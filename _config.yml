@@ -7,9 +7,9 @@
 
 # Site settings
 title: GHC6023
-email: ziqiw&cs#cmu#edu (& -> @, \# -> .)
+email: ziqiw at cs.cmu.edu
 description: > # this means to ignore newlines until "baseurl:"
-  by Ziqi Wang, Carnegie Mellon University
+  Ziqi Wang, Carnegie Mellon University
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://wangziqi2013.github.io" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
