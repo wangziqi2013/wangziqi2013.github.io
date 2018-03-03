@@ -9,15 +9,12 @@
 title: GHC6023
 email: ziqiw&cs#cmu#edu (& -> @, \# -> .)
 description: > # this means to ignore newlines until "baseurl:"
-  This site serves as a public repository for my PhD research work. I will keep
-  posting research papers that I read. This site is *NOT* intended as an official
-  demonstration of my work at Carnegie Mellon University. For more information, 
-  especially for academic or employment matters, please visit my LinkedIn and 
-  CMU personal webpage.
+  by Ziqi Wang, Carnegie Mellon University
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://wangziqi2013.github.io" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
 github_username:  wangziqi2013
+github_username2:  wangziqi2016
 
 # Build settings
 markdown: kramdown

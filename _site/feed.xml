@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>GHC6023</title>
-    <description>This site serves as a public repository for my PhD research work. I will keep posting research papers that I read. This site is *NOT* intended as an official demonstration of my work at Carnegie Mellon University. For more information,  especially for academic or employment matters, please visit my LinkedIn and  CMU personal webpage.
+    <description>by Ziqi Wang, Carnegie Mellon University
 </description>
     <link>http://wangziqi2013.github.io/</link>
     <atom:link href="http://wangziqi2013.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 02 Mar 2018 20:31:18 -0500</pubDate>
-    <lastBuildDate>Fri, 02 Mar 2018 20:31:18 -0500</lastBuildDate>
+    <pubDate>Fri, 02 Mar 2018 20:41:32 -0500</pubDate>
+    <lastBuildDate>Fri, 02 Mar 2018 20:41:32 -0500</lastBuildDate>
     <generator>Jekyll v3.0.1</generator>
     
       <item>
