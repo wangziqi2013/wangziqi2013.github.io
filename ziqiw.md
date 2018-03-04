@@ -37,3 +37,10 @@ I implemented a static analysis framework using call graph analysis for Android 
 
 Publications
 ------------
+
+Fun Stuff
+---------
+**OS Kernel** I am interested in implementing my own operating system kernel from the scratch, using a mixture of C and 
+assembly. I have made several attempts since undergraduate. In my last try, I successfully implemented 
+the bootloader, the keyboard driver, the character-based video driver, and some common facilities. I was stuck,
+however, on the file system part. 
