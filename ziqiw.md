@@ -21,7 +21,11 @@ Projects
 open-source self-driving in-memory database system optimized for HTAP workloads. My main contribution is the lock-free B+Tree index, the 
 BwTree. I implemented the BwTree based on a [Microsoft Reaearch paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf "BwTree Paper"), and measured its performance under YCSB benchmark.
 
+**(2017.03 - 2017.07)** As a research associative intern at CMU Institute of Software Research (ISR), I contributed to the 
+[Usable Privacy Policy Project (UPPP)](https://www.usableprivacy.org/ "UPPP") under the supervision of Professor Norman Sadeh. 
+I implemented a static analysis framework using call graph analysis for Android apps. 
 
+**(2017.09 - Present)** I am working with Professor Todd Mowry on page overlay and hardware transaction memory.
 
 Publications
 ------------
