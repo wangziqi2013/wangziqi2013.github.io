@@ -9,5 +9,8 @@ site:
 test:
 	jekyll serve
 
+synctime:
+	./util/synctime
+
 clean:
 	rm -rf ./_site
