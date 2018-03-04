@@ -4,14 +4,22 @@ title: Ziqi Wang
 permalink: /ziqiw/
 ---
 
-Research Goal
--------------
+Research
+--------
 
 I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") since 2017 Fall. 
 My research area is computer architecture and memory architecture, especially [Hardware Transaction Memory (HTM)](https://en.wikipedia.org/wiki/Transactional_memory "Transactional Memory"), and
 [Page Overlays](http://users.ece.cmu.edu/~omutlu/pub/page-overlays-for-fine-grained-memory-management_isca15.pdf "Page Overlays").
-I was also working closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
+My research interest also covers concurrent data structure design and parallel computation.
+
+I was working closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
 Masters education at CMU, and my research project was efficient indexing for in-memory databases. 
+
+The goal of my research is to provide efficient data manipulation capabilities based on modern general purpose 
+multicore architecture. I believe in a hardware-software co-design methodology. The hardware provides specialized 
+acceleration capabilities for common cases without sacrificing general purpose processing performance, while the software 
+adaptively takes advantage of hardware, and falls back to alternative, slower paths whenever hardware accelaration is 
+not achievable.
 
 Projects
 --------
@@ -25,7 +33,7 @@ BwTree. I implemented the BwTree based on a [Microsoft Reaearch paper](https://w
 [Usable Privacy Policy Project (UPPP)](https://www.usableprivacy.org/ "UPPP") under the supervision of Professor Norman Sadeh. 
 I implemented a static analysis framework using call graph analysis for Android apps. 
 
-**(2017.09 - Present)** I am working with Professor Todd Mowry on page overlay and hardware transaction memory.
+**(2017.09 - Present)** I am working with Professor Todd Mowry on page overlays and hardware transactional memory.
 
 Publications
 ------------
