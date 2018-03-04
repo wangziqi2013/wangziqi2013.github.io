@@ -43,4 +43,7 @@ Fun Stuff
 **OS Kernel** I am interested in implementing my own operating system kernel from the scratch, using a mixture of C and 
 assembly. I have made several attempts since undergraduate. In my last try, I successfully implemented 
 the bootloader, the keyboard driver, the character-based video driver, and some common facilities. I was stuck,
-however, on the file system part. 
+however, on the file system part. I could not figure out the best way of buffer management, and failed to
+build a working file system on top of that. This unfinished project is currently hosted on my 
+[Github](https://github.com/wangziqi2016/Kernel) {% include icon-github.html username="wangziqi2016" %}.
+
