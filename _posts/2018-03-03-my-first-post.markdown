@@ -8,6 +8,7 @@ paper_link: https://www.aaa.com
 paper_keyword: This is a paper keyword
 rw_set: Logging
 htm_cd: Eager
+htm_cr: Lazy
 version_mgmt: Lazy
 ---
 This is a test

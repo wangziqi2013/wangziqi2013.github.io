@@ -19,6 +19,10 @@ layout: default
         <strong>Conflict Detection: </strong> {{ page.htm_cd }}<br />
       {% endif %}
 
+      {% if page.htm_cr %}
+        <strong>Conflict Resolution: </strong> {{ page.htm_cr }}<br />
+      {% endif %}
+
       {% if page.version_mgmt %}
         <strong>Version Management: </strong> {{ page.version_mgmt }}<br />
       {% endif %}
@@ -27,7 +31,7 @@ layout: default
         <strong>R/W Bookkeeping: </strong> {{ page.rw_set }}<br />
       {% endif %}
 
-      {% if page.htm_cd or page.version_mgmt or page.rw_set %}
+      {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
         <br />
       {% endif %}
     <hr />
