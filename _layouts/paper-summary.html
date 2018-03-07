@@ -13,6 +13,17 @@ layout: default
     <strong>Link: </strong> <a href="{{ page.paper_link }}">{{ page.paper_link }}</a> <br />
     <strong>Keyword: </strong> {{ page.paper_keyword }} <br />
     <br />
+      {% if page.htm_cd %}
+        <strong>Conflict Detection: </strong> {{ page.htm_cd }}
+      {% endif %}
+
+      {% if page.version_mgmt %}
+        <strong>Version Management: </strong> {{ page.version_mgmt }}
+      {% endif %}
+
+      {% if page.htm_cd or page.version_mgmt %}
+        <br />
+      {% endif %}
     <hr />
     <br />
     {{ content }}
