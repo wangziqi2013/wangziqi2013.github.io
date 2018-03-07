@@ -9,10 +9,12 @@ layout: default
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <strong>Paper Title: </strong> {{ page.paper_title }} <br />
-    <strong>Link: </strong> {{ page.paper_link }} <br />
+    <strong>Paper Title: </strong> <ins>{{ page.paper_title }}</ins> <br />
+    <strong>Link: </strong> <a href="{{ page.paper_link }}">{{ page.paper_link }}</a> <br />
     <strong>About: </strong> {{ page.paper_about }} <br />
+    <br />
     <hr />
+    <br />
     {{ content }}
   </div>
 
