@@ -1,8 +1,11 @@
 ---
-layout: post
+layout: paper-summary
 title:  "Hello World!"
 date:   2018-03-03 21:40:00 -0500
 categories: Other
+paper_title: This is a paper title
+paper_link: https://www.aaa.com
+paper_about: This is a paper about
 ---
 This is a test
 
