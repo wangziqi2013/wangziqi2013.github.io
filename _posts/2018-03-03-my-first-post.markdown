@@ -6,6 +6,7 @@ categories: Other
 paper_title: This is a paper title
 paper_link: https://www.aaa.com
 paper_keyword: This is a paper keyword
+rw_set: Logging
 htm_cd: Eager
 version_mgmt: Lazy
 ---

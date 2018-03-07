@@ -21,7 +21,11 @@ layout: default
         <strong>Version Management: </strong> {{ page.version_mgmt }}<br />
       {% endif %}
 
-      {% if page.htm_cd or page.version_mgmt %}
+      {% if page.rw_set %}
+        <strong>R/W Bookkeeping: </strong> {{ page.rw_set }}<br />
+      {% endif %}
+
+      {% if page.htm_cd or page.version_mgmt or page.rw_set %}
         <br />
       {% endif %}
     <hr />
