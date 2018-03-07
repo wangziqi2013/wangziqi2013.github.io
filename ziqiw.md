@@ -37,6 +37,7 @@ I implemented a static analysis framework using call graph analysis for Android 
 
 Publications
 ------------
+(To be updated...)
 
 Fun Stuff
 ---------
@@ -47,4 +48,8 @@ however, on the file system part. I could not figure out the best way of buffer 
 build a working file system on top of that. This unfinished project is currently hosted on my 
 [Github](https://github.com/wangziqi2016/Kernel) {% include icon-github.html username="wangziqi2016" %}.
 
-**Compiler Generator** I implemented a compiler generator in Python, which supports parsing LR(1) and LALR grammar. The compiler generator also allows user to define syntax directed transformation rule, such that the compiler could directly output an Abstract Syntax Tree (AST) instead of syntax tree. C-specific typedef is also supported using a global symbol table, such that statements like "A * a" will be parsed as a pointer definition if symbol "A" has been defined as a type, or as a multiplication expression statement otherwise. The source code is available on my [Github](https://github.com/wangziqi2013/CFront) {% include icon-github.html username="wangziqi2013" %}..
+**Compiler Generator** I implemented a compiler generator in Python, which supports LR(1) and LALR grammar. The compiler generator also 
+allows user to define syntax directed transformation rule, such that the compiler could directly output an Abstract Syntax Tree (AST) 
+instead of parse tree. C-specific typedef is also supported using a global symbol table, such that statements like "A * a" will be 
+parsed as a pointer definition if symbol "A" has been defined as a type, or as a multiplication expression statement otherwise. The 
+source code is available on my [Github](https://github.com/wangziqi2013/CFront) {% include icon-github.html username="wangziqi2013" %}.
