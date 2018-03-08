@@ -4,8 +4,10 @@ layout: default
 
 <script language="javascript"> 
   function filter_post(post_type, filter_text) {
-    var posts = getElementsByClassName("post_item");
-    for(var post in posts) {
+    alert(post_type);
+    var posts = document.getElementsByClassName("post_item");
+    for(i = 0;i < posts.length;i++) {
+      post = posts[i];
       alert(post);
       if(post_type == "category") {
         s = post.getAttribute("data-category");
