@@ -15,10 +15,10 @@ layout: default
       
       if(ele.style.display == "block") {
         ele.style.display = "none";
-        a.innerHTML = "Show" + a.innerHTML.slice(4);
+        a.innerHTML = "+ Show" + a.innerHTML.slice(6);
       } else {
         ele.style.display = "block";
-        a.innerHTML = "Hide" + a.innerHTML.slice(4);;
+        a.innerHTML = "- Hide" + a.innerHTML.slice(6);
       }
     } 
   </script>
@@ -26,7 +26,7 @@ layout: default
   <div class="post-content" itemprop="articleBody">
     <hr />
     <br />
-    <a id="a_paper_metadata" href="javascript:toggle('paper_metadata', 'a_paper_metadata')">Hide Paper Summary</a><br />
+    <a id="a_paper_metadata" href="javascript:toggle('paper_metadata', 'a_paper_metadata')">- Hide Paper Summary</a><br />
     <div id="paper_metadata" style="display:block">
       <strong>Paper Title: </strong> <ins>{{ page.paper_title }}</ins> <br />
       <strong>Link: </strong> <a href="{{ page.paper_link }}">{{ page.paper_link }}</a> <br />
@@ -35,7 +35,7 @@ layout: default
     </div>
       
     {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
-        <a id="a_htm_metadata" href="javascript:toggle('htm_metadata', 'a_htm_metadata')">Hide HTM Summary</a><br />
+        <a id="a_htm_metadata" href="javascript:toggle('htm_metadata', 'a_htm_metadata')">- Hide HTM Summary</a><br />
     {% endif %}
 
     <div id="htm_metadata" style="display:block">
@@ -54,11 +54,11 @@ layout: default
       {% if page.rw_set %}
         <strong>R/W Bookkeeping: </strong> {{ page.rw_set }}<br />
       {% endif %}
+    </div>
 
       {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
         <br />
       {% endif %}
-    </div>
 
       <hr />
       <br />
