@@ -2,10 +2,35 @@
 layout: default
 ---
 
+<script language="javascript"> 
+  function filter_post(post_type, filter_text) {
+    var posts = getElementsByClassName("post_item");
+    for(var post in posts) {
+      alert(post);
+      if(post_type == "category") {
+        s = post.getAttribute("data-category");
+      } else if(post_type == "title") {
+        s = post.getAttribute("data-title");
+      } else if(post_type == "keyword") { 
+        s = post.getAttribute("data-keyword");
+      } else {
+        alert("Invalid type! (Internal error)");
+        return;
+      }
+
+      if(s.toLowerCase().indexOf(filter_text) == -1) {
+        post.style.visibility = "hidden";
+      }
+    }
+
+    return;
+  }
+</script>
+
 <div id="filter_div" align="right">
   Filter By
-  <input type="text" name="input_filter">
-  <button type="button">Category</button>
+  <input type="text" id="input_filter">
+  <button type="button" onClick="filter_post('category', getElementById('input_filter').value.toLowerCase())">Category</button>
   <button type="button">Title</button>
   <button type="button">Keyword</button>
   <br /><br />
@@ -16,7 +41,7 @@ layout: default
 
   <ul class="post-list">
     {% for post in site.posts %}
-      <li>
+      <li class="post_item" data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
         <span class="post-meta">
           {% if post.layout == "paper-summary" %}
             <strong>[Paper Review]</strong>
@@ -25,7 +50,7 @@ layout: default
           {% if post.paper_year %}
             , Paper published in {{ post.paper_year }}
           {% endif %}
-      </span>
+        </span>
 
         <h2 style="display: inline">
           <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
