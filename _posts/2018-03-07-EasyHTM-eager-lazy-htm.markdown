@@ -22,5 +22,15 @@ will be unnecessarily slowed down if conflicts are detected via a validation pha
 already known when they took place during the processing phase. 
 
 To minimize wasted work while keeping the commit protocol simple, EazyHTM adopts eager CD but postpones CR till commit point. It assumes
-a directory based cache coherent system. The observation is that speculative stores during txns can be treated as load operations 
-only assigned 
+a directory based cache coherent system. The observation is that speculative stores during txns can be treated in the same way as load 
+operations, only causing a shared state to be marked in the directory. For transactional load and store requests (txMark), the 
+directory marks the requestor as a sharer, and sends it back the number of other sharers of the requested cache line. 
+The directory also notifies all other sharers that an incoming transactional operation is pending (txAcc). On receiving an txAcc message,
+a sharer will respond directly to the requestor about the transactional operation it has performed on the specified cache line. The 
+requestor, in the meantile, waits for responses from other sharers (it knows the exact number of sharers from the directory), 
+and if any sharer has performed a conflicting operation, the requestor will add it to a "conflicting list". 
+As the last step, upon receiving the reply from a sharer, the requestor also sends back its operation to
+the sharer. The sharer needs to add the requestor to a "killer list" if their operations conflict.
+
+When a processor is about to commit, it first locks its read/write set to avoid new dependencies forming while performing
+pre-commit locking. All transactional load/store notifications (i.e. txAccess) are replied with txTryLater
