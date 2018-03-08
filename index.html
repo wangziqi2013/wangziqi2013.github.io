@@ -4,11 +4,9 @@ layout: default
 
 <script language="javascript"> 
   function filter_post(post_type, filter_text) {
-    alert(post_type);
     var posts = document.getElementsByClassName("post_item");
-    for(i = 0;i < posts.length;i++) {
+    for(var i = 0;i < posts.length;i++) {
       post = posts[i];
-      alert(post);
       if(post_type == "category") {
         s = post.getAttribute("data-category");
       } else if(post_type == "title") {
@@ -21,7 +19,9 @@ layout: default
       }
 
       if(s.toLowerCase().indexOf(filter_text) == -1) {
-        post.style.visibility = "hidden";
+        post.style.display = "none";
+      } else {
+        post.style.display = "block";
       }
     }
 
