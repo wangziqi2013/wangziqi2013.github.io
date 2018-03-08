@@ -32,5 +32,11 @@ and if any sharer has performed a conflicting operation, the requestor will add 
 As the last step, upon receiving the reply from a sharer, the requestor also sends back its operation to
 the sharer. The sharer needs to add the requestor to a "killer list" if their operations conflict.
 
-When a processor is about to commit, it first locks its read/write set to avoid new dependencies forming while performing
-pre-commit locking. All transactional load/store notifications (i.e. txAccess) are replied with txTryLater
+When a processor is about to commit, it first locks its read/write set to avoid forming new dependencies while invalidating
+conflicting txns. All transactional load/store notifications (i.e. txAccess) are replied with txTryLater. Then, for each
+conflicting procrssors in its conflicting list, the processor sends an abort message, and wait for the acknowledgement. On
+the other side, if a processor receives an abort message, it first checks whether the sender is in its killer list. If not,
+then the abort message is simply ignored. This check is to ensure that we do not abort txns that just happen to run on the
+same processor but does not have any conflict with the committing txn.
+
+After the first stage of commit
