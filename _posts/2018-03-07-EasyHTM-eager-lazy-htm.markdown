@@ -39,4 +39,11 @@ the other side, if a processor receives an abort message, it first checks whethe
 then the abort message is simply ignored. This check is to ensure that we do not abort txns that just happen to run on the
 same processor but does not have any conflict with the committing txn.
 
-After the first stage of commit
+After the first stage of commit, we guarantee an invariant that no processor can have a speculatively modified/read copy of 
+any of the cache lines in the committing txn's write set, and no processor can have a speculatively modified copy of 
+any of the cache lines in the committing txn's read set. This is bacause before the read/write set is locked, all txns
+that have a cache line in a conflicting state must have been detected and recorded in the conflicting list, and are 
+therefore aborted with cache line invalidated. After the read/write set is locked, no new dependencies can be established.
+
+Then, on the second stage, the committing txn requests exclusive ownership for every cache line in its write set. This 
+request is done 
