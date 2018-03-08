@@ -13,5 +13,7 @@ htm_cr: Lazy
 version_mgmt: Lazy
 ---
 
-This paper proposes an restricted HTM design that decouples conflict detection (CD) from conflict resolution (CR). 
-Early conflict detection (CD) has certain disadvantages. 
+This paper proposes a restricted HTM design that decouples conflict detection (CD) from conflict resolution (CR). While prior
+designs usually do not distinguish between CD and CR, and use either early or late for both, EazyHTM detects conflicts early, 
+but delays the resolution to commit time. This scheme has a few advantages. One of the advantages is that early conflict resolution
+may result in early abort, but the winner thread then itself aborts due to further conflicts.
