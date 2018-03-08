@@ -8,13 +8,36 @@ layout: default
     <p class="post-meta"><time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>{% if page.author %} • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>{% endif %}</p>
   </header>
 
+  <script language="javascript"> 
+    function toggle(elementId) {
+      var ele = document.getElementById(elementId);
+      if(ele.style.display == "block") {
+            ele.style.display = "none";
+        }
+      else {
+        ele.style.display = "block";
+      }
+    } 
+  </script>
+
   <div class="post-content" itemprop="articleBody">
     <hr />
     <br />
-    <strong>Paper Title: </strong> <ins>{{ page.paper_title }}</ins> <br />
-    <strong>Link: </strong> <a href="{{ page.paper_link }}">{{ page.paper_link }}</a> <br />
-    <strong>Keyword: </strong> {{ page.paper_keyword }} <br />
-    <br />
+    {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
+        <a href="javascript:toggle('paper_metadata')">Show</a>
+    {% endif %}
+    <div id="paper_metadata">
+      <strong>Paper Title: </strong> <ins>{{ page.paper_title }}</ins> <br />
+      <strong>Link: </strong> <a href="{{ page.paper_link }}">{{ page.paper_link }}</a> <br />
+      <strong>Keyword: </strong> {{ page.paper_keyword }} <br />
+      <br />
+    </div>
+      
+    {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
+        <a href="javascript:toggle('htm_metadata')">Show</a>
+    {% endif %}
+
+    <div id="htm_metadata">
       {% if page.htm_cd %}
         <strong>Conflict Detection: </strong> {{ page.htm_cd }}<br />
       {% endif %}
@@ -34,8 +57,10 @@ layout: default
       {% if page.htm_cd or page.htm_cr or page.version_mgmt or page.rw_set %}
         <br />
       {% endif %}
-    <hr />
-    <br />
+      <hr />
+      <br />
+    </div>
+
     {{ content }}
   </div>
 
