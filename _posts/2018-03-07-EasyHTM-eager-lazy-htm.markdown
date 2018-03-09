@@ -58,3 +58,6 @@ The second stage of commit can be optimized by allowing other processors to tran
 it has finished write back, i.e. we unlock the read/write set of the committing txn after the first stage early. This early 
 release of read/write sets will not harm correctness, as long as we write back the requested line before responding to the 
 requestor that the requested line is a non-transactional line.
+
+EazyHTM only applies to transactions whose working sets do not overflow the cache. The paper claimed, although, that it is 
+not difficult to virtualize the txn and to make them unbounded, no concrete solution or even hint is given.
