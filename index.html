@@ -44,14 +44,16 @@ layout: default
   }
 </script>
 
-<div id="filter_div" align="right">
-  Filter By
+<div id="filter_div" align="left">
+  Filter Keyword
   <input type="text" id="input_filter">
   <button type="button" onClick="filter_post('category', getElementById('input_filter').value.toLowerCase())">Category</button>
   <button type="button" onClick="filter_post('title', getElementById('input_filter').value.toLowerCase())">Title</button>
   <button type="button" onClick="filter_post('keyword', getElementById('input_filter').value.toLowerCase())">Keyword</button>
   <br /><br />
 </div>
+
+<hr /><br />
 
 <div class="home">
   <h1 class="page-heading">Posts</h1>
