@@ -52,7 +52,13 @@ Translating the above 2PL principle into hardware terminologies, we obtain the f
 (h1) All transactional load/store instructions must use cache coherence protocol to obtain permission to the cache line
 under the corresponding state; (h2) Before acquiring the last cache line used by the transaction, no cache line shall be
 evicted by the cache controller, either because of capacity/conflict misses, or because some other processors intend to 
-invalidate the line.
+invalidate the line. This seems to be only a trivial improvement of the existing cache coherence protocol, and the correctness
+is straightforward, as we can map (h1)(h2) to (s1)(s2). One of the gratest advantages of this simple design is the fact 
+that cache coherence remains unchanged, and in practice, hardware manufacturers are reluctant to revise the coherence 
+protocol. 
+
+There are still two obstacles, however, that prevents us from implementing the direct translation. The easier one is that
+as 
 
 (TODO: How to implement SS2PL/S2PL/2PL in hardware)
 
