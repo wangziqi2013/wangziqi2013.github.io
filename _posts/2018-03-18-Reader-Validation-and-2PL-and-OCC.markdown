@@ -21,6 +21,10 @@ regardless of their state, and then grants "M" state to the requestor. Note that
 as converting an "M" state to "S" after a write-back and graning "S" to the requestor could be more efficient. We avoid write-backs
 in the discussion, because under the context of HTM, write-backs usually require some indirection mechanism which is out of the scope.
 
+If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
+protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
+instead of requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
+waste cycles, the hardware choose not to wait, but just to cooperatively preempt, and the lock is always granted on-request. 
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
