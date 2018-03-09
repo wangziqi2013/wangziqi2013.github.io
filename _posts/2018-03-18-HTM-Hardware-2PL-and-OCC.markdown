@@ -4,9 +4,8 @@ title:  "Hardware Transactional Memory: Hardware Two Phase Locking and Optimisti
 date:   2018-03-09 03:32:00 -0500
 ---
 
-Reader validation is where many different HTM and STM designs diverge. In order to understand why and how the 
-validation based concurrency control is designed, and how to reason about it, we take an approach that compares
-read-validation based protocol with what we are already familiar with: the 2PL protocol.
+
+
 
 To ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, hardware already implements 
 a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence protocol". We use MSI as 
@@ -17,14 +16,17 @@ exactly one processor that has the cache line in the exclusive "M" state. In thi
 coherence protocol, and then the requestor is granted "S" state (and will receive the dirty cache line via a cache-to-cache transfer). A 
 similar process will be followed 
 if the requesting processor is to write into the cache line. Instead of granting an "S" state, the protocol revokes all other cache lines 
-regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal,
-as converting an "M" state to "S" after a write-back and graning "S" to the requestor could be more efficient. We avoid write-backs
-in the discussion, because under the context of HTM, write-backs usually require some indirection mechanism which is out of the scope.
+regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
+For instance, converting an "M" state to "S" after a write-back and graning "S" to the read permission requestor could be more efficient. 
+We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some indirection 
+mechanism which is out of the current scope.
 
 If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
 protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
 instead of requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
-waste cycles, the hardware choose not to wait, but just to cooperatively preempt, and the lock is always granted on-request. 
+waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means both the 
+current owner of the lock is aware of the preemption. As we shall see later, the cooperative nature of hardware preemption
+helps in designing an efficient protocol.
 
 Since preemptive reader/writer locking is already implemented on the heardware level via cache coherence, it should not be too
 diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (1) All read/write operations
