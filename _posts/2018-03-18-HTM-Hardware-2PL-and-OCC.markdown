@@ -42,9 +42,12 @@ Since preemptive reader/writer locking is already implemented on the heardware l
 diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (1) All read/write operations
 to data items should be protected by locks of the corresponding mode. (2) No locks shall be released before the last acquire of
 a lock. It is also correct to make (2) more restrictive but understandable: (2') Locks are acquired 
-as we access data items, but no locks shall be released before the final commit point. (1)(2) is the general form of 2PL, while
-(1)(2') is called strong strict 2PL, or SS2PL. There is actually a midpoint, (2'') Locks are acquired as we access
-data items, but no **writer** locks shall be released before final commit point. (1)(2'') is called strict 2PL, or S2PL.
+as we access data items, but no locks shall be released before the final commit point. (1)(2) is the general form of 2PL, 
+granting the full scheduling power in 2PL family, while (1)(2') is called strong strict 2PL, or SS2PL. There is actually a midpoint, (2'')
+Locks are acquired as we access data items, and no **writer** locks shall be released before final commit point. Reader locks shall not 
+be released before the last lock acquire as in 2PL. (1)(2'') is called strict 2PL, or S2PL.
+
+(TODO: How to implement SS2PL/S2PL/2PL in hardware)
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
@@ -66,9 +69,9 @@ two flavors of OCC: If reader txns validate their read sets before the write pha
 checks its read set against those txns that have already committed (and hence "forward" in time). If writer txns 
 notify readers before writers' write phase if its write set overlaps with readers' read sets, then it is Backward OCC (BOCC).
 
-(The next paragraph talks concrete impl. of validation for BOCC and FOCC, using versions, global counter, broadcast)
+(TODO: Concrete impl. of validation for BOCC and FOCC, using versions, global counter, broadcast)
 
-(Talk about the degree of parallelism of read validation)
+(TODO: Talk about the degree of parallelism of read validation)
 
 {% highlight C %}
  Txn 1               Txn 2
