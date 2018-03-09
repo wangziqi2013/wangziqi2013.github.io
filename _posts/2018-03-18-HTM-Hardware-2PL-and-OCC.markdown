@@ -17,9 +17,9 @@ that provides correct transactional semantics, with increased degrees of paralle
 MVCC will be discussed in a different literature.
 
 In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
-hardware already implements 
-a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence protocol". We use MSI as 
-an example. When a cache line is to be read by the cache controller, the controller sends a read-shared message to either the bus or the 
+hardware already implements a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence 
+protocol". We use MSI as an example. When a cache line is to be read by the cache controller, the controller sends a read-shared message 
+to either the bus or the 
 directory. The controller will be granted the permission to read through one of the following paths: (1) There are no sharing 
 processors. The requestor will be granted "S" state. (2) There are several sharing processors in "S" state. The requestor will also be 
 granted "S" state. (3) There is exactly one processor that has the cache line in the exclusive "M" state. In this case, the write 
@@ -29,23 +29,30 @@ if the requesting controller is to write into the cache line. Instead of grantin
 lines regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
 For instance, converting an "M" state to "S" after a write-back and graning "S" to the requestor of read permission could be more 
 efficient. We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some 
-indirection mechanism which is out of the current scope.
+indirection mechanism which is out of the scope of discussion.
 
 If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
 protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
 instead of the requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
 will waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means the 
-current owner of the lock is aware of the preemption. As we shall see later, the cooperative nature of hardware preemption
-helps in designing an efficient protocol.
+current owner of the lock is aware of the preemption via the cache coherence message. As we shall see later, the cooperative 
+nature of hardware preemption helps in designing an efficient protocol.
 
 Since preemptive reader/writer locking is already implemented on the heardware level via cache coherence, it should not be too
-diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (1) All read/write operations
-to data items should be protected by locks of the corresponding mode. (2) No locks shall be released before the last acquire of
-a lock. It is also correct to make (2) more restrictive but understandable: (2') Locks are acquired 
-as we access data items, but no locks shall be released before the final commit point. (1)(2) is the general form of 2PL, 
-granting the full scheduling power in 2PL family, while (1)(2') is called strong strict 2PL, or SS2PL. There is actually a midpoint, (2'')
-Locks are acquired as we access data items, and no **writer** locks shall be released before final commit point. Reader locks shall not 
-be released before the last lock acquire as in 2PL. (1)(2'') is called strict 2PL, or S2PL.
+diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (s1) All read/write operations
+to data items should be protected by locks of the corresponding mode; (s2) No locks shall be released before the last acquire of
+a lock, thus dividing the entire execution into a grow phase, where locks are only acquired, and a shrink phase, where locks are only
+released. It is also correct to make (s2) more restrictive: (s2') Locks are acquired 
+as we access data items, but no locks shall be released before the final commit point. (s1)(s2) is the general form of 2PL, 
+granting the full scheduling power of the 2PL family, while (s1)(s2') is called strong strict 2PL, or SS2PL. There is actually a midpoint,
+(s2'') Locks are acquired as we access data items, and no **writer** locks shall be released before final commit point. Reader locks 
+shall not be released before the last lock acquire as in 2PL. (s1)(s2'') is called strict 2PL, or S2PL.
+
+Translating the above 2PL principle into hardware terminologies, we obtain the following principle for hardware transactions: 
+(h1) All transactional load/store instructions must use cache coherence protocol to obtain permission to the cache line
+under the corresponding state; (h2) Before acquiring the last cache line used by the transaction, no cache line shall be
+evicted by the cache controller, either because of capacity/conflict misses, or because some other processors intend to 
+invalidate the line.
 
 (TODO: How to implement SS2PL/S2PL/2PL in hardware)
 
