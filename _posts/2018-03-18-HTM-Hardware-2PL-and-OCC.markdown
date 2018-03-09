@@ -4,8 +4,17 @@ title:  "Hardware Transactional Memory: Hardware Two Phase Locking and Optimisti
 date:   2018-03-09 03:32:00 -0500
 ---
 
-
-
+Hardware transactional memory (HTM) eases parallel programming through built-in support for 
+transactional semantics directly on the hardware level. Concurrency control (CC) is a family of implementation 
+independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
+In the discussion that follows, we focus on a page based model where only reads and writes are state-dependent.
+Several software implemented CC mechanisms are already deployed in applications such as database management systems,
+including Two Phase Locking (2PL), Optimistic CC (OCC), and Multiversion CC (MVCC). In this literature, we 
+explore the design space of CC algorithms in hardware. We first review a few hardware features that can serve as
+build blocks for our CC algorithm. Then based on these hardware features, we incrementally build an HTM 
+that provides correct transactional semantics, with increased degrees of parallelism. We only cover
+2PL and OCC, as they share some characteristics which simplify the explanation. 
+MVCC will be discussed in a different literature.
 
 To ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, hardware already implements 
 a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence protocol". We use MSI as 
