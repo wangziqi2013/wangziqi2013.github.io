@@ -13,27 +13,28 @@ including Two Phase Locking (2PL), Optimistic CC (OCC), and Multiversion CC (MVC
 explore the design space of CC algorithms in hardware. We first review a few hardware features that can serve as
 build blocks for our CC algorithm. Then based on these hardware features, we incrementally build an HTM 
 that provides correct transactional semantics, with increased degrees of parallelism. We only cover
-2PL and OCC, as they share some characteristics which simplify the explanation. 
+2PL and OCC here, as they share some characteristics that can simplify the explanation. 
 MVCC will be discussed in a different literature.
 
-To ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, hardware already implements 
+In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
+hardware already implements 
 a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence protocol". We use MSI as 
-an example. When a cache line is to be read, a processor sends a read-shared bus message to either the bus or the directory. The processor
-will be granted the permission to read if one of the following is satisfied: (1) There are no sharing processors. The requestor will be
-granted "S" state. (2) There are several sharing processors in "S" state. The requestor will also be granted "S" state. (3) There is 
-exactly one processor that has the cache line in the exclusive "M" state. In this case, the write permission will first be revoked by the 
-coherence protocol, and then the requestor is granted "S" state (and will receive the dirty cache line via a cache-to-cache transfer). A 
-similar process will be followed 
-if the requesting processor is to write into the cache line. Instead of granting an "S" state, the protocol revokes all other cache lines 
-regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
-For instance, converting an "M" state to "S" after a write-back and graning "S" to the read permission requestor could be more efficient. 
-We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some indirection 
-mechanism which is out of the current scope.
+an example. When a cache line is to be read by the cache controller, the controller sends a read-shared message to either the bus or the 
+directory. The controller will be granted the permission to read through one of the following paths: (1) There are no sharing 
+processors. The requestor will be granted "S" state. (2) There are several sharing processors in "S" state. The requestor will also be 
+granted "S" state. (3) There is exactly one processor that has the cache line in the exclusive "M" state. In this case, the write 
+permission will first be revoked by the coherence protocol, and then the requestor is granted "S" state (and will receive the dirty cache 
+line via a cache-to-cache transfer). A similar process will be followed 
+if the requesting controller is to write into the cache line. Instead of granting an "S" state, the protocol revokes all other cache 
+lines regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
+For instance, converting an "M" state to "S" after a write-back and graning "S" to the requestor of read permission could be more 
+efficient. We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some 
+indirection mechanism which is out of the current scope.
 
 If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
 protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
-instead of requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
-waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means both the 
+instead of the requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
+will waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means the 
 current owner of the lock is aware of the preemption. As we shall see later, the cooperative nature of hardware preemption
 helps in designing an efficient protocol.
 
