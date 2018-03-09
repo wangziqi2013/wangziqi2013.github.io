@@ -21,6 +21,13 @@ the former, reader txns may not realize the fact that it has read inconsistent s
 lead to what we call as "zombine" txns, as the reader now bases its action on a set of data that should never
 be considered as possible inputs in a serial environment. The general result of such execution is undefined.
 
-The above
+If you are familiar enough with Optimistic Concurrency Control (OCC), the two ways of validating read sets are exactly
+two flavors of OCC: If reader txns validate their read sets before the write phase, then it is Forward OCC (FOCC), because reader 
+checks its read set against those txns that have already committed (and hence "forward" in time). If writer txns 
+notify readers before writers' write phase if its write set overlaps with readers' read sets, then it is Backward OCC (BOCC).
+
+(The next paragraph talks concrete impl. of validation for BOCC and FOCC, using versions, global counter, broadcast)
+
+(Talk about the degree of parallelism of read validation)
 
 (To be finished)
