@@ -7,9 +7,9 @@ paper_title: "An Effective Hybrid Transactional Memory System with Strong Isolat
 paper_link: http://csl.stanford.edu/%7Echristos/publications/2007.sigtm.isca.pdf
 paper_keyword: SigTM
 paper_year: 2007
-rw_set: (later)
-htm_cd: (later)
-htm_cr: (later)
-version_mgmt: (later)
+rw_set: Signature for RS; Signature + Software hash table for WS
+htm_cd: Coherence-based; Eager for RS; Lazy for WS
+htm_cr: Eager for RS; Lazy for WS
+version_mgmt: Lazy, Software
 ---
 
