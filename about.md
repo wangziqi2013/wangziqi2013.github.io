@@ -23,7 +23,7 @@ Search Help
 The index page has a search box, in which you can type a search string, and filter out 
 unwanted posts by category, by title, or by keywords.
 
-The search string is a semicolom (";") separated string, in which each substring
+The search string is a semicolon (";") separated string, in which each substring
 separated by semicolons is a search keyword. For each search keyword, posts that do not
 have the keyword in its category/title/keyword will be hidden (case insensitive). 
 The final search result will be the union of all search keywords (i.e. search keywords 

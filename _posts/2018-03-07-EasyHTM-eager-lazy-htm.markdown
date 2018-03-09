@@ -62,3 +62,19 @@ requestor that the requested line is a non-transactional line.
 
 EazyHTM only applies to transactions whose working sets do not overflow the cache. The paper claimed, although, that it is 
 not difficult to virtualize the txn and to make them unbounded, no concrete solution or even hint is given.
+
+Why it works
+------------
+
+Lazy conflict resolution (postponing read validation till commit time) sometimes has the problem of inconsistent read
+or non-repeatable read, even if we pair it with lazy version management. This is because under read-committed semantics,
+a reader txn could still read inconsistent values during the commit process of a writer. This phenomenon, however, is
+not possible in EazyHTM. Consider the three execution stage of a writer txn: read, validate, write. During read stage, 
+all speculative written cache lines are not made public, and hence are not observable by other readers. Then, during the 
+validation stage, the writer txn validates its write set by acquiring exclusive ownership. Reader txns that have 
+read the (old value) of cache lines in the writer's write set, realize that a writer txn will WB on this line upon seeing, 
+the broadcasted invalidation, and therefore aborts. At this moment, no cache line is written, and the reader also could not observe 
+inconsistent state. During the WB stage, the write set itself is locked, such that no new conflicts can be 
+established by readers trying to read a line in the writer's write set, until WB finishes. This way, 
+it is guaranteed that reader txns never see the temporary inconsistent state created by the WB stage.
+
