@@ -52,7 +52,7 @@ shall not be released before the last lock acquire as in 2PL. (s1)(s2'') is call
 
 Translating the above 2PL principle into hardware terminologies, we obtain the following for hardware transactions: 
 (h1) All transactional load/store instructions must use cache coherence protocol to obtain permission to the cache line
-under the corresponding state; (h2) Before acquiring the last cache line used by the transaction, no cache line shall be
+under the corresponding state; (h2) Before acquiring the last cache line used by the transaction, no transactional cache line shall be
 evicted by the cache controller, either because of capacity/conflict misses, or because some other processors intend to 
 invalidate the line. This seems to be only a trivial improvement over the existing cache coherence protocol, and the correctness
 is straightforward, as (h1)(h2) can be mapped to (s1)(s2). One of the gratest advantages of this simple design is the fact 
@@ -70,6 +70,12 @@ if a coherence request of confliting mode is received. The requestor then aborts
 to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized, and that there is no livelock or 
 starvation. Some proposals introduces a hardware and/or software arbitrator, which takes the transaction age, priority, etc. into 
 consideration to make abort decisions.
+
+The second obstacle of implementing hardware 2PL derives from (h2), which says no transactional cache line shall be evicted before the 
+last coherence request on behave of transactional load/store operations. With only load/store/commit instruction sequences, and without 
+higher level semantics of the logical transaction, hardware is generally unable to determine when the last request would be.
+An easy fix is to strengthen (h2) a little into (h2'): no transactional cache line shall be evicted before commit instruction.
+Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
