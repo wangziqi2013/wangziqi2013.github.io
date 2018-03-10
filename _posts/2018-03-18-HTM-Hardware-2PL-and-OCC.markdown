@@ -4,6 +4,9 @@ title:  "Hardware Transactional Memory: Hardware Two Phase Locking and Optimisti
 date:   2018-03-09 03:32:00 -0500
 ---
 
+Introduction
+------------
+
 Hardware transactional memory (HTM) eases parallel programming through built-in support for 
 transactional semantics directly on the hardware level. Concurrency control (CC) is a family of implementation 
 independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
@@ -15,6 +18,9 @@ building blocks for our CC algorithm. Then based on these hardware features, we 
 that provides correct transactional semantics, with increased degrees of parallelism. We only cover
 2PL and OCC here, as they share some characteristics that can simplify the explanation. 
 MVCC will be discussed in another literature.
+
+Hardware Locking
+----------------
 
 In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
 hardware already implements a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence 
@@ -39,6 +45,9 @@ instead of the requestor of a conflicting lock mode waiting for the current owne
 will waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means the 
 current owner of the lock is aware of the preemption via the cache coherence message. As we shall see later, the cooperative 
 nature of hardware preemption helps in designing an efficient protocol.
+
+Two Phase Locking
+-----------------
 
 Since preemptive reader/writer locking is already implemented on the heardware level via cache coherence, it should not be too
 diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (s1) All read/write operations
@@ -74,8 +83,13 @@ of conflicting transactions into consideration for making abort decisions.
 The second obstacle of implementing hardware 2PL derives from (h2), which says no transactional cache line shall be evicted before the 
 last coherence request on behave of transactional load/store operations. With only load/store/commit instruction sequences, and without 
 higher level semantics of the logical transaction, hardware is generally unable to determine when the last request would be.
-An easy fix is to strengthen (h2) a little into (h2'): no transactional cache line shall be evicted before commit instruction.
+An easy fix is to strengthen (h2) a little into (h2'): no transactional cache line shall be evicted before the commit instruction.
 Not surprisingly, (h1)(h2') are just hardware SS2PL.
+
+2PL Limitations
+---------------
+
+(TODO: 2PL limitations; holding locks for txn duration decreases parallelism)
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
