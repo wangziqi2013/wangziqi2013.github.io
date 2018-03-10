@@ -4,8 +4,7 @@ title:  "Hardware Transactional Memory: Hardware Two Phase Locking and Optimisti
 date:   2018-03-09 03:32:00 -0500
 ---
 
-Introduction
-------------
+### Introduction
 
 Hardware transactional memory (HTM) eases parallel programming through built-in support for 
 conflict serializable (CSR) transactional semantics directly on the hardware level. Concurrency control (CC) is a 
@@ -24,8 +23,7 @@ literature is concentrated on the concurrency control aspect of HTM, we assume t
 fits in processor's L1 cache. Although unbounded transactional memory is an interesting topic, and does have an effect on
 hardware CC algorithms, we postpone this topic to a later discussion.
 
-Hardware Locking
-----------------
+### Hardware Locking
 
 In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
 hardware already implements a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence 
@@ -50,8 +48,7 @@ will waste cycles, the hardware choose not to wait, but just to cooperatively pr
 current owner of the lock is aware of the preemption via the cache coherence message. As we shall see later, the cooperative 
 nature of hardware preemption helps in designing an efficient protocol.
 
-Two Phase Locking
------------------
+### Two Phase Locking
 
 Since preemptive reader/writer locking is already implemented on the heardware level via cache coherence, it should not be too
 diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (s1) All read/write operations
@@ -90,8 +87,7 @@ higher level semantics of the logical transaction, hardware is generally unable 
 An easy fix is to strengthen (h2) a little into (h2'): no transactional cache line shall be evicted before the commit instruction.
 Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
-2PL Limitations
----------------
+### 2PL Limitations
 
 Although correctness of transactional semantics is guaranteed by holding locks on cache lines from the first 
 usage till tranaction commit as in 2PL, this scheme does not often provide high degrees of parallelism. There
@@ -106,7 +102,7 @@ resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR perform 
 they are absolutaly necessary, after which the execution cannot be undone. Usually, this time point is chosen
 as transaction commit point.
 
-(TODO: 2PL limitations; holding locks for txn duration decreases parallelism)
+### To Lock or Not to Lock: It's an OCC Question
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
