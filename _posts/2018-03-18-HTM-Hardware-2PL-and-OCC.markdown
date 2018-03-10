@@ -29,10 +29,11 @@ if the requesting controller is to write into the cache line. Instead of grantin
 lines regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
 For instance, converting an "M" state to "S" after a write-back and graning "S" to the requestor of read permission could be more 
 efficient. We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some 
-indirection mechanism which is out of the scope of discussion. In addition, we assume logical transactions are mapped to different 
+indirection mechanism which is out of the scope of discussion. In addition, we assume logical transactions are bound to different 
 processors, and they can finish within a scheduling quantum. 
 
-If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
+If we treat transactional "S" state as holding a read lock on a cache line, and transactional "M" state as holding an exclusive write 
+lock ("transactional" implies an extra bit is needed to represent that the line is part of an active transaction), then the MSI 
 protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
 instead of the requestor of a conflicting lock mode waiting for the current owner to release the lock, which may incur deadlock and 
 will waste cycles, the hardware choose not to wait, but just to cooperatively preempt. Here the word "cooperatively" means the 
@@ -58,7 +59,7 @@ is straightforward, as (h1)(h2) can be mapped to (s1)(s2). One of the gratest ad
 that cache coherence remains unchanged, and in practice, hardware manufacturers are reluctant to revise the coherence 
 protocol. 
 
-There are still two obstacles, however, that prevents the direct translation from being implemented. First, hardware locking
+There are still two obstacles, however, that prevents the above hardware 2PL design from being implemented. First, hardware locking
 is preemptive, and if two transactions conflict, i.e. one requests a cache line held by another in a conflicting state, the 
 coherence protocol can do nothing but to fulfill the request, causing a 2PL violation on the latter. while software 2PL
 allows transactions to wait for a lock, on the contrary, the best that hardware can do is to abort the 
@@ -66,9 +67,9 @@ violated transaction, and retry. This "abort-on-conflict" scheme is called "requ
 solution is to abort the requesting transaction. If this is to be supported, the cache coherence protocol should be 
 slightly modified by adding a "negative acknowledgement" (NACK) signal. The cache line owner asserts this signal  
 if a coherence request of confliting mode is received. The requestor then aborts. In general, deciding which transaction
-to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized. Some proposals introduces
-a hardware and/or software arbitrator, which takes the transaction age, priority, etc. into consideration to make
-abort decisions.
+to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized, and that there is no livelock or 
+starvation. Some proposals introduces a hardware and/or software arbitrator, which takes the transaction age, priority, etc. into 
+consideration to make abort decisions.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
