@@ -15,11 +15,14 @@ Several software implemented CC mechanisms are already deployed in applications 
 including Two Phase Locking (2PL), Optimistic CC (OCC), and Multiversion CC (MVCC). In this literature, we 
 explore the design space of CC algorithms in hardware. We first review a few hardware features that can serve as
 building blocks for hardware CC algorithms. Then based on these hardware features, we incrementally build an HTM 
-that provides correct transactional semantics, with increased degrees of parallelism. We only cover
-2PL and OCC here, as they share some characteristics that can simplify the explanation. 
-MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to different 
-processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions to allow context switch,
-interruption or migration to happen amid their executions is a relevant topic, but not discussed here.
+that provides correct transactional semantics, with increased degrees of parallelism. 
+
+To make the discussion more compact and coherent, only 2PL and OCC are covered, as they share some characteristics that 
+can simplify the explanation. MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to different processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions to allow context switch,
+interruption or migration to happen amid their executions is a relevant topic, but not covered. Since this
+literature is concentrated on the concurrency control aspect of HTM, we assume the transaction's working set
+fits in processor's L1 cache. Although unbounded transactional memory is an interesting topic, and does have an effect on
+hardware CC algorithms, we postpone this topic to a later discussion.
 
 Hardware Locking
 ----------------
@@ -90,8 +93,9 @@ Not surprisingly, (h1)(h2') are just hardware SS2PL.
 2PL Limitations
 ---------------
 
-Although correctness of transactional semantics  holding locks on cache lines from the first usage till tranaction commit, as in 2PL, guarantees correctness 
-of executions
+Although correctness of transactional semantics is guaranteed by holding locks on cache lines from the first 
+usage till tranaction commit as in 2PL, this scheme does not often provide high degrees of parallelism. There
+are two reasons. First, for long running transactions, or transactions working on "hot" data items, 
 
 (TODO: 2PL limitations; holding locks for txn duration decreases parallelism)
 
