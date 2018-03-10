@@ -66,9 +66,9 @@ violated transaction, and retry. This "abort-on-conflict" scheme is called "requ
 solution is to abort the requesting transaction. If this is to be supported, the cache coherence protocol should be 
 slightly modified by adding a "negative acknowledgement" (NACK) signal. The cache line owner asserts this signal  
 if a coherence request of confliting mode is received. The requestor then aborts. In general, deciding which transaction
-to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized. 
-
-
+to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized. Some proposals introduces
+a hardware and/or software arbitrator, which takes the transaction age, priority, etc. into consideration to make
+abort decisions.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
