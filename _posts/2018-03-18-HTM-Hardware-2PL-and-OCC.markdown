@@ -61,15 +61,15 @@ protocol.
 
 There are still two obstacles, however, that prevents the above hardware 2PL design from being implemented. First, hardware locking
 is preemptive, and if two transactions conflict, i.e. one requests a cache line held by another in a conflicting state, the 
-coherence protocol can do nothing but to fulfill the request, causing a 2PL violation on the latter. while software 2PL
+coherence protocol can do nothing but to fulfill the request, causing a 2PL violation on the latter. While software 2PL
 allows transactions to wait for a lock, on the contrary, the best that hardware can do is to abort the 
 violated transaction, and retry. This "abort-on-conflict" scheme is called "requestor-win". An alternative but symmetric 
 solution is to abort the requesting transaction. If this is to be supported, the cache coherence protocol should be 
-slightly modified by adding a "negative acknowledgement" (NACK) signal. The cache line owner asserts this signal  
+slightly modified by adding a "negative acknowledgement" (NACK) signal. The cache line owner asserts this signal 
 if a coherence request of confliting mode is received. The requestor then aborts. In general, deciding which transaction
-to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized, and that there is no livelock or 
-starvation. Some proposals introduces a hardware and/or software arbitrator, which takes the transaction age, priority, etc. into 
-consideration to make abort decisions.
+to abort on a conflict is non-trivial. Care should be taken that wasted works are minimized, and that no livelock or 
+starvation shall happen. Some proposals introduce hardware and/or software arbitrators, which take the age, priority, etc.,
+of conflicting transactions into consideration for making abort decisions.
 
 The second obstacle of implementing hardware 2PL derives from (h2), which says no transactional cache line shall be evicted before the 
 last coherence request on behave of transactional load/store operations. With only load/store/commit instruction sequences, and without 
