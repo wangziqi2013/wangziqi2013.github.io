@@ -11,10 +11,10 @@ In the discussion that follows, we focus on a page based model where only reads 
 Several software implemented CC mechanisms are already deployed in applications such as database management systems,
 including Two Phase Locking (2PL), Optimistic CC (OCC), and Multiversion CC (MVCC). In this literature, we 
 explore the design space of CC algorithms in hardware. We first review a few hardware features that can serve as
-build blocks for our CC algorithm. Then based on these hardware features, we incrementally build an HTM 
+building blocks for our CC algorithm. Then based on these hardware features, we incrementally build an HTM 
 that provides correct transactional semantics, with increased degrees of parallelism. We only cover
 2PL and OCC here, as they share some characteristics that can simplify the explanation. 
-MVCC will be discussed in a different literature.
+MVCC will be discussed in another literature.
 
 In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
 hardware already implements a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence 
@@ -29,7 +29,8 @@ if the requesting controller is to write into the cache line. Instead of grantin
 lines regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
 For instance, converting an "M" state to "S" after a write-back and graning "S" to the requestor of read permission could be more 
 efficient. We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some 
-indirection mechanism which is out of the scope of discussion.
+indirection mechanism which is out of the scope of discussion. In addition, we assume logical transactions are mapped to different 
+processors, and they can finish within a scheduling quantum. 
 
 If we treat "S" state as holding a read lock on a cache line, and "M" state as holding an exclusive write lock, then the MSI 
 protocol is exactly a hardware implementation of preemptive reader/writer locking. Compared with software reader/writer locking,
@@ -48,19 +49,26 @@ granting the full scheduling power of the 2PL family, while (s1)(s2') is called 
 (s2'') Locks are acquired as we access data items, and no **writer** locks shall be released before final commit point. Reader locks 
 shall not be released before the last lock acquire as in 2PL. (s1)(s2'') is called strict 2PL, or S2PL.
 
-Translating the above 2PL principle into hardware terminologies, we obtain the following principle for hardware transactions: 
+Translating the above 2PL principle into hardware terminologies, we obtain the following for hardware transactions: 
 (h1) All transactional load/store instructions must use cache coherence protocol to obtain permission to the cache line
 under the corresponding state; (h2) Before acquiring the last cache line used by the transaction, no cache line shall be
 evicted by the cache controller, either because of capacity/conflict misses, or because some other processors intend to 
-invalidate the line. This seems to be only a trivial improvement of the existing cache coherence protocol, and the correctness
-is straightforward, as we can map (h1)(h2) to (s1)(s2). One of the gratest advantages of this simple design is the fact 
+invalidate the line. This seems to be only a trivial improvement over the existing cache coherence protocol, and the correctness
+is straightforward, as (h1)(h2) can be mapped to (s1)(s2). One of the gratest advantages of this simple design is the fact 
 that cache coherence remains unchanged, and in practice, hardware manufacturers are reluctant to revise the coherence 
 protocol. 
 
-There are still two obstacles, however, that prevents us from implementing the direct translation. The easier one is that
-as 
+There are still two obstacles, however, that prevents the direct translation from being implemented. First, hardware locking
+is preemptive, and if two transactions conflict, i.e. one requests a cache line held by another in a conflicting state, the 
+coherence protocol can do nothing but to fulfill the request, causing a 2PL violation on the latter. while software 2PL
+allows transactions to wait for a lock, on the contrary, the best that hardware can do is to abort the 
+violated transaction, and retry. This "abort-on-conflict" scheme is called "requestor-win". An alternative but symmetric 
+solution is to abort the requesting transaction. If this is to be supported, the cache coherence protocol should be 
+slightly modified by adding a "negative acknowledgement" (NACK) signal. The cache line owner asserts this signal  
+if a coherence request of confliting mode is received. The requestor then aborts. In general, deciding which transaction
+to abort on a conflict is non-trivial. Cares should be taken that wasted works are minimized. 
 
-(TODO: How to implement SS2PL/S2PL/2PL in hardware)
+
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
