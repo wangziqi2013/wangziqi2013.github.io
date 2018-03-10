@@ -8,16 +8,18 @@ Introduction
 ------------
 
 Hardware transactional memory (HTM) eases parallel programming through built-in support for 
-transactional semantics directly on the hardware level. Concurrency control (CC) is a family of implementation 
-independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
+conflict serializable (CSR) transactional semantics directly on the hardware level. Concurrency control (CC) is a 
+family of implementation independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
 In the discussion that follows, we focus on a page based model where only reads and writes are state-dependent.
 Several software implemented CC mechanisms are already deployed in applications such as database management systems,
 including Two Phase Locking (2PL), Optimistic CC (OCC), and Multiversion CC (MVCC). In this literature, we 
 explore the design space of CC algorithms in hardware. We first review a few hardware features that can serve as
-building blocks for our CC algorithm. Then based on these hardware features, we incrementally build an HTM 
+building blocks for hardware CC algorithms. Then based on these hardware features, we incrementally build an HTM 
 that provides correct transactional semantics, with increased degrees of parallelism. We only cover
 2PL and OCC here, as they share some characteristics that can simplify the explanation. 
-MVCC will be discussed in another literature.
+MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to different 
+processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions to allow context switch,
+interruption or migration to happen amid their executions is a relevant topic, but not discussed here.
 
 Hardware Locking
 ----------------
@@ -35,8 +37,7 @@ if the requesting controller is to write into the cache line. Instead of grantin
 lines regardless of their state, and then grants "M" state to the requestor. Note that the protocol described here is not optimal.
 For instance, converting an "M" state to "S" after a write-back and graning "S" to the requestor of read permission could be more 
 efficient. We deliberately avoid write-backs in the discussion, because under the context of HTM, write-backs usually require some 
-indirection mechanism which is out of the scope of discussion. In addition, we assume logical transactions are bound to different 
-processors, and they can finish within a scheduling quantum. 
+indirection mechanism which is out of the scope of discussion. 
 
 If we treat transactional "S" state as holding a read lock on a cache line, and transactional "M" state as holding an exclusive write 
 lock ("transactional" implies an extra bit is needed to represent that the line is part of an active transaction), then the MSI 
@@ -88,6 +89,9 @@ Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
 2PL Limitations
 ---------------
+
+Although correctness of transactional semantics  holding locks on cache lines from the first usage till tranaction commit, as in 2PL, guarantees correctness 
+of executions
 
 (TODO: 2PL limitations; holding locks for txn duration decreases parallelism)
 
