@@ -95,7 +95,16 @@ Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
 Although correctness of transactional semantics is guaranteed by holding locks on cache lines from the first 
 usage till tranaction commit as in 2PL, this scheme does not often provide high degrees of parallelism. There
-are two reasons. First, for long running transactions, or transactions working on "hot" data items, 
+are two reasons. First, long running transactions, or transactions working on "hot" data items, are more prone
+to suffer from frequent aborts, as a single conflict can force them to abort. Second, in the hardware SS2PL scheme,
+conflicts are resolved by transaction aborts as early as they are detected. On one hand, such "eager" conflict 
+detection and resolution mechanism make sure that transactions who violates 2PL will not waste cycles executing 
+the rest of its work, minimizing wastages locally. On the other hand, if the "winner" transaction that survives
+an arbitration is eventually aborted, then we actually might have at least some useful work done if the "loser" of
+the arbitration were allowed to continue. The latter observation suggests an alternative conflict detection (CD) and 
+resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR perform these two only at the point 
+they are absolutaly necessary, after which the execution cannot be undone. Usually, this time point is chosen
+as transaction commit point.
 
 (TODO: 2PL limitations; holding locks for txn duration decreases parallelism)
 
