@@ -87,6 +87,10 @@ higher level semantics of the logical transaction, hardware is generally unable 
 An easy fix is to strengthen (h2) a little into (h2'): no transactional cache line shall be evicted before the commit instruction.
 Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
+One extra bouns of adopting hardware SS2PL is recoverability, which is of crucial importance to HTM. Releasing
+a transactionally written cache line to other transactions before commit will cause "dirty read". . If the transaction whose 
+dirty cache lines are read later aborts, all transactions that 
+
 ### 2PL Limitations
 
 Although correctness of transactional semantics is guaranteed by holding locks on cache lines 
