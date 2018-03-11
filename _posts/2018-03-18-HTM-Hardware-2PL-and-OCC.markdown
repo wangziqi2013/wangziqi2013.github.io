@@ -155,7 +155,10 @@ Commit
 
 ### References
 
-[1] Herlihy, Maurice, and J. Eliot B. Moss. Transactional memory: Architectural support for lock-free data structures. Vol. 21, no. 2. ACM, 1993.
-[2] Rajwar, Ravi, Maurice Herlihy, and Konrad Lai. "Virtualizing transactional memory." In Computer Architecture, 2005. ISCA'05. Proceedings. 32nd International Symposium on, pp. 494-505. IEEE, 2005.
-[3] Ananian, C. Scott, Krste Asanovic, Bradley C. Kuszmaul, Charles E. Leiserson, and Sean Lie. "Unbounded transactional memory." In High-Performance Computer Architecture, 2005. HPCA-11. 11th International Symposium on, pp. 316-327. IEEE, 2005.
-[4] Litz, Heiner, David Cheriton, Amin Firoozshahian, Omid Azizi, and John P. Stevenson. "SI-TM: reducing transactional memory abort rates through snapshot isolation." ACM SIGARCH Computer Architecture News 42, no. 1 (2014): 383-398.
+[1] Herlihy, Maurice, and J. Eliot B. Moss. **Transactional memory: Architectural support for lock-free data structures.** Vol. 21, no. 2. ACM, 1993.
+
+[2] Rajwar, Ravi, Maurice Herlihy, and Konrad Lai. "**Virtualizing transactional memory.**" In Computer Architecture, 2005. ISCA'05. Proceedings. 32nd International Symposium on, pp. 494-505. IEEE, 2005.
+
+[3] Ananian, C. Scott, Krste Asanovic, Bradley C. Kuszmaul, Charles E. Leiserson, and Sean Lie. "**Unbounded transactional memory.**" In High-Performance Computer Architecture, 2005. HPCA-11. 11th International Symposium on, pp. 316-327. IEEE, 2005.
+
+[4] Litz, Heiner, David Cheriton, Amin Firoozshahian, Omid Azizi, and John P. Stevenson. "**SI-TM: reducing transactional memory abort rates through snapshot isolation.**" ACM SIGARCH Computer Architecture News 42, no. 1 (2014): 383-398.
