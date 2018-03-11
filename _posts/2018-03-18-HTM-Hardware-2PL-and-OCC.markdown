@@ -89,8 +89,8 @@ Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
 ### 2PL Limitations
 
-Although correctness of transactional semantics is guaranteed by holding locks on cache lines from the first 
-usage till tranaction commit as in 2PL, this scheme does not often provide high degrees of parallelism. There
+Although correctness of transactional semantics is guaranteed by holding locks on cache lines 
+till tranaction commit as in SS2PL, this scheme does not often provide high degrees of parallelism. There
 are two reasons. First, long running transactions, or transactions working on "hot" data items, are more prone
 to suffer from frequent aborts, as a single conflict can force them to abort. Second, in the hardware SS2PL scheme,
 conflicts are resolved by transaction aborts as early as they are detected. On one hand, such "eager" conflict 
