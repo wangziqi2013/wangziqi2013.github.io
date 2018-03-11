@@ -6,7 +6,7 @@ date:   2018-03-09 03:32:00 -0500
 
 ### Introduction
 
-Hardware transactional memory (HTM) eases parallel programming through built-in support for 
+Hardware transactional memory (HTM) [1] eases parallel programming through built-in support for 
 conflict serializable (CSR) transactional semantics directly on the hardware level. Concurrency control (CC) is a 
 family of implementation independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
 In the discussion that follows, we focus on a page based model where only reads and writes are state-dependent.
@@ -17,10 +17,11 @@ building blocks for hardware CC algorithms. Then based on these hardware feature
 that provides correct transactional semantics, with increased degrees of parallelism. 
 
 To make the discussion more compact and coherent, only 2PL and OCC are covered, as they share some characteristics that 
-can simplify the explanation. MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to different processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions to allow context switch,
-interruption or migration to happen amid their executions is a relevant topic, but not covered. Since this
+can simplify the explanation. MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to 
+different processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions [2] to allow context 
+switch, interruption or migration to happen amid their executions is a relevant topic, but not covered. Since this
 literature is concentrated on the concurrency control aspect of HTM, we assume the transaction's working set
-fits in processor's L1 cache. Although unbounded transactional memory is an interesting topic, and does have an effect on
+fits in processor's L1 cache. Although unbounded transactional memory [3] is an interesting topic, and does have an effect on
 hardware CC algorithms, we postpone this topic to a later discussion.
 
 ### Hardware Locking
@@ -101,12 +102,11 @@ are two reasons. First, long running transactions, or transactions working on "h
 to suffering from frequent aborts, as a single conflict can force them to abort. Second, in the hardware SS2PL scheme,
 conflicts are resolved by transaction aborts as early as they are detected. On one hand, such "eager" conflict 
 detection and resolution mechanism make sure that transactions who violates 2PL will not waste cycles executing 
-the rest of its work, minimizing wastages locally. On the other hand, if the "winner" transaction that survives
+the rest of its work, minimizing wastages locally. On the other hand, if the "winner" transaction that won
 an arbitration is eventually aborted, then we actually might have at least some useful work done if the "loser" of
-the arbitration were allowed to continue. The latter observation suggests an alternative conflict detection (CD) and 
-resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR perform these two only at the point 
-they are absolutaly necessary, after which the execution cannot be undone. Usually, this time point is chosen
-as transaction commit point.
+the arbitration were allowed to continue. 
+
+
 
 ### To Lock or Not to Lock: It's an OCC Question
 
@@ -146,3 +146,10 @@ Commit
 {% endhighlight %}
 
 (To be finished)
+
+### References
+
+[1] Herlihy, Maurice, and J. Eliot B. Moss. Transactional memory: Architectural support for lock-free data structures. Vol. 21, no. 2. ACM, 1993.
+[2] Rajwar, Ravi, Maurice Herlihy, and Konrad Lai. "Virtualizing transactional memory." In Computer Architecture, 2005. ISCA'05. Proceedings. 32nd International Symposium on, pp. 494-505. IEEE, 2005.
+[3] Ananian, C. Scott, Krste Asanovic, Bradley C. Kuszmaul, Charles E. Leiserson, and Sean Lie. "Unbounded transactional memory." In High-Performance Computer Architecture, 2005. HPCA-11. 11th International Symposium on, pp. 316-327. IEEE, 2005.
+[4] Litz, Heiner, David Cheriton, Amin Firoozshahian, Omid Azizi, and John P. Stevenson. "SI-TM: reducing transactional memory abort rates through snapshot isolation." ACM SIGARCH Computer Architecture News 42, no. 1 (2014): 383-398.
