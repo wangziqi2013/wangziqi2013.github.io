@@ -88,8 +88,10 @@ An easy fix is to strengthen (h2) a little into (h2'): no transactional cache li
 Not surprisingly, (h1)(h2') are just hardware SS2PL.
 
 One extra bouns of adopting hardware SS2PL is recoverability, which is of crucial importance to HTM. Releasing
-a transactionally written cache line to other transactions before commit will cause "dirty read". . If the transaction whose 
-dirty cache lines are read later aborts, all transactions that 
+a transactionally written cache line to other transactions before commit is allowed by 2PL, as in (h2), but
+it causes the "dirty read" problem. Those who has read dirty cache lines of an uncommitted transaction must thererfore 
+form a "commit dependency" to the source transaction, and can only commit after the source transaction commits. 
+Otherwise, if the source transaction later aborts, the execution becomes non-serializable.
 
 ### 2PL Limitations
 
