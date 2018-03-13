@@ -133,12 +133,20 @@ until transaction commit point. In OCC, access controls are not imposed on indiv
 Transactionally written data must be buffered in the WS locally before the transaction is able to commit.
 
 The execution of an OCC transaction is therefore divided into three phases. In the first phase called the "read phase",
-transactionally read data items are either from the global state, or forwarded from its WS if the item is dirty.
+transactionally read data items are either obtained from the global state, or forwarded from its WS if the item is dirty.
 Transactionally written items are buffered in the local WS.
-No global state changes are made in this phase, and if transactions abort after the read phase, no roll back on
-the global state is required. In the second phase, the validation phase, transactions validate their RSs to ensure reads
+No global state changes are made in this phase, and hence if transactions abort after the read phase, no roll back on
+the global state is required. 
+
+In the second phase, the validation phase, transactions validate their RSs to ensure reads
 are atomic with regard to concurrent writes to the global state. Note that the "atomic read w.r.t. concurrent writes" 
-statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase.
+statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. Alternatively,
+validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
+first, and then broadcasting the WS to all other transactions in the read phase. Transactions whose 
+RS has a non-empty intersection with the broadcasted WS will abort. The first validation algorithm is called
+Forward OCC, as it verifies the intergity of RSs by checking
+
+In the last phase, the write phase, transactions
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
