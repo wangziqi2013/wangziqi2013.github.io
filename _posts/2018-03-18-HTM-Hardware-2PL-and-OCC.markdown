@@ -143,7 +143,8 @@ are atomic with regard to concurrent writes to the global state. Note that the "
 statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. A transaction
 becomes "invincible" once it successfully validates, as the commit status has been determined, and no abort can happen. 
 
-In the last phase, the write phase, transactions publicize their WSs by . 
+In the last phase, the write phase, transactions publicize their WSs by writing all dirty data items back to the 
+global state. Transactions cannot be rolled back during the write phase. 
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
