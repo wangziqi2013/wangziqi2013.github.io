@@ -148,8 +148,14 @@ global state. Transactions cannot be rolled back during the write phase.
 
 ### Hardware OCC
 
-In a minimal design, the hardware implements RS in its L1 private cache, as the cache coherence already maintains
-a muti-reader property, transactions just mark a "Transactionally Read" (TR) bit. 
+In a minimal design, the hardware implements RS in its L1 private cache, as cache coherence already maintains
+the muti-reader property. Transactions mark the "Transactionally Read" (TR) bit on transactional loads, and no
+extra structure is maintained. Note that the RS does not include dirty data items forwarded from the WS. 
+WSs are more tricky, because it must serve two purposes. The first is to forward dirty data to load instructions, as
+described earlier. The WS structure must therefore support efficient lookups with load addresses. 
+The second purpose is to store speculative data items and their addreses, that can be walked efficiently
+during the write back and possibly during the validation phase. Apparently, iteration of all elements
+in the WS must be suported efficiently.
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
@@ -181,6 +187,8 @@ checks its read set against those txns that have already committed (and hence "f
 notify readers before writers' write phase if its write set overlaps with readers' read sets, then it is Backward OCC (BOCC).
 
 (TODO: Concrete impl. of validation for BOCC and FOCC, using versions, global counter, broadcast)
+
+### Fine Grained Conflict Inference
 
 (TODO: Talk about the degree of parallelism of read validation)
 
