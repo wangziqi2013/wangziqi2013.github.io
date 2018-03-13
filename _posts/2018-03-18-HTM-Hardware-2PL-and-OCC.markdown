@@ -152,10 +152,14 @@ In a minimal design, the hardware implements RS in its L1 private cache, as cach
 the muti-reader property. Transactions mark the "Transactionally Read" (TR) bit on transactional loads, and no
 extra structure is maintained. Note that the RS does not include dirty data items forwarded from the WS. 
 WSs are more tricky, because it must serve two purposes. The first is to forward dirty data to load instructions, as
-described earlier. The WS structure must therefore support efficient lookups with load addresses. 
-The second purpose is to store speculative data items and their addreses, that can be walked efficiently
-during the write back and possibly during the validation phase. Apparently, iteration of all elements
-in the WS must be suported efficiently.
+described earlier. The WS structure must therefore support efficient lookups with load instructions' addresses. 
+The second purpose is to store speculative data items and their addreses, which can be walked efficiently
+during the write phase and possibly during the validation phase. Apparently, iteration of all elements
+in the WS must also be suported efficiently. Optionally, if more than one store instructions modify a data item
+transactionally, instead of logging multiple entries, the WS may consolidate multiple writes onto the same entry,
+saving WS storage. This requires efficient lookups using write instructions' addresses.
+
+
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
