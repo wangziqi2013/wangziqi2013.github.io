@@ -112,9 +112,13 @@ be portable, diagnostics tools must be provided to ensure SI induced anomalies d
 The latter observation suggests an alternative conflict detection (CD) and 
 resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR check serialization conditions only at 
 the point they are absolutaly necessary, after which the execution cannot be undone and/or may become undefined. 
- We take a closer look at lazy CD/CR In the following discussion.
+We take a closer look at lazy CD/CR In the following discussion.
+
+### Decoupling Data and Metadata
 
 ### To Lock or Not to Lock: It's an OCC Question
+
+Imagine if a transaction 
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
