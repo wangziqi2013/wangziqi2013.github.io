@@ -114,11 +114,15 @@ resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR check se
 the point they are absolutaly necessary, after which the execution cannot be undone and/or may become undefined. 
 We take a closer look at lazy CD/CR In the following discussion.
 
-### Decoupling Data and Metadata
-
 ### To Lock or Not to Lock: It's an OCC Question
 
-Imagine if a transaction 
+Lazy CD/CR shares lots of characteristics with Optimistic Concurrency Control (OCC) [5]. Instead of locking every
+data item till transaction commit to prevent conflicting accesses by other transactions,
+OCC optimistically assumes that the transaction's read set will not be altered during its 
+execution, and therefore the locking is omitted. Read set (RS) refers to the set of data items that a
+transaction accesses without modifying the content. Respectively, write set (WS) refers to the set of data items
+that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice
+blind writes (writing a data item without reading its value in the same transaction) are not uncommon. 
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
@@ -166,3 +170,5 @@ Commit
 [3] Ananian, C. Scott, Krste Asanovic, Bradley C. Kuszmaul, Charles E. Leiserson, and Sean Lie. "**Unbounded transactional memory.**" In High-Performance Computer Architecture, 2005. HPCA-11. 11th International Symposium on, pp. 316-327. IEEE, 2005.
 
 [4] Litz, Heiner, David Cheriton, Amin Firoozshahian, Omid Azizi, and John P. Stevenson. "**SI-TM: reducing transactional memory abort rates through snapshot isolation.**" ACM SIGARCH Computer Architecture News 42, no. 1 (2014): 383-398.
+
+[5] Kung, Hsiang-Tsung, and John T. Robinson. "**On optimistic methods for concurrency control.**" ACM Transactions on Database Systems (TODS) 6, no. 2 (1981): 213-226.
