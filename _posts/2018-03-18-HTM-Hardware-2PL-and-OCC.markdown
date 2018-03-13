@@ -120,9 +120,11 @@ Lazy CD/CR shares lots of characteristics with Optimistic Concurrency Control (O
 data item till transaction commit to prevent conflicting accesses by other transactions,
 OCC optimistically assumes that the transaction's read set will not be altered during its 
 execution, and therefore the locking is omitted. Read set (RS) refers to the set of data items that a
-transaction accesses without modifying the content. Respectively, write set (WS) refers to the set of data items
+transaction accesses without modifying the content. Correspondingly, write set (WS) refers to the set of data items
 that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice
-blind writes (writing a data item without reading its value in the same transaction) are not uncommon. 
+blind writes (writing a data item without reading its value in the same transaction) are not uncommon.
+
+To ensure recoverability, transactions running under OCC must only read committed data. 
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
