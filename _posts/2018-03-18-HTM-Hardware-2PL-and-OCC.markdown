@@ -138,13 +138,15 @@ Transactionally written items are buffered in the local WS.
 No global state changes are made in this phase, and hence if transactions abort after the read phase, no roll back on
 the global state is required. 
 
-In the second phase, the validation phase, transactions validate their RSs to ensure reads
-are atomic with regard to concurrent writes to the global state. Note that the "atomic read w.r.t. concurrent writes" 
+In the second phase, the validation phase, transactions validate their RSs to ensure read phases
+are atomic with regard to concurrent writes to the global state. Note that the "atomic read phase w.r.t. concurrent writes" 
 statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
-first, and then broadcasting the WS to all other transactions in the read phase. Transactions whose 
-RS has a non-empty intersection with the broadcasted WS will abort. The first validation algorithm is called
-Forward OCC, as it verifies the intergity of RSs by checking
+first, and then broadcasting the WS to all other transactions currently under the read phase. Transactions whose 
+RS has a non-empty intersection with the broadcasted WS then abort. The lock on the WS will not be 
+released until write phase finishes, as we shall see later. 
+
+The first validation algorithm is called Forward OCC, as it verifies the intergity of RSs by checking 
 
 In the last phase, the write phase, transactions
 
