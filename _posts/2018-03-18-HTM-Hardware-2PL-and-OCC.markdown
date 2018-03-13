@@ -123,7 +123,7 @@ execution (from the first read to the last read)**, and therefore locking is omi
 In later sections We will see how the validity of this assumption is checked.
 Read set (RS) refers to the set of data items that a
 transaction accesses without modifying the content. Correspondingly, write set (WS) refers to the set of data items
-that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice
+that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice,
 blind writes (writing a data item without reading its value in the same transaction) are not uncommon. Both RS and WS
 are maintained as sets of (addr., data) pairs.
 
@@ -141,10 +141,15 @@ the global state is required.
 In the second phase, the validation phase, transactions validate their RSs to ensure read phases
 are atomic with regard to concurrent writes to the global state. Note that the "atomic read phase w.r.t. concurrent writes" 
 statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. A transaction
-becomes "invincible" once it successfully validates, as the commit status has been determined, and no abort can happen. 
+becomes "invincible" once it successfully validates, as the commit status has been determined, and it can no longer abort. 
 
 In the last phase, the write phase, transactions publicize their WSs by writing all dirty data items back to the 
 global state. Transactions cannot be rolled back during the write phase. 
+
+### Hardware OCC
+
+In a minimal design, the hardware implements RS in its L1 private cache, as the cache coherence already maintains
+a muti-reader property, transactions just mark a "Transactionally Read" (TR) bit. 
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
