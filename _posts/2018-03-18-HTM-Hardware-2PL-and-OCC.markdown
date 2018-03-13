@@ -159,12 +159,12 @@ in the WS must also be suported efficiently. Optionally, if more than one store 
 transactionally, instead of logging multiple entries, the WS may consolidate them onto the same entry,
 saving WS storage. This requires efficient lookups using store addresses.
 
-The granularity of RS/WS maintenance may affect their implementation. For example, RSs are implicitly maintained 
+The granularity of RS/WS maintenance may affect conflict rates. For example, RSs are implicitly maintained 
 on cache line granularity in the previous paragraph. Conflict rates can increase due to false sharing. The justification, 
 however, is that read locality and design simplicity may offset the negative effect. On the other hand, 
 if WSs use cache line addresses, then the entire cache line must be logged as speculative data. Essentially,
 the transactional store instruction is expanded into a few load instructions to bring in the cache line, and 
-then a few store instructions to overwrite the cache line, preserving all other contents but update the intended word. 
+then a few store instructions to overwrite the cache line, preserving all other contents while updating the intended word. 
 Not only Write-after-Write (WAW) conflict rate increases in this case, but also Read-after-Write (RAW) and Write-after-Read (WAR).
 In the following discussion, we assume that the write set is maintained in word granularity. In addition, load/store addresses are 
 assumed to be word-aligned, because otherwise, a load may access half-speculative and half-non-speculative data, 
