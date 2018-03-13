@@ -118,17 +118,27 @@ We take a closer look at lazy CD/CR In the following discussion.
 
 Lazy CD/CR shares lots of characteristics with Optimistic Concurrency Control (OCC) [5]. Instead of locking every
 data item till transaction commit to prevent conflicting accesses by other transactions,
-OCC optimistically assumes that the transaction's read set will not be altered during its 
-execution, and therefore the locking is omitted. Read set (RS) refers to the set of data items that a
+OCC optimistically assumes that the **transaction's read set will not be altered during its 
+execution (from the first read to the last read)**, and therefore locking is omitted. 
+In later sections We will see how the validity of this assumption is checked.
+Read set (RS) refers to the set of data items that a
 transaction accesses without modifying the content. Correspondingly, write set (WS) refers to the set of data items
 that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice
-blind writes (writing a data item without reading its value in the same transaction) are not uncommon.
+blind writes (writing a data item without reading its value in the same transaction) are not uncommon. Both RS and WS
+are maintained as sets of (addr., data) pairs.
 
 To ensure recoverability, transactions refrian from globally making the write set visible before its commit status is
 determined. As mentioned in a previous section, SS2PL manitains this property by not releasing locks on dirty data items
-until transaction commit point. In OCC, access controls are not imposed on individual data items. Transactions must
-buffer their WSs locally before they are able to commit.
+until transaction commit point. In OCC, access controls are not imposed on individual data items. 
+Transactionally written data must be buffered in the WS locally before the transaction is able to commit.
 
+The execution of an OCC transaction is therefore divided into three phases. In the first phase called the "read phase",
+transactionally read data items are either from the global state, or forwarded from its WS if the item is dirty.
+Transactionally written items are buffered in the local WS.
+No global state changes are made in this phase, and if transactions abort after the read phase, no roll back on
+the global state is required. In the second phase, the validation phase, transactions validate their RSs to ensure reads
+are atomic with regard to concurrent writes to the global state. Note that the "atomic read w.r.t. concurrent writes" 
+statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
