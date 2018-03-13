@@ -140,15 +140,19 @@ the global state is required.
 
 In the second phase, the validation phase, transactions validate their RSs to ensure read phases
 are atomic with regard to concurrent writes to the global state. Note that the "atomic read phase w.r.t. concurrent writes" 
-statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. Alternatively,
+statement is simply a rephrase of the OCC assumption: The RS will not be altered during the read phase. A transaction
+becomes "invincible" once it successfully validates, as the commit status has been determined, and no abort can happen. 
+
+In the last phase, the write phase, transactions publicize their WSs by . 
+
+Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
 first, and then broadcasting the WS to all other transactions currently under the read phase. Transactions whose 
 RS has a non-empty intersection with the broadcasted WS then abort. The lock on the WS will not be 
 released until write phase finishes, as we shall see later. 
 
-The first validation algorithm is called Forward OCC, as it verifies the intergity of RSs by checking 
-
-In the last phase, the write phase, transactions
+The first validation algorithm is called Backward OCC (BOCC), as it verifies the intergity of RSs by intersecting
+the RS against WS of already committed transactions. A non-empty intersection implies a possible non-atomic read phase.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
