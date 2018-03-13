@@ -124,7 +124,11 @@ transaction accesses without modifying the content. Correspondingly, write set (
 that a transaction wishes to write into. It is not strictly required that WS is a subset of RS, because in practice
 blind writes (writing a data item without reading its value in the same transaction) are not uncommon.
 
-To ensure recoverability, transactions running under OCC must only read committed data. 
+To ensure recoverability, transactions refrian from globally making the write set visible before its commit status is
+determined. As mentioned in a previous section, SS2PL manitains this property by not releasing locks on dirty data items
+until transaction commit point. In OCC, access controls are not imposed on individual data items. Transactions must
+buffer their WSs locally before they are able to commit.
+
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
