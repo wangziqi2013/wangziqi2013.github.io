@@ -198,7 +198,7 @@ Store A + 0
 
 Similarly, if the WS of transaction 1 is maintained on word granularity, only transaction 2 may fail to validate. But
 if the WS is maintained on cache line granularity, then transaction 3 and 4 may also abort, due to false
-RAW conflicts with committed transaction. Note that different OCC validation protocols will result in different
+RAW conflicts with committed transaction. Note that different OCC validation protocols will produce different
 abort/commit status. We omit validation details here, and only consider the worst case.
 
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
@@ -215,8 +215,9 @@ in this literature, and we focus on the former. To support L1 resident speculati
 is modified to treat transactional store coherence request as a load-shared request. Multiple readers and multiple speculative writers can co-exist under the modified protocol. Note that speculative cache lines cannot be sent to fulfill load-shared requests.
 
 The RS, if not to be implemented as part of L1 tags, can similarly be maintained as a signature or bloom filter. 
-RSs do not have to be exact, as long as false negatives are impossible, and false positives are tolerable. 
-Depending on the type of the validation protocol, transactional loaded data as well as an exact log may also be 
+RSs do not have to be exact, as long as false negatives are impossible. Inexact RSs may cause higher conflict rate on larger
+transactions, but common cases are fast.
+Depending on the type of the validation protocol, transactionally loaded data as well as an exact log may also be 
 required, in which case all techniques for maintaining WSs can also be adopted for RSs.
 
 With RS and WS implemented, the OCC read phase proceeds as follows. On transactional load, first check the WS. If 
@@ -228,16 +229,16 @@ which is covered in the next section.
 
 ### OCC Validation
 
+Two flavors of validations are proposed for OCC, both aiming at recognizing and eliminating non-atomic read phase. 
+Backward OCC, or BOCC, verifies the intergity of RSs by intersecting
+the RS against WSs of already committed transactions. A non-empty intersection implies a possible non-atomic read phase,
+and hence the validating transaction aborts. Alternatively, validation can also be carried out by locking the WS (i.e. blocking all 
+accesses to data items in the WS) first, and then broadcasting the WS to all other transactions currently under the read phase. 
+An arbitration is performed if the broadcasted WS has non-empty intersections with one or more transactions in the read phase.
+Either the validating transaction aborts, or all conflicting read transactions abort. The lock on the WS will not be 
+released until write phase finishes or the transaction aborts.
 
 
-Alternatively,
-validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
-first, and then broadcasting the WS to all other transactions currently under the read phase. Transactions whose 
-RS has a non-empty intersection with the broadcasted WS then abort. The lock on the WS will not be 
-released until write phase finishes, as we shall see later. 
-
-The first validation algorithm is called Backward OCC (BOCC), as it verifies the intergity of RSs by intersecting
-the RS against WS of already committed transactions. A non-empty intersection implies a possible non-atomic read phase.
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
