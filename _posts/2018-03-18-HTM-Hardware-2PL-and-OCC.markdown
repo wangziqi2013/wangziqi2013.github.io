@@ -191,6 +191,8 @@ speculative data into the WS. On external abort or abort instruction, no roll ba
 local. If transactional execution eventually reaches the commit instruction, then validation is performed,
 which is covered in the next section.
 
+### Hardware Validation
+
 
 
 Alternatively,
