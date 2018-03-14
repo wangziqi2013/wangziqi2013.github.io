@@ -155,7 +155,7 @@ WSs are more tricky, because it must serve two purposes. The first is to forward
 described earlier. The WS structure must therefore support efficient lookups with load addresses. 
 The second purpose is to store speculative data items and their addreses, which can be walked efficiently
 during the write phase and possibly during the validation phase. Apparently, iteration of all elements
-in the WS must also be suported efficiently. Optionally, if more than one store instructions modify a data item
+in the WS must also be supported efficiently. Optionally, if more than one store instructions modify a data item
 transactionally, instead of logging multiple entries, the WS may consolidate them onto the same entry,
 saving WS storage. This requires efficient lookups using store addresses.
 
@@ -166,9 +166,13 @@ if WSs use cache line addresses, then the entire cache line must be logged as sp
 the transactional store instruction is expanded into a few load instructions to bring in the cache line, and 
 then a few store instructions to overwrite the cache line, preserving all other contents while updating the intended word. 
 Not only Write-after-Write (WAW) conflict rate increases in this case, but also Read-after-Write (RAW) and Write-after-Read (WAR).
-In the following discussion, we assume that the write set is maintained in word granularity. In addition, load/store addresses are 
-assumed to be word-aligned, because otherwise, a load may access half-speculative and half-non-speculative data, 
-complicating the explanation.
+In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
+and half-non-speculative data, complicating the explanation.
+
+Overall, the WS can be implemented in one of the following ways: (1) All speculative data are stored in a linear log consisting
+of (addr., data) paris. To support efficient lookup using load/store addresses, a filter is checked before a linear search. The
+filter can be a bloom filter as in VTM [5], or a fast cache of recently accessed items. The log can be virtualized, can be accelerated 
+by a hardware queue, or can be cache allocated. (2) 
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
@@ -229,3 +233,5 @@ Commit
 [4] Litz, Heiner, David Cheriton, Amin Firoozshahian, Omid Azizi, and John P. Stevenson. "**SI-TM: reducing transactional memory abort rates through snapshot isolation.**" ACM SIGARCH Computer Architecture News 42, no. 1 (2014): 383-398.
 
 [5] Kung, Hsiang-Tsung, and John T. Robinson. "**On optimistic methods for concurrency control.**" ACM Transactions on Database Systems (TODS) 6, no. 2 (1981): 213-226.
+
+[6] Rajwar, Ravi, Maurice Herlihy, and Konrad Lai. "**Virtualizing transactional memory.**" In Computer Architecture, 2005. ISCA'05. Proceedings. 32nd International Symposium on, pp. 494-505. IEEE, 2005.
