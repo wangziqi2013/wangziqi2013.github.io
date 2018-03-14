@@ -13,3 +13,7 @@ htm_cr: Lazy (FOCC)
 version_mgmt: Lazy, Software
 ---
 
+This paper proposes SigTM, a hybrid TM implementation that features lazy CD/CR as well as software maintained 
+write sets. Cache coherence and cache tags are not changed. The processor is extended with the capability of
+
+
