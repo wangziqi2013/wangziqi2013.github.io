@@ -43,6 +43,10 @@ request times out because of NACK. This implies another transaction is undergoin
 can only serialize after it by either waiting for a while, or restarting the validation process. (4) A read-exclusive
 request comes from another processor and hits the read signature. This implies another processor is performing write validation,
 and the current transaction has a read dependency with its write back phase. In this case the current transaction can only abort.
+**Note that no global commit lock is acquired during pre-commit. Although the paper mentions a global commit lock, it is in the base HTM 
+design and does not appear in SigTM**.
 
 Once pre-commit succeeds, the transaction becomes "invincible" in a sense that it can no longer abort. The write set is
-locked, such that all coherence requests will be NACKed
+locked, such that all coherence requests will be NACKed. (*The paper did not mention what if a read request is NACKed during
+the read phase*). Then the commit handler performs write back for all write set items. Once finished, all signatures are cleared
+and coherence check for read/write sets are disabled.
