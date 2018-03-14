@@ -229,18 +229,30 @@ which is covered in the next section.
 
 ### OCC Validation
 
-OCC transactions are serialized by the order they enter the validation phase. We first assume atomic validation and write phase
-for simplicity of demonstration, and then loosen this restraint to obtain extra degrees of parallelism. 
+OCC transactions are serialized by the order they enter the validation phase. We assume atomic validation and write phase
+in this section for simplicity of demonstration, and then relax the restraint in the next section to unleash the full
+scheduling power of OCC. 
 
 The fundamental purpose of OCC validation is to preserve atomic read phase with regard to interleaving writes. 
-In the absense of fine grained access control on individual data items, the best way of conflict inference is to
-check overlapping read and write phases.
+In the absense of fine grained access control and/or timestamping on individual data items, the best way of 
+conflict inference is to examine overlapping read and write phases.
 If the read phase of a transaction overlaps with the write phase of another transaction, and the intersection of the RS and WS
-from respective transactions are non-empty, then the read phase risks inconsistent read anomaly.
+from respective transactions are non-empty, then the read phase can be non-atomic. False conflicts are possible, but
+correctness is always guaranteed.
 
 Two flavors of validations are proposed for OCC [10], both aiming at recognizing and eliminating non-atomic read phases. 
-Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already committed transactions. 
-A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, in
+Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already 
+committed transactions. A non-empty intersection implies a possible non-atomic read phase, and hence the validating 
+transaction aborts. The classical BOCC implementation in [5] relies on a globally synchronized monotonic timestamp
+counter to infer possibly overlapping read and write phases. At the beginning of the read phase, a transaction reads
+the begin timestamp, *bt*. After a transaction enters validation via a critical section (recall that we assume atomic 
+validation and write phase), it reads the commit timestamp, *ct*, and then increments the counter. 
+When a transaction finishes the write phase, its WS is tagged with *ct* and then archived by the OCC manager. 
+The interval [*bt*, *ct*] represents all WSs whose corresponding write phases possibly overlapped with the 
+transaction's RS. During validation, a transaction intersects its RS with all WSs within [*bt*, *ct*]. Validation
+fails if a non-empty intersection is detected, in which case the transaction exits critical section and then aborts. 
+
+Alternatively, in
 Forward OCC (FOCC), validation is carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests 
 to data items in the WS) first, and then broadcasting the WS to all other transactions. 
 An arbitration is performed if the broadcasted WS has non-empty intersections with one or more transactions in the read phase.
