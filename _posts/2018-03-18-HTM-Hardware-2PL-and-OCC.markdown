@@ -111,7 +111,7 @@ There exists HTM proposals that only supports SI [4], but in order for programs 
 be portable, diagnostics tools must be provided to ensure SI induced anomalies do not occur. 
 The latter observation suggests an alternative conflict detection (CD) and 
 resolution (CR) mechanism that are "lazy". Transactions with lazy CD/CR check serialization conditions only at 
-the point they are absolutaly necessary, after which the execution cannot be undone and/or may become undefined. 
+the point they are absolutely necessary, after which the execution cannot be undone and/or may become undefined. 
 We take a closer look at lazy CD/CR In the following discussion.
 
 ### To Lock or Not to Lock: It's an OCC Question
