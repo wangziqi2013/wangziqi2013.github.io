@@ -41,3 +41,8 @@ the cache line. Note that it is possible to receive NACK during both read and wr
 After pre-commit, all transactionally loaded and stored cache lines are in the processor's L1 private cache. 
 An atomic in-cache commit is then performed as in the classical HTM. 
 
+A few optimizations are possible. One of them is to send the transaction's read and write set along with coherence requests
+as a bitmap (signature?). This may help the receiver to eagerly determine that a prediction is not feasible, and hence 
+abort early to avoid wasted cycles. (*I am confused here. Why sending the read set? There is even no invalidatoin for transactional 
+written lines*). The second optimization prposes enhancing existing cache coherence protocol to support updating values in another 
+processor's cache. If this is supported, a committing transaction could broadcast its changes to a cache line to all other processors that have a Stale line. The latter then updates the content of Stale lines, which may help improving the accuracy of prediction.
