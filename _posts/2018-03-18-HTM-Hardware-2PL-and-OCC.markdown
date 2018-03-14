@@ -177,9 +177,12 @@ that supports efficient membership testing, intersection, and reconstruction. Th
 by a hardware queue, or can be cache allocated. (2) Keep the WS in the L1 private cache, and optionally "virtualize" the 
 cache to support overflowing transactional states into lower memory hierarchy. Virtualizing transactional states is not covered
 in this literature, and we focus on the former. To support L1 resident speculative data, the cache coherence protocol
-is modified to treat transactional store coherence request as a load-shared request. Note that speculative cache lines
-cannot be sent to fulfill load-shared requests. Multiple readers and multiple speculative writers can co-exist in the
-modified protocol.
+is modified to treat transactional store coherence request as a load-shared request. Multiple readers and multiple speculative writers can co-exist under the modified protocol. Note that speculative cache lines cannot be sent to fulfill load-shared requests.
+
+The RS, if not to be implemented as part of L1 tags, can similarly be maintained as a signature or bloom filter. 
+RSs do not have to be exact, as long as false negatives are impossible, and false positives are tolerable. 
+Depending on the type of validation protocol, transactional loaded data as well as an exact log may also be 
+required, in which case all techniques for maintaining WSs can also be adopted for RSs.
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
