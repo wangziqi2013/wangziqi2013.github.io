@@ -169,7 +169,14 @@ Not only Write-after-Write (WAW) conflict rate increases in this case, but also 
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
 and half-non-speculative data, complicating the explanation.
 
-
+Overall, the WS can be implemented in one of the following ways: (1) Speculative data and addresses are decoupled. 
+Data items are stored in a linear log consisting of (addr., data) paris as in LogTM [8], or a software hash table as in 
+SigTM [9]. To support efficient lookup using load/store addresses, a filter is checked before a linear search. 
+The filter can be a bloom filter as in VTM [6], or a fast cache of recently accessed items, or a BULK-style signature [7] 
+that supports efficient membership testing, intersection, and reconstruction. The log can be virtualized, can be accelerated 
+by a hardware queue, or can be cache allocated. (2) Keep the WS in the L1 private cache, and optionally "virtualize" the 
+cache to support overflowing transactional states into the lower hierarchy. Virtualizing transactional states is not covered
+in this literature. 
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
