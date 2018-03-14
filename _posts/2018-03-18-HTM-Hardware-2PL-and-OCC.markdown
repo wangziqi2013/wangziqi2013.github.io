@@ -169,10 +169,7 @@ Not only Write-after-Write (WAW) conflict rate increases in this case, but also 
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
 and half-non-speculative data, complicating the explanation.
 
-Overall, the WS can be implemented in one of the following ways: (1) All speculative data are stored in a linear log consisting
-of (addr., data) paris. To support efficient lookup using load/store addresses, a filter is checked before a linear search. The
-filter can be a bloom filter as in VTM [5], or a fast cache of recently accessed items. The log can be virtualized, can be accelerated 
-by a hardware queue, or can be cache allocated. (2) 
+
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
@@ -235,3 +232,9 @@ Commit
 [5] Kung, Hsiang-Tsung, and John T. Robinson. "**On optimistic methods for concurrency control.**" ACM Transactions on Database Systems (TODS) 6, no. 2 (1981): 213-226.
 
 [6] Rajwar, Ravi, Maurice Herlihy, and Konrad Lai. "**Virtualizing transactional memory.**" In Computer Architecture, 2005. ISCA'05. Proceedings. 32nd International Symposium on, pp. 494-505. IEEE, 2005.
+
+[7] Ceze, Luis, James Tuck, Josep Torrellas, and Calin Cascaval. "**Bulk disambiguation of speculative threads in multiprocessors.**" In ACM SIGARCH Computer Architecture News, vol. 34, no. 2, pp. 227-238. IEEE Computer Society, 2006.
+
+[8] Moore, Kevin E., Jayaram Bobba, Michelle J. Moravan, Mark D. Hill, and David A. Wood. "**LogTM: log-based transactional memory.**" In HPCA, vol. 6, pp. 254-265. 2006.
+
+[9] Minh, Chi Cao, Martin Trautmann, JaeWoong Chung, Austen McDonald, Nathan Bronson, Jared Casper, Christos Kozyrakis, and Kunle Olukotun. "**An effective hybrid transactional memory system with strong isolation guarantees.**" In ACM SIGARCH Computer Architecture News, vol. 35, no. 2, pp. 69-80. ACM, 2007.
