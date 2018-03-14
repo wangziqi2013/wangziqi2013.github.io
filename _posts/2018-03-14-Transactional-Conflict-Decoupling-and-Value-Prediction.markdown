@@ -25,13 +25,19 @@ for later validations.
 
 On transactional store instructions, DPTM buffers the addresses and data in the store buffer. On cache line invalidation requests, if 
 they hit transactionally loaded cache lines, DPTM always acknowledges them. Instead of turning the line into "Invalid" state, the line 
-will stay in "Stale" state, keeping tag, data and read set bits intact. Invalidations on transactionally written lines should cause an 
-immediate abort as usual, because for recoverability reasons, HTM must not leak uncommitted data. 
+will stay in "Stale" state, keeping tag, data and read set bits intact. **There is no transactionally written lines,
+as DPTM uses a separate store buffer.**
 
-On commit, DPTM must first lock the entire write set, and then validate the read set.
-For each address whose cache line has not been in the exclusive state in the processor's L1 cache, the cache controller
-sends a read-exclusive message to the bus or the directory. Once exclusive permission is acquired, it NACKs all 
-incoming requests for the cache line. DPTM then performs value validation. For all Stale cache lines, read-shared
+On pre-commit, DPTM must first lock the entire read and write set, and then validate the read and write set. All invalidation 
+requests are NACKed after a transaction enters pre-commit stage. If a transaction receives NACK as the response during
+transactional execution, it must abort.
+
+The read set validation proceeds as follows: for all Stale cache lines, read-shared
 permissions are re-required. After the cache line is received, DPTM verifies that the value it predicts are correct.
-If all Stale cache lines pass value validation, the transaction could perform an in-cache commit. Otherwise, validation
-fails, and the transaction must abort.
+If all Stale cache lines fails validation, the transaction must abort. If read set validation passes, then for each address whose cache line has not been in the exclusive state in the processor's L1 cache, 
+the cache controller sends a read-exclusive message to the bus or the directory. DPTM then applies speculative changes onto
+the cache line. Note that it is possible to receive NACK during both read and write set validation. 
+
+After pre-commit, all transactionally loaded and stored cache lines are in the processor's L1 private cache. 
+An atomic in-cache commit is then performed as in the classical HTM. 
+
