@@ -248,9 +248,9 @@ counter to infer possibly overlapping read and write phases. At the beginning of
 the begin timestamp, *bt*. After a transaction enters validation via a critical section (recall that we assume atomic 
 validation and write phase), it reads the commit timestamp, *ct*, and then increments the counter. 
 When a transaction finishes the write phase, its WS is tagged with *ct* and then archived by the OCC manager. 
-The interval [*bt*, *ct*] represents all WSs whose corresponding write phases possibly overlapped with the 
-transaction's RS. During validation, a transaction intersects its RS with all WSs within [*bt*, *ct*]. Validation
-fails if a non-empty intersection is detected, in which case the transaction exits critical section and then aborts. 
+The interval [*bt*, *ct*] represents all WSs whose corresponding write phases overlapped with the 
+transaction's read phase. During backward validation, a transaction intersects its RS with all WSs within [*bt*, *ct*]. 
+Validation fails if a non-empty intersection is detected, in which case the transaction exits critical section and then aborts. 
 
 Alternatively, in
 Forward OCC (FOCC), validation is carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests 
