@@ -14,9 +14,12 @@ version_mgmt: Lazy
 ---
 
 This paper proposes DPTM, Decoupling and Prediction TM, that reduces abort rates of classical SS2PL based best-effort HTM
-by delaying read validation till commit time, turning preemptive SS2PL partially into OCC. DPTM maintains fine 
-grained read sets in cache tags. It also adds a new "present but invalid", or "Stale" state to differentiate cache lines 
-that have been transactionally loaded but invalidated with cache lines that are not present (the old "Invalid" state). 
+by delaying read validation till commit time, turning preemptive SS2PL partially into OCC. The argument is that cache 
+line invalidation does not necessarily mean logical conflicts. They can be artificially caused by false sharing, or silent stores. 
+(i.e. one or more stores that do not change the final state), or doomed transactions (i.e. transactions that eventually aborts). 
+
+DPTM maintains fine grained read sets in cache tags. It also adds a new "present but invalid", or "Stale" state to differentiate cache 
+lines that have been transactionally loaded but invalidated with cache lines that are not present (the old "Invalid" state). 
 
 On transactional load instructions, DPTM marks read set bits on the finer granularity. If the load address hits a Stale
 cache line, DPTM predicts whether it should abort. If prediction favors not aborting, then the Stale cache line is used
