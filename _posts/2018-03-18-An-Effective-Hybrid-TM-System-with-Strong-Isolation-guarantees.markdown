@@ -34,7 +34,7 @@ the transaction aborts. The write signature is not checked (even not NACKed).
 
 In the pre-commit handler, SigTM validates its write set while keeping an eye on the conflicting pre-commits and 
 read phase transactions. Write set validation is standard FOCC: SigTM tries to obtain exclusive permission for 
-every cache line in its write set. In the meantime, four possible events may occur: (1) A read-exclusive request
+every cache line in its write set. In the meantime, four events may possibly occur: (1) A read-exclusive request
 comes from another processor and hits the write signature. This implies another processor is also performing pre-commit. 
 The current transaction tries to serialize after the former by restarting the validation. (2) A read-shared request comes 
 from another processor and hits the write signature. This implies another reader transaction establishes a new dependency 
@@ -45,6 +45,11 @@ request comes from another processor and hits the read signature. This implies a
 and the current transaction has a read dependency with its write back phase. In this case the current transaction can only abort.
 **Note that no global commit lock is acquired during pre-commit. Although the paper mentions a global commit lock, it is in the base HTM 
 design and does not appear in SigTM**.
+
+*I am not sure whether (1) will cause livelock, because two validating transactions could repeatedly cause the other
+to restart validation without making any progress. The same may also be true for (2)(3) if a hot data item is repeatedly being
+read/written, but in (2) and (3) at least some progress is made. Maybe directly locking the write set and read set during pre-commit 
+is better*
 
 Once pre-commit succeeds, the transaction becomes "invincible" in a sense that it can no longer abort. The write set is
 locked, such that all coherence requests will be NACKed. (*The paper did not mention what if a read request is NACKed during
