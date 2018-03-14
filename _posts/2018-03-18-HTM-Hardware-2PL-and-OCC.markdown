@@ -173,8 +173,10 @@ All loads and stores are from/to the global state.
 {% highlight C %}
    Txn 1         Txn 2         Txn 3         Txn 4
               Load  A + 0   Load  A + 4   Load  A + 8
+ (Validate)
 Store A + 0  
   Commit
+               (Validate)    (Validate)    (Validate)
 {% endhighlight %}
 
 If the WS of transaction 1 is maintained on word granularity (assuming 4 byte words), only transaction 2 will abort, and 
@@ -187,14 +189,17 @@ which is an optimization technique for cache line grained RS/WS.
 {% highlight C %}
    Txn 1         Txn 2         Txn 3         Txn 4
              Load  B + 0   Load  B + 0   Load  B + 0
-Store A + 0              
-             Load  A + 0   Load  A + 4   Load  A + 8
+ (Validate)
+Store A + 0
   Commit
+             Load  A + 0   Load  A + 4   Load  A + 8
+              (Validate)    (Validate)    (Validate)
 {% endhighlight %}
 
-Similarly, if WS of transaction 0 is maintained on word granularity, only transaction 2 would fail to validate. But
-if the WS is maintained on cache line granularity, then transaction 3 and 4 will also abort, due to false
-RAW conflicts with committed transaction. 
+Similarly, if the WS of transaction 1 is maintained on word granularity, only transaction 2 may fail to validate. But
+if the WS is maintained on cache line granularity, then transaction 3 and 4 may also abort, due to false
+RAW conflicts with committed transaction. Note that different OCC validation protocols will result in different
+abort/commit status. We omit validation details here, and only consider the worst case.
 
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
 and half-non-speculative data, complicating the explanation.
@@ -216,7 +221,7 @@ required, in which case all techniques for maintaining WSs can also be adopted f
 
 With RS and WS implemented, the OCC read phase proceeds as follows. On transactional load, first check the WS. If 
 the address hits the WS, then forward from the WS. Otherwise, use cache coherence protocol to obtain shared permission
-of the cache line. Meanwhile, The address is inserted into the RS. On transactional store, insert the address and 
+of the cache line. The address is inserted into the RS in the meanwhile. On transactional store, insert the address and 
 speculative data into the WS. On external abort or abort instruction, no roll back is needed, as all changes are 
 local. If transactional execution eventually reaches the commit instruction, then validation is performed,
 which is covered in the next section.
