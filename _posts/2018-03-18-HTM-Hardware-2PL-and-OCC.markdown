@@ -167,18 +167,34 @@ the transactional store instruction is expanded into a few load instructions to 
 then a few store instructions to overwrite the cache line, preserving all other contents while updating the intended word. 
 Not only Write-after-Write (WAW) conflict rate increases in this case, but also Read-after-Write (RAW) and Write-after-Read (WAR).
 This can be illustrated by two examples. In the following schedule, "X + y" stands for "The word at byte offset y of cache line X".
+All loads and stores are from/to the global state.
 
 **Example 1**
 {% highlight C %}
-   Txn 1        Txn 2        Txn 3        Txn 4
-Store A + 0  Load A + 0   Load A + 4   Load A + 8
+   Txn 1         Txn 2         Txn 3         Txn 4
+              Load  A + 0   Load  A + 4   Load  A + 8
+Store A + 0  
   Commit
 {% endhighlight %}
 
 If the WS of transaction 1 is maintained on word granularity (assuming 4 byte words), only transaction 2 will abort, and 
 transaction 3, 4 could commit. If transaction 1 maintains WS in cache line granularity, then when it commits, transaction
 2, 3 and 4 must all abort. This is because the write back of cache line A is treated as write back of A + 0, A + 4
-and A + 8, causing false WAR conflicts on transaction 3 and 4.
+and A + 8, causing false WAR conflicts on transaction 3 and 4. The false WAR conflict can be detected by value validation,
+which is an optimization technique for cache line grained RS/WS.
+
+**Example 2**
+{% highlight C %}
+   Txn 1         Txn 2         Txn 3         Txn 4
+             Load  B + 0   Load  B + 0   Load  B + 0
+Store A + 0              
+             Load  A + 0   Load  A + 4   Load  A + 8
+  Commit
+{% endhighlight %}
+
+Similarly, if WS of transaction 0 is maintained on word granularity, only transaction 2 would fail to validate. But
+if the WS is maintained on cache line granularity, then transaction 3 and 4 will also abort, due to false
+RAW conflicts with committed transaction. 
 
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
 and half-non-speculative data, complicating the explanation.
