@@ -28,7 +28,7 @@ hardware CC algorithms, we postpone this topic to a later discussion.
 
 In a multiprocessor system, to ensure coherence of cached data while allowing every processor to manipulate data in its private L1 cache, 
 hardware already implements a multi-reader, single-writer locking protocol for each individual cache line, dubbed "cache coherence 
-protocol". We use MSI as an example. When a cache line is to be read by the cache controller, the controller sends a read-shared message 
+protocol". We use MSI as an example. When a cache line is to be read by the cache controller, the controller sends a load-shared message 
 to either the bus or the 
 directory. The controller will be granted the permission to read through one of the following paths: (1) There are no sharing 
 processors. The requestor will be granted "S" state. (2) There are several sharing processors in "S" state. The requestor will also be 
@@ -146,7 +146,7 @@ becomes "invincible" once it successfully validates, as the commit status has be
 In the last phase, the write phase, transactions publicize their WSs by writing all dirty data items back to the 
 global state. Transactions cannot be rolled back during the write phase. 
 
-### Hardware OCC
+### Hardware Read/Write Set
 
 In a minimal design, the hardware implements RS in its L1 private cache, as cache coherence already maintains
 the muti-reader property. Transactions mark the "Transactionally Read" (TR) bit on transactional loads, and no
@@ -175,8 +175,11 @@ SigTM [9]. To support efficient lookup using load/store addresses, a filter is c
 The filter can be a bloom filter as in VTM [6], or a fast cache of recently accessed items, or a BULK-style signature [7] 
 that supports efficient membership testing, intersection, and reconstruction. The log can be virtualized, can be accelerated 
 by a hardware queue, or can be cache allocated. (2) Keep the WS in the L1 private cache, and optionally "virtualize" the 
-cache to support overflowing transactional states into the lower hierarchy. Virtualizing transactional states is not covered
-in this literature. 
+cache to support overflowing transactional states into lower memory hierarchy. Virtualizing transactional states is not covered
+in this literature, and we focus on the former. To support L1 resident speculative data, the cache coherence protocol
+is modified to treat transactional store coherence request as a load-shared request. Note that speculative cache lines
+cannot be sent to fulfill load-shared requests. Multiple readers and multiple speculative writers can co-exist in the
+modified protocol.
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
