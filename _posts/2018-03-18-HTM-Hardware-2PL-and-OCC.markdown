@@ -7,7 +7,7 @@ date:   2018-03-09 03:32:00 -0500
 ### Introduction
 
 Hardware transactional memory (HTM) [1] eases parallel programming through built-in support for 
-conflict serializable (CSR) transactional semantics directly on the hardware level. Concurrency control (CC) is a 
+conflict serializable (CSR) transactional semantics on the hardware level. Concurrency control (CC) is a 
 family of implementation independent algorithms that achieve transactional semantics by the scheduling of state-dependent operations. 
 In the discussion that follows, we focus on a page based model where only reads and writes are state-dependent.
 Several software implemented CC mechanisms are already deployed in applications such as database management systems,
@@ -16,13 +16,13 @@ explore the design space of CC algorithms in hardware. We first review a few har
 building blocks for hardware CC algorithms. Then based on these hardware features, we incrementally build an HTM 
 that provides correct transactional semantics, with increased degrees of parallelism. 
 
-To make the discussion more compact and coherent, only 2PL and OCC are covered, as they share some characteristics that 
+To make the discussion more compact, only 2PL and OCC are covered, as they share some characteristics that 
 can simplify the explanation. MVCC will be discussed in another literature. In addition, we assume logical transactions are bound to 
-different processors, and that they can finish within a scheduling quantum. Virtualizing hardware transactions [2] to allow context 
+different processors, and that they can finish within an OS scheduling quantum. Virtualizing hardware transactions [2] to allow context 
 switch, interruption or migration to happen amid their executions is a relevant topic, but not covered. Since this
 literature is concentrated on the concurrency control aspect of HTM, we assume the transaction's working set
-fits in processor's L1 cache. Although unbounded transactional memory [3] is an interesting topic, and does have an effect on
-hardware CC algorithms, we postpone this topic to a later discussion.
+fits in processor's L1 cache. Although unbounded transactional memory [3] is an interesting topic, and will affect
+hardware CC algorithms, we postpone this topic to another literature.
 
 ### Hardware Locking
 
@@ -229,7 +229,7 @@ which is covered in the next section.
 
 ### OCC Validation
 
-Two flavors of validations are proposed for OCC, both aiming at recognizing and eliminating non-atomic read phase. 
+Two flavors of validations are proposed for OCC [10], both aiming at recognizing and eliminating non-atomic read phase. 
 Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already committed transactions. 
 A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, validation 
 can also be carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests to data items in the WS) first, 
@@ -238,7 +238,7 @@ An arbitration is performed if the broadcasted WS has non-empty intersections wi
 Either the validating transaction aborts, or all conflicting read transactions abort. The lock on the WS will not be 
 released until write phase finishes or the transaction aborts.
 
-### Atomic Wtite Back
+### Atomic Write Back
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
@@ -298,3 +298,5 @@ Commit
 [8] Moore, Kevin E., Jayaram Bobba, Michelle J. Moravan, Mark D. Hill, and David A. Wood. "**LogTM: log-based transactional memory.**" In HPCA, vol. 6, pp. 254-265. 2006.
 
 [9] Minh, Chi Cao, Martin Trautmann, JaeWoong Chung, Austen McDonald, Nathan Bronson, Jared Casper, Christos Kozyrakis, and Kunle Olukotun. "**An effective hybrid transactional memory system with strong isolation guarantees.**" In ACM SIGARCH Computer Architecture News, vol. 35, no. 2, pp. 69-80. ACM, 2007.
+
+[10] Härder, Theo. "**Observations on optimistic concurrency control schemes.**" Information Systems 9, no. 2 (1984): 111-120.
