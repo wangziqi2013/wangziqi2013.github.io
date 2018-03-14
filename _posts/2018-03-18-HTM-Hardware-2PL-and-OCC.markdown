@@ -181,8 +181,17 @@ is modified to treat transactional store coherence request as a load-shared requ
 
 The RS, if not to be implemented as part of L1 tags, can similarly be maintained as a signature or bloom filter. 
 RSs do not have to be exact, as long as false negatives are impossible, and false positives are tolerable. 
-Depending on the type of validation protocol, transactional loaded data as well as an exact log may also be 
+Depending on the type of the validation protocol, transactional loaded data as well as an exact log may also be 
 required, in which case all techniques for maintaining WSs can also be adopted for RSs.
+
+With RS and WS implemented, the read phase proceeds as follows. On transactional load, first check the WS. If 
+the address hits the WS, then forward from the WS. Otherwise, use cache coherence protocol to obtain shared permission
+of the cache line. Meanwhile, The address is inserted into the RS. On transactional store, insert the address and 
+speculative data into the WS. On external abort or abort instruction, no roll back is needed, as all changes are 
+local. If transactional execution eventually reaches the commit instruction, then validation is performed,
+which is covered in the next section.
+
+
 
 Alternatively,
 validation can also be carried out by locking the WS (i.e. blocking all accesses to data items in the WS) 
