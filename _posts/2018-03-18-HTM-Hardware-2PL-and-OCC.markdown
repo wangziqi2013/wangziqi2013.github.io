@@ -218,7 +218,7 @@ The RS, if not to be implemented as part of L1 tags, can similarly be maintained
 RSs do not have to be exact, as long as false negatives are impossible. Inexact RSs may cause higher conflict rate on larger
 transactions, but common cases are fast.
 Depending on the type of the validation protocol, transactionally loaded data as well as an exact log may also be 
-required, in which case all techniques for maintaining WSs can also be adopted for RSs.
+required, in which case all techniques for maintaining WSs also apply.
 
 With RS and WS implemented, the OCC read phase proceeds as follows. On transactional load, first check the WS. If 
 the address hits the WS, then forward from the WS. Otherwise, use cache coherence protocol to obtain shared permission
@@ -231,12 +231,12 @@ which is covered in the next section.
 
 Two flavors of validations are proposed for OCC [10], both aiming at recognizing and eliminating non-atomic read phase. 
 Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already committed transactions. 
-A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, validation 
-can also be carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests to data items in the WS) first, 
-and then broadcasting the WS to all other transactions  currently under the read phase. 
+A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, in
+Forward OCC (FOCC), validation can also be carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests 
+to data items in the WS) first, and then broadcasting the WS to all other transactions currently under the read phase. 
 An arbitration is performed if the broadcasted WS has non-empty intersections with one or more transactions in the read phase.
 Either the validating transaction aborts, or all conflicting read transactions abort. The lock on the WS will not be 
-released until write phase finishes or the transaction aborts.
+released until write phase finishes or the transaction aborts. 
 
 ### Atomic Write Back
 
