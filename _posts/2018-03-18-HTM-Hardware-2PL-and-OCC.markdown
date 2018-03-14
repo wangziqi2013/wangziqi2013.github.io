@@ -160,12 +160,26 @@ transactionally, instead of logging multiple entries, the WS may consolidate the
 saving WS storage. This requires efficient lookups using store addresses.
 
 The granularity of RS/WS maintenance may affect conflict rates. For example, RSs are implicitly maintained 
-on cache line granularity in the previous paragraph. Conflict rates can increase due to false sharing. The justification, 
+on cache line granularity in the minimal design. Conflict rates can increase due to false sharing. The justification, 
 however, is that read locality and design simplicity may offset the negative effect. On the other hand, 
 if WSs use cache line addresses, then the entire cache line must be logged as speculative data. Essentially,
 the transactional store instruction is expanded into a few load instructions to bring in the cache line, and 
 then a few store instructions to overwrite the cache line, preserving all other contents while updating the intended word. 
 Not only Write-after-Write (WAW) conflict rate increases in this case, but also Read-after-Write (RAW) and Write-after-Read (WAR).
+This can be illustrated by two examples. In the following schedule, "X + y" stands for "The word at byte offset y of cache line X".
+
+**Example 1**
+{% highlight C %}
+   Txn 1        Txn 2        Txn 3        Txn 4
+Store A + 0  Load A + 0   Load A + 4   Load A + 8
+  Commit
+{% endhighlight %}
+
+If the WS of transaction 1 is maintained on word granularity (assuming 4 byte words), only transaction 2 will abort, and 
+transaction 3, 4 could commit. If transaction 1 maintains WS in cache line granularity, then when it commits, transaction
+2, 3 and 4 must all abort. This is because the write back of cache line A is treated as write back of A + 0, A + 4
+and A + 8, causing false WAR conflicts on transaction 3 and 4.
+
 In the following discussion, we assume that load/store addresses are word-aligned, because otherwise, a load may access half-speculative 
 and half-non-speculative data, complicating the explanation.
 
@@ -184,14 +198,14 @@ RSs do not have to be exact, as long as false negatives are impossible, and fals
 Depending on the type of the validation protocol, transactional loaded data as well as an exact log may also be 
 required, in which case all techniques for maintaining WSs can also be adopted for RSs.
 
-With RS and WS implemented, the read phase proceeds as follows. On transactional load, first check the WS. If 
+With RS and WS implemented, the OCC read phase proceeds as follows. On transactional load, first check the WS. If 
 the address hits the WS, then forward from the WS. Otherwise, use cache coherence protocol to obtain shared permission
 of the cache line. Meanwhile, The address is inserted into the RS. On transactional store, insert the address and 
 speculative data into the WS. On external abort or abort instruction, no roll back is needed, as all changes are 
 local. If transactional execution eventually reaches the commit instruction, then validation is performed,
 which is covered in the next section.
 
-### Hardware Validation
+### OCC Validation
 
 
 
