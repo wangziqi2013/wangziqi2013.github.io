@@ -116,7 +116,7 @@ We take a closer look at lazy CD/CR In the following discussion.
 
 ### To Lock or Not to Lock: It's an OCC Question
 
-Lazy CD/CR shares lots of characteristics with Optimistic Concurrency Control (OCC) [5]. Instead of locking every
+Lazy CD/CR shares the same core idea with Optimistic Concurrency Control (OCC) [5]. Instead of locking every
 data item till transaction commit to prevent conflicting accesses by other transactions,
 OCC optimistically assumes that the **transaction's read set will not be altered during its 
 execution (from the first read to the last read)**, and therefore locking is omitted. 
@@ -160,7 +160,7 @@ transactionally, instead of logging multiple entries, the WS may consolidate the
 saving WS storage. This requires efficient lookups using store addresses.
 
 The granularity of RS/WS maintenance may affect conflict rates. For example, RSs are implicitly maintained 
-on cache line granularity in the minimal design. Conflict rates can increase due to false sharing. The justification, 
+on cache line granularity in the minimal design. Conflict rates can be higher than the optimal due to false sharing. The justification, 
 however, is that read locality and design simplicity may offset the negative effect. On the other hand, 
 if WSs use cache line addresses, then the entire cache line must be logged as speculative data. Essentially,
 the transactional store instruction is expanded into a few load instructions to bring in the cache line, and 
@@ -229,14 +229,25 @@ which is covered in the next section.
 
 ### OCC Validation
 
-Two flavors of validations are proposed for OCC [10], both aiming at recognizing and eliminating non-atomic read phase. 
+OCC transactions are serialized by the order they enter the validation phase. We first assume atomic validation and write phase
+for simplicity of demonstration, and then loosen this restraint to obtain extra degrees of parallelism. 
+
+The fundamental purpose of OCC validation is to preserve atomic read phase with regard to interleaving writes. 
+In the absense of fine grained access control on individual data items, the best way of conflict inference is to
+check overlapping read and write phases.
+If the read phase of a transaction overlaps with the write phase of another transaction, and the intersection of the RS and WS
+from respective transactions are non-empty, then the read phase risks inconsistent read anomaly.
+
+Two flavors of validations are proposed for OCC [10], both aiming at recognizing and eliminating non-atomic read phases. 
 Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already committed transactions. 
 A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, in
-Forward OCC (FOCC), validation can also be carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests 
-to data items in the WS) first, and then broadcasting the WS to all other transactions currently under the read phase. 
+Forward OCC (FOCC), validation is carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests 
+to data items in the WS) first, and then broadcasting the WS to all other transactions. 
 An arbitration is performed if the broadcasted WS has non-empty intersections with one or more transactions in the read phase.
-Either the validating transaction aborts, or all conflicting read transactions abort. The lock on the WS will not be 
+Either the validating transaction aborts, or all conflicting transactions abort. The lock on the WS will not be 
 released until write phase finishes or the transaction aborts. 
+
+Several practical issues
 
 ### Atomic Write Back
 
