@@ -230,15 +230,15 @@ which is covered in the next section.
 ### OCC Validation
 
 Two flavors of validations are proposed for OCC, both aiming at recognizing and eliminating non-atomic read phase. 
-Backward OCC, or BOCC, verifies the intergity of RSs by intersecting
-the RS against WSs of already committed transactions. A non-empty intersection implies a possible non-atomic read phase,
-and hence the validating transaction aborts. Alternatively, validation can also be carried out by locking the WS (i.e. blocking all 
-accesses to data items in the WS) first, and then broadcasting the WS to all other transactions currently under the read phase. 
+Backward OCC, or BOCC, verifies the intergity of RSs by intersecting the RS against WSs of committing and already committed transactions. 
+A non-empty intersection implies a possible non-atomic read phase, and hence the validating transaction aborts. Alternatively, validation 
+can also be carried out by locking the WS (i.e. blocking all accesses and NACKing all validation requests to data items in the WS) first, 
+and then broadcasting the WS to all other transactions  currently under the read phase. 
 An arbitration is performed if the broadcasted WS has non-empty intersections with one or more transactions in the read phase.
 Either the validating transaction aborts, or all conflicting read transactions abort. The lock on the WS will not be 
 released until write phase finishes or the transaction aborts.
 
-
+### Atomic Wtite Back
 
 In general, read validation is performed if a reader has acquired a cache line in shared mode without locking it using 2PL
 principle, i.e. the reader allows other txns to access the cache line by acquiring exclusive ownership before the reader commits. 
