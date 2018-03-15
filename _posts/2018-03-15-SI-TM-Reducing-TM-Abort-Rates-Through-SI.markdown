@@ -20,4 +20,8 @@ by omitting read set validation and hence provide only SI, long reading transact
 less aborts. In addition, less hardware resources are dedicated to maintaining transaction metadata,
 as fewer states are needed to validate.
 
-SI-TM relies on
+One distinctive feature of SI-TM is the usage of multiversion in HTM. The second feature is timestamp ordering
+(T/O) based backward OCC validation (validate with committed transactions). Although these two approaches
+to concurrency control are not uncommon in software, in hardware they are relatively rare.
+
+SI-TM relies on a multiversion device called MVM ()
