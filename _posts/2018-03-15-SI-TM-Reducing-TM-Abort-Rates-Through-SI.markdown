@@ -1,0 +1,23 @@
+---
+layout: paper-summary
+title:  "SI-TM: Reducing Transactional Memory Abort Rates Through Snapshot Isolation"
+date:   2018-03-15 12:07:00 -0500
+categories: paper
+paper_title: "SI-TM: Reducing Transactional Memory Abort Rates Through Snapshot Isolation"
+paper_link: https://dl.acm.org/citation.cfm?id=2541952
+paper_keyword: SI-TM; Snapshot Isolation; Multiversion CC
+paper_year: 2014
+rw_set: Not mentioned; Logging?
+htm_cd: Lazy, version based
+htm_cr: Lazy
+version_mgmt: Multiversion
+---
+
+This paper proposes a multiversion TM design with weaker snapshot isolation (SI) semantics guarantee. 
+Canonical HTM designs usually provide conflict serializable guarantees. One one hand, several snapshot 
+isolation specific anomalies make programs written on other HTM platforms non-portable. On the othre hand, 
+by omitting read set validation and hence provide only SI, long reading transactions may suffer from 
+less aborts. In addition, less hardware resources are dedicated to maintaining transaction metadata,
+as fewer states are needed to validate.
+
+SI-TM relies on
