@@ -2,6 +2,7 @@
 layout: post
 title:  "Hardware Transactional Memory: Hardware Two Phase Locking and Optimistic Concurrency Control"
 date:   2018-03-09 03:32:00 -0500
+ontop: true
 ---
 
 ### Introduction
