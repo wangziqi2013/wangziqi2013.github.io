@@ -1,0 +1,42 @@
+
+<script language="javascript"> 
+  function filter_post(post_type, filter_text) {
+    var posts = document.getElementsByClassName("post_item");
+
+    filter_list = filter_text.split(";");
+
+    for(var i = 0;i < posts.length;i++) {
+      post = posts[i];
+      if(post_type == "category") {
+        s = post.getAttribute("data-category");
+      } else if(post_type == "title") {
+        s = post.getAttribute("data-title");
+      } else if(post_type == "keyword") { 
+        s = post.getAttribute("data-keyword");
+      } else {
+        alert("Invalid type! (Internal error)");
+        return;
+      }
+
+      // For each element in the ';' separated list we 
+      // perform a matching, and if there is a substring in the 
+      // target, we just mark it as visible
+      var found = false;
+      for(var j = 0;j < filter_list.length;j++) {
+        filter = filter_list[j].trim();
+        // It is 'OR'
+        if(s.toLowerCase().indexOf(filter) != -1) {
+          post.style.display = "block";
+          found = true;
+          break;
+        }
+      }
+
+      if(found == false) {
+        post.style.display = "none";
+      }
+    }
+
+    return;
+  }
+</script>
