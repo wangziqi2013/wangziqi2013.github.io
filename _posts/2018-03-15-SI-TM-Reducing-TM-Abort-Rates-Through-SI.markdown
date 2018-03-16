@@ -27,9 +27,10 @@ to concurrency control are not uncommon in software, in hardware they are relati
 ![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM"){: width="400px"}
 {: align="middle"}
 
-SI-TM relies on a multiversion device called MVM (Multiversioned Memory). On a CMP with private L1 and shared LLC, 
-the MVM is put before the LLC as a translation layer. MVM translates physical cache line address and version pair (addr., ver.) 
-into a pointer to the versioned storage. The pointer can then be used to probe the shared cache, or, if misses, to
+SI-TM relies on a multiversion device called MVM (Multiversioned Memory) to provide virtualization of physical addresses. 
+On a CMP with private L1 and shared LLC, the MVM is put before the LLC as a translation layer. MVM translates physical cache 
+line address and version pair (addr., ver.) into a pointer to the versioned storage. The pointer can then be used to probe 
+the shared cache, or, if misses, to
 probe main memory. L1 and L2 use the physical address from TLB as the tag. *When a cache line is evicted or when a request
 is sent, the message must go through MVM using the physical address and the version in the context register to obtain
 the physical address for probing LLC and DRAM. This is somehow awkward, because when invalidation message is received,
@@ -40,3 +41,9 @@ a context switch happens, the speculative cache lines must be flushed or written
 *What I did not understand in the above figure is the placement of begin and commit timestamp. Conceptually they belong to
 the executing transaction, which should be part of the processor's private context. In the figure it is drawn in the
 uncore part of the procssor, implying the begin and end timestamp are shared across processors.*
+
+As virtual memory uses TLB to accelerate translation, the MVM can also have a corresponding lookaside buffer that's 
+checked with L2 search in parallel. 
+
+
+
