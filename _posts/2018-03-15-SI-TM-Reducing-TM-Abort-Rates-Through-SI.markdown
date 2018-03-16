@@ -143,3 +143,10 @@ Commit @ 100
 
 After execution, A, B is of version (100, 101), which is not reachable by any serial execution.
 Making check and store operations as a single atomic unit could solve the problem.
+
+Garbage collection is conducted lazily as new versions are created on a cache line. To infer the 
+oldest active version that MVM must maintain, a priority queue of action transaction begin timestamps
+is maintained. Every time a transaction commits and creates a new version, it reads the current
+oldest begin timestamp (obt), and removes all versions that has a timestamp smaller than the reachable version
+using obt. 
+
