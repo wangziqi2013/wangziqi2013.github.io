@@ -77,3 +77,4 @@ as cache lines are written back. Write-write conflicts are detected, if the most
 is greater than the bt, as the snapshot no longer holds as a consistent image. The transaction aborts in software
 by rolling back all written lines from MVM, and clearing all hardware structures.
 
+**TODO: GC; the inconsistent read problem**
