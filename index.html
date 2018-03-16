@@ -2,6 +2,31 @@
 layout: default
 ---
 
+<script language="javascript">
+function getAjax(url, success) {
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function() {
+        alert(xhr.status);
+        if(xhr.readyState > 3 && xhr.status == 200) {
+          success(xhr.responseText);
+        }
+    };
+    
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
+    
+    return xhr;
+}
+
+xhr = getAjax("https://github.com/wangziqi2013", 
+              function(text) {
+                alert(text);
+                return;
+              }
+      );
+</script>
+
 <div id="filter_div" align="left">
   Filter Keyword
   <input type="text" id="input_filter">
