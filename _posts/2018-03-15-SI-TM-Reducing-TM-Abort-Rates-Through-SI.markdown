@@ -24,10 +24,15 @@ One distinctive feature of SI-TM is the usage of multiversion in HTM. The second
 (T/O) based backward OCC validation (validate with committed transactions). Although these two approaches
 to concurrency control are not uncommon in software, in hardware they are relatively rare.
 
-SI-TM relies on a multiversion device called MVM (Multiversioned Memory). On a CMP with L1 private and L2 shared cache, 
-the MVM is put before the shared L2. MVM translates physical cache line address and version pair (addr., ver.) 
+SI-TM relies on a multiversion device called MVM (Multiversioned Memory). On a CMP with private L1 and shared LLC, 
+the MVM is put before the LLC as a translation layer. MVM translates physical cache line address and version pair (addr., ver.) 
 into a pointer to the versioned storage. The pointer can then be used to probe the shared cache, or, if misses, to
-probe main memory.
+probe main memory. L1 and L2 use the physical address from TLB as the tag. *When a cache line is evicted or when a request
+is sent, the message must go through MVM using the physical address and the version in the context register to obtain
+the physical address for probing LLC and DRAM. This is somehow awkward, because when invalidation message is received,
+there is no backward translation mechanism to invalidate the corresponding cache line in private L1/L2. In addition,
+the transaction is not fully virtualized, because now the physically tagged L1/L2 is actually virtually tagged. When
+a context switch happens, the speculative cache lines must be flushed or written back.*
 
 ![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM"){: width="400px"}
 {: align="middle"}
