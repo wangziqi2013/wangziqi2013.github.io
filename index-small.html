@@ -63,14 +63,14 @@ layout: default
 <div class="home">
   <h1 class="page-heading">Top Posts</h1>
 
-  <ul>
+  <ul style="list-style-type: none;">
     {% for post in site.posts %}
       {% if post.ontop == true %}
         <li data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
           <span>
-            <strong>[Top]</strong>
+            [Top]
             {% if post.layout == "paper-summary" %}
-              <strong>[Paper Review]</strong>
+              [Paper Review]
             {% endif %}
           </span>
 
@@ -84,13 +84,13 @@ layout: default
     <hr />
     <br />
     <h1 class="page-heading">Posts</h1>
-  <ul>
+  <ul style="list-style-type: none;">
     {% for post in site.posts %}
       {% if post.ontop != true %}
         <li data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
           <span>
             {% if post.layout == "paper-summary" %}
-              <strong>[Paper Review]</strong>
+              [Paper Review]
             {% endif %}
           </span>
 
