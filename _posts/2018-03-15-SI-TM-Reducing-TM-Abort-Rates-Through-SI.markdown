@@ -77,4 +77,26 @@ as cache lines are written back. Write-write conflicts are detected, if the most
 is greater than the bt, as the snapshot no longer holds as a consistent image. The transaction aborts in software
 by rolling back all written lines from MVM, and clearing all hardware structures.
 
-**TODO: GC; the inconsistent read problem**
+The above commit protocol has an undesired race condition that may incur inconsistent reads. Assume that
+data items A, B were at timestamp 99. The global timestamp counter was 100.
+
+**Inconsistent Read Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+Commit @ 100
+              Begin @ 101
+  Store A
+   @ 100
+                Load  B
+                 @ 99
+                Load  A
+                 @ 100
+  Store B
+   @ 100
+  Finish
+                Finish
+{% endhighlight %}
+
+Transaction 2 starts during the commit stage of transaction 1. The begin timestamp prevents 
+transaction 2 reading from commits that start after its transaction begin. Reading transaction 1's half 
+committed data, however, is incorrect. 
