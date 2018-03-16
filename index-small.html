@@ -1,0 +1,107 @@
+---
+layout: default
+---
+
+<script language="javascript"> 
+  function filter_post(post_type, filter_text) {
+    var posts = document.getElementsByClassName("post_item");
+
+    filter_list = filter_text.split(";");
+
+    for(var i = 0;i < posts.length;i++) {
+      post = posts[i];
+      if(post_type == "category") {
+        s = post.getAttribute("data-category");
+      } else if(post_type == "title") {
+        s = post.getAttribute("data-title");
+      } else if(post_type == "keyword") { 
+        s = post.getAttribute("data-keyword");
+      } else {
+        alert("Invalid type! (Internal error)");
+        return;
+      }
+
+      // For each element in the ';' separated list we 
+      // perform a matching, and if there is a substring in the 
+      // target, we just mark it as visible
+      var found = false;
+      for(var j = 0;j < filter_list.length;j++) {
+        filter = filter_list[j].trim();
+        // It is 'OR'
+        if(s.toLowerCase().indexOf(filter) != -1) {
+          post.style.display = "block";
+          found = true;
+          break;
+        }
+      }
+
+      if(found == false) {
+        post.style.display = "none";
+      }
+    }
+
+    return;
+  }
+</script>
+
+<div id="filter_div" align="left">
+  Filter Keyword
+  <input type="text" id="input_filter">
+  <button type="button" onClick="filter_post('category', getElementById('input_filter').value.toLowerCase())">Category</button>
+  <button type="button" onClick="filter_post('title', getElementById('input_filter').value.toLowerCase())">Title</button>
+  <button type="button" onClick="filter_post('keyword', getElementById('input_filter').value.toLowerCase())">Keyword</button>
+  {% for my_page in site.pages %}
+    {% if my_page.title == "About" %}
+      <a class="page-link" href="{{ my_page.url | prepend: site.baseurl | append: '#search_help' }}">Search Help</a>
+    {% endif %}
+  {% endfor %}
+  <br /><br />
+</div>
+
+<hr /><br />
+
+<div class="home">
+  <h1 class="page-heading">Top Posts</h1>
+
+  <ul>
+    {% for post in site.posts %}
+      {% if post.ontop == true %}
+        <li data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
+          <span>
+            <strong>[Top]</strong>
+            {% if post.layout == "paper-summary" %}
+              <strong>[Paper Review]</strong>
+            {% endif %}
+          </span>
+
+          <div style="display: inline">
+            <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+    <hr />
+    <br />
+    <h1 class="page-heading">Posts</h1>
+  <ul>
+    {% for post in site.posts %}
+      {% if post.ontop != true %}
+        <li data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
+          <span>
+            {% if post.layout == "paper-summary" %}
+              <strong>[Paper Review]</strong>
+            {% endif %}
+          </span>
+
+          <div style="display: inline">
+            <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+
+</div>
