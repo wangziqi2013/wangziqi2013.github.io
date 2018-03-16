@@ -29,4 +29,5 @@ the MVM is put before the shared L2. MVM translates physical cache line address 
 into a pointer to the versioned storage. The pointer can then be used to probe the shared cache, or, if misses, to
 probe main memory.
 
-![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM")
+![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM"){: width="400px"}
+{: align="middle"}
