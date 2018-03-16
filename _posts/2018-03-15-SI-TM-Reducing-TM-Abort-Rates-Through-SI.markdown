@@ -68,4 +68,12 @@ translation; invalidation on read-only line is propagated from LLC without any p
 has transactional bit set, and is dirty, the MVM allocates a new version using the transaction's transient version
 number. The uncommitted line is written into the physical address returned by MVM.
 
-On transaction commit, 
+On transaction commit, the write set is tested. If the write set is empty, the transaction commits immediately with
+zero overhead, and the commit always succeeds. Otherwise, the ct is obtained from the global counter. 
+**Note that the paper does not mention whether the counter should be incremented after obtaining ct**.
+Then, for each dirty line in the write set, either the line is already in MVM, or the processor evicts it to MVM.
+In both cases, the dirty cache line is assigned ct as its version number. In the meanwhile, validation is performed
+as cache lines are written back. Write-write conflicts are detected, if the most up-to-date version on the address 
+is greater than the bt, as the snapshot no longer holds as a consistent image. The transaction aborts in software
+by rolling back all written lines from MVM, and clearing all hardware structures.
+
