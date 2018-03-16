@@ -37,7 +37,15 @@ xhr = getAjax("https://crossorigin.me/https://github.com/wangziqi2013",
                   return;
                 }
                 
-                alert(contri_div[0]);
+                var target_div = document.getElementById("contributions");
+                if(target_div == null) {
+                  setContributionError("Could not find target contribution <div>");
+                  return;
+                }
+
+                alert(contri_div[0].innerHTML);
+                target_div.innerHTML = contri_div[0].innerHTML;
+                
                 return;
               }
       );
@@ -116,7 +124,9 @@ xhr = getAjax("https://crossorigin.me/https://github.com/wangziqi2013",
   </ul>
 
   <hr />
-
+  <div id="contributions">
+    
+  </div>
   <hr />
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
   <p class="rss-subscribe">Switch to <a href="{{ "/index-small.html" | prepend: site.baseurl }}">Small</a></p>
