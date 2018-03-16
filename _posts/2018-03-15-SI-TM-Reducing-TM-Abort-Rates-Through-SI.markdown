@@ -58,5 +58,14 @@ is sent to the MVM. MVM searches its version list using the (addr., ver.) pair (
 in the uncore part), and returns the physical address of the oldest version that is below the bt of the requesting
 transaction. Keeping the timestamp of the returned transaction below ct avoids a later transaction's commit into the same 
 address being observed, even if the latter was flushed to the MVM, as MVM renames the cache line to a larger version.
+No read set is maintained.
 
-On
+On transaction store, the processor first loads the cache line as a normal load, and apply the store in L1 cache. 
+The store address is also inserted into the write set. No cache coherence message is sent.
+
+On cache line eviction (note that there is no invalidation on uncommitted dirty line as MVM does not perform reverse 
+translation; invalidation on read-only line is propagated from LLC without any problem), if the evicted line
+has transactional bit set, and is dirty, the MVM allocates a new version using the transaction's transient version
+number. The uncommitted line is written into the physical address returned by MVM.
+
+On transaction commit, 
