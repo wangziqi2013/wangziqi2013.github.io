@@ -15,9 +15,7 @@ function getAjax(url, success) {
     xhr.responseType = "document";
     xhr.onreadystatechange = function() {
       if(xhr.readyState > 3) {
-        if(xhr.status != 200) {
-          setContributionError("HTTP failed - Please check browser console for CORS hints");
-        } else {
+        if(xhr.status == 200) {
           success(xhr.responseXML);
         }
       }
