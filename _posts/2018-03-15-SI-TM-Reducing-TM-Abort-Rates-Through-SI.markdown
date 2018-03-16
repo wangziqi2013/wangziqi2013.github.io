@@ -24,6 +24,9 @@ One distinctive feature of SI-TM is the usage of multiversion in HTM. The second
 (T/O) based backward OCC validation (validate with committed transactions). Although these two approaches
 to concurrency control are not uncommon in software, in hardware they are relatively rare.
 
+![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM"){: width="400px"}
+{: align="middle"}
+
 SI-TM relies on a multiversion device called MVM (Multiversioned Memory). On a CMP with private L1 and shared LLC, 
 the MVM is put before the LLC as a translation layer. MVM translates physical cache line address and version pair (addr., ver.) 
 into a pointer to the versioned storage. The pointer can then be used to probe the shared cache, or, if misses, to
@@ -34,5 +37,6 @@ there is no backward translation mechanism to invalidate the corresponding cache
 the transaction is not fully virtualized, because now the physically tagged L1/L2 is actually virtually tagged. When
 a context switch happens, the speculative cache lines must be flushed or written back.*
 
-![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM"){: width="400px"}
-{: align="middle"}
+*What I did not understand in the above figure is the placement of begin and commit timestamp. Conceptually they belong to
+the executing transaction, which should be part of the processor's private context. In the figure it is drawn in the
+uncore part of the procssor, implying the begin and end timestamp are shared across processors.*
