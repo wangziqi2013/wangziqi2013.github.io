@@ -70,7 +70,8 @@ number. The uncommitted line is written into the physical address returned by MV
 
 On transaction commit, the write set is tested. If the write set is empty, the transaction commits immediately with
 zero overhead, and the commit always succeeds. Otherwise, the ct is obtained from the global counter. 
-**Note that the paper does not mention whether the counter should be incremented after obtaining ct**.
+**Note that the paper does not mention whether the counter should be incremented after obtaining ct, because 
+there is a race condition here that needs special care. See below for a detailed example**.
 Then, for each dirty line in the write set, either the line is already in MVM, or the processor evicts it to MVM.
 In both cases, the dirty cache line is assigned ct as its version number. In the meanwhile, validation is performed
 as cache lines are written back. Write-write conflicts are detected, if the most up-to-date version on the address 
@@ -100,6 +101,15 @@ Commit @ 100
 Transaction 2 starts during the commit stage of transaction 1. The begin timestamp prevents 
 transaction 2 reading from commits that start after its transaction begin. Reading transaction 1's half 
 committed data, however, is incorrect. 
+
+Not allowing new transaction to begin during any commit solves the problem. This, however, limits parallelism
+as transaction commit blocks the creation of new transactions globally. A better solution is to increment the 
+global counter by some &Delta; on commit, and the committing transaction uses the timestamp after increment
+to write back. In the meantime, newly started transactions could only use timestamps within the &Delta; range.
+Since the &Delta; range is below the committing transaction's write timestamp, transactions starting after
+the commit point can always observe a consistent snapshot. New transactions still needs to be blocked 
+if more than &Delta; new transactions begin. This, however, is relativelu rare, as validation and commit are 
+considered as fast in most cases.
 
 Races between validation phase and commit phase may also arise, if validation and commit is not serialized as 
 a single critical section.
@@ -132,5 +142,4 @@ Commit @ 100
 {% endhighlight %}
 
 After execution, A, B is of version (100, 101), which is not reachable by any serial execution.
-
-Not allowing new transaction to begin during any commit solves the problem. 
+Making check and store operations as a single atomic unit could solve the problem.
