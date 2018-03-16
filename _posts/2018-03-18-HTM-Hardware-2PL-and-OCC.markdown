@@ -52,8 +52,8 @@ nature of hardware preemption helps in designing an efficient protocol.
 
 ### Two Phase Locking
 
-Since preemptive reader/writer locking is already implemented on the heardware level via cache coherence, it should not be too
-diffcult to implement two phase locking (2PL) on top of this. Indeed, what 2PL requires is simple: (s1) All read/write operations
+As preemptive reader/writer locking is already implemented on the heardware level via cache coherence, 
+two phase locking (2PL) seems to be the low hanging fruit. Indeed, what 2PL requires is simple: (s1) All read/write operations
 to data items should be protected by locks of the corresponding mode; (s2) No locks shall be released before the last acquire of
 a lock, thus dividing the entire execution into a grow phase, where locks are only acquired, and a shrink phase, where locks are only
 released. It is also correct to make (s2) more restrictive: (s2') Locks are acquired 
