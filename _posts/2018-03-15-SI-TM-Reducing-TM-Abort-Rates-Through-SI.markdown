@@ -100,3 +100,37 @@ Commit @ 100
 Transaction 2 starts during the commit stage of transaction 1. The begin timestamp prevents 
 transaction 2 reading from commits that start after its transaction begin. Reading transaction 1's half 
 committed data, however, is incorrect. 
+
+Races between validation phase and commit phase may also arise, if validation and commit is not serialized as 
+a single critical section.
+
+**Racing Validation and Commit Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+ Begin @ 98
+               Begin @ 99
+Commit @ 100
+              Commit @ 101
+  Check A
+   @ 99                     
+                Check A
+                 @ 99
+                Store A
+                 @ 101
+  Store A
+   @ 100
+  Check B
+   @ 99 
+                Check B             
+                 @ 99
+  Store B
+   @ 100
+                Store B
+                 @ 101
+  Finish
+                Finish
+{% endhighlight %}
+
+After execution, A, B is of version (100, 101), which is not reachable by any serial execution.
+
+Not allowing new transaction to begin during any commit solves the problem. 
