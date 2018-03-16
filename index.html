@@ -5,7 +5,7 @@ layout: default
 <script language="javascript">
 function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    xhr.open('GET', url);
+    xhr.open('GET', url, true);
     xhr.onreadystatechange = function() {
         alert(xhr.status);
         if(xhr.readyState > 3 && xhr.status == 200) {
@@ -19,7 +19,7 @@ function getAjax(url, success) {
     return xhr;
 }
 
-xhr = getAjax("https://github.com/wangziqi2013", 
+xhr = getAjax("https://wangziqi2013.github.com",
               function(text) {
                 alert(text);
                 return;
