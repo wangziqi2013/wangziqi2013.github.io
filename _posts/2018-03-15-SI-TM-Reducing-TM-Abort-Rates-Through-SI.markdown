@@ -28,10 +28,12 @@ to concurrency control are not uncommon in software, in hardware they are relati
 {: align="middle"}
 
 SI-TM relies on a multiversion device called MVM (Multiversioned Memory) to provide virtualization of physical addresses. 
-On a CMP with private L1 and shared LLC, the MVM is put before the LLC as a translation layer. MVM translates physical cache 
-line address and version pair (addr., ver.) into a pointer to the versioned storage. The pointer can then be used to probe 
-the shared cache, or, if misses, to
-probe main memory. L1 and L2 use the physical address from TLB as the tag. *When a cache line is evicted or when a request
+On a CMP with private L1 and shared LLC, the MVM is placed in the uncore part of the system, right before the LLC as an
+extra address virtualization layer. MVM translates physical cache line address and version pair (addr., ver.) into a pointer 
+to the versioned storage. The pointer can then be used to probe the shared LLC, or, if LLC misses, to
+the main memory. L1 and L2 use the physical address from TLB as the tag, while LLC uses the true physical address. 
+
+*When a cache line is evicted or when a request
 is sent, the message must go through MVM using the physical address and the version in the context register to obtain
 the physical address for probing LLC and DRAM. This is somehow awkward, because when invalidation message is received,
 there is no backward translation mechanism to invalidate the corresponding cache line in private L1/L2. In addition,
@@ -40,10 +42,21 @@ a context switch happens, the speculative cache lines must be flushed or written
 
 *What I did not understand in the above figure is the placement of begin and commit timestamp. Conceptually they belong to
 the executing transaction, which should be part of the processor's private context. In the figure it is drawn in the
-uncore part of the procssor, implying the begin and end timestamp are shared across processors.*
+uncore part of the procssor, implying the begin and end timestamp are shared across processors.* **Update: It is a vector 
+of timestamps. So the timestamp is in the uncore part of the CMP. Can we access these timestamps efficiently?**
 
-As virtual memory uses TLB to accelerate translation, the MVM can also have a corresponding lookaside buffer that's 
-checked with L2 search in parallel. 
+As virtual memory uses TLB to accelerate translation, there can optionally be a corresponding lookaside buffer that's 
+checked with L2 search in parallel. Recently accessed (addr., ver.) pairs are stored, and the physical address 
+of the version's storage is returned.
 
+On transaction start, the processor obtains a begin timestamp (bt) from the hardware global counter by atomic 
+fetch-and-increment. Commit timestamps (ct) are not determined yet. All cache lines involving the commit
+timestamp before transaction commit use a transient ct, which is preserved by MVM, and marked as invisible.
 
+On transaction load, the processor first probes L1/L2 using the physical address. If L1/L2 miss, then the request 
+is sent to the MVM. MVM searches its version list using the (addr., ver.) pair (versions are kept as an array
+in the uncore part), and returns the physical address of the oldest version that is below the bt of the requesting
+transaction. Keeping the timestamp of the returned transaction below ct avoids a later transaction's commit into the same 
+address being observed, even if the latter was flushed to the MVM, as MVM renames the cache line to a larger version.
 
+On
