@@ -150,3 +150,7 @@ is maintained. Every time a transaction commits and creates a new version, it re
 oldest begin timestamp (obt), and removes all versions that has a timestamp smaller than the reachable version
 using obt. 
 
+To reduce storage/lookup overhead of infinitely many versions, MVM supports up to four versions on each
+cache line address. If a transaction creates the fifth version on commit, the oldest version is discarded.
+If a transaction reads a non-existing version, the transaction is aborted and restarted using the 
+most up-to-date begin timestamp.
