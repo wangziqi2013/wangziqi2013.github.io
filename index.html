@@ -4,6 +4,7 @@ layout: default
 
 <script language="javascript">
 function setContributionError(err_str) {
+  alert(err_str);
   return;
 }
 
@@ -42,7 +43,6 @@ xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/cont
                   setContributionError("Could not find target contribution <div>");
                   return;
                 }
-                alert(contri_div[0].innerHTML);
 
                 target_div.innerHTML = contri_div[0].innerHTML;
                 
@@ -123,12 +123,11 @@ xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/cont
     {% endfor %}
   </ul>
 
-  <hr />
-  <div id="contributions">
-    
-  </div>
-  <hr />
   <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
   <p class="rss-subscribe">Switch to <a href="{{ "/index-small.html" | prepend: site.baseurl }}">Small</a></p>
+
+  <hr />
+  <div id="contributions"></div>
+  <hr />
 
 </div>
