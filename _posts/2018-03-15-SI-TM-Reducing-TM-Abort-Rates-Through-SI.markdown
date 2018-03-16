@@ -16,7 +16,7 @@ version_mgmt: Multiversion
 This paper proposes a multiversion TM design with weaker snapshot isolation (SI) semantics guarantee. 
 Canonical HTM designs usually provide conflict serializable guarantees. One one hand, several snapshot 
 isolation specific anomalies make programs written on other HTM platforms non-portable. On the othre hand, 
-by omitting read set validation and hence provide only SI, long reading transactions may suffer from 
+by omitting read set validation, long reading transactions may suffer from 
 less aborts. In addition, less hardware resources are dedicated to maintaining transaction metadata,
 as fewer states are needed to validate.
 
@@ -24,4 +24,9 @@ One distinctive feature of SI-TM is the usage of multiversion in HTM. The second
 (T/O) based backward OCC validation (validate with committed transactions). Although these two approaches
 to concurrency control are not uncommon in software, in hardware they are relatively rare.
 
-SI-TM relies on a multiversion device called MVM ()
+SI-TM relies on a multiversion device called MVM (Multiversioned Memory). On a CMP with L1 private and L2 shared cache, 
+the MVM is put before the shared L2. MVM translates physical cache line address and version pair (addr., ver.) 
+into a pointer to the versioned storage. The pointer can then be used to probe the shared cache, or, if misses, to
+probe main memory.
+
+![SI-TM MVM architecture]({{ "/static/SI-TM-architecture.png" | prepend: site.baseurl }} "SI-TM MVM")
