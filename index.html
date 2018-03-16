@@ -45,13 +45,11 @@ xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/cont
                 target_div.innerHTML = contri_div[0].innerHTML;
 
                 svg_list = target_div.getElementsByTagName("rect");
-                alert(svg_list.length);
                 for(var i = 0;i < svg_list.length;i++) {
                   var rect = svg_list[i];
                   rect.addEventListener("mouseover", onMouseEnter);
                   rect.addEventListener("mouseout", onMouseLeave);
                 }
-                
                 return;
               }
       );
@@ -62,11 +60,10 @@ function getDate(e) {
   var t = e.split("-").map(function(e) {
           return parseInt(e, 10)
       }),
-      n = ni(t, 3),
-      r = n[0],
-      a = n[1],
-      o = n[2];
-  return new Date(Date.UTC(r, a - 1, o))
+      r = t[0],
+      a = t[1],
+      o = t[2];
+  return new Date(Date.UTC(r, a - 1, o));
 }
 
 function pluralize(num, word) {
