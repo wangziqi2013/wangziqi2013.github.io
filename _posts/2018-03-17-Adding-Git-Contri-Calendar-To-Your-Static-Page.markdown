@@ -14,13 +14,13 @@ This article aims at solving the problem of porting the dynamic-static Github co
 onto your personal page. It is "dynamic" because the most recent update of your 
 contribution history will be reflected the next time the page is refreshed. No effort of manually
 updating the calendar and even the static page itself is ever needed. It is "static" because 
-no server-side programming is required. All you need is Javascript and ascynchronous XML HTTP request.
+no server-side programming is required. All you need is Javascript and ascynchronous XML HTTP request (XHR).
 In the following demonstration we use [Github page](https://pages.github.com/) (github.io domain) 
 as the content provider. A preview of the final effect is given in Figure 1.
 
 <hr />
 ![Preview]({{ "/static/contri-calendar/figure1-preview.png" | prepend: site.baseurl }} "Preview"){: width="800px"}
-**Figure 1 Preview**
+**Figure 1: Preview**
 {: align="middle"}
 <hr /><br />
 
@@ -34,12 +34,12 @@ professional web developer or any other reliable sources.
 ### Related Work
 
 Obviously there are lots of diligent coders who treasure their Github contribution history. And when it comes 
-to showing off, people are always motivated and innovative. Among many projects that micmic Github-style
+to showing off, people are always motivated and innovative. Among many projects that mimic Github-style
 contribution calendar, the one that I like most is
 [githubchart-api](https://github.com/2016rshah/githubchart-api), a pure static solution. The 
 HTTP server (https://ghchart.rshah.org/[username]) returns a static image that resembles the actual
 Github contribution calendar of [username]. The above link can therefore be embedded in an \<img\> tag.
-It is also dynamic-static.
+This solution is also dynamic-static.
 
 Two problems can prevent the above solution from being authentic. First, lacking real HTML elements 
 can lead to a few rendering problems. Customization is also impossible. Second, the user experience 
