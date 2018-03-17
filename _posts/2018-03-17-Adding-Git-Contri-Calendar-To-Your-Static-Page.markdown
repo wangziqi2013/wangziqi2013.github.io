@@ -44,4 +44,6 @@ It is also dynamic-static.
 Two problems can prevent the above solution from being authentic. First, lacking real HTML elements 
 can lead to a few rendering problems. Customization is also impossible. Second, the user experience 
 can be rather dull for lack of interaction. Normally, if you hang the mouse pointer over the green grid,
-a pop-up tip would appear as shown in Figure 1. On a static picture, however, this is impossible.
+a pop-up tip would appear as shown in Figure 1. A static picture , however, does not interact.
+
+### Methodology
