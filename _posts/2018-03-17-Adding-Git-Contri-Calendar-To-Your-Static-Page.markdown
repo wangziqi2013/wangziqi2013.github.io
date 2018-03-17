@@ -36,7 +36,7 @@ professional web developer or any other reliable sources.
 Obviously there are lots of diligent coders who treasure their Github contribution history. And when it comes 
 to showing off, people are always motivated and innovative. Among many projects that mimic Github-style
 contribution calendar, the one that I like most is
-[githubchart-api](https://github.com/2016rshah/githubchart-api), a pure static solution. The 
+[githubchart-api](https://github.com/2016rshah/githubchart-api). The 
 HTTP server, https://ghchart.rshah.org/[username], returns a static image that resembles the actual
 Github contribution calendar of [username]. The above link can therefore be embedded in an \<img\> tag.
 This solution is also dynamic-static.
@@ -47,3 +47,13 @@ can be rather dull for lack of interaction. Normally, if you hang the mouse poin
 a pop-up tip would appear as shown in Figure 1. A static picture, however, does not interact with users.
 
 ### Methodology
+
+Compared with image-based frontend or server-side backend approach, we strive to fulfill the following three requirements
+at the same time. First, the static content should be dynamic. This implies acquiring data from Github as the 
+static page loads using asynchronous requests. Second, the contribution calendar should consist of HTML elements, 
+and look excatly identical to the one on Github. This implies re-using the building blocks that Github profile page is
+written of, such as the HTML element layour and CSS settings. As we shall see later, it is helpful to look into the 
+source of Github page. Lastly, the calendar should be interactive. This suggests implementing event listeners for the 
+green grids. In this article, only mouse enter and mouse leave events are implemented as shown in Figure 1.
+
+In the following sections, we 
