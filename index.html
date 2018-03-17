@@ -44,12 +44,26 @@ xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/cont
 
                 target_div.innerHTML = contri_div[0].innerHTML;
 
-                svg_list = target_div.getElementsByTagName("rect");
+                var svg_list = target_div.getElementsByTagName("rect");
+                var total_count = 0;
                 for(var i = 0;i < svg_list.length;i++) {
                   var rect = svg_list[i];
                   rect.addEventListener("mouseover", onMouseEnter);
                   rect.addEventListener("mouseout", onMouseLeave);
+                  
+                  // Count total contributions
+                  total_count += parseInt(rect.getAttribute("data-count"));
                 }
+
+                // Show total contribution last year
+                var contri_count_div = document.getElementById("contri-count");
+                if(contri_count_div == null) {
+                  return;
+                }
+
+                contri_count_div.innerHTML = 
+                  total_count.toString() + " contributions last year";
+
                 return;
               }
       );
@@ -188,7 +202,8 @@ function onMouseLeave() {
   <p class="rss-subscribe">Switch to <a href="{{ "/index-small.html" | prepend: site.baseurl }}">Small</a></p>
 
   <hr />
-  <div id="contributions"></div>
+  <div id="contri-count" style="text-align:center"></div>
+  <div id="contributions" style="text-align:center"></div>
   <hr />
 
 </div>
