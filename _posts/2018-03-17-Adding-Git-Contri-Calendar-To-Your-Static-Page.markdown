@@ -13,3 +13,9 @@ showing off their hard work and devotion into the great cause that we call "prog
 This article aims at solving the problem of porting the dynamic Github contribution calendar
 onto your personal static page. We use [Github page](https://pages.github.com/) (github.io domain)
 as the platform of demonstration. A preview is given in Figure 1.
+
+<hr />
+![Preview]({{ "/static/contri-calendar/figure1-preview.png" | prepend: site.baseurl }} "Preview"){: width="800px"}
+**Figure 1 Preview**
+{: align="middle"}
+<hr />
