@@ -34,8 +34,14 @@ professional web developer or any other reliable sources.
 ### Related Work
 
 Obviously there are lots of diligent coders who treasure their Github contribution history. And when it comes 
-to showing off, people are always motivated to find the most innovative solution. The one that I like most is
+to showing off, people are always motivated and innovative. Among many projects that micmic Github-style
+contribution calendar, the one that I like most is
 [githubchart-api](https://github.com/2016rshah/githubchart-api), a pure static solution. The 
 HTTP server (https://ghchart.rshah.org/[username]) returns a static image that resembles the actual
 Github contribution calendar of [username]. The above link can therefore be embedded in an \<img\> tag.
+It is also dynamic-static.
 
+Two problems can prevent the above solution from being authentic. First, lacking real HTML elements 
+can lead to a few rendering problems. Customization is also impossible. Second, the user experience 
+can be rather dull for lack of interaction. Normally, if you hang the mouse pointer over the green grid,
+a pop-up tip would appear as shown in Figure 1. On a static picture, however, this is impossible.
