@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Adding Dynamic Git Contribution Calendar To Your Static Page"
+title:  "Adding Dynamic Github Contribution Calendar To Your Static Page"
 date:   2018-03-16 10:07:03 -0500
 categories: web-dev
 ---
@@ -37,13 +37,13 @@ Obviously there are lots of diligent coders who treasure their Github contributi
 to showing off, people are always motivated and innovative. Among many projects that mimic Github-style
 contribution calendar, the one that I like most is
 [githubchart-api](https://github.com/2016rshah/githubchart-api), a pure static solution. The 
-HTTP server (https://ghchart.rshah.org/[username]) returns a static image that resembles the actual
+HTTP server, https://ghchart.rshah.org/[username], returns a static image that resembles the actual
 Github contribution calendar of [username]. The above link can therefore be embedded in an \<img\> tag.
 This solution is also dynamic-static.
 
-Two problems can prevent the above solution from being authentic. First, lacking real HTML elements 
+Two problems can prevent the image-based contribution calendar from being authentic. First, lacking real HTML elements 
 can lead to a few rendering problems. Customization is also impossible. Second, the user experience 
 can be rather dull for lack of interaction. Normally, if you hang the mouse pointer over the green grid,
-a pop-up tip would appear as shown in Figure 1. A static picture , however, does not interact.
+a pop-up tip would appear as shown in Figure 1. A static picture, however, does not interact with users.
 
 ### Methodology
