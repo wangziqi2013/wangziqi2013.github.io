@@ -56,4 +56,7 @@ written of, such as the HTML element layour and CSS settings. As we shall see la
 source of Github page. Lastly, the calendar should be interactive. This suggests implementing event listeners for the 
 green grids. In this article, only mouse enter and mouse leave events are implemented as shown in Figure 1.
 
-In the following sections, we 
+In the following sections, we present an implementation of the contribution calendar in static HTML, CSS and javascript.
+We first show how to insert the HTML elements dynamically. Then we show how to write the CSS for appropriately rendering 
+these HTML elements. Finally, we add event handlers to support mouse events. A demonstration of the overall
+effects is uploaded to [my Github page](https://wangziqi2013.github.io/).
