@@ -22,13 +22,20 @@ as the content provider. A preview of the final effect is given in Figure 1.
 ![Preview]({{ "/static/contri-calendar/figure1-preview.png" | prepend: site.baseurl }} "Preview"){: width="800px"}
 **Figure 1 Preview**
 {: align="middle"}
-<hr />
+<hr /><br />
 
 **Disclaimer**: I am not a web programmer, and I have not participated into any "serious" web development project.
 In the following discussion, incorrect/non-standard/risky practices may be stated in a form that underestimates the
 negative effects they can introduce. In addition, my HTML/JS/CSS coding style may also be non-standard or offensive to
-real web developers (I write good C/C++/Python). If you are unsure whether certain actions will bring about
+real web developers (I write good C/C++/Python, though). If you are unsure whether certain actions will bring about
 undesirable consequences, please refrain from conducting them. If extra clarification is needed, please consult a 
 professional web developer or any other reliable sources. 
 
-### 
+### Related Work
+
+Obviously there are lots of diligent coders who treasure their Github contribution history. And when it comes 
+to showing off, people are always motivated to find the most innovative solution. The one that I like most is
+[githubchart-api](https://github.com/2016rshah/githubchart-api), a pure static solution. The 
+HTTP server (https://ghchart.rshah.org/[username]) returns a static image that resembles the actual
+Github contribution calendar of [username]. The above link can therefore be embedded in an \<img\> tag.
+
