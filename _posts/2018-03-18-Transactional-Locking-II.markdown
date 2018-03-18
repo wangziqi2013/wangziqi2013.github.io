@@ -56,4 +56,10 @@ On transactional store, the barrier simply stores the dirty value and address in
 
 On commit, the transaction first acqures the lock bit using CAS for each element in the write set.
 In this process, deadlock can happen as in 2PL scheme. Either the transaction always lock elements
-in an ordered manner, or some deadlock prevention/resolution techniques are applied.
+in an ordered manner, or some deadlock prevention/resolution techniques are applied. Once all locks are 
+acquired successfully, the transaction increment-and-fetch the global counter atomically, and 
+uses the returned value as the commit timestamp (ct). The read set is then validated again, by checking
+the lock status bit and the version. Read validation fails if any read item is locked or the version
+is greather than bt. On a successful read validation, the transaction enters write phase, and writes back
+dirty values in the write set. Written elements are unlocked by clearing the lock status bit and copying
+ct into the version field with a normal store instruction.
