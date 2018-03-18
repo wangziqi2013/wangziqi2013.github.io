@@ -24,6 +24,14 @@ that traditional STM usually assumes a closed memory allocation system. In such 
 objects cannot be deallocated or leave transactional state freely, as the GC must guarantee no 
 threads could access a deallocated/non-transactional object.
 
+Transactional objects are extended with a versioned spin lock. One bit in the spin lock indicates the lock status,
+and the remaining bits store the last modified timestamp. Lock acquisition sets the bit using atomic
+CAS, while lock release simply use store instruction to update both the status bit and the version. Versioned locks 
+do not necessarily have to be embedded into the object's address range (PO, "per-object" in the paper), as this changes object 
+memory layout, and hence renders TL2 algorithm non-portable. Alternatively, the "per-stripe" (PS) locking hashes 
+objects' address into an large array of versioned locks. Although false conflicts can arise due to object aliasing,
+in the paper
+
 TL2 observes the OCC read-validate-write (RVW) pattern. Like all STM implementations, read and write instructions 
 are instrumented by the compiler to invoke special "barrier" functions. The validation phase performs element-wise
 timestamp verification. The write phase observes 2PL for the write set, and updates the per-element timestamp. 
@@ -33,4 +41,5 @@ On transaction begin, the value of the global timestamp counter is read as begin
 The global counter is not incremented. The transaction uses bt to detect write operations on data items
 after it starts.
 
-On transactional load, if the address hits the write set, then the dirty value is forwarded.
+On transactional load, if the address hits the write set, then the dirty value is forwarded. Otherwise, 
+the barrier 
