@@ -29,8 +29,8 @@ and the remaining bits store the last modified timestamp. Lock acquisition sets 
 CAS, while lock release simply use store instruction to update both the status bit and the version. Versioned locks 
 do not necessarily have to be embedded into the object's address range (PO, "per-object" in the paper), as this changes object 
 memory layout, and hence renders TL2 algorithm non-portable. Alternatively, the "per-stripe" (PS) locking hashes 
-objects' address into an large array of versioned locks. Although false conflicts can arise due to object aliasing,
-in the paper
+objects' address into an large array of versioned locks. False conflicts can arise due to object aliasing.
+In the evaluation section, an array of 1 million 32-bit locks are used.
 
 TL2 observes the OCC read-validate-write (RVW) pattern. Like all STM implementations, read and write instructions 
 are instrumented by the compiler to invoke special "barrier" functions. The validation phase performs element-wise
