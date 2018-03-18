@@ -96,7 +96,14 @@ URL "https://github.com/users/wangziqi2013/contributions", the following will sh
 {: align="middle"}
 <hr /><br />
 
-Apparently, Figure 3 is the HTML source of Github's contribution calendar.
+Apparently, Figure 3 is the HTML source of Github's contribution calendar with all metadata. Till now, we have solved the static 
+part of the problem, i.e. how the elements are orgnized. Next, we focus on the dynamic part and seek ways of inserting the elements and 
+metadata into the static page at runtime. 
+
+The technique we employ is called Asynchronous Javascript and XML (ajax). The design is straightforward: when the page is loading,
+a request for the aforementioned URL is sent by the browser. On reception of the response, HTML elements that constitute the calendar
+are parsed and inserted into the document. On most platforms, the asynchronous request can be handled using the built-in 
+XMLHttpRequest (XHR) class.
 
 ### Adding CSS
 
