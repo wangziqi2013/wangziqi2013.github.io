@@ -104,9 +104,11 @@ the CAS can be reduced by a linear factor by adding the thread ID into the versi
 timestamp on each data item must satisfy two properties: (1) Uniqueness. An unlock operation must cause 
 the timestamp to change. (2) Ordering. If the commit phase starts after current transaction begin, then the 
 unlock operation must write a timestamp larger than the current transaction's bt. (1) can be preserved by each thread
-writing its own thread ID and current lock version when unlocking a data item. Reusing the same thread ID + lock version
-must be prevented. Each thread, therefore, keeps the last version part of the timestamp, and when it tries
-to obtain the ct, it checks whether its last ct version differs from the current global version. If they are identical,
-a new version must be allocated. This is achieved by using CAS to increment the global counter. (2) is also preserved if
-reader transaction first check whether thread ID changes in the two samples, and then whether the versions disagree. Either
-of these indicates an overlapping commit phase and hence cause current transaction to abort.
+writing its own thread ID and current global timestamp version when unlocking a data item. Reusing the same thread ID and version
+combination must be prevented, though. Each thread, therefore, remembers the version part of the last ct, and when it tries
+to obtain a new ct, it checks whether its last ct version differs from the current global version. If they are identical,
+a new version must be allocated, because otherwise it is possible that the same version is used in the previous commit on
+the same data item. The global counter is therefore updated to reflect an incremented version and the committing thread's
+ID. (2) is also preserved if reader transactions first check whether thread ID changes in the second sample and bt, and then whether 
+the version is greater than the bt. Either of these indicates an overlapping commit phase and hence cause current transaction 
+to abort.
