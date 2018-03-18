@@ -117,10 +117,6 @@ if the current domain is allowed by the server on another domain, then there wil
 which lists all allowed domains. If the current domain matches any of them (can be a wildcard, "*"), then the response can pass.
 Otherwise it is blocked.
 
-Unfortunately, The Github web server does not reply with ACAO headers. There are CORS proxies, however, that forward requests/responses 
-with CORS enabled. A simple search can find many of them. In our example we just choose one that works without any special reason: 
-[https://crossorigin.me/](https://crossorigin.me/).
-
 <hr />
 <br />
 ![Blocked Cross-Domain Request]({{ "/static/contri-calendar/figure4-blocked-request.png" | prepend: site.baseurl }} "Blocked Cross-Domain Request"){: width="800px"}
@@ -128,6 +124,83 @@ with CORS enabled. A simple search can find many of them. In our example we just
 **Figure 4: Blocked Cross-Domain Request**
 {: align="middle"}
 <hr /><br />
+
+Unfortunately, The Github web server does not reply with ACAO headers. There are CORS proxies, however, that forward requests/responses 
+with CORS enabled. A simple search can find many of them. In our example we just choose one that works without any special reason: 
+[https://crossorigin.me/](https://crossorigin.me/).
+
+After solving the CORS problem, the javascript code that fetches the elements and metadata from Github server may look like this:
+
+{% highlight javascript %}
+function setContributionError(err_str) {
+  alert(err_str);
+  return;
+}
+
+function getAjax(url, success) {
+    var xhr = window.XMLHttpRequest ? 
+              new XMLHttpRequest() : 
+              new ActiveXObject('Microsoft.XMLHTTP');
+    
+    xhr.open('GET', url, true);
+    xhr.responseType = "document";
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState > 3) {
+        if(xhr.status == 200) {
+          success(xhr.responseXML);
+        }
+      }
+
+      return;
+    };
+    
+    xhr.send();
+    
+    return xhr;
+}
+
+function processHTML(text) {
+  var contri_div = text.getElementsByTagName("body");
+  if(contri_div.length != 1) {
+    setContributionError("Could not find contribution graph <div>");
+    return;
+  }
+
+  var target_div = document.getElementById("contributions");
+  if(target_div == null) {
+    setContributionError("Could not find target contribution <div>");
+    return;
+  }
+
+  target_div.innerHTML = contri_div[0].innerHTML;
+
+  var svg_list = target_div.getElementsByTagName("rect");
+  var total_count = 0;
+  for(var i = 0;i < svg_list.length;i++) {
+    var rect = svg_list[i];
+    rect.addEventListener("mouseover", onMouseEnter);
+    rect.addEventListener("mouseout", onMouseLeave);
+    
+    // Count total contributions
+    total_count += parseInt(rect.getAttribute("data-count"));
+  }
+
+  // Show total contribution last year
+  var contri_count_div = document.getElementById("contri-count");
+  if(contri_count_div == null) {
+    return;
+  }
+
+  contri_count_div.innerHTML = 
+    total_count.toString() + " contributions last year";
+
+  return;
+}
+
+xhr = getAjax("https://crossorigin.me/" + 
+              "https://github.com/users/wangziqi2013/contributions",
+              processHTML);
+{% endhighlight %}
 
 ### Adding CSS
 
