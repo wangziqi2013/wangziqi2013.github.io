@@ -24,3 +24,13 @@ that traditional STM usually assumes a closed memory allocation system. In such 
 objects cannot be deallocated or leave transactional state freely, as the GC must guarantee no 
 threads could access a deallocated/non-transactional object.
 
+TL2 observes the OCC read-validate-write (RVW) pattern. Like all STM implementations, read and write instructions 
+are instrumented by the compiler to invoke special "barrier" functions. The validation phase performs element-wise
+timestamp verification. The write phase observes 2PL for the write set, and updates the per-element timestamp. 
+We describe each phase in detail below.
+
+On transaction begin, the value of the global timestamp counter is read as begin timestamp (bt). 
+The global counter is not incremented. The transaction uses bt to detect write operations on data items
+after it starts.
+
+On transactional load, if the address hits the write set, then the dirty value is forwarded.
