@@ -60,8 +60,18 @@ unlocked item with a changed version. (3) If the commit phase starts after trans
 and unlocks the data item before the first sampling, then we observe unlocked and consistent versions, 
 but the version is greater than the bt as the commit must have obtained the ct after current transaction starts.
 There is actually a fourth case: (4) The commit phase starts before transaction begins, and unlocks the data item
-before the first sampling. In this case the read validation does not recognize the potentially overlapping
-read and commit phases. The paper also does not address this problem.
+before the first sampling. **In this case the read validation does not recognize the potentially overlapping
+read and commit phases. The paper also does not address this problem.**
+
+The (1) and (2) above do not require the timestamp to have any ordering property. (1) requires the locked
+bit being explicitly visible to reader transactions. (2) requres version numbers to be unique, such that any
+commit operation on the item during the two samplings will be reflected by a change in the timestamp.
+(3) requires the timestamp to observe some ordering: if the commit phase starts after the transaction begins
+in real time, then the commit timestamp must be somehow also larger than the begin timestamp in some ordering. 
+In the simple case, we just use a timestamp counter that has the following nice property: if a transaction 
+reads the counter before another increment-and-fetch it, then the value obtained by the former must be smaller
+than the latter. In later sections we shall see a different and more efficient implementation where the
+ordering between timestamps becomes tricky.
 
 On transactional store, the barrier simply stores the dirty value and address in the write set. 
 
