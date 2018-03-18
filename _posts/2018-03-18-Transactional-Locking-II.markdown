@@ -41,9 +41,10 @@ On transaction begin, the value of the global timestamp counter is read as begin
 The global counter is not incremented. The transaction uses bt to detect write operations on data items
 that are carried out after it starts.
 
-On transactional load, if the address hits the write set, then the dirty value is forwarded. Otherwise, 
+On transactional load, if the address hits the write set, then the dirty value is forwarded. A bloom filter
+can be used to reduce the frequency that the write set is searched. Otherwise, 
 the barrier adds the address into the read set, and samples the lock status as well as the version. 
-The read operation is then performed. After performing load, a post-validation routine checks 
+The load operation is then performed. After performing load, a post-validation routine checks 
 the validity of the read phase up to the current point of execution by examining the current lock status
 and version. If the lock is held, then a conflict is detected because another transaction is currently in 
 its write phase. If the lock bit is clear, but the version differs from the version in the sampled lock value,
@@ -54,7 +55,7 @@ is smaller than the bt. In all three cases above, the transaction aborts.
 
 On transactional store, the barrier simply stores the dirty value and address in the write set. 
 
-On commit, the transaction first acqures the lock bit using CAS for each element in the write set.
+On commit, the transaction first acquires the lock bit using CAS for each element in the write set.
 In this process, deadlock can happen as in 2PL scheme. Either the transaction always lock elements
 in an ordered manner, or some deadlock prevention/resolution techniques are applied. Once all locks are 
 acquired successfully, the transaction increment-and-fetch the global counter atomically, and 
@@ -63,3 +64,5 @@ the lock status bit and the version. Read validation fails if any read item is l
 is greather than bt. On a successful read validation, the transaction enters write phase, and writes back
 dirty values in the write set. Written elements are unlocked by clearing the lock status bit and copying
 ct into the version field with a normal store instruction.
+
+One of the advantages of 
