@@ -113,9 +113,13 @@ An error message can be seen on the console if a cross-domain request is blocked
 Not all cross-domain requests, however, are blocked. Benevolent corss-domain requests, such as API calls, must be identified.
 The mechanism that browsers employ is called Cross Origin Resource Sharing (CORS). An extra HTTP header "Origin" with
 the current domain as value is added when the browser sends a cross-domain request. In the response header, 
-if the current domain is allowed by the server on another domain, then there will be a header "Access-Control-Allow-Origin",
+if the current domain is allowed by the server on another domain, then there will be a header "Access-Control-Allow-Origin" (ACAO),
 which lists all allowed domains. If the current domain matches any of them (can be a wildcard, "*"), then the response can pass.
 Otherwise it is blocked.
+
+Unfortunately, The Github web server does not reply with ACAO headers. There are CORS proxies, however, that forward requests/responses 
+with CORS enabled. A simple search can find many of them. In our example we just choose one that works without any special reason: 
+[https://crossorigin.me/](https://crossorigin.me/).
 
 <hr />
 <br />
