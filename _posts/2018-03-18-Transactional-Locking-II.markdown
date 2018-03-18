@@ -86,7 +86,9 @@ On commit, the transaction first acquires the lock bit using CAS for each elemen
 In this process, deadlock can happen as in 2PL scheme. Either the transaction always lock elements
 in an ordered manner, or some deadlock prevention/resolution techniques are applied. Once all locks are 
 acquired successfully, the transaction increment-and-fetch the global counter atomically, and 
-uses the returned value as the commit timestamp (ct). The read set is then validated again, by checking
+uses the returned value as the commit timestamp (ct). **Note that the increment of the global counter 
+must occur after locking the write set. Otherwise, a reading transaction can fail to recognize 
+a conflicting commit**. The read set is then validated again, by checking
 the lock status bit and the version. Read validation fails if any read item is locked or the version
 is greather than bt. On a successful read validation, the transaction enters write phase, and writes back
 dirty values in the write set. Written elements are unlocked by clearing the lock status bit and copying
@@ -101,4 +103,10 @@ The global timestamp counter is CASed everytime a writer transaction commits. Th
 the CAS can be reduced by a linear factor by adding the thread ID into the versioned lock. Recall that the
 timestamp on each data item must satisfy two properties: (1) Uniqueness. An unlock operation must cause 
 the timestamp to change. (2) Ordering. If the commit phase starts after current transaction begin, then the 
-unlock operation must write a timestamp larger than the current transaction's bt.
+unlock operation must write a timestamp larger than the current transaction's bt. (1) can be preserved by each thread
+writing its own thread ID and current lock version when unlocking a data item. Reusing the same thread ID + lock version
+must be prevented. Each thread, therefore, keeps the last version part of the timestamp, and when it tries
+to obtain the ct, it checks whether its last ct version differs from the current global version. If they are identical,
+a new version must be allocated. This is achieved by using CAS to increment the global counter. (2) is also preserved if
+reader transaction first check whether thread ID changes in the two samples, and then whether the versions disagree. Either
+of these indicates an overlapping commit phase and hence cause current transaction to abort.
