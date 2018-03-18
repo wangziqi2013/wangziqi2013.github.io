@@ -65,4 +65,7 @@ is greather than bt. On a successful read validation, the transaction enters wri
 dirty values in the write set. Written elements are unlocked by clearing the lock status bit and copying
 ct into the version field with a normal store instruction.
 
-One of the advantages of 
+One of the advantages of performing post-read validation on every transactional load is that no read 
+set validation is required for read-only transactions. Read-only transaction only validates every single read
+to make sure every value it accesses is consistent with the begin timestamp. No validation phase or write phase
+is ever necessary.
