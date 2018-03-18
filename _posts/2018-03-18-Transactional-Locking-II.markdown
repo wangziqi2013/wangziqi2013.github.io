@@ -53,6 +53,13 @@ than current transaction's bt, then a write must have been carried out before th
 the read phase starts. Because otherwise, either the timestamps will disagree, or the obtained commit timestamp
 is smaller than the bt. In all three cases above, the transaction aborts.
 
+These three cases correspond to the three possible outcome of perfoming a concurrent commit: (1) If the 
+commit phase unlocks the data item after the second sampling, then we observe a locked item. (2) If the 
+commit phase unlocks the data item between the first and the second sampling, then we observe an
+unlocked item with a changed version. (3) If the commit phase unlocks the data item between transaction start
+and the first sampling, then we observe unlocked and consistent versions, but the version is greater
+than the bt as the commit must have obtained the ct after current transaction starts.
+
 On transactional store, the barrier simply stores the dirty value and address in the write set. 
 
 On commit, the transaction first acquires the lock bit using CAS for each element in the write set.
@@ -69,3 +76,6 @@ One of the advantages of performing post-read validation on every transactional 
 set validation is required for read-only transactions. Read-only transaction only validates every single read
 to make sure every value it accesses is consistent with the begin timestamp. No validation phase or write phase
 is ever necessary.
+
+The global versioned counter is CASed everytime a writer transaction commits. The cache coherence traffic of
+the CAS can be reduced by a linear factor by adding the thread ID into the versioned lock.
