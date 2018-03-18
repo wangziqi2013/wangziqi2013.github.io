@@ -105,6 +105,20 @@ a request for the aforementioned URL is sent by the browser. On reception of the
 are parsed and inserted into the document. On most platforms, the asynchronous request can be handled using the built-in 
 XMLHttpRequest (XHR) class.
 
+There is still one problem if the domain of your static page differs from the domain of Github, i.e. github.com, which is 
+almost always the case. The XHR request to a different domain will actually be blocked by the browser to avoid some 
+[cross-site scripting attacks](https://en.wikipedia.org/wiki/Cross-site_scripting) under the same-origin policy. 
+An error message can be seen on the console if a cross-domain request is blocked by the brower, as shown in Figure 4 . To
+enable benevolent 
+
+<hr />
+<br />
+![Blocked Cross-Domain Request]({{ "/static/contri-calendar/figure4-blocked-request.png" | prepend: site.baseurl }} "Blocked Cross-Domain Request"){: width="400px"}
+<br />
+**Figure 4: Blocked Cross-Domain Request**
+{: align="middle"}
+<hr /><br />
+
 ### Adding CSS
 
 ### User Interaction with Javascript
