@@ -61,3 +61,9 @@ In the following sections, we present an implementation of the contribution cale
 We first show how to insert the HTML elements dynamically. Then we show how to write the CSS for appropriately rendering 
 these HTML elements. Finally, we add event handlers to support mouse events. A demonstration of the overall
 effects is uploaded to [my Github page](https://wangziqi2013.github.io/).
+
+### Obtaining HTML Elements
+
+### Adding CSS
+
+### User Interaction with Javascript
