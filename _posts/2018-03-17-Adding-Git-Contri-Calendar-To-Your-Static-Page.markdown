@@ -90,15 +90,15 @@ URL "https://github.com/users/wangziqi2013/contributions", the following will sh
 
 <hr />
 <br />
-![Graph Data URL]({{ "/static/contri-calendar/figure3-graph-data-url.png" | prepend: site.baseurl }} "Graph Data URL"){: width="400px"}
+![Graph Data URL]({{ "/static/contri-calendar/figure3-graph-data-url.png" | prepend: site.baseurl }} "Graph Data URL"){: width="600px"}
 <br />
 **Figure 3: Graph Data URL**
 {: align="middle"}
 <hr /><br />
 
-Apparently, Figure 3 is the HTML source of Github's contribution calendar with all metadata. Till now, we have solved the static 
-part of the problem, i.e. how the elements are orgnized. Next, we focus on the dynamic part and seek ways of inserting the elements and 
-metadata into the static page at runtime. 
+Apparently, what Figure 3 shows is the HTML source of Github's contribution calendar with all metadata. Till now, we have solved the 
+static part of the problem, i.e. how the elements are orgnized. Next, we focus on the dynamic part and seek ways of inserting the 
+elements and metadata into the static page at runtime. 
 
 The technique we employ is called Asynchronous Javascript and XML (ajax). The design is straightforward: when the page is loading,
 a request for the aforementioned URL is sent by the browser. On reception of the response, HTML elements that constitute the calendar
@@ -108,12 +108,18 @@ XMLHttpRequest (XHR) class.
 There is still one problem if the domain of your static page differs from the domain of Github, i.e. github.com, which is 
 almost always the case. The XHR request to a different domain will actually be blocked by the browser to avoid some 
 [cross-site scripting attacks](https://en.wikipedia.org/wiki/Cross-site_scripting) under the same-origin policy. 
-An error message can be seen on the console if a cross-domain request is blocked by the brower, as shown in Figure 4 . To
-enable benevolent 
+An error message can be seen on the console if a cross-domain request is blocked by the brower, as shown in Figure 4. 
+
+Not all cross-domain requests, however, are blocked. Benevolent corss-domain requests, such as API calls, must be identified.
+The mechanism that browsers employ is called Cross Origin Resource Sharing (CORS). An extra HTTP header "Origin" with
+the current domain as value is added when the browser sends a cross-domain request. In the response header, 
+if the current domain is allowed by the server on another domain, then there will be a header "Access-Control-Allow-Origin",
+which lists all allowed domains. If the current domain matches any of them (can be a wildcard, "*"), then the response can pass.
+Otherwise it is blocked.
 
 <hr />
 <br />
-![Blocked Cross-Domain Request]({{ "/static/contri-calendar/figure4-blocked-request.png" | prepend: site.baseurl }} "Blocked Cross-Domain Request"){: width="400px"}
+![Blocked Cross-Domain Request]({{ "/static/contri-calendar/figure4-blocked-request.png" | prepend: site.baseurl }} "Blocked Cross-Domain Request"){: width="800px"}
 <br />
 **Figure 4: Blocked Cross-Domain Request**
 {: align="middle"}
