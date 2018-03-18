@@ -20,7 +20,9 @@ In the following demonstration we use [Github page](https://pages.github.com/) (
 as the content provider. A preview of the final effect is given in Figure 1.
 
 <hr />
+<br />
 ![Preview]({{ "/static/contri-calendar/figure1-preview.png" | prepend: site.baseurl }} "Preview"){: width="800px"}
+<br />
 **Figure 1: Preview**
 {: align="middle"}
 <hr /><br />
@@ -68,7 +70,9 @@ As said previously, the contribution calendar should consist of real HTML elemen
 of the Github profile page, we should be able to find the HTML element that contains the calendar, as shown in Figure 2.
 
 <hr />
+<br />
 ![HTML Elements]({{ "/static/contri-calendar/figure2-html.png" | prepend: site.baseurl }} "HTML Elements"){: width="800px"}
+<br />
 **Figure 2: HTML Elements**
 {: align="middle"}
 <hr /><br />
@@ -80,7 +84,19 @@ contribution, such as the contribution date, "data-date", and commit count, "dat
 by the week they are in, using the containter element \<g\>. The entire calendar is then wrapped within a \<g\>. Texts that denote
 months and days in a week are drawn using \<text\>. 
 
-In the outermost \<div\>
+An attribute of the outermost \<div\> element in Figure 2 proves to be useful: "data-graph-url". In our example, the Github
+user name is "wangziqi2013", and the attribute's value is therefore "/users/wangziqi2013/contributions". If we enter the absolute 
+URL "https://github.com/users/wangziqi2013/contributions", the following will show up:
+
+<hr />
+<br />
+![Graph Data URL]({{ "/static/contri-calendar/figure3-graph-data-url.png" | prepend: site.baseurl }} "Graph Data URL"){: width="400px"}
+<br />
+**Figure 3: Graph Data URL**
+{: align="middle"}
+<hr /><br />
+
+Apparently, Figure 3 is the HTML source of Github's contribution calendar.
 
 ### Adding CSS
 
