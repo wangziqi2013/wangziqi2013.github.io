@@ -74,7 +74,13 @@ of the Github profile page, we should be able to find the HTML element that cont
 <hr /><br />
 
 The entire calendar is wrapped inside an \<svg\> tag. "svg" stands for "Scalable Vector Graph", which is an HTML 5 feature for 
-drawing 
+drawing 2D shapes. All elements inside an SVG are treated as HTML DOM objects, and can be accessed programmatically by javascript.
+Daily contributions are rendered using the rectangle element, \<rect\>. Attributes of rectangles describe the metadata of the daily 
+contribution, such as the contribution date, "data-date", and commit count, "data-count". Daily contributions are grouped together
+by the week they are in, using the containter element \<g\>. The entire calendar is then wrapped within a \<g\>. Texts that denote
+months and days in a week are drawn using \<text\>. 
+
+In the outermost \<div\>
 
 ### Adding CSS
 
