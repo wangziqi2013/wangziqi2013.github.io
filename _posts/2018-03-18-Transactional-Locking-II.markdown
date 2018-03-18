@@ -39,7 +39,10 @@ We describe each phase in detail below.
 
 On transaction begin, the value of the global timestamp counter is read as begin timestamp (bt). 
 The global counter is not incremented. The transaction uses bt to detect write operations on data items
-after it starts.
+that are carried out after it starts.
 
 On transactional load, if the address hits the write set, then the dirty value is forwarded. Otherwise, 
-the barrier 
+the barrier adds the address into the read set, and checks the locking status. If the lock is beging held,
+then the current read phase overlaps with the write phase of another transaction, and the transaction therefore aborts.
+If the lock bit is clear, but the version is greater than bt, then the read phase also overlaps with a write phase,
+because the write timestamp must be obtained after the current transaction starts. The load is then performed.
