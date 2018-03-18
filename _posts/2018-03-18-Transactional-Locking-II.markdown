@@ -112,3 +112,11 @@ the same data item. The global counter is therefore updated to reflect an increm
 ID. (2) is also preserved if reader transactions first check whether thread ID changes in the second sample and bt, and then whether 
 the version is greater than the bt. Either of these indicates an overlapping commit phase and hence cause current transaction 
 to abort.
+
+To see why (2) is true, imagine the scenario where transaction A begins with timestamp bt and then transaction B locks the write set and 
+obtains the ct. B writes into data item x, before A samples x's version and performs the load. 
+If B does not CAS a new global timestamp counter, then ct is merely (global.vesion, B.ID), and we know the bt can never be
+identical to ct. This is because otherwise B's thread must have updated the global counter to (global.vesion, B.ID) 
+in the previous commit, and the previous commit used global.version as the timestamp. This contradicts the assumption.
+On the other hand, if B CAS a new global timestamp counter, then the version field increments by 1, which can be detected
+by post-validation.
