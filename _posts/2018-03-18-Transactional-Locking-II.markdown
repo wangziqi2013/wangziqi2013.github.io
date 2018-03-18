@@ -42,7 +42,12 @@ The global counter is not incremented. The transaction uses bt to detect write o
 that are carried out after it starts.
 
 On transactional load, if the address hits the write set, then the dirty value is forwarded. Otherwise, 
-the barrier adds the address into the read set, and checks the locking status. If the lock is beging held,
-then the current read phase overlaps with the write phase of another transaction, and the transaction therefore aborts.
-If the lock bit is clear, but the version is greater than bt, then the read phase also overlaps with a write phase,
-because the write timestamp must be obtained after the current transaction starts. The load is then performed.
+the barrier adds the address into the read set, and samples the lock status as well as the version. 
+The read operation is then performed. After performing load, a post-validation routine checks 
+the validity of the read phase up to the current point of execution by examining the current lock status
+and version. If the lock is held, then a conflict is detected because another transaction is currently in 
+its write phase. If the lock bit is clear, but the version differs from the version in the sampled lock value,
+then a transaction must have modified the data item during the load. If versions agree, but they are greater than
+than current transaction's bt, then a write must have been carried out before the sampling took place, but after
+the read phase starts. Because otherwise, either the timestamps will disagree, or the obtained commit timestamp
+is smaller than the bt. In all three cases above, the transaction aborts.
