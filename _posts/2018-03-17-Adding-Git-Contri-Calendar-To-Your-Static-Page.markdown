@@ -55,7 +55,7 @@ Compared with image-based frontend or server-side backend approach, we strive to
 at the same time. First, the static content should be dynamic. This implies acquiring data from Github as the 
 static page loads using asynchronous requests. Second, the contribution calendar should consist of HTML elements, 
 and look excatly identical to the one on Github. This implies re-using the building blocks that Github profile page is
-written of, such as the HTML element layour and CSS settings. As we shall see later, it is helpful to look into the 
+written of, such as the HTML element layouts and CSS configurations. As we shall see later, it is helpful to look into the 
 source of Github page. Lastly, the calendar should be interactive. This suggests implementing event listeners for the 
 green grids. In this article, only mouse enter and mouse leave events are implemented as shown in Figure 1.
 
@@ -203,7 +203,7 @@ xhr = getAjax("https://crossorigin.me/" +
               processHTML);
 {% endhighlight %}
 
-In the static page, we prepared two empty \<div\> elements as place holders. Their
+In the static page, we placed two empty \<div\> elements as placeholders. Their
 ids are set to "contri-count" and "contributions" respectively for displaying the 
 total number of contributions in the last year and the calendar itself.
 
