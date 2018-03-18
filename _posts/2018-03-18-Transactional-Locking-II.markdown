@@ -56,9 +56,12 @@ is smaller than the bt. In all three cases above, the transaction aborts.
 These three cases correspond to the three possible outcome of perfoming a concurrent commit: (1) If the 
 commit phase unlocks the data item after the second sampling, then we observe a locked item. (2) If the 
 commit phase unlocks the data item between the first and the second sampling, then we observe an
-unlocked item with a changed version. (3) If the commit phase unlocks the data item between transaction start
-and the first sampling, then we observe unlocked and consistent versions, but the version is greater
-than the bt as the commit must have obtained the ct after current transaction starts.
+unlocked item with a changed version. (3) If the commit phase starts after transaction begins 
+and unlocks the data item before the first sampling, then we observe unlocked and consistent versions, 
+but the version is greater than the bt as the commit must have obtained the ct after current transaction starts.
+There is actually a fourth case: (4) The commit phase starts before transaction begins, and unlocks the data item
+before the first sampling. In this case the read validation does not recognize the potentially overlapping
+read and commit phases. The paper also does not address this problem.
 
 On transactional store, the barrier simply stores the dirty value and address in the write set. 
 
