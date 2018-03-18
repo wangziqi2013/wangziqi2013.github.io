@@ -174,6 +174,7 @@ function processHTML(text) {
 
   target_div.innerHTML = contri_div[0].innerHTML;
 
+  // Explained later
   var svg_list = target_div.getElementsByTagName("rect");
   var total_count = 0;
   for(var i = 0;i < svg_list.length;i++) {
@@ -201,6 +202,10 @@ xhr = getAjax("https://crossorigin.me/" +
               "https://github.com/users/wangziqi2013/contributions",
               processHTML);
 {% endhighlight %}
+
+In the static page, we prepared two empty \<div\> elements as place holders. Their
+ids are set to "contri-count" and "contributions" respectively for displaying the 
+total number of contributions in the last year and the calendar itself.
 
 ### Adding CSS
 
