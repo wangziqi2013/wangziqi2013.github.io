@@ -64,6 +64,18 @@ effects is uploaded to [my Github page](https://wangziqi2013.github.io/).
 
 ### Obtaining HTML Elements
 
+As said previously, the contribution calendar should consist of real HTML elements. By inspecting into the source code 
+of the Github profile page, we should be able to find the HTML element that contains the calendar, as shown in Figure 2.
+
+<hr />
+![HTML Elements]({{ "/static/contri-calendar/figure2-html.png" | prepend: site.baseurl }} "HTML Elements"){: width="800px"}
+**Figure 2: HTML Elements**
+{: align="middle"}
+<hr /><br />
+
+The entire calendar is wrapped inside an \<svg\> tag. "svg" stands for "Scalable Vector Graph", which is an HTML 5 feature for 
+drawing 
+
 ### Adding CSS
 
 ### User Interaction with Javascript
