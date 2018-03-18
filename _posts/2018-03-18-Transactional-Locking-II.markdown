@@ -51,3 +51,9 @@ then a transaction must have modified the data item during the load. If versions
 than current transaction's bt, then a write must have been carried out before the sampling took place, but after
 the read phase starts. Because otherwise, either the timestamps will disagree, or the obtained commit timestamp
 is smaller than the bt. In all three cases above, the transaction aborts.
+
+On transactional store, the barrier simply stores the dirty value and address in the write set. 
+
+On commit, the transaction first acqures the lock bit using CAS for each element in the write set.
+In this process, deadlock can happen as in 2PL scheme. Either the transaction always lock elements
+in an ordered manner, or some deadlock prevention/resolution techniques are applied.
