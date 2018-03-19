@@ -50,6 +50,7 @@ xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/cont
                   var rect = svg_list[i];
                   rect.addEventListener("mouseover", onMouseEnter);
                   rect.addEventListener("mouseout", onMouseLeave);
+                  rect.addEventListener("click", onMouseClick);
                   
                   // Count total contributions
                   total_count += parseInt(rect.getAttribute("data-count"));
@@ -121,6 +122,14 @@ function onMouseEnter(e) {
 function onMouseLeave() {
   var e = document.querySelector(".svg-tip");
   e && e.remove();
+
+  return;
+}
+
+function onMouseClick(e) {
+  var grid = e.target;
+  var date = grid.getAttribute("data-date");
+  alert(date);
 
   return;
 }
