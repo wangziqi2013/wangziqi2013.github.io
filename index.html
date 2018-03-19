@@ -51,7 +51,7 @@ xhr = getAjax("https://github.com/users/wangziqi2013/contributions",
                   var rect = svg_list[i];
                   rect.addEventListener("mouseover", onMouseEnter);
                   rect.addEventListener("mouseout", onMouseLeave);
-                  rect.addEventListener("click", onMouseClick);
+                  //rect.addEventListener("click", onMouseClick);onmouse
                   
                   // Count total contributions
                   total_count += parseInt(rect.getAttribute("data-count"));
@@ -145,7 +145,6 @@ function onMouseClick(e) {
               return;
             }
 
-            alert(body[0].innerHTML);
             target_div.innerHTML = body[0].innerHTML;
 
             return;
@@ -234,7 +233,7 @@ function onMouseClick(e) {
   <hr />
   <div id="contri-count" style="text-align:center"></div>
   <div id="contributions" style="text-align:center"></div>
-  <div id="contri-detail"></div>
+  
   <hr />
 
 </div>

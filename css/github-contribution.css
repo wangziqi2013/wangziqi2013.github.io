@@ -17,31 +17,3 @@
 .svg-tip.comparison li:last-child{border-top:3px solid #2188ff}.svg-tip-one-line{white-space:nowrap}
 
 .svg-tip .date{color:#fff}
-
-
-.profile-rollup-content .content-title:hover .link-gray-dark-underline{text-decoration:underline}
-.list-style-none{list-style:none !important}
-.ml-0{margin-left:0 !important}
-.py-1{padding-top:4px !important;padding-bottom:4px !important}
-.d-inline-block{display:inline-block !important}
-.col-8{width:66.66667%}
-.css-truncate.css-truncate-target,.css-truncate .css-truncate-target{display:inline-block;max-width:125px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top}
-.css-truncate.expandable.zeroclipboard-is-hover .css-truncate-target,.css-truncate.expandable.zeroclipboard-is-hover.css-truncate-target,.css-truncate.expandable:hover .css-truncate-target,.css-truncate.expandable:hover.css-truncate-target{max-width:10000px !important}
-.lh-condensed{line-height:1.25 !important}
-.f6{font-size:12px !important}
-.muted-link{color:#586069 !important}
-.muted-link:hover{color:#0366d6 !important;text-decoration:none}
-.ml-1{margin-left:4px !important}
-.col-3{width:25%}
-.float-right{float:right !important}
-.tooltipped{position:relative}
-.tooltipped::after{position:absolute;z-index:1000000;display:none;padding:.5em .75em;font:normal normal 11px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";-webkit-font-smoothing:subpixel-antialiased;color:#fff;text-align:center;text-decoration:none;text-shadow:none;text-transform:none;letter-spacing:normal;word-wrap:break-word;white-space:pre;pointer-events:none;content:attr(aria-label);background:#1b1f23;border-radius:3px;opacity:0}
-.tooltipped::before{position:absolute;z-index:1000001;display:none;width:0;height:0;color:#1b1f23;pointer-events:none;content:"";border:6px solid transparent;opacity:0}@keyframes tooltip-appear{from{opacity:0}to{opacity:1}}
-.tooltipped:hover::before,.tooltipped:hover::after,.tooltipped:active::before,.tooltipped:active::after,.tooltipped:focus::before,.tooltipped:focus::after{display:inline-block;text-decoration:none;animation-name:tooltip-appear;animation-duration:.1s;animation-fill-mode:forwards;animation-timing-function:ease-in;animation-delay:.4s}
-.tooltipped-n::before,.tooltipped-ne::before,.tooltipped-nw::before{top:-7px;right:50%;bottom:auto;margin-right:-6px;border-top-color:#1b1f23}
-.tooltipped-n::after{transform:translateX(50%)}
-.d-flex{display:flex !important}
-.anim-grow-x{width:0%;animation-name:grow-x;animation-duration:0.3s;animation-fill-mode:forwards;animation-timing-function:ease;animation-delay:0.5s}
-
-.progress-bar{display:block;height:15px;overflow:hidden;background-color:#eaecef;border-radius:3px}
-.progress-bar .progress{display:block;height:100%;background-color:#2cbe4e}
