@@ -131,7 +131,7 @@ function onMouseClick(e) {
   var grid = e.target;
   var date = grid.getAttribute("data-date");
   
-  getAjax("https://github.com/users/wangziqi2013/contributions",
+  getAjax("https://github.com/users/wangziqi2013/created_commits?from=" + date + "&to=" + date,
           function(text) {
             var body = text.getElementsByTagName("body");
             if(body.length != 1) {
@@ -145,7 +145,8 @@ function onMouseClick(e) {
               return;
             }
 
-            target_div.innerHTML = body.innerHTML;
+            alert(body[0].innerHTML);
+            target_div.innerHTML = body[0].innerHTML;
 
             return;
           }
