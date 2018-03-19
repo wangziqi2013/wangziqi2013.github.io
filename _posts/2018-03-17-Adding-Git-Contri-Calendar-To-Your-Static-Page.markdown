@@ -232,12 +232,63 @@ contribution calendar should look identical to the original one.
 
 ### User Interaction with Javascript
 
-Javascript files can also be located using the network traffic monitor, as shown in Figure 6. 
+Javascript files can also be located using the network traffic monitor, as shown in Figure 6. The difficulty of searching within
+js files is that they are obfuscated. All variable names are replaced by meaningless mixture of letters, control flows
+are deliberately disturbed to avoid reverse engineering, and white spaces are removed to reduce file size. The only clue that 
+we have are built-in function calls, and names of elements in the HTML documents, as they cannot be transformed by obfuscation.
 
 <hr />
 <br />
 ![Javascript Files]({{ "/static/contri-calendar/figure6-network-js.png" | prepend: site.baseurl }} "Javascript Files"){: width="800px"}
 <br />
-**Figure 5: Javascript Files**
+**Figure 6: Javascript Files**
 {: align="middle"}
 <hr /><br />
+
+Let's try moving the mouse pointer into and out of the grids, and see how the structure of the document would change.
+As shown in Figure 7, at the bottom of the HTML document, a new element is created everytime the mouse pointer moves in,
+and the element disappears everytime the point moves out. The element has a class attribute: ```svg-tip svg-tip-one-line```.
+
+<hr />
+<br />
+![The Tooltip Element]({{ "/static/contri-calendar/figure7-tooltip.png" | prepend: site.baseurl }} "The Tooltip Element"){: width="800px"}
+<br />
+**Figure 7: The Tooltip Element**
+{: align="middle"}
+<hr /><br />
+
+Using ```svg-tip-one-line``` as a keyword, exactly one match can be found in the third js file in Figure 6 
+(https://assets-cdn.github.com/assets/github-503a07c8023685e34e2f06ee655993c7.js). The matched line is 
+```a.classList.add("svg-tip","svg-tip-one-line");```, which looks pretty close. We use an online [javascript
+beautifier](http://jsbeautifier.org/) to add back white spaces. After processing, two functions seem highly relevant:
+
+{% highlight javascript %}
+function Pa(e) {
+  e.target.matches("rect.day") && (Na(), function(e) {
+      var n = document.body;
+      t(n, "null.js:91");
+      var r = e.getAttribute("data-date");
+      t(r, "null.js:94");
+      var a = function(e, t) {
+          var n = Tu[t.getUTCMonth()].slice(0, 3) + 
+                  " " + t.getUTCDate() + ", " + t.getUTCFullYear(),
+              r = 0 === e ? "No" : _.formatNumber(e),
+              a = document.createElement("div");
+          a.classList.add("svg-tip", "svg-tip-one-line");
+          var o = document.createElement("strong");
+          return o.textContent = 
+            r + " " + P.pluralize(e, "contribution"), a.append(o, " on " + n), a
+      }(parseInt(e.getAttribute("data-count")), Va(r));
+      n.appendChild(a);
+      var o = e.getBoundingClientRect(),
+          s = o.left + window.pageXOffset - a.offsetWidth / 2 + o.width / 2,
+          i = o.bottom + window.pageYOffset - a.offsetHeight - 2 * o.height;
+      a.style.top = i + "px", a.style.left = s + "px"
+  }(e.target))
+} 
+
+function Na() {
+  var e = document.querySelector(".svg-tip");
+  e && e.remove()
+}
+{% endhighlight %}
