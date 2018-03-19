@@ -10,7 +10,8 @@ function setContributionError(err_str) {
 
 function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    
+    // Use a CORS proxy to build the URL
+    url = "https://crossorigin.me/" + url;
     xhr.open('GET', url, true);
     xhr.responseType = "document";
     xhr.onreadystatechange = function() {
@@ -28,7 +29,7 @@ function getAjax(url, success) {
     return xhr;
 }
 
-xhr = getAjax("https://crossorigin.me/https://github.com/users/wangziqi2013/contributions",
+xhr = getAjax("https://github.com/users/wangziqi2013/contributions",
               function(text) {
                 var contri_div = text.getElementsByTagName("body");
                 if(contri_div.length != 1) {
@@ -129,8 +130,27 @@ function onMouseLeave() {
 function onMouseClick(e) {
   var grid = e.target;
   var date = grid.getAttribute("data-date");
-  alert(date);
+  
+  getAjax("https://github.com/users/wangziqi2013/contributions",
+          function(text) {
+            var body = text.getElementsByTagName("body");
+            if(body.length != 1) {
+              setContributionError("Could not find contribution detail body");
+              return;
+            }
+            
+            var target_div = document.getElementById("contri-detail");
+            if(target_div == null) {
+              setContributionError("Could not find contribution details <div>");
+              return;
+            }
 
+            target_div.innerHTML = body.innerHTML;
+
+            return;
+          }
+  );
+  
   return;
 }
 </script>
