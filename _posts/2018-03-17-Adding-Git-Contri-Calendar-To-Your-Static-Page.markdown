@@ -209,4 +209,10 @@ total number of contributions in the last year and the calendar itself.
 
 ### Adding CSS
 
+CSS is another important part that we should add in order for the calendar to be authentic. 
+Without CSS, the HTML elements will be rendered in a way similar to what is presented in Figure 3. 
+
+By keeping an eye on the network traffic, it is easy to find all CSS files that the Github profile
+page depends on. Figure 5 shows two CSS files. 
+
 ### User Interaction with Javascript
