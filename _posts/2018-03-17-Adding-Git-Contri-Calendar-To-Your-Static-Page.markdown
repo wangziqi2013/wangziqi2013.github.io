@@ -215,4 +215,17 @@ Without CSS, the HTML elements will be rendered in a way similar to what is pres
 By keeping an eye on the network traffic, it is easy to find all CSS files that the Github profile
 page depends on. Figure 5 shows two CSS files. 
 
+<hr />
+<br />
+![CSS Files]({{ "/static/contri-calendar/figure5-network-css.png" | prepend: site.baseurl }} "CSS Files"){: width="800px"}
+<br />
+**Figure 5: CSS Files**
+{: align="middle"}
+<hr /><br />
+
+The next step is rather mechanical. For each CSS file, search for keywords like "calendar", which is the HTML class name
+of the contribution calendar. Actually, only one file contains the keyword (the first one in Figure 5). Copy all selectors
+that involve the calendar into the CSS file of your static page. The most important two selectors are ```.js-calendar-graph-svg text.month``` and ```.js-calendar-graph-svg text.month``` which defines the text style. After adding CSS, the rendered 
+contribution calendar should look identical to the original one.
+
 ### User Interaction with Javascript
