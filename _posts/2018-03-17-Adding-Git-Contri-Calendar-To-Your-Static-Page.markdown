@@ -232,4 +232,12 @@ contribution calendar should look identical to the original one.
 
 ### User Interaction with Javascript
 
-Using the same 
+Javascript files can also be located using the network traffic monitor, as shown in Figure 6. 
+
+<hr />
+<br />
+![Javascript Files]({{ "/static/contri-calendar/figure6-network-js.png" | prepend: site.baseurl }} "Javascript Files"){: width="800px"}
+<br />
+**Figure 5: Javascript Files**
+{: align="middle"}
+<hr /><br />
