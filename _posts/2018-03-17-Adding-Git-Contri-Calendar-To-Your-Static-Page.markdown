@@ -413,3 +413,7 @@ actually needed):
 .svg-tip .date{color:#fff}
 {% endhighlight %}
 
+### Future Work
+
+We did not implement the event handler for mouse click events. Essentially, if users click on the grid, then
+another ajax request should be sent to Github server to fetch the infomation of commits in that specific day.
