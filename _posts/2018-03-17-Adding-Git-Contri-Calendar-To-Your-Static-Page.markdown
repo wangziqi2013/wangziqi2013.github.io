@@ -131,6 +131,7 @@ with CORS enabled. A simple search can find many of them. In our example we just
 
 After solving the CORS problem, the javascript code that fetches the elements and metadata from Github server may look like this:
 
+**Code 1**
 {% highlight javascript %}
 function setContributionError(err_str) {
   alert(err_str);
@@ -230,6 +231,12 @@ like ```js-calendar-graph-svg``` in order to
 match the actual HTML class (recall that we used a slightly different source of HTML elements). After adding CSS, the rendered 
 contribution calendar should look identical to the original one.
 
+**Code 2**
+{% highlight css %}
+.js-calendar-graph-svg text.month{font-size:10px;fill:#767676}
+.js-calendar-graph-svg text.wday{font-size:9px;fill:#767676}
+{% endhighlight%}
+
 ### User Interaction with Javascript
 
 Javascript files can also be located using the network traffic monitor, as shown in Figure 6. The difficulty of searching within
@@ -262,6 +269,7 @@ Using ```svg-tip-one-line``` as a keyword, exactly one match can be found in the
 ```a.classList.add("svg-tip","svg-tip-one-line");```, which looks pretty close. We use an online [javascript
 beautifier](http://jsbeautifier.org/) to add back white spaces. After processing, two functions seem highly relevant:
 
+**Code 3**
 {% highlight javascript %}
 function Pa(e) {
   e.target.matches("rect.day") && (Na(), function(e) {
@@ -292,3 +300,97 @@ function Na() {
   e && e.remove()
 }
 {% endhighlight %}
+
+It is quite trivial to see that function ```Na()``` removes the tooltip element. We register it as the ```mouseout```
+event listener for each rectangle element in the calendar SVG. Correspondingly, ```Pa()``` looks like a ```mouseenter```
+listener, not only because it creates the tooltip using ```document.createElement``` and sets its class 
+to ```svg-tip svg-tip-one-line```, but also because of the event object in the argument. 
+
+After identifying the two major event listeners, the rest can be guessed out with medium effort. Function calls like 
+```t(n, "null.js:91");``` can be eliminated. The array ```Tu``` should be a list of month names as strings, because it 
+is indexed by UTC month and concatenated with strings. I changed ```_.formatNumber(e)``` to ```to e.toString()```,
+because variable ```e``` is ```e.getAttribute("data-count")``` in the outer scope which looks like the number of 
+contributions on a specific day. Similarly, ```P.pluralize(e, "contribution")``` basically adds an "s" after "contribution"
+if the argument ```e``` is greather than 1. Although there is little clue about what ```Va(r)``` is, the function is 
+actually defined in the same file:
+
+**Code 4**
+{% highlight javascript %}
+function Va(e) {
+  var t = e.split("-").map(function(e) {
+          return parseInt(e, 10)
+      }),
+  n = ni(t, 3),
+  r = n[0],
+  a = n[1],
+  o = n[2];
+  return new Date(Date.UTC(r, a - 1, o))
+}
+{% endhighlight %}
+
+In the above code snippet, function ```ni``` is still unclear. Luckily, we know the input is a string of format "yyyy-mm-dd"
+that represents a date. ```ni(t, 3)``` can be removed in this case, because it is likely just a function that pads/truncates
+the array to length 3 after splitting the input using "-" and converting each component into integer. 
+
+We post the final javascript below. Note that the addition of event handlers is in Code 1.
+
+**Code 5**
+{% highlight javascript %}
+function getDate(e) {
+  var t = e.split("-").map(function(e) {
+          return parseInt(e, 10)
+      }),
+  r = t[0],
+  a = t[1],
+  o = t[2];
+  return new Date(Date.UTC(r, a - 1, o));
+}
+
+function pluralize(num, word) {
+  if(num <= 1) {
+    return word;
+  } else {
+    return word + "s";
+  }
+}
+
+var month_name = ["January", "February", "March", "April", "May", "June", "July", "August",
+                  "September", "October", "November", "December"];
+
+function onMouseEnter(e) {
+  e.target.matches("rect.day") && (onMouseLeave(), function(e) {
+      var n = document.body;
+      var r = e.getAttribute("data-date");
+      var a = function(e, t) {
+          // MMM DD, YYYY
+          var n = month_name[t.getUTCMonth()].slice(0, 3) + 
+                  " " + t.getUTCDate() + ", " + t.getUTCFullYear(),
+          // No contribution or a string 
+          r = 0 === e ? "No" : e.toString();
+          // Create the element and add the class
+          a = document.createElement("div");
+          a.classList.add("svg-tip", "svg-tip-one-line");
+          var o = document.createElement("strong");
+          o.textContent = r + " " + pluralize(e, "contribution");
+          a.append(o, " on " + n);
+          return a;
+      }(parseInt(e.getAttribute("data-count")), getDate(r));
+      n.appendChild(a);
+      var o = e.getBoundingClientRect(),
+          s = o.left + window.pageXOffset - a.offsetWidth / 2 + o.width / 2,
+          i = o.bottom + window.pageYOffset - a.offsetHeight - 2 * o.height;
+      a.style.top = i + "px", a.style.left = s + "px"
+  }(e.target));
+
+  return;
+}
+
+function onMouseLeave() {
+  var e = document.querySelector(".svg-tip");
+  e && e.remove();
+
+  return;
+}
+{% endhighlight %}
+
+Also do not forget CSS
