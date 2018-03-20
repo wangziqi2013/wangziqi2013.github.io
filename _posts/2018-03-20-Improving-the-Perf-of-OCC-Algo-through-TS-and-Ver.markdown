@@ -33,4 +33,14 @@ During the serial validation phase, transaction obtain commit timestamps (ct) fr
 Then, in the write phase, they update timestamps of items in write sets to ct. Furthermore,
 when transactions begin their first read operation, they obtain a begin timestamp (bt). Validation is
 performed by comparing the timestamp of data items in the read set with bt. If the timestamp is greather than bt,
-then obviously some transaction's write phase has written into it after the validating transaction started.
+then obviously some transaction's write phase has written into it after the validating transaction started. 
+
+<hr />
+<br />
+![Version Based Validation]({{ "/static/ver-validation/figure1-wrong-algo.png" | prepend: site.baseurl }} "Version Based Validation"){: width="600px"}
+<br />
+**Figure 1: The Version-Based Validation and Write Back**
+{: align="middle"}
+<hr /><br />
+
+The original version-based vaidation in the paper, however, is incorrect. As shown in Figure 1
