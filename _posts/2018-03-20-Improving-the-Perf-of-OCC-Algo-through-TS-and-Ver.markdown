@@ -86,7 +86,11 @@ timestamps of data items, because the validation and write phase is inside a cri
 suggests that the new transaction must be able to see updated data item timestamps. (2) The new transaction's bt
 is smaller than the committing transaction's ct, and hence smaller than data item's ct if conflicts exist. This can
 be detected by validation. Note that false conflicts are possible as in the example below, but no conflict can be missed. 
-In the latter case, the reasoning is more straightforward
+In the latter case, the reasoning is more straightforward. In the committing transaction's program order, we have 
+```write back -> obtain ct```; In the new transaction's program order, we have ```obtain bt -> read phase```. In addition,
+we assume ```obtain ct -> obtain bt```. The overall ordering of events is therefore 
+```write back -> obtain ct -> obtain bt -> read phase```. No dependency cycle can possible happen, as the new transaction
+is guaranteed to read updated value.
 
 **False Conflict Example:**
 {% highlight C %}
