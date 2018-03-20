@@ -71,4 +71,8 @@ Commit @ 100
 In the above example, both transaction 1 and 2 commit successfully. A cycle consisting of two dependencies, however, 
 can be identified. One is 1->2 RAW on data item A, another is 2->1 WAR on data item B. The crux of the undetected 
 conflict is that, if ct is obtained "too early", i.e. before updated values of data items are written back, then risks 
-are that new transactions may begin without being aware of the ongoing write phase.
+are that new transactions may begin without being aware of the ongoing write phase. 
+
+To fix this problem, the acquisition of ct must be postponed, till the point that all write back completes. To see why
+this works, consider concurrently spawning transactions. They either obtain bt before the committing transaction
+obtains ct, or after. In the former case, there is the risk that the read phase of the newly spawned transaction
