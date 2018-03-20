@@ -56,8 +56,8 @@ Commit @ 100
  TS(B) = 100
               Begin @ 101
   Store A
-                Load  B
                 Load  A
+                Load  B
   Store B
   Finish
              Commit @ 101
@@ -68,4 +68,7 @@ Commit @ 100
                 Finish
 {% endhighlight %}
 
-In the above example, both transaction 1 and 2 commit successfully. 
+In the above example, both transaction 1 and 2 commit successfully. A cycle consisting of two dependencies, however, 
+can be identified. One is 1->2 RAW on data item A, another is 2->1 WAR on data item B. The crux of the undetected 
+conflict is that, if ct is obtained "too early", i.e. before updated values of data items are written back, then risks 
+are that new transactions may begin without being aware of the ongoing write phase.
