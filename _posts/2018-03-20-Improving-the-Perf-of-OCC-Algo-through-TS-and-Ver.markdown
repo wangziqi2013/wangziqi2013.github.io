@@ -94,6 +94,12 @@ is guaranteed to read updated value.
 
 **False Conflict Example:**
 {% highlight C %}
+/* 
+  In this example, transaction 2 only reads updated values of transaction 1.
+  Transaction 2 fails validation, nevertheless, because its bt is smaller than
+  transaction 1's ct. 
+*/
+
    Txn 1         Txn 2
   Store A
   Store B
@@ -108,8 +114,4 @@ Commit @ 101
              Validate A, B
             TS(A), TS(B) > 101
                 ABORT
-
-// In this example, transaction 2 only reads updated values of transaction 1.
-// Transaction 2 fails validation, nevertheless, because its bt is smaller than
-// transaction 1's ct. 
 {% endhighlight %}
