@@ -71,8 +71,41 @@ Commit @ 100
 In the above example, both transaction 1 and 2 commit successfully. A cycle consisting of two dependencies, however, 
 can be identified. One is 1->2 RAW on data item A, another is 2->1 WAR on data item B. The crux of the undetected 
 conflict is that, if ct is obtained "too early", i.e. before updated values of data items are written back, then risks 
-are that new transactions may begin without being aware of the ongoing write phase. 
+are that new transactions may begin without being aware of the ongoing write phase. **The atomic fetch-and-increment to 
+obtain ct can be thought of a contract which guarantees that after this point, read operations to any data item
+in the write set must return the updated value (till the next overwrite)**. Failing to observe this contract
+will result in new transactions not being able to read the most up-to-date value although in has been logically committed.
 
 To fix this problem, the acquisition of ct must be postponed, till the point that all write back completes. To see why
 this works, consider concurrently spawning transactions. They either obtain bt before the committing transaction
-obtains ct, or after. In the former case, there is the risk that the read phase of the newly spawned transaction
+obtains ct, or after it (since it is an atomic operation). In the former case, there is the risk that the read phase 
+of the newly spawned transaction overlaps with the write back of the committing transaction, resulting in RAW and WAR
+dependency cycles. Such violations, however, are guaranteed to be caught by validation, based on two observations:
+(1) The new transaction will only start validation phase after the committing transaction finishes updating
+timestamps of data items, because the validation and write phase is inside a critical section. This observation
+suggests that the new transaction must be able to see updated data item timestamps. (2) The new transaction's bt
+is smaller than the committing transaction's ct, and hence smaller than data item's ct if conflicts exist. This can
+be detected by validation. Note that false conflicts are possible as in the example below, but no conflict can be missed. 
+In the latter case, the reasoning is more straightforward
+
+**False Conflict Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+  Store A
+  Store B
+              Begin @ 100
+                Load  A
+Commit @ 101
+                Load  B
+ TS(A) = 101
+ TS(B) = 101
+  Finish
+             Commit @ 102
+             Validate A, B
+            TS(A), TS(B) > 101
+                ABORT
+
+// In this example, transaction 2 only reads updated values of transaction 1.
+// Transaction 2 fails validation, nevertheless, because its bt is smaller than
+// transaction 1's ct. 
+{% endhighlight %}
