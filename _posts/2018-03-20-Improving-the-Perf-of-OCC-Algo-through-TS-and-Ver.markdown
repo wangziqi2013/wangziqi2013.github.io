@@ -43,4 +43,29 @@ then obviously some transaction's write phase has written into it after the vali
 {: align="middle"}
 <hr /><br />
 
-The original version-based vaidation in the paper, however, is incorrect. As shown in Figure 1
+The original version-based vaidation in the paper, however, is incorrect. As shown in Figure 1, the write phase first
+obtains ct (```C-TS(T)``` in the code snippet), then updates timestamps of data items, and eventually writes back
+dirty values. A new transaction that begins after the committing transaction obtained ct but before it finishes write back 
+can make the schedule non-serializable. An example is presented below:
+
+**Non-serializable Schedule Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+Commit @ 100
+ TS(A) = 100
+ TS(B) = 100
+              Begin @ 101
+  Store A
+                Load  B
+                Load  A
+  Store B
+  Finish
+             Commit @ 101
+              Validate A
+              TS(A) < 101
+              Validate B
+              TS(B) < 101
+                Finish
+{% endhighlight %}
+
+In the above example, both transaction 1 and 2 commit successfully. 
