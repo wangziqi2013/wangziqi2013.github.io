@@ -26,3 +26,11 @@ secton to finish, then enters the critical section, and take a second snapshot o
 All write phases that **start** before ct2 (and hence have a **finish** timestamp less than ct2) can potentilaly
 interfere with the new transaction's read phase. The new transacton, therefore, validates all write sets that have 
 a finish timestamp between ct1 and ct2.
+
+Instead of performing set intersections, which requires (# of write sets * # size read set) hash table probing (we assume
+write sets are implemented as O(1) probe time hash table), timestamps are assigned to each data item in the system. 
+During the serial validation phase, transaction obtain commit timestamps (ct) from the global timestamp counter.
+Then, in the write phase, they update timestamps of items in write sets to ct. Furthermore,
+when transactions begin their first read operation, they obtain a begin timestamp (bt). Validation is
+performed by comparing the timestamp of data items in the read set with bt. If the timestamp is greather than bt,
+then obviously some transaction's write phase has written into it after the validating transaction started.
