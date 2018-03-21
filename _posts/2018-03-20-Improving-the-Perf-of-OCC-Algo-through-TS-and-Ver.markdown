@@ -144,7 +144,14 @@ Note that the same race condition between a comitting transaction and newly spaw
 as we discussed in prior sections. No solution is provided.
 
 Multiversion can also be leveraged by OCC to improve read throughput, as read-only transactions are guaranteed 
-to succeed. In the MV-OCC scheme, instead of acquiring read/write locks, transactions proceed as they are in 
-a version-based OCC. During the serial validation and write phase, version validation is performed as usual.
-New versions are created with timestamp being ct as update transactions write back dirty values. Read-only
-transactions obtain bt only, and reads the most recent version less than bt.
+to succeed. In the MV-OCC scheme, instead of acquiring read/write locks, transactions read optimistically and 
+buffer writes as they are in a version-based OCC. During the serial validation and write phase, version validation 
+is performed as usual. New versions are created with timestamps being ct as update transactions write back dirty values. 
+Read-only transactions obtain bt only, and read the most recent version less than bt. Care must be taken that the race 
+condition between committing transactions and newly spawned transactions can still be resolved by postponing 
+the increment of the global timestamp counter. Before write back starts, the committing transaction reads the current
+global timestamp as ct' without incrementing it. The timestamp of versions it creates is ct' + 1. At this stage, 
+all newly spawned read-only transactions cannot read half-committed values. On the contraty, update transactions
+may obtain a bt which is identical ct', and fail validation, because the data item they access has at least a timestamp
+of (bt + 1). After the write back, the global timestamp is atomically incremented. Consistency is preserved because
+transactions spawned after this point will see fully committed write sets.
