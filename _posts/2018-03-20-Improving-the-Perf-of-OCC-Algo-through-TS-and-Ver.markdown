@@ -140,5 +140,11 @@ transaction. No validation is required, as update transactions acquire read lock
 locks during the write phase. Read-only transactions, on the other hand, do not acquire locks. Instead, they obtain
 bt from the same source as update transaction's ct. Read operations are performed on the most recent version
 less than bt. No validation is required for read-only transactions, as they always see a consistent snapshot.
-Note that the same race condition between a comitting transaction and newly spawned transaction can happen.
-No solution is provided.
+Note that the same race condition between a comitting transaction and newly spawned transaction can happen
+as we discussed in prior sections. No solution is provided.
+
+Multiversion can also be leveraged by OCC to improve read throughput, as read-only transactions are guaranteed 
+to succeed. In the MV-OCC scheme, instead of acquiring read/write locks, transactions proceed as they are in 
+a version-based OCC. During the serial validation and write phase, version validation is performed as usual.
+New versions are created with timestamp being ct as update transactions write back dirty values. Read-only
+transactions obtain bt only, and reads the most recent version less than bt.
