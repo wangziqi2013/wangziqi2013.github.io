@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "RingSTM: Scalable Transactions with a Single Atomic Instruction"
+date:   2018-03-21 00:55:00 -0500
+categories: paper
+paper_title: "RingSTM: Scalable Transactions with a Single Atomic Instruction"
+paper_link: https://dl.acm.org/citation.cfm?id=1378583
+paper_keyword: RingSTM
+paper_year: 2008
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
