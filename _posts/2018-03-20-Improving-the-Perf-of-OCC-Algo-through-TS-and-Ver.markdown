@@ -130,3 +130,11 @@ most (2 * read set size). Compared with the classical BOCC implementation, the r
 quite significant.
 
 ### Multiversion OCC
+
+Another direction for optimizing OCC validation is to use multiversion. This paper bases its discussion
+on a multiversion 2PL called the CCA (Computer Corporation of America) Version Pool algorithm. Transactions 
+are classified into update transactions and read-only transactions. Update transactions use 2PL for serializable 
+synchronization, and they always access the most recent version. At commit time, update transactions obtain
+ct, and then create new versions as they write back. The timestamp of the new version is the ct of the committing 
+transaction. No validation is required, as update transactions acquire read locks during the read phase and write 
+locks during the write phase. Read-only transactions, on the other hand, do not acquire locks
