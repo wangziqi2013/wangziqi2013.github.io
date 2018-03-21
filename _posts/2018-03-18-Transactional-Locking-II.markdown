@@ -94,6 +94,31 @@ is greather than bt. On a successful read validation, the transaction enters wri
 dirty values in the write set. Written elements are unlocked by clearing the lock status bit and copying
 ct into the version field with a normal store instruction.
 
+The second read validation is necessary, because it prevents non-serializable schedule as shown in the example
+below. 
+
+**Non-serializable Schedule Example:**
+{% highlight C %}
+/*
+  In this example, we omitted the validation step after locking
+  the entire write set.
+ */
+   Txn 1         Txn 2
+Begin @ 100
+  Read  A
+  Read  B
+                Read  C
+             (Begin Commit)
+                Lock  A
+              Commit @ 101
+                Write A
+                Finish
+(Begin Commit)
+  Lock  A              
+Commit @ 102
+  Write A
+{% endhighlight %}
+
 One of the advantages of performing post-read validation on every transactional load is that no read 
 set validation is required for read-only transactions. Read-only transaction only validates every single read
 to make sure every value it accesses is consistent with the begin timestamp. No validation phase or write phase
