@@ -137,4 +137,8 @@ are classified into update transactions and read-only transactions. Update trans
 synchronization, and they always access the most recent version. At commit time, update transactions obtain
 ct, and then create new versions as they write back. The timestamp of the new version is the ct of the committing 
 transaction. No validation is required, as update transactions acquire read locks during the read phase and write 
-locks during the write phase. Read-only transactions, on the other hand, do not acquire locks
+locks during the write phase. Read-only transactions, on the other hand, do not acquire locks. Instead, they obtain
+bt from the same source as update transaction's ct. Read operations are performed on the most recent version
+less than bt. No validation is required for read-only transactions, as they always see a consistent snapshot.
+Note that the same race condition between a comitting transaction and newly spawned transaction can happen.
+No solution is provided.
