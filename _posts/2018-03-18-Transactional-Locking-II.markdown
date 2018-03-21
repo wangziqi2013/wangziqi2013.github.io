@@ -95,7 +95,13 @@ dirty values in the write set. Written elements are unlocked by clearing the loc
 ct into the version field with a normal store instruction.
 
 The second read validation is necessary, because it prevents non-serializable schedule as shown in the example
-below. 
+below. A dependency cycle can be identified. The first dependency is 1->2 WAR since transaction 2 commits and writes
+into data item A. The second dependency is 2->1 WAW since transaction 1 commits on data item A. After the last lock on
+the write set is acquired (or in some design, after the validation and write phase critical section is entered), no
+transaction could possibly serialize after the current transaction, and hence the validation can be carried out
+without races about concurrent write phases, as concurrent write phases can only introduce WAR dependencies.
+On the other hand, if transaction 1 does not write A, but write some other data items, then the schedule is 
+actually serializable, but the validation protocol still do not allow it, causing a false positive.
 
 **Non-serializable Schedule Example:**
 {% highlight C %}
@@ -112,11 +118,14 @@ Begin @ 100
                 Lock  A
               Commit @ 101
                 Write A
+               Unlock  A
                 Finish
 (Begin Commit)
   Lock  A              
 Commit @ 102
   Write A
+ Unlock  A
+  Finish
 {% endhighlight %}
 
 One of the advantages of performing post-read validation on every transactional load is that no read 
