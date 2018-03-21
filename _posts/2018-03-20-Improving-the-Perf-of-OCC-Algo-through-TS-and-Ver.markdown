@@ -72,7 +72,7 @@ In the above example, both transaction 1 and 2 commit successfully. A cycle cons
 can be identified. One is 1->2 RAW on data item A, another is 2->1 WAR on data item B. The crux of the undetected 
 conflict is that, if ct is obtained "too early", i.e. before updated values of data items are written back, then risks 
 are that new transactions may begin without being aware of the ongoing write phase. **The atomic fetch-and-increment to 
-obtain ct can be thought of a contract which guarantees that after this point, read operations to any data item
+obtain ct can be thought of as a contract which guarantees that after this point, read operations to any data item
 in the write set must return the updated value (till the next overwrite)**. Failing to observe this contract
 will result in new transactions not being able to read the most up-to-date value although in has been logically committed.
 
@@ -115,3 +115,11 @@ Commit @ 101
             TS(A), TS(B) > 101
                 ABORT
 {% endhighlight %}
+
+By using version validation, the number of operations can be reduced. Assuming that version storage 
+is implemented as an hash table with O(1) probe and insert time complexity, the number of probe operations 
+for validation is merely the size of the read set. In addition, version update during the write phase requires 
+(write set size) insert operations. Overall, the cost is (read set size + write set size). If we disallow blind
+writes, then the write set is a subset of the read set. We can therefore rewrite the overhead as at 
+most (2 * read set size). Compared with the classical BOCC implementation, the reduction of overhead is
+quite significant.
