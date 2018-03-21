@@ -154,4 +154,9 @@ global timestamp as ct' without incrementing it. The timestamp of versions it cr
 all newly spawned read-only transactions cannot read half-committed values. On the contraty, update transactions
 may obtain a bt which is identical ct', and fail validation, because the data item they access has at least a timestamp
 of (bt + 1). After the write back, the global timestamp is atomically incremented. Consistency is preserved because
-transactions spawned after this point will see fully committed write sets.
+transactions spawned after this point will see fully committed write sets. 
+
+Note that the above techinique only applies to serial validation and write phase. If multiple instances of write 
+backs are present, they may obtain the same ct' and hence use the same commit timestamp (ct' + 1). The completion of any 
+write back will increment the global timestamp counter, publicizing all concurrently committing write sets even 
+if they may have not been fully committed.
