@@ -27,6 +27,11 @@ All write phases that **start** before ct2 (and hence have a **finish** timestam
 interfere with the new transaction's read phase. The new transacton, therefore, validates all write sets that have 
 a finish timestamp between ct1 and ct2.
 
+This paper seeks to improve existing BOCC algorithms from two aspects: using version based validation, and using
+multiversion. We explore these two directions below.
+
+### Version-Based Validation
+
 Instead of performing set intersections, which requires (# of write sets * # size read set) hash table probing (we assume
 write sets are implemented as O(1) probe time hash table), timestamps are assigned to each data item in the system. 
 During the serial validation phase, transaction obtain commit timestamps (ct) from the global timestamp counter.
@@ -123,3 +128,5 @@ for validation is merely the size of the read set. In addition, version update d
 writes, then the write set is a subset of the read set. We can therefore rewrite the overhead as at 
 most (2 * read set size). Compared with the classical BOCC implementation, the reduction of overhead is
 quite significant.
+
+### Multiversion OCC
