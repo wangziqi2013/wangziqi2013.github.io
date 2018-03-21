@@ -79,7 +79,7 @@ conflict is that, if ct is obtained "too early", i.e. before updated values of d
 are that new transactions may begin without being aware of the ongoing write phase. **The atomic fetch-and-increment to 
 obtain ct can be thought of as a contract which guarantees that after this point, read operations to any data item
 in the write set must return the updated value (till the next overwrite)**. Failing to observe this contract
-will result in new transactions not being able to read the most up-to-date value although in has been logically committed.
+will result in new transactions not being able to read the most up-to-date value although they have been logically committed.
 
 To fix this problem, the acquisition of ct must be postponed, till the point that all write back completes. To see why
 this works, consider concurrently spawning transactions. They either obtain bt before the committing transaction
@@ -117,11 +117,11 @@ Commit @ 101
   Finish
              Commit @ 102
              Validate A, B
-            TS(A), TS(B) > 101
+            TS(A), TS(B) > 100
                 ABORT
 {% endhighlight %}
 
-By using version validation, the number of operations can be reduced. Assuming that version storage 
+By using version validation, the number of operations is reduced. Assuming that version storage 
 is implemented as an hash table with O(1) probe and insert time complexity, the number of probe operations 
 for validation is merely the size of the read set. In addition, version update during the write phase requires 
 (write set size) insert operations. Overall, the cost is (read set size + write set size). If we disallow blind
@@ -156,7 +156,7 @@ may obtain a bt which is identical ct', and fail validation, because the data it
 of (bt + 1). After the write back, the global timestamp is atomically incremented. Consistency is preserved because
 transactions spawned after this point will see fully committed write sets. 
 
-Note that the above techinique only applies to serial validation and write phase. If multiple instances of write 
+Note that the above technique only applies to serial validation and write phase. If multiple instances of write 
 backs are present, they may obtain the same ct' and hence use the same commit timestamp (ct' + 1). The completion of any 
 write back will increment the global timestamp counter, publicizing all concurrently committing write sets even 
 if they may have not been fully committed.
