@@ -42,12 +42,20 @@ RAW and WAR dependency cycles, as shown below.
 {% endhighlight %}
 
 Note that in this article, we deliberately make a distinction between the two 
-possibilities where the committing transaction enters write phase after the other transaction begins read
-phase and the opposite. This is because they require quite different solutions to deal with. In this section,
+possibilities where the committing transaction enters write phase *after* the other transaction begins read
+phase, and the opposite. This is because they require quite different solutions to deal with. In this section,
 only the former case is addressed. 
 
-In the given example, transaction 2 begins its write back phase after transaction 1 begins 
-read phase. 
+In the given example, transaction 2 begins its write phase after transaction 1 begins 
+read phase. They collide on data items A and B. If we take the logical serialization order of OCC,
+which is usually the order that transaction finishes validation, into consideration, it is obvious that 
+transaction 1 just performs the read operation "too early". When transaction 2 decides to commit,
+it is serialized before transaction 1. Transaction 1's first read operation, therefore, must actually
+return the updated value of A. Failing to observe this order will result in conflicts, as in our example.
+
+A few techniques can be applied to prevent the race condition. In the classical Backward OCC design,
+
+
 
 ### Racing Writes
 
