@@ -16,4 +16,5 @@ validation and/or write phases that may require critical sections and/or fine gr
 One of the difficulties of designing efficient OCC algorithms, however, is to reason about complicated
 read-write ordering issues due to the speculative and optimistic nature of OCC executions.
 In this article, we discuss a few race conditions that are typical to OCC, and then introduce
-a few ways of avoiding them.
+a few ways of avoiding them. We hope our discussion could aid algorithm engineers to prevent 
+certain anomalies and motivate designs of better OCC algorithms.
