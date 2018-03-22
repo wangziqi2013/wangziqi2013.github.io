@@ -8,7 +8,7 @@ ontop: true
 
 ### Introduction
 
-Optimistic Concurrency Control (OCC) are gaining more and more attention as multicore
+Optimistic Concurrency Control (OCC) are drawing more and more attention as multicore
 has become the mainstream platform for today's database management systems and transaction
 processing systems. Compared with Two Phase Locking (2PL), OCC algorithms are expected to 
 expose better degree of parallelism due to the wait-free read phase and relatively short 
@@ -23,4 +23,13 @@ still keeping their designs efficient.
 
 ### Racing Read and Write Phase
 
-Race condition between read and write phases is the most common form of races in OCC. 
+Conflicting read and write phases is the most common form of races in OCC. If the write phase
+starts after the reading transaction began, and writes into data items that are also in the
+reading transaction's read set, then non-serializable schedules can occur in the form of
+RAW and WAR dependency cycles, as shown below.
+
+### Racing Writes
+
+### Reading the Partial Commit
+
+### 
