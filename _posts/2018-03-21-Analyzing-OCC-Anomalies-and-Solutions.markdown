@@ -47,8 +47,8 @@ phase, and the opposite. This is because they require quite different solutions 
 only the former case is addressed. 
 
 In the given example, transaction 2 begins its write phase after transaction 1 begins 
-read phase. They collide on data items A and B. If we take the logical serialization order of OCC,
-which is usually the order that transaction finishes validation, into consideration, it is obvious that 
+read phase. They collide on data items A and B. If we take into consideration the logical 
+serialization order of OCC, which is usually the order that transaction finishes validation, it is obvious that 
 transaction 1 just performs the read operation "too early". When transaction 2 decides to commit,
 it is serialized before transaction 1. Transaction 1's first read operation, therefore, must actually
 return the updated value of A. Failing to observe this order will result in conflicts, as in our example.
@@ -58,7 +58,7 @@ operations by committing transactions on data items that the reading transaction
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
 requires some post validation of the read set. In the following discussion, we assume serialized validation and write 
-phases. 
+phases. Concurrent commits is possible, but this is discussed in a separate section.
 
 In the classical Backward OCC (BOCC) design, the validation is conducted by having reader transactions remember 
 committed transactions during its read phase. On validation, the read set of the transaction and write sets from 
