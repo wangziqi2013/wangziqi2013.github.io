@@ -15,6 +15,6 @@ expose better degree of parallelism due to the wait-free read phase and relative
 validation and/or write phases that may require critical sections and/or fine grained locking.
 One of the difficulties of designing efficient OCC algorithms, however, is to reason about complicated
 read-write ordering issues due to the speculative and optimistic nature of OCC executions.
-In this article, we discuss a few race conditions that are typical to OCC, and then introduce
-a few ways of avoiding them. We hope our discussion could aid algorithm engineers to prevent 
-certain anomalies and motivate designs of better OCC algorithms.
+In this article, we discuss a few race conditions that are typical to OCC. For each race 
+condition, we propose several solutions to avoid them. We hope our discussion could aid algorithm 
+engineers to prevent common fallacies while still keeping the design efficient. 
