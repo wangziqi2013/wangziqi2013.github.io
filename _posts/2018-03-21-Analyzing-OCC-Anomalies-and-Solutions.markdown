@@ -58,8 +58,14 @@ operations by committing transactions on data items that the reading transaction
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
 requires some post validation of the read set. In the classical BOCC design, the validation is conducted by
-having reader transactions record committed transactions during its read phase. On validation, the read set
-of the write sets from overlapping write phases are tested for non-empty intersections.
+having reader transactions remember committed transactions during its read phase. On validation, the read set
+of the transaction and write sets from committed write phases are tested for non-empty intersections. 
+
+Tracking committing transactions during the read phase can be achieved by using a timestamp counter.
+The counter is incremented when a transaction completes the write phase, and tagges its write set with
+the value of the counter after the increment. Meanwhile, transactions in the read phase read the counter 
+before the first read operation and after it enters validation. Write sets whose tag is betwen this two 
+timestamps are obliged to be checked.
 
 
 
