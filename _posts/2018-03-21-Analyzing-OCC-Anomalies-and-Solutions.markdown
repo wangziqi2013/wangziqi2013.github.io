@@ -76,9 +76,14 @@ and can optionally abort early on a non-empty intersection. Reader transactions 
 broadcast. They either test every single read operation with all write sets, or perform a bulk validation
 after the read phase. Any hit or non-empty intersection indicates a possibly "early read", and will cause an abort. 
 
+We use BOCC and FOCC as a starting point to demonstrate what in general OCC algorithms should validate. BOCC and FOCC
+with serial validation are complete algorithms, and do not allow races that are detrimental to correctness. 
+In the following discussion, however, as we introduce fine grained version-based validation and parallel commits, 
+we shall see that some races are common design fallacies if the design is not verified carefully. 
+
 Beyond set-intersection based validation, which requires no extra fine grained metadata for each data item,
 version-based validation can effectivelu reduce the overhead of validation, at the cost of metadata storage
-for data items.
+for data items. For each data item, we maintain 
 
 ### Racing Writes
 
