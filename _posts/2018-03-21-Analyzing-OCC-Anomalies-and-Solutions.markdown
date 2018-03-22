@@ -17,8 +17,9 @@ One of the difficulties of designing efficient OCC algorithms, however, is to re
 read-write ordering issues due to the speculative and optimistic nature of OCC executions.
 In this article, we discuss a few race conditions that are typical to OCC. For each race 
 condition, we propose several solutions to avoid them. We also point out cases where OCC
-may raise "false alarms" but are actually serializable. We hope our discussion could aid algorithm 
-engineers to prevent common fallacies while still keeping the design efficient. 
+may raise "false alarms" to indicate violations, but which are actually serializable. 
+We hope our discussion could aid algorithm engineers to prevent common fallacies, while 
+still keeping their designs efficient. 
 
 ### Racing Read and Write Phase
 
