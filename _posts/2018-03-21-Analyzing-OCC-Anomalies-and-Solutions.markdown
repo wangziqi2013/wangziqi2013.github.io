@@ -16,5 +16,10 @@ validation and/or write phases that may require critical sections and/or fine gr
 One of the difficulties of designing efficient OCC algorithms, however, is to reason about complicated
 read-write ordering issues due to the speculative and optimistic nature of OCC executions.
 In this article, we discuss a few race conditions that are typical to OCC. For each race 
-condition, we propose several solutions to avoid them. We hope our discussion could aid algorithm 
+condition, we propose several solutions to avoid them. We also point out cases where OCC
+may raise "false alarms" but are actually serializable. We hope our discussion could aid algorithm 
 engineers to prevent common fallacies while still keeping the design efficient. 
+
+### Racing Read and Write Phase
+
+Race condition between read and write phases is the most common form of races in OCC. 
