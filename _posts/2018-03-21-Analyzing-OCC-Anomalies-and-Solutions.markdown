@@ -57,23 +57,28 @@ A few techniques can be applied to prevent the race condition. The essence of th
 operations by committing transactions on data items that the reading transaction has accessed. As the 
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
-requires some post validation of the read set. In the classical BOCC design, the validation is conducted by
-having reader transactions remember committed transactions during its read phase. On validation, the read set
-of the transaction and write sets from committed write phases are tested for non-empty intersections. 
+requires some post validation of the read set. In the following discussion, we assume serialized validation and write 
+phases. 
 
-Tracking committing transactions during the read phase can be achieved by using a timestamp counter.
-The counter is incremented when a transaction completes the write phase, and tagges its write set with
-the value of the counter after the increment. Meanwhile, transactions in the read phase read the counter 
-before the first read operation and after it enters validation. Write sets whose tags are between this two 
-timestamps are obliged to be checked. An alternative approach is to have committing transactions 
-broadcast its commit decision together with a reference to its write set to all reader transactions,
+In the classical Backward OCC (BOCC) design, the validation is conducted by having reader transactions remember 
+committed transactions during its read phase. On validation, the read set of the transaction and write sets from 
+committed write phases are tested for non-empty intersections. Tracking committing transactions during the read 
+phase can be achieved by using a timestamp counter. The counter is incremented when a transaction completes the 
+write phase, and tagges its write set with the value of the counter after the increment. Meanwhile, transactions 
+in the read phase read the counter before the first read operation and after it enters validation. Write sets whose 
+tags are between this two timestamps are obliged to be checked. 
+
+An alternative approach is to have committing transactions 
+broadcast their commit decisions together with a reference to its write set to all reader transactions,
 validating in the forward direction (Forward OCC, FOCC). 
-A reader transaction receiving the broadcast first checks its current read set against the write set,
+A reader transaction receiving the broadcast first checks its current read set against the broadcasted write set,
 and can optionally abort early on a non-empty intersection. Reader transactions also needs to buffer the 
 broadcast. They either test every single read operation with all write sets, or perform a bulk validation
-after the read phase. Any hit or non-empty intersection indicates a possibly "early read". 
+after the read phase. Any hit or non-empty intersection indicates a possibly "early read", and will cause an abort. 
 
-
+Beyond set-intersection based validation, which requires no extra fine grained metadata for each data item,
+version-based validation can effectivelu reduce the overhead of validation, at the cost of metadata storage
+for data items.
 
 ### Racing Writes
 
