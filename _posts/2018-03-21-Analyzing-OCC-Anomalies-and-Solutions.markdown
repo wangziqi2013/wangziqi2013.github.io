@@ -64,8 +64,14 @@ of the transaction and write sets from committed write phases are tested for non
 Tracking committing transactions during the read phase can be achieved by using a timestamp counter.
 The counter is incremented when a transaction completes the write phase, and tagges its write set with
 the value of the counter after the increment. Meanwhile, transactions in the read phase read the counter 
-before the first read operation and after it enters validation. Write sets whose tag is betwen this two 
-timestamps are obliged to be checked.
+before the first read operation and after it enters validation. Write sets whose tags are between this two 
+timestamps are obliged to be checked. An alternative approach is to have committing transactions 
+broadcast its commit decision together with a reference to its write set to all reader transactions,
+validating in the forward direction (Forward OCC, FOCC). 
+A reader transaction receiving the broadcast first checks its current read set against the write set,
+and can optionally abort early on a non-empty intersection. Reader transactions also needs to buffer the 
+broadcast. They either test every single read operation with all write sets, or perform a bulk validation
+after the read phase. Any hit or non-empty intersection indicates a possibly "early read". 
 
 
 
