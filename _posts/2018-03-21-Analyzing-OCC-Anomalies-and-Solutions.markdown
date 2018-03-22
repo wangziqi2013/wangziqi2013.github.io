@@ -28,6 +28,27 @@ starts after the reading transaction began, and writes into data items that are 
 reading transaction's read set, then non-serializable schedules can occur in the form of
 RAW and WAR dependency cycles, as shown below.
 
+**Racing Read and Write Phase Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Load  A
+              Begin Commit
+                Store A
+                Store B
+                Finish
+  Load  B
+   ....
+{% endhighlight %}
+
+Note that in this article, we deliberately make a distinction between the two 
+possibilities where the committing transaction enters write phase after the other transaction begins read
+phase and the opposite. This is because they require quite different solutions to deal with. In this section,
+only the former case is addressed. 
+
+In the given example, transaction 2 begins its write back phase after transaction 1 begins 
+read phase. 
+
 ### Racing Writes
 
 ### Reading the Partial Commit
