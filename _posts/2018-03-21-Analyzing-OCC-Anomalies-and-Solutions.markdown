@@ -53,7 +53,13 @@ transaction 1 just performs the read operation "too early". When transaction 2 d
 it is serialized before transaction 1. Transaction 1's first read operation, therefore, must actually
 return the updated value of A. Failing to observe this order will result in conflicts, as in our example.
 
-A few techniques can be applied to prevent the race condition. In the classical Backward OCC design,
+A few techniques can be applied to prevent the race condition. The essence of the problem is to detect write 
+operations by committing transactions on data items that the reading transaction has accessed. As the 
+reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
+any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
+requires some post validation of the read set. In the classical BOCC design, the validation is conducted by
+having reader transactions record committed transactions during its read phase. On validation, the read set
+of the write sets from overlapping write phases are tested for non-empty intersections.
 
 
 
@@ -61,4 +67,4 @@ A few techniques can be applied to prevent the race condition. In the classical 
 
 ### Reading the Partial Commit
 
-### 
+### Broken Read-Modify-Write
