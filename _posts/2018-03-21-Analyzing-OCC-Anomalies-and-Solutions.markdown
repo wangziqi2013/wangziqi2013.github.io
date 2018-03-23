@@ -153,6 +153,13 @@ Begin Commit
   Finish
 {% endhighlight %}
 
+The second schedule is also serializable, as all conflicts are from transaction 1 to transaction 2.
+Compared with the previous one, this example is more illustrative of the limitation of OCC's scheduling power.
+OCC serializes transactions based on the order they begin validation. Such artificial enforcement of ordering
+based on a single event may not best describe the way that transactions actually interact. As a consequence, 
+serializable schedules like this one will be rejected if the actual directions of conflicts differ from the order 
+that transactions begin validation. 
+
 ### Racing Writes
 
 ### Reading the Partial Commit
