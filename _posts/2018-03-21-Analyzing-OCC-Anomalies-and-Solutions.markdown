@@ -185,8 +185,8 @@ example below, we assume version-base validation. The timestamp counter is incre
       Read A
       Read B
  Begin Commit @ 101
-Check A  (bt >= A.ws)  
-Check B  (bt >= B.ws)
+Check A (bt >= A.ws)  
+Check B (bt >= B.ws)
   Store A @ 101
                            Begin @ 101
                              Load  A
@@ -194,8 +194,8 @@ Check B  (bt >= B.ws)
   Store B @ 101
      Finish
                         Begin Commit @ 102
-                       Check A  (bt >= A.ws)  
-                       Check B  (bt >= B.ws)
+                       Check A (bt >= A.ws)  
+                       Check B (bt >= B.ws)
                              Finish
 {% endhighlight %}
 
@@ -209,8 +209,17 @@ dirty values before it is read by a reading transaction that starts after the co
 order. Even worse, as shown in the example, if ct is obtained "too early", meaning that the transaction logically
 commits before it finishes writing back dirty values, the violation cannot even be detected by post-read validation.
 
+Incrementing the global timestamp counter *after* updating values solves the problem. If the read phase begins before
+incrementing the global timestamp counter, suggesting that the read phase may overlap with the write phase, then (1) 
+the reading transaction must enter validation phase after the current committing transaction leaves write phase, because 
+validation and write phases are serialized. (2) When the reading transaction enters validation phase, the wt of data items 
+that the committing transaction writes into must be greater than the reading transaction's bt, because bt is obtained before 
+ct (and hence wt of data items) is obtained. On the other hand, if the read phase begins after incrementing the 
+global timestamp counter, then it is guaranteed that the transaction reads consistent values, because the write phase
+has already completed.
 
-
-### Racing Writes
+There are schedules that read consistently, but are wrongly identified as violating 
 
 ### Broken Read-Modify-Write
+
+### Racing Writes
