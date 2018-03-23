@@ -178,7 +178,7 @@ example below, we assume version-base validation. The timestamp counter is incre
 {% highlight C %}
 /*
  * Assume the global timestamp counter is 100 before transactions start, and 
- * all data items have timestamp 100
+ * all data items have initial timestamp 100
  */
       Txn 1                   Txn 2
    Begin @ 100
@@ -198,6 +198,15 @@ Check B  (bt >= B.ws)
                        Check B  (bt >= B.ws)
                              Finish
 {% endhighlight %}
+
+The schedule in this example is not serializable. Although transaction 2 validates its read
+set using bt, reading from an partially committed write set still remains undetected. The reason is that
+in version-based OCC scheme, transaction commits are serialized by the order they obtain ct.
+Similarly, transaction commit and transaction begin are serialized by the order they obtain ct and bt.
+In this example, when transaction 1 increments the timestamp counter to 101, it is logically committed. Read phases that 
+begin after this point is serialized after the commit, and should therefore read updated values. Failing to write back
+dirty values before it is read by a reading transaction that starts after the commit point will violate the serialization 
+order. Even worse, as shown in the example, if ct is obtained too early, the violation cannot even be detected.
 
 ### Racing Writes
 
