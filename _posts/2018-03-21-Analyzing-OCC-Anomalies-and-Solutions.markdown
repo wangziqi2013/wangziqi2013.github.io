@@ -231,6 +231,24 @@ Even if read and write phases are atomic with regard to concurrent writes, if so
 items that are both in the read set and the write set after read phase ends and before the validation-write phase starts, 
 then the schedule is non-serializable, as shown in the example below:
 
-
+**Broken Read-Modify-Write Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Load  A
+  Load  B
+                 Begin
+                Load  A
+                Load  C
+              Begin Commit
+                Store B
+                Store D
+                Finish
+  
+Begin Commit
+  Store A
+  Store B
+  Finish
+{% endhighlight %}
 
 ### Racing Writes
