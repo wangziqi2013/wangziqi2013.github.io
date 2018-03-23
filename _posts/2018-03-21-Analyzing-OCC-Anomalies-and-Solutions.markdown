@@ -153,12 +153,16 @@ Begin Commit
   Finish
 {% endhighlight %}
 
-The second schedule is also serializable, as all conflicts are from transaction 1 to transaction 2.
+The above schedule is also serializable, as all conflicts are from transaction 1 to transaction 2.
 Compared with the previous one, this example is more illustrative of the limitation of OCC's scheduling power.
 OCC serializes transactions based on the order they begin validation. Such artificial enforcement of ordering
 based on a single event may not best describe the way that transactions actually interact. As a consequence, 
 serializable schedules like this one will be rejected if the actual directions of conflicts differ from the order 
 that transactions begin validation. 
+
+Some data-driven approaches do not serialize transactions on a globally agreed event. The commit timestamp is
+computed based on the read and write sets. Essentially, transactions are allowed to adjust its commit timestamp
+dynamically. We do not cover details here. Interested readers can refer to [][][][] for more information.
 
 ### Racing Writes
 
