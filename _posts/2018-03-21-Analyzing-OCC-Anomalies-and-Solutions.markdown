@@ -58,7 +58,7 @@ operations by committing transactions on data items that the reading transaction
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
 requires some post validation of the read set. In the following discussion, we assume serialized validation and write 
-phases. Concurrent commits is possible, but this is discussed in a separate section.
+phases. Concurrent commits is possible, but is discussed in a separate section.
 
 In the classical Backward OCC (BOCC) design, the validation is conducted by having reader transactions remember 
 committed transactions during its read phase. On validation, the read set of the transaction and write sets from 
@@ -105,7 +105,33 @@ specify in the transaction code whether a speculative read may lead to undefined
 The OCC runtime then only performs read validation on selected reads. To further reduce the overhead,
 the OCC runtime can compare the transaction's bt with the current global timestamp counter after read is performed
 and before incremental validation is invoked. If the two timestamps agree, then validation is skipped, because no 
-other transaction has ever committed and updated any data item after bt is obtained. 
+other transaction has ever committed, no data item can be possibly updated since transaction begin.
+
+There are schedules, however, that OCC does not accept, but are actually serializable. We give one in the example below: 
+
+**Serializable Non-OCC Schedule Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Load  A
+                 Begin
+                Load  A
+                Load  B
+              Begin Commit
+                Store B
+                Store C
+                Finish
+  Load  B
+Begin Commit
+  Store B
+  Store A
+  Finish
+{% endhighlight %}
+
+Either BOCC, FOCC, or version-based OCC will reject transaction 1's read set, because
+transaction 2 commits before transaction 1, and writes into the read set of the latter.
+On the other hand, the schedule is serializable, as all conflicts are from transaction 2 to
+transaction 1, and the overall serialiation order can be determined. 
 
 ### Racing Writes
 
