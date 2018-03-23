@@ -109,7 +109,7 @@ other transaction has ever committed, no data item can be possibly updated since
 
 There are schedules, however, that OCC does not accept, but are actually serializable. We give one in the example below: 
 
-**Serializable Non-OCC Schedule Example:**
+**Serializable Non-OCC Schedule Example 1:**
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
@@ -132,6 +132,26 @@ Either BOCC, FOCC, or version-based OCC will reject transaction 1's read set, be
 transaction 2 commits before transaction 1, and writes into the read set of the latter.
 On the other hand, the schedule is serializable, as all conflicts are from transaction 2 to
 transaction 1, and the overall serialiation order can be determined. 
+
+**Serializable Non-OCC Schedule Example 2:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Load  A
+  Load  B
+                 Begin
+                Load  A
+                Load  B
+              Begin Commit
+                Store A
+                Store B
+                Finish
+  
+Begin Commit
+  Store C
+  Store D
+  Finish
+{% endhighlight %}
 
 ### Racing Writes
 
