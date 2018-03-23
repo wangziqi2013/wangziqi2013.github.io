@@ -160,12 +160,15 @@ based on a single event may not best describe the way that transactions actually
 serializable schedules like this one will be rejected if the actual directions of conflicts differ from the order 
 that transactions begin validation. 
 
-Some data-driven approaches do not serialize transactions on a globally agreed event. The commit timestamp is
-computed based on the read and write sets. Essentially, transactions are allowed to adjust its commit timestamp
-dynamically. We do not cover details here. Interested readers can refer to [][][][] for more information.
-
-### Racing Writes
+Some data-driven OCC schemes do not serialize transactions on a globally agreed event. The commit timestamp is
+instead computed based on the read and write sets. Essentially, transactions are allowed to adjust its commit timestamp
+dynamically by inferring the best location to place itself. We do not cover details here. Interested 
+readers are referred to [][][][] for more information.
 
 ### Reading the Partial Commit
+
+In the above 
+
+### Racing Writes
 
 ### Broken Read-Modify-Write
