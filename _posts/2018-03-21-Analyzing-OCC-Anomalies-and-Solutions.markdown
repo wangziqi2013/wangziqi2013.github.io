@@ -219,10 +219,18 @@ global timestamp counter, then it is guaranteed that the transaction reads consi
 has already completed. We will revisit the commit process and develop a protocol with finer access control in later sections where 
 concurrent commits are allowed.
 
-There are schedules that read consistently, but are wrongly identified as violating the serialization order. If the reading
-transaction reads updated values of the committing transaction, but obtains bt before the committing transaction finishes 
-the write phase and then obtains ct, the reading transaction will be aborted later during validation. 
+There are schedules in which reading transactions read consistently, but are wrongly identified as violating the serialization 
+order. If the reading transaction reads updated values of the committing transaction, but obtains bt before the committing 
+transaction finishes the write phase and then obtains ct, the reading transaction will be aborted later during validation. 
 
 ### Broken Read-Modify-Write
+
+OCC features a Read-Modify-Write (RMW) execution pattern. Atomic read phases (with regard to concurrent writes) and atomic 
+write phases (with regard to concurrent writes) are necessary for a schedule to be accepted by OCC validation, which generates serializable schedules. The atomicity of read and write phases alone, however, are not sufficient to ensure serializability. 
+Even if read and write phases are atomic with regard to concurrent writes, if some interleaving transaction updates data 
+items that are both in the read set and the write set after read phase ends and before the validation-write phase starts, 
+then the schedule is non-serializable, as shown in the example below:
+
+
 
 ### Racing Writes
