@@ -92,6 +92,12 @@ and write phases are serialized. On validation, if for some data item X, its cur
 then it must be the case that another committing transaction obtained ct and updated X after the validating 
 transaction had obtained bt. Clearly, a violation may have occurred, and the validating transaction must abort.
 
+Postponing all validations till commit time, i.e. "lazy conflict detection", has certain advantages. 
+In this article, we do not perform detailed analysis on algorithmic characteristics of different OCC schcmes. 
+The problem of delaying conflict detection is that the speculative read phase may read inconsistent values 
+that can never occur during a serial execution. Such temporary unholy state can sometimes be fatal, because the program 
+may trigger spurious page access violation, or never terminate. Sandboxing is generally required to monitor the state of the 
+transaction. On the event of segment fault or suspected dead loop, the transaction must be restarted.
 
 ### Racing Writes
 
