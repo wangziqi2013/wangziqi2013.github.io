@@ -76,14 +76,22 @@ and can optionally abort early on a non-empty intersection. Reader transactions 
 broadcast. They either test every single read operation with all write sets, or perform a bulk validation
 after the read phase. Any hit or non-empty intersection indicates a possibly "early read", and will cause an abort. 
 
-We use BOCC and FOCC as a starting point to demonstrate what in general OCC algorithms should validate. BOCC and FOCC
-with serial validation are complete algorithms, and do not allow races that are detrimental to correctness. 
+We use BOCC and FOCC as a starting point to demonstrate what OCC algorithms should validate in general. BOCC and FOCC
+with serial validation do not allow races that are detrimental to correctness. 
 In the following discussion, however, as we introduce fine grained version-based validation and parallel commits, 
 we shall see that some races are common design fallacies if the design is not verified carefully. 
 
-Beyond set-intersection based validation, which requires no extra fine grained metadata for each data item,
-version-based validation can effectivelu reduce the overhead of validation, at the cost of metadata storage
-for data items. For each data item, we maintain 
+Fine grained per-element version-based validation can effectively reduce validation overhead 
+at the cost of metadata storage for each individual data items. In this scheme, a write timestamp (wt) is associated
+with every individual data item, which records the commit timestamp of the most recent transaction that wrote into
+the data item. A dual timestamp strategy is employed to detect "early read" races. On transaction begin, a begin
+timestamp (bt) is obtained from the global timestamp counter by reading its value. Correspondingly, on transaction
+commit, the commit timestamp (ct) is obtained by atomically incrementing the global timestamp counter. The wt of data 
+items in the committing transaction's write set will be updated to ct during the write phase. Note that validation
+and write phases are serialized. On validation, if for some data item X, its current wt is greater than bt,
+then it must be the case that another committing transaction obtained ct and updated X after the validating 
+transaction had obtained bt. Clearly, a violation may have occurred, and the validating transaction must abort.
+
 
 ### Racing Writes
 
