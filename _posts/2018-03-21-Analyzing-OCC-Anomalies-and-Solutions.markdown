@@ -219,7 +219,9 @@ global timestamp counter, then it is guaranteed that the transaction reads consi
 has already completed. We will revisit the commit process and develop a protocol with finer access control in later sections where 
 concurrent commits are allowed.
 
-There are schedules that read consistently, but are wrongly identified as violating 
+There are schedules that read consistently, but are wrongly identified as violating the serialization order. If the reading
+transaction reads updated values of the committing transaction, but obtains bt before the committing transaction finishes 
+the write phase and then obtains ct, the reading transaction will be aborted later during validation. 
 
 ### Broken Read-Modify-Write
 
