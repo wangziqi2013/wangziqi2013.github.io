@@ -57,7 +57,7 @@ A few techniques can be applied to prevent the race condition. The essence of th
 operations by committing transactions on data items that the reading transaction has accessed. As the 
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
-requires some post validation of the read set. In the following discussion, we assume serialized validation and write 
+requires some post-read validation of the read set. In the following discussion, we assume serialized validation and write 
 phases. Concurrent commits is possible, but is discussed in a separate section.
 
 In the classical Backward OCC (BOCC) design, the validation is conducted by having reader transactions remember 
@@ -204,9 +204,12 @@ set using bt, reading from an partially committed write set still remains undete
 in version-based OCC scheme, transaction commits are serialized by the order they obtain ct.
 Similarly, transaction commit and transaction begin are serialized by the order they obtain ct and bt.
 In this example, when transaction 1 increments the timestamp counter to 101, it is logically committed. Read phases that 
-begin after this point is serialized after the commit, and should therefore read updated values. Failing to write back
+begin after the commit point is serialized after the commit, and should therefore read updated values. Failing to write back
 dirty values before it is read by a reading transaction that starts after the commit point will violate the serialization 
-order. Even worse, as shown in the example, if ct is obtained too early, the violation cannot even be detected.
+order. Even worse, as shown in the example, if ct is obtained "too early", meaning that the transaction logically
+commits before it finishes writing back dirty values, the violation cannot even be detected by post-read validation.
+
+
 
 ### Racing Writes
 
