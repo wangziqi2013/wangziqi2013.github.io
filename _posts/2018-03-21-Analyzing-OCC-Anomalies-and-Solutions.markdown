@@ -167,7 +167,12 @@ readers are referred to [][][][] for more information.
 
 ### Reading the Partial Commit
 
-In the above 
+In the previous discussion, we have seen solutions using post-read validation to detect read-write races when the committing 
+transaction begins commit after the reading transaction obtained bt. The same technique also applies to
+solving the read-write race when the committing transaction begins before reading transactions obtain bt. Care must be taken,
+however, on the maintenance of the global timestamp counter. Otherwise, partially committed write sets can be read
+by the reading transaction. Even worse, post-read validation cannot detect such inconsistent reads. In the 
+example below, we assume version-base validation. The timestamp counter is incremented before versions and values are updated.
 
 ### Racing Writes
 
