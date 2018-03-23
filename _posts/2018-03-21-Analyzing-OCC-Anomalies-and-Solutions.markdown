@@ -209,14 +209,15 @@ dirty values before it is read by a reading transaction that starts after the co
 order. Even worse, as shown in the example, if ct is obtained "too early", meaning that the transaction logically
 commits before it finishes writing back dirty values, the violation cannot even be detected by post-read validation.
 
-Incrementing the global timestamp counter *after* updating values solves the problem. If the read phase begins before
+Incrementing the global timestamp counter *after* updating data items solves the problem. If the read phase begins before
 incrementing the global timestamp counter, suggesting that the read phase may overlap with the write phase, then (1) 
 the reading transaction must enter validation phase after the current committing transaction leaves write phase, because 
 validation and write phases are serialized. (2) When the reading transaction enters validation phase, the wt of data items 
 that the committing transaction writes into must be greater than the reading transaction's bt, because bt is obtained before 
 ct (and hence wt of data items) is obtained. On the other hand, if the read phase begins after incrementing the 
 global timestamp counter, then it is guaranteed that the transaction reads consistent values, because the write phase
-has already completed.
+has already completed. We will revisit the commit process and develop a protocol with finer access control in later sections where 
+concurrent commits are allowed.
 
 There are schedules that read consistently, but are wrongly identified as violating 
 
