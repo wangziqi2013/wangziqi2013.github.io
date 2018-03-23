@@ -180,23 +180,23 @@ example below, we assume version-base validation. The timestamp counter is incre
  * Assume the global timestamp counter is 100 before transactions start, and 
  * all data items have timestamp 100
  */
-      Txn 1              Txn 2
+      Txn 1                   Txn 2
    Begin @ 100
       Read A
       Read B
  Begin Commit @ 101
-Check A (bt &ge; A.ws)  
-Check B (bt &ge; B.ws)
+Check A  (bt >= A.ws)  
+Check B  (bt >= B.ws)
   Store A @ 101
-                      Begin @ 101
-                        Load  A
-                        Load  B
+                           Begin @ 101
+                             Load  A
+                             Load  B
   Store B @ 101
      Finish
-                   Begin Commit @ 102
-                  Check A (bt &ge; A.ws)  
-                  Check B (bt &ge; B.ws)
-                        Finish
+                        Begin Commit @ 102
+                       Check A  (bt >= A.ws)  
+                       Check B  (bt >= B.ws)
+                             Finish
 {% endhighlight %}
 
 ### Racing Writes
