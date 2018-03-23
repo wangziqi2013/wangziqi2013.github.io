@@ -99,6 +99,11 @@ that can never occur during a serial execution. Such temporary unholy state can 
 may trigger spurious page access violation, or never terminate. Sandboxing is generally required to monitor the state of the 
 transaction. On the event of segment fault or suspected dead loop, the transaction must be restarted.
 
+Performing read validation for the current read set on every speculative read can avoid the problem. This scheme has an
+unacceptable validation overhead of O(n^2) where n is the number of read operations. Programmers can specify in the 
+transaction code whether a speculative read may lead to undefined behavior should inconsistency occurs. The OCC runtime
+then only performs read validation on selected read operations. To further reduce the frequency of 
+
 ### Racing Writes
 
 ### Reading the Partial Commit
