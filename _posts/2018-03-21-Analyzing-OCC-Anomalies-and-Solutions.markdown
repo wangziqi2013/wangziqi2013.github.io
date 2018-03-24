@@ -219,6 +219,14 @@ global timestamp counter, then it is guaranteed that the transaction reads consi
 has already completed. We will revisit the commit process and develop a protocol with finer access control in later sections where 
 concurrent commits are allowed.
 
+Another simple solution is to just disallow new transactions from obtaining bt when a committing transaction is 
+performing write back. Write phases are therefore guaranteed not to interleave with transactional loads. In serial
+validation-write OCC, this is equivalent to using the same critical section that serializes validation and write phases 
+to obtain bt. Parallelism seems to be restricted in this case, because new transactions may never obtain its bt if 
+the critical section is always occupied by committing transactions. We argue, however, starvation is not an issue,
+as this process is self-stabilizing via negative feedback: The more starved new transactions become, the less contention 
+it will be on the critical section, because less and less transactions will be able to start and hence commit.
+
 There are schedules in which reading transactions read consistently, but are wrongly identified as violating the serialization 
 order. If the reading transaction reads updated values of the committing transaction, but obtains bt before the committing 
 transaction finishes the write phase and then obtains ct, the reading transaction will be aborted later during validation. 
