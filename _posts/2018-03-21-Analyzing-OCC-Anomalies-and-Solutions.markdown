@@ -216,8 +216,7 @@ validation and write phases are serialized. (2) When the reading transaction ent
 that the committing transaction writes into must be greater than the reading transaction's bt, because bt is obtained before 
 ct (and hence wt of data items) is obtained. On the other hand, if the read phase begins after incrementing the 
 global timestamp counter, then it is guaranteed that the transaction reads consistent values, because the write phase
-has already completed. We will revisit the commit process and develop a protocol with finer access control in later sections where 
-concurrent commits are allowed.
+has already completed. 
 
 Another simple solution is to just disallow new transactions from obtaining bt when a committing transaction is 
 performing write back. Write phases are therefore guaranteed not to interleave with transactional loads. In serial
@@ -226,6 +225,13 @@ to obtain bt. Parallelism seems to be restricted in this case, because new trans
 the critical section is always occupied by committing transactions. We argue, however, starvation is not an issue,
 as this process is self-stabilizing via negative feedback: The more starved new transactions become, the less contention 
 it will be on the critical section, because less and less transactions will be able to start and hence commit.
+
+Value-based validation can also catch race conditions of this kind. After entering the critical section, for each
+element in the read set, the validating transaction re-reads the item, and compare its value with the original value
+the first time the read operation is performed. Value-based validation does not maintain per-item metadata, which saves 
+global storage. The trade-off is that the read set must include data item values in addition to their addresses.
+Conflicts induced by false sharing can be reduced in this scheme if the granularity of reads and writes differ
+from the granularity of metadata bookkeeping.
 
 There are schedules in which reading transactions read consistently, but are wrongly identified as violating the serialization 
 order. If the reading transaction reads updated values of the committing transaction, but obtains bt before the committing 
@@ -288,8 +294,8 @@ locks are released before virtual write locks are acquired. As shown in the exam
 may commit in-between without being detected, making the entire schedule non-serializable.
 
 There is one special case, however, that incremental validation suffices to guarantee serializability. For read-only
-transactions, if incremental validation is performed on every read, or at least on the last read, then post-validation
-of reads is unnecessary, as no virtual write lock is acquired. 
+transactions, if incremental validation is performed on every read, or at least on the last read, then a separate 
+post-read validation phase is unnecessary, as no virtual write lock is acquired. 
 
 Non-atomic Read-Modify-Write does not always result in non-serializable schedules. As shown in 
 [Serializable Non-OCC Schedule Example 2](#serializable-non-occ-example-2) of the previous section, transaction 2
