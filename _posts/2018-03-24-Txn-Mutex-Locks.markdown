@@ -34,3 +34,10 @@ writer trying to acquire the global writer lock and has succeeded, in which case
 the writer lock is acquired. From now on, other transactions neither can run concurrently with the writing transaction,
 nor can they be spawned. The writer thread executes to the commit point. On commit, it increment the global counter,
 making it even, and concurrent reader or writer threads can start running again.
+
+TML can be thought of as a hybrid of 2PL and OCC. Reader-writer synchronization is achieved using 2PL and the global
+version counter. Reader transactions sample the global counter at the beginning, and incrementally validates the 
+read set as new elements are added. Read-only transactions do not need to final post-read validation phase as they
+do not write into the global state. Writer transactions, on the other hand, are synchronized using locking. The lock
+is implemented directly on the global counter. An odd value of the counter implies locked state, in which all other
+writers must abort and new transactions are disallowed to spawn. 
