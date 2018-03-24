@@ -199,7 +199,7 @@ Check B (bt >= B.ws)
                              Finish
 {% endhighlight %}
 
-The schedule in this example is not serializable. Although transaction 2 validates its read
+The schedule in this example is non-serializable. Although transaction 2 validates its read
 set using bt, reading from an partially committed write set still remains undetected. The reason is that
 in version-based OCC scheme, transaction commits are serialized by the order they obtain ct.
 Similarly, transaction commit and transaction begin are serialized by the order they obtain ct and bt.
@@ -257,7 +257,13 @@ and the write phase are atomic, as they are not interleaved with any conflicting
 The serializability, however, can still not be guaranteed if another transaction commits in-between.
 
 Fortunately, the broken Read-Modify-Write scenario is just a special case of Racing Read and Write Phases. Post-read
-validation effectively detects this anomaly by enforcing transaction 1 in the above example to serialize itself
-after transaction 2 which obtains ct earlier.
+validation detects this anomaly by enforcing transaction 1 in the above example to serialize itself
+after transaction 2 which obtains ct earlier. The point we are trying to make here is that, even if incremental 
+read validation can detect some violations early, they could not replace the final post-read validation
+performed within the critical section. It is possible that each incremental validation succeeded, but the final
+execution is non-serializable. 
+
+
+
 
 ### Racing Writes
