@@ -21,14 +21,14 @@ may raise "false alarms" to indicate violations, but which are actually serializ
 We hope our discussion could aid algorithm engineers to prevent common fallacies, while 
 still keeping their designs efficient. 
 
-### Racing Read and Write Phase
+### Racing Read and Write Phases
 
 Conflicting read and write phases is the most common form of races in OCC. If the write phase
 starts after the reading transaction began, and writes into data items that are also in the
 reading transaction's read set, then non-serializable schedules can occur in the form of
 RAW and WAR dependency cycles, as shown below.
 
-**Racing Read and Write Phase Example:**
+**Racing Read and Write Phases Example:**
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
@@ -226,7 +226,8 @@ transaction finishes the write phase and then obtains ct, the reading transactio
 ### Broken Read-Modify-Write
 
 OCC features a Read-Modify-Write (RMW) execution pattern. Atomic read phases (with regard to concurrent writes) and atomic 
-write phases (with regard to concurrent writes) are necessary for a schedule to be accepted by OCC validation, which generates serializable schedules. The atomicity of read and write phases alone, however, are not sufficient to ensure serializability. 
+write phases (with regard to concurrent writes) are necessary for a schedule to be accepted by OCC, which generates serializable 
+schedules. The atomicity of read and write phases alone, however, are not sufficient to ensure serializability. 
 Even if read and write phases are atomic with regard to concurrent writes, if some interleaving transaction updates data 
 items after read phase completes and before the serial validation-write phase starts, then the schedule can be 
 non-serializable, as shown in the example below:
@@ -254,5 +255,9 @@ A dependency cycle exists between the two transactions. Transaction 2 writes A a
 Meanwhile, transaction 1 writes B after transaction 2 writes it. In the example, both the read phase
 and the write phase are atomic, as they are not interleaved with any conflicting operations from another transaction. 
 The serializability, however, can still not be guaranteed if another transaction commits in-between.
+
+Fortunately, the broken Read-Modify-Write scenario is just a special case of Racing Read and Write Phases. Post-read
+validation effectively detects this anomaly by enforcing transaction 1 in the above example to serialize itself
+after transaction 2 which obtains ct earlier.
 
 ### Racing Writes
