@@ -43,15 +43,15 @@ RAW and WAR dependency cycles, as shown below.
 
 Note that in this article, we deliberately make a distinction between the two 
 possibilities where the committing transaction enters write phase *after* the other transaction begins read
-phase, and the opposite. This is because they require quite different solutions to deal with. In this section,
+phase, and the opposite. This is because they require different solutions to deal with. In this section,
 only the former case is addressed. 
 
 In the given example, transaction 2 begins its write phase after transaction 1 begins 
 read phase. They collide on data items A and B. If we take into consideration the logical 
 serialization order of OCC, which is usually the order that transaction finishes validation, it is obvious that 
-transaction 1 just performs the read operation "too early". When transaction 2 decides to commit,
+transaction 1 performs the read operation "too early". When transaction 2 decides to commit,
 it is serialized before transaction 1. Transaction 1's first read operation, therefore, must actually
-return the updated value of A. Failing to observe this order will result in conflicts, as in our example.
+return the updated value of A. Failing to observe this order will result in violations, as indicated by our example.
 
 A few techniques can be applied to prevent the race condition. The essence of the solution is to detect write 
 operations by committing transactions on data items that the reading transaction has accessed. As the 
@@ -68,9 +68,8 @@ write phase, and tagges its write set with the value of the counter after the in
 in the read phase read the counter before the first read operation and after it enters validation. Write sets whose 
 tags are between this two timestamps are obliged to be checked. 
 
-An alternative approach is to have committing transactions 
-broadcast their commit decisions together with a reference to its write set to all reader transactions,
-validating in the forward direction (Forward OCC, FOCC). 
+An alternative approach is to have committing transactions broadcast their commit decisions together with a reference 
+to its write set to all reader transactions, validating in the forward direction (Forward OCC, FOCC). 
 A reader transaction receiving the broadcast first checks its current read set against the broadcasted write set,
 and can optionally abort early on a non-empty intersection. Reader transactions also needs to buffer the 
 broadcast. They either test every single read operation with all write sets, or perform a bulk validation
