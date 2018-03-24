@@ -134,6 +134,7 @@ On the other hand, the schedule is serializable, as all conflicts are from trans
 transaction 1, and the overall serialiation order can be determined. 
 
 **Serializable Non-OCC Schedule Example 2:**
+{: id="serializable-non-occ-example-2"}
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
@@ -278,5 +279,11 @@ The importance of post-read validation is hence obvious: If post-read validation
 section after all virtual locks are acquired, then the 2PL proprety of OCC schedules no longer holds, because virtual read 
 locks are released before virtual write locks are acquired. As shown in the example above, another thread
 may commit in-between without being detected, making the entire schedule non-serializable.
+
+Non-atomic Read-Modify-Write does not always result in non-serializable schedules. As shown in 
+[Serializable Non-OCC Schedule Example 2](#serializable-non-occ-example-2) of the previous section, transaction 2
+begins and commits between transaction 1's read phase and serial validation-write phase. Transaction 2's write
+set also has a non-empty intersection with transaction 1's read set, which implies transaction 1 would fail validation.
+Nevertheless, the schedule is serializable, and transaction 1 is serialized before transaction 2.
 
 ### Racing Writes
