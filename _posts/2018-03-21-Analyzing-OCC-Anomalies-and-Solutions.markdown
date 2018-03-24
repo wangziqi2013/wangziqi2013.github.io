@@ -269,11 +269,14 @@ transactions perform and only perform writes to data items in the critical secti
 is quite similar to 2PL. Transactions first lock the read set during the read phase, and then
 lock the write set on entering of the critical section. This process corresponds to 2PL grow phase, where
 locks can only be acquired and no lock can be released. Post-read validation aborts the thread
-if the locking discipline is violated, i.e. a conflicting operation has occurred on the data item protected
-by the "virtual read lock". Locking discipline for virtual write locks (critical section), on ther other hand,
+if the locking discipline is violated, i.e. a conflicting operation has occurred on a data item protected
+by "virtual read lock". Locking discipline for "virtual write locks", on ther other hand,
 is always observed, as virtual write locks are implemented using a critical section. After post-read validation,
 the transaction enters 2PL shrink phase, where it releases all virtual read locks (no longer cares whether data
 items are modified), writes back all dirty values, and then releases all write locks by exiting the critical section.
-
+The importance of post-read validation is obvious: If post-read validation is not performed inside the critical
+section after all virtual locks are acquired, then the 2PL proprety of OCC schedules no longer holds, because virtual read 
+locks are released before virtual write locks are acquired. As shown in the example above, another thread
+may commit in-between without being detected.
 
 ### Racing Writes
