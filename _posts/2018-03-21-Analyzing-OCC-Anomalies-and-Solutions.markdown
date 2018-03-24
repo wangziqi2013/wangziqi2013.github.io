@@ -279,6 +279,10 @@ section after all virtual locks are acquired, then the 2PL proprety of OCC sched
 locks are released before virtual write locks are acquired. As shown in the example above, another thread
 may commit in-between without being detected, making the entire schedule non-serializable.
 
+There is one special case, however, that incremental validation suffices to guarantee serializability. For read-only
+transactions, if incremental validation is performed on every read, or at least on the last read, then post-validation
+of reads is unnecessary, as no virtual write lock is acquired. 
+
 Non-atomic Read-Modify-Write does not always result in non-serializable schedules. As shown in 
 [Serializable Non-OCC Schedule Example 2](#serializable-non-occ-example-2) of the previous section, transaction 2
 begins and commits between transaction 1's read phase and serial validation-write phase. Transaction 2's write
