@@ -263,12 +263,17 @@ read validation can detect some violations early, they could not replace the fin
 performed within the critical section. It is possible that each incremental validation succeeded, but the final
 execution is non-serializable. 
 
-If we think of the read-validate pair as lock-unlock (if multiple validations are performed on
-a data item, only the last validation is unlock) and the critical section as locking the write set (since
+If we think of the read-validate pair as "virtual" lock-unlock (if multiple validations are performed on
+a data item, only the last validation is unlock) and the critical section as "virtually" locking the write set (since
 transactions perform and only perform writes to data items in the critical section), then OCC 
 is quite similar to 2PL. Transactions first lock the read set during the read phase, and then
 lock the write set on entering of the critical section. This process corresponds to 2PL grow phase, where
-locks can only be acquired and no lock can be released. Performing post-read validation 
+locks can only be acquired and no lock can be released. Post-read validation aborts the thread
+if the locking discipline is violated, i.e. a conflicting operation has occurred on the data item protected
+by the "virtual read lock". Locking discipline for virtual write locks (critical section), on ther other hand,
+is always observed, as virtual write locks are implemented using a critical section. After post-read validation,
+the transaction enters 2PL shrink phase, where it releases all virtual read locks (no longer cares whether data
+items are modified), writes back all dirty values, and then releases all write locks by exiting the critical section.
 
 
 ### Racing Writes
