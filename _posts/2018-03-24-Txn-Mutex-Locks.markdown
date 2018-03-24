@@ -13,3 +13,10 @@ htm_cr: Eager
 version_mgmt: Eager
 ---
 
+This short paper proposes a lightweight STM, Transactional Mutex Lock (TML), that has extremely low metadata and 
+instrumentation overheads. Although TML may not demonstrate state-of-the-art performance, its simple implementation
+and low overhead make it an ideal building block for larger transactional systems. For example, programming 
+languages can use TML to implement features that support more complex STM mechanisms such as abort and roll back.
+Furthermore, hardware transactional memory can leverage TML as a simple fall-back path for transactions that are 
+unable to be handled by the hardware. Experiments show that TML performs reasonably well compared with simple mutex
+and read/write locks, given its simple design and low metadata overhead.
