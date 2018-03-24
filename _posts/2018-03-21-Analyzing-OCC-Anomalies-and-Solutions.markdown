@@ -53,7 +53,7 @@ transaction 1 just performs the read operation "too early". When transaction 2 d
 it is serialized before transaction 1. Transaction 1's first read operation, therefore, must actually
 return the updated value of A. Failing to observe this order will result in conflicts, as in our example.
 
-A few techniques can be applied to prevent the race condition. The essence of the problem is to detect write 
+A few techniques can be applied to prevent the race condition. The essence of the solution is to detect write 
 operations by committing transactions on data items that the reading transaction has accessed. As the 
 reading transaction must be serialized after concurrent writing transactions who have already made commit deicisions,
 any overwrite of values in its read set would indicate a commit order violation. Detecting these violating writes 
@@ -79,9 +79,9 @@ after the read phase. Any hit or non-empty intersection indicates a possibly "ea
 We use BOCC and FOCC as a starting point to demonstrate what OCC algorithms should validate in general. BOCC and FOCC
 with serial validation do not allow races that are detrimental to correctness. 
 In the following discussion, however, as we introduce fine grained version-based validation and parallel commits, 
-we shall see that some races are common design fallacies if the design is not verified carefully. 
+we shall see that some races are common design fallacies if the algorithm is not verified carefully. 
 
-Fine grained per-element version-based validation can effectively reduce validation overhead 
+Fine grained per-element version-based validation can reduce validation overhead 
 at the cost of metadata storage for each individual data items. In this scheme, a write timestamp (wt) is associated
 with every individual data item, which records the commit timestamp of the most recent transaction that wrote into
 the data item. A dual timestamp strategy is employed to detect "early read" races. On transaction begin, a begin
@@ -105,7 +105,7 @@ specify in the transaction code whether a speculative read may lead to undefined
 The OCC runtime then only performs read validation on selected reads. To further reduce the overhead,
 the OCC runtime can compare the transaction's bt with the current global timestamp counter after read is performed
 and before incremental validation is invoked. If the two timestamps agree, then validation is skipped, because no 
-other transaction has ever committed, no data item can be possibly updated since transaction begin.
+other transaction has ever committed, and no data item can be possibly updated since transaction begin.
 
 There are schedules, however, that OCC does not accept, but are actually serializable. We give one in the example below: 
 
@@ -268,8 +268,7 @@ a data item, only the last validation is unlock) and the critical section as loc
 transactions perform and only perform writes to data items in the critical section), then OCC 
 is quite similar to 2PL. Transactions first lock the read set during the read phase, and then
 lock the write set on entering of the critical section. This process corresponds to 2PL grow phase, where
-locks can only be acquired and no lock can be released. Performing
-post-read validation 
+locks can only be acquired and no lock can be released. Performing post-read validation 
 
 
 ### Racing Writes
