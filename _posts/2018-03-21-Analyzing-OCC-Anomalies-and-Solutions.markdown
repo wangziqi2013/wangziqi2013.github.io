@@ -263,7 +263,13 @@ read validation can detect some violations early, they could not replace the fin
 performed within the critical section. It is possible that each incremental validation succeeded, but the final
 execution is non-serializable. 
 
-
+If we think of the read-validate pair as lock-unlock (if multiple validations are performed on
+a data item, only the last validation is unlock) and the critical section as locking the write set (since
+transactions perform and only perform writes to data items in the critical section), then OCC 
+is quite similar to 2PL. Transactions first lock the read set during the read phase, and then
+lock the write set on entering of the critical section. This process corresponds to 2PL grow phase, where
+locks can only be acquired and no lock can be released. Performing
+post-read validation 
 
 
 ### Racing Writes
