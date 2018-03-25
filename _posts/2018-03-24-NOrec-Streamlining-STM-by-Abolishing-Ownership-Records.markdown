@@ -42,9 +42,11 @@ validation. In NOrec, writer transactions have timestamps which are the value of
 (only the even value). Timestamps of writer transactions represent the order they commit and hence the serialization order. 
 The value of the global counter is the timestamp of last writer transaction that successfully committed, if it is even. 
 Otherwise it indicates a committing transaction is in the critical section. Each transaction's local copy of the global 
-counter represents the last time the transaction's read set is known to be consistent. The difference between these two 
-is the timestamp of writer transactions that have written data items since the last time the transaction's read set is 
-known to be consistent.
+counter represents the last time the transaction's read set is known to be consistent. Transaction timestamps within the range
+defined by the global counter and local copy is the timestamps of writer transactions that have written data items since 
+the last time the transaction's read set is known to be consistent. Updating the local value of the counter on every 
+successful validation helps reducing the frequency of validation, if no transaction commits between the current and the 
+next validation.
 
 As we can easily see, the validation uses TML to detect concurrent writers. If the global counter changes, then a writer 
 must have committed during the value validation. In this case, a write that changes the read set may be missed, so 
