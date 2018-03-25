@@ -36,3 +36,8 @@ is invoked. The validation code first waits for the counter to become even to av
 It then samples the counter, performs the validation, and then compares the sampled counter to the current counter. If 
 these two differs, then validation is re-run. 
 
+As we can easily see, the validation uses TML to detect concurrent writers. If the global counter changes, then a writer 
+must have committed during the value validation. In this case, a write that changes the read set may be missed, so 
+validation must restart. We can also think of the validation routine as a "mini read-only transaction" implemented using 
+TML.
+
