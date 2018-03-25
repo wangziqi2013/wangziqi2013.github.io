@@ -36,6 +36,11 @@ is invoked. The validation code first waits for the counter to become even to av
 It then samples the counter, performs the validation, and then compares the sampled counter to the current counter. If 
 these two differs, then validation is re-run. 
 
+As we can easily see, the validation uses TML to detect concurrent writers. If the global counter changes, then a writer 
+must have committed during the value validation. In this case, a write that changes the read set may be missed, so 
+validation must restart. We can also think of the value-based validation routine as a "mini read-only transaction" implemented 
+using TML.
+
 One important detail of NOrec's incremental validation prototol is that, if read validation succeeds, the transaction's 
 local copy of the global counter is updated to the local sample in the validation routine. The purpose is to avoid redundant 
 validation. In NOrec, writer transactions have timestamps which are the value of the global counter when they commit 
@@ -48,11 +53,14 @@ the last time the transaction's read set is known to be consistent. Updating the
 successful validation helps reducing the frequency of validation, if no transaction commits between the current and the 
 next validation.
 
-As we can easily see, the validation uses TML to detect concurrent writers. If the global counter changes, then a writer 
-must have committed during the value validation. In this case, a write that changes the read set may be missed, so 
-validation must restart. We can also think of the value-based validation routine as a "mini read-only transaction" implemented 
-using TML.
-
 On transaction commit, read-only transactions simply finishes, as incremental validation is sufficient to guarantee
 serializability. For updating transactions, they must first enter the critical section by atomically CASing the
-global counter from the value of its saved local counter to the value plus one.
+global counter from the value of its saved local counter to the value plus one. Recall that the local value of the 
+counter is updated on every successful validation. If the CAS succeeds, then we know the critical section is entered,
+and the read set is still consistent. No read set validation is needed in this case. Otherwise, if CAS fails, then 
+some transaction has committed since the last read validation and the CAS, and therefore the validation routine has to
+be invoked to check read consistency. At most one committing transaction can enter the critical section, as writer 
+transactions must use its own local copy of the global counter as CAS's old value, which is an even number. If the 
+critical section is occupied, however, the global counter's value is odd, and hence The CAS can never succeed. Once the 
+critical section is entered, no further validation is required as the locking protocol of the critical section 
+already guarantees consistent read set. Dirty values are then written back.
