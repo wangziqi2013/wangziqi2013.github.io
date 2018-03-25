@@ -15,7 +15,7 @@ version_mgmt: Lazy
 
 This paper proposes NORec, which is a refined version of Transactional Mutex Lock (TML). Sharing the same set of 
 features with TML, NOrec also does not require piece-wise metadata for each data item. Instead of using merely the 
-global counter's value to detect whether concurrent writes exist, NOrec also performs value validation to refine
+global counter's value to detect whether concurrent writers exist, NOrec also performs value validation to refine
 conflict detection and to avoid false positives.
 
 Compared with TML which updates data items in-place, NOrec's read write pattern is closer to OCC. Its execution is divided 
@@ -25,4 +25,11 @@ phase. In an updating transaction's validation phase, a critical section is ente
 Although not expressed explicitly in the paper, validation and write phases are always synchronized. In the write phase,
 dirty values are written back. No new transactions are allowed to begin when another transaction is in the write phase.
 
-Two novel designs distinguishes NOrec from the classical timestamp-based BOCC algorithm.
+Two novel designs distinguish NOrec from the classical timestamp-based BOCC algorithm. The first is value-based validation,
+which requires no metadata associated with data items, and can avoid some timestamp related problems such as non-atomic 
+write phase. The second is the global timestamp counter representing the current status of the writer. A committing 
+transaction notifies all other transactions of its status using the global timestamp counter by incrementing it. Upon 
+seeing an odd value of the global counter, new transactions are disallowed to begin to avoid reading the partial commit. 
+Transactions sample the value of the counter at the beginning and saves it to a transactionally local variable. On every read 
+operation, the current value of the counter is compared with the local value. If these two differ, then value-based validation
+is invoked. 
