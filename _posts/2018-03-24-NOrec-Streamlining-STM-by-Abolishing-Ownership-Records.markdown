@@ -36,8 +36,21 @@ is invoked. The validation code first waits for the counter to become even to av
 It then samples the counter, performs the validation, and then compares the sampled counter to the current counter. If 
 these two differs, then validation is re-run. 
 
+One important detail of NOrec's incremental validation prototol is that, if read validation succeeds, the transaction's 
+local copy of the global counter is updated to the local sample in the validation routine. The purpose is to avoid redundant 
+validation. In NOrec, writer transactions have timestamps which are the value of the global counter when they commit 
+(only the even value). Timestamps of writer transactions represent the order they commit and hence the serialization order. 
+The value of the global counter is the timestamp of last writer transaction that successfully committed, if it is even. 
+Otherwise it indicates a committing transaction is in the critical section. Each transaction's local copy of the global 
+counter represents the last time the transaction's read set is known to be consistent. The difference between these two 
+is the timestamp of writer transactions that have written data items since the last time the transaction's read set is 
+known to be consistent.
+
 As we can easily see, the validation uses TML to detect concurrent writers. If the global counter changes, then a writer 
 must have committed during the value validation. In this case, a write that changes the read set may be missed, so 
-validation must restart. We can also think of the validation routine as a "mini read-only transaction" implemented using 
-TML.
+validation must restart. We can also think of the value-based validation routine as a "mini read-only transaction" implemented 
+using TML.
 
+On transaction commit, read-only transactions simply finishes, as incremental validation is sufficient to guarantee
+serializability. For updating transactions, they must first enter the critical section by atomically CASing the
+global counter from the value of its saved local counter to the value plus one.
