@@ -243,7 +243,7 @@ OCC features a Read-Modify-Write (RMW) execution pattern. Atomic read phases (wi
 write phases (with regard to concurrent writes) are necessary for a schedule to be accepted by OCC, which generates serializable 
 schedules. The atomicity of read and write phases alone, however, are not sufficient to ensure serializability. 
 Even if read and write phases are atomic with regard to concurrent writes, if some interleaving transaction updates data 
-items after read phase completes and before the serial validation-write phase starts, then the schedule can be 
+items after read phase completes and before the serial validation-write phase starts, the schedule can become
 non-serializable, as shown in the example below:
 
 **Broken Read-Modify-Write Example:**

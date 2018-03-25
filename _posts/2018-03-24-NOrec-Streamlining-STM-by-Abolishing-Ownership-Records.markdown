@@ -18,3 +18,11 @@ features with TML, NOrec also does not require piece-wise metadata for each data
 global counter's value to detect whether concurrent writes exist, NOrec also performs value validation to refine
 conflict detection and to avoid false positives.
 
+Compared with TML which updates data items in-place, NOrec's read write pattern is closer to OCC. Its execution is divided 
+into three phases, like OCC execution: read, validation and write. In the read phase, all writes to shared items are buffered.
+Read operations are instrumented to perform incremental validation. Read-only transactions do not have a separate validation
+phase. In an updating transaction's validation phase, a critical section is entered by incrementing the global timestamp counter.
+Although not expressed explicitly in the paper, validation and write phases are always synchronized. In the write phase,
+dirty values are written back. No new transactions are allowed to begin when another transaction is in the write phase.
+
+Two novel designs distinguishes NOrec from the classical timestamp-based BOCC algorithm.
