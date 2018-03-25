@@ -32,4 +32,7 @@ transaction notifies all other transactions of its status using the global times
 seeing an odd value of the global counter, new transactions are disallowed to begin to avoid reading the partial commit. 
 Transactions sample the value of the counter at the beginning and saves it to a transactionally local variable. On every read 
 operation, the current value of the counter is compared with the local value. If these two differ, then value-based validation
-is invoked. 
+is invoked. The validation code first waits for the counter to become even to avoid starting on a partial committed state. 
+It then samples the counter, performs the validation, and then compares the sampled counter to the current counter. If 
+these two differs, then validation is re-run. 
+
