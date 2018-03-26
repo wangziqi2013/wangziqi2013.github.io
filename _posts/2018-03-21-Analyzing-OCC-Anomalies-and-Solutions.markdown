@@ -32,12 +32,12 @@ RAW and WAR dependency cycles, as shown below.
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
-  Load  A
+  Read  A
               Begin Commit
-                Store A
-                Store B
+                Write A
+                Write B
                 Finish
-  Load  B
+  Read  B
    ....
 {% endhighlight %}
 
@@ -112,18 +112,18 @@ There are schedules, however, that OCC does not accept, but are actually seriali
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
-  Load  A
+  Read  A
                  Begin
-                Load  A
-                Load  B
+                Read  A
+                Read  B
               Begin Commit
-                Store B
-                Store C
+                Write B
+                Write C
                 Finish
-  Load  B
+  Read  B
 Begin Commit
-  Store B
-  Store A
+  Write B
+  Write A
   Finish
 {% endhighlight %}
 
@@ -137,19 +137,19 @@ transaction 1, and the overall serialiation order can be determined.
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
-  Load  A
-  Load  B
+  Read  A
+  Read  B
                  Begin
-                Load  A
-                Load  B
+                Read  A
+                Read  B
               Begin Commit
-                Store A
-                Store B
+                Write A
+                Write B
                 Finish
   
 Begin Commit
-  Store C
-  Store D
+  Write C
+  Write D
   Finish
 {% endhighlight %}
 
@@ -187,11 +187,11 @@ example below, we assume version-base validation. The timestamp counter is incre
  Begin Commit @ 101
 Check A (bt >= A.ws)  
 Check B (bt >= B.ws)
-  Store A @ 101
+  Write A @ 101
                            Begin @ 101
-                             Load  A
-                             Load  B
-  Store B @ 101
+                             Read  A
+                             Read  B
+  Write B @ 101
      Finish
                         Begin Commit @ 102
                        Check A (bt >= A.ws)  
@@ -219,7 +219,7 @@ global timestamp counter, then it is guaranteed that the transaction reads consi
 has already completed. 
 
 Another simple solution is to just disallow new transactions from obtaining bt when a committing transaction is 
-performing write back. Write phases are therefore guaranteed not to interleave with transactional loads. In serial
+performing write back. Write phases are therefore guaranteed not to interleave with transactional reads. In serial
 validation-write OCC, this is equivalent to using the same critical section that serializes validation and write phases 
 to obtain bt. Parallelism seems to be restricted in this case, because new transactions may never obtain its bt if 
 the critical section is always occupied by committing transactions. We argue, however, starvation is not an issue,
@@ -250,18 +250,18 @@ non-serializable, as shown in the example below:
 {% highlight C %}
    Txn 1         Txn 2
    Begin 
-  Load  A
-  Load  C
+  Read  A
+  Read  C
                  Begin
-                Load  E
-                Load  F
+                Read  E
+                Read  F
               Begin Commit
-                Store A
-                Store B
+                Write A
+                Write B
                 Finish
 Begin Commit
-  Store B
-  Store D
+  Write B
+  Write D
   Finish
 {% endhighlight %}
 
@@ -364,3 +364,24 @@ T enters the second critical section, which is synchronized with the one it ente
 actions are performed in the critical section: (1) T removes itself from the committing transactions set; 
 (2) T increments the global timestamp counter, and tags its write set with the timestamp value after the increment.
 The tagged write set is then archived. T is considered as completed after it exits the critical section.
+
+BOCC with parallel validation no longer guarantees that the serialization order of transactions is the order 
+that they complete. Actually, the following may happen:
+
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Read  A
+  Read  C
+                 Begin
+                Read  E
+                Read  F
+              Begin Commit
+                Write A
+                Write B
+                Finish
+Begin Commit
+  Write B
+  Write D
+  Finish
+{% endhighlight %}
