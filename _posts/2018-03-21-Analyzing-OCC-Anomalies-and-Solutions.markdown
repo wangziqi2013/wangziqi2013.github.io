@@ -318,4 +318,8 @@ because read-write conflicts can be detected by post-read validation. For transa
 there is no logical partial ordering between them as they can never conflict with each other via data items 
 that are written by multiple transactions. Serial validation and write phases, however, impose a global total ordering
 among all transactions. The global total ordering avoids write-write conflicts because writes are always serialized.
-Read-write conflicts are detected using the same total ordering. 
+Read-write conflicts are detected using the same total ordering. For a validating transaction, all other transactions
+are either in their read phase (including waiting for the critical section), which cannot affect the consistency of its 
+reads, or have already completed write phase and committed as only one transaction can be in the critical section.
+In this case, determining the set of transactions to validate against is trivial, because only currently completed
+transactions could possibly affect the consistency of reads. 
