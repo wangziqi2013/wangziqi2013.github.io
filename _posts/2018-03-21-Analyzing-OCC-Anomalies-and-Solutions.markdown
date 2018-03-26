@@ -325,9 +325,18 @@ with this somewhat "artificial" global total ordering, then the entire execution
 conflict cycles cannot form. 
 
 For a validating transaction, all other transactions are either in their read phase (including waiting for the critical 
-section), which cannot affect the consistency of its reads, or have already completed write phase and committed as only 
-one transaction, the validating transaction, can be in the critical section. In this case, determining the set of transactions 
-to validate against is trivial, because only currently completed transactions could possibly affect the consistency of reads. As 
-we have seen in the BOCC scheme with serial validation, the validating transaction samples the "last committed" global 
+section), which cannot affect the consistency of its reads, or have already completed write phase and exited the critical section, 
+as only one transaction, i.e. the validating transaction, can be in the critical section. In this case, determining the set of 
+transactions to validate against is trivial, because only currently completed transactions could possibly affect the consistency of 
+reads. As we have seen in the BOCC scheme with serial validation, the validating transaction samples the "last committed" global 
 timestamp counter before read phase begins and after entering the critical section. Validation is then performed against
 transactions committed within this time range.
+
+If multiple transactions are allowed to commit in parallel, then for any transaction T that just finishes its read phase,
+other transactions can be divided similarly into three classes: (1) Have not finished reading. They will not be considered
+for backward validation as they do not affect the read phase of T. (2) Finished read phase, but have not completed. Transactions
+of this class can be either validating or writing back dirty values. T needs to validate its read set against their write sets, 
+as there is no way to know whether their write phases overlapped with T's read phase. Furthermore, write-write conflicts 
+should also be checked by intersecting T's write set with these transactions' write sets, because there is also no way 
+to know whether T's write phase, after validation, can overlap with their write phases. (3) Completed. Transactions of this class is 
+validated against for read-write conflicts as in serial validation.
