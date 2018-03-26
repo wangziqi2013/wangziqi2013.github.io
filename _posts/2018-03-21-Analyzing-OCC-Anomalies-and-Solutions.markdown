@@ -372,7 +372,7 @@ that they complete. Actually, the following may happen:
 {% highlight C %}
 /*
  * Operations on the same line are considered as "concurrent", i.e. no specific
- * order is defined.
+ * order is defined. Write operations in parenthesis are performed locally.
  */
    Txn 1         Txn 2
    Begin 
@@ -395,4 +395,11 @@ Begin Commit
 {% endhighlight %}
 
 In this example, transaction 1 is serialized after transaction 2, as it overwrites data items after transaction 2 reads them.
-The complete order, however, differs from the serialization order, as transaction 2 completes before transaction 1.
+The completion order, however, differs from the serialization order, as transaction 2 completes before transaction 1.
+It is also not too difficult to find out that the serialization order is the order that transactions enter the first
+critical section.
+
+Another example showing false positives under parallel validation can be obtained by reversing the order of "Begin Commit"
+in the above example. Transaction 2 would fail validation, because transaction 1 will be in the committing transaction
+set. The non-empty intersection between transaction 2's read set and transaction 1's write set will cause transaction 2
+to abort.
