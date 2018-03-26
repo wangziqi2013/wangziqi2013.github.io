@@ -340,3 +340,11 @@ as there is no way to know whether their write phases overlapped with T's read p
 should also be checked by intersecting T's write set with these transactions' write sets, because there is also no way 
 to know whether T's write phase, after validation, can overlap with their write phases. (3) Completed. Transactions of this class is 
 validated against for read-write conflicts as in serial validation.
+
+For transactions to obtain a list of committing and committed transactions, in addition to the global timestamp counter as
+in serial validation BOCC, a "committing transactions" set is also needed. The set keeps track of all transactions that finished read 
+phase, and is currently validating itself or writing back dirty values. When a transaction finishes its read phase, it enters
+a short critical section in which the following is performed: (1) Take a copy of the committing transactions set; (2) Read the current 
+global timestamp counter; (3) add itself into the set. The copy of the set contains transactions that are potentially in the write phase.
+The value of the global counter indicates the timestamp of the last committed transaction. In order to validate, the following
+is performed: (1) For transactions in the committing transactions set, intersect the 
