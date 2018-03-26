@@ -347,8 +347,11 @@ phase, and is currently validating itself or writing back dirty values. When a t
 a short critical section in which the following is performed: (1) Take a copy of the committing transactions set; (2) Read the current 
 global timestamp counter; (3) add itself into the set. The value of the global counter indicates the timestamp of the last committed 
 transaction. The copy of the set contains transactions that are potentially in the write phase
-at the moment the critical section is entered. As transactions in the set complete and remove themselves from the set via the same 
-critical section, the set may become stale. The correctness of validation is not affected, though.
+at the moment the critical section is entered. As transactions in the set complete and remove themselves from the set via another 
+critical section, the set may become stale. The correctness of validation is not affected, though, because read-write conflicts
+are checked for transactions in both committing state and completed state. Even if transactions in committing state can 
+transit to completed state after transaction T copied the set, their write sets are always checked against T's read set.
+No read-write conflict can be missed in this case.
  
 In order to validate, the following is performed: (1) For transactions in the copy of the committing transactions set, intersect
 the current transaction's read set and write set with their write sets. On any non-empty intersection the current transaction aborts. 
