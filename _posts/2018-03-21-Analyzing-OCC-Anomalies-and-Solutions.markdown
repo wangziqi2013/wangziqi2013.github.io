@@ -271,7 +271,7 @@ and the write phase are atomic, as they are not interleaved with any conflicting
 The serializability, however, can still not be guaranteed if another transaction commits in-between.
 
 Fortunately, the broken Read-Modify-Write scenario is just a special case of Racing Read and Write Phases. Post-read
-validation detects this anomaly by enforcing transaction 1 in the above example to serialize itself
+validation detects this anomaly by enforcing transaction 1 in the above example to serialize
 after transaction 2 which obtains ct earlier. The point we are trying to make here is that, even if incremental 
 read validation can detect some violations early, they could not replace the final post-read validation
 performed within the critical section. It is possible that each incremental validation succeeded, but the final
