@@ -350,3 +350,11 @@ transaction. The copy of the set contains transactions that are potentially in t
 at the moment the critical section is entered. As transactions in the set complete and remove themselves from the set via the same 
 critical section, the set may become stale. The correctness of validation is not affected, though.
  
+In order to validate, the following is performed: (1) For transactions in the copy of the committing transactions set, intersect
+the current transaction's read set and write set with their write sets. On any non-empty intersection the current transaction aborts. 
+(2) For transactions whose commit timestamp is between bt and ct, where bt is the value of the counter at transaction begin and ct
+is the value of the counter obtained in the critical section, intersect current transaction's read set with their write sets.
+On any non-empty intersection the current transaction aborts. This step is identical to the backward validation process of BOCC. 
+
+After validation, the current transaction enters write phase and writes back dirty data values. On completion of the write phase,
+the transaction needs to enter another short critical section,
