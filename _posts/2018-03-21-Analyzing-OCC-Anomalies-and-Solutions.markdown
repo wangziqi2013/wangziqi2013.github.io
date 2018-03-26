@@ -356,5 +356,8 @@ the current transaction's read set and write set with their write sets. On any n
 is the value of the counter obtained in the critical section, intersect current transaction's read set with their write sets.
 On any non-empty intersection the current transaction aborts. This step is identical to the backward validation process of BOCC. 
 
-After validation, the current transaction enters write phase and writes back dirty data values. On completion of the write phase,
-the transaction needs to enter another short critical section,
+After validation, the current transaction enters write phase and writes back dirty values. On completion of the write phase,
+the transaction enters the second critical section, which is synchronized with the one it entered before validation. Two
+actions are performed in the critical section: (1) The transaction removes itself from the committing transactions set; 
+(2) The transaction increments the global timestamp counter, and tags its write set with the timestamp value after increment.
+The tagged write set is then archived. The transaction is considered as completed after it exits the critical section.
