@@ -317,10 +317,12 @@ sets are unnecessarily serialized. Let's ignore read sets for a while and only c
 because read-write conflicts can be detected by post-read validation. For transactions that write different data items,
 there is no logical partial ordering between them as they can never conflict with each other via data items 
 that are written by multiple transactions. Serial validation and write phases, however, impose a global total ordering
-among all transactions. The global total ordering avoids write-write conflicts because writes from different transactions 
-are always serialized. Read-write conflicts are detected against the same total ordering. As long as transactions maintain 
-the invariant that the direction of conflicts are consistent with this somewhat "artificial" global total ordering, then
-the entire execution history must be serializable because conflict cycles cannot form. 
+among all transactions. The global total ordering is always obeyed in terms of write-write conflicts, because write 
+phase is within the same critical section that transactions are serialized. Read-write conflicts also obey the global
+total ordering, because they are detected against either "older" or "younger" transactions within the critical section. 
+As long as transactions maintain the invariant that the direction of conflicts are consistent 
+with this somewhat "artificial" global total ordering, then the entire execution history must be serializable because 
+conflict cycles cannot form. 
 
 For a validating transaction, all other transactions are either in their read phase (including waiting for the critical 
 section), which cannot affect the consistency of its reads, or have already completed write phase and committed as only 
