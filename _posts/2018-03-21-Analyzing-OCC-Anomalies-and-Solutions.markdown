@@ -308,4 +308,7 @@ Nevertheless, the schedule is serializable, and transaction 1 is serialized befo
 Serial validation and write phases are assumed in above sections. In order to validate, transactions first
 tries to enter a critical section, which is equivalent to locking the write set. Transactions exit the critical
 section only after they have completed writing back dirty values. In this section, the restriction that validation
-and write phases must be serialized is relaxed, and concurrent commits is allowed. As we shall see later, relaxed
+and write phases must be serialized is relaxed. As we shall see later, more race conditions will arise if transactions
+are allowed to commit concurrently. Solutions for detecting these races are also covered. By supporting concurrent 
+commits, OCC can expose extra degrees of parallelism and is hence expected to perform better in highly contended workloads.
+
