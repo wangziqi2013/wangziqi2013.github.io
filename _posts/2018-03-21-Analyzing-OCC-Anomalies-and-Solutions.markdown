@@ -368,20 +368,31 @@ The tagged write set is then archived. T is considered as completed after it exi
 BOCC with parallel validation no longer guarantees that the serialization order of transactions is the order 
 that they complete. Actually, the following may happen:
 
+**Different Complete and Serialization Order Example:**
 {% highlight C %}
+/*
+ * Operations on the same line are considered as "concurrent", i.e. no specific
+ * order is defined.
+ */
    Txn 1         Txn 2
    Begin 
   Read  A
-  Read  C
+  Read  B
+ (Write C)
+ (Write D)
+
                  Begin
-                Read  E
-                Read  F
+                Read  C
+                Read  D
+               (Write E)
+               (Write F)
               Begin Commit
-                Write A
-                Write B
-                Finish
 Begin Commit
-  Write B
-  Write D
+  Write C       Write E
+  Write D       Write F
   Finish
+                Finish
 {% endhighlight %}
+
+In this example, transaction 1 is serialized after transaction 2, as it overwrites data items after transaction 2 reads them.
+The complete order, however, differs from the serialization order, as transaction 2 completes before transaction 1.
