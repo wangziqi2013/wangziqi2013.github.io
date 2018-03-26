@@ -304,3 +304,8 @@ set also has a non-empty intersection with transaction 1's read set, which impli
 Nevertheless, the schedule is serializable, and transaction 1 is serialized before transaction 2.
 
 ### Racing Writes
+
+Serial validation and write phases are assumed in above sections. In order to validate, transactions first
+tries to enter a critical section, which is equivalent to locking the write set. Transactions exit the critical
+section only after they have completed writing back dirty values. In this section, the restriction that validation
+and write phases must be serialized is relaxed, and concurrent commits is allowed. As we shall see later, relaxed
