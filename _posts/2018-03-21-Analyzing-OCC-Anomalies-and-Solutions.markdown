@@ -312,3 +312,10 @@ and write phases must be serialized is relaxed. As we shall see later, more race
 are allowed to commit concurrently. Solutions for detecting these races are also covered. By supporting concurrent 
 commits, OCC can expose extra degrees of parallelism and is hence expected to perform better in highly contended workloads.
 
+One important observation is that, in the serial validation and write scheme, transactions possessing disjoint write 
+sets are unnecessarily serialized. Let's ignore read sets for a while and only consider write-write conflicts, 
+because read-write conflicts can be detected by post-read validation. For transactions that write different data items,
+there is no logical partial ordering between them as they can never conflict with each other via data items 
+that are written by multiple transactions. Serial validation and write phases, however, impose a global total ordering
+among all transactions. The global total ordering avoids write-write conflicts because writes are always serialized.
+Read-write conflicts are detected using the same total ordering. 
