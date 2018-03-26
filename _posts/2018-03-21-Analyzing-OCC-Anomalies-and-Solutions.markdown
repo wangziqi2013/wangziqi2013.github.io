@@ -341,26 +341,26 @@ should also be checked by intersecting T's write set with these transactions' wr
 to know whether T's write phase, after validation, can overlap with their write phases. (3) Completed. Transactions of this class is 
 validated against for read-write conflicts as in serial validation.
 
-For transactions to obtain a list of committing and committed transactions, in addition to the global timestamp counter as
+For transaction T to obtain a list of committing and committed transactions, in addition to the global timestamp counter as
 in serial validation BOCC, a "committing transactions" set is also needed. The set keeps track of all transactions that finished read 
-phase, and is currently validating itself or writing back dirty values. When a transaction finishes its read phase, it enters
+phase, and is currently validating itself or writing back dirty values. When T finishes its read phase, it enters
 a short critical section in which the following is performed: (1) Take a copy of the committing transactions set; (2) Read the current 
-global timestamp counter; (3) add itself into the set. The value of the global counter indicates the timestamp of the last committed 
+global timestamp counter; (3) Add itself into the set. The value of the global counter indicates the timestamp of the last committed 
 transaction. The copy of the set contains transactions that are potentially in the write phase
 at the moment the critical section is entered. As transactions in the set complete and remove themselves from the set via another 
 critical section, the set may become stale. The correctness of validation is not affected, though, because read-write conflicts
 are checked for transactions in both committing state and completed state. Even if transactions in committing state can 
-transit to completed state after transaction T copied the set, their write sets are always checked against T's read set.
+transit to completed state after T copied the set, their write sets are always checked against T's read set.
 No read-write conflict can be missed in this case.
  
-In order to validate, the following is performed: (1) For transactions in the copy of the committing transactions set, intersect
-the current transaction's read set and write set with their write sets. On any non-empty intersection the current transaction aborts. 
-(2) For transactions whose commit timestamp is between bt and ct, where bt is the value of the counter at transaction begin and ct
-is the value of the counter obtained in the critical section, intersect current transaction's read set with their write sets.
-On any non-empty intersection the current transaction aborts. This step is identical to the backward validation process of BOCC. 
+In order to validate, the following check is performed: (1) For transactions in the copy of the committing transactions set, intersect
+T's read set and write set with their write sets. On any non-empty intersection T aborts. 
+(2) For transactions whose commit timestamp is between bt and ct, where bt is the value of the counter when T begins and ct
+is the value of the counter obtained in the critical section, intersect T's read set with their write sets.
+On any non-empty intersection T aborts. The second check is identical to the backward validation process of BOCC. 
 
-After validation, the current transaction enters write phase and writes back dirty values. On completion of the write phase,
-the transaction enters the second critical section, which is synchronized with the one it entered before validation. Two
-actions are performed in the critical section: (1) The transaction removes itself from the committing transactions set; 
-(2) The transaction increments the global timestamp counter, and tags its write set with the timestamp value after increment.
-The tagged write set is then archived. The transaction is considered as completed after it exits the critical section.
+After validation, transaction T enters write phase and writes back dirty values. On completion of the write phase,
+T enters the second critical section, which is synchronized with the one it entered before validation. Two
+actions are performed in the critical section: (1) T removes itself from the committing transactions set; 
+(2) T increments the global timestamp counter, and tags its write set with the timestamp value after the increment.
+The tagged write set is then archived. T is considered as completed after it exits the critical section.
