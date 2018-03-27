@@ -460,3 +460,9 @@ Check B (bt >= B.ws)
   Unlock B @ 101
      Finish
 {% endhighlight %}
+
+In the above example, since transaction 1 and transaction 2 are allowed to commit in parallel
+(transaction 2 is read-only), it is possible that transaction 2 validates its read set before 
+transaction 1 updates the wt of data item A, B. Both transactions commit successfully in
+this case, but the execution is non-serializable because transaction 2's read phase
+has a dependency cycle with transaction 1's write phase.
