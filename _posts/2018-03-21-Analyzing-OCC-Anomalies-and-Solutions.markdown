@@ -466,3 +466,9 @@ In the above example, since transaction 1 and transaction 2 are allowed to commi
 transaction 1 updates the wt of data item A, B. Both transactions commit successfully in
 this case, but the execution is non-serializable because transaction 2's read phase
 has a dependency cycle with transaction 1's write phase.
+
+One patch to the validation process is to let it also check whether the data item is locked.
+If the data item is locked, then regardless of its version, the validating transaction aborts.
+If the data item is not locked, then the wt is checked against the bt of the validating transaction.
+These two checks must be atomic. With combined lock bit and write timestamp on aligned addresses,
+atomicity is automatically guaranteed by most ISAs. 
