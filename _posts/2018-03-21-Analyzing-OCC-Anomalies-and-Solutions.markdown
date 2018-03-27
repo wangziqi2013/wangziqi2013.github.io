@@ -414,6 +414,7 @@ After read phase finishes, the transaction acquires locks for each element in th
 globally agreed order. If no globally agreed order is obeyed, deadlock detection/prevention mechanism must be present
 to guarantee progress. If multiple transactions collide on their write sets, the first that achieves 
 the lock point (holding locks on all data items) is serialized before others. After that, read validation is performed
-as in the serial case. After read validation, the transaction logically commits by obtaining a commit timestamp. 
-Finally, dirty values are written back, as well as updated write versions. If the write lock is combined with write 
-versions, then write locks can be released as the version is updated. Otherwise, write locks are released at the end.
+as in the serial case. After read validation, dirty values are written back. Finally, the transaction logically commits 
+by obtaining a commit timestamp, and then updated write versions for data items in the write set. If the write lock 
+is combined with write versions, then write locks can be released as the version is updated. Otherwise, write locks 
+are released at the end.
