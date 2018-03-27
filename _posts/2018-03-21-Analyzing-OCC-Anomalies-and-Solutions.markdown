@@ -420,9 +420,43 @@ versions for data items in the write set. If the write lock is combined with wri
 released as the version is updated. Otherwise, write locks are released at the end.
 
 Unfortunately, one important assumption when we reason about the correctness of the version-based protocol with
-serial validation no longer holds. If transaction T1 obtained its begin timestamp before transaction T2 obtains its commit
-timestamp, then T1's read phase may overlap with T2's write phase. In serial validation protocol, when T1 enters validation,
+serial validation no longer holds. If transaction T1 obtained its bt before transaction T2 obtains its ct,
+then T1's read phase may overlap with T2's write phase. In serial validation protocol, when T1 enters validation,
 T2 must have already finished updating write timestamps, otherwise T2 is still in the critical section, blocking T1.
-T1 is therefore guaranteed to observe the updated wt of data items, which causes an abort. In parallel validation, however, 
-this is not true. When T1 enters validation, as long as its write set does not overlap with T2, T2 may have not finished 
-updating wt. 
+T1 is therefore guaranteed to observe the updated wt of data items, which causes T1 to abort. In parallel validation, however, 
+this is not true. When T1 enters validation, as long as its write set does not overlap with T2's write set, T2 may 
+still be at the middle of updating wt for data items. If T1 only sees the old wt of a data item, it will conclude that
+no conflict happend, and commit successfully, as shown in the example below:
+
+**Reading Partial Commit with Parallel Validation Example:**
+{% highlight C %}
+/*
+ * Assume the global timestamp counter is 100 before transactions start, and 
+ * all data items have initial timestamp 100
+ *
+ * Note that the updated write timestamps are only written into data items
+ * when they are unlocked
+ */
+      Txn 1                   Txn 2
+   Begin @ 100
+     Read  A
+     Read  B
+   Begin Commit
+     Lock  A
+     Lock  B
+Check A (bt >= A.ws)  
+Check B (bt >= B.ws)
+     Write A
+                           Begin @ 100
+                             Read  A
+                             Read  B
+     Write B
+ Obtain  CT @ 101
+                          Begin Commit
+                       Check A (bt >= A.ws)  
+                       Check B (bt >= B.ws)
+                             Finish
+  Unlock A @ 101
+  Unlock B @ 101
+     Finish
+{% endhighlight %}
