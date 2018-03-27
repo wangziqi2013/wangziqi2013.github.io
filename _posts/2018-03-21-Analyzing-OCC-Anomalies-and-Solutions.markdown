@@ -306,7 +306,7 @@ Nevertheless, the schedule is serializable, and transaction 1 is serialized befo
 ### Racing Writes
 
 Serial validation and write phases are assumed in above sections. In order to validate, transactions first
-tries to enter a critical section, which is equivalent to locking the write set. Transactions exit the critical
+tries to enter a critical section, which is effectively equivalent to locking the write set. Transactions exit the critical
 section only after they have completed writing back dirty values. In this section, the restriction that validation
 and write phases must be serialized is relaxed. As we shall see later, more race conditions will arise if transactions
 are allowed to commit concurrently. Solutions for detecting these races are also covered. By supporting concurrent 
@@ -324,22 +324,22 @@ As long as transactions maintain the invariant that the direction of conflicts a
 with this somewhat "artificial" global total ordering, then the entire execution history must be serializable because 
 conflict cycles cannot form. 
 
-For a validating transaction, all other transactions are either in their read phase (including waiting for the critical 
-section), which cannot affect the consistency of its reads, or have already completed write phase and exited the critical section, 
-as only one transaction, i.e. the validating transaction, can be in the critical section. In this case, determining the set of 
-transactions to validate against is trivial, because only currently completed transactions could possibly affect the consistency of 
-reads. As we have seen in the BOCC scheme with serial validation, the validating transaction samples the "last committed" global 
-timestamp counter before read phase begins and after entering the critical section. Validation is then performed against
-transactions committed within this time range.
+For a validating transaction, all other transactions are either in their read phases (including waiting for the critical 
+section), which cannot affect the consistency of its reads, or have already completed write phases and exited the critical section. 
+This is because only one transaction, i.e. the validating transaction, can be in the critical section. In this case, determining 
+the set of transactions to validate against is trivial, because only currently completed transactions could possibly affect the 
+consistency of reads. As we have seen in the BOCC scheme with serial validation, the validating transaction samples the 
+"last committed" global timestamp counter before read phase begins and after entering the critical section. Validation is then 
+performed against transactions committed within this time range.
 
 If multiple transactions are allowed to commit in parallel, then for any transaction T that just finishes its read phase,
 other transactions can be divided similarly into three classes: (1) Have not finished reading. They will not be considered
 for backward validation as they do not affect the read phase of T. (2) Finished read phase, but have not completed. Transactions
 of this class can be either validating or writing back dirty values. T needs to validate its read set against their write sets, 
-as there is no way to know whether their write phases overlapped with T's read phase. Furthermore, write-write conflicts 
+as there is no way to know whether their write phases overlapped with T's read phase. Furthermore, write-write conflict
 should also be checked by intersecting T's write set with these transactions' write sets, because there is also no way 
-to know whether T's write phase, after validation, can overlap with their write phases. (3) Completed. Transactions of this class is 
-validated against for read-write conflicts as in serial validation.
+to know whether T's write phase, after validation, will overlap with their write phases. (3) Completed. Transactions of this class is 
+validated against for read-write conflict as in serial validation.
 
 For transaction T to obtain a list of committing and committed transactions, in addition to the global timestamp counter as
 in serial validation BOCC, a "committing transactions" set is also needed. The set keeps track of all transactions that finished read 
@@ -348,16 +348,15 @@ a short critical section in which the following is performed: (1) Take a copy of
 global timestamp counter; (3) Add itself into the set. The value of the global counter indicates the timestamp of the last committed 
 transaction. The copy of the set contains transactions that are potentially in the write phase
 at the moment the critical section is entered. As transactions in the set complete and remove themselves from the set via another 
-critical section, the set may become stale. The correctness of validation is not affected, though, because read-write conflicts
-are checked for transactions in both committing state and completed state. Even if transactions in committing state can 
+critical section, T's copy of the set will become stale. The correctness of validation is not affected, though, because read-write conflicts are checked for transactions in both committing state and completed state. Even if transactions in committing state can 
 transit to completed state after T copied the set, their write sets are always checked against T's read set.
 No read-write conflict can be missed in this case.
  
 In order to validate, the following check is performed: (1) For transactions in the copy of the committing transactions set, intersect
-T's read set and write set with their write sets. On any non-empty intersection T aborts. 
+T's read set and write set with their write sets. T aborts on any non-empty intersection. 
 (2) For transactions whose commit timestamp is between bt and ct, where bt is the value of the counter when T begins and ct
 is the value of the counter obtained in the critical section, intersect T's read set with their write sets.
-On any non-empty intersection T aborts. The second check is identical to the backward validation process of BOCC. 
+T aborts on any non-empty intersection. The second check is identical to the backward validation process of BOCC. 
 
 After validation, transaction T enters write phase and writes back dirty values. On completion of the write phase,
 T enters the second critical section, which is synchronized with the one it entered before validation. Two
@@ -407,7 +406,7 @@ to abort.
 Extending the parallel validation paradigm to version-based validation seems trivial. Instead of entering a critical
 section which serializes all write phases, no matter relevant or not, a fine grained exclusive lock is associated with
 every data item. The lock needs only one bit to indicate locked/free status, so a convenient way is to dedicate one bit from
-each data item's write version. The advantage of combined lock bit and write version is that they can be loaded from and 
+each data item's write version timestamp. The advantage of combined lock bit and write version is that they can be loaded from and 
 stored into atomically, given that memory addresses are aligned. 
 
 After read phase finishes, the transaction acquires locks for each element in the write set on some 
@@ -415,7 +414,7 @@ globally agreed order. If no globally agreed order is obeyed, deadlock detection
 to guarantee progress. If multiple transactions collide on their write sets, the first that achieves 
 the lock point (holding locks on all data items) is serialized before others. After that, read validation is performed
 as in the serial case by comparing the transaction's bt against data item's current wt. After read validation, dirty 
-values are written back. Finally, the transaction logically commits by obtaining a commit timestamp, and then update write 
+values are written back. Finally, the transaction logically commits by obtaining a commit timestamp, and then updates write 
 versions for data items in the write set. If the write lock is combined with write versions, then write locks can be 
 released as the version is updated. Otherwise, write locks are released at the end.
 
