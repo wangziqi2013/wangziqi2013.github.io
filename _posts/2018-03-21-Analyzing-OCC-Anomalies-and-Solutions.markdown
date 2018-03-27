@@ -414,7 +414,15 @@ After read phase finishes, the transaction acquires locks for each element in th
 globally agreed order. If no globally agreed order is obeyed, deadlock detection/prevention mechanism must be present
 to guarantee progress. If multiple transactions collide on their write sets, the first that achieves 
 the lock point (holding locks on all data items) is serialized before others. After that, read validation is performed
-as in the serial case. After read validation, dirty values are written back. Finally, the transaction logically commits 
-by obtaining a commit timestamp, and then updated write versions for data items in the write set. If the write lock 
-is combined with write versions, then write locks can be released as the version is updated. Otherwise, write locks 
-are released at the end.
+as in the serial case by comparing the transaction's bt against data item's current wt. After read validation, dirty 
+values are written back. Finally, the transaction logically commits by obtaining a commit timestamp, and then update write 
+versions for data items in the write set. If the write lock is combined with write versions, then write locks can be 
+released as the version is updated. Otherwise, write locks are released at the end.
+
+Unfortunately, one important assumption when we reason about the correctness of the version-based protocol with
+serial validation no longer holds. If transaction T1 obtained its begin timestamp before transaction T2 obtains its commit
+timestamp, then T1's read phase may overlap with T2's write phase. In serial validation protocol, when T1 enters validation,
+T2 must have already finished updating write timestamps, otherwise T2 is still in the critical section, blocking T1.
+T1 is therefore guaranteed to observe the updated wt of data items, which causes an abort. In parallel validation, however, 
+this is not true. When T1 enters validation, as long as its write set does not overlap with T2, T2 may have not finished 
+updating wt. 
