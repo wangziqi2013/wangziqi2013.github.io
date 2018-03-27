@@ -403,3 +403,7 @@ Another example showing false positives under parallel validation can be obtaine
 in the above example. Transaction 2 would fail validation, because transaction 1 will be in the committing transaction
 set. The non-empty intersection between transaction 2's read set and transaction 1's write set will cause transaction 2
 to abort.
+
+Extending the parallel validation paradigm to version-based validation seems trivial. Instead of entering a critical
+section which serializes all write phases, no matter relevant or not, a fine grained exclusive lock is associated with
+every data item. After read phase
