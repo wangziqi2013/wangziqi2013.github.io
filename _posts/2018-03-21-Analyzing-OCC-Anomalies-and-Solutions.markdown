@@ -406,4 +406,10 @@ to abort.
 
 Extending the parallel validation paradigm to version-based validation seems trivial. Instead of entering a critical
 section which serializes all write phases, no matter relevant or not, a fine grained exclusive lock is associated with
-every data item. After read phase
+every data item. The lock needs only one bit to indicate locked/free status, so a convenient way is to dedicate one bit from
+each data item's write version. The advantage of combined lock bit and write version is that they can be loaded from and 
+stored into atomically, given that memory addresses are aligned. 
+
+After read phase finishes, the transaction acquires locks for each element in the write set on some 
+globally agreed order (to avoid deadlock). If multiple transactions collide on their write sets, the first that achieves 
+the locked point is serialized before others. After 
