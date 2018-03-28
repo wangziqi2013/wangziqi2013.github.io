@@ -471,3 +471,9 @@ If the data item is locked, then regardless of its version, the validating trans
 If the data item is not locked, then the wt is checked against the bt of the validating transaction.
 These two checks must be atomic. With combined lock bit and write timestamp on aligned addresses,
 atomicity is automatically guaranteed by most ISAs. 
+
+Value-based validation simplifies version check because it only re-reads the value and 
+compare it with the last read value. The one bit lock is still needed, which forfeits
+the advantage of value-based validation of not maintaining any metadata with data items. In addition,
+extra transactionally local storage must be allocated to remember the value of data items when they
+are accessed in the read phase.
