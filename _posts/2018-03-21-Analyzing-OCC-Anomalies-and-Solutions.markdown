@@ -473,8 +473,13 @@ These two checks must be atomic. With combined lock bit and write timestamp on a
 atomicity is automatically guaranteed by most ISAs. 
 
 Value-based validation simplifies version check because it only re-reads all data items and 
-verrify that they remain consistent. The lock bit is only for write phase mutual exclusion,
+verrifies that they remain consistent. The lock bit is only for write phase mutual exclusion,
 and is not checked on validation. On the other hand, on most architectures, the single bit lock must
 still be implemented as a word. This forfeits the advantage of value-based validation of not maintaining 
 any metadata with data items. In addition, extra transactionally local storage must be allocated to remember 
 the value of data items when they were accessed in the read phase.
+
+### Conclusion
+
+In this article we discussed a few common race conditions in transactional system and their corresponding solutions.
+We focused on an optimistic approach, where the execution is divided into read, validation and write phases. 
