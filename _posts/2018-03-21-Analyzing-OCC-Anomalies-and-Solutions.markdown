@@ -492,3 +492,12 @@ To avoid inconsistency between reads and writes, read validation must be perform
 Similarly, to avoid publicizing the partial commit too early, the committing transaction must only increment
 the global timestamp counter after all writes are finished.
 
+Other techniques that are not explored by this article also help us build efficient transactional systems. For example,
+timestamps need not be obtained from a shared counter. Instead, they are computed from the read set and the write set of
+transactions. The dynamically self-adjusting timestamps can reduce some unnecessary aborts of classical OCC, where the 
+direction of the dependency differ from the order of incrementing the shared counter. Furthermore, incremental validation
+with fine grained write locking is not covered. This scheme is used by some state-of-the-art software transactional systems
+to reduce validation overhead. 
+
+
+
