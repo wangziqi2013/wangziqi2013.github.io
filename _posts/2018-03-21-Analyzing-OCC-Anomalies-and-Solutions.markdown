@@ -499,5 +499,8 @@ direction of the dependency differ from the order of incrementing the shared cou
 with fine grained write locking is not covered. This scheme is used by some state-of-the-art software transactional systems
 to reduce validation overhead. 
 
-
+Although this article only gives an introductory overview of several common OCC techniques proposed by algorithm designers,
+we hope it can server as a motivation and a foundation for more complex and innovative concurrency control algorithms. 
+As multicore programming has already become the norm of today's high performance data processing systems, we also firmly 
+believe that existing systems and new systems will benefit from better concurrency control designs.
 
