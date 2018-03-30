@@ -482,4 +482,7 @@ the value of data items when they were accessed in the read phase.
 ### Conclusion
 
 In this article we discussed a few common race conditions in transactional system and their corresponding solutions.
-We focused on an optimistic approach, where the execution is divided into read, validation and write phases. 
+We focused on an optimistic approach, where the execution is divided into read, validation and write phases. Various
+techniques can be applied to each of these three phases to guarantee a proper ordering between transactions, by either
+ensuring mutual exclusion between transactions via explicit locking, or implicit read-validate pairs. 
+
