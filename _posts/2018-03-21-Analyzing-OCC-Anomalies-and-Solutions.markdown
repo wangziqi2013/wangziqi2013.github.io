@@ -484,5 +484,11 @@ the value of data items when they were accessed in the read phase.
 In this article we discussed a few common race conditions in transactional system and their corresponding solutions.
 We focused on an optimistic approach, where the execution is divided into read, validation and write phases. Various
 techniques can be applied to each of these three phases to guarantee a proper ordering between transactions, by either
-ensuring mutual exclusion between transactions via explicit locking, or implicit read-validate pairs. 
+ensuring mutual exclusion between transactions via explicit locking, or implicit read-validate pairs. Three types
+of validations can be used to guarantee read consistency: set-intersection based validation, version-based validation, 
+and value-based validation. In addition, three types of write locking can be used to guarantee write mutual exclution: 
+global critical section, committing-set based backward validation, and fine-grained write locking. 
+To avoid inconsistency between reads and writes, read validation must be performed after the write set is locked.
+Similarly, to avoid publicizing the partial commit too early, the committing transaction must only increment
+the global timestamp counter after all writes are finished.
 
