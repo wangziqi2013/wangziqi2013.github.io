@@ -486,8 +486,11 @@ sample the timestamp again. If two timestamps disagree, or if the data item is l
 a commit happened between the two samples, or a transaction started committing before the second sample and has not finished.
 In both cases, the read phase potentially overlaps with the write phase of another transaction, and the current 
 transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent writes, and the wt is consistent with
-the value. The wt is saved for validation. Since wt is usually just an integer, when the granularity is large, it costs 
-less to save wt instead of the value of data items. 
+the read value. Only the wt is saved for validation. Since wt is usually just an integer, when the granularity is large, 
+it costs less to save wt instead of the value of data items. On transaction commit, the write set is locked as usual.
+Instead of validating values of data items, we re-read the wt of each data item in the read set. If the lock bit is clear
+and the wt agrees with the saved version, then validation succeeds. After the write phase, the wt of data items in the 
+write set is incremented. The global timestamp counter is no longer needed.
 
 ### Conclusion
 
