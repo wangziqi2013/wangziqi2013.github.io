@@ -229,9 +229,9 @@ it will be on the critical section, because less and less transactions will be a
 Value-based validation can also catch race conditions of this kind. After entering the critical section, for each
 element in the read set, the validating transaction re-reads the item, and compare its value with the original value
 the first time the read operation is performed. Value-based validation does not maintain per-item metadata, which saves 
-global storage. The trade-off is that the read set must include data item values in addition to their addresses.
-Conflicts induced by false sharing can be reduced in this scheme if the granularity of reads and writes differ
-from the granularity of metadata bookkeeping.
+global storage. The global timestamp counter is also eliminated. The trade-off is that the read set must include data 
+item values in addition to their addresses. Conflicts induced by false sharing can be reduced in this scheme if 
+the granularity of reads and writes differ from the granularity of metadata bookkeeping.
 
 There are schedules in which reading transactions read consistently, but are wrongly identified as violating the serialization 
 order. If the reading transaction reads updated values of the committing transaction, but obtains bt before the committing 
