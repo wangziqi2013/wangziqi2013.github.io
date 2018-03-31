@@ -479,6 +479,16 @@ still be implemented as a word. This forfeits the advantage of value-based valid
 any metadata with data items. In addition, extra transactionally local storage must be allocated to remember 
 the value of data items when they were accessed in the read phase.
 
+If the storage overhead of saving the value of data items is a concern when the granularity of reads and writes is large, 
+write timestamps with the lock bit can still be maintained for each data item. Read operations must read the wt 
+as well as the data item atomically. This is usually achieved by sampling the timestamp first, then perform read, and 
+sample the timestamp again. If two timestamps disagree, or if the data item is locked in the second sample, then either
+a commit happened between the two samples, or a transaction started committing before the second sample and has not finished.
+In both cases, the read phase potentially overlaps with the write phase of another transaction, and the current 
+transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent writes, and the wt is consistent with
+the value. The wt is saved for validation. Since wt is usually just an integer, when the granularity is large, it costs 
+less to save wt instead of the value of data items. 
+
 ### Conclusion
 
 In this article we discussed a few common race conditions in transactional system and their corresponding solutions.
