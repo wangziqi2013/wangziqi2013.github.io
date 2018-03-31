@@ -482,7 +482,7 @@ the value of data items when they were accessed in the read phase.
 If the storage overhead of saving the value of data items is a concern, or because read cannot be performed
 atomically when the granularity of reads and writes is large, write timestamps with the lock bit can still be 
 maintained for each data item. Read operations must read the wt 
-as well as the data item atomically. This is usually achieved by performing "mini transactions with" post-read validation
+as well as the data item atomically. This is usually achieved by performing "mini-transactions" with post-read validation
 on every read. The read operation is instrumented to sample the timestamp first, then perform read, and then
 sample the timestamp again. If two timestamps disagree, or if the data item is locked in the second sample, then either
 a commit happened between the two samples, or a transaction started committing before the second sample and has not finished.
@@ -490,10 +490,10 @@ In both cases, the read phase potentially overlaps with the write phase of anoth
 transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent writes, and the wt is consistent with
 the read value. Only the wt is saved for validation. Since wt is usually just an integer, when the granularity is large, 
 it costs less to save wt instead of the value of data items. On transaction commit, the write set is locked as usual.
-Instead of validating values of data items, we re-read the wt of each data item in the read set. If the lock bit is clear
-and the current wt agrees with the saved wt, then validation succeeds. After the write phase, the wt of data items in the 
-write set is incremented before data items can be unlocked. Note that although per-item wt and the write lock is 
-maintained, this scheme is The global timestamp counter is no longer needed.
+Instead of validating values of data items, the validation process re-reads the wt of each data item in the read set. 
+If the lock bit is clear and the current wt agrees with the saved wt, then validation succeeds. After the write phase, 
+the wt of data items in the write set is incremented before data items can be unlocked. Note that although per-item 
+version is maintained, this scheme is still considered as value-based, because no global timestamp counter is needed.
 
 ### Conclusion
 
