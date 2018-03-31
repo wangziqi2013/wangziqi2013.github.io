@@ -80,7 +80,7 @@ with serial validation do not allow races that are detrimental to correctness.
 In the following discussion, however, as we introduce fine grained version-based validation and parallel commits, 
 we shall see that some races are common design fallacies if the algorithm is not verified carefully. 
 
-Fine grained per-element version-based validation can reduce validation overhead 
+Fine grained per-item version-based validation can reduce validation overhead 
 at the cost of metadata storage for each individual data items. In this scheme, a write timestamp (wt) is associated
 with every individual data item, which records the commit timestamp of the most recent transaction that wrote into
 the data item. A dual timestamp strategy is employed to detect "early read" races. On transaction begin, a begin
@@ -479,9 +479,11 @@ still be implemented as a word. This forfeits the advantage of value-based valid
 any metadata with data items. In addition, extra transactionally local storage must be allocated to remember 
 the value of data items when they were accessed in the read phase.
 
-If the storage overhead of saving the value of data items is a concern when the granularity of reads and writes is large, 
-write timestamps with the lock bit can still be maintained for each data item. Read operations must read the wt 
-as well as the data item atomically. This is usually achieved by sampling the timestamp first, then perform read, and 
+If the storage overhead of saving the value of data items is a concern, or because read cannot be performed
+atomically when the granularity of reads and writes is large, write timestamps with the lock bit can still be 
+maintained for each data item. Read operations must read the wt 
+as well as the data item atomically. This is usually achieved by performing "mini transactions with" post-read validation
+on every read. The read operation is instrumented to sample the timestamp first, then perform read, and then
 sample the timestamp again. If two timestamps disagree, or if the data item is locked in the second sample, then either
 a commit happened between the two samples, or a transaction started committing before the second sample and has not finished.
 In both cases, the read phase potentially overlaps with the write phase of another transaction, and the current 
@@ -489,8 +491,9 @@ transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent
 the read value. Only the wt is saved for validation. Since wt is usually just an integer, when the granularity is large, 
 it costs less to save wt instead of the value of data items. On transaction commit, the write set is locked as usual.
 Instead of validating values of data items, we re-read the wt of each data item in the read set. If the lock bit is clear
-and the wt agrees with the saved version, then validation succeeds. After the write phase, the wt of data items in the 
-write set is incremented. The global timestamp counter is no longer needed.
+and the current wt agrees with the saved wt, then validation succeeds. After the write phase, the wt of data items in the 
+write set is incremented before data items can be unlocked. Note that although per-item wt and the write lock is 
+maintained, this scheme is The global timestamp counter is no longer needed.
 
 ### Conclusion
 
