@@ -479,7 +479,7 @@ still be implemented as a word. This forfeits the advantage of value-based valid
 any metadata with data items. In addition, extra transactionally local storage must be allocated to remember 
 the value of data items when they were accessed in the read phase.
 
-If the storage overhead of saving the value of data items is a concern, or because read cannot be performed
+If the storage overhead of saving the value of data items is a concern, or because reads cannot be performed
 atomically when the granularity of reads and writes is large, write timestamps with the lock bit can still be 
 maintained for each data item. Read operations must read the wt 
 as well as the data item atomically. This is usually achieved by performing "mini-transactions" with post-read validation
@@ -487,7 +487,8 @@ on every read. The read operation is instrumented to sample the timestamp first,
 sample the timestamp again. If two timestamps disagree, or if the data item is locked in the second sample, then either
 a commit happened between the two samples, or a transaction started committing before the second sample and has not finished.
 In both cases, the read phase potentially overlaps with the write phase of another transaction, and the current 
-transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent writes, and the wt is consistent with
+transaction must abort. Otherwise, the read opreation is atomic w.r.t concurrent writes, and the wt obtained by the 
+two samples is consistent with
 the read value. Only the wt is saved for validation. Since wt is usually just an integer, when the granularity is large, 
 it costs less to save wt instead of the value of data items. On transaction commit, the write set is locked as usual.
 Instead of validating values of data items, the validation process re-reads the wt of each data item in the read set. 
