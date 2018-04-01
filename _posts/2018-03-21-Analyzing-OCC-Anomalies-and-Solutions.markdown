@@ -498,7 +498,7 @@ version is maintained, this scheme is still considered as value-based, because n
 
 ### Conclusion
 
-In this article we discussed a few common race conditions in transactional system and their corresponding solutions.
+In this article we discussed a few common race conditions in transactional systems and their corresponding solutions.
 We focused on an optimistic approach, where the execution is divided into read, validation and write phases. Various
 techniques can be applied to each of these three phases to guarantee a proper ordering between transactions, by either
 ensuring mutual exclusion between transactions via explicit locking, or implicit read-validate pairs. Three types
