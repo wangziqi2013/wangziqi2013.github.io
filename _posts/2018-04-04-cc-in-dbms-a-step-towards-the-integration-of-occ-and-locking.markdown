@@ -94,4 +94,6 @@ On validation, transactions first enter the critical section. 2PL transactions d
 and is hence guaranteed to commit as long as they are not involved in deadlocks. 
 An OCC transaction first validates its read set with the write set of all committed transactions, no matter
 2PL or OCC. Then, it performs a forward validation that is similar to FOCC: for all living 2PL transactions,
-it intersects its write set with read sets
+it intersects their read sets with its write set. On any non-empty intersection, the validating OCC
+transaction aborts. After validation, the write phase is entered, and transactions write back their
+dirty values, before they exit the critical section.
