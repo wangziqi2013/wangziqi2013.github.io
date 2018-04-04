@@ -120,3 +120,9 @@ Begin Commit
   Finish
 {% endhighlight %}
 
+In the above example, transaction 1 runs in 2PL mode while transaction 2 runs in OCC mode.
+Transaction 2 begins commit by first validating its write set which contains A and B against
+the read set of transaction 1. The validation succeeds because at that time transaction 1's 
+read set only contains C. Transaction 2 then enters write phase, and writes back A and B.
+Before these writes are actually performed, transaction 1 acquires read locks for A and B,
+and reads their values. When transaction 1 commits, it also writes A and B. 
