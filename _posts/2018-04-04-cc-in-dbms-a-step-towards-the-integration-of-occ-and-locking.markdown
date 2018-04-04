@@ -126,3 +126,7 @@ the read set of transaction 1. The validation succeeds because at that time tran
 read set only contains C. Transaction 2 then enters write phase, and writes back A and B.
 Before these writes are actually performed, transaction 1 acquires read locks for A and B,
 and reads their values. When transaction 1 commits, it also writes A and B. 
+This example is non-serializable, because by reaing the old values of A and B, transaction 1
+is serialized before transaction 2. During the write phase, however, transaction 1 is 
+serialized after transaction 2 by writing A and B.
+
