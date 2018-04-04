@@ -72,3 +72,7 @@ operations happening after the write operation. Schedules like the example above
 in this case, because both data items A and B have a greather rt than transaction 2's ct, and thus
 validation succeeds.
 
+The rest of the paper talks about combining 2PL and OCC into one concurrency control manager, such that
+short transactions are executed under OCC mode for the first few runs, and if the number of failures 
+exceeds a thereshold, it is switched to 2PL mode, and runs pessimistically by taking locks. Long 
+transactions can be marked beforehand, and are always executed in 2PL mode.
