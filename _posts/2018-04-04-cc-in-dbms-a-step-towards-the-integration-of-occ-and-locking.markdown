@@ -23,3 +23,10 @@ transactions, as more write sets of committed transactions are tested for non-em
 intersection. If conflicts occur frequently, long transactions can never commit,
 causing the starvation problem.
 
+One simple but irrelevant technique can be used to slightly improve the throughput of set
+intersection based BOCC. During the validation phase, classical BOCC intersects the read 
+set of the validating transaction with committed transactions during its read phase, and 
+aborts the validating transaction on non-empty intersections. This is an overkill, because
+not all overlaps of read and write phase will result in non-serializable schedules. One example
+is given below:
+
