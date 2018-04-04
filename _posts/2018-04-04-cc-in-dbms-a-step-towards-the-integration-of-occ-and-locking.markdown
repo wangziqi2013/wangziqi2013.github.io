@@ -135,3 +135,10 @@ OCC transaction 2, then no read can ever be performed between it validates and w
 back. All read operations to data items in transaction 2's write set must either 
 take place before the validation, which causes transaction 2 to abort, or 
 they must be delayed after the write phase, which serializes correctly.
+
+In addition to "pure" 2PL and OCC modes, a more hybrid OL (Optimistic + Locking, not optimistic locking) 
+mode can be adopted. The OL mode is valuable to transactions that access independent for most of times,
+but also access a few hot data items that are prone to invalidation and frequent conflicts. In this case,
+two different treatments can be applied simultaneously in one transaction: For those items that are expected
+to be cold, we use OCC for maximum throughput; for those that are hot, 2PL is used to avoid abort
+after an optimistic read.
