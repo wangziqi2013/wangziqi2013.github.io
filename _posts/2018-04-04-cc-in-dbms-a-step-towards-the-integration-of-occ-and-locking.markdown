@@ -69,5 +69,6 @@ all these rt are greater than the ct, then the schedule is still serializable. T
 the read phase of the validating transaction overlaps with the write phase of the committed transaction,
 such overlap is "benevolent", as the serialization order is sustained by having these read 
 operations happening after the write operation. Schedules like the example above can commit successfully
-in this case, because both data items A and B
+in this case, because both data items A and B have a greather rt than transaction 2's ct, and thus
+validation succeeds.
 
