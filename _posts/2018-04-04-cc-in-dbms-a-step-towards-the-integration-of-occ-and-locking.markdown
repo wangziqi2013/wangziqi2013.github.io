@@ -130,3 +130,8 @@ This example is non-serializable, because by reaing the old values of A and B, t
 is serialized before transaction 2. During the write phase, however, transaction 1 is 
 serialized after transaction 2 by writing A and B.
 
+If read lock requests are blocked between the validation phase and write phase of 
+OCC transaction 2, then no read can ever be performed between it validates and writes
+back. All read operations to data items in transaction 2's write set must either 
+take place before the validation, which causes transaction 2 to abort, or 
+they must be delayed after the write phase, which serializes correctly.
