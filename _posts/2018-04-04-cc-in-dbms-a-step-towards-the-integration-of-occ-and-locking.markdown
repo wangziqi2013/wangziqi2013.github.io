@@ -149,3 +149,8 @@ the write set of all active OL transactions are also tested. Validation for OL t
 the validation for OCC transactions, except that we only test the optimistic part, i.e. for committed
 transactions, the OL transaction only tests its unlocked read against their write sets; For all active
 2PL and OL transactions, the OL transaction only tests its unlocked write against their read sets.
+
+The last section of the paper looses the constraints that read locks cannot be granted during validation
+a little bit. Actually, as long as the data item being requested is not in the write set of the current committing 
+transaction, the read lock can be granted. The CC manager just needs to check the incoming read lock request
+against the write set of the committing transaction.
