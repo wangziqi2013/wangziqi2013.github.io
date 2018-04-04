@@ -96,4 +96,27 @@ An OCC transaction first validates its read set with the write set of all commit
 2PL or OCC. Then, it performs a forward validation that is similar to FOCC: for all living 2PL transactions,
 it intersects their read sets with its write set. On any non-empty intersection, the validating OCC
 transaction aborts. After validation, the write phase is entered, and transactions write back their
-dirty values, before they exit the critical section.
+dirty values, before they exit the critical section. 
+
+Note that during the FOCC validation phase, if the acquisition of read locks are not blocked, then
+the following non-serializable schedule can happen:
+
+**Non-serializable FOCC Example:**
+{% highlight C %}
+    2PL           OCC
+   Txn 1         Txn 2
+   Begin
+  Read  C
+              Begin Commit
+               Validation
+  Read  A
+  Read  B
+                Write A
+                Write B
+                Finish 
+Begin Commit
+  Write A
+  Write B
+  Finish
+{% endhighlight %}
+
