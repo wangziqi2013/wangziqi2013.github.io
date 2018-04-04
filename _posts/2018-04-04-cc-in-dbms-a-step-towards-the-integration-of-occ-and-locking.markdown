@@ -30,3 +30,21 @@ aborts the validating transaction on non-empty intersections. This is an overkil
 not all overlaps of read and write phase will result in non-serializable schedules. One example
 is given below:
 
+**Serializable Non-OCC Schedule Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin
+              Begin Commit
+                Write A
+                Write B
+                Finish 
+  Read  A     
+  Read  B
+Begin Commit
+  Write A
+  Write B
+  Finish
+{% endhighlight %}
+
+Since transaction 2 begins commit after transaction 1 begins, transaction 1 will intersect its read set
+which contains A and B with
