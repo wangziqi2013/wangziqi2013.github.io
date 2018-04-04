@@ -93,7 +93,7 @@ correspondingly as it accesses data items. Modifications to data items are buffe
 On validation, transactions first enter the critical section. 2PL transactions does nothing, 
 and is hence guaranteed to commit as long as they are not involved in deadlocks. 
 An OCC transaction first validates its read set with the write set of all committed transactions, no matter
-2PL or OCC. Then, it performs a forward validation that is similar to FOCC: for all living 2PL transactions,
+2PL or OCC. Then, it performs a forward validation that is similar to FOCC: for all active 2PL transactions,
 it intersects their read sets with its write set. On any non-empty intersection, the validating OCC
 transaction aborts. After validation, the write phase is entered, and transactions write back their
 dirty values, before they exit the critical section. 
@@ -137,8 +137,15 @@ take place before the validation, which causes transaction 2 to abort, or
 they must be delayed after the write phase, which serializes correctly.
 
 In addition to "pure" 2PL and OCC modes, a more hybrid OL (Optimistic + Locking, not optimistic locking) 
-mode can be adopted. The OL mode is valuable to transactions that access independent for most of times,
+mode can be adopted. The OL mode is valuable to transactions that access independent items for most of times,
 but also access a few hot data items that are prone to invalidation and frequent conflicts. In this case,
 two different treatments can be applied simultaneously in one transaction: For those items that are expected
-to be cold, we use OCC for maximum throughput; for those that are hot, 2PL is used to avoid abort
+to be cold, we use OCC for maximum throughput; for those that are hot, 2PL is used to avoid frequent aborts
 after an optimistic read.
+
+The validation phase changes accordingly with OL mode as follows. For 2PL transactions, validation still does
+nothing. For OCC transactions, in addition to testing its write set against all active 2PL transactions, 
+the write set of all active OL transactions are also tested. Validation for OL transactions is similar to
+the validation for OCC transactions, except that we only test the optimistic part, i.e. for committed
+transactions, the OL transaction only tests its unlocked read against their write sets; For all active
+2PL and OL transactions, the OL transaction only tests its unlocked write against their read sets.
