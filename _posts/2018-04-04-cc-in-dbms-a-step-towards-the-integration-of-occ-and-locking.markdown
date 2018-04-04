@@ -53,10 +53,21 @@ intersection indicates that transaction 1 should abort. The schedule, however, i
 transaction 1 serialized after transaction 2.
 
 The above example reveals an important defect of set-intersection based BOCC: by reading the value of the global 
-timestamp counter before the first read operation during the read phase, all later read operations are
+timestamp counter only before the first read operation during the read phase, all later read operations are
 considered by the validation phase as taking place at exactly the same time as the timestamp is read.
 This is because the begin timestamp (bt) is compared with the commit timestamp (ct) of committing transactions to 
 determine the appropriate order of reads and writes. In this example, since transaction 1 takes bt
 before transaction 2 takes ct, all its reads are considered as being performed before transaction 2
-commits its write set. If the actual order differs from this perspective, then validation would fail.
+committing its write set. If the actual order differs from this perspective, then validation would fail.
+
+Instead of only reading the global timestamp counter before the first read as the global read bt, this
+paper proposes that every read is preceded by a read to the global timestamp counter, and the value is 
+kept in the read set as the read timestamp (rt) of the data item. On backward validation, if for a committed transaction, 
+the read set of the validating transaction has an non-empty overlap with the committed transaction, 
+the rt of these data items in the intersection are checked against the committed transaction's ct. If
+all these rt are greater than the ct, then the schedule is still serializable. This is because although 
+the read phase of the validating transaction overlaps with the write phase of the committed transaction,
+such overlap is "benevolent", as the serialization order is sustained by having these read 
+operations happening after the write operation. Schedules like the example above can commit successfully
+in this case, because both data items A and B
 
