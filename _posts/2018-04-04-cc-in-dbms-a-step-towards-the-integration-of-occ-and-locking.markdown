@@ -34,11 +34,12 @@ is given below:
 {% highlight C %}
    Txn 1         Txn 2
    Begin
+  Read  C
               Begin Commit
                 Write A
                 Write B
                 Finish 
-  Read  A     
+  Read  A
   Read  B
 Begin Commit
   Write A
@@ -46,7 +47,16 @@ Begin Commit
   Finish
 {% endhighlight %}
 
-Since transaction 2 begins commit after transaction 1 begins, transaction 1 will intersect its read set
+Since transaction 2 begins commit after transaction 1 begins read phase, transaction 1 will intersect its read set
 which contains A and B with transaction 2's write set, which contains A and B also. The non-empty
 intersection indicates that transaction 1 should abort. The schedule, however, is serializable, with
 transaction 1 serialized after transaction 2.
+
+The above example reveals an important defect of set-intersection based BOCC: by reading the value of the global 
+timestamp counter before the first read operation during the read phase, all later read operations are
+considered by the validation phase as taking place at exactly the same time as the timestamp is read.
+This is because the begin timestamp (bt) is compared with the commit timestamp (ct) of committing transactions to 
+determine the appropriate order of reads and writes. In this example, since transaction 1 takes bt
+before transaction 2 takes ct, all its reads are considered as being performed before transaction 2
+commits its write set. If the actual order differs from this perspective, then validation would fail.
+
