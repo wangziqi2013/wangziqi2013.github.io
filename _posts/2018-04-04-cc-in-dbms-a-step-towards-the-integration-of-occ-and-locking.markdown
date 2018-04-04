@@ -47,4 +47,6 @@ Begin Commit
 {% endhighlight %}
 
 Since transaction 2 begins commit after transaction 1 begins, transaction 1 will intersect its read set
-which contains A and B with
+which contains A and B with transaction 2's write set, which contains A and B also. The non-empty
+intersection indicates that transaction 1 should abort. The schedule, however, is serializable, with
+transaction 1 serialized after transaction 2.
