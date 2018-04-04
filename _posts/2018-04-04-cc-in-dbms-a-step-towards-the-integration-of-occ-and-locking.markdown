@@ -86,3 +86,12 @@ occupied, no read lock can be granted to avoid read-write races between 2PL tran
 validating transaction. Write locks can be granted concurrently, as data items are only modified
 in the critical section even for 2PL transactions.
 
+During the read phase, both 2PL and OCC transaction read data items, and add them into the read
+set (for OCC) or read lock set (for 2PL). Similarly, written data items are added into the write set. 
+For 2PL transactions, read and write locks are acquired
+correspondingly as it accesses data items. Modifications to data items are buffered locally. 
+On validation, transactions first enter the critical section. 2PL transactions does nothing, 
+and is hence guaranteed to commit as long as they are not involved in deadlocks. 
+An OCC transaction first validates its read set with the write set of all committed transactions, no matter
+2PL or OCC. Then, it performs a forward validation that is similar to FOCC: for all living 2PL transactions,
+it intersects its write set with read sets
