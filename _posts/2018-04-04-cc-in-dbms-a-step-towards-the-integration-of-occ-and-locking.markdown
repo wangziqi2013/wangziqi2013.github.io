@@ -5,7 +5,7 @@ date:   2018-04-04 16:17:00 -0500
 categories: paper
 paper_title: "Concurrency Control in Database Systems: A Step Towards the Integration of Optimistic Methods and Locking"
 paper_link: https://dl.acm.org/citation.cfm?id=809759
-paper_keyword: OCC; 2PL
+paper_keyword: OCC; 2PL; Hybrid
 paper_year: 1981
 rw_set: Set
 htm_cd: Both Eager and Lazy
@@ -76,3 +76,13 @@ The rest of the paper talks about combining 2PL and OCC into one concurrency con
 short transactions are executed under OCC mode for the first few runs, and if the number of failures 
 exceeds a thereshold, it is switched to 2PL mode, and runs pessimistically by taking locks. Long 
 transactions can be marked beforehand, and are always executed in 2PL mode.
+
+Two important assumptions are made in this paper. The first assumption is that 2PL also follows
+the read-validate-write pattern, albeit the validation phase does nothing. The crux here is that 
+data items are not written in-place even if a write lock has been taken. This helps concurrent OCC
+transactions avoid reading inconsistent values. The second assumptions is that validation and write phases
+are performed in a global critical section. Furthermore, if the critical section is currently 
+occupied, no read lock can be granted to avoid read-write races between 2PL transactions and the 
+validating transaction. Write locks can be granted concurrently, as data items are only modified
+in the critical section even for 2PL transactions.
+
