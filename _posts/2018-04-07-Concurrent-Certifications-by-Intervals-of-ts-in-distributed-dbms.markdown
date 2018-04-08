@@ -33,27 +33,26 @@ be performed at the exact time point when the counter is read. Any interleaving 
 transaction on data items in current transaction's read set is considered as a violation, while in some cases,
 such read-write interleaving is benevolent, as shown in the example below:
 
-**Serializable Non-OCC Schedule Example:**
+**Serializable Non-OCC Schedule Example 1:**
 {% highlight C %}
    Txn 1         Txn 2
-   Begin 
-  Read  A
-  Read  B
                  Begin
                 Read  A
                 Read  B
               Begin Commit
                 Write A
                 Write B
+   Begin 
+  Read  A
+  Read  B       
                 Finish
-  
 Begin Commit
   Write C
   Write D
   Finish
 {% endhighlight %} 
 
-In the above schedule, transaction 1 is serialized before transaction 2. It is not legal under timestamp-based 
+In the above schedule, transaction 1 is serialized after transaction 2. It is not legal under timestamp-based 
 and set-intersection based OCC, however, as the write timestamp (wt) of data item A and B is larger than the 
 bt of transaction 1, resulting in failed validation.
 
@@ -61,4 +60,7 @@ Instead of obtaining bt and using bt to validate all read operations, finer grai
 by reading the data item and its wt atomically, and storing the wt in the read set as well. During version-based 
 validation, the wt is re-read and compared with the wt in the read set. If they differ, then a write operation has 
 been performed on the data item, and the transaction aborts. For set intersection-based validation, if the validating
-transaction's read set has an non-empty intersection with 
+transaction's read set has an non-empty intersection with a committed transaction's write set, then the wt of 
+data items in both sets are compared with the ct of the committed transaction. If ct is smaller than wts of 
+all data items, the validating transaction does not need to abort, because all committing writes are
+performed before the corresponding reads in real-time. 
