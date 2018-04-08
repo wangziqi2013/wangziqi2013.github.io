@@ -66,9 +66,9 @@ data items in both sets are compared with the ct of the committed transaction. I
 all data items, the validating transaction does not need to abort, because all committing writes are
 performed before the corresponding reads in real-time. 
 
-Not all serializable schedules are fixed by the above technique. In the following example, although transaction 1
-serializes before transaction 2, no matter how fine grained the conflict detection mechanism is, transaction 1 would
-fail validation.
+Not all serializable schedules can be accpeted by adopting the above technique. In the following example, 
+although transaction 1 serializes before transaction 2, no matter how fine grained the conflict detection 
+mechanism is, transaction 1 would fail validation.
 
 **Serializable Non-OCC Schedule Example 2:**
 {% highlight C %}
@@ -89,3 +89,9 @@ Begin Commit
   Write D
   Finish
 {% endhighlight %}
+
+In fact, classical BOCC always cannot commit transaction 1, because transactions are logically 
+serialized by the order they finish write phase (which equals the order they enter validation, if
+validations are performed in a critical section). If transaction 2 commits before transaction 1
+starts validation, then classical BOCC will reject schedules in which transaction 1 is actually
+serialized before transaction 2 via Write-After-Read (WAR) dependencies.
