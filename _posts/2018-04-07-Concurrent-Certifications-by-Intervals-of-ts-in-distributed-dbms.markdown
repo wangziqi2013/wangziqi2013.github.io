@@ -123,3 +123,9 @@ The conflict, although not materialized until commit time, will need to be dealt
 committed. For example, a transaction that reads a data item conflicts with another transaction that pre-writes the 
 same data item. No matter which one commits first, the reading transaction must be serialized before the pre-writing
 transaction. 
+
+It is therefore necessary to resolve conflicts between reading transactions when they commit, in addition to 
+resolving conflicts with committed transactions during the read phase. The same timestamp interval technique is 
+used. When a transaction commits, it first enters a critical section, which blocks all commit requests and read requests
+to any data item in its write set. Blocking reads is necessary, because otherwise a read request between the validation
+and the write phase may introduce a dependency cycle, as we shall see later. 
