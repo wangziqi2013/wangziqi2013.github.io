@@ -44,7 +44,8 @@ such read-write interleaving is benevolent, as shown in the example below:
                 Write B
    Begin 
   Read  A
-  Read  B       
+  Read  B
+              (Increment)       
                 Finish
 Begin Commit
   Write C
@@ -52,7 +53,7 @@ Begin Commit
   Finish
 {% endhighlight %} 
 
-In the above schedule, transaction 1 is serialized after transaction 2. It is not legal under timestamp-based 
+In the above schedule, transaction 1 is serialized after transaction 2. It is illegal under timestamp-based 
 and set-intersection based OCC, however, as the write timestamp (wt) of data item A and B is larger than the 
 bt of transaction 1, resulting in failed validation.
 
@@ -64,3 +65,27 @@ transaction's read set has an non-empty intersection with a committed transactio
 data items in both sets are compared with the ct of the committed transaction. If ct is smaller than wts of 
 all data items, the validating transaction does not need to abort, because all committing writes are
 performed before the corresponding reads in real-time. 
+
+Not all serializable schedules are fixed by the above technique. In the following example, although transaction 1
+serializes before transaction 2, no matter how fine grained the conflict detection mechanism is, transaction 1 would
+fail validation.
+
+**Serializable Non-OCC Schedule Example 2:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Read  A
+  Read  B
+                 Begin
+                Read  A
+                Read  B
+              Begin Commit
+                Write A
+                Write B
+                Finish
+  
+Begin Commit
+  Write C
+  Write D
+  Finish
+{% endhighlight %}
