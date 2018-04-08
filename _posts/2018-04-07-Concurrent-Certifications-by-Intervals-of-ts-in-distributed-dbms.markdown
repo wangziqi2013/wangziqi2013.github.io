@@ -97,10 +97,10 @@ begins validation, then classical BOCC will reject schedules in which transactio
 serialized before transaction 2 via Write-After-Read (WAR) dependencies.
 
 This paper prposes a different approach where transactions are not serialized by commit timestamps.
-Instead, each transaction computes an appropriate timestamp based on the version of data items in
+Instead, each transaction computes a commit timestamp based on the version of data items in
 its read and write set. Accordingly, for each data item, two timestamps must be maintained to reflect
-operations that committed transactions have performed on the item. The first is read timestamp (rt),
-which is updated when a transaction that read the data item commits. The second is write timestamp (wt),
+operations that committed transactions have performed on the item. One is read timestamp (rt),
+which is updated when a transaction that read the data item commits. Another is write timestamp (wt),
 which is updated when a transaction that pre-writes the data item commits. Both timestamps are made to 
 never decrease. Each transaction is assigned an interval, initialized to [0, +&infin;). As they read
 and per-write data items, the interval is updated using the rt and wt of the data item to establish dependencies
@@ -110,10 +110,16 @@ in a distributed way, this enhanced OCC algorithm overcomes the drawback of a ce
 We describe the algorithm in detail in the next few sections.
 
 On transactional read, the wt of the data item is used to update transaction's interval. The interval is
-intersected with [wt, +&infin;). If after the intersection, the interval closes (i.e. the range contains zero
-available timestamp), then the transaction aborts as it could not find a ct.
+intersected with [wt, +&infin;) where wt is the data item's write timestamp. If, after the intersection,
+the interval closes (i.e. the range contains zero available timestamp), then the transaction aborts as a
+ct cannot be found.
 
 Similarly, on transaction write, the rt of the data item is used to update transaction's interval by
-an interval intersection. If the resulting interval closes then the transaction must abort.
+an interval intersection with [rt, +&infin;). If the resulting interval closes then the transaction must abort.
 
-The above two 
+Transactions serialize themselves after committed transactions as they read and pre-write data items. This alone,
+however, does not guarantee serializability of transactions, as reading transactions could conflict with each other.
+The conflict, although not materialized until commit time, will need to be dealt with if both transactions are to be 
+committed. For example, a transaction that reads a data item conflicts with another transaction that pre-writes the 
+same data item. No matter which one commits first, the reading transaction must be serialized before the pre-writing
+transaction. 
