@@ -24,3 +24,9 @@ This is usually achieved by reading the global timestamp counter as the begin ti
 incrementing it at the beginning of the read phase. The validation routine compares the most up-to-date 
 timestamp of data items with the bt. If bt is smaller, then the validating transaction aborts, because a
 write has occurred between bt is obtained and the start of validation. 
+
+This above scheme, although fairly simple to implement, demonstrates a few undesirable properties that
+we hope to avoid in today's multicore architecture. The first property is increased inter-processor traffic 
+as a consequence of centralized global timestamp counter. The second property is reduced degree of parallelism,
+because obtaining bt at the beginning of every transaction's read phase logically forces all these reads to
+be performed at the exact time point when the counter is read. 
