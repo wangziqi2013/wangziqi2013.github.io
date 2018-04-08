@@ -20,5 +20,7 @@ timestamps are allocated by atomically incrementing a centralized global timesta
 number of processors and distances between processors and memory modules increase, the centralized
 counter will become a major bottleneck and harms scalability. Furthermore, read operations determine
 their relative order with committed transactions in order to detect overlapping read and write phases.
-This is usually achieved by reading the global timestamp counter without incrementing it at the beginning
-of the read phase
+This is usually achieved by reading the global timestamp counter as the begin timestamp (bt) without 
+incrementing it at the beginning of the read phase. The validation routine compares the most up-to-date 
+timestamp of data items with the bt. If bt is smaller, then the validating transaction aborts, because a
+write has occurred between bt is obtained and the start of validation. 
