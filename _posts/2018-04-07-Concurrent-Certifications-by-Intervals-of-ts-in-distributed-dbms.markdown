@@ -104,13 +104,16 @@ which is updated when a transaction that read the data item commits. The second 
 which is updated when a transaction that pre-writes the data item commits. Both timestamps are made to 
 never decrease. Each transactions is assigned an interval, initialized to [0, +&infin;). As they read
 and per-write data items, the interval is updated using the rt and wt of the data item to establish dependencies
-with committed transactions. When transaction commit, it selects an appropriate timestamp from the range
-as its ct, and notify all active transactions of the commit operation. Since timestamps are stored and computed
+with committed transactions. When a transaction commits, it selects an appropriate timestamp from the interval
+as its ct, and notify all active transactions of the commit action. Since timestamps are stored and computed
 in a distributed way, this enhanced OCC algorithm overcomes the drawback of a centralized counter. 
 We describe the algorithm in detail in the next several sections.
 
 On transactional read, the wt of the data item is used to update transaction's interval. The interval is
 intersected with [wt, +&infin;). If after the intersection, the interval closes (i.e. the range contains zero
-available timestamp)
+available timestamp), then the transaction aborts as it could not find a ct.
 
+Similarly, on transaction write, the rt of the data item is used to update transaction's interval by
+an interval intersection. If the resulting interval closes then the transaction must abort.
 
+The above two 
