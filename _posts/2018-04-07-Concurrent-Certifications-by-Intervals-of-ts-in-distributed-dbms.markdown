@@ -27,6 +27,29 @@ write has occurred between bt is obtained and the start of validation.
 
 This above scheme, although fairly simple to implement, demonstrates a few undesirable properties that
 we hope to avoid in today's multicore architecture. The first property is increased inter-processor traffic 
-as a consequence of centralized global timestamp counter. The second property is reduced degree of parallelism,
+as a consequence of centralized global timestamp counter. The second property is low degree of parallelism,
 because obtaining bt at the beginning of every transaction's read phase logically forces all these reads to
-be performed at the exact time point when the counter is read. 
+be performed at the exact time point when the counter is read. Any interleaving write operation by a committing
+transaction on data items in current transaction's read set is considered as a violation, while in some cases,
+such read-write interleaving is benevolent, as shown in the example below:
+
+**Serializable Non-OCC Schedule Example:**
+{: id="serializable-non-occ-example-2"}
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Read  A
+  Read  B
+                 Begin
+                Read  A
+                Read  B
+              Begin Commit
+                Write A
+                Write B
+                Finish
+  
+Begin Commit
+  Write C
+  Write D
+  Finish
+{% endhighlight %} 
