@@ -93,5 +93,13 @@ Begin Commit
 In fact, classical BOCC always cannot commit transaction 1, because transactions are logically 
 serialized by the order they finish write phase (which equals the order they enter validation, if
 validations are performed in a critical section). If transaction 2 commits before transaction 1
-starts validation, then classical BOCC will reject schedules in which transaction 1 is actually
+begins validation, then classical BOCC will reject schedules in which transaction 1 is
 serialized before transaction 2 via Write-After-Read (WAR) dependencies.
+
+This paper prposes a different approach where transactions are not serialized by commit timestamps.
+Instead, each transaction computes an appropriate timestamp based on the version of data items in
+its read and write set. Accordingly, for each data item, two timestamps must be maintained to reflect
+the operations that committed transactions have performed on the item. The first is read timestamp (rt),
+which is updated when a transaction that read the data item commits. The second is write timestamp (wt),
+which is updated when a transaction that pre-writes the data item commits. Both timestamps never decrease. 
+For wt, 
