@@ -128,4 +128,11 @@ It is therefore necessary to resolve conflicts between reading transactions when
 resolving conflicts with committed transactions during the read phase. The same timestamp interval technique is 
 used. When a transaction commits, it first enters a critical section, which blocks all commit requests and read requests
 to any data item in its write set. Blocking reads is necessary, because otherwise a read request between the validation
-and the write phase may introduce a dependency cycle, as we shall see later. 
+and the write phase may introduce a dependency cycle, as we shall see later. During validation, the transaction picks 
+a commit timestamp from its interval. The selection of ct is not arbitrary, as it will affect the interval of other 
+active transactions. In the paper it is recommended that the lower bound of the interval be chosen. The validation transaction
+then broadcasts its write set together with its ct to all other transactions. As an optimization, the broadcast 
+can be limited only to transactions whose read set has a non-empty intersection with its write set. A reader list 
+and writer list for every data item must be maintained in this case. After receiving the broadcast, active transactions
+perform a set intersection between the broadcasted write set and their own read sets. For any item in the intersection,
+active transactions upper bounds 
