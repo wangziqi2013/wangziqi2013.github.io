@@ -12,3 +12,13 @@ htm_cd: Lazy
 htm_cr: Lazy
 version_mgmt: Lazy
 ---
+
+This paper proposes a new OCC algorithm that computes the commit timestamp (ct) in a distributed way.
+Classical OCC algorithms like set-intersection based and version-based OCC all require a total ordering
+between transactions, which is determined by the order that they finish the write phase. In this scheme,
+timestamps are allocated by atomically incrementing a centralized global timestamp counter. As the 
+number of processors and distances between processors and memory modules increase, the centralized
+counter will become a major bottleneck and harms scalability. Furthermore, read operations determine
+their relative order with committed transactions in order to detect overlapping read and write phases.
+This is usually achieved by reading the global timestamp counter without incrementing it at the beginning
+of the read phase
