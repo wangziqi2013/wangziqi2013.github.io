@@ -144,6 +144,7 @@ the ct of the committing transaction. Read timestamps, on the other hand, is not
 is greater than the ct. This is possible because read transactions do not conflict with each other, and it is possible
 that a transaction with larger ct read the item and committed before the current transaction commits.
 
-As an optimization, the broadcast 
-can be limited only to transactions whose read set has a non-empty intersection with its write set. A reader list 
-and writer list for every data item must be maintained in this case, and only the ct is broadcasted. 
+As an optimization, during the validation phase, the broadcast can be limited only to transactions whose read set has 
+a non-empty intersection with its read and write set. A reader list and writer list for every data item must be maintained 
+in this case, and only the ct is broadcasted. On receiving the broadcast, active transactions adjust their 
+interval accordingly.
