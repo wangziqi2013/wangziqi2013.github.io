@@ -33,7 +33,7 @@ first enters a critical section which blocks commit requests and data item acces
 transaction's write set is broadcasted to all reading transactions together with the selected commit timestamp. 
 On receiving the broadcast, reading transactions compare the write set with its own read and write set. If the 
 write set has a non-empty intersection with its read set, then the upper bound of the interval is set to the 
-old upper bound or the braodcasted commit timestamp, whichever is smaller. If the write set has a non-empty intersection
+old upper bound or the broadcasted commit timestamp, whichever is smaller. If the write set has a non-empty intersection
 with its write set, then the lower bound of the interval is set to the old lower bound or the broadcasted commit 
 timestamp. whichever is larger. The FOCC-style interval adjustment serializes reading transactions with the 
 transaction just committed, as if the commit operation logically happens after all uncommitted reads, and 
