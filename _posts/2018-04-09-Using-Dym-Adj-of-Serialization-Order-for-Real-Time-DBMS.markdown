@@ -53,5 +53,11 @@ Although using locks to implement OCC seems nonsense, as the major advantage of 
 by allowing transactions to execute read phases in parallel, the proposed implementation eliminates some disadvantages
 of naive 2PL. For example, the duration that write locks are held is greatly reduced, because write locks are only 
 acquired during validation and write phases, which are expected to be short. In contrast, a write lock must be taken
-in 2PL when a transaction pre-writes a data item during the read phase, as pre-writes are not buffered, and the 
+in 2PL scheme when a transaction pre-writes a data item during the read phase, as pre-writes are not buffered, and the 
 uncommitted value must be prohibited from being read by other transactions to ensure recoverability.
+
+One drawback of lock-based OCC is the possibility of deadlocks. In the proposed scheme, two or more transactions can 
+deadlock not only when they lock the write set in a conflicting order (which is common to all OCC schcmes
+that lock the write set), 
+
+The lock-based implementation 
