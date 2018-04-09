@@ -31,4 +31,10 @@ old lower bound or the rts, whichever is larger. The goal of tightening the inte
 the current reading transaction after committed transactions. On transaction commit, the committing transaction
 first enters a critical section which blocks commit requests and data item access requests. Then the committing 
 transaction's write set is broadcasted to all reading transactions together with the selected commit timestamp. 
-On receiving the broadcast, 
+On receiving the broadcast, reading transactions compare the write set with its own read and write set. If the 
+write set has a non-empty intersection with its read set, then the upper bound of the interval is set to the 
+old upper bound or the braodcasted commit timestamp, whichever is smaller. If the write set has a non-empty intersection
+with its write set, then the lower bound of the interval is set to the old lower bound or the broadcasted commit 
+timestamp. whichever is larger. The FOCC-style interval adjustment serializes reading transactions with the 
+transaction just committed, as if the commit operation logically happens after all uncommitted reads, and 
+before all uncommitted writes. 
