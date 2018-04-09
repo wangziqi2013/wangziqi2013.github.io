@@ -37,5 +37,7 @@ old upper bound or the braodcasted commit timestamp, whichever is smaller. If th
 with its write set, then the lower bound of the interval is set to the old lower bound or the broadcasted commit 
 timestamp. whichever is larger. The FOCC-style interval adjustment serializes reading transactions with the 
 transaction just committed, as if the commit operation logically happens after all uncommitted reads, and 
-before all uncommitted writes. If in any case after the adjustment, the interval closes, i.e. the upper bound crosses
-the lower bound, then the current transaction must abort as it can no longer serialize with committed transactions.
+before all uncommitted writes. If in any of the above cases, the interval closes after the adjustment, i.e. the upper 
+bound crosses the lower bound, then the current transaction must abort as it can no longer serialize with committed 
+transactions. Otherwise, if a committing transaction passes validation, it enters write phase, in which all dirty 
+values are written back and timestamps of data items are updated accordingly.
