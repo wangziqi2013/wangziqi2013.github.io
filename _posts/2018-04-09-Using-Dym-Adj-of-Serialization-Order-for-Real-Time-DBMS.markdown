@@ -46,4 +46,5 @@ In this paper, a concrete implementation is given by using locks. Two global dat
 a global transaction table, which stores active transactions and their read and write sets. The second is a lock
 table, which stores read and write locks taken on data items. Two lock modes are needed: Read lock are taken on
 reading or pre-writing a data item; Write locks are taken for items in the write set before the transaction attepmts 
-to commit. 
+to commit. Read and write locks are incompatible with each other. For both lock modes, a list of current lock holders
+must be available to perform FOCC.
