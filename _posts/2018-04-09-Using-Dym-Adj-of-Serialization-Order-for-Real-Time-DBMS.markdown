@@ -35,9 +35,15 @@ On receiving the broadcast, reading transactions compare the write set with its 
 write set has a non-empty intersection with its read set, then the upper bound of the interval is set to the 
 old upper bound or the broadcasted commit timestamp, whichever is smaller. If the write set has a non-empty intersection
 with its write set, then the lower bound of the interval is set to the old lower bound or the broadcasted commit 
-timestamp. whichever is larger. The FOCC-style interval adjustment serializes reading transactions with the 
+timestamp, whichever is larger. The FOCC-style interval adjustment serializes reading transactions with the 
 transaction just committed, as if the commit operation logically happens after all uncommitted reads, and 
 before all uncommitted writes. If in any of the above cases, the interval closes after the adjustment, i.e. the upper 
 bound crosses the lower bound, then the current transaction must abort as it can no longer serialize with committed 
 transactions. Otherwise, if a committing transaction passes validation, it enters write phase, in which all dirty 
 values are written back and timestamps of data items are updated accordingly.
+
+In this paper, a concrete implementation is given by using locks. Two global data structures are proposed. One is 
+a global transaction table, which stores active transactions and their read and write sets. The second is a lock
+table, which stores read and write locks taken on data items. Two lock modes are needed: Read lock are taken on
+reading or pre-writing a data item; Write locks are taken for items in the write set before the transaction attepmts 
+to commit. 
