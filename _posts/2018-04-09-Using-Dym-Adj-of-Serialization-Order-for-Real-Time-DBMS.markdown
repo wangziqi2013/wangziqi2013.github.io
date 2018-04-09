@@ -61,6 +61,21 @@ deadlock not only when they lock the write set in a conflicting order (which is 
 that lock the write set), but also when they try to acquire write lock for a data item and the item is in
 another transaction's read set. The example below shall clarify:
 
-
+**Read-Write Deadlock Example:**
+{% highlight C %}
+   Txn 1         Txn 2
+   Begin 
+  Read  A
+  PreW  B
+                 Begin
+                Read  B
+                PreW  A
+              Begin Commit
+                WLock A
+                  ...
+Begin Commit
+  WLock B
+    ...
+{% endhighlight %}
 
 The lock-based implementation 
