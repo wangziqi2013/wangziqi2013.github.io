@@ -124,15 +124,23 @@ committed. For example, a transaction that reads a data item conflicts with anot
 same data item. No matter which one commits first, the reading transaction must be serialized before the pre-writing
 transaction. 
 
-It is therefore necessary to resolve conflicts between reading transactions when they commit, in addition to 
+It is therefore necessary to resolve conflicts between reading transactions and the committing transaction, in addition to 
 resolving conflicts with committed transactions during the read phase. The same timestamp interval technique is 
 used. When a transaction commits, it first enters a critical section, which blocks all commit requests and read requests
 to any data item in its write set. Blocking reads is necessary, because otherwise a read request between the validation
 and the write phase may introduce a dependency cycle, as we shall see later. During validation, the transaction picks 
 a commit timestamp from its interval. The selection of ct is not arbitrary, as it will affect the interval of other 
 active transactions. In the paper it is recommended that the lower bound of the interval be chosen. The validation transaction
-then broadcasts its write set together with its ct to all other transactions. As an optimization, the broadcast 
+then broadcasts its write set together with its ct to all other transactions. 
+After receiving the broadcast, active transactions perform a set intersection between the broadcasted write set 
+and their own read and write sets. If the write-read set intersection is non-empty, then the active transaction 
+upper bounds its interval using the ct in the broadcast. Similarly, if the write-write set intersection is non-empty, 
+then the active transaction lower bounds its interval using the ct in the broadcast. If the interval of the active 
+transaction closes after processing the broadcast, then the transaction aborts. 
+
+During the write phase, the committing transaction writes back values in its write set. In addition, the rt and 
+wt of data items in its read and write sets are updated respectively. Write timestamps are always updated 
+
+As an optimization, the broadcast 
 can be limited only to transactions whose read set has a non-empty intersection with its write set. A reader list 
-and writer list for every data item must be maintained in this case. After receiving the broadcast, active transactions
-perform a set intersection between the broadcasted write set and their own read sets. For any item in the intersection,
-active transactions upper bounds 
+and writer list for every data item must be maintained in this case, and only the ct is broadcasted. 
