@@ -28,4 +28,7 @@ the time interval based on the type of operation and either the rts or wts of th
 reading a data item, the lower bound of the interval is set to the old lower bound or the wts, whichever is 
 larger. Similarly, when pre-writing a data item in the read phase, the lower bound of the interval is set to the 
 old lower bound or the rts, whichever is larger. The goal of tightening the interval's lower bound is to serialize
-the current reading transaction after committed transactions. On transaction commit, 
+the current reading transaction after committed transactions. On transaction commit, the committing transaction
+first enters a critical section which blocks commit requests and data item access requests. Then the committing 
+transaction's write set is broadcasted to all reading transactions together with the selected commit timestamp. 
+On receiving the broadcast, 
