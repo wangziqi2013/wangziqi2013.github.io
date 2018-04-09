@@ -78,4 +78,8 @@ Begin Commit
     ...
 {% endhighlight %}
 
+In the above example, transaction 1 and 2 writes disjoint data items. A deadlock occurs when they
+acquire locks for A and B, as both transactions' write sets overlap with another transaction's read
+set. It is therefore expected that more deadlock may arise in the lock-based implementation.
+
 The lock-based implementation 
