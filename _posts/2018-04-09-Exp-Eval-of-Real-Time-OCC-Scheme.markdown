@@ -13,3 +13,8 @@ htm_cr: Eager (FOCC)
 version_mgmt: Lazy
 ---
 
+This paper proposes an implementation of Forward OCC (FOCC) using shared and exclusive locks.
+The algorithm specification of classical FOCC requires that the write set of the committing
+transaction be broadcasted to all reading transactions. A conflict resolution manager is 
+invoked if any reading transaction has a non-empty overlap with the committing transaction,
+and either the reading or the committing transaction must be aborted.
