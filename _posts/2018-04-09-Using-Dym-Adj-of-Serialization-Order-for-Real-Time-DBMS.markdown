@@ -82,4 +82,5 @@ In the above example, transaction 1 and 2 writes disjoint data items. A deadlock
 acquire locks for A and B, as both transactions' write sets overlap with another transaction's read
 set. It is therefore expected that more deadlock may arise in the lock-based implementation. Although in
 the paper it is claimed that the lock-based approach is deadlock-free, the way it is described does not
-justify such claim.
+justify such claim. The detailed description of the lock-based FOCC scheme is actually in another
+paper.
