@@ -139,7 +139,10 @@ then the active transaction lower bounds its interval using the ct in the broadc
 transaction closes after processing the broadcast, then the transaction aborts. 
 
 During the write phase, the committing transaction writes back values in its write set. In addition, the rt and 
-wt of data items in its read and write sets are updated respectively. Write timestamps are always updated 
+wt of data items in its read and write sets are updated respectively. Write timestamps are always updated to
+the ct of the committing transaction. Read timestamps, on the other hand, is not updated if the current rt
+is greater than the ct. This is possible because read transactions do not conflict with each other, and it is possible
+that a transaction with larger ct read the item and committed before the current transaction commits.
 
 As an optimization, the broadcast 
 can be limited only to transactions whose read set has a non-empty intersection with its write set. A reader list 
