@@ -58,6 +58,9 @@ uncommitted value must be prohibited from being read by other transactions to en
 
 One drawback of lock-based OCC is the possibility of deadlocks. In the proposed scheme, two or more transactions can 
 deadlock not only when they lock the write set in a conflicting order (which is common to all OCC schcmes
-that lock the write set), 
+that lock the write set), but also when they try to acquire write lock for a data item and the item is in
+another transaction's read set. The example below shall clarify:
+
+
 
 The lock-based implementation 
