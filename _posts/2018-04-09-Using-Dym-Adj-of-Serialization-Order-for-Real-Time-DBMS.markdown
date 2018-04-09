@@ -27,7 +27,7 @@ transaction that reads or writes them commits. When a reading transaction access
 the time interval based on the type of operation and either the rts or wts of the data item. For example, when
 reading a data item, the lower bound of the interval is set to the old lower bound or the wts, whichever is 
 larger. Similarly, when pre-writing a data item in the read phase, the lower bound of the interval is set to the 
-old lower bound or the rts, whichever is larger. The goal of tightening the interval's lower bound is to serialize
+old lower bound or the rts or the wts, whichever is larger. The goal of tightening the interval's lower bound is to serialize
 the current reading transaction after committed transactions. On transaction commit, the committing transaction
 first enters a critical section which blocks commit requests and data item access requests. Then the committing 
 transaction's write set is broadcasted to all reading transactions together with the selected commit timestamp. 
@@ -80,6 +80,6 @@ Begin Commit
 
 In the above example, transaction 1 and 2 writes disjoint data items. A deadlock occurs when they
 acquire locks for A and B, as both transactions' write sets overlap with another transaction's read
-set. It is therefore expected that more deadlock may arise in the lock-based implementation.
-
-The lock-based implementation 
+set. It is therefore expected that more deadlock may arise in the lock-based implementation. Although in
+the paper it is claimed that the lock-based approach is deadlock-free, the way it is described does not
+justify such claim.
