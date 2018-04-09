@@ -1,7 +1,7 @@
 ---
 layout: paper-summary
 title:  "Using dynamic adjustment of serialization order for real-time database systems"
-date:   2018-04-08 16:15:00 -0500
+date:   2018-04-09 16:15:00 -0500
 categories: paper
 paper_title: "Using dynamic adjustment of serialization order for real-time database systems"
 paper_link: https://ieeexplore.ieee.org/document/393514/
@@ -46,5 +46,12 @@ In this paper, a concrete implementation is given by using locks. Two global dat
 a global transaction table, which stores active transactions and their read and write sets. The second is a lock
 table, which stores read and write locks taken on data items. Two lock modes are needed: Read lock are taken on
 reading or pre-writing a data item; Write locks are taken for items in the write set before the transaction attepmts 
-to commit. Read and write locks are incompatible with each other. For both lock modes, a list of current lock holders
+to commit. Read and write locks are incompatible with each other. For both modes, a list of current lock holders
 must be available to perform FOCC.
+
+Although using locks to implement OCC seems nonsense, as the major advantage of OCC over 2PL is increased parallelism
+by allowing transactions to execute read phases in parallel, the proposed implementation eliminates some disadvantages
+of naive 2PL. For example, the duration that write locks are held is greatly reduced, because write locks are only 
+acquired during validation and write phases, which are expected to be short. In contrast, a write lock must be taken
+in 2PL when a transaction pre-writes a data item during the read phase, as pre-writes are not buffered, and the 
+uncommitted value must be prohibited from being read by other transactions to ensure recoverability.
