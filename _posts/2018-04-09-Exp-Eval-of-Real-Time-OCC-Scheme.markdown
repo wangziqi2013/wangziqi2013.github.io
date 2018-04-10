@@ -52,4 +52,5 @@ also need R-Locks. During validation, the transaction first enters a critical se
 on all items in its write set. If a conflict is detected between V-Lock and R-Lock during this phase, the 
 validation fails. After locking the write set, the transaction exits the critical section. Dirty values are then
 written back without any critical section. Ater that, the transaction enters the critical section for the second time,
-and releases all V-Locks it has been holding on the write set.
+and releases all V-Locks it has been holding on the write set. This protocol is called OCCL-PVW, where P stands for
+"Parallel".
