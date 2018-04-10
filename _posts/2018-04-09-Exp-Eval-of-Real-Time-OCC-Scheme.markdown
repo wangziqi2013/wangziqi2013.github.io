@@ -39,3 +39,7 @@ the validation routine checks that no R-Lock is currently held before the valida
 Otherwise, the contention manager is invoked. In order for read requests to be blocked during validation, read
 operations should use the same critical section as the validation operation. Otherwise, conflicts can be missed if
 a read is performed after validation checks the data item's R-Lock.
+
+The serialized validation and write phases can become a performance bottleneck if transactions commit frequently.
+In fact, if transactions rarely conflict on their write sets, most of the commits can concurrently take place, while
+only a small fraction needs to be blocked from proceeding till the conflicting transaction finishes commit.
