@@ -25,10 +25,16 @@ be somehow emulated.
 One of the many approaches is to use lock. Two lock modes are required. The first is shared mode 
 (R-Lock, R for "Reading"), which is acquired during the read phase as transactions read and pre-write data items.
 The second is exclusive mode (V-Lock, V for "Validating"), which is acquired during the validation phase
-as transactions lock their write sets. R-Locks and V-Locks are in general incompatible. The compatibility
+as transactions lock their write sets. R-Locks and V-Locks are incompatible. The compatibility
 matrix, however, is not symmetric. Acquiring R locks on items already locked by a V-Lock causes the requesting
 transaction to wait. In contrast, acquiring V locks on items alreadyed locked by a V-Lock or R-Lock indicates
-a FOCC violation. This will cause the contention manager to be invoked and determine one of the violating transactions.
+a FOCC violation. This will cause the contention manager to be invoked and abort one of the violating transactions.
 Locks are managed by a global lock table (LT).
 
-
+Two variants are proposed by this paper. The first variant features serial validation and write phase, and is called
+OCCL-SVW. On transaction commit, the transaction first enters a critical section, which blocks other commit
+and read request. V-Locks are not needed in this case, as the validation and write phases are within the same
+critical section. Lock conflicts, however, should be checked in the critical section. For each dirty data item,
+the validation routine checks that no R-Lock is currently held before the validating transaction enters write phase. 
+Otherwise, the contention manager is invoked. In order for read requests to be blocked during validation, read
+operations should use the same critical section as the validation operation.
