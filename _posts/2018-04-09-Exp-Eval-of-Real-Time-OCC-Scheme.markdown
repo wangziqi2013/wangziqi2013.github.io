@@ -54,3 +54,7 @@ validation fails. After locking the write set, the transaction exits the critica
 written back without any critical section. Ater that, the transaction enters the critical section for the second time,
 and releases all V-Locks it has been holding on the write set. This protocol is called OCCL-PVW, where P stands for
 "Parallel".
+
+The OCCL-PVW differs from OCCL-SVW in two important aspects. The first is that the former requires R-Locks be taken
+also for pre-write operations. This is because otherwise two transactions that write the same set of data items can
+conflict on V-Locks. The paper somehow claims this as undesirable without further explanation.
