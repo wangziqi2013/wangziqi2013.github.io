@@ -57,4 +57,8 @@ and releases all V-Locks it has been holding on the write set. This protocol is 
 
 The OCCL-PVW differs from OCCL-SVW in two important aspects. The first is that the former requires R-Locks be taken
 also for pre-write operations. This is because otherwise two transactions that write the same set of data items can
-conflict on V-Locks. The paper somehow claims this as undesirable without further explanation.
+conflict on V-Locks. The paper somehow claims this as undesirable without further explanation. The second difference 
+is that the committing transaction exits the critical section after validation without releasing V-Locks on the write 
+set. It then performs write back without any critical section. Holding V-Locks during the write back prevents reading
+transactions from pre-writing any item in the write set, because otherwise, they may begin commit and try to acquire 
+V-Locks on these items, causing V-V lock conflicts.
