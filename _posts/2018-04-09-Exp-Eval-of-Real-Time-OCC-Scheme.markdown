@@ -62,3 +62,8 @@ is that the committing transaction exits the critical section after validation w
 set. It then performs write back without any critical section. Holding V-Locks during the write back prevents reading
 transactions from pre-writing any item in the write set, because otherwise, they may begin commit and try to acquire 
 V-Locks on these items, causing V-V lock conflicts.
+
+Deadlock is never a problem of OCCL-PVW. Since all V-Locks are acquired inside a critical section, no interleaving
+of lock acquisitions can occur, and hence transactions will not wait for each other. Furthermore, as OCCL-PVW
+prohibits V-V lock conflict for some unknown reason, in fact V-Lock requests can only interfere with R-Locks, which
+invokes the contention manager.
