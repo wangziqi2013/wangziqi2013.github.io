@@ -29,3 +29,6 @@ as transactions lock their write sets. R-Locks and V-Locks are in general incomp
 matrix, however, is not symmetric. Acquiring R locks on items already locked by a V-Lock causes the requesting
 transaction to wait. In contrast, acquiring V locks on items alreadyed locked by a V-Lock or R-Lock indicates
 a FOCC violation. This will cause the contention manager to be invoked and determine one of the violating transactions.
+Locks are managed by a global lock table (LT).
+
+
