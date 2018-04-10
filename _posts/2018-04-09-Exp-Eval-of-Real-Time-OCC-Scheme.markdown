@@ -34,7 +34,8 @@ Locks are managed by a global lock table (LT).
 Two variants are proposed by this paper. The first variant features serial validation and write phase, and is called
 OCCL-SVW. On transaction commit, the transaction first enters a critical section, which blocks other commit
 and read request. V-Locks are not needed in this case, as the validation and write phases are within the same
-critical section. Lock conflicts, however, should be checked in the critical section. For each dirty data item,
+critical section. Lock conflicts, however, should be checked. For each dirty data item,
 the validation routine checks that no R-Lock is currently held before the validating transaction enters write phase. 
 Otherwise, the contention manager is invoked. In order for read requests to be blocked during validation, read
-operations should use the same critical section as the validation operation.
+operations should use the same critical section as the validation operation. Otherwise, conflicts can be missed if
+a read is performed after validation checks the data item's R-Lock.
