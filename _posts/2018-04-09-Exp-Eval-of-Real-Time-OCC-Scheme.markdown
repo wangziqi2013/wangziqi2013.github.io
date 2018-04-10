@@ -43,3 +43,13 @@ a read is performed after validation checks the data item's R-Lock.
 The serialized validation and write phases can become a performance bottleneck if transactions commit frequently.
 In fact, if transactions rarely conflict on their write sets, most of the commits can concurrently take place, while
 only a small fraction needs to be blocked from proceeding till the conflicting transaction finishes commit.
+
+The second variant loosens the restriction that validation and write phases must be performed in a critical section.
+To compensate the extra risk that transactions may happen to read a data item after the lock mode for the data item
+is checked and before the new value is written back, the committing transaction must lock its write set using V-Locks.
+During the read phase, reads and pre-writes acquire R-Locks in a critical section. Note that pre-write operations 
+also need R-Locks. During validation, the transaction first enters a critical section, and then acquires V-Locks
+on all items in its write set. If a conflict is detected between V-Lock and R-Lock during this phase, the 
+validation fails. After locking the write set, the transaction exits the critical section. Dirty values are then
+written back without any critical section. Ater that, the transaction enters the critical section for the second time,
+and releases all V-Locks it has been holding on the write set.
