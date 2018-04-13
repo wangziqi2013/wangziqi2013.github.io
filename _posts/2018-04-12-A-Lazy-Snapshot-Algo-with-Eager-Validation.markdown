@@ -40,3 +40,6 @@ extended to the current global time. Extension by incremental validation is logi
 as the current stage of validation succeeds, transactions committed between the begin and the current global
 time does not write into the read set of the validating transaction. The serialization order between committed
 transactions and the validating transaction, therefore, is not defined until the validating transaction commits. 
+If the incremental validation fails, the transaction must abort if it is an updating transaction, because the
+write phase must be performed on a most up-to-date snapshot.
+
