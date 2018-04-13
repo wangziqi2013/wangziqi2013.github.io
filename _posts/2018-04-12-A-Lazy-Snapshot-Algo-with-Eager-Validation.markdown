@@ -56,4 +56,8 @@ item, whichever is smaller. If no such version is available, then the read-only 
 
 The paper gives a detailed description of the incremental BOCC algorithm, which is dubbed as the "Lazy
 Snapshot Algorithm" (LSA). Write phase is not covered in the description, nor does it give concrete solutions
-about the version storage, the garbage collection problem, etc.
+about the version storage, the garbage collection problem, etc. One of the interesting thing to note is that,
+although the paper claims that both the upper bound and the lower bound of the transaction is used to perform
+validation, only the upper bound appears meaningful in the algorithm description. The lower bound of the 
+transaction, on the other hand, is only written into, but never read for purposes other than updating
+the lower bound itself. Removing the lower bound hence does not affect the correctness of the algorithm.
