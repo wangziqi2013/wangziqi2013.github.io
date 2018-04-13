@@ -65,4 +65,4 @@ the lower bound itself. Removing the lower bound hence does not affect the corre
 LSA commits more schedules compared with classical BOCC, where read-only transactions must 
 commit strictly at the logical commit time. By allowing transactions to "read in the past"
 and restricting the maximum logical time to which read-only transactions are allowed to be 
-extended,
+extended, read-only transactions could "time travel" to the past without affecting serializability.
