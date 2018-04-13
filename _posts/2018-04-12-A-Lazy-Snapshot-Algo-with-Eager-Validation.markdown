@@ -30,3 +30,7 @@ because the data item's lower bound is larger than the transaction's upper bound
 happen, because if the transaction could not read an item which has been overwritten before it starts). 
 In this case, the transaction validates the current read set, and "extends" the upper bound of its interval 
 to the current global time.
+
+A transaction extends its upper bound by performing an incremental validation. For all items in its read
+set, it tests whether the data item's upper bound is smaller than the current global time (the most up-to-date
+version has an upper bound of +\&infin;). 
