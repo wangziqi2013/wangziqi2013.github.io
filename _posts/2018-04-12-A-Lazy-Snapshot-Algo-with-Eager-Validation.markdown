@@ -31,6 +31,12 @@ happen, because if the transaction could not read an item which has been overwri
 In this case, the transaction validates the current read set, and "extends" the upper bound of its interval 
 to the current global time.
 
-A transaction extends its upper bound by performing an incremental validation. For all items in its read
-set, it tests whether the data item's upper bound is smaller than the current global time (the most up-to-date
-version has an upper bound of +\&infin;). 
+A transaction extends its upper bound by performing an incremental validation. For all versions in its read
+set, it tests whether the version's most up-to-date upper bound is smaller than the current global time 
+(the most up-to-date version has an upper bound of +\&infin;). Note that an overwrite on data items will
+update both the previous version's upper bound and the new version's lower bound atomically. If the upper
+bound of all data items is still no smaller than the current global time, then the transaction has been
+extended to the current global time. Extension by incremental validation is logically valid, because as long 
+as the current stage of validation succeeds, transactions committed between the begin and the current global
+time does not write into the read set of the validating transaction. The serialization order between committed
+transactions and the validating transaction, therefore, is not defined until the validating transaction commits. 
