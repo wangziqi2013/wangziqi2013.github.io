@@ -45,5 +45,11 @@ write phase must be performed on a most up-to-date snapshot.
 
 For read-only transactions, the serialization condition can be less restrictive, as they do not update
 global state. Read-only transactions, if equipped with the ability to read older versions (the 
-version storage itself must be multi-version enabled). When a read is performed, the transaction
-tries to find the newest version whose lower bound is smaller than the transaction's upper bound. 
+version storage itself must be multi-version enabled), can "time travel" backwards in the logical time. 
+The result of such time travel is that the logical serialization order of read-only transactions could 
+be even earlier than the logical time it starts. When a read is performed, the transaction tries to find 
+the newest version whose lower bound is smaller than the transaction's upper bound. If the version is
+available, and has been overwritten, then the transaction "closes" its upper bound, because it can no
+longer be extended ("time travel" forward in time). The upper bound of the read-only transaction is also
+set to either the upper bound of the transaction before the read operation, or the upper bound of the data 
+item, whichever is smaller. If no such version is available, then the read-only transaction aborts.
