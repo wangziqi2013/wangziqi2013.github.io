@@ -13,3 +13,11 @@ htm_cr: Eager
 version_mgmt: Lazy
 ---
 
+This paper provides another view to the Backward OCC algorithm. The classical way models BOCC 
+problems as preventing overlapping read and write phases via either timestamps or set intersections.
+This paper proposes an interval-based approach. Each transaction, at the transaction beginning, is 
+assigned a valid interval of [CT, +&infin;). Each instance of the data item also has a valid range.
+The lower bound of the valid range is defined by the commit timestamp (ct) that creates the particular
+version of the data item. The upper bound of the valid range is defined as the ct of a later transaction
+that overwrites the item. The overwrite of a data item by a committing transactions updates the 
+upper bound of the previous version and the lower bound of the new version atomically.
