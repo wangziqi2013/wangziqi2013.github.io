@@ -21,3 +21,11 @@ The lower bound of the valid range is defined by the commit timestamp (ct) that 
 version of the data item. The upper bound of the valid range is defined as the ct of a later transaction
 that overwrites the item. The overwrite of a data item by a committing transactions updates the 
 upper bound of the previous version and the lower bound of the new version atomically.
+
+Transaction commits are serialized by a global timestamp counter as in other BOCC algorithms that
+use the counter.
+As transactions access data items, they intersect their intervals with the valid ranges of data 
+items that they access. If the resulting interval is non-empty, then the access is guaranteed to
+be valid, and requires no extra validation. If, however, that after the intersection, the interval
+becomes empty, then the transaction validates the current read set, and "extends" the upper bound
+of its interval to the current global time.
