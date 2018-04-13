@@ -23,9 +23,10 @@ that overwrites the item. The overwrite of a data item by a committing transacti
 upper bound of the previous version and the lower bound of the new version atomically.
 
 Transaction commits are serialized by a global timestamp counter as in other BOCC algorithms that
-use the counter.
-As transactions access data items, they intersect their intervals with the valid ranges of data 
-items that they access. If the resulting interval is non-empty, then the access is guaranteed to
-be valid, and requires no extra validation. If, however, that after the intersection, the interval
-becomes empty, then the transaction validates the current read set, and "extends" the upper bound
-of its interval to the current global time.
+use the counter. As transactions access data items, they intersect their intervals with the valid 
+ranges of data items that they access. If the resulting interval is non-empty, then the access is 
+guaranteed to be valid, and requires no extra validation. The intersection, however, can become empty 
+because the data item's lower bound is larger than the transaction's upper bound (the reverse will not
+happen, because if the transaction could not read an item which has been overwritten before it starts). 
+In this case, the transaction validates the current read set, and "extends" the upper bound of its interval 
+to the current global time.
