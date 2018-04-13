@@ -43,3 +43,7 @@ transactions and the validating transaction, therefore, is not defined until the
 If the incremental validation fails, the transaction must abort if it is an updating transaction, because the
 write phase must be performed on a most up-to-date snapshot.
 
+For read-only transactions, the serialization condition can be less restrictive, as they do not update
+global state. Read-only transactions, if equipped with the ability to read older versions (the 
+version storage itself must be multi-version enabled). When a read is performed, the transaction
+tries to find the newest version whose lower bound is smaller than the transaction's upper bound. 
