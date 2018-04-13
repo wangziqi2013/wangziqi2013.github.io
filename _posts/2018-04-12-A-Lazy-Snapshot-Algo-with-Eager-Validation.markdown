@@ -53,3 +53,7 @@ available, and has been overwritten, then the transaction "closes" its upper bou
 longer be extended ("time travel" forward in time). The upper bound of the read-only transaction is also
 set to either the upper bound of the transaction before the read operation, or the upper bound of the data 
 item, whichever is smaller. If no such version is available, then the read-only transaction aborts.
+
+The paper gives a detailed description of the incremental BOCC algorithm, which is dubbed as the "Lazy
+Snapshot Algorithm" (LSA). Write phase is not covered in the description, nor does it give concrete solutions
+about the version storage, the garbage collection problem, etc.
