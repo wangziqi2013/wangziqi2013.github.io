@@ -61,3 +61,8 @@ although the paper claims that both the upper bound and the lower bound of the t
 validation, only the upper bound appears meaningful in the algorithm description. The lower bound of the 
 transaction, on the other hand, is only written into, but never read for purposes other than updating
 the lower bound itself. Removing the lower bound hence does not affect the correctness of the algorithm.
+
+LSA commits more schedules compared with classical BOCC, where read-only transactions must 
+commit strictly at the logical commit time. By allowing transactions to "read in the past"
+and restricting the maximum logical time to which read-only transactions are allowed to be 
+extended,
