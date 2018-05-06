@@ -33,4 +33,8 @@ Entries can be evicted and inserted by higher level private TLBs without inserti
 
 Each TLB entry in POM-TLB is 16 bytes. It contains the virtual page number, physical page number, a valid bit, and attribute bits.
 An address space ID and virtual machine ID are also present to distinguish address translation between different processes and virtual 
-machines. DRAM is assumed to be able to burst-read 64 bytes 
+machines. DRAM is assumed to be able to burst-read 64 bytes. Four POM-TLB entries can therefore be transferred from the DRAM to 
+the data cache with short latency. POM-TLB also features a four-way set associative structure. Four elements in each set is 
+stored compactly within the 64 byte burst read unit. When an address translation needs to probe POM-TLB, the MMU reads 
+64 bytes using the set index extracted from the virtual page number as well as the predicted page size class. Once the transfer 
+finishes, a four-way comparison is performed in parallel.
