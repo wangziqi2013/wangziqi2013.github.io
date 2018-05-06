@@ -39,3 +39,8 @@ stored compactly within the 64 byte burst read unit. When an address translation
 64 bytes using the set index extracted from the virtual page number as well as the predicted page size class. Once the transfer 
 finishes, a four-way comparison is performed in parallel. Only one DRAM access is issued. Each row in the DRAM is assumed to 
 be 2KB, which can hold 32 sets.
+
+The paper recommends using die-stacked DRAM to implement POM-TLB. Lower access latancy and greater potential bandwidth 
+can be achieved with die-stacked DRAM. In addition, using POM-TLB avoids contending for memory bus bandwidth with memory instructions. as 
+accessing POM-TLB consumes precious DRAM bus capacity, which is 
+sometimes oversubscribed in data-intensive workloads
