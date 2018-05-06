@@ -30,3 +30,7 @@ or MMU directly searches DRAM. We hope to skip searching the data cache, because
 cache entries can be evicted frequently, leading to relatively low data cache hit rate for TLB entries. In these workloads, 
 cache does not bring much benefit and can be skipped anyway. The last design choice is that POM-TLB is not strictly inclusive.
 Entries can be evicted and inserted by higher level private TLBs without inserting the same entry into POM-TLB. 
+
+Each TLB entry in POM-TLB is 16 bytes. It contains the virtual page number, physical page number, a valid bit, and attribute bits.
+An address space ID and virtual machine ID are also present to distinguish address translation between different processes and virtual 
+machines. DRAM is assumed to be able to burst-read 64 bytes 
