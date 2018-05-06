@@ -15,4 +15,6 @@ problem we have here is that L1 cache is not sufficient to tell whether a cache 
 either L2 or L3. The status of miss or hit in lower levels will remain unknown before these caches are
 probed. To solve the problem, instead of having the processor probe L1, L2 and L3 caches in a row (which 
 is unnecessarily serialized), the exact location of a line is stored in the TLB. Every time a virtual address
-is translated, in addition to finding the physical address associated with an entry, the TLB also
+is translated, in addition to finding the physical address associated with an entry, the TLB also 
+returns the location of the line, including its cache level and set ID. Indices are always extracted from
+the virtual or physical page number depending on whether the cache is virtually or physically indexed.
