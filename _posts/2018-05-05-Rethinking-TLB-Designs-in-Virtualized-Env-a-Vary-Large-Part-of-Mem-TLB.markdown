@@ -37,4 +37,5 @@ machines. DRAM is assumed to be able to burst-read 64 bytes. Four POM-TLB entrie
 the data cache with short latency. POM-TLB also features a four-way set associative structure. Four elements in each set is 
 stored compactly within the 64 byte burst read unit. When an address translation needs to probe POM-TLB, the MMU reads 
 64 bytes using the set index extracted from the virtual page number as well as the predicted page size class. Once the transfer 
-finishes, a four-way comparison is performed in parallel.
+finishes, a four-way comparison is performed in parallel. Only one DRAM access is issued. Each row in the DRAM is assumed to 
+be 2KB, which can hold 32 sets.
