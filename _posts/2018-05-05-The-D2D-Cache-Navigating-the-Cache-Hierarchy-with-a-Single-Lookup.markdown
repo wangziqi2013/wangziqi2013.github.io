@@ -44,4 +44,6 @@ Cache coherence is handled by the Hub instead of the inclusive L3 cache. Because
 flattened by the Hub, inclusiveness property is no longer needed. This also increases the available amount of storage 
 to keep in the cache.
 
-Cache line eviction
+Cache line eviction causes the Hub to modify its entry. If the entry is present in eTLB, then eTLB is also updated 
+to stay consistent. Then the cache line is evicted to lower levels in the hierarchy. The new cache line's pointer 
+must be updated to point to the correct entry in the Hub.
