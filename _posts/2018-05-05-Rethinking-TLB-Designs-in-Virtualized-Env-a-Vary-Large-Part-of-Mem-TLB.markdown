@@ -24,4 +24,9 @@ These predictors work like simple branch direction predictors, but have only 1 b
 in the paper that 2-bit saturating counter is also feasible). To deal with the problem that pages of different granularities 
 can co-exist in an address space, one of the two predictors guesses the page size of the virtual address, either 4KB or 2MB.
 The implementation of POM-TLB also partitions the TLB storage and maintain the two size classes in different chunks of memory.
-The result of the prediction decides which size class is searched first
+The result of the prediction decides which size class is searched first. If the address does not have a match, then another 
+class is searched. If both misses, then a page walk is initiated. The second predictor predicts whether data cache is queried,
+or MMU directly searches DRAM. We hope to skip searching the data cache, because on some data-intensive workloads, the 
+cache entries can be evicted frequently, leading to relatively low data cache hit rate for TLB entries. In these workloads, 
+cache does not bring much benefit and can be skipped anyway. The last design choice is that POM-TLB is not strictly inclusive.
+Entries can be evicted and inserted by higher level private TLBs without inserting the same entry into POM-TLB. 
