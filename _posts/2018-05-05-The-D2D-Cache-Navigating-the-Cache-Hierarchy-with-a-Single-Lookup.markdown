@@ -46,4 +46,6 @@ to keep in the cache.
 
 Cache line eviction causes the Hub to modify its entry. If the entry is present in eTLB, then eTLB is also updated 
 to stay consistent. Then the cache line is evicted to lower levels in the hierarchy. The new cache line's pointer 
-must be updated to point to the correct entry in the Hub.
+must be updated to point to the correct entry in the Hub. In contrast, if a Hub entry must be evicted due to a 
+translation miss, all cache lines whose location information is maintained by the Hub entry must also be evicted 
+from the cache.
