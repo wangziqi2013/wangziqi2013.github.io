@@ -41,6 +41,7 @@ finishes, a four-way comparison is performed in parallel. Only one DRAM access i
 be 2KB, which can hold 32 sets.
 
 The paper recommends using die-stacked DRAM to implement POM-TLB. Lower access latancy and greater potential bandwidth 
-can be achieved with die-stacked DRAM. In addition, using POM-TLB avoids contending for memory bus bandwidth with memory instructions. as 
-accessing POM-TLB consumes precious DRAM bus capacity, which is 
-sometimes oversubscribed in data-intensive workloads
+can be achieved with die-stacked DRAM. Furthermore, using POM-TLB avoids contending for memory bus bandwidth with memory instructions. 
+In data-intensive workloads, memory bandwidth is sometimes oversubscribed, and often leads to performance degradation. Having 
+a dedicated piece of memory on-chip for POM-TLB, on the other hand, does not aggravate this problem, because die-stacked DRAM
+has its own communication channel independent from the normal memory bus.
