@@ -18,3 +18,10 @@ is unnecessarily serialized), the exact location of a line is stored in the TLB.
 is translated, in addition to finding the physical address associated with an entry, the TLB also 
 returns the location of the line, including its cache level and set ID. Indices are always extracted from
 the virtual or physical page number depending on whether the cache is virtually or physically indexed.
+
+Two extra components are added in D2D design. First, the TLB must be extended (called the "eTLB") to contain
+location information of cache lines. Two bits are needed to represent the cache identity, assuming three level of caches.
+The number of bits for set ID depends on the maximum associativity among all levels. The paper uses 4 bits to accommodate for 
+the 16-way set associative L3. The second componeng is called a "Hub", and it maintains the identity of all cached data
+in all levels. Regular cache line tags are removed, and replaced with a pointer to Hub entries. This 
+also makes the tag array shorter, because pointer to the Hub is actually shorter than a tag. Entries in 
