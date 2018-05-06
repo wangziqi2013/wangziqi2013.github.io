@@ -20,16 +20,17 @@ returns the location of the line, including its cache level and set ID. Indices 
 the virtual or physical page number depending on whether the cache is virtually or physically indexed.
 
 Two extra components are added in D2D design. First, the TLB must be extended (called the "eTLB") to contain
-location information of cache lines. Two bits are needed to represent the cache identity, assuming three level of caches.
+location information of cache lines in the 4KB page. Two bits are needed to represent the cache identity, assuming three level of caches.
 The number of bits for set ID depends on the maximum associativity among all levels. The paper uses 4 bits to accommodate for 
 the 16-way set associative L3. The second componeng is called a "Hub", and it maintains the identity of all cached data
 in all levels. 
 
 The Hub is a physically indexed and physically tagged lookup structure private to processors.
 We maintain the invariant that if the information of the cache line is not in the Hub, then the corresponding cache 
-location must also be evicted.
-Although the paper did not elaborate on the way the Hub is structured, attention should be paid because the Hub cannot diacard 
-cache line location information without evcting the cache lines. 
+location must also be evicted. The opposite may not be true, i.e. an entry merely for address translation can exist
+without any of the lines in the page be cached.
+Although the paper did not elaborate on the way the Hub is structured, attention should be paid because the Hub must be 
+designed such that the cache is fully utilized.
 
 Regular cache line tags in D2D design are removed, and replaced with a pointer to Hub entries. This 
 also makes the tag array shorter, because pointer to the Hub is actually shorter than a tag. Each Hub entry also has 
@@ -38,3 +39,9 @@ does not have a copy. eTLB entry points to the cache entry using cache identity 
 The cycle enables very flexible handling of events. No matter which component in the 
 system generates an event that require all three components to collaborate, it can always be handled by traversing
 the cycle and synchronize them. 
+
+Cache coherence is handled by the Hub instead of the inclusive L3 cache. Because the cache address space is now 
+flattened by the Hub, inclusiveness property is no longer needed. This also increases the available amount of storage 
+to keep in the cache.
+
+Cache line eviction
