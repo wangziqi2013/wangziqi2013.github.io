@@ -9,3 +9,10 @@ paper_keyword: POM-TLB
 paper_year: 2017
 ---
 
+This paper presents a design of L3 TLB that resides in DRAM rather than in on-chip SRAM. 
+In general, a larger TLB favors virtualized workload, where a single virtual address translation 
+may involve at most 24 DRAM references, known as nested or 2D page table walk (PTW). In addition, 
+the reduced frequency of PTW also benefits ordinary workloads.
+
+In order to 
+reduce the numbre of costly DRAM accesses caused by virtualized workload 
