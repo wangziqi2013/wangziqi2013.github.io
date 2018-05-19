@@ -17,4 +17,9 @@ Hardware supported memory virtualization is crucial to the performance of a virt
 are applicable for solving memory virtualization problem. Shadow paging, which requires no extra hardware support
 besides normal paging and protection machanism, stores a "shadow page table" along with the page table of the guest
 OS. The hardware uses the shadow page table to perform translation. In order to maintain the consistenct between guest OS's 
-view of the memory and the actual mapping implemented by the shadow page table. 
+view of the memory and the actual mapping implemented by the shadow page table, the host OS must compute the composition of 
+the guest page table and its own page table, and store the mapping in the shadow page table. During a context switch, whenever
+the current page table pointer is switched, the guest OS will trap into the VMM, and VMM finds the corresponding shadow
+page table before setting it as the page table that hardware uses. In case that the guest OS modifies the mapping in the guest 
+page table, the entire guest OS page table is write protected by the VMM. Any write operation to the guest OS page table will 
+then trap into VMM. The VMM is responsible for reflecting the change to the shadow page table.
