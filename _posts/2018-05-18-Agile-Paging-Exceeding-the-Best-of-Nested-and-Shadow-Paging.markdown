@@ -13,3 +13,8 @@ htm_cr:
 version_mgmt: 
 ---
 
+Hardware supported memory virtualization is crucial to the performance of a virtual environment. Two techniques
+are applicable for solving memory virtualization problem. Shadow paging, which requires no extra hardware support
+besides normal paging and protection machanism, stores a "shadow page table" along with the page table of the guest
+OS. The hardware uses the shadow page table to perform translation. In order to maintain the consistenct between guest OS's 
+view of the memory and the actual mapping implemented by the shadow page table. 
