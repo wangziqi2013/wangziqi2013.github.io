@@ -38,3 +38,10 @@ can take up to 24 memory accesses: For each guest physical address, we need four
 to the guest page table to access the entry. For the final guest physical address, we then need an extra four accesses to the 
 host page table to translate it into host physical address. As mentioned in the previous paragraph, altering an entry in the 
 guest page table is relatively faster, as the VMM is not involved in this process.
+
+In this paper, the author proposes Agile Paging, a solution that integrates shadow page table and NPT into a unified 
+translation framework. Agile paging aims at reducing the extra overhead of updating when guest OS frequently updates 
+a page by allowing that page(s) to be translated by NPT, while maintaining the fast translation scheme using shadow page 
+table for the rest of the pages. In the next paragraph we explain how this goal is achieved.
+
+To support agile paging, the hardware 
