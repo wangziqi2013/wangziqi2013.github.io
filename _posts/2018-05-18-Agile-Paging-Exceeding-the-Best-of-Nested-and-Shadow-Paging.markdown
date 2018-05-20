@@ -78,3 +78,17 @@ before populating the corresponding shadow page entries. Note that since the pag
 NPT mode once during a translation, if an NPT entry is to be converted back to use shadow page table, then all levels
 above the current level must also be converted to shadow pages.
 
+For small processes with negligible TLB misses, the translation overhead of NPT is not a big deal, and the process always 
+starts using NPT. Similarly, for short-lived processes, composing the shadow page table can be a major part of the overhead.
+In this case, we use NPT as well without switching to shadow page tables.
+
+A few optimization can be applied to agile paging design. One important difference between agile paging and traditional NPT
+is that the hardware is now aware of the existence of the shadow page table. Instead of trapping into the VMM and let VMM 
+handle the dirty bit in the shadow page table every time a guest OS's page is written into, the hardware page walker can be 
+midified such that both the shadow page table and the guest OS's page table's dirty bits are set. 
+
+The second optimization aims at reducing context switch overhead. Without special hardware support, during a context switch,
+the VM will trap into the VMM to find the corresponding shadow page table. With hardware knowing the existence of the shadow 
+page table, we could add a small fully associative cache, which stores the mapping between the guest OS page table and the 
+shadow page table. On a context switch, the hardware automatically searches the shadow page table using the new page table 
+pointer when it is installed. The VM only traps into the VMM if the mapping does not exist in the cache.
