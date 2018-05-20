@@ -58,3 +58,19 @@ different address areas. For areas that rarely change and are relatively stable,
 shadow page table for speed. For areas that undergo frequent modification, to avoid trapping into the VMM on every
 write, the translation scheme is assigned to use NPT. Overall speaking, fewer traps and less memory accesses can improve the 
 efficiency of memory virtualization.
+
+In general, to sets of poliies are needed. One determines which page table entries in the shadow page table are converted 
+to use NPT for preventing frequent traps, and another set of policy determines when NPT pages are converted back to use 
+shadow page table to provide faster translation. Converting from shadow to NPT is easier, as the VMM has full control over 
+guest OS's accesses to the guest page table. The VMM write-protect all pages that store page table entries. If more than 
+one modification to the same page table entry is detected, then that level as well as all lower levels pointed to by 
+the current level are converted to NPT. With hardware support and the added bit flag, the VMM just needs to set the bit and 
+change the physical address stored in the entry to the corresponding guest OS's table. 
+
+Converting from NPT back to shadow page table requires more efforts. The conversion is performed when one or more 
+page table entries are no longer frequently modified. Unfortunately, the VMM has only little information about how the
+guest page table entries are used. One over-simplified approach is to periodically convert *all* NPT pages back to shadow
+pages. This may cause oscillation between the two translation schemes for some pages. Another approach takes advantage of 
+the hardware maintained "dirty" bit in page table entries. The VMM periodically scans the host page table entries that map
+the guest page tables. Those with "dirty" bits clear will be converted back, as they have not seen modifications for a 
+certain period of time. 
