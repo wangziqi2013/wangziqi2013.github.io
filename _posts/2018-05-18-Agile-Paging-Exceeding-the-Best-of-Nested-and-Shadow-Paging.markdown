@@ -69,8 +69,10 @@ change the physical address stored in the entry to the corresponding guest OS's 
 
 Converting from NPT back to shadow page table requires more efforts. The conversion is performed when one or more 
 page table entries are no longer frequently modified. Unfortunately, the VMM has only little information about how the
-guest page table entries are used. One over-simplified approach is to periodically convert *all* NPT pages back to shadow
-pages. This may cause oscillation between the two translation schemes for some pages. Another approach takes advantage of 
-the hardware maintained "dirty" bit in page table entries. The VMM periodically scans the host page table entries that map
-the guest page tables. Those with "dirty" bits clear will be converted back, as they have not seen modifications for a 
-certain period of time. 
+guest page table entries are used. An over-simplified approach is to periodically convert *all* NPT pages back to shadow
+pages. This may cause oscillation between the two translation schemes for some pages and leads to performance degradation. 
+Another approach takes advantage of the hardware maintained "dirty" bit in page table entries. The VMM periodically scans 
+the host page table entries that map the guest page tables. Those with "dirty" bits clear will be converted back, as they 
+have not seen any modification for a while. The VMM then computes the composition of guest OS page table and host page table
+before populating the corresponding shadow page entries.
+
