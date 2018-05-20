@@ -36,4 +36,5 @@ On the other hand, when the guest OS changes the mapping, the VM must trap into 
 Trapping into VMM is an expensive operation, and we hope this would happen as infrequent as possible. For NPT, a 2-D page walk
 can take up to 24 memory accesses: For each guest physical address, we need four accesses to the host page table, plus one access
 to the guest page table to access the entry. For the final guest physical address, we then need an extra four accesses to the 
-host page table to translate it into host physical address. 
+host page table to translate it into host physical address. As mentioned in the previous paragraph, altering an entry in the 
+guest page table is relatively faster, as the VMM is not involved in this process.
