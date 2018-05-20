@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SIPT: Speculatively Indexed, Physically Tagged Caches"
+date:   2018-05-20 19:06:00 -0500
+categories: paper
+paper_title: "SIPT: Speculatively Indexed, Physically Tagged Caches"
+paper_link: 
+paper_keyword: Cache Hierarchy; Speculative Index
+paper_year: 2018
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
