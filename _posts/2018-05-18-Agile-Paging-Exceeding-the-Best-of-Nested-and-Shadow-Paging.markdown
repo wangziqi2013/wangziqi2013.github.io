@@ -44,4 +44,11 @@ translation framework. Agile paging aims at reducing the extra overhead of updat
 a page by allowing that page(s) to be translated by NPT, while maintaining the fast translation scheme using shadow page 
 table for the rest of the pages. In the next paragraph we explain how this goal is achieved.
 
-To support agile paging, the hardware 
+To support agile paging, the hardware adds another page table register, which holds the host physical address of the 
+shadow page table. Three page table registers are needed in a translation: one register for shadow page table; the other 
+two are guest page table register and host page table register for NPT. All three tables can be cached by the TLB. 
+The hardware page walker state machine is modified, such that translation always begins at shadow page table. We add one 
+bit to each entry of the shadow page table to indicate whether the translation should switch to NPT in the next level. 
+If the bit is clear, then the page walker treats the address stored in the entry as the next level shadow page table 
+(or page frame number, if on the last level). If the bit is set, the page walker treats the adderess as the physical address
+to the next level of the guest page table as in NPT scheme. The translation then continues as a 2-D page walk. 
