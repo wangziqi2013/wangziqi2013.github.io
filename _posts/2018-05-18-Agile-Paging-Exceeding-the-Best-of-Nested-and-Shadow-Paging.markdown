@@ -26,4 +26,14 @@ then trap into VMM. The VMM is responsible for reflecting the change to the shad
 
 Nested page table (NPT) replaces shadow page table on platforms that support Intel VT-x. With nested page table, the guest OS
 composes its own page table without intervention from the VMM. The VMM has a second set of page table that maps guest physical
-address to host physical address. 
+address to host physical address. On TLB misses, the hardware must perform a 2-D page table walk, which requires consulting the 
+host page table for every guest physical address. With NPT, the guest OS is free to modify the guest page table without 
+notifying the VMM.
+
+Both shadow page table and NPT achieve memory virtualization. The extra overhead, however, come from different sources. For 
+shadow page table, translation by performing a page walk requires at most four memory accesses (assuming 64-bit architecture).
+On the other hand, when the guest OS changes the mapping, the VM must trap into VMM, and the VMM updates the shadow page table.
+Trapping into VMM is an expensive operation, and we hope this would happen as infrequent as possible. For NPT, a 2-D page walk
+can take up to 24 memory accesses: For each guest physical address, we need four accesses to the host page table, plus one access
+to the guest page table to access the entry. For the final guest physical address, we then need an extra four accesses to the 
+host page table to translate it into host physical address. 
