@@ -74,5 +74,7 @@ pages. This may cause oscillation between the two translation schemes for some p
 Another approach takes advantage of the hardware maintained "dirty" bit in page table entries. The VMM periodically scans 
 the host page table entries that map the guest page tables. Those with "dirty" bits clear will be converted back, as they 
 have not seen any modification for a while. The VMM then computes the composition of guest OS page table and host page table
-before populating the corresponding shadow page entries.
+before populating the corresponding shadow page entries. Note that since the page walker only switched from shadow mode to
+NPT mode once during a translation, if an NPT entry is to be converted back to use shadow page table, then all levels
+above the current level must also be converted to shadow pages.
 
