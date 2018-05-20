@@ -51,4 +51,10 @@ The hardware page walker state machine is modified, such that translation always
 bit to each entry of the shadow page table to indicate whether the translation should switch to NPT in the next level. 
 If the bit is clear, then the page walker treats the address stored in the entry as the next level shadow page table 
 (or page frame number, if on the last level). If the bit is set, the page walker treats the adderess as the physical address
-to the next level of the guest page table as in NPT scheme. The translation then continues as a 2-D page walk. 
+to the next level of the guest page table as in NPT scheme. The translation then continues as a 2-D page walk.
+
+The hybrid shadow and nested page table design gives the VMM an opportunity to assign different translation policies to
+different address areas. For areas that rarely change and are relatively stable, the translation takes place using
+shadow page table for speed. For areas that undergo frequent modification, to avoid trapping into the VMM on every
+write, the translation scheme is assigned to use NPT. Overall speaking, fewer traps and less memory accesses can improve the 
+efficiency of memory virtualization.
