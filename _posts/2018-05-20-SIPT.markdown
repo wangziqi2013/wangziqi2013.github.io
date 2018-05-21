@@ -59,4 +59,15 @@ speculative bits between virtual and physical addresses. In the paper, the IDB h
 as the perceptron prediction table. Note that IDB is not needed if only a single bit is to be predicted, because
 flipping the bit is sufficient.
 
-The reason that the index can be predicted using deltas is 
+The reason that the index can be predicted using deltas is within the memory allocator in the operating system.
+In Linux, for example, the page allocator uses buddy system, which breaks large chunks into smaller ones if 
+existing chunks could not satisfy a physical memory request. That is to say, physical memory allocated by 
+the virtual memory manager is likely to be consecutive, when a chunk of virtual address is populated with
+physical pages during the initialization phase of data structures. The delta between the virtual chunk and 
+the physical chunk is therefore a constant. By remembering the constant delta in the last translation, there is 
+high probability that the next few translations will also observe the same delta. Even if this assumption
+fails to be true in some rare cases, the prediction should also work well. This is because load/store instructions 
+usually demonstrate high spatial locality, i.e. nearby instructions are prone to access data items on the same page.
+If several accesses hit the same virtual page, their virtual to physical mapping must be the same, and the index 
+delta prediction is always successful. These two observations together explains the high accuracy of the 
+index delta prediction described in the paper.
