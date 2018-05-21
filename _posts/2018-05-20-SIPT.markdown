@@ -52,6 +52,9 @@ in the physical address do not match the bits in the virtual address. If this ha
 still applies. To avoid misspeculating the value of the index (rather than whether or not to speculate), the 
 delta between the index bits from the virtual address with the bits in the physical address is also predicted
 using a table. The index delta buffer (IDB) servers a similar purpose to the branch target buffer in a branch 
-predictor. On each prediction, the cache controller uses the current PC to index into the table, and fetch the 
+predictor. On each prediction, the cache controller uses the current PC to index into IDB, and fetches the 
 index delta. The delta is then added onto the speculative bits (carries are ignored) to form the index that we 
-use to select sets.
+use to select sets. After the physical address is generated, we update the IDB entry to the actual delta of
+speculative bits between virtual and physical addresses. In the paper, the IDB has the same number of entries 
+as the perceptron prediction table. Note that IDB is not needed if only a single bit is to be predicted, because
+flipping the bit is sufficient.
