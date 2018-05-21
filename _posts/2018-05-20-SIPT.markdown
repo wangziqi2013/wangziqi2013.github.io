@@ -36,3 +36,11 @@ works well for some workloads, because the operating system may have optimizatio
 restrict the pattern that virtual pages can be mapped to physical pages. For other workloads, however, performance 
 degrades severely as a consequence of wrong speculation.
 
+In addition to the static predictor (always unchanged) as described in the previous paragraph, we can build a more 
+complicated predictor using perceptron. The perceptron predictor works similarly to a branch predictor using global 
+history. Here the global history is the result of previous speculations (bits changed/unchanged), represented as a 
+bit array, where 1 means correct speculation and 0 means incorrect speculation. We keep h bits in the global history G.
+The prediction table has 64 entries, indexed by PC slices of load/store instructions. Each entry in the prediction
+table consists of (h + 1) parameters, w<sub>0</sub>, w<sub>1</sub>, ..., w<sub>h</sub>. On prediction, the cache controller
+computes p = w<sub>0</sub> + w<sub>1</sub> * G<sub>1</sub> + ... + w<sub>h</sub> * G<sub>h</sub>. If p is non-negative,
+the 
