@@ -46,3 +46,9 @@ c[i] is at the lowest bit of the index. By using BAI, two consecutive lines (eve
 the two cache lines that can map to it are far away from each other exatly as in TSI. One of the good property of BAI is that 
 compared with TSI scheme, all cache lines are either mapped to the same set, or to an adjacent set as in TSI. This allows DICE
 to dynamically select one of these two possible sets for any cache line by one read operation of the row. 
+
+Neither TSI nor BAI works well for all workloads. When cache lines are compressible, BAI provides a clear advantage over TSI
+because two compressed cache lines are likely to share the same 64 byte storage. When cache lines are not compressible, however, 
+TSI demonstrates very poor utilization of the DRAM cache, because adjacent cache lines evict each other from the slot they are 
+mapped to. TSI, on the other hand, performs better, because adjacent lines are mapped to different sets.
+
