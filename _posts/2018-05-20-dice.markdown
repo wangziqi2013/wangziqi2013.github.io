@@ -15,5 +15,11 @@ version_mgmt:
 
 Dynamic Indexing Cache Compression (DICE) is a technique designed to increase the bandwidth of the 
 DRAM cache. Traditional algorithms of cache compression focus mainly on reducing the storage of 
-a cache line by taking advantage of data patterns. This can indeed increase the cache hit ratio for smaller
-L1 or L2 caches, because more lines can be stored without the cost of larger SRAM.
+a cache line by taking advantage of data patterns. This can indeed increase the cache hit rate for smaller
+L1 and L2 caches, because more lines can be stored without the cost of larger SRAM. For DRAM caches, however,
+compressing for capacity may not bring as much benefit as it would for smaller caches. First, DRAM caches 
+are typically few hundreds megabytes or even gigabytes in size. Increasing the size of the DRAM cache by compressing 
+lines has only marginal effect on the hit rate. Second, DRAM cache is more flexible than SRAM cache as it stores both 
+tags and lines in DRAM array. It is hence easier for the cache controller to alter the storage format of compressed lines.
+In SRAM this is impossible as extra tag arrays must be added. 
+
