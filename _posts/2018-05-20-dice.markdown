@@ -33,3 +33,7 @@ using lower bits of the line address maps spatially consecutive lines into sets 
 and are likely not on the same row. Since the row buffer of a DRAM cache is typically several KBs (2KB in the paper), 
 the spatial locality of the DRAM cache does not work well with the spatial locality of the access pattern. 
 
+Using only top bits of the cache address to map lines into sets is also a bad idea. This scheme maps all cache lines 
+from a large consecutive range into one set. The conflict rate would be very high, given that the spatial locality of 
+accesses would hit only one or few sets for most of the time. If the 64 byte storage does not have enough space to hold
+a new compressed cache line mapped to the set, then 
