@@ -4,7 +4,7 @@ title:  "SIPT: Speculatively Indexed, Physically Tagged Caches"
 date:   2018-05-20 19:06:00 -0500
 categories: paper
 paper_title: "SIPT: Speculatively Indexed, Physically Tagged Caches"
-paper_link: 
+paper_link: https://ieeexplore.ieee.org/document/8327003/
 paper_keyword: Cache Hierarchy; Speculative Index
 paper_year: 2018
 rw_set: 
@@ -12,3 +12,16 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes SIPT, a cache design that uses speculative bits obtained from virtual addresses for set 
+selection, without incurring synonym and homonym problems as in virtually indexed caches. 
+In a traditional virtually indexed, physically tagged L1 cache, the cache lookup uses the bits that do not 
+change during the translation as the set index. The translation and set selection can thus be parallized, and TLB 
+lookup is likely not on the critical path of the memory operation. The downside of this approach is that the L1 way 
+size is limited. Assuming 4KB page size and 64 byte cache line size, at most 6 bits can be used as the set 
+index. The maximum number of sets is therefore only 64, and the maximum size of each way is 4KB. If we want to build 
+a larger L1 cache, the only viable way is to increase the number of ways in a set, which also increases the latency
+and energy consumption because more tags and data needs to be read and compared. Nowadays, typical L1d cache is eight 
+way set-associative, and the size is 32KB.
+
+Instead of keep on adding ways in a set, the cache can use more bits to select sets. 
