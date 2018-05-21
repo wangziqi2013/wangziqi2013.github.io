@@ -59,3 +59,9 @@ of the two possible locations a cache line would be in, the cache controller per
 probes both locations by comparing the tags stored in the row and the tag generated from the address. If a match is found, all cache 
 lines stored in the set are delivered to higher level caches before they are decompressed. The read bandwidth of the DRAM cache is 
 at least doubled if more than one cache line is stored in the set.
+
+To reduce the latency of tag comparison, the paper also proposes adding a cache index predictor (CIP) that predicts which 
+of the two caches should be probed first for read operations. The prediction is based on the observation that cache lines 
+on the same page usually have similar compressibility. It uses a slice of the page address as the key to index the predictor 
+table, which records the set that hits the DRAM cache last time the cache was queried. The table will later be updated with 
+the result of the lookup. For write operations, the index is predicted by the compressibility of the line.
