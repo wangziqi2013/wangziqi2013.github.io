@@ -43,4 +43,6 @@ bit array, where 1 means correct speculation and 0 means incorrect speculation. 
 The prediction table has 64 entries, indexed by PC slices of load/store instructions. Each entry in the prediction
 table consists of (h + 1) parameters, w<sub>0</sub>, w<sub>1</sub>, ..., w<sub>h</sub>. On prediction, the cache controller
 computes p = w<sub>0</sub> + w<sub>1</sub> * G<sub>1</sub> + ... + w<sub>h</sub> * G<sub>h</sub>. If p is non-negative,
-the 
+the controller speculates. Otherwise, it waits for address translation. This scheme does not eliminate TLB lookup
+from the critical path entirely, as the controller still has to wait for the physical address if it decides not to
+speculate. It is effective in reducing the overhead of misspeculation.
