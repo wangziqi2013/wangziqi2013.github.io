@@ -38,3 +38,8 @@ maps all cache lines from a large consecutive range into one set. The conflict r
 locality of accesses would hit only one or few sets for most of the time. A conflict occurs when the 64 byte storage does not have 
 enough space to hold a new compressed cache line mapped to the set. The content of the set should be written back to the 
 main memory before the new cache line can be stored in DRAM cache.
+
+The paper proposes a new mapping scheme, Bandwidth Aware Indexing (BAI), that allows two consecutive cache lines to be mapped 
+into the same set, while not all adjacent lines are mapped into the same set. Assuming the DRAM cache has 2<sup>i</sup> lines 
+capacity. The set index for a given cache address *c* is computed by concatenating c[i - 1:1] and c[i]. After the concatenation, 
+c[i] is at the lowest bit of the index. 
