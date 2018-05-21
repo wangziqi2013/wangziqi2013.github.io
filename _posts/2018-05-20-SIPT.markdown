@@ -30,3 +30,9 @@ bits (usually 1 - 3 bits) do not match the actual physical address, then the spe
 restarts. All cycles and energy for the failed lookup are wasted. If, however, the speculation is correct, then we essentially
 have a larger L1 cache without serializing address translation and set selection.
 
+There are different levels of speculation. In its simplest form, the cache controller just speculates that the bits 
+in the virtual address will not change, and always use the virtual address to generate the index. This scheme in fact
+works well for some workloads, because the operating system may have optimizations such as page coloring that tries to
+restrict the pattern that virtual pages can be mapped to physical pages. For other workloads, however, performance 
+degrades severely as a consequence of wrong speculation.
+
