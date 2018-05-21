@@ -40,6 +40,9 @@ enough space to hold a new compressed cache line mapped to the set. The content 
 main memory before the new cache line can be stored in DRAM cache.
 
 The paper proposes a new mapping scheme, Bandwidth Aware Indexing (BAI), that allows two consecutive cache lines to be mapped 
-into the same set, while not all adjacent lines are mapped into the same set. Assuming the DRAM cache has 2<sup>i</sup> lines 
+into the same set, while not all adjacent lines are mapped into the same set. Assume the DRAM cache has 2<sup>i</sup> lines 
 capacity. The set index for a given cache address *c* is computed by concatenating c[i - 1:1] and c[i]. After the concatenation, 
-c[i] is at the lowest bit of the index. 
+c[i] is at the lowest bit of the index. By using BAI, two consecutive lines (even + odd) are mapped to the same set. For each set,
+the two cache lines that can map to it are far away from each other exatly as in TSI. One of the good property of BAI is that 
+compared with TSI scheme, all cache lines are either mapped to the same set, or to an adjacent set as in TSI. This allows DICE
+to dynamically select one of these two possible sets for any cache line by one read operation of the row. 
