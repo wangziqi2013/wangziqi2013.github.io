@@ -52,3 +52,10 @@ because two compressed cache lines are likely to share the same 64 byte storage.
 TSI demonstrates very poor utilization of the DRAM cache, because adjacent cache lines evict each other from the slot they are 
 mapped to. TSI, on the other hand, performs better, because adjacent lines are mapped to different sets.
 
+The result above suggests a hybrid approach that allows the cache controller to dynamically pick one of the TSI and BAI sets
+for storing a compressed cache, depending on whether there is enough storage. As stated in earlier paragraphs, BAI maintains the
+invariant that it either always maps a line to the same set as in TSI, or to a set that is one slot away. To figure out which 
+of the two possible locations a cache line would be in, the cache controller performs a read operations of the entire row, and then 
+probes both locations by comparing the tags stored in the row and the tag generated from the address. If a match is found, all cache 
+lines stored in the set are delivered to higher level caches before they are decompressed. The read bandwidth of the DRAM cache is 
+at least doubled if more than one cache line is stored in the set.
