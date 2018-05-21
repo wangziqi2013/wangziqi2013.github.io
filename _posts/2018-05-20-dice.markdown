@@ -21,5 +21,15 @@ compressing for capacity may not bring as much benefit as it would for smaller c
 are typically few hundreds megabytes or even gigabytes in size. Increasing the size of the DRAM cache by compressing 
 lines has only marginal effect on the hit rate. Second, DRAM cache is more flexible than SRAM cache as it stores both 
 tags and lines in DRAM array. It is hence easier for the cache controller to alter the storage format of compressed lines.
-In SRAM this is impossible as extra tag arrays must be added. 
+In SRAM this is impossible as extra tag arrays must be added. Furthermore, DRAM caches are usually direct-mapped,
+because looking for multiple tags is costly. All of these subtlties suggest a different design perspective than 
+what used to be for SRAM caches.
+
+Instead of compressing for capacity, this paper claims that compressing for bandwidth in DRAM caches are 
+beneficial to performance. If two cache lines can be delivered in one bus read transaction, and both lines are useful
+for the computation, then the bandwidth of the DRAM cache is effectively doubled. Determining which two cache 
+lines should be compressed into the same 64 byte storage, however, requires some careful thinking. The classical way of 
+using lower bits of the line address maps spatially consecutive lines into sets that are far away from each other
+and are likely not on the same row. Since the row buffer of a DRAM cache is typically several KBs (2KB in the paper), 
+the spatial locality of the DRAM cache does not work well with the spatial locality of the access pattern. 
 
