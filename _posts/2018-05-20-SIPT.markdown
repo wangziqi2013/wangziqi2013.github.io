@@ -58,3 +58,5 @@ use to select sets. After the physical address is generated, we update the IDB e
 speculative bits between virtual and physical addresses. In the paper, the IDB has the same number of entries 
 as the perceptron prediction table. Note that IDB is not needed if only a single bit is to be predicted, because
 flipping the bit is sufficient.
+
+The reason that the index can be predicted using deltas is 
