@@ -46,3 +46,7 @@ a 4KB page.
 The mapping specified by the range table should remain consistent with the page table. The OS should also maintain the consistency
 of dirty and accessed bits between the page mapping and the range mapping. As hardware TLB coherence is lacking on x86 platform,
 whenever a TLB entry is invalidated as a result of TLB shootdown, the range mapping should also be changed accordingly. 
+
+Two optimizations can be applied to reduce energy comsumption and hardware complexity. The first optimization adds a most recented used 
+range mapping buffer, which stores the most recent range mapping that was hit in the lookaside buffer. The hardware checks this MRU 
+buffer before 
