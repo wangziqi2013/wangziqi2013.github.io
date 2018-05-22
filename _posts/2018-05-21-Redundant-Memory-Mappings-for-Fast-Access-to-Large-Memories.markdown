@@ -62,4 +62,6 @@ memory fragmentation after many small allocations.
 In earlier days when physical memory is usually small, this helps to reduce swapping. On modern work stations, however, swapping 
 is less common. As a conclusion, in order for range mapping to work well, the OS should eagerly allocate a consecutive range of 
 physical memory when virtual addresses are reserved by the application program. Having the physical pages in a consecutive range 
-increases the probablity that only a few ranges can cover 90% of the application's working set.
+increases the probablity that only a few ranges can cover 90% of the application's working set. For the remaining 10%, or when 
+memory fragmentation prohibits range mapping from serving its purposes, the OS could choose not to enable range mapping for 
+the address space.
