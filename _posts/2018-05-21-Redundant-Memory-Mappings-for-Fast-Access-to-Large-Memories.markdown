@@ -23,10 +23,15 @@ the page size (4KB). We describe the details of operation below.
 
 Range mapping cooperates with the paging system by generating TLB entries on TLB misses. Even with range mapping enabled,
 the system still performs TLB lookup every time a virtual address is to be translated. This design distinguishes range mapping
-from other segmentation based mapping mechanisms, including x86's native segmentation. A range lookaside buffer is co-located 
+from other segmentation based mapping mechanisms, including x86's native segmentation support. A range lookaside buffer is co-located 
 with the last level TLB, and is activated when the last level TLB misses. Instead of conducting a page walk, the hardware TLB miss 
 handler searches the range buffer using the miss address, and check whether the address is within any range table entry cached by the 
 range lookaside buffer. If the address hits the range buffer, a TLB entry is generated and inserted into the TLB. The new TLB entry's 
 physical address is simply the sum of the base virtual address and the offset of the range. Permission bits in the page 
 table entry is derived from the permission bits in the range lookaside buffer entry. If the range lookaside buffer also misses,
-the hardware page walker is activated to find as in a normal TLB miss. In the meantime, a range table walker
+the hardware page walker is activated to load the page table entry from main memory as in a normal TLB miss. In the meantime, 
+a range table walker searches the in-memory range table, and loads the range into the range lookaside buffer if it exists. The 
+latter is carried out in the background, and hence is not on the critical path of memory operations. If the hit range on the 
+range lookaside buffer is high, then the majority of last level TLB misses can be satisfied by range mapping, rather than 
+an expensive page table walk. 
+
