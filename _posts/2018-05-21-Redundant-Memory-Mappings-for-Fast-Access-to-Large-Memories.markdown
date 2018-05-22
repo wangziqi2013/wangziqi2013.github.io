@@ -37,4 +37,7 @@ an expensive page table walk.
 
 The operating system is responsible for preparing a data structure called the range table in the main memory, and sets the range 
 table root control register, CR-RT (like CR3), to the physical address of the root of the table. The paper suggests that the range 
-table be organized as a B-Tree, with the base virtual addresses and limit as key, and offset, permission bits as value.
+table be organized as a B-Tree, with the base virtual addresses and limit as key, offset and permission bits as value. The experiments
+in later sections, however, claims that using a linked list does not affect performance much. The hardware walker searches the range 
+table, and loads the entry into the range lookaside buffer. The compact B-Tree representation can provide up to 128 range mappings in
+a 4KB page.
