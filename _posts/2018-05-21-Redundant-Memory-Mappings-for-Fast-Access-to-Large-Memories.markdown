@@ -33,7 +33,8 @@ the hardware page walker is activated to load the page table entry from main mem
 a range table walker searches the in-memory range table, and loads the range into the range lookaside buffer if it exists. The 
 latter is carried out in the background, and hence is not on the critical path of memory operations. If the hit range on the 
 range lookaside buffer is high, then the majority of last level TLB misses can be satisfied by range mapping, rather than 
-an expensive page table walk. 
+an expensive page table walk. Overall, the range lookaside buffer works as a fully associative search structure that maps a
+virtual addresses to range table entries. Two comparators and one adder is required to perform the search.
 
 The operating system is responsible for preparing a data structure called the range table in the main memory, and sets the range 
 table root control register, CR-RT (like CR3), to the physical address of the root of the table. The paper suggests that the range 
@@ -41,3 +42,7 @@ table be organized as a B-Tree, with the base virtual addresses and limit as key
 in later sections, however, claims that using a linked list does not affect performance much. The hardware walker searches the range 
 table, and loads the entry into the range lookaside buffer. The compact B-Tree representation can provide up to 128 range mappings in
 a 4KB page.
+
+The mapping specified by the range table should remain consistent with the page table. The OS should also maintain the consistency
+of dirty and accessed bits between the page mapping and the range mapping. As hardware TLB coherence is lacking on x86 platform,
+whenever a TLB entry is invalidated as a result of TLB shootdown, the range mapping should also be changed accordingly. 
