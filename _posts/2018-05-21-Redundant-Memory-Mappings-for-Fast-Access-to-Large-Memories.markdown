@@ -52,4 +52,12 @@ range mapping buffer, which stores the most recent range mapping that was hit in
 buffer first before performing a full search to the range lookaside buffer. Since ranges are usually big, and hence have strong locality,
 it is likely that most lookups will hit the MRU buffer. The second optimization removes the hardware range walker from the memory
 controller. A software trap is invoked when the range buffer misses, and the OS can schedule a background thread that walks the table
-in software and insert an entry into the buffer. The range table in this can have arbitrary format defined by the OS.
+in software and insert an entry into the buffer. The range table in this case can have arbitrary format defined by the OS.
+
+Range mapping works the best when both the virtual and physical addresses assigned to a process are in consecutive pages. Unfortunately, 
+this is not ture in the current OS allocator implementation. Modern OSes generally takes advantage of lazy allocation. Instead of 
+allocating physical pages for a virtual address range, the page table entries for the virtual address range are marked as read-only.
+The first write operation to any of the pages will trigger a page fault, and the OS lazily allocates a physical page, causing 
+memory fragmentation after many small allocations.
+In earlier days when physical memory is usually small, this helps to reduce swapping. On modern work stations, however, swapping 
+is less common. As a conclusion, the 
