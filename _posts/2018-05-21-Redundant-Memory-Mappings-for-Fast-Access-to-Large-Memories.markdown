@@ -16,6 +16,17 @@ version_mgmt:
 Classical virtual memory mapping relies on page tables to translate from virtual addresses to physical addresses.
 If a large chunk of memory is mapped, where the address range on both the virtual address space and physical 
 address space are consecutive, the translation can actually be performed on a larger granularity. This paper 
-proposes redundant memory mapping, where large chunks of mapping is represented only by a segment notation:
+proposes redundant memory mapping, or *range mapping*, where large chunks of mapping is represented by a segment notation:
 base, limit and offset. Permission bits are maintained on a segment basis where all pages in the segment must
-have the same permission settings. The segment is also 4KB page aligned, and the size is of multiple pages
+have the same permission settings. The segment is also 4KB page aligned, and the size is always a multiple of 
+the page size (4KB). We describe the details of operation below.
+
+Range mapping cooperates with the paging system by generating TLB entries on TLB misses. Even with range mapping enabled,
+the system still performs TLB lookup every time a virtual address is to be translated. This design distinguishes range mapping
+from other segmentation based mapping mechanisms, including x86's native segmentation. A range lookaside buffer is co-located 
+with the last level TLB, and is activated when the last level TLB misses. Instead of conducting a page walk, the hardware TLB miss 
+handler searches the range buffer using the miss address, and check whether the address is within any range table entry cached by the 
+range lookaside buffer. If the address hits the range buffer, a TLB entry is generated and inserted into the TLB. The new TLB entry's 
+physical address is simply the sum of the base virtual address and the offset of the range. Permission bits in the page 
+table entry is derived from the permission bits in the range lookaside buffer entry. If the range lookaside buffer also misses,
+the hardware page walker is activated to find as in a normal TLB miss. In the meantime, a range table walker
