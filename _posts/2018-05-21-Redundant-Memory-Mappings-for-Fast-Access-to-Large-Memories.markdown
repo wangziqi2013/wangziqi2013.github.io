@@ -35,3 +35,6 @@ latter is carried out in the background, and hence is not on the critical path o
 range lookaside buffer is high, then the majority of last level TLB misses can be satisfied by range mapping, rather than 
 an expensive page table walk. 
 
+The operating system is responsible for preparing a data structure called the range table in the main memory, and sets the range 
+table root control register, CR-RT (like CR3), to the physical address of the root of the table. The paper suggests that the range 
+table be organized as a B-Tree, with the base virtual addresses and limit as key, and offset, permission bits as value.
