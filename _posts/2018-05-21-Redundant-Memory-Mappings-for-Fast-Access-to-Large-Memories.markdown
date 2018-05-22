@@ -60,4 +60,6 @@ allocating physical pages for a virtual address range, the page table entries fo
 The first write operation to any of the pages will trigger a page fault, and the OS lazily allocates a physical page, causing 
 memory fragmentation after many small allocations.
 In earlier days when physical memory is usually small, this helps to reduce swapping. On modern work stations, however, swapping 
-is less common. As a conclusion, the 
+is less common. As a conclusion, in order for range mapping to work well, the OS should eagerly allocate a consecutive range of 
+physical memory when virtual addresses are reserved by the application program. Having the physical pages in a consecutive range 
+increases the probablity that only a few ranges can cover 90% of the application's working set.
