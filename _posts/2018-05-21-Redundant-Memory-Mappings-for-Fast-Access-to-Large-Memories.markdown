@@ -49,4 +49,7 @@ whenever a TLB entry is invalidated as a result of TLB shootdown, the range mapp
 
 Two optimizations can be applied to reduce energy comsumption and hardware complexity. The first optimization adds a most recented used 
 range mapping buffer, which stores the most recent range mapping that was hit in the lookaside buffer. The hardware checks this MRU 
-buffer before 
+buffer first before performing a full search to the range lookaside buffer. Since ranges are usually big, and hence have strong locality,
+it is likely that most lookups will hit the MRU buffer. The second optimization removes the hardware range walker from the memory
+controller. A software trap is invoked when the range buffer misses, and the OS can schedule a background thread that walks the table
+in software and insert an entry into the buffer. The range table in this can have arbitrary format defined by the OS.
