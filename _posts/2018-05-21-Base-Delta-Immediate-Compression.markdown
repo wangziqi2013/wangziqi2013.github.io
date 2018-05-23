@@ -12,3 +12,5 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes an simple yet effective cache compression architecture.
