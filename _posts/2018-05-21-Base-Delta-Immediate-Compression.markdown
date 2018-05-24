@@ -13,4 +13,9 @@ htm_cr:
 version_mgmt: 
 ---
 
-This paper proposes an simple yet effective cache compression architecture.
+This paper proposes an simple and yet effective cache compression architecture. Compressing cache lines 
+for L2 cache and LLC increases effective cache associativity, reducing conflict misses. To store the compressed 
+cache line, the paper proposes doubling the number of tags in each set. This design allows at most two cache lines to
+be stored compactly inside a 64 byte line while maintaining the number of data storage unchanged. Since the majority of 
+the resources of the cache system are devoted to data storage, only doubling the size of the tag array has a minimum
+effect. Power consumption, however, can become worse, as the comparator used for comparing tags must also be doubled.
