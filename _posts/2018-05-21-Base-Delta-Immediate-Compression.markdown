@@ -24,3 +24,9 @@ To reduce the negative effect of increased load and store latency, compression i
 but not L1. The priority should be put on decompression, as it is usually on the critical path of load instructions. 
 In contrast, decompression can usually be performed on the background after the critical word is supplied to the processor.
 
+Two compression algorithms are proposed and evaluated by the paper. The fundamental idea behind these two algorithms is 
+based on the observation that an integer usually only stores values within a narrow range. For example, an array of 
+pointers usually point to addresses of a certain class, from the same allocator, inside an array, etc. An array of integers 
+are often small values that can be represented using only a few bits. For the former, if an appropriate base value is 
+chosen, the remainder of them can be represented as the difference with that base value, which are potentially smaller. 
+Fewer bits can be used to encode such a sequence, achieving compression of the cache line. 
