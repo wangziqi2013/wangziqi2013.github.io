@@ -19,3 +19,8 @@ cache line, the paper proposes doubling the number of tags in each set. This des
 be stored compactly inside a 64 byte line while maintaining the number of data storage unchanged. Since the majority of 
 the resources of the cache system are devoted to data storage, only doubling the size of the tag array has a minimum
 effect. Power consumption, however, can become worse, as the comparator used for comparing tags must also be doubled.
+
+To reduce the negative effect of increased load and store latency, compression is only applied to shared L2 and L3 caches,
+but not L1. The priority should be put on decompression, as it is usually on the critical path of load instructions. 
+In contrast, decompression can usually be performed on the background after the critical word is supplied to the processor.
+
