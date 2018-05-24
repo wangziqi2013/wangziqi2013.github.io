@@ -29,4 +29,4 @@ based on the observation that an integer usually only stores values within a nar
 pointers usually point to addresses of a certain class, from the same allocator, inside an array, etc. An array of integers 
 are often small values that can be represented using only a few bits. For the former, if an appropriate base value is 
 chosen, the remainder of them can be represented as the difference with that base value, which are potentially smaller. 
-Fewer bits can be used to encode such a sequence, achieving compression of the cache line. 
+Fewer bits can be used to encode such a sequence, reducing the number of bits used to store the cache line. 
