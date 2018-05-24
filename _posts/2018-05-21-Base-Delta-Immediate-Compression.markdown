@@ -30,3 +30,8 @@ pointers usually point to addresses of a certain class, from the same allocator,
 are often small values that can be represented using only a few bits. For the former, if an appropriate base value is 
 chosen, the remainder of them can be represented as the difference with that base value, which are potentially smaller. 
 Fewer bits can be used to encode such a sequence, reducing the number of bits used to store the cache line. 
+
+The first algorithm, B+&Delta;, only takes advantage of narrow values. The algorithm assumes that the input cache line 
+consists of values that are within a narrow range. It tries to find a base, with which the remainder of the line could 
+be compressed using fewer bits. The base is stored first, and then follows the delta, in 2's complement form (as the 
+delta could be negative).
