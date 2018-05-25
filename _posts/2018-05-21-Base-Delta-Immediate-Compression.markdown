@@ -33,5 +33,9 @@ Fewer bits can be used to encode such a sequence, reducing the number of bits us
 
 The first algorithm, B+&Delta;, only takes advantage of narrow values. The algorithm assumes that the input cache line 
 consists of values that are within a narrow range. It tries to find a base, with which the remainder of the line could 
-be compressed using fewer bits. The base is stored first, and then follows the delta, in 2's complement form (as the 
-delta could be negative).
+be compressed using fewer bits. The base is stored first in the compressed cache line, and then follows the delta, in 2's 
+complement form (as the delta could be negative). We restrict that the number of bits in delta values must be 
+uniform, such that a hardware circuit can easily decode all values in parallel without having to guess the boundary
+of the deltas, as in some other algorithms.
+
+The second algorithm, B&Delta;I
