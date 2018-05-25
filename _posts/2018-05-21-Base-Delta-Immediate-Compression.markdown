@@ -36,6 +36,9 @@ consists of values that are within a narrow range. It tries to find a base, with
 be compressed using fewer bits. The base is stored first in the compressed cache line, and then follows the delta, in 2's 
 complement form (as the delta could be negative). We restrict that the number of bits in delta values must be 
 uniform, such that a hardware circuit can easily decode all values in parallel without having to guess the boundary
-of the deltas, as in some other algorithms.
+of the deltas, as in some other algorithms. For simplicity, The base value is chosen as the first value in the cache line.
 
-The second algorithm, B&Delta;I
+The second algorithm, B&Delta;I, extends the B+&Delta; algorithm by using zero as the second base. Generally speaking,
+adding a second base could potentially increase the compression ratio, because the number of bits required by deltas can 
+be further reduced by clever choices of the two bases. This, however, overcomplicates the hardware design, because the 
+circuit now must ensure the two base values are chosen property. To avoid such complication, 
