@@ -41,4 +41,7 @@ of the deltas, as in some other algorithms. For simplicity, The base value is ch
 The second algorithm, B&Delta;I, extends the B+&Delta; algorithm by using zero as the second base. Generally speaking,
 adding a second base could potentially increase the compression ratio, because the number of bits required by deltas can 
 be further reduced by clever choices of the two bases. This, however, overcomplicates the hardware design, because the 
-circuit now must ensure the two base values are chosen property. To avoid such complication, 
+circuit now must ensure that the two base values are chosen property. To avoid such complication, the B&Delta;I scheme
+implicitly chose zero as the second base. Small integers, such as counters, array indices, etc., can be encoded with fewer 
+bits with zero being the second base. The "I" in B&Delta;I stands for "Immediates", which is just a fancy name for integer 
+constants in assembly.
