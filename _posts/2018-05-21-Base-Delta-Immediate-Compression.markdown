@@ -57,3 +57,12 @@ algorithm used for compressing the cache line. At decode time, the decoder perfo
 "encoding algorithm" bits. The decoder simply takes the base and adds the sign-extended 2's complement onto every delta and produces
 the decompressed cache line.
 
+When a cache line is brounght into the L2 cache or written from the higher level, it needs to be compressed by the cache controller.
+The cache controller consists of all hardware encoders of different input and output parameters running in parallel. A special priority 
+decoder selects the scheme with the highest compression ratio. The resulting compressed line is then written into the 64 byte data 
+storage together with its tag.
+
+If B&Delta;I is used for compression, the process is divided into two stages. In the first stage, the circuit finds out smaller 
+values and compresses them using fewer bits. The locations of values that have been compressed are represented using a bit mask.
+Then in the second stage, the circuit selectively compresses only values on those locations where the bit is clear. The first 
+location with a clear bit will be chosen as the base value. 
