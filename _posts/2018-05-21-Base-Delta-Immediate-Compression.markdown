@@ -51,7 +51,9 @@ does the encoder perform delta operation between the base (the first k-byte word
 The output length *j* defines the number of bits in the output delta. If one or more *k* byte deltas cannot be encoded into an integer 
 of length *j*, then the encoder outputs "No" via a signal line. Otherwise, it outputs the compression ratio. By changing values of
 *k* and *j*, different encoders can be built. In the paper, it is recommended that at least we should have (8, 4), (8, 2), (8, 1),
-(4, 2), (4, 1) and (2, 1) combination for (*k*, *j*). Further, one zero encoder and one repeated value encoder can be added
+(4, 2), (4, 1) and (2, 1) combination for (*k*, *j*). Further, one zero encoder and one repeated value encoder are added
 to handle special cases. The tag arrays of L2 and L3 are extended with three extra bits. These three bits identify the encoding 
-algorithm for compressing the cache line. At decode time, the decoder performs decode operations based on the three 
-"encoding algorithm" bits.
+algorithm used for compressing the cache line. At decode time, the decoder performs decode operations based on the three 
+"encoding algorithm" bits. The decoder simply takes the base and adds the sign-extended 2's complement onto every delta and produces
+the decompressed cache line.
+
