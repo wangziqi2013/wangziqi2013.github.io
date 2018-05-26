@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 --- 
+
+Scratchpad memory (SPM) is small and fast on-chip memory that allows easy accesses by applications. Compared 
+with the cache hierarchy, SPM is nearly as fast, but is more power efficient. The biggest difference between
+SPM and the cache is that SPM requires explicit software management in order to transfer and synchronize data,
+while the cache hierarchy manages data in cache line granularity, and handles cache eviction and coherence.
