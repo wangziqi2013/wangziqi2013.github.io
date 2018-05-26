@@ -30,4 +30,12 @@ into conventional memory and SPM. The systems uses a few registers to inform the
 SPM. The MMU perform a direct mapping from virtual address to physical address if the virtual address belongs to SPM. 
 The memory controller then diverts physical addresses that are mapped to SPM to the SPM controller. 
 
+The hybird SPM and main memory architecture works well if the data access pattern is regular and can be known 
+in advance. One of the examples is HPC computing, where a dominant number of workloads access memory in a strided 
+manner. The compiler is responsible for moving data between the main memory and SPM by calling into the SPM runtime 
+library. Before a data structure can be accessed in the SPM, a DMA call that moves the data from main memory to
+SPM is issued. After that, all references to the data structure is replaced by references to the corresponding copy
+in the SPM. After the access, depending on whether the SPM copy is dirty, a second DMA transfer that copies back the 
+modified data structure may also be issued by the compiler. 
+
 
