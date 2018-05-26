@@ -59,4 +59,5 @@ HTM implementations, especially TSX, certain corner cases may produce unpredicta
 is implemented as a hardware transaction that always ends up aborting itself. This, however, may not be guaranteed 
 if the HTM reads an inconsistent value during execution. If an inconsistent value is used as the target address of 
 a virtual function or indirect jump, then the control flow may be directed to a piece of memory where an XCOMMIT
-instruction is accidently executed, materializing all speculative states. 
+instruction is accidently executed, materializing all speculative states. Fortunately, this "lazy subscription" problem 
+did not occur in any benchmark used for evaluation.
