@@ -23,3 +23,9 @@ an always-abort transaction, and performs speculation as if it were executing a 
 claims that by using always-abort speculation, the performance of lock-based systems can be boosted by at most 
 2.5 times.
 
+The always-abort hardware transaction memory (AAHTM) design resembles that of Intel TSX. AAHTM_BEGIN starts an
+always-abort transaction. AAHTM_ABORT and AAHTM_END both abort the current transaction. AAHTM_TEST checks whether 
+the processor is running an always-abort transaction. To distinguish the AA-mode from normal TSX execution, an extra 
+bit is added into one of the control registers. AAHTM_TEST tests the flag and stores the result into a register. Other
+causes of aborts for TSX, such as cache set overflow, unsupported instructions or exceptions, would abort an AA-transaction
+as well. 
