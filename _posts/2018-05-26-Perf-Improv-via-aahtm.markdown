@@ -36,4 +36,14 @@ speculatively. When the thread compeletes running the critical section, or when 
 retries acquiring the lock. The same is repeated if lock acquisition fails again. For a ticket lock, as worker threads 
 enters the critical section in an FIFO manner consistent with the order they are queued on the lock, the thread does not 
 have to immediately start the transaction. Instead, it may spin on the lock variable for a while, and only begins the 
-transaction when the difference between the two variables of the ticket lock are below a threshold.
+transaction when the difference between the two variables of the ticket lock are below a threshold. This trick avoids 
+the speculative thread running too early and thus stealing cache lines from the thread currently inside the critical 
+section.
+
+Two optimizations are applicable to the TAS spin lock with AA-HTM. The first optimization reduces the wastage of memory 
+bandwidth when a cache line is prefetched but not used. This happens if a transaction aborts early but the thread fails 
+to acquire the lock, allowing another thread to enter the critical section and invalidates the cache line it prefetches.
+To solve the problem, the TAS spin lock is coded in a way that promotes the priority of waiting threads that have finished 
+the AA-transaction. The spin lock has a counter whose value represents the number of threads that have completed running 
+the AA-transaction but are still queued to wait. When a thread attempts to acquire the lock, it first checks the value of 
+the counter. The thread does not acqiure the lock as long as the counter is non-zero.
