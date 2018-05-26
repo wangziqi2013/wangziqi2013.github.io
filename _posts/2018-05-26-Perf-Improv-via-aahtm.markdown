@@ -30,4 +30,7 @@ bit is added into one of the control registers. AAHTM_TEST tests the flag and st
 causes of aborts for TSX, such as cache set overflow, unsupported instructions or exceptions, would abort an AA-transaction
 as well. 
 
-
+The implementation of TAS spin lock takes advantage of AA-HTM as follows. Instead of spinning on the lock variable, the 
+worker thread begins an AA-transaction if the lock acquisition fails. The AA-transaction runs the critical section 
+speculatively. When the thread compeletes running the critical section, or when the transaction aborts, the thread 
+retries acquiring the lock. The same is repeated if lock acquisition fails again. 
