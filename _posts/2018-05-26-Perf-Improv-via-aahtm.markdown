@@ -29,3 +29,5 @@ the processor is running an always-abort transaction. To distinguish the AA-mode
 bit is added into one of the control registers. AAHTM_TEST tests the flag and stores the result into a register. Other
 causes of aborts for TSX, such as cache set overflow, unsupported instructions or exceptions, would abort an AA-transaction
 as well. 
+
+
