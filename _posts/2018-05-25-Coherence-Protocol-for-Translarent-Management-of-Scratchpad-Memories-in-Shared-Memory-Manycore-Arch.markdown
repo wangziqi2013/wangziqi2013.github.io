@@ -6,7 +6,7 @@ categories: paper
 paper_title: "Coherence protocol for transparent management of scratchpad memories in shared memory manycore architectures"
 paper_link: https://dl.acm.org/citation.cfm?id=2749469.2750411
 paper_keyword: Coherence; Scratchpad Memory
-paper_year: 2015
+paper_year: ISCA 2015
 rw_set: 
 htm_cd: 
 htm_cr: 
