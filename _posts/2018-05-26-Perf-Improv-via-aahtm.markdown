@@ -18,7 +18,7 @@ the code path that it has not yet been granted to execute. The speculation has a
 up the cache and branch predictor, achieving similar effects as hardware prefetching, with significantly
 more flexibility. This paper proses an enhanced implementation of TATAS spin lock and ticket lock using 
 a variant of current commercial HTM implementations, where the hardware transaction always aborts. Instead 
-of having threads spinning on the lock, wasting cycles and introducing coherence traffic, the thread begins 
+of having threads spinning on the lock, wasting cycles and introducing coherence traffic, the thread begins
 an always-abort transaction, and performs speculation as if it were executing a hardware transaction. The paper 
 claims that by using always-abort speculation, the performance of lock-based systems can be boosted by at most 
 2.5 times.
@@ -33,4 +33,7 @@ as well.
 The implementation of TAS spin lock takes advantage of AA-HTM as follows. Instead of spinning on the lock variable, the 
 worker thread begins an AA-transaction if the lock acquisition fails. The AA-transaction runs the critical section 
 speculatively. When the thread compeletes running the critical section, or when the transaction aborts, the thread 
-retries acquiring the lock. The same is repeated if lock acquisition fails again. 
+retries acquiring the lock. The same is repeated if lock acquisition fails again. For a ticket lock, as worker threads 
+enters the critical section in an FIFO manner consistent with the order they are queued on the lock, the thread does not 
+have to immediately start the transaction. Instead, it may spin on the lock variable for a while, and only begins the 
+transaction when the difference between the two variables of the ticket lock are below a threshold.
