@@ -17,7 +17,9 @@ Hardware transactional memory can improve the performance of lock-based systems 
 the code path that it has not yet been granted to execute. The speculation has an effect of warming
 up the cache and branch predictor, achieving similar effects as hardware prefetching, with significantly
 more flexibility. This paper proses an enhanced implementation of TATAS spin lock and ticket lock using 
-commercial HTM implementations, where the hardware transaction always aborts. Instead of having threads 
-spinning on the lock, wasting cycles and introducing coherence traffic, the thread begins an always-abort
-transaction, and performs speculation as if it were executing a hardware transaction. The paper claims that
-by using always-abort speculation, the performance of lock-based systems can be boosted by at most 2.5 times.
+a variant of current commercial HTM implementations, where the hardware transaction always aborts. Instead 
+of having threads spinning on the lock, wasting cycles and introducing coherence traffic, the thread begins 
+an always-abort transaction, and performs speculation as if it were executing a hardware transaction. The paper 
+claims that by using always-abort speculation, the performance of lock-based systems can be boosted by at most 
+2.5 times.
+
