@@ -45,3 +45,9 @@ scheme where variables can be moved between the SPM and main memory, the address
 unchanged throughout the lifetime of the application. Maintaining coherence in this case is trivial, as there is no 
 duplication between SPM and the main memory. This scheme, however, is totally ignorant of the dynamic property of the 
 application, and could be inferior compared with the dynamic mapping scheme. 
+
+The coherence problem arises when an instruction accesses a data item in the main memory (including caches), while 
+a potentially updated copy may in the meantime exist in the SPM. The target address of the instruction should 
+therefore be redirected to access the SPM. Note that instructions that access the SPM should never be redirected, as the 
+programming model uses DMA for explicit synchronization. If the copies of data items differ between the main memory and 
+the 
