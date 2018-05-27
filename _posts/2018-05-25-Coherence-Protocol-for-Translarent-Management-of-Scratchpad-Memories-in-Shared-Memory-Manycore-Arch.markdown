@@ -97,4 +97,10 @@ filter directory in this case. It is now the responsibility of the central filte
 is mapped to some SPM. The central filter directory first looks up the address in its associative buffer. If the address hits,
 then no other core could have mapped it, and an ACK is sent back to the requestor. On receiving the ACK, the requestor 
 adds an entry into its own filter, and continues with a normal memory access. The filter directory also adds the requestor 
-into the sharer list of the address by setting the corresponding bit. If, on the other hand, the filter directory does not find the entry
+into the sharer list of the address by setting the corresponding bit. If, on the other hand, the filter directory does not 
+find the entry in its buffer, then either the address is indeed mapped by some SPM, or it is only a false positive. The
+filter directory broadcases the request to all cores except the requestor. On receiving such a request, the core checks 
+its local SPM directory, and either applies the modification (for stores), sends back the data (for loads), or responds 
+with an NACK. If the filter directory receives NACK from all other cores, then it adds the address into the buffer.
+Otherwise, the address is indeed mapped to a remove SPM, and the requestor must abort all its local cache operations
+after receiving the NACK response from the filter directory.
