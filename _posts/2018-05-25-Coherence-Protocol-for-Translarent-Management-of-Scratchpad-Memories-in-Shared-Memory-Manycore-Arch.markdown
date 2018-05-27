@@ -90,4 +90,11 @@ The coherence protocol works as follows. When a base virtual address is generate
 directory are searched in parallel, in addition to the TLB and L1 set. If the address hits the SPM directory, then
 it is mapped by a local SPM, and hence the target address is rewritten using the SPM address. If the addresses misses 
 in the SPM directory, but his the local filter, then we know the address is not mapped by any remote SPM. The target 
-address is used to access the cache hierarchy using the translated physical address.
+address is used to access the cache hierarchy using the translated physical address. If the target address misses in 
+both SPM directory and the local filter, the address should be checked further with remote cores to determine whether 
+it refers to a remotely mapped region. A query with the virtual address (and data, for store instructions) is sent to the central 
+filter directory in this case. It is now the responsibility of the central filter directory to determine whether the address 
+is mapped to some SPM. The central filter directory first looks up the address in its associative buffer. If the address hits,
+then no other core could have mapped it, and an ACK is sent back to the requestor. On receiving the ACK, the requestor 
+adds an entry into its own filter, and continues with a normal memory access. The filter directory also adds the requestor 
+into the sharer list of the address by setting the corresponding bit. If, on the other hand, the filter directory does not find the entry
