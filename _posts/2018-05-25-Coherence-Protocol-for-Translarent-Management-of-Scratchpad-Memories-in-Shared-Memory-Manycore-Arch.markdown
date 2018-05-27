@@ -108,4 +108,8 @@ to be inclusive, i.e. if an entry does not exist in the central directory, then 
 
 When a core adds a new entry into its SPM mapping directory, both the central filter directory and the local filters on 
 all other cores must be invalidated. From now on, the address should be routed to the SPM. The invalidation begins by 
-sending an invalidation request to the filter directory.
+sending an invalidation request to the filter directory. The directory searches its buffer using the address. If the 
+address misses, according to the inclusive property, the address does not exist in any other local filters, and the 
+invalidation completes. Otherwise, the filter directory sends invalidation messages to each individual core in the 
+sharer list. After all cores remove the entry from its local filter and reply with ACK, the filter directory replies 
+the requestor with an ACK, completing the invalidation process.
