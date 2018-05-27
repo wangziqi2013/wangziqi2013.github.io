@@ -38,4 +38,10 @@ SPM is issued. After that, all references to the data structure is replaced by r
 in the SPM. After the access, depending on whether the SPM copy is dirty, a second DMA transfer that copies back the 
 modified data structure may also be issued by the compiler. 
 
-
+One notable variant of the hybrid SPM-main memory system simplifies the coherence problem by using static mapping. 
+In the static mapping scheme, variables are declared as SPM resident, and the compiler automatically generates 
+instructions to access the SPM if these statically mapped variables are accessed. Compared with the dynamic mapping 
+scheme where variables can be moved between the SPM and main memory, the address of a variable in the static scheme remains 
+unchanged throughout the lifetime of the application. Maintaining coherence in this case is trivial, as there is no 
+duplication between SPM and the main memory. This scheme, however, is totally ignorant of the dynamic property of the 
+application, and could be inferior compared with the dynamic mapping scheme. 
