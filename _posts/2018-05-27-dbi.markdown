@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "The Dirty-Block Index"
+date:   2018-05-27 18:23:00 -0500
+categories: paper
+paper_title: "The Dirty-Block Index"
+paper_link: https://dl.acm.org/citation.cfm?id=2665697
+paper_keyword: Dirty Block Index; Cache; Write Back
+paper_year: ISCA 2014
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
