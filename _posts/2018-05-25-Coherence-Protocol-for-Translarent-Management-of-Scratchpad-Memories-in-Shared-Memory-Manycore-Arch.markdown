@@ -60,4 +60,5 @@ the core that issues the instruction to broadcast the request with the target vi
 the address mapped to SPM should reply with data (for load) or apply the change (for store) on behave of the 
 requesting processor. Otherwise the address is not mapped to any SPM, and the main memory is accessed after MMU 
 translates the address. Note that since SPM storage cannot be invalidated (exactly one copy is maintained), the coherence 
-protocol here must be updated-based, rather than invalidation-based. 
+protocol here must be updated-based, rather than invalidation-based. As with any broadcast-based system, the naive design
+lacks scalability. Even worse, performance will plunge if a broadcast is issued for every memory instruction.
