@@ -61,4 +61,10 @@ the address mapped to SPM should reply with data (for load) or apply the change 
 requesting processor. Otherwise the address is not mapped to any SPM, and the main memory is accessed after MMU 
 translates the address. Note that since SPM storage cannot be invalidated (exactly one copy is maintained), the coherence 
 protocol here must be updated-based, rather than invalidation-based. As with any broadcast-based system, the naive design
-lacks scalability. Even worse, performance will plunge if a broadcast is issued for every memory instruction.
+lacks scalability. Even worse, performance will plunge if a broadcast is issued for every memory instruction. As 
+we shall see from later sections, broadcast is only used when information about the mapping is unavailable.
+
+To support coherence only on a subset of instructions, the ISA is extended in a way that distinguishes between normal load/store
+and guarded load/store. A normal load/store instruction always accesses memory based on the address space division. If the address
+belongs to main memory, then the SPM will not be checked. Guarded instructions, on the other hand, checks whether the address is 
+mapped by SPM. 
