@@ -67,4 +67,9 @@ we shall see from later sections, broadcast is only used when information about 
 To support coherence only on a subset of instructions, the ISA is extended in a way that distinguishes between normal load/store
 and guarded load/store. A normal load/store instruction always accesses memory based on the address space division. If the address
 belongs to main memory, then the SPM will not be checked. Guarded instructions, on the other hand, checks whether the address is 
-mapped by SPM. 
+mapped by SPM. The target address of the instruction is diverted to access the SPM if a copy exists. 
+
+The compiler is supposed to perform an aliasing analysis, and determine whether a load/store should be in its guarded form.
+If a memory instruction is known to be always accessing the local SPM or the main memory, then normal instructions are issued. 
+Otherwise, the compiler issues guarded instructions, and let the hardware determine in the runtime whether the address
+should be diverted to some SPM or the main memory.
