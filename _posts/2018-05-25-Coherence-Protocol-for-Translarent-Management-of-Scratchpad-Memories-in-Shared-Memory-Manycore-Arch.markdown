@@ -50,6 +50,14 @@ The coherence problem arises when an instruction accesses a data item in the mai
 a potentially updated copy may in the meantime exist in the SPM. The target address of the instruction should 
 therefore be redirected to access the SPM. Note that instructions that access the SPM should never be redirected, as the 
 programming model uses DMA for explicit synchronization. If the copies of data items differ between the main memory and 
-SPM, then it is guaranteed that the SPM must has the most up-to-date copy. The problem becomes aggravated in a multicore
+SPM, then it is guaranteed that the SPM must have the most up-to-date copy. The problem becomes aggravated in a multicore
 environment, where each core has its own SPM. In addition to checking the SPM mapping on the current core for every 
 suspicious load/store instruction, the SPM mapping of other cores must also be checked.
+
+Given that multiple SPM mapping potentially needs to be checked on a single memory instruction, the coherence protocol 
+needs a central directory that can be queried for the identity of an address. A naive implementation would be letting
+the core that issues the instruction to broadcast the request with the target virtual address. Any processor that has 
+the address mapped to SPM should reply with data (for load) or apply the change (for store) on behave of the 
+requesting processor. Otherwise the address is not mapped to any SPM, and the main memory is accessed after MMU 
+translates the address. Note that since SPM storage cannot be invalidated (exactly one copy is maintained), the coherence 
+protocol here must be updated-based, rather than invalidation-based. 
