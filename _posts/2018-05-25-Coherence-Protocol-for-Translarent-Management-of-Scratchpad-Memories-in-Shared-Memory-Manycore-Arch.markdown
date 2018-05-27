@@ -73,3 +73,11 @@ The compiler is supposed to perform an aliasing analysis, and determine whether 
 If a memory instruction is known to be always accessing the local SPM or the main memory, then normal instructions are issued. 
 Otherwise, the compiler issues guarded instructions, and let the hardware determine in the runtime whether the address
 should be diverted to some SPM or the main memory.
+
+Each core maintains a fully associative array that stores active virtual to SPM address mappings. The array is searched using 
+virtual addresses when external coherence requests arrive. Besides that, each core also has a local filter, which stores addresses
+that are known to be not part of any SPM mapping. As local and remote cores add new SPM mappings, the content of the filter may 
+become obsolete, and must be notified of any local or remote update. To perform efficient notification, a central directory of 
+filters are added to the memory controller. The central directory tracks which cores have which addresses in their filters. 
+It is a large fully associative buffer that maps virtual addresses to a bit mask. The bit mask has the corresponding bit set to 
+1 if the address exists in the filter 
