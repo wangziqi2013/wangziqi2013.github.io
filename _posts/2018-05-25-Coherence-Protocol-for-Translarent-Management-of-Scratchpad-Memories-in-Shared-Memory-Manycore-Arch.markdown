@@ -77,7 +77,11 @@ should be diverted to some SPM or the main memory.
 Each core maintains a fully associative array that stores active virtual to SPM address mappings. The array is searched using 
 virtual addresses when external coherence requests arrive. Besides that, each core also has a local filter, which stores addresses
 that are known to be not part of any SPM mapping. As local and remote cores add new SPM mappings, the content of the filter may 
-become obsolete, and must be notified of any local or remote update. To perform efficient notification, a central directory of 
-filters are added to the memory controller. The central directory tracks which cores have which addresses in their filters. 
-It is a large fully associative buffer that maps virtual addresses to a bit mask. The bit mask has the corresponding bit set to 
-1 if the address exists in the filter 
+become obsolete, and must be notified of any local or remote update. To enable efficient notification, a central filter directory of 
+filters are added to the memory controller as part of the cache directory. The filter directory tracks which cores have which 
+addresses in their filters. It is a large fully associative buffer that maps virtual addresses to a bit mask. The length of 
+the bit mask equals the number of processors in the system, and the corresponding bit is set if a processor has the address 
+in its filter. All addresses mentioned in this paragraph are base addresses of fixed sized chunks. We assume that all chunks 
+must be mapped to SPM using the same granularity and alignment. The granularity is determined in the runtime by the compiler.
+The SPM interface allows the application to specify the granularity of mapping by setting the values of a base mask register and 
+offset mask register.
