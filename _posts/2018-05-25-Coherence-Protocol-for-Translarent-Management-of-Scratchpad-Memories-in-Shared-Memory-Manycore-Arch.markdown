@@ -101,6 +101,11 @@ into the sharer list of the address by setting the corresponding bit. If, on the
 find the entry in its buffer, then either the address is indeed mapped by some SPM, or it is only a false positive. The
 filter directory broadcases the request to all cores except the requestor. On receiving such a request, the core checks 
 its local SPM directory, and either applies the modification (for stores), sends back the data (for loads), or responds 
-with an NACK. If the filter directory receives NACK from all other cores, then it adds the address into the buffer.
-Otherwise, the address is indeed mapped to a remove SPM, and the requestor must abort all its local cache operations
-after receiving the NACK response from the filter directory.
+with an NACK. If the filter directory receives NACK from all other cores, then it adds the address into the buffer,
+and ACKs the requestor. Otherwise, the address is indeed mapped to a remove SPM, and the requestor must abort all its 
+local cache operations after receiving a NACK response from the filter directory. The filter directory must be large enough
+to be inclusive, i.e. if an entry does not exist in the central directory, then it must not exist in local filters also.
+
+When a core adds a new entry into its SPM mapping directory, both the central filter directory and the local filters on 
+all other cores must be invalidated. From now on, the address should be routed to the SPM. The invalidation begins by 
+sending an invalidation request to the filter directory.
