@@ -50,4 +50,6 @@ The coherence problem arises when an instruction accesses a data item in the mai
 a potentially updated copy may in the meantime exist in the SPM. The target address of the instruction should 
 therefore be redirected to access the SPM. Note that instructions that access the SPM should never be redirected, as the 
 programming model uses DMA for explicit synchronization. If the copies of data items differ between the main memory and 
-the 
+SPM, then it is guaranteed that the SPM must has the most up-to-date copy. The problem becomes aggravated in a multicore
+environment, where each core has its own SPM. In addition to checking the SPM mapping on the current core for every 
+suspicious load/store instruction, the SPM mapping of other cores must also be checked.
