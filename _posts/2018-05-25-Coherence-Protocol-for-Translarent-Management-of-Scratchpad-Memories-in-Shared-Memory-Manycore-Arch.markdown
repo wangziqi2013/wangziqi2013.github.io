@@ -86,4 +86,8 @@ are base addresses of fixed sized chunks. We assume that all chunks must be mapp
 alignment. The granularity is determined in the runtime by the compiler. The SPM interface allows the application to specify 
 the granularity of mapping by setting the values of a base mask register and offset mask register.
 
-The coherence checking works as follows. When a base virtual address is generated, both the local filter and the SPM directory
+The coherence protocol works as follows. When a base virtual address is generated, both the local filter and the SPM 
+directory are searched in parallel, in addition to the TLB and L1 set. If the address hits the SPM directory, then
+it is mapped by a local SPM, and hence the target address is rewritten using the SPM address. If the addresses misses 
+in the SPM directory, but his the local filter, then we know the address is not mapped by any remote SPM. The target 
+address is used to access the cache hierarchy using the translated physical address.
