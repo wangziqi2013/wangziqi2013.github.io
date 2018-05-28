@@ -19,4 +19,9 @@ bit is part of the tag array. In order to access the array, an index needs to be
 and is used to activate all tags in the set. This paper proposes an alternative storage format
 of dirty bits in a cache. Instead of encoding the dirty bit either with the cache coherence 
 state (e.g. "M" state in MESI protocol) or as a separate bit for each element in the set, this 
-paper recommends encoding dirty bits for a DRAM row 
+paper recommends a scheme, called the *Dirty-Block Index* (DBI), which decouples the storage of cache 
+sets and dirty bits. The DBI scheme stores dirty bits as an array of tagged entries. Each entry
+stores a bit array for a DRAM row. Each bit in the entry represents the dirty status of a cache block
+in the row. The tag of the entry encodes the identity of the DRAM row. The entire DBI storage is 
+organized as a fully associative cache. The dirty status of a cache line can be located using the 
+row address and the cache block offset in a row. 
