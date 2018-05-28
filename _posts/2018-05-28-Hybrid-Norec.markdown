@@ -34,3 +34,8 @@ all read and validation are conducted under a consistent snapshot where no trans
 committed. The last purpose of the commit counter is to indicate an "unstable" state of the snapshot,
 and hence prevent new transactions from beginning. New transactions take a snapshot of the counter,
 and if a commit is currently going on, the new transaction will not begin.
+
+The commit counter in NORec is a 64 bit integer consisting of two parts. The lowest bit of the integer 
+serves as the "locked" bit. If it is set, then a commit is currently being processed. All remaining bits 
+comprise the version counter, which counts the number of commits (excluding the current one if the lowest
+bit is set) that have taken place.
