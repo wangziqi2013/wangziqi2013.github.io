@@ -13,3 +13,9 @@ htm_cr: Hybrid
 version_mgmt: Hybrid
 ---
 
+Current implementations of commercial hardware transactional memory (HTM) features lazy
+version management and eager conflict detection. A transactional store instruction cannot be 
+observed by both transactional and non-transactional loads until the writing transaction
+commits. In addition, both transactional and non-transactional store to a location in 
+a transaction's read set will cause an immediate abort of that reader transaction.
+
