@@ -42,3 +42,9 @@ back, although seems heavyweight and slow, can be accomplished in relatively sho
 a normal cache set write back of the same size. This is because most DRAMs have a row buffer that can accelerate
 accesses if they exhibit locality. When writing back the entire DRAM row, the write back operation can 
 always hit the row buffer except the first one, and hence can complete in short time. 
+
+Several design decisions have to be made when architecting DBI for the cache system. The first is the size of the DBI,
+characterized by the maximum number of cache lines it can track. We use &alpha; to represent the ratio between the 
+number of lines tracked by DBI and the total number of lines in the cache. The smaller &alpha; is, the lower latency DBI
+can be accessed with. On the other hand, if &alpha; becomes too small, the working set of most applications would exceed
+the capacity of the DBI. In this case, it is likely that thrashing may occur. 
