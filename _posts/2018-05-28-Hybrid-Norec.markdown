@@ -38,4 +38,9 @@ and if a commit is currently going on, the new transaction will not begin.
 The commit counter in NORec is a 64 bit integer consisting of two parts. The lowest bit of the integer 
 serves as the "locked" bit. If it is set, then a commit is currently being processed. All remaining bits 
 comprise the version counter, which counts the number of commits (excluding the current one if the lowest
-bit is set) that have taken place.
+bit is set) that have taken place. Committing transactions first set the lock bit to exclude all other 
+transactions from committing, performing reads, validating, and beginning. Then it writes back the write 
+set. After the write back completes, it clears the locked bit and increments the version counter by one.
+The last step is performed using atomic Fetch-and-Add or Compare-and-Swap. In fact, the assignment of bits in 
+the commit counter allows both atomic "lock" and "unlock-increment" be carried out by an atomic Fetch-and-Add 
+by one.
