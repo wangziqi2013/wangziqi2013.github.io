@@ -51,4 +51,7 @@ the capacity of the DBI. In this case, it is likely that thrashing may occur, wh
 after being written into. The second design decision is the size of entries. In our previous description, we assume 
 implicitly that an entry can track the entire DRAM row. In fact, the size of an entry can be smaller than a DRAM row. This 
 is another instance of the trade-off between the locality that DBI can capture and the maximum supported working set size.
-The third 
+The third design decision is the replacement policy. Similar to a cache replacement policy, there are numerous choices
+favoring different patterns and under different assumptions. In the paper it is claimed that the Least Recently Written 
+(LRW) is sufficient to achieve reasonable performance.
+
