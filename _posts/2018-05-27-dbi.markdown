@@ -70,3 +70,10 @@ high. If the prediction is correct, the latency of load operations can be shorte
 on the critical path of most load instructions. This, unfortunately, does not work for dirty lines. Former 
 solutions are either too complicated, or have to live up with the latency of activating the tag store. With DBI, 
 checking for dirty status becomes trivial. The cache controller simply looks up the DBI with the row tag.
+
+The last optimization reduces ECC storage overhead of the cache. Conventional cache design has an ECC field for 
+every line no matter dirty or not. This is in fact an overkill, because expensive ECC is only required for dirty lines.
+Clean cache lines can be re-fetched from lower level of the hierarchy if they are know to be corrupted, and hence only
+error detection code (EDC) is needed. With DBI, ECCs are maintained only for dirty lines, which are stored with DBI.
+The tag array instead uses simpler EDC for error detection, but not correction. Both real estate requirement and 
+energy consumption of the cache can be reduced if this optimization is applied.
