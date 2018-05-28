@@ -25,3 +25,11 @@ stores a bit array for a DRAM row. Each bit in the entry represents the dirty st
 in the row. The tag of the entry encodes the identity of the DRAM row. The entire DBI storage is 
 organized as a fully associative cache. The dirty status of a cache line can be located using the 
 row address and the cache block offset in a row. 
+
+As DBI decouples the storage of cache tags and dirty bits, information must be maintained in
+a consistent manner between the tag store and DBI. The invariant is that a cache line is dirty
+*if and only if* there is an entry for the line and the corresponding bit is set. To maintain the 
+invariant, when a dirty cache line is evicted, the corresponding entry in the DBI should be cleared
+to reflect the change. If all bits in an entry are clear, then the entry itself is freed. Similarly,
+when a cache line becomes dirty or a dirty cache line is evicted by higher level caches, the DBI 
+should set the bit in the corresponding entry. If the entry does not exist yet, 
