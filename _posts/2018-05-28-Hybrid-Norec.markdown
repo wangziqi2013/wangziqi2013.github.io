@@ -23,7 +23,14 @@ NORec, a lightweight software transactional memory (STM) design, features lazy v
 and incremental lazy conflict detection. A transactional write to data items cannot be observed by 
 other STMs until the writing transaction commits. This, however, will cause a hardware transaction
 to abort. NORec always maintains a consistent read set by using a commit counter. The commit 
-counter serves two purposes. First, it acts as a global write lock to all data items, serializing
+counter serves three purposes. First, it acts as a global write lock to all data items, serializing
 the write phase of all committing transactions. Second, the commit counter also signals all 
 reading transactions that a commit has taken place/is being processed. The read set of the 
-transaction should be validated using value validation
+transaction should be validated using value validation when the commit operation finishes. 
+This is achieved by transactions taking a snapshot of the commit counter before it starts and 
+before every validation. If the value of the commit counter differs from the snapshot after a 
+load operation or after a validation, the load or validation must be retried. This ensures that
+all read and validation are conducted under a consistent snapshot where no transaction has ever 
+committed. The last purpose of the commit counter is to indicate an "unstable" state of the snapshot,
+and hence prevent new transactions from beginning. New transactions take a snapshot of the counter,
+and if a commit is currently going on, the new transaction will not begin.
