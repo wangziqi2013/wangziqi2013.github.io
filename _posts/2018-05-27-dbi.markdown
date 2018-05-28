@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+Several cache system optimizations rely on the dirty bit storage being fast and having 
+low latency. This, however, is usually not the case in today's design, where the dirty
+bit is part of the tag array. In order to access the array, an index needs to be generated
+and is used to activate all tags in the set. This paper proposes an alternative storage format
+of dirty bits in a cache. Instead of encoding the dirty bit either with the cache coherence 
+state (e.g. "M" state in MESI protocol) or as a separate bit for each element in the set, this 
+paper recommends encoding dirty bits for a DRAM row 
