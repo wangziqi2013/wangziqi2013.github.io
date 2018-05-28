@@ -17,7 +17,9 @@ Current implementations of commercial hardware transactional memory (HTM) featur
 version management and eager conflict detection. A transactional store instruction cannot be 
 observed by both transactional and non-transactional loads until the writing transaction
 commits. In addition, both transactional and non-transactional store to a location in 
-a transaction's read set will cause an immediate abort of that reader transaction.
+a transaction's read set will cause an immediate abort of that reader transaction. Since 
+transactions are not guaranteed to complete successfully, such HTM implementations is called
+"best-effort" HTM.
 
 NORec, a lightweight software transactional memory (STM) design, features lazy version management
 and incremental lazy conflict detection. A transactional write to data items cannot be observed by 
@@ -44,3 +46,5 @@ set. After the write back completes, it clears the locked bit and increments the
 The last step is performed using atomic Fetch-and-Add or Compare-and-Swap. In fact, the assignment of bits in 
 the commit counter allows both atomic "lock" and "unlock-increment" be carried out by an atomic Fetch-and-Add 
 by one.
+
+The simplest way of integrating NORec and best-effort HTM is stated as follows.
