@@ -24,7 +24,7 @@ sets and dirty bits. The DBI scheme stores dirty bits as an array of tagged entr
 stores a bit array for a DRAM row. Each bit in the entry represents the dirty status of a cache block
 in the row. The tag of the entry encodes the identity of the DRAM row. The entire DBI storage is 
 organized as a fully associative cache. The dirty status of a cache line can be located using the 
-row address and the cache block offset in a row. 
+row address and the cache block offset in the row. 
 
 As DBI decouples the storage of cache tags and dirty bits, information must be maintained in
 a consistent manner between the tag store and DBI. The invariant is that a cache line is dirty
@@ -32,6 +32,13 @@ a consistent manner between the tag store and DBI. The invariant is that a cache
 invariant, when a dirty cache line is evicted, the corresponding entry in the DBI should be cleared
 to reflect the change. If all bits in an entry are clear, then the entry itself is freed. Similarly,
 when a cache line becomes dirty or a dirty cache line is evicted by higher level caches, the DBI 
-should set the bit in the corresponding entry. If the entry does not exist yet, it needs to be 
+should set the bit in the corresponding entry. If the entry has not existed yet, it needs to be 
 allocated by the cache controller. If no free entry exists in the DBI, the cache controller evicts 
-one entry according to the DBI replacement policy.
+one entry according to the DBI replacement policy. The eviction of DBI entry is also always accompanied 
+with a bulk write back, during which dirty lines are written back to the DRAM to keep them consistent
+with the dirty bits. The write back does not have to be on the critical path of the DBI eviction operation,
+as the cache controller could buffer the evicted cache lines and write them back in the background. The write 
+back, although seems heavyweight and slow, can be accomplished in relatively shorter time compared with 
+a normal cache set write back of the same size. This is because most DRAMs have a row buffer that can accelerate
+accesses if they exhibit locality. When writing back the entire DRAM row, the write back operation can 
+always hit the row buffer except the first one, and hence can complete in short time. 
