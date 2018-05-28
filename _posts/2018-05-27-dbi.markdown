@@ -32,4 +32,6 @@ a consistent manner between the tag store and DBI. The invariant is that a cache
 invariant, when a dirty cache line is evicted, the corresponding entry in the DBI should be cleared
 to reflect the change. If all bits in an entry are clear, then the entry itself is freed. Similarly,
 when a cache line becomes dirty or a dirty cache line is evicted by higher level caches, the DBI 
-should set the bit in the corresponding entry. If the entry does not exist yet, 
+should set the bit in the corresponding entry. If the entry does not exist yet, it needs to be 
+allocated by the cache controller. If no free entry exists in the DBI, the cache controller evicts 
+one entry according to the DBI replacement policy.
