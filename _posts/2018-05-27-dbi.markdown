@@ -55,3 +55,11 @@ The third design decision is the replacement policy. Similar to a cache replacem
 favoring different patterns and under different assumptions. In the paper it is claimed that the Least Recently Written 
 (LRW) is sufficient to achieve reasonable performance.
 
+DBI enables optimizations that are not possible or hard to implement in an ordinary cache design. One of them is 
+Aggressive Write Back (AWB), where cache lines belonging to the same DRAM row are written back together. As 
+explained in previous paragraphs, this scheme has the advantage of exploiting the locality of the row buffer, and 
+hence is normally faster than writing these cache lines back in several individual requests. On a cache line 
+eviction, the cache controller looks up cache lines that are on the same DRAM row as the evicted cache line,
+and writes them back in a single request. This is fast because DBI stores dirty bits for a DRAM row. Note that 
+cache lines written back in AWB scheme does not need to be evicted from the cache except the one that triggers 
+the write back. It is sufficient just setting them back to the clean state.
