@@ -63,3 +63,10 @@ eviction, the cache controller looks up cache lines that are on the same DRAM ro
 and writes them back in a single request. This is fast because DBI stores dirty bits for a DRAM row. Note that 
 cache lines written back in AWB scheme does not need to be evicted from the cache except the one that triggers 
 the write back. It is sufficient just setting them back to the clean state.
+
+Another optimization, Cache Lookup Bypass (CLB), allows the cache controller to avoid checking the tag store 
+and to directly fetch the line from the DRAM, when the confidence that the line will not hit the cache is
+high. If the prediction is correct, the latency of load operations can be shortened, because cache lookup is not 
+on the critical path of most load instructions. This, unfortunately, does not work for dirty lines. Former 
+solutions are either too complicated, or have to live up with the latency of activating the tag store. With DBI, 
+checking for dirty status becomes trivial. The cache controller simply looks up the DBI with the row tag.
