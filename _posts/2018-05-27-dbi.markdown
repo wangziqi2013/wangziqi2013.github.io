@@ -47,4 +47,8 @@ Several design decisions have to be made when architecting DBI for the cache sys
 characterized by the maximum number of cache lines it can track. We use &alpha; to represent the ratio between the 
 number of lines tracked by DBI and the total number of lines in the cache. The smaller &alpha; is, the lower latency DBI
 can be accessed with. On the other hand, if &alpha; becomes too small, the working set of most applications would exceed
-the capacity of the DBI. In this case, it is likely that thrashing may occur. 
+the capacity of the DBI. In this case, it is likely that thrashing may occur, where cache lines are repeatedly written back
+after being written into. The second design decision is the size of entries. In our previous description, we assume 
+implicitly that an entry can track the entire DRAM row. In fact, the size of an entry can be smaller than a DRAM row. This 
+is another instance of the trade-off between the locality that DBI can capture and the maximum supported working set size.
+The third 
