@@ -109,4 +109,6 @@ Any change of the STM counter between the subscription and the commit instructio
 
 The second optimization removes pre-commit validation for read-only HTM transactions. Each transaction has a thread-local
 read only flag. It is initialized to false when HTM transaction begins. HTM transactions store instructions are instrumented 
-to set the flag to true. On HTM pre-commit, 
+to set the flag to true. On HTM pre-commit, this flag is checked, and if its value is false, then the HTM commit 
+protocol does not spin on and subscribe to the commit counter. This does not harm correctness, because the HTM
+transaction does not perform transactional writes, and will not be committed in the middle of an STM write back.
