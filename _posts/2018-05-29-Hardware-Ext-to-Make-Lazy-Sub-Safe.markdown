@@ -22,6 +22,12 @@ Due to certian restrictions of current commercial implementations of HTM, HLE me
 path that executes the critical section in pure software with minimum hardware support. This is usually caused by the 
 fact that HTM capabilities heavily depend on the capacity of the cache and cache parameters. If the size of a transaction
 exceeds the maximum that the cache could support, then there is no way that the transaction can commit even
-in the absence of conflict. On Intel platform, the fall back path
+in the absence of conflict. The fall back path must therefore be able to interoperate with hardware transactions in a 
+transparent way. On Intel platform, the fall back path let the transaction acquire and release the lock as it would be 
+without HLE. Hardware transactions must "subscribe" to the cache line that contains the lock by reading its content at
+the beginning of the transaction. Hardware transactions can only start if the lock is currently free. If a fall back
+transaction acquires the lock by writing into the lock, then all hardware transactions must be aborted. This is 
+necessary to prevent them from reading inconsistent states created by the fall back transaction before they are 
+actually aborted by data conflicts.
 
-Lazy subscription enables  STM and HTM
+Lazy subscription, as its name suggests, enables  STM and HTM
