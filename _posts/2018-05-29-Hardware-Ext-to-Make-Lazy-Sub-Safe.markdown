@@ -35,4 +35,10 @@ Lazy subscription, as its name suggests, is a scheme that allows hardware transa
 the transaction is ready to commit. Lazy subscription is sometimes favored over standard HLE, because it allows higher 
 degree of concurrency between hardware threads and the fall back thread. Standard HLE, as described in the previous 
 paragraph, serializes the execution of hardware transactions and fall back transactions. At any given point in time,
-only one type of them can be actively running. enables  STM and HTM
+only one type of them can be actively running. This, however, is unnecessarily restrictive, because hardware transactions
+and fall back transactions can of course commit in parallel as long as they do not access conflicting data items. To exploit
+this extra opportunity, HLE with lazy subscription must have a two-way communication mechanism between fall back and 
+hardware transactions, such that both can inform each other of their state changes. 
+
+One example is Hybrid NORec,
+where both types of transactions uses a commit counter. enables  STM and HTM
