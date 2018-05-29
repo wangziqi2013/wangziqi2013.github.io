@@ -56,3 +56,9 @@ requires the HTM instrumentation to add the commit counter into its read set, an
 the lock bit is cleared. (2) requires the HTM to increment the commit counter by two and also add it into the write set,
 before it executes the commit instruction. (3) does not need any special handling, because before the STM commits,
 the commit counter will be incremented by one to set the lock bit, which will trigger an immediate HTM abort.
+
+The invariant we try to maintain in the hybrid approach is that all commit phases must be serialized. No interleaved 
+writes is acceptable. In the above scheme, HTM could not commit inside an STM commit phase, because neither could HTM
+begin when STM is currently committing, nor could STM commit without aborting the HTM. If the STM commits while an HTM
+transaction is running, then the increment of the commit counter will force the HTM transaction to abort.
+
