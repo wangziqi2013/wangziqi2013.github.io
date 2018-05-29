@@ -48,4 +48,8 @@ to the counter at the beginning and spin loop until no STM is committing. At com
 the commit counter by two to indicate an atomic commit. STM monitors the content of the counter on every read operation.
 If the counter has changed since last time it was sampled, then at least one transaction must have committed, potentially
 overwriting the current transaction's read set. In this case, the current transaction performs a value-based validation,
-and aborts if the read set is indeed invalid.
+and aborts if the read set is indeed invalid. As a contrast, with lazy subscription, hardware transactions only subscribe to
+the commit counter at the end of the transaction, right before it is going to execute the commit instruction. The 
+subscription of the commit counter synchronizes with the atomic increment operation performed by STM. The order of 
+HTM and STM transactions are determined by the order that corresponding primitives are executed.
+
