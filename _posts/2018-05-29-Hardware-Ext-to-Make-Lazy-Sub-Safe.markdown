@@ -63,3 +63,10 @@ may be used to switch the control flow via indirect jump, or to decide the addre
 determine the value of the lock state. It is possible that the hardware transaction be tricked into executing wrong 
 code, or reads the wrong lock, or even corrupt random memory addresses. Essentially, execution of the hardware transaction 
 is undefined.
+
+To counter such problem, hardware transaction must have an error discovery and self-abort mechanism when it detects that
+the execution may become undefined due to inconsistent reads. One obvious solution, as used by Hybrid NORec, is to 
+validate every hardware load instruction. The validation spins on the current commit counter lock bit, and waits for 
+the ongoing write back phase, if any, to complete. If the read becomes inconsistent due to reading partially committed
+data, waiting for the write back to complete will guarantee that the hardware can at least detect the conflict
+and then abort.
