@@ -84,3 +84,8 @@ commit or as a result of undefined execution, the SCAR function pointer is calle
 value of the lock and then subscribe from it. As long as LAR and SCAR are loaded with correct values, no matter whether 
 or not the the execution is undefined, the transaction can always subscribe to the correct lock, or be aborted as 
 a consequence of undefined execution.
+
+There remains one issue with the above solution. We assume in the above discussion that the code section of the SCAR 
+function pointer will be consistent. Nothing, however, could prevent the undefined execution from overwriting the lock 
+pointed to by LAR, or code pointed to by SCAR. Fortunately, if the overwrite truly happens, then they must exist in the 
+transaction's write set.
