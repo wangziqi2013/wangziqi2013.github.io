@@ -72,3 +72,15 @@ due to reading partially committed data, waiting for the write back to complete 
 least detect the conflict and then abort. Simple as it is, this solution has two undesired properties. The first is that 
 hardware transactions need to be instrumented, extending every load operation with a validation. The second property is 
 that spinning itself is an inefficient way of synchronization, which may cause frequent cache line invalidation. 
+
+The paper proposes another solution by adding two registers. One register, the lock address register (LAR), stores the 
+lock address, and is loaded as the transaction begins. The purpose of this register is to maintain a reference 
+to the lock before the execution becomes potentially undefined. Another register, the Subscription Code Address
+Register (SCAR), is loaded with the function pointer that subscribes to the lock in a similar way. Once these two registers 
+are loaded at transaction begin, they cannot be altered until the transaction commits or aborts. During the execution
+of the transaction, any attempt to modify these two registers will cause the transaction to abort immediately, because 
+this implies that undefined execution has occurred. If the transaction executes the commit instruction, either intending to
+commit or as a result of undefined execution, the SCAR function pointer is called with LAR to check the 
+value of the lock and then subscribe from it. As long as LAR and SCAR are loaded with correct values, no matter whether 
+or not the the execution is undefined, the transaction can always subscribe to the correct lock, or be aborted as 
+a consequence of undefined execution.
