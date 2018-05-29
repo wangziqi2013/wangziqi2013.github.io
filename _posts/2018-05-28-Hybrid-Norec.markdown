@@ -79,3 +79,11 @@ with each other using the STM commit counter and HTM local counters. STM proacti
 all executing HTM, no matter true data conflict happens or not. HTM signals STM about its commits using the local 
 commit counter. STM is responsible for making sure that if either STM or HTM changes the counter, it will perform 
 a value validation.
+
+As can be easily seen from the previous description, if the HTM transaction subscribes to an STM transaction by 
+reading the commit counter, then the HTM transaction is forced to abort whenever an STM transaction commits. The 
+abort does not take into consideration the actual data conflict. One might try to optimize this by using 
+"lazy subscription", i.e. the HTM thread only subscribes to the commit counter right before it executes the 
+commit instruction. The subscription of commit counter synchronizes with the atomic Fetch-and-Add increment in 
+NORec commit protocol. The serialization order of STM and HTM transactions is determined by the order that the 
+reach the respective synchronization point. 
