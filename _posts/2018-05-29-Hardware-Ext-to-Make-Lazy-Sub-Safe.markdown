@@ -40,5 +40,8 @@ and fall back transactions can of course commit in parallel as long as they do n
 this extra opportunity, HLE with lazy subscription must have a two-way communication mechanism between fall back and 
 hardware transactions, such that both can inform each other of their state changes. 
 
-One example is Hybrid NORec,
-where both types of transactions uses a commit counter. enables  STM and HTM
+One example of exploiting lazy subscription is in Hybrid NORec, where both types of transactions use a commit counter
+to serialize write phases. In the normal operation mode, STM atomically increases the counter to perform write back, 
+and then atomically increments the counter to indicate the completion. Hardware threads, on the other hand, subsribes 
+to the counter at the beginning and spin loop until no STM is committing. At commit time, the hardware thread increments 
+the commit counter by two to indicate an atomic commit. 
