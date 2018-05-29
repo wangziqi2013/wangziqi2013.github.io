@@ -53,3 +53,7 @@ the commit counter at the end of the transaction, right before it is going to ex
 subscription of the commit counter synchronizes with the atomic increment operation performed by STM. The order of 
 HTM and STM transactions are determined by the order that corresponding primitives are executed.
 
+One problem with lazy subscription is that HTM transactions may read inconsistent values, because they can begin
+at the middle of a software transaction (the lock is not checked at the beginning), or because STM can begin and 
+perform partial write back in the middle of the HTM transaction. Either may lead to incorrect execution where the 
+snapshot the hardware transaction depends on can never occur in a serialized execution. The inconsistent snapshot
