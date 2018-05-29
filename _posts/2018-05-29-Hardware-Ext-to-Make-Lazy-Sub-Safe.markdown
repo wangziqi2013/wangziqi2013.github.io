@@ -13,9 +13,9 @@ htm_cr:
 version_mgmt: 
 ---
 
+Hardware Lock Elision (HLE) is a technique that allows processors with transactional memory support to
+execute critical sections in a speculative manner. The critical section appears to commit atomically at the 
+end of the critical section. This way, multiple hardware transactions can execute in parallel, providing higher
+degrees of parallelism given that the transactions do not conflict with each other.
 
-
-
-
-
-
+Lazy subscription enables  STM and HTM
