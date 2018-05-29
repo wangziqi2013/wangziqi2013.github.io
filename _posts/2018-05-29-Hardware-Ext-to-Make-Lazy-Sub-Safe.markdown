@@ -18,4 +18,10 @@ execute critical sections in a speculative manner. The critical section appears 
 end of the critical section. This way, multiple hardware transactions can execute in parallel, providing higher
 degrees of parallelism given that the transactions do not conflict with each other.
 
+Due to certian restrictions of current commercial implementations of HTM, HLE mechanisms must provide a "fall-back" 
+path that executes the critical section in pure software with minimum hardware support. This is usually caused by the 
+fact that HTM capabilities heavily depend on the capacity of the cache and cache parameters. If the size of a transaction
+exceeds the maximum that the cache could support, then there is no way that the transaction can commit even
+in the absence of conflict. On Intel platform, the fall back path
+
 Lazy subscription enables  STM and HTM
