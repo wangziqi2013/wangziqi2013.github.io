@@ -86,6 +86,10 @@ or not the the execution is undefined, the transaction can always subscribe to t
 a consequence of undefined execution.
 
 There remains one issue with the above solution. We assume in the above discussion that the code section of the SCAR 
-function pointer will be consistent. Nothing, however, could prevent the undefined execution from overwriting the lock 
-pointed to by LAR, or code pointed to by SCAR. Fortunately, if the overwrite truly happens, then they must exist in the 
-transaction's write set.
+function pointer and the lock to be subscribed will be consistent. Nothing, however, could prevent the undefined execution 
+from overwriting the lock pointed to by LAR, or code pointed to by SCAR. Fortunately, if the overwrite truly happens, then 
+they must exist in the transaction's write set. We use a lazy approach to discover whether this has occurred. It works 
+as follows. After the transaction reaches the commit instruction, it enters a special mode, where any attempt to execute 
+or read/write data items in the write set will cause an immediate abort. Since both the lock and the function to subscribe 
+from the lock should not be touched by the transaction, if they are overwritten by the transaction, then it must be 
+the case that undefined execution made them so.
