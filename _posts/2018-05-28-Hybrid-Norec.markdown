@@ -71,5 +71,11 @@ each other via the commit counter restricts the degree of parallelism, because H
 overlap their execution phases with any commit instruction. In an improved scheme, each core in the system is allocated a 
 local counter, which is incremented by a committing transaction running on that core as part of the transaction write set. 
 HTM transactions still "subscribe" from the commit counter at the beginning of the transaction to get notifications of 
-STM commits. The difference is that now STM validation process should validate all HTM counters by value, using the value 
-validation technique as it does for data items as well.
+STM commits. The difference is that now the STM validation process should validate all HTM counters by value, using the value 
+validation technique as it does for data items as well. This way, STM transactions serialize with each other using 
+lazy versioning, non-atomic write back and incremental conflict detection, while HTM transactions serialize with each 
+other using lazy versioning, atomic write back and eager conflict detection. HTM and STM transactions synchronize 
+with each other using the STM commit counter and HTM local counters. STM proactively notifies HTM of its commit to abort
+all executing HTM, no matter true data conflict happens or not. HTM signals STM about its commits using the local 
+commit counter. STM is responsible for making sure that if either STM or HTM changes the counter, it will perform 
+a value validation.
