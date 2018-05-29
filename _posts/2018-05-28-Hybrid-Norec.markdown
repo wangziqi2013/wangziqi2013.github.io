@@ -97,7 +97,8 @@ It is therefore possible that the HTM reads partial committed state of a STM by 
 of the write back phase, and reads half-committed, half-uncommitted data that will be committed later. Fortunately, 
 such partial state read will eventually abort the HTM transaction, after the completion of the STM write back phase. 
 On every load instruction, the HTM should validate simply by waiting for the current write back phase, if any, to 
-complete. This is achieved by spinning on the commit counter until its lock bit becomes clear.
+complete. This is achieved by spinning on the commit counter until its lock bit becomes clear. The spinning should use 
+non-transactional load instruction to avoid subscribing to the commit counter too early.
 
 Two extra optimizations can be applied to reduce the amount of synchronization between STM and HTM transactions
 in addition to the lazy subscription optimization discussed above. The first optimization adds a STM counter to count 
@@ -105,3 +106,7 @@ the current number of active STM transactions. STM transactions increment and de
 transaction begin and commit/abort. On HTM pre-commit, it subscribes to the STM counter, and checks whether its value 
 is zero. If it is the case, then HTM transactions avoid reading and spinning on the commit counter, and directly commit.
 Any change of the STM counter between the subscription and the commit instruction will abort the HTM transaction.
+
+The second optimization removes pre-commit validation for read-only HTM transactions. Each transaction has a thread-local
+read only flag. It is initialized to false when HTM transaction begins. HTM transactions store instructions are instrumented 
+to set the flag to true. On HTM pre-commit, 
