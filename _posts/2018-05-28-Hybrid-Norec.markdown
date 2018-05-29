@@ -93,7 +93,8 @@ This spin operation adds the value of the counter in the read set, and serialize
 If an STM transaction attempts to commit by incrementing the commit counter, the HTM transaction will abort.
 The third change adds validation for every load instructions. Such instrumentation is indispensable, because the 
 HTM transaction can begin when a STM is performing write back, and also STM commit does not cause HTM to abort.
-It is therefore possible that the HTM reads partial committed state of a STM. Fortunately, such partial state read
-will eventually abort the HTM transaction, after the completion of the STM write back phase. On every load 
-instruction, the HTM should validate simply by waiting for the current write back phase, if any, to complete.
-This is achieved by spinning on the commit counter until its lock bit becomes clear.
+It is therefore possible that the HTM reads partial committed state of a STM by performing reads in the middle 
+of the write back phase, and reads half-committed, half-uncommitted data that will be committed later. Fortunately, 
+such partial state read will eventually abort the HTM transaction, after the completion of the STM write back phase. 
+On every load instruction, the HTM should validate simply by waiting for the current write back phase, if any, to 
+complete. This is achieved by spinning on the commit counter until its lock bit becomes clear.
