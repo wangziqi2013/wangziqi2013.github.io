@@ -54,6 +54,12 @@ subscription of the commit counter synchronizes with the atomic increment operat
 HTM and STM transactions are determined by the order that corresponding primitives are executed.
 
 One problem with lazy subscription is that HTM transactions may read inconsistent values, because they can begin
-at the middle of a software transaction (the lock is not checked at the beginning), or because STM can begin and 
-perform partial write back in the middle of the HTM transaction. Either may lead to incorrect execution where the 
-snapshot the hardware transaction depends on can never occur in a serialized execution. The inconsistent snapshot
+in the middle of a software transaction's write back (the lock is not checked at the beginning), or because STM can 
+begin and perform partial write back in the middle of the HTM transaction. Either of these may lead to incorrect execution 
+where the snapshot that the hardware transaction depends on can never occur in a serialized execution. The inconsistent 
+snapshot will finally be discovered by the HTM when STM write back completes, because it is a write-after-read conflict, and 
+all current HTM implementations will abort. The problem, however, is that before this can ever happen, inconsistent data
+may be used to switch the control flow via indirect jump, or to decide the address of the lock to be subscribed, or to 
+determine the value of the lock state. It is possible that the hardware transaction be tricked into executing wrong 
+code, or reads the wrong lock, or even corrupt random memory addresses. Essentially, execution of the hardware transaction 
+is undefined.
