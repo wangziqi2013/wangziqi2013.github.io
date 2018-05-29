@@ -65,8 +65,10 @@ code, or reads the wrong lock, or even corrupt random memory addresses. Essentia
 is undefined.
 
 To counter such problem, hardware transaction must have an error discovery and self-abort mechanism when it detects that
-the execution may become undefined due to inconsistent reads. One obvious solution, as used by Hybrid NORec, is to 
-validate every hardware load instruction. The validation spins on the current commit counter lock bit, and waits for 
-the ongoing write back phase, if any, to complete. If the read becomes inconsistent due to reading partially committed
-data, waiting for the write back to complete will guarantee that the hardware can at least detect the conflict
-and then abort.
+the execution may become undefined due to inconsistent reads. One obvious solution, used by Hybrid NORec, is to 
+validate every hardware load instruction. The validation spins on the current commit counter lock bit using 
+non-transactional load, and waits for the ongoing write back phase, if any, to complete. If the read becomes inconsistent 
+due to reading partially committed data, waiting for the write back to complete will guarantee that the hardware can at 
+least detect the conflict and then abort. Simple as it is, this solution has two undesired properties. The first is that 
+hardware transactions need to be instrumented, extending every load operation with a validation. The second property is 
+that spinning itself is an inefficient way of synchronization, which may cause frequent cache line invalidation. 
