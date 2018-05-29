@@ -103,4 +103,5 @@ Two extra optimizations can be applied to reduce the amount of synchronization b
 in addition to the lazy subscription optimization discussed above. The first optimization adds a STM counter to count 
 the current number of active STM transactions. STM transactions increment and decrement this counter atomically on 
 transaction begin and commit/abort. On HTM pre-commit, it subscribes to the STM counter, and checks whether its value 
-is zero. 
+is zero. If it is the case, then HTM transactions avoid reading and spinning on the commit counter, and directly commit.
+Any change of the STM counter between the subscription and the commit instruction will abort the HTM transaction.
