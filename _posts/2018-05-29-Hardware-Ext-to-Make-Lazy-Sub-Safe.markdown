@@ -30,4 +30,9 @@ transaction acquires the lock by writing into the lock, then all hardware transa
 necessary to prevent them from reading inconsistent states created by the fall back transaction before they are 
 actually aborted by data conflicts.
 
-Lazy subscription, as its name suggests, enables  STM and HTM
+Lazy subscription, as its name suggests, is a scheme that allows hardware transactions to subscribe to the lock
+"lazily". This means that the subscription needs not to happen at the beginning of the transaction, but right before 
+the transaction is ready to commit. Lazy subscription is sometimes favored over standard HLE, because it allows higher 
+degree of concurrency between hardware threads and the fall back thread. Standard HLE, as described in the previous 
+paragraph, serializes the execution of hardware transactions and fall back transactions. At any given point in time,
+only one type of them can be actively running. enables  STM and HTM
