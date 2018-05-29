@@ -47,4 +47,12 @@ The last step is performed using atomic Fetch-and-Add or Compare-and-Swap. In fa
 the commit counter allows both atomic "lock" and "unlock-increment" be carried out by an atomic Fetch-and-Add 
 by one.
 
-The simplest way of integrating NORec and best-effort HTM is stated as follows.
+The simplest way of integrating NORec and best-effort HTM is stated as follows. The STM runs without modification.
+For HTM, we instrument the transaction begin and commit logic to let hardware transaction (1) wait for software 
+transaction to finish before it starts, i.e. hardware transaction could not begin when a software write back is 
+being processed; and (2) The STM must be informed if a hardware transaction commits, such that the STM could have 
+a chance to validate its read set. (3) The HTM must also be informed if the STM writes onto its read set. Enforcing (1)
+requires the HTM instrumentation to add the commit counter into its read set, and spin on that counter until 
+the lock bit is cleared. (2) requires the HTM to increment the commit counter by two and also add it into the write set,
+before it executes the commit instruction. (3) does not need any special handling, because before the STM commits,
+the commit counter will be incremented by one to set the lock bit, which will trigger an immediate HTM abort.
