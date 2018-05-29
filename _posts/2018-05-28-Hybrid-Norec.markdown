@@ -85,5 +85,15 @@ reading the commit counter, then the HTM transaction is forced to abort whenever
 abort does not take into consideration the actual data conflict. One might try to optimize this by using 
 "lazy subscription", i.e. the HTM thread only subscribes to the commit counter right before it executes the 
 commit instruction. The subscription of commit counter synchronizes with the atomic Fetch-and-Add increment in 
-NORec commit protocol. The serialization order of STM and HTM transactions is determined by the order that the 
-reach the respective synchronization point. 
+NORec commit protocol. The serialization order of STM and HTM transactions is determined by the order that they
+reach the respective synchronization point. Several changes must be made to ensure correct serialization between 
+STM and HTM transactions. The first change, of course, is that HTM transaction begin no longer reads the commit counter.
+The second change makes transaction pre-commit read the commit counter, and spin on it until the lock bit is clear.
+This spin operation adds the value of the counter in the read set, and serializes the HTM and STM write phase. 
+If an STM transaction attempts to commit by incrementing the commit counter, the HTM transaction will abort.
+The third change adds validation for every load instructions. Such instrumentation is indispensable, because the 
+HTM transaction can begin when a STM is performing write back, and also STM commit does not cause HTM to abort.
+It is therefore possible that the HTM reads partial committed state of a STM. Fortunately, such partial state read
+will eventually abort the HTM transaction, after the completion of the STM write back phase. On every load 
+instruction, the HTM should validate simply by waiting for the current write back phase, if any, to complete.
+This is achieved by spinning on the commit counter until its lock bit becomes clear.
