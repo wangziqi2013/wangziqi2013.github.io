@@ -62,3 +62,14 @@ writes is acceptable. In the above scheme, HTM could not commit inside an STM co
 begin when STM is currently committing, nor could STM commit without aborting the HTM. If the STM commits while an HTM
 transaction is running, then the increment of the commit counter will force the HTM transaction to abort.
 
+Having HTM transactions incrementing the counter can be overly restrictive. Due to the fact that HTM transactions all 
+have the counter in their read sets, incrementing the counter atomically by either STM or HTM will abort all HTM transactions.
+This is necessary for STM to notify HTM that a STM transaction is being committed, to prevent the HTM committing on the 
+read set of the STM transaction after it validates successfully. This "subscription" mechanism is unnecessary between
+HTM transactions, as they guarantee serializability using the cache coherence protocol. Having HTM transactions aborting 
+each other via the commit counter restricts the degree of parallelism, because HTM transactions are forced to not 
+overlap their execution phases with any commit instruction. In an improved scheme, each core in the system is allocated a 
+local counter, which is incremented by a committing transaction running on that core as part of the transaction write set. 
+HTM transactions still "subscribe" from the commit counter at the beginning of the transaction to get notifications of 
+STM commits. The difference is that now STM validation process should validate all HTM counters by value, using the value 
+validation technique as it does for data items as well.
