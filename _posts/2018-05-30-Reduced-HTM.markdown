@@ -72,4 +72,8 @@ prevent new transactions from beginning when a commit in in-progress (as in Stan
 Instead of lowering the potential parallelism by disallowing concurrent commit and acquisition of bt, TL2 takes advantage of an
 observation: a data item is potentially in an inconsistent state only if it is locked. When reading a data item, TL2 samples 
 the version lock before the read operation, then performs read, and samples the version lock again. It will abort if one of the 
-following three check fails: (1)
+following three check fails: (1) The lock in the second sample is held; (2) The versions differ in two samples; and (3) The versions are 
+larger than the begin timestamp. (1) ensures that the read did not take place when a lock is being held, i.e. the read itself 
+is consistent if the operation consists of multiple non-atomic loads; (2) ensures that no write back of the value takes place 
+between the two samples; (3) ensures no write back takes place after the bt is acquired. These three checks together 
+ensures consistent reads.
