@@ -52,3 +52,13 @@ implementation, and is still "best-effort". The second algorithm, RH2, consists 
 a pure software slow path. It also provides a "middle ground" for the hardware path to cooperate with the software 
 path if both types of transactions are executing in parallel. Both RH1 and RH2 fast path avoids expensive load instrumentation, 
 and are expected to perform better than Hybrid NORec with lazy subscription.
+
+The base algorithm of RH1 and RH2 is based on TL2, a state-of-the-art STM design. TL2 is essentially an MV-OCC algorithm.
+The general form MV-OCC algorithm has a global timestamp counter. Transactions read the conter before they start as the 
+begin timestamp (bt). The value of bt fixed a read snapshot for the transaction. Any change of the snapshot that overlaps 
+with the read set of the transaction will cause an abort. On transactional read, either dirty values are forwarded from the 
+wrire set, or the read operations go to data items whose write timestamp is smaller than or equal to bt (if the version
+does not exist then abort). On transactional write, the dirty value is buffered in a local write set. On transaction commit,
+items in the write sets are locked to guarantee atomic write back phase. Then the read set is validated. If validation
+succeeds, the timestamp counter is atomically incremented, the after value of which is used as the commit timestamp (ct) of 
+the transaction. 
