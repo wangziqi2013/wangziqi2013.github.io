@@ -44,4 +44,9 @@ writing back all dirty items. To solve the inconsistent read problem, hardware l
 to run a validation routine after the load is performed. The validation routine spins on the lock and waits for the 
 currently committing STM transaction, if any, to complete. 
 
-This paper proposes two hybrid transactional memory algorithms based on TL2. 
+The hardware instrumentation of load instructions can affect performance in a yet unknown manner. To alleviate the 
+problem of performance degradation caused by instrumentation, this paper proposes two hybrid transactional memory 
+algorithms based on TL2. The first algorithm, RH1 (RH stands for "Reduced Hardware Transaction"), consists of a full
+hardware path and a software fall-back path. The hardware path avoids expensive load instrumentation and is expected 
+to perform better than Hybrid NORec with lazy subscription. RH1 makes non-trivial assumption about the underlying HTM 
+implementation, and is still "best-effort". The second algorithm, RH2, 
