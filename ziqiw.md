@@ -37,7 +37,7 @@ I implemented a static analysis framework using call graph analysis for Android 
 
 Publications
 ------------
-(To be updated...)
+Ziqi Wang, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. 2018. Building a Bw-Tree Takes More Than Just Buzz Words. In Proceedings of 2018 International Conference on Management of Data (SIGMOD18). ACM, New York, NY, USA, 16 pages. [https://doi.org/10.1145/3183713.3196895](https://doi.org/10.1145/3183713.3196895)
 
 Fun Stuff
 ---------
