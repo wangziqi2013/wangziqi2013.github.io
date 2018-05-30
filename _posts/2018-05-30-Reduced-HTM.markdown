@@ -61,4 +61,15 @@ wrire set, or the read operations go to data items whose write timestamp is smal
 does not exist then abort). On transactional write, the dirty value is buffered in a local write set. On transaction commit,
 items in the write sets are locked to guarantee atomic write back phase. Then the read set is validated. If validation
 succeeds, the timestamp counter is atomically incremented, the after value of which is used as the commit timestamp (ct) of 
-the transaction. 
+the transaction. During the last write back phase, all dirty values in the write set are written back with their versions set
+to ct, and then unlocked. TL2 differs from the general MV-OCC described above in several aspects. First, TL2 is not multiversioned.
+Only one version, i.e. the most recently written version, is maintained. If a transaction tries to read a value whose version is 
+greater than the current bt (which implies that the version in its snapshot no longer exists), then the transaction aborts.
+Next, there is a contention between transaction write back and read phase. Imagine that if a new transaction begins after the 
+timestamp counter is incremented but before the write back completes. The new transaction may read partial committed states,
+and still passes validation, because the committed value has a ct equal to the bt of the new transaction. The simplest approach is to
+prevent new transactions from beginning when a commit in in-progress (as in Stanford SI-TM). TL2 attacks the problem differently.
+Instead of lowering the potential parallelism by disallowing concurrent commit and acquisition of bt, TL2 takes advantage of an
+observation: a data item is potentially in an inconsistent state only if it is locked. When reading a data item, TL2 samples 
+the version lock before the read operation, then performs read, and samples the version lock again. It will abort if one of the 
+following three check fails: (1)
