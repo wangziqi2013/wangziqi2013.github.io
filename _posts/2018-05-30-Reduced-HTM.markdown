@@ -47,6 +47,8 @@ currently committing STM transaction, if any, to complete.
 The hardware instrumentation of load instructions can affect performance in a yet unknown manner. To alleviate the 
 problem of performance degradation caused by instrumentation, this paper proposes two hybrid transactional memory 
 algorithms based on TL2. The first algorithm, RH1 (RH stands for "Reduced Hardware Transaction"), consists of a full
-hardware path and a software fall-back path. The hardware path avoids expensive load instrumentation and is expected 
-to perform better than Hybrid NORec with lazy subscription. RH1 makes non-trivial assumption about the underlying HTM 
-implementation, and is still "best-effort". The second algorithm, RH2, 
+hardware path and a hardware-assisted fall-back path. RH1 makes non-trivial assumption about the underlying HTM 
+implementation, and is still "best-effort". The second algorithm, RH2, consists of a hardware assisted fast path and
+a pure software slow path. It also provides a "middle ground" for the hardware path to cooperate with the software 
+path if both types of transactions are executing in parallel. Both RH1 and RH2 fast path avoids expensive load instrumentation, 
+and are expected to perform better than Hybrid NORec with lazy subscription.
