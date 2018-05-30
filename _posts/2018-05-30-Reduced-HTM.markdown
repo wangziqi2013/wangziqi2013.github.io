@@ -29,4 +29,9 @@ be a major problem, as the majority of transactions in HLE are expected to be ex
 Only transactions that consistently fail (e.g. because the working sets exceed hardware capacity) will 
 use the fall-back path. The latter is relatively infrequent.
 
+In the near future, we may possibly only use HTM for smaller transactions whose size is stable and predictable. 
+In the long run, however, the size of transactions executed with HLE might become more heterogenous than 
+ever, featuring a mixture of small and large transactions. If this is the case, then the classical method for 
+HLE will be overly restrictive, as HTM may observe frequent aborts by STM transactions. 
+
 This paper proposes two hybrid transactional memory algorithms based on TL2. 
