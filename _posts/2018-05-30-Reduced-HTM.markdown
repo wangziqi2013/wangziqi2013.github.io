@@ -40,6 +40,8 @@ hardware and software transactions can commit in parallel if they access indepen
 as can be shown by another paper, is that hardware transaction may read inconsistent states in the middle of an
 STM commit. This is impossible for early subscription, since any software commit will trigger the hardware transaction
 to abort. We observed that such inconsistent execution will eventually be detected when the STM commit phase completes 
-writing back all dirty items. 
+writing back all dirty items. To solve the inconsistent read problem, hardware load instructions must be instrumented 
+to run a validation routine after the load is performed. The validation routine spins on the lock and waits for the 
+currently committing STM transaction, if any, to complete. 
 
 This paper proposes two hybrid transactional memory algorithms based on TL2. 
