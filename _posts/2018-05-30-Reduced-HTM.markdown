@@ -19,10 +19,14 @@ of software transactional memory when hardware fails to commit using the slower 
 The interoperability between HTM and STM transactions is achieved by designing the algorithm
 in a way that both HTM and STM transactions would notify each other of possible conflicts. One
 prominent example is Hardware Lock Elision (HLE), where HTM transactions and STM transactions cooperate
-to execute a critical section. In HLE, HTM transactions speculatively verify that the lock is clear, 
-adding the lock into its read set, and then execute the critical section. Any attempts by software 
-fall-back transactions to acquire the lock will abort hardware transactions immediately. Multiple 
-hardware transactions can execute in parallel given no data conflict, while the execution of 
-HTM and STM transactions must be serialized.
+to execute a critical section. In HLE, when the hardware executes a lock acquisition instruction, HTM transactions 
+speculatively verify that the lock is clear, adding the lock into its read set, and then execute the critical section. 
+Any attempts by software fall-back transactions to acquire the lock will abort hardware transactions immediately. 
+Multiple hardware transactions can execute in parallel given no data conflict, while the execution of 
+HTM and STM transactions must be serialized. HLE may suffer from low degrees of parallelism in some workloads, 
+because the serialization of HTM and STM transactions is unnecessary in many cases. This, however, should not
+be a major problem, as the majority of transactions in HLE are expected to be executed in hardware mode. 
+Only transactions that consistently fail (e.g. because the working sets exceed hardware capacity) will 
+use the fall-back path. The latter is relatively infrequent.
 
 This paper proposes two hybrid transactional memory algorithms based on TL2. 
