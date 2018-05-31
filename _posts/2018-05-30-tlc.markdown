@@ -13,3 +13,12 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes a cache friendly implementation of global commit counter commonly
+used by software transactional memory designs. Many STM and Hybrid TM algorithm, notably Transactional 
+Locking II (TL2) and NORec, relies on a global timestamp counter to either commit events, either 
+for individual data items or globally. The most straightforward implementation of the counter is 
+to use a 64 bit integer incremented every time a transaction commits. Verification of read 
+sets is performed by comparing the value of the counter when the transaction begins and the most up-to-date
+value on data items or of the same counter.
+
+
