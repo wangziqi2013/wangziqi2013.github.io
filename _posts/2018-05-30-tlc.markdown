@@ -54,4 +54,6 @@ two sampling are performed as well as the read operation. After that, the valida
 extracts the identify of the thread *j* that lastly committed on the data item. Transaction *i* then compares the version 
 stored in the counter against the local version of *j*. If the value of the local version is smaller than the version
 of *j*, then *i* updates its local version of *j* to the current version, and then aborts. Otherwise, read validation
-succeeds.
+succeeds. On transaction commit, the committing transaction increments its local counter using normal store instruction,
+and use the after value as the ct. The value of ct, concatenated with the identity of the committing transaction, is stored 
+into the item metadata as data items are unlocked.
