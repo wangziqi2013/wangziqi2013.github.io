@@ -21,4 +21,8 @@ to use a 64 bit integer incremented every time a transaction commits. Verificati
 sets is performed by comparing the value of the counter when the transaction begins and the most up-to-date
 value on data items or of the same counter.
 
-
+Simple as it is, the straightforward implementation does not scale. On today's multicore architecture, 
+communication between cores and sockets has become a major source of overhead for memory instructions. Using 
+an integer as the global timestamp counter will cause the cache line to be circulated around the cores that
+increment and read the cache line. This can greatly increase the latency of memory instructions, and also 
+incur contention. Decentralization of the global counter 
