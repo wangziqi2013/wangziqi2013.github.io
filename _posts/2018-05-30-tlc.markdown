@@ -45,4 +45,13 @@ version of data items are updated to be the value of ct.
 One observation is that a monotonically increasing counter is too strong to identify concurrent commits within 
 the read phase. In fact, what we need is a notation of ordering. We hope that all write operations on the read set of 
 a transaction after it starts can be detected. Using a global counter, it is the ordering relation of integer, i.e. the 
-ordering of commit counter increment to obtain ct and the read of the counter to obtain bt. Th
+ordering of commit counter increment to obtain ct and the read of the counter to obtain bt. The design of TLC follows 
+exactly this observation. Each thread *i* keeps a thread local array of counters, representing the version of other threads
+the last time *i* sees them by validating a read operation. Each thread also keeps a thread local counter as its own
+source of commit timestamps. The version consists of three fields: The lock bit, the ct of the transaction that commits 
+it, and the identify of the thread that runs the transaction. The validation rule changes as the following. On transactional load, 
+two sampling are performed as well as the read operation. After that, the validation routine runs on transaction *i* 
+extracts the identify of the thread *j* that lastly committed on the data item. Transaction *i* then compares the version 
+stored in the counter against the local version of *j*. If the value of the local version is smaller than the version
+of *j*, then *i* updates its local version of *j* to the current version, and then aborts. Otherwise, read validation
+succeeds.
