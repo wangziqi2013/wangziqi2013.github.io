@@ -78,3 +78,7 @@ is consistent if the operation consists of multiple non-atomic loads; (2) ensure
 between the two samples; (3) ensures no write back takes place after the bt is acquired. Together, they ensure that all unlock
 operations happened between transaction begin and the second sampling are with a smaller or equal transaction ID. In this case,
 the read operation serializes the current transaction after the committing transaction by reading their values.
+
+The RH1 algorithm extends TL2 by executing part of its phases as an atomic transaction. The hardware path executes load 
+instructions without instrumentation. Store instructions are instrumented such that the version is also updated speculatively 
+with the data. The next version is obtained at begin time using Global Value library
