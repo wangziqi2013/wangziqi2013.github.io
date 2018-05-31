@@ -41,3 +41,8 @@ are larger than current bt. On transaction commit, the read set is validated aga
 is followed by a write back phase, in which the global commit counter is incremented, and all dirty values are written
 back. The incremented value of the commit counter is the commit timestamp ct. At the end of the write back phase, the 
 version of data items are updated to be the value of ct.
+
+One observation is that a monotonically increasing counter is too strong to identify concurrent commits within 
+the read phase. In fact, what we need is a notation of ordering. We hope that all write operations on the read set of 
+a transaction after it starts can be detected. Using a global counter, it is the ordering relation of integer, i.e. the 
+ordering of commit counter increment to obtain ct and the read of the counter to obtain bt. A similar reasoning 
