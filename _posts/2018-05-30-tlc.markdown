@@ -31,3 +31,13 @@ counts the number of active threads can be replaced by an array of thread local 
 time the thread is active. The GC algorithm, instead of collecting garbage memory for epoches whose counter have 
 dropped to zero, scans the array of thread local timestamps, and calculates the minimum. Garbage memory freed before
 the minimum timestamp can be freed, as no thread can possibly hold a reference to it.
+
+TL2 is a special type of Multiversion OCC (MV-OCC) algorithm in which only one version per data item is maintained. 
+TL2 transactions validate the read set on every read, maintaining a consistent snapshot during the lifetime of the 
+entire transaction. The classical TL2 transaction obtains a begin timestamp (bt) from the global timestamp counter at
+transaction begin. On transactional read, they sample the version of the data item, perform read, and then sample 
+again. The transaction will abort if the second sample is locked, or if two versions disagree, or if versions agree but
+are larger than current bt. On transaction commit, the read set is validated again after all dirty items are locked. This 
+is followed by a write back phase, in which the global commit counter is incremented, and all dirty values are written
+back. The incremented value of the commit counter is the commit timestamp ct. At the end of the write back phase, the 
+version of data items are updated to be the value of ct.
