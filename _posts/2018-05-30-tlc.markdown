@@ -5,7 +5,7 @@ date: 2018-05-30 23:36:00 -0500
 categories: paper
 paper_title: "Maintaining Consistent Transactional States without a Global Clock"
 paper_link: https://link.springer.com/chapter/10.1007%2F978-3-540-69355-0_12
-paper_keyword: TL2; STM; Global Clock
+paper_keyword: TL2; STM; Global Clock; Thread Local Counter
 paper_year: LNCS 2008
 rw_set: 
 htm_cd: 
@@ -14,8 +14,8 @@ version_mgmt:
 ---
 
 This paper proposes a cache friendly implementation of global commit counter commonly
-used by software transactional memory designs. Many STM and Hybrid TM algorithm, notably Transactional 
-Locking II (TL2) and NORec, relies on a global timestamp counter to either commit events, either 
+used by software transactional memory designs, called Thread Local Counter (TLC) . Many STM and Hybrid TM algorithm, 
+notably Transactional Locking II (TL2) and NORec, relies on a global timestamp counter to either commit events, either 
 for individual data items or globally. The most straightforward implementation of the counter is 
 to use a 64 bit integer incremented every time a transaction commits. Verification of read 
 sets is performed by comparing the value of the counter when the transaction begins and the most up-to-date
@@ -45,4 +45,4 @@ version of data items are updated to be the value of ct.
 One observation is that a monotonically increasing counter is too strong to identify concurrent commits within 
 the read phase. In fact, what we need is a notation of ordering. We hope that all write operations on the read set of 
 a transaction after it starts can be detected. Using a global counter, it is the ordering relation of integer, i.e. the 
-ordering of commit counter increment to obtain ct and the read of the counter to obtain bt. A similar reasoning 
+ordering of commit counter increment to obtain ct and the read of the counter to obtain bt. Th
