@@ -25,4 +25,9 @@ Simple as it is, the straightforward implementation does not scale. On today's m
 communication between cores and sockets has become a major source of overhead for memory instructions. Using 
 an integer as the global timestamp counter will cause the cache line to be circulated around the cores that
 increment and read the cache line. This can greatly increase the latency of memory instructions, and also 
-incur contention. Decentralization of the global counter 
+incur contention. This issue has already been recognized in other areas of research, and can be addressed by 
+decentralization of the global counter. For example, in epoch-based garbage collection, the global counter which 
+counts the number of active threads can be replaced by an array of thread local timestamps that record the last 
+time the thread is active. The GC algorithm, instead of collecting garbage memory for epoches whose counter have 
+dropped to zero, scans the array of thread local timestamps, and calculates the minimum. Garbage memory freed before
+the minimum timestamp can be freed, as no thread can possibly hold a reference to it.
