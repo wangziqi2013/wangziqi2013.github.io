@@ -57,3 +57,11 @@ of *j*, then *i* updates its local version of *j* to the current version, and th
 succeeds. On transaction commit, the committing transaction increments its local counter using normal store instruction,
 and use the after value as the ct. The value of ct, concatenated with the identity of the committing transaction, is stored 
 into the item metadata as data items are unlocked.
+
+This algorithm can detect all cases that transaction *j* overwrites transaction *i*'s read set, with possibilities of 
+false positives. We prove its correctness by reasoning about the read-after-write dependency introduced by reading the value.
+The condition that *i* could successfully read the value written by *j* is that *i*'s local version of the counter is 
+greater than or equal to the version stored in the item metadata. One step further, according to the algorithm specification, 
+the only possibility that *i* could update its local counter of *j* is when *i* previously read another value written by 
+*j*, and aborted. This implies that the current transaction on *i* is after an older transaction on *i*, which in turn 
+sees the version written by an even earlyer transaction on *j*. Since the update of data item versions happen 
