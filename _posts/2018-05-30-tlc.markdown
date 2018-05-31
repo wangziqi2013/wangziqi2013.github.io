@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title: "Maintaining Consistent Transactional States without a Global Clock"
+date: 2018-05-30 23:36:00 -0500
+categories: paper
+paper_title: "Maintaining Consistent Transactional States without a Global Clock"
+paper_link: https://link.springer.com/chapter/10.1007%2F978-3-540-69355-0_12
+paper_keyword: TL2; STM; Global Clock
+paper_year: LNCS 2008
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
