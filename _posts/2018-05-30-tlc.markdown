@@ -63,5 +63,8 @@ false positives. We prove its correctness by reasoning about the read-after-writ
 The condition that *i* could successfully read the value written by *j* is that *i*'s local version of the counter is 
 greater than or equal to the version stored in the item metadata. One step further, according to the algorithm specification, 
 the only possibility that *i* could update its local counter of *j* is when *i* previously read another value written by 
-*j*, and aborted. This implies that the current transaction on *i* is after an older transaction on *i*, which in turn 
-sees the version written by an even earlyer transaction on *j*. Since the update of data item versions happen 
+*j*, and aborted. This implies that the current transaction t<sub>3</sub> on *i* is after an older transaction t<sub>2</sub> 
+on *i*, which in turn sees the version written by an even earlyer transaction t<sub>1</sub> on *j*. Since the update of data item versions happen at the end of the write back phase, we know that t<sub>1</sub> must entered its write phase even before t<sub>3</sub>
+starts, which implies that t<sub>1</sub> entered its write phase before t<sub>3</sub> does so. According to TL2's correctness 
+proof, transactions are serialized by the order they finishe locking the write sets. It is clear that t<sub>1</sub> must 
+logically occurred before t<sub>3</sub>, and it is legal that t<sub>3</sub> read t<sub>1</sub>'s committed value.
