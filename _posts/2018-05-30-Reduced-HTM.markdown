@@ -75,5 +75,6 @@ the version lock before the read operation, then performs read, and samples the 
 following three check fails: (1) The lock in the second sample is held; (2) The versions differ in two samples; and (3) The versions are 
 larger than the begin timestamp. (1) ensures that the read did not take place when a lock is being held, i.e. the read itself 
 is consistent if the operation consists of multiple non-atomic loads; (2) ensures that no write back of the value takes place 
-between the two samples; (3) ensures no write back takes place after the bt is acquired. These three checks together 
-ensures consistent reads.
+between the two samples; (3) ensures no write back takes place after the bt is acquired. Together, they ensure that all unlock
+operations happened between transaction begin and the second sampling are with a smaller or equal transaction ID. In this case,
+the read operation serializes the current transaction after the committing transaction by reading their values.
