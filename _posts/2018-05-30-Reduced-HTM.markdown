@@ -96,4 +96,9 @@ the two samplings have identical versions, and that the version is smaller than 
 finishes, a hardware transaction is started. In the hardware transaction, the read set is validated for the last time by
 comparing their versions with the begin timestamp. The validation aims to avoid cases where the read set is overwritten
 after the read operation has been performed. If all items in the read set pass validation, then the transaction enters 
-the write back phase, in which case dirty values are written back.
+the write back phase, in which case dirty values are written back. 
+
+Both RH1 hardware path and software path can abort due to contention or insufficient hardware resources. If the cause of the 
+abort is the former, then the same path is retried several times. Transaction aborts caused by insifficient hardware resources 
+implie that the transaction is too large to be executed using hardware transaction. If this happens, all currently running 
+RH1 transactions are aborted, and 
