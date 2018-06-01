@@ -124,4 +124,7 @@ then all dirty values are committed, and the next step is to release write locks
 operations are instrumented to save the address and value in a write set. The write set is traversed and commit timestamps 
 are updated before locks are released.
 
-The RH2 software path runs entirely in BOCC mode. It obatins a begin timestamp at transaction start. For every write
+The RH2 software path runs entirely in BOCC mode. It obatins a begin timestamp at transaction start. For every write operation,
+the address and value are stored in the write set. For every read operation, either the valus is forwarded from the write set,
+or read from data items, followed by post-read validation as in TL2. The commit protocol deviates from TL2 in two aspects.
+First, 
