@@ -101,4 +101,9 @@ the write back phase, in which case dirty values are written back.
 Both RH1 hardware path and software path can abort due to contention or insufficient hardware resources. If the cause of the 
 abort is the former, then the same path is retried several times. Transaction aborts caused by insifficient hardware resources 
 implie that the transaction is too large to be executed using hardware transaction. If this happens, all currently running 
-RH1 transactions are aborted, and 
+RH1 hardware paths are aborted, and the system "switch phases" (like what PhaseTM does) and runs RH2 software commit. To 
+support immediate abort of hardware paths, all transactions running under the hardware path must subscribe to a global 
+variable that counts the number of RH2 transactions. If the value of the variable is non-zero, hardware transaction always 
+aborts. Otherwise, the hardware path adds it into the read set, and aborts if this value is modified by RH1 software path
+on a failed HTM commit. The software path increments the variable to inform hardware paths of an incompatible commit
+operation. It then performs RH2 software commit, and finally decrments the variable.
