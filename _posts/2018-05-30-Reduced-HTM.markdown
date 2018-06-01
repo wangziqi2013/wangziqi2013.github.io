@@ -133,4 +133,6 @@ is that the software path tries to perform write backs atomically using hardware
 does not need to worry about reading an inconsistent state, as all dirty values are committed at once. If the write back
 transaction fails, the software path will perform the write back in the classical way, i.e. writing back dirty values one by
 one before updating the version and unlocking the write set. The hardware path must be informed of such a case by using 
-a variable as a counter and subscribing to the counter at the beginning of the transaction. The hardware path 
+a variable as a counter and subscribing to the counter at the beginning of the transaction. If the value of the counter is
+non-zero at transaction begin time, then reads are instrumented to check the lock bit as well as versions. In this case,
+it is similar to the Hybrid NORec with lazy subscription and read instrumentation.
