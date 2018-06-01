@@ -109,15 +109,19 @@ on a failed HTM commit. The software path increments the variable to inform hard
 operation. It then performs RH2 software commit, and finally decrments the variable.
 
 RH2 is based on a mixture of BOCC and FOCC. The fast hardware path of RH2 uses FOCC to validate against concurrent software 
-path transactions. The slow path of RH2 resembles TL2 except that: (1) It explicitly read-locks the 
+path transactions in the validation phase, and in the meantime it also uses BOCC to inform software path transactions of updates
+in the read phase. The slow path of RH2 resembles TL2 except that: (1) It explicitly read-locks the 
 read set before performing read validation and after locking the write set in the validation phase; (2) It tries to perform 
 write backs using a hardware transaction. If this is not achievable, then it falls back to a "fast-path-slow-read" mode.
 The RH2 hardware path wraps transactional reads and writes in a transaction. Reads are not instrumented, while writes 
-are instrumented to keep store addresses and values in a write set (note that in RH1 this is not required). No incremental
-validation is performed because any write operation on the read set will cause an abort. At validation time, the hardware 
-path performs forward OCC: For every item in the write set, it checks whether any of them is read locked. If this is the case,
-then the hardware transaction self aborts. Otherwise, it speculatively write-locks items in the write set. Any lock conflict 
-indicates that another concurrent transaction is performing write back, so the current transaction also aborts. If the hardware 
-transaction on the fast path could commit, then the write back is performed using software approach. Recall that write operations 
-are instrumented to save the address and value in a write set. The write set is traversed and values as well as commit timestamps
-are updated.
+are instrumented to keep store addresses and values in a write set (note that in RH1 this is not required) in addition to
+performing the write operation speculatively. No incremental validation is performed because any write operation on the read 
+set will cause an abort. At validation time, the hardware path performs forward OCC: For every item in the write set, it 
+checks whether any of them is read locked. If this is the case, then the hardware transaction self aborts. Otherwise, it 
+speculatively write-locks items in the write set. Any lock conflict indicates that another concurrent transaction is 
+performing write back, so the current transaction also aborts. If the hardware transaction on the fast path could commit, 
+then all dirty values are committed, and the next step is to release write locks that were set speculatively. Recall that write 
+operations are instrumented to save the address and value in a write set. The write set is traversed and commit timestamps 
+are updated before locks are released.
+
+The RH2 software path runs entirely in BOCC mode. It obatins a begin timestamp at transaction start. For every write
