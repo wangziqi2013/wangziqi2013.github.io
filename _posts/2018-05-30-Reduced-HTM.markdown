@@ -87,4 +87,13 @@ such that the version of a data item is also updated speculatively. No begin tim
 any write operation to data items after it was read will trigger an abort. Note that in TL2, any write operation afther the 
 transaction has begun is disallowed. In contrast, RH1 allows transactions to commit before the data item is actually read. 
 The commit timestamp is obtained at begin time using the Global Value library. The implementation of the global counter guarantees 
-that the increment operation does not cause concurrent transactions to abort.
+that the increment operation does not cause concurrent transactions to abort. At transaction commit, the hardware path just 
+executes commit instruction. The software path executes the read phase in a purely software manner as TL2 would do, expect that
+it does not check the lock bit, because write locks are not used in RH1. The begin timestamp is obtained at the beginning of the 
+transaction. On every read operation, the write set is first searched, and read fowarded if the data item is found. If not found,
+then the shared data item is read, with two samplings as well as the consistency check. The consistency check makes sure that
+the two samplings have identical versions, and that the version is smaller than the begin timestamp. Once the read phase
+finishes, a hardware transaction is started. In the hardware transaction, the read set is validated for the last time by
+comparing their versions with the begin timestamp. The validation aims to avoid cases where the read set is overwritten
+after the read operation has been performed. If all items in the read set pass validation, then the transaction enters 
+the write back phase, in which case dirty values are written back.
