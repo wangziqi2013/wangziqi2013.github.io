@@ -79,6 +79,12 @@ between the two samples; (3) ensures no write back takes place after the bt is a
 operations happened between transaction begin and the second sampling are with a smaller or equal transaction ID. In this case,
 the read operation serializes the current transaction after the committing transaction by reading their values.
 
-The RH1 algorithm extends TL2 by executing part of its phases as an atomic transaction. The hardware path executes load 
-instructions without instrumentation. Store instructions are instrumented such that the version is also updated speculatively 
-with the data. The next version is obtained at begin time using Global Value library
+The RH1 algorithm extends TL2 by executing at least the entire write phase as an atomic transaction. The hardware path
+executes all phases as a single hardware transaction, and the software path executes the validation and write phase as 
+a single hardware transaction. Write locking is unnecessary in both cases, because write operations from different transactions 
+will never interleave. The hardware path executes load instructions without instrumentation. Store instructions are instrumented 
+such that the version of a data item is also updated speculatively. No begin timestamp is obtained at transaction begin, because
+any write operation to data items after it was read will trigger an abort. Note that in TL2, any write operation afther the 
+transaction has begun is disallowed. In contrast, RH1 allows transactions to commit before the data item is actually read. 
+The commit timestamp is obtained at begin time using the Global Value library. The implementation of the global counter guarantees 
+that the increment operation does not cause concurrent transactions to abort.
