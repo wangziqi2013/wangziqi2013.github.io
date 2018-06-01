@@ -116,7 +116,8 @@ The RH2 hardware path wraps transactional reads and writes in a transaction. Rea
 are instrumented to keep store addresses and values in a write set (note that in RH1 this is not required). No incremental
 validation is performed because any write operation on the read set will cause an abort. At validation time, the hardware 
 path performs forward OCC: For every item in the write set, it checks whether any of them is read locked. If this is the case,
-then the hardware transaction self aborts. Otherwise, it speculatively write-locks items in the write set. Any lock conflict indicates 
-that another concurrent transaction is performing write back, so the current transaction also aborts. If the hardware transaction
-on the fast path could commit, then the write back is performed using software approach. Recall that write operations 
-are instrumented to save the address and value in a write set. The hardware path 
+then the hardware transaction self aborts. Otherwise, it speculatively write-locks items in the write set. Any lock conflict 
+indicates that another concurrent transaction is performing write back, so the current transaction also aborts. If the hardware 
+transaction on the fast path could commit, then the write back is performed using software approach. Recall that write operations 
+are instrumented to save the address and value in a write set. The write set is traversed and values as well as commit timestamps
+are updated.
