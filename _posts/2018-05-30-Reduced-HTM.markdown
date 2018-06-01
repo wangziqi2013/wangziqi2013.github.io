@@ -127,4 +127,10 @@ are updated before locks are released.
 The RH2 software path runs entirely in BOCC mode. It obatins a begin timestamp at transaction start. For every write operation,
 the address and value are stored in the write set. For every read operation, either the valus is forwarded from the write set,
 or read from data items, followed by post-read validation as in TL2. The commit protocol deviates from TL2 in two aspects.
-First, 
+First, after locking the write set, and before performing read validation, the software path also read-locks the read set,
+such that any hardware path write operation on its read set will cause the hardware transaction to fail. The second point
+is that the software path tries to perform write backs atomically using hardware transactions. This way, the hardware path
+does not need to worry about reading an inconsistent state, as all dirty values are committed at once. If the write back
+transaction fails, the software path will perform the write back in the classical way, i.e. writing back dirty values one by
+one before updating the version and unlocking the write set. The hardware path must be informed of such a case by using 
+a variable as a counter and subscribing to the counter at the beginning of the transaction. The hardware path 
