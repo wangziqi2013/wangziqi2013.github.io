@@ -108,8 +108,12 @@ aborts. Otherwise, the hardware path adds it into the read set, and aborts if th
 on a failed HTM commit. The software path increments the variable to inform hardware paths of an incompatible commit
 operation. It then performs RH2 software commit, and finally decrments the variable.
 
-RH2 is based on a mixture of BOCC and FOCC. The slow path of RH2 resembles TL2 except that: (1) It explicitly read-locks the 
+RH2 is based on a mixture of BOCC and FOCC. The fast hardware path of RH2 uses FOCC to validate against concurrent software 
+path transactions. The slow path of RH2 resembles TL2 except that: (1) It explicitly read-locks the 
 read set before performing read validation and after locking the write set in the validation phase; (2) It tries to perform 
 write backs using a hardware transaction. If this is not achievable, then it falls back to a "fast-path-slow-read" mode.
 The RH2 hardware path wraps transactional reads and writes in a transaction. Reads are not instrumented, while writes 
-are instrumented to keep store addresses and values in a write set (note that in RH1 this is not required)
+are instrumented to keep store addresses and values in a write set (note that in RH1 this is not required). No incremental
+validation is performed because any write operation on the read set will cause an abort. At validation time, the hardware 
+path performs forward OCC: For every item in the write set, it checks whether any of them is read locked. If this is the case,
+then the hardware transaction self aborts. Otherwise, it write locks items in the write set
