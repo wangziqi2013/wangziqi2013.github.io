@@ -13,4 +13,4 @@ htm_cr:
 version_mgmt: 
 ---   
 
-This paper proposes a cache coherence protocol for   
+This paper proposes a cache coherence protocol for    
