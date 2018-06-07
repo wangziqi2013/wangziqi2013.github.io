@@ -31,3 +31,10 @@ the current speculation to commit or abort. The previously mentioned producer-co
 to allow producers to set up the iteration context first, and then consumers to finish the iteration. Third, control logics, 
 especially cache hit/miss and commit/abort logic, must be local. Determining whether a request hits a cache line should not 
 involve any global coordination or search, unlike in some protocols where a request could "possibly hit" a cache line.
+
+With these design objectives in mind, the paper extends the widely deployed MOESI cache coherence protocol by adding 
+speculative states of the non-speculative counterparts. The addition of speculatively states should satisfy two 
+different goals. First, these speculative states should preserve the state of the cache line once an iteration commits 
+or aborts, returning to a correct non-speculative state. Second, the speculative cache lines alter the semantics 
+of cache coherence, allowing iterations to perform private writes and pass dirty states to each other without incurring 
+ordering violations.
