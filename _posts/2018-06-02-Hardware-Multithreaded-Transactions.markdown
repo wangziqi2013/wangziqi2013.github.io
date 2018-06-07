@@ -43,8 +43,12 @@ line also have two more fields in their tags. The first field is the creation ti
 speculative write, and creates a new version of the cache line, the iteration ID of itself is written into the field.
 This field is used to determine whether a cache line is visible to a particular request. We describe the concrete protocol
 in later sections. The second field is the last accessed timestamp. It is updated when the cache line is accessed by
-an iteration. The access iteration can be prforming either speculative reads or writes. Write operations also needs a read, 
+an iteration. The access iteration can be performing either speculative reads or writes. Write operation also requires a read, 
 because typically the write is only a few words in length, and the rest of the cache line still needs to be read from a 
-previous version. The creation timestamp and the in effect defines the "time range" of the cache line. Iterations below 
-the range could not access it because logically speaking the cache line is created after the iteration has finished.
-Iterations whose ID is in between the range could not write to the cache line, because there is a later 
+previous version. 
+
+The creation timestamp and the in effect defines the "time range" of the cache line. Iterations below 
+the range could not access it, because logically speaking, the cache line is created after the iteration has finished.
+Iterations whose ID is in between the range could not write to the cache line, because the cache line has been read by
+an iteration that logically execute after the current one. Attempting to write such a cache line will incur a write-after-read
+violation.
