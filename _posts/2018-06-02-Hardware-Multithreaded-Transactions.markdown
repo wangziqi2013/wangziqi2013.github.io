@@ -53,6 +53,11 @@ Iterations whose ID is in between the range could not write to the cache line, b
 an iteration that logically execute after the current one. Attempting to write such a cache line will incur a write-after-read
 violation.
 
-Each processor in the system is extended with an "Iteration ID", or VID, register. The register is part of the processor
-context, and needs to be saved and stored on context switches. Similar to floating point registers, this could be done 
-in a lazy manner. The paper also proposes adding a few new instructions into the ISA. The *beginMTX* instruction
+Each processor in the system is extended with an "Iteration ID", or VID, register. VID represents the logical ordering 
+of an iteration, and defines the order of conflict resolution when a dependency occurs. The register is part of the processor
+context, and needs to be saved and stored on context switches. Similar to dealing with floating point registers, this could 
+be done lazily. The paper also proposes adding a few new instructions into the ISA. The *beginMTX* instruction 
+loads the VID register with the ID of an iteration. Software is responsible for ordering iterations properly and assign
+them VIDs. The *commitMTX*/*abortMTX* commits/aborts an iteration given the VID. Commits and aborts do not have to 
+be on the same processor the iteration is started. The *initMTX* instruction saves a checkpoint of the execution context
+and sets the address of the recovery routine if the iteration aborts.
