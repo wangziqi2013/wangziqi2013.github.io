@@ -51,7 +51,7 @@ The creation timestamp and the in effect defines the "time range" of the cache l
 the range could not access it, because logically speaking, the cache line is created after the iteration has finished.
 Iterations whose ID is in between the range could not write to the cache line, because the cache line has been read by
 an iteration that logically execute after the current one. Attempting to write such a cache line will incur a write-after-read
-violation.
+violation. In the following discussion, we use (m, h) to represent the timestamp range of a cache line.
 
 Each processor in the system is extended with an "Iteration ID", or VID, register. VID represents the logical ordering 
 of an iteration, and defines the order of conflict resolution when a dependency occurs. The register is part of the processor
@@ -63,9 +63,13 @@ be on the same processor on which the iteration is started. The *initMTX* instru
 context and sets the address of the recovery routine if the iteration aborts. 
 
 The new protocol assumes a broadcasting bus and snooping protocol. Cache misses are handled by the cache controller via
-a broadcast on the bus. The broadcasted packet is also piggybacked with the VID of the requesting processor. On receiving 
-such a request, other processors check whether the request hits one of their cache lines using a set of modified visibility 
-rules. If there is a hit, then the processor will reply as in an ordinary MOESI protocol. We next describe the operations 
-of the new protocol in detail.
+a broadcast on the bus. Write operations are handled as a bus read without causing invalidation. The broadcasted packet 
+is also piggybacked with the VID of the requesting processor. On receiving such a request, other processors check whether 
+the request hits one of their cache lines using a set of modified visibility rules. If there is a hit, then the processor 
+will reply as in an ordinary MOESI protocol. We next describe the operations of the new protocol in detail.
 
-
+The S-M (m, h) state represents the most up-to-date version of a cache line. It is readable and writable by iterations whose VID 
+is larger than h. Otherwise, a WAR violation is detected. Read operations from a remote processor hitting a line in S-M state 
+will provide the remote processor with a cache line in S-S (m, h) state. On commit, S-M state represents the current version of 
+a cache line, and will trasit to nonspeculative M state. VIDs greather than or equal to m will hit the line. Note that the 
+access timestamp h is only used for violation detection, rather than visibility computing. This is because S-M lines are  
