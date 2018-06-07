@@ -52,3 +52,7 @@ the range could not access it, because logically speaking, the cache line is cre
 Iterations whose ID is in between the range could not write to the cache line, because the cache line has been read by
 an iteration that logically execute after the current one. Attempting to write such a cache line will incur a write-after-read
 violation.
+
+Each processor in the system is extended with an "Iteration ID", or VID, register. The register is part of the processor
+context, and needs to be saved and stored on context switches. Similar to floating point registers, this could be done 
+in a lazy manner. The paper also proposes adding a few new instructions into the ISA. The *beginMTX* instruction
