@@ -36,6 +36,15 @@ With these design objectives in mind, the paper extends the widely deployed MOES
 speculative states of the non-speculative counterparts. The addition of speculatively states should satisfy two 
 different goals. First, these speculative states should preserve the state of the cache line before it is accessed 
 speculatively. Once an iteration commits or aborts, the speculative cache line should return to a correct non-speculative 
-state. Second, the speculative cache lines alter the semantics of cache coherence, allowing iterations to perform private 
+state. Second, the speculative cache lines add new semantics to cache coherence, allowing iterations to perform private 
 writes and pass dirty states to each other without incurring ordering violations. Four new states are added: Speculative 
-Modified (S-M), Speculative Owned (S-O), Speculative Shared (S-S) and Speculative Exclusive (S-E). 
+Modified (S-M), Speculative Owned (S-O), Speculative Shared (S-S) and Speculative Exclusive (S-E). Besides, each cache 
+line also have two more fields in their tags. The first field is the creation timestamp. When an iteration performs a 
+speculative write, and creates a new version of the cache line, the iteration ID of itself is written into the field.
+This field is used to determine whether a cache line is visible to a particular request. We describe the concrete protocol
+in later sections. The second field is the last accessed timestamp. It is updated when the cache line is accessed by
+an iteration. The access iteration can be prforming either speculative reads or writes. Write operations also needs a read, 
+because typically the write is only a few words in length, and the rest of the cache line still needs to be read from a 
+previous version. The creation timestamp and the in effect defines the "time range" of the cache line. Iterations below 
+the range could not access it because logically speaking the cache line is created after the iteration has finished.
+Iterations whose ID is in between the range could not write to the cache line, because there is a later 
