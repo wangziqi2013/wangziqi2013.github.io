@@ -59,5 +59,13 @@ context, and needs to be saved and stored on context switches. Similar to dealin
 be done lazily. The paper also proposes adding a few new instructions into the ISA. The *beginMTX* instruction 
 loads the VID register with the ID of an iteration. Software is responsible for ordering iterations properly and assign
 them VIDs. The *commitMTX*/*abortMTX* commits/aborts an iteration given the VID. Commits and aborts do not have to 
-be on the same processor the iteration is started. The *initMTX* instruction saves a checkpoint of the execution context
-and sets the address of the recovery routine if the iteration aborts.
+be on the same processor on which the iteration is started. The *initMTX* instruction saves a checkpoint of the execution 
+context and sets the address of the recovery routine if the iteration aborts. 
+
+The new protocol assumes a broadcasting bus and snooping protocol. Cache misses are handled by the cache controller via
+a broadcast on the bus. The broadcasted packet is also piggybacked with the VID of the requesting processor. On receiving 
+such a request, other processors check whether the request hits one of their cache lines using a set of modified visibility 
+rules. If there is a hit, then the processor will reply as in an ordinary MOESI protocol. We next describe the operations 
+of the new protocol in detail.
+
+
