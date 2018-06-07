@@ -25,4 +25,7 @@ then process the nodes in parallel by entering the corresponding iteration conte
 processing function.
 
 The goal of the new protocol is to achieve the following during the speculation. First, cache lines created by 
-different iterations should be maintained separately without messing up with each other. 
+different iterations should be maintained separately and privately. They should be able to co-exist with each other 
+even inside the same set of a cache. Second, threads should be able to enter and exit an iteration without causing 
+the current speculation to commit or abort. This producer-consumer paradigm relies on this feature to allow producers 
+to set up the iteration context first, and then consumers to finish the iteration. 
