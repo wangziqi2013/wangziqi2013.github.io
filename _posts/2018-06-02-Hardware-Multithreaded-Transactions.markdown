@@ -34,7 +34,8 @@ involve any global coordination or search, unlike in some protocols where a requ
 
 With these design objectives in mind, the paper extends the widely deployed MOESI cache coherence protocol by adding 
 speculative states of the non-speculative counterparts. The addition of speculatively states should satisfy two 
-different goals. First, these speculative states should preserve the state of the cache line once an iteration commits 
-or aborts, returning to a correct non-speculative state. Second, the speculative cache lines alter the semantics 
-of cache coherence, allowing iterations to perform private writes and pass dirty states to each other without incurring 
-ordering violations.
+different goals. First, these speculative states should preserve the state of the cache line before it is accessed 
+speculatively. Once an iteration commits or aborts, the speculative cache line should return to a correct non-speculative 
+state. Second, the speculative cache lines alter the semantics of cache coherence, allowing iterations to perform private 
+writes and pass dirty states to each other without incurring ordering violations. Four new states are added: Speculative 
+Modified (S-M), Speculative Owned (S-O), Speculative Shared (S-S) and Speculative Exclusive (S-E). 
