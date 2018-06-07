@@ -27,5 +27,7 @@ processing function.
 The goal of the new protocol is to achieve the following during the speculation. First, cache lines created by 
 different iterations should be maintained separately and privately. They should be able to co-exist with each other 
 even inside the same set of a cache. Second, threads should be able to enter and exit an iteration without causing 
-the current speculation to commit or abort. This producer-consumer paradigm relies on this feature to allow producers 
-to set up the iteration context first, and then consumers to finish the iteration. 
+the current speculation to commit or abort. The previously mentioned producer-consumer paradigm relies on this feature 
+to allow producers to set up the iteration context first, and then consumers to finish the iteration. Third, control logics, 
+especially cache hit/miss and commit/abort logic, must be local. Determining whether a request hits a cache line should not 
+involve any global coordination or search, unlike in some protocols where a request could "possibly hit" a cache line.
