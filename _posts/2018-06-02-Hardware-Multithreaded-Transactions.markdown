@@ -75,8 +75,13 @@ a cache line, and will trasit to nonspeculative M state. VIDs greather than or e
 access timestamp h is only used for violation detection, rather than visibility computing. 
 
 The S-O (m, h) state represents an outdated cache line. There is a "newer" cache line created by a later iteration somewhere in 
-the system. S-O lines are red-only, because writing a version that has already been superseded will cause a write-after-write (WAW)
+the system. S-O lines are read-only, because writing a version that has already been superseded will cause a write-after-write (WAW)
 violation. S-O lines are visible to requests whose VID is between the range. If an S-O line is requsted for read, the reading 
 processor will obtain a copy in S-S state. On both commit and abort, S-O will be invalidated. S-O lines are created as a byproduct
-of speculative writes. Whenever a speculative write with VID z creates a new cache line in S-M state by writing into a (x, y), an 
-S-O line will be also created as the copy of the original line. The S-O
+of speculative writes. When a speculative write with VID z creates a new cache line in S-M state by writing into a cache line with
+timestamp (x, y), an S-O line will be also created as the copy of the original line. The timestamp of the S-O line would be (x, z),
+and the new line in S-M state will have timestamp (z, z). 
+
+The S-E state represents a speculative state being read directly from non-speculative memory. Its creation timestamp is always zero.
+The read timestamp defines the time range that this line is readable. If any iteration within the range attempts to write the line,
+a WAR is detected, and the loop should be aborted. The visibility of an S-E line is not capped by its read timestamp. This is because
