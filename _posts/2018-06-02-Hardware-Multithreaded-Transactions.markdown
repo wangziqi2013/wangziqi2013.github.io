@@ -85,3 +85,6 @@ and the new line in S-M state will have timestamp (z, z).
 The S-E state represents a speculative state being read directly from non-speculative memory. Its creation timestamp is always zero.
 The read timestamp defines the time range that this line is readable. If any iteration within the range attempts to write the line,
 a WAR is detected, and the loop should be aborted. The visibility of an S-E line is not capped by its read timestamp. This is because
+S-E lines are not versioned cache line. They are used merely to detect conflicts. The version is from the main memory, and should 
+always be visible. If the line is to be overwritten, the S-E line transits to S-M while an S-O is also created as describes in 
+previous paragraphs.
