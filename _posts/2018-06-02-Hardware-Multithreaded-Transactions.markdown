@@ -72,4 +72,11 @@ The S-M (m, h) state represents the most up-to-date version of a cache line. It 
 is larger than h. Otherwise, a WAR violation is detected. Read operations from a remote processor hitting a line in S-M state 
 will provide the remote processor with a cache line in S-S (m, h) state. On commit, S-M state represents the current version of 
 a cache line, and will trasit to nonspeculative M state. VIDs greather than or equal to m will hit the line. Note that the 
-access timestamp h is only used for violation detection, rather than visibility computing. This is because S-M lines are  
+access timestamp h is only used for violation detection, rather than visibility computing. 
+
+The S-O (m, h) state represents an outdated cache line. There is a "newer" cache line created by a later iteration somewhere in 
+the system. S-O lines are red-only, because writing a version that has already been superseded will cause a write-after-write (WAW)
+violation. S-O lines are visible to requests whose VID is between the range. If an S-O line is requsted for read, the reading 
+processor will obtain a copy in S-S state. On both commit and abort, S-O will be invalidated. S-O lines are created as a byproduct
+of speculative writes. Whenever a speculative write with VID z creates a new cache line in S-M state by writing into a (x, y), an 
+S-O line will be also created as the copy of the original line. The S-O
