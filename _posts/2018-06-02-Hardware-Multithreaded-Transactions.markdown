@@ -110,6 +110,8 @@ must be performed, because there can be speculative state lines in the system ev
 
 In general, no speculative cache line can be evicted from the cache, which causes information loss. The cache controller 
 should prioritize for speculative cache lines such that they are evicted after non-speculative lines. One exception, however,
-is S-O lines whose creation timestamp is zero. They can be written back to memory safely. If a request hitting the 
+is S-O lines whose creation timestamp is zero. They can be written back to memory safely. If a request of VID x hitting the 
 evicted S-O line is broadcasted on the bus, and it hits nowhere, and in addition there is a S-M line on the same address,
 then we know that the S-O line of creation timestamp zero must have been evicted. The line is read from the main memory
+and assigned a timestamp range (0, x + 1). The cache controller could also take this into consideration, and prioritize 
+accordingly when trying to evict speculative S-O lines with creation timestamp zero.
