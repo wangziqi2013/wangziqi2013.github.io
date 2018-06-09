@@ -67,5 +67,7 @@ Compared with paging, direct segment scales well as memory size keeps growing. T
 main memory sizes, traditional paging mechanism must either increase the size of the TLB, or the granularity of 
 mapping. The former is not always achievable, because TLB lookup is on the critical path of all memory operations.
 Large TLB can be slow and power hungry. The latter seems feasible, but it has implementation difficulties, because 
-desining TLBs for different size classes is challenging. The TLB must be . In addition, large mapping units are 
-inflexible. Possible memory wastage grows with the size of the mapping.
+desining TLBs for different size classes is challenging. In addition, large mapping units are inflexible. Possible memory 
+wastage grows with the size of the mapping. Direct mapping, on the other hand, scales perfectly. Arbitraty large segments
+can be mapped with the addition of only three registers. It also has low implementation difficulty, as the segmentation
+scheme is straightforward, and the OS only needs to save and restore three registers on each context switch.
