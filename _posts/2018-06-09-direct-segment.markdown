@@ -41,3 +41,7 @@ graph500, GUPS, and NBP. The benchmarking result shows that for regular 4 KB pag
 51% of execution time. Even with 2 MB and 1 GB super pages, D-TLB can still cause slow down, raning from zero to 10%
 of execution time. 
 
+A segmentation approach can help relieve the slow down caused by page level mapping for big-data applications.
+In the direct segment design, three registers are added to the context of a process: BASE, LIMIT and OFFSET.
+The BASE register holds the start address of segmentation in virtual address space, while LIMIT holds the 
+address of the end of the segment. OFFSET stores the different between the physical and virtual segments. 
