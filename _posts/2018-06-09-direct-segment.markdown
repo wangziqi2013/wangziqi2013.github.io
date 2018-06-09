@@ -52,3 +52,10 @@ in the translation process. To turn off segmentation, just set LIMIT and BASE to
 go for page translation because no address can fall into the range. The address range mapped by direct segment
 is always readable and writable. These three registers are also part of the process context. On context switches and 
 optionally on system calls, the OS must swapped them in and out.
+
+The OS allows applications to take advantage of direct segment by providing the abstraction of *primary region*. Memory
+chunks allocated in the primary region are expected to not benefit from paging. The application could request explicitly
+in system calls (such as mmap()) for a primary region allocation, or the system administrator could configure 
+the OS to allocate all memory of certain applications by default. To implement primary region efficiently, the OS 
+must be aware of the address space requirement on both virtual and physical addresses. Large and consecutive address 
+spaces need to be reserved for primary region mapping.
