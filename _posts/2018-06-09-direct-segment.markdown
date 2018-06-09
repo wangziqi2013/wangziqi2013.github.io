@@ -26,3 +26,8 @@ Long running big data applications, such as memcached or MySQL, demonstrate seve
 distinguish them from short running interactive programs. First, they normally do not rely on the OS to swap in 
 and swap out physical pages to transparently overcommit. Instead, they treat the main memory as a buffer pool/object 
 pool, and automatically adjusts its memory usage to the size of the physical memory available in the system. 
+Swapping can do very little good here, because big-data applications are not willing to suffer from the extra I/O
+overhead bound to swapping. Second, big-data applications typically allocate its workspace memory at startup, and 
+then perform memory management by its own. Fine-grained memory management at page granularity is of little use
+in this scenario, as external fragmentation is not observable by the OS. Third, the workspace memory of big-data
+applications are almost always of read/write permission. 
