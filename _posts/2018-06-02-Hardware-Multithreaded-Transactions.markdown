@@ -88,3 +88,7 @@ a WAR is detected, and the loop should be aborted. The visibility of an S-E line
 S-E lines are not versioned cache line. They are used merely to detect conflicts. The version is from the main memory, and should 
 always be visible. If the line is to be overwritten, the S-E line transits to S-M while an S-O is also created as describes in 
 previous paragraphs.
+
+The S-S state represents a read-only copy of a cache line that was read from S-M, S-O and S-E lines. The timestamp of the S-S 
+cache line is identical to the timestamp of the cache line from which it is copied. S-S lines are only visible to iterations whose
+VID is within the range. S-S lines never respond to cache coherence events, because one of the S-M, S-O or S-E will respond.
