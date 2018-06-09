@@ -30,4 +30,7 @@ Swapping can do very little good here, because big-data applications are not wil
 overhead bound to swapping. Second, big-data applications typically allocate its workspace memory at startup, and 
 then perform memory management by its own. Fine-grained memory management at page granularity is of little use
 in this scenario, as external fragmentation is not observable by the OS. Third, the workspace memory of big-data
-applications are almost always of read/write permission. 
+applications are almost always of readable and writable permission. Per-page protections bits are useful in cases such as 
+protecting code segment from being maliciously altered, but there is no way of selectively turning them off for 
+the workspace memory area. Overall, we conclude that the current hardware page-level fine grained mapping and protection 
+machanism is sufficient, but not in its best shape to deliver high performance for big-data applications.
