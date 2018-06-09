@@ -107,3 +107,9 @@ reset signal will reset the creation and read timestamp for all cache lines in a
 optional in the design we described above, because the reset signal is sent after all iterations have committed. No
 cache lines could have either timestamp be non-zero. If, however, the commit and abort optimization is used, the latter 
 must be performed, because there can be speculative state lines in the system even if all iterations have committed.
+
+In general, no speculative cache line can be evicted from the cache, which causes information loss. The cache controller 
+should prioritize for speculative cache lines such that they are evicted after non-speculative lines. One exception, however,
+is S-O lines whose creation timestamp is zero. They can be written back to memory safely. If a request hitting the 
+evicted S-O line is broadcasted on the bus, and it hits nowhere, and in addition there is a S-M line on the same address,
+then we know that the S-O line of creation timestamp zero must have been evicted. The line is read from the main memory
