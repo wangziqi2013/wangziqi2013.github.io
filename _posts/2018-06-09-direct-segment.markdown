@@ -21,3 +21,8 @@ relying on a TLB to accelerate translation in most cases. The classical paging-b
 regard is inefficient by having both page walk overhead and redundency of memory protection bits. Based on these 
 observations, direct segment is designed to eliminate paging overhead with simple hardware changes. We 
 elaborate the design in the next few sections.
+
+Long running big data applications, such as memcached or MySQL, demonstrate several memory usage patterns that 
+distinguish them from short running interactive programs. First, they normally do not rely on the OS to swap in 
+and swap out physical pages to transparently overcommit. Instead, they treat the main memory as a buffer pool/object 
+pool, and automatically adjusts its memory usage to the size of the physical memory available in the system. 
