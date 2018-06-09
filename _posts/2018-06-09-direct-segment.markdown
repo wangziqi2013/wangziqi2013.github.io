@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---   
+
+This paper proposes direct segment, a segmentation based approach to virtual address
+translation. The motivation of direct segment is high overhead of Translation Lookaside Buffer (TLB)
+lookup on modern big-data machines. On one hand, big-data applications do not require complicated memory 
+mapping. On the other hand, existing paging systems manage memory mapping for each 4 KB page separately, 
+relying on a TLB to accelerate translation in most cases. The classical paging-based address mapping in this 
+regard is inefficient by having both page walk overhead and redundency of memory protection bits. Based on these 
+observations, direct segment is designed to eliminate paging overhead with simple hardware changes. We 
+elaborate the design in the next few sections.
