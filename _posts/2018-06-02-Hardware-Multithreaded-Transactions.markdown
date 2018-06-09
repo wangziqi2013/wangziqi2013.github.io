@@ -92,3 +92,5 @@ previous paragraphs.
 The S-S state represents a read-only copy of a cache line that was read from S-M, S-O and S-E lines. The timestamp of the S-S 
 cache line is identical to the timestamp of the cache line from which it is copied. S-S lines are only visible to iterations whose
 VID is within the range. S-S lines never respond to cache coherence events, because one of the S-M, S-O or S-E will respond.
+Any attempt to write an S-S line will result in an immediate abort.
+
