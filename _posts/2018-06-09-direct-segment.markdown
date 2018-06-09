@@ -76,4 +76,8 @@ memory references at most. The mapping between gPA and hPA could be described by
 takes 4 memory references plus a segment translation to convert gVA to hPA.
 
 Direct segment has a few limitations. First, it is not general enough as only one segment mapping is provisioned per
-process context.
+process context. According to another study, segment mapping works best if several segments can be mapped at the 
+same time. Second, direct segments forfeits the ability of a big-data application to overcommit via demand paging.
+Physical memory is allocated even if it is not used. This, however, can be alleviated by the fact that the configuration
+file of some applications specify the maximum amount of memory it can consume. By configuring these applications in 
+a clever way, the negative effect of not being able to overcommit may be reduced or even offset.
