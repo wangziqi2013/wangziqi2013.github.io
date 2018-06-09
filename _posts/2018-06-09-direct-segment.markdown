@@ -34,3 +34,10 @@ applications are almost always of readable and writable permission. Per-page pro
 protecting code segment from being maliciously altered, but there is no way of selectively turning them off for 
 the workspace memory area. Overall, we conclude that the current hardware page-level fine grained mapping and protection 
 machanism is sufficient, but not in its best shape to deliver high performance for big-data applications.
+
+The paper also argues that the overhead of page level mapping and protection constitutes a non-negligible amount 
+of cycles while running big-data applications. The evidence is presented by running several benchmarks, including 
+graph500, GUPS, and NBP. The benchmarking result shows that for regular 4 KB pages, D-TLB misses can take as much as 
+51% of execution time. Even with 2 MB and 1 GB super pages, D-TLB can still cause slow down, raning from zero to 10%
+of execution time. 
+
