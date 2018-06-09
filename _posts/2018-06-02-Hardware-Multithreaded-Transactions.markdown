@@ -102,4 +102,8 @@ are not written by speculative instructions, but by a non-speculative instructio
 go into invalid state.
 
 If the VID counter is about to overflow and wrap back, the runtime stops spawning new iterations. Instead, it waits 
-for the last iteration to commit, and then broadcast a VID reset signal to all processors in the system. 
+for the last iteration to commit, and then broadcasts a VID reset signal to all processors in the system. The VID
+reset signal will reset the creation and read timestamp for all cache lines in all processors to zero. The latter is 
+optional in the design we described above, because the reset signal is sent after all iterations have committed. No
+cache lines could have either timestamp be non-zero. If, however, the commit and abort optimization is used, the latter 
+must be performed, because there can be speculative state lines in the system even if all iterations have committed.
