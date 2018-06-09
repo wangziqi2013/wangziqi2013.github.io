@@ -71,3 +71,9 @@ desining TLBs for different size classes is challenging. In addition, large mapp
 wastage grows with the size of the mapping. Direct mapping, on the other hand, scales perfectly. Arbitraty large segments
 can be mapped with the addition of only three registers. It also has low implementation difficulty, as the segmentation
 scheme is straightforward, and the OS only needs to save and restore three registers on each context switch.
+On virtual machines, direct segment can be applied to reduce nest page walk overhead, which can end up with 24
+memory references at most. The mapping between gPA and hPA could be described by a segment mapping, and it only
+takes 4 memory references plus a segment translation to convert gVA to hPA.
+
+Direct segment has a few limitations. First, it is not general enough as only one segment mapping is provisioned per
+process context.
