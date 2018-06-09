@@ -94,3 +94,9 @@ cache line is identical to the timestamp of the cache line from which it is copi
 VID is within the range. S-S lines never respond to cache coherence events, because one of the S-M, S-O or S-E will respond.
 Any attempt to write an S-S line will result in an immediate abort.
 
+On commit, S-M and S-E lines will become M and E lines. S-O and S-S lines will be invalidated, because they either represent
+obsolete data, or they are copied from an S-M/S-E/S-O line. On aborts, speculative states are thrown away while states originally
+read from the main memory are restored. In this regard, S-E lines are restored to E states because that is where they were 
+before the speculation. S-M and S-O lines become M lines, if their modification timestamp is zero, which indicates that they
+are not written by speculative instructions, but by a non-speculative instruction before the loop starts. S-S states always 
+go into invalid state.
