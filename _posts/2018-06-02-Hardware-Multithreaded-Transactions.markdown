@@ -98,5 +98,8 @@ On commit, S-M and S-E lines will become M and E lines. S-O and S-S lines will b
 obsolete data, or they are copied from an S-M/S-E/S-O line. On aborts, speculative states are thrown away while states originally
 read from the main memory are restored. In this regard, S-E lines are restored to E states because that is where they were 
 before the speculation. S-M and S-O lines become M lines, if their modification timestamp is zero, which indicates that they
-are not written by speculative instructions, but by a non-speculative instruction before the loop starts. S-S states always 
+are not written by speculative instructions, but by a non-speculative instruction before the loop starts. S-S lines always 
 go into invalid state.
+
+If the VID counter is about to overflow and wrap back, the runtime stops spawning new iterations. Instead, it waits 
+for the last iteration to commit, and then broadcast a VID reset signal to all processors in the system. 
