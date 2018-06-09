@@ -58,4 +58,14 @@ chunks allocated in the primary region are expected to not benefit from paging. 
 in system calls (such as mmap()) for a primary region allocation, or the system administrator could configure 
 the OS to allocate all memory of certain applications by default. To implement primary region efficiently, the OS 
 must be aware of the address space requirement on both virtual and physical addresses. Large and consecutive address 
-spaces need to be reserved for primary region mapping.
+spaces need to be reserved for primary region mapping. The OS can also dynamically adjust the size of the region at runtime.
+If the OS finds it possible that even itself could benefit from direct segment, then kernel memory could also be mapped 
+using direct segments. In this case, the OS must also swap the three registers mentioned previously during system call
+and exit.
+
+Compared with paging, direct segment scales well as memory size keeps growing. To accommodate for larger and larger 
+main memory sizes, traditional paging mechanism must either increase the size of the TLB, or the granularity of 
+mapping. The former is not always achievable, because TLB lookup is on the critical path of all memory operations.
+Large TLB can be slow and power hungry. The latter seems feasible, but it has implementation difficulties, because 
+desining TLBs for different size classes is challenging. The TLB must be . In addition, large mapping units are 
+inflexible. Possible memory wastage grows with the size of the mapping.
