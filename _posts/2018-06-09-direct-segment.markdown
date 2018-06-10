@@ -11,7 +11,7 @@ rw_set:
 htm_cd: 
 htm_cr: 
 version_mgmt: 
----   
+---
 
 This paper proposes direct segment, a segmentation based approach to virtual address
 translation. The motivation of direct segment is high overhead of Translation Lookaside Buffer (TLB)
