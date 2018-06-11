@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+Compressing for main-memory can be beneficial as it saves both capacity and bus traffic. This paper mainly focuses 
+on the latter, without presenting in a detailed manner how compressed blocks are stored and indexed in the DRAM array.
+There exists several design trade-offs for memory compression architectures. For examples, designing for cache only
+compression significantly differs from designing for main memory compression, because the former could 
