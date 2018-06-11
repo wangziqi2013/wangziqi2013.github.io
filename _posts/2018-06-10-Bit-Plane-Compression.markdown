@@ -25,4 +25,9 @@ could work for cache only compression, but the overhead of the dictionary when a
 overshadow its benefit.
 
 This paper proposes Bit-Plane Compression (BPC), which is specifically tuned for GPGPU. GPGPU systems benefit from
-compression for two reasons. First, the 
+compression for two reasons. First, GPGPUs have higher demand for memory bandwidth, and is more likely to be 
+memory-bound. They access data in strided pattern, with no or very little temporal locality, and limited spatial 
+locality. Caching, in this case, does not provide as much benefit as in a general purpose system. Second, the workload
+that GPGPU runs generally processeses data items of the same type. They are either large arrays of homogeneous 
+data items, or composite types whose elements are of the same type. Homogeneous data items usually demonstrate
+value locality, where adjacent items differ only by a small amount. 
