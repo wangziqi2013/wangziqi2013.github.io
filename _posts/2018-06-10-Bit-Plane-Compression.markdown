@@ -38,4 +38,8 @@ The memory compression architecture takes advantage of value locality by storing
 memory unchanged as the base value. The rest of the elements are stored as the delta value from its previous element.
 Thanks to the presence of value locality, these delta values are expected to be small integers, which can be encoded in
 far less bits than the original data type. For example, in Base-&Delta;-Immediate (BDI) encoding, delta values are encoded 
-by the hardware using 8, 16 and 32 bits. 
+by the hardware using 8, 16 and 32 bits in parallel, and the best scheme is chosen based on both compressibility and
+compression ratio. This scheme, though works well in practice, can only achieve a compression ratio between 1.5:1 for floats 
+and 2.3:1 for integers. 
+
+To exploit more 
