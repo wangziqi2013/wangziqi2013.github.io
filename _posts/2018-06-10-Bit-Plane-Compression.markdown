@@ -84,4 +84,7 @@ clusters at the middle of the chunk. Both can be encoded with 5 bit symbols.
 In order for the compression scheme to work well, memory subsystem must also be modified such that it can adapt to 
 variable sized transmissions of data. Traditionally, DRAM communicates with the processor on row or sub-row granularity.
 This renders the compression scheme ineffective, because it always sends and receives fixed amount of data for 
-every memory transaction. 
+every memory transaction. Luckily, newer memory architectures support packetized memory transaction. Variable 
+sized chunks can easily be transferred through the communication network. One example presented by the paper is 
+*Hybrid Memory Cube*. Compressed data is encapsulated inside the packet, and then submitted to the memory controller to
+be processed.
