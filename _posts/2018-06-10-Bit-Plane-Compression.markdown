@@ -30,4 +30,12 @@ memory-bound. They access data in strided pattern, with no or very little tempor
 locality. Caching, in this case, does not provide as much benefit as in a general purpose system. Second, the workload
 that GPGPU runs generally processeses data items of the same type. They are either large arrays of homogeneous 
 data items, or composite types whose elements are of the same type. Homogeneous data items usually demonstrate
-value locality, where adjacent items differ only by a small amount. 
+value locality, where adjacent items differ only by a small amount. This has been confirmed in the paper by running
+GPGPU benchmarks and collecting statistics on their usage of allocated memory. All but three workloads do not have 
+scala variable in global memory. 
+
+The memory compression architecture takes advantage of value locality by storing only the first element in a chunk of 
+memory unchanged as the base value. The rest of the elements are stored as the delta value from its previous element.
+Thanks to the presence of value locality, these delta values are expected to be small integers, which can be encoded in
+far less bits than the original data type. For example, in Base-&Delta;-Immediate (BDI) encoding, delta values are encoded 
+by the hardware using 8, 16 and 32 bits. 
