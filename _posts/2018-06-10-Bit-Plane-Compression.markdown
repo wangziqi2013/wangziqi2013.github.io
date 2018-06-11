@@ -59,4 +59,8 @@ next several paragraphs.
 Delta-BitPlane-XOR operates on 128 byte (1024 bits) memory chunks, and always processes items in the chunk as 32 bit integers. 
 As any delta-based encoding scheme would do, it first computes the delta of elements by substracting the previous item from
 the current one for all elements except the first one, which is compressed seperately as the base value. Note that in schemes 
-like BDI, deltas are computed as the difference between each element and the base element. 
+like BDI, deltas are computed as the difference between each element and the base element. In DBX, it is computed as the 
+difference between every element and its previous element. This is because the value locality observed in GPGPU workloads is 
+more likely to be between adjacent elements. After computing delta, the next step is to perform bit plane transformation. 
+Recall that each element are 32 bit integers, and there are 31 of them. We generate a new sequence of integers by taking 
+the k-th bit from every delta value, with k ranging from 0 to 32 (the delta has 33 bits). The bit plane transformation
