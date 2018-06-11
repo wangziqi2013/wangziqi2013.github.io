@@ -80,3 +80,8 @@ achieve good compression ratio by detecting common patterns in the transformed d
 patterns that can be specially treated. The first is data item with two consecutive ones. This implies an "abnormal"
 value that results in two large deltas. The second is data item with a single one bit. This implies a change of value 
 clusters at the middle of the chunk. Both can be encoded with 5 bit symbols.
+
+In order for the compression scheme to work well, memory subsystem must also be modified such that it can adapt to 
+variable sized transmissions of data. Traditionally, DRAM communicates with the processor on row or sub-row granularity.
+This renders the compression scheme ineffective, because it always sends and receives fixed amount of data for 
+every memory transaction. 
