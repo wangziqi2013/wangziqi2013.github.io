@@ -42,4 +42,7 @@ by the hardware using 8, 16 and 32 bits in parallel, and the best scheme is chos
 compression ratio. This scheme, though works well in practice, can only achieve a compression ratio between 1.5:1 for floats 
 and 2.3:1 for integers. 
 
-To exploit more 
+Using 1-, 2-, or 4-bytes to store compressed 8 byte deltas can reduce the total amount storage indeed. They can be 
+all sub-optimal if the value range of the deltas can be represented by, for example, 5 bits, or 18 bits. In BDI,
+1 byte and 4 byte encoding must be chosen, but there is still a waste of storage, as the higher 3 and 6 bits 
+respectively are always zero. As long as the compression scheme stores and fetches data in an aligned manner, there 
