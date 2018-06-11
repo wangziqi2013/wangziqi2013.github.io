@@ -30,4 +30,10 @@ a extended cache-address TLB (cTLB), a global inverted page table (GIPT), and a 
 All of these three are either easy to implement in hardware, or does not require significant effort to modify 
 existing hardware. We introduce the three components in the following sections.
 
-The TLB is extended
+The cTLB is extended with each entry a cache address, which stores information for hardware circuits to locate
+a DRAM cache block. Physical addresses also need to be maintained, as SRAM caches still uses physical address 
+as tags. Since the cache block is of the same size as a page that the cTLB maps, only one pointer is sufficient. 
+We maintain an invariant that the DRAM cache must hold all pages mapped by the TLB. The remaining unmapped 
+storage of the DRAM cache can be used as a victim cache. If an entry is evicted from the cTLB, the corresponding
+cache block can still be cached in the DRAM cache, and continues to exist as a victim block. 
+On a memory instruction, the TLB is consulted 
