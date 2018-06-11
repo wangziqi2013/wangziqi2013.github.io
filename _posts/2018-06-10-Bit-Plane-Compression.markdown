@@ -77,4 +77,6 @@ compressed data is sent to the memory controller as an unstructured bit sequence
 
 The above compression scheme works well if all delta values are small. If this assumotion does not hold, we can still
 achieve good compression ratio by detecting common patterns in the transformed delta. The paper suggests several common
-patterns that can be specially treated. 
+patterns that can be specially treated. The first is data item with two consecutive ones. This implies an "abnormal"
+value that results in two large deltas. The second is data item with a single one bit. This implies a change of value 
+clusters at the middle of the chunk. Both can be encoded with 5 bit symbols.
