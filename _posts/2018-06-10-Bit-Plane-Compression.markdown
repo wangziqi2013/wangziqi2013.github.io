@@ -16,4 +16,13 @@ version_mgmt:
 Compressing for main-memory can be beneficial as it saves both capacity and bus traffic. This paper mainly focuses 
 on the latter, without presenting in a detailed manner how compressed blocks are stored and indexed in the DRAM array.
 There exists several design trade-offs for memory compression architectures. For examples, designing for cache only
-compression significantly differs from designing for main memory compression, because the former could 
+compression significantly differs from designing for main memory compression, because the former could employ
+techniques such as re-compression and fast indexing structures with relatively low overheads, while the latter 
+usually could not afford so. The compression algorithm is also of great importance to the overall system design.
+Classical fixed-length encoding may be favored as they can approximate the entropic limit. The computational 
+complexity on hardware, on the other hand, can be prohibitive. Variable lengthed encoding with a dictionary
+could work for cache only compression, but the overhead of the dictionary when applied to the main memory can 
+overshadow its benefit.
+
+This paper proposes Bit-Plane Compression (BPC), which is specifically tuned for GPGPU. GPGPU systems benefit from
+compression for two reasons. First, the 
