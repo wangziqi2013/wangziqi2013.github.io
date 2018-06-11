@@ -56,3 +56,7 @@ have long sequences of zero words if deltas are small values. The length of the 
 number of leading zero bits which can be compressed in the delta values. We cover the process in more details in the 
 next several paragraphs.
 
+Delta-BitPlane-XOR operates on 128 byte (1024 bits) memory chunks, and always processes items in the chunk as 32 bit integers. 
+As any delta-based encoding scheme would do, it first computes the delta of elements by substracting the previous item from
+the current one for all elements except the first one, which is compressed seperately as the base value. Note that in schemes 
+like BDI, deltas are computed as the difference between each element and the base element. 
