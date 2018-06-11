@@ -52,4 +52,7 @@ BPC, on the other hand, transforms the deltas to extract more information that c
 processing pipeline. In the first stage, a transformation called "Delta-BitPlane-XOR" (DBX) is applied to raw data. In the 
 second stage, the resulting sequence is compressed using simple schemes such as run-length encoding (RLE) and frequent
 pattern encoding (FPE), and so on. The first stage compression is designed in a way such that the generated sequence will
-have long sequences of zero words if deltas are small values. The length of the zero sequence is 
+have long sequences of zero words if deltas are small values. The length of the zero sequence is propotional to the 
+number of leading zero bits which can be compressed in the delta values. We cover the process in more details in the 
+next several paragraphs.
+
