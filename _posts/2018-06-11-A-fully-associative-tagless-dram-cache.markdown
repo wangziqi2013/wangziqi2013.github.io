@@ -21,4 +21,6 @@ of a DRAM cache is hundreds of megabytes or even several GBs, storing tags as an
 prohibitively expensive and have high latency. Second, the tag array needs to be read and compared against
 the physical address of the accessed line. This operation is on the critical path of a cache lookup.
 This can make the latency of DRAM caches too large to be useful. Finally, even if there is a cheap and fast 
-way of storing and accessing
+way of storing and accessing tags, caching data at 64 byte guanularity as SRAM cache does may not be beneficial,
+as the locality is not fully exploited.
+
