@@ -36,4 +36,8 @@ as tags. Since the cache block is of the same size as a page that the cTLB maps,
 We maintain an invariant that the DRAM cache must hold all pages mapped by the TLB. The remaining unmapped 
 storage of the DRAM cache can be used as a victim cache. If an entry is evicted from the cTLB, the corresponding
 cache block can still be cached in the DRAM cache, and continues to exist as a victim block. 
-On a memory instruction, the TLB is consulted 
+On a memory instruction, the TLB is consulted to find the physical address and L4 cache address. If the first 
+three levels miss, then the cache address is used to fetch the cache block from the DRAM cache. Thanks to 
+the above mentioned invariant, it is guaranteed that if the cTLB has an entry for a page, then the page 
+must exist in the DRAM cache. If cTLB misses, then the page walker is invoked to traverse the page table and 
+load the corresponding entry. We cover the details of the page table in its own section.
