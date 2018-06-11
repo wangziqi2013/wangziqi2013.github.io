@@ -64,3 +64,6 @@ difference between every element and its previous element. This is because the v
 more likely to be between adjacent elements. After computing delta, the next step is to perform bit plane transformation. 
 Recall that each element are 32 bit integers, and there are 31 of them. We generate a new sequence of integers by taking 
 the k-th bit from every delta value, with k ranging from 0 to 32 (the delta has 33 bits). The bit plane transformation
+generates a sequence of *j* zeros/ones if the highest *j* bits of all deltas are zeros/ones. The value of *j* are not limited 
+to only 56, 48, or 32 as in BDI. In the last step, each symbol from the previous step is XOR'ed with the next symbol. 
+Sequences of ones are converted to sequences of zeros after the last step.
