@@ -67,3 +67,9 @@ the k-th bit from every delta value, with k ranging from 0 to 32 (the delta has 
 generates a sequence of *j* zeros/ones if the highest *j* bits of all deltas are zeros/ones. The value of *j* are not limited 
 to only 56, 48, or 32 as in BDI. In the last step, each symbol from the previous step is XOR'ed with the next symbol. 
 Sequences of ones are converted to sequences of zeros after the last step.
+
+After DBX transformation, the 128 byte chunk is transformed into the following three components. The first component is 
+the base value, which can be compressed using frequent pattern compression if the base value itself is compressible.
+The second component is the sequence of zeros, which is encoded using run-length encoding. Only the length of the 
+sequence is stored, because the hardware knows only zeros can appear in the sequence. The last component is the 
+non-zero sequence
