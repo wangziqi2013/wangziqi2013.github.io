@@ -40,4 +40,10 @@ On a memory instruction, the TLB is consulted to find the physical address and L
 three levels miss, then the cache address is used to fetch the cache block from the DRAM cache. Thanks to 
 the above mentioned invariant, it is guaranteed that if the cTLB has an entry for a page, then the page 
 must exist in the DRAM cache. If cTLB misses, then the page walker is invoked to traverse the page table and 
-load the corresponding entry. We cover the details of the page table in its own section.
+load the corresponding entry. We cover the details of the page table in the next paragraph.
+
+The page table is modified to allow the page walker to discover information about an already cached block.
+On a cTLB miss, the page walker traverses the page table to find the PTE. The PTE is extended with three extra
+bits: a Valid in Cache (VC) bit to indicate whether the page has been cached by the L4; a Non-Cachable (NC) bit
+to indicate whether L4 should not be used for this page; a Pending Update (PU) which serves as a lock to synchronize
+page walkers of different processors in a multicore systems. It then 
