@@ -72,4 +72,9 @@ After DBX transformation, the 128 byte chunk is transformed into the following t
 the base value, which can be compressed using frequent pattern compression if the base value itself is compressible.
 The second component is the sequence of zeros, which is encoded using run-length encoding. Only the length of the 
 sequence is stored, because the hardware knows only zeros can appear in the sequence. The last component is the 
-non-zero sequence
+non-zero sequence following the zero sequence. They are also encoded using frequent pattern compression. The final
+compressed data is sent to the memory controller as an unstructured bit sequence.
+
+The above compression scheme works well if all delta values are small. If this assumotion does not hold, we can still
+achieve good compression ratio by detecting common patterns in the transformed delta. The paper suggests several common
+patterns that can be specially treated. 
