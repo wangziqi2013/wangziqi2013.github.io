@@ -12,7 +12,7 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
-
+  
 As in-package DRAM modules are becoming mature, its usage as a fast L4 cache has been studied for many
 researchers. Previous stydies suggest that DRAM cache cannot be organized in the same way as a SRAM cache 
 is for performance and storage reasons. In particular, keeping a tag array to track part of the physical 
