@@ -46,5 +46,8 @@ On a cTLB miss, the page walker traverses the page table as usual to find the PT
 bits: a Valid in Cache (VC) bit to indicate whether the page has been cached by the L4; a Non-Cachable (NC) bit
 to indicate whether L4 should not be used for this page; a Pending Update (PU) bit which serves as a lock to synchronize
 page walkers of different processors in a multicore systems. The page walker first checks the NC bit. If NC is set,
-then the page will never be cached by L4, and it simply loads the physical address and return. Otherwise, it checks the 
-VC bit. If VC bit is clear, the page has not been loaded into the L4 cache. The page walker 
+then the page will never be cached by L4, and it simply loads the physical address and returns. Otherwise, it checks the 
+VC bit. If VC bit is clear, the page has not been loaded into the L4 cache. The page walker loads the physical address
+in the PTE, allocates a block in L4, and then stores the . In the above process, the PU bit is used as a lock bit. 
+Before any read or write operation is to be performed on the PTE, the page walker must spin on the PU bit if it is set, 
+or set the bit atomically if it is clear. The PU bit is cleared after the operation has completed. 
