@@ -48,6 +48,10 @@ to indicate whether L4 should not be used for this page; a Pending Update (PU) b
 page walkers of different processors in a multicore systems. The page walker first checks the NC bit. If NC is set,
 then the page will never be cached by L4, and it simply loads the physical address and returns. Otherwise, it checks the 
 VC bit. If VC bit is clear, the page has not been loaded into the L4 cache. The page walker loads the physical address
-in the PTE, allocates a block in L4, and then stores the . In the above process, the PU bit is used as a lock bit. 
-Before any read or write operation is to be performed on the PTE, the page walker must spin on the PU bit if it is set, 
-or set the bit atomically if it is clear. The PU bit is cleared after the operation has completed. 
+in the PTE, allocates a block in L4, and then stores the cache address in the physical address field. If the VC bit is 
+already set, then the page walker just loads the "physical address", which is now the L4 cache address, and returns.
+In both cases, the page walker populates the TLB entry with the cache address of the corresponding page. The MMU then
+uses the cache address to locate the block and return data to the core.
+In the above process, the PU bit is used as a lock bit. Before any read or write operation is to be performed on the 
+PTE, the page walker must spin on the PU bit if it is set, or set the bit atomically if it is clear. The PU bit is 
+cleared after the operation has completed. 
