@@ -13,14 +13,13 @@ htm_cr:
 version_mgmt: 
 ---
   
-As in-package DRAM modules are becoming mature, its usage as a fast L4 cache has been studied for many
-researchers. Previous stydies suggest that DRAM cache cannot be organized in the same way as a SRAM cache 
-is for performance and storage reasons. In particular, keeping a tag array to track part of the physical 
-addresses of cache lines is considered not feasible. There are several reasons. First, as the typical size
-of a DRAM cache is hundreds of megabytes or even several GBs, storing tags as an on-die SRAM array would be 
-prohibitively expensive and have high latency. Second, the tag array needs to be read and compared against
-the physical address of the accessed line. This operation is on the critical path of a cache lookup.
-This can make the latency of DRAM caches too large to be useful. Finally, even if there is a cheap and fast 
+As in-package DRAM modules are becoming available, its usage as a fast L4 cache has been studied extensively. 
+Previous stydies suggest that DRAM cache cannot be organized in the same way as a SRAM cache for performance 
+and storage reasons. In particular, keeping a tag array to track part of the physical addresses of cache lines 
+is considered not feasible. There are several reasons. First, as the typical size of a DRAM cache is hundreds 
+of megabytes or even several GBs, storing tags as an on-die SRAM array would be prohibitively expensive and induce 
+high latency. Second, the tag array needs to be read and compared against the physical address of the accessed line. 
+This operation is on the critical path of a cache lookup. Finally, even if there is a cheap and fast 
 way of storing and accessing tags, caching data at 64 byte guanularity as SRAM cache does may not be beneficial,
 as the locality is not fully exploited.
 
@@ -30,17 +29,17 @@ a extended cache-address TLB (cTLB), a global inverted page table (GIPT), and a 
 All of these three are either easy to implement in hardware, or does not require significant effort to modify 
 existing hardware. We introduce the three components in the following sections.
 
-The cTLB is extended with each entry a cache address, which stores information for hardware circuits to locate
-a DRAM cache block. Physical addresses also need to be maintained, as SRAM caches still uses physical address 
-as tags. Since the cache block is of the same size as a page that the cTLB maps, only one pointer is sufficient. 
-We maintain an invariant that the DRAM cache must hold all pages mapped by the TLB. The remaining unmapped 
-storage of the DRAM cache can be used as a victim cache. If an entry is evicted from the cTLB, the corresponding
-cache block can still be cached in the DRAM cache, and continues to exist as a victim block. 
-On a memory instruction, the TLB is consulted to find the physical address and L4 cache address. If the first 
-three levels miss, then the cache address is used to fetch the cache block from the DRAM cache. Thanks to 
-the above mentioned invariant, it is guaranteed that if the cTLB has an entry for a page, then the page 
-must exist in the DRAM cache. If cTLB misses, then the page walker is invoked to traverse the page table and 
-load the corresponding entry. We cover the details of the page table in the next paragraph.
+The cTLB is extends each entry with a cache address, which stores information for hardware circuits to locate
+a DRAM cache block. Physical addresses also need to be maintained as in an ordinary TLB, as SRAM caches still 
+uses physical address as tags. Since the cache block is of the same size as a page that the cTLB maps, only one 
+cache address field is sufficient. We maintain an invariant that the DRAM cache must hold all pages mapped by the 
+TLB. The remaining unmapped storage of the DRAM cache can be used as a victim cache. Eviction of cached blocks is 
+not mandatory when an entry is evicted from the cTLB. The corresponding cache block can still be kept in the DRAM 
+cache, continuing to exist as a victim block. On executing a memory instruction, the TLB is consulted to find the 
+physical address and L4 cache address. If the first three levels miss, then the cache address is used to fetch the 
+cache block from the DRAM cache. Thanks to the above mentioned invariant, it is guaranteed that as long as the cTLB 
+has an entry for a page, the page must exist in the DRAM cache. If cTLB misses, then the page walker is invoked to 
+traverse the page table and load the corresponding entry. We cover the details of the page table in the next paragraph.
 
 The page table is modified to allow the page walker to discover information about an already cached block.
 On a cTLB miss, the page walker traverses the page table to find the PTE. The PTE is extended with three extra
