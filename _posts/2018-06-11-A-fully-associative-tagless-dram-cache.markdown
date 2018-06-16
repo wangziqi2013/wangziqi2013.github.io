@@ -53,8 +53,9 @@ already set, then the page walker just loads the "physical address", which is no
 In both cases, the page walker populates the TLB entry with the cache address of the corresponding page. The MMU then
 uses the cache address to locate the block and return data to the core. In the above process, the PU bit is used as a 
 lock bit. Before any read or write operation is to be performed on the PTE, the page walker must spin on the PU bit if 
-it is set, or set the bit atomically if it is clear. The PU bit is cleared after the operation has completed. If a new 
-block is brought into the cache, the GIPT is also modified. We cover GIPT in the next section.
+it is set, or set the bit atomically if it is clear. The PU bit is cleared after the operation has completed. The GIPT
+is also modified to reflect the fact that one more TLB entry is allocated to point to the cached L4 copy. We cover GIPT 
+in the next section.
 
 The Inverted Global Pointer Table, GIPT, is indexed by cache addresses (do not require associative search). It maps 
 a page in L4 cache to its physical address in the main memory, the address of the corresponding PTE, and a TLB residence 
@@ -68,4 +69,7 @@ cover the entire L4; Otherwise TLB shootdown must also be performed), and put it
 A background hardware process then flushes the cache entry back to main memory if the entry is dirty. Freed cache 
 blocks are chained together using a free list, the head of which is also part of the global information. By maintaining 
 at least &alpha; free blocks, page walks will never be blocked because of the thoughput limit on write backs.
+The background write back process uses the GIPT to locate the PTE as well as the physical address of the cache block.
+On a write back, the PTE is updated such that the cache address is replaced by the physical address. The VC bit is 
+cleared to indicate that there is no cached copy in L4.
 
