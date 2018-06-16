@@ -24,3 +24,8 @@ memory due to a cache miss, only the frequently accessed lines will be transfere
 a high hit rate while reduces the bandwidth requirement of ordinary page based caching. In the following sections
 we will present a design in which footprint caching is integrated into tagless DRAM cache in order to 
 solve the over-fetching problem.
+
+Tagless DRAM cache emerges as on-die DRAM now becomes available on commercial hardware. On-die DRAM
+typically has lower access latency compared with the main memory DRAM, but has less capacity. To make the 
+best use of it without overburdening the OS with complicated memory allocation and scheduling problem, hardware 
+designers have proposed to dedicate the extra hundreds MBs or even few GBs of storage to serving as an L4 cache. 
