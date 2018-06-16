@@ -62,5 +62,9 @@ vector. The TLB residence vector acts as a directory of the TLB entries. If the 
 accessible through a particular core's TLB, then the corresponding bit in the residence vector must be set. This vector 
 is used to maintain coherence between TLB entries when a page table entry is modified. The GIPT serves as a global
 directory for pages in the L4 cache. It also has a small free queue, which holds the cache address of cache lines that
-are to be evicted in the background. When the number of free pages in the L4 cache drops below a threshold
+are to be evicted in the background. When the number of free pages in the L4 cache drops below a threshold &alpha;, the 
+cache controller will select a cache block not mapped by any TLB (assuming the range of all TLBs in the system cannot 
+cover the entire L4; Otherwise TLB shootdown must also be performed), and put its cache address into the free queue.
+A background hardware process then flushes the cache entry back to main memory if the entry is dirty. Freed cache 
+blocks are chained together using a free list, the head of which is also part of the GIPT.
 
