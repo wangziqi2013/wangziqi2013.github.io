@@ -51,7 +51,7 @@ VC bit. If VC bit is clear, the page has not been loaded into the L4 cache. The 
 in the PTE, allocates a block in L4, and then stores the cache address in the physical address field. If the VC bit is 
 already set, then the page walker just loads the "physical address", which is now the L4 cache address, and returns.
 In both cases, the page walker populates the TLB entry with the cache address of the corresponding page. The MMU then
-uses the cache address to locate the block and return data to the core.
-In the above process, the PU bit is used as a lock bit. Before any read or write operation is to be performed on the 
-PTE, the page walker must spin on the PU bit if it is set, or set the bit atomically if it is clear. The PU bit is 
-cleared after the operation has completed. 
+uses the cache address to locate the block and return data to the core. In the above process, the PU bit is used as a 
+lock bit. Before any read or write operation is to be performed on the PTE, the page walker must spin on the PU bit if 
+it is set, or set the bit atomically if it is clear. The PU bit is cleared after the operation has completed. 
+
