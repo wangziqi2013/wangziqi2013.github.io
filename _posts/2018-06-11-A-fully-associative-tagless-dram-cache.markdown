@@ -75,5 +75,9 @@ cleared to indicate that there is no cached copy in L4.
 
 Always fetching the entire page into L4 cache can cause "over-fetching" problem. If the locality of access is low, 
 the non-cachable bit in the PTE can be turned on by the OS. The page walker then ignores the L4 cache while performing
-the page walk. The TLB is also extended with the NC bit, and it is loaded from the PTE during the page walk. 
+the page walk. The TLB is also extended with the NC bit, and it is loaded from the PTE during the page walk. Another 
+similar problem that benefits from the NC bit is aliasing, where several different PTEs point to the same physical frame.
+In this case, it is difficult for the page walker to figure out that whether the physical address has already been cached
+by L4 without performing an associative search within the GIPT. The OS can simply turn off L4 caching on these pages, and 
+force the system to fall back to tag-based caching scheme.
 
