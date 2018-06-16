@@ -68,8 +68,12 @@ cache controller will select a cache block not mapped by any TLB (assuming the r
 cover the entire L4; Otherwise TLB shootdown must also be performed), and put its cache address into the free queue.
 A background hardware process then flushes the cache entry back to main memory if the entry is dirty. Freed cache 
 blocks are chained together using a free list, the head of which is also part of the global information. By maintaining 
-at least &alpha; free blocks, page walks will never be blocked because of the thoughput limit on write backs.
+at least &alpha; free blocks, page walks will never be blocked because of the bandwidth limit on write backs.
 The background write back process uses the GIPT to locate the PTE as well as the physical address of the cache block.
 On a write back, the PTE is updated such that the cache address is replaced by the physical address. The VC bit is 
 cleared to indicate that there is no cached copy in L4.
+
+Always fetching the entire page into L4 cache can cause "over-fetching" problem. If the locality of access is low, 
+the non-cachable bit in the PTE can be turned on by the OS. The page walker then ignores the L4 cache while performing
+the page walk. The TLB is also extended with the NC bit, and it is loaded from the PTE during the page walk. 
 
