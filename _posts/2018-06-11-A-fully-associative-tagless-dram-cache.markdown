@@ -66,5 +66,6 @@ are to be evicted in the background. When the number of free pages in the L4 cac
 cache controller will select a cache block not mapped by any TLB (assuming the range of all TLBs in the system cannot 
 cover the entire L4; Otherwise TLB shootdown must also be performed), and put its cache address into the free queue.
 A background hardware process then flushes the cache entry back to main memory if the entry is dirty. Freed cache 
-blocks are chained together using a free list, the head of which is also part of the GIPT.
+blocks are chained together using a free list, the head of which is also part of the global information. By maintaining 
+at least &alpha; free blocks, page walks will never be blocked because of the thoughput limit on write backs.
 
