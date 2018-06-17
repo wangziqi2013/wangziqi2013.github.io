@@ -74,7 +74,11 @@ set in the PTE. The physical address field of the PTE is replaced with the alloc
 
 On a TLB eviction, both the reference bit vector and valid bit vector should be written back to the PTE entry. In a multicore
 environment, however, although the paper mentions that writing back bit vectors is necessary, I doubt whether this is truly 
-the case, as the PTE must always be maintained consistently with the TLB. Whenever a bit is set in the valid bit vector,
-a coherence message must be sent among all TLBs in the system to update the status of the segment in other TLBs. The coherence
-message is similar to hardware cache coherence, and it is broadcasted using the cache coherence network. As pointed out by
-the paper, since changing the valid bit should be a relative rare event, the broadcasting is expected to have small overhead.
+the case, as the PTE must always be maintained consistently with the TLB. This requirement is different from classical cache 
+coherence problem, because we did not assume a TLB-to-TLB transfer of valid bits. Since valid bits must always be obtained from
+the PTE even if some TLBs in the system have a copy. Given this constraint, Whenever a bit is set in the valid bit vector,
+a coherence message must be sent among all TLBs in the system to update the status of the segment in other TLBs, as well as 
+the bit vector in the PTE. The coherence mechanism is similar to hardware cache coherence, and it is broadcasted using the 
+cache coherence network. As pointed out by the paper, since changing the valid bit should be a relative rare event, the 
+broadcasting is expected to have small overhead. The reference bits, on the other hand, do not need to be kept consistently 
+among all cores. They can be merged back into the PTE as TLB entries are evicted.
