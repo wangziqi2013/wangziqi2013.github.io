@@ -60,4 +60,12 @@ is evicted, then all of its valid bits are cleared. In the paper, the size of bo
 The modified scheme is called F-TDC (Footprint-Tagless DRAM Cache), and it operates as follows. On a TLB hit, the cache 
 controller checks the valid bit vector for the corresponding segment. If the bit is set, then the L4 is accessed using
 the cache address. Otherwise, the page is allocated in the cache, but the segment has not been filled yet. In this case, 
-the hardware page walker uses GIPT to load the segment into L4, and updates the valid vector for TLB as well as the PTE.
+the hardware page walker uses GIPT to load the segment into L4, and updates the reference bit vector for TLB, and valid 
+vector for TLB as well as the PTE.
+
+If the TLB misses, then the page walker is invoked to find the PTE. If the PTE has a non-zero valid bit vector, then 
+the page walker directly loads the TLB with the cache address stored in the PTE. The valid bit vector is also loaded.
+If the segment accessed by the instruction is not valid, the page walker also initiates a transfer from the main
+memory, after which the bit vectors are updated as in the previous case.
+
+If TLB misses, and the page walker
