@@ -71,3 +71,10 @@ memory, after which the bit vectors are updated as in the previous case.
 If TLB misses, and the PTE has all-zero in its valid bit vector, then the block is also not in the cache. In this case,
 the page walker allocates a block in L4, updates the GIPT, and fills the block with only segments that has reference bit
 set in the PTE. The physical address field of the PTE is replaced with the allocated cache address as in TDC.
+
+On a TLB eviction, both the reference bit vector and valid bit vector should be written back to the PTE entry. In a multicore
+environment, however, although the paper mentions that writing back bit vectors is necessary, I doubt whether this is truly 
+the case, as the PTE must always be maintained consistently with the TLB. Whenever a bit is set in the valid bit vector,
+a coherence message must be sent among all TLBs in the system to update the status of the segment in other TLBs. The coherence
+message is similar to hardware cache coherence, and it is broadcasted using the cache coherence network. As pointed out by
+the paper, since changing the valid bit should be a relative rare event, the broadcasting is expected to have small overhead.
