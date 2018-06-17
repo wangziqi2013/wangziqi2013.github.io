@@ -29,3 +29,9 @@ Tagless DRAM cache emerges as on-die DRAM now becomes available on commercial ha
 typically has lower access latency compared with the main memory DRAM, but has less capacity. To make the 
 best use of it without overburdening the OS with complicated memory allocation and scheduling problem, hardware 
 designers have proposed to dedicate the extra hundreds MBs or even few GBs of storage to serving as an L4 cache. 
+The challenge, however, is that if DRAM caches are to be organized just like the SRAM cache, the storage 
+for the tag array would be tens of MBs in size, which is not feasible to be implemented on-chip. One of the solutions
+that is relevant to our topic is the *tagless DRAM* design, where the L4 cache does not use tags to identify blocks.
+Instead, the TLB is extended with a "cache address" field, in which the location of the block in the DRAM cache 
+can be located using this pointer. Caching is always performed on page granularity. The system maintains an 
+invariant that as long as a TLB entry is valid, the corresponding page must be cached in L4. 
