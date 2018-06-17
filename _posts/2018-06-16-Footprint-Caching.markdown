@@ -68,4 +68,6 @@ the page walker directly loads the TLB with the cache address stored in the PTE.
 If the segment accessed by the instruction is not valid, the page walker also initiates a transfer from the main
 memory, after which the bit vectors are updated as in the previous case.
 
-If TLB misses, and the page walker
+If TLB misses, and the PTE has all-zero in its valid bit vector, then the block is also not in the cache. In this case,
+the page walker allocates a block in L4, updates the GIPT, and fills the block with only segments that has reference bit
+set in the PTE. The physical address field of the PTE is replaced with the allocated cache address as in TDC.
