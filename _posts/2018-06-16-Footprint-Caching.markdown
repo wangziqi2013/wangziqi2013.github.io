@@ -50,8 +50,9 @@ chained together using a free list, the head pointer of which is also maintained
 and the L4 cache are shared by all cores.
 
 Footprint caching decouples cache block allocation from cache block filling. In the original proposal, over-fetching
-would occur if a 64 byte segment is fetched into the 4 KB block, but is never accessed before the block is evicted.
-By allowing 64 bytes in the page to be fetched from the main memory on-demand, two bit vectors are added into both the 
-TLB and the PTE: A valid bit vector to indicate whether a 64 byte segment is valid in the cache, and a reference bit
-vector to record the segments that are filled on-demand after the block is allocated in the cache. Note that the 
-reference bit vector is always a subset of valid bit vector, because referenced bits are always valid in the cache.
+would occur if a segment is fetched into the 4 KB block, but is never accessed before the block is evicted.
+The over-fetching problem can be alleviated by allowing data be to fetched at sub-page granularity on-demand. Two bit 
+vectors are added into both the TLB and the PTE to support this: A valid bit vector to indicate whether a 64 byte segment 
+is valid in the cache, and a reference bit vector to record the segments that are filled on-demand after the block is 
+allocated in the cache. Note that the reference bit vector is always a subset of valid bit vector, because referenced 
+bits are always valid in the cache. In the paper, the size of both bit vectors are 8 bits. This decision is made 
