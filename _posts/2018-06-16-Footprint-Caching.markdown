@@ -38,5 +38,7 @@ invariant that as long as a TLB entry is valid, the corresponding page must be c
 page walker not only finds and loads the physical address from the PTE, but also checks the PTE to find out 
 whether the page has already been cached by L4. If not, one entry in L4 is allocated, and the entire page is 
 brought into the DRAM cache. The PTE is extended with three extra bits: VC bit to indicate whether the page 
-has already been cached; NC bit to indicate whether the page is cachable; PU bit as the lock bit to serialize
-page walkers from different cache controllers.
+has already been cached; NC bit to indicate whether the page is cachable; PU bit as a spin lock to serialize
+page walkers from different cache controllers. Furthermore, if the VC bit is turned on, which indicates that
+the page is already in L4, the physical address in the PTE is replaced by the cache address. This avoids multiple 
+redundant copies of a single page by different page walkers. 
