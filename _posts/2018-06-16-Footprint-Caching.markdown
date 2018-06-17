@@ -57,4 +57,7 @@ is valid in the cache, and a reference bit vector to record the segments that ar
 allocated in the cache. Note that the reference bit vector is not always a subset of valid bit vector, because if a block
 is evicted, then all of its valid bits are cleared. In the paper, the size of both bit vectors are 8 bits. 
 
-The modified scheme is called F-TDC (Footprint-Tagless DRAM Cache), and it operates as follows.
+The modified scheme is called F-TDC (Footprint-Tagless DRAM Cache), and it operates as follows. On a TLB hit, the cache 
+controller checks the valid bit vector for the corresponding segment. If the bit is set, then the L4 is accessed using
+the cache address. Otherwise, the page is allocated in the cache, but the segment has not been filled yet. In this case, 
+the hardware page walker uses GIPT to load the segment into L4, and updates the valid vector for TLB as well as the PTE.
