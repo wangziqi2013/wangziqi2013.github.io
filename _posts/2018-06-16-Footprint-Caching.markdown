@@ -48,3 +48,10 @@ the cache address of blocks that are to be evicted back to the main memory. A ba
 performs write back and updates the PTE using information stored in GIPT. All free blocks in the L4 cache are 
 chained together using a free list, the head pointer of which is also maintained as part of the GIPT. Both GIPT
 and the L4 cache are shared by all cores.
+
+Footprint caching decouples cache block allocation from cache block filling. In the original proposal, over-fetching
+would occur if a 64 byte segment is fetched into the 4 KB block, but is never accessed before the block is evicted.
+By allowing 64 bytes in the page to be fetched from the main memory on-demand, two bit vectors are added into both the 
+TLB and the PTE: A valid bit vector to indicate whether a 64 byte segment is valid in the cache, and a reference bit
+vector to record the segments that are filled on-demand after the block is allocated in the cache. Note that the 
+reference bit vector is always a subset of valid bit vector, because referenced bits are always valid in the cache.
