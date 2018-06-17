@@ -41,4 +41,10 @@ brought into the DRAM cache. The PTE is extended with three extra bits: VC bit t
 has already been cached; NC bit to indicate whether the page is cachable; PU bit as a spin lock to serialize
 page walkers from different cache controllers. Furthermore, if the VC bit is turned on, which indicates that
 the page is already in L4, the physical address in the PTE is replaced by the cache address. This avoids multiple 
-redundant copies of a single page by different page walkers. 
+redundant copies of a single page by different page walkers. Besides that, a global inverted page table (GIPT)
+is added to map cache blocks to the physical pointer of its main memory copy, the pointer to its PTE, and a bit vector
+to indicate which TLBs in the system has an active entry for this block. The GIPT also has a free queue that holds 
+the cache address of blocks that are to be evicted back to the main memory. A background hardware state machine 
+performs write back and updates the PTE using information stored in GIPT. All free blocks in the L4 cache are 
+chained together using a free list, the head pointer of which is also maintained as part of the GIPT. Both GIPT
+and the L4 cache are shared by all cores.
