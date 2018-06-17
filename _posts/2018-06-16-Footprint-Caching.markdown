@@ -54,5 +54,7 @@ would occur if a segment is fetched into the 4 KB block, but is never accessed b
 The over-fetching problem can be alleviated by allowing data be to fetched at sub-page granularity on-demand. Two bit 
 vectors are added into both the TLB and the PTE to support this: A valid bit vector to indicate whether a 64 byte segment 
 is valid in the cache, and a reference bit vector to record the segments that are filled on-demand after the block is 
-allocated in the cache. Note that the reference bit vector is always a subset of valid bit vector, because referenced 
-bits are always valid in the cache. In the paper, the size of both bit vectors are 8 bits. This decision is made 
+allocated in the cache. Note that the reference bit vector is not always a subset of valid bit vector, because if a block
+is evicted, then all of its valid bits are cleared. In the paper, the size of both bit vectors are 8 bits. 
+
+The modified scheme is called F-TDC (Footprint-Tagless DRAM Cache), and it operates as follows.
