@@ -71,4 +71,6 @@ works with Lite seamlessly. In fact, RMM injects TLB entries into the TLB by usi
 further reduces the number of active ways that are needed. This is another change that allows more 
 aggressive disabling of ways for Lite. Integrating RMM into Lite is trivial. The only minor modification is that
 RMM injects TLB entries for both L2 and L1 TLB, and it is accessed in parallel with L1 TLB during a translation.
-Although
+Although acessing the RMM table at every memory instruction may seem to increase dynamic energy, the 
+aggressive disabling of ways in L1 TLB can compensate for this part of extra energy. In the evaluation section,
+it is reported that Lite with RMM can reduce power consumption by up to 99% and on average 71%.
