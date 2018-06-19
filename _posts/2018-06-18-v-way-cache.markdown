@@ -30,5 +30,14 @@ Increasing the associativity of a cache or simply using fully associative cache,
 by the paper, can increase the hit rate. The extra cost and hardware changes, however, may not justify the performance
 improvement. One problem with large associativity is the cost of extra data store, as the number of tags in each
 way must equal the number of blocks allocated to that way. Furthermore, the latency of tag comparison, which is on
-the critical path of memory instructions, increases as the number of tags to compare increase. This implies larger 
-hit latency
+the critical path of memory instructions, increases as the number of tags to compare increase. Power consumption
+and heat dissipation can also be problematic with large tag array.
+
+This paper prposes Vraiable-Way (V-Way) Cache, which is a middlepoint between the classical set-associative cache and fully
+associative cache. The trade-off between associativity and hardware cost is made such that the number of tags in 
+each set is doubled, while the total number of blocks in data store remains unchanged. The mapping between tags and 
+data store blocks are not statically determined as in the current cache design. Instead, tags are assigned a cache 
+block dynamically only when the tag is allocated. The assigned block is selected from a global pool of free blocks. 
+Eviction decisions are made based on global replacement algorithm, which maximizes the opportunity that a "bad" block 
+is evicted. We describe the operations in detail in the next few sections.
+
