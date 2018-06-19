@@ -26,4 +26,5 @@ same line in the near future. Second, when the size of the working set is larger
 All accesses will result in cache misses, because the LRU algorithm always selects array elements 
 that are smaller, which are accessed earlier and hence are closer to the LRU position. The third reason
 is scan pattern, which accesses non-temporal blocks. Scan pattern also violates the assumption of LRU,
-because cache misses bring in data that will never be accessed in the near future. 
+because cache misses bring in data that will never be accessed in the near future. Overall speaking, LRU 
+is not suitable for L2 and LLC caches as a replacement algorithm, as locality assumptions are different.
