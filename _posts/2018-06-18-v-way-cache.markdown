@@ -23,4 +23,5 @@ cache is full, a fully associative cache can evict any of the lines currently in
 possibility that a "bad" line which does not benefit from extra locality is evicted. For a set-associative 
 cache, however, an eviction must be made within the set that the missed line will be loaded. Given that the 
 number of ways in a typical cache is usually significantly smaller than the total number of lines, it is likely 
-that the decision is sub-optimal. In the following discussion, we 
+that the decision is sub-optimal. In the following discussion, eviction decisions made by considering all lines 
+in the cache is called "global replacement", while decisions made only within a certain set is called "local replacement".
