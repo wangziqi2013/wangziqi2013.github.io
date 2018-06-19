@@ -33,3 +33,7 @@ static energy, because they extend the range of the TLB, and hence TLB miss rati
 introduction of separate TLB for different size classes, however, the dynamic energy increases, because multiple
 TLBs must be activated and searched in parallel. This is largely unnecessary since size classes are not distributed
 evenly among TLBs. One solution is to simply disable the TLB of a certain size class, if the TLB caches zero entry.
+An alternative to separate TLBs for size classes is to use a unified, fully associative TLB for all size classes.
+The TLB controller compares not only tags but also page sizes stored with the tag. Fully associative TLBs are 
+even more power hungry, because all entries are activated at tag comparison time. Although the paper implicitly
+assumes a set-associative TLB, as we shall see later, the design in this paper extends naturally to fully associative TLBs.
