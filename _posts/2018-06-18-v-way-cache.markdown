@@ -80,3 +80,15 @@ The first reason is that since V-Way design is to be used with lower level cache
 is not usually as high as in L1. The access pattern in L2 and LLC therefore needs an algorithm with different
 characteristics. Second, frequency-based replacement is easy to implement with little extra hardware. We describe the 
 design of frequency-based replacement below.
+
+The reuse frequency is defined as the number of accesses that hit the cache line after the line is loaded. The cache 
+controller uses a reuse counter table (RCT) to store the reuse counter for all data blocks. Recall that L2
+cache typically has less locality compared with L1, so the reuse counter does not need to be wide. Experiments 
+show that the majority of reuses before a data block is evicted are between zero and three, and hence two bit
+saturating counter is sufficient for describing the reuse pattern. A PTR register is added which points to entries 
+in the RCT. Its initial value is unimportant. On a cache hit, the corresponding entry in the RCT is incremented by
+one, and saturates if it reaches the maximum. When a eviction decision is to be made, the cache controller begins
+testing the value pointed to by the PTR register. If the counter is zero, then the corresponding block is 
+evicted immediately. Otherwise, the value is decremented by one, and PTR moves to the next location, wrapping back
+at the border. In the worst case, this process needs to be repeated thousands of times until an entry is found. In
+practice, as the paper reports, most of the searches can be finished in less than 5 
