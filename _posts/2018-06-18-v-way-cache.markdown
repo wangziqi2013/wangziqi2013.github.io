@@ -75,4 +75,8 @@ allocated a data block but ther is none. Candidates are: random, LRU, or frequen
 Random is not the best strategy, but it is employed in some designs, such as ARM, due to its simplicity.
 LRU is ideal in terms of efficiency. The main problem with LRU is the hardware cost, which, according to 
 the paper, is O(n<sup>2</sup>). Approximations of LRU can be implemented in a much lower cost, but they 
-are not as effictive as perfect LRU. This paper favors
+are not as effictive as perfect LRU. Frequency-based replacement is chosen for V-Way cache for several reasons.
+The first reason is that since V-Way design is to be used with lower level caches, the locality of data access 
+is not usually as high as in L1. The access pattern in L2 and LLC therefore needs an algorithm with different
+characteristics. Second, frequency-based replacement is easy to implement with little extra hardware. We describe the 
+design of frequency-based replacement below.
