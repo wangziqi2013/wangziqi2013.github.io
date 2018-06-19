@@ -63,4 +63,10 @@ there would be in an ordinary cache to test). If one of the tag hits, then the F
 is read in the next cycle. Note that the data block cannot be read in the same cycle as the tag is compared, therefore
 adding an extra cycle on the critical path of cache hit. This is definitely undesirable for L1, but L2 and LLC are 
 less sensitive to one cycle latency. Furthermore, to save power and space, existing hardware are already doing this 
-on lower level caches.
+on lower level caches. On a cache miss, tags in the set is inspected. If an invalid entry exists, then that entry is 
+allocated to the block currently being accessed. A clean data block is also allocated from the data store. If no clean
+data block is available, the global replacement algorithm determines which block to evict. Both the victim data block 
+and the tag allocated with the victim block are invalidated. We cover the global replacement algorithm in a separate 
+paragraph. If all tags in the set are valid, then a tag is selected as the victim of eviction. The selection process 
+uses local replacement, such as LRU. The data block associated with the victim tag is also invalidated.
+
