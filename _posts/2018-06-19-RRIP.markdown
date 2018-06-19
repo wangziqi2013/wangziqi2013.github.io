@@ -21,4 +21,9 @@ optimizal Belady's OPT algorithm, for access patterns that have high locality, w
 true for L1 cache. On L2 and LLC, LRU may not work well for three reasons. First, most of the locality
 has been filtered out by L1, and only those misses the L1 cache can be observed by L2 and LCC. This 
 property violates the assumption of LRU that both a cache miss and cache hit imply accesses to the 
-same line in the near future.
+same line in the near future. Second, when the size of the working set is larger than the cache, 
+*cache thrashing* can happen. The most typical example is accessing an array in a circular manner. 
+All accesses will result in cache misses, because the LRU algorithm always selects array elements 
+that are smaller, which are accessed earlier and hence are closer to the LRU position. The third reason
+is scan pattern, which accesses non-temporal blocks. Scan pattern also violates the assumption of LRU,
+because cache misses bring in data that will never be accessed in the near future. 
