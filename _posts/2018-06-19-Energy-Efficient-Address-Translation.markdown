@@ -46,5 +46,10 @@ modern TLBs. Lite implicitly assumes that the TLB maintains replacement informat
 for implementing the replacement algorithm. All counters are initialized to zero on initialization and reset. 
 On a TLB hit, the distance from the last hit on the same way is calculated using the LRU position. If the position 
 is between N and (N / 2), then we know if we disable half of the ways under the current configuration, then the 
-access will result in a miss. The miss counter for disabling half of the ways are hence incremented. Similarly,
-if the LRU position is between (N / 2) and (N / 4)
+access will result in a miss. The miss counter #1 for disabling half of the ways are hence incremented. Similarly,
+if the LRU position is between (N / 2) and (N / 4), miss counter #2 will be incremented, and so on. To the end,
+if the LRU position is 0, which means that the same way was hit in the last access, then miss counter #(log(N) + 1)
+is incremented, which measures the number of misses on this way if TLB were entirely disabled. Two extra counters 
+are needed also. One for recording the number of TLB misses in the current interval, and another for recording 
+the number of cache misses in the previous interval. We cover the details in the next paragraph.
+
