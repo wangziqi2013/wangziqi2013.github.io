@@ -91,4 +91,7 @@ one, and saturates if it reaches the maximum. When a eviction decision is to be 
 testing the value pointed to by the PTR register. If the counter is zero, then the corresponding block is 
 evicted immediately. Otherwise, the value is decremented by one, and PTR moves to the next location, wrapping back
 at the border. In the worst case, this process needs to be repeated thousands of times until an entry is found. In
-practice, as the paper reports, most of the searches can be finished in less than 5 
+practice, as the paper reports, most of the searches can be finished in less than 5 iterations. The cache controller 
+can further upper bound the number of iterations needed by stopping searching at the 6th iteration, and just evict
+whatever that is pointed to by PTR. Given that the locality of accesses in lower level caches are relatively low,
+this should happen infrequently. 
