@@ -74,3 +74,8 @@ RMM injects TLB entries for both L2 and L1 TLB, and it is accessed in parallel w
 Although acessing the RMM table at every memory instruction may seem to increase dynamic energy, the 
 aggressive disabling of ways in L1 TLB can compensate for this part of extra energy. In the evaluation section,
 it is reported that Lite with RMM can reduce power consumption by up to 99% and on average 71%.
+
+In the above discussion, we assumed a set-associative TLB organization. In fact, Lite works with fully associative 
+TLBs, which are deploed with SPARC and AMD processors. On fully associative TLBs, Lite treats each entry as an 
+individual way, and only one set is present in the TLB. To reduce the number of counters required, entries can
+also be clusterd. Similar energy saving has been observed for fully associative settings also.
