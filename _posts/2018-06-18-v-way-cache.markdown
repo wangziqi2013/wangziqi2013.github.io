@@ -25,3 +25,10 @@ cache, however, an eviction must be made within the set that the missed line wil
 number of ways in a typical cache is usually significantly smaller than the total number of lines, it is likely 
 that the decision is sub-optimal. In the following discussion, eviction decisions made by considering all lines 
 in the cache is called "global replacement", while decisions made only within a certain set is called "local replacement".
+
+Increasing the associativity of a cache or simply using fully associative cache, according to the results reported 
+by the paper, can increase the hit rate. The extra cost and hardware changes, however, may not justify the performance
+improvement. One problem with large associativity is the cost of extra data store, as the number of tags in each
+way must equal the number of blocks allocated to that way. Furthermore, the latency of tag comparison, which is on
+the critical path of memory instructions, increases as the number of tags to compare increase. This implies larger 
+hit latency
