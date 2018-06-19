@@ -53,3 +53,10 @@ is incremented, which measures the number of misses on this way if TLB were enti
 are needed also. One for recording the number of TLB misses in the current interval, and another for recording 
 the number of cache misses in the previous interval. We cover the details in the next paragraph.
 
+The execution is divided into intervals. In each interval, Lite monitors TLB misses using the TLB miss counter. 
+At the end of the interval, it uses the individual way miss counters to estimate the increase in TLB misses if 
+half of the ways are disabled. If the increase is not significant, e.g. if stays below a threshold, then half of 
+the ways are disabled. Disabled ways no longer store tags and PTEs. Since the TLB is a read-only structure, no
+information is needed to write back when disabling ways (Note: I doubt this, becase the dirty bit should be written 
+back to inform the OS of a dirty page). The current interval miss counter is copied to the previous interval miss 
+counter at the end of the interval. 
