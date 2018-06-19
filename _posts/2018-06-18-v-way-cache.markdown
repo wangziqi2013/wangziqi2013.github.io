@@ -70,3 +70,9 @@ and the tag allocated with the victim block are invalidated. We cover the global
 paragraph. If all tags in the set are valid, then a tag is selected as the victim of eviction. The selection process 
 uses local replacement, such as LRU. The data block associated with the victim tag is also invalidated.
 
+The global replacement algorithm selects a victim data block from all blocks for eviction when a tag is 
+allocated a data block but ther is none. Candidates are: random, LRU, or frequency-based replacement. 
+Random is not the best strategy, but it is employed in some designs, such as ARM, due to its simplicity.
+LRU is ideal in terms of efficiency. The main problem with LRU is the hardware cost, which, according to 
+the paper, is O(n<sup>2</sup>). Approximations of LRU can be implemented in a much lower cost, but they 
+are not as effictive as perfect LRU. This paper favors
