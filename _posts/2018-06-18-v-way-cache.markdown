@@ -92,6 +92,9 @@ testing the value pointed to by the PTR register. If the counter is zero, then t
 evicted immediately. Otherwise, the value is decremented by one, and PTR moves to the next location, wrapping back
 at the border. In the worst case, this process needs to be repeated thousands of times until an entry is found. In
 practice, as the paper reports, most of the searches can be finished in less than 5 iterations. The cache controller 
-can further upper bound the number of iterations needed by stopping searching at the 6th iteration, and just evict
+can further upper bound the number of iterations by stopping searching at the 6th iteration, and just evict
 whatever that is pointed to by PTR. Given that the locality of accesses in lower level caches are relatively low,
-this should happen infrequently. 
+this should happen infrequently. After the cache line is loaded, the corresponding counter is reset to zero, and 
+PTR is incremented. The next victim search will start at the next location, and only wraps back to the line 
+just loaded after all other counters have been searched. This leaves enough time for the just loaded cache line 
+to tune itself and have a representative reuse value.
