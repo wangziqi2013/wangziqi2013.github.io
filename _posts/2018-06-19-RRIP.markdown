@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "High Performance Cache Replacement Using Re-Reference Interval Prediction"
+date:   2018-06-19 05:43:00 -0500
+categories: paper
+paper_title: "High Performance Cache Replacement Using Re-Reference Interval Prediction"
+paper_link: https://dl.acm.org/citation.cfm?id=1815971
+paper_keyword: RRIP; Cache Replacement; LRU
+paper_year: ISCA 2010
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
