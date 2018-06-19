@@ -52,3 +52,9 @@ V-Way cache is designed for lower level caches (i.e. closer to the main memory) 
 some design decisions slightly hurt the hit latency and reduces hardware parallelism during a cache lookup. This 
 can be fatal for L1, but is fine for L2 and LLC. Second, the V-Way cache also changes cache replacement policy,
 which gives it an advantage over victim cache, which has little do to with the replcement policy. 
+
+As mentioned above, the V-Way cache provides elastic associativity without adding extra data store via 
+decoupled tag and data store. Tags are not mapped to cache blocks statically. Instead, each tag is extended with
+a pointer, called the Forware Pointer (FPTR), which points to the cache block is it assigned if the valid bit
+is set. Similarly, each data block has a Reversed Pointer (RPTR), which points to the tag the block is allocated
+to if the block holds valid data. In all cases, FPTR and RPTR should point to each other.
