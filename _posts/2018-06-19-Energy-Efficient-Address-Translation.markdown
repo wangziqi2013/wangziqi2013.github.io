@@ -36,4 +36,10 @@ evenly among TLBs. One solution is to simply disable the TLB of a certain size c
 An alternative to separate TLBs for size classes is to use a unified, fully associative TLB for all size classes.
 The TLB controller compares not only tags but also page sizes stored with the tag. Fully associative TLBs are 
 even more power hungry, because all entries are activated at tag comparison time. Although the paper implicitly
-assumes a set-associative TLB, as we shall see later, the design in this paper extends naturally to fully associative TLBs.
+assumes a set-associative TLB, as we shall see later, the design in this paper extends naturally to fully associative 
+TLBs.
+
+In order to identify the optimal number of ways in a set-associative TLB, the paper proposes Lite, a mechanism 
+for tracking way usages in TLB. For an N-way set-associative TLB organization, Lite adds (log(N) + 1) counters,
+the width of which is not mentioned. We assume that N is a power of two, which is almost always the case with
+modern TLBs.
