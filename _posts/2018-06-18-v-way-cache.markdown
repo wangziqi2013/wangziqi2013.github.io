@@ -45,4 +45,10 @@ Prior work focuses on increasing the associativity of L1 cache dynamically by us
 cache called the "Victim Cache". Blocks evicted from the L1 cache is stored in the victim cache. On memory operations,
 both the L1 cache and the victim cache is searched. If the L1 cache misses but there is a hit in the victim cache, then
 the victim block is reloaded into L1, avoiding a relatively expensive search operation in the next level cache. 
-Although the original
+Although the original victim cache is designed for direct-mapped L1 cache to prevent cache thrashing while more 
+than one stream that are mapped to the same set are being accessed simultaneously, the idea could be generalized 
+to set-associative caches easily. The V-Way design differs from victim cache in the following aspects. First,
+V-Way cache is designed for lower level caches (i.e. closer to the main memory) rather than L1. This is because 
+some design decisions slightly hurt the hit latency and reduces hardware parallelism during a cache lookup. This 
+can be fatal for L1, but is fine for L2 and LLC. Second, the V-Way cache also changes cache replacement policy,
+which gives it an advantage over victim cache, which has little do to with the replcement policy. 
