@@ -59,4 +59,9 @@ half of the ways are disabled. If the increase is not significant, e.g. if stays
 the ways are disabled. Disabled ways no longer store tags and PTEs. Since the TLB is a read-only structure, no
 information is needed to write back when disabling ways (Note: I doubt this, becase the dirty bit should be written 
 back to inform the OS of a dirty page). The current interval miss counter is copied to the previous interval miss 
-counter at the end of the interval. 
+counter at the end of the interval. If, on the other hand, at the end of the interval, the current interval miss 
+counter is significantly worse than the previous interval miss counter, suggesting a performance degradation, Lite
+activates all ways as a recovery from way disabling. Furthremore, since Lite could only evaluate the performance 
+of disabling ways, but does not know when to activate ways, it will randomly activate all ways to allow the 
+discovery of a better configuration. Without doing so, it is possible that Lite just "deadlocks" itself in a certain
+configuration, performing neither more disabling nor recovery.
