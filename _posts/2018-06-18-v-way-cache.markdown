@@ -53,8 +53,14 @@ some design decisions slightly hurt the hit latency and reduces hardware paralle
 can be fatal for L1, but is fine for L2 and LLC. Second, the V-Way cache also changes cache replacement policy,
 which gives it an advantage over victim cache, which has little do to with the replcement policy. 
 
-As mentioned above, the V-Way cache provides elastic associativity without adding extra data store via 
-decoupled tag and data store. Tags are not mapped to cache blocks statically. Instead, each tag is extended with
+As mentioned above, the V-Way cache provides elastic associativity without adding extra data store by 
+decoupling the tag and data store. Tags are not mapped to cache blocks statically. Instead, each tag is extended with
 a pointer, called the Forware Pointer (FPTR), which points to the cache block is it assigned if the valid bit
 is set. Similarly, each data block has a Reversed Pointer (RPTR), which points to the tag the block is allocated
-to if the block holds valid data. In all cases, FPTR and RPTR should point to each other.
+to if the block holds valid data. In all cases, FPTR and RPTR should point to each other. On a memory instruction, 
+the cache controller extracts index bits as usual, and tests the tags (now there are twice as many tags as 
+there would be in an ordinary cache to test). If one of the tag hits, then the FPTR is retrieved, and the data block
+is read in the next cycle. Note that the data block cannot be read in the same cycle as the tag is compared, therefore
+adding an extra cycle on the critical path of cache hit. This is definitely undesirable for L1, but L2 and LLC are 
+less sensitive to one cycle latency. Furthermore, to save power and space, existing hardware are already doing this 
+on lower level caches.
