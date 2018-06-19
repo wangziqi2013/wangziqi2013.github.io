@@ -65,3 +65,10 @@ activates all ways as a recovery from way disabling. Furthremore, since Lite cou
 of disabling ways, but does not know when to activate ways, it will randomly activate all ways to allow the 
 discovery of a better configuration. Without doing so, it is possible that Lite just "deadlocks" itself in a certain
 configuration, performing neither more disabling nor recovery.
+
+[Redundant Memory Mapping (RMM)]({% post_url 2018-05-21-Redundant-Memory-Mappings-for-Fast-Access-to-Large-Memories %}) 
+works with Lite seamlessly. In fact, RMM injects TLB entries into the TLB by using range mapping, which 
+further reduces the number of active ways that are needed. This is another change that allows more 
+aggressive disabling of ways for Lite. Integrating RMM into Lite is trivial. The only minor modification is that
+RMM injects TLB entries for both L2 and L1 TLB, and it is accessed in parallel with L1 TLB during a translation.
+Although
