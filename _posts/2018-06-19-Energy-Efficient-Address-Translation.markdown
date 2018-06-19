@@ -21,4 +21,9 @@ having less page walk and execution time, decreasing the power consumption of th
 the dynamic energy may increase as a result of more complicated hardware.
 
 This paper aims at optimizing the dynamic energy consumption of TLB by disabling ways if they are hardly
-beneficial to performance.
+beneficial to performance. The optimization is based on several observations on modern TLBs. First, current
+implementations of TLBs on commercial processors have several levels, together forming a hierarchy. In the 
+hierarchy, L1 TLB is accessed most frequently, and is responsible for most of the power consumption. TLBs are 
+usually organized in a way similar to caches, where the translation takes place in two steps. The first step
+is to use the index bits extracted from the address to locate the set. Then a tag comparison is performed in the 
+set to locate the entry if it exists, or signal a miss. 
