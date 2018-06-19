@@ -41,3 +41,8 @@ block dynamically only when the tag is allocated. The assigned block is selected
 Eviction decisions are made based on global replacement algorithm, which maximizes the opportunity that a "bad" block 
 is evicted. We describe the operations in detail in the next few sections.
 
+Prior work focuses on increasing the associativity of L1 cache dynamically by using a small and fully associative
+cache called the "Victim Cache". Blocks evicted from the L1 cache is stored in the victim cache. On memory operations,
+both the L1 cache and the victim cache is searched. If the L1 cache misses but there is a hit in the victim cache, then
+the victim block is reloaded into L1, avoiding a relatively expensive search operation in the next level cache. 
+Although the original
