@@ -42,4 +42,9 @@ TLBs.
 In order to identify the optimal number of ways in a set-associative TLB, the paper proposes Lite, a mechanism 
 for tracking way usages in TLB. For an N-way set-associative TLB organization, Lite adds (log(N) + 1) counters,
 the width of which is not mentioned. We assume that N is a power of two, which is almost always the case with
-modern TLBs.
+modern TLBs. Lite implicitly assumes that the TLB maintains replacement information for every entry, perhaps
+for implementing the replacement algorithm. All counters are initialized to zero on initialization and reset. 
+On a TLB hit, the distance from the last hit on the same way is calculated using the LRU position. If the position 
+is between N and (N / 2), then we know if we disable half of the ways under the current configuration, then the 
+access will result in a miss. The miss counter for disabling half of the ways are hence incremented. Similarly,
+if the LRU position is between (N / 2) and (N / 4)
