@@ -26,4 +26,10 @@ implementations of TLBs on commercial processors have several levels, together f
 hierarchy, L1 TLB is accessed most frequently, and is responsible for most of the power consumption. TLBs are 
 usually organized in a way similar to caches, where the translation takes place in two steps. The first step
 is to use the index bits extracted from the address to locate the set. Then a tag comparison is performed in the 
-set to locate the entry if it exists, or signal a miss. 
+set to locate the entry if it exists, or signal a miss. Tag search and comparison is relatively expensive,
+because all tags are read and compared against the input address. In addition, to increase lookup locality,
+data TLB and instruction TLB are two separate structures. Second, 2MB and 1GB huge page support decreases 
+static energy, because they extend the range of the TLB, and hence TLB miss ratio decreases. With the 
+introduction of separate TLB for different size classes, however, the dynamic energy increases, because multiple
+TLBs must be activated and searched in parallel. This is largely unnecessary since size classes are not distributed
+evenly among TLBs. One solution is to simply disable the TLB of a certain size class, if the TLB caches zero entry.
