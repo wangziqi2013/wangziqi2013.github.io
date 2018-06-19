@@ -12,3 +12,13 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes RRIP, a machanism for determining whether a cache line should be replaced 
+by predicting the interval from the current time till its next reference. The motivation for 
+RRIP is locality anomaly, which is not uncommon for lower level caches, such as L2 and LLC.
+The classical Least Recently Used (LRU) algorithm works pretty well, sometimes can approximate the 
+optimizal Belady's OPT algorithm, for access patterns that have high locality, which is particularly 
+true for L1 cache. On L2 and LLC, LRU may not work well for three reasons. First, most of the locality
+has been filtered out by L1, and only those misses the L1 cache can be observed by L2 and LCC. This 
+property violates the assumption of LRU that both a cache miss and cache hit imply accesses to the 
+same line in the near future.
