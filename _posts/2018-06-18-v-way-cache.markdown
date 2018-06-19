@@ -20,4 +20,7 @@ force a cache eviction as long as the cache has not been filled up yet. This red
 number of conflict misses. On the contrary, evictions are mandatory for a set-associative cache if all cache lines
 in a set has been occupied, regardless of whether empty lines exist in other sets. Second, even if the 
 cache is full, a fully associative cache can evict any of the lines currently in the cache, maximizing the 
-possibility that a "bad" line which does not enjoy much locality is evicted.
+possibility that a "bad" line which does not benefit from extra locality is evicted. For a set-associative 
+cache, however, an eviction must be made within the set that the missed line will be loaded. Given that the 
+number of ways in a typical cache is usually significantly smaller than the total number of lines, it is likely 
+that the decision is sub-optimal. In the following discussion, we 
