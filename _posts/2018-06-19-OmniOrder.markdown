@@ -101,3 +101,11 @@ the case for write differs from the case for read, in that the directory does no
 sharers should set successor vectors individually, as the write operation in WAR dependency can only be committed
 after all readers commit. For RAW, all readers can commit as long as the writer commits. 
 
+On commit instruction, the processor first waits for its predecessor vector to clear. In the meantime, the processor 
+stalls its instruction stream while continuing to react to coherence and commit/abort requests. Once the vector is clear,
+the committing processor sends the commit signal to all its successor processors and successor directories. The 
+directory then forwards the signal to all successors in the successor vector in the directory. On receiving a commit
+signal, all processors inspect their SVB caches, and merges the modification of the committing processor into the 
+non-speculative cache line. In case the commit signal arrives out-of-order, the signal is buffer until the 
+modification of the committing processor is the earliest in the SVB entry.
+
