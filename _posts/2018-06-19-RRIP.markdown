@@ -29,3 +29,12 @@ The third reason is scan pattern, which accesses non-temporal blocks. Scan patte
 assumption of LRU, because cache misses bring in data that will never be accessed in the near future. 
 Overall speaking, LRU is not suitable for L2 and LLC caches as a replacement algorithm, as a consequence 
 of different locality assumptions.
+
+Cache replacement algorithms can be described using policies. Cache replacement policies define the state 
+transition when particular events take place. For example, the insert policy defines the status of a loaded
+and perhaps existing cache blocks when a block is loaded. Similarly, the hit policy and miss policy define 
+the transition of states when a cache block is hit and when a miss is signaled respectively. In LRU, the 
+insert and hit policy both put the 
+
+To accommodate to the fact that in lower level caches, misses and hits do not necessarily imply future 
+reuse, the insert, hit and miss policy should be altered from LRU to 
