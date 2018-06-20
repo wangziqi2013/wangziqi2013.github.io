@@ -83,3 +83,12 @@ processor reads uncommitted data written by another processor, it also needs to 
 vector. This is necessary to guarantee isolation, as otherwise transactions may use data items that are written by
 an aborted transaction.
 
+On transactional store, exclusive permission is first obtained though the coherence protocol. If the store hits a 
+local M state line, no other operations are needed except buffering the modification in L0. Note that processors 
+never directly write into SVB. If the store hits a remote M state line, then the coherence message from the responding
+processor contains both the line and the SVB entry. The requesting and responding processor mark each other as predecessor 
+and successor accordingly. The directory is not involved except for forwarding the coherence message. 
+
+If the store operation hits a local S state, or remote speculative and shared S state, then coherence requires that
+these states should be invalidated first. 
+
