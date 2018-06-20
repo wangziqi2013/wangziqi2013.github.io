@@ -63,3 +63,15 @@ stored in L0 and SVB, and is not visible to non-transactional reads. Second, the
 the coherence of its corresponding cache line. If the cache line exists in multiple caches in Shared state, then
 multiple copies of the SVB also exist and they are consistent with each other. Similarly, if a cache line is in M
 state, then the SVB entry of the line is also the most up-to-date, and no other copies can ever exist.
+
+On transactional load, a cache coherence request is sent as usual. The paper only assumes MSI baseline protocol, so
+exclusive state is not under consideration. If the request hits a modified line, with uncommitted data in both L0 and SVB,
+then the source processor first combines the L0 and SVB entry, and then writes them back to the directory. The directory
+stores the combined line in its own SVB, marks the requesting processor in source processor's bit vector as a successor,
+and provides the requesting processor with the SVB entry and line. The responding processor also sets the directory
+it sends the SVB entry to in the directory bit vector. From then on, the directory acts as a proxy for the SVB entry 
+and cache line. If the request hits a shared line, then we know it must be the case that those shared lines were produced
+by one of the processors currently holding the line, and a read operation hit the line in M state. In this case
+the directory must already have an SVB entry of the line as a result of the previous read. The directory, as expected, 
+provides the line as well as the SVB entry. The directory also marks the requesting processor in the last writer's bit 
+vector as a successor. 
