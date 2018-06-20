@@ -34,7 +34,9 @@ Cache replacement algorithms can be described using policies. Cache replacement 
 transition when particular events take place. For example, the insert policy defines the status of a loaded
 and perhaps existing cache blocks when a block is loaded. Similarly, the hit policy and miss policy define 
 the transition of states when a cache block is hit and when a miss is signaled respectively. In LRU, the 
-insert and hit policy both put the 
+insert and hit policy both put the block at MRU position, which is the furthest possible position from LRU.
+The miss policy simply evicts the block at LRU position. As stated above, the LRU policy works sub-optimally
+for lower level caches, because the locality on these levels usually discourage predicting references for hit
+and inserted blocks as to be in the near future.
 
-To accommodate to the fact that in lower level caches, misses and hits do not necessarily imply future 
-reuse, the insert, hit and miss policy should be altered from LRU to 
+RRIP fixes LRU by putting inserted cache blocks in , therefore predicting them to be 
