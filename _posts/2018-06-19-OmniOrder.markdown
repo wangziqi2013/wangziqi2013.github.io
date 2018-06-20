@@ -22,4 +22,11 @@ because there is zero information for tracking how the cache line will be used b
 property is sub-optimal, because not all dependencies imply violations at the end of the execution.
 
 This paper proposes OmniOrder, an HTM extension on existing commercial HTM such as Intel TSX to support more 
-efficient dependency reasoning. Instead of keeping zero information about global 
+efficient dependency reasoning. Instead of keeping zero information about global usage of a cache line, processors 
+are extended with a few structures that can track the modification history as well as dependencies of 
+speculatively modified cache lines. One of the highlights in the design of OmniOrder is its native support for 
+unmodified directory-based cache coherence protocol. This feature is crucial for a practical HTM design, for two
+reasons. First, directory based protocol is a must in today's high performance architecture. Inability to 
+support directory based protocol is a huge deficiency. As a contrast, some HTM designs require broadcast 
+cache coherence protocol, which makes the design non-scalable and impossible to port to large scale systems.
+Second, 
