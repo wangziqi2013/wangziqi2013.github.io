@@ -57,3 +57,9 @@ enough to hold all SVB entries from all processors. Each element in the bit vect
 of a particular processor. A bit in the vector is set if the corresponding processor is a successor of 
 the processor represented by the identity of the bit vector. Similar to the per-processor SVB, if the 
 directory SVB overflows, the transaction must abort.
+
+OmniOrder maintains a few invariants. First, speculative data is never stored in ordinary caches. They are always 
+stored in L0 and SVB, and is not visible to non-transactional reads. Second, the coherence of SVB implicitly follows 
+the coherence of its corresponding cache line. If the cache line exists in multiple caches in Shared state, then
+multiple copies of the SVB also exist and they are consistent with each other. Similarly, if a cache line is in M
+state, then the SVB entry of the line is also the most up-to-date, and no other copies can ever exist.
