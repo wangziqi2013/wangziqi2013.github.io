@@ -27,6 +27,15 @@ are extended with a few structures that can track the modification history as we
 speculatively modified cache lines. One of the highlights in the design of OmniOrder is its native support for 
 unmodified directory-based cache coherence protocol. This feature is crucial for a practical HTM design, for two
 reasons. First, directory based protocol is a must in today's high performance architecture. Inability to 
-support directory based protocol is a huge deficiency. As a contrast, some HTM designs require broadcast 
+support directory based protocol is a huge deficiency. In contrast, some HTM designs require broadcast 
 cache coherence protocol, which makes the design non-scalable and impossible to port to large scale systems.
-Second, 
+Second, unmodified coherence protocol implies only incremental change is needed on existing microarchitecture.
+Designing and verifying a correct coherence protocol is difficult. What makes it worse is that the actual 
+number of state in the state machine is far more than the steady states. Transient states that handle
+race conditions must be added to ensure multiple operations can be performed in parallel. All these factors 
+discourage the invention of a new coherence protocol. In the next paragraph we cover in detail the hardware 
+changes required to implement OmniOrder.
+
+
+
+
