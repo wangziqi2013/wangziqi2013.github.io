@@ -90,5 +90,14 @@ processor contains both the line and the SVB entry. The requesting and respondin
 and successor accordingly. The directory is not involved except for forwarding the coherence message. 
 
 If the store operation hits a local S state, or remote speculative and shared S state, then coherence requires that
-these states should be invalidated first. 
+these states should be invalidated first. As described above, when this happens, it must be the case that a speculatively
+written cache line was read by another processor, and the directory had become the proxy for the line. In this case,
+the directory invalidates all S state copies (except the one in the requesting processor, if any). Then, the directory
+sends the requesting processor the SVB entry as well as the line. The requesting processor discards them if it already 
+has the line in S state. Otherwise it stores them in the SVB and cache respectively. All processors that were 
+holding the line in S state set the bit in successor bit vector. The directory also sends to the rquesting processor 
+the identities of all sharing processors. The requesting processor sets all of them as its predecessor. Note that 
+the case for write differs from the case for read, in that the directory does not set the vector. Instead, all
+sharers should set successor vectors individually, as the write operation in WAR dependency can only be committed
+after all readers commit. For RAW, all readers can commit as long as the writer commits. 
 
