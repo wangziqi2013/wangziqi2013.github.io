@@ -39,4 +39,9 @@ The miss policy simply evicts the block at LRU position. As stated above, the LR
 for lower level caches, because the locality on these levels usually discourage predicting references for hit
 and inserted blocks as to be in the near future.
 
-RRIP fixes LRU by putting inserted cache blocks in , therefore predicting them to be 
+RRIP fixes LRU by predicting newly inserted cache blocks to be accessed in the long future, therefore prioritizing 
+them for victim selection on cache misses. To implement the policy, each cache block is associated with an M-bit 
+saturating counter. In the paper M is chosen to be two. A value of zero indicates the block is expected to be accessed
+in the near future. The larger the value is, the longer the predicted interval of future accesses will be, and hence 
+the more likely the block will be chosen for victim selection. A newly inserted block will have a counter value of 
+(2<sup>M</sup> - 1), meaning that they
