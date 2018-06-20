@@ -64,4 +64,9 @@ miss the cache.
 
 To solve the problem with SRRIP, the paper also proses Dynamic RRIP (DRRIP), which dynamically chooses between SRRIP and 
 Bimodal RRIP (BRRIP). Bimodal RRIP inserts the majority of new blocks with re-reference interval of (2<sup>M</sup> - 1),
-and with small probablity with an interval of (2<sup>M</sup> - 2).
+and with small probablity with an interval of (2<sup>M</sup> - 2). BRRIP can yield better result compared with SRRIP,
+because it at least presevres part of the working set in the cache. Neither SRRIP nor BRRIP work well under all 
+circumstances. In this regard, DRRIP uses a selector to choose the one that works better using run-time information. 
+DRRIP uses set-dueling as an evaluation framework for both replacement algorithms. A subset of cache sets are dedicated 
+to SRRIP, another to BRRIP, and the rest just follows the current better one. DRRIP maintains two sets of counters to 
+record the performance of both. The one that has better performance will be adopted for the follower sets.
