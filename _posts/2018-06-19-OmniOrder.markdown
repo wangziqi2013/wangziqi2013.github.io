@@ -106,6 +106,19 @@ stalls its instruction stream while continuing to react to coherence and commit/
 the committing processor sends the commit signal to all its successor processors and successor directories. The 
 directory then forwards the signal to all successors in the successor vector in the directory. On receiving a commit
 signal, all processors inspect their SVB caches, and merges the modification of the committing processor into the 
-non-speculative cache line. In case the commit signal arrives out-of-order, the signal is buffer until the 
-modification of the committing processor is the earliest in the SVB entry.
+non-speculative cache line. The committing processor is cleared from the predecessor vector. In case the commit 
+signal arrives out-of-order, the signal is buffered until the modification of the committing processor is the 
+earliest in the SVB entry. Multiple commit signals for the same transaction do not need any special processing, 
+although the paper did not mention how to distinguish between commits from a new transaction on the same processor 
+and the old commit that was delivered late. After commit finishes, the committing processor clears the bit vectors 
+and L0 cache. SVB should not be cleared as it holds uncommitted data from other processors.
+
+On abort instruction or on potential dependency violations, the transaction must abort. Abort does not wait for any
+condition, and takes place immediately. The aborting processor propagates the signal as in the case of commit to
+all its successor processors and directories. It then clears the local L0 cache. Note that local SVB never needs 
+to be cleared as the processor never writes into its own SVB. On receiving the abort signal, processors and 
+directories clear the SVB modification of the aborting processor. They also clear the processor from its successor and 
+predecessor vector. If the aborting processor is in the squash vector of a receiving processor, then the latter also
+forces an abort, because it has a RAW dependency, and the data it read no longer exists. The abort processor 
+must keep serving coherence and propagating commit/abort messages until all its predecessor are cleared. 
 
