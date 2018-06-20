@@ -129,5 +129,6 @@ must have at least on inbound and one outbound dependency. Based on this observa
 set when it is modified. If a processor becomes the predecessor of another processor, and its two successor vectors 
 are non-empty, then it concludes that this is a dangerous structure, which may lead to dependency cycles. The 
 processor then aborts the current transaction. To avoid a transaction should self-abort due to conflicts, after the 
-first several conflict abort, 
+first several conflict abort, it falls back to normal HTM execution, where no conflict is tracked. The same technique can
+also be applied to the scenario where the hardware bookkeeping structures overflow. 
 
