@@ -44,7 +44,7 @@ them for victim selection on cache misses. To implement the policy, each cache b
 saturating counter. In the paper M is chosen to be two. A value of zero indicates the block is expected to be accessed
 in the near future. The larger the value is, the longer the predicted interval of future accesses will be, and hence 
 the more likely the block will be chosen for victim selection. A newly inserted block will have a counter value of 
-(2<sup>M</sup> - 1). On victim selection, the cache controller attempts to evict the block with counter value 2<sup>M</sup>.
+(2<sup>M</sup> - 2). On victim selection, the cache controller attempts to evict the block with counter value (2<sup>M</sup> - 1).
 If such a block does not exist, then the counters of all blocks are incremented by one, and the controller will repeat
 until it finds one. On a cache hit, the controller can either reset the counter of the hit block to zero immediately, 
 demonstrating strong belief that the block will be accessed in the near future, or act less aggressively and only
@@ -62,4 +62,6 @@ be adversely affected because both temproal and non-temporal lines will have the
 if the re-reference interval is larger than the cache size, then SRRIP still causes cache thrashing. All accesses will
 miss the cache.
 
-To
+To solve the problem with SRRIP, the paper also proses Dynamic RRIP (DRRIP), which dynamically chooses between SRRIP and 
+Bimodal RRIP (BRRIP). Bimodal RRIP inserts the majority of new blocks with re-reference interval of (2<sup>M</sup> - 1),
+and with small probablity with an interval of (2<sup>M</sup> - 2).
