@@ -51,4 +51,5 @@ demonstrating strong belief that the block will be accessed in the near future, 
 decrement the counter by one. The former is called Hit Proprity (HP) and the latter Frequency Priority (FP). It is noted 
 in the paper that RRIP-HP may harm performance, because cache lines that are only accessed once after being inserted 
 is expected to stay in the cache for a long time, which may not be true. RRIP-HP, on the other hand, prioritize the 
-eviction of cache blocks based on their reference frequency. 
+eviction of cache blocks based on their reference frequency. The entire scheme is called Static RRIP (SRRIP), because 
+decisions are made statically without run-time information.
