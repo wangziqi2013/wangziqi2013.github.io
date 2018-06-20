@@ -122,3 +122,12 @@ predecessor vector. If the aborting processor is in the squash vector of a recei
 forces an abort, because it has a RAW dependency, and the data it read no longer exists. The abort processor 
 must keep serving coherence and propagating commit/abort messages until all its predecessor are cleared. 
 
+OmniOrder uses simple heuristics for conflict detection. Since each processor only keeps local dependency information,
+it would be difficult to obtain precise intelligence about dependency cycles without global coordination. OmniOrder,
+on the other hand, takes advantage of the simple observation that in order for a cycle to form, every node in the cycle 
+must have at least on inbound and one outbound dependency. Based on this observation, OmniOrder monitors the predecrssor 
+set when it is modified. If a processor becomes the predecessor of another processor, and its two successor vectors 
+are non-empty, then it concludes that this is a dangerous structure, which may lead to dependency cycles. The 
+processor then aborts the current transaction. To avoid a transaction should self-abort due to conflicts, after the 
+first several conflict abort, 
+
