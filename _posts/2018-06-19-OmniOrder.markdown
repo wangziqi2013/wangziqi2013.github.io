@@ -36,6 +36,12 @@ race conditions must be added to ensure multiple operations can be performed in 
 discourage the invention of a new coherence protocol. In the next paragraph we cover in detail the hardware 
 changes required to implement OmniOrder.
 
-
+In OmniOrder, each processor is extended with two buffers: One L0 cache to hold speculative values it 
+has written on the cache line, and a Speculative Version Buffer (SVB) that holds the global modification
+history of cache lines currently in its private cache. Both can be organized in a similar way as caches, 
+using a few bits from the address to select cache set, and then use tag comparison to locate the way.
+Four bit vectors are also added to each processor. The first two bit vectors are successor vector and predecessor 
+vector. They record read/write dependencies into which the current processor participates, as sources and 
+destinations, respectively.
 
 
