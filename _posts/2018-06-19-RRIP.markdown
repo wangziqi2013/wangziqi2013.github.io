@@ -70,3 +70,4 @@ circumstances. In this regard, DRRIP uses a selector to choose the one that work
 DRRIP uses set-dueling as an evaluation framework for both replacement algorithms. A subset of cache sets are dedicated 
 to SRRIP, another to BRRIP, and the rest just follows the current better one. DRRIP maintains two sets of counters to 
 record the performance of both. The one that has better performance will be adopted for the follower sets.
+
