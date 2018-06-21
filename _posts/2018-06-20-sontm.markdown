@@ -59,4 +59,6 @@ stored in the hash table are ignored during an update. False positives on confli
 only affects performance. According to the benchmark presented in the paper, though, the affect is negligible.
 
 Read timestamps, however, are stored in a different way. The reason that read timestamps are not stored as 
-a centralized structure is 
+a centralized structure as write timestamps is that this would require transactions to update the RTS
+of every item in the read set at commit time. Since for most transactions, the read set is usually much larger 
+than the write set, this may bring noticeable overhead
