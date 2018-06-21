@@ -88,4 +88,7 @@ the corresponding bit in the vector. Note that SONTM decouples read/write set ma
 states. A cache line can be evicted from the cache without aborting the transaction. A evicted cache 
 line that has been transactionally read and written must keep its bit in the directory as a sticky state. 
 Later requests to the line will always hit processors that have speculatively read or written them.
-The usage of sticky
+The usage of sticky states is first introduced by LogTM, and requires slight modification to the directory
+implementation.
+
+SONTM 
