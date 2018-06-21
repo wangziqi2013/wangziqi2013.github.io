@@ -61,4 +61,13 @@ only affects performance. According to the benchmark presented in the paper, tho
 Read timestamps, however, are stored in a different way. The reason that read timestamps are not stored as 
 a centralized structure as write timestamps is that this would require transactions to update the RTS
 of every item in the read set at commit time. Since for most transactions, the read set is usually much larger 
-than the write set, this may bring noticeable overhead
+than the write set, this may incur noticeable overhead. The read timestamps are stored by pushing the read
+set bloom filter of committed transactions into a processor local stack. The bloom filter is stored with the
+ID of the committed transaction. The stack has only limited capacity, so when it is about to overflow, the 
+bottommost entry is merged with the next entry, and the ID of it is updated to the larger between the two.
+Transactions must acquire the read timestamp of data items by broadcasting requests to all processors. 
+On receiving such a request, the processor searches the stack in any order, testing the bloom filter with
+the address, and returns the largest ID of the entry among all hits. Similar to WTS aliasing, this mechanism 
+may return inaccurate RTS. This, however, does not affect correctness, as the returned RTS is always larger than
+or equal to the actual RTS. This will cause some false aborts, degrading performance, but will never 
+result in non-serializable scheduls.
