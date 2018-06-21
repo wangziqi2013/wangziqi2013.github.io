@@ -39,5 +39,8 @@ if LB is strictly smaller than UB after validation is performed. A commit timest
 transaction's ID, is chosen from the interval defined by LB and UB. After the interval is chosen, the 
 committing transaction broadcasts the commit decision as well as the read and write set to all active transactions. 
 On receiving such a commit broadcast, active transactions must set their UB as the broadcasted transaction ID, 
-if they have one or more uncommitted reads that are also in the committed write set, or set LB as the transaction ID
-if they have one or more uncommitted writes that are also in the committed read and write set.
+if they have one or more uncommitted reads that are also in the committed write set, or set LB as the transaction 
+ID if they have one or more uncommitted writes that are also in the committed read and write set. The last 
+step of commit is to update RTS and WTS of data items in the read and write set. The write set is also 
+flushed back to global storage. 
+
