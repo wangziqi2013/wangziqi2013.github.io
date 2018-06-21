@@ -113,4 +113,7 @@ it is the destination of the dependency. In SONTM, a committing processor knows 
 For case (4), (5) and (6), the committing processor has no idea whom will be the destination. It therefore
 also includes identiti into the message. Processors receiving the message checks whether the committing
 processor is in one or more of its vectors. If it is the case, then the receiving processor updates the 
-LB and UB registers accordingly.
+LB and UB registers accordingly. Commit operations in SONTM are serialized using a global token. Processors 
+must obtain and release the token before and after the commit operation. After validation and commit 
+notification, the committing processor writes back dirty values from the write log, and also updates the 
+write timestamp for items in the log. 
