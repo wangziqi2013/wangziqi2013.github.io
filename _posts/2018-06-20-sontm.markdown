@@ -44,3 +44,12 @@ ID if they have one or more uncommitted writes that are also in the committed re
 step of commit is to update RTS and WTS of data items in the read and write set. The write set is also 
 flushed back to global storage. 
 
+SONTM essentially integrates the idea of interval based OCC into the design of transactional memory. Each processor 
+is extended with two registers: one for holding the lower bound, and another for upper. The lower bound register is 
+initialized to zero, and the upper bound register to the maximum possible value. Read and write sets are kept as 
+bloom filters. Write timestamps of every cache line in the system is kept in a hash table, which is stored
+in the main memory. The hash table is allocated and managed by system software, and is located on a known location
+in the virtual address space (such that each process in the system can have their own transaction context).
+Processors retrieve and update the timestamps of any data item in the main memory by calculating its offset
+into the hash table, and then read or write the timestamp entry. The hash table may introduce aliasing, where 
+multiple addresses are mapped to the same entry and hence share the same write timestamp. We argue that
