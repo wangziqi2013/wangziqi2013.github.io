@@ -91,4 +91,20 @@ Later requests to the line will always hit processors that have speculatively re
 The usage of sticky states is first introduced by LogTM, and requires slight modification to the directory
 implementation.
 
-SONTM 
+SONTM maintains serializability with committed transactions by reading the WTS at the time of 
+speculative reads, and reading both WTS and RTS at the time of validation. Validation does not check the 
+validity of the read set, because read serialiation has been done at the time the data item is acquired.
+This is precisely what is described for interval-based OCC, and we do not cover it in much details.
+Serializability with active transactions are performed during validation. The committing processor 
+first chooses a transaction ID from the interval defined by LB and UB. In the paper it is suggested that
+the ID should be chosen as (UB - 1), but in theory any number is fine. What happens next is to notify other
+processors of the commit event, and urge them to update their LB and UB accordingly. There are six cases to 
+consider: (1) RAW and reader commits. The writer should update its LB, because the content of the write has
+not been published yet. The reader only reads old value, and should be serialized before the writer. (2) WAW
+and later writer commits. The first writer should update its LB also, because when it commits it will
+overwrite a committed value. (3) WAR and the writer commits. The reader should update its UB, because when it
+commits, the value it has read has been overwritten. The reader must therefore be serialized before 
+the writer. (4) RAW and the writer commits. The reader should update its UB for the same reason as in (3).
+(5) WAW and the earlier writer commits. The later writer should update its LB for the same reason as in (2).
+(6) WAR and the reader commits. The writer should update its LB for the same reason as in (1).
+ 
