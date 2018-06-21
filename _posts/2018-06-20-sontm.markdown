@@ -74,4 +74,11 @@ result in non-serializable scheduls. Broadcasting requests for RTS may seem inef
 see later, this only happens during the validation phase, where the entire write set is known, and 
 bulk requests can be used to reduce the communication overhead.
 
-The last component of SONTM is 
+The last component of SONTM is three dependency vectors. They record potential dependencies between active 
+transactions. The direction of the dependency can only be determined after one of the two transactions
+in the potential dependency commits. At this point, the committed transaction broadcasts its ID in some
+special way, and the active transaction updates its LB or UB accordingly. The three vectors are: 
+WAR vector, WAW vector and RAW vector. The width of these vectors is the number of processors minus one.
+If position *i* of a vector X (X = RAW/WAW/WAR) is set, then we know that the current processor has a potential 
+dependency of type X with processor *i*, and the current processor is the destination of the dependency.
+Dependency vectors 
