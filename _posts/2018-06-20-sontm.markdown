@@ -116,4 +116,7 @@ processor is in one or more of its vectors. If it is the case, then the receivin
 LB and UB registers accordingly. Commit operations in SONTM are serialized using a global token. Processors 
 must obtain and release the token before and after the commit operation. After validation and commit 
 notification, the committing processor writes back dirty values from the write log, and also updates the 
-write timestamp for items in the log. 
+write timestamp for items in the log. Race conditions could happen if another processor attempts to read
+the data item and/or the WTS while the committing processor is performing write back. Since commit phases 
+are generally believed to be short, it might be just fine to abort the transaction if it happens to collide 
+with a committing transaction. This can be easily detected by checking the owner of the commit token.
