@@ -13,10 +13,10 @@ htm_cr: Eager
 version_mgmt: Lazy (Write Log)
 ---
 
-SONTM is a Hardware Transactional Memory (HTM) design that replicates the well-known interval-based 
-OCC which was originally proposed for software implementation. Classical Backward Optimistic Concurrency 
-Control (BOCC) protocols introduces false aborts, because they assume read/write conflict as long as 
-the read set of a reading transaction has a non-empty intersection with write sets of transactions whose
+Serializability Order Number TM (SONTM) is a Hardware Transactional Memory (HTM) design that replicates the 
+well-known interval-based OCC which was originally proposed for software implementation. Classical Backward 
+Optimistic Concurrency Control (BOCC) protocols introduces false aborts, because they assume read/write conflict 
+as long as the read set of a reading transaction has a non-empty intersection with write sets of transactions whose
 write phase overlaps with its read phase. In fact, if the reading transaction only reads values after 
 the committing transactions have updated them, the schedule should be serializable. In classical OCC,
 however, this will be rejected, because the protocol does not track the actual ordering of reads and writes
@@ -70,4 +70,8 @@ On receiving such a request, the processor searches the stack in any order, test
 the address, and returns the largest ID of the entry among all hits. Similar to WTS aliasing, this mechanism 
 may return inaccurate RTS. This, however, does not affect correctness, as the returned RTS is always larger than
 or equal to the actual RTS. This will cause some false aborts, degrading performance, but will never 
-result in non-serializable scheduls.
+result in non-serializable scheduls. Broadcasting requests for RTS may seem inefficient, but as we shall
+see later, this only happens during the validation phase, where the entire write set is known, and 
+bulk requests can be used to reduce the communication overhead.
+
+The last component of SONTM is 
