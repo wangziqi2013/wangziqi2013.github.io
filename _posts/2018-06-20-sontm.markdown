@@ -25,4 +25,13 @@ commit counter. Second, classical BOCC serializes transactions in the order that
 phase. If the directions of actual read/write dependencies differ from the order that transactions enter 
 validation, then one of the transactions should be aborted to avoid cyclic dependencies. This may introduce
 many artificial aborts, in which case if transactions enter validation phase in a different order, then 
-all of them can commit successfully.
+all of them can commit successfully. 
+
+Interval-based OCC was proposed to solve these two problems. In an interval-based OCC design, each data item 
+is assigned two timestamps: a write timestamp (WTS) which records the last committed transaction's ID that wrote 
+this item; A read timestamp (RTS) which records the last committed transaction's ID that read this item. 
+Each transaction has a lower bound (LB) and upper bound (UB), which defines its valid timestamp range that
+allows it to serialize with committed transactions. Active transactions serialize with committed transactions 
+using the RTS and WTS of data items when they are read and globally written.
+Transactions read the RTS of read data items during the read phase, and the WTS of data items during the validation 
+phase. It then updates its own lower bound to be the maximum of RTS
