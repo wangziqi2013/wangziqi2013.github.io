@@ -33,14 +33,15 @@ this item; A read timestamp (RTS) which records the last committed transaction's
 Each transaction has a lower bound (LB) and upper bound (UB), which defines its valid timestamp range that
 allows it to serialize with committed transactions. Active transactions serialize with committed transactions 
 using the RTS and WTS of data items when they are read and globally written. Transactions read the RTS of read 
-data items during the read phase, and the WTS of data items during the validation phase. It then updates its 
-own lower bound to be the maximum of RTS in the read set and WTS in the write set. The validation succeeds
-if LB is strictly smaller than UB after validation is performed. A commit timestamp, which is also the 
+data items during the read phase, and the RTS as well as WTS of written data items during the validation phase. 
+It then updates its own lower bound to be the maximum of RTS in the read set and WTS in the write set. The validation 
+succeeds if LB is strictly smaller than UB after validation is performed. A commit timestamp, which is also the 
 transaction's ID, is chosen from the interval defined by LB and UB. After the interval is chosen, the 
 committing transaction broadcasts the commit decision as well as the read and write set to all active transactions. 
 On receiving such a commit broadcast, active transactions must set their UB as the broadcasted transaction ID, 
 if they have one or more uncommitted reads that are also in the committed write set, or set LB as the transaction 
-ID if they have one or more uncommitted writes that are also in the committed read and write set. The last 
+ID if they have one or more uncommitted writes that are also in the committed read and write set. After each
+of these broadcast, transactions always check whether a violation happens by comparing LB and UP. The last 
 step of commit is to update RTS and WTS of data items in the read and write set. The write set is also 
 flushed back to global storage. 
 
@@ -56,3 +57,6 @@ multiple addresses are mapped to the same entry and hence share the same write t
 that aliasing of write timestamps do not affect correctness as long as values smaller than the current one
 stored in the hash table are ignored during an update. False positives on conflict detection are possible, which 
 only affects performance. According to the benchmark presented in the paper, though, the affect is negligible.
+
+Read timestamps, however, are stored in a different way. The reason that read timestamps are not stored as 
+a centralized structure is 
