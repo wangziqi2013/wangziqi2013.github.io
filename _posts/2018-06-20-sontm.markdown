@@ -7,8 +7,15 @@ paper_title: "Hardware Support for Relaxed Concurrency Support In Transactional 
 paper_link: https://ieeexplore.ieee.org/document/5695522/
 paper_keyword: HTM; SONTM
 paper_year: MICRO 2010
-rw_set: 
-htm_cd: 
-htm_cr: 
-version_mgmt: 
+rw_set: Bloom Filter
+htm_cd: Incremental FOCC; Lazy BOCC
+htm_cr: Eager
+version_mgmt: Lazy (Write Log)
 ---
+
+SONTM is a Hardware Transactional Memory (HTM) design that replicates the well-known interval-based 
+OCC which was originally proposed for software implementation. Classical backward Optimistic Concurrency 
+Control (OCC) protocols introduces false aborts, because they assume read/write conflict as long as 
+the read set of a reading transaction has a non-empty intersection with write sets of transactions whose
+write phase overlaps with its read phase. In fact, if the reading transaction only reads values after 
+the committing transactions have updated them, the schedule should be serializable.
