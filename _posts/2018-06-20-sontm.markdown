@@ -52,4 +52,7 @@ in the main memory. The hash table is allocated and managed by system software, 
 in the virtual address space (such that each process in the system can have their own transaction context).
 Processors retrieve and update the timestamps of any data item in the main memory by calculating its offset
 into the hash table, and then read or write the timestamp entry. The hash table may introduce aliasing, where 
-multiple addresses are mapped to the same entry and hence share the same write timestamp. We argue that
+multiple addresses are mapped to the same entry and hence share the same write timestamp. We argue, however, 
+that aliasing of write timestamps do not affect correctness as long as values smaller than the current one
+stored in the hash table are ignored during an update. False positives on conflict detection are possible, which 
+only affects performance. According to the benchmark presented in the paper, though, the affect is negligible.
