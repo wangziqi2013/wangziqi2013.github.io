@@ -14,8 +14,15 @@ version_mgmt: Lazy (Write Log)
 ---
 
 SONTM is a Hardware Transactional Memory (HTM) design that replicates the well-known interval-based 
-OCC which was originally proposed for software implementation. Classical backward Optimistic Concurrency 
-Control (OCC) protocols introduces false aborts, because they assume read/write conflict as long as 
+OCC which was originally proposed for software implementation. Classical Backward Optimistic Concurrency 
+Control (BOCC) protocols introduces false aborts, because they assume read/write conflict as long as 
 the read set of a reading transaction has a non-empty intersection with write sets of transactions whose
 write phase overlaps with its read phase. In fact, if the reading transaction only reads values after 
-the committing transactions have updated them, the schedule should be serializable.
+the committing transactions have updated them, the schedule should be serializable. In classical OCC,
+however, this will be rejected, because the protocol does not track the actual ordering of reads and writes
+on data items, and always assumes the worst for safety if the ordering cannot be inferred from the global
+commit counter. Second, classical BOCC serializes transactions in the order that they enter the validation
+phase. If the directions of actual read/write dependencies differ from the order that transactions enter 
+validation, then one of the transactions should be aborted to avoid cyclic dependencies. This may introduce
+many artificial aborts, in which case if transactions enter validation phase in a different order, then 
+all of them can commit successfully.
