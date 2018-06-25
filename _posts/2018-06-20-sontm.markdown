@@ -43,7 +43,7 @@ if they have one or more uncommitted reads that are also in the committed write 
 ID if they have one or more uncommitted writes that are also in the committed read and write set. After each
 of these broadcast, transactions always check whether a violation happens by comparing LB and UP. The last 
 step of commit is to update RTS and WTS of data items in the read and write set. The write set is also 
-flushed back to global storage. 
+flushed back to global storage.  
 
 SONTM essentially integrates the idea of interval based OCC into the design of transactional memory. Each processor 
 is extended with two registers: one for holding the lower bound, and another for upper. The lower bound register is 
