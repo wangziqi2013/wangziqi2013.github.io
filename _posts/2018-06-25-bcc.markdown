@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "BCC: Reducing False Aborts in Optimistic Concurrency Control with Low Cost for In-Memory Databases"
+date:   2018-06-25 19:06:00 -0500
+categories: paper
+paper_title: "BCC: Reducing False Aborts in Optimistic Concurrency Control with Low Cost for In-Memory Databases"
+paper_link: https://dl.acm.org/citation.cfm?id=2904126
+paper_keyword: BCC; OCC
+paper_year: VLDB Jan 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
