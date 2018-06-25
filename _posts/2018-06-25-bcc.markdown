@@ -36,4 +36,9 @@ The WAR dependency is considered a violation here, because it disagrees with the
 by acquiring the commit mutex. If transaction T1 writes onto the read set of transaction T2, then the dependency 
 dictates that T1 should be serialized after T2. Since OCC assumes that the direction of dependencies must agree 
 with the direction of commit order, it is implied that T1 should commit after T2. In the above example however, if
-T1 commits before T2, then the commit order is violated, and T2 must abort. 
+T1 commits before T2, then the commit order is violated, and T2 must abort. On the other hand, if the validating 
+transaction passes validation, then it enters the last phase, the write phase, in which all locallu buffered 
+writes are flushed to the shared storage. The write set of the transaction is also archived with the commit 
+timestamp of the transaction. Later transactions will use this archived write set to perform read validation.
+The write set can only be garbage collected after all concurrenct reading transactions have exited. After the 
+write phase, the commit mutex is also released.
