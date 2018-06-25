@@ -29,4 +29,11 @@ transaction, and fetch-and-increment the counter after acquiring the commit mute
 Transactions whose commit timestamp is between this range are possibly writing into the read set of the 
 committing transaction, and are hence subject to serializability checking. We call these transactions the 
 "overlapping transactions" in the following text. The serializability checking is performed by intersecting 
-the read set of the committing transaction with the write sets of overlapping 
+the read set of the committing transaction with the write sets of overlapping transactions. This requires 
+O(n) sets operations where n is the number of overlapping transactions. If any of the intersection returns 
+non-empty result, a Write-After-Read (WAR) violation has happened, and the committing transaction must abort.
+The WAR dependency is considered a violation here, because it disagrees with the serialization order established 
+by acquiring the commit mutex. If transaction T1 writes onto the read set of transaction T2, then the dependency 
+dictates that T1 should be serialized after T2. Since OCC assumes that the direction of dependencies must agree 
+with the direction of commit order, it is implied that T1 should commit after T2. In the above example however, if
+T1 commits before T2, then the commit order is violated, and T2 must abort. 
