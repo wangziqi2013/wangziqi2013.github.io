@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+Optimistic Concurrency Control (OCC) is favored on modern hardware over traditional Tow-Phase Locking (2PL)
+for its high degree of parallelism and lower communication overhead between processors. OCC features a three 
+phased transaction execution. In the first phase, the read phase, transactions optimistically read data items
+without global state modification, and buffer writes in their local storage. Buffered write operations are called 
+"pre-write", and these pre-writes will not be made public until the later commit phase. Transactions may read
+inconsistent data items should other transactions commit during their read phases. The original OCC algorithm
+does not try to address this problem, and implicitly assumes that inconsistent data will only affect the write set,
+but never the control flow. 
