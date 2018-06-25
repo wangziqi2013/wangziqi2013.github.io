@@ -20,4 +20,13 @@ without global state modification, and buffer writes in their local storage. Buf
 "pre-write", and these pre-writes will not be made public until the later commit phase. Transactions may read
 inconsistent data items should other transactions commit during their read phases. The original OCC algorithm
 does not try to address this problem, and implicitly assumes that inconsistent data will only affect the write set,
-but never the control flow. 
+but never the control flow. After the read phase, transactions enter the second phase, the validation phase. 
+Before entering the validation phase, transactions acquire a global commit mutex to serialize commit operations. 
+The actual serialization order is the order that transactions acquire this commit mutex. During the validation
+phase, transactions compare their read sets with write sets of transactions that have committed while it is 
+reading. This is achieved via a global timestamp counter. Transactions read the counter at the beginning of 
+transaction, and fetch-and-increment the counter after acquiring the commit mutex as its commit timestamp. 
+Transactions whose commit timestamp is between this range are possibly writing into the read set of the 
+committing transaction, and are hence subject to serializability checking. We call these transactions the 
+"overlapping transactions" in the following text. The serializability checking is performed by intersecting 
+the read set of the committing transaction with the write sets of overlapping 
