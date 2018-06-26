@@ -69,4 +69,6 @@ the source transaction. Now, imagine there is a dependency cycle. We assume that
 in real-time, and that the cycle has at least three transactions (the case of two transactions is trivial). Since T3 is part
 of a cycle, there must be two other transactions, T1 and T2, such that T1 &rarr; T2 and T2 &rarr; T3. Note that T3 is the earlist
 committed transaction, but it is serialized after T2. We know the dependency between T2 and T3 must be WAR, which is excatly what
-OCC algorithms can detect. The dependency T1 &rarr; T2 can be any of the RAW, WAR and WAW
+OCC algorithms can detect. The dependency T1 &rarr; T2 can be any of the RAW, WAR and WAW, because the only constraint is that T1 
+commits after T3. We call the structure T1 &rarr; T2 &rarr; T3 where T2 &rarr; T3 is WAR a "dangerous" structure. BCC extends OCC 
+by 
