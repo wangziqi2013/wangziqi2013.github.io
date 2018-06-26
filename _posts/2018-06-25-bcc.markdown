@@ -86,4 +86,12 @@ that commit after the current transaction begins. Note that condition (2) is sli
 structure, as the structure only requires that T1 commits after T3. Since T3 must commit after T2 begins, condition (2) includes
 all dangerous structures, but also introduces false positives.
 
-BCC uses an implementation that is 
+The implementation of BCC is similar to Silo. Each data item (tuple) is accompanied by a timestamp, or TID, which indicates the 
+TID of the most recent transaction that writes to it. The TID consists of three fields: global epoch, local counter and processor ID, 
+from highest bit to the lowest bit. The processor ID encodes the identity of the processor that allocates the TID. In BCC, transactions
+are dispatched to processors for execution, and does not migrate. At any given time, there is only one transaction executing on 
+a processor. The global epoch is a global counter that is advanced slowly by a background thread. In Silo, the interval is set to
+40 ms. Transactions read the global epoch before they commit. This does not cause much contention, as the majority of reads should 
+be satisfied by the local cache. Each processor also has a local commit ID counter, which is incremented for every committed 
+transaction. TID allocations happens when transactions enter validation phase. The thread that executes the transaction reads the 
+global epoch and local counter, and . The local counter is incremented after every allocation.
