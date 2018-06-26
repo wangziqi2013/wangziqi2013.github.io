@@ -113,3 +113,9 @@ transaction begin is undesirable, because transactions are forced to commit in t
 issue, because BCC does not assume that the order of serialization is the order that TIDs are acquired. After transaction
 begin, the transaction inserts every data item it reads into a hash table, which is tagged with the TID of the transaction
 and is publicly accessible. The implementation of the hash table is assumed to be multicore-efficient and linearizable.
+Race condition can happen if a validating transaction probes the existence of a data item while a reading transaction is 
+inserting. It is possible that the WAR dependency is not identified, but the reading transaction fails to read updated value. 
+The simple solution would be to just lock the hash table while it is probed and inserted into. To further reduce the 
+locking overhead, the reading transaction samples the data item before and after inserting the item into the hash table.
+If two samples disagree, then an update must have happened in-between, and the read must be retried before deleting the 
+item from the hash table. 
