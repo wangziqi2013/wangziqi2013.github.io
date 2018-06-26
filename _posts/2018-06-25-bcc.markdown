@@ -51,3 +51,7 @@ false aborts if contention is high. For example, OCC always aborts a transaction
 another transaction during the read phase. This, however, is only a necesssary condition for dependency cycles, but
 not sufficient. When the degree of contention is high, it is expected that many WAR dependency will be identified as 
 potential sources of violations, and OCC will suffer from performance degradation.
+
+In order to increase the robustness of OCC under high contention, as well as to improve OCC's flexibility, this paper 
+proposes Balanced Concurrency Control (BCC) as an alternative of OCC under high contention. BCC extends the execution 
+model of OCC by allowing transactions having WAR dependencies to commit under certain circumstances. Accordingly, 
