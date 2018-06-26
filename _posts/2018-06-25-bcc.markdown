@@ -59,3 +59,14 @@ overhead of dependency management will also increase as the concurrency control 
 paper strives to find a balance point between CC overhead and efficiency by exploring easy-to-identify situations that 
 a transaction must be aborted in the presence of WAR violations. We cover the design of the system in detail in the 
 next few paragraphs.
+
+As stated in the previous paragraph, OCC aborts transactions if a WAR dependency is detected at commit time. WAR dependency
+alone, however, are not sufficient to form a dependency cycle which is the sufficient and necessary condition of non-serializable
+execution. In fact, we can identify a fixed pattern in an OCC dependency cycle. Recall that in the execution model of OCC,
+WAW and RAW dependency both imply that the source transaction commits before the destination transaction, as transaction's 
+write set is only made public on commit. WAR is the only exception that allows the destination transaction to commit before
+the source transaction. Now, imagine there is a dependency cycle. We assume that T3 is the transaction that committed the earlist
+in real-time, and that the cycle has at least three transactions (the case of two transactions is trivial). Since T3 is part
+of a cycle, there must be two other transactions, T1 and T2, such that T1 &rarr; T2 and T2 &rarr; T3. Note that T3 is the earlist
+committed transaction, but it is serialized after T2. We know the dependency between T2 and T3 must be WAR, which is excatly what
+OCC algorithms can detect. The dependency T1 &rarr; T2 can be any of the RAW, WAR and WAW
