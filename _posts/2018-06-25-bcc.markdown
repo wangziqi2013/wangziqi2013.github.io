@@ -74,6 +74,16 @@ commits after T3. We call the structure T1 &rarr; T2 &rarr; T3 where T2 &rarr; T
 in the paper). BCC recognizes this dangerous structure at runtime dynamically, and abort transactions if necessary to avoid 
 dependency cycles. We argue that BCC aborts only a subset of transactions that OCC aborts, and hence exposes better parallelism
 than OCC under high contention. Proving the argument is not difficult. On one direction, we can see that there is a WAR dependency in 
-the dangerous structure, and this is what OCC is trying to avoid. This proves that everything transaction that will be aborted by
-BCC will also be aborted by OCC. On the other direction, we can construct an instance of T1 &rarr; T2 &rarr; T3 where T2 &rarr; T3 
-is WAR but T1 commits before T2 starts. In this case BCC does not abort T2, which does not hold for OCC. 
+the dangerous structure, and this is what OCC is trying to avoid. This proves that every transaction that will be aborted by
+BCC will also be aborted by OCC. On the other direction, we can construct an instance of T1 &rarr; T2 &rarr; T3, where T2 &rarr; T3 
+is WAR but T1 commits before T2 starts, therefore not constituting any cycle. In this case BCC does not abort T2, which does not 
+hold for OCC. 
+
+Taking advantage of the observation, BCC does the following check during the validation phase of any transaction: (1) Whether 
+the current read set is written by another committed transaction. The WAR check is also done by OCC; (2) Whether the current 
+transaction is the destination of a dependency if it commits. The source of the dependency is one or more concurrent transactions 
+that commit after the current transaction begins. Note that condition (2) is slightly stronger in order to detect the dangerous 
+structure, as the structure only requires that T1 commits after T3. Since T3 must commit after T2 begins, condition (2) includes
+all dangerous structures, but also introduces false positives.
+
+BCC uses an implementation that is 
