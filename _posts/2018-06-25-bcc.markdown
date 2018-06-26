@@ -119,3 +119,12 @@ The simple solution would be to just lock the hash table while it is probed and 
 locking overhead, the reading transaction samples the data item before and after inserting the item into the hash table.
 If two samples disagree, then an update must have happened in-between, and the read must be retried before deleting the 
 item from the hash table. 
+
+During validation, BCC first acquires a global commit mutex as in classical OCC. Then it validates the current transaction
+not only for WAR dependencies, which can be done by comparing the TID of items in its read set with its own TID, but also
+checks RAW, WAW and WAR dependencies with concurrent transactions. Concurrent transactions can be identified by reading the 
+LAST_TID field of all processors at transaction begin and validation. The validating transaction then scans the read set
+hash tables, and checks each whose TID is between the two LAST_TID samples on the corresponding processor (recall that we 
+could find the processor ID from the TID). If any of its write set element is found in the read set hash table, then
+a WAR has been detected, and validation fails. Similarly, the validating transaction needs to detect RAW and WAW dependencies
+from concurrent transactions. 
