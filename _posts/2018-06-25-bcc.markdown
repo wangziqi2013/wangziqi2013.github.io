@@ -99,3 +99,9 @@ allocation. The most recent allocated TID is also stored in a globally accessibl
 executes one transaction at a time, the LAST_TID of a processor is either the TID of the current executing transaction, or 
 the most recent committed transaction. BCC makes use of this invariant to determine concurrent transactions of the committing
 transaction.
+
+Silo-style TID allocation has two distinguishing features. First, the TID allocated by all threads are globally unique due to
+the processor ID field. Second, the numerical values of TIDs allocated by one thread are monotonically increasing, as the epoch 
+and local counter are both monotonically increasing, and the local counter is reset on each global epoch change. The second 
+property is crucial for determining the transaction or transactions that have executed on a certain processor. If the value of 
+a TID is numerically smaller than LAST_TID, then we know the corresponding transaction must have committed.
