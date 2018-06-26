@@ -127,4 +127,8 @@ LAST_TID field of all processors at transaction begin and validation. The valida
 hash tables, and checks each whose TID is between the two LAST_TID samples on the corresponding processor (recall that we 
 could find the processor ID from the TID). If any of its write set element is found in the read set hash table, then
 a WAR has been detected, and validation fails. Similarly, the validating transaction needs to detect RAW and WAW dependencies
-from concurrent transactions. 
+from concurrent transactions. This can be achieved by comparing the TID of tuples in its read set and write set respectively.
+If any of them is greater than the begin timestamp, then RAW and/or WAW is recognized, and the validation fails. If 
+validation passes successfully, the transaction enters write phase. During the write phase, it flushes all elements 
+in the write set back to shared storage, and updates their tuple TIDs as well. The transaction releases the commit 
+mutex after the write phase.
