@@ -54,4 +54,8 @@ potential sources of violations, and OCC will suffer from performance degradatio
 
 In order to increase the robustness of OCC under high contention, as well as to improve OCC's flexibility, this paper 
 proposes Balanced Concurrency Control (BCC) as an alternative of OCC under high contention. BCC extends the execution 
-model of OCC by allowing transactions having WAR dependencies to commit under certain circumstances. Accordingly, 
+model of OCC by allowing transactions having WAR dependencies to commit under certain circumstances. Accordingly, the
+overhead of dependency management will also increase as the concurrency control manager becomes more complicated. The 
+paper strives to find a balance point between CC overhead and efficiency by exploring easy-to-identify situations that 
+a transaction must be aborted in the presence of WAR violations. We cover the design of the system in detail in the 
+next few paragraphs.
