@@ -42,3 +42,12 @@ writes are flushed to the shared storage. The write set of the transaction is al
 timestamp of the transaction. Later transactions will use this archived write set to perform read validation.
 The write set can only be garbage collected after all concurrenct reading transactions have exited. After the 
 write phase, the commit mutex is also released.
+
+OCC increases the degree of parallelism and reduces the amount of communication between processors by reading 
+optimistically without locking in the read phase. There are, however, still problems that can plunge OCC's performance. 
+The first problem is that OCC still validates pessimistically despite the optimistic read phase. Transactions in OCC
+will eventually abort if they cannot commit/will be blocked by 2PL. The second problem is that OCC may introduce many
+false aborts if contention is high. For example, OCC always aborts a transaction if its read set is overwritten by
+another transaction during the read phase. This, however, is only a necesssary condition for dependency cycles, but
+not sufficient. When the degree of contention is high, it is expected that many WAR dependency will be identified as 
+potential sources of violations, and OCC will suffer from performance degradation.
