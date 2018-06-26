@@ -105,3 +105,11 @@ the processor ID field. Second, the numerical values of TIDs allocated by one th
 and local counter are both monotonically increasing, and the local counter is reset on each global epoch change. The second 
 property is crucial for determining the transaction or transactions that have executed on a certain processor. If the value of 
 a TID is numerically smaller than LAST_TID, then we know the corresponding transaction must have committed.
+
+In order for transactions to perform backward validation with concurrent and committed transactions, transactions must expose 
+their read sets since transaction begin. BCC transactions are allocated a TID on transaction begin. Note that this is different
+from most lazy OCC algorithms where the TID is allocated only after the read phase. For OCC algorithms, allocating TID at 
+transaction begin is undesirable, because transactions are forced to commit in the same order. In BCC, this is no longer an 
+issue, because BCC does not assume that the order of serialization is the order that TIDs are acquired. After transaction
+begin, the transaction inserts every data item it reads into a hash table, which is tagged with the TID of the transaction
+and is publicly accessible. The implementation of the hash table is assumed to be multicore-efficient and linearizable.
