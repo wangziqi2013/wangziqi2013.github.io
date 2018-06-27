@@ -43,4 +43,16 @@ This paper presents a concrete implementation of Serializable Snapshot Isolation
 key-value relation database engine running MVCC. The concept of SSI is proposed in an earlier paper, which shows 
 and proves the observation that certain "dangerous structure" in the dependency graph of SI may lead to non-serializable 
 execution. The observation is based on the mechanism of reads and writes in MVCC. We present the proof as follows.
-In MVCC, 
+In MVCC, reads are processed using a begin timestamp, which always read committed data whose writing transaction
+finishes before the reading transaction starts. Writes are locally buffered until the transaction commits, and any
+interleaving commit operation in-between that writes on the current write set will cause the transaction to 
+abort. The implication is that if WAR or WAW dependency even happens between transactions, then the two transactions 
+must not overlap. The only case that transactions can overlap is WAR, where the writing transaction can commit before 
+and after the reading transaction. Based on these properties of dependencies, let us assume there is a dependency cycle 
+in the dependency graph, which is the sufficient and necessary condition of non-serializable execution. Let T3 be the 
+transaction in the cycle that commits the earliest in real-time order, and the preceding transaction of T3 be T2.
+T2 must be concurrent with T3, because otherwise it commits before T3 starts, or it starts after T3 commits. In the 
+former case, the assumption that T3 commits the earlier is violated. In the latter case, T2 cannot precede T3 in
+logical order. The only possible configuration is that T2 starts before T3 commits, and the dependency between them
+is WAR. Similar reasoning can be applied between T1 and T2. We know T2 could not commit before T2 starts, because
+otherwise T1 also commits before T3 commits.
