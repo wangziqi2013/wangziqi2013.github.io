@@ -30,4 +30,9 @@ commit for conflict detection. Transactions set write locks on data items when t
 no concurrent writer exists. If another transaction writes a locked data item, then it indicates a potential write-write 
 conflict if both writing transactions commit. In this case, the current transaction is blocked. If the other writer 
 commits, then it is aborted. Otherwise the current transaction continues. In order to guarantee detection of all 
-possible interleaving of conflicting writes, write locks are released after transaction commit or abort.
+possible interleaving of conflicting writes, write locks are released after transaction commit or abort. 
+
+Snapshot Isolation implemented using MVCC and "first committer/writer wins" rule prevents common fallacies of 
+weaker isolation levels, such as non-repeatable read and lost update, from happening. This alone, however, is 
+not sufficient for guaranteeing serializable transaction execution. One of the most well-known example is write skew,
+where two transactions write non-overlapping data items in each other's read set. In the write skew scenario, 
