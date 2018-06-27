@@ -67,3 +67,14 @@ can introduce false positives since not all dangerous structures will eventually
 with full dependency graph testing, which yields no false positive and no false negative, SSI has an obvious advantage
 in terms of complexity and resource requirement. In the paper, it is claimed that SSI is not too complicated to implement 
 on an existing MVCC engine, while being able to maintain high throughput and relatively low false abort rate.
+
+SSI can be implemented as follows. A new type of lock, "SIREAD" lock, in introduced into the locking mechanism, which may
+already exist due to the "first updater wins" rule. SIREAD locks do not block any other lock, and they serve merely as 
+a signal to notify other transactions of a concurrent read operation. Each transaction has two boolean flags, one "SSI-IN"
+which indicates it is the destination of WAR, another "SSI-OUT" which indicates it is the source of WAR. Threads acquire 
+SIREAD locks before they access data items. If a write lock is already set, then the reading transactions marks the SSI-OUT
+flag of itself and SSI-IN of the concurrent writer because it knows the concurrent writer has already written to the item. 
+The current transaction must be reading a version earlier than the uncommitted version, constituting a WAR. After the read,
+it performs a second check for newer versions that are created by transactions before it sets the read lock. These versions
+might be created by active or already committed transactions. In the latter case, if the committed transaction has its SSI-OUT
+set, then the current transaction cannot not help but just self-abort. On write, transactions create new versions
