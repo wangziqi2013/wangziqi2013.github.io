@@ -63,4 +63,7 @@ The observation can therefore be stated as follows: An SI execution may lead to 
 consecutive WAR dependencies exist in the dependency graph. The conclusion is that, in order to prevent non-serializable
 execution, SI transaction scheduler should avoid any transaction from having an incoming and outgoing WAR dependency
 at the same time. An MVCC scheduler that cohere to this rule is calld an SSI scheduler. Note that an SSI scheduler
-can introduce false positives since not all dangerous structures will eventually end up as part of a cycle.
+can introduce false positives since not all dangerous structures will eventually end up as part of a cycle. Compared
+with full dependency graph testing, which yields no false positive and no false negative, SSI has an obvious advantage
+in terms of complexity and resource requirement. In the paper, it is claimed that SSI is not too complicated to implement 
+on an existing MVCC engine, while being able to maintain high throughput and relatively low false abort rate.
