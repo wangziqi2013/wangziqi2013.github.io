@@ -87,4 +87,7 @@ One particular detail that is worth mentioning is that SSI scheduler requires tr
 states even after they commit. In the above description, two SSI flags for detecting WAR pairs are checked even
 after the transaction has committed. In addition, the SIREAD lock cannot be relased after transaction commits,
 because write operation can well be performed after the reader has committed, but yet still results in a dangerous 
-structure. Proper garbage collection mechanisms 
+structure. Proper garbage collection mechanisms must collaborate with SSI scheduler to recollect transaction 
+descriptors and release SIREAD locks. The GC algorithm is similar to epoch-based garbage collection. The last committed
+transaction ID is tracked in a per-thread manner. Resources of committed transactions are released if all concurrent
+transactions have committed. 
