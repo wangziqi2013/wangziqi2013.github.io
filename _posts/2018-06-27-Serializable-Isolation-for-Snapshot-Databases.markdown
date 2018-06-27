@@ -26,7 +26,8 @@ procedure, checks the conflict at commit time. The committing transaction goes t
 item in its write set. A conflict is detected if a newer version has been created whose ct is between its bt and ct.
 This is called "first committer wins", as write-write conflicts are only identified when the transactions that
 performs the second write commits. The alternative method, called "first updater wins", does not wait for transaction 
-commit for conflict detection. Transactions set write locks on data items when they pre-write. If another transaction
-writes a locked data item, then it indicates a potential write-write conflict if both writing transactions commit.
-In this case, the current transaction is blocked. If the other writer commits, then it is aborted. Otherwise the 
-current transaction continues.
+commit for conflict detection. Transactions set write locks on data items when they pre-write, after checking that 
+no concurrent writer exists. If another transaction writes a locked data item, then it indicates a potential write-write 
+conflict if both writing transactions commit. In this case, the current transaction is blocked. If the other writer 
+commits, then it is aborted. Otherwise the current transaction continues. In order to guarantee detection of all 
+possible interleaving of conflicting writes, write locks are released after transaction commit or abort.
