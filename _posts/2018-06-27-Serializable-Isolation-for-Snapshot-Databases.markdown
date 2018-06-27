@@ -54,5 +54,13 @@ transaction in the cycle that commits the earliest in real-time order, and the p
 T2 must be concurrent with T3, because otherwise it commits before T3 starts, or it starts after T3 commits. In the 
 former case, the assumption that T3 commits the earlier is violated. In the latter case, T2 cannot precede T3 in
 logical order. The only possible configuration is that T2 starts before T3 commits, and the dependency between them
-is WAR. Similar reasoning can be applied between T1 and T2. We know T2 could not commit before T2 starts, because
-otherwise T1 also commits before T3 commits.
+is WAR. Similar reasoning can be applied between T1 and T2. We know T1 could not commit before T2 starts, because
+otherwise T1 also commits before T3 commits. We also know T1 could not start after T2 commits, because otherwise 
+T1 could not be logically before T2. The only sensible relation between T1 and T2 is that they are concurrent and 
+T2 WAR depends on T1. 
+
+The observation can therefore be stated as follows: An SI execution may lead to non-serializable result if two 
+consecutive WAR dependencies exist in the dependency graph. The conclusion is that, in order to prevent non-serializable
+execution, SI transaction scheduler should avoid any transaction from having an incoming and outgoing WAR dependency
+at the same time. An MVCC scheduler that cohere to this rule is calld an SSI scheduler. Note that an SSI scheduler
+can introduce false positives since not all dangerous structures will eventually end up as part of a cycle.
