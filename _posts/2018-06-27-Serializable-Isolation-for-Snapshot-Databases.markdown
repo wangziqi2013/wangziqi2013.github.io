@@ -35,4 +35,6 @@ possible interleaving of conflicting writes, write locks are released after tran
 Snapshot Isolation implemented using MVCC and "first committer/writer wins" rule prevents common fallacies of 
 weaker isolation levels, such as non-repeatable read and lost update, from happening. This alone, however, is 
 not sufficient for guaranteeing serializable transaction execution. One of the most well-known example is write skew,
-where two transactions write non-overlapping data items in each other's read set. In the write skew scenario, 
+where two transactions write non-overlapping data items in each other's read set. In this scenario, no write-write
+conflict is detected, but the execution is non-serializable, because both transactions are logically before each other
+via a write after read (WAR) dependency. 
