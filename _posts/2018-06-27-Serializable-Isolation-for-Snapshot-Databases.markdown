@@ -82,3 +82,9 @@ acquiring the write lock. If a SIREAD lock is detected, the writing transaction 
 lock, and SSI-IN for itself. Care must be taken if owners have committed, in which case if they also have SSI-IN set,
 the writing transaction cannot help but self-abort. On transaction commit, if both SSI-IN and SSI-OUT flags are set,
 the transaction must abort.
+
+One particular detail that is worth mentioning is that SSI scheduler requires transactions to retain part of their 
+states even after they commit. In the above description, two SSI flags for detecting WAR pairs are checked even
+after the transaction has committed. In addition, the SIREAD lock cannot be relased after transaction commits,
+because write operation can well be performed after the reader has committed, but yet still results in a dangerous 
+structure. Proper garbage collection mechanisms 
