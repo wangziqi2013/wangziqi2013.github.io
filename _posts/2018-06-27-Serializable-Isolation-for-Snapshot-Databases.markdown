@@ -77,4 +77,8 @@ flag of itself and SSI-IN of the concurrent writer because it knows the concurre
 The current transaction must be reading a version earlier than the uncommitted version, constituting a WAR. After the read,
 it performs a second check for newer versions that are created by transactions before it sets the read lock. These versions
 might be created by active or already committed transactions. In the latter case, if the committed transaction has its SSI-OUT
-set, then the current transaction cannot not help but just self-abort. On write, transactions create new versions
+set, then the current transaction cannot not help but just self-abort. On write, transactions create new versions after 
+acquiring the write lock. If a SIREAD lock is detected, the writing transaction sets the SSI-OUT for owners of the SIREAD
+lock, and SSI-IN for itself. Care must be taken if owners have committed, in which case if they also have SSI-IN set,
+the writing transaction cannot help but self-abort. On transaction commit, if both SSI-IN and SSI-OUT flags are set,
+the transaction must abort.
