@@ -38,3 +38,9 @@ not sufficient for guaranteeing serializable transaction execution. One of the m
 where two transactions write non-overlapping data items in each other's read set. In this scenario, no write-write
 conflict is detected, but the execution is non-serializable, because both transactions are logically before each other
 via a write after read (WAR) dependency. 
+
+This paper presents a concrete implementation of Serializable Snapshot Isolation (SSI) in Oracle Berkeley DB, a 
+key-value relation database engine running MVCC. The concept of SSI is proposed in an earlier paper, which shows 
+and proves the observation that certain "dangerous structure" in the dependency graph of SI may lead to non-serializable 
+execution. The observation is based on the mechanism of reads and writes in MVCC. We present the proof as follows.
+In MVCC, 
