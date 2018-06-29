@@ -31,4 +31,11 @@ allocation is commonly implemented using a centralized global counter. Transacti
 increment the counter when it acquires the timestamp. Frequently incrementing the counter will
 incur excessive cache line traffic, which causes long latency for other memory operations on the 
 communication network, and can itself become a bottleneck. The throughput of transactions can never
-exceed the throughput of atomic operations on a single cache line. 
+exceed the throughput of atomic operations on a single cache line. Second, SI is not guaranteed to be
+fully serializable, as certain anomalies, such as write skew, could occur. Implementing Conflict Serializable 
+(CSR) using MVCC is indeed possible, but then the validation phase validates the read set instead of the write 
+set. The read set validation requires either marking the read when they are in the speculative read
+phase, or checking all concurrent transaction's write set during validation. The first option does not 
+scale, as read operations will write into global state. On many transactions, the size of the read set is 
+orders of magnitude larger than the size of the write set. The second option is not viable if the degree
+of concurrency is high, which is expected for a multicore in-memory database.
