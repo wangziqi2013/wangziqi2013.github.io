@@ -90,3 +90,11 @@ of the version chain when the transaction is being processed is stored. No versi
 at this stage, because transactions are always processed in the serialization order. Later on during execution, if the read set 
 has been serialized, the execution engine does not peform any read lookup, but instad just use the pointer to the version or 
 placeholder to process reads. This optimization can be enabled on a per-transaction level, and needs no global change.
+
+The planning stage is supposed to run fast for several reasons. First, transactions are processed by several independent 
+worker threads, the communication between which is rare. Each worker thread simply takes a reference to the transaction in
+the global queue, and scans its write set (and read set, if applicable) while inserting placeholders into the version chain.
+Since the database is partitioned, and worker threads only insert into their own partition, contention is supposed to be low.
+Increasing the number of worker threads can also increase the throughput of transaction planning, because the amount of work 
+each worker thread is responsible for decreases. It is also noted by the paper that the process we present here is an example of 
+intra-transaction parallelism.
