@@ -25,3 +25,11 @@ lock entry and the identity of threads that are related to the lock, which costs
 is not cache friendly, and is prone to incur high cache miss ratio. In terms of scalability, the hash table itself is 
 a centralized structure, managed by lightweight latches. Worker threads need to acquire and release these latches everytime
 the lock table is accessed. This may cause frequent cache line invalidation, and hence degrade performance.
+
+This paper aims at solving the lock manager's efficiency and scalability problem by using per-tuple, metadata-less 
+very lightweight locks (VLL). As the first step towards optimizing locks, VLL eliminates the lock manager entirely 
+from the system. As an alternative, each data item, e.g. rows, tuples, etc, is extended with an extra metadata field 
+that is invisible to users, which is used to maintain locks. This removes the need of traversing the linked list
+for every lock request and also reduces the probabilities of expensive cache line misses. The next step is to eliminate
+the presence of linked structures that record the current holder of the lock as well as threads waiting for the lock.
+VLL uses two counters, one to 
