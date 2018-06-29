@@ -69,3 +69,9 @@ immediately scheduled, because it needs to stay non-conflicting with all transac
 In practice, the system uses the number of blocked transactions in the queue as an indicator. If this number exceeds a 
 certain threshold, the system stops accepting new transactions into the queue, and will prioritize the task of finding 
 transactions that can be blocked. We introduce the method of finding such transactions in the next paragraph.
+
+Selective Contention Analysis (SCA) is proposed as an optimization of VLL which allows early unblocking of transactions. 
+SCA threads searches from the head of the queue for a transaction that is currently blocked but is actually ready to
+be executed. This is possible if all locks in the transaction's lock set has been released, but it has not reached 
+the head of the queue. To identify such a transaction, recall that all transactions are ordered by the queue, and 
+all dependencies are only developed from the current transaction to transactions closer to the head of the queue. 
