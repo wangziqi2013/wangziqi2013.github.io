@@ -98,3 +98,12 @@ Since the database is partitioned, and worker threads only insert into their own
 Increasing the number of worker threads can also increase the throughput of transaction planning, because the amount of work 
 each worker thread is responsible for decreases. It is also noted by the paper that the process we present here is an example of 
 intra-transaction parallelism.
+
+To reduce synchronization overhead, worker threads do not synchronize and wait for each other to finish processing one transaction
+before they can start the next. Instead, transaction planning are performed in a batch of transactions. Worker threads do not have 
+to keep lockstep and be on the same transaction at all times. In fact, it makes no harm if a few transactions are way ahead of others 
+or are lagging behind, since worker threads only process their own partition of the database. A global barrier is only needed after 
+the current batch has finished, and worker threads wait for each other to finish before they can begin with the next batch. 
+
+In the next stage, the execution stage, transactions are executed by the execution engine, which sends read and write requests 
+to the MVCC engine. The execution engine
