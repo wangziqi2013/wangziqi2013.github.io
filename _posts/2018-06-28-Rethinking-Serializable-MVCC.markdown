@@ -24,3 +24,11 @@ For snapshot isolation MVCC, transactions validate by checking whether items in 
 have been updated by a concurrent transaction. If this is the case, then a write-write conflict is
 detected, and the committing transaction must abort. Otherwise, the transaction installs its locally
 buffered write set onto the version chain and commits successfully.
+
+Both SI itself and the implementation of SI using MVCC are problematic on modern multicore platform.
+The paper identifies two problems that can affect performance as well as scalability. First, timestamp
+allocation is commonly implemented using a centralized global counter. Transactions must atomically
+increment the counter when it acquires the timestamp. Frequently incrementing the counter will
+incur excessive cache line traffic, which causes long latency for other memory operations on the 
+communication network, and can itself become a bottleneck. The throughput of transactions can never
+exceed the throughput of atomic operations on a single cache line. 
