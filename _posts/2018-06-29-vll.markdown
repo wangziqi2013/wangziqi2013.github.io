@@ -76,9 +76,12 @@ be executed. This is possible if all locks in the transaction's lock set has bee
 the head of the queue. Recall that all transactions are ordered by the queue, and all dependencies are only developed 
 from the current transaction to transactions closer to the head of the queue. In order to identify a transaction which
 has no outstanding dependency with any transaction, we only need to scan the lock set of transactions in the queue
-that are closer to the head, and make sure the current transaction's lock set has empty overlap with their lock sets. 
-To simplify complicated set union and intersection, a bloom filter is used to indicate which locks are currently held. 
-The SCA thread scans the queue from the head, and summarizes the transaction's lock set into two bloom filters, one for
-shared lock and another for exclusive lock. With bloom filters, false positives may happen and a transaction may remain
-blocked even if it is eligible for scheduling. This, however, only affects performance, but not correctness.
+that are closer to the head, and make sure the current transaction's lock set has empty overlap with the union of their 
+lock sets. To simplify complicated set union and intersection, a bloom filter is used to indicate which locks are currently 
+held. The SCA thread scans the queue from the head, and summarizes the transaction's lock set into two bloom filters, 
+one for shared lock and another for exclusive lock. The transaction under processing intersects its lock set's bloom filter
+with the culmulative filters by performing bit-wise AND. With bloom filters, false positives may happen and a transaction may 
+remain blocked even if it is eligible for scheduling. This, however, only affects performance, but not correctness.
+As an optimization, given that the lock set of a transaction is read-only, the SCA thread could cache the two bloom filters 
+for every individual transaction in the queue once they are computed. This avoids re-hashing overhead of locks in the lock set.
 
