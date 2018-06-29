@@ -106,4 +106,13 @@ or are lagging behind, since worker threads only process their own partition of 
 the current batch has finished, and worker threads wait for each other to finish before they can begin with the next batch. 
 
 In the next stage, the execution stage, transactions are executed by the execution engine, which sends read and write requests 
-to the MVCC engine. The execution engine
+to the MVCC engine. The execution engine consists of another set of worker threads, each being responsible for executing the 
+logic of one transaction in the batch from the planning stage. In contract to the intra-transaction parallelism the system
+demonstrates in the planning stage, in the execution stage, worker threads exploit inter-transaction parallelism and 
+execute the transactions in a batch in parallel. The execution does not need concurrency control, because write operations 
+have been ordered in the planning stage, and read operations could find the corresponding version using the timestamp and 
+the version chain. The only problematic case is RAW dependency, because the value cannot be consumed before it is produced
+by another worker thread. If a worker thread intends to read a version, but unfortunately the data has not been generated yet,
+the thread suspends the current transaction, and recursively executes the source transaction if it is not being executed. 
+Note that the execution stage and the planning stage work on different batches at any given time. There would be no race condition
+between the two stages. 
