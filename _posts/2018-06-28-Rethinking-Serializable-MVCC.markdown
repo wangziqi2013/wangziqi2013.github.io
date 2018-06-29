@@ -40,3 +40,11 @@ scale, as read operations will write into global state. On many transactions, th
 orders of magnitude larger than the size of the write set. The second option is not viable if the degree
 of concurrency is high, which is expected for a multicore in-memory database. The validating transaction needs
 to spend significant number of cycles during the validation phase to perform set intersection.
+
+This paper proposes BOHM, which takes advantage of pre-declared write sets of transactions to serialize 
+them when they are submitted to the engine. The system features the following novel designs. First, the
+concurrency control layer and the execution layer is fully decoupled. The execution layer does not perform
+concurrency control, because concurrency has been planned prior to execution. Second, concurrency control and 
+execution happens in separate stages. The lifetime of a transaction consists of two stages. In the first
+stage, the transaction is serialized with other transactions by the concurrency control manager. All reads
+and writes are planned according to the serialization order
