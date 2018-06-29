@@ -56,8 +56,8 @@ attached to that portion. Threads at the same stage hardly need to communicate w
 case where global synchronization takes place is when worker threads have finished processing a batch. A barrier is 
 used to ensure threads finish the previous batch before the begin with the next batch.
 
-BOHM works as follows. When a transaction is submitted to the system, it is required that the write set of the
-transaction is declared. This is not always possible, especially if the transaction takes multiple "rounds" of 
+One of the most important of BOHM is that when a transaction is submitted to the system, the write set of the
+transaction must be declared. This is not always possible, especially if the transaction takes multiple "rounds" of 
 communication between the engine and the application, using, for example, a cursor. BOHM does not intend to support 
 transactions of this kind, and in the paper it is suggested that only stored procedure is supported. In the case
 where the write set is unknown in advance, the database engine executes a speculative execution stage where no 
@@ -66,3 +66,11 @@ write set. During the later execution phase, if the transaction writes to an ite
 it must abort and retry. In the following text, we assume that transactions already have their write sets either 
 declared by programmers or automatically generated via program analysis / speculative execution.
 
+BOHM works as follows. When the transaction is submitted to the concurrency control manager, a single thread 
+adds the transaction into a global queue. The global queue serializes all transactions in the order that they
+are enqueued. Since only one thread maintains the queue, no contention would occur during this phase, and transactions 
+always have a well-defined order with regard to all other transactions. The timestamps of transactions are implicitly
+assigned as their positions in the queue. BOHM's timestamp assignment process differs from the base line algorithm
+described earlier as it only assigns one timestamp instead of two, one for begin and another for commit. By
+assigning only one timestamp to each transaction, transactions logically happen at a single point of time, and thus 
+no validation againt concurrenct transactions between the bt and ct is needed.
