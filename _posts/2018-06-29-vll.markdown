@@ -19,4 +19,9 @@ produce serializable schedules. In the paper it is claimed that the lock manager
 hash table. Lock entries are hashed into one of the buckets of the table. For each lock entry, lists of transactions 
 that are currently holding the lock as well as those who are blocked by the lock are maintained. To protect the consistency
 of the lock table data structure itself, each bucket and lock entry has a latch, which is used to serialize insert, delete
-and read operations on the lock table. 
+and read operations on the lock table. On a main-memory database deployed on multicore platform, such a centralized 
+lock manager is not efficient and not scalable. One or more linked list needs to be traversed in order to find the 
+lock entry and the identity of threads that are related to the lock, which costs cycles. In addition, the linked structure
+is not cache friendly, and is prone to incur high cache miss ratio. In terms of scalability, the hash table itself is 
+a centralized structure, managed by lightweight latches. Worker threads need to acquire and release these latches everytime
+the lock table is accessed. This may cause frequent cache line invalidation, and hence degrade performance.
