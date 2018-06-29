@@ -38,4 +38,5 @@ set. The read set validation requires either marking the read when they are in t
 phase, or checking all concurrent transaction's write set during validation. The first option does not 
 scale, as read operations will write into global state. On many transactions, the size of the read set is 
 orders of magnitude larger than the size of the write set. The second option is not viable if the degree
-of concurrency is high, which is expected for a multicore in-memory database.
+of concurrency is high, which is expected for a multicore in-memory database. The validating transaction needs
+to spend significant number of cycles during the validation phase to perform set intersection.
