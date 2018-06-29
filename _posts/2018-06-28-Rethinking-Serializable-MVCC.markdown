@@ -74,3 +74,9 @@ assigned as their positions in the queue. BOHM's timestamp assignment process di
 described earlier as it only assigns one timestamp instead of two, one for begin and another for commit. By
 assigning only one timestamp to each transaction, transactions logically happen at a single point of time, and thus 
 no validation againt concurrenct transactions between the bt and ct is needed.
+
+In the next stage, worker threads dequeues transactions from the global queue, and plans transactional reads and writes
+serially. Transactions are processed by multiple worker threads, each being reponsible for a partition of the database. Worker 
+threads process transactions in the order they are dequeued from the global queue, and hence the serialization order of 
+transactions is observed in this stage. Transactional writes are serialized by scanning the write set of the transaction, 
+and insering placeholders into the version chain as contains for updated data generated during the execution phase. 
