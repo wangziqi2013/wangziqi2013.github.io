@@ -61,4 +61,11 @@ queue. The reasoning is that since transactions are ordered by the global queue,
 at the head of the queue can always be scheduled, because no other transaction could be holding a lock that it is waiting for.
 Deadlock is also not a problem, because transactions enter the queue under the protection of a critical section. The only possible
 reason for being blocked is to develop forward dependencies with transactions that are already in the queue. In this case,
-these transactions are always awakened earlier than the current one, therefore making
+these transactions are always awakened earlier than the current one, making deadlock impossible.
+
+In the paper, it is suggested that the size of the global queue should not exceed a certain threshold. If too many
+transactions are waiting to be scheduled, then transactions that enter the queue later will find it difficult to be 
+immediately scheduled, because it needs to stay non-conflicting with all transactions currently in the queue. 
+In practice, the system uses the number of blocked transactions in the queue as an indicator. If this number exceeds a 
+certain threshold, the system stops accepting new transactions into the queue, and will prioritize the task of finding 
+transactions that can be blocked. We introduce the method of finding such transactions in the next paragraph.
