@@ -53,4 +53,5 @@ They simply executes their own parts of the transaction from the beginning to th
 to the external caller. Lastly, BOHM is scalable by using partition. The entire database is partitioned such that
 each worker thread is responsible for a portion of the database, and it has exclusive ownership of all resources
 attached to that portion. Threads at the same stage hardly need to communicate with each other. The only exception 
-case where global synchronization is barrier, which is used to synchronize
+case where global synchronization takes place is when worker threads have finished processing a batch. A barrier is 
+used to ensure threads finish the previous batch before the begin with the next batch.
