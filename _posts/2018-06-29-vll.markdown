@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Lightweight Locking for Main Memory Database Systems"
+date:   2018-06-29 00:35:00 -0500
+categories: paper
+paper_title: "Lightweight Locking for Main Memory Database Systems"
+paper_link: https://dl.acm.org/citation.cfm?id=2448947
+paper_keyword: Very Lighweight Locking; VLL
+paper_year: VLDB 2012
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
