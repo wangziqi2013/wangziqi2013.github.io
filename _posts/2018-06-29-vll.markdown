@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+Classical lock based transactional systems usually suffer from performance bottleneck because of the extra contention
+at the lock manager. Locks are essential for old systems using locking protocols such as Two-Phase Locking (2PL) to
+produce serializable schedules. 
