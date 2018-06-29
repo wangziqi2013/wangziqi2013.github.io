@@ -73,5 +73,12 @@ transactions that can be blocked. We introduce the method of finding such transa
 Selective Contention Analysis (SCA) is proposed as an optimization of VLL which allows early unblocking of transactions. 
 SCA threads searches from the head of the queue for a transaction that is currently blocked but is actually ready to
 be executed. This is possible if all locks in the transaction's lock set has been released, but it has not reached 
-the head of the queue. To identify such a transaction, recall that all transactions are ordered by the queue, and 
-all dependencies are only developed from the current transaction to transactions closer to the head of the queue. 
+the head of the queue. Recall that all transactions are ordered by the queue, and all dependencies are only developed 
+from the current transaction to transactions closer to the head of the queue. In order to identify a transaction which
+has no outstanding dependency with any transaction, we only need to scan the lock set of transactions in the queue
+that are closer to the head, and make sure the current transaction's lock set has empty overlap with their lock sets. 
+To simplify complicated set union and intersection, a bloom filter is used to indicate which locks are currently held. 
+The SCA thread scans the queue from the head, and summarizes the transaction's lock set into two bloom filters, one for
+shared lock and another for exclusive lock. With bloom filters, false positives may happen and a transaction may remain
+blocked even if it is eligible for scheduling. This, however, only affects performance, but not correctness.
+
