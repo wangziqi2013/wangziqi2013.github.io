@@ -47,4 +47,10 @@ concurrency control layer and the execution layer is fully decoupled. The execut
 concurrency control, because concurrency has been planned prior to execution. Second, concurrency control and 
 execution happens in separate stages. The lifetime of a transaction consists of two stages. In the first
 stage, the transaction is serialized with other transactions by the concurrency control manager. All reads
-and writes are planned according to the serialization order
+and writes are planned according to the serialization order. In the second stage, the transaction is executed by
+the execution engine. The execution threads does neither block on resources nor validate any speculative results.
+They simply executes their own parts of the transaction from the beginning to the end, and output the result
+to the external caller. Lastly, BOHM is scalable by using partition. The entire database is partitioned such that
+each worker thread is responsible for a portion of the database, and it has exclusive ownership of all resources
+attached to that portion. Threads at the same stage hardly need to communicate with each other. The only exception 
+case where global synchronization is barrier, which is used to synchronize
