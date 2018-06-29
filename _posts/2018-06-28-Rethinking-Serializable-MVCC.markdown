@@ -55,3 +55,14 @@ each worker thread is responsible for a portion of the database, and it has excl
 attached to that portion. Threads at the same stage hardly need to communicate with each other. The only exception 
 case where global synchronization takes place is when worker threads have finished processing a batch. A barrier is 
 used to ensure threads finish the previous batch before the begin with the next batch.
+
+BOHM works as follows. When a transaction is submitted to the system, it is required that the write set of the
+transaction is declared. This is not always possible, especially if the transaction takes multiple "rounds" of 
+communication between the engine and the application, using, for example, a cursor. BOHM does not intend to support 
+transactions of this kind, and in the paper it is suggested that only stored procedure is supported. In the case
+where the write set is unknown in advance, the database engine executes a speculative execution stage where no 
+concurrency control is applied. The set of items that the transaction speculatively writes to are collected as the
+write set. During the later execution phase, if the transaction writes to an item not in the speculative write set,
+it must abort and retry. In the following text, we assume that transactions already have their write sets either 
+declared by programmers or automatically generated via program analysis / speculative execution.
+
