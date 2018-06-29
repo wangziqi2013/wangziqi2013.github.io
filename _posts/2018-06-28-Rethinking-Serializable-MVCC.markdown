@@ -79,4 +79,9 @@ In the next stage, worker threads dequeues transactions from the global queue, a
 serially. Transactions are processed by multiple worker threads, each being reponsible for a partition of the database. Worker 
 threads process transactions in the order they are dequeued from the global queue, and hence the serialization order of 
 transactions is observed in this stage. Transactional writes are serialized by scanning the write set of the transaction, 
-and insering placeholders into the version chain as contains for updated data generated during the execution phase. 
+and insering placeholders into the version chain as contains for updated data generated during the execution phase. Transactional
+reads cannot be serialized at this stage, because they remain unknown until the execution phase. Each placeholder is tagged 
+with the timestamp of the transaction that generates it for read lookup as the create timestamp. If a placeholder is overwritten 
+by a write from a more recent transaction, then the timestamp of the more recent transaction is also stored in the old placeholder
+as the end timestamp. The identity of the transaction that generates this version is also stored in the placeholder in order 
+to resolve RAW dependencies at run-time. As an optimization 
