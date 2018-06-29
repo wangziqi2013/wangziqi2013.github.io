@@ -84,4 +84,9 @@ reads cannot be serialized at this stage, because they remain unknown until the 
 with the timestamp of the transaction that generates it for read lookup as the create timestamp. If a placeholder is overwritten 
 by a write from a more recent transaction, then the timestamp of the more recent transaction is also stored in the old placeholder
 as the end timestamp. The identity of the transaction that generates this version is also stored in the placeholder in order 
-to resolve RAW dependencies at run-time. As an optimization 
+to resolve RAW dependencies at run-time. As an optimization, if the read set of transactions is pre-declared prior to execution,
+they can also be serialized at this stage. Read sets are also scanned, and the pointer to the version or placeholder at the top 
+of the version chain when the transaction is being processed is stored. No version lookup is needed if read sets are serialized 
+at this stage, because transactions are always processed in the serialization order. Later on during execution, if the read set 
+has been serialized, the execution engine does not peform any read lookup, but instad just use the pointer to the version or 
+placeholder to process reads. This optimization can be enabled on a per-transaction level, and needs no global change.
