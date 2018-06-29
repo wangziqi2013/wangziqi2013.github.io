@@ -116,3 +116,12 @@ by another worker thread. If a worker thread intends to read a version, but unfo
 the thread suspends the current transaction, and recursively executes the source transaction if it is not being executed. 
 Note that the execution stage and the planning stage work on different batches at any given time. There would be no race condition
 between the two stages. 
+
+Garbage collection (GC) has always been an indispensable part of MVCC systems. The high level goal of GC in MVCC is to 
+delete versions that can no longer be observed by any active transaction. Performing GC in a fine guanularity usually
+incurs high overhead. In BOHM, GC takes advantage of the fact that all transactions in an earlier batch also logically
+happen before all transactions in a later batch. If a version v<sub>j</sub> is overwritten by batch b<sub>i</sub>, then 
+all versions smaller than v<sub>j</sub> can be garbage collected after batch b<sub>i</sub> is finished. To achieve this,
+each worker thread k maintains a thread local variable batch<sub>k</sub> which stores the minimum batch it has finished 
+processing. A global low watermark is periodically updated by taking the minimum of all batch<sub>k</sub>. Versions
+are then collected if they have been overwritten by transactions in batch or batches higher than the global low watermark.
