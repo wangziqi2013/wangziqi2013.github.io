@@ -39,5 +39,16 @@ count the number of waiting and active threads on the lock mode. In practice, th
 using a single 64 bit integer, split evenly. Threads requesting to acquire the lock in either shared or exclusive mode 
 perform Compare-and-Swap (CAS) to atomically increment the corresponding counter, and read the value before the increment.
 If the value before increment indicates that the lock can be acquired (i.e. no exclusive holder for shared request, and no
-lock holder for exclusive request), then the thread proceeds without blocking. Otherwise, the thread blocks on the lock.
+lock holder for exclusive request), then the thread proceeds without blocking. Otherwise, the thread returns failure.
+We introduce in the next paragraph how VLL cooperate with the concurrency control layer to provide lightweight but yet
+efficient locking service.
 
+VLL requires that threads pre-declare their lock set before execution. This could be achieved by speculatively running the
+transaction without concurrency control, and gather the set of locks under the speculative execution. If a lock not in
+the lock set is requested during normal execution, the transaction has to abort and retry in a more conservative lock set.
+We assume in the following text that transactions already know their lock sets. Before the transaction is submitted for 
+execution, it first enters a critical section. In the critical section, the transaction enqueues itself into a global
+transaction queue. The order that transactions are entered into the queue determine the order their locks should be 
+granted and released. Since transactions only access the queue in the critical section, the global ordering is well-defined
+and no race condition should occur. Within the critical section, the transaction acquire all locks in its lock set
+as described in the previous paragraph. Should a lock request fail, the transaction exits the critical section, and blocks
