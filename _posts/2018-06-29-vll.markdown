@@ -32,4 +32,12 @@ from the system. As an alternative, each data item, e.g. rows, tuples, etc, is e
 that is invisible to users, which is used to maintain locks. This removes the need of traversing the linked list
 for every lock request and also reduces the probabilities of expensive cache line misses. The next step is to eliminate
 the presence of linked structures that record the current holder of the lock as well as threads waiting for the lock.
-VLL uses two counters, one to 
+VLL uses two counters, one to record the number of threads currently holding the lock in shared mode, another to record
+the number of threads holding the lock in exclusive mode. Note that even though exclusive mode lock can only be held by 
+at most one threads at any moment, we need more than one bit, because as explained later, these two counters actually
+count the number of waiting and active threads on the lock mode. In practice, the two counters could be implemented 
+using a single 64 bit integer, split evenly. Threads requesting to acquire the lock in either shared or exclusive mode 
+perform Compare-and-Swap (CAS) to atomically increment the corresponding counter, and read the value before the increment.
+If the value before increment indicates that the lock can be acquired (i.e. no exclusive holder for shared request, and no
+lock holder for exclusive request), then the thread proceeds without blocking. Otherwise, the thread blocks on the lock.
+
