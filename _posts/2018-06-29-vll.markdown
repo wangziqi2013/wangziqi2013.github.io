@@ -48,7 +48,12 @@ transaction without concurrency control, and gather the set of locks under the s
 the lock set is requested during normal execution, the transaction has to abort and retry in a more conservative lock set.
 We assume in the following text that transactions already know their lock sets. Before the transaction is submitted for 
 execution, it first enters a critical section. In the critical section, the transaction enqueues itself into a global
-transaction queue. The order that transactions are entered into the queue determine the order their locks should be 
+transaction queue. The order that transactions are entered into the queue defines the order their locks should be 
 granted and released. Since transactions only access the queue in the critical section, the global ordering is well-defined
-and no race condition should occur. Within the critical section, the transaction acquire all locks in its lock set
+and no race condition should occur. Within the critical section, the transaction acquires all locks in its lock set
 as described in the previous paragraph. Should a lock request fail, the transaction exits the critical section, and blocks
+itself. If all locks are acquired successfully, the transaction exits the critical section and is submitted for execution.
+
+When transactions are finished, they release the locks in their lock sets by performing another CAS operation to atomically
+decrement the counter. Releasing locks this way, however, does not awaken blocked threads, as they did not subscribe to the
+unlock event and have no way to be notified. VLL
