@@ -56,4 +56,9 @@ itself. If all locks are acquired successfully, the transaction exits the critic
 
 When transactions are finished, they release the locks in their lock sets by performing another CAS operation to atomically
 decrement the counter. Releasing locks this way, however, does not awaken blocked threads, as they did not subscribe to the
-unlock event and have no way to be notified. VLL
+unlock event and have no way to be notified. VLL deals with this problem by trying to unblock the first thread in the global
+queue. The reasoning is that since transactions are ordered by the global queue, then it is easy to see that the transaction 
+at the head of the queue can always be scheduled, because no other transaction could be holding a lock that it is waiting for.
+Deadlock is also not a problem, because transactions enter the queue under the protection of a critical section. The only possible
+reason for being blocked is to develop forward dependencies with transactions that are already in the queue. In this case,
+these transactions are always awakened earlier than the current one, therefore making
