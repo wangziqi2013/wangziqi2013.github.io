@@ -81,4 +81,4 @@ a coherence message must be sent among all TLBs in the system to update the stat
 the bit vector in the PTE. The coherence mechanism is similar to hardware cache coherence, and it is broadcasted using the 
 cache coherence network. As pointed out by the paper, since changing the valid bit should be a relative rare event, the 
 broadcasting is expected to have small overhead. The reference bits, on the other hand, do not need to be kept consistently 
-among all cores. They can be merged back into the PTE as TLB entries are evicted.
+among all cores. They can be merged back into the PTE as TLB entries are evicted. 
