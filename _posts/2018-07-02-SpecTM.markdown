@@ -36,15 +36,16 @@ practical approach for efficient parallel programming.
 This paper proposes SpecTM, an STM design that addresses all above three problems by positioning itself properly
 between the simplest Compare-and-Swap (CAS) paradigm and complicated fully-fledged STM systems. The philosophy of SpecTM 
 is to find a balancing point between user's resonsibility and STM's responsibility, such that the STM only controls how
-transactions are serialized, and the rest is shifted to the user. SpecTM features the following design decisions that
-lessen the overhead. First, SpecTM does not keep read log and write log of arbitrary size. Instead, read logs are 
+transactions are serialized, and the rest is shifted to the user. To achieve its design goal, SpecTM optimizes handling of 
+short transactions, special data types, and special access patterns. We summarize the design decisions featured by SpecTM
+as follows. First, SpecTM does not keep read log and write log of arbitrary size. Instead, read logs are 
 kept only for a constant number of transactional reads, the sequence number of which is specified by users using different
 API calls. Fixed-sized read log makes it possible to allocate the transaction object as a stack variable with the
 transaction's read set also stored on the stack, without an extra layer of indirection. Write logs are entirely eliminated,
 and SpecTM does not allow users to perform transactional writes until commit time. The commit API of SpecTM takes 
 the addresses and values of transactional write operations as arguments. Second, SpecTM continues to use timestamps and 
-lock bits as per-item metadata, but this is crafted in a careful way such that the metadata and actual data item
+lock bits as per-item metadata, but they are crafted in a careful way such that the metadata and actual data item
 are stored in the same cache line, and hence can be fetched with at most one cache miss. To further reduce the metadata 
 overhead, SpecTM specializes for data types such as aligned pointers and small integers by "borrowing" one bit from
 the data item and using it as the lock bit. The timestamp in this case is also eliminated from the design, and validation 
-of reads proceeds by directly comparing values of data items. 
+of reads proceeds by directly comparing values of data items. Third, SpecTM 
