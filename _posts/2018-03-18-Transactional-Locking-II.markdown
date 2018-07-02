@@ -169,3 +169,10 @@ current logical time by assigning it to be the value of the global timestamp cou
 result of validation that no other transaction could have possibly committed into the read set of the current transaction.
 It is therefore correct to consider all its read operations taking place at the current time, although the actual reads 
 were performed a few logical ticks ago. 
+
+Transaction commit could be optimized in a similar way. Since after each successful validation, the begin timestamp of the 
+transaction indicates the latest snapshot under which that the read set is valid. Before the transaction is able to validate
+and after its read phase, we compare the current begin timestamp with the global timestamp counter. If these two are equal,
+then we know no transaction have committed during the last validation and the current time, and therefore the read set of 
+the current transaction remains a consistent snapshot. In this case, no commit time validation is needed, because the 
+transaction is already know to be consistent. 
