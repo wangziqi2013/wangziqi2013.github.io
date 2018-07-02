@@ -16,7 +16,18 @@ version_mgmt: N/A
 Software Transactional Memory (STM) has long been rumored as being slow and useless as only a "research toy". The slowness
 of STM for general purpose code inhibits its ability to serve as a build block for larger systems such as efficient parallel 
 data structures and database transaction processing engine. The major factors that make STM slow can be summarized as 
-follows. First, unlink Hardware Transactional Memory (HTM) where the data cache and on-chip buffers serve as a limited 
+follows. First, unlike Hardware Transactional Memory (HTM) where the data cache and on-chip buffers serve as a limited 
 storage of transaction metadata, STM must keep all metadata by itself with pure software approach. To work with potentialy
 unbounded transactions, STM must support metadata of arbitrary size, which usually requires an auxiliary lookup structure
-such as a hash table or per-item annotation for every transactional object. Neither of these is fast and scalable.
+such as a hash table or per-item annotation for every transactional object. Neither of these is fast and scalable. Second,
+STM essentially creates a separate name space for contents of the main memory. Transactions bring in data items into the 
+separate name space on read, and buffers dirty data in the name space on write. The STM implementation must ensure proper
+synchronization between the private name space and the main memory name space. For example, most STM systems guarantee that
+if a memory word is written by a transaction, read operations on the word performed by the same transaction must observe 
+the value it has written, rather than committed values currently residing in the main memory. This feature requires the 
+STM run-time to check the read address in the current write set, which can be time consuming if performed for every read.
+Third, special cases and patterns, such as read-only, read-one update-many, compare-many swap-one, or all-read-all-write,
+are typically not the focus of optimization in existing STM systems (although some might have optimizations for read-only
+transaction because it is straightforward). These special patterns, however, are common in data structure implementations. 
+Not being able to take advantage of the extra semantics information offered by the special patterns can make STM users
+pay extra overhead they do not have to.
