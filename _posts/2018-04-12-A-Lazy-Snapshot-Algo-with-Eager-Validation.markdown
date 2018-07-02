@@ -71,4 +71,7 @@ Compared with canonical TL2, the LSA algorithm allows transactions to read data 
 logical begin time of a transaction. Different terminologies are used to describe these algorithms. The "begin timestamp"
 in TL2, used to describe the logical time at which the snapshot that the transaction hopes to operate on, is 
 equivalent to the "txn.Max" variable in LSA. The "commit timestamp" of data items, used to describe the logical time
-at which a data item is created, is called the "lower bound" of an item at current logical time.
+at which a data item is created, is called the "lower bound" of an item at current logical time. The incremental validation
+scheme which adjustes the begin timestamp of transactions to the current logical time in TL2 is referred to as 
+"extending txn.Max". 
+
