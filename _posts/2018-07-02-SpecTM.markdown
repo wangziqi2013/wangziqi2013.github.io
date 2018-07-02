@@ -48,4 +48,9 @@ lock bits as per-item metadata, but they are crafted in a careful way such that 
 are stored in the same cache line, and hence can be fetched with at most one cache miss. To further reduce the metadata 
 overhead, SpecTM specializes for data types such as aligned pointers and small integers by "borrowing" one bit from
 the data item and using it as the lock bit. The timestamp in this case is also eliminated from the design, and validation 
-of reads proceeds by directly comparing values of data items. Third, SpecTM 
+of reads proceeds by directly comparing values of data items. Third, SpecTM optimizes special patterns in different ways.
+For example, the base STM that SpecTM is built on makes use of incremental validation and adjustment of the begin timestamp.
+For every read operation where the commit timestamp of the data item is greater than the begin timestamp, a validation
+is triggered, and if it is successful, the begin timestamp of the current transaction is adjusted to be the current logical
+time. For read-only transactions, if the read set does not change after the last incremental validation, SpecTM does not 
+require the transaction to perform validation at commit time. Instead, read-only transactions can directly commit.
