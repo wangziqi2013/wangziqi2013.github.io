@@ -154,3 +154,8 @@ identical to ct. This is because otherwise B's thread must have updated the glob
 in the previous commit, and the previous commit used global.version as the timestamp. This contradicts the assumption.
 On the other hand, if B CAS a new global timestamp counter, then the version field increments by 1, which can be detected
 by post-validation.
+
+TL2's begin and commit timestamp design can be further optimized by dynamically adjusting the begin timestamp as data items
+are accessed. The data-driven dynamic adjustment of the begin timestamp resembles the one used in Tic-Toc, and aims at reducing
+false aborts where the abort is caused by artificial ordering violations due to sub-optimal timestamp assignment. To see why this 
+helps The canonical
