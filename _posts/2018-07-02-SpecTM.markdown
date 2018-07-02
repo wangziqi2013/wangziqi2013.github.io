@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "STM in the Small: Trading Generality for Performance in Software Transactional Memory"
+date:   2018-07-02 02:02:00 -0500
+categories: paper
+paper_title: "STM in the Small: Trading Generality for Performance in Software Transactional Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=2168836.2168838
+paper_keyword: SpecTM; STM
+paper_year: EuroSys 2012
+rw_set: N/A
+htm_cd: Adaptive
+htm_cr: Adaptive
+version_mgmt: N/A
+---
