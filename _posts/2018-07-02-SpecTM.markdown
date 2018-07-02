@@ -12,3 +12,11 @@ htm_cd: Adaptive
 htm_cr: Adaptive
 version_mgmt: N/A
 ---
+
+Software Transactional Memory (STM) has long been rumored as being slow and useless as only a "research toy". The slowness
+of STM for general purpose code inhibits its ability to serve as a build block for larger systems such as efficient parallel 
+data structures and database transaction processing engine. The major factors that make STM slow can be summarized as 
+follows. First, unlink Hardware Transactional Memory (HTM) where the data cache and on-chip buffers serve as a limited 
+storage of transaction metadata, STM must keep all metadata by itself with pure software approach. To work with potentialy
+unbounded transactions, STM must support metadata of arbitrary size, which usually requires an auxiliary lookup structure
+such as a hash table or per-item annotation for every transactional object. Neither of these is fast and scalable.
