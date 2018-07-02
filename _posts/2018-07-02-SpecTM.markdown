@@ -33,4 +33,10 @@ Not being able to take advantage of the extra semantics information offered by t
 pay extra overhead they do not have to. All of these three problems contribute to the reason that STM may not be a 
 practical approach for efficient parallel programming.
 
-This paper proposes
+This paper proposes SpecTM, an STM design that addresses all above three problems by positioning itself properly
+between the simplest Compare-and-Swap (CAS) paradigm and complicated fully-fledged STM systems. The philosophy of SpecTM 
+is to find a balancing point between user's resonsibility and STM's responsibility, such that the STM only controls how
+transactions are serialized, and the rest is shifted to the user. SpecTM features the following design decisions that
+lessen the overhead. First, SpecTM does not keep read log and write log of arbitrary size. Instead, read logs are 
+kept only for a constant number of transactional reads, the sequence number of which is specified by users using different
+API calls. Fixed-sized read log
