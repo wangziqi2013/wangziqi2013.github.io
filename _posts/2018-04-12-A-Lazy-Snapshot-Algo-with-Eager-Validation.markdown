@@ -75,11 +75,18 @@ at which a data item is created, is called the "lower bound" of an item at curre
 scheme which adjustes the begin timestamp of transactions to the current logical time in TL2 is referred to as 
 "extending txn.Max". 
 
+<hr />
+![LSA Algorithm]({{ "/static/LSA-algo.png" | absolute_url }})
+
+**Picture 1: LSA Algorithm Specification (Only partially shown)**
+{: align="middle"}
+<hr />
+
 Besides the differences in terminologies between LSA and TL2, these two algorithms also differ by several details
 in the pseudocode. First, the begin timestamp of a transaction in LSA is set to positive infinity, while in TL2
 it is set to the current logical time. The reason for LSA to use positive infinity as the begin timestamp is that
 there is no "tentative" begin timestamp assigned, while in TL2 the tentative timestamp is exactly the current
 value of the global timestamp counter. In LSA, the begin timestamp of a transaction is derived as the result of 
-the first access
+the first access. In the algorithm presented by the LSA paper, every transaction will hit
 
 If we replace LSA's terminology with those of TL2, the algorithm can be described as follows: On transaction begin, the 
