@@ -30,4 +30,7 @@ Third, special cases and patterns, such as read-only, read-one update-many, comp
 are typically not the focus of optimization in existing STM systems (although some might have optimizations for read-only
 transaction because it is straightforward). These special patterns, however, are common in data structure implementations. 
 Not being able to take advantage of the extra semantics information offered by the special patterns can make STM users
-pay extra overhead they do not have to.
+pay extra overhead they do not have to. All of these three problems contribute to the reason that STM may not be a 
+practical approach for efficient parallel programming.
+
+This paper proposes
