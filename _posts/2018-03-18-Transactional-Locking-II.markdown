@@ -168,11 +168,14 @@ its read set to make sure they are still value at the current logical time. Then
 current logical time by assigning it to be the value of the global timestamp counter. This is valid, because we know by the 
 result of validation that no other transaction could have possibly committed into the read set of the current transaction.
 It is therefore correct to consider all its read operations taking place at the current time, although the actual reads 
-were performed a few logical ticks ago. 
+were performed a few logical ticks ago. Note that during incremental validation, no other transaction could commit, otherwise
+the validation should be retries. This is implemented as reading the global counter both before and after validation. If 
+the two samples disagree, then some transaction must have committed in-between. The validation function should take care
+of this and retry.
 
 Transaction commit could be optimized in a similar way. Since after each successful validation, the begin timestamp of the 
 transaction indicates the latest snapshot under which that the read set is valid. Before the transaction is able to validate
 and after its read phase, we compare the current begin timestamp with the global timestamp counter. If these two are equal,
 then we know no transaction have committed during the last validation and the current time, and therefore the read set of 
 the current transaction remains a consistent snapshot. In this case, no commit time validation is needed, because the 
-transaction is already know to be consistent. 
+transaction is already known to be consistent. 
