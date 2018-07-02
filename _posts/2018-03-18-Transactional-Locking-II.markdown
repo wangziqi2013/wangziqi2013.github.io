@@ -169,7 +169,7 @@ current logical time by assigning it to be the value of the global timestamp cou
 result of validation that no other transaction could have possibly committed into the read set of the current transaction.
 It is therefore correct to consider all its read operations taking place at the current time, although the actual reads 
 were performed a few logical ticks ago. Note that during incremental validation, no other transaction could commit, otherwise
-the validation should be retries. This is implemented as reading the global counter both before and after validation. If 
+the validation should be retried. This is implemented as reading the global counter both before and after validation. If 
 the two samples disagree, then some transaction must have committed in-between. The validation function should take care
 of this and retry.
 
