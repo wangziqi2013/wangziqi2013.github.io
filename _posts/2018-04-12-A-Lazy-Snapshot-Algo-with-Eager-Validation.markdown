@@ -66,3 +66,9 @@ LSA commits more schedules compared with classical BOCC, where read-only transac
 commit strictly at the logical commit time. By allowing transactions to "read in the past"
 and restricting the maximum logical time to which read-only transactions are allowed to be 
 extended, read-only transactions could "time travel" to the past without affecting serializability.
+
+Compared with canonical TL2, the LSA algorithm allows transactions to read data items that are created after the
+logical begin time of a transaction. Different terminologies are used to describe these algorithms. The "begin timestamp"
+in TL2, used to describe the logical time at which the snapshot that the transaction hopes to operate on, is 
+equivalent to the "txn.Max" variable in LSA. The "commit timestamp" of data items, used to describe the logical time
+at which a data item is created, is called the "lower bound" of an item at current logical time.
