@@ -98,3 +98,10 @@ Since txn.Max itself must be smaller than or equal to the current logical time, 
 and the net effect is still the same as TL2.
 
 If we replace LSA's terminology with those of TL2, the algorithm can be described as follows: On transaction begin, the 
+begin timestamp is set to the current logical time. The reason that this does not change the algorithm's behavior has been
+elaborated in the previous paragraph. On transactional read, the commit timestamp of the data item is compared with the 
+current begin timestamp. If the former is greater, which means that the snapshot at begin timestamp is no longer 
+valid, the algorithm tries to adjust the begin timestamp. The way of adjusting is to validate the read set. If data items
+in the read set have not be overwritten since they were read, then it makes no differnce if they were read at the current 
+logical time. The current transaction could therefore "fake" a begin timestamp as the current logical time, and pretend
+that all the data items in the read set are read at the fake begin time. By adjusting the begin timestamp 
