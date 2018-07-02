@@ -87,6 +87,14 @@ in the pseudocode. First, the begin timestamp of a transaction in LSA is set to 
 it is set to the current logical time. The reason for LSA to use positive infinity as the begin timestamp is that
 there is no "tentative" begin timestamp assigned, while in TL2 the tentative timestamp is exactly the current
 value of the global timestamp counter. In LSA, the begin timestamp of a transaction is derived as the result of 
-the first access. In the algorithm presented by the LSA paper, every transaction will hit
+the first access. In the algorithm presented by the LSA paper (and posted above), every transaction will hit line 
+17 on the first access to any data item, because txn.Max is infinite, and therefore the condition is always true.
+After hitting line 17, the begin timestamp is set as current logical time, which is essentially the same as TL2,
+but just uses the first access to data items as the logical begin time. The same effect can be achieved by setting
+txn.Max at transaction begin to current logical time, just like TL2. If this is the case, then on the first data item
+access, either line 12 or 17 will be hit. If line 12 is hit, then extend() will set txn.Max to current logical time
+as described earlier. If line 17 is hit, then txn.Max will be set to the minimum of txn.Max, or the current logical time.
+Since txn.Max itself must be smaller than or equal to the current logical time, so this line does not change txn.Max,
+and the net effect is still the same as TL2.
 
 If we replace LSA's terminology with those of TL2, the algorithm can be described as follows: On transaction begin, the 
