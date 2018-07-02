@@ -104,4 +104,12 @@ current begin timestamp. If the former is greater, which means that the snapshot
 valid, the algorithm tries to adjust the begin timestamp. The way of adjusting is to validate the read set. If data items
 in the read set have not be overwritten since they were read, then it makes no differnce if they were read at the current 
 logical time. The current transaction could therefore "fake" a begin timestamp as the current logical time, and pretend
-that all the data items in the read set are read at the fake begin time. By adjusting the begin timestamp 
+that all the data items in the read set are read at the fake begin time. Of course, the validation phase must be carried out
+atomically, and no transaction commit would be allowed. If transactions commit during the validation phase, then possibilities 
+exist that the read set is overwritten while the validation successfully adjusts the begin timestamp, which will commit 
+non-serializable schedules. At a high level, by adjusting the begin timestamp on data item access, transactions essentially 
+serializes itself after committed transactions regardless of the artificial begin timestamp. On the other hand, if the data 
+item's commit timestamp is less than the begin timestamp, then the data item is within the current snapshot of the transaction,
+and hence no adjustment is needed. The LSA algorithm requirs that the begin time be upper bounded by current logical time
+in this case at line 19. This line, however, is unnecessary as long as we do not use positive infinity as the initial begin 
+timestamp, because the begin timestamp of a transaction is always less than or equal to the current logical time. 
