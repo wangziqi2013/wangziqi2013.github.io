@@ -54,3 +54,11 @@ For every read operation where the commit timestamp of the data item is greater 
 is triggered, and if it is successful, the begin timestamp of the current transaction is adjusted to be the current logical
 time. For read-only transactions, if the read set does not change after the last incremental validation, SpecTM does not 
 require the transaction to perform validation at commit time. Instead, read-only transactions can directly commit.
+Another example is for value validation. SpecTM does not require transactions to validate data items if: (1) the 
+transactions only reads one data item, in which case the validation only consists of one value-based comparison without
+worrying about reading an inconsistent snapshot; (2) the transaction writes into every item it has read. In this case
+the read set is locked, and hence value-based validation can always read consistent snapshot; (3) All transactions
+in the system write distinct values into data items. In this case value-based validation is equivalent to timestamp
+based validation. This case is not too uncommon, because some memory reclamation algorithms actually can meet this
+requirement. By performing value validation when it can, SpecTM avoids metadata overhead on data items and the 
+validation can complete faster.
