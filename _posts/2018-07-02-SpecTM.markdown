@@ -61,4 +61,9 @@ the read set is locked, and hence value-based validation can always read consist
 in the system write distinct values into data items. In this case value-based validation is equivalent to timestamp
 based validation. This case is not too uncommon, because some memory reclamation algorithms actually can meet this
 requirement. By performing value validation when it can, SpecTM avoids metadata overhead on data items and the 
-validation can complete faster.
+validation can complete faster. The last feature that SpecTM has is the fall back path using a normal STM which is 
+a derivation of TL2 with begin timestamp adjustment. The normal STM suffers from performance problems mentioned earlier,
+but it can commit transactions of arbitraty size and control flow. The normal STM and SpecTM must be able to cooperate 
+and observe each other's committed states. Although the paper does not mention how this is achieved, it is suggested to
+be a combination of per-item metadata and value validation.
+
