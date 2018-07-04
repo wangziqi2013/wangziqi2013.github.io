@@ -120,4 +120,16 @@ then it begins forward validation against read sets of active transactions that 
 forward validation proceeds by hashing the write set into the read table, and check the priority of the transaction
 if a bit is marked in the corresponding entry. If the transaction in the ATT has higher priority than the current one,
 then the current transaction must abort, because otherwise it will write into the read set of a higher priority transaction.
-Transactions in ATT remove themselves from the table and clears the bits in the read table when they complete. 
+Transactions in ATT remove themselves from the table and clears the bits in the read table when they complete.
+Note that since conditionally waiting transactions are assigned negative priorities, they will not prevent any normal
+transaction from committing.
+
+As for conditional wait, the transaction first enters itself into ATT, and then marks its current read set in the read
+table. A validation is also performed to avoid some other transactions committing on its read set after the 
+conditional wait decision is made and before the transaction sleeps. Without the validation, it is possible that the 
+condition is actually met during this interval, but the waiting transaction can never observe it. The transaction is then
+blocked. At transaction commit phase, after performing write back and releasing all locks, the transaction scans the 
+ATT, and finds if any conditionally waiting transaction is present. This action can be simplified using a counter to 
+indicate the number of waiting transactions. The scan is only performed if the counter is non-zero. After finding a 
+negative priority transaction, the committing transaction checks if its write set overlaps with the read set of the 
+waiting transaction. The latter is awaken if two sets have a non-empty intersection.
