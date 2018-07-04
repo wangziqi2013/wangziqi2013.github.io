@@ -76,4 +76,11 @@ the read phase, and also when acquiring the write set during the validation phas
 data item during read is reasonable if extensible timestamp is not implemented, because a locked item indicates
 that the wt of the item can be higher than current bt after the commit completes. With extensible timestamp, however,
 since the transaction is able to adjust its bt to a higher value upon reading an item committed after it starts, 
-it can be beneficial to 
+it can simply wait for the commit to complete, and then load the updated value with a validation. Spinning on a lock
+is usually frowned upon in STM designs, because they tend to waste cycles, and may introduce long waiting chains, or 
+even deadlocks in the worst case. The paper argues that neither of these to applies here. First, transaction commit
+is considered as a fast operation whose time is bounded. Waiting on transaction commit does not delay the read phase
+beyond a reasonable amount. The OS scheduler can even be designed in a way such that committing transaction is given
+high priority when making scheduling decisions to further reduce waiting time. Second, since reading transactions do
+not hold any shared resource using locks, it is impossible for them to block other transactions. It is worth mentioning
+that the same argument does not apply to the latter case, i.e. when transactions are acquiring
