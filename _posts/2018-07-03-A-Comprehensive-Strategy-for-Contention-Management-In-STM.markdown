@@ -39,4 +39,11 @@ that has written to it, and a lock bit. The wt and the lock bit can be optionall
 On transactional read operation, the wt of the data item is sampled before and after the data item itself is read. 
 The read is considered as consistent if the versions in the two samples agree, and none of them is being locked. 
 If this is not the case, then the transaction simply aborts, because an on-going commit will overwrite/has already 
-overwritten the data item, making the snapshot at bt inconsistent.
+overwritten the data item, making the snapshot at bt inconsistent. If the data item is in the write set, then the
+read returns the updated item instead of performing a global read. On transactional write operation, the dirty value
+is buffered at a local write set. The implementation of the write set can affect performance, as we shall discuss later.
+On transaction commit, the protocol first locks all data items in the write set. If a lock has already been acquired 
+by another transaction, then the current transaction will abort. Then validation proceeds by comparing the current wt
+of data items in the write set with the bt. If any of them is greater than bt, then a violation has occurred, and 
+transaction aborts. Otherwise, the ct is obtained, and dirty values in the write set are written back. Data items
+are unlocked at the end of the transaction.
