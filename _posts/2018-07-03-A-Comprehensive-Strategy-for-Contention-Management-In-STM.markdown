@@ -17,3 +17,10 @@ This paper proposes a contention management system that supports Software Transa
 and lazy version management. The system features not only a generally better contention management strategy, but
 also enhances the base line STM with useful capabilities such as programmer-specified priority, irrevocable transaction,
 conditional waiting, automatic priority elevation, and so on. 
+
+Contention management is important for both eager and lazy STM designs. The goal of a contention management system is 
+to avoid pathologies such as livelock and starvation, while maintaining low overhead and high throughput. Past researches
+have mainly focused on policies of resolving conflicts when they are detected during any phase of execution. Among them, the 
+Passive policy simply aborts the transaction that cannot proceed due to a locked item or incompatible timestamp; The 
+Polite policy, on the other hand, commands transactions to spin for a while before they eventually abort the competitor,
+which allows some conflicts to resolve themselves naturally. 
