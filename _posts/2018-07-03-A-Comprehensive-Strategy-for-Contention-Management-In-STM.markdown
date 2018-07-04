@@ -83,4 +83,6 @@ is considered as a fast operation whose time is bounded. Waiting on transaction 
 beyond a reasonable amount. The OS scheduler can even be designed in a way such that committing transaction is given
 high priority when making scheduling decisions to further reduce waiting time. Second, since reading transactions do
 not hold any shared resource using locks, it is impossible for them to block other transactions. It is worth mentioning
-that the same argument does not apply to the latter case, i.e. when transactions are acquiring
+that the same argument does not apply to the latter case, i.e. when transactions are acquiring its write set. This is 
+because transactions hold locks on global resources during the validation phase. If they start to spin, a waiting chain or 
+even deadlock can easily form, the consequence of which is disastrous.
