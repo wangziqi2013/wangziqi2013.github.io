@@ -137,4 +137,6 @@ waiting transaction. The latter is awaken if two sets have a non-empty intersect
 Special care needs to be taken for the implementation of irrevocable transactions. First, there can only be one irrevocable 
 transaction globally. This is implemented by having a dedicated ATT with only one entry. Transactions that failed to 
 acquire the only entry can either wait or abort. Second, an irrevocable transaction must publish all its writes upon 
-entering the irrevocable state. 
+entering the irrevocable state, because external libraries can only read committed data. This can be achieved by locking
+all data items in its write set and then performing a write back. This actually resembles eager version management, and 
+works seamlessly with the base STM.
