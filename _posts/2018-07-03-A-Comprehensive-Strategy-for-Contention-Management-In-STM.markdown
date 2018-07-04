@@ -97,10 +97,11 @@ feedback. The second case is itself very rare, and can also be solved by backoff
 in the paper is resistence to livelocks while being able to maintain a high throughput.
 
 The paper then seeks to extend the base system to support comprehensive contention management. The contention management
-scheme is based on priorities. Transactions by default have priority zero. At transaction begin, programmers could
-manually assign a positive priority to certain transactions and hence make it easier for them to commit successfully.
-Transaction's priority can also be elevated automatically by the system if it has been repeated aborted for several times.
+scheme is based on priorities. Transactions of lower priority cannot commit if it will incur the abort of a higher priority
+transaction in the future. Transactions of the same priority have equal chance as if they were normal transactions. Transactions 
+by default have priority zero. At transaction begin, programmers could manually assign a positive priority to certain transactions. Transaction priority can also be elevated automatically by the system if it has been repeated aborted for several times.
 In addition, a priority number of negative one is used to indicate conditional waits, a useful feature that blocks a 
-reading for a while until the event it listens on (writes happening on the read set) happens. The highest priority is reserved
+reading transaction until the event it listens on (writes on the read set) happens. The highest priority is reserved
 for irrevocable transactions, which is necessary if the transaction calls non-transactional library code and/or performs I/O
-that cannot be easily made speculative.
+that cannot be easily made speculative. According to the definition, only one transaction is allowed to be in 
+irrevocable state in the system. We cover in detail about how these features are implemented in the following paragraphs.
