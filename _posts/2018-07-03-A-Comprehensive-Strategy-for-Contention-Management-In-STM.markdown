@@ -57,3 +57,9 @@ as usual during commit and write back, while the hash table provides shortcuts i
 accelerate item lookup. Note that the same problem does not exist in STMs using eager version management, because
 the data item is updated in-place, and the metadata of the item is designed such that the owner of the item can be 
 easily inferred.
+
+The second problem that leads to sub-optimal performance is spurious aborts. The dual timestamp scheme fixes the 
+snapshot as the global state at bt, and tries to extend the snapshot to transaction commit at ct. The entire speculative
+execution is based on the assumption that the snapshot at time bt will not change until ct, which suggests that any commit 
+operation on the read set from bt to ct will trigger an abort. This, however, is overly restrictive, because what 
+the speculative execution really needs is just a consistent snapshot, regardless of time. 
