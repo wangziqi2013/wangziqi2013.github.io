@@ -58,8 +58,8 @@ accelerate item lookup. Note that the same problem does not exist in STMs using 
 the data item is updated in-place, and the metadata of the item is designed such that the owner of the item can be 
 easily inferred.
 
-The second problem that leads to sub-optimal performance is spurious aborts. The dual timestamp scheme fixes the 
-snapshot as the global state at bt, and tries to extend the snapshot to transaction commit at ct. The entire speculative
+The second problem that leads to sub-optimal performance is spurious aborts due to committed items. The dual timestamp scheme 
+fixes the snapshot as the global state at bt, and tries to extend the snapshot to transaction commit at ct. The entire speculative
 execution is based on the assumption that the snapshot at time bt will not change until ct, which suggests that any commit 
 operation on the read set from bt to ct will trigger an abort. This, however, is overly restrictive, because what 
 the speculative execution really needs is just a consistent snapshot, regardless of time. For example, let us assume a 
@@ -70,3 +70,10 @@ at (bt + 3). In the majority of cases, the validation should pass, which means t
 a begin timestamp equals (bt + 3), they should still observe exactly the same value. In the extensible timestamp design,
 the transactin will then promote its begin timestamp to (bt + 3). If validation fails, then the transaction aborts,
 because the snapshot is no longer valid at time (bt + 3). 
+
+The last problem is unnecessary aborts due to locked items. Recall that the original TL2 aborts on a locked data item during
+the read phase, and also when acquiring the write set during the validation phase. Aborting the transaction on a locked
+data item during read is reasonable if extensible timestamp is not implemented, because a locked item indicates
+that the wt of the item can be higher than current bt after the commit completes. With extensible timestamp, however,
+since the transaction is able to adjust its bt to a higher value upon reading an item committed after it starts, 
+it can be beneficial to 
