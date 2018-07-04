@@ -113,4 +113,11 @@ an Active Transaction Table (ATT) using Compare-and-Swap (CAS). On transactional
 marks its read in a separate read table, which is essentially a lock table that has a bit for every ATT entry
 for every data item in the system. Aliasing of data items is allowed by using a hash function to map data items to
 read table entries. The transaction marks the corresponding bit of the lock table entry after computing the index 
-of the read table entry. This is not needed for transactions with zero priority. 
+of the read table entry. This is not needed for transactions with zero priority. If transactional reads or writes 
+observe locked data items, high priority transaction always wait for the lock. At commit time after acquisition of the 
+write set, the committing transaction, regardless of its priority, checks the size of the ATT. If table size is non-zero, 
+then it begins forward validation against read sets of active transactions that have non-zero priority. The 
+forward validation proceeds by hashing the write set into the read table, and check the priority of the transaction
+if a bit is marked in the corresponding entry. If the transaction in the ATT has higher priority than the current one,
+then the current transaction must abort, because otherwise it will write into the read set of a higher priority transaction.
+Transactions in ATT remove themselves from the table and clears the bits in the read table when they complete. 
