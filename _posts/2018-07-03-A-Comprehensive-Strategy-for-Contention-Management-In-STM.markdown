@@ -133,3 +133,8 @@ ATT, and finds if any conditionally waiting transaction is present. This action 
 indicate the number of waiting transactions. The scan is only performed if the counter is non-zero. After finding a 
 negative priority transaction, the committing transaction checks if its write set overlaps with the read set of the 
 waiting transaction. The latter is awaken if two sets have a non-empty intersection.
+
+Special care needs to be taken for the implementation of irrevocable transactions. First, there can only be one irrevocable 
+transaction globally. This is implemented by having a dedicated ATT with only one entry. Transactions that failed to 
+acquire the only entry can either wait or abort. Second, an irrevocable transaction must publish all its writes upon 
+entering the irrevocable state. 
