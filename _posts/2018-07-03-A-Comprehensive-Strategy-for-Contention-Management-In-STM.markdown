@@ -62,4 +62,11 @@ The second problem that leads to sub-optimal performance is spurious aborts. The
 snapshot as the global state at bt, and tries to extend the snapshot to transaction commit at ct. The entire speculative
 execution is based on the assumption that the snapshot at time bt will not change until ct, which suggests that any commit 
 operation on the read set from bt to ct will trigger an abort. This, however, is overly restrictive, because what 
-the speculative execution really needs is just a consistent snapshot, regardless of time. 
+the speculative execution really needs is just a consistent snapshot, regardless of time. For example, let us assume a 
+transaction starts at time bt, another transaction commits on data item X at (bt + 3), and then the transaction reads 
+X in the read phase. According to the original TL2 algorithm, the transaction should abort as soon as it sees the wt
+of X. This abort, however, can be avoided, if the transaction validates its past reads to see if they are still valid 
+at (bt + 3). In the majority of cases, the validation should pass, which means that if the past reads are performed using
+a begin timestamp equals (bt + 3), they should still observe exactly the same value. In the extensible timestamp design,
+the transactin will then promote its begin timestamp to (bt + 3). If validation fails, then the transaction aborts,
+because the snapshot is no longer valid at time (bt + 3). 
