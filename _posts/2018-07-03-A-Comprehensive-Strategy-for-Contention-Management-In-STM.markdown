@@ -104,4 +104,13 @@ In addition, a priority number of negative one is used to indicate conditional w
 reading transaction until the event it listens on (writes on the read set) happens. The highest priority is reserved
 for irrevocable transactions, which is necessary if the transaction calls non-transactional library code and/or performs I/O
 that cannot be easily made speculative. According to the definition, only one transaction is allowed to be in 
-irrevocable state in the system. We cover in detail about how these features are implemented in the following paragraphs.
+irrevocable state in the system. We cover in detail how these features are implemented in the following paragraphs.
+
+In order to commit high priority transactions without being aborted by a low priority one, the read set of high
+priority transactions must be made visible, such that low priority transactions could self-abort during validation.
+All transactions with non-zero priorities (including negative priority), on transaction begin, must enter themselves into
+an Active Transaction Table (ATT) using Compare-and-Swap (CAS). On transactional read operation, the high priority transaction
+marks its read in a separate read table, which is essentially a lock table that has a bit for every ATT entry
+for every data item in the system. Aliasing of data items is allowed by using a hash function to map data items to
+read table entries. The transaction marks the corresponding bit of the lock table entry after computing the index 
+of the read table entry. This is not needed for transactions with zero priority. 
