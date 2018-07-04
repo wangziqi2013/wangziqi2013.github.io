@@ -47,3 +47,13 @@ by another transaction, then the current transaction will abort. Then validation
 of data items in the write set with the bt. If any of them is greater than bt, then a violation has occurred, and 
 transaction aborts. Otherwise, the ct is obtained, and dirty values in the write set are written back. Data items
 are unlocked at the end of the transaction.
+
+The original TL2 algorithm described above suffers from several prformance problems. The first problem is read 
+forwarding, which happens when a dirty data item is read. The semantics of most STMs require that the read operation 
+must return the dirty value. Since TL2 maintains versions in the write set lazily, the write log must be searched 
+sequentially on *every* read operation (after optionally checking a bloom filter), which is both costly and pollutes 
+the cache. This paper proposes using a hash table in addition to a linear log. The log can be traversed linearly
+as usual during commit and write back, while the hash table provides shortcuts into the middle of the list to
+accelerate item lookup. Note that the same problem does not exist in STMs using eager version management, because
+the data item is updated in-place, and the metadata of the item is designed such that the owner of the item can be 
+easily inferred.
