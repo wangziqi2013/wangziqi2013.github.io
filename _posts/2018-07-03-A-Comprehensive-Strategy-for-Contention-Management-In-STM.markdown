@@ -26,4 +26,13 @@ Polite policy, on the other hand, commands transactions to spin for a while befo
 which allows some conflicts to resolve themselves naturally; The Karma policy tracks the number of objects a transaction
 has accessed before the conflict, and the one with fewer objects is aborted. This strategy minimizes wasted work locally.
 The last is called Greedy, which features both visible read and early conflict detection. Transactions are also assigned
-begin times. The transaction with earlier begin time is favored. Also note that due to the adoption of visible reads, the Greedy strategy incurs
+begin times. The transaction with earlier begin time is favored. Also note that due to the adoption of visible reads, the 
+Greedy strategy incurs some overhead even if contention does not exist.
+
+None of the above four contention management strategies works particularly well for all workloads and for all STM 
+designs. In the paper the baseline is assumed to be a TL2 style, lazy conflict detection and lazy version management
+STM. Each transaction is assigned a begin timestamp (bt) from a global timestamp counter before the first operation.
+The begin timestamp determines the snapshot that the transaction is able to access, and is also used for validation.
+Transactions are assigned commit timetamp (ct) from the same global counter using atomic fetch-and-increment after
+a successful validation. Each data item has a write timestamp (wt) that stores the ct of the most recent transaction 
+that has written to it, and a lock bit. The wt and the lock bit can be optionally stored together in a machine word. 
