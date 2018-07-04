@@ -86,3 +86,11 @@ not hold any shared resource using locks, it is impossible for them to block oth
 that the same argument does not apply to the latter case, i.e. when transactions are acquiring its write set. This is 
 because transactions hold locks on global resources during the validation phase. If they start to spin, a waiting chain or 
 even deadlock can easily form, the consequence of which is disastrous.
+
+The paper also presents an argument about livelock in the base system. Livelock occurs when two or more lock-holding 
+transactions abort each other, and nobody can make progress. Note that a transaction during the read phase being aborted 
+by a locked item does not constitute livelock, because progress is made by the committing transaction (the paper considers
+this as livelock, though). The only two possibilities of livelock in the base system is: (1) Two lock holding transactions
+abort each other during write set acquisition; and (2) Two lock holding transactions write into each other's read set
+and then abort during validation. The first case is easy to resolve, as we can add an exponential backup as negative 
+feedback. The second case is itself very rare, and can also be solved by backoffs. Overall, the base system presented 
