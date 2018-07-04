@@ -94,3 +94,4 @@ this as livelock, though). The only two possibilities of livelock in the base sy
 abort each other during write set acquisition; and (2) Two lock holding transactions write into each other's read set
 and then abort during validation. The first case is easy to resolve, as we can add an exponential backup as negative 
 feedback. The second case is itself very rare, and can also be solved by backoffs. Overall, the base system presented 
+in the paper is resistence to livelocks while being able to maintain a high throughput.
