@@ -23,4 +23,4 @@ to avoid pathologies such as livelock and starvation, while maintaining low over
 have mainly focused on policies of resolving conflicts when they are detected during any phase of execution. Among them, the 
 Passive policy simply aborts the transaction that cannot proceed due to a locked item or incompatible timestamp; The 
 Polite policy, on the other hand, commands transactions to spin for a while before they eventually abort the competitor,
-which allows some conflicts to resolve themselves naturally. 
+which allows some conflicts to resolve themselves naturally.   
