@@ -36,3 +36,7 @@ The begin timestamp determines the snapshot that the transaction is able to acce
 Transactions are assigned commit timetamp (ct) from the same global counter using atomic fetch-and-increment after
 a successful validation. Each data item has a write timestamp (wt) that stores the ct of the most recent transaction 
 that has written to it, and a lock bit. The wt and the lock bit can be optionally stored together in a machine word. 
+On transactional read operation, the wt of the data item is sampled before and after the data item itself is read. 
+The read is considered as consistent if the versions in the two samples agree, and none of them is being locked. 
+If this is not the case, then the transaction simply aborts, because an on-going commit will overwrite/has already 
+overwritten the data item, making the snapshot at bt inconsistent.
