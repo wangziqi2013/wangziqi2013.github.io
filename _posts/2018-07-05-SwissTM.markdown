@@ -32,5 +32,7 @@ write log, which contains the address of the write and the updated value of data
 ptotocol first locks all data items in the write set. If any lock conflict occurs, to avoid deadlock, the 
 transaction must abort. After acquring all locks, the transaction performs a read validation. The validation routine
 compares the most up-to-date write timestamps of data items in the read set, and aborts the transaction if any of them
-has changed, which indicates Write-After-Read (WAR) anti-dependency. After successful validation, the transaction enters
-the write phase, in which 
+has changed, which indicates Write-After-Read (WAR) anti-dependency. After successful validation, the transaction obtains 
+its ct, and then enters the write phase, in which dirty items are written back. The timestamps of data items are also updated 
+to the commit timestamp of the tranaction, and locks on updated data items are released. This can be done using one store 
+operation.
