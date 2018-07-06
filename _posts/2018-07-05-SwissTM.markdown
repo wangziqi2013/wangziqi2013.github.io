@@ -48,3 +48,11 @@ physical time. One extra benefit is that read-only transactions in this case doe
 read operations, if the value of bt equals current timestamp value. In some publications this technique is called "extensible
 timestamps", and has been adopted by NORec and LSA-STM. By extending the begin timestamp whenever possible, the transaction
 suffers from less spurious aborts and can sustain higher throughput.
+
+This paper argues that TL2, regardless of the optimization we describe above, is still sub-optimal for a few reasons. First, 
+while the lazy detection and resolution mechanism of read-write conflicts provides good degree of parallelism, the paper 
+pointed out that lazy detection of write-write conflicts negatively impact the performance. The paper recognizes the fact 
+that in most cases, data items in the write set are also in the read set, i.e. only few transactions blindly write a data item
+without reading it first. A "pre-write"-"pre-write" conflict almost always also indicates that a future read-write conflict will happen
+during the validation of the transaction that committed latter. In this case, allowing both to proceed until commit time
+wasts processor cycles, because at most one of them can commit successfully. 
