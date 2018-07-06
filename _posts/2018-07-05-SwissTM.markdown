@@ -5,10 +5,21 @@ date:   2018-07-05 22:36:00 -0500
 categories: paper
 paper_title: "Stretching Transactional Memory"
 paper_link: https://dl.acm.org/citation.cfm?id=1542494
-paper_keyword: STM; SwissTM
+paper_keyword: STM; SwissTM; TL2
 paper_year: PLDI 2009
 rw_set: Log
 htm_cd: Eager for W/W; Lazy for R/W
 htm_cr: Eager for W/W; Lazy for R/W
 version_mgmt: Lazy
 ---
+
+Classical state-of-the-art Software Transactional Memory (STM) design, such as TL2, uses lazy conflict detection and 
+resolution, and allows higher degree of parallelism where multiple transactions could pre-write a data item and 
+transactions are only serialized at commit time. TL2 style STM relies on timestamps to synchronize transactional
+reads and writes. A global timestamp counter, which can be implemented as either a simple integer counter or a 
+more complicated per-thread counter pool, provides timestamp values at transaction begin and commit time. At transaction
+begin, a begin timestamp (bt) is obtained by reading the current value of the counter. At transaction commit time, the
+counter is atomically fetch-and-incremented and the after value is obtained as the commit timestamp. Data items are 
+associated with timestamps, which records the commit timestamp of the most recent transaction that wrote to them. 
+Transactions keep a read set and write set during read phase execution. The read set maintains addresses of read values
+as well as the timestamps when they are being feteched
