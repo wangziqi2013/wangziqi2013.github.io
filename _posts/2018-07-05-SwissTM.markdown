@@ -26,4 +26,11 @@ same machine word and can hence be fetched and updated atomically. Transactions 
 read phase execution. The read set maintains addresses of read values as well as the timestamps when they are being 
 feteched. The read is guaranteed to be consistent regardless of concurrent writers by sampling the write timestamp of 
 the data item before and after thr read. The two samples are compared, and the read is considered as consistent if both 
-samples are unlocked, and the wtite timestamps agree. 
+samples are unlocked, and the wtite timestamps agree. If the version of the data item is greater than bt, then the transaction
+aborts, because the data item is generated after the snapshot is taken at time bt. Writes are buffered in the thread-local 
+write log, which contains the address of the write and the updated value of data items. At commit time, the commit 
+ptotocol first locks all data items in the write set. If any lock conflict occurs, to avoid deadlock, the 
+transaction must abort. After acquring all locks, the transaction performs a read validation. The validation routine
+compares the most up-to-date write timestamps of data items in the read set, and aborts the transaction if any of them
+has changed, which indicates Write-After-Read (WAR) anti-dependency. After successful validation, the transaction enters
+the write phase, in which 
