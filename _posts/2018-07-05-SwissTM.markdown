@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Stretching Transactional Memory"
+date:   2018-07-05 22:36:00 -0500
+categories: paper
+paper_title: "Stretching Transactional Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=1542494
+paper_keyword: STM; SwissTM
+paper_year: PLDI 2009
+rw_set: Log
+htm_cd: Eager for W/W; Lazy for R/W
+htm_cr: Eager for W/W; Lazy for R/W
+version_mgmt: Lazy
+---
