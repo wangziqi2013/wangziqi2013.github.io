@@ -45,5 +45,6 @@ snapshot. The abort in this case can be avoided by promoting the bt to the curre
 of the read set. The reasoning behind this is that, as long as the content of the read set still matches the most up-to-date 
 values of data items, it makes no difference for read operations to occur at current logical time, or to occur at their 
 physical time. One extra benefit is that read-only transactions in this case does not have to perform validation after all 
-read operations, if the value of bt equals current timestamp value. The classical TL2 can be further optimized using a technique called extensible timestamp, which is adopted 
-by NORec and LSA-STM. The idea of extensible timestamp is that 
+read operations, if the value of bt equals current timestamp value. In some publications this technique is called "extensible
+timestamps", and has been adopted by NORec and LSA-STM. By extending the begin timestamp whenever possible, the transaction
+suffers from less spurious aborts and can sustain higher throughput.
