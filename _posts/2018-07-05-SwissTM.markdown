@@ -83,4 +83,10 @@ to store the address of the write set entry in the remaining bits of the lock wo
 transactional read operation, the owner transaction could find the write set entry in constant time using just one pointer dereference, 
 while other transactions can still access the original data item. Compared with eager writer designs, if the writer transaction 
 replaces the old data item with the updated value, reader transactions could not be able to proceed, because the last committed
-value is nowhere to be found. 
+value is nowhere to be found. On transaction commit, the transaction acquires another type of lock called reader lock. Read locks
+functions exactly like the commit time lock in TL2, blocking reading transactions from accessing the data item. Since writer 
+locks already guarantee that data items will be pre-written by only one transaction, reader locks is acquired just by writing 
+into its lock bit, instead of Compare-and-Swap (CAS). The second feature of SwissTM is its two-phase contention manager. In
+classical schemes such as timid and Greedy, the contention manager favors either large or small transactions. As an alternative,
+SwissTM uses a scheme that is both friendly to large transactions by avoiding aborting them if not strictly unnecessary, and 
+does not hurt small transactions because small transactions do not fetch-and-increment global counters as Greedy did.
