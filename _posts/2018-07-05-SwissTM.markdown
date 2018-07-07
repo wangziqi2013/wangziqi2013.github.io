@@ -63,4 +63,11 @@ aggravated if the transaction that aborted the current one later itself aborts. 
 The Greedy contention manager chooses the "younger" transaction whose timestamp is smaller as the victim. This scheme favors 
 larger transaction, because the overhead of reading and incrementing the global counter can be a performance bottleneck for 
 smaller ones. Starvation is impossible with "Greedy", as newer transactions always have larger timestamp and thus will not 
-be easily aborted.
+be easily aborted. Finally, on every transactional read operation, TL2 needs to search its write set first in order to forward
+dirty values instead of reading directly from the global storage. If not implemented properly, the write set can also become
+a major source of performance loss, as searching the write set usually requires checking every or at least several items 
+that the transaction has written, and thus has an overhead that is dependent on the working set size. 
+
+This paper proposes SwissTM, aiming to solve the above problems of existing TL2-based STM designs. SwissTM distinguishes 
+itself from TL2 by the following features. First, SwissTM eagerly acquire writer locks when a data item is pre-written
+during the read phase. Writer locks do not block concurrent readers
