@@ -70,4 +70,11 @@ that the transaction has written, and thus has an overhead that is dependent on 
 
 This paper proposes SwissTM, aiming to solve the above problems of existing TL2-based STM designs. SwissTM distinguishes 
 itself from TL2 by the following features. First, SwissTM eagerly acquire writer locks when a data item is pre-written
-during the read phase. Writer locks do not block concurrent readers
+during the read phase. Writer locks do not block concurrent readers, but rather will cause a concurrent transaction that
+pre-writes the same data item to invoke the contention manager. We delay the description of the contention manager a little.
+The invariant of the writer lock is that, once it is acquired, the owner transaction is guaranteed to have exclusive write 
+access to the item until it commits or aborts. This efficiently detects "pre-write"-"pre-write" conflicts, while allows 
+read-write conflicts to be resolved until commit time. In other words, if a reader transaction observes the write lock,
+it is still possible for the reader to commit as long as it enters validation phase before the writer transaction
+commits. One extra bouns of acquiring writer lock on data items upon pre-write is that, since the data item is guaranteed
+not to appear in other transaction's 
