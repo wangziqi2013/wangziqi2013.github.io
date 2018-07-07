@@ -76,5 +76,11 @@ The invariant of the writer lock is that, once it is acquired, the owner transac
 access to the item until it commits or aborts. This efficiently detects "pre-write"-"pre-write" conflicts, while allows 
 read-write conflicts to be resolved until commit time. In other words, if a reader transaction observes the write lock,
 it is still possible for the reader to commit as long as it enters validation phase before the writer transaction
-commits. One extra bouns of acquiring writer lock on data items upon pre-write is that, since the data item is guaranteed
-not to appear in other transaction's 
+commits. "Pre-write"-"pre-write" conflicts, as we have analyzed above, do not have such property, and is better to be 
+aborted eagerly when they are detected. One extra bouns of acquiring writer lock on data items upon pre-write is that, 
+since the data item is guaranteed not to appear in other transaction's write set, it is convenient for the current transaction 
+to store the address of the write set entry in the remaining bits of the lock word (the lock itself only occupies a bit). On a 
+transactional read operation, the owner transaction could find the write set entry in constant time using just one pointer dereference, 
+while other transactions can still access the original data item. Compared with eager writer designs, if the writer transaction 
+replaces the old data item with the updated value, reader transactions could not be able to proceed, because the last committed
+value is nowhere to be found. 
