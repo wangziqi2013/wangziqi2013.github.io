@@ -89,4 +89,13 @@ locks already guarantee that data items will be pre-written by only one transact
 into its lock bit, instead of Compare-and-Swap (CAS). The second feature of SwissTM is its two-phase contention manager. In
 classical schemes such as timid and Greedy, the contention manager favors either large or small transactions. As an alternative,
 SwissTM uses a scheme that is both friendly to large transactions by avoiding aborting them if not strictly unnecessary, and 
-does not hurt small transactions because small transactions do not fetch-and-increment global counters as Greedy did.
+does not hurt small transactions because small transactions do not fetch-and-increment global counters as Greedy did. The 
+contention manager is only invoked on writer-writer conflicts. At transaction begin, each transaction is assigned a weight of 
+positive infinite, which means the current transaction is "small" and should always be favored during a conflict resolution. 
+On every successful pre-write lock acquire, the size of the write set is checked, and if it equals a certain threshold, 
+then the transaction atomically fetch-and-increments a global counter and saves it as the weight. The weight is set at most 
+once during the read phase, and the earlier the transaction reaches the threshold, the smaller its weight will be. Then, when a "pre-write"-"pre-write" conflict occurs, the contention manager peeks into the current holder of the write lock, and compares 
+the weight of the two transactions. The one with a smaller wight will be aborted, which prevents starvation as Greedy does without
+incurring the overhead of incrementing a global counter. Finally, SwissTM locks data items in 4-word (16 bytes) granularity.
+Compared with TL2's word level locking, using 4 word chunk as the locking unit has the best empirical result while having a 
+reasonable overhead.
