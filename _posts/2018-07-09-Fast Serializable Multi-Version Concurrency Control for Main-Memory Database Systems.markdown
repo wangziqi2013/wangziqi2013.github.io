@@ -102,7 +102,10 @@ log is the central component for implementing efficient validation.
 
 On transaction commit, the transaction validates its read set to make sure no write operation happened during its execution.
 The validation is carried out using predicates instead of checking each individual data item in the read set. One of the most
-fundamental assumptions about the MVCC system is that data must be read via predicates. The predicates are specified using 
+fundamental assumptions about the MVCC system is that data must be read via predicates. Predicates are specified using 
 the "WHERE" clause of SQL statements, and can be implemented as either point query or table/index scan depending on the 
 semantics. Predicates that are used to access data items are logged during the execution of the transactions. At validation
-time, the system assembles all predicates into a clause tree. The node of the tree
+time, the system assembles all predicates in the log into a clause tree. The nodes of the tree are logic expressions on a single
+attribute of the table. Parent-child edge represents "AND" relation, while sibling nodes are connected using "OR". Overall,
+the predicate tree maps tuples to boolean values, and is a union of all predicates used for accessing data items. Any tuple
+that would have been selected by those predicates will return true from the tree. 
