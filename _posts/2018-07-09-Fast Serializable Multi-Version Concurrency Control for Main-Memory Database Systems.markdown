@@ -73,3 +73,11 @@ access involves at least one pointer dereference. Second, when the read set is l
 because the time required for validation is propotional to the number of items in the read set. In OLAP environments where
 table scan is not as infrquent as in OLTP, and where transactions usually read a large portion of the table, these two 
 combined will slow down both the read phase and the validation phase, negatively affecting the throughput of the system. 
+
+This paper proposes an innovative MVCC design that alleviates the two problems mentioned above. First, the most recent 
+version of data items are always stored in a contiguous chunk of memory, using columnar storage. This ensures that table 
+scan can be really fast as long as no older version is being read, as the regular access pattern benefits from both spatial
+locality and hardware pre-fetching. In the case that transactions need to "time travel" to an older version, they read 
+the head pointer stored in an invisible column of the table, and traverses the version chain. The version chain is implemented
+as delta storage, i.e. each version stores the difference ("delta") between the current version and the next younger 
+version. 
