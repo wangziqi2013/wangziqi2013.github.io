@@ -31,11 +31,18 @@ visible to other transactions. For MVCC, the local storage can be omitted becaus
 new version and adds it into the version chain. The commit timestamp of the uncommitted version should be somehow greather
 than all possible begin timestamps in the system to avoid uncommitted read. Note that in SQL Server Hekaton this is not
 the case, as writing transactions allow other transactions to read uncommitted data, as long as the latter establishs
-a commit dependency with the former to guarantee recoverable execution. On transaction commit, transactions validate
-themselves by verifying the read and/or write set. Under Snapshot Isolation, transactions must ensure the integrity of 
-the write set, i.e. no other transaction has committed on the write set of the committing transaction. The verification
-proceeds by checking the most recent version on the version chain for every item in the write set. If the version has 
-a commit timestamp greater than the begin timestamp, then validation fails and current transaction must abort.
+a commit dependency with the former to guarantee recoverable execution. 
+
+On transaction commit, transactions validate themselves by verifying the read and/or write set. The concrete validation
+algorithm depends on the isolation level. We only consider Snapshot Isolation (SI) and Serializzbility here. For Snapshot Isolation, 
+transactions must ensure the integrity of the write set, i.e. no other transaction has committed on the write set of the 
+committing transaction. The verification proceeds by checking the most recent version on the version chain for every item 
+in the write set. If the version has a commit timestamp greater than the begin timestamp, then validation fails and current 
+transaction must abort. This validation rule is usually called "First Committer Wins", because if two transactions conflict 
+by writing the same data item, the one that commits first wins and the other must abort. As an alternative, OracleDB detects 
+write-write conflcits eagerly, which is called "First Writer Wins". Transactions that speculatively write a data item needs to 
+lock the item first. If the lock is already held by another transaction, then a write-write conflict is detected, and the 
+transaction aborts. The write set is also checked during validation. 
 
 In practice, MVCC is favored by commercial database vendors over other concurrency control schemes 
 such as Optimistic Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with
