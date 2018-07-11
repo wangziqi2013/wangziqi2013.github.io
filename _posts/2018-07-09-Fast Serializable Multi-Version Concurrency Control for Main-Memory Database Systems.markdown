@@ -84,4 +84,9 @@ version. Each node in the version chain is tagged with the commit timestamp of t
 to reconstruct a particular version given the begin timesamp, the read procedure first reads the most recent version, and 
 then iterates through the version chain until it finds a version whose commit timestamp strictly less than the begin timestamp. 
 For each node in the version chain, the delta is applied to the data item. Since delta is stored in its raw form (i.e. binary
-difference), the delta replay is very fast as it only involves copying memory into local storage. 
+difference), the delta replay is very fast as it only involves copying memory into local storage. Note that if the reading 
+transaction already wrote to the data item, then the operation should return the value it has written instead of the one 
+obtained by replaying the delta chain. 
+
+Write operations are processed in a more complicated way. On transactional writes, the transaction first creates an invisible
+version on the version chain of the data item. The uncommitted version is 
