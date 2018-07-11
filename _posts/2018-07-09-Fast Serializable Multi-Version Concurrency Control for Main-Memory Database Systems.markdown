@@ -34,7 +34,7 @@ the case, as writing transactions allow other transactions to read uncommitted d
 a commit dependency with the former to guarantee recoverable execution. 
 
 On transaction commit, transactions validate themselves by verifying the read and/or write set. The concrete validation
-algorithm depends on the isolation level. We only consider Snapshot Isolation (SI) and Serializzbility here. For Snapshot Isolation, 
+algorithm depends on the isolation level. We only consider Snapshot Isolation (SI) and Serializable here. For Snapshot Isolation, 
 transactions must ensure the integrity of the write set, i.e. no other transaction has committed on the write set of the 
 committing transaction. The verification proceeds by checking the most recent version on the version chain for every item 
 in the write set. If the version has a commit timestamp greater than the begin timestamp, then validation fails and current 
@@ -42,7 +42,11 @@ transaction must abort. This validation rule is usually called "First Committer 
 by writing the same data item, the one that commits first wins and the other must abort. As an alternative, OracleDB detects 
 write-write conflcits eagerly, which is called "First Writer Wins". Transactions that speculatively write a data item needs to 
 lock the item first. If the lock is already held by another transaction, then a write-write conflict is detected, and the 
-transaction aborts. The write set is also checked during validation. 
+transaction aborts. The write set is also checked during validation. On the other hand, to achieve Serializable, transactions
+must verify that their read sets are not changed by concurrenct transactions. This is usually implemented as re-reading 
+all data items in the read set and checking their most up-to-date versions after locking data items in the write set.
+In either case, if the validation returns successfully, then a commit timestamp is obtained, and speculative data items
+are made public by tagging them with the commit timestamp.
 
 In practice, MVCC is favored by commercial database vendors over other concurrency control schemes 
 such as Optimistic Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with
