@@ -97,15 +97,20 @@ belongs to an uncommitted transaction, and will ignore the in-place value. The u
 the version before update happens and the updated version. Similar to the "first updater wins" rule used by OracleDB, if
 there is already an uncommitted version at the head of the version chain, the writing transaction must abort, because we 
 are unable to resolve uncommitted write-write conflicts. In the meantime, the writing transaction adds the delta which 
-contains the before-image of the data item under modification into a private undo log. As we shall see later, the undo 
-log is the central component for implementing efficient validation. 
+contains the before-image of the data item under modification into a private undo log. Undo logs are archived with the 
+commit timestamp of the transaction after it commits.As we shall see later, the undo log is the central component for 
+implementing efficient validation. 
 
 On transaction commit, the transaction validates its read set to make sure no write operation happened during its execution.
 The validation is carried out using predicates instead of checking each individual data item in the read set. One of the most
 fundamental assumptions about the MVCC system is that data must be read via predicates. Predicates are specified using 
-the "WHERE" clause of SQL statements, and can be implemented as either point query or table/index scan depending on the 
+the "WHERE" clause of SQL statements, and can be translated to either point query or table/index scan depending on the 
 semantics. Predicates that are used to access data items are logged during the execution of the transactions. At validation
 time, the system assembles all predicates in the log into a clause tree. The nodes of the tree are logic expressions on a single
 attribute of the table. Parent-child edge represents "AND" relation, while sibling nodes are connected using "OR". Overall,
 the predicate tree maps tuples to boolean values, and is a union of all predicates used for accessing data items. Any tuple
-that would have been selected by those predicates will return true from the tree. 
+that would have been selected by those predicates will return true from the tree. After building the predicate tree, the 
+validating transaction then enumerates the undo logs of transactions that committed during its execution using their commit 
+timestamps and the current begim timestamp. The transaction then tests each before-image in the undo log against the 
+predicate tree. If any of the entries in the undo log returns true, then it is an indication that one of the writing 
+transaction has written onto the read set of the current transaction, and the current transaction must abort. 
