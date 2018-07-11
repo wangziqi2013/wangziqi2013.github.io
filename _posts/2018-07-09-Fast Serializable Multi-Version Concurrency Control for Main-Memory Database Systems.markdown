@@ -48,11 +48,17 @@ all data items in the read set and checking their most up-to-date versions after
 In either case, if the validation returns successfully, then a commit timestamp is obtained, and speculative data items
 are made public by tagging them with the commit timestamp.
 
-In practice, MVCC is favored by commercial database vendors over other concurrency control schemes 
-such as Optimistic Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with
-2PL, transactions running MVCC do not wait for other transactions to finish if conflict occurs. Instead, for read-write 
-conflicts, transactions are able to time travel and locate an older version of the data item, while the resolution of 
-write-write conflicts can be optionally postponed to commit time. Allowing multiple conflicting transactions to run in
-parallel greatly increases the degree of paralellism of the system, and on today's multicore platform this feature prevents
+In practice, MVCC is favored by commercial database vendors over other concurrency control schemes such as Optimistic 
+Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with 2PL, transactions 
+running MVCC do not wait for other transactions to finish if conflict occurs. Instead, for read-write conflicts, 
+transactions are able to time travel and locate an older version of the data item, while the resolution of write-write 
+conflicts can be optionally postponed to commit time. Allowing multiple conflicting transactions to run in parallel 
+greatly increases the degree of paralellism of the system, and on today's multicore platform this feature prevents
 processors from being putting into idle state frequently. Second, since MVCC does not employ any form of busy waiting
-based on transactional reads and writes, no deadlock is ever possible
+during the execution phase, no deadlock is ever possible, and therefore, deadlock detection or prevention mechanism
+does not have to be implemented. Third, modern architecture generally discourage lock-based synchronization unless
+necessary, as it incurs huge amount of cache coherence traffic on the communication network. Excessive coherence traffic
+not only delays lock and unlock operations themselves, but also affect the delivery of normal memory operations, which
+slows down the entire system. In the case of 2PL, contentions are created by the centralized lock manager, which is 
+often implemented as a monolithic object that is shared among all processors. As a contrast, in MVCC, versions are managed
+in a distributed way, and only necessary contention
