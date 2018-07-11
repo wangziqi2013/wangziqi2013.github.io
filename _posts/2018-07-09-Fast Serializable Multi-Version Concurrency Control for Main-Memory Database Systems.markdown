@@ -123,4 +123,9 @@ As mentioned earlier, scan performance is critical for OLAP workloads where the 
 is the dominant type of workload. In the database system, Hyper, where the MVCC described above is deployed, scan
 operations are accelerated using Just-In-Time compilation with LLVM. The advantage of storing the most up-to-date version
 in the data table is that the compiled assembly for scanning the table is shorter, as most of the entries in the 
-table does not have any version chain. The machine code can therefore 
+table does not have any version chain. The machine code can therefore omit checking for old version most of the time 
+when there is no version chain. To support this, the data table is divided into several partitions, each of 1024 rows.
+A descriptor is associated with the table, which describes the range where versions must be checked. When generating
+code for performing scans on a partition, the generator loads the descriptor of the partition, and only generates logic
+to check versions for items in the range. This way, scan can be efficiently compiled Just-In-Time without having to pay 
+the extra overhead of loading and branching.
