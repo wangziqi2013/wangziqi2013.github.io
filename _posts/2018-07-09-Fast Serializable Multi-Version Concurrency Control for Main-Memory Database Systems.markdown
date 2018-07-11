@@ -99,3 +99,10 @@ there is already an uncommitted version at the head of the version chain, the wr
 are unable to resolve uncommitted write-write conflicts. In the meantime, the writing transaction adds the delta which 
 contains the before-image of the data item under modification into a private undo log. As we shall see later, the undo 
 log is the central component for implementing efficient validation. 
+
+On transaction commit, the transaction validates its read set to make sure no write operation happened during its execution.
+The validation is carried out using predicates instead of checking each individual data item in the read set. One of the most
+fundamental assumptions about the MVCC system is that data must be read via predicates. The predicates are specified using 
+the "WHERE" clause of SQL statements, and can be implemented as either point query or table/index scan depending on the 
+semantics. Predicates that are used to access data items are logged during the execution of the transactions. At validation
+time, the system assembles all predicates into a clause tree. The node of the tree
