@@ -60,5 +60,8 @@ does not have to be implemented. Third, modern architecture generally discourage
 necessary, as it incurs huge amount of cache coherence traffic on the communication network. Excessive coherence traffic
 not only delays lock and unlock operations themselves, but also affect the delivery of normal memory operations, which
 slows down the entire system. In the case of 2PL, contentions are created by the centralized lock manager, which is 
-often implemented as a monolithic object that is shared among all processors. As a contrast, in MVCC, versions are managed
-in a distributed way, and only necessary contention
+often implemented as a monolithic object that is shared among all processors. In contrast, in MVCC, versions are managed
+in a distributed way, and contention occurs only if certain data items become "hot spots". Finally, compared with OCC,
+MVCC supports read-only transaction better by maintaining multiple versions. Unlike OCC, in which reading transactions must
+abort if the data item has been overwritten by another transaction before it can be consumed, MVCC allows the 
+reading transaction to lookup the version chain and locate the correct version it hopes to access, reducing conflict aborts. 
