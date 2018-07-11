@@ -80,13 +80,18 @@ scan can be really fast as long as no older version is being read, as the regula
 locality and hardware pre-fetching. In the case that transactions need to "time travel" to an older version, they read 
 the head pointer stored in an invisible column of the table, and traverses the version chain. The version chain is implemented
 as delta storage, i.e. each version stores the difference ("delta") between the current version and the next younger 
-version. Each node in the version chain is tagged with the commit timestamp of the transaction that created it. In order 
-to reconstruct a particular version given the begin timesamp, the read procedure first reads the most recent version, and 
-then iterates through the version chain until it finds a version whose commit timestamp strictly less than the begin timestamp. 
-For each node in the version chain, the delta is applied to the data item. Since delta is stored in its raw form (i.e. binary
-difference), the delta replay is very fast as it only involves copying memory into local storage. Note that if the reading 
-transaction already wrote to the data item, then the operation should return the value it has written instead of the one 
-obtained by replaying the delta chain. 
+version. Each node in the version chain is tagged with the commit timestamp of the transaction that created it. Assuming no 
+uncommitted write is present (we deal with writes later), in order to reconstruct a particular version given the begin timesamp, 
+the read procedure first reads the most recent version, and then iterates through the version chain until it finds a version 
+whose commit timestamp strictly less than the begin timestamp. For each node in the version chain, the delta is applied 
+to the data item. Since delta is stored in its raw form (i.e. binary difference), the delta replay is very fast as it 
+only involves copying memory into local storage. Note that if the reading transaction already wrote to the data item, 
+then the operation should return the value it has written instead of the one obtained by replaying the delta chain. 
 
 Write operations are processed in a more complicated way. On transactional writes, the transaction first creates an invisible
-version on the version chain of the data item. The uncommitted version is 
+version on the version chain of the data item. The uncommitted version is tagged with a special "transaction ID", which is 
+higher than all possible begin and commit timestamps. In practice, the system uses a 64 bit integer as timestamps, where bit 
+0 - 62 are dedicated to the value of the counter, and bit 63, the highest bit, distinguishes begin/commit timestamps from
+transaction IDs. If bit 63 is set, then other transactions traversing the version chain knows that the in-place version 
+belongs to an uncommitted transaction, and will ignore the in-place value. The uncommitted version stores the delta between 
+the version before update happens and the updated version. 
