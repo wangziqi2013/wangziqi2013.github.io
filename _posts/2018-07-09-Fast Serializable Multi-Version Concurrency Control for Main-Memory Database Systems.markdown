@@ -65,3 +65,11 @@ in a distributed way, and contention occurs only if certain data items become "h
 MVCC supports read-only transaction better by maintaining multiple versions. Unlike OCC, in which reading transactions must
 abort if the data item has been overwritten by another transaction before it can be consumed, MVCC allows the 
 reading transaction to lookup the version chain and locate the correct version it hopes to access, reducing conflict aborts. 
+
+Despite the advantages enumerated above, MVCC can suffer from several problems if not implemented properly. First, in some
+products, data table is implemented as an array of pointers pointing to the version chain of each row. Compared with the 
+storage scheme of non-MVCC systems, the extra level of indirection can degrade scan performance, because each version
+access involves at least one pointer dereference. Second, when the read set is large, read validation can become costly,
+because the time required for validation is propotional to the number of items in the read set. In OLAP environments where
+table scan is not as infrquent as in OLTP, and where transactions usually read a large portion of the table, these two 
+combined will slow down both the read phase and the validation phase, negatively affecting the throughput of the system. 
