@@ -17,10 +17,16 @@ Multiversion Concurrency Control (MVCC) has been widely deployed with commercial
 OracleDB and SQL Server. Most MVCC systems use timestamps to synchronize transactions. We describe a baseline 
 implementation of MVCC here as the foundation of the following discussion. Our baseline MVCC uses dual-timestamp
 scheme, which is a common choice for commercial MVCC implementations. Every transaction obtains a begin timestamp
-from a global timestamp counter at transaction begin. The begin timestamp is used by the transaction during its 
+from a global timestamp counter at transaction start. The begin timestamp is used by the transaction during its 
 execution to access the correct version of data items. When writing transaction commits, it obtains a commit timestamp
-using atomic Compare-and-Swap (CAS) creates new versions
-for data items in its write set. The newly created data items are tagged with the commit timestamp. Data items are tagged with 
+using atomic Compare-and-Swap (CAS) from the same global timestamp counter as it obtained the begin timestamp. New versions
+of data items are created, which are tagged with the commit timestamp of the transaction that writes the data item. 
+Different versions of the same data item are linked together in sorted commit timestamp order, from the most recent
+to the least recent. This structure is called a version chain. On transactional read, the transaction locates the most 
+recent version whose commit timestamp is less than or equal to the begin timestamp. On transactional write, the 
+transaction buffers the write operation as well as the new value of the data item into local storage, which is not yet 
+visible to other transactions. For MVCC, the local storage can be omitted because the transaction could just creates a 
+new version 
 
 In practice, MVCC is favored by commercial database vendors over other concurrency control schemes 
 such as Optimistic Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with
