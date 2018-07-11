@@ -80,4 +80,8 @@ scan can be really fast as long as no older version is being read, as the regula
 locality and hardware pre-fetching. In the case that transactions need to "time travel" to an older version, they read 
 the head pointer stored in an invisible column of the table, and traverses the version chain. The version chain is implemented
 as delta storage, i.e. each version stores the difference ("delta") between the current version and the next younger 
-version. 
+version. Each node in the version chain is tagged with the commit timestamp of the transaction that created it. In order 
+to reconstruct a particular version given the begin timesamp, the read procedure first reads the most recent version, and 
+then iterates through the version chain until it finds a version whose commit timestamp strictly less than the begin timestamp. 
+For each node in the version chain, the delta is applied to the data item. Since delta is stored in its raw form (i.e. binary
+difference), the delta replay is very fast as it only involves copying memory into local storage. 
