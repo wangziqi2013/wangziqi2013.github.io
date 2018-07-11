@@ -23,10 +23,19 @@ using atomic Compare-and-Swap (CAS) from the same global timestamp counter as it
 of data items are created, which are tagged with the commit timestamp of the transaction that writes the data item. 
 Different versions of the same data item are linked together in sorted commit timestamp order, from the most recent
 to the least recent. This structure is called a version chain. On transactional read, the transaction locates the most 
-recent version whose commit timestamp is less than or equal to the begin timestamp. On transactional write, the 
+recent version whose commit timestamp is less than or equal to the begin timestamp by traversing the version chain from
+the head. If the version could not be found (e.g. if the Garbage Collector has already freed the target version), the 
+reading transaction aborts and acquires a newer begin timestamp before retry. On transactional write, the 
 transaction buffers the write operation as well as the new value of the data item into local storage, which is not yet 
 visible to other transactions. For MVCC, the local storage can be omitted because the transaction could just creates a 
-new version 
+new version and adds it into the version chain. The commit timestamp of the uncommitted version should be somehow greather
+than all possible begin timestamps in the system to avoid uncommitted read. Note that in SQL Server Hekaton this is not
+the case, as writing transactions allow other transactions to read uncommitted data, as long as the latter establishs
+a commit dependency with the former to guarantee recoverable execution. On transaction commit, transactions validate
+themselves by verifying the read and/or write set. Under Snapshot Isolation, transactions must ensure the integrity of 
+the write set, i.e. no other transaction has committed on the write set of the committing transaction. The verification
+proceeds by checking the most recent version on the version chain for every item in the write set. If the version has 
+a commit timestamp greater than the begin timestamp, then validation fails and current transaction must abort.
 
 In practice, MVCC is favored by commercial database vendors over other concurrency control schemes 
 such as Optimistic Concurrency Control (OCC) and Two-Phase Locking (2PL) for the following reasons. First, compared with
