@@ -94,4 +94,8 @@ higher than all possible begin and commit timestamps. In practice, the system us
 0 - 62 are dedicated to the value of the counter, and bit 63, the highest bit, distinguishes begin/commit timestamps from
 transaction IDs. If bit 63 is set, then other transactions traversing the version chain knows that the in-place version 
 belongs to an uncommitted transaction, and will ignore the in-place value. The uncommitted version stores the delta between 
-the version before update happens and the updated version. 
+the version before update happens and the updated version. Similar to the "first updater wins" rule used by OracleDB, if
+there is already an uncommitted version at the head of the version chain, the writing transaction must abort, because we 
+are unable to resolve uncommitted write-write conflicts. In the meantime, the writing transaction adds the delta which 
+contains the before-image of the data item under modification into a private undo log. As we shall see later, the undo 
+log is the central component for implementing efficient validation. 
