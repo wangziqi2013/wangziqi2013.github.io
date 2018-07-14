@@ -11,7 +11,7 @@ rw_set: N/A
 htm_cd: Adaptive
 htm_cr: Adaptive
 version_mgmt: N/A
----
+---  
  
 Software Transactional Memory (STM) has long been rumored as being slow and useless as only a "research toy". The slowness
 of STM for general purpose code inhibits its ability to serve as a building block for larger systems such as efficient parallel 
