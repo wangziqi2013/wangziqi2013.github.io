@@ -11,7 +11,7 @@ rw_set: L1 Cache
 htm_cd: Eager
 htm_cr: Lazy
 version_mgmt: Lazy
----
+---  
 
 This paper proposes a restricted HTM design, EazyHTM (EArly + laZY) that decouples conflict detection (CD) from conflict resolution (CR). 
 While prior designs usually do not distinguish between CD and CR, and use either early or late for both, EazyHTM detects conflicts early, 
