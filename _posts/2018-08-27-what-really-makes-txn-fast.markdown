@@ -51,4 +51,8 @@ The lifecycle of TL transactions under commit mode with PS locking is similar to
 phases during the execution of TL transactions: read phase, validation phase, and write phase. During the read phase, 
 the transaction maintains a read set and a write set as linked lists. Both sets track addresses of data items. For 
 read operations, the value of the lock is loaded before the item is accessed, and saved in the read sets. For write operations, 
-the uncommitted new value is buffered in the write set. 
+the uncommitted new value is buffered in the write set. Special care must be taken if a read operation hits a write set entry.
+Instead of accessing shared data item, the read operation should return uncommitted data from the write set. If the lock bit
+is set when testing the versioned lock before accessing a data item, the read operation can choose either to spin on the lock
+for a bounded number of cycles, or to abort immediately. 
+
