@@ -37,4 +37,7 @@ TL runs two modes, a commit mode, where data items are write locked only before 
 locks are placed as early as when items are updated. Both modes leverage versioned locks as a way of detecting
 read-write and write-write conflicts. A versioned lock is a machine word that can be atomically read, written, and CAS'ed. 
 It consists of two parts: a one bit field which is used as a spin lock, and the rest of the word as either a version
-number (commit mode) or an aligned pointer to the undo log (encounter mode).
+number (commit mode) or an aligned pointer to the undo log (encounter mode). Every memory location in the transaction domain
+needs to be associated with one versioned lock. There are several schemes of mapping from memory locations to version
+locks, the most representative of them being "Per-Object" (PO), "Per-Word" (PW) and "Per-Stripe" (PS). PO takes advantage of 
+the object header in high-level programming languages such as JAVA. 
