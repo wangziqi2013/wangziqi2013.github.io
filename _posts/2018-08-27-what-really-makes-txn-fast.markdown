@@ -23,11 +23,12 @@ indirection. Compared with DSTM where each transactionally accessed object must 
 a special ownership record, fewer cache misses and lower memory latency in average is expected.
 Second, TL adopts a blocking approach by introducing lightweight spin locks during the 
 commit protocol. While admitting the possibility of execssive waiting due to blocking on 
-write locks, it is argued that, in practice, the duration does not cause significant slowdown 
+write locks, it is argued that, in practice, write locking does not cause significant slowdown 
 with a combination of bounded waiting and retry mechanism with exponential backoff. Third, instead of 
 locking data items for in-place update as they are to be written during the read phase as in some STM designs,
-TL buffers uncommitted writes in transaction local storage. Data items are not locked until commit time,
+TL buffers uncommitted writes in transaction local storage. Data items are not locked until commit time
 when uncommitted modifications are made public after validating the read set. The OCC style read-validate-commit
 lifecycle of transactions greatly improves the throughput of the system when contention is large.
 Finally, by relaxing the progress guarantee, TL is considerably less complicated compared with other 
-wait-free STM designs. The reduction in complexity directly translates into an increase 
+wait-free STM designs. The reduction in complexity directly translates into increased throughput and decreased
+latency.
