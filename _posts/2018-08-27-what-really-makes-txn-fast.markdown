@@ -46,3 +46,9 @@ an array of locks. The only difference is that in PS the address is right-shifte
 unmanaged languages such as C++, in order to balance both performance and safety, it is suggested that commit mode / PS is the 
 best combination. In the next paragraph, we default to the commit mode / PS scheme, and postpones the discussion of other 
 combinations to later sections.
+
+The lifecycle of TL transactions under commit mode with PS locking is similar to a typical OCC transaction. There are three
+phases during the execution of TL transactions: read phase, validation phase, and write phase. During the read phase, 
+the transaction maintains a read set and a write set as linked lists. Both sets track addresses of data items. For 
+read operations, the value of the lock is loaded before the item is accessed, and saved in the read sets. For write operations, 
+the uncommitted new value is buffered in the write set. 
