@@ -67,3 +67,11 @@ validation succeeds, then the transaction commits by writing uncommitted values 
 Writer locks are released after write back finishes. The transaction increments the version counter by one and stores the new 
 version as well as the cleared lock bit into the lock. The store operation does not have to atomic, because the transaction now 
 has exclusive access to the locked data item.
+
+In an open memory system, where programmers are allowed to compose transactions using malloc() and free(), the usage of PO
+scheme is discouraged. This is because transactions may access invalid lock bits after the object is freed by another transaction.
+For example, assume transaction A removes a node from a linked list and frees the node, while transaction B writes into the same node.
+A commits before B. When B enters validation phase, it acquires all locks in the write set, including the lock associated with
+the node that has already been freed, before it checks the read set and eventually finds out that the node has been deleted and 
+then aborts. 
+Transaction B has no idea whether the node is still 
