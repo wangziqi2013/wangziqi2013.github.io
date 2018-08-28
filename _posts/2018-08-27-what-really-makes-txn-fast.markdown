@@ -40,4 +40,9 @@ It consists of two parts: a one bit field which is used as a spin lock, and the 
 number (commit mode) or an aligned pointer to the undo log (encounter mode). Every memory location in the transaction domain
 needs to be associated with one versioned lock. There are several schemes of mapping from memory locations to version
 locks, the most representative of them being "Per-Object" (PO), "Per-Word" (PW) and "Per-Stripe" (PS). PO takes advantage of 
-the object header in high-level programming languages such as JAVA. 
+the object header in high-level programming languages such as JAVA. TL benefits from the spatial locality of PO scheme as the lock
+word is located right next to the data being accessed. Both PW and PS maps the address of the memory location directly to 
+an array of locks. The only difference is that in PS the address is right-shifted before the hash value is computed. For 
+unmanaged languages such as C++, in order to balance both performance and safety, it is suggested that commit mode / PS is the 
+best combination. In the next paragraph, we default to the commit mode / PS scheme, and postpones the discussion of other 
+combinations to later sections.
