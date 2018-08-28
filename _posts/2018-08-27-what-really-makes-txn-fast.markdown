@@ -23,5 +23,5 @@ indirection. Compared with DSTM where each transactionally accessed object must 
 a special ownership record, fewer cache misses and lower memory latency in average is expected.
 Second, TL adopts a blocking approach by introducing lightweight spin locks during the 
 commit protocol. While admitting the possibility of execssive waiting due to blocking on 
-write locks, it is argued that, in practice, the duration can be upper bounded by a 
-combination of bounded waiting and retry with exponential backoff.
+write locks, it is argued that, in practice, the duration does not cause significant slowdown 
+with a combination of bounded waiting and retry mechanism with exponential backoff. 
