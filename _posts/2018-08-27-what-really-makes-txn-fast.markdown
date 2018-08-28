@@ -56,3 +56,9 @@ Instead of accessing shared data item, the read operation should return uncommit
 is set when testing the versioned lock before accessing a data item, the read operation can choose either to spin on the lock
 for a bounded number of cycles, or to abort immediately. 
 
+During the validation phase, transactions first acquire locks for all items in the write set. As with the case for reading, if the 
+lock is already held by another transaction, the current transaction could choose to wait for bounded amount of cycles or to abort. 
+After locking the write set, the transaction then proceed to verify the read set by comparing the most up-to-date value of the 
+versioned lock with the version maintained in the read set. Should any disagreement occurs, the transaction must abort, because a 
+write-after-read conflict has happened, which cannot be easily resolved. If read validation succeeds, then the transaction 
+commits by writing uncommitted values in the write set back to shared data items. 
