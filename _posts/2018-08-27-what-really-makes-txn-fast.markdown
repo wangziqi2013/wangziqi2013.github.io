@@ -32,3 +32,9 @@ lifecycle of transactions greatly improves the throughput of the system when con
 Finally, by relaxing the progress guarantee, TL is considerably less complicated compared with other 
 wait-free STM designs. The reduction in complexity directly translates into increased throughput and decreased
 latency.
+
+TL runs two modes, a commit mode, where data items are write locked only before commit, and an encounter mode where 
+locks are placed as early as when items are updated. Both modes leverage versioned locks as a way of detecting
+read-write and write-write conflicts. A versioned lock is a machine word that can be atomically read, written, and CAS'ed. 
+It consists of two parts: a one bit field which is used as a spin lock, and the rest of the word as either a version
+number (commit mode) or an aligned pointer to the undo log (encounter mode).
