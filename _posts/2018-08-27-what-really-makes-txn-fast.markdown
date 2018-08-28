@@ -73,5 +73,5 @@ scheme is discouraged. This is because transactions may access invalid lock bits
 For example, assume transaction A removes a node from a linked list and frees the node, while transaction B writes into the same node.
 A commits before B. When B enters validation phase, it acquires all locks in the write set, including the lock associated with
 the node that has already been freed, before it checks the read set and eventually finds out that the node has been deleted and 
-then aborts. 
-Transaction B has no idea whether the node is still 
+then aborts. Programmers in this case should prepare for the possibility and some transaction acquire a lock which is not even
+malloc'ed, or, even worse, the piece of memory is re-allocated to another transaction, causing an unexpected "flicker".
