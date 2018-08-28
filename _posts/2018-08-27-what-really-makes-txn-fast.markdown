@@ -75,3 +75,8 @@ A commits before B. When B enters validation phase, it acquires all locks in the
 the node that has already been freed, before it checks the read set and eventually finds out that the node has been deleted and 
 then aborts. Programmers in this case should prepare for the possibility and some transaction acquire a lock which is not even
 malloc'ed, or, even worse, the piece of memory is re-allocated to another transaction, causing an unexpected "flicker".
+
+Even with PS or PW scheme, special care must be taken when memory leaves the system by calling free(). Logically speaking, the 
+system should have a mechanism that regulates the order in which transaction commits, such that if a transaction calls free()
+on a piece of memory, then the transaction should be serialized after all concurrent transactions. In the example above, imagine that
+a PS or PW scheme is used instead. Transaction A and B behave exactly as described. 
