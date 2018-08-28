@@ -16,4 +16,7 @@ version_mgmt:
 This paper proposes Transactional Locking (TL), a Software Transactional Memory (STM)
 design that features low latancy and high scalability. Prior to TL, researchers have proposed
 several designs that address different issues. Trade-offs must be made regarding latency,
-scalability, ease of programming, and complexity. 
+scalability, ease of programming, progress guarantee, and complexity. Compared with previous
+designs, TL highlights certain design choices which give it an advantage over previous STM
+proposals. First, TL allows data items to be accessed without introducing extra levels of
+indirection.
