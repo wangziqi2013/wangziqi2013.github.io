@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Predictive Log-Syncrhonization"
+date:   2018-08-29 17:48:00 -0500
+categories: paper
+paper_title: "Predictive Log-Syncrhonization"
+paper_link: https://dl.acm.org/ft_gateway.cfm?id=1217965&type=pdf
+paper_keyword: Log-Structured; STM; Lock-Free
+paper_year: EuroSys 2006
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
