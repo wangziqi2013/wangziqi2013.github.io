@@ -76,7 +76,14 @@ the node that has already been freed, before it checks the read set and eventual
 then aborts. Programmers in this case should prepare for the possibility and some transaction acquire a lock which is not even
 malloc'ed, or, even worse, the piece of memory is re-allocated to another transaction, causing an unexpected "flicker".
 
-Even with PS or PW scheme, special care must be taken when memory leaves the system by calling free(). Logically speaking, the 
-system should have a mechanism that regulates the order in which transaction commits, such that if a transaction calls free()
-on a piece of memory, then the transaction should be serialized after all concurrent transactions. In the example above, imagine that
-a PS or PW scheme is used instead. Transaction A and B behave exactly as described. 
+Using PS or PW scheme seems to dodge the problem of transactions accessing a piece of memory after another transaction frees it,
+as the array of locks resides in a chunk of memory that will never be freed. This, in fact, only addresses part of the problem.
+Even with PS or PW scheme, special care must be taken when memory leaves the system by calling free(). In the example above, imagine that
+a PS or PW scheme is used instead. Transaction A and B behave exactly as described. We change the interleaving between A and B.
+This time, transaction B enters validation first, and it successfully commits. Before B has a chance to write back uncommitted
+values, transaction A also commits, and then calls free() on the node. Note that in this case, transaction A and B's read sets 
+contain only the pointer that leads to the node, which is not modified by transaction B. In addition, transaction B's write set 
+only contains a word inside the node, while transaction A's write set contains the node pointer. Neither A nor B conflicts with
+each other. After A commits, however, transaction B resumes execution and writes into a chunk of memory that has been freed,
+causing unexpected behavior. Note that in this case, the serialization order does not matter at all, since A is serialized after 
+B given that B accesses the node before A removes it.
