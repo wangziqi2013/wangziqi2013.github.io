@@ -86,4 +86,9 @@ contain only the pointer that leads to the node, which is not modified by transa
 only contains a word inside the node, while transaction A's write set contains the node pointer. Neither A nor B conflicts with
 each other. After A commits, however, transaction B resumes execution and writes into a chunk of memory that has been freed,
 causing unexpected behavior. Note that in this case, the serialization order does not matter at all, since A is serialized after 
-B given that B accesses the node before A removes it.
+B, given that B accesses the node before A removes it. 
+
+The solution, as suggested by the paper, is to have transaction A waiting for the object to "quiesce" before it can be freed.
+An object becomes quiesce when all transactional write locks are released. Transaction A can only free the node after it 
+commits once all concurrent transactions that write to the node has committed or aborted. Non-concurrent transactions do not 
+have to be considered, because after A commits, the node cannot be accessed anymore. 
