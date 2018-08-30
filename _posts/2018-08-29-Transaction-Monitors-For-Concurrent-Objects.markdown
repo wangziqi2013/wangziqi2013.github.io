@@ -50,4 +50,10 @@ between the read set of the validation transaction and the write set of all conc
 succeeds, as the transaction is known to have read a consistent snapshot of the shared state, which is taken by the time the 
 transaction begins. The write phase simply flushes all uncommitted data to shared state, and hence commits the transaction. 
 
-Transactional monitor
+Transactional monitor uses a variant of BOCC which is described below. There are two modes of operation: A low contention mode,
+which is intended for cases where most threads are read-only; and a high contention mode, which allows writers to execute concurrently.
+The runtime system should switch between these two modes based on the degree of contention, though it is not mentioned in the paper 
+how this is achieved. In the low contention mode, the monitor object maintains an atomic descriptor, which consists of two fields:
+A thread identifier field which stores the identity of the writer (or set to null if non-existent), and a counter which keeps 
+track of the total number of threads in the monitor. These two fields, as suggested by the name, should be able to be read and 
+written atomically. 
