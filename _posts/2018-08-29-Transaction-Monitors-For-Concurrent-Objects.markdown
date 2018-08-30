@@ -42,4 +42,12 @@ phase, the thread only reads from shared state (or uncommitted data if available
 thread local storage. Not publishing uncommitted writes to the shared state ensures safety property because uncommitted state
 will not be accessed by other transactions. During the validation phase, the transaction checks its read set against the write 
 set of transactions that: (1) committed before it does; and (2) committed after it starts. The set of transactions for backward
-validation are 
+validation are identified using a commit ID, which is drawn from a global version counter. Threads enter a critical section
+before they start to validate, and exits the section after they increment the version counter and tag their write sets with the 
+counter. On transaction begin, a begin timestamp is read from the version counter. Validating threads only need to validate 
+against transactions whose commit ID is between their begin timestamps and the current value of the timestamp. If the intersection
+between the read set of the validation transaction and the write set of all concurrent transactions is empty, then validation
+succeeds, as the transaction is known to have read a consistent snapshot of the shared state, which is taken by the time the 
+transaction begins. The write phase simply flushes all uncommitted data to shared state, and hence commits the transaction. 
+
+Transactional monitor
