@@ -18,3 +18,10 @@ blocks access to the entire object suffices. On large-scale data processing plat
 however, the overhead of inter-thread communication and the bottleneck of blocking render the simple approach unattractive.
 Writing efficient concurrent data structures thus require a thorough understanding of the internals of the data structure,
 as well as knowing the intrinsic level of parallelism of certain implementations. 
+
+This paper, on the other hand, proposes Predictive Log-Synchronization (PLS) for parallelizing existing serial implementations 
+of data structures, without having to fully understand the internals (it helps if one does have a solid understanding). PLS 
+extends existing sequential version of a data structure with a log, which records logical operations that worker threads have 
+performed. One of the worker threads modifying the data structure periodically acquires a lock before it "replays" the log to 
+apply all the pending changes. Other worker threads, while the log is being replayed and the current instance becomes unstable, 
+reads from a duplicate of the last stable instance, traverses the log
