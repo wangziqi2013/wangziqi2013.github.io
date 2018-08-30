@@ -65,4 +65,10 @@ itself if the field not already set. This can usually be done with a Compare-And
 thread has successfully acquired exclusive right to perform write, and the current thread must abort and retry. If the CAS
 succeeds, then the current thread becomes the exclusive writer, and subsequent writes of the same thread are always committed
 to the shared state. One invariant this algorithm demonstrates is that, after a thread has acquired write permission, the number 
-of threads in the monitor can only decrease, assuming that threads only stay in the monitor for a finite amount of time. 
+of threads in the monitor can only decrease, assuming that threads only stay in the monitor for a finite amount of time. When 
+threads are about to exit the monitor, they check the writer field. If the writer field is not null, which indicates that some
+thread has written to some data items during the current thread's execution, the current thread must abort and retry. Otherwise,
+the current thread decrements the thread counter atomically, and exits from the monitor. As mentioned above, since the number of
+threads can only decrease after a thread has acquired permission to write, it is expected that when the last thread leaves the 
+monitor, it can observe a thread count of one. In this case, the thread also clears the writer field by storing null into it, 
+thus unblocking all threads waiting to enter the monitor. 
