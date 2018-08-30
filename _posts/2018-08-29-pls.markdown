@@ -32,3 +32,10 @@ thread applies all entries to the instance, an instance switch happens. The inst
 making the one with all log entries applied the stable instance, while the other one writable. This is realized using a global
 version counter: the replaying thread increments the counter atomically. Other threads choose the corresponding instance to
 read from according to the least significant bit of the version counter.
+
+On initialization, PLS creates two empty instances of the data structure, and sets the version counter to zero. PLS also initializes
+two log objects, which are simply arrays of operations which can be traversed from the head to the tail, and inserted at
+the tail atomically. Operations are inserted by threads that modify the data structure. One of the two instances is called the 
+stable read-only instance, another being called the unstable instance. Each instance is also associated with a spin lock
+
+Operations are categorized into three types: write-only, read-modify-write (RMW), and read-only. 
