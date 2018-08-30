@@ -80,3 +80,11 @@ rare, this scheme works because for most of the time, it will only be readers pe
 however, write operations occur quite often, then the monitor should switch to high contention mode, in which a finer grained 
 conflict detection scheme is used.
 
+The high contention mode differs from low contention mode by the following features. First, the monitor object has a global
+write signature, which holds the union of the write set of all committed threads in a "session". Accordingly, each transaction
+has two thread local signatures, one for read set and anothe for write set. The signatures are populated as transactions 
+read and write data items. Validating transactions intersect their read signatures with the global write signature using 
+bitwise AND. If the intersection indicates that there is no overlap between these two sets, then validation succeeds.
+Second, the high contention mode allows multiple writers. To avoid reading uncommitted data, writers must take a 
+copy of the objects it writes into, and then modify them locally. Uncommitted objects are not made public until commit 
+time. Third, 
