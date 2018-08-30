@@ -44,4 +44,9 @@ predict the result of their operations. We elaborate this part in the next parag
 Operations are categorized into three types: write-only, read-modify-write (RMW), and read-only. Write-only operations are those
 that modify the content of the data structure, without carrying a return value. Their effect can only be observed by other threads
 via internal change of the data structure. Read-only operations, on the other side of the spectrum, only returns value to the 
-caller but does not modify the data structure. RMW operations both modify the data structure and carry a return value. 
+caller but does not modify the data structure. RMW operations both modify the data structure and carry a return value. Threads
+executing a write-only operation inserts the operation descriptor and argument into the log, and then returns. The actual execution
+of the operation will not take place until a thread replays the log. For RMW operations, the thread inserts the operation at
+the end of the log as with write-only operations. Then, in order to compute the return value, the thread must partially replay
+the log as if all operations before its own operation have been applied. The partial log replay is realized using a mechanism
+called "substate". In the context of PLS, Substate refers 
