@@ -85,6 +85,13 @@ write signature, which holds the union of the write set of all committed threads
 has two thread local signatures, one for read set and anothe for write set. The signatures are populated as transactions 
 read and write data items. Validating transactions intersect their read signatures with the global write signature using 
 bitwise AND. If the intersection indicates that there is no overlap between these two sets, then validation succeeds.
-Second, the high contention mode allows multiple writers. To avoid reading uncommitted data, writers must take a 
-copy of the objects it writes into, and then modify them locally. Uncommitted objects are not made public until commit 
-time. Third, 
+At commit time, the write signature is merged into the global signature using bitwise OR. Second, the high contention mode 
+allows multiple writers. To avoid reading uncommitted data, writers must take a copy of the objects it writes into, and 
+then modify them locally. Uncommitted objects are not made public until commit time. Third, threads are not prevented 
+from entering the monitor before some thread in the monitor commits. After the commit, threads trying to enter the 
+monitor are blocked, because otherwise they might be falsely aborted due to false positives of conflict detection. In
+other words, non-overlapping transactions are now allowed to enter the monitor for the same seccion. Similar to the 
+low contention case, once threads are blocked from entering the monitor, the number of threads in the monitor can only 
+decrease. When the last thread leaves the monitor, it clears the global write signature, and decrements the thread
+number counter, finishing the current session. After that, threads waiting for the monitor can enter, which automatically
+starts a new session.
