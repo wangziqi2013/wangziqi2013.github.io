@@ -11,4 +11,10 @@ rw_set:
 htm_cd: 
 htm_cr: 
 version_mgmt: 
----  
+---
+
+Designing concurrent data structure is, in general, a difficult task. For small-scale applications, a single lock that 
+blocks access to the entire object suffices. On large-scale data processing platforms with modern multicore architecture,
+however, the overhead of inter-thread communication and the bottleneck of blocking render the simple approach unattractive.
+Writing efficient concurrent data structures thus require a thorough understanding of the internals of the data structure,
+as well as knowing the intrinsic level of parallelism of certain implementations. 
