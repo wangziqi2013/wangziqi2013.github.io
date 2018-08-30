@@ -35,3 +35,11 @@ thread is about to leave the monitor. This process, by its nature, must be optim
 under the assumption that objects it accesses will remain in the state observed when it enters the monitor. If the assumption
 fails to hold because another thread has modified one of the objects the current thread has read, the thread must not commit, 
 and should retry executing the critical section.
+
+The algorithm used by transactional monitor resembles Optimistic Concurrency Control (OCC) with backward validation, or BOCC. 
+In BOCC, a transaction's lifecycle is divided into three phases: read phase, validation phase, and write phase. In the read
+phase, the thread only reads from shared state (or uncommitted data if available), while write operations are buffered in 
+thread local storage. Not publishing uncommitted writes to the shared state ensures safety property because uncommitted state
+will not be accessed by other transactions. During the validation phase, the transaction checks its read set against the write 
+set of transactions that: (1) committed before it does; and (2) committed after it starts. The set of transactions for backward
+validation are 
