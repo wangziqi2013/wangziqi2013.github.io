@@ -36,6 +36,9 @@ read from according to the least significant bit of the version counter.
 On initialization, PLS creates two empty instances of the data structure, and sets the version counter to zero. PLS also initializes
 two log objects, which are simply arrays of operations which can be traversed from the head to the tail, and inserted at
 the tail atomically. Operations are inserted by threads that modify the data structure. One of the two instances is called the 
-stable read-only instance, another being called the unstable instance. Each instance is also associated with a spin lock
+stable read-only instance, another being called the unstable instance. Each instance is also associated with a spin lock.
+Threads try to acquire the spin lock after they have inserted their operations at the end of the log. The winner thread then
+proceeds to replay the log onto the unstable instance, while other threads simply read the stable read-only instance, and 
+predict the result of their operations. We elaborate this part in the next paragraph in detail.
 
 Operations are categorized into three types: write-only, read-modify-write (RMW), and read-only. 
