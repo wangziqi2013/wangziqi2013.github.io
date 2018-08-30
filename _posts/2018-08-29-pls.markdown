@@ -27,4 +27,8 @@ apply all the pending changes. Other worker threads, while the log is being repl
 predicts the results of their operations. The prediction process works by reading from a duplicate of the last stable instance, 
 and then traversing the read-only log, with the help of a few substate functions. Substate functions apply transformations to
 information gathered from the stable instance according to operations performed by all threads. Once the predicting thread finishes
-traversing the log, the final result is returned as if it is from the object with all log entries applied.
+traversing the log, the final result is returned as if it is from the object with all log entries applied. After the log replaying 
+thread applies all entries to the instance, an instance switch happens. The instance switch swaps the status of the two instances,
+making the one with all log entries applied the stable instance, while the other one writable. This is realized using a global
+version counter: the replaying thread increments the counter atomically. Other threads choose the corresponding instance to
+read from according to the least significant bit of the version counter.
