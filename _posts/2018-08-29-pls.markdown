@@ -70,4 +70,9 @@ concurrent read and write. To avoid the reading thread accessing inconsistent su
 for the stable copy. Every reading thread increments the reference counter atomically before it accesses the stable instance. 
 A log-replaying thread will not begin until the reference counter drops to zero. 
 
-When a 
+When a log-replaying thread finishes applying all log entries onto the unstable instance, an instance switch takes place.
+As described earlier, the instance switch is atomic with regard to all threads by using a version counter. After the switch, 
+the two instances exchange their roles, and the spin lock is released. At the next round of log replay, the winner thread 
+should first replay the log in the previous round onto the current unstable instance. This stage is called "adjustment" as
+it "adjusts" the current unstable instance to catch up with the latest updates. One of the delicacies about adjustments is 
+that they can be usually carried out more efficiently than log replay. This is because adjustments are 
