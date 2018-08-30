@@ -53,4 +53,8 @@ called "substate". In the context of PLS, substate refers to a subset of states 
 operation of interest. The thread first queries the read-only copy using the argument of the operation to extract the initial
 substate. Then it traverses the log and check if the operations in the log are relevant to the substate, and if yes, then updates 
 the substate according to the semantics of the operation accordingly. Finally, the thread stops traversing the log once it reaches
-the operation of itself, and then returns.
+the operation of itself, and then returns. Read-only operations also relies on substate. Instead of replaying the log on the 
+substate until all operations before the current operation are exhausted, read-only operations are not inserted into the log,
+and the substate replay can stop early at the last RMW or write-only operation inserted by the same thread. This constraint is 
+added to guarantee sequential consistency, because otherwise the read-only operation could be fulfilled simply by reading
+the stable copy, ignoring all modifying operations that happen before the read-only operation in program order. 
