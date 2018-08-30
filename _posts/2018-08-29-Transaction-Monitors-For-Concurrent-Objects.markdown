@@ -61,4 +61,8 @@ on the descriptor until the writer leaves the monitor. Otherwise, the thread ent
 This guarantees that whenever a writer thread is active in the monitor, no new thread could enter, thus avoiding conflicts between 
 the writer and the new thread. For threads already in the monitor, read barrier needs no further action except returning the value 
 from the shared state. Write barriers, however, tests the atomic descriptor in the monitor object, and sets the writer field to 
-itself if the field not already set. This can usually be 
+itself if the field not already set. This can usually be done with a Compare-And-Swap (CAS). If the CAS fails, then another 
+thread has successfully acquired exclusive right to perform write, and the current thread must abort and retry. If the CAS
+succeeds, then the current thread becomes the exclusive writer, and subsequent writes of the same thread are always committed
+to the shared state. One invariant this algorithm demonstrates is that, after a thread has acquired write permission, the number 
+of threads in the monitor can only decrease, assuming that threads only stay in the monitor for a finite amount of time. 
