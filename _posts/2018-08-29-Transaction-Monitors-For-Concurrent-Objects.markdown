@@ -26,3 +26,9 @@ to wait until the first one exits. The blocking nature of a mutex can easily bec
 are serialized at the point they enter the monitor. The last problem with mutexes is that threads are serialized unnecessarily
 even if they do not conflict with each other, which is the usual case for some workloads. If threads are allowed to proceed
 in parallel, higher throughput is attainable while the result can still be correct.
+
+This paper proposes transactional monitors, which is a novel way of implementing a monitor. A transactional monitor does not 
+prevent multiple threads from entering the monitor. Instead, the read and write operations inside the monitor are instrumented 
+with the so called "barriers". Barriers are invoked on every read and every write operation performed by threads. They keep 
+track of information that is used to determine whether a certain thread has seen a consistent snapshot later on when the 
+thread is about to leave the monitor
