@@ -18,4 +18,9 @@ by a monitor, called a "critical section", is guaranteed by the compiler and lan
 atomic. In practice, monitors are mostly implemented using a mutex. Threads entering the monitor acquire the mutex, before 
 they are allowed to proceed executing the critical section. The mutex is released before threads exit the monitor.
 Simple as it is, using a mutex to implement monitor is not always the best option. Three problems may arise when
-threads acquire and release mutexes on entering and exiting the monitor. 
+threads acquire and release mutexes on entering and exiting the monitor. First, on modern multicore architectures, both 
+acquiring and spinning on a mutex induce cache coherence traffic, which can easily saturate the communication network and 
+thus delay normal processing of memory requests, causing system-wide performance degradation. Second, if multiple threads
+wish to access the critical section concurrently, only one of them would succeed acquiring the mutex, while the rest has 
+to wait until the first one exits. The blocking nature of a mutex can easily become a performance bottleneck as all threads
+are serialized at the point they enter the monitor. Third, when threads 
