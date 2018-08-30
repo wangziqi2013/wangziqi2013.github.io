@@ -24,4 +24,7 @@ of data structures, without having to fully understand the internals (it helps i
 extends existing sequential version of a data structure with a log, which records logical operations that worker threads have 
 performed. One of the worker threads modifying the data structure periodically acquires a lock before it "replays" the log to 
 apply all the pending changes. Other worker threads, while the log is being replayed and the current instance becomes unstable, 
-reads from a duplicate of the last stable instance, traverses the log
+predicts the results of their operations. The prediction process works by reading from a duplicate of the last stable instance, 
+and then traversing the read-only log, with the help of a few substate functions. Substate functions apply transformations to
+information gathered from the stable instance according to operations performed by all threads. Once the predicting thread finishes
+traversing the log, the final result is returned as if it is from the object with all log entries applied.
