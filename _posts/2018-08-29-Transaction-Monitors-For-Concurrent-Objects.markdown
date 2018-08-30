@@ -73,3 +73,10 @@ the current thread decrements the thread counter atomically, and exits from the 
 threads can only decrease after a thread has acquired permission to write, it is expected that when the last thread leaves the 
 monitor, it can observe a thread count of one. In this case, the thread also clears the writer field by storing null into it, 
 thus unblocking all threads waiting to enter the monitor. 
+
+The biggest advantage of the low contention mode is that no extra metadata is required to keep track of the read and write 
+sets of threads. Instead, the writing thread is assumed to conflict with all reading threads. In the cases when writes are 
+rare, this scheme works because for most of the time, it will only be readers performing non-conflicting operations. If,
+however, write operations occur quite often, then the monitor should switch to high contention mode, in which a finer grained 
+conflict detection scheme is used.
+
