@@ -62,3 +62,8 @@ however, is that the implementation is not linearizable, which is a stronger pro
 objects are composable, which means that a system consisting of multiple linearizable objects is itself linearizable. The
 same condition does not hold for sequentially consistent objects, as a system consisting of sequentially consistent objects
 can still observe deviate from the program order.
+
+While the stable instance is being read, it is possible that the log replaying thread finishes, and then switchs instances
+by incrementing the version counter. If the read operation still has not finished after the next round of log replay, 
+this time on the previous stable and currently unstable instance, begins, then inconsistency might occur as a result of 
+concurrent read and write.
