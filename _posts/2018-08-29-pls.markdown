@@ -57,4 +57,8 @@ the operation of itself, and then returns. Read-only operations also relies on s
 substate until all operations before the current operation are exhausted, read-only operations are not inserted into the log,
 and the substate replay can stop early at the last RMW or write-only operation inserted by the same thread. This constraint is 
 added to guarantee sequential consistency, because otherwise the read-only operation could be fulfilled simply by reading
-the stable copy, ignoring all modifying operations that happen before the read-only operation in program order. 
+the stable copy, ignoring all modifying operations that happen before the read-only operation in program order. The problem,
+however, is that the implementation is not linearizable, which is a stronger property than sequential consistency. Linearizable 
+objects are composable, which means that a system consisting of multiple linearizable objects is itself linearizable. The
+same condition does not hold for sequentially consistent objects, as a system consisting of sequentially consistent objects
+can still observe deviate from the program order.
