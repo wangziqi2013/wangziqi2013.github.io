@@ -49,4 +49,8 @@ executing a write-only operation inserts the operation descriptor and argument i
 of the operation will not take place until a thread replays the log. For RMW operations, the thread inserts the operation at
 the end of the log as with write-only operations. Then, in order to compute the return value, the thread must partially replay
 the log as if all operations before its own operation have been applied. The partial log replay is realized using a mechanism
-called "substate". In the context of PLS, Substate refers 
+called "substate". In the context of PLS, substate refers to a subset of states in the data structure that are relevent to an
+operation of interest. The thread first queries the read-only copy using the argument of the operation to extract the initial
+substate. Then it traverses the log and check if the operations in the log are relevant to the substate, and if yes, then updates 
+the substate according to the semantics of the operation accordingly. Finally, the thread stops traversing the log once it reaches
+the operation of itself, and then returns.
