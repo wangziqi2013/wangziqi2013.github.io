@@ -75,4 +75,6 @@ As described earlier, the instance switch is atomic with regard to all threads b
 the two instances exchange their roles, and the spin lock is released. At the next round of log replay, the winner thread 
 should first replay the log in the previous round onto the current unstable instance. This stage is called "adjustment" as
 it "adjusts" the current unstable instance to catch up with the latest updates. One of the delicacies about adjustments is 
-that they can be usually carried out more efficiently than log replay. This is because adjustments are 
+that they can be usually carried out more efficiently than log replay. This is because adjustments can take advantage of 
+the fact that they have actually been executed by the previous log replaying thread on the unstable copy. It is thus 
+possible for the previous thread to leave "hints" to the adjusting thread, accelerating the adjustment process.
