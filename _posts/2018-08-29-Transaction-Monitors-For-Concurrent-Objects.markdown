@@ -23,4 +23,6 @@ acquiring and spinning on a mutex induce cache coherence traffic, which can easi
 thus delay normal processing of memory requests, causing system-wide performance degradation. Second, if multiple threads
 wish to access the critical section concurrently, only one of them would succeed acquiring the mutex, while the rest has 
 to wait until the first one exits. The blocking nature of a mutex can easily become a performance bottleneck as all threads
-are serialized at the point they enter the monitor. Third, when threads 
+are serialized at the point they enter the monitor. The last problem with mutexes is that threads are serialized unnecessarily
+even if they do not conflict with each other, which is the usual case for some workloads. If threads are allowed to proceed
+in parallel, higher throughput is attainable while the result can still be correct.
