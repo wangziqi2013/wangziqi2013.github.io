@@ -31,4 +31,7 @@ This paper proposes transactional monitors, which is a novel way of implementing
 prevent multiple threads from entering the monitor. Instead, the read and write operations inside the monitor are instrumented 
 with the so called "barriers". Barriers are invoked on every read and every write operation performed by threads. They keep 
 track of information that is used to determine whether a certain thread has seen a consistent snapshot later on when the 
-thread is about to leave the monitor
+thread is about to leave the monitor. This process, by its nature, must be optimistic, which means that every thread executes
+under the assumption that objects it accesses will remain in the state observed when it enters the monitor. If the assumption
+fails to hold because another thread has modified one of the objects the current thread has read, the thread must not commit, 
+and should retry executing the critical section.
