@@ -56,4 +56,9 @@ The runtime system should switch between these two modes based on the degree of 
 how this is achieved. In the low contention mode, the monitor object maintains an atomic descriptor, which consists of two fields:
 A thread identifier field which stores the identity of the writer (or set to null if non-existent), and a counter which keeps 
 track of the total number of threads in the monitor. These two fields, as suggested by the name, should be able to be read and 
-written atomically. 
+written atomically. When a thread enters the monitor, it checks whether the writer field is set. If yes, then the thread spins 
+on the descriptor until the writer leaves the monitor. Otherwise, the thread enters the monitor after incrementing the counter. 
+This guarantees that whenever a writer thread is active in the monitor, no new thread could enter, thus avoiding conflicts between 
+the writer and the new thread. For threads already in the monitor, read barrier needs no further action except returning the value 
+from the shared state. Write barriers, however, tests the atomic descriptor in the monitor object, and sets the writer field to 
+itself if the field not already set. This can usually be 
