@@ -41,4 +41,7 @@ Threads try to acquire the spin lock after they have inserted their operations a
 proceeds to replay the log onto the unstable instance, while other threads simply read the stable read-only instance, and 
 predict the result of their operations. We elaborate this part in the next paragraph in detail.
 
-Operations are categorized into three types: write-only, read-modify-write (RMW), and read-only. 
+Operations are categorized into three types: write-only, read-modify-write (RMW), and read-only. Write-only operations are those
+that modify the content of the data structure, without carrying a return value. Their effect can only be observed by other threads
+via internal change of the data structure. Read-only operations, on the other side of the spectrum, only returns value to the 
+caller but does not modify the data structure. RMW operations both modify the data structure and carry a return value. 
