@@ -62,4 +62,4 @@ coherence requests forwarded from the directory.
 
 On transaction commit, the processor sends a commit request to the conflict map. The conflict map aborts transactions on 
 processors that have the bit set by sending an abort request. Transactions running on other processors must abort immediately 
-and unconditionally once they receive this request. The
+as they receive this request. The bits in QCF and CC will also be cleared. 
