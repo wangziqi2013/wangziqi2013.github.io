@@ -32,3 +32,7 @@ metadata are treated equally. Instead, only metadata that is most recently used 
 structure which allows fast accessing, while the majority of them stays in a distibuted manner and can be 
 requested only at certain cases.
 
+The first level of the hierarchy is the coherence directory. A cache line can be in the following four states at any 
+moment: (1) Non-transactional; (2) speculatively read by a processor but not written into; (3) Speculatively written 
+by a processor but neither read nor written by another; and (4) Conflict has been detected because there were conflicting 
+accesses.
