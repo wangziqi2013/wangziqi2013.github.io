@@ -18,4 +18,10 @@ conflict maps. In a classical Eager-Lazy HTM, conflicts are detected on a distri
 usually as a side-effect of cache coherence: Transactionally accessed cache lines are marked 
 by the local L1/L2 cache, and conflicting accesses are detected as a coherence message is issued
 by another processor. This scheme, simple as it is, faces several challenges that must be addressed 
-by a more practical HTM design. 
+by a more practical HTM design. First, transactional states will be lost when speculative cache lines 
+are evicted. A simple solution is to always declare conflict after an overflow, with high probablity
+of false positives. Second, conflicts are resolved eagerly. A consequence of this is that the transaction
+that aborts another one might itself be aborted, making the first abort unnecessary. Finally, a
+substantial amount of metadata has to be stored in the cache, if unbounded transactions are to be supported.
+The amount of metadata is propotional to the largest of transactions supported, while in practice only
+a small fraction of them will actually be used for conflict detection.
