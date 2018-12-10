@@ -54,3 +54,8 @@ The CC is only an approximation of the full set of conflicting lines, as it has 
 The capacity of CC is also restricted by the fully associative nature of the structure. When the CC overflows, it simply
 discards a selected entry. The next time a conflict occurs on the same address, the CC needs to multi-cast a request to all
 owners of the cache line. The corresponding bit will be set after responses from processors are received. 
+
+The directory also maintains a *Conflict Map*, which is a matrix of size (*N* - 1)<sup>2</sup> where *N* is the number of processors 
+in the system. If bit *i* of processor *j* is set, it means that processor *j* has requested a cache line in a conflicting 
+mode that has been speculatively accessed by processor *i*. The conflict map entries are set as CC processes
+coherence requests forwarded to it from the directory. On transaction commit, 
