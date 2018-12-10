@@ -43,4 +43,10 @@ QCF provides an easy way of detecting whether conflicts have occurred. It is not
 which processors are involved in the conflict. The second level in the hierarchy is called *Conflict Checker (CC)*.
 The CC is organized as a small, fully associative lookup table, in which cache line addresses are used as the tag. 
 Each entry stores two bits per processor in the system: one bit for speculative reads and one for writes. 
-Everytime a coherence request hits the directory, the corresponding bit in the CC will also be set
+Everytime a conflicting coherence request hits the directory, the corresponding bit in the CC will also be set.
+Note that for transactional accesses, as long as they do not create conflicts, the CC is not involved. 
+When a conflict occurs, the directory knows the identify of *both* processors of the conflict, as the directory
+itself remembers the current owner of the cache line. In practice, since the number of conflicts are relatively
+small compared with the total number of speculative cache lines, there is no contention on the CC side, as it is 
+only contacted when a conflicting access is detected.
+
