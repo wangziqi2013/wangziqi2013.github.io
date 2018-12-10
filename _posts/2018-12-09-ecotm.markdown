@@ -25,3 +25,10 @@ that aborts another one might itself be aborted, making the first abort unnecess
 substantial amount of metadata has to be stored in the cache, if unbounded transactions are to be supported.
 The amount of metadata is propotional to the largest of transactions supported, while in practice only
 a small fraction of them will actually be used for conflict detection.
+
+EcoTM solves the above problems by using a hierarchy of metadata storage, assuming that actual conflicting cache lines
+are only a small portion of the total number of transactional cache lines. Under this assumption, not all 
+metadata are treated equally. Instead, only metadata that is most recently used will be cached in a small
+structure which allows fast accessing, while the majority of them stays in a distibuted manner and can be 
+requested only at certain cases.
+
