@@ -70,3 +70,10 @@ abort. An improvement over this simple scheme is to allow speculative states to 
 The log is maintained in virtual address space by the OS. The hardware writes the address of speculative lines and 
 optionally data (only for dirty lines) into the log on overflows. On receiving a query from the CC, the processor 
 searches the log to determine the status of a cache line. 
+
+In many designs where the directory cannot cover the entire address space, it is possible that directory
+entries are evicted due to limited space (e.g. the directory is maintained by the L3). The QCF must not be discarded 
+in this case, because real conflicts might be missed, and there is no way to reconstruct the QCF using 
+the system's knowledge. The directory overflow must therefore be handled by storing them into DRAM cells, either 
+taking advantage of the unused ECC bits, or extending DRAM rows to allow a few extra bits. The QCF will be loaded
+back into the directory the next time an entry is allocated.
