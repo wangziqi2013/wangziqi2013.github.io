@@ -58,4 +58,5 @@ owners of the cache line. The corresponding bit will be set after responses from
 The directory also maintains a *Conflict Map*, which is a matrix of size (*N* - 1)<sup>2</sup> where *N* is the number of processors 
 in the system. If bit *i* of processor *j* is set, it means that processor *j* has requested a cache line in a conflicting 
 mode that has been speculatively accessed by processor *i*. The conflict map entries are set as CC processes
-coherence requests forwarded to it from the directory. On transaction commit, 
+coherence requests forwarded from the directory. 
+
