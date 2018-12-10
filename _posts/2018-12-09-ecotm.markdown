@@ -33,6 +33,8 @@ structure which allows fast accessing, while the majority of them stays in a dis
 requested only at certain cases.
 
 The first level of the hierarchy is the coherence directory. A cache line can be in the following four states at any 
-moment: (1) Non-transactional; (2) speculatively read by a processor but not written into; (3) Speculatively written 
+given moment: (1) Non-transactional; (2) Speculatively read by a processor but not written into; (3) Speculatively written 
 by a processor but neither read nor written by another; and (4) Conflict has been detected because there were conflicting 
-accesses.
+accesses. EcoTM encodes the extra transactional state of a cache using two bits, called *Quick Conflict Filter (QCF)*, 
+which only adds a constant number of storage per directory entry. Any transactional read/write request from the processor 
+will set QCF into a corrersponding state. We discuss the details in the following paragraphs.
