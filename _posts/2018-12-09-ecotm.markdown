@@ -50,3 +50,7 @@ itself remembers the current owner of the cache line. In practice, since the num
 small compared with the total number of speculative cache lines, there is no contention on the CC side, as it is 
 only contacted when a conflicting access is detected.
 
+The CC is only an approximation of the full set of conflicting lines, as it has limited capacity (64 entries in the paper). 
+The capacity of CC is also restricted by the fully associative nature of the structure. When the CC overflows, it simply
+discards a selected entry. The next time a conflict occurs on the same address, the CC needs to multi-cast a request to all
+owners of the cache line. The corresponding bit will be set after responses from processors are received. 
