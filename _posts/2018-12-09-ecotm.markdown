@@ -37,4 +37,10 @@ given moment: (1) Non-transactional; (2) Speculatively read by a processor but n
 by a processor but neither read nor written by another; and (4) Conflict has been detected because there were conflicting 
 accesses. EcoTM encodes the extra transactional state of a cache using two bits, called *Quick Conflict Filter (QCF)*, 
 which only adds a constant number of storage per directory entry. Any transactional read/write request from the processor 
-will set QCF into a corrersponding state. We discuss the details in the following paragraphs.
+will set QCF into a corresponding state. We discuss the details below.
+
+QCF provides an easy way of detecting whether conflicts have occurred. It is not sufficient to precisely identify 
+which processors are involved in the conflict. The second level in the hierarchy is called *Conflict Checker (CC)*.
+The CC is organized as a small, fully associative lookup table, in which cache line addresses are used as the tag. 
+Each entry stores two bits per processor in the system: one bit for speculative reads and one for writes. 
+Everytime a coherence request hits the directory, the corresponding bit in the CC will also be set
