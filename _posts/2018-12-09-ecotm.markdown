@@ -60,3 +60,6 @@ in the system. If bit *i* of processor *j* is set, it means that processor *j* h
 mode that has been speculatively accessed by processor *i*. The conflict map entries are set as CC processes
 coherence requests forwarded from the directory. 
 
+On transaction commit, the processor sends a commit request to the conflict map. The conflict map aborts transactions on 
+processors that have the bit set by sending an abort request. Transactions running on other processors must abort immediately 
+and unconditionally once they receive this request. The
