@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "EcoTM: Conflict-Aware Economical Unbounded Hardware Transactional Memory"
+date:   2018-12-09 23:41:00 -0500
+categories: paper
+paper_title: "EcoTM: Conflict-Aware Economical Unbounded Hardware Transactional Memory"
+paper_link: https://www.sciencedirect.com/science/article/pii/S1877050913003335
+paper_keyword: EcoTM; HTM; Directory
+paper_year: ICCS 2013
+rw_set: L1/Sepcial Hardware
+htm_cd: Eager
+htm_cr: Lazy
+version_mgmt: Lazy
+---
