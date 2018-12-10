@@ -63,3 +63,10 @@ coherence requests forwarded from the directory.
 On transaction commit, the processor sends a commit request to the conflict map. The conflict map aborts transactions on 
 processors that have the bit set by sending an abort request. Transactions running on other processors must abort immediately 
 as they receive this request. The bits in QCF and CC will also be cleared. 
+
+When the private cache overflows, the processor sets a bit to indicate that future requests for the status of *any*
+cache should be responded with an affirmative. If speculative states overflow, however, the transaction must immediately
+abort. An improvement over this simple scheme is to allow speculative states to be overflowed to an external log.
+The log is maintained in virtual address space by the OS. The hardware writes the address of speculative lines and 
+optionally data (only for dirty lines) into the log on overflows. On receiving a query from the CC, the processor 
+searches the log to determine the status of a cache line. 
