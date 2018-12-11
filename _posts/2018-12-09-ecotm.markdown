@@ -76,4 +76,4 @@ entries are evicted due to limited space (e.g. the directory is maintained by th
 in this case, because real conflicts might be missed, and there is no way to reconstruct the QCF using 
 the system's knowledge. The directory overflow must therefore be handled by storing them into DRAM cells, either 
 taking advantage of the unused ECC bits, or extending DRAM rows to allow a few extra bits. The QCF will be loaded
-back into the directory the next time an entry is allocated.
+back into the directory the next time an entry is allocated. 
