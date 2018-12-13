@@ -12,7 +12,7 @@ htm_cd: Eager
 htm_cr: Lazy
 version_mgmt: Lazy
 ---
-
+ 
 This paper proposes EcoTM, an HTM design that performs conflict detection using a hierarchy of 
 conflict maps. In a classical Eager-Lazy HTM, conflicts are detected on a distributed manner, 
 usually as a side-effect of cache coherence: Transactionally accessed cache lines are marked 
