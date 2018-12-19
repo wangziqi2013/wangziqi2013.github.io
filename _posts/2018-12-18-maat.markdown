@@ -17,4 +17,9 @@ This paper proposes a distributed concurrency control protocol that uses interva
 transactions are logically ordered by timestamps, which are integers whose value denote the serialization order of
 transactions. Each transaction in the system has two timestamps: A lower bound (lb) which represents the lowest time the 
 transaction could commit, and correspondingly a higher bound (ub) which represents the largest time the 
-transaction could commit. As the transaction reads or writes data items, the CC manager must 
+transaction could commit. As the transaction reads or writes data items, the CC manager adjusts both lb and ub, such
+that the ordering between the current transaction and other transactions are consistent with read and write 
+operations. At any time during the execution, if the transaction's lb and ub crosses, i.e. the lb is larger than
+the ub, then an ordering conflict is detected, because there is no serial schedule that allows the current 
+transaction to be properly ordered with other transactions based on the existing execution history. The current 
+transaction must abort and roll back all changes it has made and retry.
