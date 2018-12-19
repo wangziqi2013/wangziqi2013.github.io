@@ -13,7 +13,7 @@ htm_cr: N/A
 version_mgmt: N/A
 ---
 
-This paper proposes a distributed concurrency control protocol that uses interval-based validation. 
+This paper proposes a distributed concurrency control protocol that uses interval-based validation, called MaaT. 
 Transactions are logically ordered by timestamps, which are integers whose value denote the serialization order of
 transactions. Each transaction in the system has two timestamps: A lower bound (lb) which represents the lowest time the 
 transaction could commit, and correspondingly a higher bound (ub) which represents the largest time the 
