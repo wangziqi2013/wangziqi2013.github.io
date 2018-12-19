@@ -25,4 +25,7 @@ transaction to be properly ordered with other transactions based on the existing
 transaction must abort and roll back all changes it has made and retry. If at the end of the transaction, 
 the interval [lb, ub) is still valid, the CC manager picks an arbitrary timestamp in this range as the commit 
 timestamp (ct) of the transaction, and commits all changes. Data items are tagged with two timestamps: A
-read timestamp (rts), indicating the largest committed transaction that
+read timestamp (rts), indicating the largest committed transaction that read this item, and a write timestamp (wts),
+indicating the largest committed transaction that wrote this item. Both timestamps are updated when a 
+transaction commits.
+
