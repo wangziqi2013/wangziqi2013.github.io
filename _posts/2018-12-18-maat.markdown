@@ -35,5 +35,7 @@ the backend and implement the concurrency control logic. To reduce communication
 states for its own partition. Global transaction states are exchanged via the link between servers. Compared with a 
 non-distributed database, network connection and latency between servers pose a different set of problems and hence 
 affects the overall design goal. For example, instead of trying to minimize data transfer between processing nodes 
-as in a non-distributed architecture, in a distributed settings we are more focused on reducing the number of 
-data communication. 
+as in a non-distributed architecture, in distributed designs we are more focused on reducing the number of 
+data communication. This paper proposes five design goals that a distributed data base CC scheme should generally meet:
+High throughput, efficient CPU utilization, scalability, no thrashing, and liveness.
+
