@@ -29,6 +29,11 @@ read timestamp (rts), indicating the largest committed transaction that read thi
 indicating the largest committed transaction that wrote this item. Both timestamps are updated when a 
 transaction commits.
 
-Under distributed settings, the database is divided into multiple partitions. Each partition is hosted by a server. 
-User requests are sent to one of the front-end servers, which are responsible for issuing data requests to the backend
-and performing concurrency control logic. 
+Under distributed settings, the database is divided into multiple partitions. Each partition is hosted by a backend data 
+server. User requests are forwarded to one of the front-end servers, which are responsible for issuing data requests to 
+the backend and implement the concurrency control logic. To reduce communication, each backend servers only maintains 
+states for its own partition. Global transaction states are exchanged via the link between servers. Compared with a 
+non-distributed database, network connection and latency between servers pose a different set of problems and hence 
+affects the overall design goal. For example, instead of trying to minimize data transfer between processing nodes 
+as in a non-distributed architecture, in a distributed settings we are more focused on reducing the number of 
+data communication. 
