@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "MaaT: Effective and Scalable Coordination of Distributed Transactions in the Cloud"
+date:   2018-12-19 00:01:00 -0500
+categories: paper
+paper_title: "MaaT: Effective and Scalable Coordination of Distributed Transactions in the Cloud"
+paper_link: http://www.vldb.org/pvldb/vol7/p329-mahmoud.pdf
+paper_keyword: MaaT; Concurrency Control; OCC; Interval-Based CC
+paper_year: VLDB 2014
+rw_set: Software
+htm_cd: N/A
+htm_cr: N/A
+version_mgmt: N/A
+---
