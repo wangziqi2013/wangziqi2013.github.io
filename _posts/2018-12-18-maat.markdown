@@ -95,3 +95,8 @@ has committed a write operation, the current transaction will serialize after it
 On the other hand, if a conflicting transaction has not yet committed when the current transaction is validating, then
 we assume that the former is lagging behind, and therefore will be serialized after the latter. In this case, we put
 the conflicting transaction into the after(T) set as well.
+
+After validation, the data server checks if the lb and the ub of the current transaction crosses. If they do, then 
+the transaction cannot commit. Otherwise, a commit interval is chosen as the range of valid commit timestamps. To avoid 
+aborting running transactions to aggressively by directly using [lb, ub) as the range, the data servers chooses a sub-range 
+within [lb, ub), and sends a commit message back to the client server.
