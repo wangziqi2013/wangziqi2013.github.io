@@ -88,4 +88,10 @@ such that the adjustment can be done later. The second part of validation is to 
 after all uncommitted readers of data items it intends to write. Similarly to read serialization, the status of 
 transactions in UR(y) is checked. If they have been committed or validated, the lb of the current transaction is 
 adjusted to the maximum of the ub of the reader transactions and the old lb of the current transaction. Uncommitted 
-reader transactions are added to another per-transaction set, before(T).
+reader transactions are added to another per-transaction set, before(T). The third part is to serialize writes 
+against writes of other transactions. Since write operations do not observe the value of each other, conflicting write 
+operations can be serialized in arbitraty order. In MaaT, the heuristic is used such that if another conflicting transaction 
+has committed a write operation, the current transaction will serialize after it, and will perform the write after validation.
+On the other hand, if a conflicting transaction has not yet committed when the current transaction is validating, then
+we assume that the former is lagging behind, and therefore will be serialized after the latter. In this case, we put
+the conflicting transaction into the after(T) set as well.
