@@ -59,12 +59,18 @@ transaction is known to that server.
 
 On transactional read, the client server sends a read request to the destination server. The destination server adds the transaction 
 into its transaction table if it is not already there. The server then returns the value of the data item together with the 
-wts of the item, as well as a list of conflicting locks. The data item is also read locked by the reading transaction. By reading
-the wts of data items, the transaction serializes after committed transactions that have written this item as the 
+wts of the item, as well as a list of conflicting lock owners denoted as UW(x). The data item is also read locked by the reading 
+transaction. By reading the wts of data items, the transaction serializes after committed transactions that have written this item as the 
 value has been observed. By returning the list of write lock holders, the transaction serializes before uncommitted writers of 
 the item, because the uncommitted values are not observed. By read locking the data item, the transaction guarantees that
 later uncommitted writes will also be serialized after it when the writer transaction validates. After receiving the 
 response from the destination server, the lb of the transaction is adjusted to the maximum of the current lb and the returned wts.
 
 Transactional write operations are processed locally: they are buffered in a write queue, and forwarded if later transactional
-reads hits a queue entry. No communication with the remote server is required for writes. 
+reads hits the same data item. No communication with the remote server is required for writes. 
+
+After the transaction body finishes execution, the client server validates the transaction before committing. A pre-write 
+message is sent to servers that the transaction has accessed. The message consists of the transaction's write set, and all 
+UW(x) sets collected during the read phase. We give a detailed description below how data server handles the pre-write message. 
+First, for all items in the write set, the server fetches the corresponding rts and wts. 
+
