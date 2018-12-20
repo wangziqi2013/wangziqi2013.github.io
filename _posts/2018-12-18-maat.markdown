@@ -41,9 +41,14 @@ High throughput, efficient CPU utilization, scalability, no thrashing, and liven
 
 One of the important features of MaaT is the usage of soft locks. Similar to ordinary mutual exclusion locks, soft locks
 can be acquired in two modes: read (shared) mode and write (exclusive) mode. Rather than blocking transactions from proceeding
-when a conflicting lock mode is acquired, soft locks never block. Instead, a list of conflicting lock owners are returned, which 
+when a conflicting lock mode is attempted, soft locks never block. Instead, a list of conflicting lock owners are returned, which 
 serves as the basis for conflict resolution during validation. Soft locks are acquired in a two-phase manner as in S2PL. 
 Once the transaction is committed or aborted, all soft locks will be released.
+
+Another important data structure is the transaction table. Every data server has a transaction table which records the 
+status of transaction on its partition. The transaction table only maintains the transaction status that is consistent
+with its local access on the server, which is not coherenct across servers. This way, we avoid expensive broadcast on 
+the validation stage, which is a must in some early interval-based distributed protocols.
 
 
 
