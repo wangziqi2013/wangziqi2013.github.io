@@ -80,9 +80,12 @@ Finally, the server write locks the data item for later reads and writes from ot
 
 The data server then proceeds to validate the transaction. The validation algorithm in MaaT tries to reduce aborts by 
 serializing transactions as much as possible instead of forcing them to abort when a conflict is detected. The serialization
-consists of two parts. First, the current transaction serializes before uncommitted writers on data items it has read. This 
+consists of three parts. First, the current transaction serializes before uncommitted writers on data items it has read. This 
 is achieved by checking the status of transactions in UW(x) set. If any of them is committed or validated, the ub
-of the current transaction is adjusted as the smaller one of lb of the writer transactions and the old ub of the 
+of the current transaction is adjusted as the minimum of lb of the writer transactions and the old ub of the 
 current transaction. If these transactions are still uncommitted, they are put into a per-transaction set, after(T),
-such that the adjustment can be done later. The second part is 
-
+such that the adjustment can be done later. The second part of validation is to serialize the current transaction
+after all uncommitted readers of data items it intends to write. Similarly to read serialization, the status of 
+transactions in UR(y) is checked. If they have been committed or validated, the lb of the current transaction is 
+adjusted to the maximum of the ub of the reader transactions and the old lb of the current transaction. Uncommitted 
+reader transactions are added to another per-transaction set, before(T).
