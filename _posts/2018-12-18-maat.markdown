@@ -99,4 +99,14 @@ the conflicting transaction into the after(T) set as well.
 After validation, the data server checks if the lb and the ub of the current transaction crosses. If they do, then 
 the transaction cannot commit. Otherwise, a commit interval is chosen as the range of valid commit timestamps. To avoid 
 aborting running transactions to aggressively by directly using [lb, ub) as the range, the data servers chooses a sub-range 
-within [lb, ub), and sends a commit message back to the client server.
+within [lb, ub), and sends a commit message back to the client server. The state of the transaction is also 
+changed to VALIDATED to avoid being aborted by validations of other transactions.
+
+After receiving the commit message from all data servers, the client server performs the last step of validation
+by intersecting the ranges from all servers. If the final range is still valid, then the transaction is ready to commit.
+The client server sends a commit confirmation message consisting of the read set, the write set of the transaction and the 
+final commit timestamp (which is selected from the range) to data servers. On receiving the message, the data server
+applies writes to data items, adjusts their wts and rts using the commit timestamp, and updates the lb and ub of the 
+current transaction in its transaction table to the commit timestamp. The lb and ub of transactions in before(T) and 
+after(T) are also adjusted accordingly to reflect the fact that the dependencies are materialized after the transaction 
+has committed. All soft locks acquired by the transaction are released.
