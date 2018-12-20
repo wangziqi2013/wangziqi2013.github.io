@@ -117,4 +117,10 @@ transactions. To see an example, consider the case where another transaction T' 
 after transaction T read locked it. Transaction T knows nothing about T' when it performs validation. Actually,
 the serialization between T and T' on the data item is performed by T'. If T removes itself from the table 
 right after it commits, T' would not be able to find the entry of T when T' validates, which will lead to incorrect
-serialization because the WAR dependency between T' and T is not enforced. 
+serialization because the WAR dependency between T' and T is not enforced. To solve the garbage collection problem,
+either transaction T' increments the reference counter when it locks the data item in a conflicting mode, or 
+registers itself into T's transaction states. If reference counting is used, then the entry for T can be safely 
+recycled when the number decreases to zero after T commits (because we know after T releases its soft locks there 
+will not be any more increments). If T' registers the dependency to T explicitly, then on the last step of T's 
+commit sequence, T will adjust the lb and ub to be consistent with the dependency, and then immediately remove
+the entry from the table.
