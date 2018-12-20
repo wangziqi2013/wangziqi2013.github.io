@@ -72,5 +72,9 @@ reads hits the same data item. No communication with the remote server is requir
 After the transaction body finishes execution, the client server validates the transaction before committing. A pre-write 
 message is sent to servers that the transaction has accessed. The message consists of the transaction's write set, and all 
 UW(x) sets collected during the read phase. We give a detailed description below how data server handles the pre-write message. 
-First, for all items in the write set, the server fetches the corresponding rts and wts. 
+First, for all items in the write set, the server fetches the corresponding rts and wts. The write operation synchrionizes
+with committed reads and writes by adjusting its lb to the maximum of rts, wts, and the old lb. Second, the server detects 
+all conflicting locks for elements in the write set. Uncommitted reads (i.e. transactions that have read locked the 
+item) are denoted as UR(y) and uncommitted writes (i.e. transactions that have write locked the item) are denoted as UW(y).
+Finally, the server write locks the data item for later reads and writes from other transactions to synchronize with it.
 
