@@ -110,3 +110,11 @@ applies writes to data items, adjusts their wts and rts using the commit timesta
 current transaction in its transaction table to the commit timestamp. The lb and ub of transactions in before(T) and 
 after(T) are also adjusted accordingly to reflect the fact that the dependencies are materialized after the transaction 
 has committed. All soft locks acquired by the transaction are released.
+
+The entry in the transaction table cannot be deleted immediately after the transaction commits. This is because 
+UW(x), UR(y) and UW(y) do not include all dependencies the transaction has established with other uncommitted 
+transactions. To see an example, consider the case where another transaction T' just write locked an item
+after transaction T read locked it. Transaction T knows nothing about T' when it performs validation. Actually,
+the serialization between T and T' on the data item is performed by T'. If T removes itself from the table 
+right after it commits, T' would not be able to find the entry of T when T' validates, which will lead to incorrect
+serialization because the WAR dependency between T' and T is not enforced. 
