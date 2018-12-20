@@ -30,12 +30,17 @@ indicating the largest committed transaction that wrote this item. Both timestam
 transaction commits.
 
 Under distributed settings, the database is divided into multiple partitions. Each partition is hosted by a backend data 
-server. User requests are forwarded to one of the front-end servers, which are responsible for issuing data requests to 
-the backend and implement the concurrency control logic. To reduce communication, each backend server only maintains 
+server. User requests are forwarded to one of the front-end servers, which implement the concurrency control logic, and 
+are responsible for issuing data requests to the backend. To reduce synchronization, each backend server only maintains 
 states for its own partition. Global transaction states are exchanged via the link between servers. Compared with a 
 non-distributed database, network connection and latency between servers pose a different set of problems and hence 
 affects the overall design goal. For example, instead of trying to minimize data transfer between processing nodes 
 as in a non-distributed architecture, in distributed designs we are more focused on reducing the number of 
 data communication. This paper proposes five design goals that a distributed database CC scheme should generally meet:
 High throughput, efficient CPU utilization, scalability, no thrashing, and liveness.
+
+One of the important features of MaaT is the usage of soft locks. Similar to ordinary mutual exclusion locks, soft locks
+can be acquired in two modes: read (shared) mode and write (exclusive) mode. Rather than blocking transactions from proceeding
+when a conflicting lock mode is acquired, soft locks never block. Instead, a list of current lock owners are returned, which 
+serves as the basis for conflict resolution during validation.
 
