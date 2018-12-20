@@ -52,9 +52,19 @@ the validation stage, which is a requirement in some earlier interval-based dist
 
 The details of the CC scheme is described as follows. On system initialization, all data items are initialized such that their
 wts and rts are both zero. No centralized counter dispensing timestamps is required. On transaction begin, its lb and ub are 
-initialized to 0 and +&infin; respectively. A new entry is also created in the transaction table. This only needs to be done at 
-the server responsible for running CC for the transaction. The table entry is created on other servers lazily after the transaction 
-is known to that server. 
+initialized to 0 and +&infin; respectively. The transaction is assigned a unique transaction ID (TID) as the system-wide identifier. 
+A new entry is also created in the transaction table. This only needs to be done at 
+the server responsible for running CC for the transaction. The table entry is created on other servers lazily only after the 
+transaction is known to that server. 
+
+On transactional read, the server sends a read request to the destination server. The destination server adds the transaction 
+into its transaction table if it is not already there. The server then returns the value of the data item together with the 
+wts of the item, as well as a list of conflicting locks. The data item is also read locked by the reading transaction. By reading
+the wts of data items, the transaction serializes after committed transactions that have written this item as the 
+value has been observed. By returning the list of write lock holders, the transaction serializes before uncommitted writers of 
+the item, because the uncommitted values are not observed. By read locking the data item, the transaction guarantees that
+later uncommitted writes will also be serialized after it when the writer transaction validates. After receiving the 
+response from the destination server, the lb of the transaction is adjusted to the maximum of the current lb and the returned wts.
 
 
 
