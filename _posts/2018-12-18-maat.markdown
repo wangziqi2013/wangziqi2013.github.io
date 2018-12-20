@@ -57,7 +57,7 @@ A new entry is also created in the transaction table. This only needs to be done
 the server responsible for running CC for the transaction. The table entry is created on other servers lazily only after the 
 transaction is known to that server. 
 
-On transactional read, the server sends a read request to the destination server. The destination server adds the transaction 
+On transactional read, the client server sends a read request to the destination server. The destination server adds the transaction 
 into its transaction table if it is not already there. The server then returns the value of the data item together with the 
 wts of the item, as well as a list of conflicting locks. The data item is also read locked by the reading transaction. By reading
 the wts of data items, the transaction serializes after committed transactions that have written this item as the 
@@ -66,5 +66,5 @@ the item, because the uncommitted values are not observed. By read locking the d
 later uncommitted writes will also be serialized after it when the writer transaction validates. After receiving the 
 response from the destination server, the lb of the transaction is adjusted to the maximum of the current lb and the returned wts.
 
-
-
+Transactional write operations are processed locally: they are buffered in a write queue, and forwarded if later transactional
+reads hits a queue entry. No communication with the remote server is required for writes. 
