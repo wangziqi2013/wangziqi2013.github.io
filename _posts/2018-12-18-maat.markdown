@@ -41,6 +41,9 @@ High throughput, efficient CPU utilization, scalability, no thrashing, and liven
 
 One of the important features of MaaT is the usage of soft locks. Similar to ordinary mutual exclusion locks, soft locks
 can be acquired in two modes: read (shared) mode and write (exclusive) mode. Rather than blocking transactions from proceeding
-when a conflicting lock mode is acquired, soft locks never block. Instead, a list of current lock owners are returned, which 
-serves as the basis for conflict resolution during validation.
+when a conflicting lock mode is acquired, soft locks never block. Instead, a list of conflicting lock owners are returned, which 
+serves as the basis for conflict resolution during validation. Soft locks are acquired in a two-phase manner as in S2PL. 
+Once the transaction is committed or aborted, all soft locks will be released.
+
+
 
