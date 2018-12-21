@@ -81,4 +81,7 @@ After the transaction commits, the soft locks must not be immediately released. 
 may still have to serialize against committed operations. Delayed lock release is required as a compensate for lacking
 read timestamps. For example, assume transaction A reads version 90, and commits at 100. If another transaction B wishes 
 to write a value, the timestamp of B must at least be 101, because A did not read the value written by B and hence 
-is serialized before B. If A removes the soft read lock
+is serialized before B. If A removes the soft read lock after it commits, there is no way for B to know that it could not 
+use a timestamp between 90 and 100. If B eventually commits at 95, serializability is violated. To garbage collect
+soft locks on data items, the TCM must make sure that the soft lock is only removed when it can no longer affect the 
+interval of active and future transactions. 
