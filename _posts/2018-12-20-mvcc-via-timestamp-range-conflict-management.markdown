@@ -22,3 +22,10 @@ suffers less aborts, because OCC does not tolerate any Write-After-Read (WAR) co
 if WAR is detected no matter if it can be resolved, the transaction must be aborted. In contrast, TCM performs more detailed 
 analysis using timestamps and the nature of conflicts, and hence allows more transactions to commit given the same workload
 and scheduling compared with OCC.
+
+The storage engine maintains multiple versions of data items. Each version is tagged with a timestamp. On transaction
+commit, after the commit timestamp has been selected, the storage engine commits the write set of the transaction and 
+tag them with the transaction's commit timestamp. Compared with some schemes which maintains two timestamps per item: 
+one for read (rts) and one for write (wts), this scheme could save storage that is dedicated to timestamps. As a compensation,
+transactions must hold their soft locks on data items even after they commit. The soft lock requires an extra garbage collection
+mechanism in addition to the GC for versions.
