@@ -53,8 +53,12 @@ as we will show later.
 If a conflicting lock mode has already been acquired by another transaction (i.e. a writer transaction), the current transaction
 will try to resolve the conflict eagerly by adjusting either its timestamp or the timestamp of the other transaction. 
 TCM maintains a lock manager that operates exactly the same as an ordinary lock manager except that it does not always block.
-On a conflict, the lock manager returns the list of transactions that are incompatible with the current
-
+On a conflict, the lock manager returns the list of transactions that are incompatible with the current requestor, which 
+will be used for the next step of conflict resolution. In most cases, the reader transaction should be able to serialize before 
+uncommitted writes by forcing the writer transaction's lb to shrink (and also lowering its ub), after which the reader could 
+proceed without blocking. If the above is not possible, then the reader transaction will fall back and serialize after the 
+uncommitted write by adjusting its lb to a higher value (and also lowering the other transaction's ub). The transaction
+will then be blocked, because in order to access the uncommitted data item, the writer transaction must commit first.
 
 
 On transactional write, the TCM buffers dirty data in a transactional-local area. 
