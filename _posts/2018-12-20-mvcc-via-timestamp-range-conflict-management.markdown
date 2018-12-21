@@ -29,3 +29,8 @@ tag them with the transaction's commit timestamp. Compared with some schemes whi
 one for read (rts) and one for write (wts), this scheme could save storage that is dedicated to timestamps. As a compensation,
 transactions must hold their soft locks on data items even after they commit. The soft lock requires an extra garbage collection
 mechanism in addition to the GC for versions.
+
+Each TCM transaction has two timestamps: a lower bound (lb) which denotes the smallest logical time the transaction could commit,
+and an upper bound (ub) which denotes the largest logical time the transaction could commit. If lb and ub cross (i.e. lb becomes 
+larger than ub), then the transaction must immediately abort, because a conflict cycle will occur if the transaction commits. 
+During the execution of the transaction, the lb and ub are adjusted dynamically according to the execution of concurrent transactions. 
