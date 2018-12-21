@@ -63,4 +63,8 @@ will then be blocked, because in order to access the uncommitted data item, the 
 On transactional write, the TCM buffers dirty data in a transactional-local area. The data item is also write locked.
 The lock manager returns the list of conflicting lock holders, if any. If the write operation conflicts with any other 
 running transaction, the current transaction will try to serialize against them by adjusting intervals. There are two cases 
-two consider. 
+two consider. First, if the current transaction conflicts with an uncommitted read, the former will try to serialize 
+after the read, as the latter does not observe the uncommitted write value. This is done whenever possible by raising 
+the lb of the current transaction (and also lowering the ub of the reading transaction). Otherwise, the write transaction
+serializes before the reader transaction using similar adjustments to the lb and ub, after blocking and waiting the 
+reader to commit first.
