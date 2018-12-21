@@ -69,4 +69,6 @@ two consider. First, if the current transaction conflicts with an uncommitted re
 after the reader, as the latter does not observe the uncommitted write value. This is done whenever possible by raising 
 the lb of the current transaction (and also lowering the ub of the reading transaction). Otherwise, the write transaction
 serializes before the reader transaction using similar adjustments to the lb and ub, after blocking and waiting the 
-reader to commit first. 
+reader to commit first. In the second case, the lock holder is a writing transaction. The current transaction can only choose
+to serialize after it, and then block. If serialization is not possible, the current transaction immediately aborts, 
+because TCM does not allowing write operations to be serialized before another uncommitted write.
