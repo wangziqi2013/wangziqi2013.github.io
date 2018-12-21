@@ -12,3 +12,10 @@ htm_cd: N/A
 htm_cr: N/A
 version_mgmt: N/A
 ---
+
+This paper presents Transaction Conflict Manager (TCM), a MVCC transaction processing engine from Microsoft. 
+Instead of utilizing multiversioning and only provides Snapshot Isolation (SI), this paper combines multiversioning 
+with Optimistic Concurrency Control (OCC), and provides full serializability support. Compared with Two-Phase Locking (2PL), 
+this approach allows higher degrees of parallelism, because transactions are allowed to proceed in parallel even if they conflict. 
+The conflict is resolved eagerly as in 2PL, but blocking is not always required. Compared with traditional OCC, TCM 
+suffers less aborts
