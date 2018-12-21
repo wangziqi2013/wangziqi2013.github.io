@@ -72,3 +72,13 @@ serializes before the reader transaction using similar adjustments to the lb and
 reader to commit first. In the second case, the lock holder is a writing transaction. The current transaction can only choose
 to serialize after it, and then block. If serialization is not possible, the current transaction immediately aborts, 
 because TCM does not allowing write operations to be serialized before another uncommitted write.
+
+On transaction commit, no extra validation is required, because the CC scheme detects and resolves conflicts eagerly. 
+The transaction simply tests whether its interval is still valid, and if it is, writes back all dirty values by creating 
+new versions. The commit timestamp is chosen as the earliest possible timestamp in the interval. 
+
+After the transaction commits, the soft locks must not be immediately released. This is because future reads and writes 
+may still have to serialize against committed operations. Delayed lock release is required as a compensate for lacking
+read timestamps. For example, assume transaction A reads version 90, and commits at 100. If another transaction B wishes 
+to write a value, the timestamp of B must at least be 101, because A did not read the value written by B and hence 
+is serialized before B. If A removes the soft read lock
