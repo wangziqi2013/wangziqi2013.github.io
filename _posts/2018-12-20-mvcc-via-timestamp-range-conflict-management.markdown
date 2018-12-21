@@ -60,5 +60,7 @@ proceed without blocking. If the above is not possible, then the reader transact
 uncommitted write by adjusting its lb to a higher value (and also lowering the other transaction's ub). The transaction
 will then be blocked, because in order to access the uncommitted data item, the writer transaction must commit first.
 
-
-On transactional write, the TCM buffers dirty data in a transactional-local area. 
+On transactional write, the TCM buffers dirty data in a transactional-local area. The data item is also write locked.
+The lock manager returns the list of conflicting lock holders, if any. If the write operation conflicts with any other 
+running transaction, the current transaction will try to serialize against them by adjusting intervals. There are two cases 
+two consider. 
