@@ -33,4 +33,14 @@ mechanism in addition to the GC for versions.
 Each TCM transaction has two timestamps: a lower bound (lb) which denotes the smallest logical time the transaction could commit,
 and an upper bound (ub) which denotes the largest logical time the transaction could commit. If lb and ub cross (i.e. lb becomes 
 larger than ub), then the transaction must immediately abort, because a conflict cycle will occur if the transaction commits. 
-During the execution of the transaction, the lb and ub are adjusted dynamically according to the execution of concurrent transactions. 
+During the execution of the transaction, the lb and ub are adjusted dynamically according to the execution of concurrent 
+transactions. We next discuss how transactional operations are handled in detail.
+
+On transaction begin, lb is initialized to the current time, and ub is initialized to +&infin;. The source of "current time"
+can either be a real time clock with sufficient precision, or a software counter that is atomically incremented after every
+timestamp read. Note that this is different from some data-driven timestamping schemes, where the lb is initialized to 
+zero, and will be adjusted according to the rts or wts of data items it accesses as a means of serializing committed 
+transactions. In TCM, transactions do not serialize against committed transactions using rts or wts. Instead, the transaction
+is assigned a timestamp that allows it to access the most current snapshot of the state, which can be only increased but 
+not decreased. 
+
