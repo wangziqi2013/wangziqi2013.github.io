@@ -84,4 +84,7 @@ to write a value, the timestamp of B must at least be 101, because A did not rea
 is serialized before B. If A removes the soft read lock after it commits, there is no way for B to know that it could not 
 use a timestamp between 90 and 100. If B eventually commits at 95, serializability is violated. To garbage collect
 soft locks on data items, the TCM must make sure that the soft lock is only removed when it can no longer affect the 
-interval of active and future transactions. 
+interval of active and future transactions. For soft read locks, the TCM removes it anytime after the 
+global lock that is used to dispense lb on transaction begin is larger than the committed transaction's commit time.
+This is safe because no transaction after this point will commit with a timestamp smaller than the committed read
+timestamp.
