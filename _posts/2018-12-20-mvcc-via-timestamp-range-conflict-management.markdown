@@ -44,8 +44,17 @@ transactions. In TCM, transactions do not serialize against committed transactio
 is assigned a timestamp that allows it to access the most current snapshot of the state, which can be only increased but 
 not decreased. 
 
-On transactional read, the TCM traverses the version chain beginning from the most up-to-date version to older versions. 
+On transactional read, the TCM traverses the version chain beginning from the most up-to-date version towards older versions. 
 The first version whose timestamp is less than the lb of the transaction during the traversal will be used to fulfill the read
 operation. This way, we are guaranteed that the transaction can always access a consistent snapshot at logical time lb.
 A soft read lock is also acquired to ensure that later writing transactions on this item will serialize with the current transaction,
-as we will show later.
+as we will show later. 
+
+If a conflicting lock mode has already been acquired by another transaction (i.e. a writer transaction), the current transaction
+will try to resolve the conflict eagerly by adjusting either its timestamp or the timestamp of the other transaction. 
+TCM maintains a lock manager that operates exactly the same as an ordinary lock manager except that it does not always block.
+On a conflict, the lock manager returns the list of transactions that are incompatible with the current
+
+
+
+On transactional write, the TCM buffers dirty data in a transactional-local area. 
