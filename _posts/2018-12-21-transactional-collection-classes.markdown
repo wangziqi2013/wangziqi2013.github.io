@@ -36,4 +36,8 @@ Semantic concurrency control tries to deliver the best of both closed nesting an
 read and write sets of the child transaction into the parent's, they can be diacarded as soon as the child 
 transaction commits. This reduces the chance that the child transaction physically conflicts with concurrent transactions 
 that access the data structure. On the other hand, accesses to the data structure are restricted by semantic locks. 
-If an access is not compatible with the 
+If an access is not compatible with an existing committed operation, then one of these two operations have to be aborted.
+Compared with previous approaches, by using semantic locks, transactions on the data structure only conflicts on 
+logical operations. Physical conflicts are tolerated, as long as (1) The consistency of the data structure is preserved,
+i.e. these operations still need to be atomic with regard to each other, but they are not necessarily atomic in the 
+context of the parent transaction; (2) The semantics of the operations do not conflict. One example
