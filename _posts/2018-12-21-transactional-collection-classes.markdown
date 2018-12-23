@@ -81,4 +81,6 @@ The commit handler should itself execute as a closed nested transaction, because
 of the parent transaction (e.g. the store queue). If the commit handler aborts due to physical conflicts on the data structure,
 it can simply be retried without aborting the parent. The abort handler, on the other hand, must be executed as an open nested
 transaction, because otherwise, the update performed by the abort handler will be diacarded when the parent transaction eventually 
-aborts.
+aborts. The abort handler should explicitly roll back any changes made in open nested transactions during the execution of the 
+transaction body. If only read-only open nested transactions are executed, then there is nothing to roll back, and the abort
+handler simply performs a cleanup.
