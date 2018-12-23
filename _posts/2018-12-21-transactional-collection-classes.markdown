@@ -26,4 +26,8 @@ is rolled back on a conflict. Dirty results of the child transaction can only be
 parent commits. Compared with flattened transaction, closed nesting can reduce the number of wasted cycles
 when only the child transaction encounters a conflict but not the parent. After the child transaction commits, conflict 
 detection will still be performed for the committed child transaction, as the read and write sets of the child transaction
-are merged into its parent. 
+are merged into its parent. The last model is open nesting. Compared with closed nexting, open nesting transactions
+expose their dirty values immediately after they commit. Reads and writes of the child transaction do not cause aborts
+after it commits. If the parent transaction aborts, an abort handler must be executed which rolls back the committed
+child transaction explicitly. Isolation is not maintained for open nested transactions, and without extra mechanism to 
+enforce data accesses, open nested transactions may not satisfy serializability.
