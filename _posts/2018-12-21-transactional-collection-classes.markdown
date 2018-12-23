@@ -75,3 +75,10 @@ wrapped in a transaction to avoid creating inconsistencies in the data structure
 operations running on the data structure as well at the same moment. If the commit transaction fails because of 
 low level physical accesses conflict, it can simply be just retried without rolling back the parent. After transaction commits
 or aborts, the store queue and locks are both released.
+
+One important component of semantic locking is the commit and abort handler. They are invoked on transaction commit or abort.
+The commit handler should itself execute as a closed nested transaction, because it needs to access the transactional state
+of the parent transaction (e.g. the store queue). If the commit handler aborts due to physical conflicts on the data structure,
+it can simply be retried without aborting the parent. The abort handler, on the other hand, must be executed as an open nested
+transaction, because otherwise, the update performed by the abort handler will be diacarded when the parent transaction eventually 
+aborts.
