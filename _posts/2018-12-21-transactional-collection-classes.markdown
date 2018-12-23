@@ -43,4 +43,6 @@ i.e. these operations still need to be atomic with regard to each other, but the
 context of the parent transaction; (2) The semantics of the operations do not conflict. One example is the semantics of 
 an integer set. Adding a member into the set does not conflict with membership query as long as the key of these two
 operations are distinct. On the physical implementation level, however, these two operations might conflict just
-because they modify the same counter, linked list node, etc. 
+because they modify the same counter, linked list node, etc. If we reduce the goal of concurrency control down to simply 
+avoiding logical conflicts, while preserving the consistency of the data structure, less aborts will be observed, which
+reduces both the number of wasted cycles, and increases concurrency.
