@@ -57,6 +57,9 @@ things can happen. If the operation is read-only, then it is executed as an open
 commits, it acquires semantic locks that indicate incompatible operations. Note that transactions are stilled used 
 to guarantee isolation of operations as well as consistency of the data structure. It is just that after the open nested
 transaction commits, the parent will not be aborted by later operations on the data structure, because conflicts are 
-now detected based on semantic locks, rather than memory access pattern. If the read-only transaction fails, the parent
+now detected based on semantic locks, rather than the memory access pattern. If the read-only transaction fails, the parent
 does not need to roll back. Instead, only the read-only child transaction is retried, since it is read-only and always 
-idempotent.
+idempotent. If, on the other hand, the operation is read-write, it is executed within a sandbox, i.e. all modifications 
+to global data will be redirected to a transactional-local buffer used as a software store queue. If reads from the 
+same transaction hits the store queue, then these accesses will also be redirected to the buffer. On transaction commit,
+conflict resolution is performed by applying these changes in the store queue back to the data structure.
