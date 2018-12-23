@@ -52,3 +52,11 @@ must first figure out which operations would conflict on each other on which con
 on integer sets, addition of an element will conflict with membership query of the same key, element removal of the same key 
 and size query in all cases. After figuring out conflicting patterns between operations, we add semantic locks to
 the data structure. Semantic locks are acquired by reading transactions on the data structure before they commit.
+When a parent transaction accesses the data structure via some operations, depending on the operation type, two different 
+things can happen. If the operation is read-only, then it is executed as an open nested transaction. Before the transaction
+commits, it acquires semantic locks that indicate incompatible operations. Note that transactions are stilled used 
+to guarantee isolation of operations as well as consistency of the data structure. It is just that after the open nested
+transaction commits, the parent will not be aborted by later operations on the data structure, because conflicts are 
+now detected based on semantic locks, rather than memory access pattern. If the read-only transaction fails, the parent
+does not need to roll back. Instead, only the read-only child transaction is retried, since it is read-only and always 
+idempotent.
