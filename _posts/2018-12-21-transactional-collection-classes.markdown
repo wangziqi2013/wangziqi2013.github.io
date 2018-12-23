@@ -68,4 +68,10 @@ by uncommitted reading transactions. In the set example, if a read-only transact
 transaction inserts 100, then the semantic lock for key = 100 is acquired by the former. When the latter commits,
 the commit handler should be able to discover that the lock is being held by the former, and hence detects a conflict.
 In this paper, conflicts are detected and resolved using Forward OCC (FOCC). Either the commit handler aborts the 
-writing transaction, or the reader fails and retry after the writer commits. 
+writing transaction, or the reader fails and retry after the writer commits. Let us assume that the reading transaction
+is aborted (and the parnt rolls back to the point where the nested reading transaction is invoked), the commit handler
+then proceeds to commit all changes in the store queue back to the data structure. This write back sequence must also be 
+wrapped in a transaction to avoid creating inconsistencies in the data structure, since there can be concurrent 
+operations running on the data structure as well at the same moment. If the commit transaction fails because of 
+low level physical accesses conflict, it can simply be just retried without rolling back the parent. After transaction commits
+or aborts, the store queue and locks are both released.
