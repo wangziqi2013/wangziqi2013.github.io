@@ -31,3 +31,9 @@ expose their dirty values immediately after they commit. Reads and writes of the
 after it commits. If the parent transaction aborts, an abort handler must be executed which rolls back the committed
 child transaction explicitly. Isolation is not maintained for open nested transactions, and without extra mechanism to 
 enforce data accesses, open nested transactions may not satisfy serializability.
+
+Semantic concurrency control tries to deliver the best of both closed nesting and open nesting: Instead of merging the 
+read and write sets of the child transaction into the parent's, they can be diacarded as soon as the child 
+transaction commits. This reduces the chance that the child transaction physically conflicts with concurrent transactions 
+that access the data structure. On the other hand, accesses to the data structure are restricted by semantic locks. 
+If an access is not compatible with the 
