@@ -62,4 +62,10 @@ does not need to roll back. Instead, only the read-only child transaction is ret
 idempotent. If, on the other hand, the operation is read-write, it is executed within a sandbox, i.e. all modifications 
 to global data will be redirected to a transactional-local buffer used as a software store queue. If reads from the 
 same transaction hits the store queue, then these accesses will also be redirected to the buffer. On transaction commit,
-conflict resolution is performed by applying these changes in the store queue back to the data structure.
+conflict resolution is performed by applying these changes in the store queue back to the data structure using a 
+commit handler. It is described as follows. First, the commit handler checks whether any conflicting locks is being held
+by uncommitted reading transactions. In the set example, if a read-only transaction queries for key x = 100, and the writing
+transaction inserts 100, then the semantic lock for key = 100 is acquired by the former. When the latter commits,
+the commit handler should be able to discover that the lock is being held by the former, and hence detects a conflict.
+In this paper, conflicts are detected and resolved using Forward OCC (FOCC). Either the commit handler aborts the 
+writing transaction, or the reader fails and retry after the writer commits. 
