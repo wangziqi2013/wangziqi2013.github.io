@@ -46,3 +46,9 @@ operations are distinct. On the physical implementation level, however, these tw
 because they modify the same counter, linked list node, etc. If we reduce the goal of concurrency control down to simply 
 avoiding logical conflicts, while preserving the consistency of the data structure, less aborts will be observed, which
 reduces both the number of wasted cycles, and increases concurrency.
+
+The details of the algorithm are described as follows. Before we apply semantic concurrency control to data structures, we 
+must first figure out which operations would conflict on each other on which conditions. As shown in the above example
+on integer sets, addition of an element will conflict with membership query of the same key, element removal of the same key 
+and size query in all cases. After figuring out conflicting patterns between operations, we add semantic locks to
+the data structure. Semantic locks are acquired by reading transactions on the data structure before they commit.
