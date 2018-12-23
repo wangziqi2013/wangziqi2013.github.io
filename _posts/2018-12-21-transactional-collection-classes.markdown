@@ -20,4 +20,9 @@ data structure are expected to complete as an atomic unit), then it is inevitabl
 data structure operations will be nested with the parent transaction. Depending on the design of the transactional memory, three
 nested models are generally available: First, nested transactions can be flattened, and hence become part of the parent 
 transaction. The read and write set of the child transaction will be merged with the parent's. If the nested transaction 
-needs to abort, then the entire parent will also be rolled back. The second model is called 
+needs to abort, then the entire parent will also be rolled back. The second model is called closed nesting, where the 
+read and write sets of the child transaction is maintained separately, and it is possible that only the child transaction
+is rolled back on a conflict. Dirty results of the child transaction can only be observed by other transactions after the 
+parent commits. Compared with flattened transaction, closed nesting can reduce the number of wasted cycles
+when only the child transaction encounters a conflict but not the parent. After the child transaction commits, conflict 
+detection will not be performed for the committed child transaction. The last model is open nest
