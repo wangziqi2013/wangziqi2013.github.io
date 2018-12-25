@@ -24,3 +24,9 @@ graphs, where nodes are linked together using pointers. The last reason is that 
 is typically slow. Letting the accelerator fetch data from the main memory, on the other hand, amortizes the overhead
 of data movement, and hence enables finer grained batches being processed by the accelerator. 
 
+When accelerators access the memory using virtual addresses, the IOMMU is responsible for translating virtual addresses
+into a physical addresses. IOMMU is a device connected to the system bus. All memory requests issued by the device must
+be forwarded by the IOMMU in order to reach memory. During system startup, the Operating System configures the IOMMU
+by assigning I/O page tables to devices. Each device could have its own page table, the content of which may or may not be 
+identical with the page table used by MMU. The IOMMU translates the address in the memory request issued by devices 
+using the page table before forwading them to the memory controller.
