@@ -14,5 +14,9 @@ version_mgmt:
 ---
 
 This paper proposes Devirtualized Memory (DVM), which aims at providing high memory bandwidth to accelerators that
-can access virtual address space. This is crucial in improving the usability and efficiency of accelerators 
-(such as GPUs).
+can access virtual address space. This is crucial for improving the usability and efficiency of accelerators 
+such as GPUs for three reasons. First, accelerators need to access virtual memory for better protection and resource 
+multiplexing. The virtual memory protection bits and remapping fits into this perfectly. Second, if accelerators could 
+access the virtual memory as the CPU does, then a pointer on the CPU has the same meaning on the accelerator. Pointer
+based data structures, such as linked lists, trees and graphs, can be transferred between CPU and accelerator directly without
+data marshalling and unmarshalling.
