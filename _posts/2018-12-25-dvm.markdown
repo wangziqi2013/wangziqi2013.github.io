@@ -46,3 +46,10 @@ useful if the OS can find an identity mapping that is almost consecutive, with a
 been occupied for other purposes. Instead of giving up finding an identify mapping, the holds can be masked off by setting 
 the permission bits to Invalid. 
 
+The PE distinguishes itself from other PTE types using the type field in the PTE. When the page walker accesses the PTE, 
+it checks whether the PTE is of PE type. If this is true, then translation terminates, and the page walker treats the 
+remainder bits in the address as an offset and computes the permission of the address. Otherwise, the page walker 
+walks the page table as usual. An important invariant of this design is that if there is a PE on the path of 
+the page walk, the time it takes is always less than or equal to normal address translation, because the page walker
+only does less but not more. The paper therefore concludes that, by using permission bits, the new system can run at least 
+as fast as an unchanged one.
