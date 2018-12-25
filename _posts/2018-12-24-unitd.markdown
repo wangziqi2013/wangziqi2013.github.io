@@ -15,11 +15,18 @@ version_mgmt:
 
 This paper presents UNITD, a unified mechanism for maintaining coherence for caches and the Translation-Lookaside Buffer 
 (TLB) using the classical cache coherence infrastructure. Traditionally, TLB are not maintained coherent by the hardware,
-unlike the cache. There are two reasons. The first is that although cache coherence are important in most cases, as data 
+unlike the cache. There are three reasons. The first is that although cache coherence are important in most cases, as data 
 sharing between processors are very common, TLB entries, on the other hand, are only invalidated when the underlying page 
-table entries (PTEs) are modified. Maintaining coherent TLB across processors hence may not justify the extra hardware and 
-design efforts in order to implement it. The second reason is that since TLB coherence is already well-handled by existing
+table entries (PTEs) are modified. In addition, TLB modifications can be classified into "safe" and "unsafe". "Safe" 
+modifications are those that initializes an invalid virtual address (VA), or that the permission is lowered. In these two 
+cases, the modifying processor does not have to notify other processors that the change has been made. This OS could handle
+them lazily. When the exception is raised by other processors when they access the page using out-of-date. Maintaining coherent 
+TLB across processors hence may not justify the extra hardware and 
+design efforts in order to implement it. The last reason is that since TLB coherence is already well-handled by existing
 software, i.e. Operating Systems, even if hardware coherence is implemented, people would be reluctant migrating to the 
-new method, because the old approach works very well.
+new method, because the old approach works very well. These approaches are called "TLB shootdown", and they generally involve
+one processor setting up a list of sharers for a certain PTE, and trriggering Inter-Processor Interrupts (IPI) to all sharers.
+Sharers of the PTE will invalidate the corresponding TLB entries, and remove themselves from the list. Once all entries have been
+removed, the initiator processor could proceed to modify the page table entry.
 
-
+The trend that so, however, does not continue
