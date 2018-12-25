@@ -68,5 +68,6 @@ load operation and everything that follows, and re-executes the load using the c
 
 To obtain identity mapping, the OS memory allocator needs to be modified in order to work with identity mapping. For 
 maximum compatibility, only heap allocations are considered for identity mapping. The memory allocator uses modified 
-mmap() which will try to obtain a range of pre-populated physical addresses. It then assigns a virtual address to 
-the range, which constitutes an identity mapping. 
+mmap() which will try to obtain a range of pre-populated physical pages. It then assigns an identical virtual address 
+to the range, which constitutes an identity mapping. If identity mapping cannot be constructed, the allocator falls back
+to using the original allocator. Correctness will not not affected in this case.
