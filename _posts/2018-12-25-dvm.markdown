@@ -1,0 +1,18 @@
+---
+layout: paper-summary
+title:  "Devirtualizing Memory in Heteogeneous System"
+date:   2018-12-25 00:01:00 -0500
+categories: paper
+paper_title: "Devirtualizing Memory in Heteogeneous System"
+paper_link: https://dl.acm.org/citation.cfm?doid=3173162.3173194
+paper_keyword: TLB; Virtual Memory; Accelerator; GPU
+paper_year: ASPLOS 2018
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
+This paper proposes Devirtualized Memory (DVM), which aims at providing high memory bandwidth to accelerators that
+can access virtual address space. This is crucial in improving the usability and efficiency of accelerators 
+(such as GPUs).
