@@ -93,4 +93,4 @@ not taken, the load instruction would commit successfully without raising an exc
 execution. The process therefore must monitor the invalidation of TLB entries while load instructions are buffered in
 the load queue. If any of the pages whose mappings are invalidated by a preceding store operation, the load instruction
 must be squashed. Another solution would be just to re-execute the load before it commits in program order. If the 
-load is able
+load is not able to execute successfully, then it will be squashed.
