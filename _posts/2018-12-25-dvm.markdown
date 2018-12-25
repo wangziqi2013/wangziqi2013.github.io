@@ -39,4 +39,10 @@ checks permissions in addition to address translation. To facilitate this, the p
 table type: the Permissions Entry (PE). PE can replace a PTE on any level, assuming a multi-level page table. It contains
 16 permission descriptors, which describes the access permissions of the memory range covered by an entry on that level. For
 example, an L2 PE covers 2MB of memory, and hence each permission descriptor defines the permission of 128KB of consecutive 
-memory; For L3 PE each descriptor defines the permission for 64MB of memory.
+memory; For L3 PE each descriptor defines the permission for 64MB of memory. To reduce the number of entries, L1 PEs
+are not allowed. Each permission descriptor consists of two bits, and hence could represent four different permissions:
+Read-Only, Read-Write; Read-Execute; Invalid. The Invalid permission can be used to "punch holes" in a page. This is particularly
+useful if the OS can find an identity mapping that is almost consecutive, with a few "holes" in the middle that has already 
+been occupied for other purposes. Instead of giving up finding an identify mapping, the holds can be masked off by setting 
+the permission bits to Invalid. 
+
