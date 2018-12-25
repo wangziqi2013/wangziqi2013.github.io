@@ -32,3 +32,8 @@ identical to the page table used by MMU. The IOMMU translates the address in the
 using the page table before forwading them to the memory controller. Similar to the case of CPU, in order to make 
 translation faster, the IOMMU may also have a built-in TLB, which caches recently used translation entries. 
 
+The IOMMU address translation can become a performance bottleneck when the accelerator runs memory intensive workloads. 
+This paper addresses this problem using identity mapping. An identify mapping is a trivial way of performing address
+translation: it directly outputs VA as the PA, which makes address translation unnecessary. Recall that the IOMMU also
+checks permissions in addition to address translation. To facilitate this, the paper also proposes adding a new page 
+table type: the Permissions Entry (PE). PE can replace a PTE on any level given a multi-level page table.
