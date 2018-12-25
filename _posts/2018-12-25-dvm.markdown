@@ -60,8 +60,8 @@ Since identity mapping and permission bits can reduce the number of L1 PTEs, the
 too many L1 PTEs entering the cache. The page walker on IOMMU then checks the cache for a hit before going to the main memory
 to fetch PTEs.
 
-Address translation can even overlapped with memory access if the accelerator supports load speculation. The IOMMU allows a 
-load request to bypass translation and permission check before it completes the permission lookup. If later on, IOMMU decides 
-that either the page is not readable, or the address translation is not an identity mapping, it will notify the accelerator.
-On receiving the notification, the accelerator squashes the load operation and everything that follows, and re-executes 
-the load using the correct mapping information.
+Address translation can even overlapped with memory access if the accelerator supports load speculation (also called 
+preload in the paper). The IOMMU allows a load request to bypass translation and permission check before it completes 
+the permission lookup. If later on, IOMMU decides that either the page is not readable, or the address translation is 
+not an identity mapping, it will notify the accelerator. On receiving the notification, the accelerator squashes the 
+load operation and everything that follows, and re-executes the load using the correct mapping information.
