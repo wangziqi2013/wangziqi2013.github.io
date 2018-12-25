@@ -26,9 +26,12 @@ entries, the OS detects that the exception is spurious after checking the PTE, i
 besides simply updating the TLB entry. For "unsafe" modifications, however, the OS must always invalidate potentially
 cached PTE entries in remote TLBs. The last reason is that since TLB coherence is already well-handled by existing
 software, i.e. Operating Systems, even if hardware coherence is implemented, people would be reluctant migrating to the 
-new method, because the old approach works very well. These approaches are called "TLB shootdown", and they generally involve
+new method, because the old approach works very well. 
+
+The software approaches that maintains TLB coherence are called "TLB shootdown". A TLB shootdown algorithm generally involves
 one processor setting up a list of sharers for a certain PTE, and trriggering Inter-Processor Interrupts (IPI) to all sharers.
 Sharers of the PTE will invalidate the corresponding TLB entries, and remove themselves from the list. Once all entries have been
-removed, the initiator processor could proceed to modify the page table entry.
+removed, the initiator processor could proceed to modify the page table entry. A lock per PTE is also acquired during 
+the modification process to synchronize processors that wish to moidify the same entry.
 
 The trend that so, however, does not continue
