@@ -73,4 +73,6 @@ PCAM only stores the physical addresses of leaf level PTEs, even if the page tab
 levels. In some cases, the OS may only modify upper level PTEs, e.g. the permission of a large address range is changed
 during a fork(), in which there is no coherence traffic on the leaf PTE. If the leaf PTEs affected by the modification
 are cached by one or more TLBs, they will not be invalidated, and hence access violation cannot be detected. To solve this
-problem,
+problem, it is required that the OS propagate its changes of upper levls PTEs to the leaf level, forcing coherence traffic
+to inavlidate all potentially affected lower level PTEs. As an optimization, the OS can choose to do this only on unsafe 
+changes. 
