@@ -53,3 +53,9 @@ walks the page table as usual. An important invariant of this design is that if 
 the page walk, the time it takes is always less than or equal to normal address translation, because the page walker
 only does less but not more. The paper therefore concludes that, by using permission bits, the new system can run at least 
 as fast as an unchanged one.
+
+To further accelerate the translation process, the paper also proposes adding a PE cache to the IOMMU, called Access 
+Validation Cache (AVC). The AVC is a regular 4-way set-associative cache which stores PE entries from the page table.
+Since identity mapping and permission bits can reduce the number of L1 PTEs, there will not be pollution caused by 
+too many L1 PTEs entering the cache. The page walker on IOMMU then checks the cache for a hit before going to the main memory
+to fetch PTEs.
