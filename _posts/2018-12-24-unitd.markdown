@@ -13,3 +13,9 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper presents UNITD, a unified mechanism for maintaining coherence for caches and the Translation-Lookaside Buffer 
+(TLB) using the classical cache coherence infrastructure. Traditionally, TLB are not maintained coherent by the hardware,
+unlike the cache. There are two reasons. The first is that although cache coherence are important in most cases, as data 
+sharing between processors are very common, TLB entries, on the other hand, are only invalidated when the underlying page 
+table entries (PTEs) are modified. Maintaining coherent TLB across processors hence may not justify extra hardware and 
+design efforts in order to implement it. 
