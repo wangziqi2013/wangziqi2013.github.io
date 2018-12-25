@@ -68,3 +68,9 @@ queries the PCAM to see if any of its addresses matches the one in the coherence
 then the corresponding TLB entry is identified and then invalidated. Of course, if the TLB is fully-associative, the PCAM then has 
 exactly the same structure as the TLB, and there is no need to store the pointer as it is implicitly given by the index
 of the PCAM entry.
+
+PCAM only stores the physical addresses of leaf level PTEs, even if the page table is organized as a radix tree with multiple
+levels. In some cases, the OS may only modify upper level PTEs, e.g. the permission of a large address range is changed
+during a fork(), in which there is no coherence traffic on the leaf PTE. If the leaf PTEs affected by the modification
+are cached by one or more TLBs, they will not be invalidated, and hence access violation cannot be detected. To solve this
+problem,
