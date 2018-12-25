@@ -40,4 +40,10 @@ suggests that, as the number of cores keep increasing, the performance impact of
 significant. The paper also suggests that using existing hardware infrastructure for cache coherence to enforce 
 coherent TLBs is a feasible choice. We describe the details as follows.
 
-
+One major difficulty of maintaining TLB coherence via cache coherence is to associate each entry of the TLB with a 
+physical address on which the notion of coherence is defined. One straightforward choice, which is also the one adopted 
+by this paper, is to use the physical address of the PTE, since TLB can be treated as a special kind of cache, whose content
+is derived from the PTE in the physical memory. When another processor modifies the PTE in its local cache, given that the 
+PTE is cached elsewhere in a TLB, the state of the physical cache line would be Shared. An invalidation will be sent
+as usual by the cache controller to acquire exclusive ownership of the line containing the PTE. On receiving this 
+request, the processor invalidates not only the entry in its local cache, but also the TLB entry, if it exists.
