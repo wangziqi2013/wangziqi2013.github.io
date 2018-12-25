@@ -55,3 +55,11 @@ since cache coherence is maintained on the 64 byte cache granularity, it is poss
 in the same cache line. In this case, they will have the same physical address in the TLB. Modifications on any of them
 will result in all being invalidated. In practice, aliasing like this happens relatively rare, and the performance 
 impact is minimum.
+
+The storage of physical addresses in the TLB requires careful design. The hardware mapping structure must have the 
+following two properties: First, given a physical address (of the PTE), it should find whether an entry containing the
+same address exists; Second, if an entry is found, the structure should identify which TLB entry is associated with it.
+Satisfying the second requirement is easy, because we can just add a pointer to the TLB entry. To satisfy the first,
+however, is non-trivial if the TLB is set-associative. Of course, if the TLB is fully-associative, the PCAM then has 
+exactly the same structure as the TLB, and there is no need to store the pointer as it is implicitly given by the index
+of the PCAM entry.
