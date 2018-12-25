@@ -80,4 +80,7 @@ changes.
 Another potential problem is self-invalidation. This happens if a processor holds a PTE in its local cache in Modified 
 or Exclusive state, and in the same time has a TLB entry of the same PTE. When the processor writes to the PTE, no
 coherence traffic will be generated, while it is still necessary for the TLB to be aware of the self-invalidation
-and either updates or invalidates the entry. The solution is to. 
+and either updates or invalidates the entry. The solution is to let the TLB snoop on local stores. If the address of 
+the local store instruction matches any of the entries in the PCAM, then the TLB entry will be invalidated. Such 
+self-snooping capability is cheap to add, as it already exists on modern hardware to accomodate for self-modifying code
+and to maintain coherence between the instruction cache and data cache.
