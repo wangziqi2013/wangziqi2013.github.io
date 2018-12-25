@@ -34,4 +34,10 @@ Sharers of the PTE will invalidate the corresponding TLB entries, and remove the
 removed, the initiator processor could proceed to modify the page table entry. A lock per PTE is also acquired during 
 the modification process to synchronize processors that wish to moidify the same entry.
 
-The trend that so, however, does not continue
+The trend that software TLB coherence is sufficient, however, is likely to fade out in the coming years as more and more 
+cores are integrated onto the chip. The study conducted by this paper using both synthetic workloads and real-world applications  
+suggests that, as the number of cores keep increasing, the performance impact of software TLB shootdown becomes more 
+significant. The paper also suggests that using existing hardware infrastructure for cache coherence to enforce 
+coherent TLBs is a feasible choice. We describe the details as follows.
+
+
