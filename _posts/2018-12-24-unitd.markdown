@@ -84,3 +84,13 @@ and either updates or invalidates the entry. The solution is to let the TLB snoo
 the local store instruction matches any of the entries in the PCAM, then the TLB entry will be invalidated. Such 
 self-snooping capability is cheap to add, as it already exists on modern hardware to accomodate for self-modifying code
 and to maintain coherence between the instruction cache and data cache.
+
+In order for this scheme to work with load speculation, the load queue must not only snoop store addresses for a match, 
+but also snoop for TLB invalidations caused by store instructions. Imagine the following scenario: A load bypassed a 
+preceding store and is executed speculatively. The store instruction changes the permission bits in the PTE to disallow
+read operations on the page, which happens to be the page that the load instruction accesses. In this case, if care is 
+not taken, the load instruction would commit successfully without raising an exception as it would be for in-order 
+execution. The process therefore must monitor the invalidation of TLB entries while load instructions are buffered in
+the load queue. If any of the pages whose mappings are invalidated by a preceding store operation, the load instruction
+must be squashed. Another solution would be just to re-execute the load before it commits in program order. If the 
+load is able
