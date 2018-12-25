@@ -76,3 +76,8 @@ are cached by one or more TLBs, they will not be invalidated, and hence access v
 problem, it is required that the OS propagate its changes of upper levls PTEs to the leaf level, forcing coherence traffic
 to inavlidate all potentially affected lower level PTEs. As an optimization, the OS can choose to do this only on unsafe 
 changes. 
+
+Another potential problem is self-invalidation. This happens if a processor holds a PTE in its local cache in Modified 
+or Exclusive state, and in the same time has a TLB entry of the same PTE. When the processor writes to the PTE, no
+coherence traffic will be generated, while it is still necessary for the TLB to be aware of the self-invalidation
+and either updates or invalidates the entry. The solution is to. 
