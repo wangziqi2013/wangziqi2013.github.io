@@ -59,7 +59,12 @@ impact is minimum.
 The storage of physical addresses in the TLB requires careful design. The hardware mapping structure must have the 
 following two properties: First, given a physical address (of the PTE), it should find whether an entry containing the
 same address exists; Second, if an entry is found, the structure should identify which TLB entry is associated with it.
-Satisfying the second requirement is easy, because we can just add a pointer to the TLB entry. To satisfy the first,
-however, is non-trivial if the TLB is set-associative. Of course, if the TLB is fully-associative, the PCAM then has 
+Satisfying the second requirement is easy, because we can just add a pointer to the TLB entry. Satisfying the first,
+however, is non-trivial if the TLB is set-associative. A set-associative TLB uses virtual addresses to determine the 
+set and way as in a set-associative cache. The mapping structure, on the other hand, must be fully-associative, because 
+it is queried using physical addresses when a coherence request is received. The paper suggests that the structure be 
+implemented as a Content Addressable Memory (CAM), which is called a PCAM. On receiving an invalidation request, the processor
+queries the PCAM to see if any of its addresses matches the one in the coherence request. If the search results in a match,
+then the corresponding TLB entry is identified and then invalidated. Of course, if the TLB is fully-associative, the PCAM then has 
 exactly the same structure as the TLB, and there is no need to store the pointer as it is implicitly given by the index
 of the PCAM entry.
