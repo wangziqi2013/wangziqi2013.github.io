@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "UNified Instruction/Translation/Data (UNITD) Coherence: One Protocol to Rule Them All"
+date:   2018-12-24 19:04:00 -0500
+categories: paper
+paper_title: "UNified Instruction/Translation/Data (UNITD) Coherence: One Protocol to Rule Them All"
+paper_link: https://ieeexplore.ieee.org/document/5416643
+paper_keyword: TLB; Coherence; TLB Shootdown
+paper_year: HPCA 2010 
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
