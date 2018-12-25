@@ -17,5 +17,9 @@ This paper presents UNITD, a unified mechanism for maintaining coherence for cac
 (TLB) using the classical cache coherence infrastructure. Traditionally, TLB are not maintained coherent by the hardware,
 unlike the cache. There are two reasons. The first is that although cache coherence are important in most cases, as data 
 sharing between processors are very common, TLB entries, on the other hand, are only invalidated when the underlying page 
-table entries (PTEs) are modified. Maintaining coherent TLB across processors hence may not justify extra hardware and 
-design efforts in order to implement it. 
+table entries (PTEs) are modified. Maintaining coherent TLB across processors hence may not justify the extra hardware and 
+design efforts in order to implement it. The second reason is that since TLB coherence is already well-handled by existing
+software, i.e. Operating Systems, even if hardware coherence is implemented, people would be reluctant migrating to the 
+new method, because the old approach works very well.
+
+
