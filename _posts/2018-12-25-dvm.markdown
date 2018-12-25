@@ -36,4 +36,7 @@ The IOMMU address translation can become a performance bottleneck when the accel
 This paper addresses this problem using identity mapping. An identify mapping is a trivial way of performing address
 translation: it directly outputs VA as the PA, which makes address translation unnecessary. Recall that the IOMMU also
 checks permissions in addition to address translation. To facilitate this, the paper also proposes adding a new page 
-table type: the Permissions Entry (PE). PE can replace a PTE on any level given a multi-level page table.
+table type: the Permissions Entry (PE). PE can replace a PTE on any level, assuming a multi-level page table. It contains
+16 permission descriptors, which describes the access permissions of the memory range covered by an entry on that level. For
+example, an L2 PE covers 2MB of memory, and hence each permission descriptor defines the permission of 128KB of consecutive 
+memory; For L3 PE each descriptor defines the permission for 64MB of memory.
