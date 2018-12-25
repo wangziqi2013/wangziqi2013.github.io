@@ -17,12 +17,14 @@ This paper presents UNITD, a unified mechanism for maintaining coherence for cac
 (TLB) using the classical cache coherence infrastructure. Traditionally, TLB are not maintained coherent by the hardware,
 unlike the cache. There are three reasons. The first is that although cache coherence are important in most cases, as data 
 sharing between processors are very common, TLB entries, on the other hand, are only invalidated when the underlying page 
-table entries (PTEs) are modified. In addition, TLB modifications can be classified into "safe" and "unsafe". "Safe" 
+table entries (PTEs) are modified. Maintaining coherent TLB across processors hence may not justify the extra hardware and 
+design efforts in order to implement it. In addition, TLB modifications can be classified into "safe" and "unsafe". "Safe" 
 modifications are those that initializes an invalid virtual address (VA), or that the permission is lowered. In these two 
-cases, the modifying processor does not have to notify other processors that the change has been made. This OS could handle
-them lazily. When the exception is raised by other processors when they access the page using out-of-date. Maintaining coherent 
-TLB across processors hence may not justify the extra hardware and 
-design efforts in order to implement it. The last reason is that since TLB coherence is already well-handled by existing
+cases, the modifying processor does not have to notify other processors that the change has been made. This OS handles
+this lazily: when the exception is raised by other processors when they access the page using their out-of-date private TLB
+entries, the OS detects that the exception is spurious after checking the PTE, in which case no further action is taken
+besides simply updating the TLB entry. For "unsafe" modifications, however, the OS must always invalidate potentially
+cached PTE entries in remote TLBs. The last reason is that since TLB coherence is already well-handled by existing
 software, i.e. Operating Systems, even if hardware coherence is implemented, people would be reluctant migrating to the 
 new method, because the old approach works very well. These approaches are called "TLB shootdown", and they generally involve
 one processor setting up a list of sharers for a certain PTE, and trriggering Inter-Processor Interrupts (IPI) to all sharers.
