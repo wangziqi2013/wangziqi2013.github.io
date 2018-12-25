@@ -65,3 +65,8 @@ preload in the paper). The IOMMU allows a load request to bypass translation and
 the permission lookup. If later on, IOMMU decides that either the page is not readable, or the address translation is 
 not an identity mapping, it will notify the accelerator. On receiving the notification, the accelerator squashes the 
 load operation and everything that follows, and re-executes the load using the correct mapping information.
+
+To obtain identity mapping, the OS memory allocator needs to be modified in order to work with identity mapping. For 
+maximum compatibility, only heap allocations are considered for identity mapping. The memory allocator uses modified 
+mmap() which will try to obtain a range of pre-populated physical addresses. It then assigns a virtual address to 
+the range, which constitutes an identity mapping. 
