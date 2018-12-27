@@ -38,4 +38,13 @@ the modification, and unlocks the PTE.
 Recent evidences show, however, that TLB shootdown actually has an non-negligible impact on performance. This paper 
 suggests that the slowdown caused by excessive shootdowns has two major sources. The first is frequent memory management
 events, such as mmap() and munmap(). An example is Apache web server, in which a HTTP request is processed by mapping
-the file into memory, and then um-mapping it 
+the file into memory, and then um-mapping it after serving the file. The munmap() system call changes the mapping 
+of a virtual address range, and since the change is unsafe, i.e. they cannot be processed lazily, the TLB shootdown
+must be carried out immediately. The paper also identifies page migration, which is part of the AutoNUMA scheduling 
+package, as another source of frequent shootdown. AutoNUMA migration is triggered by a background daemon
+process to determine whether a page should be moved to a NUMA node closer to the processor that frequenly refers to it.
+The daemon process periodically sets the permission of pages under consideration to non-readable and non-writable. 
+If a processor accesses the page, a page fault will be raised. During the handling of the page fault, if the access
+happens again for several times, then the page will be marked for migration. Since raising the permission of 
+a page is also an unsafe change, TLB shootdown must be performed before the the daemon process modifies the page table.
+
