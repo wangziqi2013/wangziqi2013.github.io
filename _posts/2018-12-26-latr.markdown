@@ -13,3 +13,9 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes LATR, a software TLB coherence scheme that overcomes the overhead of traditional TLB shootdown. 
+Software-based TLB shootdown has been widely adopted by Operating Systems as a way of maintaining coherence among 
+private TLBs. Just like cache coherence, when a processor modifies the page table either by changing the virtual-to-physical
+mapping or by altering the permissions bits in a page table entry (PTE), these modifications need to propagate to 
+other processors that have cached a private copy of the PTE to avoid accessing the wrong physical page or accessing the 
+page with wrong permission. 
