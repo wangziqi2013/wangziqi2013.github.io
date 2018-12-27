@@ -56,3 +56,6 @@ useful work. The last problem is that a synchronous shootdown algorithm can add 
 normal operations. In time critical applications, the extra latency can be fatal and decreases the applicability of 
 the shootdown algorithm.
 
+LATR features lazy handling of TLB coherence by delaying the actual delivery of the coherence event. In the example
+of memory reclamation, LATR puts both the physical pages and the virtual address range into a reclamation list
+called the lazy virtual address list, instead of releasing the address spaces immediately.  
