@@ -75,3 +75,7 @@ time a freed memory block can be actually released, because every processor is e
 in every 2ms no matter what their current states are, and inside the handler of the scheduler tick, TLB shootdown will
 be performed. A background thread is therefore scheduled 2ms after a block is unmapped from virtual address space.
 The background thread tests whether the LATR states have been all reset, and then releases the block.
+
+AutoNUMA migration test can be done in a similar way. Instead of unmapping the page before adding the shootdown request 
+to LATR states, in AutoNUMA, the daemon thread must add the shootdown request to the LATR state first, come back after 2ms,
+and then modify the page table. Every memory access on the page will incur a page falut after this point.
