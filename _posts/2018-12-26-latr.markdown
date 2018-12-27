@@ -79,3 +79,11 @@ The background thread tests whether the LATR states have been all reset, and the
 AutoNUMA migration test can be done in a similar way. Instead of unmapping the page before adding the shootdown request 
 to LATR states, in AutoNUMA, the daemon thread must add the shootdown request to the LATR state first, come back after 2ms,
 and then modify the page table. Every memory access on the page will incur a page falut after this point.
+
+Subtle race conditions may arise as a result of lazy handling of TLB coherence events. For example, if the application 
+program frees a range of virtual address by calling munmap(), and later on expect accesses from other threads on the 
+freed page to trigger a page fault, it may fail to observe the falut. This is because unmappings of virtual addresses
+are now handled lazily. Before the thread on another processor can have a change to scan LATR states on scheduler ticks, 
+its locally cached PTE entries will not be updated and hence contains out-of-date information. The thread is able to 
+access the freed page as usual, although both reads and writes are harmless and will not corrupt states since the 
+physical page will not be released before all processors have acknowledged the shootdown request.
