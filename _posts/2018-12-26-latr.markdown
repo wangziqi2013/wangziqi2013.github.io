@@ -63,4 +63,8 @@ a TLB shootdown is necessary, each processor has 64 LATR states, which records t
 it has been scheduled. The LATR states are enumerated as follows: (1) A flag to indicate whether the entry contains 
 valid information; (2) An address range which indicates the range of virtual addresses the shootdown should invalidate;
 (3) A bit mask describing a subset of processors that should react to the shootdown request; (4) A reason field that encodes
-the purpose of the shootdown (e.g. munmap(), NUMA migration test, etc.). 
+the purpose of the shootdown (e.g. munmap(), NUMA migration test, etc.). On context switch or scheduler tick, the handler
+scans LATR states located in the kernel. The scan is very efficient because LATR states are statically allocated as a 
+consecutive range of memory, and hence the scan benefits greatly from caching and pre-fetching. If the processor finds 
+out that it is on the list of some other processor's shootdown request, an invalidation will be performed, and the 
+corresponding bit on the bit mask will be cleared. The freed memory addresses can only be released after all processors on the list completes their shootdown.
