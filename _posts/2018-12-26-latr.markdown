@@ -67,4 +67,10 @@ the purpose of the shootdown (e.g. munmap(), NUMA migration test, etc.). On cont
 scans LATR states located in the kernel. The scan is very efficient because LATR states are statically allocated as a 
 consecutive range of memory, and hence the scan benefits greatly from caching and pre-fetching. If the processor finds 
 out that it is on the list of some other processor's shootdown request, an invalidation will be performed, and the 
-corresponding bit on the bit mask will be cleared. The freed memory addresses can only be released after all processors on the list completes their shootdown.
+corresponding bit on the bit mask will be cleared. The freed memory addresses can only be released after all processors 
+on the list completes their shootdown.
+
+On Linux platform, a scheduler tick is usually delivered every 1ms. This places an upper bound on the maximum amount of
+time a freed memory block can be actually released, because every processor is expected to receive a scheduler tick
+in every 2ms no matter what their current states are, and inside the handler of the scheduler tick, TLB shootdown will
+be performed. 
