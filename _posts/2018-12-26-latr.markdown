@@ -73,4 +73,5 @@ on the list completes their shootdown.
 On Linux platform, a scheduler tick is usually delivered every 1ms. This places an upper bound on the maximum amount of
 time a freed memory block can be actually released, because every processor is expected to receive a scheduler tick
 in every 2ms no matter what their current states are, and inside the handler of the scheduler tick, TLB shootdown will
-be performed. 
+be performed. A background thread is therefore scheduled 2ms after a block is unmapped from virtual address space.
+The background thread tests whether the LATR states have been all reset, and then releases the block.
