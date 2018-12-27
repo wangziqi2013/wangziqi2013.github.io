@@ -22,3 +22,7 @@ page with wrong permission. Past empirical experience suggests that, compared wi
 happen relatively infrequently, e.g. during fork() system call, it is hence by design that hardware does not maintain
 the coherence of TLB entries. 
 
+The classical algorithm of enforcing TLB coherence is called TLB shootdown. It takes advantage of Inter-Processor 
+Interrupts (IPI) to deliver asynchronous events to remote processors. We describe the shootdown algorithm as follows.
+First, the initiator acquires a lock on the page table entry to avoid multiple concurrent modifications and shootdown on
+the same entry. Then the initiator
