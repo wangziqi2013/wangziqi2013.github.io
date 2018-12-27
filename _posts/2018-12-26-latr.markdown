@@ -58,4 +58,9 @@ the shootdown algorithm.
 
 LATR features lazy handling of TLB coherence by delaying the actual delivery of the coherence event. In the example
 of memory reclamation, LATR puts both the physical pages and the virtual address range into a reclamation list
-called the lazy virtual address list, instead of releasing the address spaces immediately.  
+called the lazy virtual address list, instead of releasing the address spaces immediately. In order to determine whether 
+a TLB shootdown is necessary, each processor has 64 LATR states, which records the information about a shootdown if 
+it has been scheduled. The LATR states are enumerated as follows: (1) A flag to indicate whether the entry contains 
+valid information; (2) An address range which indicates the range of virtual addresses the shootdown should invalidate;
+(3) A bit mask describing a subset of processors that should react to the shootdown request; (4) A reason field that encodes
+the purpose of the shootdown (e.g. munmap(), NUMA migration test, etc.). 
