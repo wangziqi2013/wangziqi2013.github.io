@@ -48,3 +48,8 @@ If a processor accesses the page, a page fault will be raised. During the handli
 happens again for several times, then the page will be marked for migration. Since raising the permission of 
 a page is also an unsafe change, TLB shootdown must be performed before the the daemon process modifies the page table.
 
+LATR attempts to reduce the overhead of TLB shootdown from three different aspects. First, to start the shootdown, 
+the initiator will send IPI to remote processors. Both the delivery and the processing of the interrupt is time consuming,
+and can pollute the cache. Second, during a shootdown, the initiator spins on a set of flags to wait for other 
+processors to complete. The time taken spinning on the flags is wasted because the processor could have been doing 
+useful work. 
