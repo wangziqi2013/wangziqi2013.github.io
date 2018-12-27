@@ -34,3 +34,8 @@ the TLB entry, and acknowledges the completion of the shootdown operation. In th
 a set of flags which indicate whether all processors have finished the process. The flags will be set to true if the 
 corresponding processor has completed shootdown. The last step for the initiator processor is to actually conduct
 the modification, and unlocks the PTE.
+
+Recent evidences show, however, that TLB shootdown actually has an non-negligible impact on performance. This paper 
+suggests that the slowdown caused by excessive shootdowns has two major sources. The first is frequent memory management
+events, such as mmap() and munmap(). An example is Apache web server, in which a HTTP request is processed by mapping
+the file into memory, and then um-mapping it 
