@@ -30,6 +30,7 @@ current algorithm that Linux uses is that all processors that have used the page
 The list will be stored in a well-known location in the memory, and is accessible to all processors in the system.
 The initiator processor then sends IPI to remote processors on the list. On receiving an IPI indicating TLB shootdown,
 the remote processor checks the list to see if it is included. If yes, then the receiving processor invalidates 
-the TLB entry, and acknowledges the complete of the shootdown operation. In the meanwhile, the initiator spins on 
-a set of flags which indicate whether all processors have finished the process. The flag will be set if this is true.
-The initiator processor then 
+the TLB entry, and acknowledges the completion of the shootdown operation. In the meanwhile, the initiator spins on 
+a set of flags which indicate whether all processors have finished the process. The flags will be set to true if the 
+corresponding processor has completed shootdown. The last step for the initiator processor is to actually conduct
+the modification, and unlocks the PTE.
