@@ -86,4 +86,5 @@ freed page to trigger a page fault, it may fail to observe the falut. This is be
 are now handled lazily. Before the thread on another processor can have a change to scan LATR states on scheduler ticks, 
 its locally cached PTE entries will not be updated and hence contains out-of-date information. The thread is able to 
 access the freed page as usual, although both reads and writes are harmless and will not corrupt states since the 
-physical page will not be released before all processors have acknowledged the shootdown request.
+physical page will not be released before all processors have acknowledged the shootdown request. If this feature 
+must be implemented, LATR will fall back to using IPI for request delivery.
