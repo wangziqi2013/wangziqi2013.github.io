@@ -18,4 +18,7 @@ Software-based TLB shootdown has been widely adopted by Operating Systems as a w
 private TLBs. Just like cache coherence, when a processor modifies the page table either by changing the virtual-to-physical
 mapping or by altering the permissions bits in a page table entry (PTE), these modifications need to propagate to 
 other processors that have cached a private copy of the PTE to avoid accessing the wrong physical page or accessing the 
-page with wrong permission. 
+page with wrong permission. Past empirical experience suggests that, compared with cache coherence, TLB coherence events 
+happen relatively infrequently, e.g. during fork() system call, it is hence by design that hardware does not maintain
+the coherence of TLB entries. 
+
