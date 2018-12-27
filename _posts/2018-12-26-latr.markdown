@@ -52,4 +52,7 @@ LATR attempts to reduce the overhead of TLB shootdown from three different aspec
 the initiator will send IPI to remote processors. Both the delivery and the processing of the interrupt is time consuming,
 and can pollute the cache. Second, during a shootdown, the initiator spins on a set of flags to wait for other 
 processors to complete. The time taken spinning on the flags is wasted because the processor could have been doing 
-useful work. 
+useful work. The last problem is that a synchronous shootdown algorithm can add extra variation to the latency of 
+normal operations. In time critical applications, the extra latency can be fatal and decreases the applicability of 
+the shootdown algorithm.
+
