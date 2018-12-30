@@ -13,4 +13,4 @@ htm_cr:
 version_mgmt: 
 ---
 
-This paper proposes Interval-Based Memory Reclamation (IBR). 
+This paper proposes Interval-Based Memory Reclamation (IBR).  
