@@ -25,4 +25,8 @@ since the block may have just been reclaimed before the reader thread has a chan
 reader reads the pointer, another writer sneaks in, unlinkes the block, checks its reference counter which is zero,
 and then reclaims the memory of the block), the reference counter should not be embedded within the block. An independent 
 data structure is needed to maintain reference counters for all blocks. When a block is to be deleted, the thread
-unlinked the block, and checks the reference counter. If the value is zero, then the node can be reclaimed.
+unlinked the block, and checks the reference counter. If the value is zero, then the node can be reclaimed. 
+The pointer value should also be validated by re-reading the pointer field from the parent block, because otherwise 
+it is possible that the block is reclaimed before the reference counter is incremented. This issue is common in GC
+problem, if the protection of a pointer is only applied when the pointer is first used to access the block.
+
