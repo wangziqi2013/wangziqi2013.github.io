@@ -57,4 +57,13 @@ blocks. Thread-local counters are initialized to +&infin;. At the beginning of e
 global epoch into the local epoch. When they unlink a block, the block is linked to the local garbage list. 
 The delete epoch of the block is also stored in the garbage node. During garbage collection, the GC thread first computes 
 the minimum epoch among all local epoch counters. Then the garbage list of each thread is scanned, and blocks whose 
-delete epoch is smaller than the minimum epoch computed in the previous stage is reclaimed.
+delete epoch is smaller than the minimum epoch computed in the previous stage is reclaimed. When a thread completes 
+its operation, it sets the local epoch back to +&infin; such that it never blocks the reclamation of any block.
+
+EBR does not have strong progress guarantee if a thread is blocked or killed in the middle of an operation. In this 
+case, the local epoch counter will never be reset, and hence GC cannot progress past the epoch when the thread
+enters the current operation. The essence of the problem is that EBR reserves epoches too conservatively: At the 
+beginning of an operation, all epoches from the current epoch to +&infin; are reserved by reading the global epoch
+into its local epoch counter. This condition can be relaxed by adding an upper bound to each thread, representing the 
+maximum epoch the thread reserves. The interval between low epoch and high epoch prevents all blocks deleted within 
+this interval from being reclaimed.
