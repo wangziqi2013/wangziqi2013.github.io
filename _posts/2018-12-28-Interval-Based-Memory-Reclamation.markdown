@@ -81,3 +81,11 @@ declared epoch between its created and deleted epoch. If this is true, then pote
 reference to the pointer, and hence the reclamation should be delayed. Otherwise the block can be reclaimed immediately.
 With HE, if a thread is stalled due to I/O or killed halfway inside an operation, the number of blocks that cannot be 
 reclaimed is bounded, since the thread is no longer able to make any reservation.
+
+IBR borrows the idea of created and deleted epoch from HE, while using an interval to represent reserved epoches. By
+tagging objects with created epoches, the GC algorithm is able to bound the number of unclaimable blocks even if 
+a thread fails to make progress. By using an interval rather than individual epoches to represent the reservation,
+a better interface can be used which does not force the programmer to "unreserve" blocks when they leave 
+the working set. IBR works as follows: When a new object is created, its created epoch is read from the current global 
+epoch counter, and stored in the object header. When an object is deleted, the epoch counter is read as the deleted
+epoch which is also stored in the header. 
