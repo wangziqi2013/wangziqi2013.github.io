@@ -39,4 +39,8 @@ lock-free list. When a block is unlinked, its address must be checked against al
 it is part of the working set of any other thread. If this is true, then the reclamation of the block is delayed until
 no thread holds a "hazard pointer" to this block. Similar to RC, since the protection of a block is only applied right 
 before the thread accesses the block, it is possible that the block has been unlinked and reclaimed before the 
-hazard pointer is observed by other threads. To prevent this 
+hazard pointer is observed by other threads. To prevent this, threads must re-validate the value of the pointer 
+field after adding the hazard pointer and issuing a memory fence to make sure no unlink operation has been done 
+before the HP is added. After the thread completes an operation, it should also releases all hazard pointers from 
+the thread-local list. 
+
