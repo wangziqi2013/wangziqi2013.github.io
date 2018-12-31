@@ -97,3 +97,9 @@ the range of reserved epoches always overlap with the lifetime of objects it acc
 reclamation, if there exists an inverval reserved by a thread overlapping with the lifetime of the block (i.e.
 from the creation epoch to the delete epoch), then the thread could have accessed the block. Reclamation
 for the block will be delayed in this case.
+
+In practice, however, threads cannot always access a block without moving the block under protection. On the other hand, 
+in order to protect the block from being reclaimed, the thread must read the created epoch of the block, which is 
+embedded within the object's memory. There are three approaches to this problem. The first is to use tagged pointer.
+Every pointer in the data structure is tagged with an epoch approximating the created epoch of the object it 
+points to.
