@@ -29,4 +29,8 @@ unlinked the block, and checks the reference counter. If the value is zero, then
 The pointer value should also be validated by re-reading the pointer field from the parent block, because otherwise 
 it is possible that the block is unlinked and reclaimed before the reference counter is incremented. This issue is common 
 in GC problem, if the protection of a pointer is only applied when the pointer is first used to access the block.
+Although RC is easy to understand and simple to implement, its extra overhead of having to write global states even for 
+read operations is a performance bottleneck. For example, in a concurrent binary tree implementation, any operation
+on the tree must contend for the cache line that stores the reference counter for the root node. 
 
+Hazard Pointer (HP) is another technique that optimizes out unnecessary memory contention incurred by RC. 
