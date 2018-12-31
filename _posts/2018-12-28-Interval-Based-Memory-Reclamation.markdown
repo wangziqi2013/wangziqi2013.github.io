@@ -44,3 +44,12 @@ field after adding the hazard pointer and issuing a memory fence to make sure no
 before the HP is added. After the thread completes an operation, it should also releases all hazard pointers from 
 the thread-local list. 
 
+Epoch-based reclamation (EBR) further improves HP in two aspects. First, threads never declare individual pointers 
+as hazardous, which requires at least two extra operations per pointer accessed by the thread (one before usage 
+and one after). This improves not only performance but also the usability of the GC algorithm, since programmers
+can just write their programs without realizing the existance of GC. In addition, threads never validate a pointer
+after declaring it as hazardous by re-reading the pointer field. Instead, at the beginning of every operation, threads
+declare a new epoch which protects all pointers accessed within and after the epoch. No operation needs to be done when
+a pointer is used to accessed the block, as the pointer has been protected since the beginning of the operation. 
+The details of EBR is described as follows. The algorithm maintains a centralized epoch counter, which is periodically
+incremented to make progress.
