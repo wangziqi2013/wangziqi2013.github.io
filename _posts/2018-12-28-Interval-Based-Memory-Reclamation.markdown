@@ -67,3 +67,8 @@ beginning of an operation, all epoches from the current epoch to +&infin; are re
 into its local epoch counter. This condition can be relaxed by adding an upper bound to each thread, representing the 
 maximum epoch the thread reserves. The interval between low epoch and high epoch prevents all blocks deleted within 
 this interval from being reclaimed.
+
+Prior to IBR, people have proposed Hazard Eras (HE) which addresses the problem of epoch reservation being too 
+conservative in EBR. In HE, not only the epoch an object was born, but an epoch the object was created, are recorded. 
+The object header is extended with two fields: The created epoch, and the deleted epoch. This can be done conveniently
+with C++ and constructor semantics.
