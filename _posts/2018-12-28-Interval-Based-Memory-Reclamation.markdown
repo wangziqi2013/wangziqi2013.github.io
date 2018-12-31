@@ -92,3 +92,8 @@ epoch which is also stored in the header. Threads have two local epoches: One lo
 At the beginning of the operations, both are set to the current global epoch. Let us assume for a while that it is 
 always legal to access the object header at any moment (in reality this might cause undefined behavior if the header 
 is accessed after the object is reclaimed). The reservation process is as follows: Whenever a thread accesses 
+a block via a pointer, the local upper epoch is adjusted to the created epoch of the block. This is to ensure that
+the range of reserved epoches always overlap with the lifetime of objects it accesses. When the object is tested for 
+reclamation, if there exists an inverval reserved by a thread overlapping with the lifetime of the block (i.e.
+from the creation epoch to the delete epoch), then the thread could have accessed the block. Reclamation
+for the block will be delayed in this case.
