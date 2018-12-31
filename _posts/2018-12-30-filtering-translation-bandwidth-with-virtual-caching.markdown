@@ -23,4 +23,8 @@ Current design relies on IOMMU to perform address translation. IOMMU sits on the
 inbound and outbound the I/O devices. The IOMMU is initialized at system startup time with a standalone page table that
 maps the VA used by I/O devices to PA with access permissions. In order to perform translation, I/O devices send translation
 request packets carrying the VA to the IOMMU, and the latter walks the page table and returns the resulting PA. To accelerate
-translation 
+translation, both the GPU and the IOMMU are equipped with private TLBs. They function exactly as TLB on the processor, that is,
+to provide a fast path of translation when the TLB hits and the PA can be generated within a few cycles. The IOMMU also 
+has a dedicated page walk cache (PWC) which stores entries of the page table. To further improve the scalability of the design,
+the IOMMU page walker is multi-threaded: At most 16 page walks can be active at the same time. 
+
