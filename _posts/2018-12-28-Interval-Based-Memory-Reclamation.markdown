@@ -102,4 +102,10 @@ In practice, however, threads cannot always access a block without moving the bl
 in order to protect the block from being reclaimed, the thread must read the created epoch of the block, which is 
 embedded within the object's memory. There are three approaches to this problem. The first is to use tagged pointer.
 Every pointer in the data structure is tagged with an epoch approximating the created epoch of the object it 
-points to.
+points to. When threads update pointers, they must update both the tag and the pointer value itself. If double-word
+compare-and-swap (DCAS) is supported on the target platform, this is straightforward, because we can DCAS both the tag
+and the pointer into the field when it is to be updated. With DCAS, it is still possible as long as we guarantee that
+the value of the tag never decreases. On a CAS operation on the tagged pointer, we must first CAS the tag with an updated
+one, if and only if the new tag is larger than the previous tag. Then the pointer is also updated with CAS. This way,
+even if the tag may not stay consistent with the created epoch of the block pointed to by the pointer, we can at least
+guarantee that the tag is larger than the actual created epoch, and hence correctness is unaffected. 
