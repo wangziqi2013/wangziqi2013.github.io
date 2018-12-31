@@ -72,4 +72,12 @@ this interval from being reclaimed.
 Prior to IBR, people have proposed Hazard Eras (HE) which addresses the problem of epoch reservation being too 
 conservative in EBR. In HE, not only the epoch an object was born, but an epoch the object was created, are recorded. 
 The object header is extended with two fields: The created epoch, and the deleted epoch. This can be done conveniently
-with C++ and constructor semantics.
+with C++ and constructor semantics. Threads declare the current global epoch using a local epoch list whenever it 
+dereferences a pointer. Note that since this is similar to HP which only applies protection to a pointer before 
+it is dereferenced, the pointer should be validated after the current epoch is declared. The epoch list is cleared 
+at the beginning and end of each operation. The reclamation works as follows: When a thread performs GC, it scans 
+the local garbage list as in EBR. For each garbage node in the list, it checks whether for every thread, there is a 
+declared epoch between its created and deleted epoch. If this is true, then potentially that thread can hold a 
+reference to the pointer, and hence the reclamation should be delayed. Otherwise the block can be reclaimed immediately.
+With HE, if a thread is stalled due to I/O or killed halfway inside an operation, the number of blocks that cannot be 
+reclaimed is bounded, since the thread is no longer able to make any reservation.
