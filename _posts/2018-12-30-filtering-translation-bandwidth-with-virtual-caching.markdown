@@ -12,3 +12,15 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper seeks to reduce GPU's address translation traffic using virtual private caches. Modern GPUs work with
+virtual address spaces directly to enhance programmability, as pointer-based data structures such as graphs can be 
+transferred and understood without mangling and demangling. Allowing GPUs to access the virtual address space poses a 
+problem: How are VAs translated to PAs without messing up with existing virtual memory framework which is tightly coupled
+with the microarchitecture of the processor? 
+
+Current design relies on IOMMU to perform address translation. IOMMU sits on the system bus and handles memory requests 
+inbound and outbound the I/O devices. The IOMMU is initialized at system startup time with a standalone page table that
+maps the VA used by I/O devices to PA with access permissions. In order to perform translation, I/O devices send translation
+request packets carrying the VA to the IOMMU, and the latter walks the page table and returns the resulting PA. To accelerate
+translation
