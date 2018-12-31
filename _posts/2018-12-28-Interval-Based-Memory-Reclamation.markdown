@@ -52,4 +52,9 @@ after declaring it as hazardous by re-reading the pointer field. Instead, at the
 declare a new epoch which protects all pointers accessed within and after the epoch. No operation needs to be done when
 a pointer is used to accessed the block, as the pointer has been protected since the beginning of the operation. 
 The details of EBR is described as follows. The algorithm maintains a centralized epoch counter, which is periodically
-incremented to make progress.
+incremented to make progress. Each thread has a thread-local epoch counter and garbage list which holds unlinked 
+blocks. Thread-local counters are initialized to +&infin;. At the beginning of every operation, threads read the 
+global epoch into the local epoch. When they unlink a block, the block is linked to the local garbage list. 
+The delete epoch of the block is also stored in the garbage node. During garbage collection, the GC thread first computes 
+the minimum epoch among all local epoch counters. Then the garbage list of each thread is scanned, and blocks whose 
+delete epoch is smaller than the minimum epoch computed in the previous stage is reclaimed.
