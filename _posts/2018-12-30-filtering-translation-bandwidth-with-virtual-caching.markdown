@@ -23,4 +23,4 @@ Current design relies on IOMMU to perform address translation. IOMMU sits on the
 inbound and outbound the I/O devices. The IOMMU is initialized at system startup time with a standalone page table that
 maps the VA used by I/O devices to PA with access permissions. In order to perform translation, I/O devices send translation
 request packets carrying the VA to the IOMMU, and the latter walks the page table and returns the resulting PA. To accelerate
-translation
+translation 
