@@ -108,4 +108,8 @@ and the pointer into the field when it is to be updated. With DCAS, it is still 
 the value of the tag never decreases. On a CAS operation on the tagged pointer, we must first CAS the tag with an updated
 one, if and only if the new tag is larger than the previous tag. Then the pointer is also updated with CAS. This way,
 even if the tag may not stay consistent with the created epoch of the block pointed to by the pointer, we can at least
-guarantee that the tag is larger than the actual created epoch, and hence correctness is unaffected. 
+guarantee that the tag is larger than the actual created epoch, and hence correctness is unaffected. The second approach
+does not tag the pointer, but mimics the algorithm of HE: When a thread accesses a pointer, it reserves all epoches 
+between the lower epoch and the current global epoch by reading the current epoch into the local upper epoch counter.
+This approach reserves slightly more epoches than needed, because the created epoch of the object is always smaller 
+than or equal to the global epoch when the object is being accessed by the thread. 
