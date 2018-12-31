@@ -88,4 +88,7 @@ a thread fails to make progress. By using an interval rather than individual epo
 a better interface can be used which does not force the programmer to "unreserve" blocks when they leave 
 the working set. IBR works as follows: When a new object is created, its created epoch is read from the current global 
 epoch counter, and stored in the object header. When an object is deleted, the epoch counter is read as the deleted
-epoch which is also stored in the header. 
+epoch which is also stored in the header. Threads have two local epoches: One lower epoch and one upper epoch.
+At the beginning of the operations, both are set to the current global epoch. Let us assume for a while that it is 
+always legal to access the object header at any moment (in reality this might cause undefined behavior if the header 
+is accessed after the object is reclaimed). The reservation process is as follows: Whenever a thread accesses 
