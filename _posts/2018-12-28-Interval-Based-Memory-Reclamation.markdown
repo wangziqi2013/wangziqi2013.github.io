@@ -33,4 +33,7 @@ Although RC is easy to understand and simple to implement, its extra overhead of
 read operations is a performance bottleneck. For example, in a concurrent binary tree implementation, any operation
 on the tree must contend for the cache line that stores the reference counter for the root node. 
 
-Hazard Pointer (HP) is another technique that optimizes out unnecessary memory contention incurred by RC. 
+Hazard Pointer (HP) is another technique that optimizes out unnecessary memory contention incurred by RC. Instead of 
+writing to global states when a block is accessed, in HP, threads only publish their local read set to a thread-local
+lock-free list. When a block is unlinked, its address must be checked against all thread-local lists to see whether 
+it is part of the working set of any other thread. If this is true
