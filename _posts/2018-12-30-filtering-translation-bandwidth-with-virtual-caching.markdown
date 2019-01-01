@@ -63,3 +63,9 @@ data fetching from the IOMMU which is 64 bytes. To fill this gap, the BT entry a
 lines within the page are present in the cache. In the previous case, if the VA to PA entry already exists in BT, 
 but the corresponding bit is unset, then the bit will be set.
 
+The FT, on the other hand, maps a VA to an entry index of BT. Given a virtual address, the FT could perform a 
+local address translation by querying BT for the physical address. In this prespective, the FT can be thought of 
+as a lightweight TLB whose content fully covers the cache. The FT will be used when the cache responds to coherence
+requests with virtual addresses. In this case a local address translation is necessary since cache coherence 
+generally use physical addresses.
+
