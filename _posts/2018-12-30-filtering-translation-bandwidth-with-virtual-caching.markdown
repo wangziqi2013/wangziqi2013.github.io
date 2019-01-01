@@ -37,7 +37,9 @@ indicate that a large range of virtual pages will be accessed. Second, since the
 the burst of translation requests are likely to be serialized at IOMMU, causing a non-negligible slowdown. The last reason
 is that some GPU workloads, such as graph algorithms, intrinsically have low locality. In the paper, it is claimed that
 the TLB hit rate is only around 60%, and many blocks are actually in the cache while the address translation must be 
-performed using the slow path.
+performed using the slow path. The conclusion is that the degree pf parallelism in existing IOMMU designs do not 
+match the highly parallel workload and data access pattern in modern GPUs. It is the serialization of requests at IOMMU,
+rather than the translation latency, that degrades performance.
 
 
 
