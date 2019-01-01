@@ -101,3 +101,9 @@ nothing to do with the actual content of memory. The TLB shootdown request is ha
 locked, and no new memory requests are allowed. Next the cache controller waits for all outstanding memory requests to 
 be drained before it can proceed. Then the cache controller walks the cache tag array, and invalidate cache lines
 covered by the shootdown request. After that the FT is unlocked, and memory operations could resume.
+
+Another problem related to address aliasing is read-write synonym. It becomes problematic when a load instruction
+bypasses a store before it in program order. In the physical address case, the data hazard can be identified when the 
+store instruction enters the load store queue by comparing the address field. With virtual caching, this becomes much
+more difficult, because if the load and store instructions use different VAs mapped to the same PA, an actual
+conflict might be missed.
