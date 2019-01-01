@@ -69,3 +69,7 @@ as a lightweight TLB whose content fully covers the cache. The FT will be used w
 requests with virtual addresses. In this case a local address translation is necessary since cache coherence 
 generally use physical addresses.
 
+Synonym may occur in a virtual address cache as a result of multiple VAs mapping to the same PA. Without proper handling,
+multiple copies will be present in different blocks of the cache, each being potentially incoherent with the rest. It 
+is therefore important to enforce the rule that only one copy of the same physical address can reside in the cache
+even if different VAs are used to access the block. In our case we use BT to perform disambiguation as follows.
