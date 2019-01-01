@@ -94,3 +94,10 @@ using the VA after the first translation. If the cache needs to reply to the coh
 should also be consulted to translate back the VA from the cache to PA which is understandable by the coherence protocol.
 Also note that in this case, the cache actually handles less coherence traffic, as the BT effectively serves as a 
 traffic filter for coherence requests.
+
+When a TLB shootdown request is received, the cache hierarchy must not only flush the corresponding entries from the 
+FT, but also flushs the cache. The latter is not required for a physical address cache, since mapping changes have 
+nothing to do with the actual content of memory. The TLB shootdown request is handled as follows. First the FT is 
+locked, and no new memory requests are allowed. Next the cache controller waits for all outstanding memory requests to 
+be drained before it can proceed. Then the cache controller walks the cache tag array, and invalidate cache lines
+covered by the shootdown request. After that the FT is unlocked, and memory operations could resume.
