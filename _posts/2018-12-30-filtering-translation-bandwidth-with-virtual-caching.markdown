@@ -106,4 +106,8 @@ Another problem related to address aliasing is read-write synonym. It becomes pr
 bypasses a store before it in program order. In the physical address case, the data hazard can be identified when the 
 store instruction enters the load store queue by comparing the address field. With virtual caching, this becomes much
 more difficult, because if the load and store instructions use different VAs mapped to the same PA, an actual
-conflict might be missed.
+conflict might just be missed. This paper admits no good solution. One temporary solution is that processors 
+still perform address translation using FT while a memory instruction is executed. Both the VA and PA are saved in 
+the load store queue. Cache accesses use VA as stated above. The PA must be used to detect address aliasing 
+when a new instruction enters the load store queue. In future designs processor might need to add better support
+to roll back speculative execution to further optimize this case. 
