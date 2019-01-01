@@ -77,4 +77,9 @@ as follows. When the IOMMU replies to a data fetch request, it tags the data wit
 We have described the scenario in the case that the PA has not yet existed in the BT or the bit is not set and do not 
 elaborate here. In the opposite, if there is already an entry in BT and the bit is set, then we know synonym must have 
 occurred, because the request must have been issued with a different VA than the current VA tag in the cache (otherwise 
-the request will hit the cache and no request is issued).
+the request will hit the cache and no request is issued). In this case, the access is restarted using the VA recorded 
+in the BT, and no new block will be inserted into the cache. Note that although the permission bits might differ
+between the current entry in the cache and the actual VA used to access the block, it is generally correct if the 
+current permissions are more relaxed than the permission on the actual VA, because the IOMMU will also check for 
+permission when the request is being processed. If the permission is violated, an interrupt will be delivered to the 
+CPU. 
