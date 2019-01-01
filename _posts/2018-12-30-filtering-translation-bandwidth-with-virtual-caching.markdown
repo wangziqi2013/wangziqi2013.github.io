@@ -87,3 +87,8 @@ the permission of the VA used to access the block, an otherwise-normal access wi
 and the program would terminate unexpectedly**. This paper did not figure this out and hence no solution is given.
 One quick patch is to ignore the permission bits in the virtual cache entry, since permission check has already
 been done by the IOMMU and the access is guaranteed to be legal.
+
+When there are coherence requests, they are first delivered to the BT to perform a PA to VA translation. The bit 
+vector must be checked to see if the cache line actually is in the cache. Coherence actions are taken as usual
+using the VA after the first translation. If the cache needs to reply to the coherence message, then the FT
+should also be consulted to translate back the VA from the cache to PA which is understandable by the coherence protocol.
