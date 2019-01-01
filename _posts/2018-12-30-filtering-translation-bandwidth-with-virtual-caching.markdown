@@ -51,5 +51,8 @@ permission bits must also be part of the block state, since the TLB is absent an
 memory access. To detect synonym, perform cache coherence and support TLB shootdown, the cache hierarchy is extended 
 with a mapping structure called the Forward-Backward Table (FBT). The FBT consists of two tables: One Forward Table (FT)
 which maps virtual addresses to physical address as an ordinary TLB, and a Backward Table (BT) which maps physical
-addresses back to virtual addresses. 
+addresses back to virtual addresses. The FBT must cover all entries in the cache: For every cache block with virtual 
+address tag T, there must be an entry mapping to T's physical address in the FT, and one entry mapping some physical 
+address to T in the BT. On FT and BT eviction, both the cache and the other table must be checked, and the corresponding
+entries must be evicted also if their addresses are covered by the evicted entry.
 
