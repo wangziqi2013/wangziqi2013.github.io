@@ -82,4 +82,8 @@ in the BT, and no new block will be inserted into the cache. Note that although 
 between the current entry in the cache and the actual VA used to access the block, it is generally correct if the 
 current permissions are more relaxed than the permission on the actual VA, because the IOMMU will also check for 
 permission when the request is being processed. If the permission is violated, an interrupt will be delivered to the 
-CPU. 
+CPU. **It can be problematic, however, that if the permission of the current cache entry is more restrictive than 
+the permission of the VA used to access the block, an otherwise-normal access will be wrongly marked as illegal,
+and the program would terminate unexpectedly**. This paper did not figure this out and hence no solution is given.
+One quick patch is to ignore the permission bits in the virtual cache entry, since permission check has already
+been done by the IOMMU and the access is guaranteed to be legal.
