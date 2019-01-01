@@ -41,8 +41,15 @@ performed using the slow path. The conclusion is that the degree of parallelism 
 match the highly parallel workload and data access pattern in modern GPUs. It is the serialization of requests at IOMMU,
 rather than the translation latency, that degrades performance.
 
-The fact that L1 private cache is more effective than the TLB for preserving locality of accesses suggest that virtual
+The fact that L1 private cache is more effective than the TLB for preserving locality of accesses suggests that virtual
 caching alone can be more effective than physical address caching plus a TLB. Since virtual addresses are directly
-used to access the cache, address translation is only necessary when there is a cache miss, and the memory block must
-be fetched using the physical address. We describe the design of virtual cache as follows.
+used to access the cache, address translation is only necessary when there is a cache miss and the memory block must
+be fetched using the physical address. We describe the design of virtual cache as follows. The hierarchy is assumed to 
+be inclusive consisting of two levels of write-back, write-allocate cache. Each cache block has an address tag, which is the 
+virtual address of the block. In addition to the conventional per-block states as in a physical cache, the access 
+permission bits must also be part of the block state, since the TLB is absent and permissions must be checked on every 
+memory access. To detect synonym, perform cache coherence and support TLB shootdown, the cache hierarchy is extended 
+with a mapping structure called the Forward-Backward Table (FBT). The FBT consists of two tables: One Forward Table (FT)
+which maps virtual addresses to physical address as an ordinary TLB, and a Backward Table (BT) which maps physical
+addresses back to virtual addresses. 
 
