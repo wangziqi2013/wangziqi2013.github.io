@@ -54,5 +54,12 @@ which maps virtual addresses to physical address as an ordinary TLB, and a Backw
 addresses back to virtual addresses. The FBT must cover all entries in the cache: For every cache block with virtual 
 address tag T, there must be an entry mapping to T's physical address in the FT, and one entry mapping some physical 
 address to T in the BT. On FT and BT eviction, both the cache and the other table must be checked, and the corresponding
-entries must be evicted also if their addresses are covered by the evicted entry.
+entries must be evicted also if their addresses are covered by the evicted entry. 
+
+The BT stores the mapping from physical addresses to virtual addresses. It is populated when a cache miss is served by 
+the IOMMU using the physical address in the response message, where the VA to PA mapping is inserted into the table if
+it does not already exist. Note that each entry in the BT covers a 4KB page, which is larger than the granularity of 
+data fetching from the IOMMU which is 64 bytes. To fill this gap, the BT entry also has a bit vector indicating which 
+lines within the page are present in the cache. In the previous case, if the VA to PA entry already exists in BT, 
+but the corresponding bit is unset, then the bit will be set.
 
