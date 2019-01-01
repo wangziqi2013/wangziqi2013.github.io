@@ -29,7 +29,15 @@ has a dedicated page walk cache (PWC) which stores entries of the page table. To
 the IOMMU page walker is multi-threaded: At most 16 page walks can be active at the same time. 
 
 Despite the IOMMU optimizations on both the throughput and latency of translation, this paper argues that, on common GPU 
-workloads low TLB hit rate is observed. One direct consequence is that address translation has become a major performance 
-bottleneck on modern GPUs. There are several reasons for this. First, the memory access pattern of GPU features large 
-scatter and gather operations.
+workloads, TLB hit rate is still lower than the case of CPU. One direct consequence is that address translation has become a 
+major performance bottleneck on modern GPUs. There are several reasons for this. First, the memory access pattern of GPU 
+features large scatter and gather operations. Although the GPU memory controller will try its best to coalesce memory 
+requests such that they can be fulfilled with the least number of actual requests, the high parallelism of GPU still 
+indicate that a large range of virtual pages will be accessed. Second, since the translation bandwidth is severely limited, 
+the burst of translation requests are likely to be serialized at IOMMU, causing a non-negligible slowdown. The last reason
+is that some GPU workloads, such as graph algorithms, intrinsically have low locality. In the paper, it is claimed that
+the TLB hit rate is only around 60%, and many blocks are actually in the cache while the address translation must be 
+performed using the slow path.
+
+
 
