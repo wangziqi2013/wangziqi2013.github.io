@@ -97,3 +97,9 @@ only one S-edge disappears, and since pi1 and pi2 has an S-edge that could not b
 one C-edge and one S-edge. In the second case, one of the two pieces has a C-edge. In the third case, both pieces have 
 C-edges. In both cases, the number of C-edges is not affected, because merging pieces only affect the number of S-edges.
 Using a similar argument in case one, we know that there is still an SC-cycle no matter how we merge pieces. 
+
+The first observation helps us identify when to stop chopping. It is easily shown that the chopping should stop when
+the split of any piece will induce a cycle, because further steps of chopping will not make the cycle disappear. The
+second observation helps us degisn an algorithm to perform chopping. It shows that it makes no difference when we chop
+transaction Ti, whether or not the other transactions have been chopped. This is because SC-graphs do not disappear
+if we split or merge pieces in transactions other than Ti. 
