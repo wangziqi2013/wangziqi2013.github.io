@@ -26,10 +26,16 @@ read-modify-write operation. The second operation is to add the amount of value 
 the total amount of money the user has spent. To prevent users from buying when their account balance is insufficient,
 the transaction also checks whether the balance is larger than or equal to the value of the item before purchasing. 
 At any given moment, the same user can have multiple instances of the purchasing transaction running on the backend. 
-In this scenario, S2PL is definitely sufficient to make the execution serializable. It is, however, also possible that
-serializability is still guaranteed, but we execute the purchasing transaction in two smaller transactions: In the first
-transaction, user's balance is checked against the value of the item. The first transaction aborts immediately if the 
-user has insufficient balance. Otherwise, the first transaction deducts the amount from the account balance, and then 
-commits. The second transaction is only executed if the first transaction commits. In the second transaction, the amount
-of money is simply added onto the total amount of value, and then the transaction commits. Both transactions use S2PL
-as their concurrency control algorithms, which requires no change to the database design. Programmers 
+The invarinat we want to preserve is that users should never be able to buy if their account balance is insufficient
+to pay for the item. In this scenario, S2PL is definitely sufficient to make the execution serializable, because the account
+balance is locked after the transaction checks it, and hence no other transaction could access the value. It is, 
+however, also possible that serializability is still guaranteed, but we execute the purchasing transaction in two 
+smaller transactions: In the first transaction, user's balance is checked against the value of the item. The first 
+transaction aborts immediately if the user has insufficient balance. Otherwise, the first transaction deducts the amount 
+from the account balance, and then commits. The second transaction is only executed if the first transaction commits. 
+In the second transaction, the amount of money is simply added onto the total amount of value, and then the transaction 
+commits. Both transactions use S2PL as their concurrency control algorithms, which requires no change to the database 
+design. Programmers just split one transaction into two, and instruct the database to conditionally execute the second one. 
+The reasoning showing that chopping the purchasing transaction into two pirces will not break serializability is as follows:
+if two transactions, let's call them A and B, violates the invariant that user's balance must not be negative, then
+it must
