@@ -50,6 +50,8 @@ extra locks on data items, hence breaking the S2PL rule. In the previous example
 that the lock on account balance is dropped before the lock on total amount is acquired. Relaxing the S2PL rule helps 
 increasing parallelism of the system, because locks are held for shorter durations of time. As a result, less transactions 
 will be blocked due to lock conflicts, and even if they do, the time they spent waiting for the lock is also shorter. 
-Note that unlink some proposals which explicitly changes the locking protocol and modifies the database system, transaction
-chopping is a technique which leave the database intact, but only seeks to re-write transactions under certain conditions 
-to obtain extra free parallelism. 
+Note that unlike some relaxed 2PL proposals which explicitly changes the locking protocol and modifies the database system, 
+transaction chopping is a technique which leaves the database intact, and only seeks to re-write transactions under certain 
+conditions to obtain extra free parallelism. It is therefore easier to deploy transaction chopping compared with 
+previous approaches, because no fundamental change to the system needs to be done. 
+
