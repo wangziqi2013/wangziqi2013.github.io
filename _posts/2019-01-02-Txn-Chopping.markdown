@@ -47,4 +47,9 @@ balance, the piece will abort. A contradiction!
 
 More formally speaking, transaction chopping seeks a way to force locks to be dropped before the transaction can acquire
 extra locks on data items, hence breaking the S2PL rule. In the previous example, the transaction is chopped in a way such
-that the lock on account balance is dropped before the lock on total amount is acquired. 
+that the lock on account balance is dropped before the lock on total amount is acquired. Relaxing the S2PL rule helps 
+increasing parallelism of the system, because locks are held for shorter durations of time. As a result, less transactions 
+will be blocked due to lock conflicts, and even if they do, the time they spent waiting for the lock is also shorter. 
+Note that unlink some proposals which explicitly changes the locking protocol and modifies the database system, transaction
+chopping is a technique which leave the database intact, but only seeks to re-write transactions under certain conditions 
+to obtain extra free parallelism. 
