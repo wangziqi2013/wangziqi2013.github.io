@@ -55,3 +55,6 @@ transaction chopping is a technique which leaves the database intact, and only s
 conditions to obtain extra free parallelism. It is therefore easier to deploy transaction chopping compared with 
 previous approaches, because no fundamental change to the system needs to be done. 
 
+Transaction chopping must be done following a certain set of rules. The most crucial goal is that serializability must
+be maintained. To achieve this goal, the paper proposes using SC-graph to determine whether a given chopping of 
+a transaction is legal (i.e. satisfies serializability). 
