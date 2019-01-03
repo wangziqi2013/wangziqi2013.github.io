@@ -38,4 +38,9 @@ commits. Both transactions use S2PL as their concurrency control algorithms, whi
 design. Programmers just split one transaction into two, and instruct the database to conditionally execute the second one. 
 The reasoning showing that chopping the purchasing transaction into two pirces will not break serializability is as follows:
 if two transactions, let's call them A and B, violates the invariant that user's balance must not be negative, then
-it must
+it must be that these two transactions both committed when the account balance is less than the sum of the two items 
+bought. In this case, both transaction must commit the first piece, in which the balance is checked and adjusted. 
+Recall the assumption that the first piece is executed as a transaction. We know there can only be two
+interleavings for the first piece: Either A's piece is executed first and B's second, or the opposite of it. In neither 
+case should the account balance become negative, as the check is always performed, and if the account has insufficient 
+balance, the piece will abort. A contradiction!
