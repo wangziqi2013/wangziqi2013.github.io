@@ -92,5 +92,8 @@ matter how we merge pieces. In the base case, no pieces are merged, and the obse
 assume that some pieces have already been merged, and there is still an SC-cycle. In the next step we select two pieces 
 to merge (note: not all pieces are merge-able, but it is guaranteed that we can always find some pieces to merge as long
 as the transaction has not been fully merged). If none of these pieces is within the cycle then the cycle is not affected. 
-Otherwise, there are three possibilities. First, none of the pieces has a C edge. In
-this case the C edge
+Otherwise, there are three possibilities. First, none of the pieces has a C-edge. In this case the cycle still holds because 
+only one S-edge disappears, and since pi1 and pi2 has an S-edge that could not be removed, the SC-graph always has at least
+one C-edge and one S-edge. In the second case, one of the two pieces has a C-edge. In the third case, both pieces have 
+C-edges. In both cases, the number of C-edges is not affected, because merging pieces only affect the number of S-edges.
+Using a similar argument in case one, we know that there is still an SC-cycle no matter how we merge pieces. 
