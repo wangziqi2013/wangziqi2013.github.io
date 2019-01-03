@@ -65,4 +65,10 @@ pairs of pieces from the same transaction are connected by an S edge. C edges, o
 from different transactions. If two pieces from different transactions access the same data item, and at least one 
 of them is a write, then we connect these two pieces using a C edge.
 Note that both S and C edges are bi-directional. This is because we are only performing static analysis, and hence 
-we can only draw possibilities of conflicts, but do not know the actual direction of conflicts until run time. 
+we can only draw possibilities of conflicts, but do not know the actual direction of conflicts until run time.
+In a high level, S edges identifies all pieces in the same transaction, which is necessary for identifying 
+conflict cycles, because conflicts (and the notion of seriazability) are only meaningful for transactions. 
+C edges identifies actual conflicts that can potentially happen during the execution. Since pieces are executed
+themselves as atomic units, if transaction A has two or more distinct pieces (call them p1, p2) that conflict with 
+a piece of transaction B (call it p3), then it is possible that p3 is executed between p1 and p2, and that 
+transaction A is serialized both before and after B, causing a conflict cycle. 
