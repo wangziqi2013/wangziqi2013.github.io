@@ -109,4 +109,7 @@ using only local knowledge. The algorithm only considers one transaction at a ti
 other transactions, thanks to observation two above. Note that in a database system, usually multiple instances of the same
 transaction will be running at the same time. If this is true, then during the chopping of transaction Ti, the other 
 "reference transactions" must also all transactions in the system, including Ti, because it is possible that one instance 
-of Ti conflicts with another instance. The algorithm runs in a bottom-up manner described as follows: 
+of Ti conflicts with another instance. The algorithm runs in a bottom-up manner described as follows: First, transaction 
+Ti is chopped such that each read/write operation is an individual piece. We do not chop any other transaction, and consider
+them as an entire piece. Then, the SC-graph between Ti pieces and other transactions are drawn. In the next stage, the 
+algorithm merges pieces of Ti such that no cycle can exist. 
