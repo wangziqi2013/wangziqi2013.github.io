@@ -118,4 +118,5 @@ of the connected component found, all pieces in Ti are merged (if they are merge
 merging step erases all SC-cycles, because there is no S-edge (if there is one then that is a connected component). The 
 algorhtm terminates if no such components can be found. The same process is run for every transaction without using 
 existing choppings of transactions that have already been processed. It is proved in the paper that the chopping is 
-actually optimal
+actually optimal in a sense that no further chopping can be done, while the execution of chopped transactions 
+can still achieve seriazability given that each transaction is protected by S2PL.
