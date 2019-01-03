@@ -57,4 +57,7 @@ previous approaches, because no fundamental change to the system needs to be don
 
 Transaction chopping must be done following a certain set of rules. The most crucial goal is that serializability must
 be maintained. To achieve this goal, the paper proposes using SC-graph to determine whether a given chopping of 
-a transaction is legal (i.e. satisfies serializability). 
+a transaction is legal (i.e. satisfies serializability). The SC-graph is constructed as follows. Given transaction
+T<sub>1</sub>, T<sub>2</sub>, ..., T<sub>n</sub>, and their corresponding chopping c<sub>11</sub>, c<sub>12</sub>, ...,
+c<sub>21</sub>, ..., c<sub>nk</sub>, we treat each piece c<sub>ij</sub>, as a node. We connect nodes with two 
+types of edges
