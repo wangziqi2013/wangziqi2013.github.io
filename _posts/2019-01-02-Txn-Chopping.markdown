@@ -112,4 +112,10 @@ transaction will be running at the same time. If this is true, then during the c
 of Ti conflicts with another instance. The algorithm runs in a bottom-up manner described as follows: First, transaction 
 Ti is chopped such that each read/write operation is an individual piece. We do not chop any other transaction, and consider
 them as an entire piece. Then, the SC-graph between Ti pieces and other transactions are drawn. In the next stage, the 
-algorithm merges pieces of Ti such that no cycle can exist. 
+algorithm merges pieces of Ti such that no cycle can exist. The merge process runs iteratively. The algorithm searchs 
+connected components between Ti pieces and other transactions in which at least two pieces in Ti are involved. For each 
+of the connected component found, all pieces in Ti are merged (if they are merge-able), such that no S-edge exist. The 
+merging step erases all SC-cycles, because there is no S-edge (if there is one then that is a connected component). The 
+algorhtm terminates if no such components can be found. The same process is run for every transaction without using 
+existing choppings of transactions that have already been processed. It is proved in the paper that the chopping is 
+actually optimal
