@@ -103,3 +103,7 @@ the split of any piece will induce a cycle, because further steps of chopping wi
 second observation helps us degisn an algorithm to perform chopping. It shows that it makes no difference when we chop
 transaction Ti, whether or not the other transactions have been chopped. This is because SC-graphs do not disappear
 if we split or merge pieces in transactions other than Ti. 
+
+Taking advantage of the above two observations and their derivations, we can design an algorithm that chops transactions 
+using only local knowledge. The algorithm only considers one transaction at a time, without knowing the exact chopping of 
+other transactions, thanks to observation two above. Note that in a database system
