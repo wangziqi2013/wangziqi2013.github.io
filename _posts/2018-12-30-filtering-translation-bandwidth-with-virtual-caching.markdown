@@ -110,4 +110,4 @@ conflict might just be missed. This paper admits no good solution. One temporary
 still perform address translation using FT while a memory instruction is executed. Both the VA and PA are saved in 
 the load store queue. Cache accesses use VA as stated above. The PA must be used to detect address aliasing 
 when a new instruction enters the load store queue. In future designs processor might need to add better support
-to roll back speculative execution to further optimize this case.  
+to roll back speculative execution to further optimize this case. 
