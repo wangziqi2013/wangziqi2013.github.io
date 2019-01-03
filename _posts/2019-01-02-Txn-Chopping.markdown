@@ -60,4 +60,9 @@ be maintained. To achieve this goal, the paper proposes using SC-graph to determ
 a transaction is legal (i.e. satisfies serializability). The SC-graph is constructed as follows. Given transaction
 T<sub>1</sub>, T<sub>2</sub>, ..., T<sub>n</sub>, and their corresponding chopping c<sub>11</sub>, c<sub>12</sub>, ...,
 c<sub>21</sub>, ..., c<sub>nk</sub>, we treat each piece c<sub>ij</sub>, as a node. We connect nodes with two 
-types of edges
+types of edges. S edges, or "sibling" edges, connects all pieces from the same transaction. Essentially, every two
+pairs of pieces from the same transaction are connected by an S edge. C edges, or "conflict" edges, connects pieces 
+from different transactions. If two pieces from different transactions access the same data item, and at least one 
+of them is a write, then we connect these two pieces using a C edge.
+Note that both S and C edges are bi-directional. This is because we are only performing static analysis, and hence 
+we can only draw possibilities of conflicts, but do not know the actual direction of conflicts until run time. 
