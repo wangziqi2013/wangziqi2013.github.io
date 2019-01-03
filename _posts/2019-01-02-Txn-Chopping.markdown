@@ -79,4 +79,9 @@ C edge and one S edge is in the graph.
 Two more observations follow the above conclusion on SC-graph. First, given a chopping whose corresponding SC-graph has 
 at least one SC-cycle, any further finer division of this chopping must also have at least one SC-graph. We show this by induction.
 In the base case, no further chopping is done, and the graph has at least one cycle. Assume that after some chopping steps
-the graph still has one or more cycles. Then what if we chop a piece into two in the next step? 
+the graph still has one or more cycles. Then what if we chop a piece into two in the next step? There are two possibilities.
+In the first case, a piece that does not constitute any cycle is chopped. This does not change existing cycles, and hence 
+the resulting graph must have at least one cycle. In the second case, we chop a piece that constitute a SC-graph. We assume 
+w.l.o.g. that the piece is p1 and it is connected with p2 and p3. Chopping p1 into p11 and p12 does not break the cycle
+because p11 and p12 are connected by an S-edge, while p11 and p12 themselves are connected with other nodes via the 
+original edges
