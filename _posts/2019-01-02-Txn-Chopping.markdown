@@ -87,4 +87,10 @@ because p11 and p12 are connected by an S-edge, while p11 and p12 themselves are
 original edges. By induction, we know that no matter how we further chop an already invalid chopping, the resulting 
 chopping remains invalid. The second observation is that, if a given chopping has an SC-cycle that involves two or more
 pieces of Ti (i.e. two or more pieces of Ti, pi1 and pi2, constitute the cycle), then if we merge all chopped nodes for all transactions 
-execpt Ti, there would still be an SC-cycle. 
+execpt Ti, there would still be an SC-cycle. We prove this by induction by showing that the cycle will not disappear no
+matter how we merge pieces. In the base case, no pieces are merged, and the observation is trivially true. In the induction step,
+assume that some pieces have already been merged, and there is still an SC-cycle. In the next step we select two pieces 
+to merge (note: not all pieces are merge-able, but it is guaranteed that we can always find some pieces to merge as long
+as the transaction has not been fully merged). If none of these pieces is within the cycle then the cycle is not affected. 
+Otherwise, there are three possibilities. First, none of the pieces has a C edge. In
+this case the C edge
