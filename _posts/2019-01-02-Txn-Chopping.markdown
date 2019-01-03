@@ -106,4 +106,7 @@ if we split or merge pieces in transactions other than Ti.
 
 Taking advantage of the above two observations and their derivations, we can design an algorithm that chops transactions 
 using only local knowledge. The algorithm only considers one transaction at a time, without knowing the exact chopping of 
-other transactions, thanks to observation two above. Note that in a database system
+other transactions, thanks to observation two above. Note that in a database system, usually multiple instances of the same
+transaction will be running at the same time. If this is true, then during the chopping of transaction Ti, the other 
+"reference transactions" must also all transactions in the system, including Ti, because it is possible that one instance 
+of Ti conflicts with another instance. The algorithm runs in a bottom-up manner described as follows: 
