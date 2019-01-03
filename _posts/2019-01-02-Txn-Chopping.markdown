@@ -84,4 +84,7 @@ In the first case, a piece that does not constitute any cycle is chopped. This d
 the resulting graph must have at least one cycle. In the second case, we chop a piece that constitute a SC-graph. We assume 
 w.l.o.g. that the piece is p1 and it is connected with p2 and p3. Chopping p1 into p11 and p12 does not break the cycle
 because p11 and p12 are connected by an S-edge, while p11 and p12 themselves are connected with other nodes via the 
-original edges
+original edges. By induction, we know that no matter how we further chop an already invalid chopping, the resulting 
+chopping remains invalid. The second observation is that, if a given chopping has an SC-cycle that involves two or more
+pieces of Ti (i.e. two or more pieces of Ti, pi1 and pi2, constitute the cycle), then if we merge all chopped nodes for all transactions 
+execpt Ti, there would still be an SC-cycle. 
