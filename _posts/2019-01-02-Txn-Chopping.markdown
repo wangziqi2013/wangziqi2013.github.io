@@ -44,3 +44,7 @@ Recall the assumption that the first piece is executed as a transaction. We know
 interleavings for the first piece: Either A's piece is executed first and B's second, or the opposite of it. In neither 
 case should the account balance become negative, as the check is always performed, and if the account has insufficient 
 balance, the piece will abort. A contradiction!
+
+More formally speaking, transaction chopping seeks a way to force locks to be dropped before the transaction can acquire
+extra locks on data items, hence breaking the S2PL rule. In the previous example, the transaction is chopped in a way such
+that the lock on account balance is dropped before the lock on total amount is acquired. 
