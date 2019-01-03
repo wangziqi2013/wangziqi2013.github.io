@@ -71,4 +71,7 @@ conflict cycles, because conflicts (and the notion of seriazability) are only me
 C edges identifies actual conflicts that can potentially happen during the execution. Since pieces are executed
 themselves as atomic units, if transaction A has two or more distinct pieces (call them p1, p2) that conflict with 
 a piece of transaction B (call it p3), then it is possible that p3 is executed between p1 and p2, and that 
-transaction A is serialized both before and after B, causing a conflict cycle. 
+transaction A is serialized both before and after B, causing a conflict cycle. A more detailed analysis can also be 
+performed for scenario with more than two transactions and more than three pieces. The conclusion is that, 
+in order for a chopping to be serializable, there must not be any cycle in the SC-graph where at least one 
+C edge and one S edge is in the graph.
