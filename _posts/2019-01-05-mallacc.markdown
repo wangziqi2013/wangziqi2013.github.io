@@ -39,11 +39,12 @@ of memory allocation. The hardware design, however, is totally general and can b
 implemetations (partially because the fast-path is performance critical, and hence different malloc implementations are 
 largely the same or at least very similar to each other).
 
-The paper, however, observes two major sources of slowdown in the already-fast malloc fast-path, which is described 
-as follows. First, during the first stage where the request size is rounded up to an existing size class, a lookup
-table is used to translate the aligned requested size into an actual allocation size. To accelerate the translation
-process, tcmalloc using the aligned requested size as an index to perform two table lookups. Both lookup tables are static
-read-only area of memory organized as arrays. The request size (after alignment) is directed used as the index to the 
-first table to compute the size class. Then the size class is used to index the second lookup table, and the output is 
-the index of the bucket where the free list is stored. Experiments show that accessing the static array suffers high 
-cache miss ratio. The explanation is that 
+Regardless of the fact that the fast-path is already highly optimized, the paper still observes two major sources of 
+slowdown in the already-fast malloc fast-path, which is described as follows. First, during the first stage where the 
+request size is rounded up to an existing size class, a lookup table is used to translate the aligned requested size 
+into an actual allocation size. To accelerate the translation process, tcmalloc using the aligned requested size as an 
+index to perform two table lookups. Both lookup tables are static read-only area of memory organized as arrays. The request 
+size (after alignment) is directly used as the index to the first table to compute the size class. Then the size class is 
+used to index the second lookup table, and the output is the index of the bucket where the free list is maintained. Both arrays 
+are small enough such that there is non-negligible change that they will remain in the LLC or even L1. It is, however, still 
+slow because the two load instructions are on the critical path of malloc, and hence cannot be overlapped or speculated. 
