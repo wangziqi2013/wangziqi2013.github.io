@@ -56,3 +56,7 @@ updates the bucket to point to the next block in the linked list using the resul
 instructions may suffer performance bottleneck from two aspects. First is that they are dependent on each other, which
 makes speculation impossible. The second is that the linked structure may not have good cache hit ratio as in the 
 case of array lookup from the previous stage, because modern cache hierarchy does not handle linked structure very well. 
+
+To handle these two issues, the paper proposes adding a small hardware buffer in the cache hierarchy to aid the fast-path
+of malloc. Given that existing fast-path implementations are already very fast, the hardware buffer must be close enough
+to the processor and has low access overhead. 
