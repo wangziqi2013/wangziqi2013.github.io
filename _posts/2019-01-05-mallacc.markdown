@@ -22,4 +22,10 @@ available sizes in a reasonable range achieves a balance between internal fragme
 not all allocated spaces are used by the user program) and the space taken to maintain metadata which can have a negative 
 effect on performance if the metadata size is too large and cannot fit into the cache. Free memory blocks of each size class 
 are usually maintained per size bucket in the form of linked lists. The allocator removes the head element from the list
-and returns it to the user if the list is non-empty. 
+and returns it to the user if the list is non-empty. To avoid synchronization overheads, each thread maintains their own 
+size buckets and size classes. If a size bucket is empty, the allocator either tries to claim more memory blocks from a 
+larger bucket, or from the higher level memory pool. The memory pool is a shared data structure, which itself can also 
+be hierarchical and consists of multiple smaller pools. Accesses to the memory pool usually requires locking or other forms
+of synchronizaton. During normal operation, the first level buckets will be accessed most frequently, which is the fast-path
+of allocation. The paper suggests that the fast-path is already quite highly optimized, and only takes 20 to 30 cycles to 
+complete. 
