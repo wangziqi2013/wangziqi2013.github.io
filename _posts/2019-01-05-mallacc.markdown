@@ -59,4 +59,10 @@ case of array lookup from the previous stage, because modern cache hierarchy doe
 
 To handle these two issues, the paper proposes adding a small hardware buffer in the cache hierarchy to aid the fast-path
 of malloc. Given that existing fast-path implementations are already very fast, the hardware buffer must be close enough
-to the processor and has low access overhead. 
+to the processor and has low access overhead. One important observation made by the paper is that, although tcmalloc
+allocates from a rather large range of size classes (there were around 2100 size classes), in practice, less than five 
+size classes are frequently used. Based on this observation, the paper proposes adding a four entry on-chip buffer
+to each core. The buffer holds mappings from requested size (after alignment) to size class index, and then to the 
+first two entries of the free block linked list. Mappings are learned from previous allocations, and need to be 
+inserted and updated by software. When there is a hit on the malloc cache, results can be returned from the cache instantly
+without waiting. 
