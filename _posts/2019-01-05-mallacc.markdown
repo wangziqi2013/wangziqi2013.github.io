@@ -36,5 +36,7 @@ largely the same or at least very similar to each other).
 The paper, however, observes two major sources of slowdown in the already-fast malloc fast-path, which is described 
 as follows. First, during the first stage where the request size is rounded up to an existing size class, a lookup
 table is used to translate the aligned requested size into an actual allocation size. To accelerate the translation
-process, tcmalloc using 
-the aligned requested size to perform a table lookup.
+process, tcmalloc using the aligned requested size as an index to perform a table lookup. The lookup table is a static
+read-only area of memory organized as an array. The request size (after alignment and normalization) is directed used 
+as the index, and the output is the index of the bucket where the free list is stored. Experiments show that accessing
+the static array suffers high cache miss ratio. The explanation is that 
