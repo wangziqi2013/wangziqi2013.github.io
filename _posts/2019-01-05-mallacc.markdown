@@ -65,4 +65,12 @@ size classes are frequently used. Based on this observation, the paper proposes 
 to each core. The buffer holds mappings from requested size (after alignment) to size class index, and then to the 
 first two entries of the free block linked list. Mappings are learned from previous allocations, and need to be 
 inserted and updated by software. When there is a hit on the malloc cache, results can be returned from the cache instantly
-without waiting. 
+without waiting. The hardware cache contains six fields. The first field is a valid bit indicating whether the entry is valid.
+This bit is initialized to zero at system startup time, and toggled when an entry is inserted for the first time. The 
+second entry is a pair of requested sizes after alignment. Associative search is performed on this field by the 
+controller hardware when a requested size (after alignment) is used to query the cache. If the requested size are 
+within the range of the entry, then it is a cache hit. The third and fourth fields are size class index, and the 
+actual allocated size. Both are returned as the result of the query using requested size. They are inserted by
+software if a previous lookup misses the cache, and has to perform memory reads. If the cache is hit, then we 
+can remove the two load operations from the critical path, because they are no long required to obtain both
+the size class and the actual allocation size. 
