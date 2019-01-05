@@ -40,7 +40,7 @@ implemetations (partially because the fast-path is performance critical, and hen
 largely the same or at least very similar to each other).
 
 Regardless of the fact that the fast-path is already highly optimized, the paper still observes two major sources of 
-slowdown in the already-fast malloc fast-path, which is described as follows. First, during the first stage where the 
+slow down in the already-fast malloc fast-path, which is described as follows. First, during the first stage where the 
 request size is rounded up to an existing size class, a lookup table is used to translate the aligned requested size 
 into an actual allocation size. To accelerate the translation process, tcmalloc using the aligned requested size as an 
 index to perform two table lookups. Both lookup tables are static read-only area of memory organized as arrays. The request 
@@ -48,3 +48,8 @@ size (after alignment) is directly used as the index to the first table to compu
 used to index the second lookup table, and the output is the index of the bucket where the free list is maintained. Both arrays 
 are small enough such that there is non-negligible change that they will remain in the LLC or even L1. It is, however, still 
 slow because the two load instructions are on the critical path of malloc, and hence cannot be overlapped or speculated. 
+The second source of slow down is the overhead to maintain the linked list after the bucket has been identified. In order to
+remove the first element from the linked list and return it as the allocated block, two loads and one store instruction
+are needed: The first load instruction reads the pointer to the head node, and the following load reads the pointer 
+to the next node (the pointer to the next node is stored inside the unallocated block itself). Then a store instruction
+updates the bucket to point to the next block in the linked list using the result of the second load.
