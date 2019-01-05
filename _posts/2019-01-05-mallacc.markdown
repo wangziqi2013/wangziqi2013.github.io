@@ -52,4 +52,7 @@ The second source of slow down is the overhead to maintain the linked list after
 remove the first element from the linked list and return it as the allocated block, two loads and one store instruction
 are needed: The first load instruction reads the pointer to the head node, and the following load reads the pointer 
 to the next node (the pointer to the next node is stored inside the unallocated block itself). Then a store instruction
-updates the bucket to point to the next block in the linked list using the result of the second load.
+updates the bucket to point to the next block in the linked list using the result of the second load. These three memory 
+instructions may suffer performance bottleneck from two aspects. First is that they are dependent on each other, which
+makes speculation impossible. The second is that the linked structure may not have good cache hit ratio as in the 
+case of array lookup from the previous stage, because modern cache hierarchy does not handle linked structure very well. 
