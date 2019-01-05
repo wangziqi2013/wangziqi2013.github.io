@@ -13,3 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes mallacc, a special purpose hardware design that accelerates the C heap memory allocation API: malloc().
+Malloc, as one of the most important C library functions, are performance critical and must complete within only a few 
+cycles. We briefly describe common designs of state-of-the-art malloc in this paragraph. Users call malloc() with the 
+size of the request, which is the minimum amount of memory that the allocator should return.
