@@ -28,7 +28,13 @@ larger bucket, or from the higher level memory pool. The memory pool is a shared
 be hierarchical and consists of multiple smaller pools. Accesses to the memory pool usually requires locking or other forms
 of synchronizaton. During normal operation, the first level buckets will be accessed most frequently, which is the fast-path
 of allocation. The paper suggests that the fast-path is already quite highly optimized, and only takes 20 to 30 cycles to 
-complete. In the following sections, we use tcmalloc as a typical example to illustrate how mallacc improves the performance
+complete. Free operations are treated almost the same way as allocation. When the bucket is calculated, the freed memory
+block is inserted to the head of the linked list. Migrations of blocks between threads and between different levels of 
+memory pools are also implemented to bound the total amount of memory usage. We do not concentrate on these details
+because the implementation of block migration policies differ greately among implementations, and are not on the 
+fast-path.
+
+In the following sections, we use tcmalloc as a typical example to illustrate how mallacc improves the performance
 of memory allocation. The hardware design, however, is totally general and can be equally applied to other malloc
 implemetations (partially because the fast-path is performance critical, and hence different malloc implementations are 
 largely the same or at least very similar to each other).
