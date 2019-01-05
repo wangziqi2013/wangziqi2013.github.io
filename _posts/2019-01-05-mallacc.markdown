@@ -33,3 +33,8 @@ of memory allocation. The hardware design, however, is totally general and can b
 implemetations (partially because the fast-path is performance critical, and hence different malloc implementations are 
 largely the same or at least very similar to each other).
 
+The paper, however, observes two major sources of slowdown in the already-fast malloc fast-path, which is described 
+as follows. First, during the first stage where the request size is rounded up to an existing size class, a lookup
+table is used to translate the aligned requested size into an actual allocation size. To accelerate the translation
+process, tcmalloc using 
+the aligned requested size to perform a table lookup.
