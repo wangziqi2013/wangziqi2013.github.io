@@ -16,4 +16,10 @@ version_mgmt:
 This paper proposes mallacc, a special purpose hardware design that accelerates the C heap memory allocation API: malloc().
 Malloc, as one of the most important C library functions, are performance critical and must complete within only a few 
 cycles. We briefly describe common designs of state-of-the-art malloc in this paragraph. Users call malloc() with the 
-size of the request, which is the minimum amount of memory that the allocator should return.
+size of the request, which is the minimum amount of memory that the allocator should return. On receiving the request, the 
+allocator aligns the requested size, and rounds it up to the nearest size available for allocation. Keeping the number of 
+available sizes in a reasonable range achieves a balance between internal fragmentation (memory under-utilization because
+not all allocated spaces are used by the user program) and the space taken to maintain metadata which can have a negative 
+effect on performance if the metadata size is too large and cannot fit into the cache. Free memory blocks of each size class 
+are usually maintained per size bucket in the form of linked lists. The allocator removes the head element from the list
+and returns it to the user if the list is non-empty. 
