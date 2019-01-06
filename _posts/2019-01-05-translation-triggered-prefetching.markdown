@@ -23,3 +23,6 @@ by the paper is that a large fraction of TLB misses are actually followed by cac
 indicators of the fact that the target physical address is cold and has not been touched for a while. In such cases, it is
 reasonable to expect that the cache does not contain the target block.
 
+Based on this observation, TEMPO attempts to mitigate the "double miss" problem by prefetching the target memory address when
+the last level TLB entry is read from the DRAM. The approach is described as follows. When a TLB miss is detected, the page walker
+initiates the page walk process. 
