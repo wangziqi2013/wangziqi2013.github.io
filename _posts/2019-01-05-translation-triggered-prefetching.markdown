@@ -25,4 +25,9 @@ reasonable to expect that the cache does not contain the target block.
 
 Based on this observation, TEMPO attempts to mitigate the "double miss" problem by prefetching the target memory address when
 the last level TLB entry is read from the DRAM. The approach is described as follows. When a TLB miss is detected, the page walker
-initiates the page walk process. 
+initiates the page walk process. The page walk is unchanged for all levels expect the last one. When the page walker reaches the 
+last level of the page table (we assume a x86-64 multi-level page table), the physical address of the block that will be 
+fetched shortly is known, and hence the target address can be prefetched to overlap DRAM access with TLB miss handling. 
+The page walker injects the memory request for the last level page table entry (PTE) with two more fields. One is a special
+flag indicating that the DRAM read request is for the last level PTE. Another is the cache line address within the physical 
+page, which can be generated from the virtual address and only consists of 6 bits given 4KB page and 64 byte cache line.
