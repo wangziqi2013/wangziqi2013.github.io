@@ -83,6 +83,12 @@ size. This usually involves adding a constant to the requested size and then rig
 implemented, then a requested size from the user can directly be used as the input to the cache.
 
 The head and next pointer fields of the cache needs to be maintained in such a way that they can consistently hit.
-The current design is described as follows. After obtaining the size class index, malloc removes the first element
+The proposed design is described as follows. After obtaining the size class index, malloc removes the first element
 from the free list using a "pop" instruction. The "pop" instruction writes the current "head" in a register, and 
-shifts the "next" field into the "head" field. The "next" field is then cleared. If the "pop" instruction
+shifts the "next" field into the "head" field. The "next" field is then cleared. If the "next" field is empty, then
+the "pop" instruction assumes that software did not update the field after the last pop, and will clear the entry
+to avoid reading invalid pointers. To update the "next" field, every time after the software pops the head of a 
+bucket, it is supposed to issue a special prefetch instruction, which loads the pointer stored in the head block,
+and fills the "next" field with the value. This prefetch instruction breaks the dependency chain in the original
+malloc, where two loads and one store must be executed sequentially even on an out-of-order core, becaise there are 
+data dependencies between them. 
