@@ -90,5 +90,10 @@ the "pop" instruction assumes that software did not update the field after the l
 to avoid reading invalid pointers. To update the "next" field, every time after the software pops the head of a 
 bucket, it is supposed to issue a special prefetch instruction, which loads the pointer stored in the head block,
 and fills the "next" field with the value. This prefetch instruction breaks the dependency chain in the original
-malloc, where two loads and one store must be executed sequentially even on an out-of-order core, becaise there are 
-data dependencies between them. 
+malloc, where two loads and one store must be executed sequentially even on an out-of-order core, because there are 
+data dependencies between them. Now with prefetching, the reading of the next block pointer can be overlapped with 
+normal operation of malloc and the application, and the next time malloc is invoked, it is likely that the pointer
+value is ready, and the request is fulfilled instantly. If the prefetching has not completed when an request arrive, the 
+request needs to be blocked and wait for prefetching. Note that this will not make things worse, because if prefetching
+cannot complete in a timely manner, it must be the case that the data is rather cold, and during normal operation
+the execution will also block here waiting for data. 
