@@ -81,3 +81,8 @@ is not found in the cache, then ZF in FLAGS register will be set, indicating tha
 after it has completed the software-only slow-path. In addition, a circuit can also be added to align the requested 
 size. This usually involves adding a constant to the requested size and then right shift a few bits. If this is 
 implemented, then a requested size from the user can directly be used as the input to the cache.
+
+The head and next pointer fields of the cache needs to be maintained in such a way that they can consistently hit.
+The current design is described as follows. After obtaining the size class index, malloc removes the first element
+from the free list using a "pop" instruction. The "pop" instruction writes the current "head" in a register, and 
+shifts the "next" field into the "head" field. The "next" field is then cleared. If the "pop" instruction
