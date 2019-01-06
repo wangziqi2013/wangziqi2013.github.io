@@ -39,3 +39,9 @@ using the physical address and the cache line offset. After the cache line is al
 a response message back to the cache controller, and the cache controller fills the LLC with the line just read.
 The memory request is replayed as usual, and if it misses the first few cache levels in the hierarchy, the prefetched line
 can be provided by the LLC.
+
+With memory requests for last level PTE explicitly marked, a few other optimizations also apply. One example is to schedule 
+multiple accesses to the same DRAM row into one request. This is realized as follows. In DRAM, the row buffer is used to latch
+the data read from capacitors which do not directly provide stable and readable digital. If two consecutive requests access
+different rows, the row buffer must be written back to the row, before the next row can be fetched. The write back process 
+is called "precharge", and 
