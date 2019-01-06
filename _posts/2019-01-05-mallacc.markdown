@@ -76,4 +76,8 @@ can remove the two load instructions from the critical path, because it is no lo
 the size class and the actual allocation size via array lookups, removing the first source of slow down mentioned above. 
 The fifth and sixth fields are the head pointer and next block pointer of the bucket. These two fields are also
 filled by the software when there is a miss. Otherwise, if the cache is hit, the two values are loaded into registers
-and can be directly used by malloc to update the bucket and then return the allocated block.
+and can be directly used by malloc to update the bucket and then return the allocated block. On x86, if an entry
+is not found in the cache, then ZF in FLAGS register will be set, indicating that the software must fill the cache 
+after it has completed the software-only slow-path. In addition, a circuit can also be added to align the requested 
+size. This usually involves adding a constant to the requested size and then right shift a few bits. If this is 
+implemented, then a requested size from the user can directly be used as the input to the cache.
