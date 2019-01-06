@@ -31,3 +31,8 @@ fetched shortly is known, and hence the target address can be prefetched to over
 The page walker injects the memory request for the last level page table entry (PTE) with two more fields. One is a special
 flag indicating that the DRAM read request is for the last level PTE. Another is the cache line address within the physical 
 page, which can be generated from the virtual address and only consists of 6 bits given 4KB page and 64 byte cache line.
+Once the request is received by the memory controller, the controller schedules two requests in its transaction queue.
+The first request is the one that reads the PTE. The second request reads the target address, and special processing is needed,
+since the target address is not known until the first request is processed. After the DRAM controller completes the request for 
+PTE, it notes down the physical address (since the format of the PTE is known), and then proceeds to read the target block
+using the physical address and the cache line offset. 
