@@ -52,4 +52,4 @@ accesses hit the same row. There are two obvious benefits: First, since TLB miss
 the bottleneck of memory operations, prioritizing TLB misses and the following prefetching can improve instruction throughput. 
 Second, in workloads where consecutive pages are scanned, it is common that multiple TLB misses are on-the-fly and hence 
 can be combined by the memory controller into one request to the DRAM row. Instead of performing two expensive precharge 
-operations, only one such operation is needed, improving the throughput of DRAM also. 
+operations, only one such operation is needed, improving the throughput of DRAM also.  
