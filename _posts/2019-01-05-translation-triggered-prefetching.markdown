@@ -35,4 +35,7 @@ Once the request is received by the memory controller, the controller schedules 
 The first request is the one that reads the PTE. The second request reads the target address, and special processing is needed,
 since the target address is not known until the first request is processed. After the DRAM controller completes the request for 
 PTE, it notes down the physical address (since the format of the PTE is known), and then proceeds to read the target block
-using the physical address and the cache line offset. 
+using the physical address and the cache line offset. After the cache line is also read, the memory controller sends 
+a response message back to the cache controller, and the cache controller fills the LLC with the line just read.
+The memory request is replayed as usual, and if it misses the first few cache levels in the hierarchy, the prefetched line
+can be provided by the LLC.
