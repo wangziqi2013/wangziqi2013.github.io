@@ -17,4 +17,9 @@ This paper proposes TEMPO, an automatic prefetching scheme driven by TLB misses.
 scientific computation, demonstrates less locality and hence exhibits higher TLB misses. There are several causes of decreased
 locality, such as graph workloads where nodes are linked by pointers; sparse data structures where non-adjacent entries are 
 stored in noncontiguous blocks of memory, and large memory workloads where the amount of translation information is just too
-large to be cached entirely in the TLB, causing TLB thrashing.
+large to be cached entirely in the TLB, causing TLB thrashing. When TLB miss happens, the page walker must load the PTE entry from
+the main memory into TLB, and then replay the memory access instruction, which will hit the TLB. One important observation made
+by the paper is that a large fraction of TLB misses are actually followed by cache misses. This is because TLB misses are often
+indicators of the fact that the target physical address is cold and has not been touched for a while. In such cases, it is
+reasonable to expect that the cache does not contain the target block.
+
