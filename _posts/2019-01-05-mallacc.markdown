@@ -100,4 +100,7 @@ the execution will also block here waiting for data.
 
 Since the malloc cache is only a fast access to frequently used data maintained by malloc, the cache can always be flushed
 if there is a context switch. This is also necessary because most malloc implementations use thread-local buckets to
-avoid fast-path synchronization
+avoid fast-path synchronization. Occasionally, misspeculation might occur as a result of branch mis-prediction. In this 
+case, the entry that are filled during the speculation must also be invalidated. To achieve this we need to add an entry 
+pointer to every instruction in the commit queue. If the instruction is nullified because of mis-prediction, the 
+corresponding entry is also cleared. 
