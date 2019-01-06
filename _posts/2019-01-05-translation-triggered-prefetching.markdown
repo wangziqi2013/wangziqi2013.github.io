@@ -44,4 +44,12 @@ With memory requests for last level PTE explicitly marked, a few other optimizat
 multiple accesses to the same DRAM row into one request. This is realized as follows. In DRAM, the row buffer is used to latch
 the data read from capacitors which do not directly provide stable and readable digital. If two consecutive requests access
 different rows, the row buffer must be written back to the row, before the next row can be fetched. The write back process 
-is called "precharge", and 
+is called "precharge", and adds an extra overhead to memory accesses if the locality is poor. If, however, two accesses use
+the same row, then the row buffer can be repeatedly read without any precharge. Taking advantage of this, the memory controller
+does the following: If there are multiple last level PTE requests in the transaction queue, and the target address of the 
+PTE are within the same row buffer, the memory controller schedules these two requests together, ensuring that their
+accesses hit the same row. There are two obvious benefits: First, since TLB misses and the potential cache miss are often
+the bottleneck of memory operations, prioritizing TLB misses and the following prefetching can improve instruction throughput. 
+Second, in workloads where consecutive pages are scanned, it is common that multiple TLB misses are on-the-fly and hence 
+can be combined by the memory controller into one request to the DRAM row. Instead of performing two expensive precharge 
+operations, only one such operation is needed, improving the throughput of DRAM also. 
