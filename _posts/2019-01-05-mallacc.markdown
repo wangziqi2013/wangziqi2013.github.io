@@ -72,5 +72,8 @@ controller hardware when a requested size (after alignment) is used to query the
 within the range of the entry, then it is a cache hit. The third and fourth fields are size class index, and the 
 actual allocated size. Both are returned as the result of the query using requested size. They are inserted by
 software if a previous lookup misses the cache, and has to perform memory reads. If the cache is hit, then we 
-can remove the two load operations from the critical path, because they are no long required to obtain both
-the size class and the actual allocation size. 
+can remove the two load instructions from the critical path, because it is no longer required to obtain both
+the size class and the actual allocation size via array lookups, removing the first source of slow down mentioned above. 
+The fifth and sixth fields are the head pointer and next block pointer of the bucket. These two fields are also
+filled by the software when there is a miss. Otherwise, if the cache is hit, the two values are loaded into registers
+and can be directly used by malloc to update the bucket and then return the allocated block.
