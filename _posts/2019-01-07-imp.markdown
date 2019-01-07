@@ -42,3 +42,7 @@ can only have a limited set of values, e.g. 4 (C int type or float), 8 (C long t
 where B\[i\] is the offset of bits. Converted to offset of bytes by division it with 8). Tha hardware does not need to perform
 multiplication or division using an expensive multiplier and divisor, because they can be achieved easily using left
 and right shifts on bit level. 
+
+The architecture of IMP is described as follows. IMP is based on existing designs of stream prefetchers. In these prefetchers,
+stream information is stored in a small associative buffer called the stream table. The stream table maintains states that
+are necessary to detect memory streaming access pattern. 
