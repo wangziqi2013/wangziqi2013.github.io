@@ -16,5 +16,10 @@ version_mgmt:
 This paper proposes Indirect Memory Prefetcher (IMP) to address the common problem of slow indirect memory operations. 
 Indirect memory operations are of the form A\[B\[i\]\], where B\[i\] is an array of indices that are read and used 
 with a regular pattern, and A\[i\] stores data which are often accessed without a pattern. This scenario is common in 
-compressed representation of sparse data structures, where the array B stores the index of entries that have a non-zero
-value, and array A stores the actual non-zero value
+compressed representation of sparse data structures. In practice, both arrays are pre-computed at the beginning of
+an iteration, and remain unchanged during the iteration, because the compact form is difficult to modify. Access patterns 
+like this suffer low spatial locality especially when the size of A is large, because it is unclear whether two adjacent 
+elements in A will be physically stored close to each other. In addition, a classical stream prefetcher which detects 
+regular access patterns as access streams also cannot help in this case, because the contents of B\[i\] usually do not result 
+in a regular pattern of accessing A even if B itself is accessed regularly (e.g. using linear scans), making it harder for 
+hardware prefetcher to work. 
