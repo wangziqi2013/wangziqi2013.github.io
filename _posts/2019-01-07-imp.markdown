@@ -62,4 +62,6 @@ above process, using another table to keep base address computed from B\[i + k\]
 base addresses have been computed, IPD walks the two tables using a state machine, and compares the values of base addresses
 stored on the corresponding location. If two values match, then we have high confidence that an indirect pattern has been 
 detected. The element size and base address will then be associated with the stream that accesses B\[i\] by inserting them 
-into columns of the stream table. 
+into columns of the stream table. In addition, the current value of B\[i\] is also stored in a column of the stream table. 
+We use this value to check whether the prefetching would work as expected. If on the third acces to B\[i\], there is still
+no indirect access pattern detected, IMP assumes that the pattern does not exist, and frees the entry from IPD.
