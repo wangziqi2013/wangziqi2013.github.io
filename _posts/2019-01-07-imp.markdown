@@ -27,4 +27,8 @@ hardware prefetcher to work.
 In order to also efficiently prefetch array A, IMP takes advantage of the following observation: The address of 
 A\[B\[i\]\] to prefetch is computed using a simple formula: &A\[B\[i\]\] == sizeof(A\[0\]) * B\[i\] + &A\[0\]. 
 Given that the size of elements in array A is a compile time constant, and the base address of A is fixed at the beginning
-of the iteration, this equation only contains one variable, B\[i\], and two unknown constants, sizeof(A\[0\] and &A\[0\]).
+of the iteration, this equation only contains one variable, B\[i\], and two unknown constants, sizeof(A\[0\]) and &A\[0\].
+By using a stream prefetcher we can easily prefetch the content of array B since it is accessed regularly. By
+monitoring cache miss events, it is likely that we can also catch the target address (if there is no cache miss for multiple
+accesses, then it is an indication that the locality of accesses is good, and prefetching is unnecessary) that should have 
+been prefetched if the prefetcher works ideally. 
