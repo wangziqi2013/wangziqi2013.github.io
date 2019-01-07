@@ -71,4 +71,9 @@ of A are computed correctly. For each entry in the stream table, there is a satu
 the stream is accessed, the value of B\[i\] is used to compute the expected target address, and this address is compared with
 every memory access (or cache miss? The paper did not elaborate). If there is a match, which means that the prediction is 
 successful, the saturating counter is incremented. Otherwise, if no match is found until the next access of B\[i\], the 
-counter is decremented. Once the saturating counter reaches a threshold, IMP will start prefetching as follows. 
+counter is decremented. Once the saturating counter reaches a threshold, IMP will start prefetching as follows. On an 
+access to the stream reading B\[i\], the prefetcher issues memory read operations to read B\[i + &Delta;\], computes the 
+target address, and then prefetches the target address. For memory blocks prefetched into the cache, IMP also tracks their
+usage by the processor. The value of &Delta; is initially small, and will be incremented gradually as the prefetcher warms up. 
+The value of &Delta; is considered as optimized if a block is used shortly after it is inserted into the cache, until which 
+the prefetcher stops incrementing it.
