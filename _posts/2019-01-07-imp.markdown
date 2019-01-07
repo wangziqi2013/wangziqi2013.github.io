@@ -23,3 +23,8 @@ elements in A will be physically stored close to each other. In addition, a clas
 regular access patterns as access streams also cannot help in this case, because the contents of B\[i\] usually do not result 
 in a regular pattern of accessing A even if B itself is accessed regularly (e.g. using linear scans), making it harder for 
 hardware prefetcher to work. 
+
+In order to also efficiently prefetch array A, IMP takes advantage of the following observation: The address of 
+A\[B\[i\]\] to prefetch is computed using a simple formula: &A\[B\[i\]\] == sizeof(A\[0\]) * B\[i\] + &A\[0\]. 
+Given that the size of elements in array A is a compile time constant, and the base address of A is fixed at the beginning
+of the iteration, this equation only contains one variable, B\[i\], and two unknown constants, sizeof(A\[0\] and &A\[0\]).
