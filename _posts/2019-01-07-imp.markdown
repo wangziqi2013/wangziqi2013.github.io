@@ -52,4 +52,14 @@ one indirect memory reference of form A\[B\[i\]\]. After a stream has been detec
 memory references made by the stream. For a memory reference B\[i\] detected by the stream detector, IPD checks if it is already in
 the table, and if not assigns a new entry. We use the PC of the instruction to disambiguate between different streams; If 
 two accessing instructions have the same PC, then we assume they constitute the same stream even if the pattern changes, 
-because this can be a result of nested loop. 
+because this can be a result of nested loop. After detecting the memory reference to B\[i\], the IPD keeps monitoring 
+cache miss events following the read. The cache miss will also be detected and the address will be sent to the IPD, after which
+the latter computes the base address of A (i.e. &A\[0\]) using four hard-coded element sizes mentioned in previous paragraphs. 
+The results are stored in another hardware table. If multiple cache misses occur afte reading B\[i\], the first few of them will
+be captured, and used to compute the base address (so the table should have multiple entries, one for each cache miss
+for the same B\[i\] read). On a second access to elements in the same stream (i.e. B\[i + k\]), the IPD repeats the 
+above process, using another table to keep base address computed from B\[i + k\] and cache miss addresses. After the
+base addresses have been computed, IPD walks the two tables using a state machine, and compares the values of base addresses
+stored on the corresponding location. If two values match, then we have high confidence that an indirect pattern has been 
+detected. The element size and base address will then be associated with the stream that accesses B\[i\] by inserting them 
+into columns of the stream table. 
