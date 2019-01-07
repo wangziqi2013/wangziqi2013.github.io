@@ -39,4 +39,6 @@ value of b\[i + 1\] as an input to generate the next address to prefetch.
 One simplification is made in the paper to make the hardware implementation more practical: for performance critical
 part of the program, most compilers will align data items accessed in an array. It is hence very likely that sizeof(A\[0\]) 
 can only have a limited set of values, e.g. 4 (C int type or float), 8 (C long type or double), 16 (vector type), or 1/8 (bit field
-where B\[i\] is the offset of bits. Converted to offset of bytes by division it with 8).
+where B\[i\] is the offset of bits. Converted to offset of bytes by division it with 8). Tha hardware does not need to perform
+multiplication or division using an expensive multiplier and divisor, because they can be achieved easily using left
+and right shifts on bit level. 
