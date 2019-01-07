@@ -77,3 +77,8 @@ target address, and then prefetches the target address. For memory blocks prefet
 usage by the processor. The value of &Delta; is initially small, and will be incremented gradually as the prefetcher warms up. 
 The value of &Delta; is considered as optimized if a block is used shortly after it is inserted into the cache, until which 
 the prefetcher stops incrementing it.
+
+IMP can work in both physical addresses and virtual addresses. The former requires that the buffer be cleared or saved on
+a context switch, while the latter does not support prefetching across page boundaries (because the underlying physical 
+pages may not be allocated in contiguous page frames). In the paper it is suggested that IMP should be deployed with
+virtual prefetching. It is therefore necessary to place the IMP near the address translation facility.
