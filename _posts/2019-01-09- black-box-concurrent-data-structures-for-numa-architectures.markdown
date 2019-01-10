@@ -31,3 +31,7 @@ log for any fresh entry that was not seen during the last update. The update ope
 applied to the local instance by a local thread. Since updates are communicated between nodes in a logical form, compared
 with directly allowing worker threads to update a remote data structure, this approach minimizes the information that 
 needs to be passed across node boundaries, and hence reduces NUMA communication. 
+
+Since the implementation details of the data structure is unknown to the NR algorithm, no fine-grained synchronization
+can be done. Instead, NR worker threads cooperatively finish operations, guaranteeing that at any moment, only one thread
+can be performing updates on the data structure. This is realized using flat combining, which is described as follows.
