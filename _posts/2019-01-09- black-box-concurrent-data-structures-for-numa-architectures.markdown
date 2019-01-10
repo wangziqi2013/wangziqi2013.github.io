@@ -73,6 +73,10 @@ using reader-writer lock and local read possibilities.
 
 With read-only optimization, the reader-writer lock replaces the mutex as the way of providing protection to the 
 local instance. Read-only threads do not add their entries into either the local or the global log. Instead, they
-acquire the mutex in reader mode, and proceed to access the data structure. Multiple reader threads can exist at
-the same time for increased parallelism. One 
+acquire the mutex in reader mode, and proceed to access the local instance. Multiple reader threads can exist at
+the same time for increased parallelism. One potential problem is that if no remote update is synchronized, 
+linearizability may not hold, since operations completed by a remote combiner thread before the current read operation
+in real time may appear to have logically occurred after the local operation. This issue can be solved by synchronizing
+only operations that occurred in real-time before the current read. To achieve the "partial synchronization", 
+another pointer, called "lastCompleted" is maintained globally. The "lastCompleted" pointer is 
 
