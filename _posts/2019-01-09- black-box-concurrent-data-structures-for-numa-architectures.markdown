@@ -66,3 +66,10 @@ is seen by the combiner thread, the latter must spin and wait for it to become v
 infrequently. After synchronizing with the global log, the combiner thread then proceeds to the local flat combing stage, 
 and applies local changes as described in the previous paragraph. 
 
+Always acquiring the local mutex even for read-only operations is detrimental to performance, because threads are 
+unnecessarily serialized even when they do not conflict physically. In addition, read-only threads can always read from
+the locally stored consistent instance of the data structure. We next describe how NR optimizes read-only operations
+using reader-writer lock and local read possibilities. 
+
+
+
