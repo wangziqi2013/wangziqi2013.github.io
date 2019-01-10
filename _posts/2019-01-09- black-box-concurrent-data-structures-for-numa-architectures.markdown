@@ -71,5 +71,8 @@ unnecessarily serialized even when they do not conflict physically. In addition,
 the locally stored consistent instance of the data structure. We next describe how NR optimizes read-only operations
 using reader-writer lock and local read possibilities. 
 
-
+With read-only optimization, the reader-writer lock replaces the mutex as the way of providing protection to the 
+local instance. Read-only threads do not add their entries into either the local or the global log. Instead, they
+acquire the mutex in reader mode, and proceed to access the data structure. Multiple reader threads can exist at
+the same time for increased parallelism. One 
 
