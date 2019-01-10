@@ -36,10 +36,13 @@ Since the implementation details of the data structure is unknown to the NR algo
 can be done. Instead, NR worker threads cooperatively finish operations, guaranteeing that at any moment, only one thread
 can be performing updates on the data structure. This is realized using flat combining, which is described as follows.
 In flat combining, a modification log is maintained with the data structure. If a thread wishes to update the data stucture,
-it must insert into the log by atomically acquiring a log entry, and then store the operation as well as parameters in 
-the log entry. After creating the log entry, threads then attempt to acquire a mutex and become the "combiner thread", 
-which grants the permission of updating the data structure on behave of other threads. Threads that fail to acquire the 
-mutex will spin on a local flag waiting for the signal to proceed. The combiner thread scans the log, 
+it must insert into the log by atomically acquiring a log entry, and then store identify of itself, the operation descriptor,
+and operation parameters in the log entry. After creating the log entry, threads then attempt to acquire a mutex and become 
+the "combiner thread", which grants the permission of updating the data structure on behave of other threads. Threads that 
+fail to acquire the mutex will spin on a local flag waiting for the return value. The combiner thread scans the log, 
 marks all log entries from the current time in backward direction to the earliest entry that has not been processed, and 
-then applies the entries one by one from the earliest to the latest. After each log entry is fulfilled, the combiner thread
-notifies the 
+then applies the entries one by one from the earliest to the latest. After fulfulling each log entry, the combiner thread
+notifies the corresponding waiting thread to unblock them. After processing all log entries, the combiner thread releases 
+the lock, and then proceed to do its own work. In the meanwhile, other worker threads can keep appending to the log
+(the log does not use the same lock as the one held by the combiner thread). Entries appended after the combiner thread
+scans the log will not be processed until the next iteration.
