@@ -17,4 +17,8 @@ This paper proposes DudeTM, a persistent transactional memory design which guara
 isolation, but also durability. DudeTM is built upon Non-Volatile Memory (NVM), where read latency is close or equal
 to that of DRAM, and write operations are orders of magnitudes slower than reads. Another prominent feature of NVM
 is that unlike hard disks where data can only be accessed by block I/O, NVM supports byte addressable, DRAM style 
-accessing interface, making it an ideal replacement for DRAM modules when persistency is desired. 
+accessing interface, making it an ideal replacement for DRAM modules when persistency is desired. Transactions on NVM
+are said to be persistent, if the atomicity property of transactions can still be guaranteed in case of failure: Either
+all operations or no operation in the transaction is executed. In practice, it is often interpreted as the ability for 
+the transaction processing system to guarantee that transactions committed before the crash can be recovered, while 
+uncommitted transactions must be rolled back.
