@@ -51,5 +51,7 @@ In NR, each node has an instance of the data structure, and hence each node runs
 Update operations are not only posted on the local log, but also they should be conveyed to other nodes using a global log.
 The global log is maintained as a circular buffer. The next available slot is indicated by a global variable "logTail".
 Memory for the global log is allocated in a round-robin fashion from every node equally.
-
+Each node also maintains a "lastTail" pointer, which points to the position in the global log when the node last synchronizes 
+with the global log by. After the combiner thread acquires the mutex and marks local log entries, it first uses Fetch-And-Add 
+(FAA) instruction to increment the 
 
