@@ -87,7 +87,4 @@ it begins the operation. If the reader-writer lock is unheld, it acquires the lo
 instance till "lastCompleted" pointer from the global log as "readTail", and then proceeds with the read operation. 
 Otherwise, if the lock is held, the current reader just waits for the moment that "localTail" becomes greater than "readTail",
 and then retries.
-(Personally I don't think this increases parallelism, because reader threads either wait for the combiner to finish
-or they acts as a reduced combiner that synchronizes less entries. Other reader threads still cannot run in parallel
-with the current reader, because either the latter is the combiner or they both wait for the combiner.)
 
