@@ -78,5 +78,16 @@ the same time for increased parallelism. One potential problem is that if no rem
 linearizability may not hold, since operations completed by a remote combiner thread before the current read operation
 in real time may appear to have logically occurred after the local operation. This issue can be solved by synchronizing
 only operations that occurred in real-time before the current read. To achieve the "partial synchronization", 
-another pointer, called "lastCompleted" is maintained globally. The "lastCompleted" pointer is 
+another pointer, called "lastCompleted" is maintained globally. The "lastCompleted" pointer is updated to the position
+of the global log corresponding to the end of the local batch using CAS *before* a combiner thread starts updating its 
+own batch. The pointer can only be moved forward. Note that by updating the pointer before the local update process, we 
+guarantee that the local batch can finish anytime after this point, because in the perspective of remote threads these 
+operations have been completed and must be synchronized for linearizability. A reader thread reads "lastCompleted" after 
+it begins the operation. If the reader-writer lock is unheld, it acquires the lock in writer mode, updates the local 
+instance till "lastCompleted" pointer from the global log as "readTail", and then proceeds with the read operation. 
+Otherwise, if the lock is held, the current reader just waits for the moment that "localTail" becomes greater than "readTail",
+and then retries.
+(Personally I don't think this increases parallelism, because reader threads either wait for the combiner to finish
+or they acts as a reduced combiner that synchronizes less entries. Other reader threads still cannot run in parallel
+with the current reader, because either the latter is the combiner or they both wait for the combiner.)
 
