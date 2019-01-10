@@ -24,5 +24,12 @@ the transaction processing system to guarantee that transactions committed befor
 uncommitted transactions must be rolled back.
 
 Two classical ways of realizing persistent transactions are undo and redo logging. In undo logging, transactions update 
-data items in-place, after they save the original value of the item somewhere else in the persistent storage. This is to
-ensure that even the system crashes halfway 
+data items on the persistent storage in-place, after they save the original value of the item somewhere else on the 
+persistent storage. This is to ensure that even if the system crashes halfway during the execution when only part of the 
+transaction's output is written, it is still possible for the recovery handler to find out the fact that the transaction
+has not completed before the crash, and hence restore the original values from the undo log. The cost of undo logging
+is that the processor must issue a memory fence between the store instruction that saves the old value and the store 
+instruction that updates the item in-place. This is to ensure that the log will reach persistent storage first, and then
+the new value. Otherwise, the recovery handler may not be able to restore the old value if the system crashes before 
+the log entry reaches persistent storage and after the new value has been written.
+
