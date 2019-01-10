@@ -63,5 +63,6 @@ synchronized properly with remote updates, and that all update operations are ap
 thread has FAA'ed "logTail", but has not finished writing its local operations. To deal with this, all entries in the 
 global log has a valid bit. The bit is only set after the operation has been written. If a log entry with valid bit clear
 is seen by the combiner thread, the latter must spin and wait for it to become valid. In practice this should occur only
-rarely. After synchronizing with the global log, the combiner thread then proceeds to the local flat combing stage, and 
+infrequently. After synchronizing with the global log, the combiner thread then proceeds to the local flat combing stage, 
+and applies local changes as described in the previous paragraph. 
 
