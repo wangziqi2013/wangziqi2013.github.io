@@ -46,3 +46,10 @@ notifies the corresponding waiting thread to unblock them. After processing all 
 the lock, and then proceed to do its own work. In the meanwhile, other worker threads can keep appending to the log
 (the log does not use the same lock as the one held by the combiner thread). Entries appended after the combiner thread
 scans the log will not be processed until the next iteration.
+
+In NR, each node has an instance of the data structure, and hence each node runs one instance of the flat combining algorithm.
+Update operations are not only posted on the local log, but also they should be conveyed to other nodes using a global log.
+The global log is maintained as a circular buffer. The next available slot is indicated by a global variable "logTail".
+Memory for the global log is allocated in a round-robin fashion from every node equally.
+
+
