@@ -35,3 +35,11 @@ needs to be passed across node boundaries, and hence reduces NUMA communication.
 Since the implementation details of the data structure is unknown to the NR algorithm, no fine-grained synchronization
 can be done. Instead, NR worker threads cooperatively finish operations, guaranteeing that at any moment, only one thread
 can be performing updates on the data structure. This is realized using flat combining, which is described as follows.
+In flat combining, a modification log is maintained with the data structure. If a thread wishes to update the data stucture,
+it must insert into the log by atomically acquiring a log entry, and then store the operation as well as parameters in 
+the log entry. After creating the log entry, threads then attempt to acquire a mutex and become the "combiner thread", 
+which grants the permission of updating the data structure on behave of other threads. Threads that fail to acquire the 
+mutex will spin on a local flag waiting for the signal to proceed. The combiner thread scans the log, 
+marks all log entries from the current time in backward direction to the earliest entry that has not been processed, and 
+then applies the entries one by one from the earliest to the latest. After each log entry is fulfilled, the combiner thread
+notifies the 
