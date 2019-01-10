@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Node Replication (NR), which provides an efficient solution for converting a sequential data structure
+to a concurrent version, which is both linearizable NUMA-aware. In NUMA architecture, all processors share the same physical
+address space, while the physical memory is distributed on several NUMA nodes. A NUMA node consists of one or more cores and 
+a memory module. Memory accesses from a processor have non-uniform latency, depending on address assignment.
