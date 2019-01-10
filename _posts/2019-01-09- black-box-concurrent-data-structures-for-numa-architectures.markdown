@@ -21,3 +21,8 @@ speaking, it is faster for a processor to access memory in the same node (i.e. l
 a different node (i.e. remote memory). If not designed properly, a NUMA-oblivious data structure may suffer from the 
 worst case scenario where most memory requests have to be served by a remote memory, which easily tanks performance.
 
+In order for NUMA-aware data structures to perform well, communications across NUMA nodes must be minimized. NR solves the 
+issue by replicating K instances of the same data structure on each node, where K is the number of processors. Logically 
+speaking, these K copies all represent the current state of the data structure. They are maintained consistent using a 
+shared log. Worker threads only perform updates and reads on their local instances. Update operations on one node are 
+propagated to other nodes by adding an entry to the log describing the change that has to be made.
