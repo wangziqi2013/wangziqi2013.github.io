@@ -52,6 +52,16 @@ Update operations are not only posted on the local log, but also they should be 
 The global log is maintained as a circular buffer. The next available slot is indicated by a global variable "logTail".
 Memory for the global log is allocated in a round-robin fashion from every node equally.
 Each node also maintains a "lastTail" pointer, which points to the position in the global log when the node last synchronizes 
-with the global log by. After the combiner thread acquires the mutex and marks local log entries, it first uses Fetch-And-Add 
-(FAA) instruction to increment the 
+with the global log. After the combiner thread acquires the mutex and marks local log entries, it first uses Fetch-And-Add 
+(FAA) instruction to increment "logTail" to reserve space for the local operations. Then the combiner thread writes all 
+local operations as well as their arguments into the global log. Note that no global lock is held while combiner threads
+from different nodes access the log to prevent scalability bottleneck, which means that the global log should be designed 
+in such a way that lock-free reads and writes are possible. The combiner thread then updates the local instance using
+global log entries between "lastTail" and "logTail" before increment. This step ensures that the local instance is 
+synchronized properly with remote updates, and that all update operations are applied to every instance at the same order
+(i.e. the global serialization order is defined by the order in the global log). A race condition might occur if another
+thread has FAA'ed "logTail", but has not finished writing its local operations. To deal with this, all entries in the 
+global log has a valid bit. The bit is only set after the operation has been written. If a log entry with valid bit clear
+is seen by the combiner thread, the latter must spin and wait for it to become valid. In practice this should occur only
+rarely. After synchronizing with the global log, the combiner thread then proceeds to the local flat combing stage, and 
 
