@@ -22,3 +22,7 @@ are said to be persistent, if the atomicity property of transactions can still b
 all operations or no operation in the transaction is executed. In practice, it is often interpreted as the ability for 
 the transaction processing system to guarantee that transactions committed before the crash can be recovered, while 
 uncommitted transactions must be rolled back.
+
+Two classical ways of realizing persistent transactions are undo and redo logging. In undo logging, transactions update 
+data items in-place, after they save the original value of the item somewhere else in the persistent storage. This is to
+ensure that even the system crashes halfway 
