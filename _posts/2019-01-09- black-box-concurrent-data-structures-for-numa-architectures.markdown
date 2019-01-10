@@ -28,4 +28,6 @@ the data structure. They are maintained consistent using a shared log. Worker th
 local instances. Update operations on one node are propagated to other nodes by adding an entry to the log describing the 
 change that has to be made. Before a worker thread are about to read and update the local instance, they check the shared 
 log for any fresh entry that was not seen during the last update. The update operations in these fresh entries are then 
-applied to the local instance by a local thread. 
+applied to the local instance by a local thread. Since updates are communicated between nodes in a logical form, compared
+with directly allowing worker threads to update a remote data structure, this approach minimizes the information that 
+needs to be passed across node boundaries, and hence reduces NUMA communication. 
