@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "DudeTM: Building Durable Transactions with Decoupling for Persistent Memory"
+date:   2019-01-10 16:16:00 -0500
+categories: paper
+paper_title: "DudeTM: Building Durable Transactions with Decoupling for Persistent Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=3037714
+paper_keyword: NVM; HTM; Transaction
+paper_year: ASPLOS 2017
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
