@@ -22,7 +22,10 @@ a different node (i.e. remote memory). If not designed properly, a NUMA-obliviou
 worst case scenario where most memory requests have to be served by a remote memory, which easily tanks performance.
 
 In order for NUMA-aware data structures to perform well, communications across NUMA nodes must be minimized. NR solves the 
-issue by replicating K instances of the same data structure on each node, where K is the number of processors. Logically 
-speaking, these K copies all represent the current state of the data structure. They are maintained consistent using a 
-shared log. Worker threads only perform updates and reads on their local instances. Update operations on one node are 
-propagated to other nodes by adding an entry to the log describing the change that has to be made.
+issue by replicating K instances of the same data structure on each node, where K is the number of processors, admitting the 
+memory inefficiency of (K - 1) times more memory usage. Logically speaking, these K copies all represent the current state of 
+the data structure. They are maintained consistent using a shared log. Worker threads only perform updates and reads on their 
+local instances. Update operations on one node are propagated to other nodes by adding an entry to the log describing the 
+change that has to be made. Before a worker thread are about to read and update the local instance, they check the shared 
+log for any fresh entry that was not seen during the last update. The update operations in these fresh entries are then 
+applied to the local instance by a local thread. 
