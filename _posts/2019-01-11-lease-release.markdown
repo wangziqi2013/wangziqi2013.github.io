@@ -29,9 +29,17 @@ and CAS should fail.
 
 The guiding design principle of Lease/Release is that, whenever a cache line is acquired for exclusive ownership, some
 useful work must be done. In both cases in the previous paragraph, if the processor can retain ownership for the duration
-of lock-unlock or read-CAS even on coherence requests, then unnecessary memory traffic can be reduced. 
+of lock-unlock or read-CAS even on coherence requests, then unnecessary memory traffic can be reduced. Of course, to avoid
+resource monopoly and programming bugs from blocking the entire system, the cache line can only be held 
 
 The Lease/Release design is described as follows. Two new instructions are added to the ISA: lease, which takes two operands,
 the memory address (cache line aligned) of the block to be leased, and the time in the number of local processor cycles as 
 an upper bound of the maximum lease time; release, which takes an address as specified above, and will release the memory 
-address if it is still leased. 
+address if it is still leased. Each processor has a lease table, organized as an assoiciative search structure. The lease
+table consists of several fields: an address field holding the cache line address of the block being leased; A remaining
+time field holding the remaining time after which the lease shall be terminated, and a group identifier which allows multiple
+addresses to be leased as a group. The lease table supports associative search using both the address and the group ID.
+When a coherence message is received by the processor, the lease table is checked using the requested address. If the address
+is found in the table and the remaining time is not zero, the request will be buffered by the cache controller. Note that
+only one slot for buffering the request is sufficient, since in a directory-based design, if multiple processors request
+the same cache line, all but a single request will be buffered by the directory.
