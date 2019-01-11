@@ -83,3 +83,9 @@ replayed. If the entry is found, it is re-applied to the NVM. Note that although
 already been applied before the crash, the correctness of the recovery process is not affected. If a log is incomplete,
 then that log as well as all logs for later transactions must be discarded, and they are considered as aborted. The 
 application should be notified of the fact that some transactions did not complete.
+
+The shadow memory is backed by DRAM whose size is typically smaller than the NVM. If a shadow page needs to be brought in,
+but there is no physical DRAM available, an existing shadow page must be evicted. Evicting a shadow page is different 
+from evicting a page in virtual memory: Dirty pages do not need to be written back, since the synchronization between
+shadow memory and NVM is performed only using logs. When a shadow page is first brought into memory, we must ensure 
+that all updates on the corresponding NVM page has been applied. 
