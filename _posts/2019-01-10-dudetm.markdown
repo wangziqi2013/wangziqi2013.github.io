@@ -42,5 +42,10 @@ values in the redo log will be replayed in the order consistent with the serial 
 
 Neither undo logging nor redo logging is ideal for a persistent transaction processing system. The former penalizes write
 operations while the latter penalizes reads. In contrast, DudeTM achieves both cheap reads and writes using shadow pages. 
-Every virtual page in DudeTM is backed by two physical frames: One from the persistent NVM, another from the volatile DRAM.
-The overall architecture is quite similar to
+Every virtual page in DudeTM is backed by two physical frames: One from the persistent NVM as the main storage, another 
+from the volatile DRAM as shadow memory. The overall architecture is quite similar to a disk-based virtual memory system, 
+where disk pages are persistent NVM, and physical DRAM is the shadow page. For transactional writes, if the corresponding 
+page has not been allocated a shadow page, then the shadow page will be allocated from DRAM, and the write operation
+is directly conducted on the shadow page. No store fence is required because write operations will not propagate to 
+the NVM. For transactional reads, no extra redirection needs to be done. The MMU translates the read virtual address 
+into the shadow page if it exists, and hence we do not pay the extra overhead of software redirection.
