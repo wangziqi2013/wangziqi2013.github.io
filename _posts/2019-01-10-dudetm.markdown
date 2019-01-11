@@ -88,4 +88,9 @@ The shadow memory is backed by DRAM whose size is typically smaller than the NVM
 but there is no physical DRAM available, an existing shadow page must be evicted. Evicting a shadow page is different 
 from evicting a page in virtual memory: Dirty pages do not need to be written back, since the synchronization between
 shadow memory and NVM is performed only using logs. When a shadow page is first brought into memory, we must ensure 
-that all updates on the corresponding NVM page has been applied. 
+that all updates on the corresponding NVM page has been applied. To achieve this, we maintain a last modified field 
+in the page table. The field is set to the maximum transaction ID that has updated the page. When the shadow page is to
+be loaded, the OS checks whether the last modified ID is less than the most recent committed ID (the latter is 
+maintained somewhere in the NVM and updated when a transaction commits). If it is the case, then we are certain that 
+all updates on the NVM page have been merged, and the shadow page is just a direct copy of the NVM page. Otherwise, the 
+shadow page loader must wait until the most recent committed ID is not less than the last modified ID.
