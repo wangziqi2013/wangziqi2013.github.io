@@ -71,5 +71,8 @@ because of conflicts or it aborts proactively, all log entries as well as dirty 
 
 In the third stage, a background thread (or an idle transaction thread) merges the log from the second stage to NVM.
 This stage can be asynchronous with the previous two stages (stage one and two must be synchronous). The background
-thread scans the logging area for a committed transaction with the minimum transaction ID. Once this is found, the 
+thread scans the logging area for a committed transactions with the minimum transaction ID. Once this is found, the 
 thread then applies the updates recorded in the log to the NVM. The log can be discarded after this stage completes. 
+This stage is not strictly required for completeness: transactions are already committed and considered as persistent
+after the second stage. By replaying the log on the NVM in the background, we allow more efficient access of data by
+later transactions. 
