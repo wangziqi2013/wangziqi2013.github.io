@@ -65,7 +65,11 @@ transaction, the log is also tagged with the serialization order of the transact
 commit timestamp). After the log flushing operation is acknowledged by the NVM, the transaction commits, and the application 
 program can be notified of a success transaction. Note that the second stage can only be considered as completed after all 
 transactions with a smaller ID have completed the second stage. This is to avoid committing a transaction before its 
-logical predecessor is able to commit, because otherwise, if a crash happens, there is no way to recover the predecessor 
+logical predecessor is able to commit. Otherwise, if a crash happens, there is no way to recover the predecessor 
 transaction, while the application treats the current transaction as committed. If the transaction decides to abort, either 
 because of conflicts or it aborts proactively, all log entries as well as dirty data items are discarded.
 
+In the third stage, a background thread (or an idle transaction thread) merges the log from the second stage to NVM.
+This stage can be asynchronous with the previous two stages (stage one and two must be synchronous). The background
+thread scans the logging area for a committed transaction with the minimum transaction ID. Once this is found, the 
+thread then applies the updates recorded in the log to the NVM. The log can be discarded after this stage completes. 
