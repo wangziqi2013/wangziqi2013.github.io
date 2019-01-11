@@ -57,9 +57,15 @@ in some designs, and can be added without much effort in others. The execution o
 the first stage, transactions are executed on the shadow memory using the transactional core. Transactional reads and 
 writes follow the rule we discussed in the previous paragraph. Note that logging transactional writes is not a requirement
 of the TM core; The TM core can use any concurrency control method and version management scheme as long as all 
-modifications are on the shadow memory. The first stage ends when the TM core commits. In the second stage, DudeTM
-collects the write set of the transaction as a redo log, and flushes them to a special logging area in NVM. The logging
-area is a chunk of memory allocated at startup time. Its size is fixed upon allocation. For each transaction, the log 
-is also tagged with the serialization order of the transaction (in some designs this is the transaction commit timestamp).
-After the log flushing operation is acknowledged by the NVM, the transaction commits, and the application program can
-be notified of a success transaction. 
+modifications are on the shadow memory. The first stage ends when the TM core commits. 
+
+In the second stage, DudeTM collects the write set of the transaction as a redo log, and flushes them to a special logging 
+area in NVM. The logging area is a chunk of memory allocated at startup time. Its size is fixed upon allocation. For each 
+transaction, the log is also tagged with the serialization order of the transaction (in some designs this is the transaction 
+commit timestamp). After the log flushing operation is acknowledged by the NVM, the transaction commits, and the application 
+program can be notified of a success transaction. Note that the second stage can only be considered as completed after all 
+transactions with a smaller ID have completed the second stage. This is to avoid committing a transaction before its 
+logical predecessor is able to commit, because otherwise, if a crash happens, there is no way to recover the predecessor 
+transaction, while the application treats the current transaction as committed. If the transaction decides to abort, either 
+because of conflicts or it aborts proactively, all log entries as well as dirty data items are discarded.
+
