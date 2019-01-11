@@ -40,3 +40,7 @@ then data items are updated in-place such that following reads can access the up
 reads the redo log from the persistent storage. If the redo log indicates that the transaction has committed, then 
 values in the redo log will be replayed in the order consistent with the serial order for each transaction. 
 
+Neither undo logging nor redo logging is ideal for a persistent transaction processing system. The former penalizes write
+operations while the latter penalizes reads. In contrast, DudeTM achieves both cheap reads and writes using shadow pages. 
+Every virtual page in DudeTM is backed by two physical frames: One from the persistent NVM, another from the volatile DRAM.
+The overall architecture is quite similar to
