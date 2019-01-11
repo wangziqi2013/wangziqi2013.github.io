@@ -56,4 +56,10 @@ is that transactions must have a timestamp which is consistent with their logica
 in some designs, and can be added without much effort in others. The execution of DudeTM consists of three stages. In
 the first stage, transactions are executed on the shadow memory using the transactional core. Transactional reads and 
 writes follow the rule we discussed in the previous paragraph. Note that logging transactional writes is not a requirement
-of the TM core.
+of the TM core; The TM core can use any concurrency control method and version management scheme as long as all 
+modifications are on the shadow memory. The first stage ends when the TM core commits. In the second stage, DudeTM
+collects the write set of the transaction as a redo log, and flushes them to a special logging area in NVM. The logging
+area is a chunk of memory allocated at startup time. Its size is fixed upon allocation. For each transaction, the log 
+is also tagged with the serialization order of the transaction (in some designs this is the transaction commit timestamp).
+After the log flushing operation is acknowledged by the NVM, the transaction commits, and the application program can
+be notified of a success transaction. 
