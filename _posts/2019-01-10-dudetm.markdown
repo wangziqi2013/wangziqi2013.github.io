@@ -49,3 +49,8 @@ page has not been allocated a shadow page, then the shadow page will be allocate
 is directly conducted on the shadow page. No store fence is required because write operations will not propagate to 
 the NVM. For transactional reads, no extra redirection needs to be done. The MMU translates the read virtual address 
 into the shadow page if it exists, and hence we do not pay the extra overhead of software redirection.
+
+DudeTM decouples the TM engine from the persistency engine. Virtually any existing TM design can be used as the 
+transactional core of DudeTM with slightest modification. The only constraint that DudeTM imposes on the TM implementation
+is that transactions must have a timestamp which is consistent with their logical ordering, which already exists 
+in some designs, and can be added without much effort in others. 
