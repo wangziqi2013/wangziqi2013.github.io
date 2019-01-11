@@ -19,4 +19,9 @@ is acquired, the exclusive ownership is obtained by the acquiring processor. If 
 the same lock, it has to acquire exclusive ownership of the line, forcing an ownership transfer, only to find out that the 
 lock is currently held by the first processor. When the first processor releases the lock, it has to acquire the cache line 
 again to perform the write. In this case, the memory traffic can be reduced if the second processor does not obtain the 
-cache immediately, but only after the first processor releases the lock.
+cache immediately, but only after the first processor releases the lock. The second happens in lock-free programming, where 
+threads usually follow the read-modify-validate-write pattern. The validate-write is implemented as a Compare-And-Swap (CAS)
+operation. The first read operation brings the cache line into the processor in shared mode. If after the first read and 
+before the CAS, another processor sneaks in, and modifies the content of the cache line, the second processor must acquire
+exclusive ownership and hence invalidates the cache line held by the first processor. When the first processor executes 
+the CAS, it has to acquire exclusive ownership of the cache line again, and 
