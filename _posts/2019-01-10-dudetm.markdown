@@ -76,3 +76,10 @@ thread then applies the updates recorded in the log to the NVM. The log can be d
 This stage is not strictly required for completeness: transactions are already committed and considered as persistent
 after the second stage. By replaying the log on the NVM in the background, we allow more efficient access of data by
 later transactions. 
+
+On recovery, the handler restores the persistent NVM to a consistent state as follows. The recovery handler first scans the 
+log area of each transaction on the NVM. Similar to the third stage above, it searches for the minimum log that has not been
+replayed. If the entry is found, it is re-applied to the NVM. Note that although this may apply a log that has actually 
+already been applied before the crash, the correctness of the recovery process is not affected. If a log is incomplete,
+then that log as well as all logs for later transactions must be discarded, and they are considered as aborted. The 
+application should be notified of the fact that some transactions did not complete.
