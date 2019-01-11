@@ -30,3 +30,8 @@ and CAS should fail.
 The guiding design principle of Lease/Release is that, whenever a cache line is acquired for exclusive ownership, some
 useful work must be done. In both cases in the previous paragraph, if the processor can retain ownership for the duration
 of lock-unlock or read-CAS even on coherence requests, then unnecessary memory traffic can be reduced. 
+
+The Lease/Release design is described as follows. Two new instructions are added to the ISA: lease, which takes two operands,
+the memory address (cache line aligned) of the block to be leased, and the time in the number of local processor cycles as 
+an upper bound of the maximum lease time; release, which takes an address as specified above, and will release the memory 
+address if it is still leased. 
