@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Write-Behind Logging (WBL), a novel technique that levarages Non-Volatile Memory (NVM) to solve 
+the classical problem in databases: making transactions durable. In earlier works, people have proposed various schemes
+to retain the consistency of database in cases of power failure (media failure and OS/DBMS failure are not considered,
+because they usually corrupt data in such an unpredicable manner that a recovery algorithm could handle), where all 
+in-memory works not flushed to durable storage are lost and there is no way to know which part of the database is consistent.
