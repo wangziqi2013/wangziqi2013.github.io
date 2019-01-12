@@ -48,4 +48,9 @@ controller also has a set of subtractor circuit, which is used to decrement the 
 group. On every unit of lease time (there can be a minimum resolution), the subtractor circuit decrements the remaining 
 time of every active and valid entry. If the remaining time of an entry becomes zero, the controller checks if a request
 is buffered on the same address. If this is true, the request is satisfied by the controller, and future requests can
-also be granted. 
+also be granted. Note that if an address in a group is released, either by a timeout or by the release instruction, 
+other addresses are also released automatically.
+
+A processor acquires a lease to an address using the lease instruction. On executing the instruction, the processor 
+either finds an empty slot in the lease table, and allocates it by filling the address, remaining time, valid bit
+and optionally the group ID. 
