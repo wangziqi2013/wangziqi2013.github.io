@@ -23,4 +23,5 @@ database system with a managed buffer pool. To make it more realistic, two assum
 the buffer pool may be written back to the disk at any time during transaction's execution. This assumption is made to
 allow the buffer pool to swap in new pages when there is no free slot, as is the case with most buffer pool implementations.
 As a consequence, before a transaction could commit, its dirty pages may overwrite valid data on the disk. On power failure,
-the recovery algorithm must be able to recover the disk image to a state before the dirty pages were written out. The 
+the recovery algorithm must be able to recover the disk image to a state before the dirty pages were written out. The second
+assumption is that 
