@@ -46,4 +46,6 @@ cache controller. Note that only one slot for buffering the request is sufficien
 multiple processors request the same cache line, all but a single request will be buffered by the directory. The cache 
 controller also has a set of subtractor circuit, which is used to decrement the remaining time for a single address or a 
 group. On every unit of lease time (there can be a minimum resolution), the subtractor circuit decrements the remaining 
-time of every active and valid entry. 
+time of every active and valid entry. If the remaining time of an entry becomes zero, the controller checks if a request
+is buffered on the same address. If this is true, the request is satisfied by the controller, and future requests can
+also be granted. 
