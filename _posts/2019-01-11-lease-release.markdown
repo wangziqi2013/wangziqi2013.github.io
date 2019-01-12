@@ -56,5 +56,9 @@ either finds an empty slot in the lease table, and allocates it by filling the a
 and optionally the group ID. The active bit is initially set to false, and only toggled when an instruction first
 accesses the address being leased and has not yet been active. There is also an upper bound for the maximum number 
 of time a lease can be granted. Any lease request exceeding this time will only be granted with this upper bound.
+For lock-based programming, the lease duration should be longer than the expected time the critical section will
+take, because otherwise, memory traffic can still be generated after the lease expires. For read-CAS lock-free pattern,
+the lease should be longer than the duration between the first read and the CAS to ensure that the CAS will see
+the same value in most cases.
 
-Multi-leases is useful if MCAS
+Multi-leases is useful if the processor holds multiple locks at the same time MCAS
