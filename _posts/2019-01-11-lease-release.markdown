@@ -53,4 +53,6 @@ other addresses are also released automatically.
 
 A processor acquires a lease to an address using the lease instruction. On executing the instruction, the processor 
 either finds an empty slot in the lease table, and allocates it by filling the address, remaining time, valid bit
-and optionally the group ID. 
+and optionally the group ID. The active bit is initially set to false, and only toggled when an instruction first
+accesses the address being leased and has not yet been active. 
+
