@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Write-Behind Logging"
+date:   2019-01-12 18:05:00 -0500
+categories: paper
+paper_title: "Write-Behind Logging"
+paper_link: https://dl.acm.org/citation.cfm?id=3025116
+paper_keyword: Logging; Durability; Transaction Processing; Database
+paper_year: VLDB 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
