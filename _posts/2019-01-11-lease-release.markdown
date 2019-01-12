@@ -70,4 +70,4 @@ numeric value of addresses. This guarantees that no deadlock is ever possible. I
 multi-lease address A1 and A2. Processor 1 adds address A1 to the table, and requests exclusive ownership to address A2, 
 while processor 2 adds address A2 to the table, and requests exclusive ownership to address A1. Since there is no timeout 
 until one later instruction accesses the address being leased, both processor 1 and 2 will be stuck waiting for each other 
-to respond to the 
+to respond, causing a deadlock.
