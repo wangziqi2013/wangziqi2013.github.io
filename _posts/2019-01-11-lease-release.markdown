@@ -37,9 +37,13 @@ the memory address (cache line aligned) of the block to be leased, and the time 
 an upper bound of the maximum lease time; release, which takes an address as specified above, and will release the memory 
 address if it is still leased. Each processor has a lease table, organized as an assoiciative search structure. The lease
 table consists of several fields: an address field holding the cache line address of the block being leased; A remaining
-time field holding the remaining time after which the lease shall be terminated, and a group identifier which allows multiple
-addresses to be leased as a group. The lease table supports associative search using both the address and the group ID.
-When a coherence message is received by the processor, the lease table is checked using the requested address. If the address
-is found in the table and the remaining time is not zero, the request will be buffered by the cache controller. Note that
-only one slot for buffering the request is sufficient, since in a directory-based design, if multiple processors request
-the same cache line, all but a single request will be buffered by the directory.
+time field holding the remaining time after which the lease shall be terminated; an active bit to indicate whether the 
+remaining time should be decremented, a valid bit to indicate whether the entry stores valid data, and a group identifier 
+which allows multiple addresses to be leased as a group. The lease table supports associative search using both the address 
+and the group ID. When a coherence message is received by the processor, the lease table is checked using the requested 
+address. If the address is found in the table and the remaining time is not zero, the request will be buffered by the 
+cache controller. Note that only one slot for buffering the request is sufficient, since in a directory-based design, if 
+multiple processors request the same cache line, all but a single request will be buffered by the directory. The cache 
+controller also has a set of subtractor circuit, which is used to decrement the remaining time for a single address or a 
+group. On every unit of lease time (there can be a minimum resolution), the subtractor circuit decrements the remaining 
+time of every active and valid entry. 
