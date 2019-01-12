@@ -24,4 +24,8 @@ the buffer pool may be written back to the disk at any time during transaction's
 allow the buffer pool to swap in new pages when there is no free slot, as is the case with most buffer pool implementations.
 As a consequence, before a transaction could commit, its dirty pages may overwrite valid data on the disk. On power failure,
 the recovery algorithm must be able to recover the disk image to a state before the dirty pages were written out. The second
-assumption is that 
+assumption is that dirty pages may not be flushed back to durable storage on transaction commit. This assumption improves 
+transaction throughput, because for disk-based systems, writing dirty data back to the disk will most likely be random
+writes, which can easily become the performance bottleneck. On recovery, the algorithm must be able to find back the 
+committed values, even if they were not flushed to the disk before the crash. These two schemes, combined together,
+is called "steal and no force". 
