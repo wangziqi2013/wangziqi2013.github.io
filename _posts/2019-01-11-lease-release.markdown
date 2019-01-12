@@ -61,4 +61,13 @@ take, because otherwise, memory traffic can still be generated after the lease e
 the lease should be longer than the duration between the first read and the CAS to ensure that the CAS will see
 the same value in most cases.
 
-Multi-leases is useful if the processor holds multiple locks at the same time MCAS
+Multi-leases is useful if the processor holds multiple locks at the same time, or implements lock-free MCAS in software.
+Multi-leases can be implemented both on hardware and software with simple extension to the ISA. Instead of only allowing
+one address to be taken as operand, multiple addresses are allowed (in the hardware case, the instruction takes a
+descriptor's address which specifies the group address), and they share the same group ID and remaining time counter. 
+In both cases, the leases of multiple addresses must be added to the table in the same global order, such as the 
+numeric value of addresses. This guarantees that no deadlock is ever possible. If not, imagine that two processors 
+multi-lease address A1 and A2. Processor 1 adds address A1 to the table, and requests exclusive ownership to address A2, 
+while processor 2 adds address A2 to the table, and requests exclusive ownership to address A1. Since there is no timeout 
+until one later instruction accesses the address being leased, both processor 1 and 2 will be stuck waiting for each other 
+to respond to the 
