@@ -54,5 +54,7 @@ other addresses are also released automatically.
 A processor acquires a lease to an address using the lease instruction. On executing the instruction, the processor 
 either finds an empty slot in the lease table, and allocates it by filling the address, remaining time, valid bit
 and optionally the group ID. The active bit is initially set to false, and only toggled when an instruction first
-accesses the address being leased and has not yet been active. 
+accesses the address being leased and has not yet been active. There is also an upper bound for the maximum number 
+of time a lease can be granted. Any lease request exceeding this time will only be granted with this upper bound.
 
+Multi-leases is useful if MCAS
