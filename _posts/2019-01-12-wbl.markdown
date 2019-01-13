@@ -35,3 +35,8 @@ considered as committed once fsync returns. Fuzzy checkpoints are also taken per
 fuzzy checkpointing operation does not have to halt all transactions, and hence can complete faster than a synchronized 
 checkpoint. Since uncommitted data may exist in fuzzy checkpoints, both redo and undo are needed to restore the 
 database to a consistent state after a crash. 
+
+There are three phases on ARIES recovery. In the first phase, the analysis phase, the recovery handler finds the most recent
+checkpoint, and restores the status of transactions and dirty pages when the checkpoint was taken. It also restores the database
+states using the checkpoint. Next, in redo phase, transactions that have already committed are replayed by the recovery 
+handler. Only log records after and during the checkpoint are used for recovery. In the third phase, the undo phase, 
