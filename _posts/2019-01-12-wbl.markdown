@@ -28,4 +28,10 @@ assumption is that dirty pages may not be flushed back to durable storage on tra
 transaction throughput, because for disk-based systems, writing dirty data back to the disk will most likely be random
 writes, which can easily become the performance bottleneck. On recovery, the algorithm must be able to find back the 
 committed values, even if they were not flushed to the disk before the crash. These two schemes, combined together,
-is called "steal and no force". 
+is called "steal and no force". ARIES commit protocol is described as follows. During normal operations, the database monitors
+write operations to the database. For each write, the physical before-image and after-image are both saved in the log. 
+On transaction commit, the log record of the transaction must be flushed to the disk using fsync(). The transaction is 
+considered as committed once fsync returns. Fuzzy checkpoints are also taken periodically to avoid log buffer overflow. The 
+fuzzy checkpointing operation does not have to halt all transactions, and hence can complete faster than a synchronized 
+checkpoint. Since uncommitted data may exist in fuzzy checkpoints, both redo and undo are needed to restore the 
+database to a consistent state after a crash.
