@@ -90,4 +90,6 @@ can be used to cleanup versions that will never be visible to any transaction. T
 too old to be visible, and uncommitted versions as a result of crash recovery. To perform GC for the latter purpose, 
 the garbage collector takes a [cp, cd] from the current set of intervals, and scans the entire database for versions 
 that are within this interval. These versions will be removed from the database heap. After a full scan, this interval is 
-also removed from the DBMS's volatile states. 
+also removed from the DBMS's volatile states. Similarly, after a successful group commit, log records before the most
+up-to-date entry is no longer needed, as the recovery handler only uses the most recent one. The garbage collector 
+can safely remove older entries after the newest entry is persisted on the NVM.
