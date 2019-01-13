@@ -66,3 +66,6 @@ commit. Multiple transactions are held in the transaction queue even if they hav
 a few transactions until it decides that the commit overhead can be amortized. The commit protocol then flushes dirty
 pages of all transactions back to the NVM.
 
+WBL works as follows. During normal operation, dirty cache lines can be evicted back to the NVM. These dirty lines belong
+to uncommitted transactions, and hence should not be visible to other transactions. On transaction commit, no undo or 
+redo log is created. Instead, the 
