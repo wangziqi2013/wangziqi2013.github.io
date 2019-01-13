@@ -79,7 +79,15 @@ will happen (i.e. if the global counter reaches cd then a group commit is forced
 to achieve a balance between transactions' latency and commit overhead, the interval should neither be too larger nor too
 small. The interval is written into the persistent log after all dirty lines are flushed back to NVM, completing the 
 group commit process. On recovery, the handler reads the most recent valid log entry, [cp, cd]. No undo or redo is needed
-in this process. The handler simply remember the interval in a DRAM location, and continues processing new transactions.
-In later processing, transactions should treat all versions whose commit timestamp is between this interval, or does not 
-have a commit timestamp as invisible, since they belong to transactions that have not committed since this log record is 
-writtem (a log record is written on every group commit).
+in this process, and recovery only consists of a single analysis phase which is instaneous. The handler simply remember 
+the interval in a DRAM location, and continues processing new transactions. In later processing, transactions should 
+treat all versions whose commit timestamp is between this interval, or does not have a commit timestamp as invisible, since 
+they belong to transactions that have not committed since this log record is written (a log record is written on every group 
+commit).
+
+The number of [cp, cd] intervals may grow indefinitely without proper cleaning. A background garbage collection thread
+can be used to cleanup versions that will never be visible to any transaction. This both includes versions that are 
+too old to be visible, and uncommitted versions as a result of crash recovery. To perform GC for the latter purpose, 
+the garbage collector takes a [cp, cd] from the current set of intervals, and scans the entire database for versions 
+that are within this interval. These versions will be removed from the database heap. After a full scan, this interval is 
+also removed from the DBMS's volatile states. 
