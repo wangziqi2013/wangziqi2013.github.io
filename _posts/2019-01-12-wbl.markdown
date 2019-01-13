@@ -39,4 +39,8 @@ database to a consistent state after a crash.
 There are three phases on ARIES recovery. In the first phase, the analysis phase, the recovery handler finds the most recent
 checkpoint, and restores the status of transactions and dirty pages when the checkpoint was taken. It also restores the database
 states using the checkpoint. Next, in redo phase, transactions that have already committed are replayed by the recovery 
-handler. Only log records after and during the checkpoint are used for recovery. In the third phase, the undo phase, 
+handler. Only after-image of log records taken after and during the checkpoint are used for recovery. In the third phase, 
+the undo phase, the recovery handler undoes modifications made to the database by uncommitted transactions. The set of 
+uncommitted transactions are derived in the analysis phase. The before-image from log records are used to restore the 
+database to the state before uncommitted transactions started. After the undo phase, the state of the database is consistent,
+and new transactions can be processed.
