@@ -77,4 +77,9 @@ that will be used by future transactions until they commit. The interval is [cp,
 allocated to a committing transaction (i.e. current timestamp counter plus one), and cd is the next point where a group commit
 will happen (i.e. if the global counter reaches cd then a group commit is forced). The choice of cd is largely arbitrary, but
 to achieve a balance between transactions' latency and commit overhead, the interval should neither be too larger nor too
-small.
+small. The interval is written into the persistent log after all dirty lines are flushed back to NVM, completing the 
+group commit process. On recovery, the handler reads the most recent valid log entry, [cp, cd]. No undo or redo is needed
+in this process. The handler simply remember the interval in a DRAM location, and continues processing new transactions.
+In later processing, transactions should treat all versions whose commit timestamp is between this interval, or does not 
+have a commit timestamp as invisible, since they belong to transactions that have not committed since this log record is 
+writtem (a log record is written on every group commit)
