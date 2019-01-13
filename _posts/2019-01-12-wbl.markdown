@@ -66,6 +66,10 @@ commit. Multiple transactions are held in the transaction queue even if they hav
 a few transactions until it decides that the commit overhead can be amortized. The commit protocol then flushes dirty
 pages of all transactions back to the NVM.
 
-WBL works as follows. During normal operation, dirty cache lines can be evicted back to the NVM. These dirty lines belong
-to uncommitted transactions, and hence should not be visible to other transactions. On transaction commit, no undo or 
-redo log is created. Instead, the 
+WBL works as follows. During normal operation, dirty cache lines may be evicted back to the NVM. These dirty lines belong
+to uncommitted transactions, and hence should not be visible to other transactions. The DBMS maintains a dirty tuple table (DTT),
+which stores for each transaction the locations (virtual addresses) of dirty items modified by the transaction. On transaction 
+commit, no undo or redo log is created. Instead, the DBMS expects more transactions to commit in the near future such that 
+the current committing transaction can be committed together. On each group commit, the DBMS first flushes all dirty data items
+back to the NVM as described above. The flush process queries the DTT to identify the location of dirty items, and then 
+use cache line write back instruction from the ISA to perform write back. 
