@@ -61,4 +61,8 @@ during transaction execution, it is enforced that when the transaction commits, 
 NVM by creating a new version. In practice, versions are stored in a table as tuples, with a backwad pointer field 
 indicating the previous version. This is infeasible for disk-based systems, because the latancy of I/O and the random write
 pattern has a huge negative impact on performance. On NVM, however, small random writes are much faster, and hence the 
-force commit scheme works perfrctly. 
+force commit scheme works perfectly. The third design decision is that the DBMS can avoid frequent logging using group
+commit. Multiple transactions are held in the transaction queue even if they have finished execution. The DBMS aggregates 
+a few transactions until it decides that the commit overhead can be amortized. The commit protocol then flushes dirty
+pages of all transactions back to the NVM.
+
