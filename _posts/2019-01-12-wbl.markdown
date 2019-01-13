@@ -54,3 +54,11 @@ traverse the version chain to find the version that is visible according to its 
 counter similar to how OCC allocates timestamps). The version read rule states that a version with timestamps [ts1, ts2)
 is visible to a transaction with begin timestamp ts if and only if (1) ts is within [ts1, ts2); and (2) the transaction
 that writes the version has committed (note that ts2 can be &infin; as is the case for the most up-to-date version). 
+By allowing data items to be tagged with versions, no before-image is needed, because we can always access a version 
+even if it has been overwritten by an uncommitted transaction after recovery. The second design decision is that WBL
+uses "steal, force" scheme for maintaining the buffer pool. While dirty data is allowed to propagate to the durable NVM
+during transaction execution, it is enforced that when the transaction commits, all dirty data must be made to the 
+NVM by creating a new version. In practice, versions are stored in a table as tuples, with a backwad pointer field 
+indicating the previous version. This is infeasible for disk-based systems, because the latancy of I/O and the random write
+pattern has a huge negative impact on performance. On NVM, however, small random writes are much faster, and hence the 
+force commit scheme works perfrctly. 
