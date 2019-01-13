@@ -72,4 +72,9 @@ which stores for each transaction the locations (virtual addresses) of dirty ite
 commit, no undo or redo log is created. Instead, the DBMS expects more transactions to commit in the near future such that 
 the current committing transaction can be committed together. On each group commit, the DBMS first flushes all dirty data items
 back to the NVM as described above. The flush process queries the DTT to identify the location of dirty items, and then 
-use cache line write back instruction from the ISA to perform write back. 
+use cache line write back instruction from the ISA to perform write back. The DBMS then logs the next timestamp interval
+that will be used by future transactions until they commit. The interval is [cp, cd], where cp is the next timestamp that will be 
+allocated to a committing transaction (i.e. current timestamp counter plus one), and cd is the next point where a group commit
+will happen (i.e. if the global counter reaches cd then a group commit is forced). The choice of cd is largely arbitrary, but
+to achieve a balance between transactions' latency and commit overhead, the interval should neither be too larger nor too
+small.
