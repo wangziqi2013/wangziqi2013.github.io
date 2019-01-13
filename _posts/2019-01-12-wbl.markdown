@@ -44,3 +44,11 @@ the undo phase, the recovery handler undoes modifications made to the database b
 uncommitted transactions are derived in the analysis phase. The before-image from log records are used to restore the 
 database to the state before uncommitted transactions started. After the undo phase, the state of the database is consistent,
 and new transactions can be processed.
+
+With the performance advantage of NVM over disk I/O, WBL can achieve a better performance than WAL and ARIES, especially
+on recovery time. Several design decisions are made to take advantage of fast and byte-addressable accesses to NVM. First,
+WBL is designed to work with MVCC, where each data item is tagged with two timestamps: One begin timestamp, which is the 
+timestamp of transaction that created this version (version update only creates new versions, and never delete existing version),
+and one end timestamp, which is the begin timestamp of the next higher version in the version chain. Reading transactions 
+traverse the version chain to find the version that is visible according to its timestamp (distributed using a centralized
+counter similar to how OCC allocates timestamps). 
