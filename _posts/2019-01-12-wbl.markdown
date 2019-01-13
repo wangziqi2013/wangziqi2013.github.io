@@ -51,4 +51,6 @@ WBL is designed to work with MVCC, where each data item is tagged with two times
 timestamp of transaction that created this version (version update only creates new versions, and never delete existing version),
 and one end timestamp, which is the begin timestamp of the next higher version in the version chain. Reading transactions 
 traverse the version chain to find the version that is visible according to its timestamp (distributed using a centralized
-counter similar to how OCC allocates timestamps). 
+counter similar to how OCC allocates timestamps). The version read rule states that a version with timestamps [ts1, ts2)
+is visible to a transaction with begin timestamp ts if and only if (1) ts is within [ts1, ts2); and (2) the transaction
+that writes the version has committed (note that ts2 can be &infin; as is the case for the most up-to-date version). 
