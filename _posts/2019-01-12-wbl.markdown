@@ -82,4 +82,4 @@ group commit process. On recovery, the handler reads the most recent valid log e
 in this process. The handler simply remember the interval in a DRAM location, and continues processing new transactions.
 In later processing, transactions should treat all versions whose commit timestamp is between this interval, or does not 
 have a commit timestamp as invisible, since they belong to transactions that have not committed since this log record is 
-writtem (a log record is written on every group commit)
+writtem (a log record is written on every group commit).
