@@ -20,3 +20,9 @@ two logging schemes are widely used to achieve durability: undo and redo logging
 of the memory location when a modification is about to be applied to the cache line. The before-image is then evicted
 back to the NVM for persistence before the dirty line can be evicted. In case of failure, the recovery handler 
 reads the undo log from the NVM, and reverts dirty modifications of uncommitted transactions using the before-image.
+Redo logging instead saves the after-image of the modification in a separate log (either centralized or per-transaction).
+The log is then written back to the NVM for persistency before the transaction can commit. Since no undo information
+is saved, dirty cache lines should be held back from eviction until the log reaches the NVM. On recovery, no transaction
+should be undone, because modifications must only reside in the cache, and hence will be discarded on power loss. 
+The recovery handler traverses the log, discards redo entries of uncommitted transactions (those that lack a commit
+record at the very end), and applies modifications in the logical commit order for committed transactions.
