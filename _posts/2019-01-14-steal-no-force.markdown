@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes a novel technique for performing logging on NVM backed systems that require atomic durability.
+Such systems generally employ NVM as a direct replcement for DRAM, where memory reads and writes are issued in the 
+same way via the memory controller and are finally served by the NVM connected to the bus using DIMM. In previous works,
+two logging schemes are widely used to achieve durability: undo and redo logging. 
