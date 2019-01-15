@@ -54,4 +54,13 @@ implementation of the TM, which is off-topic to our discussion. All memory opera
 as transactional and persistent. We only consider write operations, because reads naturally do not need any persistency 
 guarantee. On every write operation, the cache controller extracts the old and new value. Log records containing both before-image 
 and after-image are constructed. Containing both before- and after-image in the log record can double the amount of storage 
-required, putting more stress on NVM bandwidth, but have the following benefits. 
+required, putting more stress on NVM bandwidth, but have the following benefits. First, cache lines can be evicted freely
+as defined by the replacement policy. Second, transaction commit can be almost instantaneous, because redo log entries are 
+already flushed to the NVM at commit point. Third, on transaction commit, dirty cache lines are no longer needed to be 
+flushed to the NVM, because redo logging guarantees persistence. 
+
+One problem, however, remains to be solved: the write ordering problem. In order for undo logging to work, the log entry 
+must reach the NVM before dirty update does. In previous solutions, the programmer manually insert a store barrier between 
+updating the data and updating the log entry. This condition, however, is overly restrictive, because what we want is really 
+just the order that the two updates reach NVM, while what store fences provide is the serialization of commits on the CPU side.
+Frequent 
