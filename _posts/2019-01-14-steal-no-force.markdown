@@ -105,3 +105,13 @@ a fwb. The paper does not talk much about the case when uncommitted entries are 
 talk about how to coordinate these two components. The only clue we have from the paper is that the maximum throughput of 
 the NVM can be used to deduce the amount of time till the next log wrap-around. The cache controller uses this piece of 
 information to determine when write back should be scheduled.
+
+On recovery, the handler performs undo and redo by locating the log in the NVM (the two pointers are stored in a well-known
+location such that their addresses can be hardcoded) first, and then identifying uncommitted and committed transactions. 
+Note that since there is one centralized log, log entries from mutliple transactions will be mixed up. To identify whether 
+a series of log entries of a transaction (indicated by the txn ID and thread ID in the log fields) is complete, we 
+add an additional "torn bit" to the entry. The "torn bit" is flipped every time a log entry is overwritten. A complete
+log series will have consistent torn bits across all entries. Otherwise, the log is corrupted, e.g. because some writes 
+are not completed written by the NVM at the moment of the failure or because writes to the log are reordered, and we undo
+all changes of the transaction using entries. For those who have a complete log entry, the handler performs redo by reapplying
+all changes. 
