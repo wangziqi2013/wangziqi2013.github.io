@@ -49,3 +49,9 @@ on transaction commit, no dirty cache line is flushed. This implies that transac
 operation since cache line flush is not on the critical path. In database terminologies, these two properties are 
 called "steal, no force" which is also assumed by the well-known undo-redo ARIES recovery scheme.
 
+We describe the system and its operation as follows. Transaction bookkeeping and conflict detection are controlled by the 
+implementation of the TM, which is off-topic to our discussion. All memory operations within the transaction are treated 
+as transactional and persistent. We only consider write operations, because reads naturally do not need any persistency 
+guarantee. On every write operation, the cache controller extracts the old and new value. Log records containing both before-image 
+and after-image are constructed. Containing both before- and after-image in the log record can double the amount of storage 
+required, putting more stress on NVM bandwidth, but have the following benefits. 
