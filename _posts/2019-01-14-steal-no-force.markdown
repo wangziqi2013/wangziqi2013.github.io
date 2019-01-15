@@ -88,4 +88,11 @@ are overwritten, there is no way to recover from a failure since the recovery ha
 cache line. To deal with this problem, the paper also proposes a hardware cache line write back mechanism which periodically
 scans the cache and writes back dirty lines. Note that dirty lines of uncommitted transactions will also be written back
 to NVM, although this does not affect correctness since it is guaranteed that their undo entries will reach NVM first.
-The hardware write back is described as follows. 
+The hardware write back is described as follows. First, the cache controller initiates the write back by scanning the 
+cache line array. Each cache entry is extended with a "fwb (force-write-back)" bit. The cache controller scans the tag 
+array of the cache, and sets the fwb bit if dirty bit is on and the fwb bit is off. Then, the cache controller 
+scans the tag array for the second time. It writes back cache lines whose fwb bits and dirty bits are both set. If the cache
+line with fbw bit set is evicted from the cache before the second iteration, the fwb bit will be cleared, because we know 
+the content in the NVM is already up-to-date. (Note: The paper does not discuss what if the data is only evicted to 
+lower level caches but not to NVM). Note that by doing the scan and write back in two iterations, we esssentially only
+consider cache lines that are already dirty before the first iteration.
