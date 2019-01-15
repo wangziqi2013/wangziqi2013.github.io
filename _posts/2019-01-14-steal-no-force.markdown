@@ -35,4 +35,8 @@ performed synchronously, which is on the critical path of transaction commit. We
 are forced back to the NVM on transaction commit. In contrast, redo logging allows faster commit by flushing only log 
 records to the NVM and not forcing dirty lines to be flushed. It is, however, necessary to prevent dirty cache lines 
 from being evicted to the NVM. The latter may cause problems, because the cache has only limited capacity. If the 
-cache set overflows, the transaction must not proceed.
+cache set overflows, the transaction must not proceed. One solution adopted by earlier designs is to use a DRAM buffer
+as the victim cache. When a cache line is evicted from the processor cache, instead of directly writing them into the NVM,
+they are redirected into the DRAM cache which is allocated by the OS and managed as a mapping structure. This way, redo
+logging does not impose any constraint on the cache replacement policy, while still being able to perform better than
+other schemes. 
