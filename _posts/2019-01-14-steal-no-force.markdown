@@ -80,4 +80,9 @@ using non-temporal streaming write instruction: movntq.
 
 The log is maintained in the NVM as an OS-allocated chunk of persistent memory. System-wise there is only one centralized log
 to simplify ordering problems. The processor uses two registers to insert into and remove from the log. The value of registers 
-must also be persisted on the log every time they change. 
+must also be persisted on the log every time they change (the paper does not state how, and if there are multiple processors
+in the systen, the consistency of these pointers is also a problem). The log is managed as a circular buffer. On a wrap-around, 
+new entries will rewrite old entry. Rewriting log entries of committed transactions will destroy the persistence property, since
+there can be dirty cache lines of a committed transaction still in the cache. If the redo log entries of such transactions 
+are overwritten, there is no way to recover from a failure since the recovery handler does not know the after-image of the 
+cache line. 
