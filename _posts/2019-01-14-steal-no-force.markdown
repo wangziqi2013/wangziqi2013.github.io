@@ -42,3 +42,8 @@ logging does not impose any constraint on the cache replacement policy, while st
 other schemes. The problem, however, is that extra storage as well as states are maintained by both hardware and software.
 The extra design complexity and storage usage might become prohibitively expensive, limiting its usage in actual products.
 
+Using both undo and redo logging in one scheme can solve the problem of each while keeping their benifits. This paper 
+assumes the following two properties of the cache: First, cache lines may be evicted from the cache at any time during
+the transaction, suggesting that no modifications to the replacement policy is required to implement the scheme. Second, 
+on transaction commit, no dirty cache line is flushed. This implies that the transaction commit can be a rather quick 
+operation since cache line flush is not on the critical path. 
