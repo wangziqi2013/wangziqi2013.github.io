@@ -27,8 +27,12 @@ should be undone, because modifications must only reside in the cache, and hence
 The recovery handler traverses the log, discards redo entries of uncommitted transactions (those that lack a commit
 record at the very end), and applies modifications in the logical commit order for committed transactions.
 
-Neither undo nor redo logging are ideal for high performance transaction processing with durability requirement. While 
-undo logging allows instaneous commit, it introduces unnecessary write ordering problem: The undo log record must reach
-the NVM before the actual data update, because otherwise if a crash happens between the update and the log write, no 
-recovery can be done. In addition, to ensure durability of updates after commit, all dirty lines must be flushed. The 
-flush operation must be performed synchronously, which is on the critical path of transaction commit. 
+Neither undo nor redo logging are ideal for high performance transaction processing with durability requirement.
+Undo logging introduces unnecessary write ordering problem: The undo log record must reach the NVM before the actual 
+data update, because otherwise if a crash happens between the update and the log write, no recovery can be done. In 
+addition, to ensure durability of updates after commit, all dirty lines must be flushed. The flush operation must be 
+performed synchronously, which is on the critical path of transaction commit. We call this "force" because cache lines 
+are forced back to the NVM on transaction commit. In contrast, redo logging allows faster commit by flushing only log 
+records to the NVM and not forcing dirty lines to be flushed. It is, however, necessary to prevent dirty cache lines 
+from being evicted to the NVM. The latter may cause problems, because the cache has only limited capacity. If the 
+cache set overflows, the transaction must not proceed.
