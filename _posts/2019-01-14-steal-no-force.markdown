@@ -78,3 +78,6 @@ from the instruction stream, and using a log buffer to perform log writes, norma
 log writes in a pipelined manner. Note that log writes must circumvent the cache. On x86 platforms, this is achieved 
 using non-temporal streaming write instruction: movntq.
 
+The log is maintained in the NVM as an OS-allocated chunk of persistent memory. System-wise there is only one centralized log
+to simplify ordering problems. The processor uses two registers to insert into and remove from the log. The value of registers 
+must also be persisted on the log every time they change. 
