@@ -95,4 +95,6 @@ scans the tag array for the second time. It writes back cache lines whose fwb bi
 line with fbw bit set is evicted from the cache before the second iteration, the fwb bit will be cleared, because we know 
 the content in the NVM is already up-to-date. (Note: The paper does not discuss what if the data is only evicted to 
 lower level caches but not to NVM). Note that by doing the scan and write back in two iterations, we esssentially only
-consider cache lines that are already dirty before the first iteration.
+consider cache lines that are already dirty before the first iteration. Later writes and dirty cache lines are not considered,
+because there is large chance that they belong to active transactions. Writing back uncommitted cache lines do not 
+bring any extra benefit in our design.
