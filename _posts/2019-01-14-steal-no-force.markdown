@@ -85,4 +85,7 @@ in the systen, the consistency of these pointers is also a problem). The log is 
 new entries will rewrite old entry. Rewriting log entries of committed transactions will destroy the persistence property, since
 there can be dirty cache lines of a committed transaction still in the cache. If the redo log entries of such transactions 
 are overwritten, there is no way to recover from a failure since the recovery handler does not know the after-image of the 
-cache line. 
+cache line. To deal with this problem, the paper also proposes a hardware cache line write back mechanism which periodically
+scans the cache and writes back dirty lines. Note that dirty lines of uncommitted transactions will also be written back
+to NVM, although this does not affect correctness since it is guaranteed that their undo entries will reach NVM first.
+The hardware write back is described as follows. 
