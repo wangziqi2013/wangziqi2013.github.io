@@ -98,3 +98,10 @@ lower level caches but not to NVM). Note that by doing the scan and write back i
 consider cache lines that are already dirty before the first iteration. Later writes and dirty cache lines are not considered,
 because there is large chance that they belong to active transactions. Writing back uncommitted cache lines do not 
 bring any extra benefit in our design.
+
+The hardware write back should be scheduled in coordination with log writing. Whenever the system judges that the NVM log
+will soon be filled and old entries are inevitably overwritten, it notifies the cache controller, and the latter initiates
+a fwb. The paper does not talk much about the case when uncommitted entries are about to be overwritten, nor does it 
+talk about how to coordinate these two components. The only clue we have from the paper is that the maximum throughput of 
+the NVM can be used to deduce the amount of time till the next log wrap-around. The cache controller uses this piece of 
+information to determine when write back should be scheduled.
