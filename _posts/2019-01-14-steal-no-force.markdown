@@ -39,4 +39,6 @@ cache set overflows, the transaction must not proceed. One solution adopted by e
 as the victim cache. When a cache line is evicted from the processor cache, instead of directly writing them into the NVM,
 they are redirected into the DRAM cache which is allocated by the OS and managed as a mapping structure. This way, redo
 logging does not impose any constraint on the cache replacement policy, while still being able to perform better than
-other schemes. 
+other schemes. The problem, however, is that extra storage as well as states are maintained by both hardware and software.
+The extra design complexity and storage usage might become prohibitively expensive, limiting its usage in actual products.
+
