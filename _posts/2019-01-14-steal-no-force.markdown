@@ -75,4 +75,6 @@ buffer be added to the processor. Log write operations are issued by the process
 hence can be identified and multiplexed into the log buffer. The cache controller then carefully coordinate between cache 
 operations and buffer write backs, such that the latter always reach the NVM first. By eliminating the store fence
 from the instruction stream, and using a log buffer to perform log writes, normal execution can be parallelized with
-log writes in a pipelined manner.
+log writes in a pipelined manner. Note that log writes must circumvent the cache. On x86 platforms, this is achieved 
+using non-temporal streaming write instruction: movntq.
+
