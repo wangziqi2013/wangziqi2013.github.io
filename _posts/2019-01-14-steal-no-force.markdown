@@ -70,4 +70,9 @@ to reach the NVM, it must undergo several cache evicts, e.g. from L1 to L2, and 
 the update written a few moments ago definitely cannot make it to the NVM. This time lower bound is defined by the 
 microarchitecture and the memory hierarechy. On the other hand, if proper control is imposed on the timing of log write operations,
 we can make strong guarantee that the log record updates always reach NVM before the shortest time in the future it takes 
-for an update in L1 cache to propagate to the NVM. 
+for an update in L1 cache to propagate to the NVM. Motivated by this, the paper proposes that a dedicated hardware log 
+buffer be added to the processor. Log write operations are issued by the processor automatically during execution, and 
+hence can be identified and multiplexed into the log buffer. The cache controller then carefully coordinate between cache 
+operations and buffer write backs, such that the latter always reach the NVM first. By eliminating the store fence
+from the instruction stream, and using a log buffer to perform log writes, normal execution can be parallelized with
+log writes in a pipelined manner.
