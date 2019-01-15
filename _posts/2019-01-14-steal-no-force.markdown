@@ -63,4 +63,11 @@ One problem, however, remains to be solved: the write ordering problem. In order
 must reach the NVM before dirty update does. In previous solutions, the programmer manually insert a store barrier between 
 updating the data and updating the log entry. This condition, however, is overly restrictive, because what we want is really 
 just the order that the two updates reach NVM, while what store fences provide is the serialization of commits on the CPU side.
-Frequent 
+Frequent serialization of instruction commits like this case harms performance, because the processor can no longer reorder and 
+coalesce memory operations freely as it is the case with more relaxed memory ordering. This paper relaxes the memory ordering
+issue without using fence instructions. Instead, it takes the advantageo of the observation that, in order for an in-place update
+to reach the NVM, it must undergo several cache evicts, e.g. from L1 to L2, and then to L3. There is a time window during which
+the update written a few moments ago definitely cannot make it to the NVM. This time lower bound is defined by the 
+microarchitecture and the memory hierarechy. On the other hand, if proper control is imposed on the timing of log write operations,
+we can make strong guarantee that the log record updates always reach NVM before the shortest time in the future it takes 
+for an update in L1 cache to propagate to the NVM. 
