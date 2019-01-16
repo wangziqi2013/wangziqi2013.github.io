@@ -97,5 +97,6 @@ The log buffer is allocated in the NVM, and only has limited capacity. To free s
 log buffer overflow, transactions must be retired constantly to make space for later transactions. In order to ensure 
 transaction retirement, the cache controller flushes all dirty and transactional blocks back to the DRAM buffer on
 transaction commit. Note that since the DRAM cache has faster write access than the NVM, this does not constitute a 
-performance bottleneck. The cache controller then monitors the number of lines using the transaction table. When this
-number drops to zero
+performance bottleneck. The cache controller then monitors the number of lines using the transaction table. After this
+number drops to zero, the transaction could be retired. A retired transaction is deteled from the transaction table, and 
+its log entries will be freed. To simplify
