@@ -37,4 +37,5 @@ being written back to the NVM. If this does not hold, then a power failure happe
 will corrupt data, because only the after-image is saved in the log (and if the log does not reach NVM at that time, it is 
 even impossible for this data corruption to be detected). Log writing is usually not considered as a bottleneck for redo
 logging, because persistence of log entries are only required before commit. For undo + redo scheme, neither write ordering
-nor "no-steal" property is problematic. It is, however, 
+nor "no-steal" property is problematic, but the bandwidth requirement of writing log entries to the NVM doubles, which 
+becomes a new bottleneck especially on write intensive workloads.
