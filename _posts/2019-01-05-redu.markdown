@@ -92,3 +92,10 @@ with both false positibes and false negatives. If the bloom filter returns posit
 the DRAM cache and NVM are accessed in parallel. For the eager case, since only a small number of entries are in the DRAM cache,
 a counting bloom filter can be used to improve the prediction accuracy. Again, since both false positives and false negatives
 are possible, the cache controller must always check DRAM cache to avoid missing up-to-date data.
+
+The log buffer is allocated in the NVM, and only has limited capacity. To free stale log entries in a timely manner to avoid
+log buffer overflow, transactions must be retired constantly to make space for later transactions. In order to ensure 
+transaction retirement, the cache controller flushes all dirty and transactional blocks back to the DRAM buffer on
+transaction commit. Note that since the DRAM cache has faster write access than the NVM, this does not constitute a 
+performance bottleneck. The cache controller then monitors the number of lines using the transaction table. When this
+number drops to zero
