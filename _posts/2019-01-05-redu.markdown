@@ -99,4 +99,6 @@ transaction retirement, the cache controller flushes all dirty and transactional
 transaction commit. Note that since the DRAM cache has faster write access than the NVM, this does not constitute a 
 performance bottleneck. The cache controller then monitors the number of lines using the transaction table. After this
 number drops to zero, the transaction could be retired. A retired transaction is deteled from the transaction table, and 
-its log entries will be freed. To simplify
+its log entries will be freed. To simplify log management, a transaction's log entries are only removed if and only if
+they are at the head of the log, and that the transaction is retired. This avoid creating holds in the middle of the 
+log, which can complicated the recovery process.
