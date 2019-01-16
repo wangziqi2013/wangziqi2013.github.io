@@ -83,4 +83,10 @@ that the updates can be merged in the DRAM cache. The second policy is to write 
 This policy eagerly flush lines back to the NVM, and only buffers dirty lines for a short period of time. The advantage 
 of the eager approach is that a smaller buffer can be used. Also, since only a small number of lines will be in the cache
 at any given moment, the chance that a cache miss must be fulfilled by the DRAM cache is low. The latter enables the 
-processor to use a predictor for determining whether the DRAM cache should be checked with high accuracy.
+processor to use a predictor for determining whether the DRAM cache should be checked with high accuracy. 
+
+When a cache miss occurs, the cache controller should check the DRAM cache first in order to load the most up-to-date data.
+This increases the latency of cache misses. To avoid the performance impact of checking DRAM cache, the paper proposes using
+bloom filters to approximate membership checking. For the non-eager policy, an ordinary bloom filter is used to test membership
+with both false positibes and false negatives. If the bloom filter returns positive, the DRAM cache is accessed first. Otherwise,
+the DRAM cache and NVM are accessed in parallel. For the eager case, since only a small number of entries
