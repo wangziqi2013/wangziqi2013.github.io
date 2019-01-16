@@ -63,4 +63,12 @@ to an entry of the offset table. Each entry of the offset table is 64 byte in si
 by one cache line fill) and has 8 fields, 8 byte for each field. Each field consists of 48 bits for the physical address
 of the line, 15 bits for the transaction ID for virtualizing transactions across processes, and one valid bit. After being
 mapped to the entry, the DRAM cache controller checks if any of the physical address fields match the address of the 
-evicted line. 
+evicted line. If a match is found, the corresponding data is updated. Otherwise, a new entry is created after evicting an
+existing one, and the data is written. Note that we do not store the offset explicitly. Instead, the offset is implied 
+by the entry index and field index. Evicted lines from the DRAM buffer are written back to the NVM if they belong to 
+committed transactions. Otherwise, if the line belongs to an uncommitted transaction, the transaction must be aborted,
+because Redu does not perform undo logging. To avoid frequent transaction abort, the cache controller prioritizes evicting 
+committed lines. The second table is called transaction table, which maintains the status of running and committed 
+transactions. For running transactions, their log pointers (the range of log entries) will be updated when a log entry
+is written. For committed transactions, their status will no longer change, but they must stay there until all dirty
+lines in the DRAM cache are flushed back to the NVM. For each entry in the transaction table, 
