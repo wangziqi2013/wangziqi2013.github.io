@@ -71,4 +71,8 @@ because Redu does not perform undo logging. To avoid frequent transaction abort,
 committed lines. The second table is called transaction table, which maintains the status of running and committed 
 transactions. For running transactions, their log pointers (the range of log entries) will be updated when a log entry
 is written. For committed transactions, their status will no longer change, but they must stay there until all dirty
-lines in the DRAM cache are flushed back to the NVM. For each entry in the transaction table, 
+lines in the DRAM cache are flushed back to the NVM. For each entry in the transaction table, the number of blocks in
+the DRAM cache for that transaction is maintained and updated when cache lines are evicted. An entry can only be deleted
+after this number drops to zero, and that the transaction is committed. We say that a transaction "retires" if the 
+transaction is committed, and all dirty lines have been flushed back to the NVM.
+
