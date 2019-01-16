@@ -39,3 +39,12 @@ even impossible for this data corruption to be detected). Log writing is usually
 logging, because persistence of log entries are only required before commit. For undo + redo scheme, neither write ordering
 nor "no-steal" property is problematic, but the bandwidth requirement of writing log entries to the NVM doubles, which 
 becomes a new bottleneck especially on write intensive workloads.
+
+Prior works try to address the aforementioned problems of each scheme by adding extra components and ordering guarantees 
+to the hardware. For undo logging, instead of using cache line write back instruction plus memory fences to enforce the 
+ordering, it is proposed in previous work that a dedicated log entry queue be added. The log entry queue is filled 
+with log entries that bypass the cache hierarchy. The observation is that the combination of write backs and fences is 
+too restrictive: In fact, correctness is guaranteed as long as the log write happens before the actual update on the NVM 
+side. In contrast, write backs and fences totally serialize the log write and the data item update, which can be relaxed
+a little. Since cachable dirty lines must go through the entire hierarchy, while log entries can be directly sent to 
+the NVM
