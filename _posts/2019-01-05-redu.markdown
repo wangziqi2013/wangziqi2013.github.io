@@ -21,3 +21,10 @@ is sufficient for reproducing the modifications; (3) redo + undo where both befo
 in the log. This scheme allows more flexible handling of cache lines, because both uncommitted and committed 
 transactions can be handled by the recovery routine using the log.
 
+This paper claims that all the above three schemes are insiffucient to build a system that has both high throughput and 
+low latency. For undo logging, since only the before-image is saved to the log, two types of write ordering must be observed. 
+The first type is that the log write containing the before-image must be persisted before the updated data item. Otherwise,
+if a crash happens right after the data item reaches NVM (at which time the log entry has not made it), there is no way
+to recover from such failure since no undo image is present to roll back the changes. The second type of write ordering is that
+on commit, all dirty updates in the cache must be persisted on the NVM before the application can be notified of the commit.
+Otherwise, on a power loss, those committed dirty lines will be lost. 
