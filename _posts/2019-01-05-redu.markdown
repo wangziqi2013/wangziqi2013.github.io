@@ -47,4 +47,6 @@ with log entries that bypass the cache hierarchy. The observation is that the co
 too restrictive: In fact, correctness is guaranteed as long as the log write happens before the actual update on the NVM 
 side. In contrast, write backs and fences totally serialize the log write and the data item update, which can be relaxed
 a little. Since cachable dirty lines must go through the entire hierarchy, while log entries can be directly sent to 
-the NVM
+the NVM, the fence and cache flush are no longer needed if the cache controller can take advantage of the timing.
+For redo logging, often people will propose to add a DRAM cache as the victim buffer. Evicted cache lines will be stored 
+temporarily in the DRAM buffer. On system failure, the volatile DRAM will automatically roll back all uncommitted changes. 
