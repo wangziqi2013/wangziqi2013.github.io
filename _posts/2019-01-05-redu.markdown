@@ -79,4 +79,8 @@ transaction is committed, and all dirty lines have been flushed back to the NVM.
 Two policies can be used to manage dirty lines in the DRAM cache. The first policy retains writing back cache lines until
 necessary, i.e. an entry cannot be found when a new cache line is to be inserted. This policy delays the write back of 
 cache lines to an appropriate time, and can hence utilize the chance that a cache line is updated multiple times and 
-that the updates can be merged in the DRAM cache. 
+that the updates can be merged in the DRAM cache. The second policy is to write back the dirty line as soon as it arrives.
+This policy eagerly flush lines back to the NVM, and only buffers dirty lines for a short period of time. The advantage 
+of the eager approach is that a smaller buffer can be used. Also, since only a small number of lines will be in the cache
+at any given moment, the chance that a cache miss must be fulfilled by the DRAM cache is low. The latter enables the 
+processor to use a predictor for determining whether the DRAM cache should be checked with high accuracy.
