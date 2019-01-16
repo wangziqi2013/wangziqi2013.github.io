@@ -15,4 +15,9 @@ version_mgmt:
 
 This paper proposes Redu, a transaction system that supports atomic durability using redo logs. Prior designs of 
 transactional systems with durability must use one of the three logging schemes: (1) undo, where the before-image of the 
-data item being modified is recorded in the log; 
+data item being modified is recorded in the log; (2) redo, where the after-image of the data item being modified is 
+recorded in the log. In this case, the actual data item on NVM may not actually be modified, because the log 
+is sufficient for reproducing the modifications; (3) redo + undo where both before- and after-image are saved 
+in the log. This scheme allows more flexible handling of cache lines, because both uncommitted and committed 
+transactions can be handled by the recovery routine using the log.
+
