@@ -89,4 +89,6 @@ When a cache miss occurs, the cache controller should check the DRAM cache first
 This increases the latency of cache misses. To avoid the performance impact of checking DRAM cache, the paper proposes using
 bloom filters to approximate membership checking. For the non-eager policy, an ordinary bloom filter is used to test membership
 with both false positibes and false negatives. If the bloom filter returns positive, the DRAM cache is accessed first. Otherwise,
-the DRAM cache and NVM are accessed in parallel. For the eager case, since only a small number of entries
+the DRAM cache and NVM are accessed in parallel. For the eager case, since only a small number of entries are in the DRAM cache,
+a counting bloom filter can be used to improve the prediction accuracy. Again, since both false positives and false negatives
+are possible, the cache controller must always check DRAM cache to avoid missing up-to-date data.
