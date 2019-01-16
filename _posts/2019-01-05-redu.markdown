@@ -31,4 +31,10 @@ Otherwise, on a power loss, those committed dirty lines will be lost. Enforcing 
 effect on latency of both write and commit operations. For write operation, the log entry must circumvent the cache and be
 flushed to the NVM before the store could proceed. This is usually done using a cache line write back instruction and 
 a store fence. Similarly, on commit, all dirty cache lines are written back to the NVM using write back instructions and 
-fences, which is even worse, because this operation is on the critical path of the commit sequence. 
+fences, which is even worse, because this operation is on the critical path of the commit sequence. For redo logging, without 
+substantially changing the memory architecture, it must be enforced that dirty cache lines must remain in the cache without 
+being written back to the NVM. If this does not hold, then a power failure happening anytime before the transaction commit 
+will corrupt data, because only the after-image is saved in the log (and if the log does not reach NVM at that time, it is 
+even impossible for this data corruption to be detected). Log writing is usually not considered as a bottleneck for redo
+logging, because persistence of log entries are only required before commit. For undo + redo scheme, neither write ordering
+nor "no-steal" property is problematic. It is, however, 
