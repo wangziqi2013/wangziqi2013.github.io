@@ -76,3 +76,7 @@ the DRAM cache for that transaction is maintained and updated when cache lines a
 after this number drops to zero, and that the transaction is committed. We say that a transaction "retires" if the 
 transaction is committed, and all dirty lines have been flushed back to the NVM.
 
+Two policies can be used to manage dirty lines in the DRAM cache. The first policy retains writing back cache lines until
+necessary, i.e. an entry cannot be found when a new cache line is to be inserted. This policy delays the write back of 
+cache lines to an appropriate time, and can hence utilize the chance that a cache line is updated multiple times and 
+that the updates can be merged in the DRAM cache. 
