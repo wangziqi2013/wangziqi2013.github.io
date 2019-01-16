@@ -27,4 +27,8 @@ The first type is that the log write containing the before-image must be persist
 if a crash happens right after the data item reaches NVM (at which time the log entry has not made it), there is no way
 to recover from such failure since no undo image is present to roll back the changes. The second type of write ordering is that
 on commit, all dirty updates in the cache must be persisted on the NVM before the application can be notified of the commit.
-Otherwise, on a power loss, those committed dirty lines will be lost. 
+Otherwise, on a power loss, those committed dirty lines will be lost. Enforcing the two write orderings can have a negative 
+effect on latency of both write and commit operations. For write operation, the log entry must circumvent the cache and be
+flushed to the NVM before the store could proceed. This is usually done using a cache line write back instruction and 
+a store fence. Similarly, on commit, all dirty cache lines are written back to the NVM using write back instructions and 
+fences, which is even worse, because this operation is on the critical path of the commit sequence. 
