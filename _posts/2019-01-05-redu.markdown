@@ -50,3 +50,7 @@ a little. Since cachable dirty lines must go through the entire hierarchy, while
 the NVM, the fence and cache flush are no longer needed if the cache controller can take advantage of the timing.
 For redo logging, often people will propose to add a DRAM cache as the victim buffer. Evicted cache lines will be stored 
 temporarily in the DRAM buffer. On system failure, the volatile DRAM will automatically roll back all uncommitted changes. 
+Another potential problem for redo logging is that, if the system designer decides to use the log to update NVM, 
+then the extra log reading traffic may saturate the bandwidth and lower performance for normal operations. The solution 
+is to only use the log for recovery. During normal operations, it is the responsibility of the DRAM buffer controller to 
+update data on the NVM. 
