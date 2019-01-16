@@ -54,3 +54,13 @@ Another potential problem for redo logging is that, if the system designer decid
 then the extra log reading traffic may saturate the bandwidth and lower performance for normal operations. The solution 
 is to only use the log for recovery. During normal operations, it is the responsibility of the DRAM buffer controller to 
 update data on the NVM. 
+
+Redu follows the approach of adding a DRAM buffer as victim cache, which allows dirty cache lines to be evicted from
+the cache before a transaction commits. Two tables are maintained in the DRAM cache itself to maintain block status and 
+transaction status, respectively. The first table is offset table, which maps dirty cache lines evicted from the cache hierarchy
+to an offset in the DRAM cache. When a cache line is evicted to the DRAM cache, its physical address is used to map
+to an entry of the offset table. Each entry of the offset table is 64 byte in size (i.e. can be fetched by the processor
+by one cache line fill) and has 8 fields, 8 byte for each field. Each field consists of 48 bits for the physical address
+of the line, 15 bits for the transaction ID for virtualizing transactions across processes, and one valid bit. After being
+mapped to the entry, the DRAM cache controller checks if any of the physical address fields match the address of the 
+evicted line. 
