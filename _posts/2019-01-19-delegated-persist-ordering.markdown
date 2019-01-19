@@ -19,5 +19,6 @@ data is written back from volatile storage (e.g. on-chip SRAM, DRAM buffer, etc.
 classes of write ordering must be enforced: First, the log entry must be persisted onto NVM before dirty items does, because
 otherwise, if a crash happens after a dirty item is written back and before its corresponding undo log entry, there is no
 way to recover from such failure. Second, all dirty items must be persisted before the commit record is written on the NVM
-log. If not, the . Without significant hardware addition, in order to enforce persistence ordering on current platforms,
+log. If not, the system cannot guarantee the persistence of committed transactions, since unflushed dirty items will be 
+lost on a failure. Without significant hardware addition, in order to enforce persistence ordering on current platforms,
 programmers must issue a special instruction sequence which flushes the dirty cache line
