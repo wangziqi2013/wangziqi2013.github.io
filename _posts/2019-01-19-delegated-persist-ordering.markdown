@@ -20,5 +20,12 @@ classes of write ordering must be enforced: First, the log entry must be persist
 otherwise, if a crash happens after a dirty item is written back and before its corresponding undo log entry, there is no
 way to recover from such failure. Second, all dirty items must be persisted before the commit record is written on the NVM
 log. If not, the system cannot guarantee the persistence of committed transactions, since unflushed dirty items will be 
-lost on a failure. Without significant hardware addition, in order to enforce persistence ordering on current platforms,
-programmers must issue a special instruction sequence which flushes the dirty cache line
+lost on a failure. 
+
+Without significant hardware modification, in order to enforce persistence ordering on current platforms, programmers must 
+issue a special instruction sequence which flushes the dirty cache line manually first, and then instruct the memory controller
+to persist these writes. The instruction sequence is in the form of the following: clwb; sfence; pcommit; sfence;. The clwb
+instruction flushes back cache lines without giving up permissions for read. The line still remains in the cache in a 
+non-dirty state after the instruction. The two sfences around pcommit prevents store operations from reordering with 
+pcommit, which itself provides no guarantee of any ordering. The implication is that a persistence fence is also a 
+store fence, since it blocks later stores from committing until previous stores are persisted.
