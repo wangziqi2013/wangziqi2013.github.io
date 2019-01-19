@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Delegated Persiste Ordering, a machanism for enforcing persistent write ordering on platforms
+that support NVM. Persistence ordering is crucial to NVM recovery applications, because it controls the order that dirty
+data is written back from volatile storage (e.g. on-chip SRAM, DRAM buffer, etc.) . Without significant hardware addition, in order to enforce persistence ordering on current platforms,
+programmers must issue a special instruction sequence which flushes the dirty cache line
