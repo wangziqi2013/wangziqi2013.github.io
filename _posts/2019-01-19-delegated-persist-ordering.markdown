@@ -67,6 +67,9 @@ orderding can be translated into persistency ordering. There are two types of co
 interested in. The first is coherence ordering, which is established by coherence events between processors on the same 
 memory address. The coherence ordering specifies that, if two processors contend on the same cache line, then the ordering
 of the two instructions is defined as the ordering that their corresponding processors obtain ownership of the cache line.
+The second is fence ordering, which is established by one processor executing a fence instruction, effectively dividing 
+instructions before and after the fence into two adjacent epoches, and then the second processor establishes a coherence 
+dependency with instructions on the later epoch. 
 
 
 Based on the above observations, the paper proposes adding 
