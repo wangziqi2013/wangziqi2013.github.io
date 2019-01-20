@@ -69,7 +69,9 @@ memory address. The coherence ordering specifies that, if two processors contend
 of the two instructions is defined as the ordering that their corresponding processors obtain ownership of the cache line.
 The second is fence ordering, which is established by one processor executing a fence instruction, effectively dividing 
 instructions before and after the fence into two adjacent epoches, and then the second processor establishes a coherence 
-dependency with instructions on the later epoch. 
+dependency with instructions on the later epoch. In this case, all instructions before the fence are ordered before instructions 
+after the fence on the first processor. Furthermore, since consistency relations are transitive, instructions on the second 
+processor then also implicitly establishes a consistency order with instructions in the earlier epoch. 
 
 
 Based on the above observations, the paper proposes adding 
