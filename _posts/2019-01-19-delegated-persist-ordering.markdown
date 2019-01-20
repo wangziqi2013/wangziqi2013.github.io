@@ -49,4 +49,8 @@ to which process or thread, and must wait for all of them. This is unnecessary i
 different tasks in the same system. Finally, the clwb instruction is expensive. Dirty cache lines with exclusive permissions
 will transit to shared state after the write back. On the next write operation to the same cache line, a coherence bus 
 transaction must be performed to regain the exclusive permission, which introduces some extra latency on the critical path.
-Besides, 
+Besides, the clwb instruction itself may snoop dirty cache lines of the same address on other private and shared caches, 
+including the remote ones. This is because the semantics of clwb requires that if a dirty cache line exists, it must be 
+written back system-wide, i.e. no cache in the system may contain a dirty line on the address after the instruction. 
+This is almost the worst-case scenario of a cache coherence transaction, since the write back coherence message must
+propagate to all caches in the system.
