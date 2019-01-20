@@ -39,8 +39,14 @@ required for the persistence barrier, which now only requires a few clwb instruc
 Ideally, the persistence order would be identical to the memory consistency order (i.e. the order that memory operations 
 become visible to other processors), such that programmers do not have to learn another set of reasoning rules for persistence 
 order. This order is called Strict Persistency. In practice, enforcing this property using sync barriers (called "Strict 
-Ordering", SO) introduces non-negligible overhead on several aspects. First, SO is overly restrictive that it also forces 
+Ordering", SO) introduces non-negligible overhead on several aspects. First, SO is overly restrictive, being that it also forces 
 the processor to wait for the completion of persistence operations using pcommit (or clwb), which is not required in 
 strict persistency. This is because currently the NVM controller write queue does not know the ordering requirement from
 the processor, and hence may schedule operations in the write queue arbitrarily for better performance (e.g. taking advantage 
-of inter-bank parallelism). Second,
+of inter-bank parallelism). Second, the pcommit instruction unconditionally stalls the processor until the NVM write queue 
+is drained. If other applications in the system also writes to the NVM, pcommit has no way to know which operations belong
+to which process or thread, and must wait for all of them. This is unnecessary if different applications run
+different tasks in the same system. Finally, the clwb instruction is expensive. Dirty cache lines with exclusive permissions
+will transit to shared state after the write back. On the next write operation to the same cache line, a coherence bus 
+transaction must be performed to regain the exclusive permission, which introduces some extra latency on the critical path.
+Besides, 
