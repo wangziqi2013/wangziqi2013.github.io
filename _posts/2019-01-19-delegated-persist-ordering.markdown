@@ -73,7 +73,22 @@ dependency with instructions on the later epoch. In this case, all instructions 
 after the fence on the first processor. Furthermore, since consistency relations are transitive, instructions on the second 
 processor then also implicitly establishes a consistency order with instructions in the earlier epoch. 
 
-Based on the above observations, the paper proposes adding a special buffer serving the purpose of a dedicated persistence 
-store queue on each logic processor. The existing NVM write queue is also extended with extra capability of recognizing 
-instruction barriers across which no store operation can be scheduled. We describe the details of the design below.
+Based on the above observations, the paper proposes adding a special buffer called the "persist buffer", serving the purpose 
+of a dedicated persistence store queue on each logic processor. The existing NVM write queue is also extended with extra 
+capability of recognizing instruction barriers across which no store operation can be scheduled. We describe the details 
+of the design below.
 
+The persist buffer consists fields that help a processor determine the relative order of local stores. Each entry in the 
+buffer can either be a store operation with data, or a fence instruction indicating the local and potentially global
+ordering between instructions. The persist buffer flushes instructions to the NVM controller store queue whenever it 
+is able to do so. The NVM controller store queue operates as follows: It accepts either an operation, or a fence instruction.
+Both will be buffered in the store queue in the order that they arrive. The NVM controller is allowed to schedule NVM writes
+only within fences, but not cross them. Fence instructions have no effect on the NVM content, and will be discarded if they
+are at the head of the NVM store queue. 
+
+This paper assumes a snoopy cache coherence protocol, in which write back operations can be snooped by all processors.
+On every store operation to NVM address space, the instruction is enqueued at the tail of the persistence queue, while 
+also being performed on the cache line. w.l.o.g. we assume that the instruction hits L1 cache, and hence requires no 
+coherence action. Each entry in the buffer has the following fields: A type field indicating whether the entry represents 
+an instruction or a barrier; A data field, which stores the updated data for a store operation, or a pointer to a hardware 
+bloom filter, the usage of which will be explained later. 
