@@ -128,4 +128,8 @@ on DRAM address space after the barrier, and then processor 2 reads the same cac
 of memory ordering, the read operation should be ordered after the barrier. It is, however, impossible to add the dependency
 into the persist buffer since processor 2 only executes a regular load instruction. If, later on, processor 2 stores the 
 result of the load to an NVM address, the store should be persisted after the barrier, since the NVM store must be ordered
-after the regular load (core-local data dependency) and the regular load is ordered after the barrier. 
+after the regular load (core-local data dependency) and the regular load is ordered after the barrier. To avoid missing
+dependencies, each processor also has a register called "AccumDP", which stored dependency information carried by
+coherence responses. Every time a coherence message is received, and if there is an entry ID indicating a potential
+dependency, the ID will be appended into the AccumDP register. Next time an entry is allocated in the persist buffer, the 
+content of AccumDP will be copied into the "dependency" field, and the register is cleared.
