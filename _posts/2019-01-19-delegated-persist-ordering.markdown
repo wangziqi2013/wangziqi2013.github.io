@@ -110,3 +110,14 @@ processor adds an entry into its own persist buffer, and fill the "dependency" f
 is a store to the NVM address space). The entry in the latter processor cannot be sent to the NVM controller before it
 sees the entry with the ID in its "dependency" field being written back. 
 
+The second type of ordering is introduced by executing a memory fence on one processor, and observing the effect of a 
+later instruction via cache coherence on another processor. Note that the later instruction can be an instruction to
+either NVM address space or DRAM address space. To precisely reflect such ordering requirements, after a fence instruction is 
+executed and added to the persist buffer, the processor allocates a bloom filter to the memory fence entry in the 
+buffer (and link them together using the "data" field in the entry). All memory accesses after the barrier are hashed 
+into the bloom filter using their addresses. On receiving a coherence request, the persist buffer checks the requested 
+address with all fences in the buffer. If one of them has a hit (if multiple hits are present, use the latest one),
+the ID of the entry is piggybacked in the coherence response to indicate that the receiving processor may potentially
+has a dependency with a memory operation after the fence, and hence should wait until the fence is drained. Note that
+even if false positives are possible with a bloom filter, correctness is not affected, since in the case of false 
+positives we only create more false dependencies.
