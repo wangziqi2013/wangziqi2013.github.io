@@ -91,4 +91,8 @@ On every store operation to NVM address space, the instruction is enqueued at th
 also being performed on the cache line. w.l.o.g. we assume that the instruction hits L1 cache, and hence requires no 
 coherence action. Each entry in the buffer has the following fields: A type field indicating whether the entry represents 
 an instruction or a barrier; A data field, which stores the updated data for a store operation, or a pointer to a hardware 
-bloom filter, the usage of which will be explained later. 
+bloom filter, the usage of which will be explained later. There is a "Youngest" field which indicates whether the current 
+entry contains the most up-to-date data for the cache line. Note that if multiple processors write to the same cache line, 
+multiple instances of the entry may present in their persist buffers, and only one of them may have the "Youngest" bits set. 
+The persist buffer should also snoop for coherence requests, and entries with the "Youngest" bit set should response to 
+coherence requests on the dirty line, in case that the line has been evicted from the cache hierarchy. 
