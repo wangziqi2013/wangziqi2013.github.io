@@ -54,3 +54,10 @@ including the remote ones. This is because the semantics of clwb requires that i
 written back system-wide, i.e. no cache in the system may contain a dirty line on the address after the instruction. 
 This is almost the worst-case scenario of a cache coherence transaction, since the write back coherence message must
 propagate to all caches in the system.
+
+This paper addresses the inefficiency problem in SO from two perspectives. First, although it is beneficial to keep the 
+persistence order of memory operations the same as the consistency order, the actual completion of these operations do not 
+need to be kept synchronized with regular execution of the processor. By decoupling NVM operation ordering from operation
+completion, the processor is allowed to overlap its execution with NVM write operations, which keeps the processor busy as 
+much as possible. The second perspective is about usability: Programmers no longer need to write explicit sync barriers 
+on certain points to enforce the ordering. Instead, hardware can detect and infer the ordering of memory instructions
