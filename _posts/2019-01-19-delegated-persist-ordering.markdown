@@ -30,4 +30,8 @@ non-dirty state after the instruction. The two sfences around pcommit prevents s
 pcommit, which itself provides no guarantee of any ordering. The implication is that a persistence fence is also a 
 store fence, since it blocks later store instructions from committing (i.e. being globally visible) until previous stores 
 are persisted. The pcommit instruction tells the persistent memory controller to flush its memory queue such that all
-in-flight requests will become persistent before this instruction could retire. 
+in-flight requests will become persistent before this instruction could retire. Note that recently, Intel announced that
+the pcommit instruction has been deprecated, because memory controllers are now considered as part of the persistence 
+domain: On power failure, the memory controller is guaranteed to have enough power to drain its write queue before the 
+system finally shuts down. With this convenience at hand, the pcommit instruction is no longer required for the persistence
+barrier, which now only requires a few clwb instructions and an sfence at the end.
