@@ -100,4 +100,13 @@ an ID field, which consists of the processor ID and an unique identifier of the 
 The ID field is included in the write back message such that other processors could see which entries have finished writing 
 back. In order to track dependence introduced by coherence actions or barriers, each entry also has a "dependency" field,
 which stores the ID of a remote entry that it is dependent on. The entry with a non-empty "dependency" field must snoop
-on the bus and wait for the entry with the ID to be written back, before the current entry can be written back. 
+on the bus and wait for the entry with the ID to be written back, before the current entry can be written back. In the 
+next paragraph we describe how persistence ordering can be tracked and enforced using the persist buffer and coherence protocol.
+
+There are two types of ordering the persist buffer must track: coherence ordering and barrier ordering. In order to track 
+coherence ordering, the hardware piggybacks the ID of an entry if the entry serves a coherence request (i.e. an incoming 
+request for ownership hits an entry in the persist buffer). On receiving the response containing the entry ID, the 
+processor adds an entry into its own persist buffer, and fill the "dependency" field with the field ID (if the instruction
+is a store to the NVM address space). The entry in the latter processor cannot be sent to the NVM controller before it
+sees the entry with the ID in its "dependency" field being written back. 
+
