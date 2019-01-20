@@ -53,7 +53,8 @@ Besides, the clwb instruction itself may snoop dirty cache lines of the same add
 including the remote ones. This is because the semantics of clwb requires that if a dirty cache line exists, it must be 
 written back system-wide, i.e. no cache in the system may contain a dirty line on the address after the instruction. 
 This is almost the worst-case scenario of a cache coherence transaction, since the write back coherence message must
-propagate to all caches in the system.
+propagate to all caches in the system. (ADDED: According to Intel documentation, clwb within a TSX transaction may also
+force the current transaction to abort, if any).
 
 This paper addresses the inefficiency problem in SO from two perspectives. First, although it is beneficial to keep the 
 persistence order of memory operations the same as the consistency order, the actual completion of these operations do not 
