@@ -36,3 +36,7 @@ as part of the persistence domain: On power failure, the memory controller is gu
 its write queue before the system finally shuts down. With this convenience at hand, the pcommit instruction is no longer 
 required for the persistence barrier, which now only requires a few clwb instructions and an sfence at the end.
 
+Ideally, it is desired that the persistence order would be identical to the memory consistency order (i.e. the order that 
+memory operations become visible to other processors), such that programmers do not have to learn another set of 
+reasoning rules for persistence order. This order is called Synchronous Ordering (SO). In practice, enforcing SO using 
+sync barriers introduces non-negligible overhead on several aspects. First, 
