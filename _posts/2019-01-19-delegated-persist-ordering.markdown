@@ -73,6 +73,7 @@ dependency with instructions on the later epoch. In this case, all instructions 
 after the fence on the first processor. Furthermore, since consistency relations are transitive, instructions on the second 
 processor then also implicitly establishes a consistency order with instructions in the earlier epoch. 
 
+Based on the above observations, the paper proposes adding a special buffer serving the purpose of a dedicated persistence 
+store queue on each logic processor. The existing NVM write queue is also extended with extra capability of recognizing 
+instruction barriers across which no store operation can be scheduled. We describe the details of the design below.
 
-Based on the above observations, the paper proposes adding 
-a special buffer
