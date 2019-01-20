@@ -60,4 +60,14 @@ persistence order of memory operations the same as the consistency order, the ac
 need to be kept synchronized with regular execution of the processor. By decoupling NVM operation ordering from operation
 completion, the processor is allowed to overlap its execution with NVM write operations, which keeps the processor busy as 
 much as possible. The second perspective is about usability: Programmers no longer need to write explicit sync barriers 
-on certain points to enforce the ordering. Instead, hardware can detect and infer the ordering of memory instructions
+on certain points to enforce the ordering. Instead, hardware can detect and infer the ordering of memory instructions,
+and automatically apply these orderings to NVM operations as well. To simplify the hardware design, only certain memory 
+ordering events are tracked. The paper uses ARM architecture as the demonstrating example to show how memory consistency 
+orderding can be translated into persistency ordering. There are two types of consistency ordering that we are particularly
+interested in. The first is coherence ordering, which is established by coherence events between processors on the same 
+memory address. The coherence ordering specifies that, if two processors contend on the same cache line, then the ordering
+of the two instructions is defined as the ordering that their corresponding processors obtain ownership of the cache line.
+
+
+Based on the above observations, the paper proposes adding 
+a special buffer
