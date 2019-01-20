@@ -121,3 +121,11 @@ the ID of the entry is piggybacked in the coherence response to indicate that th
 has a dependency with a memory operation after the fence, and hence should wait until the fence is drained. Note that
 even if false positives are possible with a bloom filter, correctness is not affected, since in the case of false 
 positives we only create more false dependencies.
+
+On the receiving end of the coherence message, it is important to note that when a coherence message with piggybacked 
+entry ID is received, it is not always a persist memory operation. For example, processor 1 executes a store operation
+on DRAM address space after the barrier, and then processor 2 reads the same cache line. According to the transitivity
+of memory ordering, the read operation should be ordered after the barrier. It is, however, impossible to add the dependency
+into the persist buffer since processor 2 only executes a regular load instruction. If, later on, processor 2 stores the 
+result of the load to an NVM address, the store should be persisted after the barrier, since the NVM store must be ordered
+after the regular load (core-local data dependency) and the regular load is ordered after the barrier. 
