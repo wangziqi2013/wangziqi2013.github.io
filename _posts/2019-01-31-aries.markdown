@@ -52,10 +52,16 @@ this field should contain both redo and undo information. For some log records, 
 they are part of the undo process, and cannot be undone.
 
 We then describe the operations of ARIES during normal operation. The ARIES paper assumes a lock-based transaction management 
-system, but also claims that ARIES does not preclude other design options. In either options, transactions must acquire 
+system, but also claims that ARIES does not preclude other design options. In either case, transactions must acquire 
 latches on the page if they wish to insert or modify an element on the page. This is because data modification may incur
 garbage collection or page reorganization, which requires mutual exclusion on the page. The log record can only be appended 
 to the log while the page latch is held by the modifying transaction. This is to ensure that, for every page, the order of 
-log records is consistent with the order of actual page modifications happening in real time. If this property is violated,
+log records is consistent with the order of actual page modifications happening physically. If this property is violated,
 it is possible that two log records on the same page are written out-of-order. During redo phase, these two entries will
-then be applied also in the wrong order, causing data corruption in some cases (e.g. redo logging is operational). 
+then be applied also in the wrong order, causing data corruption in some cases (e.g. redo logging is operational). While appending
+the log, the transaction manager computes the pre- and after-image of the data item to be modified, and fills in the 
+PrevLSN field with the previous LSN the transaction has written (using the entry in the transaction table). On each 
+persistent page, ARIES also maintains a LSN field called PageLSN. This field is updated whenever a log entry is generated
+for that page, and will be written back to disk with the page (the easiest way is to make the field part of the page).
+When the buffer pool decides to evict a page, according to the WAL property, log entries upto the entry that modifies the 
+page must be written back before the page. In this case, the buffer pool manager reads the PageLSN field, and writes back
