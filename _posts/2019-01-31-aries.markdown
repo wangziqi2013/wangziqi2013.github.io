@@ -181,4 +181,11 @@ are not necessarily identical to the changes made during normal operation as we 
 has two obvious benefits. First, it saves log buffer and on-disk log space, because some physical changes are only for 
 bookkeeping purposes, and have no concrete meaning. One example is changing the layout of objects on the page for gargabe 
 collection purposes. While this operation does not alter the logical content stored on the page, its effect must be logged 
-if physical logging is used. The second 
+if physical logging is used. The second benefit is that operational logging enables higher parallelism, because transactions
+do not have to establish unnecessary commit dependencies. Image the case where transaction T1 splits a B+Tree index page, and 
+then transaction T2 deletes a key from the new page. If physical logging is used, T1 will log the physical changes to the 
+B+Tree node first, and then T2 logs the deletion of the key using the pre- and after-image of the new node. If, however, the 
+system crashes after T2 commits but before T1 commits. During the undo pass, modifications made by T2 will be undone,
+including the page split. After recovery, T1 losts its deletion operation, because as T2 was rolled back duing recovery,
+the new page was deallocated, and the original content of the pre-split B+Tree page was restored. Durability is violated
+in this case, because T2 is partially undone. 
