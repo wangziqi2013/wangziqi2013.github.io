@@ -50,3 +50,9 @@ use the most up-to-date entry to determine the next log entry from the same tran
 of scanning the log backwards. The last field of log entries is data. For normal write operations during normal processing,
 this field should contain both redo and undo information. For some log records, only redo information is present because 
 they are part of the undo process, and cannot be undone.
+
+We then describe the operations of ARIES during normal operation. The ARIES paper assumes a lock-based transaction management 
+system, but also claims that ARIES does not preclude other design options. In either options, transactions must acquire 
+latches on the page if they wish to insert or modify an element on the page. This is because data modification may incur
+garbage collection or page reorganization, which requires mutual exclusion on the page. The log record can only be appended 
+to the log while the page latch is held by the modifying transaction. 
