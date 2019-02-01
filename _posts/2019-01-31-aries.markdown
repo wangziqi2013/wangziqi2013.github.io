@@ -11,4 +11,15 @@ rw_set:
 htm_cd: 
 htm_cr: 
 version_mgmt: 
----
+--- 
+
+This 69 page paper describes Algorithm for Recovery and Isolation Exploiting Semantics (ARIES) in great detail. ARIES 
+is designed for providing durability to database transactions with fast recovery and low runtime overhead. ARIES also
+requires less software engineering effort to adopt for an existing system, because it supports rich semantics and most
+main stream database designs (as of the time the paper was published). We next describe the data structures and operations 
+of ARIES.
+
+ARIES requires two in-memory data structures to be maintained in the runtime. These two data structures are transaction
+table (TT) which describes the commit state of transactions, and dirty page table (DPT). Neither of them is persisted 
+to the disk except for performing checkpoints. During recovery, these two tables are recoverd by replaying log records 
+since the last checkpoint. 
