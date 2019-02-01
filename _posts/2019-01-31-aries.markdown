@@ -92,4 +92,5 @@ the current CLR undoes into the NextUndoLSN field of the CLR. This is to make su
 locate the next log entry to roll back on recovery. Note that the latest CLR in the log for a certain transaction actually
 defines an interval: (NextUndoLSN, current LSN], which is the range of log records whose effects have been undone. If nested
 rollbacks have taken before before the current rollback, the transaction manager will see CLRs written by earlier rollback
-operations. In this case, the transaction manager reads NextUndoLSN of the first
+operations. In this case, the transaction manager reads NextUndoLSN of the first CLR it encounters, and directly jumps to the 
+NextUndoLSN, skipping all log entries in-between.
