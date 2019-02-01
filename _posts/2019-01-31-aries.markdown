@@ -55,4 +55,7 @@ We then describe the operations of ARIES during normal operation. The ARIES pape
 system, but also claims that ARIES does not preclude other design options. In either options, transactions must acquire 
 latches on the page if they wish to insert or modify an element on the page. This is because data modification may incur
 garbage collection or page reorganization, which requires mutual exclusion on the page. The log record can only be appended 
-to the log while the page latch is held by the modifying transaction. 
+to the log while the page latch is held by the modifying transaction. This is to ensure that, for every page, the order of 
+log records is consistent with the order of actual page modifications happening in real time. If this property is violated,
+it is possible that two log records on the same page are written out-of-order. During redo phase, these two entries will
+then be applied also in the wrong order, causing data corruption in some cases (e.g. redo logging is operational). 
