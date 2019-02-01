@@ -109,8 +109,10 @@ table as well as the dirty page table in the background and stores them into the
 and the buffer manager may modify the tables in the meantime. This, however, does not affect the correctness of the algorithm,
 because (1) Existing transactions can only leave the table, which may cause a "ghost entry" to be written to the checkpoint,
 but in this case, the transaction commit record must be written after the checkpoint begin record, which is also part of the 
-checkpoint. New transactions  (2) Dirty pages can leave and re-enter the table. In the previous case, it actually does not matter because 
+checkpoint. New transactions are also included in the checkpoint because they write transaction begin records after the checkpoing
+begin; (2) Dirty pages can leave and re-enter the table. In the previous case, it actually does not matter because 
 the DPT is not the ultimate source for deciding whether an operation has been persisted. In the latter case, a similar argument
-can be used
+can be used to prove that the new page will not be missed. After collecting data, the log manager writes back the checkpoing 
+end record which contains the DBT and TT. 
 
 On recovery, ARIES first runs an analysis algorithm to compute 
