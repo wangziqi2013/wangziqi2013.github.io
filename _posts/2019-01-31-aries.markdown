@@ -34,3 +34,8 @@ however, the content of DPT does not strictly replicate the DPT before the failu
 always use log entries as the ultimate reference for performing recovery. DPT, on the other hand, only acts as a filter 
 that prevents most unnecessary I/O when they are truly avoidable. False positives are possible, but they only affect 
 recovery speed instead of correctness.
+
+ARIES maintains all log entries in a logically serial log. The actual implementation may partition the serial log into
+multiple files. Each log entry has a Log Serial Number (LSN), which uniquely identifies: (1) The identity of the entry, and 
+(2) The location of the entry in the log, which means that the content of the log entry can be found given the LSN. 
+The LSN grows monotonically in all circumstances. A log entry may contain different information depending on its type.
