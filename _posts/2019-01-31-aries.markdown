@@ -116,6 +116,12 @@ can be used to prove that the new page will not be missed. After collecting data
 end record which contains the DBT and TT. As the final step, the LSN of the checkpoint begin record is written into the 
 master record, which itself is stored in a well-known place on the disk and can be retrieved after the failure. Note that
 since the checkpoint is only lightweight, log entries before the checkpoint begin record cannot be discarded. Otherwise,
-transactions that fail to complete may not be able to roll back on a failure or even during normal processing.
+transactions that fail to complete may not be able to commit or roll back.
 
-On recovery, ARIES first runs an analysis algorithm to compute 
+On recovery, ARIES first runs an analysis algorithm to compute the DPT and TT. The TT must be recovered to the state 
+right before the crash, but the content of DPT does not have to be exactly identical. In fact, ARIES only computes a 
+superset of pages that are in the DPT before the crash. The recovery algorithm first reads the checkpoint end log record,
+and loads both tables into the memory. Due to the fuzzy nature of the checkpoint, some entries might be missing or unnecessary.
+Then, the recovery routine scans the log from the checkpoint begin record. For every log entry, if it indicates a transactional
+status change (e.g. begin, commit, rollback), then the change is reflected on the transaction table. Otherwise, if the 
+entry indicates data modification, then the 
