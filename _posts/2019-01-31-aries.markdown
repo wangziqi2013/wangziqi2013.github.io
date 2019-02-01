@@ -132,4 +132,6 @@ pages. Note that the DPT does not evict entries during the analysis pass. During
 a page is silently evicted which causes the removal of an entry in the DPT. The algorithm guarantees that the result is 
 still correct. After the analysis pass, the recovery routine computes the minimum RecLSN, and uses this value as the starting
 point of the following undo pass. Note that the RecLSN can be much smaller than the checkpoint begin LSN if a page is 
-loaded into the buffer pool long time ago and has not been written back. 
+loaded into the buffer pool long time ago and has not been written back. In practice, this may cause very inefficient 
+recovery, because the redo pass then needs to scan a large portion of the log and replay all of them. In addition, 
+storage management becomes more difficult as the log cannot be garbage collected.
