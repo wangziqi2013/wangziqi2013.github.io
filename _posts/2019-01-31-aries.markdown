@@ -27,4 +27,10 @@ and their logging status. Typical fields include the transaction's commit progre
 records to be persisted), last log record written, and the next log record to undo if the transaction is halfway through
 a partial or full rollback. The dirty page table stores information for dirty pages currently in the buffer pool. ARIES
 only requires one field, the RecLSN (Recovery LSN), which is the smallest serial number of the log record that modifies the
-page since the last write back of the same page. During normal processing, the fields is updated whenever a page is loaded
+page since the last write back of the same page. During normal processing, the entry is updated to the log record 
+number whenever a page is loaded into the buffer pool for writing, or when a write operation causes the buffer pool 
+entry to become dirty. If a page is evicted from the buffer pool, the corresponding entry is removed. During recovery,
+however, the content of DPT does not strictly replicate the DPT before the failure. The reasoning behind is that ARIES
+always use log entries as the ultimate reference for performing recovery. DPT, on the other hand, only acts as a filter 
+that prevents most unnecessary I/O when they are truly avoidable. False positives are possible, but they only affect 
+recovery speed instead of correctness.
