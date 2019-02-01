@@ -159,4 +159,7 @@ are ignored, and the undo process instead follows the UndoNextLSN to the next lo
 by the recovery routine, a CLR is also appended to the log. The CLR is generated in the same way as the CLR in a rollback
 during normal processing. If another crash happens in the middle of undo, the later recovery routine will find these CLRs,
 and skip undoing log records that have been undone. When performing undo on a page, the PageLSN must also be updated 
-using the LSN of the CLR
+using the LSN of the CLR. WAL property must also be observed, which forced the log entry to be written back before a 
+dirty page is evicted. After performing undo for the loser transaction, the recovery routine writes a transaction
+termination record to inform future instances of recovery routines that this transaction can be removed from the TT. 
+The recovery completes after processing all loser transactions, after which normal processing can be resumed.
