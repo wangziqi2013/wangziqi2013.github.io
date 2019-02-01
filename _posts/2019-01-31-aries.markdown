@@ -141,4 +141,11 @@ redo pass takes the minimum RecLSN from the analysis pass as an argument, and st
 point. For all log entries that have an after-image, the page ID is first checked against the DPT. If the page is not 
 in the DPT, then the page is already up-to-date, and does not require redo. If, however, that the page has an entry in the 
 DPT, then the recovery routine suspects that some changes may not be written back to the disk, which requires a redo.
-The problem is complicated by the fact that the DPT is inexact. 
+Recall that the DPT is inexact, so even if a page is found in the DPT, it might still be the case that the page has been
+silently written back. To check for this possibility, the recovery routine reads the page into the buffer pool, and 
+compared the PageLSN with the LSN of the log entry. If the latter is smaller, then it indicates that the disk page is 
+actually newer than the log entry, the redo action of which can be skipped. Otherwise, the log entry is applied to the 
+page, and the PageLSN is updated accordingly. Note that in this process no log entry is written, and the buffer pool
+is free to write back dirty pages. If the system crashes again, redo will begin from the same position. This time 
+the PageLSN will be larger than it was last time, and the recovery routines will ignore the redo operation that has 
+already been performed in the previous recovery attempt.
