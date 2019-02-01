@@ -153,4 +153,10 @@ already been performed in the previous recovery attempt. CLRs are treated in the
 The last stage of recovery is the undo pass, in which "loser transactions" are rolled back using undo log. The recovery
 routine undoes transactions that have not successfully committed (as recorded by the transaction status in the TT),
 including those half way through their roll back process but were interrupted by the crash. The undo pass is described 
-as follows. For every loser transaction in the TT, the 
+as follows. For every loser transaction in the TT, the last written LSN is used as the starting point of undo. The undo
+process follows the PrevLSN field in the log entry after undoing the current entry using the before-image. CLR entries 
+are ignored, and the undo process instead follows the UndoNextLSN to the next log entry. For every undo action performed
+by the recovery routine, a CLR is also appended to the log. The CLR is generated in the same way as the CLR in a rollback
+during normal processing. If another crash happens in the middle of undo, the later recovery routine will find these CLRs,
+and skip undoing log records that have been undone. When performing undo on a page, the PageLSN must also be updated 
+using the LSN of the CLR
