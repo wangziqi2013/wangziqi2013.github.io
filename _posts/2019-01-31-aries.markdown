@@ -70,6 +70,12 @@ all log entries upto the one indicated by the PageLSN.
 On transaction commit, the transaction manager appends a commit record to the log. To ensure durability, it also must 
 write back all log entries the current transaction has written. Similar to the normal operation case, the transaction 
 manager reads the transaction table to determine the last log entry the transaction generated. It then forces log 
-entries upto the last LSN to be written back. The transaction could successfully commit after that.
+entries upto the last LSN to be written back. The transaction could successfully commit after that. Note that ARIES
+makes very relaxed assumption about the buffer manager: Buffer pool can be managed as steal, no-force. Steal means
+dirty pages are allowed to be written back before the corresponding transaction commits. The undo log entry can help
+recover to the previous state if crash happens. No-force means the transaction manager does not force dirty pages
+to be written back to disk on transaction commit. As we have shown above, only log entries the transaction has written
+will be written back. I/O is often significantly faster in this case, because writing the log only involves sequential I/O,
+while writing disk pages is more random.
 
-On a partial or full rollback
+On a partial or full rollback, the transaction manager needs to 
