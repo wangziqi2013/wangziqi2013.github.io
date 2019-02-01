@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ARIES: Atransaction Recivery Method Supporting Fine-Granularity Locking and Partial Rollbacks Using Write-Ahead Logging"
+date:   2019-01-31 22:26:00 -0500
+categories: paper
+paper_title: "ARIES: Atransaction Recivery Method Supporting Fine-Granularity Locking and Partial Rollbacks Using Write-Ahead Logging"
+paper_link: https://dl.acm.org/citation.cfm?id=128770
+paper_keyword: ARIES; Recovery; Logging
+paper_year: TODS 1992
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
