@@ -124,4 +124,12 @@ superset of pages that are in the DPT before the crash. The recovery algorithm f
 and loads both tables into the memory. Due to the fuzzy nature of the checkpoint, some entries might be missing or unnecessary.
 Then, the recovery routine scans the log from the checkpoint begin record. For every log entry, if it indicates a transactional
 status change (e.g. begin, commit, rollback), then the change is reflected on the transaction table. Otherwise, if the 
-entry indicates data modification, then the 
+entry indicates data modification, then the DPT is modified accordingly using the same rule as if it were normal processing.
+Note that during the analysis pass, no redo is performed. This is because since the checkpoint does not force back
+all dirty pages, log records before the checkpoint begin record may also be needed in the redo process, while the analysis
+pass always begins at the checkpoint begin record. CLRs are treated as data modification entries because they also modify
+pages. Note that the DPT does not evict entries during the analysis pass. During normal processing, it is possible that 
+a page is silently evicted which causes the removal of an entry in the DPT. The algorithm guarantees that the result is 
+still correct. After the analysis pass, the recovery routine computes the minimum RecLSN, and uses this value as the starting
+point of the following undo pass. Note that the RecLSN can be much smaller than the checkpoint begin LSN if a page is 
+loaded into the buffer pool long time ago and has not been written back. 
