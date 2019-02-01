@@ -195,3 +195,13 @@ the problem without extra commit dependency elegantly: Instead of physically und
 B+Tree nodes, T1 is only rolled back logically by removing the key that was inserted (which caused the split). The shape of 
 the B+Tree is necessarily identical to the one during normal processing before the crash, because logical logging does not
 enforce a strict replication of the history. 
+
+ARIES also supports nested top transactions elegantly using CLR. Nested top transactions are operations that must happen
+atomically, but should not be rolled back once commit under all circumstances. To guarantee atomicity, nested top transactions
+must also participate in logging, and in the case of failure, be rolled back using the normal strategy. After the transaction
+has committed, however, even if the parent transaction rolls back, the nested top transaction must remain committed. To
+support such semantics, when the nested top transaction begins, the log manager remembers the most recent log entry of the 
+transaction. After the top nested transaction commits, the log manager writes a CLR, and fills in the UndoNextLSN with the 
+LSN taken before the transaction. The CLR itself contains no redo information. On recovery, the dummy CLR record protects 
+the log region of the top nested transaction from being undone, as the undo pass will follow the UndoNextLSN to log entries
+before the nested top transaction.
