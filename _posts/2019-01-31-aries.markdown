@@ -79,8 +79,17 @@ will be written back. I/O is often significantly faster in this case, because wr
 while writing disk pages is more random.
 
 On a partial or full rollback, the transaction manager needs to undo the partial change the current transaction has performed
-on disk pages. In ARIES, undo operations also generate log records, called Compensation Log Records (CLR). CLRs guarantee 
+on disk pages by scanning the log in the backward direction and undoing all operations performed by that transaction. 
+In ARIES, undo operations also generate log records, called Compensation Log Records (CLR). CLRs guarantee 
 that every write operation can at most be undone once. Imagine the case where a transaction is halfway through a rollback
 before the system crashes. If no CLR is generated, the recovery routine has no way to know at which point the rollback
 operation was on at the moment of crash. Some operations in the log have to be undone twice in order to roll back the entire
-transaction as part of the undo pass. As we will show
+transaction as part of the undo pass. As we will show later, undoing an operation more than once may have disastrous outcome
+if operational logging is employed. ARIES treats CLR just like ordinary log records except that CLR does not contain a pre-image.
+In other words, CLRs can only be redone, but not undone since CLR indicates that the transaction is already in the process 
+of being rolled back. When a CLR is generated, the transaction manager writes the PrevLSN in the ordinary log record that
+the current CLR undoes into the NextUndoLSN field of the CLR. This is to make sure that the recovery routine can quickly
+locate the next log entry to roll back on recovery. Note that the latest CLR in the log for a certain transaction actually
+defines an interval: (NextUndoLSN, current LSN], which is the range of log records whose effects have been undone. If nested
+rollbacks have taken before before the current rollback, the transaction manager will see CLRs written by earlier rollback
+operations. In this case, the transaction manager reads NextUndoLSN of the first
