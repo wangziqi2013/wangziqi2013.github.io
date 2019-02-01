@@ -78,4 +78,9 @@ to be written back to disk on transaction commit. As we have shown above, only l
 will be written back. I/O is often significantly faster in this case, because writing the log only involves sequential I/O,
 while writing disk pages is more random.
 
-On a partial or full rollback, the transaction manager needs to 
+On a partial or full rollback, the transaction manager needs to undo the partial change the current transaction has performed
+on disk pages. In ARIES, undo operations also generate log records, called Compensation Log Records (CLR). CLRs guarantee 
+that every write operation can at most be undone once. Imagine the case where a transaction is halfway through a rollback
+before the system crashes. If no CLR is generated, the recovery routine has no way to know at which point the rollback
+operation was on at the moment of crash. Some operations in the log have to be undone twice in order to roll back the entire
+transaction as part of the undo pass. As we will show
