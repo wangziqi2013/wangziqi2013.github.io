@@ -39,3 +39,14 @@ ARIES maintains all log entries in a logically serial log. The actual implementa
 multiple files. Each log entry has a Log Serial Number (LSN), which uniquely identifies: (1) The identity of the entry, and 
 (2) The location of the entry in the log, which means that the content of the log entry can be found given the LSN. 
 The LSN grows monotonically in all circumstances. A log entry may contain different information depending on its type.
+We list them as follows. First, the log entry contains the entry's LSN, type and Transaction ID. These three fields
+are common to all log entries. Most log entries also have a PrevLSN field, which stores the LSN of the previous log entry
+written by the same transaction. The recovery routine could undo all uncommitted changes of a certain transaction by
+repeatedly following the PrevLSN until a NULL value is seen, without having to scan the entire log. If the log entry
+describes the modification to a page, it also has a page ID field, which stores the address that the modification is 
+applied to. For log records generated during a rollback, a field UndoNextLSN stores the LSN of the next log entry that 
+should be rolled back. This simplifies handling of transaction rollbacks, because the recovery routine only needs to 
+use the most up-to-date entry to determine the next log entry from the same transaction that should be undone instead
+of scanning the log backwards. The last field of log entries is data. For normal write operations during normal processing,
+this field should contain both redo and undo information. For some log records, only redo information is present because 
+they are part of the undo process, and cannot be undone.
