@@ -148,4 +148,9 @@ actually newer than the log entry, the redo action of which can be skipped. Othe
 page, and the PageLSN is updated accordingly. Note that in this process no log entry is written, and the buffer pool
 is free to write back dirty pages. If the system crashes again, redo will begin from the same position. This time 
 the PageLSN will be larger than it was last time, and the recovery routines will ignore the redo operation that has 
-already been performed in the previous recovery attempt.
+already been performed in the previous recovery attempt. CLRs are treated in the same way as a normal data write entry.
+
+The last stage of recovery is the undo pass, in which "loser transactions" are rolled back using undo log. The recovery
+routine undoes transactions that have not successfully committed (as recorded by the transaction status in the TT),
+including those half way through their roll back process but were interrupted by the crash. The undo pass is described 
+as follows. For every loser transaction in the TT, the 
