@@ -22,4 +22,9 @@ of ARIES.
 ARIES requires two in-memory data structures to be maintained in the runtime. These two data structures are transaction
 table (TT) which describes the commit state of transactions, and dirty page table (DPT). Neither of them is persisted 
 to the disk except for performing checkpoints. During recovery, these two tables are recoverd by replaying log records 
-since the last checkpoint. 
+since the last checkpoint. The transaction table, as stated above, stores information of currently active transactions
+and their logging status. Typical fields include the transaction's commit progress (not yet committed, or waiting for log
+records to be persisted), last log record written, and the next log record to undo if the transaction is halfway through
+a partial or full rollback. The dirty page table stores information for dirty pages currently in the buffer pool. ARIES
+only requires one field, the RecLSN (Recovery LSN), which is the smallest serial number of the log record that modifies the
+page since the last write back of the same page. During normal processing, the fields is updated whenever a page is loaded
