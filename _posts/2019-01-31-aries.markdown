@@ -143,7 +143,7 @@ in the DPT, then the page is already up-to-date, and does not require redo. If, 
 DPT, then the recovery routine suspects that some changes may not be written back to the disk, which requires a redo.
 Recall that the DPT is inexact, so even if a page is found in the DPT, it might still be the case that the page has been
 silently written back. To check for this possibility, the recovery routine reads the page into the buffer pool, and 
-compared the PageLSN with the LSN of the log entry. If the latter is smaller, then it indicates that the disk page is 
+compares the PageLSN with the LSN of the log entry. If the latter is smaller, then it indicates that the disk page is 
 actually newer than the log entry, the redo action of which can be skipped. Otherwise, the log entry is applied to the 
 page, and the PageLSN is updated accordingly. Note that in this process no log entry is written, and the buffer pool
 is free to write back dirty pages. If the system crashes again, redo will begin from the same position. This time 
@@ -163,3 +163,12 @@ using the LSN of the CLR. WAL property must also be observed, which forced the l
 dirty page is evicted. After performing undo for the loser transaction, the recovery routine writes a transaction
 termination record to inform future instances of recovery routines that this transaction can be removed from the TT. 
 The recovery completes after processing all loser transactions, after which normal processing can be resumed.
+
+ARIES guarantees that each redo and undo operation is only performed at most once during the recovery even with
+multiple failures. For redo-able log entries, their LSN is compared with the page LSN, and if the former is smaller than
+or equal to PageLSN, its redo will be skipped. For rollbacks, the WAL property guarantees that if the dirty page affected 
+by undo is written back to the disk, then so does the corresponding CLR. This has two consequences: First, just like 
+the case with ordinary log entries in redo pass, if the system crashes during a previous undo attempt, CLRs whose dirty 
+pages have been written back to the disk will be skipped, and the rest will be replayed. Second, the undo pass is guaranteed 
+to begin with the most recent CLR entry in the log, whose effect to disk pages must have already been applied at the time
+of undo. The recovery routine will then proceed with the UndoNextLSN as the next LSN to undo.
