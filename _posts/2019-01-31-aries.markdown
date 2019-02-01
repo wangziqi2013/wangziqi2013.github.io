@@ -99,6 +99,18 @@ Periodically, ARIES takes checkpoints of the system and stores them in the log. 
 for recovery if a crash happens after the completion of the checkpoint. ARIES checkpointing algorithm is fast and non-intrusive
 in the runtime thanks to two unique features. First, dirty pages will not be written back to disk during the checkpoint
 operation, saving I/O bandwidth. Only data structures and some auxiliary information will be written back to the disk,
-which, as stated above, only incurs sequential I/O. 
+which, as stated above, only incurs sequential I/O. Second, the checkpoint operation does not halt transaction execution
+while it is collecting data in the background. This results in a fuzzy checkpoint, which cannot precisely describe the 
+state of the system at any given moment, but still works with carefully designed recovery algorithm. We next describe the 
+details of checkpointing. First, the log manager writes a transaction begin record to the log. This log record indicates 
+the beginning of the checkpoint operation. Every log entry appended after this entry and before the completion is considered 
+as part of the checkpoint. Then, without interrupting current running transactions, the log manager copies the transaction
+table as well as the dirty page table in the background and stores them into the checkpoint end record. Note that transactions
+and the buffer manager may modify the tables in the meantime. This, however, does not affect the correctness of the algorithm,
+because (1) Existing transactions can only leave the table, which may cause a "ghost entry" to be written to the checkpoint,
+but in this case, the transaction commit record must be written after the checkpoint begin record, which is also part of the 
+checkpoint. New transactions  (2) Dirty pages can leave and re-enter the table. In the previous case, it actually does not matter because 
+the DPT is not the ultimate source for deciding whether an operation has been persisted. In the latter case, a similar argument
+can be used
 
 On recovery, ARIES first runs an analysis algorithm to compute 
