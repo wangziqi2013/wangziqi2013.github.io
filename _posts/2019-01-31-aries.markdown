@@ -172,3 +172,9 @@ the case with ordinary log entries in redo pass, if the system crashes during a 
 pages have been written back to the disk will be skipped, and the rest will be replayed. Second, the undo pass is guaranteed 
 to begin with the most recent CLR entry in the log, whose effect to disk pages must have already been applied at the time
 of undo. The recovery routine will then proceed with the UndoNextLSN as the next LSN to undo.
+
+Support for strong "exact-once" semantics of redo and undo implies the adoption of more efficient operational logging.
+Instead of copying the exact physical before- and after-image in log entries, which can potentially generate prohibitively 
+large log records, operational logging only writes the logical operation with arguments, and relies on the business logic
+of the DBMS to translate the operation to physical changes during recovery. Note that the physical changes during recovery 
+are not necessarily identical to the changes made during normal operation as we will show in an example below. 
