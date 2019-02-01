@@ -94,3 +94,11 @@ defines an interval: (NextUndoLSN, current LSN], which is the range of log recor
 rollbacks have taken before before the current rollback, the transaction manager will see CLRs written by earlier rollback
 operations. In this case, the transaction manager reads NextUndoLSN of the first CLR it encounters, and directly jumps to the 
 NextUndoLSN, skipping all log entries in-between.
+
+Periodically, ARIES takes checkpoints of the system and stores them in the log. The checkpoint serves as the starting point 
+for recovery if a crash happens after the completion of the checkpoint. ARIES checkpointing algorithm is fast and non-intrusive
+in the runtime thanks to two unique features. First, dirty pages will not be written back to disk during the checkpoint
+operation, saving I/O bandwidth. Only data structures and some auxiliary information will be written back to the disk,
+which, as stated above, only incurs sequential I/O. 
+
+On recovery, ARIES first runs an analysis algorithm to compute 
