@@ -177,4 +177,8 @@ Support for strong "exact-once" semantics of redo and undo implies the adoption 
 Instead of copying the exact physical before- and after-image in log entries, which can potentially generate prohibitively 
 large log records, operational logging only writes the logical operation with arguments, and relies on the business logic
 of the DBMS to translate the operation to physical changes during recovery. Note that the physical changes during recovery 
-are not necessarily identical to the changes made during normal operation as we will show in an example below. 
+are not necessarily identical to the changes made during normal operation as we will show in an example below. Operational logging
+has two obvious benefits. First, it saves log buffer and on-disk log space, because some physical changes are only for 
+bookkeeping purposes, and have no concrete meaning. One example is changing the layout of objects on the page for gargabe 
+collection purposes. While this operation does not alter the logical content stored on the page, its effect must be logged 
+if physical logging is used. The second 
