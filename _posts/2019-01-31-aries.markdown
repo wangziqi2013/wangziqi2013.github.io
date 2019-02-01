@@ -135,3 +135,10 @@ point of the following undo pass. Note that the RecLSN can be much smaller than 
 loaded into the buffer pool long time ago and has not been written back. In practice, this may cause very inefficient 
 recovery, because the redo pass then needs to scan a large portion of the log and replay all of them. In addition, 
 storage management becomes more difficult as the log cannot be garbage collected.
+
+The redo pass replays all log entries from the earliest LSN that is known to be missing from the persistent image. The 
+redo pass takes the minimum RecLSN from the analysis pass as an argument, and starts scanning log entries from that
+point. For all log entries that have an after-image, the page ID is first checked against the DPT. If the page is not 
+in the DPT, then the page is already up-to-date, and does not require redo. If, however, that the page has an entry in the 
+DPT, then the recovery routine suspects that some changes may not be written back to the disk, which requires a redo.
+The problem is complicated by the fact that the DPT is inexact. 
