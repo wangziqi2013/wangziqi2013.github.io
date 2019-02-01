@@ -113,6 +113,9 @@ checkpoint. New transactions are also included in the checkpoint because they wr
 begin; (2) Dirty pages can leave and re-enter the table. In the previous case, it actually does not matter because 
 the DPT is not the ultimate source for deciding whether an operation has been persisted. In the latter case, a similar argument
 can be used to prove that the new page will not be missed. After collecting data, the log manager writes back the checkpoing 
-end record which contains the DBT and TT. 
+end record which contains the DBT and TT. As the final step, the LSN of the checkpoint begin record is written into the 
+master record, which itself is stored in a well-known place on the disk and can be retrieved after the failure. Note that
+since the checkpoint is only lightweight, log entries before the checkpoint begin record cannot be discarded. Otherwise,
+transactions that fail to complete may not be able to roll back on a failure or even during normal processing.
 
 On recovery, ARIES first runs an analysis algorithm to compute 
