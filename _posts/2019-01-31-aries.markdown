@@ -65,3 +65,11 @@ persistent page, ARIES also maintains a LSN field called PageLSN. This field is 
 for that page, and will be written back to disk with the page (the easiest way is to make the field part of the page).
 When the buffer pool decides to evict a page, according to the WAL property, log entries upto the entry that modifies the 
 page must be written back before the page. In this case, the buffer pool manager reads the PageLSN field, and writes back
+all log entries upto the one indicated by the PageLSN.
+
+On transaction commit, the transaction manager appends a commit record to the log. To ensure durability, it also must 
+write back all log entries the current transaction has written. Similar to the normal operation case, the transaction 
+manager reads the transaction table to determine the last log entry the transaction generated. It then forces log 
+entries upto the last LSN to be written back. The transaction could successfully commit after that.
+
+On a partial or full rollback
