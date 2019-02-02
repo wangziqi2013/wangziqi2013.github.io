@@ -45,5 +45,8 @@ on today's multicore architecture. The situation is only aggravated as the numbe
 and with multi-node memory architecture such as NUMA. 
 
 To overcome the inherent shortcoming of centralized logging, this paper proposes distributed logging which allows multiple
-log objects to be maintained in the main memory following some partition rules. In addition, recovery can be made more efficient
-using multiple log objects by adopting concurrent recovery.
+log objects to be maintained in the main memory following some partitioning rules. In addition, recovery can be made more 
+efficient using multiple log objects by adopting concurrent recovery algorithms. The paper also takes advantage of the fact 
+that with the advent of Non-Volatile Memory (NVM), even random I/O from or into the NVM will be much faster than sequential 
+I/O with disks. This observation justifies multiple log objects, which will incur non-sequential I/O operation to the NVM
+address space.
