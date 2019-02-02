@@ -53,3 +53,9 @@ address space. At last, the paper also pointed out that current hardware is insu
 given that data accesses are cached by the processor. Future processor designs may incorporate the idea of backing the 
 entire cache hierarchy with battery or super capacitors to extend persistence domain to the cache. Durability can then be
 made very efficient using only ordiary memory instructions and fences. 
+
+We next describe designs of distributed logging and focus on the chanllenges it poses to classical ARIES-style logging 
+and recovery. In distributed logging, log entries can be partitioned using two keys: Page ID and Transaction ID. In the 
+former case, the log manager operates like a hash table: whenever a transaction intends to append a new log entry, it 
+hashes the page ID into a bucket, and then append the entry to the end of the log in the corresponding bucket. Since 
+Page ID space does not overlap, buckets can be locked and maintained independent of each other, improving parallelism. 
