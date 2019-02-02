@@ -87,3 +87,11 @@ is smaller than or equal to the PageLSN which indicates that the page already co
 still be inserted into the private log buffer. At the end of the redo pass, the log buffer is recovered to the state 
 right before the crash, and in the following undo pass, it can be used to roll back modifications of loser transactions 
 just as in ARIES. 
+
+Determining the correct order of modifications from different trasactions is more difficult in transaction oriented logging, 
+because two ordering constraints must be satisified. First, log entries from the same transaction must be ordered according 
+to the program order that these modifications are carried out. Second, log entries on the same page from different transactions
+must also be ordered based on the logical ordering of modifications (e.g. if serializability is to be implemented, then the 
+logical ordering the modifications is consistent with the logical ordering of transactions). Since log records are scattered
+between different transaction's log objects, it would be difficult to encode LSNs in a global consistent manner without hampering
+scalability.
