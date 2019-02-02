@@ -59,3 +59,6 @@ and recovery. In distributed logging, log entries can be partitioned using two k
 former case, the log manager operates like a hash table: whenever a transaction intends to append a new log entry, it 
 hashes the page ID into a bucket, and then append the entry to the end of the log in the corresponding bucket. Since 
 Page ID space does not overlap, buckets can be locked and maintained independent of each other, improving parallelism. 
+In the other option, transaction oriented logging, every transaction have a dedicated log buffer. Transactions append only
+to their local buffer, and does not communicate with each other. 
+
