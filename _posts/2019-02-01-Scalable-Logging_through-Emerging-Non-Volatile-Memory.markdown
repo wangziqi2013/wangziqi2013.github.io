@@ -84,4 +84,6 @@ can always be reconstructed from the redo WAL entries, which are already written
 During recovery, the recovery manager runs the classical ARIES algorithm. In the redo pass, the recovery manager 
 reconstructs the private log buffer as it redoes modifications to pages. Note that in this case, even if the log record LSN
 is smaller than or equal to the PageLSN which indicates that the page already contains the update, the log entry must
-still be inserted into the private log buffer.
+still be inserted into the private log buffer. At the end of the redo pass, the log buffer is recovered to the state 
+right before the crash, and in the following undo pass, it can be used to roll back modifications of loser transactions 
+just as in ARIES. 
