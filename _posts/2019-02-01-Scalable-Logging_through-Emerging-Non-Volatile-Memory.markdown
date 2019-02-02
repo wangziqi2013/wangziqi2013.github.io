@@ -20,4 +20,7 @@ database system. The core of ARIES is a software maintained sequential log, in w
 are stored. Log entries are identified by their unique Log Sequence Number (LSN), which corresponds to their logical 
 offsets into the log. Although not explicitly mentioned in the paper, in order to append an entry into the log, the 
 transaction should acquire both a page latch and a log latch. The former is to ensure that two different transactions
-modifying the same page should append their entries in the same order
+modifying the same page should append their entries in the same order as they conduct the modification. The latter is to
+protect the integrity and consistency of the log itself, preventing concurrent modifications corrupting the log data 
+structure. 
+
