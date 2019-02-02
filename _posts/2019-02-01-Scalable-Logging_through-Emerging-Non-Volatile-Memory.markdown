@@ -91,19 +91,21 @@ just as in ARIES.
 Determining the correct order of modifications from different trasactions is more difficult in transaction oriented logging, 
 because two ordering constraints must be satisified. First, log entries from the same transaction must be ordered according 
 to the program order that these modifications are carried out. Second, log entries on the same page from different transactions
-must also be ordered based on the logical ordering of modifications (e.g. if serializability is to be implemented, then the 
+must also be ordered based on the logical ordering of modifications (e.g. if serializability is implemented, then the 
 logical ordering the modifications is consistent with the logical ordering of transactions). Since log records are scattered
 between different transaction's log objects, it would be difficult to encode LSNs in a global consistent manner without hampering
 scalability. To solve the global ordering problem, the paper proposes using Lamport logical clock. With logical clock, every
-entity in the system has a local clock, which represents the last time it synchronizes with another entity. Entities synchronize 
-via sending messages to each other. The local clock is included in the message, and on receiving such a message, the 
-receiver must set its local clock to the maximum of the local clock and the value included in the message. This way,
-it is guaranteed that arbitrarily many events (in the form of message passing) can be serialized based on the value 
+entity in the system has a local integer counter, which represents the last time it synchronizes with another entity. 
+Entities synchronize via sending messages to each other. The local clock is included in the message, and on receiving such 
+a message, the receiver must set its local clock to the maximum of the local clock and the value included in the message. 
+This way, it is guaranteed that all events (in the form of message passing) in the system can be compared based on the value 
 included in the message. If the value of event A is smaller than that of event B, then it is potentially possible that
 event A happens before event B. In our case, entities are pages and transactions, because we want to maintain ordering 
-property on both. When a transaction causes a page to be loaded into the buffer pool for writing (or changes ownership), 
+properties on both. When a transaction causes a page to be loaded into the buffer pool for writing (or changes ownership), 
 it sets the clock of both the transaction and the page to the larger of these two plus one (and if it is only for read, 
 the value is just the larger of these two). Log entries contain the current clock of the transaction. This guarantees that 
 if two log entries write to the same page, then the logical clock of these two entries are consistent with the actual
-physical order that the write operations happen. Similarly, we can argue that log entries written by the same transaction
-always have a monotonically increasing logical clock, because the transaction will also synchronize with itself.
+physical order that write operations happen. Similarly, we can argue that log entries written by the same transaction
+always have a monotonically increasing logical clock, because the transaction will also synchronize with itself every time
+a new log entry is generated.
+
