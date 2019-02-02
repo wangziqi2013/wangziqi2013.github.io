@@ -100,4 +100,10 @@ via sending messages to each other. The local clock is included in the message, 
 receiver must set its local clock to the maximum of the local clock and the value included in the message. This way,
 it is guaranteed that arbitrarily many events (in the form of message passing) can be serialized based on the value 
 included in the message. If the value of event A is smaller than that of event B, then it is potentially possible that
-event A happens before event B. 
+event A happens before event B. In our case, entities are pages and transactions, because we want to maintain ordering 
+property on both. When a transaction causes a page to be loaded into the buffer pool for writing (or changes ownership), 
+it sets the clock of both the transaction and the page to the larger of these two plus one (and if it is only for read, 
+the value is just the larger of these two). Log entries contain the current clock of the transaction. This guarantees that 
+if two log entries write to the same page, then the logical clock of these two entries are consistent with the actual
+physical order that the write operations happen. Similarly, we can argue that log entries written by the same transaction
+always have a monotonically increasing logical clock, because the transaction will also synchronize with itself.
