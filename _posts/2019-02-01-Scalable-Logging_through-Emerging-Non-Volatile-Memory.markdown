@@ -41,4 +41,6 @@ Beging able to write into a centralized log object in the DRAM simplifies loggin
 a unique LSN, and their logical ordering is implied by the LSN. During recovery, ARIES does not redo a log entry, 
 if the log LSN is smaller than or equal to the last modified LSN recorded on the page. On the other hand, however,
 keeping a centralized object in the memory which is accessed using a lock can easily become a performance bottleneck
-on today's multicore architecture. 
+on today's multicore architecture. The situation is only aggravated as the number of cores in the system increases
+and with multi-node memory architecture such as NUMA. 
+
