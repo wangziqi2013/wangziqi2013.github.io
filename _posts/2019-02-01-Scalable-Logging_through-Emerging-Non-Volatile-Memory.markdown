@@ -37,7 +37,7 @@ commit pending queue. Transactions in the pending queue are only committed if th
 any commit for a while. With group commit, only one large I/O operation is scheduled for all transactions in the pending 
 queue, which amortizes the overhead of I/O over multiple committing transactions at the cost of longer commit latency. 
 
-Beging able to write into a centralized log object in the DRAM simplifies logging logic, because all log entries have 
+Being able to write into a centralized log object in the DRAM simplifies logging logic, because all log entries have 
 a unique LSN, and their logical ordering is implied by the LSN. During recovery, ARIES does not redo a log entry, 
 if the log LSN is smaller than or equal to the last modified LSN recorded on the page. On the other hand, however,
 keeping a centralized object in the memory which is accessed using a lock can easily become a performance bottleneck
@@ -49,4 +49,7 @@ log objects to be maintained in the main memory following some partitioning rule
 efficient using multiple log objects by adopting concurrent recovery algorithms. The paper also takes advantage of the fact 
 that with the advent of Non-Volatile Memory (NVM), even random I/O from or into the NVM will be much faster than sequential 
 I/O with disks. This observation justifies multiple log objects, which will incur non-sequential I/O operation to the NVM
-address space.
+address space. At last, the paper also pointed out that current hardware is insufficient to implement efficient durability 
+given that data accesses are cached by the processor. Future processor designs may incorporate the idea of backing the 
+entire cache hierarchy with battery or super capacitors to extend persistence domain to the cache. Durability can then be
+made very efficient using only ordiary memory instructions and fences. 
