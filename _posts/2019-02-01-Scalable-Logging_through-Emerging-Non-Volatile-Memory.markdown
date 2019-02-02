@@ -44,3 +44,6 @@ keeping a centralized object in the memory which is accessed using a lock can ea
 on today's multicore architecture. The situation is only aggravated as the number of cores in the system increases
 and with multi-node memory architecture such as NUMA. 
 
+To overcome the inherent shortcoming of centralized logging, this paper proposes distributed logging which allows multiple
+log objects to be maintained in the main memory following some partition rules. In addition, recovery can be made more efficient
+using multiple log objects by adopting concurrent recovery.
