@@ -62,3 +62,9 @@ Page ID space does not overlap, buckets can be locked and maintained independent
 In the other option, transaction oriented logging, every transaction have a dedicated log buffer. Transactions append only
 to their local buffer, and does not communicate with each other. 
 
+Due to the nature of redo and undo, both logging schemes are hard to deal with under certain circumstances. For page 
+oriented logging, redo is simple, because the ordering of log entries for a single page still observes the logical
+ordering of modifications that happen on the page. Undo, however, is hard, because undo is intrinsically transaction
+oriented, which requires the recovery manager to traverse the linked list of log entries written by the loser transaction
+in reverse chronilogical order. With proper notion of inter-log undo, it would be very inefficient. For transaction
+oriented logging
