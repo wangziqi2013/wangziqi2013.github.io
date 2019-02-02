@@ -79,4 +79,9 @@ To solve the easier problem of not being able to undo transactions efficiently w
 proposes that each transaction can have a private DRAM-only log buffer. The log buffer must reside in the DRAM all the
 time, and does not participate in the WAL. Every time a transaction appends an entry to the distributed page log, it 
 must also write the same entry into its private log buffer. On partial or full rollbacks, the private log buffer is used
-to undo previously generated log entries of the transaction. 
+to undo previously generated log entries of the transaction. The log buffer is discarded on successful commit, and 
+can always be reconstructed from the redo WAL entries, which are already written back to the NVM before commit.
+During recovery, the recovery manager runs the classical ARIES algorithm. In the redo pass, the recovery manager 
+reconstructs the private log buffer as it redoes modifications to pages. Note that in this case, even if the log record LSN
+is smaller than or equal to the PageLSN which indicates that the page already contains the update, the log entry must
+still be inserted into the private log buffer.
