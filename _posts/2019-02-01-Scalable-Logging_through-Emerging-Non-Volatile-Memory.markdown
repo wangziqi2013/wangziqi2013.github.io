@@ -94,4 +94,10 @@ to the program order that these modifications are carried out. Second, log entri
 must also be ordered based on the logical ordering of modifications (e.g. if serializability is to be implemented, then the 
 logical ordering the modifications is consistent with the logical ordering of transactions). Since log records are scattered
 between different transaction's log objects, it would be difficult to encode LSNs in a global consistent manner without hampering
-scalability.
+scalability. To solve the global ordering problem, the paper proposes using Lamport logical clock. With logical clock, every
+entity in the system has a local clock, which represents the last time it synchronizes with another entity. Entities synchronize 
+via sending messages to each other. The local clock is included in the message, and on receiving such a message, the 
+receiver must set its local clock to the maximum of the local clock and the value included in the message. This way,
+it is guaranteed that arbitrarily many events (in the form of message passing) can be serialized based on the value 
+included in the message. If the value of event A is smaller than that of event B, then it is potentially possible that
+event A happens before event B. 
