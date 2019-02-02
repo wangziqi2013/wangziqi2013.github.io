@@ -67,4 +67,8 @@ oriented logging, redo is simple, because the ordering of log entries for a sing
 ordering of modifications that happen on the page. Undo, however, is hard, because undo is intrinsically transaction
 oriented, which requires the recovery manager to traverse the linked list of log entries written by the loser transaction
 in reverse chronilogical order. With proper notion of inter-log undo, it would be very inefficient. For transaction
-oriented logging
+oriented logging, redo is non-straightforward, because log records are only ordered with each other within a transaction.
+In the classical ARIES scheme there is no notion of inter-transaction dependency, as all operations are implicitly 
+serialized by the LSN. Finding an encoding scheme which describes the data dependency between transactions is hence 
+the essence of solving the issue with transaction oriented logging. If such a encoding scheme can be found, the recovery 
+manager 
