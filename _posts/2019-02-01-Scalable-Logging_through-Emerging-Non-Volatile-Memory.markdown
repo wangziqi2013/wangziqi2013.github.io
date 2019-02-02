@@ -36,3 +36,9 @@ immediately when a transaction finishes execution, the transaction manager puts 
 commit pending queue. Transactions in the pending queue are only committed if the queue is full, or there has not been
 any commit for a while. With group commit, only one large I/O operation is scheduled for all transactions in the pending 
 queue, which amortizes the overhead of I/O over multiple committing transactions at the cost of longer commit latency. 
+
+Beging able to write into a centralized log object in the DRAM simplifies logging logic, because all log entries have 
+a unique LSN, and their logical ordering is implied by the LSN. During recovery, ARIES does not redo a log entry, 
+if the log LSN is smaller than or equal to the last modified LSN recorded on the page. On the other hand, however,
+keeping a centralized object in the memory which is accessed using a lock can easily become a performance bottleneck
+on today's multicore architecture. 
