@@ -138,4 +138,7 @@ it only stalls until its local WC queue is drained, but does not wait for remote
 log records whose GSN is smaller than or equal to the current committing transaction's most recent entry. Given that draining
 the WC queue typically takes shorter time compared with disk I/O in classical ARIES, the paper proposes a group commit
 mechanism called "passive group commit". In passive group commit, transactions that have finished their executions first 
-flush the local WC queue, and then wait in a commit queue.
+flush the local WC queue, and then wait in a commit queue. Each processor maintains two thread-local variables. One is a 
+dgsn (dirty GSN), which is updated to the maximum GSN on the local processor when an mfence returns. Another is a dirty bit which
+is set when new log entries are written and cleared when mfence returns. In order to commit transactions, a daemon thread
+periodically scans the local dgsn variables for all processors. It then computes min_dgsn, the minimum of all dgsns. 
