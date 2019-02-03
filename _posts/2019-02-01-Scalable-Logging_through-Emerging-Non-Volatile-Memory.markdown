@@ -146,3 +146,11 @@ Transactions whose last GSN is smaller than or equal to the min_dgsn can be remo
 The dirty bit is used as a way of detecting whether any transaction has written any log entry between two scans. If no
 log entries have been generated, the dgsn will be ignored in the next scan, because we know that no log entries have been
 written since the last scan, and that the processor can be safely ignored because no cached log entries can be missed.
+
+In the future, it is expected that the persistence domain be expanded from what it is nowadays (the NVM and its store buffer) 
+to include processor caches. This can be realized by backing the processor cache hierarchy with a battery or super capacitor
+to allow the cache to be drained to lower level storage on a power failure. Given this technology at hand, the commit protocol
+of transactions can be further simplified, because memory fences are sufficient to guarantee both write ordering and 
+persistence of data items the processor just written. Passive group commit is no longer required, because after the memory
+fence instruction returns, the processor guarantees global persistence of all log entries of the transaction. This is sufficient
+to ensure durability according to WAL.
