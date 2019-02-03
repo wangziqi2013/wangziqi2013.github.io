@@ -142,3 +142,7 @@ flush the local WC queue, and then wait in a commit queue. Each processor mainta
 dgsn (dirty GSN), which is updated to the maximum GSN on the local processor when an mfence returns. Another is a dirty bit which
 is set when new log entries are written and cleared when mfence returns. In order to commit transactions, a daemon thread
 periodically scans the local dgsn variables for all processors. It then computes min_dgsn, the minimum of all dgsns. 
+Transactions whose last GSN is smaller than or equal to the min_dgsn can be removed from the pending queue and then commit.
+The dirty bit is used as a way of detecting whether any transaction has written any log entry between two scans. If no
+log entries have been generated, the dgsn will be ignored in the next scan, because we know that no log entries have been
+written since the last scan, and that the processor can be safely ignored because no cached log entries can be missed.
