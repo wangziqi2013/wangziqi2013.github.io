@@ -126,4 +126,9 @@ technology, the NVM is the new disk, while processor cache becomes the new buffe
 transactions may be cached by different processors, the write back of which is largely uncontrollable by the application.
 The paper suggests two solutions. In the first solution, hardware primitives such as pcommit, memory fence and cache line 
 force write back is used (called an "epoch barrier"). By issuing epoch barriers before commit, it is guaranteed that all 
-dirty log entries are written back to the NVM. The second solution employs a special type
+dirty log entries are written back to the NVM. The second solution employs a special type of caching policy called 
+"write combining" (WC). Memory regions marked as WC are not cached by the processor. Instead, write operations are 
+buffered by a WC queue, for which some optimizations may apply for common patterns, and read operations directly
+access memory. In the case when log entries must be flushed, the application issues a mfence instruction which will
+stall the processor until the WC queue is drained. Since log buffers are write-mostly and not read during normal processing, 
+using WC memory is expected to have minimal performance impact on logging.
