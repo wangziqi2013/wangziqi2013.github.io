@@ -118,3 +118,8 @@ log buffer, and for each log entry, hashes its Page ID into one of the buckets. 
 to make sure that log entries in each bucket are also sorted by GSN. Note that since log entries are ordered by GSN in a 
 log buffer, the sorting is similar to multi-way merge in a merge sort algorithm. Then, in the second stage, buckets are assigned 
 to recovery threads, and log entries are replayed in the order they are inserted into the buckets.
+
+On a disk-based log buffer implementation, when a transaction commits, log entries whose LSNs are smaller than or equal to
+the transaction's last LSN must be forced back to the disk, as required by WAL. With distributed logging, this becomes more 
+challenging, because now log entries below a certain GSN can be scattered in multiple log objects. Even worse, with NVM
+technology, the NVM is the new disk, while processor cache becomes the new buffer pool. 
