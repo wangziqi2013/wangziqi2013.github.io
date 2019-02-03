@@ -132,3 +132,10 @@ buffered by a WC queue, for which some optimizations may apply for common patter
 access memory. In the case when log entries must be flushed, the application issues a mfence instruction which will
 stall the processor until the WC queue is drained. Since log buffers are write-mostly and not read during normal processing, 
 using WC memory is expected to have minimal performance impact on logging.
+
+The problem of flushing log entries is only partially solved with WC caching. When a processor executes a mfence instruction,
+it only stalls until its local WC queue is drained, but does not wait for remote processors' WC queues, which may hold 
+log records whose GSN is smaller than or equal to the current committing transaction's most recent entry. Given that draining
+the WC queue typically takes shorter time compared with disk I/O in classical ARIES, the paper proposes a group commit
+mechanism called "passive group commit". In passive group commit, transactions that have finished their executions first 
+flush the local WC queue, and then wait in a commit queue.
