@@ -122,4 +122,8 @@ to recovery threads, and log entries are replayed in the order they are inserted
 On a disk-based log buffer implementation, when a transaction commits, log entries whose LSNs are smaller than or equal to
 the transaction's last LSN must be forced back to the disk, as required by WAL. With distributed logging, this becomes more 
 challenging, because now log entries below a certain GSN can be scattered in multiple log objects. Even worse, with NVM
-technology, the NVM is the new disk, while processor cache becomes the new buffer pool. 
+technology, the NVM is the new disk, while processor cache becomes the new buffer pool. Log records written by different 
+transactions may be cached by different processors, the write back of which is largely uncontrollable by the application.
+The paper suggests two solutions. In the first solution, hardware primitives such as pcommit, memory fence and cache line 
+force write back is used (called an "epoch barrier"). By issuing epoch barriers before commit, it is guaranteed that all 
+dirty log entries are written back to the NVM. The second solution employs a special type
