@@ -50,7 +50,7 @@ a risk that when power failure occurs, some log entries are not properly written
 is called "torn writes", and is usually addressed by appending a checksum to the log entry after they have been flushed to
 the disk. The first primitive, "persist_wal", uses a similar technique, in which the LSN is used instead of the checksum.
 When a multi-word log entey is to be written, the log manager first writes the log entry body to the NVM, and then executes 
-an epoch barrier. One possible implementation of the epoch barrier consists of a cache ling flush, a memory fence, a pcommit
+an epoch barrier. One possible implementation of the epoch barrier consists of a cache line flush, a memory fence, a pcommit
 instruction, and another memory fence. On newer hardware the pcommit and the second memory fence may be unnecessary because
 cache line flush itself is sufficient to guarantee the durability of writes when the instruction returns. After the epoch 
 barrier returns, the log manager then writes the LSN of the entry, which is followed by the second epoch barrier. On recovery,
@@ -59,10 +59,10 @@ entry is corrupted by the failure, and will discard it. The second atomic primit
 log manager first copies the original content of the page on the NVM to a separate log record, and writes that log record
 with "persist_wal". Each log record has a "valid" bit to indicate whether the page has successfully reached NVM or not.
 The valid bit is initially turned on when the log record is written. Note that this log has nothing to do with ARIES
-undo log, although it effectively reverts the page content should power failure happens during the page write.
-The page is then written in-place after "persist_wal" returns. Following the successful page write, the log menager 
+undo log, although it effectively reverts the page content should power failure occur during the page write.
+The page is then written in-place after "persist_wal" returns. Following the successful page write, the log manager 
 executes an epoch barrier to ensure durability of the page write, and then clears the valid bit of the log record
-to indicate that the undo image has now become obsolete, which is again followed by an epoch barrier. On recovery, if
+to indicate that the undo image has now become obsolete, which is again followed by the final epoch barrier. On recovery, if
 a page is found to be corrupted, indicated by the fact that the log entry is present but valid bit is set, then the 
 content of the page is reverted. If the log record itself it corrupted, the page is not actually written, and the log is 
 simply discarded. 
@@ -101,9 +101,9 @@ dirty pages (note that since the buffer pool is shared across transactions, we c
 transaction abort, as the page may also have been written by other transactions). On commit, the transaction manager pushes 
 the committing transaction into a pending queue. After the number of pending transactions or the waiting time reach a 
 threshold, the transaction manager group commits all transactions in the pending queue as follows. First, all undo log entries
-from the pending transactions are collected, and are written into the NVM. Then a epoch barrier is issued to guarantee 
+from the pending transactions are collected, and are written into the NVM. Then an epoch barrier is issued to guarantee 
 later operations can always be undone if power failure occurs and the data is corrupted. After that, the transaction manager
-flushed the shared buffer pool to overwrite existing data on the NVM. This step is not atomic, and failures could occur
+flushes the shared buffer pool to overwrite existing data on the NVM. This step is not atomic, and failures could occur
 during this process. If it is the case, then the recovery manager scans the log, and will find active entries which indicate
 that some pages are not written. Another epoch barrier is issued after writing all pages. Finally, the transaction manager 
 clears the valid bits in the undo log entries written earlier, meaning that all transactions have committed successfully
