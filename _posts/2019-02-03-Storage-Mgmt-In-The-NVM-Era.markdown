@@ -55,4 +55,14 @@ instruction, and another memory fence. On newer hardware the pcommit and the sec
 cache line flush itself is sufficient to guarantee the durability of writes when the instruction returns. After the epoch 
 barrier returns, the log manager then writes the LSN of the entry, which is followed by the second epoch barrier. On recovery,
 if a log entry's LSN does not match its actual offset in the log file, the recovery manager then believes that the log 
-entry is corrupted by the failure, and will discard it. 
+entry is corrupted by the failure, and will discard it. The second atomic primitive, "persist_page", proceeds as follows. The 
+log manager first copies the original content of the page on the NVM to a separate log record, and writes that log record
+with "persist_wal". Each log record has a "valid" bit to indicate whether the page has successfully reached NVM or not.
+The valid bit is initially turned on when the log record is written. Note that this log has nothing to do with ARIES
+undo log, although it effectively reverts the page content should power failure happens during the page write.
+The page is then written in-place after "persist_wal" returns. Following the successful page write, the log menager 
+executes an epoch barrier to ensure durability of the page write, and then clears the valid bit of the log record
+to indicate that the undo image has now become obsolete, which is again followed by an epoch barrier. On recovery, if
+a page is found to be corrupted, indicated by the fact that the log entry is present but valid bit is set, then the 
+content of the page is reverted. If the log record itself it corrupted, the page is not actually written, and the log is 
+simply discarded.
