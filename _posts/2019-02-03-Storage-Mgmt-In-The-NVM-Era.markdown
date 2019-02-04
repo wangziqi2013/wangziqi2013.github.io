@@ -65,4 +65,9 @@ executes an epoch barrier to ensure durability of the page write, and then clear
 to indicate that the undo image has now become obsolete, which is again followed by an epoch barrier. On recovery, if
 a page is found to be corrupted, indicated by the fact that the log entry is present but valid bit is set, then the 
 content of the page is reverted. If the log record itself it corrupted, the page is not actually written, and the log is 
-simply discarded.
+simply discarded. 
+
+The first "persist_wal" uses two epoch barriers per call, while the "persist_page" uses four. To reduce the extra overhead 
+of executing an epoch barrier which forces the processor to stall on the store queue and the NVM device, multiple log entries 
+and pages can be written together as a batch. The paper gave an example of batching with log records, which works as follows.
+First, the log manager
