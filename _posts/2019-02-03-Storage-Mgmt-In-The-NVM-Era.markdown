@@ -83,6 +83,24 @@ primitive we just introduced. Undo log entries are also persisted to the NVM as 
 "persist_page" primitive itself also uses undo logging, we can combine these two, and the actual number of epoch barriers 
 is still four per page write. Note that when the page is being persisted to NVM, a latch must be taken on the page to 
 avoid other threads accessing the page. Otherwise, it is possible that another transaction reads the page being persisted,
-writes another page, and then commits before the current transaction. If the system crashes before the former transaction
+writes a different page, and then commits before the current transaction. If the system crashes before the former transaction
 could commit, the recovery manager would be confused, because the latter transaction reads from a transaction that have 
 been rolled back. 
+
+The In-Place Update scheme works well on NVM, because it circumvents the expensive software path of performing buffer pool
+management and writing redo logs. It is, however, sensitive to NVM write latency, because the epoch barrier is on the 
+critical path. To further reduce the number of epoch barriers, the paper proposes the third scheme which is called "NVM
+Group Commit". The group commit scheme assumes a shared buffer pool, which only holds dirty pages written by the transaction.
+Transactional reads are directly served from the NVM, taking advantage of fast read operations (unless the page being read
+is in the dirty pool, in which case dirty data is forwarded to ensure transactions can see their own updates). Compared with
+ARIES which uses "steal, no-force" buffer pool management scheme and relies on WAL to provide durability, NVM group commit
+uses "no-steal, force" policy which is exactly the opposite of ARIES. Group commit buffer pools are not allowed to write back
+pages before commit, and must write back all dirty pages on commit. Each transaction also maintains a transactional-local
+undo log in the DRAM. During normal operation, if the transaction requests to abort, then the undo log is used to roll back
+dirty pages (note that since the buffer pool is shared across transactions, we could not simply discard dirty pages on 
+transaction abort, as the page may also have been written by other transactions). On commit, the transaction manager pushes 
+the committing transaction into a pending queue. After the number of pending transactions or the waiting time reach a 
+threshold, the transaction manager group commits all transactions in the pending queue as follows. First, all undo log entries
+from the pending transactions are collected, and are written into the NVM. Then a epoch barrier is issued to guarantee 
+later operations can always be undone if power failure occurs and the data is corrupted. After that, the transaction manager
+flushed the shared buffer pool to overwrite existing data on the NVM. This step is not atomic
