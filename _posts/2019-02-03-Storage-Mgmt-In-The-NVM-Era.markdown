@@ -24,3 +24,8 @@ flush operation is usually called when a page is to be evicted from the buffer p
 execution and is about to commit. In the former case, the log is flushed upto the LSN of the most recent log entry
 that wrote the page, while in the latter case, all log entries written by the committing transaction (and hence all log 
 entries with smaller LSN) should be written back.
+
+The combination of software buffering and centralized WAL is well-suited for disk I/O. While accesses to data pages are 
+typically slow due to its random nature, the slowness can be compensated by the software controlled buffer pool. On the 
+other hand, flushing log records to the disk only involves sequential disk I/O, which in most cases should also be fast.
+
