@@ -14,7 +14,13 @@ version_mgmt:
 ---  
 
 This paper seeks to get rid of centralized logging in classical database recovery schemes such as WAL and ARIES which is 
-also based on WAL. The classical WAL is designed specifically for disk-like devices that features a block interface 
-with slow random I/O, but faster sequential I/O. In ARIES, a software-controlled buffer pool is used to provide fast
-reads and writes to disk pages. The buffer pool must observe the WAL property in order to guarantee that transactions 
-can always be undone after a crash. 
+also based on WAL. The classical WAL is designed specifically for disk-like devices that feature a block interface 
+with slow random I/O, but faster sequential I/O. One of the examples is ARIES, where a software-controlled buffer pool 
+is used to provide fast random read and write access to disk pages. The buffer pool must observe the WAL property in order 
+to guarantee that transactions can always be undone after a crash. In addition, ARIES maintains a centralized log object 
+to which all transactions append their log entries. Every log entry has an unique identifier called a Log Sequence Number (LSN).
+The log object supports the "flush" operation, which writes back all log entries before a given LSN to the disk. The 
+flush operation is usually called when a page is to be evicted from the buffer pool, and when a transaction has completed 
+execution and is about to commit. In the former case, the log is flushed upto the LSN of the most recent log entry
+that wrote the page, while in the latter case, all log entries written by the committing transaction (and hence all log 
+entries with smaller LSN) should be written back.
