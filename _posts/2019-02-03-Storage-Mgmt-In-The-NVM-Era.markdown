@@ -34,4 +34,9 @@ broadly, Write-Ahead Logging, to identify the new challenges of providing durabi
 commercial NVM usually provides a byte-addressable interface to users, and can be connected to the memory bus which enables
 the device to be mapped directly to the virtual address space such that processors can access individual words directly.
 This capability allows the application to dierctly update data items on the NVM without using a buffer pool. Furthermore,
-the NVM access timing is different from disk drives. Typical NVM read latency are close to the read latency of DRAM. 
+the NVM access timing is different from disk drives. Typical NVM read latency are close to the read latency of DRAM. NVM
+writes are much slower compared with reads, but sequential writes can be made fast. With NVM at hand, the paper identifies 
+three places in current database designs that can be optimized. First, the background logging and buffer pool manager threads
+can be removed, because with fast write access (compared with disks) the database system can update data in-place whenever
+they are modificed by the processor. Second, in WAL, the page whose log entries are being written back must be latched to
+prevent race conditions. This interferes with normal execution of transactions when contention is high. The last point is that
