@@ -107,4 +107,6 @@ flushed the shared buffer pool to overwrite existing data on the NVM. This step 
 during this process. If it is the case, then the recovery manager scans the log, and will find active entries which indicate
 that some pages are not written. Another epoch barrier is issued after writing all pages. Finally, the transaction manager 
 clears the valid bits in the undo log entries written earlier, meaning that all transactions have committed successfully
-and no rollback would ever happen after this point. 
+and no rollback would ever happen after this point. Compared with In-Place Update scheme, group commit relieves the critical
+path of transaction execution of frequent epoch barriers, which only occurs at the end of transaction, and happens in 
+the granularity of batches, further amortizing the overhead.
