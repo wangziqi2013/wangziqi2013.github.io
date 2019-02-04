@@ -29,3 +29,9 @@ The combination of software buffering and centralized WAL is well-suited for dis
 typically slow due to its random nature, the slowness can be compensated by the software controlled buffer pool. On the 
 other hand, flushing log records to the disk only involves sequential disk I/O, which in most cases should also be fast.
 
+With the advant of NVM, however, the paper suggests that people should rethink about the design of ARIES and even more 
+broadly, Write-Ahead Logging, to identify the new challenges of providing durability to transactions. For example, 
+commercial NVM usually provides a byte-addressable interface to users, and can be connected to the memory bus which enables
+the device to be mapped directly to the virtual address space such that processors can access individual words directly.
+This capability allows the application to dierctly update data items on the NVM without using a buffer pool. Furthermore,
+the NVM access timing is different from disk drives. Typical NVM read latency are close to the read latency of DRAM. 
