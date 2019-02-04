@@ -46,4 +46,10 @@ critical path.
 The paper then proposes two primitives for performing atomic NVM writes to both log entries and data pages. The motivation 
 of atomic writes is that, NVM device, like most memory devices, only guarantees atomicity of writes (and persist requests) 
 on word granularity. If a log entry write operation consists of multiple words (which is almost always the case), there is 
-a risk that when power failure occurs, some log entries are not properly written. 
+a risk that when power failure occurs, some log entries are not properly written. In file system researches this anomaly
+is called "torn writes", and is usually addressed by appending a checksum to the log entry after they have been flushed to
+the disk. The first primitive, "persist_wal", uses a similar technique, in which the LSN is used instead of the checksum.
+When a multi-word log entey is to be written, the log manager first writes the log entry body to the NVM, and then executes 
+an epoch barrier. One possible implementation of the epoch barrier consists of a cache ling flush, a memory fence, a pcommit
+instruction, and another memory fence. On newer hardware the pcommit and the second memory fence may be unnecessary because
+cache line flush itself is sufficient to guarantee the durability of writes when the instruction returns. 
