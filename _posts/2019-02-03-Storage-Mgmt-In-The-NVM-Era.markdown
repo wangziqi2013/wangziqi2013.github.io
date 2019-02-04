@@ -103,4 +103,8 @@ the committing transaction into a pending queue. After the number of pending tra
 threshold, the transaction manager group commits all transactions in the pending queue as follows. First, all undo log entries
 from the pending transactions are collected, and are written into the NVM. Then a epoch barrier is issued to guarantee 
 later operations can always be undone if power failure occurs and the data is corrupted. After that, the transaction manager
-flushed the shared buffer pool to overwrite existing data on the NVM. This step is not atomic
+flushed the shared buffer pool to overwrite existing data on the NVM. This step is not atomic, and failures could occur
+during this process. If it is the case, then the recovery manager scans the log, and will find active entries which indicate
+that some pages are not written. Another epoch barrier is issued after writing all pages. Finally, the transaction manager 
+clears the valid bits in the undo log entries written earlier, meaning that all transactions have committed successfully
+and no rollback would ever happen after this point. 
