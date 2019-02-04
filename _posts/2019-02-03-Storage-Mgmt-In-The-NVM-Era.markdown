@@ -74,3 +74,15 @@ First, the log manager writes multiple log body into the log, leaving blank thei
 epoch barrier. Then the log manager writes the LSN for each log record, and executes a second epoch barrier. After the 
 second epoch barrier returns, all log entries are guaranteed to be persistent.
 
+The paper then proceeds to propose recovery algorithms that optimize WAL for NVM. The first approach, NVM disk
+replacement, where the NVM is only exposed as a disk replacement with block based interface, yields poor performance 
+mainly because of the software overhead incurred by the centralized log, the buffer pool manager and the file system. 
+The second approach uses In-Place Updates to take advantage of the fast write of NVM and to reduce redo logging overhead.
+It runs as follows. When the transaction writes to a page, the update is directly applied to a page using "persist_page"
+primitive we just introduced. Undo log entries are also persisted to the NVM as the page is persisted. Note that
+"persist_page" primitive itself also uses undo logging, we can combine these two, and the actual number of epoch barriers 
+is still four per page write. Note that when the page is being persisted to NVM, a latch must be taken on the page to 
+avoid other threads accessing the page. Otherwise, it is possible that another transaction reads the page being persisted,
+writes another page, and then commits before the current transaction. If the system crashes before the former transaction
+could commit, the recovery manager would be confused, because the latter transaction reads from a transaction that have 
+been rolled back. 
