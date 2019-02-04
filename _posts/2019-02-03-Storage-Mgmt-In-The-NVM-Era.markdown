@@ -39,4 +39,6 @@ writes are much slower compared with reads, but sequential writes can be made fa
 three places in current database designs that can be optimized. First, the background logging and buffer pool manager threads
 can be removed, because with fast write access (compared with disks) the database system can update data in-place whenever
 they are modificed by the processor. Second, in WAL, the page whose log entries are being written back must be latched to
-prevent race conditions. This interferes with normal execution of transactions when contention is high. The last point is that
+prevent race conditions. This interferes with normal execution of transactions when contention is high. The last point is 
+that WAL can be greatly simplified or even removed with NVM. This saves processor cycles and reduces the latency on the 
+critical path. 
