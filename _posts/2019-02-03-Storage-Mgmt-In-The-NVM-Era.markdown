@@ -70,4 +70,7 @@ simply discarded.
 The first "persist_wal" uses two epoch barriers per call, while the "persist_page" uses four. To reduce the extra overhead 
 of executing an epoch barrier which forces the processor to stall on the store queue and the NVM device, multiple log entries 
 and pages can be written together as a batch. The paper gave an example of batching with log records, which works as follows.
-First, the log manager
+First, the log manager writes multiple log body into the log, leaving blank their corresponding LSNs, and executes an 
+epoch barrier. Then the log manager writes the LSN for each log record, and executes a second epoch barrier. After the 
+second epoch barrier returns, all log entries are guaranteed to be persistent.
+
