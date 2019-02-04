@@ -110,3 +110,11 @@ clears the valid bits in the undo log entries written earlier, meaning that all 
 and no rollback would ever happen after this point. Compared with In-Place Update scheme, group commit relieves the critical
 path of transaction execution of frequent epoch barriers, which only occurs at the end of transaction, and happens in 
 the granularity of batches, further amortizing the overhead.
+
+Two problems still remain to be solved with group commit. The first problem is with long transactions, where one long 
+running transaction (e.g. reading analytical transaction) blocks the commit of other completed transactions. If this is 
+detected, the long running transaction joins the next batch, while all others are allowed to commit. Since dirty pages 
+of the long running transaction is also written back to the NVM in the previous batch, it is then required that those
+undo log entries of the long running transaction must not be invalidated after the group commit of the previous batch.
+Instead, the undo log of the long running transaction is merged into the next batch, and if the transaction aborts, 
+all modifications that are persisted with the previous batch must be explicitly undone on the NVM. 
