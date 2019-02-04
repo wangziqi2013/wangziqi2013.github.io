@@ -117,4 +117,10 @@ detected, the long running transaction joins the next batch, while all others ar
 of the long running transaction is also written back to the NVM in the previous batch, it is then required that those
 undo log entries of the long running transaction must not be invalidated after the group commit of the previous batch.
 Instead, the undo log of the long running transaction is merged into the next batch, and if the transaction aborts, 
-all modifications that are persisted with the previous batch must be explicitly undone on the NVM. 
+all modifications that are persisted with the previous batch must be explicitly undone on the NVM. The second problem
+is buffer pool overflow, which happens when most transactions are write dominant or the buffer pool size is too small.
+In this case, we allow all transactions in the current batch to partially commit by running the commit protocol
+immediately as described above, and move all transactions into the next batch. Similar to the long running transaction
+case, all transactions are treated as a long running transaction, and their log entries from the previous batch
+must not be invalidated. On recovery, if the recovery manager detects that some transactions have more than one batch,
+the recovery manager will undo their modifications explicitly on the NVM using undo log entries from the corresponding batches.
