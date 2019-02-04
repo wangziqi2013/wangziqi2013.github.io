@@ -42,3 +42,8 @@ they are modificed by the processor. Second, in WAL, the page whose log entries 
 prevent race conditions. This interferes with normal execution of transactions when contention is high. The last point is 
 that WAL can be greatly simplified or even removed with NVM. This saves processor cycles and reduces the latency on the 
 critical path. 
+
+The paper then proposes two primitives for performing atomic NVM writes to both log entries and data pages. The motivation 
+of atomic writes is that, NVM device, like most memory devices, only guarantees atomicity of writes (and persist requests) 
+on word granularity. If a log entry write operation consists of multiple words (which is almost always the case), there is 
+a risk that when power failure occurs, some log entries are not properly written. 
