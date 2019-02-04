@@ -52,4 +52,7 @@ the disk. The first primitive, "persist_wal", uses a similar technique, in which
 When a multi-word log entey is to be written, the log manager first writes the log entry body to the NVM, and then executes 
 an epoch barrier. One possible implementation of the epoch barrier consists of a cache ling flush, a memory fence, a pcommit
 instruction, and another memory fence. On newer hardware the pcommit and the second memory fence may be unnecessary because
-cache line flush itself is sufficient to guarantee the durability of writes when the instruction returns. 
+cache line flush itself is sufficient to guarantee the durability of writes when the instruction returns. After the epoch 
+barrier returns, the log manager then writes the LSN of the entry, which is followed by the second epoch barrier. On recovery,
+if a log entry's LSN does not match its actual offset in the log file, the recovery manager then believes that the log 
+entry is corrupted by the failure, and will discard it. 
