@@ -50,3 +50,12 @@ related call. As a trade-off, the semantics can be relaxed a little. The last re
 enable applications to query the status of dirty cache lines written to the NVM address space. This capability is necessary
 to determine when certain changes have been persisted to the NVM. 
 
+Ths paper then proposes an implementation of malloc, NVMalloc, which satisfies requirement one and two. Requirement one 
+implies that blocks should not be allocated in a LIFO order which favors recently freed blocks. As an alternative, the 
+NVMalloc maintains a recently freed list of blocks, the "don't allocate list". After a block is freed, it is moved into
+the recently freed list. Blocks are only removed from the list in FIFO order after it has spent T seconds in the list.
+The paper suggests that T can be 0.2 seconds. By putting an upper bound on allocation frequency of blocks, NVMalloc ensures 
+that each block is at most allocated once in every T seconds, which helps wear leveling. The recently freed list 
+is organized as a linked list, with pointers and timestamps stored in the block themselves. Note that metadata for blocks 
+in the most recent freed list is only modified when a block is pushed into or removed from the list. Metadata induced 
+wear should also be minimum, because blocks enter and leave the list only at a limited maximum speed. 
