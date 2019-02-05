@@ -52,7 +52,7 @@ related call. As a trade-off, the semantics can be relaxed a little. The last re
 enable applications to query the status of dirty cache lines written to the NVM address space. This capability is necessary
 to determine when certain changes have been persisted to the NVM. 
 
-Ths paper then proposes an implementation of malloc, NVMalloc, which satisfies requirement one and two. Requirement one 
+The paper then proposes an implementation of malloc, NVMalloc, which satisfies requirement one and two. Requirement one 
 implies that blocks should not be allocated in a LIFO order which favors recently freed blocks. As an alternative, the 
 NVMalloc maintains a recently freed list of blocks, the "don't allocate list". After a block is freed, it is moved into
 the recently freed list. Blocks are only removed from the list in FIFO order after it has spent T seconds in the list.
@@ -116,12 +116,16 @@ The kernel thread performs a stable sort on addresses in the message, and applie
 in the order that they were pushed into the queue. A stable sort is required, because the order of applying permissions
 is important. Note that some permission changes could cancel out. For example, when the application first requests to
 raise the permission for a page, and then requests to lower permission for the same page. If these two requests are 
-prccessed in the same batch, neither of them would be actually applied.
+prccessed in the same batch, neither of them would be actually applied. This approach also requires less TLB shootdowns.
+Given sufficiently large buffers for holding TLB shootdown information, only one Inter-Processor Interrupt (IPI) is invoked
+for every batch
 
 Special optmization can be applied if the application wishes to lower the permission requirement of a page (i.e. changing 
-a read-only page to writable). The application just logs its permission change action in another table shared between the 
+a read-only page to writable). The application just logs its permission change request in another table shared between the 
 application and the kernel, and then optimistically assume that the page is writable. If it is not the case, a page fault
-will be trigger when the thread first writes to the page. On receiving the page fault, the kernel will first check
+will be triggered when the thread first writes to the page. On receiving the page fault, the kernel will first check
 the table to see if any permission change is pending. The permission change request will then be removed from the table
-and processed by the kernel. This process is transparent to the application. The permission change appears to be made 
+and processed by the kernel. This process is transparent to the application. The permission change appears to become 
 effective instantly after the application writes the permission change request into the table. 
+
+The paper addresses the last point (allowing applications to query the state of dirty cache lines). 
