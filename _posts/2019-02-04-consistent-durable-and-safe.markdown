@@ -71,3 +71,12 @@ the recovery manager scans from the begin address of the heap. It assumes that t
 every offset that is the multiple of cache line, and verifies the assumption by computing the checksum. If the computed 
 checksum matches the value stored in the checksum field, then a valid block header have been found, and the recovery manager
 uses the size of the block to jump to the next header to analyze. 
+
+If allocation information were only to be stored at the header of each block, then memory allocation would have to 
+iterate through all blocks on the NVM heap to find a block of the requested size, the time complexity of which is 
+propotional to the number of objects on the heap. To accelerate this process, NVMalloc also maintains a segregated
+free list structure in DRAM as a hint. The segregated free list is similar to the one in ordinary malloc implementations, 
+the difference being that nodes in the list do not contain data, but just pointers to the NVM heap. Memory allocation
+first checks the segregated list entry of the requested size class. If there is an element in the list, the element will
+be popped out, and the routine checks the block header to verify that the list element is consistent with the block
+metadata. The reason that
