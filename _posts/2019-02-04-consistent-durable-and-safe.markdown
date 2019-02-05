@@ -38,4 +38,7 @@ size classes, and each size class is maintained as a linked list with pointers s
 chunks are poped from and pushed into the linked list in LIFO order for good locality, because chunks that are freed
 recently are more likely to be allocated in the future. In addition, on every memory allocation and free, the pointer
 and metadata fields in the header and footer will be modified, which increases the probability that certain addresses are 
-more prone to wearing.
+more prone to wearing. The second requirement is that NVM libraries should be design in a way such that the chance of 
+memory corruption by accidental writes (e.g. buffer overflow, off-by-one error, etc.) is minimized. This is because unlike
+DRAM, data stored in NVM can survive reboots. If critical data structure is maintained in the NVM, and these data structures 
+are corrupted by user programs, it would be hard or even impossible to recover, causing permanent data loss or memory leak.
