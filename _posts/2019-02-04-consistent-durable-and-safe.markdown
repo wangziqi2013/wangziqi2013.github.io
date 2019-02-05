@@ -136,4 +136,20 @@ The cache controller begins counting the number of dirty cache lines upon execut
 the execution of which allocates a free counter and stores the counter ID into a general purpose register. The application
 saves the counter ID as a token to query the counter value. The cache controller also remembers the most recent allocated
 counter ID. Whenever a cache line becomes dirty as a result of NVM write, if the counter ID is valid, then the corresponding
-counter is incremented. 
+counter is incremented. On the other hand, whenever a cache line is evicted or invalidated, the counter is decremented.
+The paper did not discuss the behavior of counters on coherence actions, which complicates the design, because some cache 
+coherence protocol will write back the dirty line if it is invalidated on one private cache and sent to another as a result
+of read shared request. The paper suggests, however, that for inclusive L3 caches, simply adding the counter ID field into
+L3 tag array is sufficient. For non-exclusive caches, each core has its own set of counters. The counter ID field should be 
+further divided into a local counter ID and a core ID. If a cache line is evicted from the lower level cache to the NVM,
+the message should percolate up to the corresponding core, and the counter on the core is decremented. 
+
+Application programmers query the value of a certain counter using the scheck instruction, which returns true if the 
+value of the counter is zero. Equipped with sgroup and scheck, programmers no longer need to explicitly issue epoch 
+barriers which consists of cache line write backs and memory fence instructions in order to ensure persistence of modifications.
+Frequent execution of epoch barriers negatively impacts performance, since it stalls the processor until the write back 
+operation completes. This will exclude out-of-order execution that overlaps the epoch barrier with other instructions 
+in order to hide latency. Instead of forcing the processor to stall on a write back, with cache line counters, it is possible
+that the write back can be conducted in the background, and the processor just keeps executing instructions. 
+
+There are still two problems. 
