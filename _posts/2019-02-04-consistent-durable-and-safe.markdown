@@ -60,3 +60,14 @@ is organized as a linked list, with pointers and timestamps stored in the block 
 in the most recent freed list is only modified when a block is pushed into or removed from the list. Metadata induced 
 wear should also be minimum, because blocks enter and leave the list only at a limited maximum speed. 
 
+To reduce write amplification, NVMalloc only allocates memory in the unit of cache line sized blocks (64B on most platforms). 
+On initialization, the heap is divided into blocks of several pre-chosen size classes. Metadata containing the allocation
+state and size of blocks are written into block headers. A checksum is computed based on the size, state, and the relative 
+offset of the block (from the heap start address), and also stored in the header. Note that metadata stored in the NVM 
+blocks are used as the definite source of allocation information. During normal operation, it might be possible that 
+external data structures stored elsewhere may become inconsistent with information stored in the NVM block header. In 
+this case, the block header is used to guide allocation decisions, rather than other data structures. On recovery,
+the recovery manager scans from the begin address of the heap. It assumes that there might be a valid block header on 
+every offset that is the multiple of cache line, and verifies the assumption by computing the checksum. If the computed 
+checksum matches the value stored in the checksum field, then a valid block header have been found, and the recovery manager
+uses the size of the block to jump to the next header to analyze. 
