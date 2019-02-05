@@ -45,6 +45,8 @@ are corrupted by user programs, it would be hard or even impossible to recover, 
 The third requirement is that protection mechanism on NVM must be lightweight and fast. The paper claims that NVM 
 applications rely heavily on VM protection mechanism to avoid data corruption. In current distribution of Linux, this is 
 done by calling the mprotect system call. This, however, can incur the overhead of one system call, which is expensive.
+In addition, permission changes (towards more strict permission) require TLB shootdown to keep the private TLB consistent on
+all cores, which itself is a heavyweight event, whose invocation should be minimized as much as possible.
 The design goal is that a lightweight mechanism is provided such that we do not have to pay extra overhead on every protection 
 related call. As a trade-off, the semantics can be relaxed a little. The last requirement is that the library should 
 enable applications to query the status of dirty cache lines written to the NVM address space. This capability is necessary
@@ -101,4 +103,7 @@ validity checking of operations and arguments, as in disk-based file systems and
 have direct access to the entire NVM address space, in which many critical system metadata is also stored. Restricting 
 user program's write access is hence an important part of any usable NVM library.
 
-Calling mprotect on every metadata change is expensive as explained in previous paragraphs.
+Calling mprotect on every metadata change is expensive as explained in previous paragraphs. This overhead can be largely
+avoided by leveraging the observation that most memory errors are rare (given a non-malicious application), and that the 
+protection mechanism does not need to work a hundred percent of the time. As long as the majority of memory errors are 
+detected, there is large probablity that the application developer can be aware of the problem, and then work to fix it.
