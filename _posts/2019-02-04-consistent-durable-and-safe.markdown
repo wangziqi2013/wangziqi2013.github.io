@@ -87,3 +87,11 @@ has been allocated, and cleared bit means it is free. The block header is easily
 of the block. NVMalloc uses both bitmap information and the block header to access the actual block meatdata during
 allocation. Note that both the bitmap and the free list can be rebuilt during recovery. They do not need to persist
 in any case, and will simply be lost on a failure or reboot.
+
+Storing free list and bitmap in DRAM has another benefit: data corruption is less likely because neither buffer 
+overflow nor off-one-one error (and other common mistakes) can corrupt the linked structure. In the case of corrupted
+header, they are detected by the checksum field described above. During recovery, if checksum mismatch occurs at the 
+location where a block header is expected, the user will be notified of the corruption, and the recovery manager
+proceeds by scanning the heap with step size being cache line sized until the next valid header is found.
+
+The next thing
