@@ -118,7 +118,7 @@ is important. Note that some permission changes could cancel out. For example, w
 raise the permission for a page, and then requests to lower permission for the same page. If these two requests are 
 prccessed in the same batch, neither of them would be actually applied. This approach also requires less TLB shootdowns.
 Given sufficiently large buffers for holding TLB shootdown information, only one Inter-Processor Interrupt (IPI) is invoked
-for every batch
+for every batch.
 
 Special optmization can be applied if the application wishes to lower the permission requirement of a page (i.e. changing 
 a read-only page to writable). The application just logs its permission change request in another table shared between the 
@@ -128,4 +128,12 @@ the table to see if any permission change is pending. The permission change requ
 and processed by the kernel. This process is transparent to the application. The permission change appears to become 
 effective instantly after the application writes the permission change request into the table. 
 
-The paper addresses the last point (allowing applications to query the state of dirty cache lines). 
+The paper addresses the last point (allowing applications to query the state of dirty cache lines) by adding counters and 
+version IDs to cache line tags. The design proposal is described as follows. First, an array of counters are added to the 
+cache controller. Each counter should be at least 8 bits which allows at most 256 cache lines to be tracked. Counters
+can be identified using counter IDs. Each cache line tag is also extended with a field that stores the counter ID.
+The cache controller begins counting the number of dirty cache lines upon executing a special instruction, sgroup,
+the execution of which allocates a free counter and stores the counter ID into a general purpose register. The application
+saves the counter ID as a token to query the counter value. The cache controller also remembers the most recent allocated
+counter ID. Whenever a cache line becomes dirty as a result of NVM write, if the counter ID is valid, then the corresponding
+counter is incremented. 
