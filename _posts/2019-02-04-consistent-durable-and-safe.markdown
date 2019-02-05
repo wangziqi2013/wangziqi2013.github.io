@@ -79,4 +79,11 @@ free list structure in DRAM as a hint. The segregated free list is similar to th
 the difference being that nodes in the list do not contain data, but just pointers to the NVM heap. Memory allocation
 first checks the segregated list entry of the requested size class. If there is an element in the list, the element will
 be popped out, and the routine checks the block header to verify that the list element is consistent with the block
-metadata. The reason that
+metadata. The reason for inconsistent free list is that when a block merges with the previous or the next block,
+NVMalloc does not update the element in the free list for the previous or the next block, leaving the possibility
+that some free list elements may have pointers pointing to the middle of a block. To deal with this problem, NVMalloc
+also have a bit mask describing global allocation status. A set bit means the corresponding cache line sized block
+has been allocated, and cleared bit means it is free. The block header is easily located given a pointer to the middle
+of the block. NVMalloc uses both bitmap information and the block header to access the actual block meatdata during
+allocation. Note that both the bitmap and the free list can be rebuilt during recovery. They do not need to persist
+in any case, and will simply be lost on a failure or reboot.
