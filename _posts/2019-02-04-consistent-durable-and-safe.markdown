@@ -106,4 +106,22 @@ user program's write access is hence an important part of any usable NVM library
 Calling mprotect on every metadata change is expensive as explained in previous paragraphs. This overhead can be largely
 avoided by leveraging the observation that most memory errors are rare (given a non-malicious application), and that the 
 protection mechanism does not need to work a hundred percent of the time. As long as the majority of memory errors are 
-detected, there is large probablity that the application developer can be aware of the problem, and then work to fix it.
+detected, it will not be long before application developers become aware of the problem, and then work to fix it. 
+
+The new protection mechanism works as follows. Instead of having applications call mprotect and the kernel initiate 
+a TLB shootdown for every request, permissions changes are now applied lazily. Application programs write their intents
+on changing the permission as messages into a message queue, which is shared between the user space and kernel space.
+A kernel thread is scheduled to scan the queue periodically, and takes all elements away from the queue for processing.
+The kernel thread performs a stable sort on addresses in the message, and applies the permission changes one by one
+in the order that they were pushed into the queue. A stable sort is required, because the order of applying permissions
+is important. Note that some permission changes could cancel out. For example, when the application first requests to
+raise the permission for a page, and then requests to lower permission for the same page. If these two requests are 
+prccessed in the same batch, neither of them would be actually applied.
+
+Special optmization can be applied if the application wishes to lower the permission requirement of a page (i.e. changing 
+a read-only page to writable). The application just logs its permission change action in another table shared between the 
+application and the kernel, and then optimistically assume that the page is writable. If it is not the case, a page fault
+will be trigger when the thread first writes to the page. On receiving the page fault, the kernel will first check
+the table to see if any permission change is pending. The permission change request will then be removed from the table
+and processed by the kernel. This process is transparent to the application. The permission change appears to be made 
+effective instantly after the application writes the permission change request into the table. 
