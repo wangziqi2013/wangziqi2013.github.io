@@ -42,3 +42,11 @@ more prone to wearing. The second requirement is that NVM libraries should be de
 memory corruption by accidental writes (e.g. buffer overflow, off-by-one error, etc.) is minimized. This is because unlike
 DRAM, data stored in NVM can survive reboots. If critical data structure is maintained in the NVM, and these data structures 
 are corrupted by user programs, it would be hard or even impossible to recover, causing permanent data loss or memory leak.
+The third requirement is that protection mechanism on NVM must be lightweight and fast. The paper claims that NVM 
+applications rely heavily on VM protection mechanism to avoid data corruption. In current distribution of Linux, this is 
+done by calling the mprotect system call. This, however, can incur the overhead of one system call, which is expensive.
+The design goal is that a lightweight mechanism is provided such that we do not have to pay extra overhead on every protection 
+related call. As a trade-off, the semantics can be relaxed a little. The last requirement is that the library should 
+enable applications to query the status of dirty cache lines written to the NVM address space. This capability is necessary
+to determine when certain changes have been persisted to the NVM. 
+
