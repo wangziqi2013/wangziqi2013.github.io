@@ -154,4 +154,7 @@ write back can be performed in the background, and the processor just keeps exec
 in the meantime, periodically checks the status of write backs using scheck instruction. This allows better parallelism
 in general because of reduced dependency between instructions.
 
-There are still two problems. 
+There are still two issues with cache line counter. The first issue is that counters may be used up. A simple solution
+would add a virtual counter, C0, which is returned by sgroup instruction if no free counter is available. If the current 
+counter is C0, then any write operation resulting in a dirty cache line will cause the line to be written back immediately.
+In this case the processor must stall on the write back operation. 
