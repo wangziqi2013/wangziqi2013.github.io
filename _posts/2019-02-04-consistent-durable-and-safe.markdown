@@ -149,7 +149,9 @@ value of the counter is zero. Equipped with sgroup and scheck, programmers no lo
 barriers which consists of cache line write backs and memory fence instructions in order to ensure persistence of modifications.
 Frequent execution of epoch barriers negatively impacts performance, since it stalls the processor until the write back 
 operation completes. This will exclude out-of-order execution that overlaps the epoch barrier with other instructions 
-in order to hide latency. Instead of forcing the processor to stall on a write back, with cache line counters, it is possible
-that the write back can be conducted in the background, and the processor just keeps executing instructions. 
+in order to hide latency. Instead of forcing the processor to stall on a write back, with cache line counters, the 
+write back can be performed in the background, and the processor just keeps executing instructions. The application,
+in the meantime, periodically checks the status of write backs using scheck instruction. This allows better parallelism
+in general because of reduced dependency between instructions.
 
 There are still two problems. 
