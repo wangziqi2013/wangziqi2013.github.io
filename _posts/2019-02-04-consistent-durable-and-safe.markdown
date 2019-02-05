@@ -157,4 +157,13 @@ in general because of reduced dependency between instructions.
 There are still two issues with cache line counter. The first issue is that counters may be used up. A simple solution
 would add a virtual counter, C0, which is returned by sgroup instruction if no free counter is available. If the current 
 counter is C0, then any write operation resulting in a dirty cache line will cause the line to be written back immediately.
-In this case the processor must stall on the write back operation. 
+In this case the processor must stall on the write back operation. The second issue occurs when a write operation on a cache
+line with a different counter. This can happen if there is an sgroup instruction between the two consecutive cache line 
+writes. The simple solution is that whenever this happens, the dirty line is written back immediately, and then the counter ID
+field is updated to the current counter ID. The processor must stall on this write back, because the write operation must be 
+performed before following instructions are executed. This simple solution may incur excessive NVM writes if sgroups are 
+frequent. The second solution is to rely on the application to track cache line access conflicts. It is assumed in the paper
+that sgroups are executed at the beginning of a durable transaction. In order to guarantee serializability, transactions themselves 
+must track conflict information to ensure that accessed to conflicting cache lines are properly ordered. If this is the case,
+the counter ID in the dirty cache line need not be changed at all, and no counter is incremented. The transactional system must guarantee
+either both transactions are committed or aborted together, or they are committed in a serializable order.
