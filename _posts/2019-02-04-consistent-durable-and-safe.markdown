@@ -94,4 +94,11 @@ header, they are detected by the checksum field described above. During recovery
 location where a block header is expected, the user will be notified of the corruption, and the recovery manager
 proceeds by scanning the heap with step size being cache line sized until the next valid header is found.
 
-The next thing
+The next thing the paper proposes is a low overhead memory protection scheme. Memory protection is more important on NVM
+because of the way NVM is used by user application. On traditional devices such as disks, an errorneous user program
+may only corrupt user data, but not the system's metadata. Such protection capability is provided by carefully coded
+validity checking of operations and arguments, as in disk-based file systems and DBMS. On NVM, however, user program
+have direct access to the entire NVM address space, in which many critical system metadata is also stored. Restricting 
+user program's write access is hence an important part of any usable NVM library.
+
+Calling mprotect on every metadata change is expensive as explained in previous paragraphs.
