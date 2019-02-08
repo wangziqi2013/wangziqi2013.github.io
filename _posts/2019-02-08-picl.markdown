@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "PiCL: A Software Transparent, Persistent Cache Log for Nonvolatile Main Memory"
+date:   2019-02-08 18:44:00 -0500
+categories: paper
+paper_title: "PiCL: A Software Transparent, Persistent Cache Log for Nonvolatile Main Memory"
+paper_link: https://parallel.princeton.edu/papers/micro18-nguyen-picl.pdf
+paper_keyword: NVM; Undo; Logging; PiCL
+paper_year: MICRO 2018
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---  
