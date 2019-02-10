@@ -40,3 +40,11 @@ to the NVM before the epoch can be notified of the commit. Dirty lines, on the o
 for efficiency purposes. On recovery, all modifications in the redo log will be replayed in the order they are appended
 to the centralized log. Redo logs can be discarded whenever the correponding dirty cache lines have been written back
 to the NVM, or the cache line is written by another store instruction. 
+
+This paper identifies several problems in both the classical undo and redo designs. First, for undo logging, the two
+write ordering constraints put the latency of NVM writes directly on the critical path of epoch execution. In the simple
+undo model, execution must wait for persistence of log entries and dirty cache lines to complete before it resumes. Even worse,
+the performance of random writes on NVM is usually several orders of magnitudes slower than reads and sequential writes.
+At the end of the epoch when dirty cache lines are forced back to the NVM, since cache lines themselves tend to have very 
+little locality (as most locality is absorbed by the cache itself), the latency of NVM random writes will become a dominant 
+factor in the total execution time. 
