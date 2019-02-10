@@ -38,4 +38,5 @@ persisted on the NVM before a crash happens, in which case there is no way to re
 operations to the cache lines also generate log entries which contain the after image of the line. The log must be flushed
 to the NVM before the epoch can be notified of the commit. Dirty lines, on the other hand, can reamin in the cache
 for efficiency purposes. On recovery, all modifications in the redo log will be replayed in the order they are appended
-to the centralized log. 
+to the centralized log. Redo logs can be discarded whenever the correponding dirty cache lines have been written back
+to the NVM, or the cache line is written by another store instruction. 
