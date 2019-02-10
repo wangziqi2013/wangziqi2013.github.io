@@ -51,4 +51,8 @@ factor in the total execution time. The second problem of undo logging is the fa
 scales, the size of the cache continues growing larger and larger. Cache flush operations at the end of the epoch will 
 therefore become more and more expensive, because it takes longer time and more NVM writes to flush dirty lines from
 the shared last-level cache. In addition, the paper also claims that undo logging introduces extra reads whenever dirty
-lines are evicted
+lines are evicted. This is because the paper assumes an undo model where the log entry is only generated on-demand, i.e. right
+before the cache line is to be evicted. Since the pre-image is not available in the cache, the processor has to issue 
+one extra read operation to the NVM for the pre-image of the cache line, and then issue a write to persist it to the 
+log area. The cache line eviction is suspended and only resumed after the log entry is persisted. The "hidden" read operation
+might be problematic in the runtime, as it incurs extra random reads to the NVM, which results in poor data locality. 
