@@ -80,5 +80,11 @@ On every store instruction, if the address of the store is within the NVM addres
 cache line using normal cache coherence protocol. After receiving the content of the line (or request hits a copy in the 
 local cache), the processor then copies the cache line into the undo log entry. Since no modification has been done yet, 
 the cache line is exactly the undo image that can be used for recovery. Entries in the log buffer do not have to be written
-back immediately. In fact, the paper proposes an optimization in which write operations resulting from the write back
-are combined into a bulk write of the size of the row buffer in NVM. This is to 
+back immediately. In fact, the paper proposes an optimization in which write operations resulting from NVM write back
+are combined into a bulk write of the size of the row buffer in NVM. Since row buffer activation takes non-negligible time 
+in the process of NVM write, this optimization is expected to improve both the latency and throughput of log writes. 
+A bloom filter can also be added to allow fast detection of whether an address has a log entry in the buffer (note that the 
+paper did not mention how the bloom filter is maintained to handle entry deletion from the buffer, because this is a relatively
+frequent operation). When a cache line is to be evicted by the cache controller, the undo log buffer is checked using the 
+address tag of the line. If the address also has an entry in the log buffer, the log buffer is flushed first to guarantee
+the write ordering between dirty data and log entries. 
