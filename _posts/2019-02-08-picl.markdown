@@ -26,4 +26,9 @@ Undo and redo logging are the two most typical ways of performing recovery. Both
 in the NVM, the location of which is either hardcoded in all processors, or is stored in a well-known location on the NVM. 
 In the following discussion we assume that logging is performed in cache line granularity as metadata is maintained per
 cache line. With undo logging, processors only save the undo image, which is the value of the cache line before the modification.
-To guarantee recoverability of modifications, two write ordering constranits
+To guarantee recoverability of modifications, two write ordering constranits a enforced. The first is that dirty cache
+lines can only be written back to the NVM after the undo log entries are. This is to ensure that modifications can awlays 
+be rolled back in the case of failure. The second is that the epoch must not commit before all dirty cache lines are 
+written back to the NVM. This is to ensure that the current epoch become durable before the next epoch begins, such that
+if the system crashes during the next epoch, we can always revert all changes and restore the state to the end of the 
+current epoch.
