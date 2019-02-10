@@ -55,4 +55,11 @@ lines are evicted. This is because the paper assumes an undo model where the log
 before the cache line is to be evicted. Since the pre-image is not available in the cache, the processor has to issue 
 one extra read operation to the NVM for the pre-image of the cache line, and then issue a write to persist it to the 
 log area. The cache line eviction is suspended and only resumed after the log entry is persisted. The "hidden" read operation
-might be problematic in the runtime, as it incurs extra random reads to the NVM, which results in poor data locality. 
+might be problematic in the runtime, as it incurs extra random reads to the NVM, which results in poor data locality.
+Redo logging, on the other hand, does not require expensive cache flush and read-log-modify, but is also severely limited 
+by the "no-steal" property it imposes on the cache replacement policy. One of the consequences of the "no-steal" policy 
+is that if the cache controller must evict a dirty line, the epoch will be forced to complete prematurally, quite similar
+to how best-effort HTM handles evictions of speculative cache lines. As a mitigation, some designs add a hardware victim 
+cache to the LLC for holding evicted dirty lines before the epoch compeletes. The victim cache is typically an associative
+search structure of limited capacity, which is also not scalable as the size of the system increases. Furthermore, the victim
+cache may also overflow
