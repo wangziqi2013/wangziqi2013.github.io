@@ -74,4 +74,11 @@ PiCL features asynchronous NVM writes, and the generation of multi-undo log. The
 Processors still have a global notion of epoches. Instead of committing an epoch before starting the next one in a strict
 sequential manner, PiCL divides the completion of epoches into two operations: commit, which means the epoch has completed
 all operations, and persist, which means all dirty lines and log entries have been written back to the NVM, and that the 
-epoch can be restored on a crash. To achieve this, 
+epoch can be restored on a crash. To achieve this, PiCL adds an undo log buffer to each core, and changes the logging mechanism
+such that log entries are generated eagerly when store instructions commit. For simplicity we ignore multi-undo log first.
+On every store instruction, if the address of the store is within the NVM address space, the processor first acquires the 
+cache line using normal cache coherence protocol. After receiving the content of the line (or request hits a copy in the 
+local cache), the processor then copies the cache line into the undo log entry. Since no modification has been done yet, 
+the cache line is exactly the undo image that can be used for recovery. Entries in the log buffer do not have to be written
+back immediately. In fact, the paper proposes an optimization in which write operations resulting from the write back
+are combined into a bulk write of the size of the row buffer in NVM. This is to 
