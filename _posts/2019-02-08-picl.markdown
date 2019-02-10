@@ -62,4 +62,4 @@ is that if the cache controller must evict a dirty line, the epoch will be force
 to how best-effort HTM handles evictions of speculative cache lines. As a mitigation, some designs add a hardware victim 
 cache to the LLC for holding evicted dirty lines before the epoch compeletes. The victim cache is typically an associative
 search structure of limited capacity, which is also not scalable as the size of the system increases. Furthermore, the victim
-cache may also overflow
+cache may also overflow, in which case the epoch still has to be aborted forcefully.
