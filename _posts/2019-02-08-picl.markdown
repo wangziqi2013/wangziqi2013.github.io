@@ -105,8 +105,15 @@ modified several times in different epoches, e.g. e<sub>i</sub>, e<sub>i+1</sub>
 only needs to be written back in ACS for epoch j. Although the cache line contents in epoch i, .., j - 1 are not written back,
 their values are actually saved by the undo log entry in epoch i + 1, ..., j. From this example we can also see that for 
 frequently written cache lines, ACS not only reduces the latency of the cache line flush operation, but also reduces the 
-number of write backs issued.
+number of write backs issued. After ACS processes epoch k, it also writes k into the last persisted epoch field on NVM. 
 
 To remember the most recent epoch in which a cache line is written, PiCL extends the cache tag array with a EID field.
 The EID field will be checked against the current persisting epoch ID when ACS is running, and if the EID matches the 
 cache line will be written back by the ACS. Otherwise it is ignored. 
+
+PiCL allows a cache line to be modified several times before it is written back to the NVM for persistence. This feature 
+is called multi-undo logging. In PiCL, each log entry consists of two epoch IDs: The ID of the epoch that the cache line is 
+last modified (version create), and the ID of the current executing epoch (version overwrite). During recovery, these two epoch
+IDs are used to determine whether the undo log entry should be applied based on the target epoch ID to restore (i.e. the 
+last persisted ID): If the target ID is between the two IDs (excluding version overwrite ID), the undo log entry will be 
+restored. Otherwise it is just ignored. 
