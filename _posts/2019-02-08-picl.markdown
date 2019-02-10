@@ -47,4 +47,8 @@ undo model, execution must wait for persistence of log entries and dirty cache l
 the performance of random writes on NVM is usually several orders of magnitudes slower than reads and sequential writes.
 At the end of the epoch when dirty cache lines are forced back to the NVM, since cache lines themselves tend to have very 
 little locality (as most locality is absorbed by the cache itself), the latency of NVM random writes will become a dominant 
-factor in the total execution time. 
+factor in the total execution time. The second problem of undo logging is the fact that it is not scalable. As the system 
+scales, the size of the cache continues growing larger and larger. Cache flush operations at the end of the epoch will 
+therefore become more and more expensive, because it takes longer time and more NVM writes to flush dirty lines from
+the shared last-level cache. In addition, the paper also claims that undo logging introduces extra reads whenever dirty
+lines are evicted
