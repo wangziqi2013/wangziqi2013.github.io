@@ -87,7 +87,8 @@ A bloom filter can also be added to allow fast detection of whether an address h
 bloom filter does not support efficient delete operation, the filter is only updated when new entries are inserted into
 the buffer, and cleared when the buffer is flushed. When a cache line is to be evicted by the cache controller, the undo 
 log buffer is checked using the address tag of the line. If the address also has an entry in the log buffer, the log buffer 
-is flushed first to guarantee the write ordering between dirty data and log entries. 
+is flushed first to guarantee the write ordering between dirty data and log entries. Log entries generated for the 
+same address must be written back in exactly the order that they are inserted into the buffer. 
 
 The second mechanism to support undo log is called Asynchronous Cache Scan (ACS). Instead of forcing flushing all dirty cache 
 lines back to the NVM on epoch commit, which is neither scalable nor efficient, ACS allows the epoch to be committed 
@@ -125,3 +126,4 @@ is precisely the most recent epoch that this line was modified. In both cases, a
 operation. The created ID for the undo entry is the cache line's EID, and the overwrite ID is the current running epoch ID.
 PiCL guarantees that at most one log entry is generated for every address in one epoch. Every time a log entry is generated
 for a cache line, the cache line will be marked as already logged, and later store operations on that line will be ignored. 
+On an epoch change, all cache lines need to be unmarked in order for new log entries for the new epoch to be generated.
