@@ -83,8 +83,9 @@ the cache line is exactly the undo image that can be used for recovery. Entries 
 back immediately. In fact, the paper proposes an optimization in which write operations resulting from NVM write back
 are combined into a bulk write of the size of the row buffer in NVM. Since row buffer activation takes non-negligible time 
 in the process of NVM write, this optimization is expected to improve both the latency and throughput of log writes. 
-A bloom filter can also be added to allow fast detection of whether an address has a log entry in the buffer (note that the 
-paper did not mention how the bloom filter is maintained to handle entry deletion from the buffer, because this is a relatively
-frequent operation). When a cache line is to be evicted by the cache controller, the undo log buffer is checked using the 
-address tag of the line. If the address also has an entry in the log buffer, the log buffer is flushed first to guarantee
-the write ordering between dirty data and log entries. 
+A bloom filter can also be added to allow fast detection of whether an address has a log entry in the buffer. Note that since
+bloom filter does not support efficient delete operation, the filter is only updated when new entries are inserted into
+the buffer, and cleared when the buffer is flushed. When a cache line is to be evicted by the cache controller, the undo 
+log buffer is checked using the address tag of the line. If the address also has an entry in the log buffer, the log buffer 
+is flushed first to guarantee the write ordering between dirty data and log entries. 
+
