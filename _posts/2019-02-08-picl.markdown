@@ -89,8 +89,15 @@ the buffer, and cleared when the buffer is flushed. When a cache line is to be e
 log buffer is checked using the address tag of the line. If the address also has an entry in the log buffer, the log buffer 
 is flushed first to guarantee the write ordering between dirty data and log entries. 
 
-The second mechanism to support undo log is called Asynchronous Cache Scan (ACS). Instead of force flushing all dirty cache 
+The second mechanism to support undo log is called Asynchronous Cache Scan (ACS). Instead of forcing flushing all dirty cache 
 lines back to the NVM on epoch commit, which is neither scalable nor efficient, ACS allows the epoch to be committed 
 immediately and persisted later in the background. ACS works as follows. The system maintains two epoch registers. One is
-the current epoch register, and another is the persisted epoch register. The latter must also have a persistent copy
-on the NVM stored in a well-known location.
+the current epoch register, and another is the last persisted epoch register. The latter must also have a persistent copy
+on the NVM stored in a well-known location, such that the crash recovery routine can read it from the NVM and then restore
+the system state to that epoch (on an system performing synchronous cache write back, the value of these two registers would
+always differ by one, because the current epoch will not begin until the previous epoch persists). An epoch is persisted 
+only if its dirty cache lines have been written back. This process, as we stated above, do not have to happen when the 
+epoch commits. The ACS works as follows. The cache controller periodically scans the tag array and checks whether any cache 
+line is written in epoch (last persisted epoch + 1), i.e. the next epoch to write back. If such a cache line is found, 
+the ACS engine will try to write back the cache line to NVM. Note that the undo buffer should be checked before the 
+write back is performed, and the undo log entry for the cache line is flushed first if it exists. 
