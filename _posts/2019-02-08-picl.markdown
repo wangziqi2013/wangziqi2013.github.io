@@ -22,4 +22,8 @@ written using ordinary processor load and store operations. Processors access th
 the DRAM. After the crash, all volatile state such as processor register file and cache content will be lost. Data
 stored in NVM, as its name suggests, can survive crashes and be used for post-failure recovery.
 
-
+Undo and redo logging are the two most typical ways of performing recovery. Both methods require a centralized log kept
+in the NVM, the location of which is either hardcoded in all processors, or is stored in a well-known location on the NVM. 
+In the following discussion we assume that logging is performed in cache line granularity as metadata is maintained per
+cache line. With undo logging, processors only save the undo image, which is the value of the cache line before the modification.
+To guarantee recoverability of modifications, two write ordering constranits
