@@ -63,3 +63,9 @@ to how best-effort HTM handles evictions of speculative cache lines. As a mitiga
 cache to the LLC for holding evicted dirty lines before the epoch compeletes. The victim cache is typically an associative
 search structure of limited capacity, which is also not scalable as the size of the system increases. Furthermore, the victim
 cache may also overflow, in which case the epoch still has to be aborted forcefully.
+
+The design of PiCL is based on undo logging, and it addresses the above problem with undo logging by decoupling the write back
+of both log entries and dirty lines on epoch commit. Besides, it solves the "read-log-modify" problem by generating log entries
+eagerly right before the store operation, when the pre-image is available in the cache. As a trade-off, during recovery, there is 
+no guarantee that the memory state can be recovered to the most recently committed epoch, but just a recent epoch. We next describe
+describe the details of the design.
