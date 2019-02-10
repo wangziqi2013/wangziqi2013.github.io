@@ -89,3 +89,8 @@ the buffer, and cleared when the buffer is flushed. When a cache line is to be e
 log buffer is checked using the address tag of the line. If the address also has an entry in the log buffer, the log buffer 
 is flushed first to guarantee the write ordering between dirty data and log entries. 
 
+The second mechanism to support undo log is called Asynchronous Cache Scan (ACS). Instead of force flushing all dirty cache 
+lines back to the NVM on epoch commit, which is neither scalable nor efficient, ACS allows the epoch to be committed 
+immediately and persisted later in the background. ACS works as follows. The system maintains two epoch registers. One is
+the current epoch register, and another is the persisted epoch register. The latter must also have a persistent copy
+on the NVM stored in a well-known location.
