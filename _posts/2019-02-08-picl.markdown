@@ -127,3 +127,11 @@ operation. The created ID for the undo entry is the cache line's EID, and the ov
 PiCL guarantees that at most one log entry is generated for every address in one epoch. Every time a log entry is generated
 for a cache line, the cache line will be marked as already logged, and later store operations on that line will be ignored. 
 On an epoch change, all cache lines need to be unmarked in order for new log entries for the new epoch to be generated.
+
+On recovery, the recovery routine scans the log in backward direction, and performs the epoch ID check described 
+in the previous paragraph. If the log entry satisfies the condition, then its content will be applied to the NVM image.
+Note that there can be multiple entries that satisfy the condition, and if this is the case, they should be applyed
+in the reverse order they are inserted into the log. Imagine that a cache line is written in epoch 4, written back
+to the NVM during epoch 6 due to capacity eviction, and written again in epoch 7. The most recent persisted epoch
+is 2 when both writes happens (i.e. the ACS does not make progress). If the system crashes, then there are two log entries 
+whose interval incluses epoch 2, the persistent epoch ID.
