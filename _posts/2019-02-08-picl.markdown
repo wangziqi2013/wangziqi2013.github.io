@@ -69,3 +69,9 @@ of both log entries and dirty lines on epoch commit. Besides, it solves the "rea
 eagerly right before the store operation, when the pre-image is available in the cache. As a trade-off, during recovery, there is 
 no guarantee that the memory state can be recovered to the most recently committed epoch, but just a recent epoch. We next describe
 describe the details of the design.
+
+PiCL features asynchronous NVM writes, and the generation of multi-undo log. The execution model of PiCL epoches is as follows:
+Processors still have a global notion of epoches. Instead of committing an epoch before starting the next one in a strict
+sequential manner, PiCL divides the completion of epoches into two operations: commit, which means the epoch has completed
+all operations, and persist, which means all dirty lines and log entries have been written back to the NVM, and that the 
+epoch can be restored on a crash. To achieve this, 
