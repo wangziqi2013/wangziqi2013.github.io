@@ -116,4 +116,12 @@ is called multi-undo logging. In PiCL, each log entry consists of two epoch IDs:
 last modified (version create), and the ID of the current executing epoch (version overwrite). During recovery, these two epoch
 IDs are used to determine whether the undo log entry should be applied based on the target epoch ID to restore (i.e. the 
 last persisted ID): If the target ID is between the two IDs (excluding version overwrite ID), the undo log entry will be 
-restored. Otherwise it is just ignored. 
+restored. Otherwise it is just ignored. When a cache line is loaded into L1 cache for write, there are two possible cases. 
+In the first case, the cache line is directly read from the NVM. In this case, we could not know exactly when the cache 
+line was last time modified, so the cache line is treated as being last written in the most recent persisted epoch (while 
+in fact it can actually be modified after that epoch and was just evicted due to cache replacement) and the EID is set to
+the ID of the most recent persisted epoch. In the second case, the write request hits the L1, and the cache line's EID tag 
+is precisely the most recent epoch that this line was modified. In both cases, a log entry is generated for the modification 
+operation. The created ID for the undo entry is the cache line's EID, and the overwrite ID is the current running epoch ID.
+PiCL guarantees that at most one log entry is generated for every address in one epoch. Every time a log entry is generated
+for a cache line, the cache line will be marked as already logged, and later store operations on that line will be ignored. 
