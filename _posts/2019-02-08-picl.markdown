@@ -31,4 +31,11 @@ lines can only be written back to the NVM after the undo log entries are. This i
 be rolled back in the case of failure. The second is that the epoch must not commit before all dirty cache lines are 
 written back to the NVM. This is to ensure that the current epoch become durable before the next epoch begins, such that
 if the system crashes during the next epoch, we can always revert all changes and restore the state to the end of the 
-current epoch.
+current epoch. Undo log entries can be discarded after the current epoch has committed, because the epoch can no longer
+be rolled back under any circumstance. With redo logging, processors must adopt a specialcache eviction policy called "no-steal",
+which means that the cache may not evict any dirty line before the current epoch commits. This is avoid dirty data being 
+persisted on the NVM before a crash happens, in which case there is no way to restore to the previous state. Store 
+operations to the cache lines also generate log entries which contain the after image of the line. The log must be flushed
+to the NVM before the epoch can be notified of the commit. Dirty lines, on the other hand, can reamin in the cache
+for efficiency purposes. On recovery, all modifications in the redo log will be replayed in the order they are appended
+to the centralized log. 
