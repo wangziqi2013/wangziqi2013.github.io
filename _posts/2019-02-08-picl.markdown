@@ -100,4 +100,9 @@ only if its dirty cache lines have been written back. This process, as we stated
 epoch commits. The ACS works as follows. The cache controller periodically scans the tag array and checks whether any cache 
 line is written in epoch (last persisted epoch + 1), i.e. the next epoch to write back. If such a cache line is found, 
 the ACS engine will try to write back the cache line to NVM. Note that the undo buffer should be checked before the 
-write back is performed, and the undo log entry for the cache line is flushed first if it exists. 
+write back is performed, and the undo log entry for the cache line is flushed first if it exists. If a cache line has been 
+modified several times in different epoches, e.g. e<sub>i</sub>, e<sub>i+1</sub>, ..., e<sub>j</sub>, the cache line 
+only needs to be written back in ACS for epoch j. Although the cache line contents in epoch i, .., j - 1 are not written back,
+their values are actually saved by the undo log entry in epoch i + 1, ..., j. From this example we can also see that for 
+frequently written cache lines, ACS not only reduces the latency of the cache line flush operation, but also reduces the 
+number of write backs issued.
