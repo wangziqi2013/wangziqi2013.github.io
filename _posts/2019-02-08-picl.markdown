@@ -12,7 +12,7 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---  
- 
+
 This paper proposes PiCL, a novel architecture for supporting main memory checkpoints using NVM. Checkpoints are consistent 
 main memory images that can be restored after power failure. In this paper, it is assumed that the execution of 
 all processors in the system is divided into "epoches". Epoches are also the basic unit of recovery: At recovery time,
