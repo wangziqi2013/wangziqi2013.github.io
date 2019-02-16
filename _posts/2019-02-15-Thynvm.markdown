@@ -83,4 +83,11 @@ the memory controller also writes PTT and BTT at the end of the log.
 
 ThyNVM overlaps the persistence of the previous checkpoint with the execution of the next checkpoint, thus reducing unnecessary
 stalls caused by the relatively costly NVM write back operation. If the execution of the next epoch is longer than the persistence
-of the previous epoch, all write back operations can actually be overlapped, and checkpoints appear to have almost zero overhead.
+of the previous epoch, all write back operations can actually be overlapped, and checkpoints appear to have almost zero overhead
+(otherwise new epoch cannot start until the persistence of the previous epoch completes). ThyNVM maintains states for three 
+epoches: The active epoch, which is the currently executing epoch, for which all shadow pages are kept in the DRAM buffer; 
+The last epoch, whose shadow pages and two tables are being written back to the NVM; The penultimate epoch, for which all 
+states have been persisted. Entries in BTT and PTT must also be in one of these three states. Note that the paper did not 
+discuss how blocks and pages in older epoches are handled. In the common sense, since metadata is not maintained for older
+items, in order for processors to locate them correctly, they must be written back to their "home address", i.e. the physical
+address directly mapped without any version translation.
