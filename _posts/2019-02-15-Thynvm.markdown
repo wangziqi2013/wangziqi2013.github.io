@@ -26,3 +26,9 @@ page copy is made to transfer the page from NVM to DRAM, and all future writes t
 page until the next checkpoint, during which the dirty page is written back. This approach, however, is sub-optimal if 
 the page is only written a few times before the end of the current epoch. Memory bandwidth as well as idle cycles are wasted
 due to the two data transfer between the shadow page and NVM.
+
+No existing scheme works well under all workloads and all write patterns. Some schemes are particularly good for some 
+workloads, and bad on others. This paper made the following two observations. First, if a location is only written
+sparsely (i.e. memory writes have little spatial locality around that location), the modification should be written 
+directly into the NVM. This scheme avoids wasting memory bandwidth on unnecessary data transfer as well as wasting 
+NVM storage by storing excessive metadata in log entries. 
