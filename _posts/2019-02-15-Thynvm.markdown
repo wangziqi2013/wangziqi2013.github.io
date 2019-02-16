@@ -67,4 +67,8 @@ either overwrite earlier data on the same address, or appends to the end of the 
 The latter may work better with the NVM's wear-leveling algorithm, and performing sequential writes are almost always 
 faster than random overwrites. 
 
-If the physical
+If the physical address is of shadow paging type, any store operation will first trigger a page read from the NVM
+if the page has not been allocated in the DRAM buffer. An page frame will then be allocated in the DRAM buffer, which is
+filled with the page read from the NVM. A new entry will also be allocated in the PTB if not already. The store operation
+is performed on the DRAM buffer, and will not be written back to the NVM until the epoch ends. 
+
