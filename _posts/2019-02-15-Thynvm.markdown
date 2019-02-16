@@ -58,3 +58,13 @@ if the same address is stored to in consecutive epoches. The mapped addresses an
 in BTT and PTT entries (one physical address can only exist in at most one of these two for a given epoch). If an entry is
 not found for the current epoch, and the memory operation is store, then a new entry will be created in the corresponding
 table based on the type of memory address.
+
+If the physical address is of cache line sized multiversining type, the memory operation will be directly performed
+on the remapped address of NVM (the processor should always map the location to NVM). The processor bypasses the cache, and 
+stalls until the store is guaranteed to be persistent. This way, no dirty data needs to be flushed at the end of the epoch.
+The BTT which stores block mapping information is also changed accordingly. Note that within one epoch, the modifications can
+either overwrite earlier data on the same address, or appends to the end of the current epoch in a log-structured manner. 
+The latter may work better with the NVM's wear-leveling algorithm, and performing sequential writes are almost always 
+faster than random overwrites. 
+
+If the physical
