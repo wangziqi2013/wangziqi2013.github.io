@@ -38,5 +38,12 @@ the latency of write operations when conducted on the buffered page.
 
 ThyNVM adopts a multiversioning scheme for supporting flexible granularity in order to leverage the above two observations.
 The system is assumed to be directly operating on NVM as main memory. DRAM is also installed as buffers for data in the active
-epoch as we will describe below. The system execution is divided into epoches, which are the basic units of checkpointing 
-and recovery. 
+epoch as we will describe below. System execution is divided into epoches, which are the basic units of checkpointing 
+and recovery. At the end of each epoch, the system execution is interrupted, and the system state is dumped and stored on
+the NVM. On failure, it is guaranteed that the system state can be restored to a previous epoch, after which normal execution
+resumes and it appears as if no failure had ever happened. The memory controller is aware of the existence of NVM and DRAM,
+and can access both using the device ID and physical address on the drvice. The memory controller provides the abstraction
+of a unified address space to upper levels in the memory hierarchy, such that the semantics of existing programs compiled for
+DRAM do not change during normal execution (except that some operations may take longer to complete if they operate on NVM). 
+At system startup time, the operating system probes the mapping information of the physical address space, and divice the 
+address space accordingly into regions
