@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---  
+
+This paper proposes ThyNVM, a hardware checkpointing mechanism that uses multi-granularity multiversioning. Before ThyNVM,
+there are two ways of achieving continuous checkpointing: Logging and shadow page. Both approaches have inherent problems
+that limit their efficiency. For logging, the granularity that data are copied into the log plays an important role in the 
+performance of the system. If log entries are generated on a fine granularity, then metadata overhead will be a few times
+larger than logged data itself, since for each log entry, we need to store the transaction ID, log LSN
