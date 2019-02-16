@@ -31,4 +31,7 @@ No existing scheme works well under all workloads and all write patterns. Some s
 workloads, and bad on others. This paper made the following two observations. First, if a location is only written
 sparsely (i.e. memory writes have little spatial locality around that location), the modification should be written 
 directly into the NVM. This scheme avoids wasting memory bandwidth on unnecessary data transfer as well as wasting 
-NVM storage by storing excessive metadata in log entries. 
+NVM storage by storing excessive metadata in log entries. Since only a few writes will be directly performed on NVM,
+the increase of write latency is expected to be minimal. Second, if a location is modified frequently and has good spatial
+locality, it should be buffered by the DRAM in page granularity to prevent repeated writes to the NVM and to improve 
+the latency of write operations when conducted on the buffered page.
