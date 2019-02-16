@@ -72,3 +72,10 @@ if the page has not been allocated in the DRAM buffer. An page frame will then b
 filled with the page read from the NVM. A new entry will also be allocated in the PTB if not already. The store operation
 is performed on the DRAM buffer, and will not be written back to the NVM until the epoch ends. 
 
+At the end of an epoch, the memory controller issues notifications to all processors in the system to initiate state write back.
+On receiving the notification, processors save their execution contexts into a special NVM area, and then flushes the store queue
+to guarantee that all memory operations are committed. The pipeline needs to be stalled shortly, but since checkpoints are rarely infrequent compared with instruction execution, the performance impact is negligible. After this point, processors enter the 
+next epoch and resume normal execution. In the meantime, processors also initiate write backs of dirty pages to the NVM 
+mapped by the PTT in the previous epoch. For each dirty page the memory controller will reserve a page sized frame in the 
+checkpoint area. The checkpointing process completes after all dirty pages in the PTT are persisted, at which point 
+the memory controller also writes PTT and BTT at the end of the log. 
