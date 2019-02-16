@@ -23,5 +23,6 @@ entries will dominate execution time. The problem aggravates if data items are o
 is also wasted, because most part of the data copied into the log entry is unnecessary. Similar problems can be observed 
 with shadow paging: On every memory update, if the page of the updated location has not been buffered by the DRAM, a 
 page copy is made to transfer the page from NVM to DRAM, and all future writes to the NVM will be buffered by the shadow
-page until the next checkpoint, during which the dirty page is written back. This approach, however, is sub-optimal if the page is only
-written a few times
+page until the next checkpoint, during which the dirty page is written back. This approach, however, is sub-optimal if 
+the page is only written a few times before the end of the current epoch. Memory bandwidth as well as idle cycles are wasted
+due to the two data transfer between the shadow page and NVM.
