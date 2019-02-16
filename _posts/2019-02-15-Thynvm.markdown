@@ -37,8 +37,8 @@ locality, it should be buffered by the DRAM in page granularity to prevent repea
 the latency of write operations when conducted on the buffered page.
 
 ThyNVM adopts a multiversioning scheme for supporting flexible granularity in order to leverage the above two observations.
-The system is assumed to be directly operating on NVM as main memory. DRAM is also installed as buffers for data in the active
-epoch as we will describe below. System execution is divided into epoches, which are the basic units of checkpointing 
+The system is assumed to be directly operating on NVM as the main memory. DRAM is also installed as buffers for data in 
+the active epoch as we will describe below. System execution is divided into epoches, which are the basic units of checkpointing 
 and recovery. At the end of each epoch, the system execution is interrupted, and the system state is dumped and stored on
 the NVM. On failure, it is guaranteed that the system state can be restored to a previous epoch, after which normal execution
 resumes and it appears as if no failure had ever happened. The memory controller is aware of the existence of NVM and DRAM,
@@ -46,4 +46,15 @@ and can access both using the device ID and physical address on the drvice. The 
 of a unified address space to upper levels in the memory hierarchy, such that the semantics of existing programs compiled for
 DRAM do not change during normal execution (except that some operations may take longer to complete if they operate on NVM). 
 At system startup time, the operating system probes the mapping information of the physical address space, and divice the 
-address space accordingly into regions
+address space accordingly into regions for different purposes, as we will describe later.
+
+ThyNVM operates as follows. The address space is divided into two types: One for cache line sized multiversining, and another
+for page sized shadow paging. Processors do not generate log entries as they execute store instructions. Instead, new 
+versions are created by remapping the physical address translated by the TLB to a new address. In order to achieve this,
+two mapping tables are added for each processor. These two tables are called Block Translation Table (BTT) and Page Translation
+Table (PTT) accordingly. Translation tables are associative searching structures that can be queried using the physical 
+address of the memory instruction. On each query, multiple entries might be returned because multiple versions can exist
+if the same address is stored to in consecutive epoches. The mapped addresses and epoches of memory locations are stored
+in BTT and PTT entries (one physical address can only exist in at most one of these two for a given epoch). If an entry is
+not found for the current epoch, and the memory operation is store, then a new entry will be created in the corresponding
+table based on the type of memory address.
