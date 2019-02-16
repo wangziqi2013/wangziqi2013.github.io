@@ -35,3 +35,8 @@ NVM storage by storing excessive metadata in log entries. Since only a few write
 the increase of write latency is expected to be minimal. Second, if a location is modified frequently and has good spatial
 locality, it should be buffered by the DRAM in page granularity to prevent repeated writes to the NVM and to improve 
 the latency of write operations when conducted on the buffered page.
+
+ThyNVM adopts a multiversioning scheme for supporting flexible granularity in order to leverage the above two observations.
+The system is assumed to be directly operating on NVM as main memory. DRAM is also installed as buffers for data in the active
+epoch as we will describe below. The system execution is divided into epoches, which are the basic units of checkpointing 
+and recovery. 
