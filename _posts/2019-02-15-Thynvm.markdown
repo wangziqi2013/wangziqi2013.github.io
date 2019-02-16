@@ -17,4 +17,11 @@ This paper proposes ThyNVM, a hardware checkpointing mechanism that uses multi-g
 there are two ways of achieving continuous checkpointing: Logging and shadow page. Both approaches have inherent problems
 that limit their efficiency. For logging, the granularity that data are copied into the log plays an important role in the 
 performance of the system. If log entries are generated on a fine granularity, then metadata overhead will be a few times
-larger than logged data itself, since for each log entry, we need to store the transaction ID, log LSN
+larger than logged data itself, since for each log entry, we need to store the transaction ID, log sequence number, and 
+some other auxiliary information. If, on the other hand, the granularity is large, the overhead of copying data into log
+entries will dominate execution time. The problem aggravates if data items are only written sparsely, in which case space 
+is also wasted, because most part of the data copied into the log entry is unnecessary. Similar problems can be observed 
+with shadow paging: On every memory update, if the page of the updated location has not been buffered by the DRAM, a 
+page copy is made to transfer the page from NVM to DRAM, and all future writes to the NVM will be buffered by the shadow
+page until the next checkpoint, during which the dirty page is written back. This approach, however, is sub-optimal if the page is only
+written a few times
