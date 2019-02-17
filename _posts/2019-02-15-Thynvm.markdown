@@ -133,4 +133,6 @@ the physical address of the load will be used to query both BTT and PTT. The mos
 the address exists in the tables (if the address is of shadow page type, multiple queries must be made to retrieve the 
 location of all cache lines in the page). Otherwise, data will be loaded from the home address.
 
-On recovery, the memory controller reads
+On recovery, the memory controller reads the last persisted epoch from one of the two epoch areas. Then it restores the 
+BTT, PTT in the epoch as well as shadow pages. No extra undo and redo is required, because all information is present
+in the BTT and PTT. Recovery is hence very fast, which is crucial for achieving high availbility.
