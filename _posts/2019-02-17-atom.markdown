@@ -30,3 +30,7 @@ write it back later unmodified, which wastes memory bandwidth. The second proble
 control over the ordering of NVM write backs, to avoid write ordering violation, the log entry must be written back to the 
 NVM right after they are created. During the write back operation, the processor must stall and wait for the operation to
 complete, hence putting the slow NVM write back operation on the critical path of execution. In fact, since log entry
+write back needs to be done for all store operations on the cache line if the line has not been written since the beginning 
+of the atomic region, the processor is unable to overlap memory operations with on-chip computation, which effectively
+offsets the performance benefit of modern out-of-order superscalar processors.
+
