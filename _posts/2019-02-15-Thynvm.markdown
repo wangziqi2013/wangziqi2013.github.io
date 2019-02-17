@@ -121,5 +121,13 @@ if a shadow page type address only observes a few stores, the memory controller 
 falls back to use NVM writes for future stores. 
 
 ThyNVM divides the address space into three parts: One for DRAM buffer, another for only storing epoches, and the last for 
-storing epoches and other data that does not have a version in the two epoch areas. Note that during normal operation,
-ThyNVM only maintains NVM image for the last epoch and the penultimate epoch, 
+storing epoches and other data that does not have a version in the two epoch areas. Note that ThyNVM only maintains NVM 
+image for the last epoch and the penultimate epoch, the two NVM epoch areas are used in an alternating manner: If one epoch
+area is used for the penultimate epoch, then the memory controller will allocate space for the last epoch in the other area.
+Area usage information is stored also on the NVM at a known location, which is read on recovery to locate the last 
+consistent epoch to restore. As we mentioned above, the paper did not mention how data migrates from the penultimate epoch
+to their home addresses if it has not been updated in the last and active epoch. If this is not done, then such data will
+be silently discarded and impossible to retrieve after the active epoch overwrites the penultimate epoch. On memory load,
+the physical address of the load will be used to query both BTT and PTT. The most recent version will be returned if 
+the address exists in the tables (if the address is of shadow page type, multiple queries must be made to retrieve the 
+location of all cache lines in the page). Otherwise, data will be loaded from the home address.
