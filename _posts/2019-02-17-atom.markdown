@@ -16,7 +16,12 @@ version_mgmt:
 This paper proposes ATOM, an undo-based design for achieving atomic persistency. Atomic persistency is a programming paradigm
 in which programmers specify an atomic region, and either all updates within the region are persisted, or none of them is 
 persisted, similar to how atomicity is defined for transactions. Atomic persistency is often implemented in software using 
-undo logging. Before a data item is written, code must be inserted to. Programmers manually issue persistence barriers consisting of cache line write back instructions and memory 
-fences to flush dirty data items back to the NVM.
+undo logging. Before a data item is written, code must be inserted to copy the old value to an undo log entry if the data 
+item is written for the first time in the atomic region. Programmers must also manually issue persistence barriers 
+consisting of cache line write back instructions and memory fences to flush log entries and dirty data items back to the 
+NVM before the atomic region ends. To guarantee that modifications in the atomic region are able to be rolled back on 
+crashes, the undo log entry must be written to the NVM immediately after they are created and before the update is made.
+Otherwise, the dirty cache line can be evicted back to the NVM at arbitrary time after it is written, and if this happens
+before the log entry reaches NVM, this dirty line cannot be undone during recovery.
 
-This paper identifies two potential write ordering
+This paper identifies two potential performance problems in the software-only scheme.
