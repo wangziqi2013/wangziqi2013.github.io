@@ -111,3 +111,6 @@ finished writing back, the processor can either choose to stall to wait for the 
 sized slot in the DRAM buffer to allow temporary buffering of block data. This temporary slot should be written back
 to the NVM before the current epoch commits as is the case for shadow pages. 
 
+ThyNVM monitors the store frequency of pages and blocks in the rum time to determine how each physical address is handled.
+At startup time, all addresses default to use one scheme. In the rum time, the memory controller uses a field in BTT and PTT
+to count the number of store operations on the block or the page. If 
