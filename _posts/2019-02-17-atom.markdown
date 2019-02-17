@@ -22,7 +22,8 @@ consisting of cache line write back instructions and memory fences to flush log 
 NVM before the atomic region ends. To guarantee that modifications in the atomic region are able to be rolled back on 
 crashes, the undo log entry must be written to the NVM immediately after they are created and before the update is made.
 Otherwise, the dirty cache line can be evicted back to the NVM at arbitrary time after it is written, and if this happens
-before the log entry reaches NVM, this dirty line cannot be undone during recovery. At the end of the 
+before the log entry reaches NVM, this dirty line cannot be undone during recovery. At the end of the atomic region, software
+issues cache line flush instructions to write back all dirty lines. 
 
 This paper identifies two potential performance problems in the software-only scheme. The first problem is that by writing 
 the old value into the log and flushing the log entry into the NVM as in undo WAL, data might be read from the NVM just to 
@@ -36,4 +37,8 @@ offsets the performance benefit of modern out-of-order superscalar processors.
 
 ATOM solves the above two issues by extending both the cache controller and memory controller to make them aware of the 
 existence of WAL and undo logging. Logging is handled at the hardware level, and therefore the full set of hardware states
-are available to support more informative decision making and better utilization of hardware resources. 
+are available to support more informative decision making and better utilization of hardware resources. ATOM assumes that
+the system consists of cache coherent multicores, and NVM devices connected to the memory bus. Multiple memory controllers
+exist to handle memory requests from processors. Each memory controller runs independently based solely on it internal
+state, and hence does not constitute a performance bottleneck. DRAM caching is not assumed by this paper. The entire 
+address space is mapped to the NVM as is the case with DRAM based system.
