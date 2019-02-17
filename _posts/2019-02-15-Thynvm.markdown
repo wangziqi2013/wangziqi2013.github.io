@@ -113,4 +113,9 @@ to the NVM before the current epoch commits as is the case for shadow pages.
 
 ThyNVM monitors the store frequency of pages and blocks in the rum time to determine how each physical address is handled.
 At startup time, all addresses default to use one scheme. In the rum time, the memory controller uses a field in BTT and PTT
-to count the number of store operations on the block or the page. If 
+to count the number of store operations on the block or the page. If a cache line sized multiversioning block has too many 
+accesses in one epoch, then in the next epoch, the scheme will transit to use shadow paging. To perform the transition, the 
+memory controller allocates a page frame in the DRAM buffer, and copies all dirty data from the previous epoch (and potentially
+from older epoches or the NVM home address) to the DRAM buffer slot. A new entry is also allocated in the PTT. Similarly,
+if a shadow page type address only observes a few stores, the memory controller removes the PTT entry for that page, and 
+falls back to use NVM writes for future stores. 
