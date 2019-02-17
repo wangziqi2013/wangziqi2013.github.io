@@ -24,4 +24,9 @@ crashes, the undo log entry must be written to the NVM immediately after they ar
 Otherwise, the dirty cache line can be evicted back to the NVM at arbitrary time after it is written, and if this happens
 before the log entry reaches NVM, this dirty line cannot be undone during recovery.
 
-This paper identifies two potential performance problems in the software-only scheme.
+This paper identifies two potential performance problems in the software-only scheme. The first problem is that by writing 
+the old value into the log and flushing the log entry into the NVM as in undo WAL, data might be read from the NVM just to 
+write it back later unmodified, which wastes memory bandwidth. The second problem is that since software has no fine-grained
+control over the ordering of NVM write backs, to avoid write ordering violation, the log entry must be written back to the 
+NVM right after they are created. During the write back operation, the processor must stall and wait for the operation to
+complete, hence putting the slow NVM write back operation on the critical path of execution. In fact, since log entry
