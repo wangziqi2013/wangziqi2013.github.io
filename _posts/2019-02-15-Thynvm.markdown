@@ -87,10 +87,11 @@ of the previous epoch, all write back operations can actually be overlapped, and
 (otherwise new epoch cannot start until the persistence of the previous epoch completes). ThyNVM maintains states for three 
 epoches: The active epoch, which is the currently executing epoch, for which all shadow pages are kept in the DRAM buffer; 
 The last epoch, whose shadow pages and two tables are being written back to the NVM; The penultimate epoch, for which all 
-states have been persisted. Entries in BTT and PTT must also be in one of these three states. Note that the paper did not 
-discuss how blocks and pages in older epoches are handled. In the common sense, since metadata is not maintained for older
-items, in order for processors to locate them correctly, they must be written back to their "home address", i.e. the physical
-address directly mapped without any version translation.
+states have been persisted. Entries in BTT and PTT must also be in one of these three states, and be discarded if the entry
+is three epoches away from the active epoch. Note that the paper did not discuss how blocks and pages in older epoches are 
+handled. In the common sense, since metadata is not maintained for older items, in order for processors to locate them 
+correctly, they must be written back to their "home address", i.e. the physical address directly mapped without any version 
+translation.
 
 Although multiversioning allows multiple epoches to co-exist in the execution context, store operations from a newer epoch
 must not directly overwrite data from older epoches. In ThyNVM, two write ordering constraints must be observed. The first 
@@ -131,3 +132,5 @@ be silently discarded and impossible to retrieve after the active epoch overwrit
 the physical address of the load will be used to query both BTT and PTT. The most recent version will be returned if 
 the address exists in the tables (if the address is of shadow page type, multiple queries must be made to retrieve the 
 location of all cache lines in the page). Otherwise, data will be loaded from the home address.
+
+On recovery, the memory controller reads
