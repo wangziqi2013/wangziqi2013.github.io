@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---  
+
+This paper proposes ATOM, an undo-based design for achieving atomic persistency. Atomic persistency is a programming paradigm
+in which programmers specify an atomic region, and either all updates within the region are persisted, or none of them is 
+persisted, similar to how atomicity is defined for transactions. Atomic persistency is often implemented in software using 
+undo logging. Before a data item is written, code must be inserted to. Programmers manually issue persistence barriers consisting of cache line write back instructions and memory 
+fences to flush dirty data items back to the NVM.
+
+This paper identifies two potential write ordering
