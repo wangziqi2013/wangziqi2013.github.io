@@ -119,3 +119,7 @@ memory controller allocates a page frame in the DRAM buffer, and copies all dirt
 from older epoches or the NVM home address) to the DRAM buffer slot. A new entry is also allocated in the PTT. Similarly,
 if a shadow page type address only observes a few stores, the memory controller removes the PTT entry for that page, and 
 falls back to use NVM writes for future stores. 
+
+ThyNVM divides the address space into three parts: One for DRAM buffer, another for only storing epoches, and the last for 
+storing epoches and other data that does not have a version in the two epoch areas. Note that during normal operation,
+ThyNVM only maintains NVM image for the last epoch and the penultimate epoch, 
