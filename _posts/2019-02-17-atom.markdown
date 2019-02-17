@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ATOM: Atomic Durability in Non-Volatile Memory through Hardware Logging"
+date:   2019-02-17 03:52:00 -0500
+categories: paper
+paper_title: "ATOM: Atomic Durability in Non-Volatile Memory through Hardware Logging"
+paper_link: ATOM: Atomic Durability in Non-Volatile Memory through Hardware Logging
+paper_keyword: NVM; Undo; ATOM
+paper_year: HPCA 2017
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---  
