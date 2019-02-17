@@ -41,9 +41,14 @@ are available to support more informative decision making and better utilization
 the system consists of cache coherent multicores, and NVM devices connected to the memory bus. Multiple memory controllers
 exist to handle memory requests from processors. Each memory controller runs independently based solely on its internal
 state, and hence does not constitute a performance bottleneck. DRAM caching is not assumed by this paper. The entire 
-address space is mapped to the NVM as is the case with DRAM based system.
+address space is mapped to the NVM as is the case with DRAM based system. ATOM performs undo logging in cache line 
+granularity. Programmers issue instructions to enter and terminate atomic regions using two instructions that are similar
+to hardware transactions. On a failure, it is guaranteed that either modifications in the entire atomic region are preserved,
+or none of them are present after recovery.
 
 We describe the operation of ATOM as follows. Each cache line in ATOM is extended with one extra bit, the "logged" bit.
 This bit is cleared whenever the processor enters and exits an atomic region, and set when the cache line is written
 for the first time. A newly loaded cache line may have this bit set as well depending on the responde from the memory
-controller which contains a hint of whether the logged bit is set. 
+controller which contains a hint of whether the logged bit is set. On store instructions, if the cache line already exists
+in the cache, the logged bit for the line is checked. If the bit is set, then store is committed as usual, because undo
+logging only saves the content of the cache line before the first write operation in the atomic region.
