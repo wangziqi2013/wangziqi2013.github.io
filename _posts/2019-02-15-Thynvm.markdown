@@ -106,4 +106,8 @@ blocks in the penultimate epoch is part of the implicit garbage collection (GC) 
 metadata for the three most recent epoches. A block in the penultimate epoch can only be overwritten, if this epoch is 
 no longer needed for recovery. This condition is only achieved after the last epoch has been fully persisted, because 
 otherwise the most recent consistent checkpoint is still the penultimate epoch, which must be protected from overwriting.
+If a store operation from the active epoch writes to a block in the penultimate epoch, and the last epoch has not 
+finished writing back, the processor can either choose to stall to wait for the previous epoch, or allocate a block
+sized slot in the DRAM buffer to allow temporary buffering of block data. This temporary slot should be written back
+to the NVM before the current epoch commits as is the case for shadow pages. 
 
