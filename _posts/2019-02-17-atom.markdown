@@ -39,6 +39,11 @@ ATOM solves the above two issues by extending both the cache controller and memo
 existence of WAL and undo logging. Logging is handled at the hardware level, and therefore the full set of hardware states
 are available to support more informative decision making and better utilization of hardware resources. ATOM assumes that
 the system consists of cache coherent multicores, and NVM devices connected to the memory bus. Multiple memory controllers
-exist to handle memory requests from processors. Each memory controller runs independently based solely on it internal
+exist to handle memory requests from processors. Each memory controller runs independently based solely on its internal
 state, and hence does not constitute a performance bottleneck. DRAM caching is not assumed by this paper. The entire 
 address space is mapped to the NVM as is the case with DRAM based system.
+
+We describe the operation of ATOM as follows. Each cache line in ATOM is extended with one extra bit, the "logged" bit.
+This bit is cleared whenever the processor enters and exits an atomic region, and set when the cache line is written
+for the first time. A newly loaded cache line may have this bit set as well depending on the responde from the memory
+controller which contains a hint of whether the logged bit is set. 
