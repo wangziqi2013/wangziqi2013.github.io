@@ -84,3 +84,12 @@ An internal buffer in the memory controller stores log entries, until seven are 
 has passed, which is similar to database group commit. Note that under this optimization, at most seven cache lines might
 be locked at a given moment in time. Any evicted cache line from the processor should be checked against the log entry
 buffer to ensure that the corresponding log entry has been written back.
+
+ATOM hardware runs on a chunk of NVM memory statically allocated by the operating system at startup time. This chunk of 
+memory can be used as a centralized log to which all processors append their log entries. One potential problem of treating
+the logging area as one centralized log is that log entries from different processors may become intermingled together.
+During garbage collection (which can be performed as soon as an atomic regions commits successfully), the memory controller
+must scan the entire log region and remove entries belonging to the committed atomic regions, which induces both extra read
+bandwidth and fragmentation. To reduce both, ATOM proposes dividing the log area into separate buckets. Each bucket can
+only be used by at most one atomic region, such that if the atomic region commits, garbage collection only takes constant 
+time since we just free the buckets. 
