@@ -92,4 +92,9 @@ During garbage collection (which can be performed as soon as an atomic regions c
 must scan the entire log region and remove entries belonging to the committed atomic regions, which induces both extra read
 bandwidth and fragmentation. To reduce both, ATOM proposes dividing the log area into separate buckets. Each bucket can
 only be used by at most one atomic region, such that if the atomic region commits, garbage collection only takes constant 
-time since we just free the buckets. 
+time since we just free the buckets. If one transaction uses multiple buckets, they should be linked together like a linked
+list, with the atomic region's metadata pointing to both the head and the end. To track bucket usage, the memory controller
+stores contexts for atomic regions in the system. Before a processor starts an atomic region, it must request a free context
+from the memory controller. If no context is available the processor must stall. The context of an atomic region consists of 
+a bit map describing bucket usage, as well as pointers to the head and the end of the log. The log entry buffer described
+in the previous optimization is also included as part of the context.
