@@ -104,3 +104,9 @@ that can be done in a single cycle. On power failure, the memory controller writ
 metadata back to a well-known location on the NVM using a small battery as backup power (which is already in the NVM 
 controller to support flushing the store queue).
 
+On recovery, a special interrupt is raised by the memory controller, and processors must handle the interrupt in software.
+The software routine is coded as an ISR, which reads the well-known location on the NVM to restore memory controller metadata
+first, and then use the metadata to locate active atomic regions. After that, the recovery routine identifies uncommitted 
+atomic regions, and for every dirty cache line, reapplies the undo image back to the address recorded in the metadata field. 
+The system is guaranteed to be in a consistent state with all uncommitted atomic regions rolled back, and will resume 
+execution after the recovery process.
