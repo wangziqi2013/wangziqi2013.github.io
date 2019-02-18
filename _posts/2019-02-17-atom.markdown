@@ -72,3 +72,11 @@ log entry has been persisted (i.e. received an ACK from the memory controller st
 algorithm does not change, and can evict a line whenever it decides to. The memory controller compares the address of the 
 evicted line against the locked address. If they match then the dirty cache line evicted from the processor will be held
 until the line is unlocked. 
+
+On the memory controller side, ATOM defines a set of rules guiding the generation and persistence of log entries. One 
+observation made by the paper is that most NVM controllers support data write on cache line granularity (because processors
+only request and send data in this granularity). In the case of logging, the logged data itself occupies a line, while 
+metadata must occupy an extra line although it only has one word (the address word). The direct consequence of this is 
+that a log entry persistence operation will be translated into two writes issued to the NVM controller: one for the data 
+and another for metadata. To reduce the overhead, ATOM proposes an optimization that group commits seven log entries as
+a batch, which consists of eight cache lines: Seven lines for holding data, and the last cache line holds the metadata.
