@@ -96,5 +96,11 @@ time since we just free the buckets. If one transaction uses multiple buckets, t
 list, with the atomic region's metadata pointing to both the head and the end. To track bucket usage, the memory controller
 stores contexts for atomic regions in the system. Before a processor starts an atomic region, it must request a free context
 from the memory controller. If no context is available the processor must stall. The context of an atomic region consists of 
-a bit map describing bucket usage, as well as pointers to the head and the end of the log. The log entry buffer described
-in the previous optimization is also included as part of the context.
+a bitmap describing bucket usage, as well as pointers to the head and the end of the log. The log entry buffer described
+in the previous optimization is also included as part of the context. The context is updated accordingly as log entries are 
+appended. The memory controller also has a set of global states, consisting of a counter of the current number of atomic 
+regions, and a global bitmap describing the usage of all buckets. Bucket allocation and release are simple bitwise operations
+that can be done in a single cycle. On power failure, the memory controller writes back the global metadata and per-region
+metadata back to a well-known location on the NVM using a small battery as backup power (which is already in the NVM 
+controller to support flushing the store queue).
+
