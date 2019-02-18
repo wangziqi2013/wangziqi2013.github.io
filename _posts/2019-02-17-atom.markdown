@@ -51,4 +51,7 @@ This bit is cleared whenever the processor enters and exits an atomic region, an
 for the first time. A newly loaded cache line may have this bit set as well depending on the responde from the memory
 controller which contains a hint of whether the logged bit is set. On store instructions, if the cache line already exists
 in the cache, the logged bit for the line is checked. If the bit is set, then store is committed as usual, because undo
-logging only saves the content of the cache line before the first write operation in the atomic region.
+logging only saves the content of the cache line before the first write operation in the atomic region. Otherwise, the 
+cache controller sends the original content of the line as well as relevant metadata to the memory controller as the undo
+log entry, sets the logged bit of the line, and commits the store instruction. 
+
