@@ -66,3 +66,9 @@ controller to fill a missing line, it indicates in the request that undo logging
 exclusive request" in the paper). On receiving the request, the memory controller generates the log entry and directly forwards
 the entry to the store queue. The cache line read from NVM is used to generate the entry as well. 
 
+To enforce the write ordering between log entry and dirty cache line, the memory controller also locks the cache line
+when it receives a read exclusive request from the cache controller. The cache line is only unlocked after the corresponding
+log entry has been persisted (i.e. received an ACK from the memory controller store queue). Processor's cache line eviction
+algorithm does not change, and can evict a line whenever it decides to. The memory controller compares the address of the 
+evicted line against the locked address. If they match then the dirty cache line evicted from the processor will be held
+until the line is unlocked. 
