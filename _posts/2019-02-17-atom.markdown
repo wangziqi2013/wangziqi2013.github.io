@@ -80,3 +80,7 @@ metadata must occupy an extra line although it only has one word (the address wo
 that a log entry persistence operation will be translated into two writes issued to the NVM controller: one for the data 
 and another for metadata. To reduce the overhead, ATOM proposes an optimization that group commits seven log entries as
 a batch, which consists of eight cache lines: Seven lines for holding data, and the last cache line holds the metadata.
+An internal buffer in the memory controller stores log entries, until seven are aggregated or a certain amount of time
+has passed, which is similar to database group commit. Note that under this optimization, at most seven cache lines might
+be locked at a given moment in time. Any evicted cache line from the processor should be checked against the log entry
+buffer to ensure that the corresponding log entry has been written back.
