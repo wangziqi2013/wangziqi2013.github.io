@@ -55,3 +55,14 @@ logging only saves the content of the cache line before the first write operatio
 cache controller sends the original content of the line as well as relevant metadata to the memory controller as the undo
 log entry, sets the logged bit of the line, and commits the store instruction. 
 
+If, however, the store instruction misses the cache hierarchy and must send a request to the memory controller, logging 
+needs not to be performed by the memory controller. To see this, imagine the read/write sequence of the cache line filling 
+process. If no special hardware is added, the miss request is fulfilled by the memory controller, which reads the NVM and 
+sends back the content of the cache line. On receiving the cache line, the cache controller attachs metadata to the line 
+and sends it immediately back to the memory controller, without modifying the line itself. As pointed out at the beginning
+of this article, it is a waste of the memory bandwidth to send the content of the cache line twice in a round-trip manner.
+ATOM proposes the following optimization. During an atomic region, when the cache controller sends a request to the memory
+controller to fill a missing line, it indicates in the request that undo logging should be performed (called a "read 
+exclusive request" in the paper). On receiving the request, the memory controller generates the log entry and directly forwards
+the entry to the store queue. The cache line read from NVM is used to generate the entry as well. 
+
