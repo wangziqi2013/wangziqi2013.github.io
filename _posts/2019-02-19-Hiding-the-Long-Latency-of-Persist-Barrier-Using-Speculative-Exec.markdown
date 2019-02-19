@@ -21,4 +21,7 @@ logging, where the value of data items (e.g. cache line sized memory blocks) are
 before they are modified by store operations. On recovery, the undo log entries are identified, and partial modifications 
 are rolled back by re-applying all undo log entries to the corresponding addresses. 
 
-
+This paper assumes a static transactional model. Persistence is achieved by wrapping operations within static transactions. 
+Either all store operations within a transaction are persisted as an atomic unit, or none of them is persisted. On recovery,
+partial transactions are rolled back using undo log as described in the previous paragraph. Transactions execute as follows.
+First, locations that are to be stored into are identified, and log entries containing their old values are generated. If 
