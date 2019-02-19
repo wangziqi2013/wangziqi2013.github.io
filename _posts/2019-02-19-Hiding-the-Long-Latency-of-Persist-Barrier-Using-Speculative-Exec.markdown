@@ -29,6 +29,10 @@ Second, these log entries are flushed to the NVM by issuing a persist barrier. N
 and flushed into the log to indicate that after this point, dirty cache lines might be evicted back to the NVM. Then, the 
 transaction body is executed as usual, during which dirty cache lines might be written back to the NVM due to eviction.
 Lastly, dirty cache lines are flushed back to the NVM using another persistent barrier, after which the transaction end 
-record is written and then flushed using the fourth persistence barrier.
+record is written and then flushed using the fourth persistence barrier. On recovery, the recovery handler reads the sequential
+log in reverse order. For every uncommitted transaction in the log, it first checks whether the transaction has begun by 
+locating the transaction begin record. If the log has undo log entries, but the transaction actually did not begin, these 
+undo log entries are discarded, because it is guaranteed that no dirty cache lines from the transaction can ever reach NVM. 
+Otherwise, undo entries are applied. 
 
 
