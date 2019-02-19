@@ -24,4 +24,11 @@ are rolled back by re-applying all undo log entries to the corresponding address
 This paper assumes a static transactional model. Persistence is achieved by wrapping operations within static transactions. 
 Either all store operations within a transaction are persisted as an atomic unit, or none of them is persisted. On recovery,
 partial transactions are rolled back using undo log as described in the previous paragraph. Transactions execute as follows.
-First, locations that are to be stored into are identified, and log entries containing their old values are generated. If 
+First, locations that are to be stored into are identified, and log entries containing their old values are generated. 
+Second, these log entries are flushed to the NVM by issuing a persist barrier. Next, the transaction begin record is written
+and flushed into the log to indicate that after this point, dirty cache lines might be evicted back to the NVM. Then, the 
+transaction body is executed as usual, during which dirty cache lines might be written back to the NVM due to eviction.
+Lastly, dirty cache lines are flushed back to the NVM using another persistent barrier, after which the transaction end 
+record is written and then flushed using the fourth persistence barrier.
+
+
