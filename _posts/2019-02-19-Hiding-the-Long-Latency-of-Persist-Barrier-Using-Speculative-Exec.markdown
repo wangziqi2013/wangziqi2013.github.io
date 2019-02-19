@@ -18,5 +18,7 @@ persistence barrier. A persistence barrier is a special instruction sequence tha
 cached store operations are acknowledged by the memory controller. It is particularly essential in NVM applications
 where the system state is persisted onto the NVM to enable fast crash recovery. Many existing proposals use undo
 logging, where the value of data items (e.g. cache line sized memory blocks) are first recorded in a sequential log
-before they are modified by store operations. 
+before they are modified by store operations. On recovery, the undo log entries are identified, and partial modifications 
+are rolled back by re-applying all undo log entries to the corresponding addresses. 
+
 
