@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---  
+
+This paper proposes speculative persistence, a microarchitecture technique that allows processors to execute past a 
+persistence barrier. A persistence barrier is a special instruction sequence that stalls the processor until previous
+cached store operations are acknowledged by the memory controller. It is particularly essential in NVM applications
+where the system state is persisted onto the NVM to enable fast crash recovery. Many existing proposals use undo
+logging, where the value of data items (e.g. cache line sized memory blocks) are first recorded in a sequential log
+before they are modified by store operations. 
+
