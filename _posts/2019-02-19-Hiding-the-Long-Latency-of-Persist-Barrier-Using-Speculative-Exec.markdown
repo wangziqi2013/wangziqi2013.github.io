@@ -35,4 +35,10 @@ locating the transaction begin record. If the log has undo log entries, but the 
 undo log entries are discarded, because it is guaranteed that no dirty cache lines from the transaction can ever reach NVM. 
 Otherwise, undo entries are applied. 
 
-
+The above transaction model requires programmers to know exactly which locations will be written before the transaction begins.
+If it is not the case, two alternative models can be used. The first model is incremental update, in which the transaction 
+does not log all entries at the beginning, but only writes and persists log records right before they update an item. The 
+transaction begin record must hence be written and flushed at the very beginning of the transaction. In this model, the 
+number of persist barriers is upper bounded by the number of store instructions in the transaction. In contrast, in the 
+static transaction model, only constant number of (four) persist barriers are used. One way to allievate this issue is 
+to collect as many store location as possible that are known at the current time of execution, and then log them in batches.
