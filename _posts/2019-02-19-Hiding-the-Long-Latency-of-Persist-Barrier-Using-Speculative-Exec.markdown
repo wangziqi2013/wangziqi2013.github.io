@@ -42,3 +42,9 @@ transaction begin record must hence be written and flushed at the very beginning
 number of persist barriers is upper bounded by the number of store instructions in the transaction. In contrast, in the 
 static transaction model, only constant number of (four) persist barriers are used. One way to allievate this issue is 
 to collect as many store location as possible that are known at the current time of execution, and then log them in batches.
+The second model is full logging, in which programmers leverage domain-specific knowledge of the data structure, and log 
+a super set of memory locations that might be changed before the transaction body starts. For example, in a B+Tree, in
+the worst case a leaf node split will cause all nodes from the root to the leaf node to split, which happens every time
+the height of the tree grows by one. The logging scheme must then log every node from the root to the leaf to deal with
+the possible (but rare) worse case scenario. Compared with incremental logging, only four persist barriers are required,
+but potentially many more nodes than necessary are logged which may cause bottleneck if the tree is large.
