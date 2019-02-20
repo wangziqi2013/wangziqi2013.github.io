@@ -47,4 +47,17 @@ a super set of memory locations that might be changed before the transaction bod
 the worst case a leaf node split will cause all nodes from the root to the leaf node to split, which happens every time
 the height of the tree grows by one. The logging scheme must then log every node from the root to the leaf to deal with
 the possible (but rare) worse case scenario. Compared with incremental logging, only four persist barriers are required,
-but potentially many more nodes than necessary are logged which may cause bottleneck if the tree is large.
+but potentially many more nodes than necessary are logged which may cause bottleneck if the tree is large. This paper 
+assumes full logging scheme whenever static transaction is difficult.
+
+Persistence barriers are detrimental to performance, because the processor stalls to wait for an acknowledgement from
+the memory controller. In our transactional model, at least four persistence barriers are executed for each transaction,
+leading to frequent stalls. To solve the problem, this paper makes three observations. The first observation is that 
+execution can be performed speculatively while the processor is waiting for pcommit, as long as the state of the 
+speculation is not revealed to other processors, thus defining the beginning of the speculation. The second observation 
+is that some instructions cannot be executed speculatively, such as PMEM instructions (i.e. clflush, clwb, pcommit, 
+clflushopt, etc.) because they cause non-undoable actions to be taken on external devices, and the processor has no
+way to buffer the state changes. Luckily, the third observation is that PMEM instructions have a very flexible re-ordering 
+rule: They can be reordered with most instructions except store fences, serializing instructions (LOCK- prefixed, XCHG, 
+etc.) and conflicting instructions. This last two observations together define when speculation must stop, as we shall 
+see later. 
