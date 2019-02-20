@@ -68,4 +68,11 @@ the instruction stream after the barrier without making available the internal s
 processor takes a checkpoint of all architectural states at that point and pushes the checkpoint into a queue. Note that
 although during normal execution, persistence speculation will never be rolled back, it is possible that NVM reports an 
 error as the return code of pcommit, at which time the processor should roll back to the first non-speculative point and 
-raise an interrupt. The checkpoint is only discarded when the corresponding speculation
+raise an exception. The checkpoint is only discarded when the corresponding pcommit instruction receives an ACK. All
+store operations during the speculation are buffered in a separate queue called the Speculative Store Buffer (SSB). The SSB
+is checked on every load operation using the address of load, and if there is a match, the dirty data is forwarded from
+the newest SSB entry having the same address rather than cache or memory. The paper noted that in a practical design, the 
+SSB would be implemented using Content Addressable Memory (CAM) which has relative high latency (5 cycles). To enable 
+fast lookup of the SSB to at least determine whether an address is present, the paper proposes adding a bloom filter
+to accelerate address lookup on read, since most read instructions expect low latency as they are likely to hit the L1 
+cache. The bloom filter is periodically cleared when there the last speculation ends and the processor enters normal execution.
