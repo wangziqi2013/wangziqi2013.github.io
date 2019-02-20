@@ -91,6 +91,14 @@ out that the roll back may happen in finer granularity, if we also store in the 
 instruction is executed. On conflits, the system state is only restored to the earliest epoch before which no conflict
 is present.
 
+During speculation, if a PMEM instruction is seen in the instruction flow, the processor reorders the PMEM instruction 
+with following instructions in the instruction stream until it is unable to do so. In order words, the execution of the 
+PMEM instruction is delayed by the processor, until the processor sees another instruction that cannot be reordered with
+the PMEM instruction, as listed above. In this case, the current epoch terminates, and the PMEM instruction is executed 
+non-speculatively by the processor. A new epoch will start after the PMEM instruction, from which point a new instance 
+of speculation begins. 
+
+
 Speculation terminates successfully when the corresponding pcommit instruction returns success and the epoch is the earliest
 in the queue, in which case the checkpoint is discarded, and all store operations buffered in the SSB are applied to the 
 cache in program order, sending coherence messages to acquire cache line permission if necessary. If the pcommit instrucrtion
