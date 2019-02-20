@@ -76,3 +76,10 @@ SSB would be implemented using Content Addressable Memory (CAM) which has relati
 fast lookup of the SSB to at least determine whether an address is present, the paper proposes adding a bloom filter
 to accelerate address lookup on read, since most read instructions expect low latency as they are likely to hit the L1 
 cache. The bloom filter is periodically cleared when there the last speculation ends and the processor enters normal execution.
+
+Speculation may introduce unexpected reads/write conflicts with other processors, which cause the current processor to 
+access inconsistent data. For example, if lock acquisition code is executed under speculation, the lock acquisition
+will not actually be visible to other processors, while the current processor can execute the critical section also 
+speculatively. This may cause problem, if another processor acquires the lock in non-speculative mode, and modifies a data 
+structure in the critical section. In this case, the former processor may accidentally stump upon some inconsistent states 
+as a consequence of the latter processor actively modifying it, which causes unexpected error, 
