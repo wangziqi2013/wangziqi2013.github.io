@@ -60,4 +60,12 @@ clflushopt, etc.) because they cause non-undoable actions to be taken on externa
 way to buffer the state changes. Luckily, the third observation is that PMEM instructions have a very flexible re-ordering 
 rule: They can be reordered with most instructions except store fences, serializing instructions (LOCK- prefixed, XCHG, 
 etc.) and conflicting instructions. This last two observations together define when speculation must stop, as we shall 
-see later. 
+see later. In the following paragraphs we call the time period from the beginning to the end of speculation as an "epoch".
+
+Persistence speculation begins when the instruction sequence "pcommit, sfence" is seen, which indicates that the processor
+should stall until the memory controller sends an acknowledgement for the persistence of stores. The processor keeps executing
+the instruction stream after the barrier without making available the internal states to other processors. First, the 
+processor takes a checkpoint of all architectural states at that point and pushes the checkpoint into a queue. Note that
+although during normal execution, persistence speculation will never be rolled back, it is possible that NVM reports an 
+error as the return code of pcommit, at which time the processor should roll back to the first non-speculative point and 
+raise an interrupt. The checkpoint is only discarded when the corresponding speculation
