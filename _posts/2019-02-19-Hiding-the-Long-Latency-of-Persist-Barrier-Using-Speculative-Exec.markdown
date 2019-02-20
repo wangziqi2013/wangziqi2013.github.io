@@ -82,4 +82,12 @@ access inconsistent data. For example, if lock acquisition code is executed unde
 will not actually be visible to other processors, while the current processor can execute the critical section also 
 speculatively. This may cause problem, if another processor acquires the lock in non-speculative mode, and modifies a data 
 structure in the critical section. In this case, the former processor may accidentally stump upon some inconsistent states 
-as a consequence of the latter processor actively modifying it, which causes unexpected error, 
+as a consequence of the latter processor actively modifying it, which causes unexpected error, some of which being 
+non-recoverable (e.g. jumps to undefined piece of code). To prevent the above from happening, the processor under 
+speculation must record all cache line addresses read or written in a hardware structure called the Block Lookup Table 
+(BLT). On receiving external coherence requests, the processor checks the block address again the BLT. Any conflicting
+access will cause all active speculations to abort, restoring the system state to the first checkpoint. The paper also pointed
+out that the roll back may happen in finer granularity, if we also store in the BLT the corresponding epoch a memory
+instruction is executed. On conflits, the system state is only restored to the earliest epoch before which no conflict
+is present.
+
