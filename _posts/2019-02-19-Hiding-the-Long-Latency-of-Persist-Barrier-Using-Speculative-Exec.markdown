@@ -96,8 +96,12 @@ with following instructions in the instruction stream until it is unable to do s
 PMEM instruction is delayed by the processor, until the processor sees another instruction that cannot be reordered with
 the PMEM instruction, as listed above. In this case, the current epoch terminates, and the PMEM instruction is executed 
 non-speculatively by the processor. A new epoch will start after the PMEM instruction, from which point a new instance 
-of speculation begins. 
-
+of speculation begins. The new instance of speculation forms two commit dependencies: It must only commit after the 
+previous speculation terminates and the PMEM instruction completes. A new checkpoint is also taken and added to the 
+checkpoint queue. Note that the paper does not mention the second commit dependency. In my personal opinion it is necessary 
+to wait for the PMEM instruction as well, because if the second epoch commits before the PMEM instruction does in ROB, it 
+would appear that the PMEM instruction is reordered after the beginning of the second epoch, which is a violation of 
+instruction ordering.
 
 Speculation terminates successfully when the corresponding pcommit instruction returns success and the epoch is the earliest
 in the queue, in which case the checkpoint is discarded, and all store operations buffered in the SSB are applied to the 
