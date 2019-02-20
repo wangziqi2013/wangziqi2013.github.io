@@ -91,3 +91,7 @@ out that the roll back may happen in finer granularity, if we also store in the 
 instruction is executed. On conflits, the system state is only restored to the earliest epoch before which no conflict
 is present.
 
+Speculation terminates successfully when the corresponding pcommit instruction returns success and the epoch is the earliest
+in the queue, in which case the checkpoint is discarded, and all store operations buffered in the SSB are applied to the 
+cache in program order, sending coherence messages to acquire cache line permission if necessary. If the pcommit instrucrtion
+returns but the epoch is not the earliest one, the epoch should not commit until it becomes the earliest epoch. 
