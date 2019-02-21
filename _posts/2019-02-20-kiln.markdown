@@ -20,3 +20,10 @@ on certain locations of the program to enforce the correct write ordering depend
 lines. COW requires an extra level of indirection. On modification, data items are copied to a new location on the NVM, 
 and then the modification is performed on the new copy. The mapping is changed to point to the new copy after the modification. 
 New copies of data items must be persisted to the NVM before the transaction commits.
+
+Neither WAL nor COW is perfect for efficient persistent atomic regions. Both schemes induce extra memory traffic. In WAL,
+data items must be copied twice (one to generate the log entry, using either old or new value based on logging type, another 
+to update the data item), while in COW, extra NVM storage is used by multiple versions of data items as well as the mapping 
+table. In addition, if WAL is to be used, the long latency of persist barriers cannot easily be removed from the critical
+path, which is another source of slowdown. 
+
