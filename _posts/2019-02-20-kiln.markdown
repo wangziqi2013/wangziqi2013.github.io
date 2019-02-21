@@ -13,3 +13,9 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes Kiln, a novel design that achieves atomic persistence using persistent LLC. In classical designs there
+are two ways of achieving the same effect, using either Write-Ahead Logging (WAL) or Copy-On-Write (COW). WAL requires the 
+programmer or hardware to generate log entries on every data modification. In addition, persistent barriers are also inserted 
+on certain locations of the program to enforce the correct write ordering dependency between log entries and dirty cache lines. 
+COW copies data under modification to a new location, and 
+then changes the mapping to allow in-place update of data.
