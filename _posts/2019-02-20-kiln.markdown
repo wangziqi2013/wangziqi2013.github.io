@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "Kiln: Closing the Performance Gap Between Systems With and Without Persistence Support"
+date:   2019-02-20 23:39:00 -0500
+categories: paper
+paper_title: "Kiln: Closing the Performance Gap Between Systems With and Without Persistence Support"
+paper_link: http://www.cse.psu.edu/~juz138/files/150-zhao.pdf
+paper_keyword: Kiln; NVM; Cache; LLC
+paper_year: MICRO 2013
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
