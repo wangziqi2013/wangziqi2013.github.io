@@ -27,3 +27,6 @@ to update the data item), while in COW, extra NVM storage is used by multiple ve
 table. In addition, if WAL is to be used, the long latency of persist barriers cannot easily be removed from the critical
 path, which is another source of slowdown. 
 
+This paper adopts a third approach, which extends the persistence domain to the last level cache (LLC) using techniques such
+as battery powered SRAM. No expensive data movement or persistence berriers are needed, because in order to achieve 
+persistence, it is sufficient to  
