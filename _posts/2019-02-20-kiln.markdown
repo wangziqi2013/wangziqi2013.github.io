@@ -29,4 +29,4 @@ path, which is another source of slowdown.
 
 This paper adopts a third approach, which extends the persistence domain to the last level cache (LLC) using techniques such
 as battery powered SRAM. No expensive data movement or persistence berriers are needed, because in order to achieve 
-persistence, it is sufficient to  
+persistence, it is sufficient to 
