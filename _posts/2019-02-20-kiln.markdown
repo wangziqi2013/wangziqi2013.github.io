@@ -61,3 +61,9 @@ that the cache line is not written by another transaction, committed or uncommit
 written by an uncommitted transaction; Persistent, which means that the cache line has been committed. Note that on all
 levels of caches, the FIFO queues are volatile, and will be reset on a power failure. The design of Kiln guarantees
 that the recovery routine can identify cache lines in different states using the metadata and state bits after a crash.
+
+On transaction commit, as described above, the cache controller evicts dirty lines in higher level caches to the LLC,
+after which the transaction becomes durable. The FIFO queue at each level is consulted on commit using the committing
+transaction ID. Entries will be removed from the queue after the dirty lines are evicted. Note that a line does not 
+have to be totally removed from higher level caches. The line can remain in higher level caches in a clean state, which
+reduces future cache misses if access locality is high.
