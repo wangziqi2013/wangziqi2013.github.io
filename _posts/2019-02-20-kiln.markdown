@@ -66,7 +66,11 @@ During normal operation, the LLC eviction algorithm must not evict an uncommitte
 This is not always possible if all lines in a cache set are uncommitted, and a miss needs to load a new line into the set.
 In this case, the cache controller raises an interrupt to request a chunk of memory from the OS as the overflow buffer
 (the paper author should think more carefully here, since the interrupt routine itself may cause another line to be loaded
-into the same set, which incurs infinitely many interrupts). 
+into the same set, which incurs infinitely many interrupts). The LLC cache controller then performs normal redo logging by
+evicting one of the uncommitted line into the buffer. Althoug the paper did not mention how the line is accessed if 
+it is requested by upper level caches before the transaction commits, it can be done by adding the information into the 
+FIFO queue, and indicating that the line has overflowed into DRAM. On commit, the line must be written back to the NVM
+as an in-place update. 
 
 On transaction commit, as described above, the cache controller evicts dirty lines in higher level caches to the LLC,
 after which the transaction becomes durable. The FIFO queue at each level is consulted on commit using the committing
