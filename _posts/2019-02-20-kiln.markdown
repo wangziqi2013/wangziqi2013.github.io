@@ -31,6 +31,11 @@ This paper adopts a third approach, which extends the persistence domain to the 
 as battery powered SRAM. No expensive data movement or persistence berriers are needed, because in order to achieve 
 persistence, it is sufficient to evict data to the LLC, which has lower latency and higher bandwidth. 
 
+Kiln is motivated by redo logging. Generally speaking, the goal of achieving persistence can be further divided into two 
+slightly different smaller parts. In the first part, we want consistency. Data structures are supposed to remain in a 
+consistent state after recovery. Since system can crash any moment during the execution, the exact state of the data structure 
+is hard to know at the time of the crash. To solve this problem, 
+
 The operation of Kiln is described as follows. During normal operation, dirty cache lines written by different transactions
 are recorded by caches on all levels. On transaction begin, a globally unique transaction ID is distributed such that
 every transaction can be uniquelly identified using the ID. Dirty cache lines generated during the transaction are tagged 
