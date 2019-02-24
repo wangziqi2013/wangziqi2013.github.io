@@ -53,4 +53,11 @@ The operation of Kiln is described as follows. During normal operation, dirty ca
 are recorded by caches on all levels. On transaction begin, a globally unique transaction ID is distributed such that
 every transaction can be uniquelly identified using the ID. Dirty cache lines generated during the transaction are tagged 
 with the transaction ID. Kiln extends tag arrays with an array of transaction IDs, which are set during a transaction when
-the cache line is written for the first time. 
+the cache line is written for the first time. Each level of the cache is also extended with a FIFO queue, which stores the 
+metadata (transaction ID, line location, etc.) of dirty cache lines. When a cache line is first written, the metadata 
+of the store operation is pushed into the queue. To help identify whether a store operation is the first store during 
+the transaction, three more states are added to a cache line which co-exist with ordinary coherence states: Clean, which means
+that the cache line is not written by another transaction, committed or uncommitted; Pending, which means the cache is 
+written by an uncommitted transaction; Persistent, which means that the cache line has been committed. Note that on all
+levels of caches, the FIFO queues are volatile, and will be reset on a power failure. The design of Kiln guarantees
+that the recovery routine can identify cache lines in different states using the metadata and state bits after a crash.
