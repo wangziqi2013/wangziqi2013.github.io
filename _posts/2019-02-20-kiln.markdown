@@ -62,6 +62,12 @@ written by an uncommitted transaction; Persistent, which means that the cache li
 levels of caches, the FIFO queues are volatile, and will be reset on a power failure. The design of Kiln guarantees
 that the recovery routine can identify cache lines in different states using the metadata and state bits after a crash.
 
+During normal operation, the LLC eviction algorithm must not evict an uncommitted cache line as in redo logging schemes. 
+This is not always possible if all lines in a cache set are uncommitted, and a miss needs to load a new line into the set.
+In this case, the cache controller raises an interrupt to request a chunk of memory from the OS as the overflow buffer
+(the paper author should think more carefully here, since the interrupt routine itself may cause another line to be loaded
+into the same set, which incurs infinitely many interrupts). 
+
 On transaction commit, as described above, the cache controller evicts dirty lines in higher level caches to the LLC,
 after which the transaction becomes durable. The FIFO queue at each level is consulted on commit using the committing
 transaction ID. Entries will be removed from the queue after the dirty lines are evicted. Note that a line does not 
