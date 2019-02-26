@@ -35,4 +35,10 @@ NVM system, only one copy of data is maintained. Both normal access and recovery
 that no redundant data is maintained. The last benefit is reduced fragmentation, both internal and external, because data 
 is only appended to the end of the log. Only very few "gaps" is inserted between valid pieces of data. 
 
-
+There are also several difficulties of implementing LSNVMM. The most prominent problem is that, compared with log-structured
+file system or RAMCloud, where data is accessed in object semantics, in byte-addressable NVM, any pointer can be used to
+access a piece of memory. The point could be pointing to the head of an allocated memory block, but there is nothing that 
+prevents the pointer from pointing to the middle of the block. Simply mapping the starting address of all blocks to its 
+relative offset into the log object is insufficient, because the granularity of access is different from the granularity of 
+allocation. As we shall see below, instead of using an efficient hash table, LSNVMM chooses a skip list as its main DRAM 
+index structure. 
