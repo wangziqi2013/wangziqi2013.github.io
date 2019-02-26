@@ -51,4 +51,7 @@ block-based interface.
 We next describe the assumptions of LSNVMM. LSNVMM adopts a transactional interface similar to many HTM and STM designs.
 Programmers use two compiler provided primitives, xbegin and xend, to start and commit a transaction. Conflict detection
 is out of the scope of the paper, but it is still suggested that lightweight STMs such as TinySTM can be used to
-support transactions. 
+support transactions. The transaction follows the well-known ACID property: C and I requires that store operations of the 
+current transaction must not be seen by other transactions before the current transaction commits. D requires that data 
+written by the current transaction must not be rolled back after the transaction commits. A requires that either all stores
+of the transaction are persisted, or none of them is persisted. 
