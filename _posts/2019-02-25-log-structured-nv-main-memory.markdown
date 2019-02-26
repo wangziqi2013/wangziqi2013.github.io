@@ -14,7 +14,12 @@ version_mgmt:
 ---
 
 This paper proposes log-structured Non-Volatile Main Memory (LSNVMM) as an improvement to more traditional NVMM designs
-that use Write-Ahead Logging (WAL). The paper identifies two problems with WAL-based NVM designs. First, WAL doubles the 
+that use Write-Ahead Logging (WAL). The paper identifies three problems with WAL-based NVM designs. First, WAL doubles the 
 number of write operations compared with normal execution. Either undo or redo log entry is generated for every store 
 operation, which will then be persisted onto the NVM using persiste barriers or dedicated hardware. In the case where NVM 
-bandwidth is the bottleneck, overall performance will be impacted by the extra store operation. The 
+bandwidth is the bottleneck, overall performance will be impacted by the extra store operation. The second problem is 
+fragmentation, which is a general problem with memory allocators. Commonly used memory allocators such as tcmalloc or glibc 
+malloc tend to waste memory when the allocation pattern changes. This problem worsens on NVM, because memory must be utilized
+efficiently across applications and even between reboots. In addition, the cost of NVM is still higher than DRAM or disk of
+the same capacity, which implies that it would also be economically infeasible to use a general purpose allocator with NVM.
+The 
