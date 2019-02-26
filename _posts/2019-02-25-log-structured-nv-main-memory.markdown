@@ -41,4 +41,9 @@ access a piece of memory. The point could be pointing to the head of an allocate
 prevents the pointer from pointing to the middle of the block. Simply mapping the starting address of all blocks to its 
 relative offset into the log object is insufficient, because the granularity of access is different from the granularity of 
 allocation. As we shall see below, instead of using an efficient hash table, LSNVMM chooses a skip list as its main DRAM 
-index structure. 
+index structure. The second problem is common to all log-structured designs, garbage collection. Since log grows unboundedly,
+earlier entries that are freed or overwritten must be deleted from the log, during which process live entries are also migrated
+to the head of the log due to partial cleaning of a log chunk. The last problem is how the LSNVMM interface is exposed to
+end users. Since NVM provides a more convenient byte addressable interface directed connected to the memory which has close-DRAM
+access latency, a traditional file system based interface is infeasible for the software overhead and inflexibility of 
+block-based interface.
