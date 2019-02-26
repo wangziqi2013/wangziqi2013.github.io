@@ -31,4 +31,8 @@ data to the end of log objects. Always appending data to the end of logs has the
 data has a streaming pattern, it can be optimized by both the processor and the persistence controller. In particular,
 if the application writes data in large batches, the size of which is a multiple of the size of the row buffer, write 
 amplification can be allievated because data does not need to be read and then re-written. Second, in a log-structured
-NVM system, 
+NVM system, only one copy of data is maintained. Both normal access and recovery process use the same data copy, which means
+that no redundant data is maintained. The last benefit is reduced fragmentation, both internal and external, because data 
+is only appended to the end of the log. Only very few "gaps" is inserted between valid pieces of data. 
+
+
