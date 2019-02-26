@@ -47,3 +47,8 @@ to the head of the log due to partial cleaning of a log chunk. The last problem 
 end users. Since NVM provides a more convenient byte addressable interface directed connected to the memory which has close-DRAM
 access latency, a traditional file system based interface is infeasible for the software overhead and inflexibility of 
 block-based interface.
+
+We next describe the assumptions of LSNVMM. LSNVMM adopts a transactional interface similar to many HTM and STM designs.
+Programmers use two compiler provided primitives, xbegin and xend, to start and commit a transaction. Conflict detection
+is out of the scope of the paper, but it is still suggested that lightweight STMs such as TinySTM can be used to
+support transactions. 
