@@ -25,3 +25,10 @@ the same capacity, which implies that it would also be economically infeasible t
 The third problem is that WAL still requires in-place updates to data items on the NVM. If these data items follow the 
 ordinary layout a memory allocator usually use, locality can sometimes be bad, which hurts write performance, brings extra 
 stress to wear leveling, and also aggravates write amplification.
+
+LSNVMM leverages log-structured design and applies it to byte-addressable NVM, resulting in an NVM system that only appends 
+data to the end of log objects. Always appending data to the end of logs has the following benefits. First, since log 
+data has a streaming pattern, it can be optimized by both the processor and the persistence controller. In particular,
+if the application writes data in large batches, the size of which is a multiple of the size of the row buffer, write 
+amplification can be allievated because data does not need to be read and then re-written. Second, in a log-structured
+NVM system, 
