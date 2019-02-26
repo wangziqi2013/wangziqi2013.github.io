@@ -22,4 +22,6 @@ fragmentation, which is a general problem with memory allocators. Commonly used 
 malloc tend to waste memory when the allocation pattern changes. This problem worsens on NVM, because memory must be utilized
 efficiently across applications and even between reboots. In addition, the cost of NVM is still higher than DRAM or disk of
 the same capacity, which implies that it would also be economically infeasible to use a general purpose allocator with NVM.
-The 
+The third problem is that WAL still requires in-place updates to data items on the NVM. If these data items follow the 
+ordinary layout a memory allocator usually use, locality can sometimes be bad, which hurts write performance, brings extra 
+stress to wear leveling, and also aggravates write amplification.
