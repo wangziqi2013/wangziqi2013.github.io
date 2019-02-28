@@ -61,6 +61,14 @@ In either case we will change the actual virtual address that the instruction ac
 later. In addition, the paper also assumes that the LSNVMM accesses raw NVM device using special OS memory mapping interface.
 
 The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
-region, in addition to returning an allocated virtual address range, the request is written into an allocation log, and then 
-the address is returned to the application. The run-time system should remember the mapping between allocated blocks and store
-operations that write into these blocks. During the transaction, uncommitted stores
+region, the allocator only reserves a range of virtual address space without populating it with physical pages. The request is also
+recorded in an allocation log, which will be flushed when the transaction commits. Memory free operations are similarly logged 
+in the deallocation log. The run-time system should keep a table of speculatively allocated blocks, and allocate a transaction-private 
+buffer to each of the block. Store operations on these blocks will be redirected to the corresponding buffers during the 
+transaction. We omit the details of conflict detection here because it is an orthogonal area of research. On transaction 
+commit, the commit handler first persists speculative writes by flushing them to the thread's log. The log head pointer 
+is incremented by the size of the write set, and then the commit handler copies data in speculative blocks to the log area 
+using streaming writes. New entries are inserted into the mapping table, with keys being the starting addresses of blocks 
+allocated during the transaction, and values being pointers to the physical address of the corresponding log entry. In the 
+last step, the commit handler flushes both the allocation log and deallocation log, after which the transaction is declared 
+to be committed, and a commit record is written. 
