@@ -60,6 +60,16 @@ compiler that instruments every memory allocation and instruction, or with a run
 In either case we will change the actual virtual address that the instruction accesses using a memory mapping table described 
 later. In addition, the paper also assumes that the LSNVMM accesses raw NVM device using special OS memory mapping interface.
 
+As stated by the previous paragraph, since there is no fixed home address for data items accessed using their virtual accesses,
+a mapping table maps the virtual address of a data items to another virtual address which resides in the memory mapped part 
+of NVM. Note that the underlying VA to PA translation is still performed by unmodified paging hardware. By performing the 
+translation for every read operation, each time a data item is overwritten, we can just append the updated data to the end 
+of the log, and then relocate the data item by remapping the virtual address being updated to the end of the log. The difficulty
+here is that data items might be accessed with a pointer that points to the middle of the memory block allocated to it. In
+this case, the mapping table should correctly figure out the identity of the allocated block, and update the mapping table
+accordingly. To find the starting address of the containing block given any arbitrary unaligned address, the paper proposes
+using an ordered skiplist as the main indexing structure.
+
 The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
 region, the allocator only reserves a range of virtual address space without populating it with physical pages. The request is also
 recorded in an allocation log, which will be flushed when the transaction commits. Memory free operations are similarly logged 
