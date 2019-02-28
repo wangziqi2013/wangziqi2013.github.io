@@ -59,3 +59,8 @@ detecting memory allocations and intercepting instructions that access memory. T
 compiler that instruments every memory allocation and instruction, or with a run-time bianry translation infrastructure.
 In either case we will change the actual virtual address that the instruction accesses using a memory mapping table described 
 later. In addition, the paper also assumes that the LSNVMM accesses raw NVM device using special OS memory mapping interface.
+
+The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
+region, in addition to returning an allocated virtual address range, the request is written into an allocation log, and then 
+the address is returned to the application. The run-time system should remember the mapping between allocated blocks and store
+operations that write into these blocks. During the transaction, uncommitted stores
