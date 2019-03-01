@@ -79,7 +79,12 @@ log which records memory deallocation operations; A main log which stores data w
 logs are only written, but never read during normal operations. They are important, however, to the recovery process.
 The recovery handler could restore the state of the memory allocation by replaying the allocation and deallocation logs. 
 Based on the same reason, the memory allocator in LSNVMM does not need to be designed for NVM. In fact, the paper suggests 
-that an ordinary allocator such as Hoard is sufficient.
+that an ordinary allocator such as Hoard is sufficient. To simplify garbage collection and transaction management, the global
+log object is divided into fixed sized chunks, which is the basic unit of garbage collection. Chunks are further divided into
+transactional blocks, which stores the transaction metadata as well as a pair of pointers to other blocks of the same transaction
+(in case that one block is not enough for the transaction's write set). These sibling pointers are never read during normal
+operation. On recovery, the handler needs to know whether a transaction has committed by finding the latest chunk and 
+checking if a commit record has been written.
 
 The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
 region, the allocator only reserves a range of virtual address space without populating it with physical pages. The request is also
@@ -97,4 +102,5 @@ allocation log and deallocation log, after which the transaction is declared to 
 Like all log-structured systems, LSNVMM requires periodic garbage collection (GC) to recycle storage occupied by stale data.
 In LSNVMM, data become stale either because the block they are in is freed and the free operation has committed, or because 
 another committed transaction updates the block. In both cases, the entry for the home address in the mapping table will be 
-modified to reflect those changes. 
+modified to reflect those changes. LSNVMM uses several background threads to perform GC. These GC threads wake up periodically
+and check log chunks. Chunks are basic units of performing GC. 
