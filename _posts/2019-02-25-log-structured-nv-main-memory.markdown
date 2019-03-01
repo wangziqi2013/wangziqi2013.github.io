@@ -117,4 +117,6 @@ partition log entries from the beginning of the log into buckets basded on their
 similar to the mapping phase of map-reduce. Then in the second phase recovery threads work locally to rebuild the mapping 
 table. Each recovery thread claim one or more buckets, and sorts the log entries using version ID. Note that the version 
 ID from TinySTM indicates the logic serialization order of updates. After sorting these log entries, the recovery thread 
-finds the most recent version for each address, and inserts that version into the mapping table. 
+finds the most recent version for each address, and inserts that version into the mapping table. Note that malloc and free
+operations are also recorded in the log, and hence should also be replayed during this process. Normal execution will 
+resume after rebuilding the mapping table.
