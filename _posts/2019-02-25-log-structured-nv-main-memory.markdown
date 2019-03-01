@@ -73,6 +73,8 @@ operations, however, can be performed in a lock-free manner in parallel with upd
 a skiplist update involves several atomic steps which require a lock to avoid concurrent update, each of the atomic step
 preserves consistency of the skiplist. In other words, reader threads on the skiplist can always find the correct lower bound
 given an address as the key while writer threads are atomically inserting elements into linked lists called "towers".
+The skiplist based mapping table is maintained in DRAM, and will be lost during a power failure. The recovery handler,
+on the other hand, rebuilds the mapping table on recovery by replaying log entries. We describe recovery in later sections.
 
 Each thread in LSNVMM maintains three logs: An allocation log which records memory allocation operations; A deallocation
 log which records memory deallocation operations; A main log which stores data written into memory blocks. The first two
