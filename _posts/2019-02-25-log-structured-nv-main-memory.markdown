@@ -103,4 +103,9 @@ Like all log-structured systems, LSNVMM requires periodic garbage collection (GC
 In LSNVMM, data become stale either because the block they are in is freed and the free operation has committed, or because 
 another committed transaction updates the block. In both cases, the entry for the home address in the mapping table will be 
 modified to reflect those changes. LSNVMM uses several background threads to perform GC. These GC threads wake up periodically
-and check log chunks. Chunks are basic units of performing GC. 
+and check log chunks. As described in the previous section, chunks are basic units of GC. GC threads scan chunks in the log, 
+and for every log entry in a chunk, it queries the mapping table and see if the mapping table still has an entry, and if 
+the entry still points to the log entry. If either the mapping table entry does not exist or no longer points to the log 
+entry, the log entry is known to be stale. A chunk is garbage collected, if the portion of stale entries exceeds a threshold.
+The GC thread copies valid data to the end of the log, updates mapping table entries atomically, and eventually frees 
+the chunk.
