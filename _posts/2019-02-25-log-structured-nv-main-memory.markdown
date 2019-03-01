@@ -61,7 +61,7 @@ In either case we will change the actual virtual address that the instruction ac
 later. In addition, the paper also assumes that the LSNVMM accesses raw NVM device using special OS memory mapping interface.
 
 As stated by the previous paragraph, since there is no fixed home address for data items accessed using their virtual accesses,
-a mapping table maps the virtual address of a data items to another virtual address which resides in the memory mapped part 
+a mapping table maps the virtual address of a data item to another virtual address which resides in the memory mapped part 
 of NVM. Note that the underlying VA to PA translation is still performed by unmodified paging hardware. By performing the 
 translation for every read operation, each time a data item is overwritten, we can just append the updated data to the end 
 of the log, and then relocate the data item by remapping the virtual address being updated to the end of the log. The difficulty
@@ -69,7 +69,17 @@ here is that data items might be accessed with a pointer that points to the midd
 this case, the mapping table should correctly figure out the identity of the allocated block, and update the mapping table
 accordingly. To find the starting address of the containing block given any arbitrary unaligned address, the paper proposes
 using an ordered skiplist as the main indexing structure. Updates to the skiplist are serialized using a global lock. Read
-operations, however, can be performed in a lock-free manner in parallel with update operations. This is because skiplist maintains
+operations, however, can be performed in a lock-free manner in parallel with update operations. This is because although
+a skiplist update involves several atomic steps which require a lock to avoid concurrent update, each of the atomic step
+preserves consistency of the skiplist. In other words, reader threads on the skiplist can always find the correct lower bound
+given an address as the key while writer threads are atomically inserting elements into linked lists called "towers".
+
+Each thread in LSNVMM maintains three logs: An allocation log which records memory allocation operations; A deallocation
+log which records memory deallocation operations; A main log which stores data written into memory blocks. The first two
+logs are only written, but never read during normal operations. They are important, however, to the recovery process.
+The recovery handler could restore the state of the memory allocation by replaying the allocation and deallocation logs. 
+Based on the same reason, the memory allocator in LSNVMM does not need to be designed for NVM. In fact, the paper suggests 
+that an ordinary allocator such as Hoard is sufficient.
 
 The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
 region, the allocator only reserves a range of virtual address space without populating it with physical pages. The request is also
