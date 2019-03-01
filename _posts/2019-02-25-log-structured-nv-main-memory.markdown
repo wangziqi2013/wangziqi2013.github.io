@@ -111,3 +111,10 @@ the entry still points to the log entry. If either the mapping table entry does 
 entry, the log entry is known to be stale. A chunk is garbage collected, if the portion of stale entries exceeds a threshold.
 The GC thread copies valid data to the end of the log, updates mapping table entries atomically, and eventually frees 
 the chunk.
+
+Recovery works in a two-stage manner with multiple threads as follows. In the first stage, all threads collaborate to 
+partition log entries from the beginning of the log into buckets basded on their home addresses. This can be done in 
+similar to the mapping phase of map-reduce. Then in the second phase recovery threads work locally to rebuild the mapping 
+table. Each recovery thread claim one or more buckets, and sorts the log entries using version ID. Note that the version 
+ID from TinySTM indicates the logic serialization order of updates. After sorting these log entries, the recovery thread 
+finds the most recent version for each address, and inserts that version into the mapping table. 
