@@ -68,17 +68,18 @@ of the log, and then relocate the data item by remapping the virtual address bei
 here is that data items might be accessed with a pointer that points to the middle of the memory block allocated to it. In
 this case, the mapping table should correctly figure out the identity of the allocated block, and update the mapping table
 accordingly. To find the starting address of the containing block given any arbitrary unaligned address, the paper proposes
-using an ordered skiplist as the main indexing structure.
+using an ordered skiplist as the main indexing structure. Updates to the skiplist are serialized using a global lock. Read
+operations, however, can be performed in a lock-free manner in parallel with update operations. This is because skiplist maintains
 
 The normal execution of LSNVMM is described as follows. When the application requests memory allocation within a transactional
 region, the allocator only reserves a range of virtual address space without populating it with physical pages. The request is also
 recorded in an allocation log, which will be flushed when the transaction commits. Memory free operations are similarly logged 
-in the deallocation log. The run-time system should keep a table of speculatively allocated blocks, and allocate a transaction-private 
-buffer to each of the block. Store operations on these blocks will be redirected to the corresponding buffers during the 
+in the deallocation log. The run-time system should keep a table of speculatively allocated blocks, and allocate a transactional
+private buffer to each of the block. Store operations on these blocks will be redirected to the corresponding buffers during the 
 transaction. We omit the details of conflict detection here because it is an orthogonal area of research. On transaction 
 commit, the commit handler first persists speculative writes by flushing them to the thread's log. The log head pointer 
 is incremented by the size of the write set, and then the commit handler copies data in speculative blocks to the log area 
 using streaming writes. New entries are inserted into the mapping table, with keys being the starting addresses of blocks 
-allocated during the transaction, and values being pointers to the physical address of the corresponding log entry. In the 
-last step, the commit handler flushes both the allocation log and deallocation log, after which the transaction is declared 
-to be committed, and a commit record is written. 
+allocated during the transaction, and values being pointers to the physical address of the corresponding log entry. Similarly,
+blocks that are deallocated will be removed from the mapping table. In the last step, the commit handler flushes both the 
+allocation log and deallocation log, after which the transaction is declared to be committed, and a commit record is written. 
