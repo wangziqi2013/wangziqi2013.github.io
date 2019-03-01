@@ -93,3 +93,8 @@ using streaming writes. New entries are inserted into the mapping table, with ke
 allocated during the transaction, and values being pointers to the physical address of the corresponding log entry. Similarly,
 blocks that are deallocated will be removed from the mapping table. In the last step, the commit handler flushes both the 
 allocation log and deallocation log, after which the transaction is declared to be committed, and a commit record is written. 
+
+Like all log-structured systems, LSNVMM requires periodic garbage collection (GC) to recycle storage occupied by stale data.
+In LSNVMM, data become stale either because the block they are in is freed and the free operation has committed, or because 
+another committed transaction updates the block. In both cases, the entry for the home address in the mapping table will be 
+modified to reflect those changes. 
