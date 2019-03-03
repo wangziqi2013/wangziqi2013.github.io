@@ -55,4 +55,7 @@ to the new object. On an object deletion, the existing object in the log will no
 record is appended to the head of the log, indicating the deletion of existing entries. Tombstone records are ignored during
 normal operations. On recovery, objects marked by the tombstome record will not be part of the restored state. As we will show
 later, tombstone objects introduce special problems for garbage collection, and need to be treated in a slightly different way.
-In all the above cases, both the in-memory copy and the on-disk copy of the 
+In all the above cases, both the in-memory copy and the on-disk copy of the log are kept synchronized. Remote copies are 
+also updated accordingly.
+
+
