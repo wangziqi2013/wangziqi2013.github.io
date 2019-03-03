@@ -86,4 +86,6 @@ DRAM, there is always a corresponding full-sized segment on the disk having iden
 is that the DRAM version of the segment can be smaller than the one on the disk. On the second level, the disk version
 segment is also cleaned, which requires copying live data to the head of the disk log and hence consumes I/O bandwidth. 
 Since GC for disk segments are postponed, it is likely that more objects have freed since last time first-level GC
-is conducted. 
+is conducted. In fact, we can upper bound the amount of work on second level GC. Given that the DRAM usage of segments
+can be seen as an upper bound of the actual amount of valid data, if we allow the disk image to be at least twice 
+the size of the DRAM log, we know that disk segment utilization must always be less than 50%. 
