@@ -63,3 +63,13 @@ log. The scan proceeds segment by segment. For each log record in a segment, the
 if the entry is stale or not. A stale entry is recognized by the fact thet the key recorded in the entry does not exist 
 in the hash table, or the key exists but the object pointer does not match the log record's address. In either case, the 
 object is marked as stale. If too many stale objects are found in the log, the segment will be marked as eligible for GC.
+The GC process then copies all valid objects from the segment into a new segment, and appends the new segment to the head 
+of the log. Hash table entries for valid objects are also updated to point to objects in the new segment. Tombstone records
+introduce a little bit problems in this process, because the tombstone record will not become stale unless the segment of 
+the object it refers to is garbage collected. In other words, if the tombstone record is in the same segment as the deleted
+object, the tomestore record can be removed freely. If, however, that these two are not in the same segment, then a GC 
+dependency is created, which must be obeyed by the GC thread. The simplest way to deal with this is that if the segment
+has not been collected when a tombstone record is scanned, the tombstone record will not be marked as stale, and will
+be copied to the new segment.
+
+
