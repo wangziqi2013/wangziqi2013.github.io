@@ -35,10 +35,19 @@ Every operation executed by the in-memory component must be reflected to the on-
 the client. To further improve safety, each durable log is also replicated on a few peer servers. Operations must also 
 wait for information to propagate to peer servers before they can return.
 
+RAMCloud maintains a global log object, which is further divided into smaller units, called segments. Each segment is 
+usually 8MB in size, and can be allocated from the heap using a simple slab allocator. Threads append new objects to the 
+head of the log, and perform garbage collection from the tail of the log. When a new segment is created, a special record, 
+the segment digestion, is written at the beginning of the segment. The sement digestion is a list of all valid segments 
+(i.e. contain non-stale data). Every segment in the system is assigned a unique and non-decreasing segment identifier. 
+The digestion in the new segment is marked as active, after which the segment is persisted onto the disk. The digestion 
+in the previous segment is then marked as inactive, and persisted. At any time in the system, there is at most two and at 
+least one
+
 The log-structured aechitecture work as follows. On an object allocation, which happens on both inserting new keys and modifying
 existing objects, the object is appended to the head of the current log. The in-memory hash table is then updated to point
 to the new object. On an object deletion, the existing object in the log will not be written into. Instead, a special tombstone 
 record is appended to the head of the log, indicating the deletion of existing entries. Tombstone records are ignored during
 normal operations. On recovery, objects marked by the tombstome record will not be part of the restored state. As we will show
 later, tombstone objects introduce special problems for garbage collection, and need to be treated in a slightly different way.
-
+In all the above cases, both the in-memory copy and the on-disk copy of the 
