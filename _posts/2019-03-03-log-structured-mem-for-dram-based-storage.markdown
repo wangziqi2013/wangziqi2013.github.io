@@ -72,8 +72,18 @@ dependency is created, which must be obeyed by the GC thread. The simplest way t
 has not been collected when a tombstone record is scanned, the tombstone record will not be marked as stale, and will
 be copied to the new segment.
 
-The paper also points out that a dilemma between memory utilization and available bandwidth prevents the simple scheme 
-described above from working well. If the system is to maintain high utilization of memory, then for each segment collected,
-on average, only a small fraction of stale objects will be truly freed. That is to say, the majority part of the segment 
-to be cleaned will be copied to the new segment, which can easily become a bottleneck given that all segment creation
-must be reflected to the disk. 
+The paper also points out that a dilemma exists between memory utilization and available bandwidth, which prevents the 
+simple scheme described above from working well. If the system is to maintain high utilization of memory, then for each 
+segment collected, on average, only a small fraction of stale objects will be truly freed. That is to say, the majority 
+part of the segment to be cleaned will be copied to the new segment, which can easily become a bottleneck given that all 
+segment creation must be reflected to the disk. To solve this problem, the paper proposes a two-level GC scheme. On the 
+first level, the GC thread only compresses segments in DRAM without reflecting them to the disk version. A smaller granularity
+of allocation is required to satisfy the needs, which is called seglets. Seglets are smaller units whose size is usually 
+tens of KBs for composing larger segments. On garbage collection, a full-sized segment is compressed into a smaller segment,
+and then appended to the head of the in-memory log. This process does not involve disk I/O, and can hence be completed with
+relatively higher bandwidth. During first level claning, it is maintained that for each segment (having varying sizes) in
+DRAM, there is always a corresponding full-sized segment on the disk having identical logical content. The only difference
+is that the DRAM version of the segment can be smaller than the one on the disk. On the second level, the disk version
+segment is also cleaned, which requires copying live data to the head of the disk log and hence consumes I/O bandwidth. 
+Since GC for disk segments are postponed, it is likely that more objects have freed since last time first-level GC
+is conducted. 
