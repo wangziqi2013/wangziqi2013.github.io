@@ -26,3 +26,8 @@ general applications, because it would be impossible to move blocks around witho
 Copy allocators, however, utilizes memory better by periodically compressing the address space and thus reducing memory
 fragmentation. In such an environment, memory accesses cannot be made directly using pointers, since the pointer may
 point to an invalid block which is already relocated. 
+
+This paper assumes that the system runs RAMCloud, an in-memory key-value store supporting high throughput query and durable 
+object storage. Its main in-memory component is a hash table, which maps keys to immutable objects. Objects must not be modified
+partially: An object modification operation from clients must upload a new object and change the key-value mapping from 
+the old object to the new one.  
