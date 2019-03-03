@@ -30,4 +30,7 @@ point to an invalid block which is already relocated.
 This paper assumes that the system runs RAMCloud, an in-memory key-value store supporting high throughput query and durable 
 object storage. Its main in-memory component is a hash table, which maps keys to immutable objects. Objects must not be modified
 partially: An object modification operation from clients must upload a new object and change the key-value mapping from 
-the old object to the new one.  
+the old object to a new one. The on-disk component maintains a log which is the durable replica of in-memory component. 
+Every operation executed by the in-memory component must be reflected to the on-disk log before they can return results to
+the client. To further improve safety, each durable log is also replicated on a few peer servers. Operations must also 
+wait for information to propagate to peer servers before they can return.
