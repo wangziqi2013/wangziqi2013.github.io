@@ -40,9 +40,6 @@ usually 8MB in size, and can be allocated from the heap using a simple slab allo
 head of the log, and perform garbage collection from the tail of the log. When a new segment is created, a special record, 
 the segment digestion, is written at the beginning of the segment. The sement digestion is a list of all valid segments 
 (i.e. contain non-stale data). Every segment in the system is assigned a unique and non-decreasing segment identifier. 
-The digestion in the new segment is marked as active, after which the segment is persisted onto the disk. The digestion 
-in the previous segment is then marked as inactive, and persisted. At any time in the system, there is at most two and at 
-least one
 
 The log-structured aechitecture work as follows. On an object allocation, which happens on both inserting new keys and modifying
 existing objects, the object is appended to the head of the current log. The in-memory hash table is then updated to point
