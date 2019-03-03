@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper introduces log-structured key-value store based on RAMCloud, a state-of-the-art key-value store using non-log-structured 
+architecture. The paper identifies the problem with traditional memory allocators: fragmentation. The paper claims that 
+traditional memory allocators such as glibc malloc() is only efficient when the application has a relatively stable DRAM
+allocation pattern. If the pattern changes, a worst case of 50% space waste has been observed using synthetic workloads
+on all allocators.
