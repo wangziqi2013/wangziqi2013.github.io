@@ -58,4 +58,8 @@ later, tombstone objects introduce special problems for garbage collection, and 
 In all the above cases, both the in-memory copy and the on-disk copy of the log are kept synchronized. Remote copies are 
 also updated accordingly.
 
-
+Garbage collection (GC) works similarly to a log-structured file system. The GC thread scans segment from the tail of the 
+log. The scan proceeds segment by segment. For each log record in a segment, the GC thread checks the hash table to see 
+if the entry is stale or not. A stale entry is recognized by the fact thet the key recorded in the entry does not exist 
+in the hash table, or the key exists but the object pointer does not match the log record's address. In either case, the 
+object is marked as stale. If too many stale objects are found in the log, the segment will be marked as eligible for GC.
