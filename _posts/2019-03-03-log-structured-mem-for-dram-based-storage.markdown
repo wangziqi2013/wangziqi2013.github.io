@@ -72,4 +72,8 @@ dependency is created, which must be obeyed by the GC thread. The simplest way t
 has not been collected when a tombstone record is scanned, the tombstone record will not be marked as stale, and will
 be copied to the new segment.
 
-
+The paper also points out that a dilemma between memory utilization and available bandwidth prevents the simple scheme 
+described above from working well. If the system is to maintain high utilization of memory, then for each segment collected,
+on average, only a small fraction of stale objects will be truly freed. That is to say, the majority part of the segment 
+to be cleaned will be copied to the new segment, which can easily become a bottleneck given that all segment creation
+must be reflected to the disk. 
