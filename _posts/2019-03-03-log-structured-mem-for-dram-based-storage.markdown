@@ -23,4 +23,6 @@ This paper points out that allocators can be divided into two types: non-copy al
 such as malloc(), never moves the location of memory blocks after they are allocated. Non-copy allocator, on the other hand,
 can move the location of blocks even after allocation. In practice, non-copy allocator is most likely the one used by 
 general applications, because it would be impossible to move blocks around without knowing all poionter references to the block.
-Non-copy allocators, however, 
+Copy allocators, however, utilizes memory better by periodically compressing the address space and thus reducing memory
+fragmentation. In such an environment, memory accesses cannot be made directly using pointers, since the pointer may
+point to an invalid block which is already relocated. 
