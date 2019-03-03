@@ -34,3 +34,11 @@ the old object to a new one. The on-disk component maintains a log which is the 
 Every operation executed by the in-memory component must be reflected to the on-disk log before they can return results to
 the client. To further improve safety, each durable log is also replicated on a few peer servers. Operations must also 
 wait for information to propagate to peer servers before they can return.
+
+The log-structured aechitecture work as follows. On an object allocation, which happens on both inserting new keys and modifying
+existing objects, the object is appended to the head of the current log. The in-memory hash table is then updated to point
+to the new object. On an object deletion, the existing object in the log will not be written into. Instead, a special tombstone 
+record is appended to the head of the log, indicating the deletion of existing entries. Tombstone records are ignored during
+normal operations. On recovery, objects marked by the tombstome record will not be part of the restored state. As we will show
+later, tombstone objects introduce special problems for garbage collection, and need to be treated in a slightly different way.
+
