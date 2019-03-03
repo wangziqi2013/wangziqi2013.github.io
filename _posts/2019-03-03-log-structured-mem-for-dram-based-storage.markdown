@@ -46,7 +46,8 @@ any time in the system, the number of active segments is at most two and at leas
 the log to locate the most recent segment using the segment IDs (since they are monotonically increasing). The segment digest
 contains a superset of all valid segments in the system before the crash (since segments might be garbage collected after
 the new segment is created). If there are two segments both having an active digest, the segment with a larger ID wins,
-and the other is marked as inactive.
+and the other is marked as inactive. The recovery handler then locates all valid segments using the digest found in the 
+header, and proceeds to restore the state.
 
 The log-structured aechitecture work as follows. On an object allocation, which happens on both inserting new keys and modifying
 existing objects, the object is appended to the head of the current log. The in-memory hash table is then updated to point
