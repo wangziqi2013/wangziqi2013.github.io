@@ -111,3 +111,8 @@ If empty entry still cannot be found, the memory controller interupts the OS to 
 buffer for holding the page. The overflowed page can be migrated back to the main storage at the beginning of the next
 epoch, where dirty bits for all entries in the mapping table are cleared and it is guaranteed that an entry can always
 be found. 
+
+At the end of an epoch, the memory controller interrupts all processors to perform end-of-epoch actions. Processors 
+first drain their volatile states as described in previous sections, and then write back dirty lines from their on-chip 
+cache. Dirty pages from the L4 cache is also evicted. After that, processors write their execution context, including the 
+register file, to a checkpoint location on the NVM. 
