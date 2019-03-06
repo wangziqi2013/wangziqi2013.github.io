@@ -98,4 +98,12 @@ If, on a write back request, no mapping table entry is found with the page addre
 from the mapping table. If one empty slot can be found within the table, then it will be initialized with the physical
 address of the page, with two bit vectors set to zero. The dirty page will be written into the corresponding derived page.
 In the more common case, there is no unused entry in the mapping table. The memory controller then needs to evict an
-existing entry to make room for the dirty page. The eviction is performs as follows. The memory controller
+existing entry to make room for the dirty page. The eviction is performed as follows. The memory controller first checks
+whether there is a page whose cache lines are all in the home page, and no dirty line exists. This can be done easily by
+checking whether both bit vectors are all zero. The entry will be removed directly if it is the case. The removal of 
+such entry does not harm correctness, because by default, memory controller will fetch pages from their home addresses
+if the page does not exist in the mapping table. If such entry could not be found, the memory controller then proceeds 
+to find a clean entry (i.e. DBV is all zero), and initiates a write back which copies clean cache lines that are stored 
+in the derived page to their home addresses. Note that this also does not harm correctness, because if the page is clean, 
+then the version indicated by the CPBV is the stable snapshot from the previous epoch, and the other half is from
+two epoches ago, which can be safely overwritten. After the write back completes, the table entry can be removed. 
