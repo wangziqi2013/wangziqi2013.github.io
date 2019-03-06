@@ -110,9 +110,13 @@ two epoches ago, which can be safely overwritten. After the write back completes
 If empty entry still cannot be found, the memory controller interupts the OS to request a chunk of memory as the overflow
 buffer for holding the page. The overflowed page can be migrated back to the main storage at the beginning of the next
 epoch, where dirty bits for all entries in the mapping table are cleared and it is guaranteed that an entry can always
-be found. 
+be found. In practice, the last case should happen only rarely, because epoches are relatively short (hundreds of milliseconds), 
+and working sets of epoches are expected to be smaller than what a reasonably sized mapping table could support. 
 
 At the end of an epoch, the memory controller interrupts all processors to perform end-of-epoch actions. Processors 
 first drain their volatile states as described in previous sections, and then write back dirty lines from their on-chip 
-cache. Dirty pages from the L4 cache is also evicted. After that, processors write their execution context, including the 
-register file, to a checkpoint location on the NVM. 
+cache. Dirty pages from the L4 cache are also evicted. After that, processors write their execution context, including the 
+register file, to a checkpoint location on the NVM. In the meantime, the memory controller walks the mapping table and 
+persists bit vectors. CPBVs and mapping information are written into the NVM as part of the checkpoint's metadata. CPBVs 
+bits are then flipped if the dirty bit is set. This reflects the fact that if a cache line was updated in an epoch, it 
+will then become part of the stable snapshot in the perspective of the next epoch. As the last step, DBVs are flash-cleared.
