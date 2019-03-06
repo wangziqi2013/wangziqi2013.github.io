@@ -53,3 +53,10 @@ crashes within an epoch, we can always restore the system state to the previous 
 of the entire system at some point of execution. The paper also assumes that global corrdination exists to synchronize all
 processors at a checkpoint, such that processors agree to stop, drain their volatile queues and buffers (e.g. store queue
 and instruction window), and write out the on-chip execution context. 
+
+DPC extends the memory controller with a hadrware mapping table which decides the physical location of a page when it is 
+accessed from upper level components. In DPC, a virtual page can only be mapped to two locations: One is the physical 
+address obtained via MMU address translation, called its "home page"; another is a "derived page", which sits in a special
+NVM area allocated by the Operating System at startup time. Given the size of the mapping table as S, at startup time,
+the OS must allocate S consecutive pages from the NVM as the derived page area, and inform the memory controller of the 
+beginning of the area. The i-th entry of the table records the address mapping for page i of the derived area. 
