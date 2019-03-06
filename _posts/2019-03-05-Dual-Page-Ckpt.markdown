@@ -62,5 +62,10 @@ the OS must allocate S consecutive pages from the NVM as the derived page area, 
 beginning of the area. The i-th entry of the table records the address mapping for page i of the derived area. There are 
 four fields for each entry. The first field records the home page address of the derived page. An associative search is 
 performed for every memory operation from upper levels. If there is a hit, then we use the information stored in the 
-entry to decide next step operations. Othereise, a new entry is created if the upper level operation is a write.
-The 
+entry to decide next step operations. Otherwise, a new entry is created if the upper level operation is a write.
+The second and third fields are two bit vectors, the length of which is the number of cache lines in the page. Each bit
+in the bit vector describes the property of the cache line on the corresponding offset. The first bit vector is cache line 
+position bit vector (CPBV). If the bit is set, then the clean version of the cache line (i.e. versions created by a 
+previous epoch) is in derived page. Otherwise it is in its home page. The second bit vector is dirty bit vector (DBV).
+If a bit is set, then there exists a dirty version of the line written by the current epoch. This dirty version will 
+be written back to the NVM and become the clean version for future epoches. The last field 
