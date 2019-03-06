@@ -34,4 +34,14 @@ to relocate newly updated data items to the end of the log. Updated content of d
 end of the log since NVM favors sequential writes. The problem with log-structured NVM design, however, is that they
 penalize every memory access, adding a non-constant overhead to memory operations that access the NVM. In addition,
 log-structured designs require an extra garbage collection mechanism, which copies data around and frees stale items
-that have been deleted or overwritten, consuming both the bandwidth and cycles. 
+that have been deleted or overwritten, consuming both the bandwidth and cycles. The third problem of log-structured
+designs is that they generally require more NVM space than needed, due to the multiversioning nature of the log.
+
+Dual page checkpointing (DPC) attempts to solve all the above problems using a simple mapping scheme built into the memory
+controller. Instead of generating log entries and forcing complicated write ordering of log entries, DPC never performs 
+in-place updates to older data items (i.e. created by previous epoches) during an epoch. Compared with coarse-grained 
+COW, DPC uses bit vectors to maintain dirty and location information, such that pages can actually be managed in a flexible,
+per-cache line manner. Compared with log-structured NVM, DPC restricts the possible locations a virtual page can be mapped 
+to (similar to page coloring, but the restriction is even more strong), and hence can just use one bit to indicate the 
+location of a virtual page. Put them all together, DPC can achieve fast hardware checkpointing with small metadata and 
+torage overhead.
