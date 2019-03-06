@@ -87,5 +87,9 @@ data in page granularity, then for every physical page, at most two read request
 home page, another from the shadow page. The memory controller reads both pages from their locations, and assemble the 
 final version of the page using the output of XOR operation on CPBV and DBV.
 
-Write operations are more complex. If a write operation hits the mapping table, and the DBV bit is set, then the dirty
-page is brought into the L4 cache for modification. If DBV bit is clear, then the memory controller sets the bit in DBV
+Write back operations are more complex. Note that the paper assumes a page-based L4, and hence all write back operations
+from the L4 are pages. We also assume that the mapping table is hit. On such a request, the memory controller first enumerates 
+dirty lines from the page. If there is no dirty line, then the write back will be ignored. Otherwise, for every dirty line, 
+the memory controller tests the CPBV bit. If the CPBV bit is zero, indicating that the current stable image is on the 
+home address, then the dirty line will be written into the derived page. Otherwise, if the CPBV bit is one, the dirty line
+will be written into the home page. The DBV of the page is also updated with the dirty vector from the L4.
