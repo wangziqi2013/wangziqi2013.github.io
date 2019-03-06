@@ -68,4 +68,6 @@ in the bit vector describes the property of the cache line on the corresponding 
 position bit vector (CPBV). If the bit is set, then the clean version of the cache line (i.e. versions created by a 
 previous epoch) is in derived page. Otherwise it is in its home page. The second bit vector is dirty bit vector (DBV).
 If a bit is set, then there exists a dirty version of the line written by the current epoch. This dirty version will 
-be written back to the NVM and become the clean version for future epoches. The last field 
+be written back to the NVM and become the clean version for future epoches. The last field is a valid bit indicating 
+whether the entry is being used or not. If DRAM is used as L4 cache, necessary hardware components are also added
+to support it. Addresses from the L4 cache are physical addresses after MMU translation as in processor caches.
