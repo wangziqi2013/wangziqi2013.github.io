@@ -45,3 +45,11 @@ per-cache line manner. Compared with log-structured NVM, DPC restricts the possi
 to (similar to page coloring, but the restriction is even more strong), and hence can just use one bit to indicate the 
 location of a virtual page. Put them all together, DPC can achieve fast hardware checkpointing with small metadata and 
 torage overhead.
+
+The system assumption of DPC is as follows. DRAM and NVM are attached to the memory bus, which allows byte level addressing
+for both devices. This paper, in particular, uses DRAM as an L4 cache for the NVM, and applications have no capability to
+directly address the DRAM. Global execution is divided into epoches, which are basic units of recovery. If the system
+crashes within an epoch, we can always restore the system state to the previous epoch, which is a consistent snapshot 
+of the entire system at some point of execution. The paper also assumes that global corrdination exists to synchronize all
+processors at a checkpoint, such that processors agree to stop, drain their volatile queues and buffers (e.g. store queue
+and instruction window), and write out the on-chip execution context. 
