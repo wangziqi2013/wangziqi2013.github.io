@@ -78,3 +78,8 @@ levels of the cache. On an L4 cache miss, the mapping table is consulted using t
 and no entry exists for the page address, by default all cache lines in the page is stored on its home address, and the 
 memory controller fulfills the request by issuing a NVM read request to the cache line's home address. If, however, that an 
 entry exists, then the memory controller takes the XOR of the CPBV and the DBV bit of the line to determine the next step.
+If the XOR result is one, then a read request is issued using the cache line address calculated from the derived page address. 
+Note that since there is a one-to-one correspondence between mapping table entries and derived pages, the address of the 
+derived page can be generated given the index of the entry that is hit. Otherwise, if XOR outputs zero, the home address
+of the cache line is read, because either the clean data is in derived page, and the current epoch has written dirty
+data, or clean data is in the home page, and the current epoch has not written anything.
