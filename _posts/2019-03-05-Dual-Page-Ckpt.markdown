@@ -93,3 +93,9 @@ dirty lines from the page. If there is no dirty line, then the write back will b
 the memory controller tests the CPBV bit. If the CPBV bit is zero, indicating that the current stable image is on the 
 home address, then the dirty line will be written into the derived page. Otherwise, if the CPBV bit is one, the dirty line
 will be written into the home page. The DBV of the page is also updated with the dirty vector from the L4.
+
+If, on a write back request, no mapping table entry is found with the page address, a new entry should be allocated
+from the mapping table. If one empty slot can be found within the table, then it will be initialized with the physical
+address of the page, with two bit vectors set to zero. The dirty page will be written into the corresponding derived page.
+In the more common case, there is no unused entry in the mapping table. The memory controller then needs to evict an
+existing entry to make room for the dirty page. The eviction is performs as follows. The memory controller
