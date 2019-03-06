@@ -28,3 +28,7 @@ a page requires an entire page to be read and written. Even worse, COW needs two
 page updated within an epoch: One read to make the shadow copy during normal operation, one read and write during 
 commit to generate the undo log entry, and one final write to flush back the updated shadow page. 
 
+On the other extreme, log-structured NVM system never updates data items in-place. Instead of fixing a home location
+for every data item (e.g. virtual pages or objects), log-structured checkpointing designs rely on a mapping table
+to relocate newly updated data items to the end of the log. Updated content of data items are also appended to the 
+end of the log since NVM favors sequential writes.
