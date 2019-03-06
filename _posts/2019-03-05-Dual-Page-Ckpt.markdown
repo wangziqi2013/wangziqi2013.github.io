@@ -82,4 +82,10 @@ If the XOR result is one, then a read request is issued using the cache line add
 Note that since there is a one-to-one correspondence between mapping table entries and derived pages, the address of the 
 derived page can be generated given the index of the entry that is hit. Otherwise, if XOR outputs zero, the home address
 of the cache line is read, because either the clean data is in derived page, and the current epoch has written dirty
-data, or clean data is in the home page, and the current epoch has not written anything.
+data, or clean data is in the home page, and the current epoch has not written anything. Note that if the L4 cache maintains
+data in page granularity, then for every physical page, at most two read requests are issued to read it: One from the 
+home page, another from the shadow page. The memory controller reads both pages from their locations, and assemble the 
+final version of the page using the output of XOR operation on CPBV and DBV.
+
+Write operations are more complex. If a write operation hits the mapping table, and the DBV bit is set, then the dirty
+page is brought into the L4 cache for modification. If DBV bit is clear, then the memory controller sets the bit in DBV
