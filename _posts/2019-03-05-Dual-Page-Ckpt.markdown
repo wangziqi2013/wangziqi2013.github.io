@@ -59,4 +59,8 @@ accessed from upper level components. In DPC, a virtual page can only be mapped 
 address obtained via MMU address translation, called its "home page"; another is a "derived page", which sits in a special
 NVM area allocated by the Operating System at startup time. Given the size of the mapping table as S, at startup time,
 the OS must allocate S consecutive pages from the NVM as the derived page area, and inform the memory controller of the 
-beginning of the area. The i-th entry of the table records the address mapping for page i of the derived area. 
+beginning of the area. The i-th entry of the table records the address mapping for page i of the derived area. There are 
+four fields for each entry. The first field records the home page address of the derived page. An associative search is 
+performed for every memory operation from upper levels. If there is a hit, then we use the information stored in the 
+entry to decide next step operations. Othereise, a new entry is created if the upper level operation is a write.
+The 
