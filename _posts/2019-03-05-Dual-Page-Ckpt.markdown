@@ -107,3 +107,7 @@ to find a clean entry (i.e. DBV is all zero), and initiates a write back which c
 in the derived page to their home addresses. Note that this also does not harm correctness, because if the page is clean, 
 then the version indicated by the CPBV is the stable snapshot from the previous epoch, and the other half is from
 two epoches ago, which can be safely overwritten. After the write back completes, the table entry can be removed. 
+If empty entry still cannot be found, the memory controller interupts the OS to request a chunk of memory as the overflow
+buffer for holding the page. The overflowed page can be migrated back to the main storage at the beginning of the next
+epoch, where dirty bits for all entries in the mapping table are cleared and it is guaranteed that an entry can always
+be found. 
