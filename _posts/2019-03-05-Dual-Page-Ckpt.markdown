@@ -71,3 +71,10 @@ If a bit is set, then there exists a dirty version of the line written by the cu
 be written back to the NVM and become the clean version for future epoches. The last field is a valid bit indicating 
 whether the entry is being used or not. If DRAM is used as L4 cache, necessary hardware components are also added
 to support it. Addresses from the L4 cache are physical addresses after MMU translation as in processor caches.
+
+The normal operation is described as follows. On system initialization, all entries in the mapping table are invalidated,
+and data is only stored in the home address. Load and store instructions are executed as usual if they hit the first four 
+levels of the cache. On an L4 cache miss, the mapping table is consulted using the page address. If the operation is read, 
+and no entry exists for the page address, by default all cache lines in the page is stored on its home address, and the 
+memory controller fulfills the request by issuing a NVM read request to the cache line's home address. If, however, that an 
+entry exists, then the memory controller takes the XOR of the CPBV and the DBV bit of the line to determine the next step.
