@@ -31,4 +31,7 @@ commit to generate the undo log entry, and one final write to flush back the upd
 On the other extreme, log-structured NVM system never updates data items in-place. Instead of fixing a home location
 for every data item (e.g. virtual pages or objects), log-structured checkpointing designs rely on a mapping table
 to relocate newly updated data items to the end of the log. Updated content of data items are also appended to the 
-end of the log since NVM favors sequential writes.
+end of the log since NVM favors sequential writes. The problem with log-structured NVM design, however, is that they
+penalize every memory access, adding a non-constant overhead to memory operations that access the NVM. In addition,
+log-structured designs require an extra garbage collection mechanism, which copies data around and frees stale items
+that have been deleted or overwritten, consuming both the bandwidth and cycles. 
