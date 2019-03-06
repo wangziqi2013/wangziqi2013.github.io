@@ -120,6 +120,7 @@ register file, to a checkpoint location on the NVM. In the meantime, the memory 
 persists bit vectors. CPBVs and mapping information are written into the NVM as part of the checkpoint's metadata. CPBVs 
 bits are then flipped if the dirty bit is set. This reflects the fact that if a cache line was updated in an epoch, it 
 will then become part of the stable snapshot in the perspective of the next epoch. As the last step, DBVs are flash-cleared.
+After the new snapshot has been persisted, the previous snapshot is now stale, and can be garbage collected.
 
 On recovery, the recovery handler first locates the last known valid snapshot on the NVM. Then the recovery handler loads
 mapping information from the NVM, including the address mapping, as well as CPBVs. DBVs are initialized to zero. Finally, 
