@@ -97,3 +97,9 @@ controller just starts a new checkpoint), only two logging areas are needed: One
 another to hold the next incoming checkpoint. A pointer in a known hardware location indicates which checkpoint is the 
 most recent one. After a new checkpoint is made, the controller atomically updates this pointer to point to the current
 logging area. The other logging area is implicitly garbage collected.
+
+To avoid excessive logging, i.e. multiple log entries being generated for the same address in the same execution, which is 
+entirely unnecessary because undo logging only needs the first image, the directory controller also allocates one bit for
+each page. The bit is set every time a log entry is generated for the page, and cleared when a new checkpoint is made.
+If the bit is on when a memory modification operation is detected, the directory controller simply ignores the request,
+since an undo image is already present.
