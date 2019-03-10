@@ -70,8 +70,12 @@ generated in epoch j, if such j exists. In the case where such epoch j does not 
 line has not been modified between epoch i and the current epoch. The current value of the line can then be directly copied, 
 because we know the current epoch has not modified the line. 
 
-Data migration proceeds as follows. In order to track versions, the memory controller reserves a chunk of memory as tags
-for DRAM rows. Every row in the main area and logging area has a tag. The tag is a row address pointer whose meaning
-differs for main area and logging area. For main area rows, the tag points to the most recent undo log entries in the 
-logging area. This simplifies rollback recovery, because the memory controller can just read the tag, and copy the 
-undo image back to the corresponding row in the main area. 
+In order to track versions, the memory controller reserves a chunk of memory as tags for DRAM rows. Every row in the main 
+area and logging area has a tag. The tag is a row address pointer whose meaning differs for main area and logging area. 
+For main area rows, the tag points to the most recent undo log entries in the logging area. This simplifies rollback 
+recovery, because the memory controller can just read the tag, and copy the undo image back to the corresponding row in 
+the main area. For logging area rows, the tag serves as a pointer to the next (i.e. more recent) undo log entry. If the 
+undo log entry is already the most recent entry, then the tag points to the corresponding log entry in the main area. 
+When a new log entry is generated, it is inserted into the version chain as follows. First, the tag of the main area row 
+is altered to point to the newly generated entry. Next, the entry's tag is modified to point to the main area row. 
+Finally, the tag of the previous topmost entry is modified to point to the newly generated entry. 
