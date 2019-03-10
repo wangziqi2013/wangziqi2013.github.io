@@ -50,3 +50,10 @@ between the parity page and the result of the previous XOR. In the last step, th
 the cache line is unlocked. The processor requesting the write back can resume execution as long as it receives the 
 acknowledgement from the directory. Parity page update can be performed in the background and hence is overlapped with 
 normal execution.
+
+Note that, in the above procedure, if the two update operations, data write and log write, cannot be made atomic,
+which is the case for most hardware, extra steps need to be taken to ensure that the atomicty is not violated. The paper
+suggests that each parity entry is extended with a one bit marker. The marker is unset before updating data, and only
+re-set when updated parity has been written. During recovery, if a parity page is found to have the marker clear, the 
+parity page is corrupted, and must be diacarded, because there is no guarantee that the parity page has been updated 
+after the data page.
