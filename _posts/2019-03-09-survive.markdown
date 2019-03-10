@@ -79,3 +79,10 @@ undo log entry is already the most recent entry, then the tag points to the corr
 When a new log entry is generated, it is inserted into the version chain as follows. First, the tag of the main area row 
 is altered to point to the newly generated entry. Next, the entry's tag is modified to point to the main area row. 
 Finally, the tag of the previous topmost entry is modified to point to the newly generated entry. 
+
+With version chains, data migration proceeds as follows. A background thread in the memory controller periodically 
+scans the list of epoches that have not been migrated. If the list is non-empty, the thread iterates over all undo
+log entries, and writes the next undo entry obtained from the tag into NVM. If the tag points to the main area, the 
+memory controller should ensure that while the main area row is being read, no write operations should be able to
+modify the row, because otherwise dirty data written by the current epoch might be copied during the migration of 
+a completed epoch.
