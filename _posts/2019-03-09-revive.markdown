@@ -57,3 +57,9 @@ suggests that each parity entry is extended with a one bit marker. The marker is
 re-set when updated parity has been written. During recovery, if a parity page is found to have the marker clear, the 
 parity page is corrupted, and must be diacarded, because there is no guarantee that the parity page has been updated 
 after the data page.
+
+Distributed parity partially solves failure recovery problem: On a component failure, by XOR'ing the parity page with
+all remaining data pages in the parity group, we can reconstruct the content of the failing memory module. Similarly,
+if the parity page itself is lost, we can also easily compute it by XOR'ing all data pages. In the paper, it is assumed 
+that at most one page will be lost during the failure. If, however, more than one page in a parity group is lost due to 
+the failure, an external replica must be used to restore the state. 
