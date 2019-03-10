@@ -88,4 +88,12 @@ scans the list of epoches that have not been migrated. If the list is non-empty,
 log entries, and writes the next undo entry obtained from the tag into NVM. If the tag points to the main area, the 
 memory controller should ensure that while the main area row is being read, no write operations should be able to
 modify the row, because otherwise dirty data written by the current epoch might be copied during the migration of 
-a completed epoch. 
+a completed epoch. The background thread keeps scanning the list until all epoches have been processed, at which point
+the state of the NVM is exactly the state at the beginning of the current epoch. 
+
+Data migration for single epoch itself, however, is not atomic. If the system crashes during an active migration, the 
+NVM will be left in an inconsistent state. To deal with this problem, the paper proposes that an extra non-volatile buffer 
+be added to the NVM. Data migration first writes the after-image into the non-volatile buffer. Row copy is only performed
+after all rows have been safely committed into the buffer. Even if the system crashes during a migration, the migration
+can still be resumed by the recovery handler, because all of the epoch's redo entries have been written into the non-volatile
+buffer.
