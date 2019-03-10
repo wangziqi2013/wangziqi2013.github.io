@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ReVive: Cost-Effective Architectural Support for Rollback Recovery in Shared-Memory Multiprocessors"
+date:   2019-03-09 04:01:00 -0500
+categories: paper
+paper_title: "ReVive: Cost-Effective Architectural Support for Rollback Recovery in Shared-Memory Multiprocessors"
+paper_link: https://ieeexplore.ieee.org/document/1003567
+paper_keyword: Checkpointing
+paper_year: ISCA 2002
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
