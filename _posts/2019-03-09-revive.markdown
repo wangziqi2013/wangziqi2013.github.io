@@ -68,4 +68,13 @@ Rebuilding system state after failure is not the entire story: On a failure, par
 also be lost. Without the exact processor state, it would be impossible to resume execution on an inconsistent memory image.
 ReVive relies on incremental checkpointing to guarantee that the system state can always be rolled back to the last
 consistent snapshot. During normal execution, the memory controller priodically interrupts all processors by sending them
-checkpointing signals. On receiving such a signal, processors will stop fetching new instructions immediately, drain
+checkpointing signals. On receiving such a signal, processors will stop fetching new instructions immediately. Then processors 
+drain their volatile states such as store queues and instruction windows, to ensure that information contained in these 
+hardware structures will not be lost on a recovery. Next, processors evict all dirty cache lines in the local cache back 
+to their home memory modules. During this process the parity bits of the memory pages are also updated accordingly. Finally,
+processors write their execution context into a known location in the address space, after which they reply to the memory
+controller indicating that the checkpoint has been completed. After receiving replies from all processors, the memory controller 
+then send a second signal to all processors to let them resume execution. Note that such two-phase commit style global 
+coordination is necessary during a checkpoint. Processors must wait until all other peer processors finish their checkpoint 
+preparation before it could resume execution. Otherwise, a processor that completes the checkpoint early may interfere with 
+processors that have not finished, which can corrupt the checkpoint. 
