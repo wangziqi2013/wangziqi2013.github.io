@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "Survive: Pointer-Based In-DRAM Incremental Checkpointing for Low-Cost Data Persistence and Rollback-Recovery"
+date:   2019-03-09 22:40:00 -0500
+categories: paper
+paper_title: "Survive: Pointer-Based In-DRAM Incremental Checkpointing for Low-Cost Data Persistence and Rollback-Recovery"
+paper_link: https://ieeexplore.ieee.org/document/7801818
+paper_keyword: Checkpointing; NVM
+paper_year: IEEE Computer Architecture Letters 2017
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
