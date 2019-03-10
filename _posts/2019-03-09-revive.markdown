@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes ReVive, a general purpose rollback recovery mechanism for shared-memory multiprocessors. There are 
+two design goals: Software rollback and crash recovery. Software rollback requires the system to preserve a consistent
+snapshot of system states. On a rollback request, the state snapshot is quickly restored, and system execution resumes 
+from the restoration point as if nothing has ever happened. Crash recovery focuses on the scenario where one or more 
+components of the system malfunction and cause data loss. A previously saved system snapshot must be loaded from some
+external sources, or rebuilt from remaining available information after the crash. In the case of ReVive, since all data i
+s stored in DRAM and hence is volatile, we only consider recovery from detectable errors caused by malfunctioning memory 
+modules. 
