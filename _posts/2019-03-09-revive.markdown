@@ -46,4 +46,7 @@ First, the cache line is marked as busy by the directory such that no other proc
 to preserve the atomicity of parity update. The directory controller then reads the old content of the line, computes 
 the XOR with the new line, and then writes the new line. If an acknowledgement for the write back is required, it will
 also be sent by the directory controller. Next, the directory controller reads the parity page, and computes the XOR
-between the parity page and the result of the previous XOR.
+between the parity page and the result of the previous XOR. In the last step, the updated parity is written back, and then
+the cache line is unlocked. The processor requesting the write back can resume execution as long as it receives the 
+acknowledgement from the directory. Parity page update can be performed in the background and hence is overlapped with 
+normal execution.
