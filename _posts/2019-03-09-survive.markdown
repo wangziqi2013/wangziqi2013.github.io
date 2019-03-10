@@ -53,3 +53,11 @@ rather efficiently using RowClone-FPM: Two DRAM operations on the same sub-array
 commands without intervening PRECHARGE. Compared with performing logging from the processor, this approach has both lower 
 latency and higher throughput, because the row copy operation is performed within DRAM, which does not use the bandwidth
 of memory bus.
+
+Survive uses a different rollback model than most other designs. Instead of allowing data to be written back to NVM during
+normal execution, which may cause NVM to become inconsistent, Survive does not allow dirty write back to the NVM. This is 
+achievable in Survive but difficult in other designs, because Survive builds upon conventional DRAM based systems, and 
+therefore the DRAM is considered as the last level of volatile memory hierarchy. Since NVM always keeps a consistent snapshot,
+on crash recovery, replaying undo log entries becomes unnecessary, and the recovery handler just skips this step. In other 
+words, Survive is a hybrid of redo and undo logging: undo logging is used for DRAM level rollback, while redo logging is 
+used to keep NVM a consistent image at the end of some epoch in the past.
