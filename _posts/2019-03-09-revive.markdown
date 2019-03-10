@@ -35,3 +35,12 @@ be automatically rolled back after this period of time. This is critical to I/O 
 I/O messages until it is certain that these non-retractable I/O operations will not be called back in the future. When 
 an error is detected, the system just discards active data, and restores the global state to a previously saved, consistent
 checkpoint.
+
+ReVive protects the system from data loss by adding redundancy when one or more memory module suddenly stops working and 
+loses all data it stores. Memory modules are divided into parity groups. For each page in each parity group, an extra 
+parity page is stored, and if one page in a parity group is lost, this parity page is used to rebuild the missing page.
+Note that parity pages are also scattered in all memory modules to lessen the risk that a few broken memory modules 
+bring the system into an unrecoverable state because more than one page in the parity group is missing. On write backs
+of dirty cache lines, both the old cache line and the parity should be updated. The sequence is described as follows.
+First, the cache line is marked as busy by the directory such that no other processors could access the line via coherence
+to preserve the atomicity of parity update.
