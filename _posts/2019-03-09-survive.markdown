@@ -18,9 +18,17 @@ between Survive and similar systems is that Survive still runs on DRAM just like
 deployed as a backend which is invisible to applications and even system libraries. Only during recovery is NVM visible
 to a system service called the recovery handler. The paper claims two benefits of such a hybrid system. First, writes to
 NVM can be significantly reduced, because most write operations are filtered out by the DRAM. This reduces both the write
-latency which is often on the critical path of the end of the checkpoint, and also pressure to the wear leveling mechanism
+latency which is often on the critical path at the end of the checkpoint, and also pressure to the wear leveling mechanism
 on the NVM since less writes are actually performed. With careful optimization such as reordering and coalescing, write
 amplification can also be alleviated. The second benefit is that hiding NVM behine DRAM allows simpler hardware designs.
 There is no need for complicated hardware to enforce proper write ordering, which is a necessity for logging. In addition,
 most existing components - coherence protocols, eviction policies, directories, etc. can remain unchanged. This implies 
 that no major hardware upgrade is required in order to deploy Survive.
+
+Like many other proposals, Survive adopts an epoch-based recovery paradigm. Normal execution of processors is divided into
+epoches. At the end of each epoch, all processors are interrupted to establish a checkpoint, which in general consists of 
+three steps. In the first step, processors stall and drain volatile states including the store queue and instruction window.
+In the second step, processors evict all dirty cache lines in their local caches back to lower level persistent storage.
+In the last step, processors write their execution context including the register file and some on-chip states also
+to the persistent storage. After these three steps, a marker is written at the end of the checkpoint, which marks the 
+checkpoint as active.
