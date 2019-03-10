@@ -63,3 +63,9 @@ all remaining data pages in the parity group, we can reconstruct the content of 
 if the parity page itself is lost, we can also easily compute it by XOR'ing all data pages. In the paper, it is assumed 
 that at most one page will be lost during the failure. If, however, more than one page in a parity group is lost due to 
 the failure, an external replica must be used to restore the state. 
+
+Rebuilding system state after failure is not the entire story: On a failure, part (or all) of the processor states may 
+also be lost. Without the exact processor state, it would be impossible to resume execution on an inconsistent memory image.
+ReVive relies on incremental checkpointing to guarantee that the system state can always be rolled back to the last
+consistent snapshot. During normal execution, the memory controller priodically interrupts all processors by sending them
+checkpointing signals. On receiving such a signal, processors will stop fetching new instructions immediately, drain
