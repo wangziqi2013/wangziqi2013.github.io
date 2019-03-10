@@ -78,3 +78,11 @@ then send a second signal to all processors to let them resume execution. Note t
 coordination is necessary during a checkpoint. Processors must wait until all other peer processors finish their checkpoint 
 preparation before it could resume execution. Otherwise, a processor that completes the checkpoint early may interfere with 
 processors that have not finished, which can corrupt the checkpoint. 
+
+During normal execution, the directory controller monitors memory modification actions from all processors, and performs
+undo logging to ensure that dirty states can always be restored to the initial value when the most recent checkpoint 
+is made. There are two cases: When the directory sees a read-exclusive or upgrade request, or when the directory sees 
+a write back request. In the former case, the directory eagerly logs the requested cache line, because a read-exclusive
+or upgrade request generally indicate that the requesting processor intends to perform write to the line. In the latter 
+case, the directory first reads out the original value of the line, writes it to the logging area, updates the parity
+as usual, only after which the write back can be served. 
