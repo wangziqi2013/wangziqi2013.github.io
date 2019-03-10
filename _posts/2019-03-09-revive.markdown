@@ -28,4 +28,10 @@ communication network. Each processor has a memory module and a cache controller
 handling cache coherence requests forwarded to that node. This paper assumes that these processor and memory modules 
 could fail independently, i.e. it is possible that one of the memory modules stopped working while others remain usable.
 Failures are restricted to non-power failure only, as a power failure will wipe out the content of every memory module,
-and hence render the system unrecoverable.
+and hence render the system unrecoverable. The paper also assumes a fail-safe error model: When an error happens, it is 
+guaranteed that it will be detected by hradware using error-correcting bits or other techniques within a bounded amount 
+of time. This bounded amount of time is known in advance, such that the system just assumes that the system will no longer
+be automatically rolled back after this period of time. This is critical to I/O handling, because the system needs to buffer
+I/O messages until it is certain that these non-retractable I/O operations will not be called back in the future. When 
+an error is detected, the system just discards active data, and restores the global state to a previously saved, consistent
+checkpoint.
