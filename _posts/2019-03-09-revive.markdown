@@ -103,3 +103,9 @@ entirely unnecessary because undo logging only needs the first image, the direct
 each page. The bit is set every time a log entry is generated for the page, and cleared when a new checkpoint is made.
 If the bit is on when a memory modification operation is detected, the directory controller simply ignores the request,
 since an undo image is already present.
+
+On recovery, the recovery handler first restores the logging area using parity pages. It then walks log entries one by one,
+and attempts to restore the page using the undo image. If, however, the page to be restored it inaccessible, the handler
+will then use the parity page and remaining data pages to fix it. After all pages are restored, the recovery handler 
+instructs all processors to load their execution context from the logging area. In the last step of recovery, the directory
+controller waits for all processors to be ready, after which it sends a signal to resume normal execution.
