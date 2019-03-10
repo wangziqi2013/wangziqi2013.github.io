@@ -41,3 +41,7 @@ of the next few epoches, it is possible that a system crash happens before the m
 In this case, the only option is to discard the incompleted checkpoint, and use the most recent valid checkpoint for 
 recovery. After restoring the system state to the beginning of a checkpoint, the recovery handler then instructs 
 all processors to load the execution context, after which the system can resume execution.
+
+Survive performs logging in the memory controller with the granularity of DRAM rows, which are typically a few KBs in size. 
+The memory controller maintains a list of row addresses that have been logged during the epoch for every past epoch that has 
+not been garbage collected. 
