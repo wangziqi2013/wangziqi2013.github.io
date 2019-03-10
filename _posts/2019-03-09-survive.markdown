@@ -13,3 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes Survive, a memory checkpointing architecture using hybrid NVM and DRAM system. The biggest difference 
+between Survive and similar systems is that Survive still runs on DRAM just like a conventional DRAM-only system. NVM is 
+deployed as a backend which is invisible to applications and even system libraries. Only during recovery is NVM visible
+to a system service called the recovery handler. The paper 
