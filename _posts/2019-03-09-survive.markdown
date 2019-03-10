@@ -70,3 +70,8 @@ generated in epoch j, if such j exists. In the case where such epoch j does not 
 line has not been modified between epoch i and the current epoch. The current value of the line can then be directly copied, 
 because we know the current epoch has not modified the line. 
 
+Data migration proceeds as follows. In order to track versions, the memory controller reserves a chunk of memory as tags
+for DRAM rows. Every row in the main area and logging area has a tag. The tag is a row address pointer whose meaning
+differs for main area and logging area. For main area rows, the tag points to the most recent undo log entries in the 
+logging area. This simplifies rollback recovery, because the memory controller can just read the tag, and copy the 
+undo image back to the corresponding row in the main area. 
