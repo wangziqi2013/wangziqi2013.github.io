@@ -43,4 +43,7 @@ Note that parity pages are also scattered in all memory modules to lessen the ri
 bring the system into an unrecoverable state because more than one page in the parity group is missing. On write backs
 of dirty cache lines, both the old cache line and the parity should be updated. The sequence is described as follows.
 First, the cache line is marked as busy by the directory such that no other processors could access the line via coherence
-to preserve the atomicity of parity update.
+to preserve the atomicity of parity update. The directory controller then reads the old content of the line, computes 
+the XOR with the new line, and then writes the new line. If an acknowledgement for the write back is required, it will
+also be sent by the directory controller. Next, the directory controller reads the parity page, and computes the XOR
+between the parity page and the result of the previous XOR.
