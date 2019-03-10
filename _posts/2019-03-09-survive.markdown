@@ -61,3 +61,13 @@ therefore the DRAM is considered as the last level of volatile memory hierarchy.
 on crash recovery, replaying undo log entries becomes unnecessary, and the recovery handler just skips this step. In other 
 words, Survive is a hybrid of redo and undo logging: undo logging is used for DRAM level rollback, while redo logging is 
 used to keep NVM a consistent image at the end of some epoch in the past.
+
+To keep the NVM image consistent while making progress, Survive needs to update NVM contents with data generated at each
+epoch. One interesting observation made this possible: For epoches i and j, where i < j, if an undo log entry is generated 
+at epoch j, and no log entry on the same address is generated between i and j, then the undo log entry is actually accessible
+data for epoches between i and j. In other words, the state of any address at the end of epoch i is exactly the value of 
+the undo log entry generated in epoch j, if such j exists. In the case where such epoch j does not exist, it must be the 
+case that the cache line has not been modified between epoch i and the current epoch. The current value of the line can 
+then be directly copied, because we know the current epoch has not modified the line. While performing data migration
+from DRAM to NVM, we 
+
