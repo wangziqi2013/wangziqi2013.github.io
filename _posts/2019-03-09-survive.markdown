@@ -44,4 +44,12 @@ all processors to load the execution context, after which the system can resume 
 
 Survive performs logging in the memory controller with the granularity of DRAM rows, which are typically a few KBs in size. 
 The memory controller maintains a list of row addresses that have been logged during the epoch for every past epoch that has 
-not been garbage collected. 
+not been garbage collected. The DRAM hardware address space is divided into two parts: The first part serves normal DRAM reads
+and writes as usual, and the second part is a logging area where log entries and checkpoints are stored. When a DRAM row is
+written by a cache line replacement from the LLC, the memory controller checks whether the DRAM row is already in the log
+of the current epoch. If not, a copy-on-write is performed, during which the before-image of the row is moved to the 
+logging area, and the address of the row is added to the end of the row ID list. The COW operation on DRAM can be implemented
+rather efficiently using RowClone-FPM: Two DRAM operations on the same sub-array can be accessed with back-to-back ACTIVATE
+commands without intervening PRECHARGE. Compared with performing logging from the processor, this approach has both lower 
+latency and higher throughput, because the row copy operation is performed within DRAM, which does not use the bandwidth
+of memory bus.
