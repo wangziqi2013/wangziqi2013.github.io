@@ -86,7 +86,14 @@ a write back request. In the former case, the directory eagerly logs the request
 or upgrade request generally indicate that the requesting processor intends to perform write to the line. In the latter 
 case, the directory first reads out the original value of the line, writes it to the logging area, updates the parity
 as usual, only after which the write back can be served. In the meantime when the log entry is being written, the cache 
-line must be marked as busy by the directory controller, such that no data write bach is served. Enforcing the write 
+line must be marked as busy by the directory controller, such that no data write back is served. Enforcing the write 
 ordering between log entry write and data write is very important in undo logging, as the logging scheme does not work
 if data is updated first without writing the log, and then system crashes. In this case, the dirty state cannot be 
-restored because the undo image is not written.
+restored because the undo image is not written. 
+
+Each memory module has a reserved chunk of memory dedicated for logging. Given that the logging area is large enough to
+hold all log entries during a checkpoint (which is easy to enforce, because if the area ia about to overflow, the directory
+controller just starts a new checkpoint), only two logging areas are needed: One to hold the most recent checkpoint, and 
+another to hold the next incoming checkpoint. A pointer in a known hardware location indicates which checkpoint is the 
+most recent one. After a new checkpoint is made, the controller atomically updates this pointer to point to the current
+logging area. The other logging area is implicitly garbage collected.
