@@ -21,3 +21,11 @@ components of the system malfunction and cause data loss. A previously saved sys
 external sources, or rebuilt from remaining available information after the crash. In the case of ReVive, since all data i
 s stored in DRAM and hence is volatile, we only consider recovery from detectable errors caused by malfunctioning memory 
 modules. 
+
+ReVive is built on Stanford DASH multiprocessor, which is a shared-memory architecture using a customized hardware coherence
+protocol to maintain cache coherence. DASH consists of multiple processors and memory modules connected to a low latency 
+communication network. Each processor has a memory module and a cache controller. The cache controller is responsible for 
+handling cache coherence requests forwarded to that node. This paper assumes that these processor and memory modules 
+could fail independently, i.e. it is possible that one of the memory modules stopped working while others remain usable.
+Failures are restricted to non-power failure only, as a power failure will wipe out the content of every memory module,
+and hence render the system unrecoverable.
