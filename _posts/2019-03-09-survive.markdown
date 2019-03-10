@@ -31,4 +31,13 @@ three steps. In the first step, processors stall and drain volatile states inclu
 In the second step, processors evict all dirty cache lines in their local caches back to lower level persistent storage.
 In the last step, processors write their execution context including the register file and some on-chip states also
 to the persistent storage. After these three steps, a marker is written at the end of the checkpoint, which marks the 
-checkpoint as active.
+completion of the checkpoint. Normal execution could resume after thrse three steps, which begins a new epoch. During normal
+execution, when a data item is written for the first time, an undo log entry is generated which contains the before image
+of the cache line. The undo log entry is written into the persistent storage before the updated cache line (some hardware 
+is needed to enforce this write ordering). On recovery, the recovery handler first replays the undo log to restore the 
+system state to the beginning of one of the recent checkpoints. Note that not all designs allow us to restore the system
+state to the most recent checkpoint, because if the persistence of the last checkpoint is overlapped with the execution
+of the next few epoches, it is possible that a system crash happens before the most recent checkpoint is fully persisted.
+In this case, the only option is to discard the incompleted checkpoint, and use the most recent valid checkpoint for 
+recovery. After restoring the system state to the beginning of a checkpoint, the recovery handler then instructs 
+all processors to load the execution context, after which the system can resume execution.
