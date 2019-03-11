@@ -45,4 +45,6 @@ list are considered as hot pages, and will be copies at the beginning of an epoc
 Active-CKS, differ in how pages are removed from the list. In Active-RND, there is an upper bound on the number of pages 
 in the list. If in some epoch a page is to be added, but the list is full, then the algorithm will randomly select a page
 from the list and then remove it. The paper claims that randomly selecting a page performs better than some other algorithms
-such as LRU, CLOCK or FIFO. In Active-CKS, no upper bound is put on the list size. 
+such as LRU, CLOCK or FIFO. In Active-CKS, no upper bound is put on the list size. Instead, a page is removed from the 
+list if the checksum of the page has not changed in the last N epoches. The paper recommends using N = 5. Computing the 
+checksum for a page is also inexpensive according to the measurement, which only takes a few hundred cycles. 
