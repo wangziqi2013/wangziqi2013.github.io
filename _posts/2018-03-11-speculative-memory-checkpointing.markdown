@@ -38,3 +38,11 @@ may result in unnecessary copies, but as the measurement suggests, these redunda
 significant problem compared with using page fault handler for every page write. Correctness is also guaranteed, because 
 in the case of overedtimation the undo image is identical to the memory image when the epoch ends.
 
+The paper proposes three ways of estimating the WWS of an epoch at the beginning of the epoch. The first two algorithms 
+are based on active lists, which are just lists of page IDs. Initially, all pages are marked as non-writable. The active 
+list is built during the first few epoches by adding every page for which the page fault is triggered. All pages in the 
+list are considered as hot pages, and will be copies at the beginning of an epoch. The two algorithms, Active-RND and 
+Active-CKS, differ in how pages are removed from the list. In Active-RND, there is an upper bound on the number of pages 
+in the list. If in some epoch a page is to be added, but the list is full, then the algorithm will randomly select a page
+from the list and then remove it. The paper claims that randomly selecting a page performs better than some other algorithms
+such as LRU, CLOCK or FIFO. In Active-CKS, no upper bound is put on the list size. 
