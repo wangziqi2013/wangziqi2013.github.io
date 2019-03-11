@@ -64,4 +64,8 @@ the cost of a heavyweight page fault. At the end of the epoch, the algorithm sel
 as one of the parents. The other parent for generating the next generation is selected over all individuals probablistically.
 The probablity of an individual being chosen as the other parent is inversely proportional to the cost function, i.e.
 the lower the cost is, the high chance the individual will be chosen as the parent. In total, P parents will be chosen.
-In the next step, the algorithm combines the first parent and P second parents to derive their offsprings. 
+In the next step, the algorithm combines the first parent and P second parents to derive their offsprings. Bit i in the 
+offspring is selected from either parent with equal probablity. To avoid falling into local minima, the algorithm will
+also randomly mutate the bits in the population after they are generated. The mutation process flips a bit in the population
+with very low probablity (e.g. 0.01). After that, the prediction is made for the next epoch, and the program continues 
+to execute.
