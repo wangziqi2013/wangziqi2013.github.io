@@ -23,7 +23,12 @@ walks the undo log in reverse chronilogical order, and applies undo images to co
 epoch to restore to has been reached. To track the list of modified pages during every epoch, at the beginning of the epoch,
 the library requests the OS to mark all pages in the current process as non-writable. Page faults will be triggered when
 the user application writes a page for the first time, during the handling of which the undo image is copied to the 
-logging area. The page is marked as writable (if it is writable without checkpointing) after the page fault handler returns
-such that following page writes do not trigger logging.
+logging area. The page is marked as writable (if it is writable without checkpointing) after the page fault handler returns,
+such that following page writes within the same epoch do not trigger logging.
 
-This paper identifies potential problems
+This paper identifies the problem with page fault driven checkpointing: efficiency. The paper shows by measurement that 
+the cost of handling page faults can be significantly larger than simply copying a page or computing a page checksum. 
+In fact, page copy only takes ~500 cycles, while COW takes more than 4000 cycles, an eight times overhead. Based on this
+observation, the paper proses a speculation scheme for estimating the set of pages that might be copied during the next
+epoch, called the Writable Working Set (WWS), at the beginning of every epoch. Instead of copy-on-demand as in COW, the 
+checkpointing library copies these pages 
