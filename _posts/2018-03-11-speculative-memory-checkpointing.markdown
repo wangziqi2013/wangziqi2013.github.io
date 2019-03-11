@@ -31,4 +31,10 @@ the cost of handling page faults can be significantly larger than simply copying
 In fact, page copy only takes ~500 cycles, while COW takes more than 4000 cycles, an eight times overhead. Based on this
 observation, the paper proses a speculation scheme for estimating the set of pages that might be copied during the next
 epoch, called the Writable Working Set (WWS), at the beginning of every epoch. Instead of copy-on-demand as in COW, the 
-checkpointing library copies these pages 
+checkpointing library copies these pages optimistically at the beginning of the epoch, and unsets the write protection bits
+for them. Any following write operations on these pages do not incur overhead of page faults, and hence can improve overall
+performance. Note that the estimation scheme does not need to be perfectly accurate. Slightly overestimating the working set
+may result in unnecessary copies, but as the measurement suggests, these redundant page copies actually do not pose a 
+significant problem compared with using page fault handler for every page write. Correctness is also guaranteed, because 
+in the case of overedtimation the undo image is identical to the memory image when the epoch ends.
+
