@@ -94,3 +94,7 @@ coordinator notes down the current epoch, e<sub>h</sub>, as the ending epoch. Th
 until the global persisted epoch variable, pepoch (see above), has reached e<sub>h</sub>, after which the coordinator 
 writes e<sub>l</sub> and e<sub>h</sub> to the checkpoint and mark the checkpoint as valid. After establishing a checkpoint,
 all older checkpoints and log entries before e<sub>l</sub> can be deleted because they will no longer be used for recovery.
+
+As an optimization, the checkpointing thread may ignore tuples with a timestamp larger than or equal to e<sub>l</sub>, since
+during recovery these tuples will be restored from the log anyway. This optimization greatly reduces both the size and the 
+time taken for a checkpoint which largely eliminates the need for incremental checkpointing.
