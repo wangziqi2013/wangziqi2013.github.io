@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents SiloR, a fast in-memory database system with support for persistence. SiloR is built upon Silo,
+an in-memory engine for transaction processing. Silo uses single version Optimistic Concurrency Control (OCC) for
+conflict detection. Every tuple in Silo has a version timestamp, consisting of three subfields: Epoch, version, and status bits. 
+The first two subfields (epoch and version) of the version timestamp equals the commit timestamp of the last write transaction 
+that updates the tuple. A lock bit in the status bit field allows tuples to be locked by a committing transaction, providing
+exclusive access permission for that transaction until commit succeeds. Silo differs from classical backward OCC in that 
+it does not rely on a centralized counter for establishing serialization orders. In fact, Silo serializes transaction in
+an entirely distributed and data-driven manner. 
