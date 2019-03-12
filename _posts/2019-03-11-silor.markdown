@@ -26,10 +26,12 @@ timestamp counter. Silo keeps track of tuples read and written during the transa
 set. The lock acqusition process follows a global total ordering to avoid deadlock. The committing transaction then
 reads a global epoch counter, which is advanced slowly only by a background thread (every 40ms). The value of the global 
 epoch counter represents the epoch in which the transaction commits. Next, the transaction validates its read by comparing 
-versions of tuples in the read against the current tuple version in data tables. If these two versions are different, indicating
-that another transaction committed on the tuple after the current transaction reads it, the current transaction must abort,
-because although Solo does not use centralized counter to order transactions, the concurrency control procotol is still
-commit time ordered which means that the transaction must ensure that all tuples it accessed must remain unchanged until
-commit time. 
-Next, the transaction determines its ct by the following 
-rules. First, the ct must not be smaller than or equal to the ct of any tuple in its RS and WS. 
+versions of tuples in the read against the current tuple version in data tables. If these two versions are different or 
+the tuple is currently locked by another committing transaction, indicatingthat another transaction committed (will commit) 
+on the tuple after the current transaction reads it, the current transaction must abort. This is because although Silo does 
+not use centralized counter to order transactions, the concurrency control procotol is still commit time ordered which 
+means that the transaction must ensure that all tuples it accessed must remain unchanged until commit time. If validation 
+succeeds, the transaction then proceeds to determine its ct by the following rules. First, the ct must not be smaller than 
+or equal to the ct of any tuple in its RS and WS. This guarantees that a tuple's timestamp is monotonically increasing. 
+Personally, I don't think ordering the transaction against its read set makes sense, because OCC is, by nature, commit
+time ordered. Timestamp assignment does not change the serialization guarantee of the protocol.
