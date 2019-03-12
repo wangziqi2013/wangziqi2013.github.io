@@ -34,4 +34,11 @@ means that the transaction must ensure that all tuples it accessed must remain u
 succeeds, the transaction then proceeds to determine its ct by the following rules. First, the ct must not be smaller than 
 or equal to the ct of any tuple in its RS and WS. This guarantees that a tuple's timestamp is monotonically increasing. 
 Personally, I don't think ordering the transaction against its read set makes sense, because OCC is, by nature, commit
-time ordered. Timestamp assignment does not change the serialization guarantee of the protocol.
+time ordered. Timestamp assignment does not change the serialization guarantee of the protocol. Second, the ct must not 
+be smaller than or equal to the previous ct that the same worker thread has assigned to transactions. This guarantees 
+that a single thread will always see monotonically increasing cts. The third rule is that if a transaction committed
+in epoch E, then the final version timestamp must also use E. Based on these rules, the committing transaction computes the 
+maximum ct over data items in its RS and WS, compare with the last ct, pick the larger one, and then form the version
+timestamp using this value and E. The last step of transaction commit it to update data items and version timestamps. 
+The transaction first updates tuples using the values in its WS, after which the version timestamp is updated by writing 
+the new value into the tuple header. Versions are unlocked after data and metadata are both updated.
