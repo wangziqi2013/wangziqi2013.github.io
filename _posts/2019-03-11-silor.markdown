@@ -23,4 +23,13 @@ backward OCC in that it does not rely on a centralized counter for establishing 
 transaction in an entirely distributed and data-driven manner, which prevents scalability problems brought by a centralized 
 timestamp counter. Silo keeps track of tuples read and written during the transaction using a read set (RS) and write set 
 (WS). At commit time, the transaction manager first locks the write set by acquiring locks for every tuple in the write 
-set. The lock acqusition process follows a global total ordering to avoid deadlock. 
+set. The lock acqusition process follows a global total ordering to avoid deadlock. The committing transaction then
+reads a global epoch counter, which is advanced slowly only by a background thread (every 40ms). The value of the global 
+epoch counter represents the epoch in which the transaction commits. Next, the transaction validates its read by comparing 
+versions of tuples in the read against the current tuple version in data tables. If these two versions are different, indicating
+that another transaction committed on the tuple after the current transaction reads it, the current transaction must abort,
+because although Solo does not use centralized counter to order transactions, the concurrency control procotol is still
+commit time ordered which means that the transaction must ensure that all tuples it accessed must remain unchanged until
+commit time. 
+Next, the transaction determines its ct by the following 
+rules. First, the ct must not be smaller than or equal to the ct of any tuple in its RS and WS. 
