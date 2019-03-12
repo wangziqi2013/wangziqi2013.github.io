@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Fast Databases with Fast Durability and Recovery Through Multicore Parallelism"
+date:   2019-03-11 23:34:00 -0500
+categories: paper
+paper_title: "Fast Databases with Fast Durability and Recovery Through Multicore Parallelism"
+paper_link: https://www.usenix.org/conference/osdi14/technical-sessions/presentation/zheng_wenting
+paper_keyword: Database Recovery; Logging; Multicore
+paper_year: OSDI 2014
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
