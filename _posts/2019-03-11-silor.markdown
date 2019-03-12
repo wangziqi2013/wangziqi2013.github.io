@@ -86,4 +86,7 @@ of the checkpoint. Then n checkopinting threads are started, each responsible fo
 These checkpointing threads read tuples after locking them, which guarantees the consistency of a single tuple, but not 
 across tuples. This checkpointing scheme works well with the concurrency control protocol, because if a transaction
 is about to commit on a tuple that is currently being read, it will detect the lock bit, and then abort. No partial update
-is hence observable. 
+is hence observable. It is possible, however, that the checkpoint itself is inconsistent (a fuzzy checkpoint) because of 
+concurrent transaction commits. Taking fuzzy checkpoints do not harm SiloR's recoverability, since SiloR uses physical redo
+logging, which can always restore the database to the consistent state by applying redo images, which may potentially redo 
+some tuples unnecessarily, but never gives up correctness.
