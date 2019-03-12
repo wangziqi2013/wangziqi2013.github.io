@@ -65,5 +65,16 @@ In order to drive the logging process forward, in SiloR worker threads refresh t
 a transaction commits (if the thread is busy) or periodically using a timer (if the thread is idle). Worker thread having 
 a local epoch e means that the worker thread will not generate any log records with epoches less than e, which is useful
 for determining the range of log entries that have already been persisted. Note that there is no guarantee that log entries
-for transactions below the local epoch have been persisted, even if 
-all worker threads have their local epoches greather than some e'. Logger threads 
+of transactions committed with ct below the local epoch have been persisted, even if all worker threads have their local 
+epoches greather than some e'. This is because some log entries may still have not been processed by the logger thread, 
+and will remain in the volatile buffer for a while. Logger threads hence should take into consideration both the contents 
+of the buffer and the local epoches of worker threads assigned to it. The process is described as follows. First, every 
+logger thread scans the assigned worker threads, and computes the minimum of all local epoches. Next, the logger thread
+scans the current buffer objects that have not been persisted, and computes the minimum epoch of all log entries. These
+buffers are written to the disk as soon as possible, during which time the logger just waits for more buffer objects to
+come and repeats this step every time a new buffer object is received. The minimum log entry epoch is only computed after
+all entries in the buffer object have been persisted to the disk. In the third step, the logger thread takes the 
+smaller from step one and step two, and advertises this value to a special logger thread. The special logger thread then
+computes the minimum of all logger threads, and writes this value minus one to a separate file on the disk as pepoch. 
+Pepoch indicates the maximum epoch that is known to be durable. The value of pepoch is also broadcasted to all worker
+threads. Transactions whose commit timestamp is in pepoch or before it can be safely committed.
