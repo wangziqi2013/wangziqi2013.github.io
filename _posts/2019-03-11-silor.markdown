@@ -43,4 +43,7 @@ timestamp using this value and e. The last step of transaction commit it to upda
 The transaction first updates tuples using the values in its WS, after which the version timestamp is updated by writing 
 the new value into the tuple header. Versions are unlocked after data and metadata are both updated.
 
-Silo commits transactions via group commit, in the notion of consecutive epoches. The global epoch counter E
+Silo commits transactions via group commit, in the notion of consecutive epoches. The global epoch counter E denotes the 
+current epoch. Transactions are only committed after the current epoch ends, and log entries for the transaction (as well 
+as all other transactions) become durable. The worker thread suspends the transaction if it has finished execution, but 
+has not been made persistence. 
