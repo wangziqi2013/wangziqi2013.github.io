@@ -60,3 +60,10 @@ feedback mechanism, where loggers can impose backpressure to workers if transact
 such that workers can slow down and avoid overcommitting the system with too many log entries. In practice, in order to
 reduce unnecessary worker thread stalls due to not being able to claim an empty buffer, the logger thread releases the buffer
 back to the pool immediately after the write system call returns, instead of waiting for the write to be persisted. 
+
+In order to drive the logging process forward, in SiloR worker threads refresh their local copy of the global epoch when
+a transaction commits (if the thread is busy) or periodically using a timer (if the thread is idle). Worker thread having 
+a local epoch e means that the worker thread will not generate any log records with epoches less than e, which is useful
+for determining the range of log entries that have already been persisted. Note that there is no guarantee that log entries
+for transactions below the local epoch have been persisted, even if 
+all worker threads have their local epoches greather than some e'. Logger threads 
