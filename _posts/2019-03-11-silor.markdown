@@ -89,4 +89,8 @@ is about to commit on a tuple that is currently being read, it will detect the l
 is hence observable. It is possible, however, that the checkpoint itself is inconsistent (a fuzzy checkpoint) because of 
 concurrent transaction commits. Taking fuzzy checkpoints do not harm SiloR's recoverability, since SiloR uses physical redo
 logging, which can always restore the database to the consistent state by applying redo images, which may potentially redo 
-some tuples unnecessarily, but never gives up correctness.
+some tuples unnecessarily, but never gives up correctness. After the checkpoint is finished on all threads, the central 
+coordinator notes down the current epoch, e<sub>h</sub>, as the ending epoch. The checkpoint is not considered as completed,
+until the global persisted epoch variable, pepoch (see above), has reached e<sub>h</sub>, after which the coordinator 
+writes e<sub>l</sub> and e<sub>h</sub> to the checkpoint and mark the checkpoint as valid. After establishing a checkpoint,
+all older checkpoints and log entries before e<sub>l</sub> can be deleted because they will no longer be used for recovery.
