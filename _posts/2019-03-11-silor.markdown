@@ -46,4 +46,6 @@ the new value into the tuple header. Versions are unlocked after data and metada
 Silo commits transactions via group commit, in the notion of consecutive epoches. The global epoch counter E denotes the 
 current epoch. Transactions are only committed after the current epoch ends, and log entries for the transaction (as well 
 as all other transactions) become durable. The worker thread suspends the transaction if it has finished execution, but 
-has not been made persistence. 
+has not been made persistence. The application is only notified of transaction commit after the epoch that the transaction
+is in ends and everything has been persisted to the disk.
+
