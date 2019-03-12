@@ -79,6 +79,12 @@ computes the minimum of all logger threads, and writes this value minus one to a
 Pepoch indicates the maximum epoch that is known to be durable. The value of pepoch is also broadcasted to all worker
 threads. Transactions whose commit timestamp is in pepoch or before it can be safely committed.
 
+It is worth noting that log entries are not sorted before they are written to the disk. It is therefore possible and 
+is actually the norm that log entries from different threads and epoches are mixed together. Although the paper suggests
+that a worker thread should flush its log buffer to the logger thread when the global epoch is advanced, this is merely
+an optimization to ensure progress, and even with this mechanism deployed, log entries from the same epoch are still
+mixed up together.
+
 To reduce log storage pressure and to accelerate log restoration during recovery, SiloR periodically takes checkpoints of
 the entire database, and writes these checkpoints to the disk as a starting point for recovery. The checkpointing process
 is described as follows. First, a central coordinator takes the current global epoch as the staring epoch e<sub>l</sub> 
