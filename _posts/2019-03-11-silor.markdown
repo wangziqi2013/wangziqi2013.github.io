@@ -78,3 +78,12 @@ smaller from step one and step two, and advertises this value to a special logge
 computes the minimum of all logger threads, and writes this value minus one to a separate file on the disk as pepoch. 
 Pepoch indicates the maximum epoch that is known to be durable. The value of pepoch is also broadcasted to all worker
 threads. Transactions whose commit timestamp is in pepoch or before it can be safely committed.
+
+To reduce log storage pressure and to accelerate log restoration during recovery, SiloR periodically takes checkpoints of
+the entire database, and writes these checkpoints to the disk as a starting point for recovery. The checkpointing process
+is described as follows. First, a central coordinator takes the current global epoch as the staring epoch e<sub>l</sub> 
+of the checkpoint. Then n checkopinting threads are started, each responsible for 1/n of each table in the database.
+These checkpointing threads read tuples after locking them, which guarantees the consistency of a single tuple, but not 
+across tuples. This checkpointing scheme works well with the concurrency control protocol, because if a transaction
+is about to commit on a tuple that is currently being read, it will detect the lock bit, and then abort. No partial update
+is hence observable. 
