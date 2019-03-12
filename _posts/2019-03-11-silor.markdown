@@ -104,3 +104,10 @@ all older checkpoints and log entries before e<sub>l</sub> can be deleted becaus
 As an optimization, the checkpointing thread may ignore tuples with a timestamp larger than or equal to e<sub>l</sub>, since
 during recovery these tuples will be restored from the log anyway. This optimization greatly reduces both the size and the 
 time taken for a checkpoint which largely eliminates the need for incremental checkpointing.
+
+During recovery, a dedicated thread first reads the checkpoint into memory, and then rebuilds tables, indices, etc. Recovery
+threads are then started to replay the log till the most recent presistent epoch. The recovery threads first read pepoch from
+the disk, which represents the last presistent epoch. Then they read log files from the disk in reverse creation time order,
+i.e. files created late are read before files created earlier. This is because SiloR adoptes redo logging, and hence only 
+cares about the most up-to-date of a tuple. If we replay logs in the reverse order they were created, there is a large chance
+that most locations are only written a few times, which reduces memory traffic. 
