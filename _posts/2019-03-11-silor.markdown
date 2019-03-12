@@ -37,8 +37,10 @@ Personally, I don't think ordering the transaction against its read set makes se
 time ordered. Timestamp assignment does not change the serialization guarantee of the protocol. Second, the ct must not 
 be smaller than or equal to the previous ct that the same worker thread has assigned to transactions. This guarantees 
 that a single thread will always see monotonically increasing cts. The third rule is that if a transaction committed
-in epoch E, then the final version timestamp must also use E. Based on these rules, the committing transaction computes the 
+in epoch e, then the final version timestamp must also use e. Based on these rules, the committing transaction computes the 
 maximum ct over data items in its RS and WS, compare with the last ct, pick the larger one, and then form the version
-timestamp using this value and E. The last step of transaction commit it to update data items and version timestamps. 
+timestamp using this value and e. The last step of transaction commit it to update data items and version timestamps. 
 The transaction first updates tuples using the values in its WS, after which the version timestamp is updated by writing 
 the new value into the tuple header. Versions are unlocked after data and metadata are both updated.
+
+Silo commits transactions via group commit, in the notion of consecutive epoches. The global epoch counter E
