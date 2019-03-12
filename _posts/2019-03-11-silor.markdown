@@ -110,4 +110,10 @@ threads are then started to replay the log till the most recent presistent epoch
 the disk, which represents the last presistent epoch. Then they read log files from the disk in reverse creation time order,
 i.e. files created late are read before files created earlier. This is because SiloR adoptes redo logging, and hence only 
 cares about the most up-to-date of a tuple. If we replay logs in the reverse order they were created, there is a large chance
-that most locations are only written a few times, which reduces memory traffic. 
+that most locations are only written a few times, which reduces memory traffic. Recovery threads then scans log entries in
+the file. If the entry has a timestamp larger than pepoch, it is ignored, because the entry represents an uncommitted
+update, which should be discarded because users are not notified yet. Log entries before e<sub>l</sub> are ignored because 
+they must have already been included in the checkpoint image. If the timestamp of the log entry is smaller than
+the current timestamp in the table, it will also be ignored, because the current value in the table is a more recent 
+value written by some transaction. The tuple is only updated using the log entry if the timestamp of the tuple is 
+smaller than the timestamp of the log entry.
