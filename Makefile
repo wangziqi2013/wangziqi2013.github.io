@@ -1,6 +1,6 @@
 
 JEKYLL=jekyll
- 
+  
 all: site
 site: 
 	jekyll build
