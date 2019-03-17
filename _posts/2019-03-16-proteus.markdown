@@ -25,4 +25,9 @@ to impose correct memory ordering between PMEM instructions and earlier store in
 hardware changes and can be deployed quickly, software barriers are overly conservative, and are slow and cumbersome to use. 
 This is because programmers have no control over how cache lines are maintained by the hardware cache and how dirty lines 
 are written back by the NVM controller. In contrast, hardware solutions generally require extending the cache, the directory,
-or the memory controller to automate logging and recovery. 
+or the memory controller to automate logging and recovery. They resort to hardware address remapping in the case of 
+Copy-on-Write (COW), or hardware store queue in the case of undo logging. The problem with hardware solutions is that
+on-chip storage resources are often scarce and have limitations (e.g. access latency, capacity, etc.), which further puts 
+a hard limit on the number of concurrent transactions or the maximum read/write sets. When the working set of a transaction
+exceeds these hard limits, hardware systems either need to stall to wait for resource, or use software handler as a fall
+back path.
