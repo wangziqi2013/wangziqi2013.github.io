@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Proteus: A Flexible and Fast Software Supported Hardware Logging Approach for NVM"
+date:   2019-03-16 21:39:00 -0500
+categories: paper
+paper_title: "Proteus: A Flexible and Fast Software Supported Hardware Logging Approach for NVM"
+paper_link: https://dl.acm.org/citation.cfm?id=3124539
+paper_keyword: NVM; Logging; Proteus
+paper_year: MICRO 2017
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
