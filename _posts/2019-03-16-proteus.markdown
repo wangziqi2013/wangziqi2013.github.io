@@ -33,9 +33,17 @@ exceeds these hard limits, hardware systems either need to stall to wait for res
 back path.
 
 Proteus, on the other hand, borrows from both sides and achieves the favorable characteristics of software and hardware 
-approaches. Compared with software solutions, Proteus relies on programmers or compilers to denote transaction boundaries
+approaches. Compared with software solutions, Proteus relies on programmers or compilers to mark transaction boundaries
 as well as to issue instructions that generate and flushe log entries, when shared data items are updated during a transaction.
 Compared with hardware solutions, Proteus similarly extends the processor with a log write queue which stores pending log
 entries to be written. In addition, an extra log pending queue is added to the memory controller, such that some log entries 
 do not even need to be written to the NVM if the transaction commits before the queue overflows. We elaborate on these designs
 in the following sections.
+
+Protus assumes transactional semantics for durable writes: Either all writes within a transaction become durable as the 
+transaction commits, or none of them becomes durable, and the transaction is aborted. Special instructions are needed
+to begin and attempt to commit a durable transaction. When generating code for a transaction body, compilers are responsible 
+for expanding every transactional store instruction to global data items into three instructions: One for reading the old
+value and generating the log entry, another for writing data that has been loaded into the cache, and the last for writing
+the log entry into NVM logging area. Semantics and implementation of the three instructions will be covered in details. 
+Each transaction is allocated a unique transaction ID (TID)
