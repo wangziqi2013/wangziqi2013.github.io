@@ -50,4 +50,9 @@ Each transaction is allocated a unique transaction ID (TID) when it commits. The
 purposes, but also for the hardware to identify which log entry belongs to which transaction, as we will see later.
 
 Two new instructions are added to the ISA: log-load and log-flush. The log-load instruction takes one address and one register 
-argument. The address points to an aligned 32 byte memory block, which is the basic unit of logging in Protus
+argument. The address points to an aligned 32 byte memory block, which is the basic unit of logging in Protus. Choosing 32 bytes
+as the logging unit is to reduce the number of NVM writes when the entry is flushed back to the NVM, since write back to 
+NVM must be 64 byte, cache line sized memory block. A log entry consisting of 32 byte data plus metadata is guaranteed 
+to be written back using just one write operation to the NVM. On executing the instruction, the processor attempts to load 
+the L1 cache with the block on the given address if it has not been loaded (and raises exception as usual if the access 
+is invalid), and the copy the 32 byte block to a special register, the log register. 
