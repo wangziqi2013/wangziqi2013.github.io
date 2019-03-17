@@ -76,4 +76,11 @@ can be flushed out-of-order to maximize bandwidth, which also enables some optim
 a store instruction is about to commit, an associative search is performed on the log queue. If the log entry from the 
 same source address as the address of the store instruction has not been flushed yet, the pipeline should prevent the 
 store instruction from committing, and therefore guarantees that the log entry can always be persisted before the 
-corresponding dirty data.
+corresponding dirty data. Note that the system circumvents the cache hierarchy when performing log entry flush. These
+entries are directly sent to the memory controller when they leave the log queue.
+
+To avoid logging unnecessary data, each processor also has a Log Lookup Table (LLT), which stores the addresses of the 
+most recent log entries that are generated. Since undo logging only requires generating the log entry on the first 
+write within the transaction, later writes on the same address does not need to be logged, although the store instruction
+has been expanded by the compiler, wasting bandwidth and NVM storage. To solve this problem, when a new log entry is inserted
+into the log queue
