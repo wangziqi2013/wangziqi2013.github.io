@@ -96,5 +96,6 @@ processors are first buffered by the LPQ, until the buffer becomes full and spil
 data items still use the normal data path. After the transaction commits, the commit message along with the TID is sent 
 to the memory controller. The memory controller checks the LPQ, and invalidates all log entries that have the same TID.
 If some entries have already been spilled into the NVM, then the commit handler in the memory controller also 
-walks the logging area, and invalidates them as well. To slightly accelerate the log cleaning process, log buffered can
-be allocated in a per-thread manner. Since a thread
+walks the logging area, and invalidates them as well. To slightly accelerate the log cleaning process, log buffers can
+be allocated in a per-thread manner. Since a thread can only be executing one transaction at a given time, log buffers can
+be directly removed once the corresponding transaction commits.
