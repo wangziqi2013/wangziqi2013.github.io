@@ -19,4 +19,10 @@ programmers or compilers to insert software persist barriers to enforce correct 
 programmers with a set of new instructions, called PMEM, to compose persist barriers on x86 based architectures. A persist
 barrier using PMEM consists of one or more cache line flush instructions, and a pcommit instruction at the end. The cache 
 line flush instructions make sure that all dirty states are written into the NVM controller, and pcommit guarantees that
-NVM controller has drained its internal write queue.
+NVM controller has drained its internal write queue. Dirty states generated before the barrier and flushed by the cache line 
+flush instructions are guaranteed to be persistent on the NVM after the barrier returns. Store fences are also inserted 
+to impose correct memory ordering between PMEM instructions and earlier store instructions. Though not requiring any expensive
+hardware changes and can be deployed quickly, software barriers are overly conservative, and are slow and cumbersome to use. 
+This is because programmers have no control over how cache lines are maintained by the hardware cache and how dirty lines 
+are written back by the NVM controller. In contrast, hardware solutions generally require extending the cache, the directory,
+or the memory controller to automate logging and recovery. 
