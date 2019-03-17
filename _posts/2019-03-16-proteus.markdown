@@ -83,4 +83,7 @@ To avoid logging unnecessary data, each processor also has a Log Lookup Table (L
 most recent log entries that are generated. Since undo logging only requires generating the log entry on the first 
 write within the transaction, later writes on the same address does not need to be logged, although the store instruction
 has been expanded by the compiler, wasting bandwidth and NVM storage. To solve this problem, when a new log entry is inserted
-into the log queue
+into the log queue, an entry with the same address is also inserted into the LLT. On executing log-load and log-flush,
+the address is searched against the LLT. If the address exists in the LLT, then both instructions will be essentially no-op.
+When the LLT is full, a LRU entry is evicted, and then the newest entry is inserted.
+
