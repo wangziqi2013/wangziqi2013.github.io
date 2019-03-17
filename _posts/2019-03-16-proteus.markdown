@@ -46,4 +46,8 @@ to begin and attempt to commit a durable transaction. When generating code for a
 for expanding every transactional store instruction to global data items into three instructions: One for reading the old
 value and generating the log entry, another for writing data that has been loaded into the cache, and the last for writing
 the log entry into NVM logging area. Semantics and implementation of the three instructions will be covered in details. 
-Each transaction is allocated a unique transaction ID (TID)
+Each transaction is allocated a unique transaction ID (TID) when it commits. The TID is useful not only for conflict detection
+purposes, but also for the hardware to identify which log entry belongs to which transaction, as we will see later.
+
+Two new instructions are added to the ISA: log-load and log-flush. The log-load instruction takes one address and one register 
+argument. The address points to an aligned 32 byte memory block, which is the basic unit of logging in Protus
