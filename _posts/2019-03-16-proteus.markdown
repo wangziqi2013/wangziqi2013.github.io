@@ -87,3 +87,14 @@ into the log queue, an entry with the same address is also inserted into the LLT
 the address is searched against the LLT. If the address exists in the LLT, then both instructions will be essentially no-op.
 When the LLT is full, a LRU entry is evicted, and then the newest entry is inserted.
 
+The paper also made an important observation: as long as crash and recovery is uncommon, log entries are written once, and 
+almost never read. The implication is that, instead of always storing log entries on the NVM, which suffers both higher
+write latency compared with DRAM, and limited P/E cycles, log entries can be buffered in a small memory-backed SRAM hardware
+queue. The hardware queue is called a Log Pending Queue (LPQ), which can be made fast and durable. An LPQ entry cosists of 
+all fields of the log queue, plus the TID of the transaction that generates these entries. Log entries flushed from
+processors are first buffered by the LPQ, until the buffer becomes full and spills entries onto the NVM, while other 
+data items still use the normal data path. After the transaction commits, the commit message along with the TID is sent 
+to the memory controller. The memory controller checks the LPQ, and invalidates all log entries that have the same TID.
+If some entries have already been spilled into the NVM, then the commit handler in the memory controller also 
+walks the logging area, and invalidates them as well. To slightly accelerate the log cleaning process, log buffered can
+be allocated in a per-thread manner. Since a thread
