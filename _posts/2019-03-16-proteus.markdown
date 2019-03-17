@@ -71,5 +71,9 @@ To architectually support the log-flush operation, the paper proposes adding a s
 operations that have not been completed. The log queue is a hardware associative searching structure. Each entry in the 
 queue consists of the source address, destination address, log metadata, and data. When a log-flush instruction enters the
 pipeline, a slot is reserved in the log queue, which will be filled later as the instruction flows through the pipeline.
-After the slot becomes ready, it can be selected by the write back hardware and then flushed. Entries in the queue can be 
-flushed out-of-order to maximize bandwidth, which also enables some optimizations.
+After the slot becomes ready, it can be selected by the write back hardware and then flushed. Entries not on the same address
+can be flushed out-of-order to maximize bandwidth, which also enables some optimizations. To enforce write ordering, when 
+a store instruction is about to commit, an associative search is performed on the log queue. If the log entry from the 
+same source address as the address of the store instruction has not been flushed yet, the pipeline should prevent the 
+store instruction from committing, and therefore guarantees that the log entry can always be persisted before the 
+corresponding dirty data.
