@@ -31,3 +31,7 @@ on-chip storage resources are often scarce and have limitations (e.g. access lat
 a hard limit on the number of concurrent transactions or the maximum read/write sets. When the working set of a transaction
 exceeds these hard limits, hardware systems either need to stall to wait for resource, or use software handler as a fall
 back path.
+
+Proteus, on the other hand, borrows from both sides and achieves the favorable characteristics of software and hardware 
+approaches. Compared with software solutions, Proteus relies on programmers or compilers to denote transaction boundaries
+as well as to issue instructions that generate and flushe log entries, when shared data items are updated during a transaction.
