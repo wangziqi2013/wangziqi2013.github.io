@@ -55,4 +55,7 @@ as the logging unit is to reduce the number of NVM writes when the entry is flus
 NVM must be 64 byte, cache line sized memory block. A log entry consisting of 32 byte data plus metadata is guaranteed 
 to be written back using just one write operation to the NVM. On executing the instruction, the processor attempts to load 
 the L1 cache with the block on the given address if it has not been loaded (and raises exception as usual if the access 
-is invalid), and the copy the 32 byte block to a special register, the log register. 
+is invalid), and the copy the 32 byte block to a special register, the log register. Log registers are 64 byte registers
+allocated from a separate register file. Each log register holds the log entry, including data and metadata such as addresses
+and property bits. On executing a log-load instruction, the processor issues a read, and uses the returned data to fill the
+given log register. Compilers are responsible for allocating and reusing log registers. 
