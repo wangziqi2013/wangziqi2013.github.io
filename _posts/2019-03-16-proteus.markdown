@@ -35,3 +35,7 @@ back path.
 Proteus, on the other hand, borrows from both sides and achieves the favorable characteristics of software and hardware 
 approaches. Compared with software solutions, Proteus relies on programmers or compilers to denote transaction boundaries
 as well as to issue instructions that generate and flushe log entries, when shared data items are updated during a transaction.
+Compared with hardware solutions, Proteus similarly extends the processor with a log write queue which stores pending log
+entries to be written. In addition, an extra log pending queue is added to the memory controller, such that some log entries 
+do not even need to be written to the NVM if the transaction commits before the queue overflows. We elaborate on these designs
+in the following sections.
