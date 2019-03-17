@@ -66,3 +66,10 @@ entries are generated. During recovery, only the earliest entry for an address i
 dirty data written in the transaction, which should not be part of the state after roll back. To achieve this, Protus also
 has a special register, LTA (Log Target Address),  for dispensing sequence numbers. The register is used to generate the 
 address on NVM logging area, to which the log entry is written. After each read, the value of LTA is incremented.
+
+To architectually support the log-flush operation, the paper proposes adding a special log queue for holding log write back
+operations that have not been completed. The log queue is a hardware associative searching structure. Each entry in the 
+queue consists of the source address, destination address, log metadata, and data. When a log-flush instruction enters the
+pipeline, a slot is reserved in the log queue, which will be filled later as the instruction flows through the pipeline.
+After the slot becomes ready, it can be selected by the write back hardware and then flushed. Entries in the queue can be 
+flushed out-of-order to maximize bandwidth, which also enables some optimizations.
