@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents Proteus, a hardware extension on NVM based architectures for supporting atomic durability. Prior to 
+Proteus, past designs tend to either only focus on software side or on the hardware side. Software solutions require 
+programmers or compilers to insert software persist barriers to enforce correct write ordering. For example, Intel provided 
+programmers with a set of new instructions, called PMEM, to compose persist barriers on x86 based architectures. A persist
+barrier using PMEM consists of one or more cache line flush instructions, and a pcommit instruction at the end. The cache 
+line flush instructions make sure that all dirty states are written into the NVM controller, and pcommit guarantees that
+NVM controller has drained its internal write queue.
