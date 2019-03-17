@@ -56,6 +56,13 @@ NVM must be 64 byte, cache line sized memory block. A log entry consisting of 32
 to be written back using just one write operation to the NVM. On executing the instruction, the processor attempts to load 
 the L1 cache with the block on the given address if it has not been loaded (and raises exception as usual if the access 
 is invalid), and the copy the 32 byte block to a special register, the log register. Log registers are 64 byte registers
-allocated from a separate register file. Each log register holds the log entry, including data and metadata such as addresses
+allocated from a separate register file. Each log register holds the log entry, including data and metadata such as address
 and property bits. On executing a log-load instruction, the processor issues a read, and uses the returned data to fill the
-given log register. Compilers are responsible for allocating and reusing log registers. 
+given log register. Compilers are responsible for allocating and reusing log registers. The second instruction is log-flush,
+which writes the content of a given log register into a target address. Both the register name and the address are encoded
+by the instruction. Note that, for undo logging based systems, if the same address can be logged multiple times (i.e. a 
+log entry is generated every time the address is written), then undo log entries must be written by the order that these 
+entries are generated. During recovery, only the earliest entry for an address is replayed, because later entries contain
+dirty data written in the transaction, which should not be part of the state after roll back. To achieve this, Protus also
+has a special register, LTA (Log Target Address),  for dispensing sequence numbers. The register is used to generate the 
+address on NVM logging area, to which the log entry is written. After each read, the value of LTA is incremented.
