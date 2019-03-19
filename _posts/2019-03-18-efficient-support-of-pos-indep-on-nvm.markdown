@@ -51,7 +51,9 @@ arises when a based pointer is incremented, decremented, or passed as arguments.
 are difficult to reason about and use correctly.
 
 Beyond what we have discussed above, the paper also points out that data structures can also be stored without any relocation
-problem by serializing and deserializing them after and before use. This has been implemented by several commercial systems.
-The overhead of (de)serialization depends on the usage pattern of the data structure. If a NVM region is only loaded once 
-and used during a long period of time, the overhead of relocation can be largely amortized, in which case this might actually
-be a good choice. The paper does not give muct attention to this option, though.
+problem by serializing and deserializing them after and before use. This process is similar to the OS loader relocating all 
+absolute pointers in a binary, or more commonly, a dynamic library, before executing the binary or library. This mechanism 
+has been implemented by several commercial systems. The overhead of (de)serialization depends on the usage pattern of the 
+non-volatile data structure. If a NVM region is only loaded once and used during a long period of time, the overhead of 
+relocation can be largely amortized, in which case this might actually be a good choice. The paper does not give muct 
+attention to this option, though.
