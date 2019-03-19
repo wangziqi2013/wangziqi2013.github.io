@@ -62,4 +62,8 @@ This paper proposes two solutions: off-holder and Region ID in Value (RIV). One 
 that, in order for a NVM pointer to be both efficient and convenient to use, three requirements must be satisfied. First,
 the pointer must be of the same length as a native volatile pointer. This excludes extra storage overhead and cache
 pollution problem incurred by a fat pointer. Second, the pointer itself must contain all information needed for generating 
-the target virtual address, i.e. the pointer must be self-contained. 
+the target virtual address, i.e. the pointer must be self-contained. A non-self-contained pointer may require extra variables
+to be passed or stored when the pointer is passed around as function arguments or stored on the NVM. The last requirement
+is that programmers must be able to use the non-volatile pointer in the same way (except declaration) as a volatile pointer.
+To achieve this, the compiler must be able to infer type information of the non-volatile pointers, and whenever they are 
+beging assigned or dereferenced, a special routine for type conversion is called automatically by the compiler.
