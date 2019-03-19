@@ -25,4 +25,8 @@ to may be no longer valid. In addition, cross-region reference (i.e. pointers fr
 mmap'ed region) will not work if the target region is relocated or does not exist. All these properties of NVM pointers 
 motivate the development of position independent pointers.
 
-Two prior designs are discussed in the paper: fat pointers and based pointer.
+Two prior designs are discussed in the paper: fat pointers and based pointer. Fat pointer is a struct consisting of two fields:
+Region ID and Region offset. The region ID field identifies which NVM region the pointer is based on. The base address is 
+implicitly defined as a region property, and is maintained by the OS. The offset field specifies a byte within the region. 
+For every memory access using the fat pointer, a virtual address must be generated and provided to the memory instruction.
+To achieve this, the NVM library maintains a hash table mapping region IDs to region properties. When a new region is mapped by the OS, the NVM library adds a
