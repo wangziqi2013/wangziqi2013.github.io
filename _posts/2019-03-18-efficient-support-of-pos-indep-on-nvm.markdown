@@ -88,4 +88,10 @@ and offset in two separate fields, an RIV pointer stores each of them as a 32 bi
 a machine word. The difference between RIV and fat pointer is how region ID to base address mapping works. Recall that for
 fat pointers, the library must maintain a hash table mapping regions IDs to base addresses, and that the hash table must be
 queried before every memory access, which may take hundreds of extra cycles in the worst case (e.g. the query is not cached).
- 
+RIV solves this problem by direct mapping: A mapping between region IDs and base addresses can be obtained by simple bit 
+arithmetics and one memory access. This is achieved based on the observation that there are abundant number of virtual 
+addresses on 64 bit architectures. It is therefore possible for us to dedicate a potentially large chunk of virtual addresses 
+to store the mapping, while only populating these VA with physical pages when they are actually used. We describe the mapping
+schemes as follows. The virtual address space is divided into segments of large sizes (larger than the largest of supported
+NVM regions). NVM regions can only be mapped within a single segment, and the starting address of the region must align
+with the segment head it is in. 
