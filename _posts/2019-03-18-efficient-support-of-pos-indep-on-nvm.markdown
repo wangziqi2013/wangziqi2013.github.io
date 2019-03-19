@@ -79,4 +79,6 @@ the NVM (which must be a valid address on mapped NVM region), and then adding th
 address. The pointer must then be passed around and stored locally in the form of volatile pointers using absolute addresses
 as a regular pointer. When an off-holder pointer is written, the programmer must first ensure that the pointer is allocated 
 on the NVM. The compiler will then generate the off-holder value by subtracting the pointer variable's address from the 
-absolute address, and store the value into the off-holder pointer.
+absolute address, and store the value into the off-holder pointer. An off-holder pointer cannot be directly assigned using
+another off-holder pointer, because the base address of the two variables differ. A type cast to volatile pointer and then
+back to off-holder pointer is necessary, which can be performed by the compiler.
