@@ -16,7 +16,13 @@ version_mgmt:
 This paper proposes an efficient pointer representation scheme to be used in NVM as a replacement for raw volatile pointers. 
 Using raw volatile pointers for NVM memory regions is risky, because almost all currently proposed methods for accessing
 NVM is through Operating System's mmap() system call. On calling mmap(), the OS finds a chunk of virtual pages in the calling 
-process's address space, and then assigns physial NVM pages to the allocated vierual addresses. On the next call to mmap(),
+process's address space, and then assigns physial NVM pages to the allocated vierual addresses. On future calls to mmap(),
 either by the same process or a different process, however, there is no guarantee that the two mmap() calls will put the 
-NVM region on the same virtual addresses. Imagine that if raw pointers are used within a persistent data structure, and the 
-data structure is closed 
+NVM region on the same virtual address. Imagine the case where raw pointers are used within a persistent data structure, 
+and the persistent object is copied to another machine. When the user open this object via mmap(), the base address 
+of the mapped NVM region might change, which makes pointers in the data structure invalid, because the address they point 
+to may be no longer valid. In addition, cross-region reference (i.e. pointers from one mmap'ed region pointing to another
+mmap'ed region) will not work if the target region is relocated or does not exist. All these properties of NVM pointers 
+motivate the development of position independent pointers.
+
+Two prior designs are discussed in the paper: fat pointers and based pointer.
