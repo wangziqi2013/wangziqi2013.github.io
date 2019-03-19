@@ -67,3 +67,10 @@ to be passed or stored when the pointer is passed around as function arguments o
 is that programmers must be able to use the non-volatile pointer in the same way (except declaration) as a volatile pointer.
 To achieve this, the compiler must be able to infer type information of the non-volatile pointers, and whenever they are 
 beging assigned or dereferenced, a special routine for type conversion is called automatically by the compiler.
+
+Off-holders are pointer variables that store an offset value. Instead of using an second variable or environmental value
+as its "base variable", as is the case for based pointers, an off-holder pointer uses its own address as the base, and 
+stores the offset from its own address to the target address. Note that since off-holder pointers must have an address,
+they can only be used as l-values. In addition, off-holder pointers cannot be used as local variables, because the storage
+for the pointer itself will change when the copy is made. Although the paper does not mention this explicitly, off-holders
+can only be declared for pointer fields whose nodes are stored on the NVM. When reading
