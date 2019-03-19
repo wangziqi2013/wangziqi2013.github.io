@@ -47,3 +47,7 @@ to generate the value of the based pointer. This way, if the base pointer points
 without any manual effort of type conversion. The compiler takes care of pointer compatibilities with type inference, and
 convers between different pointers if necessary. Based pointers improve over fat pointer in a way that the compiler is aware 
 of the special access semantics of NVM, and could process common usages of fat pointers seamlessly. The problem, however,
+arises when a based pointer is incremented, decremented, or passed as arguments. The paper claims that these operations 
+are difficult to reason about and use correctly.
+
+Beyond 
