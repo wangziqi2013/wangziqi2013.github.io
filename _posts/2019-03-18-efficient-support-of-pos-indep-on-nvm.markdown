@@ -105,4 +105,12 @@ There are 2<sup>L4</sup> entries in the second table where L4 is the number of b
 small because typically users will not open many NVM objects in one session. Overall speaking, since both L4 and L2 are 
 significantly smaller than 64, and that only a small subset of all possible values are used in practice, as long as we 
 only allocate pages for these two tables on-demand, the actual physical storage requirement can be as small as several 
-KBs.
+KBs. The second table does not immediately begin after the first table, because it would involve an extra step in the runtime 
+to compute the base of the second table. To obtain the base address of the second table, we first round the size of both tables
+to a power of two, and depending on which table is larger (we denote the larger size after rounding as SZ), assign the begin
+address of the second table as (0x11..100..0 + SZ). Note that, first, SZ is a power of two, and has only 1 bit set in its 
+binary representation. The starting address of (0x11..100..0 + SZ) is therefore of the form 0x11..100..010..0, which can
+be computed easily by a bit flip. Second, since L1, L2 and L4 are all static values fixed during the session, the hardware
+can precompute the values of these two tables, and use them from a cached register during execution. It only takes one 
+memory access to convert between region IDs and base addresses, which enables fast translation between a RIV pointer
+and a volatile pointer.
