@@ -57,3 +57,9 @@ has been implemented by several commercial systems. The overhead of (de)serializ
 non-volatile data structure. If a NVM region is only loaded once and used during a long period of time, the overhead of 
 relocation can be largely amortized, in which case this might actually be a good choice. The paper does not give muct 
 attention to this option, though.
+
+This paper proposes two solutions: off-holder and Region ID in Value (RIV). One important observation made by the paper is 
+that, in order for a NVM pointer to be both efficient and convenient to use, three requirements must be satisfied. First,
+the pointer must be of the same length as a native volatile pointer. This excludes extra storage overhead and cache
+pollution problem incurred by a fat pointer. Second, the pointer itself must contain all information needed for generating 
+the target virtual address, i.e. the pointer must be self-contained. 
