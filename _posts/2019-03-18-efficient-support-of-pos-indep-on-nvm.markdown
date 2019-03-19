@@ -37,4 +37,13 @@ on the NVM region can be accessed. Although fat pointer is compatible with the c
 to understand, its hash table lookup overhead on every memory access lies on the critical path, and may take hundreds of 
 extra instructions to complete. This severely reduces the efficiency of NVM-based system, because read/write operations 
 on NVM are supposed to be fast. In addition, fat pointers are usually larger than a machine word (64 Bytes), which requires
-more storage and introduces cache pollution problem for pointer-based data structures.
+more storage and introduces cache pollution problem for pointer-based data structures. Based pointers, on the other hand,
+are compiler assisted fat pointers. Instead of storing the region ID and offset in one struct, with special compiler support,
+a pointer can be declared to use a second pointer as its "base pointer". When a based pointer is dereference for memory 
+accesses, the compiler automatically generates code to add the value of the "base pointer" onto the pointer being dereference.
+Similarly, when a normal volatile pointer is assigned to a based pointer, the base value is deducted from the volatile pointer
+to generate the value of the based pointer. This way, if the base pointer points to the starting address of a NVM region 
+(which is obtained via the NVM library during run time), programmers can assign to and from based pointers stored in NVM
+without any manual effort of type conversion. The compiler takes care of pointer compatibilities with type inference, and
+convers between different pointers if necessary. Based pointers improve over fat pointer in a way that the compiler is aware 
+of the special access semantics of NVM, and could process common usages of fat pointers seamlessly. The problem, however,
