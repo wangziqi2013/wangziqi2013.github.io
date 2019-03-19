@@ -94,4 +94,15 @@ addresses on 64 bit architectures. It is therefore possible for us to dedicate a
 to store the mapping, while only populating these VA with physical pages when they are actually used. We describe the mapping
 schemes as follows. The virtual address space is divided into segments of large sizes (larger than the largest of supported
 NVM regions). NVM regions can only be mapped within a single segment, and the starting address of the region must align
-with the segment head it is in. 
+with the segment head it is in. In addition, to reduce the number of bits for representing a segment, NVM regions must
+be mapped to the upper part of the virtual address space, which indicates that the leading bits of a VA in any NVM region
+must be all 1s. We denote the number of 1s in such a VA as L1, and the number of bits to represent a segment is L2. The number 
+of bits to represent an offset within segments is hence 64 - L1 - L2, denoted as L3. Two mapping tables are maintained at
+the bottom of this area, i.e. staring from VA = 0x11..100..0, in which the number of 1s is L1. The first mapping table
+maps segment base addresses to region IDs. There are 2<sup>L2</sup> entries in the table, because it is direct mapping and
+every segment has an entry in the table. The second mapping table maps region IDs back to segment addresses in a similar way.
+There are 2<sup>L4</sup> entries in the second table where L4 is the number of bits in the region ID which is supposed to be 
+small because typically users will not open many NVM objects in one session. Overall speaking, since both L4 and L2 are 
+significantly smaller than 64, and that only a small subset of all possible values are used in practice, as long as we 
+only allocate pages for these two tables on-demand, the actual physical storage requirement can be as small as several 
+KBs.
