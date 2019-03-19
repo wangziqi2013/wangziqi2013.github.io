@@ -73,4 +73,10 @@ as its "base variable", as is the case for based pointers, an off-holder pointer
 stores the offset from its own address to the target address. Note that since off-holder pointers must have an address,
 they can only be used as l-values. In addition, off-holder pointers cannot be used as local variables, because the storage
 for the pointer itself will change when the copy is made. Although the paper does not mention this explicitly, off-holders
-can only be declared for pointer fields whose nodes are stored on the NVM. When reading
+can only be declared for pointer fields whose nodes are stored on the NVM. When reading from an off-holder pointer, the 
+compiler recognizes its type as off-holders, and generates the address by taking the address of the pointer variable on 
+the NVM (which must be a valid address on mapped NVM region), and then adding the value of the pointer variable to the 
+address. The pointer must then be passed around and stored locally in the form of volatile pointers using absolute addresses
+as a regular pointer. When an off-holder pointer is written, the programmer must first ensure that the pointer is allocated 
+on the NVM. The compiler will then generate the off-holder value by subtracting the pointer variable's address from the 
+absolute address, and store the value into the off-holder pointer.
