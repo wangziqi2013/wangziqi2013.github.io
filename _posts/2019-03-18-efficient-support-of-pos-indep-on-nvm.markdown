@@ -82,3 +82,10 @@ on the NVM. The compiler will then generate the off-holder value by subtracting 
 absolute address, and store the value into the off-holder pointer. An off-holder pointer cannot be directly assigned using
 another off-holder pointer, because the base address of the two variables differ. A type cast to volatile pointer and then
 back to off-holder pointer is necessary, which can be performed by the compiler.
+
+The second proposal is RIV, which is quite similar to a "shorter" version of fat pointer: Instead of storing the region ID
+and offset in two separate fields, an RIV pointer stores each of them as a 32 bit sub-word, totalling 64 bits which fits into
+a machine word. The difference between RIV and fat pointer is how region ID to base address mapping works. Recall that for
+fat pointers, the library must maintain a hash table mapping regions IDs to base addresses, and that the hash table must be
+queried before every memory access, which may take hundreds of extra cycles in the worst case (e.g. the query is not cached).
+ 
