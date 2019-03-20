@@ -55,3 +55,9 @@ of the target. The VA is also entered into the reserved slot in the LSQ for disa
 might be using the same VA to access the NVM location. The NVM memory operation is finally issued to the cache in the memory 
 access stage of the pipeline.
 
+At dispatching stage, if the POLB signals a miss, the instruction must be stalled in the instruction window while a 
+hardware page walker fetches region ID mapping from the main memory. The region ID to VA mapping is maintained by the 
+Operating System. A new entry is inserted into the table whenever mmap() is called for allocating a chunk of VA mapped 
+to NVM address space, and removed when munmap() on the VA is called. One observation made by the paper is that only
+a few region IDs will be opened for typical scenarios. The mapping table therefore does not need to be large and complex, 
+but must be efficient. The paper proposes using a hash table with linear probing. 
