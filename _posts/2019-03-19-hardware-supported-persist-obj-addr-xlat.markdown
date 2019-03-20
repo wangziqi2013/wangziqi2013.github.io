@@ -39,4 +39,11 @@ then added with the offset.
 Traditionally, obtaining the starting address of a region requires a table lookup, which is maintained by the NVM library.
 A new region ID to base address mapping is inserted into the hash table after mmap returns successfully. If this is done 
 by software routines, the call to which is inserted by the compiler every time before issuing a memory instruction, hundreds 
-of extra cycles would be added to the critical path of memory access latency just to perform the table query. 
+of extra cycles would be added to the critical path of memory access latency just to perform the table query. To get rid 
+of such an expensive operation for every memory access, the paper proposes that we treat region ID as a new segmented address
+space on top of virtual address space, and use special hardware to translate region IDs into virtual addresses at early stages 
+of the execution pipeline. To achiveve this goal, two components are to be added: A Persistent Object Lookaside Buffer (POLB),
+and a Persistent Object Table (POT). POLB serves similar functionality as a TLB, which caches translation information
+from the page table. In the case of POLB, the mapping from region ID to the starting virtual address is maintained. The paper
+also proposes adding two types of memory instruction, nvld and nvst, for reads and writes using composite pointers.
+During the decoder stage of a nvld or nvst instruction, the decoder reserve a slot in the load store queue (LSQ)
