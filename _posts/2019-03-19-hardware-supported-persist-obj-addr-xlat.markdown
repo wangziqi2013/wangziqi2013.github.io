@@ -73,4 +73,8 @@ is done in parallel with TLB lookup. This design, however, faces multiple proble
 First, the correctness of load-store reordering cannot be guaranteed if the LSQ uses VA, because the instruction bypasses 
 VA generation, and the hardware only knows PA. If a load instruction using composite pointer is after a store instruction to
 the same VA using a volatile pointer, the load instruction may fail to observe the value written by the latter, because 
-the LSQ may fail to recognize that they access the same part of the memory and miss the load forwarding. 
+the LSQ may fail to recognize that they access the same part of the memory and miss the load forwarding. Second, if 
+region ID is directly mapped to physical addresses, the tag size must be larger than the one in region ID to VA design.
+This is because the underlying physical address on NVM address space may not be consecutive. This design actually maps
+region ID and page offset from the beginning of the region to a physical page. Based on the same reason, more mapping entries 
+are actually needed, because now every page in the NVM region requires a mapping, instead of every opened object.
