@@ -22,4 +22,9 @@ NVM, causing data corruption that can persist reboots (i.e. is impossible to fix
 by calling mmap(), which in turn allocates a chunk of virtual address space, and maps these VAs to PAs on the NVM. In the 
 following discussion we call a VA mapped tp NVM addresses a NVM region. Exposing address spaces via mmap() suffers relocation
 problem: If NVM data structures were written in the same way as volatile data structures, which use the value of virtual 
-addresses of the target object as pointers
+addresses of the target object as pointers, the NVM region must be mapped to the same base address every time the NVM object
+is opened. This, as is the case for shared libraries, is hard to guarantee, because virtual address mapping can be affected
+by many factors, such as multiple opened NVM objects, Address Space Layout Randomization (ASLR), conflicting addresses between
+NVM region and the application, etc. If a NVM object is mapped to a different address than the one it is created, the 
+value of pointers will be invalid, leading to undefined behavior for reads and data corruption for writes. 
+
