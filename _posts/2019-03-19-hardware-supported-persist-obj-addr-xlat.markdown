@@ -46,4 +46,10 @@ of the execution pipeline. To achiveve this goal, two components are to be added
 and a Persistent Object Table (POT). POLB serves similar functionality as a TLB, which caches translation information
 from the page table. In the case of POLB, the mapping from region ID to the starting virtual address is maintained. The paper
 also proposes adding two types of memory instruction, nvld and nvst, for reads and writes using composite pointers.
-During the decoder stage of a nvld or nvst instruction, the decoder reserve a slot in the load store queue (LSQ)
+During the decoder stage of a nvld or nvst instruction, the decoder reserves a slot in the load store queue (LSQ) as for 
+regular memory instructions. During the dispatch stage, after the instruction receives the value of the pointer from committed
+instructions, it stays in the instruction window for at least two extra cycles before it can be issued for execution. In the 
+first cycle, the address generation unit performs a POLB lookup using region ID in the address, obtaining the base VA.
+In the second cycle, the unit then adds the base VA with the offset (zero extended), and finally generates the effective VA 
+of the target. The VA is also entered into the reserved slot in the LSQ for disambiguation purposes (because other instructions
+might be using the same VA to access the NVM location).
