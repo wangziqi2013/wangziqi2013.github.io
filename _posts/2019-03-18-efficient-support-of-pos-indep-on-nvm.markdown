@@ -113,4 +113,4 @@ binary representation. The starting address of (0x11..100..0 + SZ) is therefore 
 be computed easily by a bit flip. Second, since L1, L2 and L4 are all static values fixed during the session, the hardware
 can precompute the values of these two tables, and use them from a cached register during execution. It only takes one 
 memory access to convert between region IDs and base addresses, which enables fast translation between a RIV pointer
-and a volatile pointer.
+and a volatile pointer. 
