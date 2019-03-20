@@ -51,5 +51,7 @@ regular memory instructions. During the dispatch stage, after the instruction re
 instructions, it stays in the instruction window for at least two extra cycles before it can be issued for execution. In the 
 first cycle, the address generation unit performs a POLB lookup using region ID in the address, obtaining the base VA.
 In the second cycle, the unit then adds the base VA with the offset (zero extended), and finally generates the effective VA 
-of the target. The VA is also entered into the reserved slot in the LSQ for disambiguation purposes (because other instructions
-might be using the same VA to access the NVM location).
+of the target. The VA is also entered into the reserved slot in the LSQ for disambiguation purposes, because other instructions
+might be using the same VA to access the NVM location. The NVM memory operation is finally issued to the cache in the memory 
+access stage of the pipeline.
+
