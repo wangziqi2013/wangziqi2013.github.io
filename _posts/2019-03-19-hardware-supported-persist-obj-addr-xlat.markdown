@@ -60,4 +60,7 @@ hardware page walker fetches region ID mapping from the main memory. The region 
 Operating System. A new entry is inserted into the table whenever mmap() is called for allocating a chunk of VA mapped 
 to NVM address space, and removed when munmap() on the VA is called. One observation made by the paper is that only
 a few region IDs will be opened for typical scenarios. The mapping table therefore does not need to be large and complex, 
-but must be efficient. The paper proposes using a hash table with linear probing. 
+but must be efficient. The paper proposes using a hash table with linear probing. The hash table is initialized as an array
+of 16K table entries. The page walker first hashes the lookup key, i.e. the region ID, to an index, and scans the array until
+a matching entry or an empty entry is found. In the latter case, the lookup key does not exist in the table, and the MMU
+signals the processor to raise an exception, because an invalid region ID is used to access memory.
