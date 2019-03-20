@@ -33,4 +33,6 @@ addresses, pointers now are composed of two fields: A region ID and an offset. T
 NVM region assigned by the creator of the region. Region ID is defined in the header of the NVM object, which must be 
 unique in the current session (the paper does not propose a solution for resolving region ID conflicts). The offset field 
 stores the relative offset of the target address within the region, using the starting address of the region as the base. 
-To convert a composite pointer to 
+To convert a composite pointer to volatile virtual address pointers, the base address of the region must be obtained, and
+then added with the offset. 
+
