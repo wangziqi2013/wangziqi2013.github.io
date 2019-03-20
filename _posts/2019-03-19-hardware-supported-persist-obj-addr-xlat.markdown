@@ -64,3 +64,9 @@ but must be efficient. The paper proposes using a hash table with linear probing
 of 16K table entries. The page walker first hashes the lookup key, i.e. the region ID, to an index, and scans the array until
 a matching entry or an empty entry is found. In the latter case, the lookup key does not exist in the table, and the MMU
 signals the processor to raise an exception, because an invalid region ID is used to access memory.
+
+The paper also proposes another solution that maps region ID directly into the physical address of the NVM region, hence
+passing the address translation stage of memory access. With the physical address design, the memory operation can be 
+initiated as soon as the address is available from decoding stage, because the cache set can be pre-activated using lower 
+bits of the address, which are completely included by the offset field. This is similar to how cache set activation
+is done in parallel with TLB lookup.
