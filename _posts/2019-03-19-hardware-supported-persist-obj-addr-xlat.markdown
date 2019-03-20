@@ -33,6 +33,10 @@ addresses, pointers now are composed of two fields: A region ID and an offset. T
 NVM region assigned by the creator of the region. Region ID is defined in the header of the NVM object, which must be 
 unique in the current session (the paper does not propose a solution for resolving region ID conflicts). The offset field 
 stores the relative offset of the target address within the region, using the starting address of the region as the base. 
-To convert a composite pointer to volatile virtual address pointers, the base address of the region must be obtained, and
+To convert a composite pointer to volatile virtual address pointers, the starting address of the region must be obtained, and
 then added with the offset. 
 
+Traditionally, obtaining the starting address of a region requires a table lookup, which is maintained by the NVM library.
+A new region ID to base address mapping is inserted into the hash table after mmap returns successfully. If this is done 
+by software routines, the call to which is inserted by the compiler every time before issuing a memory instruction, hundreds 
+of extra cycles would be added to the critical path of memory access latency just to perform the table query. 
