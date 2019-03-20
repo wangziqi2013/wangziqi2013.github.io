@@ -28,3 +28,9 @@ by many factors, such as multiple opened NVM objects, Address Space Layout Rando
 NVM region and the application, etc. If a NVM object is mapped to a different address than the one it is created, the 
 value of pointers will be invalid, leading to undefined behavior for reads and data corruption for writes. 
 
+This paper solves the problem of pointer relocation with composite pointers. Instead of using the absolute value of virtual 
+addresses, pointers now are composed of two fields: A region ID and an offset. The region ID is a unique identifier of the 
+NVM region assigned by the creator of the region. Region ID is defined in the header of the NVM object, which must be 
+unique in the current session (the paper does not propose a solution for resolving region ID conflicts). The offset field 
+stores the relative offset of the target address within the region, using the starting address of the region as the base. 
+To convert a composite pointer to 
