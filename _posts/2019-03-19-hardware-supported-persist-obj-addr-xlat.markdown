@@ -69,4 +69,8 @@ The paper also proposes another solution that maps region ID directly into the p
 passing the address translation stage of memory access. With the physical address design, the memory operation can be 
 initiated as soon as the address is available from decoding stage, because the cache set can be pre-activated using lower 
 bits of the address, which are completely included by the offset field. This is similar to how cache set activation
-is done in parallel with TLB lookup.
+is done in parallel with TLB lookup. This design, however, faces multiple problems that hinders both correctness and efficiency.
+First, the correctness of load-store reordering cannot be guaranteed if the LSQ uses VA, because the instruction bypasses 
+VA generation, and the hardware only knows PA. If a load instruction using composite pointer is after a store instruction to
+the same VA using a volatile pointer, the load instruction may fail to observe the value written by the latter, because 
+the LSQ may fail to recognize that they access the same part of the memory and miss the load forwarding. 
