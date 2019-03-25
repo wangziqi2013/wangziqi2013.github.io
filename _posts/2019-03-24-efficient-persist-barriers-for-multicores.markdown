@@ -30,4 +30,6 @@ stream. It is required that store operations before the barrier must be persiste
 barrier. The easiest implementation of epoch persistency is to track dirty cache lines accessed within an epoch. At the end 
 of the epoch, these dirty cache lines are forced to be written back to the NVM using special instructions such as clwb.
 Regular store barriers may also need to be inserted to enforce correct ordering between epoches. The processor in the meantime
-must stall and wait for the persistence to complete before continue executing the next barrier.
+must stall and wait for the persistence to complete before continue executing the next barrier. Epoch persistency overcomes
+some of the undesirable properties of strict persistency, such as long latency on the store critical path. It is, however,
+still inefficient, since the processor remains idle while an epoch has finished and is being persisted.
