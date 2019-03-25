@@ -61,3 +61,10 @@ after epoch A. Imagine the case where epoch B persists before epoch A and the sy
 the post-crash image, epoch B contains a value generated or derived from epoch A, but the corresponding line in epoch A
 has not been persisted, and is lost during the crash. This outcome is inconsistent with normal execution, because epoch
 B contains a value from nowhere.
+
+In order to enforce epoch dependencies caused by inter- or intra-thread conflicts, traditional implementations stall
+the destination processor when such dependency is about to form, and initiate an epoch flush on the source processor.
+This adds a significant number of cycles to the critical path of the destination processor if the source epoch has a large
+working set. This paper addresses the problem using a tachnique called proactive flush: Instead of flushing epoches 
+only on-demand, the epoch flushing process is initiated as soon as an epoch completes. To support this, every cache line
+in the hierarchy is extended with 
