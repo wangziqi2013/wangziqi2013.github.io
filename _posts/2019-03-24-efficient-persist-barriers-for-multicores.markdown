@@ -95,3 +95,12 @@ different cores, my best guess is that core ID of the writing processor should a
 ID is not used as part of the global epoch ID, but when an inter-thread conflict is detected, the core ID can be used 
 to identify the source processor in the dependency. 
 
+After adding dependencies between epoches, the L1 cache next should flush epoches in an order that is consistent with 
+these dependencies. This paper proposes proactive flushing, which means that an epoch should be flushed as soon as it completes.
+We describe the process as follows. First, every L1 cache controller tracks a FIFO list of global epoch IDs in the order
+that they are started at this core. Then for the epoch at the head of the list, it checks the dependent table to see whether the
+epoch is a dependent of a commit dependency. If it is the case, then the L1 cache waits until the source of the dependency
+commits. Otherwise, it writes back all dirty cache lines in that epoch, and notifies the LLC controller. On receiving the notification,
+the LLC then initiates a write back to the NVM. After writing back all dirty lines to the NVM, the LLC controller sends an ACK
+message back to L1. On receiving the ACK, the L1 knows that the previous epoch has been persisted, and then it continues 
+flushing the next epoch from the list of the queue.
