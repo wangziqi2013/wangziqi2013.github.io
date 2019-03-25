@@ -23,4 +23,11 @@ writes must propagate through the entire cache hierarchy which usually consists 
 bypasses the cache hierarchy and directly writes into the NVM. The second reason is that NVM writes are typically much slower
 than a local cache write. The latency of store operations is longer even compared with uncached memory writes. The last reason
 is that since the pipeline must not reorder persistent stores with other stores, there is little chance that NVM writes 
-can be coalesced or batched in order to take advantage of the internal scheduling of the memory controller. 
+can be coalesced or batched in order to take advantage of the internal scheduling of the memory controller. The second model is 
+epoch persistency, which relaxes strict persistency by allowing store operations to be persisted in a different order than
+the one they become visible. A special memory ordering primitive called the epoch barriers are inserted into the instruction 
+stream. It is required that store operations before the barrier must be persisted before any store operations after the 
+barrier. The easiest implementation of epoch persistency is to track dirty cache lines accessed within an epoch. At the end 
+of the epoch, these dirty cache lines are forced to be written back to the NVM using special instructions such as clwb.
+Regular store barriers may also need to be inserted to enforce correct ordering between epoches. The processor in the meantime
+must stall and wait for the persistence to complete before continue executing the next barrier.
