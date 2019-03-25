@@ -114,5 +114,8 @@ epoch whose ID is indicated by the ACK message has ended, and that dirty lines f
 or flushed. Each LLC should also keep track of the most recent epoches from each L1 that have been persisted.
 
 If an LLC is about to evict a dirty cache line, it must be guaranteed that all epoches before the epoch in which the dirty
-line was written have been persisted. Recall that we require that all LLCs keep track of the most recent persisted epoches
-from all L1 controllers, this can be easily checked
+line was written have been persisted. This can be easily checked, recall that we require all LLCs to keep track of the most 
+recent persisted epoches from all L1 controllers. If there are unflushed epoches, the LLC controller sends a message up
+to the L1 controller to request a flush. Note that if the epoches to be flushed also have inter-thread dependencies 
+from other L1 controllers, this flushing chain can be quite long and time consuming, which may stall the LLC controller 
+for a while. This paper does not seem to address this problem.
