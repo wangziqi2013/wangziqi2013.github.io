@@ -32,4 +32,11 @@ of the epoch, these dirty cache lines are forced to be written back to the NVM u
 Regular store barriers may also need to be inserted to enforce correct ordering between epoches. The processor in the meantime
 must stall and wait for the persistence to complete before continue executing the next barrier. Epoch persistency overcomes
 some of the undesirable properties of strict persistency, such as long latency on the store critical path. It is, however,
-still inefficient, since the processor remains idle while an epoch has finished and is being persisted.
+still inefficient, since the processor remains idle while an epoch has finished and is being persisted. The third type 
+of persistency model is buffered epoch persistency (BEP), which is essentially the same as epoch persistency, except that 
+processors can continue executing the next epoch while the previous epoch is being written back to the NVM. BEP completely
+decouples memory persistence from write visibility: A memory operation can become visible to other processors arbitrarily
+earlier than the operation becomes persistent. In non-buffered epoch persistency model, this is impossible, because a memory
+operation is guaranteed to be persisted when the processor executes the next epoch barrier. Although epoches are not immediately
+persisted when the corresponding epcoch barriers are executed, the correct ordering must be maintained. This paper identifies two
+sources of epoch orderings, which will be discussed later.
