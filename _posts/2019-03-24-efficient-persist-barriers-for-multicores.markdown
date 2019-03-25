@@ -128,4 +128,6 @@ Deadlock may form if we allow dependencies to form without constraints. For exam
 a concurrent epoch B on another core, and later on epoch B reads a cache line from A. Both epoches will add each other as a source
 and a dependent, which prevents them from completing. To prevent forming dependency cycles (in theory, the cycle can be much 
 longer than just having two elements, which makes it harder to detect), an epoch is broken into two sub-epoches: On receiving
-a conflicting access from another thread
+a conflicting access from another epoch, the source epoch immediately ends, and a new epoch is started. Original epoch
+semantics is preserved, because breaking down one epoch into two does not harm the semantics. In addition, no dependency 
+cycles could form, because it is guaranteed that the source epoch can only have one "out" edges, which is at the end of the epoch.
