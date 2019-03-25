@@ -86,10 +86,12 @@ number of entries in each table. If an entry is to be allocated, but the table i
 the online flushing scheme described above. In order to detect both types of conflicts, it is sufficient that the processor 
 checks the global epoch ID tag of a cache line on certain accesses. For intra-thread conflicts, the processor checks whether 
 the thread ID is identical to the current thread ID, but epoch ID is larger (should not be smaller in normal cases) when 
-executing store instructions. If it is the case, then a dependency from the older epoch to the newer epoch is formed by inserting
+executing store instructions. If it is the case, then a intra-thread dependency is formed, and the newer epoch must stall
+and wait for the newer epoch to be flushed. The chance of rewriting a cache line . For inter-thread conflicts, the processor checks whether the thread IDs are 
+different. If it is the case, then a dependency from the older epoch to the newer epoch is formed by inserting
 an entry into the dependent table and another entry into the source table. The value of both entries reflect the newly
-added dependency edge. For inter-thread conflicts, the processor checks whether the thread IDs are different. Both tables 
-are updated if it is the case. Note that although the paper did not mention what if the two conflicting threads are on
+added dependency edge. Note that although the paper did not mention what if the two conflicting threads are on
 different cores, my best guess is that core ID of the writing processor should also be tracked in cache line tags. The core
 ID is not used as part of the global epoch ID, but when an inter-thread conflict is detected, the core ID can be used 
 to identify the source processor in the dependency. 
+
