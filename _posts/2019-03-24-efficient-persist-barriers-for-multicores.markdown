@@ -20,5 +20,7 @@ become visible. In other words, the persistency model follows the consistency mo
 not make store operations visible to other processors via coherence before these operations are persisted to the NVM, which 
 essentially make the cache write-through. This model suffers from performance issues for three reasons. The first reason is that
 writes must propagate through the entire cache hierarchy which usually consists of several levels, since the processor 
-bypasses the cache hierarchy and directly writes into the NVM. The second reason is that NVM writes are typically must slower
-than a local cache write. 
+bypasses the cache hierarchy and directly writes into the NVM. The second reason is that NVM writes are typically much slower
+than a local cache write. The latency of store operations is longer even compared with uncached memory writes. The last reason
+is that since the pipeline must not reorder persistent stores with other stores, there is little chance that NVM writes 
+can be coalesced or batched in order to take advantage of the internal scheduling of the memory controller. 
