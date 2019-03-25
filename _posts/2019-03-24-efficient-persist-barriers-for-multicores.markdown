@@ -80,4 +80,7 @@ In order to track conflicts, each physical core has two tables: a dependent tabl
 global epoch IDs of dependency sources if the current epoch must commit after the source epoches. Similarly, the dependent table 
 stores global epoch IDs of dependents if the current epoch must commit before the dependent epoches. There are only limited
 number of entries in each table. If an entry is to be allocated, but the table is full, then processors fall back to use
-the online flushing scheme described above. 
+the online flushing scheme described above. In order to detect both types of conflicts, it is sufficient that the processor 
+checks the global epoch ID tag of a cache line on certain accesses. For intra-thread conflicts, the processor checks whether 
+the thread ID is identical to the current thread ID, but epoch ID is larger (should not be smaller in normal cases) when 
+executing store instructions. If it is the case, then 
