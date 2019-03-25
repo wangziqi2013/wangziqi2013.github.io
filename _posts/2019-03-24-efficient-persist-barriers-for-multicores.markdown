@@ -111,4 +111,8 @@ aware of the flushing progress in other LLCs. In this case, the L1 controller in
 the flush message to all LLCs. After persisting all dirty lines from the epoch, the L1 controller waits for ACK message
 from all LLCs, after which it broadcasts a second ACK back to all LLCs. On receicing the second ACK, LLCs know that the 
 epoch whose ID is indicated by the ACK message has ended, and that dirty lines from later epoches can be safely evicted 
-or flushed. 
+or flushed. Each LLC should also keep track of the most recent epoches from each L1 that have been persisted.
+
+If an LLC is about to evict a dirty cache line, it must be guaranteed that all epoches before the epoch in which the dirty
+line was written have been persisted. Recall that we require that all LLCs keep track of the most recent persisted epoches
+from all L1 controllers, this can be easily checked
