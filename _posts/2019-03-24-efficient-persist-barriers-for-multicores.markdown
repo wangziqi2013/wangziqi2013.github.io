@@ -39,4 +39,8 @@ decouples memory persistence from write visibility: A memory operation can becom
 earlier than the operation becomes persistent. In non-buffered epoch persistency model, this is impossible, because a memory
 operation is guaranteed to be persisted when the processor executes the next epoch barrier. Although epoches are not immediately
 persisted when the corresponding epcoch barriers are executed, the correct ordering must be maintained. This paper identifies two
-sources of epoch orderings, which will be discussed later.
+sources of epoch orderings, which will be discussed later. The last type of persistence model is buffered strict persistency (BSP).
+BSP is different from the above all persistency models in that it requires atomic execution of epoches. Executions are divided
+into epoches, which is the atomic unit for memory instructions to become both visible and persistent. Within an epoch, no 
+coherence message is sent on writes, implying that their visibility as well as persistence are postponed to the end of the 
+epoch.
