@@ -87,13 +87,13 @@ the online flushing scheme described above. In order to detect both types of con
 checks the global epoch ID tag of a cache line on certain accesses. For intra-thread conflicts, the processor checks whether 
 the thread ID is identical to the current thread ID, but epoch ID is larger (should not be smaller in normal cases) when 
 executing store instructions. If it is the case, then a intra-thread dependency is formed, and the newer epoch must stall
-and wait for the newer epoch to be flushed. The chance of rewriting a cache line . For inter-thread conflicts, the processor checks whether the thread IDs are 
-different. If it is the case, then a dependency from the older epoch to the newer epoch is formed by inserting
-an entry into the dependent table and another entry into the source table. The value of both entries reflect the newly
-added dependency edge. Note that although the paper did not mention what if the two conflicting threads are on
-different cores, my best guess is that core ID of the writing processor should also be tracked in cache line tags. The core
-ID is not used as part of the global epoch ID, but when an inter-thread conflict is detected, the core ID can be used 
-to identify the source processor in the dependency. 
+and wait for the newer epoch to be flushed. The chance of rewriting a cache line . For inter-thread conflicts, the processor 
+checks whether the thread IDs are different. If it is the case, then a dependency from the older epoch to the newer epoch 
+is formed by inserting an entry into the dependent table and another entry into the source table. The value of both entries 
+reflect the newly added dependency edge. Note that although the paper did not mention what if the two conflicting threads 
+are on different cores, my best guess is that core ID of the writing processor should also be tracked in cache line tags. 
+The core ID is not used as part of the global epoch ID, but when an inter-thread conflict is detected, the core ID can be 
+used to identify the source processor in the dependency. 
 
 After adding dependencies between epoches, the L1 cache next should flush epoches in an order that is consistent with 
 these dependencies. This paper proposes proactive flushing, which means that an epoch should be flushed as soon as it completes.
@@ -104,3 +104,4 @@ commits. Otherwise, it writes back all dirty cache lines in that epoch, and noti
 the LLC then initiates a write back to the NVM. After writing back all dirty lines to the NVM, the LLC controller sends an ACK
 message back to L1. On receiving the ACK, the L1 knows that the previous epoch has been persisted, and then it continues 
 flushing the next epoch from the list of the queue.
+
