@@ -105,3 +105,10 @@ the LLC then initiates a write back to the NVM. After writing back all dirty lin
 message back to L1. On receiving the ACK, the L1 knows that the previous epoch has been persisted, and then it continues 
 flushing the next epoch from the list of the queue.
 
+If the LLC is partitioned across cores, which is not unusual in modern architectures, then the epoch flushing process would be 
+more complicated, because an LLC partition only maintains cache lines within a certain address range, and it is not 
+aware of the flushing progress in other LLCs. In this case, the L1 controller initiating an epoch flushing should broadcast
+the flush message to all LLCs. After persisting all dirty lines from the epoch, the L1 controller waits for ACK message
+from all LLCs, after which it broadcasts a second ACK back to all LLCs. On receicing the second ACK, LLCs know that the 
+epoch whose ID is indicated by the ACK message has ended, and that dirty lines from later epoches can be safely evicted 
+or flushed. 
