@@ -12,3 +12,13 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes a new implementation of persist barrier, a common programming language construct for NVM programming. 
+Prior works have proposed four persistency models of different semantics and constraints. The first and the most straightfirward
+persitency model is strict persistency, in which the order that memory operations persist must follow the order that they
+become visible. In other words, the persistency model follows the consistency model. To achieve this, processors must
+not make store operations visible to other processors via coherence before these operations are persisted to the NVM, which 
+essentially make the cache write-through. This model suffers from performance issues for three reasons. The first reason is that
+writes must propagate through the entire cache hierarchy which usually consists of several levels, since the processor 
+bypasses the cache hierarchy and directly writes into the NVM. The second reason is that NVM writes are typically must slower
+than a local cache write. 
