@@ -43,6 +43,10 @@ Zimmeck, S., Wang, Z., Zou, L., Iyengar, R., Liu, B., Schaub, F., Wilson, S., Sa
 
 Ziqi Wang, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. 2018. Building a Bw-Tree Takes More Than Just Buzz Words. In Proceedings of 2018 International Conference on Management of Data (SIGMOD18). ACM, New York, NY, USA, 16 pages. [https://doi.org/10.1145/3183713.3196895](https://doi.org/10.1145/3183713.3196895)
 
+Peter Story, Sebastian Zimmeck, Abhilasha Ravichander, Daniel Smullen, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "Natural Language Processing for Mobile App Privacy Compliance", AAAI Spring Symposium on Privacy Enhancing AI and Language Technologies (PAL 2019), Mar 2019
+
+Sebastian Zimmeck, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "MAPS: Scaling Privacy Compliance Analysis to a Million Apps", Privacy Enhancing Technologies Symposium (PETS 2019), 3, Jul 2019
+
 Fun Stuff
 ---------
 **OS Kernel** I am interested in implementing my own operating system kernel from the scratch, using a mixture of C and 
