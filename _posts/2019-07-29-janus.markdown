@@ -57,4 +57,8 @@ be resumed when data becomes available. Data can be sent to the IRB as soon as t
 instead of having to wait until a cache line eviction or flush. The actual write operation, however, must only be performed
 when the processor indicates so to avoid the result being invalidated by other instructions. 
 
-In addition to intermediate states of BMOs, the IRB also tracks data dependencies of the BMO
+In addition to intermediate states of BMOs, the IRB also tracks data dependencies of each BMO, and aborts the operation
+if the data dependency changes (i.e. results are invalidated). Data dependency could change in two aspects. First, if 
+the processor sends the cache line to the IRB before the line is actually evicted or flushed, it is possible that a
+later store instruction further modifies the line, hence changing the content. In this case, the pre-computed intermediate
+result is no longer valid, and must be re-calculated using the new line. 
