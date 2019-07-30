@@ -28,4 +28,9 @@ of store operations, aggravating the store bottleneck.
 
 This paper employs two techniques to reduce the latency of BMO: parallization and pre-computation. With parallelization,
 some operations from different tasks can be performed at the same time, as long as they are independent from each other.
-This paper identifies four types of dependence: 
+This paper identifies four types of dependence: inter-operation dependence, intra-operation dependence, address dependence,
+and data dependence. The first two types of dependence dictates which operation within each task can be overlapped without 
+affecting the result. In the paper's example, inter-operation dependence exists between every two consecutive steps of 
+a task, while intra-operation dependence can be identified by examining the task's workflow. In this example, the table 
+lookup operation in deduplication is the pre-requisite of XOR operation in block encryption, because if the block of the 
+same content already exists on the NVM, no extra write will be conducted, and hence the encryption is no longer needed. 
