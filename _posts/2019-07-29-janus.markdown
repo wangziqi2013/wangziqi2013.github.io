@@ -53,4 +53,8 @@ is tagged as "requesting pre-computation", then this identifier, together with t
 will be sent and entered into a buffer, called the Intermediate Result Buffer (IRB), in which the intermediate of BMOs
 are kept. Although not explicitly mentioned, the IRB should be co-located with the NVM controller that performs BMOs.
 Once the pre-computation is finished, its result will be entered into IRB also, such that the remaining steps of BMO can
-be resumed when data becomes available.
+be resumed when data becomes available. Data can be sent to the IRB as soon as they are acquired by the coherence protocol,
+instead of having to wait until a cache line eviction or flush. The actual write operation, however, must only be performed
+when the processor indicates so to avoid the result being invalidated by other instructions. 
+
+In addition to intermediate states of BMOs, the IRB also tracks data dependencies of the BMO
