@@ -47,4 +47,8 @@ Janus consists of two parts: the hardware component for enforcing dependence and
 software interface that exposes these capabilities to the programmer. Janus assumes a transactional model, in which all 
 NVM stores are performed as part of a transaction, and committed to the NVM device at the end. This paper does not specify 
 how inter- and intra-operation dependences are enforced (we can assume the hardware has some hardwired knowledge about these
-two operations), and only concentrate on storing intermediate results. In Janus
+two operations), and only concentrate on storing intermediate results. In Janus, every store operation is assigned a globally 
+unique identifier, which consists of three subfields: request ID, thread ID, and the transaction ID. If the store instruction
+is tagged as "requesting pre-computation", then this identifier, together with the physical address of the store operation 
+will be sent and entered into a buffer, called the Intermediate Result Buffer (IRB), in which the intermediate of BMOs
+are kept. 
