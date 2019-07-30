@@ -1,12 +1,12 @@
 ---
 layout: paper-summary
 title:  "Efficient Persist Barriers for Multicores"
-date:   2019-03-24 21:00:00 -0500
+date:   2019-07-29 21:44:00 -0500
 categories: paper
-paper_title: "Efficient Persist Barriers for Multicores"
-paper_link: http://homepages.inf.ed.ac.uk/vnagaraj/papers/micro2015.pdf
-paper_keyword: NVM; persist barrier; persistency model
-paper_year: MICRO 2015
+paper_title: "Janus: Optimizing Memory and Storage Support for Non-Volatile Memory Systems"
+paper_link: https://dl.acm.org/citation.cfm?doid=3307650.3322206
+paper_keyword: NVM; Encryption; Backend Memory Operation (BMO)
+paper_year: ISCA 2019
 rw_set: 
 htm_cd: 
 htm_cr: 
