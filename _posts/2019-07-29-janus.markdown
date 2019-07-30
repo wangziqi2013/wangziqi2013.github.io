@@ -23,5 +23,9 @@ is evicted to the NVM before the corresponding undo image does. Write ordering i
 which also blocks the processor pipeline, constituting a critical path. Second, most NVM devices also provide capabilities 
 beyond persistence. For example, encryption, data compression, and deduplication are all important features for NVM
 device. These features require that the NVM device perform computations such as hashing, table lookup, key generation, etc. 
-on the backend when a cache line is evicted or flushed from the processor, which can further add to the latency of store 
-operations, aggravating the store bottleneck.  
+on the backend (i.e. BMOs) when a cache line is evicted or flushed from the processor, which can further add to the latency 
+of store operations, aggravating the store bottleneck.  
+
+This paper employs two techniques to reduce the latency of BMO: parallization and pre-computation. With parallelization,
+some operations from different tasks can be performed at the same time, as long as they are independent from each other.
+This paper identifies four types of dependence: 
