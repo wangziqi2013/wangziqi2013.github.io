@@ -61,4 +61,7 @@ In addition to intermediate states of BMOs, the IRB also tracks data dependencie
 if the data dependency changes (i.e. results are invalidated). Data dependency could change in two aspects. First, if 
 the processor sends the cache line to the IRB before the line is actually evicted or flushed, it is possible that a
 later store instruction further modifies the line, hence changing the content. In this case, the pre-computed intermediate
-result is no longer valid, and must be re-calculated using the new line. 
+result is no longer valid, and must be re-calculated using the new line. In the second case, no direct data dependency exists
+between the result and the data, but instead, the result may be related to another entry in the IRB or to the metadata
+used by BMO algorithms. If another entry is invalidated, or if the metadata is modified by other BMOs, the affected 
+IRB entry must also be invalidated. 
