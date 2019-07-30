@@ -73,4 +73,5 @@ Any later alternation of the address or data will cause an invalidation, as desc
 the programmer may also choose to issue a delayed request, which will not be immediately sent to the NVM controller, but 
 instead, it will be buffered in a request queue. Any later requests on the same address will be coalesced by the queue,
 which avoids extra overhead of invalidation. Only when the programmer "fires" the request, could it be sent to the NVM
-controller for processing.
+controller for processing. On structural hazards of both the request buffer and the IRB, the incoming request will be discarded
+silently. This does not affect correctness, but only the performance.
