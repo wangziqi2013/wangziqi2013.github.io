@@ -51,4 +51,6 @@ two operations), and only concentrate on storing intermediate results. In Janus,
 unique identifier, which consists of three subfields: request ID, thread ID, and the transaction ID. If the store instruction
 is tagged as "requesting pre-computation", then this identifier, together with the physical address of the store operation 
 will be sent and entered into a buffer, called the Intermediate Result Buffer (IRB), in which the intermediate of BMOs
-are kept. 
+are kept. Although not explicitly mentioned, the IRB should be co-located with the NVM controller that performs BMOs.
+Once the pre-computation is finished, its result will be entered into IRB also, such that the remaining steps of BMO can
+be resumed when data becomes available.
