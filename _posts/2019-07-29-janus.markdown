@@ -39,4 +39,6 @@ during data encryption, the address is needed at the first step (computing the c
 generate the final output at the last XOR step. In practice, the processor pipeline computes the address of store operations
 before the cache line is acquired using cache coherence. The cache may send the address to the NVM controller once it is 
 available in the address genetation unit, and only send data when the coherence transaction finishes, essentially overlapping
-the coherence transaction and the first two steps of data encryption. 
+the coherence transaction and the first two steps of data encryption. This technique, called pre-computation, helps 
+reduce the latency of store operations. As long as the input dependence is satisfied, the BMO can be executed
+in the background by the NVM controller which overlaps with in-cache data operation.
