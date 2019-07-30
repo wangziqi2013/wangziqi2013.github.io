@@ -65,3 +65,8 @@ result is no longer valid, and must be re-calculated using the new line. In the 
 between the result and the data, but instead, the result may be related to another entry in the IRB or to the metadata
 used by BMO algorithms. If another entry is invalidated, or if the metadata is modified by other BMOs, the affected 
 IRB entry must also be invalidated. 
+
+The software component of Janus has a class interface. The class data members track the unique identifier of the persistent
+store, as well as the address and data. Programmers are also given the choice of immediate and delayed pre-computation.
+For immediate pre-computation, the request will be sent to the NVM controller and IRB when the programmer indicates so. 
+Any later alternation of the address or data will cause an invalidation, as described in the previous paragraph. 
