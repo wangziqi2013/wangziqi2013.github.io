@@ -20,4 +20,8 @@ persistency and recovery, most NVM applications use some form of logging or shad
 between the log and actual data. For example, in undo logging scheme, the undo image is generated before the data
 is written into the cache line, and then written to the NVM to avoid the unrecoverable case in which a dirty cache line
 is evicted to the NVM before the corresponding undo image does. Write ordering incurs extra latency on store operations, 
-which also blocks the processor pipeline, constituting a critical path. 
+which also blocks the processor pipeline, constituting a critical path. Second, most NVM devices also provide capabilities 
+beyond persistence. For example, encryption, data compression, and deduplication are all important features for NVM
+device. These features require that the NVM device perform computations such as hashing, table lookup, key generation, etc. 
+on the backend when a cache line is evicted or flushed from the processor, which can further add to the latency of store 
+operations, aggravating the store bottleneck.  
