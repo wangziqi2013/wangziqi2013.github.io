@@ -34,3 +34,9 @@ affecting the result. In the paper's example, inter-operation dependence exists 
 a task, while intra-operation dependence can be identified by examining the task's workflow. In this example, the table 
 lookup operation in deduplication is the pre-requisite of XOR operation in block encryption, because if the block of the 
 same content already exists on the NVM, no extra write will be conducted, and hence the encryption is no longer needed. 
+Address and data dependence are input dependence resolved by prividing the address of the operation of the data. For example,
+during data encryption, the address is needed at the first step (computing the cipher key), but data is only used to 
+generate the final output at the last XOR step. In practice, the processor pipeline computes the address of store operations
+before the cache line is acquired using cache coherence. The cache may send the address to the NVM controller once it is 
+available in the address genetation unit, and only send data when the coherence transaction finishes, essentially overlapping
+the coherence transaction and the first two steps of data encryption. 
