@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents Janus, an framework for efficient handling of Backend Memory Operations (BMO) on Non-Volatile Memory 
+(NVM) controllers. In the introduction section, the paper identifies a major bottleneck of NVM operations in addition to loads: 
+stores and the correspoinding BMOs. Two factors contribute to this conclusition. First, in order to achieve crash 
+persistency and recovery, most NVM applications use some form of logging or shadowing. These techniques enforce write ordering
+between the log and actual data. For example, in undo logging scheme, the undo image is generated before the data
+is written into the cache line, and then written to the NVM to avoid the unrecoverable case in which a dirty cache line
+is evicted to the NVM before the corresponding undo image does. Write ordering incurs extra latency on store operations, 
+which also blocks the processor pipeline, constituting a critical path. 
