@@ -42,3 +42,9 @@ available in the address genetation unit, and only send data when the coherence 
 the coherence transaction and the first two steps of data encryption. This technique, called pre-computation, helps 
 reduce the latency of store operations. As long as the input dependence is satisfied, the BMO can be executed
 in the background by the NVM controller which overlaps with in-cache data operation.
+
+Janus consists of two parts: the hardware component for enforcing dependence and storing intermediate results, and the 
+software interface that exposes these capabilities to the programmer. Janus assumes a transactional model, in which all 
+NVM stores are performed as part of a transaction, and committed to the NVM device at the end. This paper does not specify 
+how inter- and intra-operation dependences are enforced (we can assume the hardware has some hardwired knowledge about these
+two operations), and only concentrate on storing intermediate results. In Janus
