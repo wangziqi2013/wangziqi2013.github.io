@@ -70,3 +70,6 @@ a great opportunity in logging systems, because according to the observation, no
 for cache lines updated during the transaction until the transaction commits, at which time the updated data will become 
 the master copy. 
 
+As an ISA extension, the paper suggests adding a "flush counter cache" instruction as a counterpart of the clflush which 
+flushes data cache. At the end of the counter atomicity window, the programmer should issue both clflush and counter 
+cache flush instructions in order to correctly persist both states to the NVM. 
