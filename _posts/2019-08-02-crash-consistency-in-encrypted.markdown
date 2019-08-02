@@ -55,3 +55,7 @@ the line on the same address has already been inserted. If positive, the "ready"
 power failure, only entries with the "ready" bit on will be flushed, and the rest be discarded. Note that the hardware
 does not need to insert the counter and dirty cache line at the same moment. In fact, to achieve better performance, the 
 design explicitly allows some cache line and counter writes be non-atomic, as we will discuss below. 
+
+This paper also makes an observation that is critical for achieving high performance with counter atomic architecture:
+Not all stores are required to be counter atomic to ensure recoverability. In some use cases, only the store that makes 
+private data public, or affects the recoverbility of the data. In the above linked list example, 
