@@ -40,4 +40,8 @@ pointer value.
 
 The paper proposes two solutions. One straightford solution is to co-locate the counter and data, such that they constitute 
 an atomic pair which can be transferred on the memory bus. To accommodate this change, the width of the memory bus must 
-also be extended such that 72 bits (64 + 8) are sent per transfer. This design has two severe problems. First,
+also be extended such that 72 bits (64 + 8) are sent per transfer. This design has two severe problems. First, extending the 
+memory bug width is rather impractical on today's architecture, since that implies adding more pins to the memory chip,
+which is expensive and sometimes unrealistic. Second, this still does not solve the read latency problem, because in order 
+to overlap cache line read and counter read, they must reside in different address spaces. Co-locating both in the 
+same unit will waste too much storage.
