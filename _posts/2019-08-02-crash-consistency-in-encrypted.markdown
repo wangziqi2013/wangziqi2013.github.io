@@ -64,4 +64,9 @@ counter-atomicity must be enforced, of course). This allows the hardware to reor
 performance in the window starting from node creation to head pointer update. Another prominent example is logging. 
 In all logging schemes, two copies of data under modification are maintained, and only one copy is updated during the 
 transaction (for undo logging, we update data in-place; for redo/shadow logging, we update the redo log entry and leave 
-data untouched). The important observation is that if the system crashes in the middle of a transaction, 
+data untouched). The important observation is that if the system crashes in the middle of a transaction, the copy of data
+that is under update will be discarded, and no impact will be made if this part of the memory is inconsistent. This poses 
+a great opportunity in logging systems, because according to the observation, no counter atomicity needs to be maintained
+for cache lines updated during the transaction until the transaction commits, at which time the updated data will become 
+the master copy. 
+
