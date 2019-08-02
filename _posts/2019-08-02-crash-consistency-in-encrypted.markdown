@@ -29,3 +29,8 @@ To reduce latency, the paper suggests that a counter cache can be added, which i
 operation. Since the counter cache has lower latency, the NVM controller could partially or fully parallelize padding 
 generation and data read from NVM, reducing the extra read latency to a minimum. 
 
+One of the chanllenges of using counter mode encryption identified by the paper is about the consistency between cache line
+data written back to the NVM and the counter value. On current hardware platform, only the atomicity of one single write 
+is guaranteed by the hardware. By contrast, with counter mode encryption, two NVM writes are generated per store: one for 
+the regular data write, another for updating the counter map on the NVM. Without proper handling, this may lead to data 
+corruption which renders NVM data unreadable. 
