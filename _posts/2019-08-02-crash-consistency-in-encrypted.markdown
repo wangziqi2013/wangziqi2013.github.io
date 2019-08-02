@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper introduces counter-atomicity, a concept used for encrypted NVM environment. The paper builds upon the fact
+that data stored in NVM devices should be encrypted, because otherwise data can be accessed even after a system shutdown,
+rendering memory protection meaningless. This paper levarages counter mode encryption, in which each cache line is tagged 
+with a run-time generated counter. On every modification of the line, 
