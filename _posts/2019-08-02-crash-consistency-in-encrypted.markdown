@@ -45,3 +45,8 @@ memory bug width is rather impractical on today's architecture, since that impli
 which is expensive and sometimes unrealistic. Second, this still does not solve the read latency problem, because in order 
 to overlap cache line read and counter read, they must reside in different address spaces. Co-locating both in the 
 same unit will waste too much storage.
+
+The second proposal is to add a separate queue for counters in addition to the write queue that already exists on modern
+processors. These two queues are backed by residual powers on the NVM chip, which allows them to flush volatile data into 
+the NVM in case of a power failure. On eviction of a dirty cache line, the newly generated counter as well as the dirty
+line are inserted into the corresponding queue. 
