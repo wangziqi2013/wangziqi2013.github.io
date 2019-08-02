@@ -23,4 +23,9 @@ padding, it is XOR'ed with the content of the line, which concludes the encrypti
 line are stored in the NVM in two different address spaces. On NVM read operation, both the counter and data are read
 from their storage locations. The one-time padding is generated using the same function as in the encryption phase, and then
 XOR'ed with the cache line data read from the NVM device. Since two XOR operations with the same mask will cancel out with 
-each other, the original data can be recovered this way. 
+each other, the original data can be recovered this way. Note that without any optimization, this process will increase 
+the latency of read operations, because the generation of one-time padding and XOR operation both adds to the critical path.
+To reduce latency, the paper suggests that a counter cache can be added, which is accessed on every counter read and update 
+operation. Since the counter cache has lower latency, the NVM controller could partially or fully parallelize padding 
+generation and data read from NVM, reducing the extra read latency to a minimum. 
+
