@@ -58,4 +58,10 @@ design explicitly allows some cache line and counter writes be non-atomic, as we
 
 This paper also makes an observation that is critical for achieving high performance with counter atomic architecture:
 Not all stores are required to be counter atomic to ensure recoverability. In some use cases, only the store that makes 
-private data public, or affects the recoverbility of the data. In the above linked list example, 
+private data public, or affects the recoverbility of the data. In the above linked list example, the stores that 
+write to the new node does not need to be counter atomic before the store that updates the head pointer (after this point,
+counter-atomicity must be enforced, of course). This allows the hardware to reorder and coalesce stores for better write 
+performance in the window starting from node creation to head pointer update. Another prominent example is logging. 
+In all logging schemes, two copies of data under modification are maintained, and only one copy is updated during the 
+transaction (for undo logging, we update data in-place; for redo/shadow logging, we update the redo log entry and leave 
+data untouched). The important observation is that if the system crashes in the middle of a transaction, 
