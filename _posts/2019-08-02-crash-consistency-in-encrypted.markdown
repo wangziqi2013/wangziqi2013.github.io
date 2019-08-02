@@ -49,4 +49,9 @@ same unit will waste too much storage.
 The second proposal is to add a separate queue for counters in addition to the write queue that already exists on modern
 processors. These two queues are backed by residual powers on the NVM chip, which allows them to flush volatile data into 
 the NVM in case of a power failure. On eviction of a dirty cache line, the newly generated counter as well as the dirty
-line are inserted into the corresponding queue. 
+line are inserted into the corresponding queue. A "ready" bit is set for both entries if both are available in the queues
+(i.e. the paper suggests that when a counter is inserted, the counter queue controller should check cache line queue whether 
+the line on the same address has already been inserted. If positive, the "ready" bits in both entries will be set). On 
+power failure, only entries with the "ready" bit on will be flushed, and the rest be discarded. Note that the hardware
+does not need to insert the counter and dirty cache line at the same moment. In fact, to achieve better performance, the 
+design explicitly allows some cache line and counter writes be non-atomic, as we will discuss below. 
