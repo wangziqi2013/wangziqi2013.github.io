@@ -37,3 +37,7 @@ corruption which renders NVM data unreadable. The paper uses the example of inse
 In this example, if the system crashes between the head pointer cache line update and the counter update, then it is impossible
 to recover the correct address of the new node, since the counter has not been updated on the NVM, which corrupts the 
 pointer value. 
+
+The paper proposes two solutions. One straightford solution is to co-locate the counter and data, such that they constitute 
+an atomic pair which can be transferred on the memory bus. To accommodate this change, the width of the memory bus must 
+also be extended such that 72 bits (64 + 8) are sent per transfer. This design has two severe problems. First,
