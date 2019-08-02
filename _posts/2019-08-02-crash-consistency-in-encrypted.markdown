@@ -33,4 +33,7 @@ One of the chanllenges of using counter mode encryption identified by the paper 
 data written back to the NVM and the counter value. On current hardware platform, only the atomicity of one single write 
 is guaranteed by the hardware. By contrast, with counter mode encryption, two NVM writes are generated per store: one for 
 the regular data write, another for updating the counter map on the NVM. Without proper handling, this may lead to data 
-corruption which renders NVM data unreadable. 
+corruption which renders NVM data unreadable. The paper uses the example of inserting a new node at the head of a linked list.
+In this example, if the system crashes between the head pointer cache line update and the counter update, then it is impossible
+to recover the correct address of the new node, since the counter has not been updated on the NVM, which corrupts the 
+pointer value. 
