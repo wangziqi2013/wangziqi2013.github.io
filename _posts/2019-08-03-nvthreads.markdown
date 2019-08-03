@@ -27,4 +27,9 @@ NVthreads seeks to solve the above two problems using atomic region inference an
 that programs directly run on an address space mapped to the NVM (i.e. there is no address backed by DRAM, such that all 
 cache line evictions will be directed to the NVM device). NVthreads also assume that programmers use the pthread library
 for thread synchronization. Notably, this paper assumes programmers will use pthread_lock/unlock and pthread_wait/signal
-to implement critical sections and signaling, although other third-party interface can be easily supported. 
+to implement critical sections and signaling, although other third-party interface can be easily supported. The paper makes 
+a critical observation that, if accesses to shared data are always wrapped within a critical section, then shared data 
+is always in a consistent state if no thread is in a critical section. The paper therefore concluded that it is sufficient 
+to persist modifications to shared data only at the end of a critical section. As long as individual critical sections 
+can be rolled back, if the system crashes within a critical section, then after recovery it appears that the critical
+section has never been entered, and the system is in a state where no thread is executing a critical section 
