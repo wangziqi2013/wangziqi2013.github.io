@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper introduces NVthreads, a parallel programming framework aiming at providing persistency without burdening 
+programmers with modifying existing code to fit into the new paradigm, while being efficient on Non-Volatile devices.
+Prior to NVthreads, several NVM frameworks have been proposed. As pointed out by this paper, these proposals are usually 
+not user-friendly and/or inefficient for two reasons. 
+
+NVthreads 
