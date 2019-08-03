@@ -32,4 +32,11 @@ a critical observation that, if accesses to shared data are always wrapped withi
 is always in a consistent state if no thread is in a critical section. The paper therefore concluded that it is sufficient 
 to persist modifications to shared data only at the end of a critical section. As long as individual critical sections 
 can be rolled back, if the system crashes within a critical section, then after recovery it appears that the critical
-section has never been entered, and the system is in a state where no thread is executing a critical section 
+section has never been entered, and the system is in a state where no thread is executing a critical section (in fact,
+this formalization does not consider local data of each thread as part of the recovery domain; It is simply assumed 
+that all local states of the thread are discarded. This makes sense, because after the crash, the application is restarted 
+from the main function, and recovery is performed on shared states, at which point previous local states are not used anyway). 
+This guarantees that the global shared state is always consistent after recovery, such that computation could proceed
+from the interrupted point (in practice, threads can also wrap their local states as a piece of "shared data"; This local
+state may record the current process of local computation, which is not shared by other threads, but still needs to be 
+preserved during a crash).
