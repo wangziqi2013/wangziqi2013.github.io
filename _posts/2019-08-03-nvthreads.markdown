@@ -16,6 +16,10 @@ version_mgmt:
 This paper introduces NVthreads, a parallel programming framework aiming at providing persistency without burdening 
 programmers with modifying existing code to fit into the new paradigm, while being efficient on Non-Volatile devices.
 Prior to NVthreads, several NVM frameworks have been proposed. As pointed out by this paper, these proposals are usually 
-not user-friendly and/or inefficient for two reasons. 
+not user-friendly and/or inefficient for two reasons. First, programmers may be forced to adapt to a new programming
+paradigm that is partially or entirely different from what they are used to. This may involve some deep learning curve,
+or require changing existing source code. Second, most prior publications focus on utilizing the byte-addressibility
+of NVM devices, which implies tracking and persisting changes at the unit of cache line sized blocks (64 Bytes). Although
+this scheme sometimes have less storage overhead and 
 
 NVthreads 
