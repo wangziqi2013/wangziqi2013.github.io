@@ -57,4 +57,8 @@ and compares the content of the dirty page with the original shared page. Differ
 at byte granularity (to save logging storage). The redo log entries are then flushed to the NVM logging area after all pages have
 been processed. NVthreads then writes an committed mark at the end of the log to indicate to the recovery manager that the 
 critical section has been fully persisted, and then executes a persistence barrier. The barrier will stall the processor until
-all previous writes have been persisted on the NVM. After that, the 
+all previous writes have been persisted on the NVM. After that, NVthreads updates the shared page by copying redo entries
+to the shared pages. Note that, to avoid data race, the changes must be copies back at byte granularity, because otherwise
+two threads updating a page concurrently may collide with each other, and some updates may be lost. 
+
+
