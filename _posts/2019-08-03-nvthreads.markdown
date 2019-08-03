@@ -69,4 +69,6 @@ to check whether the current instance of the program is a restarted process afte
 In the former case, the programmer should call some special routine to perform after-recovery tasks such as rebuilding 
 their own thread-local states, and then resume execution from the recovery point. 
 
-
+Special handling is also needed to properly persist nested critical sections. There are two cases of nested critical sections:
+fully (perfectly) nested and partially nested (e.g. 2PL-style locking protocol). The general rule is that any two overlapping 
+critical sections on the same thread should be flattened or merged into one, 
