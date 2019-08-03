@@ -46,4 +46,9 @@ such that whenever a new thread is to be started, it re-routes the function call
 creating a new thread with shared address space with the parent thread, the clone() system call will create a new process
 with its own page table and page access permissions. The newly created process has all its user pages marked as read-only.
 Normal read accessed are not affected. When a store instruction attempts to update a page, a page fault will be raised 
-by the process, which is handled by the handler of NVthreads. 
+by the process, which is handled by the handler of NVthreads. The page fault handler allocates a physical page from the DRAM
+as the local buffer for dirty data, adds the page address into its write set hash table, and then remaps the virtual 
+address to be accessed to the new physical page. All future updates on this page will not trigger any page fault, and 
+can proceed at full processor speed. Compared with cache line granularity design in which all store operations are 
+instrumented and will generate a log entry, the page-level design has a clear advantage that it has less instrumentation 
+as well as logging overhead. 
