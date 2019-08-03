@@ -74,4 +74,11 @@ fully (perfectly) nested and partially nested (e.g. 2PL-style locking protocol).
 critical sections on the same thread should be flattened or merged into one, because otherwise, depending on the 
 access pattern of data in two critical sections, it is possible that one of them is rolled back, and the other happens to 
 have accessed modified data and committed. In this case, the final state is no longer consistent, because the state 
-after recovery contains a variable whose value is derived from nowhere. 
+after recovery contains a variable whose value is derived from nowhere. The same rule also applies to critical sections on 
+different threads that are communicated via a condition variable (CV). To avoid data inconsistency, the paper proposes 
+using global reference counting. Every time a page is duplicated for COW, the counter for the original page is incremented
+by one, and the current owner is recorded in the page metadata (e.g. a hash table); The opposite is done when a critical
+section commits. When a critical section first accesses a page, it checks whether the page is already dirty (i.e. ref count
+non-zero), and if true, it means that the current critical section may read states updated by another active critical
+section, and hence, the former can only commit after the latter, since the recovery process will either recover both, or 
+only recovery the latter, which is correct. 
