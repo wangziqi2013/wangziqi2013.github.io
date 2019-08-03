@@ -23,4 +23,8 @@ of NVM devices, which implies tracking and persisting changes at the unit of cac
 this scheme sometimes have less storage overhead, the extra cost of persisting every cache line may outweigh the 
 storage benefit, and makes the system under-perform. 
 
-NVthreads 
+NVthreads seeks to solve the above two problems using atomic region inference and page-level redo logging. NVthreads assume 
+that programs directly run on an address space mapped to the NVM (i.e. there is no address backed by DRAM, such that all 
+cache line evictions will be directed to the NVM device). NVthreads also assume that programmers use the pthread library
+for thread synchronization. Notably, this paper assumes programmers will use pthread_lock/unlock and pthread_wait/signal
+to implement critical sections and signaling, although other third-party interface can be easily supported. 
