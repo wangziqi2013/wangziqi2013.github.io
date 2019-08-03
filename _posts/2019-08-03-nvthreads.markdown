@@ -20,6 +20,7 @@ not user-friendly and/or inefficient for two reasons. First, programmers may be 
 paradigm that is partially or entirely different from what they are used to. This may involve some deep learning curve,
 or require changing existing source code. Second, most prior publications focus on utilizing the byte-addressibility
 of NVM devices, which implies tracking and persisting changes at the unit of cache line sized blocks (64 Bytes). Although
-this scheme sometimes have less storage overhead and 
+this scheme sometimes have less storage overhead, the extra cost of persisting every cache line may outweigh the 
+storage benefit, and makes the system under-perform. 
 
 NVthreads 
