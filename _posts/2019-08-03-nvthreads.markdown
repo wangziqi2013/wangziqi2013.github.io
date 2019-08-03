@@ -71,4 +71,7 @@ their own thread-local states, and then resume execution from the recovery point
 
 Special handling is also needed to properly persist nested critical sections. There are two cases of nested critical sections:
 fully (perfectly) nested and partially nested (e.g. 2PL-style locking protocol). The general rule is that any two overlapping 
-critical sections on the same thread should be flattened or merged into one, 
+critical sections on the same thread should be flattened or merged into one, because otherwise, depending on the 
+access pattern of data in two critical sections, it is possible that one of them is rolled back, and the other happens to 
+have accessed modified data and committed. In this case, the final state is no longer consistent, because the state 
+after recovery contains a variable whose value is derived from nowhere. 
