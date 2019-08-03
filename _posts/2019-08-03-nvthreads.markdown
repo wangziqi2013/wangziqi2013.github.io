@@ -51,4 +51,10 @@ as the local buffer for dirty data, adds the page address into its write set has
 address to be accessed to the new physical page. All future updates on this page will not trigger any page fault, and 
 can proceed at full processor speed. Compared with cache line granularity design in which all store operations are 
 instrumented and will generate a log entry, the page-level design has a clear advantage that it has less instrumentation 
-as well as logging overhead. 
+as well as logging overhead. At the end of the critical section, NVthreads "commits" the critical section by generating 
+redo log entries, and then updating the shared state. First, it iterates over dirty pages in its write set hash table, 
+and compares the content of the dirty page with the original shared page. Differences will be recorded in redo log entries
+at byte granularity (to save logging storage). The redo log entries are then flushed to the NVM logging area after all pages have
+been processed. NVthreads then writes an committed mark at the end of the log to indicate to the recovery manager that the 
+critical section has been fully persisted, and then executes a persistence barrier. The barrier will stall the processor until
+all previous writes have been persisted on the NVM. After that, the 
