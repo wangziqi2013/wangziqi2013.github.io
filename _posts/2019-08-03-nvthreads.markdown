@@ -40,3 +40,10 @@ This guarantees that the global shared state is always consistent after recovery
 from the interrupted point (in practice, threads can also wrap their local states as a piece of "shared data"; This local
 state may record the current process of local computation, which is not shared by other threads, but still needs to be 
 preserved during a crash).
+
+NVthreads is implemented with Operating System support of Copy-on-Write (COW). NVthreads instruments the thread library,
+such that whenever a new thread is to be started, it re-routes the function call to the "clone" system call. Instead of 
+creating a new thread with shared address space with the parent thread, the clone() system call will create a new process
+with its own page table and page access permissions. The newly created process has all its user pages marked as read-only.
+Normal read accessed are not affected. When a store instruction attempts to update a page, a page fault will be raised 
+by the process, which is handled by the handler of NVthreads. 
