@@ -81,4 +81,6 @@ by one, and the current owner is recorded in the page metadata (e.g. a hash tabl
 section commits. When a critical section first accesses a page, it checks whether the page is already dirty (i.e. ref count
 non-zero), and if true, it means that the current critical section may read states updated by another active critical
 section, and hence, the former can only commit after the latter, since the recovery process will either recover both, or 
-only recovery the latter, which is correct. 
+only recovery the latter, which is correct. To achieve this, a commit dependency is created from the current critical section
+to existing critical sections that have a reference to the page. The current critical section must wait until all these 
+dependencies are resolved (i.e. critical sections are committed), after which it can commit.
