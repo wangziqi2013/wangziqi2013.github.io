@@ -70,4 +70,12 @@ there are two possibilities: either the new record is aligned to cache block bou
 the log manager first flushes the new log entry back to the NVM, and then updates the previous entry's "next" pointer, and 
 then flush the previous entry. This guarantees atomicity, because the content of the new entry is persisted first, followed 
 by the updated pointer that points to it. In the latter case, since the "next" pointer of the previous entry shares 
-a cache block with the new entry, it is sufficient to just flush the cache block, and the new entry is added atomically.
+a cache block with the new entry, it is sufficient to just flush the cache block. In both cases, the new entry is added 
+atomically.
+
+At runtime, Atlas instruments every store instruction within critical sections, lock acquire and lock release operation to
+let them call into the library. A log entry is generated and added to the per-thread log for these three types of operations. 
+To further track lock acquire-release dependencies, the runtime system also maintains a hash table that records the last
+log record that corresponds to the most recent release of a lock. When a lock is released, the hash table is updated to
+reflect the change. When a lock is acquired, the acquisition thread queries the hash table, and stores the pointer to
+the last lock release log record into its lock acquire entry.
