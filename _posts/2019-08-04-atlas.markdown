@@ -50,4 +50,9 @@ Atlas is implemented using undo logging and background log pruning. The entire N
 block where smaller blocks can be allocated from using special allocator interface. To aid crash recovery, each allocation
 associates an identifier with the address just returned by the allocator, such that after the crash, the recovery code 
 could use the same name to locate the memory block to recover (this name to address table should itself be persisted atomically).
-In addition, blocks are assumed to consist of objects that are linked using pointers. 
+In addition, blocks are assumed to consist of objects that are linked using pointers. Every memory block should have at 
+least one entry point, through which all live objects can be accessed. This is extremely important for garbage collection,
+a task that is necessary for NVM but not for DRAM due to the fact that allocated blocks will not be freed automatically
+after a crash. The garbage collector simply traverses from the entry point, marks all reachable objects as live, and then
+reclaims the rest memory in the block (of cuorse, the layout of objects should be exposed to the GC process, e.g. via 
+a per-class header field). 
