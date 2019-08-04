@@ -37,3 +37,7 @@ The paper first defines FASE (Failure-Atomic Section) as the minimum sequence of
 which at least one lock is held for all instructions. This essentially flattens out nested locks, no matter whether 
 they are perfected nested (like transactions in a TM) or not (like the 2PL protocol or hand-over-hand locking protocol
 used in B+Trees). This suggests that state modifications within the FASE must be treated as a single logging unit.
+In addition, if thread T2 synchronized with another thread T1 in the runtime (i.e. either unblocked by T1, or acquired 
+a lock that was previously released by T1), then T2's critical section must logically commit after the corresponding 
+critical section in T1. Note that due to nested critical sections, the release operation may be at the middle of a 
+FASE. In this case, T2's FASE must be logically serialized after T1's FASE.
