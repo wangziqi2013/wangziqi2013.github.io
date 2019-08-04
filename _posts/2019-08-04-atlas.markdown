@@ -25,4 +25,10 @@ logging, which has already been addressed in previous publications. Second, in t
 sections, extra care must be taken to avoid the system recovering to an inconsistent state, even if all individual
 critical sections are recovered properly. To see the reason, assume there are two threads, T1 and T2. T1 is exeuting a 
 critical section consisting of two lock acquires: lock(L1), lock(L2), Write(X), unlock(L1), unlock(L2), and T2 executes 
-the following sequence: lock(L1), Read(X), Write(Y), unlock(L1). 
+the following sequence: lock(L1), Read(X), Write(Y = X + 1), unlock(L1). We further assume that during the execution, T2 
+executes lock(L1) after T1 releases L1, and the system crashes after T2 finishes unlock(L1) (and is persisted) but before 
+T1 could unlock L2. In this example, since T1's critical has not yet finished execution, it must be rolled back during 
+recovery to ensure the atomicity of the critical section. On the other hand, since T2 has been persisted on the NVM, if 
+the recovery handler commits T2's critical section (i.e. make it persistent or not undo its changes), then essentially,
+T2's critical section wrote a value from nowhere, since the source critical section where the value X is updated has 
+been undone.
