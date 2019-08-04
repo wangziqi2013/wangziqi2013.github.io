@@ -32,3 +32,8 @@ recovery to ensure the atomicity of the critical section. On the other hand, sin
 the recovery handler commits T2's critical section (i.e. make it persistent or not undo its changes), then essentially,
 T2's critical section wrote a value from nowhere, since the source critical section where the value X is updated has 
 been undone.
+
+The paper first defines FASE (Failure-Atomic Section) as the minimum sequence of executed instructions by a thread in
+which at least one lock is held for all instructions. This essentially flattens out nested locks, no matter whether 
+they are perfected nested (like transactions in a TM) or not (like the 2PL protocol or hand-over-hand locking protocol
+used in B+Trees). This suggests that state modifications within the FASE must be treated as a single logging unit.
