@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper introduces Atlas, a runtime library for ensuring persistency on multi-threaded applications. This paper assumes 
+that the program is written data race-free, using locks as the mathod of synchronization. The paper also assumes 
+that the NVM device is attached to the memory bus, and can be allocated in user space via nv_malloc() calls which
+maps a "persistent region" of user VA onto the device. Stores to the persistent region will not be immediately flushed to
+the NVM device. Instead, they may remain in the cache as long as the cache controller does not evict the cache block
+or the programmer does not issue a cache line flush instruction. In this situation, the library must ensure two invariants:
+First, 
