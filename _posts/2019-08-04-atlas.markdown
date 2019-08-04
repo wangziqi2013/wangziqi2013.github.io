@@ -47,7 +47,7 @@ are similarly tracked as if they were made in the next critical section, i.e. th
 if so does the next critical section. 
 
 Atlas is implemented using undo logging and background log pruning. The entire NVM address space is treated as a memory 
-block where smaller blocks can be allocated from using special allocator interface. To aid crash recovery, each allocation
+block from where smaller blocks can be allocated using special allocator interface. To aid crash recovery, each allocation
 associates an identifier with the address just returned by the allocator, such that after the crash, the recovery code 
 could use the same name to locate the memory block to recover (this name to address table should itself be persisted atomically).
 In addition, blocks are assumed to consist of objects that are linked using pointers. Every memory block should have at 
@@ -56,3 +56,9 @@ a task that is necessary for NVM but not for DRAM due to the fact that allocated
 after a crash. The garbage collector simply traverses from the entry point, marks all reachable objects as live, and then
 reclaims the rest memory in the block (of cuorse, the layout of objects should be exposed to the GC process, e.g. via 
 a per-class header field). 
+
+On initialization of the program, the library allocates a log buffer on the NVM. The log buffer consists of n log head 
+objects, where n is the maximum number of threads. Log entries are attached to the corresponding log head object in
+program order as a linked list. Each log head object also contains a pointer that points to the last valid log entry
+of the thread, which is used as the starting point of recovery (note that Atlas uses undo, so applying log records 
+means that the modifications are rolled back). Log entries are allocated from a per-thread circular buffer. 
