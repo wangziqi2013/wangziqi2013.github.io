@@ -44,7 +44,8 @@ a lock that was previously released by T1), then T2's critical section must logi
 critical section in T1. Note that due to nested critical sections, the release operation may be at the middle of a 
 FASE. In this case, T2's FASE must be logically serialized after T1's FASE. Persistent stores outside of critical sections
 are similarly tracked as if they were made in the next critical section, i.e. they will be part of the post-crash state 
-if so does the next critical section. 
+if so does the next critical section. Note that within a thread, FASEs must always commit in the program order, even if 
+the FASEs do not conflict by the same lock. 
 
 Atlas is implemented using undo logging and background log pruning. The entire NVM address space is treated as a memory 
 block from where smaller blocks can be allocated using special allocator interface. To aid crash recovery, each allocation
@@ -87,11 +88,11 @@ state.
 Atlas also starts a background thread to maintain internal states in the background. One of the most important role 
 this background thread plays is to compute the current persistent image. Recall that the current persistent image 
 consists of only FASEs that are committed and all persistent stores before them. A FASE is committed only when (1) All
-its stores are persisted to the NVM, and (2) All its dependent FASEs are committed (if any). To compute the persistent
-image, the background thread scans the log chain of each thread periodically. It identifies FASE using a counter,
-which is incremented for every lock acquire, and decremented for every lock release. Stores performed while the 
-counter is non-zero are considered as in a FASE (i.e. nested critical sections are flattened out). Besides, stores 
-that are not in any FASE will join the next FASE if there is one, which implies that these stores must not be 
+its stores (and by transitivity, undo records) are persisted to the NVM, and (2) All its dependent FASEs are committed 
+(if any). To compute the persistent image, the background thread scans the log chain of each thread periodically. It 
+identifies FASE using a counter, which is incremented for every lock acquire, and decremented for every lock release. 
+Stores performed while the counter is non-zero are considered as in a FASE (i.e. nested critical sections are flattened out). 
+Besides, stores that are not in any FASE will join the next FASE if there is one, which implies that these stores must not be 
 committed before the next FASE does (otherwise, it is possible that the previous FASE is undone, while stores after 
 it are committed, which is inconsistent). The background thread then builds a graph based on the results of log scan.
-
+Nodes of the graph correspond to FASEs (in addition to stores before them), and edges are dependencies. 
