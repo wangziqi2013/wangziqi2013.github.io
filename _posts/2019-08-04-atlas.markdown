@@ -87,5 +87,11 @@ state.
 Atlas also starts a background thread to maintain internal states in the background. One of the most important role 
 this background thread plays is to compute the current persistent image. Recall that the current persistent image 
 consists of only FASEs that are committed and all persistent stores before them. A FASE is committed only when (1) All
-its stores are persisted to the NVM, and (2) All its dependent FASEs are committed (if any). 
+its stores are persisted to the NVM, and (2) All its dependent FASEs are committed (if any). To compute the persistent
+image, the background thread scans the log chain of each thread periodically. It identifies FASE using a counter,
+which is incremented for every lock acquire, and decremented for every lock release. Stores performed while the 
+counter is non-zero are considered as in a FASE (i.e. nested critical sections are flattened out). Besides, stores 
+that are not in any FASE will join the next FASE if there is one, which implies that these stores must not be 
+committed before the next FASE does (otherwise, it is possible that the previous FASE is undone, while stores after 
+it are committed, which is inconsistent). The background thread then builds a graph based on the results of log scan.
 
