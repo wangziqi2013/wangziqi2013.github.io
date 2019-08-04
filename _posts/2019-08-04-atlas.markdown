@@ -61,4 +61,13 @@ On initialization of the program, the library allocates a log buffer on the NVM.
 objects, where n is the maximum number of threads. Log entries are attached to the corresponding log head object in
 program order as a linked list. Each log head object also contains a pointer that points to the last valid log entry
 of the thread, which is used as the starting point of recovery (note that Atlas uses undo, so applying log records 
-means that the modifications are rolled back). Log entries are allocated from a per-thread circular buffer. 
+means that the modifications are rolled back). Log entries are allocated from a per-thread circular buffer. It is enforced 
+by the allocator that two consecutive log entries be adjacent to each other in the NVM address space, such that if entry 
+i and j are two adjacent entries in program order, their physical addresses must also be in adjacent cache blocks. This 
+property of log entries is critical in ensuring that log records are attached to the end of the block atomically (we 
+assume the "next" pointer of the log entry object is its last field, and is always 8 byte aligned). When a new entry is added, 
+there are two possibilities: either the new record is aligned to cache block boundaries, or it is not. In the former case,
+the log manager first flushes the new log entry back to the NVM, and then updates the previous entry's "next" pointer, and 
+then flush the previous entry. This guarantees atomicity, because the content of the new entry is persisted first, followed 
+by the updated pointer that points to it. In the latter case, since the "next" pointer of the previous entry shares 
+a cache block with the new entry, it is sufficient to just flush the cache block, and the new entry is added atomically.
