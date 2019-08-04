@@ -84,5 +84,8 @@ reflect the change. When a lock is acquired, the acquisition thread queries the 
 the last lock release log record into its lock acquire entry. This information will be used when computing the persist
 state.
 
-
+Atlas also starts a background thread to maintain internal states in the background. One of the most important role 
+this background thread plays is to compute the current persistent image. Recall that the current persistent image 
+consists of only FASEs that are committed and all persistent stores before them. A FASE is committed only when (1) All
+its stores are persisted to the NVM, and (2) All its dependent FASEs are committed (if any). 
 
