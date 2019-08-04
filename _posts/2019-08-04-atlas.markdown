@@ -46,3 +46,8 @@ FASE. In this case, T2's FASE must be logically serialized after T1's FASE. Pers
 are similarly tracked as if they were made in the next critical section, i.e. they will be part of the post-crash state 
 if so does the next critical section. 
 
+Atlas is implemented using undo logging and background log pruning. The entire NVM address space is treated as a memory 
+block where smaller blocks can be allocated from using special allocator interface. To aid crash recovery, each allocation
+associates an identifier with the address just returned by the allocator, such that after the crash, the recovery code 
+could use the same name to locate the memory block to recover (this name to address table should itself be persisted atomically).
+In addition, blocks are assumed to consist of objects that are linked using pointers. 
