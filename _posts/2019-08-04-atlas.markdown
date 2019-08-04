@@ -75,7 +75,14 @@ atomically.
 
 At runtime, Atlas instruments every store instruction within critical sections, lock acquire and lock release operation to
 let them call into the library. A log entry is generated and added to the per-thread log for these three types of operations. 
+To ensure correctness of recovery, the undo log entry must persist before the corresponding store. Atlas chooses to flush
+the log entry immediately after generating them, but uses a different policy for stores, i.e. stores may not be instantly
+flushed back once they finish in the cache (we will discuss this later).
 To further track lock acquire-release dependencies, the runtime system also maintains a hash table that records the last
 log record that corresponds to the most recent release of a lock. When a lock is released, the hash table is updated to
 reflect the change. When a lock is acquired, the acquisition thread queries the hash table, and stores the pointer to
-the last lock release log record into its lock acquire entry.
+the last lock release log record into its lock acquire entry. This information will be used when computing the persist
+state.
+
+
+
