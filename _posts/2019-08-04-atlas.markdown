@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Atlas: Leveraging Locks for Non-Volatile Memory Consistency"
+date:   2019-08-04 01:07:00 -0500
+categories: paper
+paper_title: "Atlas: Leveraging Locks for Non-Volatile Memory Consistency"
+paper_link: https://dl.acm.org/citation.cfm?id=2660224
+paper_keyword: NVM; Critical Section; Undo Logging
+paper_year: OOPSLA 2014
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
