@@ -19,4 +19,10 @@ that the NVM device is attached to the memory bus, and can be allocated in user 
 maps a "persistent region" of user VA onto the device. Stores to the persistent region will not be immediately flushed to
 the NVM device. Instead, they may remain in the cache as long as the cache controller does not evict the cache block
 or the programmer does not issue a cache line flush instruction. In this situation, the library must ensure two invariants:
-First, 
+First, each individual critical section (and probably the resule of merging several critical section) should be atomic,
+i.e. either all stores in that critical section is persisted, or none of them is persisted. This implies some form of 
+logging, which has already been addressed in previous publications. Second, in the case of multiple nested critical
+sections, extra care must be taken to avoid the system recovering to an inconsistent state, even if all individual
+critical sections are recovered properly. To see the reason, assume there are two threads, T1 and T2. T1 is exeuting a 
+critical section consisting of two lock acquires: lock(L1), lock(L2), Write(X), unlock(L1), unlock(L2), and T2 executes 
+the following sequence: lock(L1), Read(X), Write(Y), unlock(L1). 
