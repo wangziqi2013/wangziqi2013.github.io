@@ -95,4 +95,8 @@ Stores performed while the counter is non-zero are considered as in a FASE (i.e.
 Besides, stores that are not in any FASE will join the next FASE if there is one, which implies that these stores must not be 
 committed before the next FASE does (otherwise, it is possible that the previous FASE is undone, while stores after 
 it are committed, which is inconsistent). The background thread then builds a graph based on the results of log scan.
-Nodes of the graph correspond to FASEs (in addition to stores before them), and edges are dependencies. 
+Nodes of the graph correspond to FASEs (in addition to stores before them), and edges are dependencies. The background thread
+marks a FASE as "committed" by checking the status of stores within that FASE as well as the status of all its dependencies.
+If both are satisifed, the FASE is considered as committed, and all its log records are recycled. The background thread
+atomically updates the log head pointer to let it point to the next log entry that has not been committed, such that
+during recovery, all stores (no matter they are physically committed or not) are rolled back after this point. 
