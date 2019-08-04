@@ -42,4 +42,7 @@ used in B+Trees). This suggests that state modifications within the FASE must be
 In addition, if thread T2 synchronized with another thread T1 in the runtime (i.e. either unblocked by T1, or acquired 
 a lock that was previously released by T1), then T2's critical section must logically commit after the corresponding 
 critical section in T1. Note that due to nested critical sections, the release operation may be at the middle of a 
-FASE. In this case, T2's FASE must be logically serialized after T1's FASE. Persistent stores 
+FASE. In this case, T2's FASE must be logically serialized after T1's FASE. Persistent stores outside of critical sections
+are similarly tracked as if they were made in the next critical section, i.e. they will be part of the post-crash state 
+if so does the next critical section. 
+
