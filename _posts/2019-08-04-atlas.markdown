@@ -111,3 +111,6 @@ uninterrupted execution where no lock is held by any thread.
 The paper also proposes several policies for persisting stores. The simplest of them is to flush the store right after 
 the log entry is persisted. This scheme works badly on architectures where cache line flush is a synchronous operation
 (i.e. x86 at the time this paper is written), although it guarantees immediate persistence after the thread exits the FASE. 
+On the other extreme, all stores may be recorded into a list, which is flushed periodically by the backgrouhd thread. Although
+some stores might be evicted before this happens, their persistence can only be secured once the background thread
+flushes the store list. 
