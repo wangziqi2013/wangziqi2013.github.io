@@ -107,3 +107,7 @@ alrorithm to advance the persistent image as far as possible, discarding log ent
 and then starts undoing changes. The roll back process begins from the end of the log, and iterates backwards, applying 
 the undo image to the recorded address. Once this process is finished, the system state is equivalent to a point during 
 uninterrupted execution where no lock is held by any thread. 
+
+The paper also proposes several policies for persisting stores. The simplest of them is to flush the store right after 
+the log entry is persisted. This scheme works badly on architectures where cache line flush is a synchronous operation
+(i.e. x86 at the time this paper is written), although it guarantees immediate persistence after the thread exits the FASE. 
