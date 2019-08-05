@@ -100,3 +100,10 @@ marks a FASE as "committed" by checking the status of stores within that FASE as
 If both are satisifed, the FASE is considered as committed, and all its log records are recycled. The background thread
 atomically updates the log head pointer to let it point to the next log entry that has not been committed, such that
 during recovery, all stores (no matter they are physically committed or not) are rolled back after this point. 
+
+After the system crashes, the recovery handler is invoked. Due to the fact that the background thread only scans the log
+periodically, some already committed FASEs may not be identified. The recovery handler first runs the same log scanning
+alrorithm to advance the persistent image as far as possible, discarding log entries not participating the recovery process,
+and then starts undoing changes. The roll back process begins from the end of the log, and iterates backwards, applying 
+the undo image to the recorded address. Once this process is finished, the system state is equivalent to a point during 
+uninterrupted execution where no lock is held by any thread. 
