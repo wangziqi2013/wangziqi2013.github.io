@@ -111,6 +111,13 @@ uninterrupted execution where no lock is held by any thread.
 The paper also proposes several policies for persisting stores. The simplest of them is to flush the store right after 
 the log entry is persisted. This scheme works badly on architectures where cache line flush is a synchronous operation
 (i.e. x86 at the time this paper is written), although it guarantees immediate persistence after the thread exits the FASE. 
-On the other extreme, all stores may be recorded into a list, which is flushed periodically by the backgrouhd thread. Although
-some stores might be evicted before this happens, their persistence can only be secured once the background thread
-flushes the store list. 
+On the other extreme, all stores may be recorded into a list, which is flushed periodically by the background thread (or 
+by a worker thread at the end of one or multiple FASEs). Although some stores might be evicted before this happens, their 
+persistence can only be secured once the background thread flushes the store list. This schemes introduces less overhead 
+per store operation, but huge traffic at the end of a FASE or an epoch. Besides, at recovery time, stores not yet flushed 
+into the NVM are considered as lost, and hence must be rolled back. In the middle, the paper proposes using a software 
+maintained, direct-mapped cache. The software cache is implemented as an array, indexed using a few bits from the address.
+If the store address hits the cache, and the entry is inserted in the same FASE, no undo image is generated. If the store
+missed the cache, then the current entry's address is flushed, and the entry is updated. Stores that are persisted by
+means of flushing the cache block will be reflected in the log entry (e.g. set a bit). The log scanning algorithm uses 
+this flag to infer whether a FASE has been fully persisted or not.
