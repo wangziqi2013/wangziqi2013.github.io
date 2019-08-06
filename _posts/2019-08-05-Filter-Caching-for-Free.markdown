@@ -50,5 +50,16 @@ and serves similar purposes). If the store buffer remains full for an extended p
 which stalls the processor by preventing new store instructions from being inserted (typical store buffer/queue has 56
 entries). 
 
-
+The technique proposed by this paper is described as follows. When a store operation commits, it is added into the store
+buffer, and written back to the L1 cache as soon as possible. Instead of clearing the store buffer entry when the data
+is written out, the processor retains the entry in the buffer, unless a new entry is to be allocated for a new store instruction,
+and there is no space left. By retaining entries that have already been written out to the L1 in the store buffer, 
+the hit rate of the store buffer increases to ~18% on the same benchmark, a 23% improvement. To avoid accessing stale 
+data when the cache block is invalidated by coherence after writing back the store buffer entry, the entry whose block
+was invalidated should also be invalidated and removed from the store buffer. This poses another challenge in the design.
+First, simplying removing the entry would complicate resource allocation, as entries in the store buffer are no longer
+consecutive. Second, in normal cases, coherence messages stop propagating at L1. Adding the store buffer as a filter cache
+implies that the invalidation should further propagate to the store buffer for every invalidation. This not only adds extra 
+traffic and port contention for the store buffer, but also consumes energy, because every invalidation requires a fully
+associative lookup. 
 
