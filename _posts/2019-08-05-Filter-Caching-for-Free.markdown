@@ -28,4 +28,6 @@ store buffer plays an important role in the memory consistency model of the proc
 from stores do not affect the consistency model. For Sequential Consistency, load instructions must not commit before 
 stores before it in the program order, i.e. they remain speculative in the load queue. When there is no aliasing in the 
 store buffer, the coherence request is either made only after the store is committed, or speculatively made when the load is executed, 
-and is squashed and replayed if the cache block is invalidated by another 
+and is squashed and replayed if the cache block is invalidated by coherence. If there is a conflict in the store buffer,
+no matter whether load bypassing or forwarding is used, the load instruction must also remain speculative, and can only
+commit after the store does. In Total Store Ordering (TSO) such as x86/x86-64
