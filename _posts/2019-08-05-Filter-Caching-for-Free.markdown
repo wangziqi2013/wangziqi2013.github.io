@@ -30,4 +30,7 @@ stores before it in the program order, i.e. they remain speculative in the load 
 store buffer, the coherence request is either made only after the store is committed, or speculatively made when the load is executed, 
 and is squashed and replayed if the cache block is invalidated by coherence. If there is a conflict in the store buffer,
 no matter whether load bypassing or forwarding is used, the load instruction must also remain speculative, and can only
-commit after the store does. In Total Store Ordering (TSO) such as x86/x86-64
+commit after the store does. In Total Store Ordering (TSO) such as x86/x86-64, data is always forwarded from the store 
+buffer, if there is aliasing (if not then directly access the cache and commit). Load instructions commit as soon as data 
+is ready without waiting for preceding stores, essentially ordering themselves before stores in the program order. 
+Stores are always written into the cache from the end of the store buffer, maintaining the store-store program order.
