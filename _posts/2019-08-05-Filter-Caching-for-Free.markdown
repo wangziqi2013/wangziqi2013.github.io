@@ -34,3 +34,12 @@ commit after the store does. In Total Store Ordering (TSO) such as x86/x86-64, d
 buffer, if there is aliasing (if not then directly access the cache and commit). Load instructions commit as soon as data 
 is ready without waiting for preceding stores, essentially ordering themselves before stores in the program order. 
 Stores are always written into the cache from the end of the store buffer, maintaining the store-store program order.
+
+As indicated above, for the sake of correctness, it is crucial that the store buffer be checked every time a load is issued 
+by the pipeline. It is, however, also observed by the authors that the actual hit rate is very low (~8% on SPEC in average).
+The low hit rate of store buffer justifies the design choice of probing both the buffer and L1 cache in parallel, which 
+has been adopted by most processors (by contrast, processors never probe L1 and L2 cache in parallel, because the L1 
+cache alone often has a high hit rate). Whether or not the load request hits the store buffer, we always have to pay
+the energy and port contention for a fully associative probing into the buffer CAM.
+
+
