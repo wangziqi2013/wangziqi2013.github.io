@@ -61,5 +61,10 @@ First, simplying removing the entry would complicate resource allocation, as ent
 consecutive. Second, in normal cases, coherence messages stop propagating at L1. Adding the store buffer as a filter cache
 implies that the invalidation should further propagate to the store buffer for every invalidation. This not only adds extra 
 traffic and port contention for the store buffer, but also consumes energy, because every invalidation requires a fully
-associative lookup. 
+associative lookup. On the other extreme, on every invalidation of any block in L1, a signal is sent to the store buffer,
+which invalidates all "completed" entries. Although this scheme is much simpler and only requires a bulk invalidation
+(which does not need a CAM lookup-by-address opration), it severely reduces the hit rate, since the store buffer will be 
+flushed even if the invalidated block does not exist in the buffer. 
+
+As a midpoint, 
 
