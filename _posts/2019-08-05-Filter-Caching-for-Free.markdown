@@ -74,5 +74,9 @@ setting the "dirty" bit in the tag, we also set the epoch of the cache line as t
 When an L1 block is invalidated or evicted, the epoch is also sent to the store buffer. The store buffer compares its local
 epoch with the signal, and if they differ, no invalidation will happen, since we know that the invalidation or eviction
 is conducted on a line that is no longer in the buffer. Compared with the simple scheme, no associative lookup is performed, but 
-instead we just need an integer equality comparator (essentially an array of XOR gates). 
+instead we just need an integer equality comparator (essentially an array of XOR gates). In practice, using an infinite 
+or even a reasonably large number of counters are unrealistic due to the strict requirement on L1 latency and area.
+As a approximation, we allow the epoch counter to wrap back when it overflows, which causes no harm, because this only
+introduces false positives, but never false negative (i.e. we do not stale data to be accessed from the store buffer).
+In fact, the paper proposes using only 1-bit counter, i.e. a second "dirty" bit in L1 tags. 
 
