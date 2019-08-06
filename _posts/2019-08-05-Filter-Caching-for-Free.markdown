@@ -20,3 +20,7 @@ controller to acquire ownership of the cache block before the block can be updat
 take several hundreds of cycles in the worst case, which poses a great performance disadvantage as processors will stall and 
 wait during this time.
 
+To ensure the illustion of ordered execution, processors need to check not only the L1 cache, but also the store buffer, 
+when a load instruction is executed. If a committed store with the same address as the load is found in the store buffer,
+the processor either defers the commit of the load until the store is written into L1, or directly forward the data from
+the store buffer to the load instruction. 
