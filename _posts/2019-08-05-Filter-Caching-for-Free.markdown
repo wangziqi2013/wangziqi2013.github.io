@@ -42,4 +42,9 @@ has been adopted by most processors (by contrast, processors never probe L1 and 
 cache alone often has a high hit rate). Whether or not the load request hits the store buffer, we always have to pay
 the energy and port contention for a fully associative probing into the buffer CAM.
 
+The paper therefore points out that, by treating the store buffer as a small, fully associative filter cache, we may 
+achieve higher hit rate without fundamentally changing the functionality of the store buffer. On an ordinaly design,
+the store buffer is emptied as quickly as possible, usually right after the L1 is able to accept a new request, since 
+the store buffer usually also shares storage with the store queue. If the store buffer remains full for an extended period
+of time, structural hazard may happen, which stalls the processor by preventing new store instructions from being inserted.
 
