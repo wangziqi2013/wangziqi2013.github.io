@@ -66,5 +66,10 @@ which invalidates all "completed" entries. Although this scheme is much simpler 
 (which does not need a CAM lookup-by-address opration), it severely reduces the hit rate, since the store buffer will be 
 flushed even if the invalidated block does not exist in the buffer. 
 
-As a midpoint, 
+As a midpoint, the paper proposes using epoches to identify whether a block is in the store buffer or not, with false
+positives but never false negative. The store buffer maintains an "epoch counter", which is incremented by one every time
+it is invalidated. When the epoch counter changes, we know that blocks that are written back to L1 in an older epoch can 
+never be in the store buffer. The tag array of L1 is extended with an array of epoches. On every L1 write, in addition to 
+setting the "dirty" bit in the tag, we also set the epoch of the cache line as the current epoch in the store buffer. 
+When an L1 block
 
