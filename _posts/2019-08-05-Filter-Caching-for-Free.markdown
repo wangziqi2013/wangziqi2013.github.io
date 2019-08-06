@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes using the store buffer as a small fully-associative cache to achieve less energy consumption and shorter load 
+latency on modern architectures. Virtually all processors nowadays are equipped with a store buffer to hide the relatively 
+slower coherence protocol. Without a store buffer, store instructions that are ready to commit otherwise must wait for the cache 
+controller to acquire ownership of the cache block before the block can be updated. In a multi-chip architecture, this may 
+take several hundreds of cycles in the worst case, which poses a great performance disadvantage as processors will stall and 
+wait during this time.
+
