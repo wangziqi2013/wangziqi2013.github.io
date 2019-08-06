@@ -78,5 +78,7 @@ instead we just need an integer equality comparator (essentially an array of XOR
 or even a reasonably large number of counters are unrealistic due to the strict requirement on L1 latency and area.
 As a approximation, we allow the epoch counter to wrap back when it overflows, which causes no harm, because this only
 introduces false positives, but never false negative (i.e. we do not stale data to be accessed from the store buffer).
-In fact, the paper proposes using only 1-bit counter, i.e. a second "dirty" bit in L1 tags. 
+In fact, the paper proposes using only 1-bit counter, i.e. a second "dirty" bit in L1 tags. These two dirty bits could 
+support 3 counter values in total (epoch zero means the block is clean, which cannot be used since this has its own meaning).
+Evaluation shows that three epoches is sufficient to filter out most irrelevant block invalidations with low overhead.
 
