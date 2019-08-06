@@ -22,5 +22,7 @@ wait during this time.
 
 To ensure the illustion of ordered execution, processors need to check not only the L1 cache, but also the store buffer, 
 when a load instruction is executed. If a committed store with the same address as the load is found in the store buffer,
-the processor either defers the commit of the load until the store is written into L1, or directly forward the data from
-the store buffer to the load instruction. 
+the processor either defers the commit of the load until the store is written into L1 (load-bypassing), or directly forwards 
+dirty data just written by the store from the store buffer to the load instruction (load-forwarding). Note that although the 
+store buffer plays an important role in the memory consistency model of the processor, whether or not loads are forwarded 
+from stores do not affect the consistency model. 
