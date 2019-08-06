@@ -71,5 +71,8 @@ positives but never false negative. The store buffer maintains an "epoch counter
 it is invalidated. When the epoch counter changes, we know that blocks that are written back to L1 in an older epoch can 
 never be in the store buffer. The tag array of L1 is extended with an array of epoches. On every L1 write, in addition to 
 setting the "dirty" bit in the tag, we also set the epoch of the cache line as the current epoch in the store buffer. 
-When an L1 block
+When an L1 block is invalidated or evicted, the epoch is also sent to the store buffer. The store buffer compares its local
+epoch with the signal, and if they differ, no invalidation will happen, since we know that the invalidation or eviction
+is conducted on a line that is no longer in the buffer. Compared with the simple scheme, no associative lookup is performed, but 
+instead we just need an integer equality comparator (essentially an array of XOR gates). 
 
