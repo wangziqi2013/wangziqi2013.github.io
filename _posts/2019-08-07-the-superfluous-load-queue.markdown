@@ -44,3 +44,6 @@ by a remote store, or evicted from L1 (no longer be able to receive invalidation
 using the cache line address. If a speculative load conflicts with the address, it should be squashed, because an external
 writter may observe wrong ordering on the same block (the load is ordered before the remote store, but according to SC, 
 it should be ordered after the remote store). 
+
+For a more relaxed consistency model such as Total Store Ordering (TSO), where store-load reordering is allowed, the load
+queue is still a crucial part of the microrchitecture for enforcing load-load ordering, which is not allowed.
