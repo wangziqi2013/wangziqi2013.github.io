@@ -21,4 +21,10 @@ conditions are checked to ensure both correct program semantics and memory consi
 the illustration that instructions are executed one by one in the program order, load instructions should always 
 read the most recent value written by the same processor if there is no remote store. The store instruction, however,
 may still be in the pipeline (and also store queue) and has not been committed; or even if it has been committed, it may 
-stay in the store buffer for a while just to wait for L1 to acquire line ownership. 
+stay in the store buffer for a while just to wait for L1 to acquire line ownership. It is therefore insufficient simply 
+let the load instruction check the L1 cache. In fact, all these three structures should be checked, and whether the 
+load is allowed to continue execution depends on the result of the checking. If there is an older store instruction in 
+the store queue, and its address has not yet been fully calculated, there is no way for the load to forward or bypass 
+the store. In most designs, the load instruction will simply assume that the older store does not conflict with itself,
+and then proceed. In the (relatively) rare case that a conflict truly happens, this leads to incorrect result, because 
+the value returned from the load instruction is not the most recent store. To counter this, 
