@@ -46,4 +46,10 @@ writter may observe wrong ordering on the same block (the load is ordered before
 it should be ordered after the remote store). 
 
 For a more relaxed consistency model such as Total Store Ordering (TSO), where store-load reordering is allowed, the load
-queue is still a crucial part of the microrchitecture for enforcing load-load ordering, which is not allowed.
+queue is still a crucial part of the microrchitecture for enforcing load-load ordering, which is not allowed. Recall that
+in TSO, while loads could legitimately bypass an earlier store by not checking for interleaving stores between the L1
+read request and the actual commit, loads must still maintain the illusion that they are committed in-order. This 
+translates to the following ordering requirement: for any two loads l1 and l2, if l1 is before l2 in the program order,
+then for any remote store s1, if l2 does not see the updated data of s1, then neither does l1 (because otherwise, l1 is 
+ordered after the store by observing its updates, while l2 is ordered before s1, which is equivalent to load reordering). 
+To enforce
