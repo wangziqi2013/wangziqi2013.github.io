@@ -52,4 +52,7 @@ read request and the actual commit, loads must still maintain the illusion that 
 translates to the following ordering requirement: for any two loads l1 and l2, if l1 is before l2 in the program order,
 then for any remote store s1, if l2 does not see the updated data of s1, then neither does l1 (because otherwise, l1 is 
 ordered after the store by observing its updates, while l2 is ordered before s1, which is equivalent to load reordering). 
-To enforce
+To enforce load-load ordering, if instruction l2 is issued before l1, then it must be the case that no interleaving store
+happens between the cache read request of l2 and that of l1. This implies that if a cache line invalidation or eviction
+happens between l2 and l1's read request, then l2 must be squashed, because the data it has read is no longer valid under
+TSO.
