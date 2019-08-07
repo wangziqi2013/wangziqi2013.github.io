@@ -31,3 +31,10 @@ the value returned from the load instruction is not the most recent store. To co
 (or after the store resolves its address), it searches the load queue for a younger load whose address conflicts with
 the store address. If such a load exists, it implies that the load incorrectly speculated over a store-load dependency,
 and should be squashed in the pipeline. 
+
+The second case where a load queue is useful is when a load is executed out-of-order with regard to other loads and/or
+stores. Whether or not this reordering is allowed to be exposed depends on the memory order specification. In Sequential
+Consistency (SC) model, no reordering of loads and stores are allowed to be observed by an external viewer, although
+the actual implementation can still reorder some of them, as long as it can guarantee that no external viewer can 
+see them. In such a consistency model, the pipeline maintains the illustration that every instruction "takes effect"
+at the commit point. 
