@@ -27,4 +27,7 @@ load is allowed to continue execution depends on the result of the checking. If 
 the store queue, and its address has not yet been fully calculated, there is no way for the load to forward or bypass 
 the store. In most designs, the load instruction will simply assume that the older store does not conflict with itself,
 and then proceed. In the (relatively) rare case that a conflict truly happens, this leads to incorrect result, because 
-the value returned from the load instruction is not the most recent store. To counter this, 
+the value returned from the load instruction is not the most recent store. To counter this, after a store instruction commits
+(or after the store resolves its address), it searches the load queue for a younger load whose address conflicts with
+the store address. If such a load exists, it implies that the load incorrectly speculated over a store-load dependency,
+and should be squashed in the pipeline. 
