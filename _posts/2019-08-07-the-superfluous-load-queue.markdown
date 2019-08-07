@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+Load queue has long been used in microarchitectures as one of the many hardware structures that support speculation.
+When a load instruction is inserted into the reordered buffer (ROB), an entry is also allocated in the load queue
+which contains full information of the instruction just as in the ROB. Load instructions are inserted into the load
+queue in the program order (because the front end inserts into the ROB in the program order). During the execution, three
+conditions are checked to ensure both correct program semantics and memory consistency guarantees. First, to maintain
+the illustration that instructions are executed one by one in the program order, 
