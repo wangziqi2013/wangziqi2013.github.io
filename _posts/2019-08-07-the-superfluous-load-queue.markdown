@@ -37,4 +37,10 @@ stores. Whether or not this reordering is allowed to be exposed depends on the m
 Consistency (SC) model, no reordering of loads and stores are allowed to be observed by an external viewer, although
 the actual implementation can still reorder some of them, as long as it can guarantee that no external viewer can 
 see them. In such a consistency model, the pipeline maintains the illustration that every instruction "takes effect"
-at the commit point. 
+at the commit point. Load operations, however, are always executed as soon as its operands are ready, because of the 
+relatively long latency of loads compared with ALU instructions. If the SC implementation eagerly isses load requests (to
+the L1 cache), the load queue will be responsible for maintaining SC semantics: every time a cache line is invalidated 
+by a remote store, or evicted from L1 (no longer be able to receive invalidation notification), the load queue is searched 
+using the cache line address. If a speculative load conflicts with the address, it should be squashed, because an external
+writter may observe wrong ordering on the same block (the load is ordered before the remote store, but according to SC, 
+it should be ordered after the remote store). 
