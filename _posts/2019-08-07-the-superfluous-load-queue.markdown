@@ -123,4 +123,9 @@ eviction of a cache line is caused by a memory access before the load in program
 memory access, and hence the load can never reach ROB front). This can be solved by using non-cachable reads: Instead of 
 read-allocate a line on memory access, the coherence request is sent and results are directly sent to the memory
 instruction without inserting the ling into L1. Note that similar to the case of store-load dependency, a younger load can 
-update the "ROB index" field of the cache line. 
+update the "ROB index" field of the cache line. The field is no longer updatable after the block receives an invalidation
+or eviction request, after which load instructions should not speculate on this cache line, and can only be issued in-order.
+This is to prevent livelock: If the block's ROB index field can be updated indefinitely, it is possible that the current 
+processor keeps updating this field with memory loads (e.g. memory reads in a tight loop, such as lock acquire), and the 
+writer will never have a chance to perform the write, causing a global deadlock (e.g. the lock can never be released because
+other processors in a test-test-and-set loop will prevent the block from being invalidated for write).
