@@ -59,8 +59,13 @@ TSO. In practice, processors often extend this "vulunerability window" to instru
 appear to be executed at the exact time that they commit.
 
 Prior papers have proposed load queue-less designs by using value-based validation. Instead of letting the load queue know
-that an interleaving store operation invalidated a speculative load, the processor only checks the validity of the loaded
-value at commit time. This check is performed by re-reading the same cache block at commit time, and comparing the 
+that an interleaving store operation or eviction invalidated a speculative load, the processor only checks the validity of 
+the loaded value at commit time. This check is performed by re-reading the same cache block at commit time, and comparing the 
 current value with the old value. If these two values differ, then some writes must have already updated the cache block,
 resulting in a squash. Otherwise, it is also possible that some stores updated the block, but since the two values coincide,
 the (potentially illegal) execution still have the same effect as a legal execution.
+
+As this paper pointed out, both invalidation-based and validation-based design have flaws that cost extra area and energy 
+for no good. In invalidation-based (i.e. with a load queue) design, the load queue is implemented as a Content-Addressable 
+Memory (CAM), which also has multiple read ports for parallel lookup. CAMs are expensive on hardware to implement, and are
+power-hungry. In addition, it is difficult to scale CAMs, because their complexity grows exponentially with their sizes.
