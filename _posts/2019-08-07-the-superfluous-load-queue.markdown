@@ -74,3 +74,8 @@ In validation-based design, no CAM area and search overhead is paid, because we 
 It is, however, required that the L1 be accessed twice for each load instruction: first when the load is issued,
 and the second when the load finally commits. The extra L1 access can be expensive, because an extra read port is needed
 to avoid port contention, and also L1 access is also a (smaller) associative lookup.
+
+This paper proposes not using a load queue as in validation-based design, but also without value-validation. The insight 
+is that, instead of using a dedicated load queue, and let other components perform associative lookup when some loads are 
+susceptible to squashes, we can simply "register a call back" to these components with the location of the load in the ROB,
+and then let them directly access ROB to squash the load (and all younger instructions).
