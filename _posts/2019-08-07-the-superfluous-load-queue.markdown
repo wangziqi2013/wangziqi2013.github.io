@@ -109,6 +109,11 @@ One of the concerns of blocking store instructions from being emptied from the s
 On the surface, it appears that deadlock is truly possible: If the store buffer fills up because of a blocked store 
 instruction at the head, the front end will stall, and stop adding instructions into the ROB (note that store queue 
 entries are allocated when the instruction is issued by the frontend, since this is the last chance we maintain program
-order). This way, the load instruction may not be issued at all by the frontend, which prevents the store from unblocking,
+order). This way, the load instruction may not be issued at all by the front end, which prevents the store from unblocking,
 because the load may never have a chance to commit. Further inspection suggests, however, that this scenario is impossible. 
 If the load has not entered ROB, the store would never depend on the load to unblock.
+
+To address load-load reordering, the paper further proposes adding the "sentinel" and "ROB index" fields to L1 tags. The 
+process is similar to resolving store-load dependencies. When a load instruction is issued out-of-order, i.e. if there is 
+an older load that has not sent its L1 request, the current load marks the cache line with the "sentinel" flag and its 
+ROB index. This is no more than an L1 tag access. After setting the flag, the 
