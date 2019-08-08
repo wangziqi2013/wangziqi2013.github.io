@@ -57,3 +57,10 @@ happens between the cache read request of l2 and that of l1. This implies that, 
 happens between l2 and l1's read request, then l2 must be squashed, because the data it has read is no longer valid under
 TSO. In practice, processors often extend this "vulunerability window" to instruction commit time, such that load instructions
 appear to be executed at the exact time that they commit.
+
+Prior papers have proposed load queue-less designs by using value-based validation. Instead of letting the load queue know
+that an interleaving store operation invalidated a speculative load, the processor only checks the validity of the loaded
+value at commit time. This check is performed by re-reading the same cache block at commit time, and comparing the 
+current value with the old value. If these two values differ, then some writes must have already updated the cache block,
+resulting in a squash. Otherwise, it is also possible that some stores updated the block, but since the two values coincide,
+the (potentially illegal) execution still have the same effect as a legal execution.
