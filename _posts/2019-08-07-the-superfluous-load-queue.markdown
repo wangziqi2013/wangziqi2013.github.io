@@ -96,4 +96,6 @@ as all stores that follow from being written. The blocking of stores will only b
 ROB index matches the "ROB index" field of the blocked store reaches the head of the ROB. The ROB checks the "store queue 
 index" field of a load instruction when it commits, and notifies the store queue/store buffer that a load will commit. 
 Note that multiple load instructions may attempt to unblock the same store, but only the youngest of them will succeed 
-(this happens if the multiple loads speculated on the same store).
+(this happens if the multiple loads speculated on the same store). If a conflictng entry is identified, the load will either 
+squash and re-execute (which makes little sense becaise the load is at the head of the ROB), or simply forward data
+from the store instruction.
