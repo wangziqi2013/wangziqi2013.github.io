@@ -116,4 +116,10 @@ If the load has not entered ROB, the store would never depend on the load to unb
 To address load-load reordering, the paper further proposes adding the "sentinel" and "ROB index" fields to L1 tags. The 
 process is similar to resolving store-load dependencies. When a load instruction is issued out-of-order, i.e. if there is 
 an older load that has not sent its L1 request, the current load marks the cache line with the "sentinel" flag and its 
-ROB index. This is no more than an L1 tag access. After setting the flag, the 
+ROB index. This is no more than an L1 tag access. After setting the flag, the cache line is no longer susceptible to 
+eviction. In the case of invalidations, it blocks the ACK message back to the requestor, such that the remote store 
+can never proceed until the load-load ordering is no longer observable. For evictions, this may cause deadlock if the 
+eviction of a cache line is caused by a memory access before the load in program order (the ROB could not commit the 
+memory access, and hence the load can never reach ROB front). This can be solved by using non-cachable reads: Instead of 
+read-allocate a line on memory access, the coherence request is sent and results are directly sent to the memory
+instruction without inserting the ling into L1.
