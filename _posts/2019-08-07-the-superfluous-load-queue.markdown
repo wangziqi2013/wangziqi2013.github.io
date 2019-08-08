@@ -70,3 +70,7 @@ As this paper pointed out, both invalidation-based and validation-based design h
 for no good. In invalidation-based (i.e. with a load queue) design, the load queue is implemented as a Content-Addressable 
 Memory (CAM), which also has multiple read ports for parallel lookup. CAMs are expensive on hardware to implement, and are
 power-hungry. In addition, it is difficult to scale CAMs, because their complexity grows exponentially with their sizes.
+In validation-based design, no CAM area and search overhead is paid, because we can get rid of the load queue entirely.
+It is, however, required that the L1 be accessed twice for each load instruction: first when the load is issued,
+and the second when the load finally commits. The extra L1 access can be expensive, because an extra read port is needed
+to avoid port contention, and also L1 access is also a (smaller) associative lookup.
