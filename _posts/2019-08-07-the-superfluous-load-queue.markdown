@@ -88,8 +88,9 @@ instruction. When a load attempts to read older store's results from the store q
 address has not been calculated, the "sentinel" of the store is set (if not already), and the "ROB index" is updated to
 the current load's index if the current load is younger than the previous one (if any). If multiple store entries match,
 only the oldest of them needs to be marked. In addition, the index of the store instruction in the store queue is stored
-in the ROB entry of the load, which will be checked by the ROB when the load commits. When a store becomes committed and 
-ready to be written into L1 (i.e. at the head of the store buffer, which in many designs is combined with the store queue; 
-We assume a combined design), if the "sentinel" bit is set, we block the store as well as all stores that follow from being 
-written. The blocking of stores will only be released when the load instruction whose ROB index matches the "ROB index" 
-field of the blocked store reaches the head of the ROB. The ROB checks the 
+in the ROB entry of the load as "store queue index", which will be checked by the ROB when the load commits. 
+
+When a store becomes committed and ready to be written into L1 (i.e. at the head of the store buffer, which in many designs 
+is combined with the store queue; We assume a combined design), if the "sentinel" bit is set, we block the store as well 
+as all stores that follow from being written. The blocking of stores will only be released when the load instruction whose 
+ROB index matches the "ROB index" field of the blocked store reaches the head of the ROB. The ROB checks the 
