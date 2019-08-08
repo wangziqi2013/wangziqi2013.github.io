@@ -99,3 +99,8 @@ Note that multiple load instructions may attempt to unblock the same store, but 
 (this happens if the multiple loads speculated on the same store). If a conflictng entry is identified, the load will either 
 squash and re-execute (which makes little sense becaise the load is at the head of the ROB), or simply forward data
 from the store instruction.
+
+By eliminating the load queue, and adding several more fields to hardware structures that maintain instruction states, we 
+have eliminated unnecessary L1 access on every load commit. Furthermore, when a store address is calculated, no
+associative search is performed, because loads will validate themselves when committed. The commit of load also does not
+require associatively searching the store queue, because the index of the entry in the queue has been recorded in the ROB.
