@@ -80,3 +80,8 @@ The insight is that, instead of using a dedicated load queue, and let other comp
 loads are susceptible to squashes, we can simply mark the suspicious instruction or cache block (e.g. stores whose addresses
 have not been calculated) with a "sentinel", and delay the writing/invalidation/eviction of them to avoid introducing 
 unrecoverable ordering violation until the load is ready to commit, at which time value-validation is performed.
+
+In order to resolve the first type of load speculation, i.e. speculating that prior stores do not conflict with the current load,
+we add two new fields to store queue entries: a "sentinel" field to indicate that the store must not be written into L1
+because a load might be pending, and a "ROB index" field as the index of the youngest load that speculate on this store
+instruction. 
