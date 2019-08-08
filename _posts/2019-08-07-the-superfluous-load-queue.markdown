@@ -122,4 +122,5 @@ can never proceed until the load-load ordering is no longer observable. For evic
 eviction of a cache line is caused by a memory access before the load in program order (the ROB could not commit the 
 memory access, and hence the load can never reach ROB front). This can be solved by using non-cachable reads: Instead of 
 read-allocate a line on memory access, the coherence request is sent and results are directly sent to the memory
-instruction without inserting the ling into L1.
+instruction without inserting the ling into L1. Note that similar to the case of store-load dependency, a younger load can 
+update the "ROB index" field of the cache line. 
