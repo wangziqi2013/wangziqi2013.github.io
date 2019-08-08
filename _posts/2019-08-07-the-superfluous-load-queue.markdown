@@ -104,3 +104,11 @@ By eliminating the load queue, and adding several more fields to hardware struct
 have eliminated unnecessary L1 access on every load commit. Furthermore, when a store address is calculated, no
 associative search is performed, because loads will validate themselves when committed. The commit of load also does not
 require associatively searching the store queue, because the index of the entry in the queue has been recorded in the ROB.
+
+One of the concerns of blocking store instructions from being emptied from the store buffer is the possibility of deadlock.
+On the surface, it appears that deadlock is truly possible: If the store buffer fills up because of a blocked store 
+instruction at the head, the front end will stall, and stop adding instructions into the ROB (note that store queue 
+entries are allocated when the instruction is issued by the frontend, since this is the last chance we maintain program
+order). This way, the load instruction may not be issued at all by the frontend, which prevents the store from unblocking,
+because the load may never have a chance to commit. Further inspection suggests, however, that this scenario is impossible. 
+If the load has not entered ROB, the store would never depend on the load to unblock.
