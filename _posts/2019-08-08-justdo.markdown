@@ -113,3 +113,10 @@ current active log entry, and then jumping directly to the PC stored in the log 
 FASE till the end, and then exit. A counter is used to detect the end of a FASE. The counter records the current number 
 of locks held by the thread, and is incremented or decremented when acquiring and releasing a lock. The current FASE ends 
 when the counter drops to zero.
+
+To ensure that the local state is always consistent with every store, justdo logging requires that every store to the 
+local state must be reflected to the memory. This incurs a non-trivial overhead, because compilers often promote a 
+variable into register to avoid excessive memory writes. With this optimization, recent updates to the variable 
+might be lost during the crash as register values are volatile, and the state of local memory is inconsistent when recovery 
+threads jump to the PC of the most recent store. By disabling register promotion, the execution time is almost doubled
+as reported in the paper, but this cost is necessary for correctness, and is lower than logging based approach. 
