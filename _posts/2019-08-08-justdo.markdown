@@ -31,4 +31,6 @@ which introduces extra traffic, storage and complexity. The last problem is that
 are data-centric, which means that the time complexity of recovery depends on the amount of data the current transaction
 or critical section has generated. The availbility of the system might be affected because of slow recovery. For shadow-mapping,
 only simple recovery is performed, because by nature, this scheme has a "write-once" property for non-volatile data, and 
-only overwrites old data when it is safe to do so. The downside, however, is that 
+only overwrites old data when it is safe to do so. The downside, however, is that the amount of working data will be multiplied
+due to multiversioning. The system generally has to stall and perform garbage collection when storage runs out to reuse
+older versions of data.
