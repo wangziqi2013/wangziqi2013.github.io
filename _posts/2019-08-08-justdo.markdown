@@ -17,3 +17,7 @@ This paper proposes JUSTDO logging, a novel logging and recovery method for non-
 such as undo logging, redo logging, and shadow logging, the amount of data (i.e. log records and metadata) is proportional
 to the number of store operations. One log entry is generated for each store operation, which contains the address, data,
 and other control information in order to roll back or redo the affected region. These schemes generally have two problems. 
+First, they enforce write ordering at the guanularity of every store or every transaction commit. In the former case,
+a log entry is generated before the store is performed, and the entry must be fllu flushed to the NVM device before the 
+store could proceed to guarantee recoverability. Although with new hardware primitives and probably new architectures, the 
+overhead of persisting can be overlapped 
