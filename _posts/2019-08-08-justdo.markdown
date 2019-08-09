@@ -58,4 +58,8 @@ considered of persistent, as long as the instruction has exited the store buffer
 store fence (which drains the store buffer, exactly as needed), instead of executing a heavyweight fence-flush-fence sequence,
 which can take hundreds of cycles. 
 
-
+Justdo logging overcomes the above problems using a combination of persistent cache, exeution-centric recovery, and 
+FASE-based inference. Each thread maintains a small thread-local logging area, which consists of a special logging 
+object (jd_obj in the paper) and other control data. The logging object consists of two log entries, a list of pending lock
+descriptors, and a list of owned lock descriptors. The two log entries are used alternatively to log the most recent store
+instruction in the current FASE, including the address, value, and the program counter after the store. 
