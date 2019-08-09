@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Failure-Atomic Persistent Memory Updates via JUSTDO Logging"
+date:   2019-08-08 23:44:00 -0500
+categories: paper
+paper_title: "Failure-Atomic Persistent Memory Updates via JUSTDO Logging"
+paper_link: https://dl.acm.org/citation.cfm?id=2872410
+paper_keyword: Logging; JUSTDO; NVM
+paper_year: ASPLOS 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
