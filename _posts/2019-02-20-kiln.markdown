@@ -13,6 +13,23 @@ htm_cr:
 version_mgmt: 
 ---
 
+***
+Comments:
+
+1. Kiln uses redo-logging (actually, shadow-mapping because there is no data migration back to main copy) based reasoning 
+   method for ensuring persistency
+
+2. With a NV-cache, the reasoning with redo-logging does not change; We can just treat the non-volatile LLC as NVM, and L1, L2
+   as regular cache. Data must not be released to the LLC before transaction commit (and this paper did not even point out
+   how transactions commit atomically, i.e. half-committed transaction may be unrecoverable if power failure happens in the middle
+   of the commit flush). 
+
+3. The txn ID field is largely used (only used to identify the txn that committed) but takes L1, L2, LLC tag storage.
+   
+4. What if a txn migrates from one cache to another? How do you flush a remote cache (e.g. via TLB shootdown-style interrupt
+   which is expensive and cannot happen very frequently)?
+***
+
 This paper proposes Kiln, a novel design that achieves atomic persistence using persistent LLC. In classical designs there
 are two ways of achieving the same effect, using either Write-Ahead Logging (WAL) or Copy-On-Write (COW). WAL requires the 
 programmer or hardware to generate log entries on every data modification. In addition, persistent barriers are also inserted 
