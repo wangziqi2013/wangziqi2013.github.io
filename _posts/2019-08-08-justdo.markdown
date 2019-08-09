@@ -52,4 +52,10 @@ reached.
 
 This paper also identifies an important trend in the evolution of hardware platform: In the near future, the cache system 
 might also be included into the persistence domain, just as the pending queue in the memory controller. This can be done
-by battery-backed caches, or using residual/backup power to flush the cache back to the NVM. 
+by battery-backed caches, or using residual/backup power to flush the cache back to the NVM. No matter which technique 
+is used, the illustration of persistent caches can greatly simplify persistent programming, since store instructions can be 
+considered of persistent, as long as the instruction has exited the store buffer. This only takes a relatively lightweight 
+store fence (which drains the store buffer, exactly as needed), instead of executing a heavyweight fence-flush-fence sequence,
+which can take hundreds of cycles. 
+
+
