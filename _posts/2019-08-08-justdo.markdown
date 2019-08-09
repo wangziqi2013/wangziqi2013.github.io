@@ -47,4 +47,9 @@ sequence of stores can actually be reproduced by running the same FASE with the 
 if the FASE itself is non-determinstic, the sequence could not be reconstructed, in which case re-executing with the 
 same input will not help), which eliminates the need of value logging. As long as the recovery process can resume the 
 inerrupted execution of a FASE with the same environment (e.g. local stack frames, arguments, etc.), it is guaranteed 
-that the same output be generated, and the same state as if the original FASE were not interrupted by the crash can be reached.
+that the same output be generated, and the same state as if the original FASE were not interrupted by the crash can be 
+reached.
+
+This paper also identifies an important trend in the evolution of hardware platform: In the near future, the cache system 
+might also be included into the persistence domain, just as the pending queue in the memory controller. This can be done
+by battery-backed caches, or using residual/backup power to flush the cache back to the NVM. 
