@@ -95,3 +95,9 @@ none of the FASE body has been executed, and hence no inconsistency has been int
 considered as not executed, and no recovery needs to be done. Similarly, on a lock release, the lock is first removed 
 fron the ownership list, and then from the pending list. If the former is missing but the latter is present, we know that
 the FASE has been completed already, and there is nothing except releasing the lock that we need to do on recovery.
+
+On recovery, the library first scans the lock log to infer lock ownership. First, it frees all locks that are in the pending list,
+but not in the ownership list by directly writing into the lock object (whose address is in the log entry). Then, the 
+library
+
+the system enters recovery mode, and the most recent justdo routine is re-executed. 
