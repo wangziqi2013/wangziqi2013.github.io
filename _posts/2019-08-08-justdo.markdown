@@ -68,3 +68,10 @@ the entry, we always keep the previously valid entry clean, and write to the oth
 locks are responsible for recoverying lock ownership after a crash. The paper assumes that all locks are mapped to NVM region,
 and hence their state remains available after the crash (so the lock list only serves as a fast path - we can always find 
 the owner of a lock by scanning the lock table if the lock is implemented with owner information). 
+
+FASEs in Justdo logging is wrapped by special wrappers called justdo routines. A justdo routine consists of three parts.
+The first part is a header macro, JD_ROUTINE_ON_ENTRY. This macro checks the current mode of execution (normal/recovery),
+and depending on the mode, jumps to the last point (recovery mode) of interruption or does nothing (normal mode). In
+the second part, the justdo routine copies local states for executing the FASE into the logging object, which will be 
+mapped to persistent storage (i.e. the cache). This is necessary, since in order for the FASE to resume execution, the 
+local state of the FASE must remain accessible after a crash. The third part is the FASE body
