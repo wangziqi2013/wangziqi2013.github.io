@@ -62,4 +62,9 @@ Justdo logging overcomes the above problems using a combination of persistent ca
 FASE-based inference. Each thread maintains a small thread-local logging area, which consists of a special logging 
 object (jd_obj in the paper) and other control data. The logging object consists of two log entries, a list of pending lock
 descriptors, and a list of owned lock descriptors. The two log entries are used alternatively to log the most recent store
-instruction in the current FASE, including the address, value, and the program counter after the store. 
+instruction in the current FASE, including the address, value, and the program counter after the store. We need two entries, 
+because while writing the current log entry, the content of the entry may become temporarily inconsistent. To avoid corrupting 
+the entry, we always keep the previously valid entry clean, and write to the other one (more details later). The two lists of 
+locks are responsible for recoverying lock ownership after a crash. The paper assumes that all locks are mapped to NVM region,
+and hence their state remains available after the crash (so the lock list only serves as a fast path - we can always find 
+the owner of a lock by scanning the lock table if the lock is implemented with owner information). 
