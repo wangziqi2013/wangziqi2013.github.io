@@ -41,4 +41,10 @@ shared states. Applications often only observe inconsistent states of shared dat
 at least one lock), and leave shared data in consistent states before leaving the critical section. The crash recovery,
 therefore, could only focus on these (potentially nested) critical sections called "Failure-Atomic Sections (FASE)",
 and recover the system back to a state that is equivalent to a time point in normal execution where no lock is held by
-any thread. 
+any thread. The second observation is that, although data-centric recovery may simply the algorithm, because the recovery handler 
+just needs to iterate over all log records, and apply the data to the address indicated by the record, the same 
+sequence of stores can actually be reproduced by running the same FASE with the same input (the paper fails to identify that
+if the FASE itself is non-determinstic, the sequence could not be reconstructed, in which case re-executing with the 
+same input will not help), which eliminates the need of value logging. As long as the recovery process can resume the 
+inerrupted execution of a FASE with the same environment (e.g. local stack frames, arguments, etc.), it is guaranteed 
+that the same output be generated, and the same state as if the original FASE were not interrupted by the crash can be reached.
