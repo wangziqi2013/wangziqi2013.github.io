@@ -106,3 +106,9 @@ re-acquire locks that are owned by the current thread. Since each lock can at mo
 this process is data race-free, and we can always reach a determinatic state, although may not be the exact same state before 
 the crash (e.g. some locks acquired might not be reflected in the ownership list, which is fine, because these threads 
 have not performed any writes anyway). Recovery threads pass a second barrier at the end of this stage.
+In the third stage, the system enters recovery mode, and the most recent justdo routine is re-executed. Recall that at the 
+beginning of the routine, we call a procedure to determine the current mode. If the system is in recovery mode, instead 
+of proceeding to execute the rest of the routine, the procedure performs recovery by completing the store in the 
+current active log entry, and then jumping directly to the PC stored in the log entry. The recovery thread will run the 
+FASE till the end, and then exit. A counter is used to detect the end of a FASE. The counter records the current number 
+of locks in 
