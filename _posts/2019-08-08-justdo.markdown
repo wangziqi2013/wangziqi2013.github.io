@@ -96,13 +96,13 @@ considered as not executed, and no recovery needs to be done. Similarly, on a lo
 fron the ownership list, and then from the pending list. If the former is missing but the latter is present, we know that
 the FASE has been completed already, and there is nothing except releasing the lock that we need to do on recovery.
 
-On recovery, the library first scans the lock log to infer lock ownership. First, it frees all locks that are in the pending list,
-but not in the ownership list by directly writing into the lock object (whose address is in the log entry). Then, the 
-library
-
-the system enters recovery mode, and the most recent justdo routine is re-executed. The recovery process is naturally
-multi-threaded (because some locks may still be held, threads may block each other during recovery, and therefore the 
-execution should be multi-threaded to avoid deadlock), the library will therefore start the same number of threads as 
-before crash, and assign one thread to a context. Note that at the beginning 
-of the routine, we call a procedure to determine the current mode. If the system is in recovery mode, instead of proceeding
-to execute the rest of the routine, the procedure performs recovery. 
+On recovery, the library starts the same number of recovery threads as before the crash, and assign one thread to a context. 
+The recovery process is naturally multi-threaded because some locks may still be held, threads may block each other during 
+recovery, and therefore the execution should be multi-threaded to avoid deadlock.
+Each recovery thread scans the lock log to infer lock ownership. First, it frees all locks that are in the 
+pending list, (including those also in the ownership list) by directly writing into the lock object whose address is in 
+the log entry. Threads need to pass a barrier at the end of this stage. Then, threads scan ownership list, and 
+re-acquire locks that are owned by the current thread. Since each lock can at most be owned by one thread at a time,
+this process is data race-free, and we can always reach a determinatic state, although may not be the exact same state before 
+the crash (e.g. some locks acquired might not be reflected in the ownership list, which is fine, because these threads 
+have not performed any writes anyway). Recovery threads pass a second barrier at the end of this stage.
