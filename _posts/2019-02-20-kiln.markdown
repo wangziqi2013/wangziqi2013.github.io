@@ -24,7 +24,7 @@ Comments:
    how transactions commit atomically, i.e. half-committed transaction may be unrecoverable if power failure happens in the middle
    of the commit flush). 
 
-3. The txn ID field is largely used (only used to identify the txn that committed) but takes L1, L2, LLC tag storage.
+3. The txn ID field is largely unused (only used to identify the txn that committed) but takes L1, L2, LLC tag storage.
    
 4. What if a txn migrates from one cache to another? How do you flush a remote cache (e.g. via TLB shootdown-style interrupt
    which is expensive and cannot happen very frequently)?
