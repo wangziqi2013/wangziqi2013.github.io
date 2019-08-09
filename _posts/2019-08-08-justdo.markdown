@@ -27,4 +27,8 @@ chance of overlapping this burst of memory write backs with other useful work is
 happens as the last action a transaction will take, which puts the persistence of log records on the critical path. This 
 happens with redo logging. The second problem is that extra metadata, either on-chip or off-chip (e.g. on memory controller)
 might be used to track the state of stores. These metadata themselves also require persistence for correct crash recovery, 
-which introduces extra traffic, storage and complexity. 
+which introduces extra traffic, storage and complexity. The last problem is that the recovery of all except shadow-mapping 
+are data-centric, which means that the time complexity of recovery depends on the amount of data the current transaction
+or critical section has generated. The availbility of the system might be affected because of slow recovery. For shadow-mapping,
+only simple recovery is performed, because by nature, this scheme has a "write-once" property for non-volatile data, and 
+only overwrites old data when it is safe to do so. The downside, however, is that 
