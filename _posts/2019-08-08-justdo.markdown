@@ -79,4 +79,9 @@ acquire, lock release, and other operations. Note that locks do not have to be n
 designs. If the execution is interrupted in the middle of this part, Justdo logging guarantees that the FASE is completed
 as if the interruption never happened.
 
-
+In the runtime, Justdo logging works as follows. On every store operation within a FASE (detectable by incrementing/decrementing 
+a counter on lock acquire/release), the library updates the log entry with the information of the store (described above).
+To ensure atomic update of a log entry, we use two entries (statically allocated in jd_obj) alternatively. The current active 
+entry is marked by a flag in the entry object. When a new log entry is to be written, the library picks the inactive entry,
+updates its fields, and executes a store barrier to ensure these writes have reached the persistent cache. Then the library
+sets the flag, and executes a store barrier again. This ensures that the store is only executed after the log entry is written.
