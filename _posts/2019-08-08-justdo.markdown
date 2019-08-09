@@ -100,4 +100,9 @@ On recovery, the library first scans the lock log to infer lock ownership. First
 but not in the ownership list by directly writing into the lock object (whose address is in the log entry). Then, the 
 library
 
-the system enters recovery mode, and the most recent justdo routine is re-executed. 
+the system enters recovery mode, and the most recent justdo routine is re-executed. The recovery process is naturally
+multi-threaded (because some locks may still be held, threads may block each other during recovery, and therefore the 
+execution should be multi-threaded to avoid deadlock), the library will therefore start the same number of threads as 
+before crash, and assign one thread to a context. Note that at the beginning 
+of the routine, we call a procedure to determine the current mode. If the system is in recovery mode, instead of proceeding
+to execute the rest of the routine, the procedure performs recovery. 
