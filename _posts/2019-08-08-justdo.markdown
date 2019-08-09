@@ -74,4 +74,9 @@ The first part is a header macro, JD_ROUTINE_ON_ENTRY. This macro checks the cur
 and depending on the mode, jumps to the last point (recovery mode) of interruption or does nothing (normal mode). In
 the second part, the justdo routine copies local states for executing the FASE into the logging object, which will be 
 mapped to persistent storage (i.e. the cache). This is necessary, since in order for the FASE to resume execution, the 
-local state of the FASE must remain accessible after a crash. The third part is the FASE body
+local state of the FASE must remain accessible after a crash. The third part is the FASE body, which consists of lock
+acquire, lock release, and other operations. Note that locks do not have to be nested perfectly, as in other FASE-based
+designs. If the execution is interrupted in the middle of this part, Justdo logging guarantees that the FASE is completed
+as if the interruption never happened.
+
+
