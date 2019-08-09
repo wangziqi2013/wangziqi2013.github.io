@@ -85,3 +85,8 @@ To ensure atomic update of a log entry, we use two entries (statically allocated
 entry is marked by a flag in the entry object. When a new log entry is to be written, the library picks the inactive entry,
 updates its fields, and executes a store barrier to ensure these writes have reached the persistent cache. Then the library
 sets the flag, and executes a store barrier again. This ensures that the store is only executed after the log entry is written.
+Lock acquire and release are also instrumented. On a locking operation, before the lock is physically acquired, the library
+adds the address of the lock into the lock pending list, which indicates that the lock might be locked by the current thread.
+After the lock is physically acquired and before any instruction after that is executed, the library adds the lock address
+into lock ownership list, which indicates that the lock has been owned by the current thread, and if this flag is set, the
+FASE must execute to completion during recovery.
