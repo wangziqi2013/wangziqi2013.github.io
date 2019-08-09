@@ -119,4 +119,7 @@ local state must be reflected to the memory. This incurs a non-trivial overhead,
 variable into register to avoid excessive memory writes. With this optimization, recent updates to the variable 
 might be lost during the crash as register values are volatile, and the state of local memory is inconsistent when recovery 
 threads jump to the PC of the most recent store. By disabling register promotion, the execution time is almost doubled
-as reported in the paper, but this cost is necessary for correctness, and is lower than logging based approach. 
+as reported in the paper, but this cost is necessary for correctness, and is still lower than logging based approach. 
+Recall that before entering a FASE, the justdo routine has already copied volatile local states into the justdo object.
+Inside the FASE, all local state updates are perfomed on the non-volatile version of the FASE, and will be used to
+resume execution during recovery. 
