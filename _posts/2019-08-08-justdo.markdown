@@ -86,7 +86,10 @@ entry is marked by a flag in the entry object. When a new log entry is to be wri
 updates its fields, and executes a store barrier to ensure these writes have reached the persistent cache. Then the library
 sets the flag, and executes a store barrier again. This ensures that the store is only executed after the log entry is written.
 Lock acquire and release are also instrumented. On a locking operation, before the lock is physically acquired, the library
-adds the address of the lock into the lock pending list, which indicates that the lock might be locked by the current thread.
+adds the address of the lock into the lock pending list, which indicates that the lock might be acquired by the current thread.
 After the lock is physically acquired and before any instruction after that is executed, the library adds the lock address
 into lock ownership list, which indicates that the lock has been owned by the current thread, and if this flag is set, the
-FASE must execute to completion during recovery.
+FASE must execute to completion during recovery. The observation here is that, at any given point, if an address X is in the 
+lock pending list, but not in lock ownership list, the lock may or may not have been acquired by the thread, but it is guaranteed
+none of the FASE body has been executed, and hence no inconsistency has been introduced. In this case, the FASE can be 
+considered as not executed, and no recovery needs to be done. Similarly, on a lock release
