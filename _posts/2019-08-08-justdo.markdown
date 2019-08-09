@@ -34,3 +34,11 @@ only simple recovery is performed, because by nature, this scheme has a "write-o
 only overwrites old data when it is safe to do so. The downside, however, is that the amount of working data will be multiplied
 due to multiversioning. The system generally has to stall and perform garbage collection when storage runs out to reuse
 older versions of data.
+
+Justdo logging takes advantage of two important observations. First, most datarace-free applications use locks as the basic 
+synchroniation primitive. Lock acquisition and release can be interpreted as granting and giving up permission of accessing
+shared states. Applications often only observe inconsistent states of shared data within critical sections (i.e. holding 
+at least one lock), and leave shared data in consistent states before leaving the critical section. The crash recovery,
+therefore, could only focus on these (potentially nested) critical sections called "Failure-Atomic Sections (FASE)",
+and recover the system back to a state that is equivalent to a time point in normal execution where no lock is held by
+any thread. 
