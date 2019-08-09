@@ -92,4 +92,6 @@ into lock ownership list, which indicates that the lock has been owned by the cu
 FASE must execute to completion during recovery. The observation here is that, at any given point, if an address X is in the 
 lock pending list, but not in lock ownership list, the lock may or may not have been acquired by the thread, but it is guaranteed
 none of the FASE body has been executed, and hence no inconsistency has been introduced. In this case, the FASE can be 
-considered as not executed, and no recovery needs to be done. Similarly, on a lock release
+considered as not executed, and no recovery needs to be done. Similarly, on a lock release, the lock is first removed 
+fron the ownership list, and then from the pending list. If the former is missing but the latter is present, we know that
+the FASE has been completed already, and there is nothing except releasing the lock that we need to do on recovery.
