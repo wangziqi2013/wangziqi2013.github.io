@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
-***
+<b>
 Comments:
 
 1. Kiln uses redo-logging (actually, shadow-mapping because there is no data migration back to main copy) based reasoning 
@@ -28,7 +28,7 @@ Comments:
    
 4. What if a txn migrates from one cache to another? How do you flush a remote cache (e.g. via TLB shootdown-style interrupt
    which is expensive and cannot happen very frequently)?
-***
+</b>
 
 This paper proposes Kiln, a novel design that achieves atomic persistence using persistent LLC. In classical designs there
 are two ways of achieving the same effect, using either Write-Ahead Logging (WAL) or Copy-On-Write (COW). WAL requires the 
