@@ -31,4 +31,6 @@ on the memory address.
 Instead of performing value-based logging, or changing compiler's optimization, iDO leverages the notion of idempotent 
 regions. An idempotent region is a one-entry, multiple-exit deterministic code block, the execution of which always 
 output the same result given the same input. The general idea is that, if we can divide FASEs into idempotent regions,
-then as long as we 
+then as long as we provide the same input as the ones in normal execution, the final system state will be exactly identical
+to the one as if normal execution had not been interrupted. 
+
