@@ -40,6 +40,11 @@ sections of the FASE must be included in the same routine (i.e. no lock held whe
 It is also assumed that FASEs themselves do not contain software bugs that can cause crash and invoke recovery, because 
 the original execution will be replayed during recovery. If the crash is caused by the FASE itself, then during recovery
 the same bug will be produced again, which blocks the recovery handler from making any progress.
+The last assumotion is that persistent writes must be within a FASE, because the recovery guarantee of iDO is that
+the system will be restored to a state in which FASEs are either fully completed, or not executed at all. Writes 
+to NVM outside a FASE may or may not have been persisted (due to lack of tracking) when the system crashes, and therefore 
+the write might be missing from the final result, while a FASE after the write in program order is re-executed.
+
 At initialization time, each thread is allocated a log object, which is organized into a linked list. The recovery 
 handler will locate this linked list after a crash. The log object consists of three types of contect information for re-execution 
 of an idempotent region. First, all input variables are recorded in the object, including register variables and stack
