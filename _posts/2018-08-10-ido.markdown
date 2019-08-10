@@ -34,3 +34,6 @@ output the same result given the same input. The general idea is that, if we can
 then as long as we provide the same input as the ones in normal execution, the final system state will be exactly identical
 to the one as if normal execution had not been interrupted. 
 
+This paper assumes that the system is a hybird of NVM and DRAM, with a NVM-specific memory allocation that maps a 
+region of memory onto the NVM device. Programmers need to wrap their FASE within a special routine, and all critical
+sections of the FASE must be included in the same routine (i.e. no lock held when the routine is called or returns).
