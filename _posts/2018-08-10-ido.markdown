@@ -19,4 +19,6 @@ write set and persisting data into the NVM with heavy-weight barriers. A more re
 per-store logging and data-centric approach of recovery, and instead, relies on the re-execution of the Failure-Atomic
 Section (FASE) to reproduce the state before the crash, and furthermore, restore the consistent system state by executing
 the FASE till completion. Although Justdo logging may offer better performance because of less persistence barrier, it 
-has two constraints which may hinder its practicability. 
+has two constraints which may hinder its practicability. First, Justdo logging assumes a non-volatile cache, which is not 
+yet available on today's architecture. Even on future platforms where the cache can be made persistent or be backed 
+by a battery, the feasibility of persistent cache is still questionable. 
