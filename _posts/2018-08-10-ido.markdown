@@ -27,3 +27,8 @@ within the FASE, all memory states must be consistent at the point of crash. If 
 then the most up-to-date value of the variable will be lost, resulting in an invalid snapshot. To enforce this allocation
 rule, all variables within a FASE must be declared as volatile, which forces writes to these variables to be conducted 
 on the memory address. 
+
+Instead of performing value-based logging, or changing compiler's optimization, iDO leverages the notion of idempotent 
+regions. An idempotent region is a one-entry, multiple-exit deterministic code block, the execution of which always 
+output the same result given the same input. The general idea is that, if we can divide FASEs into idempotent regions,
+then as long as we 
