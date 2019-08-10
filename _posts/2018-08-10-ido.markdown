@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt: 
 ---
 
+Comment:
+
+1. This approach is essentially a hybrid between value-logging and execution-driven recovery. It uses undo-based logging
+   to create a consistent checkpoint before each idempotent region, and then relies on re-execution to reach the final 
+   state as if no crash had happened.
+
+2. 
+
 This paper proposes iDO, a crash recovery scheme based on Non-Volatile Memory using idempotent regions. Classical crash
 recovery schemes, such as undo logging, redo logging, and shadow mapping, incur too much overhead by maintaining a runtime
 write set and persisting data into the NVM with heavy-weight barriers. A more recent proposal, Justdo Logging, abandons 
@@ -74,4 +82,4 @@ list and acquire locks using the addresses stored in the list. Threads execute a
 In the second stage, threads locate their log object, and restores the state of local variables, including register variables
 and memory variables. After restoration of local states, the recovery thread jumps to the PC in the log object, which is the 
 begin address of the most recent idempotent block. After that, threads keep executing until the FASE is completed, at which point
-they exit and leave the rest to the application.
+they exit and leave the rest to the application. 
