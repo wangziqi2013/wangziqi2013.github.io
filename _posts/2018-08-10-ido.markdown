@@ -61,3 +61,7 @@ function will copy the arguments and part of the stack frame into the log object
 then sets the PC in the log object, and then a second barrier. At the end of a idempotent region, the handler inserts a function
 to collect live variables and spill them into the log object as the input of the next region. These variables may be allocated
 in the register or on the stack. No instrumentation for store is inserted as in value-logging based approaches.
+Lock acquire and release are also instrumented. Locks in iDO are assumed to be volatile, and will be unlocked automatically
+when the system crashes. Compared with Justdo logging in which locks are persistent, this design avoids writing log entries
+both before and after the lock/unlock operation as in Justdo logging. Idempotent region boundaries are also inserted after lock
+acquisition and before lock release (although the paper did not mention the reason).
