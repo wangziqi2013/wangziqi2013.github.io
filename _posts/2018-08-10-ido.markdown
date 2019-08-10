@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes iDO, a crash recovery scheme based on Non-Volatile Memory using idempotent regions. Classical crash
+recovery schemes, such as undo logging, redo logging, and shadow mapping, incur too much overhead by maintaining a runtime
+write set and persisting data into the NVM with heavy-weight barriers. A more recent proposal, Justdo Logging, abandons 
+per-store logging and data-centric approach of recovery, and instead, relies on the re-execution of the Failure-Atomic
+Section (FASE) to reproduce the state before the crash, and furthermore, restore the consistent system state by executing
+the FASE till completion. Although Justdo logging may offer better performance because of less persistence barrier, it 
+has two constraints which may hinder its practicability. 
