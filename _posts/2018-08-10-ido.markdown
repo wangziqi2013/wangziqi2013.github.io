@@ -19,7 +19,9 @@ Comment:
    to create a consistent checkpoint before each idempotent region, and then relies on re-execution to reach the final 
    state as if no crash had happened.
 
-2. 
+2. This scheme does not need to track dependencies, because no job that has already been done is rolled back (except
+   the corner case when a thread acquired a lock but has not added the lock into the list, which makes no harm
+   because for such a thread no dependency has been established). 
 
 This paper proposes iDO, a crash recovery scheme based on Non-Volatile Memory using idempotent regions. Classical crash
 recovery schemes, such as undo logging, redo logging, and shadow mapping, incur too much overhead by maintaining a runtime
