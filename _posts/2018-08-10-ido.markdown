@@ -54,6 +54,10 @@ bit in the same write (since they are co-located in an 8-byte word), which saves
 type is a list of lock addresses, which represent the locks that this thread has acquired and may have executed the body of the 
 critical section protected by the lock. During recovery, this list will be used to infer lock-ownership and re-acquire locks
 before execution resumes.
-The compiler inserts function calls at the beginning and end of 
-idempotent regions. On entering of the first idempotent region in a FASE, the handler function will copy the arguments
-and part of the stack frame into the log object for re-execution, and then sets the (), 
+
+iDO relies on the compiler to identify idempotent regions and insert handler functions at appropriate locations. The compiler 
+inserts function calls at the beginning and end of idempotent regions. On entering of the first idempotent region in a FASE, the handler 
+function will copy the arguments and part of the stack frame into the log object for re-execution, execute a barrier, and 
+then sets the PC in the log object, and then a second barrier. At the end of a idempotent region, the handler inserts a function
+to collect live variables and spill them into the log object as the input of the next region. These variables may be allocated
+in the register or on the stack. No instrumentation for store is inserted as in value-logging based approaches.
