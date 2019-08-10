@@ -45,7 +45,10 @@ handler will locate this linked list after a crash. The log object consists of t
 of an idempotent region. First, all input variables are recorded in the object, including register variables and stack
 allocated variables. Second, the program counter of the idempotent region is stored, which is co-located with a flag that
 indicates the validity of the log object. When setting this field of a log object, we can also atomically set the validity
-bit in the same write (since they are co-located in an 8-byte word), which saves an extra persistence barrier. 
+bit in the same write (since they are co-located in an 8-byte word), which saves an extra persistence barrier. The third 
+type is a list of lock addresses, which represent the locks that this thread has acquired and may have executed the body of the 
+critical section protected by the lock. During recovery, this list will be used to infer lock-ownership and re-acquire locks
+before execution resumes.
 The compiler inserts function calls at the beginning and end of 
 idempotent regions. On entering of the first idempotent region in a FASE, the handler function will copy the arguments
 and part of the stack frame into the log object for re-execution, and then sets the (), 
