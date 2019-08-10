@@ -65,3 +65,8 @@ Lock acquire and release are also instrumented. Locks in iDO are assumed to be v
 when the system crashes. Compared with Justdo logging in which locks are persistent, this design avoids writing log entries
 both before and after the lock/unlock operation as in Justdo logging. Idempotent region boundaries are also inserted after lock
 acquisition and before lock release (although the paper did not mention the reason).
+
+During recovery, the recovery handler first starts the same number of recovery threads as in Justdo logging. In the first
+stage, these threads re-acquire locks that have been acquired before the crash. Recall that in Justdo logging, threads first
+scan their own pending lists, and releases the lock that might have been acquired. In iDO, this step is omitted, because 
+locks are volatile and will be released automatically by the crash. 
