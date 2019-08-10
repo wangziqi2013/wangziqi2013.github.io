@@ -41,4 +41,11 @@ It is also assumed that FASEs themselves do not contain software bugs that can c
 the original execution will be replayed during recovery. If the crash is caused by the FASE itself, then during recovery
 the same bug will be produced again, which blocks the recovery handler from making any progress.
 At initialization time, each thread is allocated a log object, which is organized into a linked list. The recovery 
-handler will locate this linked after a crash
+handler will locate this linked list after a crash. The log object consists of three types of contect information for re-execution 
+of an idempotent region. First, all input variables are recorded in the object, including register variables and stack
+allocated variables. Second, the program counter of the idempotent region is stored, which is co-located with a flag that
+indicates the validity of the log object. When setting this field of a log object, we can also atomically set the validity
+bit in the same write (since they are co-located in an 8-byte word), which saves an extra persistence barrier. 
+The compiler inserts function calls at the beginning and end of 
+idempotent regions. On entering of the first idempotent region in a FASE, the handler function will copy the arguments
+and part of the stack frame into the log object for re-execution, and then sets the (), 
