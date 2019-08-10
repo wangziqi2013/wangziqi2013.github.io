@@ -69,4 +69,9 @@ acquisition and before lock release (although the paper did not mention the reas
 During recovery, the recovery handler first starts the same number of recovery threads as in Justdo logging. In the first
 stage, these threads re-acquire locks that have been acquired before the crash. Recall that in Justdo logging, threads first
 scan their own pending lists, and releases the lock that might have been acquired. In iDO, this step is omitted, because 
-locks are volatile and will be released automatically by the crash. 
+locks are volatile and will be released automatically by the crash. As a result, iDO recovery threads only scan the lock 
+list and acquire locks using the addresses stored in the list. Threads execute a barrier to synchronize after this stage.
+In the second stage, threads locate their log object, and restores the state of local variables, including register variables
+and memory variables. After restoration of local states, the recovery thread jumps to the PC in the log object, which is the 
+begin address of the most recent idempotent block. After that, threads keep executing until the FASE is completed, at which point
+they exit and leave the rest to the application.
