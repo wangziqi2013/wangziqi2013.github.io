@@ -21,4 +21,9 @@ Section (FASE) to reproduce the state before the crash, and furthermore, restore
 the FASE till completion. Although Justdo logging may offer better performance because of less persistence barrier, it 
 has two constraints which may hinder its practicability. First, Justdo logging assumes a non-volatile cache, which is not 
 yet available on today's architecture. Even on future platforms where the cache can be made persistent or be backed 
-by a battery, the feasibility of persistent cache is still questionable. 
+by a battery, the feasibility of persistent cache is still questionable. Second, Justdo logging requires FASEs be compiled
+in a way such that no variable is allocated in the register. To support resumation of execution from an arbitrary point
+within the FASE, all memory states must be consistent at the point of crash. If a variable is allocated in the register,
+then the most up-to-date value of the variable will be lost, resulting in an invalid snapshot. To enforce this allocation
+rule, all variables within a FASE must be declared as volatile, which forces writes to these variables to be conducted 
+on the memory address. 
