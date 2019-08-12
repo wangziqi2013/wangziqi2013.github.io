@@ -22,8 +22,10 @@ from lower numbered tasks to higher numbers ones are totally legal. Second, spec
 by earlier tasks, usually driven by the structure of the problem itself (e.g. in parallel version of Dijkstra's algorithm,
 the creation of tasks are driven by the adjacency structure of nodes). This typically forces the program to be written
 in a sequential manner (because there are control dependencies between tasks), which is hard to parallelize without knowing 
-the specific semantics. Third, unnecessary data dependencies are introduced if we maintain tasks using software structures. 
+the specific problem. Third, unnecessary data dependencies are introduced if we maintain tasks using software structures. 
 This happens not only when an explicit task scheduler is implemented, but also in data structures used by the algorithm.
 For example, in Dijkstra's algorithm, a priority queue is used to track the distance of candicate nodes from the source.
 Any insertion of new nodes into the queue is likely a conflict with some speculative tasks that dequeued a node from 
-the queue, but this dependency can be eliminated if hardware can track the structure of task creation.
+the queue, but this dependency can be eliminated if hardware can track the structure of task creation. The last 
+reason is that existing software solutions can only provide limited performance improvement, while introducing a 
+non-negligible overhead, which can offset any improvement gain from parallelization.
