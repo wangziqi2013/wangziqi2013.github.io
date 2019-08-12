@@ -38,3 +38,9 @@ executed. Swarm guarantees that it appears that tasks are executed sequentially 
 defined by timestmaps. If two or more tasks have the same timestamp, their relative ordering is undefined, and they can 
 be in any logical total order (in practice this total order is the order they are selected for execution).
 
+Swarm assumes a chip-multiprocessor organized as tiles. Each tile has its own private L1 and shared L2. LLC cache is 
+shared among all tiles, and partitioned such that each tile has a slice of LLC array. Swarm assumes that the L1 cache is 
+write-through. This may increase the latency of store instructions when the store buffer is at high load, but makes 
+L1 flush instaneous since no write back is to be performed.
+Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. The enqueue_task instruction takes a function
+pointer, a timestamp, and several arguments. A new task will be created by dispatching a 
