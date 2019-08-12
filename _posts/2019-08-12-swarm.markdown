@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Scalable Architecture for Ordered Parallelism"
+date:   2019-08-12 17:05:00 -0500
+categories: paper
+paper_title: "A Scalable Architecture for Ordered Parallelism"
+paper_link: A Scalable Architecture for Ordered Parallelism
+paper_keyword: Swarm; TLS; HTM; Speculation
+paper_year: MICRO 2015
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
