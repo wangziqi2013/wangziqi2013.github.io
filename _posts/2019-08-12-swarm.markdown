@@ -49,5 +49,14 @@ many tasks in the same cycle. The paper suggests that the commit queue should be
 queue can be implemented with two TCAMs that provide indexing capability to the structure. In the runtime, the 
 task queue always selects the task with the minimum timestamp to execute.
 
-Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. The enqueue_task instruction takes a function
-pointer, a timestamp, and several arguments. A new task will be created by dispatching a 
+The task queue consists of task structures, which contains context information that is necessary to start and maintain 
+the task. The context information includes the starting address of the task (i.e. a function pointer), arguments to the 
+task, and the task timestamp. In addition, each task structure has a finite number of entries that point to the child tasks.
+A task spawns child task when it creates them. These child tasks are stored in the current task's structure, which is used
+when the current task aborts (commit does not follow the child pointer). Child task pointers are a composite field of the 
+core ID and task queue index on that core. Since a task never changes its location in the queue after it is inserted, this
+uniquely identifies a task before it finishes and releases the entry.
+
+Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. 
+The enqueue_task instruction takes a function pointer, a timestamp, and several arguments. A new task will be created 
+by dispatching a 
