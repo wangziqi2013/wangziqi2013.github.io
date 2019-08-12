@@ -18,4 +18,8 @@ pointed out that some algorithms intrinsically have abundant parallelism, but mo
 not exploit them very well for several reasons. First, existing HTM designs are targeted at unordered execution of 
 transactional regions. Optimizations such as dirty read are therefore disallowed to maintain isolation, which hinders
 concurrency, because if the order of transactions can be known and tracked by hardware in advance, forwarding dirty data
-from lower numbered tasks to higher numbers ones are totally legal.
+from lower numbered tasks to higher numbers ones are totally legal. Second, speculative tasks are created dynamically
+by earlier tasks, usually driven by the structure of the problem itself (e.g. in parallel version of Dijkstra's algorithm,
+the creation of tasks are driven by the adjacency structure of nodes). This typically forces the program to be written
+in a sequential manner (because there are control dependencies between tasks), which is hard to parallelize without knowing 
+the specific semantics. 
