@@ -29,3 +29,11 @@ Any insertion of new nodes into the queue is likely a conflict with some specula
 the queue, but this dependency can be eliminated if hardware can track the structure of task creation. The last 
 reason is that existing software solutions can only provide limited performance improvement, while introducing a 
 non-negligible overhead, which can offset any improvement gain from parallelization.
+
+Swarm solves the above challenges using a task-based speculation model. Fine-grained pieces of code that can potentially
+run in parallel if there is no conflict are abstracted as "tasks". The exection of tasks is expected to have only
+a few data dependencies, which will cause the violating task and all its decendants, and related tasks to abort.
+Tasks are assigned programmer-defined sequence numbers called timestamps, which specify the logical ordering tasks are 
+executed. Swarm guarantees that it appears that tasks are executed sequentially following the partial ordering 
+defined by timestmaps. If two or more tasks have the same timestamp, their relative ordering is undefined, and they can 
+be executed in any order.
