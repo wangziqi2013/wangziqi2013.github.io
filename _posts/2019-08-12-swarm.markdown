@@ -36,4 +36,5 @@ a few data dependencies, which will cause the violating task and all its decenda
 Tasks are assigned programmer-defined sequence numbers called timestamps, which specify the logical ordering tasks are 
 executed. Swarm guarantees that it appears that tasks are executed sequentially following the partial ordering 
 defined by timestmaps. If two or more tasks have the same timestamp, their relative ordering is undefined, and they can 
-be executed in any order.
+be in any logical total order (in practice this total order is the order they are selected for execution).
+
