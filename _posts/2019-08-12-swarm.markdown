@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Swarm, a highly parallelized architecture supporting Thread-Level Speculation (TLS). This paper 
+pointed out that some algorithms intrinsically have abundant parallelism, but most existing speculation mechanisms could 
+not exploit them very well for several reasons. First, existing HTM designs are targeted at unordered execution of 
+transactional regions. Optimizations such as dirty read are therefore disallowed to maintain isolation, which hinders
+concurrency, because if the order of transactions can be known and tracked by hardware in advance, forwarding dirty data
+from lower numbered tasks to higher numbers ones are totally legal.
