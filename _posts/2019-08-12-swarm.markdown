@@ -41,6 +41,13 @@ be in any logical total order (in practice this total order is the order they ar
 Swarm assumes a chip-multiprocessor organized as tiles. Each tile has its own private L1 and shared L2. LLC cache is 
 shared among all tiles, and partitioned such that each tile has a slice of LLC array. Swarm assumes that the L1 cache is 
 write-through. This may increase the latency of store instructions when the store buffer is at high load, but makes 
-L1 flush instaneous since no write back is to be performed.
+L1 flush instaneous since no write back is to be performed (we will see later how this benefits conflict detection).
+Each tile has also a task unit, which consists of a task queue and a commit queue. The task queue holds pending tasks 
+that are to be executed once resource is available, while the commit queue holds tasks that are completed and waiting
+for lower numbered tasks to commit. These two structures are not necessarily of the same size, given that Swarm can commit
+many tasks in the same cycle. The paper suggests that the commit queue should be implemented as a TCAM, while the task
+queue can be implemented with two TCAMs that provide indexing capability to the structure. In the runtime, the 
+task queue always selects the task with the minimum timestamp to execute.
+
 Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. The enqueue_task instruction takes a function
 pointer, a timestamp, and several arguments. A new task will be created by dispatching a 
