@@ -38,7 +38,8 @@ executed. Swarm guarantees that it appears that tasks are executed sequentially 
 defined by timestmaps. If two or more tasks have the same timestamp, their relative ordering is undefined, and they can 
 be in any logical total order (in practice this total order is the order they are selected for execution).
 
-Swarm assumes a chip-multiprocessor organized as tiles. Each tile has its own private L1 and shared L2. LLC cache is 
+Swarm assumes a chip-multiprocessor organized as tiles. Each tile has a few number of cores, and its own private L1 and 
+shared L2. LLC cache is 
 shared among all tiles, and partitioned such that each tile has a slice of LLC array. Swarm assumes that the L1 cache is 
 write-through. This may increase the latency of store instructions when the store buffer is at high load, but makes 
 L1 flush instaneous since no write back is to be performed (we will see later how this benefits conflict detection).
@@ -54,9 +55,10 @@ the task. The context information includes the starting address of the task (i.e
 task, and the task timestamp. In addition, each task structure has a finite number of entries that point to the child tasks.
 A task spawns child task when it creates them. These child tasks are stored in the current task's structure, which is used
 when the current task aborts (commit does not follow the child pointer). Child task pointers are a composite field of the 
-core ID and task queue index on that core. Since a task never changes its location in the queue after it is inserted, this
+tile ID and task queue index on that tile. Since a task never changes its location in the queue after it is inserted, this
 uniquely identifies a task before it finishes and releases the entry.
 
-Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. 
-The enqueue_task instruction takes a function pointer, a timestamp, and several arguments. A new task will be created 
-by dispatching a 
+Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. The enqueue_task instruction takes a function 
+pointer, a timestamp, and function arguments as operands. A new task will be created by dispatching the context information 
+and the parent task information to a randomly selected tile, at which site a new task structured will be allocated,
+and these information will be filled in (the child pointer of the current task will also be updated). 
