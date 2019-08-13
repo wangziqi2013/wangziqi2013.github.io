@@ -61,4 +61,6 @@ uniquely identifies a task before it finishes and releases the entry.
 Swarm adds two new instructions to the ISA: enqueue_task and dequeue_task. The enqueue_task instruction takes a function 
 pointer, a timestamp, and function arguments as operands. A new task will be created by dispatching the context information 
 and the parent task information to a randomly selected tile, at which site a new task structured will be allocated,
-and these information will be filled in (the child pointer of the current task will also be updated). 
+and these information will be filled in (the child pointer of the current task will also be updated). When dequeue_task
+is executed, the processor performs a priority-based lookup, and selects the task with the minimum timestamp in the current
+task queue. If the task queue is empty, this instruction will stall.
