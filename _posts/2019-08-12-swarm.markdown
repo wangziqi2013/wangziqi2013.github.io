@@ -79,4 +79,13 @@ happens not only on RAW and WAW, but also on anti-dependencies (WAR). Luckily, t
 because they all incur coherence actions when the lower numbered task attempts to perform the load or store. Conceptually
 speaking, the conflict detection works by attaching the current task timestamp to the coherence request. When the processor
 executes a load or store, it inserts the address into a read or write set (implemented as bloom filters, stored in the task
-queue entry). 
+queue entry). These two sets are checked every time a coherence request is received from another task using the timestamp
+attached to the request. If the coherence request has a lower timestamp than the current task, and the request's address
+is in the read and/or write set (depending on the type of conflict), the current task will abort, since an ordering violation
+just happened. The coherence request can only be fulfilled after the abort is handled.
+
+Swarm chooses to decouple data and read/write set maintenance in order to simplify the handling of overflowed states. If 
+a speculatively read or written cache line is written back to the memory, instead of aborting the task until it becomes
+non-sepculative, Swarm simply follows the write back protocol (if needed), and indicates to the directory that the bit
+should be preserved. The next time a coherence request on the same address reaches the directory, it will be forwarded
+to the current processor. 
