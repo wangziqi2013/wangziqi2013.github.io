@@ -63,4 +63,7 @@ pointer, a timestamp, and function arguments as operands. A new task will be cre
 and the parent task information to a randomly selected tile, at which site a new task structured will be allocated,
 and these information will be filled in (the child pointer of the current task will also be updated). When dequeue_task
 is executed, the processor performs a priority-based lookup, and selects the task with the minimum timestamp in the current
-task queue. If the task queue is empty, this instruction will stall.
+task queue. If the task queue is empty, this instruction will stall until a new task is added (this paper does not 
+mention how a stalled processor can resume at the end of the computation; Queuing a task that indicates the end of the 
+computation may do the job).
+
