@@ -105,4 +105,12 @@ the paper suggests that the L1 should be flushed whenever a task completes or is
 this does not require any costly write back, and can be accomplished with a flash clear of valid bits.
 
 After a task completes, the task descriptor is inserted into the commit queue. Note that tasks in the commit queue will
-also be validated against incoming coherence requests.
+also be validated against incoming coherence requests. Tasks could not commit locally without communicating with remote
+tasks, because the commit ordering defined by timestamps must be obeyed. A task can only commit, if there is no
+lower numbered task that is still running. To this end, every tile will send its minimum unfinished task (either running
+or idle) to a centralized global arbiter. The global arbiter maintains a "global virtual timestamp" (GVT), which is the 
+timestamp of the global minimum of unfinished task. The arbiter updates GVT after receiving all messages from the tiles by
+computing the minimum of them, and then overwrite the current GVT. After computing the GVT, the arbiter further broadcasts 
+the updated GVT to all tiles. After receiving the broadcast, tiles commit all tasks in the commit queue whose timestamp
+is less than GVT. Due to eager version management, the commit process is instant, and the tile could commit all tasks
+in the same cycle. 
