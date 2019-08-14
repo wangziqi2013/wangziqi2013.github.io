@@ -87,9 +87,9 @@ just happened. The coherence request can only be fulfilled after the abort is ha
 Swarm chooses to decouple data and read/write set maintenance in order to simplify the handling of overflowed states. If 
 a speculatively read or written cache line is written back to the memory, instead of aborting the task until it becomes
 non-sepculative, Swarm simply follows the write back protocol (if needed), and indicates to the directory that the bit
-should be preserved. The next time a coherence request on the same address reaches the directory, it will be forwarded
-to the current processor. The current processor checks the timestamp and the address, and act as if the block were
-still in the local cache. 
+should be preserved ("sticky bits" borrowed from LogTM). The next time a coherence request on the same address reaches 
+the directory, it will be forwarded to the current processor. The current processor checks the timestamp and the address, 
+and act as if the block were still in the local cache. 
 
 Note that the paper seems to assume there is no coherence bit in the L2, maybe because the L1 is assumed to be write-through
 (so only one valid copy exists in the L2 for every tile even if several cores have written to a cache line). In this case,
@@ -103,3 +103,6 @@ no conflict detection is made if another task is switched in, since the L1 cache
 the newly switched task has a smaller timestamp, this constitutes a violation, but no check is performed. To counter this,
 the paper suggests that the L1 should be flushed whenever a task completes or is switched out. Since the L1 cache is write-through,
 this does not require any costly write back, and can be accomplished with a flash clear of valid bits.
+
+After a task completes, the task descriptor is inserted into the commit queue. Note that tasks in the commit queue will
+also be validated against incoming coherence requests.
