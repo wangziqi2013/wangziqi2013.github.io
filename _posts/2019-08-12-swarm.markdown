@@ -114,3 +114,11 @@ computing the minimum of them, and then overwrite the current GVT. After computi
 the updated GVT to all tiles. After receiving the broadcast, tiles commit all tasks in the commit queue whose timestamp
 is less than GVT. Due to eager version management, the commit process is instant, and the tile could commit all tasks
 in the same cycle. 
+
+On abort, the changes made by the task is undone by reading the undo log and copying the before-image to the original 
+address. Child tasks are also notified to abort by following the child pointers in the task descriptor. Note that although
+tasks that have data dependencies and anti-dependencies should also be aborted, this is done naturally by writing
+back the undo log entry to the original address. Since these runtime dependencies only point from lower numbered tasks
+to higher numbered ones, when the lower numbered task aborts, by writing the same address again, we deliberately
+introduced dependencies from the same set of higher numbered tasks to the aborted task, which will abort those higher 
+numbered tasks, resolving data dependency. 
