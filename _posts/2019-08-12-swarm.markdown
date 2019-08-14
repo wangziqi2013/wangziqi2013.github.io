@@ -67,3 +67,8 @@ task queue. If the task queue is empty, this instruction will stall until a new 
 mention how a stalled processor can resume at the end of the computation; Queuing a task that indicates the end of the 
 computation may do the job).
 
+Since tasks run in the specified logical order, Swarm must track memory accesses to enforce that reads and writes observe 
+the order. Due to the fact that in some cases, reading uncommitted data will not violate the ordering, Swarm allows data 
+forwarding from lower numbered to higher numbered tasks. To achieve this, Swarm adopts eager version management from LogTM, 
+which means that updates are always performed in-place, and the undo image (before the update) is stored in a per-task log.
+Each task is allocated a task-local logging area, which is part of the task context.  
