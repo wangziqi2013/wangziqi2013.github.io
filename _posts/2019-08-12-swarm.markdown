@@ -88,4 +88,13 @@ Swarm chooses to decouple data and read/write set maintenance in order to simpli
 a speculatively read or written cache line is written back to the memory, instead of aborting the task until it becomes
 non-sepculative, Swarm simply follows the write back protocol (if needed), and indicates to the directory that the bit
 should be preserved. The next time a coherence request on the same address reaches the directory, it will be forwarded
-to the current processor. 
+to the current processor. The current processor checks the timestamp and the address, and act as if the block were
+still in the local cache. 
+
+Note that the paper seems to assume there is no coherence bit in the L2, maybe because the L1 is assumed to be write-through
+(so only one valid copy exists in the L2 for every tile even if several cores have written to a cache line). In this case,
+detecting a violation with coherence is impossible. One straightforward way is to broadcast the current memory access
+to all cores in the same tile (sharing the same L2) when a core executes load or store. The paper offers another optimization 
+to reduce broadcast traffic. The optimization tags L2 lines with the timestamp of the transaction that inserts the line 
+into the cache. If an access hits L2, but the timestamp of the task that initiates the access is lower than the L2 
+timestamp, a broadcast should be sent to all cores in the tile, the address of which is then checked against the R/W set.
