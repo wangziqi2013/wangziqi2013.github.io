@@ -74,4 +74,9 @@ which means that updates are always performed in-place, and the undo image (befo
 Each task is allocated a task-local logging area, which is part of the task context. With eager version management,
 uncommitted data can be forwarded to higher numbered tasks without the latter doing anything special. 
 
-Conflicts occur when data is forwarded 
+Conflicts occur when data is forwarded in the wrong direction, i.e. from higher numbered tasks to lower numbered tasks. This
+happens not only on RAW and WAW, but also on anti-dependencies (WAR). Luckily, these three cases are detectable via coherence,
+because they all incur coherence actions when the lower numbered task attempts to perform the load or store. Conceptually
+speaking, the conflict detection works by attaching the current task timestamp to the coherence request. When the processor
+executes a load or store, it inserts the address into a read or write set (implemented as bloom filters, stored in the task
+queue entry). 
