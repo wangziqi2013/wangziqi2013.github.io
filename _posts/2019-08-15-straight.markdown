@@ -58,3 +58,5 @@ they cannot be allocated the same physical register. The second problem is recov
 from a mis-speculation takes time proportional to the size of the mis-speculated path, because instructions are undone
 one-by-one with a ROB walker. On a TCAM-based design, one snapshot is taken on each speculation, which requires significant
 on-chip storage to buffer these snapshots, given that the number of physical registers are generally large on modern platform. 
+The last problem is that the mapping table is accessed in every cycle where a register is accessed. This contributes not only to 
+total power consumption, but also makes frequency scaling more difficult.
