@@ -118,4 +118,9 @@ while k is at the end of the ROB. After i has been executed, to avoid instructio
 (recall that instructions only access operands the same cycle they are scheduled). The size of ROB, therefore, can only
 be at most the number of physical registers minus the maximum possible distance between a consumer and producer.
 
-To solve the problem of consumer and producer
+To solve the problem of consumer and producer being two far away from each other, Straight introduces RMOV instruction
+which does nothing but only moves operands between registers. The RMOV instruction reads from its only source operand and 
+then writes into the destination, which serves as a "relay" of value. The RMOV instruction is also useful when two basic 
+blocks merge. If a variable is written in both blocks, and a third instruction reads from the variable, it is unclear
+what is the distance from the third instruction to the producer instruction, because the dynamic instruction flow
+from the two paths may result in different distances. 
