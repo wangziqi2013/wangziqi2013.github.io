@@ -39,6 +39,10 @@ they are unmapped. The register recycling rule is identical to the rule of RAM-b
 
 Both renaming schemes need to consider the case when a speculation path fails and have to be rolled back. In this case,
 simply nullifying their instruction buffers in the pipeline is insufficient, because architectural state changes such
-as allocations in the mapping table should also be rolled back. With the first design, the paper suggests that a reorder
-buffer walker should be invoked and undo all changes made by the speculation path (the ROB entry should record the 
-before-image of the entry it affects for such undo operations). 
+as allocations in the mapping table should also be rolled back. With the first RAM-based design, the paper suggests that 
+a reorder buffer (ROB) walker should be invoked and undo all changes made by the speculation path (the ROB entry should 
+record the before-image of the entry it affects for such undo operations). In the second TCAM-based design, since the 
+entire TCAM can be snapshot in a single cycle quite efficiently, and that there is no extra data structure to maintain, 
+the processor may take a snapshot on every point of speculation, and just restore the snapshot back to the mapping table.
+In this scheme, it takes constant time to restore the snapshot, but as a trade-off, the storage required to store these
+snapshots grows linearly with the maxmimum allowed depth of speculation.
