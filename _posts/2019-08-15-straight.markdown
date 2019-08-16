@@ -105,3 +105,7 @@ to realize common constructs such as variable sized stack array). Most SP values
 To leverage such value locality, the paper proposes using a TCAM-based small mapping table which only stores SP changes, 
 i.e. maps ROB entry index to an SP value only if the ROB entry updates the SP. For ROB entries not in this table, their 
 SP values can be inferred from the table by an inexact search (which returns the most recent ROB entry that modifies SP).
+
+RP wraps around when all physical registers have been allocated. The value of RP begins from zero and will be incremented 
+for every new instruction, which introduces aliasing. Since the size of ROB is fixed, alisaing can be harmless if the 
+re-use of the same register is larger than the threshold. 
