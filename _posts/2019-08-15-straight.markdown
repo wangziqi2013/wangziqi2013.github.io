@@ -46,3 +46,12 @@ entire TCAM can be snapshot in a single cycle quite efficiently, and that there 
 the processor may take a snapshot on every point of speculation, and just restore the snapshot back to the mapping table.
 In this scheme, it takes constant time to restore the snapshot, but as a trade-off, the storage required to store these
 snapshots grows linearly with the maxmimum allowed depth of speculation.
+
+Based on the above two possibilities of implementing register renaming, this paper identifies three potential problems
+of the current scheme. First, in order to keep the OOO backend busy, it is expected that the frontend issue several
+instructions into the instruction window every cycle. This, however, means that the mapping table needs to be accessed
+and updated by multiple instructions in the same cycle, implying a multi-ported design whose complexity grows exponentially,
+limiting the issue width of the pipeline. 
+In addition, if these instructions have dependencies, the updates they made to the mapping table should be as if they were 
+performed sequentially. This requires extra priority handling circult (e.g. if two instructions need renaming, they cannot 
+be allocated the same physical register).
