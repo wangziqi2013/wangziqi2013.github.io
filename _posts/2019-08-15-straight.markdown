@@ -87,3 +87,13 @@ operand is produced by the x-th instruction counting backwards from the current 
 source operand is from physical register (k - x), allowing wrap-around. One notable advantage of this design is that the 
 backend of the pipeline is unchanged at all. All renamings happen at decoder stage, and after that the source operand of 
 instructions are represented by the physical ID number.
+
+All general-purpose registers except the stack pointer are renamed in the method described above. The stack pointer (SP),
+on the other hand, can be updated in-place by SPADD instruction. The SPADD instruction is executed when it is decoded
+(but still we put it into the ROB for recovery from mis-speculation),
+and every instruction's ROB entry contains the SP value when the instruction is decoded. The SP value, together with the 
+PC and RP stored in ROB entries, are used to restore the context on a mis-speculation.
+
+When a mis-speculation is detected, the first instruction in the mis-speculated path is located. The ROB entry is used to
+restore the state. In particular, we copy the PC, SP and RP register value back to the corresponding registers, and then flush
+the pipeline. This process only takes constant time, and is extremely simple to implement. 
