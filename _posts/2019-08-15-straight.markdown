@@ -53,5 +53,8 @@ instructions into the instruction window every cycle. This, however, means that 
 and updated by multiple instructions in the same cycle, implying a multi-ported design whose complexity grows exponentially,
 limiting the issue width of the pipeline. 
 In addition, if these instructions have dependencies, the updates they made to the mapping table should be as if they were 
-performed sequentially. This requires extra priority handling circult (e.g. if two instructions need renaming, they cannot 
-be allocated the same physical register).
+performed sequentially. This requires extra priority handling circult. For example, when if two instructions need renaming, 
+they cannot be allocated the same physical register. The second problem is recovery cost. On a RAM-based design, recoverying
+from a mis-speculation takes time proportional to the size of the mis-speculated path, because instructions are undone
+one-by-one with a ROB walker. On a TCAM-based design, one snapshot is taken on each speculation, which requires significant
+on-chip storage to buffer these snapshots, given that the number of physical registers are generally large on modern platform. 
