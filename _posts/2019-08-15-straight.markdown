@@ -123,4 +123,6 @@ which does nothing but only moves operands between registers. The RMOV instructi
 then writes into the destination, which serves as a "relay" of value. The RMOV instruction is also useful when two basic 
 blocks merge. If a variable is written in both blocks, and a third instruction reads from the variable, it is unclear
 what is the distance from the third instruction to the producer instruction, because the dynamic instruction flow
-from the two paths may result in different distances. 
+from the two paths may result in different distances. If such a case is identified, during code genetation, the compiler
+will insert RMOV instruction at the end of the basic block, such that after a merge, the live variables (i.e. registers 
+that are still referenced) will be at a fixed distance from the consumer instruction in the after-merge block.
