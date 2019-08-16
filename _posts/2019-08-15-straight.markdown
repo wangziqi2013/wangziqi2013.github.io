@@ -84,4 +84,6 @@ what the physical register value is if the instruction does not produce a value,
 is an easy task, because the physical register of previous instruction in the dynamic flow can be inferred from the offset.
 To elaborate: If the current instruction's physical register ID is k, and the operand offset is x (which means that the 
 operand is produced by the x-th instruction counting backwards from the current instruction in program order), then the 
-source operand is from physical register (k - x), allowing wrap-around.
+source operand is from physical register (k - x), allowing wrap-around. One notable advantage of this design is that the 
+backend of the pipeline is unchanged at all. All renamings happen at decoder stage, and after that the source operand of 
+instructions are represented by the physical ID number.
