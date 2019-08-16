@@ -26,6 +26,9 @@ and the content of the entry is the name of the physical register it maps to. Ev
 stage overwrites an architectural register, a new physical register is allocated, and the entry is updated to the new
 physical register. When an architectural register is used as source operands, the mapping table is accessed and the 
 current name of the physical register is returned. To manage physical registers, an extra free list is also added to
-allocate physical registers. Physical registers are only released when no future instruction could be reading it, using
+allocate unused physical registers. Physical registers are only released when no future instruction could be reading it, using
 either reference counting, or epoch-based mechanism (i.e. the register could be freed after the instruction that caused
-its being overwritten in the mapping table commits).
+its being overwritten in the mapping table commits). The second scheme of register renaming uses a TCAM whose size equals the 
+number of physical registers. Each physical register corresponds to an entry in the TCAM. TCAM entries store the current 
+architectural register that uses this physical register. No free list is maintained, because free physical registers 
+can be obtained by acquiring a physical register not allocated to any architectural register. 
