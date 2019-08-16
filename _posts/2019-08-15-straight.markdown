@@ -23,8 +23,6 @@ version_mgmt:
    there is still a strict program order defined and most part of the backend and fetching unit does not change. Also
    programming is easier than data-flow machine.
 
-3. 
-
 **Lowlights:**
 
 1. The SP register can only be incremented/decremented by a constant amount which is quite over-restrictive, because 
@@ -35,6 +33,13 @@ version_mgmt:
    this architecture can be extended as a hybrid one: A small set of registers is provided to hold values that are 
    allowed to be updated in-place. No renaming is needed for these scratch registers since their usages are relative
    scarce compared with data-flow style value passing.
+
+3. This paper did not state very clearly what assumptions are made to the RISC OOO superscalar pipeline. When I was 
+   reading I just assumed it was Tomasulo's Algorithm and was confused trying to understand why the 
+
+4. Instructions that do not provide a value is also allocated a physical register for simplicity of inferring RP value
+   for ROB entries. This may allocate more physical registers than actually needed. I can see this not being a major 
+   problem because most instructions do produce a value (except stores).
 
 This paper proposes Straight, a novel superscalar microarchitecture implementing out-of-order (OOO) execution without
 register renaming. In ordinary architecture, in order to schedule instructions that have anti-dependencies out of the 
