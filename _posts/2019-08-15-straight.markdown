@@ -13,6 +13,19 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlights:**
+
+1. The introduction section actually covers two different implementations of register renaming, which is good because
+   most lectures (including some books) do not make such distinction.
+
+ 
+
+**Lowlights:**
+
+1. The SP register can only be incremented/decremented by a constant amount which is quite over-restrictive, because 
+   in practice we may need to allocate a variably sized array on the stack
+2. 
+
 This paper proposes Straight, a novel superscalar microarchitecture implementing out-of-order (OOO) execution without
 register renaming. In ordinary architecture, in order to schedule instructions that have anti-dependencies out of the 
 program order, registers must be renamed to avoid accidental overwriting of register contents. For example, if 
