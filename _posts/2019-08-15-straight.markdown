@@ -112,4 +112,10 @@ re-use of the same register is larger than the threshold. Imagine the case in wh
 a value which is consumed by instruction j, and a later instruction k re-uses the same register as instruction i, and has no
 dependency to both i and j. In this case, instruction j could read the wrong value if instruction i is scheduled first,
 and then instruction k is scheduled. Since i and k use the same destination register, when j executes, it reads the 
-value produced by k, rather than i.
+value produced by k, rather than i. In the worst case, i is at the head of ROB, and j is at some distance away (x instructions), 
+while k is at the end of the ROB. After i has been executed, to avoid instruction k from being scheduled, the next 
+(x + ROB size) must not contain instruction k, because otherwise it is always possible that k is scheduled before j
+(recall that instructions only access operands the same cycle they are scheduled). The size of ROB, therefore, can only
+be at most the number of physical registers minus the maximum possible distance between a consumer and producer.
+
+To solve the problem of consumer and producer
