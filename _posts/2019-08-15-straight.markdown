@@ -12,3 +12,17 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Straight, a novel superscalar microarchitecture implementing out-of-order (OOO) execution without
+register renaming. In ordinary architecture, in order to schedule instructions that have anti-dependencies out of the 
+program order, registers must be renamed to avoid accidental overwriting of register contents. For example, if 
+instruction I1 reads from register X, while a later instruction in the program order I2 writes register X, if I2 is 
+scheduled before I1, then when I1 executes, it will read a value produced by I2, which violates the invariant that
+single threaded execution must be equivalent to serial execution.
+
+Regular register renaming schemes usually use a mapping table implemented as RAM or TCAM. There are two ways of designing
+the mapping table. In the first scheme, the mapping table is a RAM, in which every entry corresponds to an architectural register,
+and the content of the entry is the name of the physical register it maps to. Every time a new instruction passing the decode
+stage overwrites an architectural register, a new physical register is allocated, and the entry is updated to the new
+physical register. When an architectural register is used as source operands, the mapping table is accessed and the 
+current name of the physical register is returned. 
