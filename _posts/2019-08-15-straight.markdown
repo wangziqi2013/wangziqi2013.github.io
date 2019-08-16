@@ -75,3 +75,9 @@ the instruction is issued, and results are written back into the register file a
 particular, it seems that Straight does not assume a Tomasulo execution model in which completed instructions directly
 forward its result to waiting instructions in the window (so an instruction can only have its operands ready when all dependent
 instructions retire). Instructions can retire when they are at the head of the ROB.
+
+Straight works as follows. At decoding stage, instructions are assigned physical registers beased on source operands.
+The decoder maintains a register pointer (RP), which points to the next physical register to be allocated. Since 
+most instructions will produce a value, every instruction is allocated a register by incrementing the RP when it is decoded.
+The physical register ID is the value of the RP when the instruction is decoded (although the paper did not specify
+what the physical register value is if the instruction does not produce a value, such as stores). 
