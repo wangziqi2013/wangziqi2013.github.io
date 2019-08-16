@@ -18,13 +18,23 @@ version_mgmt:
 1. The introduction section actually covers two different implementations of register renaming, which is good because
    most lectures (including some books) do not make such distinction.
 
- 
+2. The design is similar to data-flow machine, in a sense that instructions encode dependencies directly w.r.t. other 
+   instructions rather than using the abstract "architectural register name" as data-flow medium. The difference is that
+   there is still a strict program order defined and most part of the backend and fetching unit does not change. Also
+   programming is easier than data-flow machine.
+
+3. 
 
 **Lowlights:**
 
 1. The SP register can only be incremented/decremented by a constant amount which is quite over-restrictive, because 
    in practice we may need to allocate a variably sized array on the stack
-2. 
+
+2. I don't like the concept that the return address needs to be saved to the stack before entering a loop simply
+   because the dynamic distance from the return inst. to the return address register is unknown in advance. Maybe 
+   this architecture can be extended as a hybrid one: A small set of registers is provided to hold values that are 
+   allowed to be updated in-place. No renaming is needed for these scratch registers since their usages are relative
+   scarce compared with data-flow style value passing.
 
 This paper proposes Straight, a novel superscalar microarchitecture implementing out-of-order (OOO) execution without
 register renaming. In ordinary architecture, in order to schedule instructions that have anti-dependencies out of the 
