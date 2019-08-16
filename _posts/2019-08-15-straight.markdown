@@ -68,3 +68,10 @@ instructions no longer specify a destination register, because the "destination"
 of the instruction in the ROB. Second, instructions refer to the result produced by other instructions using a relative offset
 in the dynamic flow, which can only be determined at runtime. The second property complicates code generation, since in
 some cases there can be producer instructions in different execution paths.
+
+Straight assumes a RISC-like OOO superscalar pipeling model. Instructions are fetched and decoded in-order, which are then
+pushed into the reorder buffer (ROB) in program order. Operands are only read from the physical register file at the cycle 
+the instruction is issued, and results are written back into the register file at the last stage (retirement stage). In
+particular, it seems that Straight does not assume a Tomasulo execution model in which completed instructions directly
+forward its result to waiting instructions in the window (so an instruction can only have its operands ready when all dependent
+instructions retire). Instructions can retire when they are at the head of the ROB.
