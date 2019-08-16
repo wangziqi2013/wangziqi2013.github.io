@@ -108,4 +108,8 @@ SP values can be inferred from the table by an inexact search (which returns the
 
 RP wraps around when all physical registers have been allocated. The value of RP begins from zero and will be incremented 
 for every new instruction, which introduces aliasing. Since the size of ROB is fixed, alisaing can be harmless if the 
-re-use of the same register is larger than the threshold. 
+re-use of the same register is larger than the threshold. Imagine the case in which aliasing can be harmful: instruction i produces
+a value which is consumed by instruction j, and a later instruction k re-uses the same register as instruction i, and has no
+dependency to both i and j. In this case, instruction j could read the wrong value if instruction i is scheduled first,
+and then instruction k is scheduled. Since i and k use the same destination register, when j executes, it reads the 
+value produced by k, rather than i.
