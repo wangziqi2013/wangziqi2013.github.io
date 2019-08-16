@@ -31,4 +31,8 @@ either reference counting, or epoch-based mechanism (i.e. the register could be 
 its being overwritten in the mapping table commits). The second scheme of register renaming uses a TCAM whose size equals the 
 number of physical registers. Each physical register corresponds to an entry in the TCAM. TCAM entries store the current 
 architectural register that uses this physical register. No free list is maintained, because free physical registers 
-can be obtained by acquiring a physical register not allocated to any architectural register. 
+can be obtained by acquiring a physical register not allocated to any architectural register. On instruction decoding,
+the name of the architectural register is used to query the TCAM, which obtains the name of the physical register it is 
+allocated with. On a register write instruction, a free entry is obtained from the TCAM, and then the name of the 
+architectural register is stored into the free entry. Note that physical registers cannot be freed immediately after 
+they are unmapped. The register recycling rule is identical to the rule of RAM-based design.
