@@ -65,4 +65,6 @@ To solve the problem of register renaming, instead of using fixed name for regis
 anyway), Straight proposes that instructions explicitly specify source operands using an offset from the current instruction
 back to the producer instruction the dynamic instruction flow. Two major changes are introduced into the ISA. First,
 instructions no longer specify a destination register, because the "destination" of the instruction is encoded by the position
-of the instruction in the ROB. 
+of the instruction in the ROB. Second, instructions refer to the result produced by other instructions using a relative offset
+in the dynamic flow, which can only be determined at runtime. The second property complicates code generation, since in
+some cases there can be producer instructions in different execution paths.
