@@ -36,3 +36,9 @@ the name of the architectural register is used to query the TCAM, which obtains 
 allocated with. On a register write instruction, a free entry is obtained from the TCAM, and then the name of the 
 architectural register is stored into the free entry. Note that physical registers cannot be freed immediately after 
 they are unmapped. The register recycling rule is identical to the rule of RAM-based design.
+
+Both renaming schemes need to consider the case when a speculation path fails and have to be rolled back. In this case,
+simply nullifying their instruction buffers in the pipeline is insufficient, because architectural state changes such
+as allocations in the mapping table should also be rolled back. With the first design, the paper suggests that a reorder
+buffer walker should be invoked and undo all changes made by the speculation path (the ROB entry should record the 
+before-image of the entry it affects for such undo operations). 
