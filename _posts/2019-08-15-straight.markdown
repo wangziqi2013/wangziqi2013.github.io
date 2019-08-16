@@ -96,4 +96,8 @@ PC and RP stored in ROB entries, are used to restore the context on a mis-specul
 
 When a mis-speculation is detected, the first instruction in the mis-speculated path is located. The ROB entry is used to
 restore the state. In particular, we copy the PC, SP and RP register value back to the corresponding registers, and then flush
-the pipeline. This process only takes constant time, and is extremely simple to implement. 
+the pipeline. This process only takes constant time, and is extremely simple to implement. In practice, to reduce ROB 
+storage overhead, two optimizations can be applied. First, the RP does not need to be stored for every ROB entry, since 
+this pointer will be incremented for every instruction. The ROB only needs to maintain the RP of the first entry, and the 
+rest can be inferred from the entry index. Second, the paper observes that SP is only modified at the beginning and the 
+end of a function as stack frame allocation/deallocation.
