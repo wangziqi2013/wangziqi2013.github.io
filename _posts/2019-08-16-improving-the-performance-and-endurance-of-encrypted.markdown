@@ -76,3 +76,8 @@ critical path is only the longer of these two. Evaluation shows that three bits 
 success rate of > 92%, which confirms the paper's observation. Note that whether the prediction is correct or not,
 the predictor state can always be updated using the result of deduplication. 
 
+The paper then describes a concrete scheme for implementing deduplication. Four data structures are used to support
+address remapping and space management of NVM. The first data structure is a mapping table, directly indexed by block 
+addresses. Note that DeWrite assumes 256 byte cache line and 32 bit address width, the mapping table only occupies 1/64
+of the NVM storage to map any arbitrary block to any arbitrary block on the device. The second data structure is a 
+mapping table,
