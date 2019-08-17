@@ -53,4 +53,5 @@ and encryption, when performed together, are inevitably serialized. The system f
 is a duplication of an existing block, and if not, the block is then encrypted and written. Although these two can be parallelized
 by speculatively encrypting the block while deduplication is running, and cancelling the encryption process if the block
 is confirmed to be a duplication, this parallelization wastes energy and hardware throughput by unnecessarily encoding 
-a block when a duplication happens.
+a block when a duplication happens. The third problem is that most previous publications (at least those cited by the paper)
+did not attempt to reduce metadata storage of either by exploring the possibility of combing these two.
