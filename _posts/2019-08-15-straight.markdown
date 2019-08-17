@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
-**Highlights:**
+Highlights:
 
 1. The introduction section actually covers two different implementations of register renaming, which is good because
    most lectures (including some books) do not make such distinction.
@@ -25,7 +25,7 @@ version_mgmt:
 
 3. Similar to TCAM-based renaming, this scheme also combines register allocation with assignment.
 
-**Lowlights:**
+Lowlights:
 
 1. The SP register can only be incremented/decremented by a constant amount which is quite over-restrictive, because 
    in practice we may need to allocate a variably sized array on the stack
