@@ -18,10 +18,13 @@ version_mgmt:
 1. Using larger blocks (256B) to reduce metadata overhead. Similarly, the paper assumes 32 bit device address, which reduces
    the length of the two arrays.
 
+2. Results with 3-bit dedup predictor is very impressive. I did not expect the clustering of blocks that can be dedup'ed 
+   to be this strong.
+
 **Lowlight:**
 
 1. I personally don't buy the argument that using dedup will reduce traffic and put writes out of the critical path,
-   because the dedup dat structure should be persisted as well, which constitutes an NVM write to the hash table entry 
+   because the dedup data structure should be persisted as well, which constitutes an NVM write to the hash table entry 
    and the reference count for each block eviction. One explanation is that the cache filters out the write to the metadata,
    then the question becomes how you write back the cache data on power failure?
 
@@ -40,5 +43,6 @@ in order to re-apply the series of writes or undo a partial change after a syste
 and the write entry must be enforced to guarantee the recoverability of the operation, e.g. for undo logging, the undo log entry
 must be written into the NVM before the corresponding dirty block. In the meantime, the processor can only wait until the 
 store buffer is drained before the log write is persisted. This not only doubles the traffic to the NVM, but also forces 
-the processor to stall, which puts the write operation at the critical path of execution. Deduplication eliminates some 
+the processor to stall, which puts the write operation at the critical path of execution. Depending the workload, deduplication 
+can eliminate some direct writes to NVM by mapping a newly created block to an existing on already on the device.
 
