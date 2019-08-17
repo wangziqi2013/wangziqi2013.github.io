@@ -66,3 +66,8 @@ on read operation, the counter can be accessed from a fast cache, and the genera
 the fetch of the block from the NVM. After the block has been fetched, the only latency change on the critical path is
 an extra XOR operation.
 
+This paper proposes using a hardware predictor to solve the second problem above. The observation made by the paper is 
+that duplicated blocks are often clustered, i.e. most of them are produced in a small window, which makes prediction 
+feasible. The predictor is very simple: only three bits are used to remember the most recent three block writes. 
+The majority of the three bits is used as the prediction output. If the predictor indicates that the block might be 
+a duplication, then we run deduplication and encryption serially
