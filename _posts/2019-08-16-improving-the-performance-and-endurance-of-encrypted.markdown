@@ -61,3 +61,8 @@ did not attempt to reduce metadata storage of either by exploring the possibilit
 The paper assumes counter-mode encryption in which a counter is incremented every time a cache block is to be written back.
 The counter value, together with the address of the block and a private key, is used to generate a one-time padding of the 
 block size, which is then XOR'ed with the cache block as the encrypted block. The counter value should also be written back
+to the NVM atomically (using ADR or logging) with the dirty block. One of the advantages of counter mode encryption is that
+on read operation, the counter can be accessed from a fast cache, and the generation of OTP is largely overlapped with 
+the fetch of the block from the NVM. After the block has been fetched, the only latency change on the critical path is
+an extra XOR operation.
+
