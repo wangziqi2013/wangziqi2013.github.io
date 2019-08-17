@@ -70,4 +70,8 @@ This paper proposes using a hardware predictor to solve the second problem above
 that duplicated blocks are often clustered, i.e. most of them are produced in a small window, which makes prediction 
 feasible. The predictor is very simple: only three bits are used to remember the most recent three block writes. 
 The majority of the three bits is used as the prediction output. If the predictor indicates that the block might be 
-a duplication, then we run deduplication and encryption serially
+a duplication, then we run deduplication and encryption serially, because there is a large chance that the last step
+is not needed. If, on ther other hand, the predictor indicates otherwise, then we run both in parallel such that the 
+critical path is only the longer of these two. Evaluation shows that three bits are sufficient to reach a prediction
+success rate of > 92%, which confirms the paper's observation. Note that whether the prediction is correct or not,
+the predictor state can always be updated using the result of deduplication. 
