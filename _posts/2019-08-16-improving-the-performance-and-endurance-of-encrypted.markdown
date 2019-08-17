@@ -92,5 +92,7 @@ As the mapping table privides an association between the hash value and the stor
 structure, an inverse mapping table, maps from the storage address to the hash table entry. This mapping table is 
 consulted when a cache line is modified, which changes its mapped location. In this case, the inverse mapping table is 
 consulted with the original storage address of the cache line (obtained from the address mapping table), which returns 
-a pointer to the hash table entry. The reference count is the hash table entry is decremented by one (and GC'ed if 
-the count reaches zero).
+a pointer to the hash table entry. The reference count in the hash table entry is decremented by one (and GC'ed if 
+the count reaches zero) before the new hash is computed. Note that if the reference count in the entry is about to overflow,
+the NVM controller no longer allows more lines to be mapped to this entry. Instead, it allocates a new line on the device,
+tolerating some degrees of redundancy. In practice, as long as the counter is reasonably long (8 bits) this is extremely rare.
