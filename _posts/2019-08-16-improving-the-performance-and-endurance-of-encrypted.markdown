@@ -33,11 +33,11 @@ version_mgmt:
    ADR as an excuse (as some previous publication point out) and say just make sure both updates are in the store 
    buffer before they are saved by ADR.
 
-This paper unifies NVM encryption and deduplication into a simple machanism with both low latency and reasonable metadata storage
-overhead. Encryption and deduplication are two important features for NVM based systems. Encryption avoids system data from
-being leaked by physically accessing the NVM on a different machine after the current session is powered down. Since data
-remain persistent on the NVM, runtime sensitive data protected by virtual memory machanism can be accessed directly if 
-the device is taken down and installed on another computer. Deduplication is another technique that can both improve 
+This paper unifies NVM encryption and deduplication into a simple machanism, DeWrite, with both low latency and reasonable 
+metadata storage overhead. Encryption and deduplication are two important features for NVM based systems. Encryption avoids 
+system data from being leaked by physically accessing the NVM on a different machine after the current session is powered 
+down. Since data remain persistent on the NVM, runtime sensitive data protected by virtual memory machanism can be accessed 
+directly if the device is taken down and installed on another computer. Deduplication is another technique that can both improve 
 performance and endurance of the device by reducing the frequency of writes. NVM writes, being different from writes to DRAM
 the latency of which can be overlapped with other instructions via the store buffer, are on the critical path. This is 
 because in order to ensure the atomicity of a series of modifications, NVM writes generally require logging or shadow mapping
@@ -75,3 +75,4 @@ is not needed. If, on ther other hand, the predictor indicates otherwise, then w
 critical path is only the longer of these two. Evaluation shows that three bits are sufficient to reach a prediction
 success rate of > 92%, which confirms the paper's observation. Note that whether the prediction is correct or not,
 the predictor state can always be updated using the result of deduplication. 
+
