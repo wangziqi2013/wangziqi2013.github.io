@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt: 
 ---
 
+
+
+**Lowlight:**
+
+1. I personally don't buy the argument that using dedup will reduce traffic and put writes out of the critical path,
+   because the dedup dat structure should be persisted as well, which constitutes an NVM write to the hash table entry 
+   and the reference count for each block eviction. One explanation is that the cache filters out the write to the metadata,
+   then the question becomes how you write back the cache data on power failure?
+
+2. The paper did not mention how caches are persisted back to the NVM, i.e. how to ensure that the update of the 
+   hash table, the mapping tables and the cache block are conducted atomically?
+
 This paper unifies NVM encryption and deduplication into a simple machanism with both low latency and reasonable metadata storage
 overhead. Encryption and deduplication are two important features for NVM based systems. Encryption avoids system data from
 being leaked by physically accessing the NVM on a different machine after the current session is powered down. Since data
@@ -23,4 +35,7 @@ the latency of which can be overlapped with other instructions via the store buf
 because in order to ensure the atomicity of a series of modifications, NVM writes generally require logging or shadow mapping
 in order to re-apply the series of writes or undo a partial change after a system crash. Write orderings between the log entry
 and the write entry must be enforced to guarantee the recoverability of the operation, e.g. for undo logging, the undo log entry
-must be written into the NVM before the corresponding dirty block. 
+must be written into the NVM before the corresponding dirty block. In the meantime, the processor can only wait until the 
+store buffer is drained before the log write is persisted. This not only doubles the traffic to the NVM, but also forces 
+the processor to stall, which puts the write operation at the critical path of execution. Deduplication eliminates some 
+
