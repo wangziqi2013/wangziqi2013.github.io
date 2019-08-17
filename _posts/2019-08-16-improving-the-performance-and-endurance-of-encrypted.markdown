@@ -13,7 +13,10 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlight:**
 
+1. Using larger blocks (256B) to reduce metadata overhead. Similarly, the paper assumes 32 bit device address, which reduces
+   the length of the two arrays.
 
 **Lowlight:**
 
