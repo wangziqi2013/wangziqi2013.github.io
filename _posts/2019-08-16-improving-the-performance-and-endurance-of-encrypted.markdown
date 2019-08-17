@@ -78,6 +78,10 @@ the predictor state can always be updated using the result of deduplication.
 
 The paper then describes a concrete scheme for implementing deduplication. Four data structures are used to support
 address remapping and space management of NVM. The first data structure is a mapping table, directly indexed by block 
-addresses. Note that DeWrite assumes 256 byte cache line and 32 bit address width, the mapping table only occupies 1/64
-of the NVM storage to map any arbitrary block to any arbitrary block on the device. The second data structure is a 
-mapping table,
+addresses. Note that since DeWrite assumes 256 byte cache line and 32 bit address width, the mapping table only occupies 1/64
+of the NVM storage to map from any arbitrary block to any arbitrary block on the device. The second data structure is a 
+hash table, which stores the reference count of a block. The paper did not mention the internal structure of the hash
+table including the conflict resolution algorithm, but the paper suggests that there can be multiple entries under a
+same hash value due to conflict. Hash table entries are organized into (hash value, storage addres, ref count) tuples. 
+When a cache block is to be written back, the CRC hash of the content is computed, and then used to probe the table. 
+If an entry exists, then the existing block is read from the address, whose content is compared with the block to be evicted.
