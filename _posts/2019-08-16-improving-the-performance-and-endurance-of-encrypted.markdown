@@ -104,3 +104,10 @@ tolerating some degrees of redundancy. In practice, as long as the counter is re
 The last data structure is a block allocation table, which uses bitmaps to indicate block being busy or not. Since a block
 can be mapped anywhere on the device, this map is consulted when a new block is to be written, and deduplication could not
 find a duplicated block.
+
+The last contribution of the paper is based on the below invariant. At any moment in the runtime, for any address X, 
+either the address mapping table entry of X is unused, or the inverse mapping is unused. Recall that the address mapping 
+table maps block address into its storage address, if there is remapping, while the inverse mapping table maps the storage 
+address to the hash table entry (if there is a valid block). For entry X, there are two cases. If X has been remapped to
+a new location, the mapping table entry of X is occupied and cannot be used for other purposes. The inverse mapping, however,
+must be valid, because the cache block to be written here has been remapped. 
