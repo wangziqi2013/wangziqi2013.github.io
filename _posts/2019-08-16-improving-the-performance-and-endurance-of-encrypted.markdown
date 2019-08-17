@@ -29,7 +29,9 @@ version_mgmt:
    then the question becomes how you write back the cache data on power failure?
 
 2. The paper did not mention how caches are persisted back to the NVM, i.e. how to ensure that the update of the 
-   hash table, the mapping tables and the cache block are conducted atomically?
+   hash table, the mapping tables and the cache block are conducted atomically? I understand that you may use 
+   ADR as an excuse (as some previous publication point out) and say just make sure both updates are in the store 
+   buffer before they are saved by ADR.
 
 This paper unifies NVM encryption and deduplication into a simple machanism with both low latency and reasonable metadata storage
 overhead. Encryption and deduplication are two important features for NVM based systems. Encryption avoids system data from
@@ -54,4 +56,8 @@ is a duplication of an existing block, and if not, the block is then encrypted a
 by speculatively encrypting the block while deduplication is running, and cancelling the encryption process if the block
 is confirmed to be a duplication, this parallelization wastes energy and hardware throughput by unnecessarily encoding 
 a block when a duplication happens. The third problem is that most previous publications (at least those cited by the paper)
-did not attempt to reduce metadata storage of either by exploring the possibility of combing these two.
+did not attempt to reduce metadata storage of either by exploring the possibility of co-locating their metadata.
+
+The paper assumes counter-mode encryption in which a counter is incremented every time a cache block is to be written back.
+The counter value, together with the address of the block and a private key, is used to generate a one-time padding of the 
+block size, which is then XOR'ed with the cache block as the encrypted block. The counter value should also be written back
