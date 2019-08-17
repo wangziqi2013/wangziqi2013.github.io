@@ -85,3 +85,5 @@ table including the conflict resolution algorithm, but the paper suggests that t
 same hash value due to conflict. Hash table entries are organized into (hash value, storage addres, ref count) tuples. 
 When a cache block is to be written back, the CRC hash of the content is computed, and then used to probe the table. 
 If an entry exists, then the existing block is read from the address, whose content is compared with the block to be evicted.
+If the contents also match, the write will be cancelled because we have found a duplication. The reference count is incremented
+by one, and the mapping table entry for the address to be evicted is updated to be the duplicated block. 
