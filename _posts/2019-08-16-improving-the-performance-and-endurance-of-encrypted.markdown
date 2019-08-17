@@ -46,3 +46,11 @@ store buffer is drained before the log write is persisted. This not only doubles
 the processor to stall, which puts the write operation at the critical path of execution. Depending the workload, deduplication 
 can eliminate some direct writes to NVM by mapping a newly created block to an existing on already on the device.
 
+This paper identifies several problems from previous works on NVM deduplication and encryption, and both. First, many
+encrytion framework relies on cryptographic algorithms such as AES or MD5 to hash a block into a shorter identifier. The 
+hardware computation of such functions are slow and energy hungry, and even worse, on the critical path. Second, deduplication
+and encryption, when performed together, are inevitably serialized. The system first identifies whether the block to be written
+is a duplication of an existing block, and if not, the block is then encrypted and written. Although these two can be parallelized
+by speculatively encrypting the block while deduplication is running, and cancelling the encryption process if the block
+is confirmed to be a duplication, this parallelization wastes energy and hardware throughput by unnecessarily encoding 
+a block when a duplication happens.
