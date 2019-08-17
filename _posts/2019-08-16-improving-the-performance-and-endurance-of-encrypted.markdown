@@ -110,4 +110,9 @@ either the address mapping table entry of X is unused, or the inverse mapping is
 table maps block address into its storage address, if there is remapping, while the inverse mapping table maps the storage 
 address to the hash table entry (if there is a valid block). For entry X, there are two cases. If X has been remapped to
 a new location, the mapping table entry of X is occupied and cannot be used for other purposes. The inverse mapping, however,
-must be valid, because the cache block to be written here has been remapped. 
+must be valid, because the cache block to be written here has been remapped. If, on the othre hand, address X could not be 
+deduplicated, then it has to be written into storage address X (i.e. identify mapping, which can be encoded using one bit
+in the mapping table), in which case the inverse mapping stores the pointer to the hash table entry. Since we assume 
+32 bit address width, 31 bits of them are usable to store data for other purposes, and we only dedicate one bit to indicate 
+whether this is an identify mapping. Taking advantage of this invariant, the paper suggests that the counter of block 
+can be co-located with the two mapping tables on entry X, eliminating dedicated storage for counters.
