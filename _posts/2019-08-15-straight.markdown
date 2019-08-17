@@ -4,7 +4,7 @@ title:  "STRAIGHT: Hazardless Processor Architecture Without Register Renaming"
 date:   2019-08-15 19:32:00 -0500
 categories: paper
 paper_title: "STRAIGHT: Hazardless Processor Architecture Without Register Renaming"
-paper_link: STRAIGHT: Hazardless Processor Architecture Without Register Renaming
+paper_link: https://ieeexplore.ieee.org/document/8574536
 paper_keyword: Register renaming; Straight; Microarchitecture
 paper_year: MICRO 2018
 rw_set: 
@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
-Highlights:
+**Highlights**:
 
 1. The introduction section actually covers two different implementations of register renaming, which is good because
    most lectures (including some books) do not make such distinction.
@@ -25,7 +25,7 @@ Highlights:
 
 3. Similar to TCAM-based renaming, this scheme also combines register allocation with assignment.
 
-Lowlights:
+**Lowlights**:
 
 1. The SP register can only be incremented/decremented by a constant amount which is quite over-restrictive, because 
    in practice we may need to allocate a variably sized array on the stack
