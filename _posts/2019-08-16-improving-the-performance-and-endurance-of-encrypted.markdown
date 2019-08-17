@@ -21,6 +21,10 @@ version_mgmt:
 2. Results with 3-bit dedup predictor is very impressive. I did not expect the clustering of blocks that can be dedup'ed 
    to be this strong.
 
+3. The co-location of counter value and mapping table entries are a great contribution, especially that the inverse 
+   mapping table uses real addresses rather than abstracted address
+   
+
 **Lowlight:**
 
 1. I personally don't buy the argument that using dedup will reduce traffic and put writes out of the critical path,
@@ -96,3 +100,7 @@ a pointer to the hash table entry. The reference count in the hash table entry i
 the count reaches zero) before the new hash is computed. Note that if the reference count in the entry is about to overflow,
 the NVM controller no longer allows more lines to be mapped to this entry. Instead, it allocates a new line on the device,
 tolerating some degrees of redundancy. In practice, as long as the counter is reasonably long (8 bits) this is extremely rare.
+
+The last data structure is a block allocation table, which uses bitmaps to indicate block being busy or not. Since a block
+can be mapped anywhere on the device, this map is consulted when a new block is to be written, and deduplication could not
+find a duplicated block.
