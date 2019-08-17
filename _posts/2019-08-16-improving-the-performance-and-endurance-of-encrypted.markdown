@@ -87,3 +87,10 @@ When a cache block is to be written back, the CRC hash of the content is compute
 If an entry exists, then the existing block is read from the address, whose content is compared with the block to be evicted.
 If the contents also match, the write will be cancelled because we have found a duplication. The reference count is incremented
 by one, and the mapping table entry for the address to be evicted is updated to be the duplicated block. 
+
+As the mapping table privides an association between the hash value and the storage address of a block, the third data
+structure, an inverse mapping table, maps from the storage address to the hash table entry. This mapping table is 
+consulted when a cache line is modified, which changes its mapped location. In this case, the inverse mapping table is 
+consulted with the original storage address of the cache line (obtained from the address mapping table), which returns 
+a pointer to the hash table entry. The reference count is the hash table entry is decremented by one (and GC'ed if 
+the count reaches zero).
