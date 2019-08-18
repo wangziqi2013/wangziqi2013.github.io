@@ -25,7 +25,10 @@ each page walk access. To reduce page walks which require a number of memory acc
 table (typically four), previous researches propose using an in-memory L3 TLB which stores translation entries as 
 a hardware TLB does in order to avoid a page walk. The L3 TLB can be as large as 16MB, a capacity that exceeds all 
 hardware implementations. Some other researches also propose caching the intermediate page table entries in hardware
-caches, such that the latency of accessing the entry can be reduced to as fast as a regular cache access. 
+caches, such that the latency of accessing the entry can be reduced to as fast as a regular cache access. Using part
+of the data cache to store TLB entries, however, can negatively affect performance, since the cache might be polluted
+by extra TLB entries as a result of TLB misses. As we will see later, CSALT addresses the cache pollution problem 
+by partitioning the cache into two parts, dedicated for data and TLB entries respectively.
 
 In this paper, we assume that TLB entries are cached by the L2 and LLC, sharing the same storage with data accesses.
 The paper also assumes that there is an underlying L3 TLB in the main memory, but also claims that this is not necessary,
