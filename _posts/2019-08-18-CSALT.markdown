@@ -17,4 +17,11 @@ This paper proposes CSALT, a cache partitioning scheme for unified L3 TLB and da
 identifies that, on modern platform where virtualization is supported, running multiple virtual machines can overburden
 the TLB with excessive misses, resulting in a massive number of page walks. A page walk on today's 2-D page table 
 can take, in the worst case, 24 memory accesses (20 for accessing host page table for every guest physical address, 
-and 4 for the standard 4-level guest translation).
+and 4 for the standard 4-level guest translation), the latency of which can easily become a performance bottleneck
+on a saturated system. 
+
+Previous solutions focus on reducing the number of page walks required for a translation and reducing the latency of 
+each page walk access. To reduce page walks which require a number of memory access on different levels of the page
+table (typically four), previous researches propose using an in-memory L3 TLB which stores translation entries as 
+a hardware TLB does in order to avoid a page walk. The L3 TLB can be as large as 16MB, a capacity that exceeds all 
+hardware implementations. 
