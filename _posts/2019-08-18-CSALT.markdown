@@ -32,5 +32,16 @@ by partitioning the cache into two parts, dedicated for data and TLB entries res
 
 In this paper, we assume that TLB entries are cached by the L2 and LLC, sharing the same storage with data accesses.
 The paper also assumes that there is an underlying L3 TLB in the main memory, but also claims that this is not necessary,
-and that the cache partitioning scheme works on all designs that cache page table entries in the data cache.
+and that the cache partitioning scheme works on all designs that cache page table entries in the data cache. Only translation 
+entries (i.e. from VA to PA) are stored in the cache. Other intermediate entries might be cached by a dedicated cache
+in the page walker.
 
+To solve the cache pollution problem when data and TLB entries share the same cache, CSALT partitions the cache into two
+parts, one for data and another for TLB entries. The partitioning parameter, N, dictates that in a way-associative cache, 
+way 0 to way N - 1 of the cache is dedicated to data, while way N to the maximum way (W) is dedicated to TLB entries. 
+When a memory access from upper levels misses the cache, the newly inserted entry must only be allocated from the 
+data part, if the request is a regular load or store, or from the TLB entry part, if the request is to a memory region
+allocated for L3 TLB (i.e. it is a hardware generated request to fetch L3 TLB entry).
+
+CSALT is based on LRU as the cache replacemenr policy, but can also be integrated into other replacement algorithms. The 
+basic idea of CSALT is that, on a set-associative cache, it is possible that 
