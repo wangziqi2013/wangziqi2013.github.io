@@ -60,4 +60,9 @@ position in the list, the countre value goes with the element). When a cache acc
 of the current LRU stack element that corresponds to the way being hit. The meaning of counters in the LRU stack is that,
 on a cache managed by LRU, the sum of LRU position 0 to N - 1 is exactly the number of cache hits we will observe 
 under the same trace, if we "disable" way N to way W - 1. In other words, the LRU stack help us estimate the potential
-number of cache hits if we dedicate part of the ways to other purposes.
+number of cache hits if we dedicate part of the ways to other purposes. 
+
+CSALT works as follows. Within each epoch, two LRU stacks are maintained, one for data partition and another for TLB partition.
+At system startup, N is set as half of the total number of ways (i.e. divided evenly). On every cache hit, depending on 
+the partition, the corresponding LRU element counter from that partition's stack is incremented. At the end of the epoch,
+the hardware computes a target function for all possible values of N (from 0 to W - 1 where W is the number of ways). 
