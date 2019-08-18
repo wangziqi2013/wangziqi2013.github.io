@@ -44,7 +44,10 @@ data part, if the request is a regular load or store, or from the TLB entry part
 allocated for L3 TLB (i.e. it is a hardware generated request to fetch L3 TLB entry). When a block is to be evicted,
 the cache controller will prioritize eviction of blocks in the wrong partition, i.e. a data block in the TLB partition, 
 or a TLB block in the data partition. Either case, the distribution of blocks will converge to the state where all
-blocks in the data partition are data blocks, and so does the TLB partition.
+blocks in the data partition are data blocks, and so does the TLB partition. We will see from later sections that
+a block can reside in the wrong partition when the parameter N is adjusted.
 
-CSALT is based on LRU as the cache replacemenr policy, but can also be integrated into other replacement algorithms. The 
-basic idea of CSALT is that, on a set-associative cache, it is possible that 
+CSALT does not rely on a statically determined N to work correctly. Instead, the parameter N is determined dynamically 
+based on profiling results. The profiling process compares the performance of the current partitioning with a potentially
+better partitioning parameter N' within a time window, called an epoch. At the end of the epoch, if the latter is indeed 
+better, then the parameter N will be updated to be N', and the hardare will converge to the new parameter. 
