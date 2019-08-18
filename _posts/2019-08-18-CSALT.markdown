@@ -55,3 +55,9 @@ is based on the concept of LRU stack. The LRU stack is an ordered list, in which
 ordered before a less recently accessed block. The most recently used block is at the head of the list, while the least
 recently used block is at the tail (when LRU evicts a block from the cache, the block at the tail is selected). Each way 
 in a single set has a position in the LRU stack, and therefore, the stack size is identical to the number of ways.
+Every element in the LRU stack has a counter recording the number of hits on the element (note that when the element changes
+position in the list, the countre value goes with the element). When a cache access hits a block, we increment the counter 
+of the current LRU stack element that corresponds to the way being hit. The meaning of counters in the LRU stack is that,
+on a cache managed by LRU, the sum of LRU position 0 to N - 1 is exactly the number of cache hits we will observe 
+under the same trace, if we "disable" way N to way W - 1. In other words, the LRU stack help us estimate the potential
+number of cache hits if we dedicate part of the ways to other purposes.
