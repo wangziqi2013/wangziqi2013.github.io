@@ -75,4 +75,10 @@ In reality, a data cache miss and a TLB cache miss have different penalties. Thi
 target function in which the cache hit counters are simply sumed up. To differentiate between the importance of 
 data block hit and TLB block hit, we can enhance the target function by multiplying a "hit contribution" with the 
 sum of counters from the LRU list. For example, for L2 caches, if the data block misses the cache, then we need to
-pay the penalty of accessing the LLC or even the DRAM. This penalty can be computed by 
+pay the penalty of accessing the LLC or even the DRAM. This penalty can be computed using the LLC hit rate, LLC
+latency, and DRAM latency. The LLC hit rate can be obtained from the performance counter already in the PMU. We use the 
+ratio between the L2 miss penalty and the L2 access latency as the hit contribution (or "performance gain" in the paper),
+meaning that the longer a L2 data miss takes, the better it would be if we allocate more ways to the data partition.
+In the final target function, after suming up way 0 to N - 1 of the data LRU stack, we multiply this with the hit
+contribution. Similar things are also done for the TLB partition. The final maximization of the target function remains
+unchanged, which gives the parameter N for the next epoch.
