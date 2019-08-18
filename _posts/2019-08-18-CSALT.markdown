@@ -24,4 +24,10 @@ Previous solutions focus on reducing the number of page walks required for a tra
 each page walk access. To reduce page walks which require a number of memory access on different levels of the page
 table (typically four), previous researches propose using an in-memory L3 TLB which stores translation entries as 
 a hardware TLB does in order to avoid a page walk. The L3 TLB can be as large as 16MB, a capacity that exceeds all 
-hardware implementations. 
+hardware implementations. Some other researches also propose caching the intermediate page table entries in hardware
+caches, such that the latency of accessing the entry can be reduced to as fast as a regular cache access. 
+
+In this paper, we assume that TLB entries are cached by the L2 and LLC, sharing the same storage with data accesses.
+The paper also assumes that there is an underlying L3 TLB in the main memory, but also claims that this is not necessary,
+and that the cache partitioning scheme works on all designs that cache page table entries in the data cache.
+
