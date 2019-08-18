@@ -70,3 +70,9 @@ target function is defined as the sum of all counters for entries that will be a
 elaborate: it sums up counter for LRU element 0 to N - 1 in the data partition's stack, which is added with the sum of 
 LRU element 0 to (W - N - 1) in TLB partition's stack. The hardware then selects the N that maximizes the target function,
 and uses it as the N for the next epoch. 
+
+In reality, a data cache miss and a TLB cache miss have different penalties. This, however, is not reflected by the 
+target function in which the cache hit counters are simply sumed up. To differentiate between the importance of 
+data block hit and TLB block hit, we can enhance the target function by multiplying a "hit contribution" with the 
+sum of counters from the LRU list. For example, for L2 caches, if the data block misses the cache, then we need to
+pay the penalty of accessing the LLC or even the DRAM. This penalty can be computed by 
