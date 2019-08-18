@@ -50,4 +50,8 @@ a block can reside in the wrong partition when the parameter N is adjusted.
 CSALT does not rely on a statically determined N to work correctly. Instead, the parameter N is determined dynamically 
 based on profiling results. The profiling process compares the performance of the current partitioning with a potentially
 better partitioning parameter N' within a time window, called an epoch. At the end of the epoch, if the latter is indeed 
-better, then the parameter N will be updated to be N', and the hardare will converge to the new parameter. 
+better, then the parameter N will be updated to be N', and the hardare will converge to the new parameter. The profiling
+is based on the concept of LRU stack. The LRU stack is an ordered list, in which a more recently accessed block is 
+ordered before a less recently accessed block. The most recently used block is at the head of the list, while the least
+recently used block is at the tail (when LRU evicts a block from the cache, the block at the tail is selected). Each way 
+in a single set has a position in the LRU stack, and therefore, the stack size is identical to the number of ways.
