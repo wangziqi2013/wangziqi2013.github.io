@@ -65,4 +65,8 @@ number of cache hits if we dedicate part of the ways to other purposes.
 CSALT works as follows. Within each epoch, two LRU stacks are maintained, one for data partition and another for TLB partition.
 At system startup, N is set as half of the total number of ways (i.e. divided evenly). On every cache hit, depending on 
 the partition, the corresponding LRU element counter from that partition's stack is incremented. At the end of the epoch,
-the hardware computes a target function for all possible values of N (from 0 to W - 1 where W is the number of ways). 
+the hardware computes a target function for all possible values of N (from 0 to W - 1 where W is the number of ways). The
+target function is defined as the sum of all counters for entries that will be active if the parameter is set as N. To
+elaborate: it sums up counter for LRU element 0 to N - 1 in the data partition's stack, which is added with the sum of 
+LRU element 0 to (W - N - 1) in TLB partition's stack. The hardware then selects the N that maximizes the target function,
+and uses it as the N for the next epoch. 
