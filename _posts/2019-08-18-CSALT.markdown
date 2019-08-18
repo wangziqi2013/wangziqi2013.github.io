@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes CSALT, a cache partitioning scheme for unified L3 TLB and data on lower level caches. The paper 
+identifies that, on modern platform where virtualization is supported, running multiple virtual machines can overburden
+the TLB with excessive misses, resulting in a massive number of page walks. A page walk on today's 2-D page table 
+can take, in the worst case, 24 memory accesses (20 for accessing host page table for every guest physical address, 
+and 4 for the standard 4-level guest translation).
