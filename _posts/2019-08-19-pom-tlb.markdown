@@ -24,7 +24,10 @@ version_mgmt:
    how would the dirty bits be maintained? This is non-trivial since the dirty bit dictates whether the page
    should be written back to the disk when it is swapped out, and hence affect correctness.
 
-2. The paper did not mention how the 
+2. The paper did not mention how the bypassing predictor state is updated. It cannot be known whether an entry
+   exists in the L2/LLC without probing the cache, which is the case of predicting "not in the cache". I can only
+   imagine there being a bit in the TLB to indicate whether it has been cached, or the MMU probes the cache to 
+   verrify the existence of such entries in the background.
 
 This paper proposes Part-of-Memory TLB (POM-TLB), a novel design that adds a L3 TLB to the existing address translation
 hierarchy. The paper sets its context under virtualization in which address translation can be a major bottleneck
