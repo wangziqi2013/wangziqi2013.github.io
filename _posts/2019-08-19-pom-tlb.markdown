@@ -15,4 +15,8 @@ version_mgmt:
 
 This paper proposes Part-of-Memory TLB (POM-TLB), a novel design that adds a L3 TLB to the existing address translation
 hierarchy. The paper sets its context under virtualization in which address translation can be a major bottleneck
-due to 2-D page table walk and frequent context switch between VMs. 
+due to 2-D page table walk and frequent context switch between VMs. To solve this problem, previous researches proposed 
+several solutions, including adding a larger L2 TLB to increase the address coverage, using multiple hardware page walkers 
+to serve multiple requests from different cores concurrently (processors stall on TLB miss), and adding a cache dedicated 
+to intermediate entries of page table walk. These solutions, however, either add non-negligible hardware overheads and 
+verification cost, or pose new challenge and trade-offs to address. 
