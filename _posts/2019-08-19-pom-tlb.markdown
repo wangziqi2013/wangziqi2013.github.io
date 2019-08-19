@@ -19,4 +19,6 @@ due to 2-D page table walk and frequent context switch between VMs. To solve thi
 several solutions, including adding a larger L2 TLB to increase the address coverage, using multiple hardware page walkers 
 to serve multiple requests from different cores concurrently (processors stall on TLB miss), and adding a cache dedicated 
 to intermediate entries of page table walk. These solutions, however, either add non-negligible hardware overheads and 
-verification cost, or pose new challenge and trade-offs to address. 
+verification cost, or pose new challenge and trade-offs to address. For example, by making the L2 TLB larger, it is 
+expected that more entries can be cached at the same time. This, however, does not necessarily imply better performance, 
+since a larger L2 TLB takes longer to access, which is on the critical path of address translation. 
