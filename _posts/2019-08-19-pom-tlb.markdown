@@ -34,5 +34,8 @@ POM-TLB only stores TLB entries in the same format as in hardware TLB. A typical
 attribute bits (permissions), and other metadata (such as ASID and virtual machine ID). The paper assumes a 16 byte TLB
 entry, which means that a single 64 byte cache line can hold four entries. POM-TLB is organized as a 4-way set-associative 
 cache, and also operates similarly. The lower bits of virtual page number is first used as an index to select a set from
-the POM-TLB, and then the 64 byte set is read from the DRAM, and then associatively searched attempting to find a matching 
-entry. 
+the POM-TLB, and then the 64 byte set is read from the DRAM, and then associatively searched using higher bits, attempting 
+to find a matching entry. If a matching entry is found, then the result will be returned to higher level TLBs. A page 
+walk is initiated as usual if the POM-TLB misses. The physical address of the POM-TLB can be programmed and configured
+as part of the bootstraping process. The MMU uses the base address plus the offset of the set (64B * set index) to generate
+the address of the TLB entries.
