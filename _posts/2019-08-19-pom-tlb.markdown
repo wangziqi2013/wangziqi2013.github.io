@@ -64,4 +64,8 @@ size predictor.
 In addition to the page size predictor, the paper also proposes adding a cache bypassing predictor. The motivation is that
 sometimes, the frequency of TLB access in the L2 is far less than the frequency of data access. It is therefore expected 
 that only few or even none TLB entries will be cached in this case, and probing the L2/LLC with the generated address 
-is simply a waste of time. 
+is simply a waste of time. To recognize this pathetic case when it happens, we add another 512 entry. single-bit predictor
+to classify whether an access needs to bypass the cache hierarchy and directly go into the POM-TLB. Different from the 
+page size predictor for which we feed with the VA to be translated, in this case, we feed the bypassing predictor with
+9 bits from the generated TLB entry's address, which happens after the page size prediction (we need it to choose the 
+base address of POM-TLB). 
