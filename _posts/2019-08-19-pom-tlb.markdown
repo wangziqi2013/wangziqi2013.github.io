@@ -32,4 +32,7 @@ The L3 TLB is organized as follows. A chunk of memory in the DRAM is statically 
 for storing translation entries. Instead of caching intermediate results of page table walk as in the MMU cache proposal, 
 POM-TLB only stores TLB entries in the same format as in hardware TLB. A typical TLB entry consists of the VA, the PA,
 attribute bits (permissions), and other metadata (such as ASID and virtual machine ID). The paper assumes a 16 byte TLB
-entry, which means that a single 64 Byte cache line can hold four entries. 
+entry, which means that a single 64 byte cache line can hold four entries. POM-TLB is organized as a 4-way set-associative 
+cache, and also operates similarly. The lower bits of virtual page number is first used as an index to select a set from
+the POM-TLB, and then the 64 byte set is read from the DRAM, and then associatively searched attempting to find a matching 
+entry. 
