@@ -48,4 +48,10 @@ use the physical address generated as the request address.
 
 One problem with the baseline design of POM-TLB presented above is the handling of different page sizes, or huge pages. 
 One possible way is to allocate two non-overlapped memory regions from the DRAM, one for regular 4KB pages, and another
-for 1GB huge pages. 
+for 1GB huge pages. Without any special settings, for every translation request, we must probe the cache and POM-TLB with
+both possibilities, since the indexing bits of these two paging schemes differ for the same VA. Traditionally this could 
+be done either in parallel, which does not increase the length of the critical path but increases L2 access traffic, or 
+be done serially at the cost of longer translation latency. The paper proposes adding a hardware predictor to solve the 
+issue. The predictor has 512 single bit entries. 9 bits from the input VA to be translated are taken as the index into the 
+predictor. If the bit indicates small page (0 bit), then the address of the TLB entry is generated using the base address
+of small page TLB. Otherwise the MMU uses huge page TLB base address. Note that if the 
