@@ -28,4 +28,8 @@ especially beneficial for VMM, since a 2-D page walk can incur 24 cache misses (
 and 4 accessing the guest page table). Reducing the number of page walks, therefore, can save many unnecessary memory
 accesses, decreasing both the bandwidth requirement and the latency. 
 
-
+The L3 TLB is organized as follows. A chunk of memory in the DRAM is statically allocated from the physical address space 
+for storing translation entries. Instead of caching intermediate results of page table walk as in the MMU cache proposal, 
+POM-TLB only stores TLB entries in the same format as in hardware TLB. A typical TLB entry consists of the VA, the PA,
+attribute bits (permissions), and other metadata (such as ASID and virtual machine ID). The paper assumes a 16 byte TLB
+entry, which means that a single 64 Byte cache line can hold four entries. 
