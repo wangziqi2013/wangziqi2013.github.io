@@ -58,4 +58,10 @@ of small page TLB. Otherwise the MMU uses huge page TLB base address. Note that 
 be found in L2, LLC and the POM-TLB of the corresponding size, we do not re-probe the cache using another size's address. 
 Instead, the page walker is invoked, and the page walk can identify the correct size of the page, and sents its feedback to 
 the predictor for updating the predictor entry. This does not affect correctness, since the correct information can always 
-be found from the page table, and that TLB is just a cache of entries. 
+be found from the page table, and that TLB is just a cache of entries. The paper reports > 95% success rate of the page
+size predictor.
+
+In addition to the page size predictor, the paper also proposes adding a cache bypassing predictor. The motivation is that
+sometimes, the frequency of TLB access in the L2 is far less than the frequency of data access. It is therefore expected 
+that only few or even none TLB entries will be cached in this case, and probing the L2/LLC with the generated address 
+is simply a waste of time. 
