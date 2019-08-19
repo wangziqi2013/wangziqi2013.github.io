@@ -20,7 +20,11 @@ version_mgmt:
 **Lowlights:**
 
 1. The paper did not explain how dirty/accessed bits are maintained in different hierarchies, including L2/LLC
-   and the in-memoty POM-TLB. For example, if an access bypasses the cache, and goes directly into the 
+   and the in-memoty POM-TLB. For example, if a write access bypasses the cache, and goes directly into the POM-TLB,
+   how would the dirty bits be maintained? This is non-trivial since the dirty bit dictates whether the page
+   should be written back to the disk when it is swapped out, and hence affect correctness.
+
+2. The paper did not mention how the 
 
 This paper proposes Part-of-Memory TLB (POM-TLB), a novel design that adds a L3 TLB to the existing address translation
 hierarchy. The paper sets its context under virtualization in which address translation can be a major bottleneck
