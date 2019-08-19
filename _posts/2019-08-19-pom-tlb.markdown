@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlights:**
+
+1. Simple and intuitive design, especially the 4-way set-associative cache-like structure.
+
+**Lowlights:**
+
+1. The paper did not explain how dirty/accessed bits are maintained in different hierarchies, including L2/LLC
+   and the in-memoty POM-TLB. For example, if an access bypasses the cache, and goes directly into the 
+
 This paper proposes Part-of-Memory TLB (POM-TLB), a novel design that adds a L3 TLB to the existing address translation
 hierarchy. The paper sets its context under virtualization in which address translation can be a major bottleneck
 due to 2-D page table walk and frequent context switch between VMs. To solve this problem, previous researches proposed 
@@ -66,6 +75,6 @@ sometimes, the frequency of TLB access in the L2 is far less than the frequency 
 that only few or even none TLB entries will be cached in this case, and probing the L2/LLC with the generated address 
 is simply a waste of time. To recognize this pathetic case when it happens, we add another 512 entry. single-bit predictor
 to classify whether an access needs to bypass the cache hierarchy and directly go into the POM-TLB. Different from the 
-page size predictor for which we feed with the VA to be translated, in this case, we feed the bypassing predictor with
+page size predictor to which we feed with the VA to be translated, in this case, we feed the bypassing predictor with
 9 bits from the generated TLB entry's address, which happens after the page size prediction (we need it to choose the 
 base address of POM-TLB). 
