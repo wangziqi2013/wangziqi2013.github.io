@@ -22,3 +22,10 @@ to intermediate entries of page table walk. These solutions, however, either add
 verification cost, or pose new challenge and trade-offs to address. For example, by making the L2 TLB larger, it is 
 expected that more entries can be cached at the same time. This, however, does not necessarily imply better performance, 
 since a larger L2 TLB takes longer to access, which is on the critical path of address translation. 
+
+This paper takes a different approach by adding an L3 TLB in the DRAM to reduce the frequency of page walks. This is 
+especially beneficial for VMM, since a 2-D page walk can incur 24 cache misses (20 accessing the host page table,
+and 4 accessing the guest page table). Reducing the number of page walks, therefore, can save many unnecessary memory
+accesses, decreasing both the bandwidth requirement and the latency. 
+
+
