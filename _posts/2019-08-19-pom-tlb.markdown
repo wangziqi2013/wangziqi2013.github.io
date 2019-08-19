@@ -40,3 +40,12 @@ walk is initiated as usual if the POM-TLB misses. The physical address of the PO
 as part of the bootstraping process. The MMU uses the base address plus the offset of the set (64B * set index) to generate
 the address of the TLB entries. The paper chose 4-way set-associative TLB, because most DRAM's burst size is 64 bytes,
 exactly the size of four entries. This way, only one DRAM read command is needed to access a single set.
+
+To accelerate access latency of POM-TLB entries, the MMU injects the read request into the L2 cache every time it tries
+to read the POM-TLB. The L2 cache may keep the TLB set as regular data, which allows lower latency re-access of the 
+same entry if it has not been evicted. Most L2 caches nowadays are physically tagged, and therefore, the MMU can just
+use the physical address generated as the request address.
+
+One problem with the baseline design of POM-TLB presented above is the handling of different page sizes, or huge pages. 
+One possible way is to allocate two non-overlapped memory regions from the DRAM, one for regular 4KB pages, and another
+for 1GB huge pages. 
