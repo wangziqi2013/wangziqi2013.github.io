@@ -54,4 +54,8 @@ be done either in parallel, which does not increase the length of the critical p
 be done serially at the cost of longer translation latency. The paper proposes adding a hardware predictor to solve the 
 issue. The predictor has 512 single bit entries. 9 bits from the input VA to be translated are taken as the index into the 
 predictor. If the bit indicates small page (0 bit), then the address of the TLB entry is generated using the base address
-of small page TLB. Otherwise the MMU uses huge page TLB base address. Note that if the 
+of small page TLB. Otherwise the MMU uses huge page TLB base address. Note that if the entry of the predicted size cannot 
+be found in L2, LLC and the POM-TLB of the corresponding size, we do not re-probe the cache using another size's address. 
+Instead, the page walker is invoked, and the page walk can identify the correct size of the page, and sents its feedback to 
+the predictor for updating the predictor entry. This does not affect correctness, since the correct information can always 
+be found from the page table, and that TLB is just a cache of entries. 
