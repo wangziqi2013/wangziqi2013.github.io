@@ -26,3 +26,7 @@ there is a waste of storage, because entries are duplicated across many L2 TLBs.
 the capacity of each TLB is fixed at manufacturing time. In the run time, even if load imbalance occurs, which results in
 the scenario where some TLBs are not large enough to hold the working set, while some other TLBs are not fully utilized 
 at all. Such static allocation of resources may harm performance by limiting the maximum size of the working set at each core.
+Shared monolithic L2 TLB, while solving the entry duplication problem and resource allocation problem, on ther other 
+hand, suffers high access latency. The paper points that on Skylake architecture, the L2 TLB has 1536 entries, which 
+takes 9 cycles to access. Given that address translation is performed on all memory instructions, this can be a disadvantage
+especially for applications whose working sets are larger than the L1 TLB.
