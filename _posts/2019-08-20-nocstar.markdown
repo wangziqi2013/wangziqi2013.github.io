@@ -81,3 +81,11 @@ two options: Either the destination replies a negative signal to the requestor, 
 walk by its own, or the destination TLB controller performs the page walk, and then replies. The paper pointed out that
 the second option may cause load imbalancing, if many cores happen to request from the same slice at roughly the same time,
 which will cause several page walk requests to queue up at a single site. 
+
+A slice L2 TLB also implies a design change of the OS by complicating TLB shootdown, which happens when a page table entry 
+is modified and cached TLB entries become stale. In the case of private TLB, cores that may cache the modified entry are 
+notified via an Inter-Processor Interruption, which forces the processor to stop and flush the TLB. In the case of 
+sliced shared L2 TLB, if multiple processors are notified via IPI, and they all issue TLB flush instruction, all
+of these TLB flush will be sent to the corresponding slice, resulting in temporary congestion on the network. Recall
+that the network is not designed with bandwidth in mind, congestion in the network may aggravate the TLB shootdown latency
+which is already problematic for some workloads, causing performance degradation.
