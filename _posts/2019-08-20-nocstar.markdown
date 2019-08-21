@@ -51,4 +51,8 @@ Nocstar features circuit switching in which connections are set up before transm
 core, as a relaying node, has an arbitrater connected to it. Each arbitrater is connected with other cores via two lines, 
 one used to sense request signals, and the other used to deliver grant or denied reply signal. Before a TLB read request
 can be sent to a remote slice, the local TLB controller must set up the path by arbitrating with all other cores on the 
-path. 
+path. The TLB controller first computes a route from the requestor to the destination, and then it signals all cores on
+this path for a transmission. Concurrent requests from another core may attempt to acquire the same node, and this is 
+what arbitrator are designed for. The arbitrator, as the name suggests, will grant exactly one requests, and signals
+a granted message back to the requestor. The transmission may begin only if all grant signals from all nodes in the 
+path is received. Otherwise, the requestor needs to retry the next cycle until arbitration succeeds. 
