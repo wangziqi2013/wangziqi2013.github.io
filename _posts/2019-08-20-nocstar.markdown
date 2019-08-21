@@ -29,4 +29,10 @@ at all. Such static allocation of resources may harm performance by limiting the
 Shared monolithic L2 TLB, while solving the entry duplication problem and resource allocation problem, on ther other 
 hand, suffers high access latency. The paper points that on Skylake architecture, the L2 TLB has 1536 entries, which 
 takes 9 cycles to access. Given that address translation is performed on all memory instructions, this can be a disadvantage
-especially for applications whose working sets are larger than the L1 TLB.
+especially for applications whose working sets are larger than the L1 TLB. The last design, distributed L2 TLB, divides the 
+monolithic TLB into small slices. Each core is responsible for one slice, and addresses are mapped to slices using a 
+hash function (not necessarily just using the middle bits in the address). If an address maps to a remote TLB slice,
+the processor relies on the on-chip communication network to send the request and receive the response. This design
+has the obvious advantage that accesses to local TLB slice is as fast as a private TLB, while also being scalable as the 
+number of core increases. The problem, however, is that the distributed design incurs a network communication every
+time a remote access is required. This can further increase both the network traffic and access latency.
