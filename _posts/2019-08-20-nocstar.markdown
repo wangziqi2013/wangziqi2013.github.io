@@ -20,4 +20,9 @@ added to reduce the misses which result in costly page walks.
 
 The design of L2 TLB has become a problem, since the trade-off between access latency and capacity as for caches
 also appy to L2 TLB (which is organized similarly to a cache). This paper presents three existing designs of L2 TLB: private, 
-monolithic shared, and distributed shared. 
+monolithic shared, and distributed shared. All three have problems that can prevent them from being practical in future
+large systems. For private L2 TLB design, since each core can maintain a private copy of an entry in its own TLB,
+there is a waste of storage, because entries are duplicated across many L2 TLBs. In addition, in the private design,
+the capacity of each TLB is fixed at manufacturing time. In the run time, even if load imbalance occurs, which results in
+the scenario where some TLBs are not large enough to hold the working set, while some other TLBs are not fully utilized 
+at all. Such static allocation of resources may harm performance by limiting the maximum size of the working set at each core.
