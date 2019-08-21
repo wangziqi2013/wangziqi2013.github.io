@@ -36,3 +36,7 @@ the processor relies on the on-chip communication network to send the request an
 has the obvious advantage that accesses to local TLB slice is as fast as a private TLB, while also being scalable as the 
 number of core increases. The problem, however, is that the distributed design incurs a network communication every
 time a remote access is required. This can further increase both the network traffic and access latency.
+
+Nocstar, which stands for "NOCs for Scalable TLB Architecture", uses a dedicated, circuit-switching network infrastructure 
+to access remote TLB slices. Nocstar has a different design philosophy from typical NOCs in which messages are transferred 
+and relayed by intermediate nodes in the form of packets and filts. The design decision is made 
