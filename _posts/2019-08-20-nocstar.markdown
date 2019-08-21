@@ -88,4 +88,7 @@ notified via an Inter-Processor Interruption, which forces the processor to stop
 sliced shared L2 TLB, if multiple processors are notified via IPI, and they all issue TLB flush instruction, all
 of these TLB flush will be sent to the corresponding slice, resulting in temporary congestion on the network. Recall
 that the network is not designed with bandwidth in mind, congestion in the network may aggravate the TLB shootdown latency
-which is already problematic for some workloads, causing performance degradation.
+which is already problematic for some workloads, causing performance degradation. The paper suggests that, instead of 
+every core sending an invalidation to the L2 TLB using TLB invalidation instructions, only a small number of cores
+are designated the responsibility of L2 TLB flush. Other cores forward their requests to these cores, and they perform
+a collective shootdown on behalf of other cores. 
