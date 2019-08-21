@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Scalable Distributed Last-Level TLBs Using Low-Latency Interconnects"
+date:   2019-08-20 21:26:00 -0500
+categories: paper
+paper_title: "Scalable Distributed Last-Level TLBs Using Low-Latency Interconnects"
+paper_link: https://ieeexplore.ieee.org/document/8574547
+paper_keyword: TLB; NOCStar; NOC
+paper_year: MICRO 2018
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
