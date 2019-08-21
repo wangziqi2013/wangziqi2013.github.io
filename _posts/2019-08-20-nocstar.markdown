@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlight:**
+
+1. Very detailed description of the interconnection network based on MUX'ed inputs and outputs
+
+2. 
+
+**Lowlight:**
+
 This paper proposes Nocstar, a novel design for fast access of distributed L2 TLB. Traditionally, to perform address
 translation, when L1 TLB misses, the page walker will be initiated to query the in-memory page table. Due to the high
 latency of memory accesses and the long sequence of dependent operations during the page walk, an L2 TLB is further 
@@ -55,4 +63,8 @@ path. The TLB controller first computes a route from the requestor to the destin
 this path for a transmission. Concurrent requests from another core may attempt to acquire the same node, and this is 
 what arbitrator are designed for. The arbitrator, as the name suggests, will grant exactly one requests, and signals
 a granted message back to the requestor. The transmission may begin only if all grant signals from all nodes in the 
-path is received. Otherwise, the requestor needs to retry the next cycle until arbitration succeeds. 
+path is received. Otherwise, the requestor needs to retry the next cycle until arbitration succeeds. The winner of 
+arbitration is granted the next cycle to transmit its request to the destination. Internally, the transmission nodes
+are implemented as a set of multiplexers. Inputs are mux'ed from several source directions, and then routed to another 
+direction, which is then mux'ed again. Neither buffering nor forwarding happens within a node.
+
