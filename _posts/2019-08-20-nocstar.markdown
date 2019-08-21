@@ -46,3 +46,9 @@ previous paragraph, and therefore, they must obey very strict timing constraints
 concurrency in terms of number of requests waiting to be served when another request is sent to a slice, is low. Only a 
 few percentage of requests are processed by the same slice when there are other requests outstanding. The above observation
 implies a design that has both low latency for performance, and low bandwidth for economics. 
+
+Nocstar features circuit switching in which connections are set up before transmission can begin. To achieve this, each 
+core, as a relaying node, has an arbitrater connected to it. Each arbitrater is connected with other cores via two lines, 
+one used to sense request signals, and the other used to deliver grant or denied reply signal. Before a TLB read request
+can be sent to a remote slice, the local TLB controller must set up the path by arbitrating with all other cores on the 
+path. 
