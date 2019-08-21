@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Nocstar, a novel design for fast access of distributed L2 TLB. Traditionally, to perform address
+translation, when L1 TLB misses, the page walker will be initiated to query the in-memory page table. Due to the high
+latency of memory accesses and the long sequence of dependent operations during the page walk, an L2 TLB is further 
+added to reduce the miss rate which result in costly page walks.
