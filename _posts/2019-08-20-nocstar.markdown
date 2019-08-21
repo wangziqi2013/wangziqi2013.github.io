@@ -74,3 +74,10 @@ within one cycle, the transmission can be fulfilled in a single cycle (if not th
 what Nocstar is trying to achieve: low latency transmission without high bandwidth support (since requests could not 
 share the same node, differing from packet swicthing).
 
+On receiving the remote request, the TLB controller latches the request in its internal buffer, and begins accessing 
+the local TLB slice. If the access is a hit, then similarly, the destination TLB controller sets up a path back to the 
+requestor, and signals success together with entry data. If, on the other hand, the access results in a miss. There are 
+two options: Either the destination replies a negative signal to the requestor, indicating that it should conduct a page
+walk by its own, or the destination TLB controller performs the page walk, and then replies. The paper pointed out that
+the second option may cause load imbalancing, if many cores happen to request from the same slice at roughly the same time,
+which will cause several page walk requests to queue up at a single site. 
