@@ -23,3 +23,7 @@ This paper identifies two problems with inclusive caches. The first problem is t
 level, for example, when the sum of private cache sizes are larger than one-eighth of the shared cache, performance will begin to
 deteriorate compared with other caching policies. This problem can be solved by not requiring the shared cache to keep all
 blocks in private caches, hence freeing more space for data currently not in the cores' working set. The second problem
+is that the access pattern to the shared cache is very different from the pattern to core cache. To be specific, core cache
+accesses often have temporal locality which suggests that an address accessed in the past is likely to be re-accessed in the 
+near future. For shared caches, especially last-level caches, however, this is not true, since the temporal locality has
+been filtered out by upper level caches. 
