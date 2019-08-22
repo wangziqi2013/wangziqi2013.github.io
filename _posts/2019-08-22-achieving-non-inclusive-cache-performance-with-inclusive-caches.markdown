@@ -44,3 +44,6 @@ extra bonus of larger effective capacity, since all cache storage can be used to
 more bandwidth-hungry, because now every eviction from the upper level has to be written back into the lower level,
 since the lower level does not have the block. By contrary, inclusive and non-inclusive caches can simply discard a clean
 block when it is to be evicted, since the lower level cache definitely (or is likely to) contain the evicted block.
+In practice, exclusive caches are designed such that when the core cache misses, the fetched block is directly transferred
+to the core cache instead of inserting it into every level. Similarly, if a line is hit in a non-core cache (which 
+implies that an upper level cache misses), the line is invalidated before it is sent upwards.
