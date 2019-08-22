@@ -47,3 +47,9 @@ block when it is to be evicted, since the lower level cache definitely (or is li
 In practice, exclusive caches are designed such that when the core cache misses, the fetched block is directly transferred
 to the core cache instead of inserting it into every level. Similarly, if a line is hit in a non-core cache (which 
 implies that an upper level cache misses), the line is invalidated before it is sent upwards.
+
+The paper identifies the root cause of the problem being that the core cache being unable to communicate locality to
+lower level caches. As long as the lower level cache has a way of knowing a block is frequently accessed by the core
+cache, the block to be evicted can be preserved instead, and no back invalidation is needed. 
+
+The first scheme, called Temporal Locality Hints (TLH)
