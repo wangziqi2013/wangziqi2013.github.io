@@ -35,3 +35,8 @@ set is equal to or larger than the shared cache. In this case, due to frequent m
 application, cache blocks brought into the shared cache by the first application is likely to be invalidated shortly even 
 if the block is frequently accessed by the first application.
 
+Two alternatives are present which do not require the maintenance of inclusiveness. In the first solution, non-inclusive
+caches, cache blocks are not evicted from the core cache even if they are evicted from the shared cache. This preserves 
+locality in the core cache, at the cost of extra coherence traffic forwarded from the shared cache, since now the 
+shared cache is unsure whether a block exists in the private cache or not even if the address does not exist in the
+shared cache. 
