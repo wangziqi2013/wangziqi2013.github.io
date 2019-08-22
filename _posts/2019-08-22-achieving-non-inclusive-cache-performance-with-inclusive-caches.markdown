@@ -67,4 +67,7 @@ an invalidation anyway, so the amount of traffic barely change. The observation 
 in the LRU chain is a frequently accessed block, then after it has been evicted from the core cache, it is expected
 that the core cache will access it shortly, which misses the core cache. When the cache miss is sent to the shared
 cache, then very naturally, the block will be moved to the head of the LRU chain, which prevents it from being evicted
-too soon. 
+too soon. The drawback of this scheme, however, is that the cache block must be re-used in the core cache between the 
+window from the eviction of P and the next eviction of Q. If the core cache access of block Q only happens after Q has
+been evicted from the shared cache, this access will still be a miss as in the normal case.
+
