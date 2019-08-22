@@ -29,5 +29,9 @@ near future. For shared caches, especially last-level caches, however, this is n
 been filtered out by upper level caches. A frequently accessed block in the core cache will remain unaccessed for a long 
 time in lower level caches, which will gradually move to the LRU position, and finally be evicted. The eviction of the 
 block in the shared cache, however, will inevitably result in the eviction of the block from core caches also, since 
-inclusiveness (and hence correct coherence) must be maintained. 
+inclusiveness (and hence correct coherence) must be maintained. The paper points out that this phenomenon is particularly
+harmful, when an application whose working set fits into L1 is running in the system with another application whose working 
+set is equal to or larger than the shared cache. In this case, due to frequent misses in the core cache of the second 
+application, cache blocks brought into the shared cache by the first application is likely to be invalidated shortly even 
+if the block is frequently accessed by the first application.
 
