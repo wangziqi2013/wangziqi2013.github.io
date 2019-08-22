@@ -78,4 +78,8 @@ as follows. If the block to be evicted is in multiple core caches, the block is 
 accessed block, and will be moved to the head of the LRU chain. This process may go several rounds before a 
 block is found as the eviction candidate, which is not necessarily on the critical path, since a cache miss is
 being handled at that moment (recall that evictions are often caused by capacity misses, which requires fetching the 
-data from lower levels anyway). The shared
+data from lower levels anyway). The shared cache can either query the status of the block by looking up the coherence 
+directory (which records which cores may have the block, but due to the fact that clean blocks are evicted silently in
+inclusive caches, this may not work as good as the alternative), or sending an explicit request to all upper level
+caches. The total number of messages slightly increases, as the query may proceed for several rounds. Core caches,
+however, enjoy the lowest access latency possible since no unnecessary invalidation happens.
