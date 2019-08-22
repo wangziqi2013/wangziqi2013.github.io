@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+Non-inclusive and exclusive caches are often used as a replacement for the classical inclusive cache in the cache hierarchy,
+aiming for better performance. The classical inclusive cache hierarchy mandates that all cache blocks in upper level caches
+must be present also in the shared cache. The last level cache hence stores a super set of blocks that are in the private caches.
+On a coherence request, if an address cannot be found in the shared cache, then the request will not be forwarded to higher 
+level caches, since the shared cache essentially acts as a coherence filter.
