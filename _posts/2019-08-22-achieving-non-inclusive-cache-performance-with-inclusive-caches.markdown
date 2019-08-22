@@ -26,4 +26,8 @@ blocks in private caches, hence freeing more space for data currently not in the
 is that the access pattern to the shared cache is very different from the pattern to core cache. To be specific, core cache
 accesses often have temporal locality which suggests that an address accessed in the past is likely to be re-accessed in the 
 near future. For shared caches, especially last-level caches, however, this is not true, since the temporal locality has
-been filtered out by upper level caches. 
+been filtered out by upper level caches. A frequently accessed block in the core cache will remain unaccessed for a long 
+time in lower level caches, which will gradually move to the LRU position, and finally be evicted. The eviction of the 
+block in the shared cache, however, will inevitably result in the eviction of the block from core caches also, since 
+inclusiveness (and hence correct coherence) must be maintained. 
+
