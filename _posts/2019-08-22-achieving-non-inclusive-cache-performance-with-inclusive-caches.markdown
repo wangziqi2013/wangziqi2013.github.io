@@ -71,3 +71,11 @@ too soon. The drawback of this scheme, however, is that the cache block must be 
 window from the eviction of P and the next eviction of Q. If the core cache access of block Q only happens after Q has
 been evicted from the shared cache, this access will still be a miss as in the normal case.
 
+The last scheme is called Query Based Selection (QBS), which avoids invalidation of blocks in upper level caches
+which can increase the latency of such blocks. Instead, QBS lets the shared cache query the state of a block when
+it is to be evited, and assesses whether the block is suitable as a candicate for eviction. The assessment works 
+as follows. If the block to be evicted is in multiple core caches, the block is considered as a frequently
+accessed block, and will be moved to the head of the LRU chain. This process may go several rounds before a 
+block is found as the eviction candidate, which is not necessarily on the critical path, since a cache miss is
+being handled at that moment (recall that evictions are often caused by capacity misses, which requires fetching the 
+data from lower levels anyway). The shared
