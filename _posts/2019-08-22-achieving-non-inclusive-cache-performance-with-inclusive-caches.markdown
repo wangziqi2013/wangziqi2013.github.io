@@ -39,4 +39,8 @@ Two alternatives are present which do not require the maintenance of inclusivene
 caches, cache blocks are not evicted from the core cache even if they are evicted from the shared cache. This preserves 
 locality in the core cache, at the cost of extra coherence traffic forwarded from the shared cache, since now the 
 shared cache is unsure whether a block exists in the private cache or not even if the address does not exist in the
-shared cache. 
+shared cache. The other option is exclusive cache, which explicitly disallows inclusion. Exclusive caches have the 
+extra bonus of larger effective capacity, since all cache storage can be used to store non-duplicate blocks. It is, however, 
+more bandwidth-hungry, because now every eviction from the upper level has to be written back into the lower level,
+since the lower level does not have the block. By contrary, inclusive and non-inclusive caches can simply discard a clean
+block when it is to be evicted, since the lower level cache definitely (or is likely to) contain the evicted block.
