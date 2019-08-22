@@ -63,4 +63,8 @@ block before it is about to be evicted. ECI operates as follows. When a block P 
 probably because it is at the bottom of the LRU chain, the cache controller selects the next block Q to be evicted
 (e.g. the second bottom block in the LRU chain), and then evicts the block from the upper level cache (if it is cached;
 Otherwise do nothing). The two eviction messages can be combined into one because the upper level cache will receive 
-an invalidation anyway, so the amount of traffic barely change. The observation is that
+an invalidation anyway, so the amount of traffic barely change. The observation is that, if the second-last block 
+in the LRU chain is a frequently accessed block, then after it has been evicted from the core cache, it is expected
+that the core cache will access it shortly, which misses the core cache. When the cache miss is sent to the shared
+cache, then very naturally, the block will be moved to the head of the LRU chain, which prevents it from being evicted
+too soon. 
