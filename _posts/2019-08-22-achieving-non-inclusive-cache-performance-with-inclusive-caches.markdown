@@ -54,6 +54,13 @@ cache, the block to be evicted can be preserved instead, and no back invalidatio
 
 The first scheme, called Temporal Locality Hints (TLH), uses a straightforward method of sending every L1 hit to 
 lower levels. The lower level caches, upon receiving this message, moves the corresponding block to the head of 
-the LRU chain. Although simple, the scheme generates huge amount og traffic to all levels of caches, since L1 hits 
-are usually filtered away from lower levels in normal operation. The paper indicates that although this scheme is
+the LRU chain. Although simple, the scheme generates huge amount of traffic to all levels of caches, since L1 hits 
+are usually filtered away from lower levels during normal operation. The paper indicates that although this scheme is
 not practical in any sense, it is perfect as an upper bound to see how well the other two schemes perform.
+
+The second scheme, Early Care Invalidation (ECI), forces the core cache to explicitly request for a frequently accessed 
+block before it is about to be evicted. ECI operates as follows. When a block P is to be evicted from a non-core cache, 
+probably because it is at the bottom of the LRU chain, the cache controller selects the next block Q to be evicted
+(e.g. the second bottom block in the LRU chain), and then evicts the block from the upper level cache (if it is cached;
+Otherwise do nothing). The two eviction messages can be combined into one because the upper level cache will receive 
+an invalidation anyway, so the amount of traffic barely change. The observation is that
