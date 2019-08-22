@@ -52,4 +52,8 @@ The paper identifies the root cause of the problem being that the core cache bei
 lower level caches. As long as the lower level cache has a way of knowing a block is frequently accessed by the core
 cache, the block to be evicted can be preserved instead, and no back invalidation is needed. 
 
-The first scheme, called Temporal Locality Hints (TLH)
+The first scheme, called Temporal Locality Hints (TLH), uses a straightforward method of sending every L1 hit to 
+lower levels. The lower level caches, upon receiving this message, moves the corresponding block to the head of 
+the LRU chain. Although simple, the scheme generates huge amount og traffic to all levels of caches, since L1 hits 
+are usually filtered away from lower levels in normal operation. The paper indicates that although this scheme is
+not practical in any sense, it is perfect as an upper bound to see how well the other two schemes perform.
