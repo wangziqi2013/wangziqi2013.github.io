@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SpaceJMP: Programming with Multiple Virtual Address Spaces"
+date:   2019-08-23 18:11:00 -0500
+categories: paper
+paper_title: "SpaceJMP: Programming with Multiple Virtual Address Spaces"
+paper_link: https://dl.acm.org/citation.cfm?id=2872366
+paper_keyword: Virtual Memory
+paper_year: ASPLOS 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
