@@ -17,4 +17,7 @@ This paper proposes SpaceJMP, which is a software-only framework for supporting 
 kernels. Traditionally, a virtual address space (VAS) is a second-class object in the operating system, which is only 
 one of the resources held within a certain process. The model of operation works well until recently when big-data workloads
 of tens of TBs in size begin to emerge. The paper identifies three scenarios in which a single VAS may not be sufficient
-to support such workloads. 
+to support such workloads. First, as workload sizes are becoming larger, the virtual address space size remains unchanged 
+over the past few years. On current platforms, most VAS only has 48 bits, which can support 256TB of virtual memory. If 
+the size of the working set grows to near this limit, the memory allocator is no longer able to allocate from the VAS
+due to exhasuatation of VAS.
