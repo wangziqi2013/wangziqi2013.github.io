@@ -19,5 +19,14 @@ one of the resources held within a certain process. The model of operation works
 of tens of TBs in size begin to emerge. The paper identifies three scenarios in which a single VAS may not be sufficient
 to support such workloads. First, as workload sizes are becoming larger, the virtual address space size remains unchanged 
 over the past few years. On current platforms, most VAS only has 48 bits, which can support 256TB of virtual memory. If 
-the size of the working set grows to near this limit, the memory allocator is no longer able to allocate from the VAS
-due to exhasuatation of VAS.
+the size of the working set grows beyond this limit, the memory allocator is no longer able to allocate from the VAS
+due to exhasuatation of addresses (and not to mention the OS, stack and code themselves occupy part of the VAS). 
+The second scenario occurs when the address space migrates between different machine sessions. For example, when a
+non-volatile device is installed in the system and mapped to part of the address space, it is required that pointer-based 
+data structures must either use special representation of pointers (e.g. the pointer stores the offset from the mapped 
+region rather than VA), or be mapped to the same VA on all sessions, due to the fact that pointers in these data structures
+store virtual addresses, which is the offset from zero address, rather than the mapped region. When the mapped device is 
+installed on another machine (or even another process session), it is possible that the base address of the region
+will differ from it used to be, causing program error since all pointers now refer to undefined objects.
+If, on the other hand, that the address space of the NVM device can always start at absolute zero (i.e. it has its own
+address space), no matter how the VAS migrates, pointer semantics are always consistent.
