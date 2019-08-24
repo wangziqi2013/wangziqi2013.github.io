@@ -29,4 +29,8 @@ store virtual addresses, which is the offset from zero address, rather than the 
 installed on another machine (or even another process session), it is possible that the base address of the region
 will differ from it used to be, causing program error since all pointers now refer to undefined objects.
 If, on the other hand, that the address space of the NVM device can always start at absolute zero (i.e. it has its own
-address space), no matter how the VAS migrates, pointer semantics are always consistent.
+address space), no matter how the VAS migrates, pointer semantics are always consistent. The last scenario is when 
+processes share part of their address space. This has already been implemented on current systems. The paper, however,
+claims that these interfaces are either inefficient (overhead of building page tables) or difficult to use (coupled with
+the file system interface, for example, in mmap()). 
+
