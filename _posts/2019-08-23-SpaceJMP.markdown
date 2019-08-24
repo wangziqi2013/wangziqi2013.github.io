@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes SpaceJMP, which is a software-only framework for supporting address space switching in operating system
+kernels. Traditionally, a virtual address space (VAS) is a second-class object in the operating system, which is only 
+one of the resources held within a certain process. The model of operation works well until recently when big-data workloads
+of tens of TBs in size begin to emerge. The paper identifies three scenarios in which a single VAS may not be sufficient
+to support such workloads. 
