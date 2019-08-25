@@ -34,3 +34,7 @@ processes share part of their address space. This has already been implemented o
 claims that these interfaces are either inefficient (overhead of building page tables) or difficult to use (coupled with
 the file system interface, for example, in mmap()). 
 
+The paper proposes decoupling the one-to-one correspondence between processes and VASes, which allows VAS to be created 
+as a first-class object as indicated by a process. Furthermore, processes are also allowed to detach from the current 
+VAS, and attach to a different VAS, which is equivalent to "swapping out" data that is not currently used in a more 
+coarse-grained (and therefore, more efficient) manner, enabling the same address space to be reused.
