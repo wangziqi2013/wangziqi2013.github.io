@@ -38,3 +38,10 @@ The paper proposes decoupling the one-to-one correspondence between processes an
 as a first-class object as indicated by a process. Furthermore, processes are also allowed to detach from the current 
 VAS, and attach to a different VAS, which is equivalent to "swapping out" data that is not currently used in a more 
 coarse-grained (and therefore, more efficient) manner, enabling the same address space to be reused.
+
+Due to the fact that no matter how VASes are switched in and out, some basic address mapping must be kept consistent, such
+as user application code, application stack, OS data structure, etc., because otherwise, the behavior is undefined.
+To this end, the paper proposes encapsulating these important mappings as "segments". A segment can be thought of as 
+a collection of VA to PA mapping on a consecutive range of VAs. An application's context in the traditional sense
+consists of several segments on non-overlapping addresses. Since a VAS can be shared between different processes, segments 
+are also further divided into two kinds: public and private. 
