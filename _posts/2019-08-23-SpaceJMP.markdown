@@ -50,3 +50,8 @@ with private mappings. Private mappings, on the other hand, are process-specific
 on some addresses with colliding with each other, which provides a chance for them to "paste" their own mappings such as 
 code and stack, onto a shared VAS. Private mappings between processes never collide, while inside a process they must
 still only map distinct addresses.
+
+In SpaceJMP, segments and VASes are both created via library APIs. Segments are created by specifying their base addresses
+and sizes. After created, the segment can be used to represent an address range mapped by the current VAS. VASes can be 
+created in a similar way (without specifying the base address and size). The creation of both VASes and segments return
+an object handler as the argument for future operations on these objects.
