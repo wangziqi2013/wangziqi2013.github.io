@@ -67,4 +67,11 @@ is similar to a context switch except that it never switches out the current con
 no register context is saved. VASes are maintained by the OS as first-class objects, which means that even when all processes
 are detached from the VAS, they can still exist within a namespace and be found by calling vas_find().
 
-The implementation of SpaceJMP involves 
+The implementation of SpaceJMP involves creating and destroying extra page tables for processes. Instead of having strictly
+one page table per process, with SpaceJMP, each process can possess multiple page tables, each representing a VAS it has 
+attached to (and these page tables may be cached by the kernel to make future attachment faster). On creation of a VAS,
+a null page table is initialized as the base mapping (i.e. all mappings are invalid until segments are pasted). On the 
+attachment of a public segment, the page table for the VAS is modified to incorporate the entries from the page table
+of the calling process. On the attachment of a private segment, since they are highly likely to collide among processes
+(since processes application code are all mapped to the same base address in most systems), no global change can be made
+on the VAS's page table. 
