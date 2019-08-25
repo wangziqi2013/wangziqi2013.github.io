@@ -44,4 +44,9 @@ as user application code, application stack, OS data structure, etc., because ot
 To this end, the paper proposes encapsulating these important mappings as "segments". A segment can be thought of as 
 a collection of VA to PA mapping on a consecutive range of VAs. An application's context in the traditional sense
 consists of several segments on non-overlapping addresses. Since a VAS can be shared between different processes, segments 
-are also further divided into two kinds: public and private. 
+are also further divided into two kinds: public and private. Address mappings contained by public segments can be seen
+by all sharing processed on a certain VAS. No two public segments can overlap in the address they map, nor can they overlap
+with private mappings. Private mappings, on the other hand, are process-specific. Each process can has its own private mapping
+on some addresses with colliding with each other, which provides a chance for them to "paste" their own mappings such as 
+code and stack, onto a shared VAS. Private mappings between processes never collide, while inside a process they must
+still only map distinct addresses.
