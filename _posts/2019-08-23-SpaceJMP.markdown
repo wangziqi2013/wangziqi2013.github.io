@@ -64,4 +64,7 @@ globally visible public segments to a VAS using seg_attach(), as long as they us
 the session handler as the VAS argument. Attaching a public segment may not always succeed, since a previous attachment
 of segment may have already used that part of the address space. Processes switch into the new VAS using vas_switch() which
 is similar to a context switch except that it never switches out the current control flow and exeution stack and that
-no register context is saved. 
+no register context is saved. VASes are maintained by the OS as first-class objects, which means that even when all processes
+are detached from the VAS, they can still exist within a namespace and be found by calling vas_find().
+
+The implementation of SpaceJMP involves 
