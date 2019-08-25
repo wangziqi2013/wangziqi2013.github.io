@@ -59,4 +59,9 @@ the vas_attach() interface, specifying the VAS by its object handler. This funct
 of which will be explained in the following. After attaching to a VAS and before switching to it, the process can "paste"
 private segments into the current session using seg_attach(). The arguments to seg_attach() are the segment's object handler,
 and the session handler for the current process. This attach operation allows the process to access its execution context
-after switching to the new VAS by mapping the same VAs to the same physical pages in the new VAS. 
+after switching to the new VAS by mapping the same VAs to the same physical pages in the new VAS. Processes can also attach
+globally visible public segments to a VAS using seg_attach(), as long as they use the VAS's object handler instead of 
+the session handler as the VAS argument. Attaching a public segment may not always succeed, since a previous attachment
+of segment may have already used that part of the address space. Processes switch into the new VAS using vas_switch() which
+is similar to a context switch except that it never switches out the current control flow and exeution stack and that
+no register context is saved. 
