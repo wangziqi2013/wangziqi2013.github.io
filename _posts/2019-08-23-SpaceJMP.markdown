@@ -74,4 +74,9 @@ a null page table is initialized as the base mapping (i.e. all mappings are inva
 attachment of a public segment, the page table for the VAS is modified to incorporate the entries from the page table
 of the calling process. On the attachment of a private segment, since they are highly likely to collide among processes
 (since processes application code are all mapped to the same base address in most systems), no global change can be made
-on the VAS's page table. 
+on the VAS's page table. Instead, the kernel performs what is similar to a "copy-on-write", which duplicates the current 
+page table of the VAS, and then copies entries from the calling process's current page table into the duplication. 
+Recall that the session handler instead of VAS handler is used for attaching a private segment, the OS simply relates the 
+customized page table to the session handler, and every time the process attaches to the VAS, the corresponding page table
+from the session object will be used. Furthermore, the page table will be updated if public segments are attached after the 
+creation of the duplicated page table.
