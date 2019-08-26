@@ -89,3 +89,5 @@ when the instruction j that reads from i is decoded and if instruction i's regis
 register file, since it is expected that the value in R is no longer needed after j reads it, instruction j's destination 
 register will be assigned as R. Recall that every time a register is reused, the version counter will be incremented and 
 the one bit flag will be set. 
+
+**Not going to finish this one**
