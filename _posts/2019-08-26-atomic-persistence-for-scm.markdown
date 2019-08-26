@@ -58,4 +58,7 @@ changing the frontend cache hierarchy, this must be done by software routines. O
 to adding the unique ID into the internal list, the memory controller also allocate a log buffer for the newly started 
 transaction. The log buffer is located at a well-known address on the NVM such that the recovery handler can find right
 after the post-crash reboot, and the paper suggests that they can be maintained like a linked list. Log entries are only
-flushed into the log buffer at the end of the transaction using streaming write instructions. 
+flushed into the log buffer at the end of the transaction using streaming write instructions. Compared with undo logging
+in which dirty blocks are flushed back to NVM on commit point, flushing redo log entries can achieve higher speed, since 
+these writes are on consecutive addresses, and can be coalesced in the store buffer. The CloseWrap() library call also
+writes a end-of-transaction mark after flushing all log entries. 
