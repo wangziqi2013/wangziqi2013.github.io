@@ -39,4 +39,9 @@ The first is a single bit flag to indicate whether the value of the physical reg
 all instructions read from the register file at issue stage, rather than reading from the broadcasted value when the 
 dependent instruction commits). It is cleared whenever the physical register is allocated from the free list, and set when
 an instruction reads it in the issue stage. The second field is a 2-bit counter, which represents the version of the 
-content of the physical register. This 2-bit counter is critical for identifying which version of data is 
+content of the physical register. This 2-bit counter is critical for identifying which version of data is read when an
+instruction commits and wakes up dependent instructions in the instruction window, because otherwise, if instruction
+i1, i2, i3 both read from and write into physical register R, then when i1 commits, it will broadcast to the instruction
+the status change of R. If the version of R is not specified in this broadcast, both i2 and i3 might be awaken since they
+both have a source register R. As indicated by the above example, when an instruction is allocated register R as the 
+destination register
