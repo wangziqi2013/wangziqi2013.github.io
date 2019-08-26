@@ -70,3 +70,10 @@ which are consistent with the ordering of transaction commit (commits are serial
 The memory controller selects the first entry in the log buffer list, and copies the content of the log entry into the 
 address indicated by the entry. A log buffer is removed from the retirement list after it has been fully migrated. In
 addition, the ID of the transaction is also removed from the internal ID list.
+
+When a dirty block is evicted from the LLC, we check whether the physical address is in the NVM. If positive, the 
+block will be stored into a victim cache, which can be implemented as a highly associative hardware cache.
+The entry in the victim cache serves as a temporary source of dirty data when a memory request misses in the LLC.
+A block can be discarded by the victim cache after its transaction has been fully migrated. Instead of tagging every
+cache line in the hierarchy with the ID of the transaction that writes the block, this paper suggests that we 
+only take a snapshot of the internal transaction ID list when the block is evicted.
