@@ -25,4 +25,6 @@ already also been committed since the ROB commits instructions in the dynamic pr
 This renaming scheme, however, are over-conservative when some values are only used once. For example, given that instruction
 i is the last instruction that uses value stored in physical register R. After i reads from R at issue stage, the physical
 register R can be released right away, because it is guaranteed that no one else can read from it even if R has not been 
-renamed by another instruction. 
+renamed by another instruction. Even better, if such instruction i can be identified as early as it is decoded, and if i
+produces a value itself, then the renaming for instruction i could be as simple as assigning R as a destination register 
+to i, saving an extra allocation from the physical register file. 
