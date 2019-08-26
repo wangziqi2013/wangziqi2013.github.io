@@ -37,7 +37,7 @@ may increase the space overhead and power consumption exponentially.
 This paper proposes extending the register file as follows. Each physical register is extended with two extra fields.
 The first is a single bit flag to indicate whether the value of the physical register has been read (note that we assume
 all instructions read from the register file at issue stage, rather than reading from the broadcasted value when the 
-dependent instruction commits). It is cleared whenever the physical register is allocated from the free list, and set when
+dependent instruction commits). It is cleared whenever the physical register is allocated to an instruction, and set when
 an instruction reads it in the issue stage. The second field is a 2-bit counter, which represents the version of the 
 content of the physical register. This 2-bit counter is critical for identifying which version of data is read when an
 instruction commits and wakes up dependent instructions in the instruction window, because otherwise, if instruction
@@ -50,11 +50,21 @@ ROB as the version of data. When an instruction commits, it broadcasts the name 
 those whose in-ROB register names and versions match the broadcasted value will be woken up.
 
 The proposed register renaming scheme works as follows. When an value-producing instruction enters the decoding/renaming 
-stage of the pipeline, a hardware predictor is invoked to predict whether the instruction will only have one consumers; 
+stage of the pipeline, we first check whether any of the source operands is accessed first time after it is produced by
+checking the one bit flag of the physical register. If the bit is clear, then we know the source has not been read before,
+and we set the bit to notify later instructions.
+If the instruction indeed is the first reader of one of its source operands, the second check is performed to see if the 
+instruction is also the last reader of the same source operand. There are two cases. In the first case, the instruction's 
+destination register is identical to the aforementioned source
+
+a hardware predictor is invoked to predict whether the instruction will only have one consumers; 
 If positive, the predictor also try to predict the number of sharers of the same register. Note that by saying "sharers" 
 on the same physical register R, we mean (1) these instructions all produce a value, which is mapped to R, and (2) they 
 all read physical register R as source operands, and (3) they are all the last consumer of physical register R. The number
 of sharers are used as an optimization that we will discuss below. If the instruction is predicted to have only one
 consumer and that a new physical register must be allocated, then the physical register for this instruction will be 
 allocated from a special checkpointed part of the register file. Assuming that the prediction for instruction i is correct, 
-when the instruction j that reads from i
+when the instruction j that reads from i is decoded and if instruction i's register is from the special area of physical
+register file, since it is expected that the value in R is no longer needed after j reads it, instruction j's destination 
+register will be assigned as R. Recall that every time a register is reused, the version counter will be incremented and 
+the one bit flag will be set. 
