@@ -25,7 +25,8 @@ version_mgmt:
 3. The paper did not say how the beginning of the "redefinition-reuse" chain is started. We need to detect the beginning of such
    sequence and determine the length of the chain to allocate a physical register from the checkpointed area. We also need to
    detect whether an instruction continues the chain by: (1) reading one of the previously defined physical register; and 
-   (2) defining a new register which is predicted to be not 
+   (2) defining a new register which is predicted to be only reused once. The paper apparently did not mention how (1) is 
+   satisfied. And also if (2) is not satisfied, the chain will stop expanding.
 
 This paper proposes a new register renaming algorithm which takes advatage of the observation that some values are only 
 used once after they are produced. In traditional register renaming algorithms, a new physical register is always allocated
