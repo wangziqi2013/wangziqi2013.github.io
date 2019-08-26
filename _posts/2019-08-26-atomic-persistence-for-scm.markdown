@@ -89,4 +89,7 @@ Non-transactional stores can be wrapped as a single-op transaction by the softwa
 however, later points out that this is sub-optimal since the software overhead of logging and migrating the single store
 is an overkill. To optimize non-transaction store, the paper proposes adding an extra bit in the victim cache. The bit is 
 cleared initially when a block is received from the LLC. The bit of the corresponding block is set when the memory controller 
-migrates a log entry to its home location. 
+migrates a log entry to its home location. A non-transactional store is treated in exact the same way as a transactional 
+store except that it does not generate log entries and when the victim cache decided to invalidate the entry. Instead of 
+being invalidated, the cache entry will be written back to the home location if the bit is clear, because we know no log 
+entry is written back.
