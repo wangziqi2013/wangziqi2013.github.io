@@ -48,3 +48,9 @@ destination register, it takes the counter value as the version of data to be wr
 increments the counter. When an instruction reads R as a source operand, the current version should also be stored into
 ROB as the version of data. When an instruction commits, it broadcasts the name of R together with the version. Only
 those whose in-ROB register names and versions match the broadcasted value will be woken up.
+
+The proposed register renaming scheme works as follows. When an value-producing instruction enters the decoding/renaming 
+stage of the pipeline, a hardware predictor is invoked to predict whether the instruction will only have one consumers; 
+If positive, the predictor also try to predict the number of sharers of the same register. Note that by saying "sharers" 
+on the same physical register R, we mean (1) these instructions all produce a value, which is mapped to R, and (2) they 
+all read physical register R as source operands, and (3) they are all the last consumer of physical register R. 
