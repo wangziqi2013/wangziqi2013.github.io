@@ -39,5 +39,9 @@ a timely manner.
 This paper proposes adding a dedicated victim cache for storing overflowed blocks from the LLC. The victim cache is responsible
 for holding cache blocks evicted from the LLC, and at the same time, serving LLC misses. No log entry walking is necessary
 with a victim cache. In the rare scenario where the victim cache is not sufficient to hold all dirty blocks, a DRAM backed
-mapping table is used to locate the most recent dirty lines.
+mapping table is used to locate the most recent dirty lines. 
 
+This paper assumes a persistent transaction model. Applications are written in a transactional manner such that persistent
+stores that must be committed atomically are wrapped by a special code block. During compilation, the code block will be 
+translated to two library calls: OpenWrap() and CloseWrap(). Store instructions between the call are translated to 
+library call wrapStore(), which generates the log entry in software (without flushing them at once).
