@@ -22,4 +22,7 @@ a mapping table, enabling background persistence of different "layers" or "versi
 be kept crash-consistent such that the after-crash recovery routine can still access persisted data. Such a change also
 involves non-trivial hardware change and run time metadata cost. 
 
-The paper
+The paper proposes using redo logging to implement atomic persistent transactions. Two problems naturally exist with 
+redo logging. First, although redo logging does not require the write ordering between log entries and dirty data 
+(since dirty data can always be replayed by applying log entries), dirty data must be kept away from the NVM device
+before the transaction is fully committed, because otherwise, there is no way of rolling back these partial changes.
