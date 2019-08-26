@@ -44,4 +44,7 @@ instruction commits and wakes up dependent instructions in the instruction windo
 i1, i2, i3 both read from and write into physical register R, then when i1 commits, it will broadcast to the instruction
 the status change of R. If the version of R is not specified in this broadcast, both i2 and i3 might be awaken since they
 both have a source register R. As indicated by the above example, when an instruction is allocated register R as the 
-destination register
+destination register, it takes the counter value as the version of data to be written (and stores it in the ROB), and 
+increments the counter. When an instruction reads R as a source operand, the current version should also be stored into
+ROB as the version of data. When an instruction commits, it broadcasts the name of R together with the version. Only
+those whose in-ROB register names and versions match the broadcasted value will be woken up.
