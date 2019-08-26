@@ -29,8 +29,14 @@ renamed by another instruction. Even better, if such instruction i can be identi
 produces a value itself, then the renaming for instruction i could be as simple as assigning R as a destination register 
 to i, saving an extra allocation from the physical register file. 
 
+The paper identifies that, as the instruction window keeps scaling on newer systems, the size of the physical register file
+must keep growing as well, to avoid stalling the processor at decode stage as a result of lacking registers. Scaling the
+physical register file, however, is a difficult task, since register files are generally multi-ported. Adding extra registers
+may increase the space overhead and power consumption exponentially.
+
 This paper proposes extending the register file as follows. Each physical register is extended with two extra fields.
 The first is a single bit flag to indicate whether the value of the physical register has been read (note that we assume
 all instructions read from the register file at issue stage, rather than reading from the broadcasted value when the 
 dependent instruction commits). It is cleared whenever the physical register is allocated from the free list, and set when
-an instruction reads it in the issue stage. 
+an instruction reads it in the issue stage. The second field is a 2-bit counter, which represents the version of the 
+content of the physical register. This 2-bit counter is critical for identifying which version of data is 
