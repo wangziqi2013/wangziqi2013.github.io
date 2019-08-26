@@ -75,7 +75,7 @@ When a dirty block is evicted from the LLC, we check whether the physical addres
 block will be stored into a victim cache, which can be implemented as a highly associative hardware cache.
 The entry in the victim cache serves as a temporary source of dirty data when a memory request misses in the LLC.
 A block can be discarded by the victim cache after its transaction has been fully migrated. Instead of tagging every
-cache line in the hierarchy with the ID of the transaction that writes the block, this paper suggests that we 
+cache block in the hierarchy with the ID of the transaction that writes the block, this paper suggests that we 
 only take a snapshot of the internal transaction ID list when the block is evicted. The block can only be removed
 when all transactions is this list have been fully migrated. This scheme is correct, because there are two cases:
 either the writing transaction is in this list, or not in this list. In the former case, the block will wait for its 
@@ -85,3 +85,8 @@ In either case, waiting for all transactions to retire ensures correctness. When
 controller broadcasts its ID to all blocks in the victim cache. Blocks remove the transaction ID from the list
 snapshot, and those with an empty list will be invalidated immediately. 
 
+Non-transactional stores can be wrapped as a single-op transaction by the software as suggested by the paper. The paper,
+however, later points out that this is sub-optimal since the software overhead of logging and migrating the single store
+is an overkill. To optimize non-transaction store, the paper proposes adding an extra bit in the victim cache. The bit is 
+cleared initially when a block is received from the LLC. The bit of the corresponding block is set when the memory controller 
+migrates a log entry to its home location. 
