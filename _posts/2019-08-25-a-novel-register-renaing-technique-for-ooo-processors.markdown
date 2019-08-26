@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes a new register renaming algorithm which takes advatage of the observation that some values are only 
+used once after they are produced. In traditional register renaming algorithms, a new physical register is always allocated
+for instructions that produce a value, such that in the case of WAR dependency, the writing instruction can actually be 
+scheduled before the reading instruction, hence increasing parallelism of the OOO pipeline. A physical register R can 
+only be released when the instruction that renames R become
