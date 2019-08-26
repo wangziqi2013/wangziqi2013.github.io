@@ -59,6 +59,14 @@ to adding the unique ID into the internal list, the memory controller also alloc
 transaction. The log buffer is located at a well-known address on the NVM such that the recovery handler can find right
 after the post-crash reboot, and the paper suggests that they can be maintained like a linked list. Log entries are only
 flushed into the log buffer at the end of the transaction using streaming write instructions. Compared with undo logging
-in which dirty blocks are flushed back to NVM on commit point, flushing redo log entries can achieve higher speed, since 
-these writes are on consecutive addresses, and can be coalesced in the store buffer. The CloseWrap() library call also
-writes a end-of-transaction mark after flushing all log entries. 
+in which dirty blocks are flushed back to NVM on commit point, flushing redo log entries can achieve higher throughput, 
+since these writes are on consecutive addresses, and can be coalesced in the store buffer. The CloseWrap() library call 
+also writes a end-of-transaction mark after flushing all log entries. 
+
+To keep the home locations of NVM data up-to-date, the memory controller gradually migrates data in the redo log entries 
+to their home locations. This process is conducted entirely in the background, and hence does not incur extra cycles
+on the processor. Log buffers are added to the "retirement list" after they are committed, the logic ordering of 
+which are consistent with the ordering of transaction commit (commits are serialized, though not mentioned by the paper).
+The memory controller selects the first entry in the log buffer list, and copies the content of the log entry into the 
+address indicated by the entry. A log buffer is removed from the retirement list after it has been fully migrated. In
+addition, the ID of the transaction is also removed from the internal ID list.
