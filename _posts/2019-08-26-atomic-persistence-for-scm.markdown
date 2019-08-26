@@ -76,4 +76,10 @@ block will be stored into a victim cache, which can be implemented as a highly a
 The entry in the victim cache serves as a temporary source of dirty data when a memory request misses in the LLC.
 A block can be discarded by the victim cache after its transaction has been fully migrated. Instead of tagging every
 cache line in the hierarchy with the ID of the transaction that writes the block, this paper suggests that we 
-only take a snapshot of the internal transaction ID list when the block is evicted.
+only take a snapshot of the internal transaction ID list when the block is evicted. The block can only be removed
+when all transactions is this list have been fully migrated. This scheme is correct, because there are two cases:
+either the writing transaction is in this list, or not in this list. In the former case, the block will wait for its 
+writing transaction to be fully migrated, exactly as specified. In the latter case, it can only be that the writing
+transaction has been removed from the list, which implies that it has been fully migrated even before the eviction happens.
+In either case, waiting for all transactions to retire ensures correctness. 
+
