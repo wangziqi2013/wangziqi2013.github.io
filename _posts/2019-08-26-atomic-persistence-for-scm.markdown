@@ -17,4 +17,9 @@ This paper proposes a lightweight method for implementing atomic persistent regi
 there are three ways of ensuring atomicity with NVM: undo logging, redo logging, and shadow mapping. Undo logging requires
 write ordering between the log entries and dirty cache lines, such that dirty data can never reach NVM before the log
 entry does. Enforcing such write ordering is expensive on some architectures, and involves changing the cache hierarchy
-directly. 
+directly. Shadow mapping, on the other hand, allows the same address to be mapped to different physical locations using
+a mapping table, enabling background persistence of different "layers" or "versions". The mapping table, however, must also
+be kept crash-consistent such that the after-crash recovery routine can still access persisted data. Such a change also
+involves non-trivial hardware change and run time metadata cost. 
+
+The paper
