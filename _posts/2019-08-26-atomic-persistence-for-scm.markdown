@@ -53,3 +53,9 @@ As will be made clear by the text below, this list of wrap IDs help us delete st
 The paper suggests that the list can be implemented as a bit vector on hardware, preferrably one bit per core (since 
 we expect each core to run one transaction at a time). 
 
+A log entry is generated when a write operation to the NVM region is performed. Note that since this paper does propose
+changing the frontend cache hierarchy, this must be done by software routines. On beginning of a new transaction, in addition
+to adding the unique ID into the internal list, the memory controller also allocate a log buffer for the newly started 
+transaction. The log buffer is located at a well-known address on the NVM such that the recovery handler can find right
+after the post-crash reboot, and the paper suggests that they can be maintained like a linked list. Log entries are only
+flushed into the log buffer at the end of the transaction using streaming write instructions. 
