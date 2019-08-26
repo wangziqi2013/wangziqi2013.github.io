@@ -17,4 +17,7 @@ This paper proposes a new register renaming algorithm which takes advatage of th
 used once after they are produced. In traditional register renaming algorithms, a new physical register is always allocated
 for instructions that produce a value, such that in the case of WAR dependency, the writing instruction can actually be 
 scheduled before the reading instruction, hence increasing parallelism of the OOO pipeline. A physical register R can 
-only be released when the instruction that renames R become
+only be released when the instruction that renames R become non-speculative, and when all consumers of R have finished 
+reaading the value from R (i.e. after they are issued from the instruction window). In practice, R is often released 
+when the renaming instruction commits, at which time it must be non-speculative, and all earlier instructions must have
+already also been committed since the ROB commits instructions in the dynamic program order.
