@@ -53,4 +53,8 @@ The proposed register renaming scheme works as follows. When an value-producing 
 stage of the pipeline, a hardware predictor is invoked to predict whether the instruction will only have one consumers; 
 If positive, the predictor also try to predict the number of sharers of the same register. Note that by saying "sharers" 
 on the same physical register R, we mean (1) these instructions all produce a value, which is mapped to R, and (2) they 
-all read physical register R as source operands, and (3) they are all the last consumer of physical register R. 
+all read physical register R as source operands, and (3) they are all the last consumer of physical register R. The number
+of sharers are used as an optimization that we will discuss below. If the instruction is predicted to have only one
+consumer and that a new physical register must be allocated, then the physical register for this instruction will be 
+allocated from a special checkpointed part of the register file. Assuming that the prediction for instruction i is correct, 
+when the instruction j that reads from i
