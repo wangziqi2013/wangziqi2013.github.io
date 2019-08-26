@@ -13,6 +13,20 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Lowlights:**
+
+1. The authors never bothered to make distinction between logical registers and physical registers which is confusing to read.
+
+2. The predictor is claimed to be predicting "whether the instruction is the only consumer for the value" earlier in the paper,
+   and then later in the paper it is said that the predictor "determines the type of the register which should be assigned to it".
+   As far as I can understand, the first claim applies to predicting source logical operands, while the second claim 
+   applies to predicting the length of the "redefinition-reuse" chain. How could these two be mixed up as the same predictor?
+
+3. The paper did not say how the beginning of the "redefinition-reuse" chain is started. We need to detect the beginning of such
+   sequence and determine the length of the chain to allocate a physical register from the checkpointed area. We also need to
+   detect whether an instruction continues the chain by: (1) reading one of the previously defined physical register; and 
+   (2) defining a new register which is predicted to be not 
+
 This paper proposes a new register renaming algorithm which takes advatage of the observation that some values are only 
 used once after they are produced. In traditional register renaming algorithms, a new physical register is always allocated
 for instructions that produce a value, such that in the case of WAR dependency, the writing instruction can actually be 
@@ -55,7 +69,13 @@ checking the one bit flag of the physical register. If the bit is clear, then we
 and we set the bit to notify later instructions.
 If the instruction indeed is the first reader of one of its source operands, the second check is performed to see if the 
 instruction is also the last reader of the same source operand. There are two cases. In the first case, the instruction's 
-destination register is identical to the aforementioned source
+destination register is identical to the aforementioned source, and we know no later instruction can access the underlying 
+physical register's value since it will be redefined. In the second case, a predictor is invoked to predict whether 
+this instruction will be the last reader of the source operand. If the predictor outputs positive, we also treat this 
+instruction as the last reader. In either case, the optimized register renaming schemed is used, in which the physical
+register of the source operand is released immediately, and allocated to the destination of the current instruction.
+
+**I have no idea how this happens**
 
 a hardware predictor is invoked to predict whether the instruction will only have one consumers; 
 If positive, the predictor also try to predict the number of sharers of the same register. Note that by saying "sharers" 
