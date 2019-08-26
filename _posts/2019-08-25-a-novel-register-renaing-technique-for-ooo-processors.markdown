@@ -28,3 +28,9 @@ register R can be released right away, because it is guaranteed that no one else
 renamed by another instruction. Even better, if such instruction i can be identified as early as it is decoded, and if i
 produces a value itself, then the renaming for instruction i could be as simple as assigning R as a destination register 
 to i, saving an extra allocation from the physical register file. 
+
+This paper proposes extending the register file as follows. Each physical register is extended with two extra fields.
+The first is a single bit flag to indicate whether the value of the physical register has been read (note that we assume
+all instructions read from the register file at issue stage, rather than reading from the broadcasted value when the 
+dependent instruction commits). It is cleared whenever the physical register is allocated from the free list, and set when
+an instruction reads it in the issue stage. 
