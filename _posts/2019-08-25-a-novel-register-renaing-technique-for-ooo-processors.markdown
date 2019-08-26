@@ -21,3 +21,8 @@ only be released when the instruction that renames R become non-speculative, and
 reaading the value from R (i.e. after they are issued from the instruction window). In practice, R is often released 
 when the renaming instruction commits, at which time it must be non-speculative, and all earlier instructions must have
 already also been committed since the ROB commits instructions in the dynamic program order.
+
+This renaming scheme, however, are over-conservative when some values are only used once. For example, given that instruction
+i is the last instruction that uses value stored in physical register R. After i reads from R at issue stage, the physical
+register R can be released right away, because it is guaranteed that no one else can read from it even if R has not been 
+renamed by another instruction. 
