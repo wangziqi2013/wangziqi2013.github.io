@@ -26,3 +26,4 @@ The paper proposes using redo logging to implement atomic persistent transaction
 redo logging. First, although redo logging does not require the write ordering between log entries and dirty data 
 (since dirty data can always be replayed by applying log entries), dirty data must be kept away from the NVM device
 before the transaction is fully committed, because otherwise, there is no way of rolling back these partial changes.
+Similarly, the end-of-transaction mark in the redo log must be written before the transaction commits.
