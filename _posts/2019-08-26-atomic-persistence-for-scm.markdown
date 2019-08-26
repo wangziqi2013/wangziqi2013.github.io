@@ -35,3 +35,9 @@ because the de facto content of memory after a recovery is recorded in the redo 
 be fetched from the log by walking log entries and locating the most recent write, or by querying the in-memory 
 mapping table. Such re-direction overhead can be large sometimes, which prevents a load miss from being resolved in
 a timely manner.
+
+This paper proposes adding a dedicated victim cache for storing overflowed blocks from the LLC. The victim cache is responsible
+for holding cache blocks evicted from the LLC, and at the same time, serving LLC misses. No log entry walking is necessary
+with a victim cache. In the rare scenario where the victim cache is not sufficient to hold all dirty blocks, a DRAM backed
+mapping table is used to locate the most recent dirty lines.
+
