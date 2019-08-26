@@ -44,4 +44,12 @@ mapping table is used to locate the most recent dirty lines.
 This paper assumes a persistent transaction model. Applications are written in a transactional manner such that persistent
 stores that must be committed atomically are wrapped by a special code block. During compilation, the code block will be 
 translated to two library calls: OpenWrap() and CloseWrap(). Store instructions between the call are translated to 
-library call wrapStore(), which generates the log entry in software (without flushing them at once).
+library call wrapStore(), which generates the log entry in software (without flushing them at once). Each wrap instance
+will be allocated an identifier, which will be explained later. The memory controller is extended with a special unit
+responsible for persisting transactions. Both OpenWrap() and CloseWrap() will notify the memory controller of the 
+beginning and the end of a persistent transaction. The memory controller maintains a list of wrap IDs. A wrap's identifier
+is added to (removed from) this list (included in the message sent from the processor) when a wrap begins (commits).
+As will be made clear by the text below, this list of wrap IDs help us delete stale entries from the victim cache.
+The paper suggests that the list can be implemented as a bit vector on hardware, preferrably one bit per core (since 
+we expect each core to run one transaction at a time). 
+
