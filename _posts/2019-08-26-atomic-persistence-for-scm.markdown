@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes a lightweight method for implementing atomic persistent regions by using redo logging. Traditionally
+there are three ways of ensuring atomicity with NVM: undo logging, redo logging, and shadow mapping. Undo logging requires
+write ordering between the log entries and dirty cache lines, such that dirty data can never reach NVM before the log
+entry does. Enforcing such write ordering is expensive on some architectures, and involves changing the cache hierarchy
+directly. 
