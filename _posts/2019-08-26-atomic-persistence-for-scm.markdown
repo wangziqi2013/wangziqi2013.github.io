@@ -81,5 +81,7 @@ when all transactions is this list have been fully migrated. This scheme is corr
 either the writing transaction is in this list, or not in this list. In the former case, the block will wait for its 
 writing transaction to be fully migrated, exactly as specified. In the latter case, it can only be that the writing
 transaction has been removed from the list, which implies that it has been fully migrated even before the eviction happens.
-In either case, waiting for all transactions to retire ensures correctness. 
+In either case, waiting for all transactions to retire ensures correctness. When a tranaction retires, the memory
+controller broadcasts its ID to all blocks in the victim cache. Blocks remove the transaction ID from the list
+snapshot, and those with an empty list will be invalidated immediately. 
 
