@@ -34,5 +34,7 @@ cache write may be reordered after the cache flush due to relaxed memory consist
 discard cache lines that are currently in the hierarchy, stalling the processor if the cache line is dirty until the 
 write back finishes. Note that at the time this paper was written, clflushopt has not been proposed yet as an optimized
 version of clflush. The clflush instruction may negatively affect performance because it invalidates cache lines from the 
-cache, while in fact what we need is merely a write back (and coherence state change). The last 
+cache, while in fact what we need is merely a write back (and coherence state change). The last memory fence orders the flush
+instruction with instructions that follow to make sure no memory operation will be performed (and then evicted by the cache) 
+before the current flush sequence completes. 
 
