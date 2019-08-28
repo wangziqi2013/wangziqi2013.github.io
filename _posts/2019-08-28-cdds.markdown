@@ -20,4 +20,11 @@ in arbitrary order. Even in the case where certain memory orderings are enforced
 often requires several writes on non-continuous locations, making it non-trivial to guarantee atomicity, the lack of 
 which can introduce inconsistency to the data structure. 
 
-This paper
+This paper proposes two levels of abstraction of implementing a CDDS. The first level implements an interface which flushes
+a series of cache lines back to the NVM, acting as a persistence barrier. All instructions executed after the persistence
+barrier can safely assume that previous writes have made to the NVM. The interface, named flush(), however, only supports
+8 byte atomic write to persistent storage. In other words, if system crashes at the moment flush() is being executed 
+by the processor, some cache blocks may not reach the NVM before the crash, the content of which will be lost. 
+
+
+
