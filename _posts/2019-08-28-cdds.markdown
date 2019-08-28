@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "Consistent and Durable Data Structures for Non-Volatile Byte-Addressable Memory"
+date:   2019-08-28 00:12:00 -0500
+categories: paper
+paper_title: "Consistent and Durable Data Structures for Non-Volatile Byte-Addressable Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=1960480
+paper_keyword: B+Tree; NVM; Versioning
+paper_year: FAST 2011
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
+
