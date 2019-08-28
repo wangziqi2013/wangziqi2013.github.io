@@ -31,5 +31,8 @@ paper does not mention pcommit, largely because when it is written pcommit has n
 later on deprecated). The first memory fence stalls the processor until the write buffer is emptied, which ensures that 
 all previous memory writes reach the cache when the cache flush executes. Thie is necessary, because otherwise, the actual 
 cache write may be reordered after the cache flush due to relaxed memory consistency. The clflush instructions in the middle
-discard cache lines 
+discard cache lines that are currently in the hierarchy, stalling the processor if the cache line is dirty until the 
+write back finishes. Note that at the time this paper was written, clflushopt has not been proposed yet as an optimized
+version of clflush. The clflush instruction may negatively affect performance because it invalidates cache lines from the 
+cache, while in fact what we need is merely a write back (and coherence state change). The last 
 
