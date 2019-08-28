@@ -13,3 +13,11 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper presents Consistent and Durable Data Structures (CDDS), a software technique for ensuring the consistency
+of data structures on Non-Volatile memory (NVM). As NVM devices are directly attached to the memory bus, it is 
+difficult to reason about persistence state changes due to the fact that memory writes can be made persistent on the device 
+in arbitrary order. Even in the case where certain memory orderings are enforced, performing a data structure operation
+often requires several writes on non-continuous locations, making it non-trivial to guarantee atomicity, the lack of 
+which can introduce inconsistency to the data structure. 
+
+This paper
