@@ -26,5 +26,10 @@ barrier can safely assume that previous writes have made to the NVM. The interfa
 8 byte atomic write to persistent storage. In other words, if system crashes at the moment flush() is being executed 
 by the processor, some cache blocks may not reach the NVM before the crash, the content of which will be lost. 
 
-
+The flush() interface consists of a memory barrier, mfence, a series of cache flushes, and another memory barrier (the
+paper does not mention pcommit, largely because when it is written pcommit has not been part of the proposal, which was
+later on deprecated). The first memory fence stalls the processor until the write buffer is emptied, which ensures that 
+all previous memory writes reach the cache when the cache flush executes. Thie is necessary, because otherwise, the actual 
+cache write may be reordered after the cache flush due to relaxed memory consistency. The clflush instructions in the middle
+discard cache lines 
 
