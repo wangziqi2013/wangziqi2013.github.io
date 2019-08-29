@@ -31,7 +31,7 @@ logical registers of the same name to physical registers of different names, we 
 which constitute the core of out-of-order execution. Data-flow dependency tracking works on today's superscalar using the 
 name of the physical register, but not the content. This observation is confirmed by the fact that when an instruction commits,
 we only broadcast its destination physical register name to waiting instructions in the window, rather than the content. 
-The scheduling decision of instructions in the windos is also made merely based on whether they have received the operand
+The scheduling decision of instructions in the windows is also made merely based on whether they have received the operand
 name through broadcasting, instead of checking the value. The second purpose of register renaming is to allocate storage for
 completed instructions. The allocated physical register acts as a temporary storage for the produced values. The lifetime of
 this temporary storage starts from the moment a value is produced till the commit of the renaming instruction to the
@@ -40,3 +40,9 @@ apparently a mismatch, since the former is needed right after the decoding stage
 renaming must happen before the issue stage in conventional schemes), while the latter only requires a physical register
 to be allocated at the last cycle of execution.
 
+The paper proposes that, instead of allocating storage and performing dependency tracking at the same time under the 
+abstraction of physical registers, we decouple these two tasks into two separate abstractions. Dependency tracking 
+is achieved with a set of new registers, called Virtual-Physical Registers (VPR), which are used as a way of tagging
+data-flow dependencies between instructions. Storage allocation is achieved using regular physical registers (PR), but 
+instead of allocating a PR for every value producing instruction at the decode stage, we only allocate PRs before they
+are really needed.
