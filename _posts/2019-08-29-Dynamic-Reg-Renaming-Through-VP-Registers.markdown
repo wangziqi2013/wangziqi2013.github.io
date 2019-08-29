@@ -32,4 +32,11 @@ which constitute the core of out-of-order execution. Data-flow dependency tracki
 name of the physical register, but not the content. This observation is confirmed by the fact that when an instruction commits,
 we only broadcast its destination physical register name to waiting instructions in the window, rather than the content. 
 The scheduling decision of instructions in the windos is also made merely based on whether they have received the operand
-name through broadcasting, insread of checking the value.
+name through broadcasting, instead of checking the value. The second purpose of register renaming is to allocate storage for
+completed instructions. The allocated physical register acts as a temporary storage for the produced values. The lifetime of
+this temporary storage starts from the moment a value is produced till the commit of the renaming instruction to the
+physical register. The paper notes that using physical register for both dependency tracking and value storage is 
+apparently a mismatch, since the former is needed right after the decoding stage (and that is the reason why register
+renaming must happen before the issue stage in conventional schemes), while the latter only requires a physical register
+to be allocated at the last cycle of execution.
+
