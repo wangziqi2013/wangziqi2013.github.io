@@ -26,6 +26,8 @@ version_mgmt:
    align their addresses to a multiple of 8. If the compiler aligns by multiple of 4, then it is possible that the 
    8 byte memory object is mapped across a cache line boundary.
 
+2. The paper cites an external technical report on HP research wrbsite, but unfortunately this report was never published.
+
 This paper presents Consistent and Durable Data Structures (CDDS), a software technique for ensuring the consistency
 of data structures on Non-Volatile memory (NVM). As NVM devices are directly attached to the memory bus, it is 
 difficult to reason about persistence state changes due to the fact that memory writes can be made persistent on the device 
