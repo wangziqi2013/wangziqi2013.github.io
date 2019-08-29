@@ -28,6 +28,11 @@ version_mgmt:
 
 2. The paper cites an external technical report on HP research wrbsite, but unfortunately this report was never published.
 
+3. This paper does not cover multi-word update of an object (e.g. key object) in CDDS. Multi-word update can be tricky,
+   because when you update it, it is still visible to the current operation (because otherwise how the operation finds it?), 
+   and hence flusing must be atomic, which is not guaranteed. One safe way is to decompose the update into two steps, first
+   delete and then insert. This, however, brings a new problem which is the atomicity of these two steps. 
+
 This paper presents Consistent and Durable Data Structures (CDDS), a software technique for ensuring the consistency
 of data structures on Non-Volatile memory (NVM). As NVM devices are directly attached to the memory bus, it is 
 difficult to reason about persistence state changes due to the fact that memory writes can be made persistent on the device 
@@ -80,4 +85,4 @@ visibility rule, the object is no longer accessible to later operations, because
 equal to the *ets*. If the system crashes, then these objects are still valid, because the current timestamp still
 lies in the [*bts*, *ets*) interval.
 
-Objects can be reused if they have been made invisible by a previous 
+Objects can be reused if they have been made invisible by a previous increment of the current timestamp. 
