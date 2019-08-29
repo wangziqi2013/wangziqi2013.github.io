@@ -70,6 +70,10 @@ instruction is renamed at decode stage. This field is essential for recovery fro
 
 The renaming process works as follows. When an instruction enters the decoding stage (we assume it has an integer 
 destination register), we allocate a VPR to the instruction without a PR. The source operands are first located 
-from the GMT as in a regy=ular scheme. If the GMT indicates that a logical register has been allocated both VPR
-and PR, then the source operand's register just uses. The previous value of the VPR in the GMT
-is copies into the ROB entry of the instruction, and then updated with the newly allocated VPR. 
+from the GMT as in a regular scheme. If the GMT indicates that a logical register has been allocated both VPR
+and PR, then the source operand's register just uses the PR, and the ready bit in the window is set. Otherwise, the 
+ready bit is cleared, and the VPR is copies into the instruction window. Then the hardware renames the destination logical
+register to a newly allocated VPR as follows. First, the current value of the VPR in the GMT is copied into the ROB entry 
+of the instruction. Then, a new VPR is allocated from a free list, and the GMT entry is updated with the newly allocated
+VPR. The PR and the bit is cleared since no physical register has been allocated. The instruction is then sent into the 
+window and will be scheduled when both ready bits are "1". When the instruction is executed
