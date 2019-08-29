@@ -13,6 +13,19 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlight:**
+
+1. Novel adoption of versioning and multiversioned data structure to the realm of persistent data structures.
+
+**Lowlights**
+
+1. The assumption that flush() can only ensure the atomicity of 8 byte stores are overly restrictive and yet incorrect.
+   It is overly restrictive because on x86 and most other architectures, cache lines are flushed back to the NVM in
+   the granularity of 64 byte blocks (or other granularities), the atomicity of which is implied by the memory controller.
+   It is incorrect because the paper did not explicitly mention that even for 8 byte pointers/integers, it is necessary to
+   align their addresses to a multiple of 8. If the compiler aligns by multiple of 4, then it is possible that the 
+   8 byte memory object is mapped across a cache line boundary.
+
 This paper presents Consistent and Durable Data Structures (CDDS), a software technique for ensuring the consistency
 of data structures on Non-Volatile memory (NVM). As NVM devices are directly attached to the memory bus, it is 
 difficult to reason about persistence state changes due to the fact that memory writes can be made persistent on the device 
@@ -64,3 +77,5 @@ current timestamp counter, and flushes the counter. If the counter made into the
 visibility rule, the object is no longer accessible to later operations, because the timestamp will be larger than or 
 equal to the *ets*. If the system crashes, then these objects are still valid, because the current timestamp still
 lies in the [*bts*, *ets*) interval.
+
+Objects can be reused if they have been made invisible by a previous 
