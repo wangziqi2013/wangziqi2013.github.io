@@ -26,3 +26,7 @@ while only actually needed before a value is generated and written back. Holding
 waiting and execution period may result in a shortage of physical registers, stalling the front-end pipeline, while instructions
 already allocated a physical register do not use them until the last cycle of execution.
 
+This paper made an important observation that regiater renaming in fact servers two distinct purposes. First, by renaming
+logical registers of the same name to physical registers of different names, we enable dependency tracking between instructions,
+which constitute the core of out-of-order execution. Data-flow dependency tracking works on today's superscalar using the 
+name of the physical register, but not the content. 
