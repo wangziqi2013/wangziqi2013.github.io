@@ -50,7 +50,11 @@ are really needed.
 This scheme resembles virtual memory and demand paging, in which an extra level of indirection is added on to the 
 physical address space, such that memory accessed are always made with virtual addresses. A virtual address is just
 a "symbol" for ensuring that different data are allocated on distinct locations. A virtual address can be backed by
-nothing, and mapped to a physical address only when it is actually accessed. 
+nothing, and mapped to a physical address only when it is actually accessed. In our context, physical registers are 
+analogus to physical addresses, while virtual-physical addresses are analogous to virtual addresses. When dependency
+tracking is needed such that instructions do not overwrite each other's result out-of-order, we allocate virtual-physical
+registers. Only when a value is produced (which can be many cycles later) do we allocate a physical register to back the 
+virtual-physical register. 
 
 The Virtual-Physical renaming schemes requires two data structures. The first data dtructure, called the General Mapping 
 Table (GMT), maps a logical register (LR) to both the VPR and the PR. An extra bit is used to indicate whether the VPR has
