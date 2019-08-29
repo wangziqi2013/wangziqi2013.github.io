@@ -29,4 +29,7 @@ already allocated a physical register do not use them until the last cycle of ex
 This paper made an important observation that regiater renaming in fact servers two distinct purposes. First, by renaming
 logical registers of the same name to physical registers of different names, we enable dependency tracking between instructions,
 which constitute the core of out-of-order execution. Data-flow dependency tracking works on today's superscalar using the 
-name of the physical register, but not the content. 
+name of the physical register, but not the content. This observation is confirmed by the fact that when an instruction commits,
+we only broadcast its destination physical register name to waiting instructions in the window, rather than the content. 
+The scheduling decision of instructions in the windos is also made merely based on whether they have received the operand
+name through broadcasting, insread of checking the value.
