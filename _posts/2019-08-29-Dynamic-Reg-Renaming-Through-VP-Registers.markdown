@@ -47,7 +47,12 @@ data-flow dependencies between instructions. Storage allocation is achieved usin
 instead of allocating a PR for every value producing instruction at the decode stage, we only allocate PRs before they
 are really needed.
 
+This scheme resembles virtual memory and demand paging, in which an extra level of indirection is added on to the 
+physical address space, such that memory accessed are always made with virtual addresses. A virtual address is just
+a "symbol" for ensuring that different data are allocated on distinct locations. A virtual address can be backed by
+nothing, and mapped to a physical address only when it is actually accessed. 
+
 The Virtual-Physical renaming schemes requires two data structures. The first data dtructure, called the General Mapping 
 Table (GMT), maps a logical register (LR) to both the VPR and the PR. An extra bit is used to indicate whether the VPR has
 been allocated s PR or not. This bit is set after an instruction has produced value and written back the result to the PR.
-The second data structur is called Physical Mapping Table (PMT).
+The second data structur is called Physical Mapping Table (PMT), which maps VPR to PR. The 
