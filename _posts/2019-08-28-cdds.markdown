@@ -41,6 +41,16 @@ before the current flush sequence completes.
 The second level of abstraction leverages versioning to guarantee that all changes are made visible atomically even if
 the process may involve several memory updates to different cache lines, which we explain as follows. CDDS maintains a 
 64 bit integer as the "current time" timestamp. This timestamp stores the current logical version the data structure. 
-Every "object" in a CDDS has two fields, a begin timestamp (bt) stores the minimum timestamp required to access the 
-data structure, and an "end timestamp" which is the highest timestamp that can access the object. Every operation on the 
-data structure must first read the current logical timestamp
+Every "object" in a CDDS has two fields, a begin timestamp (bts) stores the minimum timestamp required to access the 
+data structure, and an "end timestamp" (ets) which is the highest timestamp that can access the object. Every operation 
+on the data structure must first read the current logical timestamp, and then uses this timestamp to determine the visibility
+of objects within the data structure. To elaborate: If the current timestamp is *ts*, then an object is accessible to the 
+current operation if and only if *ts* is within the interval [*bts*, *ets*), where *bts* and *ets* are the begin and end 
+timestamps of the object to be accessed (in the paper, to represent the "infinitly large" time, we reserve timestamp zero
+as a special timestamp, the usage of which is restrivted to only in *ets*). 
+
+When a new object is being added, we first create a new object with *bts* equals *ts* + 1 and *ets* equals 0. The newly 
+created object is hence insivible before we change the current time. After objects are added (there can be more than one), 
+we issue a flush() command to force them back to the NVM, and then increment the current time counter, and eventually flush 
+the counter back to NVM. The last flush operation is atomic, since is only writes back the 8-byte current time counter,
+which is also the persistent point of the newly added objects. 
