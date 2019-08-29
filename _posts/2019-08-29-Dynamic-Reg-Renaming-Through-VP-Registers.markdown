@@ -76,4 +76,10 @@ ready bit is cleared, and the VPR is copies into the instruction window. Then th
 register to a newly allocated VPR as follows. First, the current value of the VPR in the GMT is copied into the ROB entry 
 of the instruction. Then, a new VPR is allocated from a free list, and the GMT entry is updated with the newly allocated
 VPR. The PR and the bit is cleared since no physical register has been allocated. The instruction is then sent into the 
-window and will be scheduled when both ready bits are "1". When the instruction is executed
+window and will be scheduled when both ready bits are "1". When the instruction is executed, at the last cycle, a
+physical register is allocated for holding the value. Assuming that the allocation succeeds, this physical register
+ID, as well as the VPR ID, is broadcasted to the instruction window, and for those instructions that have a ready bit
+"0", the broadcasted VPR is checked against the source operand. If a match occurs, the ready bit is set to "1", and 
+the VPR in the source operand field is replaced by the physical register ID. When an instruction is issued, it reads
+both source operands from the physical register file.
+
