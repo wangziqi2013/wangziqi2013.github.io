@@ -60,10 +60,16 @@ The Virtual-Physical renaming scheme requires two data structures. The first dat
 Table (GMT), maps a logical register (LR) to both the VPR and the PR. An extra bit is used to indicate whether the VPR has
 been allocated a PR or not. This bit is set after an instruction has produced value and written back the result to the PR.
 The second data structure is called Physical Mapping Table (PMT), which maps VPR to PR. The PMT resembles a page table:
-If a VPR has not been allocated a PR, the entry will not store a valid PR identifier. 
+If a VPR has not been allocated a PR, the entry will not store a valid PR identifier. Note that the paper assumes there
+would be more VPR than PR, since VPRs do not need to be backed by anything, while PR consume energy and area on the chip.
 
-Two modifications are also made with instruction window and ROB. In the instruction window, we now store the VPR for 
-source operands, and the destination VPR. In the ROB, we store the logical destination register and the previous
-VPR the destination register is mapped to when this instruction is renamed at decode stage. This field is essential for
-recovery from mis-speculation.
+Two modifications are also made with instruction window and ROB. In the instruction window, we now store the VPR or PR for 
+source operands, and use a ready bit for each to determine which one it is. The destination VPR is also stored in the window. 
+In the ROB, we store the logical destination register and the previous VPR the destination register is mapped to when this 
+instruction is renamed at decode stage. This field is essential for recovery from mis-speculation.
 
+The renaming process works as follows. When an instruction enters the decoding stage (we assume it has an integer 
+destination register), we allocate a VPR to the instruction without a PR. The source operands are first located 
+from the GMT as in a regy=ular scheme. If the GMT indicates that a logical register has been allocated both VPR
+and PR, then the source operand's register just uses. The previous value of the VPR in the GMT
+is copies into the ROB entry of the instruction, and then updated with the newly allocated VPR. 
