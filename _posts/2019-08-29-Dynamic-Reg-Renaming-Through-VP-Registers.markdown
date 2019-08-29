@@ -56,7 +56,14 @@ tracking is needed such that instructions do not overwrite each other's result o
 registers. Only when a value is produced (which can be many cycles later) do we allocate a physical register to back the 
 virtual-physical register. 
 
-The Virtual-Physical renaming schemes requires two data structures. The first data dtructure, called the General Mapping 
+The Virtual-Physical renaming scheme requires two data structures. The first data dtructure, called the General Mapping 
 Table (GMT), maps a logical register (LR) to both the VPR and the PR. An extra bit is used to indicate whether the VPR has
-been allocated s PR or not. This bit is set after an instruction has produced value and written back the result to the PR.
-The second data structur is called Physical Mapping Table (PMT), which maps VPR to PR. The 
+been allocated a PR or not. This bit is set after an instruction has produced value and written back the result to the PR.
+The second data structure is called Physical Mapping Table (PMT), which maps VPR to PR. The PMT resembles a page table:
+If a VPR has not been allocated a PR, the entry will not store a valid PR identifier. 
+
+Two modifications are also made with instruction window and ROB. In the instruction window, we now store the VPR for 
+source operands, and the destination VPR. In the ROB, we store the logical destination register and the previous
+VPR the destination register is mapped to when this instruction is renamed at decode stage. This field is essential for
+recovery from mis-speculation.
+
