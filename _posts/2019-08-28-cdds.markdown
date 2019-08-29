@@ -33,6 +33,18 @@ version_mgmt:
    and hence flusing must be atomic, which is not guaranteed. One safe way is to decompose the update into two steps, first
    delete and then insert. This, however, brings a new problem which is the atomicity of these two steps. 
 
+4. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
+   reused in the node, in line 7 to line 10, the paper simply assumes that we can update the timestamps and keys, and then
+   issue a flush. This, however, does not guarantee the atomicity of the three updates (i.e. then can be partially
+   written back to the NVM). Imagine if the system crashes after "n\[entry\_num\].end = 0" is written back and before
+   the other two fields are (this is possible since the cache can evict any block at any time). In this case the reused
+   node will be made visible again, with the old key and old start timestamp, which is indistinguishable from the originally 
+   inserted node. 
+
+   It would be better for the paper to assume that the flush() routine guarantees 64 byte atomicity and forces all 
+   objects to be mapped into a single cache line. This way, either all updates of fields are visible atomically, or none 
+   of them is visible.
+
 This paper presents Consistent and Durable Data Structures (CDDS), a software technique for ensuring the consistency
 of data structures on Non-Volatile memory (NVM). As NVM devices are directly attached to the memory bus, it is 
 difficult to reason about persistence state changes due to the fact that memory writes can be made persistent on the device 
@@ -85,4 +97,6 @@ visibility rule, the object is no longer accessible to later operations, because
 equal to the *ets*. If the system crashes, then these objects are still valid, because the current timestamp still
 lies in the [*bts*, *ets*) interval.
 
-Objects can be reused if they have been made invisible by a previous increment of the current timestamp. 
+Objects can be reused if they have been made invisible by a previous increment of the current timestamp. The reused
+object is claimed when an operation needs to create a new object (e.g. when inserting into a full B+Tree node but 
+this insertion will trigger a node split).
