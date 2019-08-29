@@ -58,3 +58,9 @@ are visible to later operations since their *bts* is now exactly the logical tim
 crashes before the last flush() completes, then the current logical increment is not successfully reflected on the NVM.
 After system reboot, the timestamp read from the NVM is still *bts* - 1, meaning that the newly added object is not 
 visible to the post-crash recovery routine.
+
+Similarly, when an object is to be deleted, we sets its end timestamp to *ts* + 1, flushes the object, increments the 
+current timestamp counter, and flushes the counter. If the counter made into the NVM, then according to the version 
+visibility rule, the object is no longer accessible to later operations, because the timestamp will be larger than or 
+equal to the *ets*. If the system crashes, then these objects are still valid, because the current timestamp still
+lies in the [*bts*, *ets*) interval.
