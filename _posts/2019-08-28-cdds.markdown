@@ -111,4 +111,8 @@ comments at the beginning for a discussion of problems with this scheme.**
 After a crash, the crash recovery routine scans all objects in a CDDS and checks their timestamps. Some objects need 
 to be "reworked" in order to function properly during normal operations. For example, if a delete operation is interrupted
 by the crash after it flushes all (or some) of the objects but before the current timestamp counter is flushed, all these
-objects will have a *ets* of *ts* + 1. 
+objects will have a *ets* of *ts* + 1. Although the delete operation was not successfully committed thanks to the versioning
+protocol, if these objects' *ets* fields are not fixed to zero, then after a normal insert or delete on any object in the 
+CDDS, all or part of these objects will suddenly disappear, due to the fact that the current timestamp counter has been
+incremented, the value of which now equals the objects' *ets*. Similarly, unsuccessful inserts and reusage of deleted 
+objects will be cleaned up.
