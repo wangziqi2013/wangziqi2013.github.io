@@ -32,8 +32,13 @@ version_mgmt:
    because when you update it, it is still visible to the current operation (because otherwise how the operation finds it?), 
    and hence flusing must be atomic, which is not guaranteed. One safe way is to decompose the update into two steps, first
    delete and then insert. This, however, brings a new problem which is the atomicity of these two steps. 
+   
+   Combined with the discussion in the next point, I truly believe this paper should just say that flush() is 64-byte 
+   atomic and that objects must be mapped to a single cache line, which guarantees tha atomicity of single object update. 
+   As for multi-step operations such as a tree structural modification, using versioning is still the right choice which 
+   is exactly the merit of this paper.
 
-4. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
+1. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
    reused in the node, in line 7 to line 10, the paper simply assumes that we can update the timestamps and keys, and then
    issue a flush. This, however, does not guarantee the atomicity of the three updates (i.e. then can be partially
    written back to the NVM). Imagine if the system crashes after "n\[entry\_num\].end = 0" is written back and before
@@ -97,6 +102,8 @@ visibility rule, the object is no longer accessible to later operations, because
 equal to the *ets*. If the system crashes, then these objects are still valid, because the current timestamp still
 lies in the [*bts*, *ets*) interval.
 
-Objects can be reused if they have been made invisible by a previous increment of the current timestamp. The reused
-object is claimed when an operation needs to create a new object (e.g. when inserting into a full B+Tree node but 
-this insertion will trigger a node split).
+Objects can be reused if they have been made invisible by a previous increment of the current timestamp (so it must be 
+a deleted object). The deleted object is reclaimed when an operation needs to create a new object (e.g. when inserting 
+into a full B+Tree node but this insertion will trigger a node split). We overwrite fields of the deleted object,
+setting its *bts* and *ets* as described above, and then flushes the object, making it live again. **Please see the "lowlight"
+comments at the beginning for a discussion of problems with this scheme.**
