@@ -21,3 +21,8 @@ non-speculative), another consumer instruction of the logical register may be is
 to provide precise exception, the state of the logical register file must match the one in serial execution when the 
 triggering instruction raises an exception. If the physical register is released before the renaming instruction commits,
 it is possible that we read the released physical register as part of the architectural state when the execption is raised.
+The second problem with the current scheme is that physical registers are allocated during the decode stage in the front-end,
+while only actually needed before a value is generated and written back. Holding a physical for a prolonged time during the 
+waiting and execution period may result in a shortage of physical registers, stalling the front-end pipeline, while instructions
+already allocated a physical register do not use them until the last cycle of execution.
+
