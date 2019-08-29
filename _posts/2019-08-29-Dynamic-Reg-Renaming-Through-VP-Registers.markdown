@@ -88,3 +88,10 @@ uses the same logical register as it does. Since the ROB stores the previous VPR
 to query the PMT, and the physical registre is freed together with the VPR. This schemes always maintains an invariant that
 the VPR to PR mapping is unchanged once a PR is mapped to VPR (all VPRs begin with no PR mapped), and that these two are 
 always freed together when some instruction commits.
+
+When an exception is raised, or speculation fails, the architectural state is restored to the exact point where the event 
+happens. The instruction that triggers the event is first located in the ROB, and then the processor starts undoing
+mapping changes incurred by younger instructions. The undo of changes begins from the head of ROB (the end it adds
+instructions) and proceeds until the located instruction. For every instruction under consideration, we free the VPR and 
+PR (if there is one) allocated by renaming. These frees are safe, since these instructions have not themselves committed,
+and hence the VPRs and PRs must be allocated and only allocated to the mentioned instruction. 
