@@ -38,7 +38,7 @@ version_mgmt:
    As for multi-step operations such as a tree structural modification, using versioning is still the right choice which 
    is exactly the merit of this paper.
 
-1. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
+4. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
    reused in the node, in line 7 to line 10, the paper simply assumes that we can update the timestamps and keys, and then
    issue a flush. This, however, does not guarantee the atomicity of the three updates (i.e. then can be partially
    written back to the NVM). Imagine if the system crashes after "n\[entry\_num\].end = 0" is written back and before
@@ -105,5 +105,10 @@ lies in the [*bts*, *ets*) interval.
 Objects can be reused if they have been made invisible by a previous increment of the current timestamp (so it must be 
 a deleted object). The deleted object is reclaimed when an operation needs to create a new object (e.g. when inserting 
 into a full B+Tree node but this insertion will trigger a node split). We overwrite fields of the deleted object,
-setting its *bts* and *ets* as described above, and then flushes the object, making it live again. **Please see the "lowlight"
+setting its *bts* and *ets* as described above, and then flush the object, making it live again. **Please see the "lowlight"
 comments at the beginning for a discussion of problems with this scheme.**
+
+After a crash, the crash recovery routine scans all objects in a CDDS and checks their timestamps. Some objects need 
+to be "reworked" in order to function properly during normal operations. For example, if a delete operation is interrupted
+by the crash after it flushes all (or some) of the objects but before the current timestamp counter is flushed, all these
+objects will have a *ets* of *ts* + 1. 
