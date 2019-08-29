@@ -83,3 +83,8 @@ ID, as well as the VPR ID, is broadcasted to the instruction window, and for tho
 the VPR in the source operand field is replaced by the physical register ID. When an instruction is issued, it reads
 both source operands from the physical register file.
 
+When an instruction commits in the ROB, it releases the physical register allocated to the previous instruction that 
+uses the same logical register as it does. Since the ROB stores the previous VPR when it is renamed, the VPR is used
+to query the PMT, and the physical registre is freed together with the VPR. This schemes always maintains an invariant that
+the VPR to PR mapping is unchanged once a PR is mapped to VPR (all VPRs begin with no PR mapped), and that these two are 
+always freed together when some instruction commits.
