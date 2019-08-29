@@ -94,4 +94,7 @@ happens. The instruction that triggers the event is first located in the ROB, an
 mapping changes incurred by younger instructions. The undo of changes begins from the head of ROB (the end it adds
 instructions) and proceeds until the located instruction. For every instruction under consideration, we free the VPR and 
 PR (if there is one) allocated by renaming. These frees are safe, since these instructions have not themselves committed,
-and hence the VPRs and PRs must be allocated and only allocated to the mentioned instruction. 
+and hence the VPRs and PRs must be allocated and only allocated to the mentioned instruction. Furthermore, the previous VPR
+is restored by copying the previoud VPR field in the ROB back to the GMT. If the VPR has a physical register associated
+(by looking up the PMT, since the VPR must have not been freed), we also restore the physical register number in GMT.
+The extra bit is also set if such physical register exists.
