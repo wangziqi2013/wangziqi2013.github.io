@@ -40,7 +40,7 @@ version_mgmt:
 
 4. I don't believe the algorithm given in the paper is correct. For example, in Algo.2 in which an existing item is 
    reused in the node, in line 7 to line 10, the paper simply assumes that we can update the timestamps and keys, and then
-   issue a flush. This, however, does not guarantee the atomicity of the three updates (i.e. then can be partially
+   issue a flush. This, however, does not guarantee the atomicity of the three updates (i.e. they can be partially
    written back to the NVM). Imagine if the system crashes after "n\[entry\_num\].end = 0" is written back and before
    the other two fields are (this is possible since the cache can evict any block at any time). In this case the reused
    node will be made visible again, with the old key and old start timestamp, which is indistinguishable from the originally 

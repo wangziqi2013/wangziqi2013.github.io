@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents a design for DRAM-based L4 cache implemented with Die-Stacked DRAM. Conventional DRAM is not suitable
+for implementing any form of caching, because accessing the DRAM cache before going to the home location can only
+increase latency in any situation. Die-Stacked DRAM, however, makes DRAM caching feasible due to its lower access latency.
+Previous researches reported lower latency of Die-Stacked DRAM, ranging from half to one-fourth of the latency of conventional 
+DRAM, which implies the possibility of using on-chip Die-Stacked DRAM to implement an additional L4 cache between the LLC
+and conventional DRAM.
+
+This paper pointed out, however, that due to the large size of DRAM caches, storing the tags can be difficult. 
