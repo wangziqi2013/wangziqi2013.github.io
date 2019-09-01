@@ -33,3 +33,9 @@ block. The MissMap is accessed before every access of the DRAM cache, and if the
 cache will be skipped. Querying the MissMap, however, is also on the critical path of every access. In addition, the L-H 
 cache paper also proposes implementing the MissMap in the LLC SRAM storage, contending for space with regular data requests.
 This paper identifies this kind of extra latency as "Predictor Serialization Latency", or PSL.
+
+One important observation made by the paper is that prior DRAM cache proposals do not truly have a lower access latency
+compared with directly accessing the home location on LLC misses, due to the negative performance effect of TSL and PSL. 
+These proposals, however, still demonstrate performance improvement, because they divert part of the memory traffic 
+that should have been on DRAM to the on-chip Die-Stacked DRAM, leveraging the high bandwidth data link. This reduces 
+contention on conventional DRAM.
