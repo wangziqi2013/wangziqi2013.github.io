@@ -68,4 +68,7 @@ address. In the meantime, the cache controller closes the row by writing back th
 lines. Row buffer contents will remain valid even after the row is closed. Given a tag match, the data block is located 
 using the index of the tag in the tag array, and then read out from the DRAM using another read command. Note that since
 the row buffer still holds valid contents of the row, the second read operation will hit the row buffer and hence only
-incurs negligible latency. 
+incurs negligible latency. Updates to coherence states, dirty bits and LRU bits are performed in the background. In
+the case where no tag in the array can match the miss address, a L4 cache miss is generated, and a read to the conventional
+DRAM will be scheduled.
+
