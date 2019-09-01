@@ -34,5 +34,11 @@ blocks, called a "sector", are grouped together and only associated with a singl
 at the granularity of 64 byte blocks as on-chip caches. A bit vector is also added to indicate which blocks are present in 
 the sector and which are not. The problem with sector cache, however, is that it assumes spatial locality of access, i.e. 
 if a block is brought into the sector cache by an access, then later accesses are expected to occur on nearby addresses. 
-As argued in the previous point, this assumption does not work well for lower level caches due to to filtering effect from
-higher level caches. As a result, 
+As argued in the previous point, this assumption does not work well for lower level caches due to the filtering effect from
+higher level caches. As a result, higher miss rates are observed with sector caches compared with a regular cache. The 
+last solution is to store tags in a separate DRAM store area which is organized as a tag array. Before data in the DRAM is 
+accessed, we first read the tag array to locate the data block (or generate a miss), and then use a second access to 
+read the data block. The problem with this method is that three accesses are incurred for every cache hit. The first two are 
+to tag and data store, and the last access updates the LRU status. Although the last access is not on the critical path
+of a cache hit, the extra DRAM update request increases the level of contention on the memory controller, delaying later 
+requests.
