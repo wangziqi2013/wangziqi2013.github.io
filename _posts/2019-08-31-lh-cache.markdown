@@ -72,3 +72,9 @@ incurs negligible latency. Updates to coherence states, dirty bits and LRU bits 
 the case where no tag in the array can match the miss address, a L4 cache miss is generated, and a read to the conventional
 DRAM will be scheduled.
 
+To further reduce DRAM cache misses, the paper also proposes MissMap, a dedicated hardware structure for recording block
+residency states. The MissMap consists a set of entries recording which addresses are currently in the DRAM cache and 
+which are not. Each entry covers a "segment" of memory, e.g. 4KB, and uses a single bit for every block in the segment
+for indicating presence of the block. An address tag is also assicated with each entry. The MissMap is organized as a
+conventional cache, i.e. the middle bits of the address is used to locate the set, and then an associative search is 
+performed on the set to locate the entry. 
