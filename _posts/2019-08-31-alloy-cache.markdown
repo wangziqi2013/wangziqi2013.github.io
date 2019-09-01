@@ -52,4 +52,9 @@ bytes. On every cache access, the middle bits in the address are used to form th
 the row number in the DRAM. Note that since the number of TADs per row may not be a multiple of two, we need a circuit
 that can perform modular operation with a constant. The cache controller then activates the row, reads the TAD, and 
 checks the tag. If there is a tag match, the data will be read. Otherwise, the current block is evicted, and DRAM is 
-accessed instead.
+accessed instead. No extra LRU status need to be updated, because the eviction decision can be made instantly. Compared
+with L-H cache, in which 172 bytes of tags must be fully transferred to the cache controller before determining which
+data block to use, the Alloy Cache approach only reads 72 bytes of data, and in the case of cache miss, 64 of them are 
+discarded.
+
+
