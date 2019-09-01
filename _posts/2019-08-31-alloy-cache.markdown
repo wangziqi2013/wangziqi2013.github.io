@@ -60,4 +60,8 @@ discarded.
 To compensate the lower hit rate compared with other designs, Alloy cache further overlaps cache probe with DRAM access.
 If the cache indicates a hit, then the DRAM lookup is aborted (results are discarded if it finishes earlier), and we use
 the cached block. If the cache indicate a miss, the miss latency is reduced to the latency of cache lookup or DRAM lookup,
-whichever is larger, instead of the sum of these two. 
+whichever is larger, instead of the sum of these two. This technique, however, unnecessarily increases the bandwidth to 
+the DRAM if the cache indicates a hit, which should be the majority case (compared with not having an L4 DRAM cache, the 
+amount of traffic stays the same). To counter this, the paper proposes using predictors to inform the cache controller 
+on whether a cache access should happen in parallel with DRAM access, or they should be serialized. Two schemes of prediction
+are presented in the paper. 
