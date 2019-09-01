@@ -44,10 +44,16 @@ of a cache hit, the extra DRAM update request increases the level of contention 
 requests.
 
 This paper argues that DRAM caches can be made efficient by reducing the latency of accessing the tag store. The paper
-assumes that the row size of the Die-Stacked DRAM is 4KB, though other row sizes are also applicable. One important observation
+assumes that the row size of the Die-Stacked DRAM is 2KB, though other row sizes are also applicable. One important observation
 is that current generations of DRAM are equipped with a row buffer. The row buffer is populated with the bits read
 from the internal array when a read command is sent. The content of the row buffer can be preserved even after the read 
 operation, which enables the next read to "hit" the row buffer if it accesses the same row as the one current opened. 
 This "open page" design gives opportunity to DRAM caches if we co-locate tags and data in the same row, allowing them 
 to be accessed with one relatively expensive row buffer read, and several chaper column accesses. 
 
+The DRAM cache is described as follows. We still use the conventional set-associative cache organization, with an extremely
+high associativity. The paper suggests that we use a DRAM row to store an entire set, including data, tags and metadata. For 
+2KB rows, at most 29 data blocks can be stored, which takes 1856 bytes. Assuming 6 byte tags (48 bit physical address),
+we need an extra 174 bytes to store the tag as a compact array, such that they can be "streamed" out of the DRAM with burst 
+reads. The remaining 18 bytes can be dedicated to other metadata such as dirty bit, coherence states or storing profiling
+data.
