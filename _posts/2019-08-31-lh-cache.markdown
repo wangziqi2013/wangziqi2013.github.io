@@ -57,3 +57,9 @@ high associativity. The paper suggests that we use a DRAM row to store an entire
 we need an extra 174 bytes to store the tag as a compact array, such that they can be "streamed" out of the DRAM with burst 
 reads. The remaining 18 bytes can be dedicated to other metadata such as dirty bit, coherence states or storing profiling
 data.
+
+The operation of the DRAM cache is described as follows. When the L3 cache misses, a probe into the L4 DRAM cache is 
+initiated. First, the row number of cpmputed using middle bits in the miss address in exact the same way as in a conventional
+cache. The target row number of computed by adding this set index onto the base row number of the cache region (configured 
+once at system startup time). After computing the target row, the cache controller then sends an activate command to the 
+DRAM cache with the target row number. 
