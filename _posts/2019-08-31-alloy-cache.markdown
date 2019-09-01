@@ -46,4 +46,10 @@ reflect a fundamental trade-off in cache performance: the miss rate and latency 
 and removing the predictor from the critical path, we decrease hit latency of the cache at the cost of increasing the miss
 rate. 
 
-The direct-mapped
+The direct-mapped Alloy Cache operates as follows. The entire cache is implemented as an array of tag and data. To
+reduce the number of DRAM row activations, the tag and data are stored next to each other as a "TAD", which occupies 72 
+bytes. On every cache access, the middle bits in the address are used to form the index, which is then used to compute 
+the row number in the DRAM. Note that since the number of TADs per row may not be a multiple of two, we need a circuit
+that can perform modular operation with a constant. The cache controller then activates the row, reads the TAD, and 
+checks the tag. If there is a tag match, the data will be read. Otherwise, the current block is evicted, and DRAM is 
+accessed instead.
