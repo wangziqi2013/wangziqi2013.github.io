@@ -39,3 +39,7 @@ compared with directly accessing the home location on LLC misses, due to the neg
 These proposals, however, still demonstrate performance improvement, because they divert part of the memory traffic 
 that should have been on DRAM to the on-chip Die-Stacked DRAM, leveraging the high bandwidth data link. This reduces 
 contention on conventional DRAM.
+
+Instead of implementing a highly associative cache with miss predictors, Alloy Cache puts itself on another end of the 
+spectrum, featuring a direct-mapped organization and parallel cache/DRAM access. The radical design differences in fact
+reflect a fundamental trade-off in cache performance: the miss rate and latency trade-off. 
