@@ -62,4 +62,10 @@ The operation of the DRAM cache is described as follows. When the L3 cache misse
 initiated. First, the row number of cpmputed using middle bits in the miss address in exact the same way as in a conventional
 cache. The target row number of computed by adding this set index onto the base row number of the cache region (configured 
 once at system startup time). After computing the target row, the cache controller then sends an activate command to the 
-DRAM cache with the target row number. 
+DRAM cache with the target row number. After the row has been activated, the controller first streams out the array of tags
+(174 bytes) into an internal TCAM buffer, and then associatively searches the buffer with the remaining bits of the miss 
+address. In the meantime, the cache controller closes the row by writing back the row to the array and precharging the bit 
+lines. Row buffer contents will remain valid even after the row is closed. Given a tag match, the data block is located 
+using the index of the tag in the tag array, and then read out from the DRAM using another read command. Note that since
+the row buffer still holds valid contents of the row, the second read operation will hit the row buffer and hence only
+incurs negligible latency. 
