@@ -88,4 +88,5 @@ then the block is present in the DRAM cache, and the cache controller reads the 
 is clear, then the DRAM is cache is not accessed, and the cache controller directly reads the home location. On a MissMap miss,
 an existing entry is evicted to make space for the new entry. To avoid giving inaccurate block residency information, 
 when an entry is evicted from the MissMap, we also evict the corresponding sets from the DRAM cache, writing back blocks
-if they are dirty. 
+if they are dirty. When a new block is inserted into/deleted from the cache, the corresponding entries are also updated
+by setting/clearing the bits. Such update can be moved out of the critical path by performing them in the background.
