@@ -25,8 +25,14 @@ For example, to support 1GB DRAM cache, the size of the tag store reoported by t
 which already exceeds the maximum amount of fast SRAM implementable with today's technology (the paper was written in 2011, 
 but I believe even in 2019 this amount of SRAM is either impossible or extremely slow/expensive). The paper also identifies 
 several solutions to address the tag store issue. The first solution is to increase the size of the block, and hence 
-reduce the number of tags for the same amount of cached data. The problem, however, is that large blocks have to be read
-from and written into their home locations as an indivisible unit. Without sufficient locality, which is typically the case
-with lower level caches because the locality has been filtered out by higher level caches, only a few smaller blocks will
-be used in the large unit, resulting in wastage of bandwidth and contention on the memory bus (because a larger block takes 
-longer to transfer).
+reduce the number of tags for the same amount of cached data. The problem, however, is that large blocks (e.g. 4KB) have 
+to be read from and written into their home locations as an indivisible unit. Without sufficient locality, which is typically 
+the case with lower level caches because the locality has been filtered out by higher level caches, only a few smaller blocks 
+will be used in the large unit, resulting in wastage of bandwidth and contention on the memory bus (because a larger block takes 
+longer to transfer). The second solution is sector cache, in which the granularity of blocks are unchaned, but multiple 
+blocks, called a "sector", are grouped together and only associated with a single tag. Blocks can be transferred and evicted
+at the granularity of 64 byte blocks as on-chip caches. A bit vector is also added to indicate which blocks are present in 
+the sector and which are not. The problem with sector cache, however, is that it assumes spatial locality of access, i.e. 
+if a block is brought into the sector cache by an access, then later accesses are expected to occur on nearby addresses. 
+As argued in the previous point, this assumption does not work well for lower level caches due to to filtering effect from
+higher level caches. As a result, 
