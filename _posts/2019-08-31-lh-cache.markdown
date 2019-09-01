@@ -84,4 +84,8 @@ MBs of storage dedicated to the MissMap can cover hundreds of MBs of DRAM space.
 When an L3 miss is detected, the cache controller initiates an access to the MissMap. The middle bits of the address is 
 used to locate the set, and then an associative search is performed on the set to locate the entry. Assuming a MissMap hit,
 after the entry is read, we use the in-segment offset to locate the status bit for the target block. If the bit is set, 
-then the block is present in the DRAM cache, and the cache controller reads the DRAM set.
+then the block is present in the DRAM cache, and the cache controller reads the DRAM cache as described earlier. If the bit
+is clear, then the DRAM is cache is not accessed, and the cache controller directly reads the home location. On a MissMap miss,
+an existing entry is evicted to make space for the new entry. To avoid giving inaccurate block residency information, 
+when an entry is evicted from the MissMap, we also evict the corresponding sets from the DRAM cache, writing back blocks
+if they are dirty. 
