@@ -42,4 +42,8 @@ contention on conventional DRAM.
 
 Instead of implementing a highly associative cache with miss predictors, Alloy Cache puts itself on another end of the 
 spectrum, featuring a direct-mapped organization and parallel cache/DRAM access. The radical design differences in fact
-reflect a fundamental trade-off in cache performance: the miss rate and latency trade-off. 
+reflect a fundamental trade-off in cache performance: the miss rate and latency trade-off. By reducing the associativity
+and removing the predictor from the critical path, we decrease hit latency of the cache at the cost of increasing the miss
+rate. 
+
+The direct-mapped
