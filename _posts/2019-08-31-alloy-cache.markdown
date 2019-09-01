@@ -57,4 +57,7 @@ with L-H cache, in which 172 bytes of tags must be fully transferred to the cach
 data block to use, the Alloy Cache approach only reads 72 bytes of data, and in the case of cache miss, 64 of them are 
 discarded.
 
-
+To compensate the lower hit rate compared with other designs, Alloy cache further overlaps cache probe with DRAM access.
+If the cache indicates a hit, then the DRAM lookup is aborted (results are discarded if it finishes earlier), and we use
+the cached block. If the cache indicate a miss, the miss latency is reduced to the latency of cache lookup or DRAM lookup,
+whichever is larger, instead of the sum of these two. 
