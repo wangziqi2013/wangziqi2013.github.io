@@ -29,4 +29,7 @@ second issue is prediction. Since row activation is a major source of latency du
 attempt to minimize the chance that row activation is performed by prediction whether a block will be found in the cache.
 For example, in L-H cache, a MissMap is added to track the residency state of memory segments. Each segment has a tagged 
 entry in the MissMap and an associated bit vector, with "1" bit representing a cached block, and "0" representing non-cached
-block. 
+block. The MissMap is accessed before every access of the DRAM cache, and if the query indicates a non-existent block, the 
+cache will be skipped. Querying the MissMap, however, is also on the critical path of every access. In addition, the L-H 
+cache paper also proposes implementing the MissMap in the LLC SRAM storage, contending for space with regular data requests.
+This paper identifies this kind of extra latency as "Predictor Serialization Latency", or PSL.
