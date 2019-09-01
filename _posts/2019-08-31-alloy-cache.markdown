@@ -64,4 +64,9 @@ whichever is larger, instead of the sum of these two. This technique, however, u
 the DRAM if the cache indicates a hit, which should be the majority case (compared with not having an L4 DRAM cache, the 
 amount of traffic stays the same). To counter this, the paper proposes using predictors to inform the cache controller 
 on whether a cache access should happen in parallel with DRAM access, or they should be serialized. Two schemes of prediction
-are presented in the paper. 
+are presented in the paper. The first scheme relies on global history, which is based on the theory that cache hits and misses
+usually happen in strides, i.e. if the previous accesses are hits/misses, the following access also tend to be a hit/miss. 
+The global predictor can be as simple as a three-bit saturating counter. Every cache hit/miss will increment/decrement the 
+counter, ignoring overflows and underflows. The cache controller uses the highest bit of the counter as the prediction output.
+If it is "1", a cache hit is predicted, and the controller serialize cache access and DRAM access. If it is "0", then
+both accesses are performed in parallel since we do not expect to find the block in the cache.
