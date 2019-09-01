@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes Alloy Cache, a DRAM cache design that features low hit latency and low lookup overhead. This paper 
+is based the assumption that the processor is equipped with Die-Stacked DRAM, the access latency of which is lower than 
+conventional DRAM (because otherwise, directly accessing the DRAM on LLC miss is always better). The paper identifies 
+several issues with previously published DRAM cache designs. 
