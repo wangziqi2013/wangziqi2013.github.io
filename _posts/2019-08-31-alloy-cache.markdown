@@ -69,4 +69,10 @@ usually happen in strides, i.e. if the previous accesses are hits/misses, the fo
 The global predictor can be as simple as a three-bit saturating counter. Every cache hit/miss will increment/decrement the 
 counter, ignoring overflows and underflows. The cache controller uses the highest bit of the counter as the prediction output.
 If it is "1", a cache hit is predicted, and the controller serialize cache access and DRAM access. If it is "0", then
-both accesses are performed in parallel since we do not expect to find the block in the cache.
+both accesses are performed in parallel since we do not expect to find the block in the cache. The second scheme uses PC-based
+prediction, leveraging the fact that cache hits/misses are also tightly related with the instruction that generates the 
+access. In the PC-based scheme, the miss address will be hashed into a 8 bit index, which is then used to lookup a table 
+of three-bit saturating counters. The saturating counters operate exactly the same as in the global scheme. The counter 
+is updated after the cache returns result, which is off the critical path. The table of counters is a per-processor 
+structure to avoid multiple control flows disrupting the predictor state, which sums up to 96 bytes of extra SRAM storage
+per processor, a negligible cost.
