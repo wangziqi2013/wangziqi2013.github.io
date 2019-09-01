@@ -25,4 +25,8 @@ expensive operation. The high associativity design, however, inevitably puts tag
 In L-H cache, all 174 bytes of tags have to be read from the row before a tag comparison can be completed, resulting in 
 a total 238 bytes read in order to access a block. Both accessing the tag store and performing tag comparison are conducted
 on every access of the cache. The paper identifies this part of the overhead as "Tag Serialization Latency", or TSL. The 
-second 
+second issue is prediction. Since row activation is a major source of latency during tag lookup, some DRAM cache designs
+attempt to minimize the chance that row activation is performed by prediction whether a block will be found in the cache.
+For example, in L-H cache, a MissMap is added to track the residency state of memory segments. Each segment has a tagged 
+entry in the MissMap and an associated bit vector, with "1" bit representing a cached block, and "0" representing non-cached
+block. 
