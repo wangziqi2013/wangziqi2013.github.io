@@ -55,7 +55,12 @@ of data block in the DRAM cache. The DRAM cache is organized as a set-associativ
 The paper assumes 4KB DRAM row, which can support at most 64 cache blocks. Metadata such as dirty bits and coherence states
 are stored in the mapping table for fast access and update. The paper also assumes 48-bit physical addresses. When translating 
 an address A, we form the row selection index using bit 12 to bit 29 of the address. This index is sent to the DRAM controller
-to activate the row. 
+to activate the row. In the meantime, a four-level page walk is performed to map the higher bits of the address into 
+a leaf level entry, the content of which will be explained later. The four-level page walk uses bit 12 to 20, bit 21 to 29, 
+bit 30 to 38 and bit 39 to 47 to form the index to level 1, 2, 3 and 4 nodes of the radix tree, respectively. We assume that
+the page walk always reaches a leaf node at level four, and discuss the case of the path compression later. Note that this
+mapping scheme differs from the x86 page table in two aspects. First, indices are formed from middle bits to higher bits
+(rather than starting from the highest bits). This is consistent with 
 
 The leaf
 entry is an array of direct-mapped 
