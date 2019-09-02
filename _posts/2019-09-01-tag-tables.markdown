@@ -41,11 +41,17 @@ pages. In the case where the virtual address space is larger than the physical a
 IPT has an obvious advantage over a direct-mapped page table (an array of physical frame numbers, the size of which equals 
 the number of virtual pages).
 
-On the other hand, a page table can be optimized to use less storage while still using forward mapping 
+On the other hand, a page table can be optimized to consume less storage while still using forward mapping 
 (i.e. mapping VA to PA). For example, multi-leveled page table, implemented as radix trees, allows flexible 
-allocation of mapping table storage in three aspects. First, storage does not need to be consecutive, since 
-tree nodes are linked together using pointers. Second, if a subtree is empty, the upper level parent can just store
-a empty pointer in the corresponding field. The tree walker is able to infer this case when seeing an empty pointer.
-The last, and the most important point is that, if a middle-level subtree P only has one leaf-level entry E as its 
-only decendant, i.e. there is a path from P to E and no other nodes in the tree can be reached except the nodes on the 
-path, the path can be compressed by storing the leaf node E within node P.
+allocation of mapping table storage in three aspects. First, compared with a direct-mapped array, storage does not need 
+to be consecutive, since tree nodes are linked together using pointers. Second, if a subtree is empty, the upper level 
+parent can just store an empty pointer in the corresponding field. The tree walker is able to infer this case when seeing 
+an empty pointer. The last, and the most important point is that, if a middle-level subtree P only has one leaf-level entry 
+E as its only decendant, i.e. there is a path from P to E and no other nodes in the tree can be reached except the nodes on the 
+path, the path can be compressed by storing the leaf node E within node P. 
+
+The design of tag table borrows from multi-leveled page table, such that physical addresses are mapped to the location
+of data block in the DRAM cache. The DRAM cache is organized as a set-associative cache with extremely high associativity.
+The paper assumes 4KB DRAM row, which can support at most 64 cache blocks. Metadata such as dirty bits and coherence states
+are stored in the mapping table for fast access and update. The paper also assumes 48-bit physical addresses. When translating 
+an address A, the middle bits above A
