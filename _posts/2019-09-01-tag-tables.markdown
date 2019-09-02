@@ -85,4 +85,6 @@ of two parts. The first part is a tag field, which stores either 9 bits or 18 bi
 should have been used to address level 3 and level 4 nodes. The second part is a range descriptor, which itself consists
 of four fields: A page offset field (6 bits) to specify the beginning of the range in the physical page; A length (6 bits)
 to describe the number of blocks in the range; A row offset (6 bits) to specify the beginning of the range in the DRAM row,
-and a dirty bits to indicate whether any of these blocks are dirty. 
+and a dirty bit to indicate whether any of these blocks are dirty. Four descriptors can be stored within one compressed 
+leaf node, which sums up to 12 bytes. Such a leaf node can describe the same row layout as long as there are less than 
+five consecutive regions in a physical page, saving both storage and lookup latency. 
