@@ -93,4 +93,12 @@ On insertion of a new block into a compressed leaf entry, the tag walker should 
 exceed four, because otherwise the leaf entry has to be expanded to the full-sized entry, and in the case of level-3 or -4
 leaf nodes, be assigned new internal nodes as parents. To achieve this, the paper suggests that the tag walker map blocks
 to consecutive locations in the DRAM cache as much as possible. Even in the case of an expansion, however, the insertion
-operation still occurs off the critical path as a background task. 
+operation still occurs off the critical path as a background task.
+
+The paper proposes another two optimizations that help improve tag table's performance. The first optimization, called 
+"prefetching", can be applied when the tag walker needs to insert a new block into the row, but could not find a 
+range that allows it to be merged. In this case, instead of expanding the compressed leaf node into a normal node,
+the tag walker finds the nearest range in the same physical page in terms of block offsets, and then prefetches all intermediate
+blocks into the cache to form a new range, given that the blocks in the DRAM cache at the corresponding locations are also 
+empty. 
+
