@@ -54,4 +54,8 @@ The design of tag table borrows from multi-leveled page table, such that physica
 of data block in the DRAM cache. The DRAM cache is organized as a set-associative cache with extremely high associativity.
 The paper assumes 4KB DRAM row, which can support at most 64 cache blocks. Metadata such as dirty bits and coherence states
 are stored in the mapping table for fast access and update. The paper also assumes 48-bit physical addresses. When translating 
-an address A, the middle bits above A
+an address A, we form the row selection index using bit 12 to bit 29 of the address. This index is sent to the DRAM controller
+to activate the row. 
+
+The leaf
+entry is an array of direct-mapped 
