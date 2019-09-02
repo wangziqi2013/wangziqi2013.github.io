@@ -82,4 +82,7 @@ case will take at least 48 bytes. To further reduce memory consumption and the t
 compressed leaf entry. A compressed leaf entry represents a consecutive range of blocks mapped from the physical page
 to the DRAM row, and the compressed leaf entry can be linked to level 2 or level 3 nodes. The compressed leaf entry consists
 of two parts. The first part is a tag field, which stores either 9 bits or 18 bits tag, which is (are) the index that
-should have been used to address level 3 and level 4 nodes. The
+should have been used to address level 3 and level 4 nodes. The second part is a range descriptor, which itself consists
+of four fields: A page offset field (6 bits) to specify the beginning of the range in the physical page; A length (6 bits)
+to describe the number of blocks in the range; A row offset (6 bits) to specify the beginning of the range in the DRAM row,
+and a dirty bits to indicate whether any of these blocks are dirty. 
