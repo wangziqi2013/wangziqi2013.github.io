@@ -26,3 +26,13 @@ and metadata such as dirty bits, coherence states, etc., we compute the ratio be
 In the conventional set-associative scheme, in which every data slot in the DRAM cache has a corresponding tag slot
 in the tag array, storing these tags will cost hundreds MBs on the chip, which is most likely not practical nowadays
 and in the near future considering several factors such as cost, latency, energy, and area.
+
+The paper seeks to reduce the amount of storage required to store all tags on-chip by adopting a mapping structure 
+similar to a page table, enabling adaptive tag storage policies. This solution is based on the observation that
+conventional tag array approach of maintaning tags within a set is similar to inverted page table (IPT). In the realm of 
+virtual memory, an inverted page table reserves an array of virtual addresses, the size of which equals the number of 
+physical pages. Entry i of the inverted page table stores the tag of the virtual address that is mapped to the physical
+frame. When translating a virtual address, the table is associatively searched to locate the physical frame number by 
+comparing every virtual address against the requested address. Given that the physical address space is often several GBs
+in size (which is far more larger than a set in the cache), this process is typically accelerated by hashing the virtual
+address to a certain location in the IPT, and then start linear probing from that point. 
