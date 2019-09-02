@@ -62,9 +62,19 @@ the page walk always reaches a leaf node at level four, and discuss the case of 
 mapping scheme differs from the x86 page table in two aspects. First, indices are formed from middle bits to higher bits
 of the address, rather than starting from the highest bits as in x86-64 page table. This is consistent with how the address
 is used: We use middle bits as the row selection index, which will also be used as the indices for first two levels of the 
-page table walk. This guarantees that the subtree we reach after two levels of table walk will cover only the row being 
-activated. This property is extremely helpful if information on the row is to be collected, since the page table scan
+tag table walk. This guarantees that the subtree we reach after two levels of table walk will cover only the row being 
+activated. This property is extremely helpful if information on the row is to be collected, since the tag table scan
 is localized to only the subtree describing the mapping of the row. The paper calls the subtree as "page roots".
+In addition, since memory allocation on a typical machine is performed at 4KB granularity, which is also the size 
+of a tree node in the tag table (9 bits can address 512 entries. Assuming each entry is 8 byte pointer, this sums up to
+exactly 4KB). To avoid creating too many "sparse" nodes in which the majority of entries are empty (indicating no
+subtree), we would like to use the high entropy bits at the first few levels, such that nodes in these levels are mostly
+populated to increase cache performance.
 
-The leaf
-entry is an array of direct-mapped 
+In order for the tag table walk to proceed in parallel with row activation, the paper suggests that the tag table be made
+addressable in the conventional DRAM and cachable by the LLC. The tag table walk will most likely hit the LLC, the latency 
+which is much smaller than a row activation.
+
+After reaching the leaf entry, the tag table walker performs the last step of mapping using the remaining 6 bits from
+the address, bit 6 to 11, which encodes the offset of the cache block in the physical page. The leaf entry is simply
+an array of 6 bit integers that maps the source offset to the destination offset in the DRAM row. 
