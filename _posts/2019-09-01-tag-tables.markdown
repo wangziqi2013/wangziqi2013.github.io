@@ -87,4 +87,10 @@ of four fields: A page offset field (6 bits) to specify the beginning of the ran
 to describe the number of blocks in the range; A row offset (6 bits) to specify the beginning of the range in the DRAM row,
 and a dirty bit to indicate whether any of these blocks are dirty. Four descriptors can be stored within one compressed 
 leaf node, which sums up to 12 bytes. Such a leaf node can describe the same row layout as long as there are less than 
-five consecutive regions in a physical page, saving both storage and lookup latency. 
+five consecutive regions in a physical page, saving both storage and lookup latency.
+
+On insertion of a new block into a compressed leaf entry, the tag walker should ensure that the number of regions do not
+exceed four, because otherwise the leaf entry has to be expanded to the full-sized entry, and in the case of level-3 or -4
+leaf nodes, be assigned new internal nodes as parents. To achieve this, the paper suggests that the tag walker map blocks
+to consecutive locations in the DRAM cache as much as possible. Even in the case of an expansion, however, the insertion
+operation still occurs off the critical path as a background task. 
