@@ -100,5 +100,12 @@ The paper proposes another two optimizations that help improve tag table's perfo
 range that allows it to be merged. In this case, instead of expanding the compressed leaf node into a normal node,
 the tag walker finds the nearest range in the same physical page in terms of block offsets, and then prefetches all intermediate
 blocks into the cache to form a new range, given that the blocks in the DRAM cache at the corresponding locations are also 
-empty. 
+empty. The second optimization accelerates tag table access on the LLC by colocating frequently accessed page roots on a 
+core with the LLC slice on that core. On a NUCA machine where the LLC is partitioned between cores, each core is only
+responsible for maintaining the LLC on a subset of the address space. A remote LLC request takes more cycles to fulfill,
+since the core needs to communicate with another core and brings back the cached entry. In the tag table design, since 
+the location of page roots are not specified, the hardware may choose to place a page root table in a physical page
+that is mapped to a certain core. If the core also happens to access the page root frequently (e.g. due to locality
+of accesses), this prevents the core from sending a costly remote LLC request for every tag table read, a performance 
+improvement.
 
