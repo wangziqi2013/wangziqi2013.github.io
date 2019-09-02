@@ -35,4 +35,8 @@ physical pages. Entry i of the inverted page table stores the tag of the virtual
 frame. When translating a virtual address, the table is associatively searched to locate the physical frame number by 
 comparing every virtual address against the requested address. Given that the physical address space is often several GBs
 in size (which is far more larger than a set in the cache), this process is typically accelerated by hashing the virtual
-address to a certain location in the IPT, and then start linear probing from that point. 
+address to a certain location in the IPT, and then start linear probing from that point. As discussed above, the size of 
+an IPT is bounded by the number of physical pages (or cache blocks in a set compared) rather than the number of virtual
+pages. In the case where the virtual address space is larger than the physical address space, such as virtual memory, the 
+IPT has an obvious advantage over a direct-mapped page table (an array of physical frame numbers, the size of which equals 
+the number of virtual pages).
