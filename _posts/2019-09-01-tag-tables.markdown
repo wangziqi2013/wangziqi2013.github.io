@@ -45,4 +45,7 @@ On the other hand, a page table can be optimized to use less storage while still
 (i.e. mapping VA to PA). For example, multi-leveled page table, implemented as radix trees, allows flexible 
 allocation of mapping table storage in three aspects. First, storage does not need to be consecutive, since 
 tree nodes are linked together using pointers. Second, if a subtree is empty, the upper level parent can just store
-a empty pointer in the corresponding field. 
+a empty pointer in the corresponding field. The tree walker is able to infer this case when seeing an empty pointer.
+The last, and the most important point is that, if a middle-level subtree P only has one leaf-level entry E as its 
+only decendant, i.e. there is a path from P to E and no other nodes in the tree can be reached except the nodes on the 
+path, the path can be compressed by storing the leaf node E within node P.
