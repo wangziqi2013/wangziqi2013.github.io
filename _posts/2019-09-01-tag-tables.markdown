@@ -40,3 +40,9 @@ an IPT is bounded by the number of physical pages (or cache blocks in a set comp
 pages. In the case where the virtual address space is larger than the physical address space, such as virtual memory, the 
 IPT has an obvious advantage over a direct-mapped page table (an array of physical frame numbers, the size of which equals 
 the number of virtual pages).
+
+On the other hand, a page table can be optimized to use less storage while still using forward mapping 
+(i.e. mapping VA to PA). For example, multi-leveled page table, implemented as radix trees, allows flexible 
+allocation of mapping table storage in three aspects. First, storage does not need to be consecutive, since 
+tree nodes are linked together using pointers. Second, if a subtree is empty, the upper level parent can just store
+a empty pointer in the corresponding field. 
