@@ -60,7 +60,11 @@ a leaf level entry, the content of which will be explained later. The four-level
 bit 30 to 38 and bit 39 to 47 to form the index to level 1, 2, 3 and 4 nodes of the radix tree, respectively. We assume that
 the page walk always reaches a leaf node at level four, and discuss the case of the path compression later. Note that this
 mapping scheme differs from the x86 page table in two aspects. First, indices are formed from middle bits to higher bits
-(rather than starting from the highest bits). This is consistent with 
+of the address, rather than starting from the highest bits as in x86-64 page table. This is consistent with how the address
+is used: We use middle bits as the row selection index, which will also be used as the indices for first two levels of the 
+page table walk. This guarantees that the subtree we reach after two levels of table walk will cover only the row being 
+activated. This property is extremely helpful if information on the row is to be collected, since the page table scan
+is localized to only the subtree describing the mapping of the row. The paper calls the subtree as "page roots".
 
 The leaf
 entry is an array of direct-mapped 
