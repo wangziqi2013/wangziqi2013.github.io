@@ -77,4 +77,9 @@ which is much smaller than a row activation.
 
 After reaching the leaf entry, the tag table walker performs the last step of mapping using the remaining 6 bits from
 the address, bit 6 to 11, which encodes the offset of the cache block in the physical page. The leaf entry is simply
-an array of 6 bit integers that maps the source offset to the destination offset in the DRAM row. 
+an array of 6 bit integers that maps the source offset to the destination offset in the DRAM row. A leaf page in this 
+case will take at least 48 bytes. To further reduce memory consumption and the tag walk complexity, the paper proposes
+compressed leaf entry. A compressed leaf entry represents a consecutive range of blocks mapped from the physical page
+to the DRAM row, and the compressed leaf entry can be linked to level 2 or level 3 nodes. The compressed leaf entry consists
+of two parts. The first part is a tag field, which stores either 9 bits or 18 bits tag, which is (are) the index that
+should have been used to address level 3 and level 4 nodes. The
