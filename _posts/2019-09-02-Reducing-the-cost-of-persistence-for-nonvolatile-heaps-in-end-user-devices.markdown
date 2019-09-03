@@ -46,6 +46,10 @@ is a global operation that would take many cycles to complete.
 and similarly no explanation on what causes the higher miss rate. What's the difference between these two types of 
 applications and any two applications that share the same LLC?**
 
+**Note 2: I guess the paper is trying to say that since NVMPersist cache lines will be flushed anyway shortly after they 
+are written, these short-lived cache lines should not cause other cache lines to be evicted just because it needs the
+cache.**
+
 The second problem is metadata overhead of memory allocators. Previous NVM-based allocators store their metadata on the 
 NVM directly, which is updated every time an allocation request is fulfilled. Given that modern memory allocators have fairly
 complicated internal states and policies, this will incur large amount of data being written to the NVM on every memory
@@ -64,4 +68,6 @@ records are written compared with the amount of logged data. The problem with th
 large and modifications are small, space will be wasted storing the unmodified part of the object.
 
 To solve the cache sharing proble, the paper levarages an architectural knowledge that continuous cache lines are typically
-mapped to different sets in the cache in most cache implementations.
+mapped to different sets in the cache in most cache implementations. The paper suggests that the physical pages allocated
+to a process should be made contiguous as much as possible, such that the cache lines of the applications are evenly distributed 
+within all cache sets, rather than biased towards a few sets and content for cache with other applications. 
