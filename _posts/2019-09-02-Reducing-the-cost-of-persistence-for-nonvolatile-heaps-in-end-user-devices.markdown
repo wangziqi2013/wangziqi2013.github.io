@@ -42,3 +42,7 @@ where NVMCap and NVMPersist applications are scheduled on different cores which 
 is shared by multiple caches, the flush instruction will have to invalidate all copies in the cache hierarchy, which itself
 is a global operation that would take many cycles to complete.
 
+The second problem is metadata overhead of memory allocators. Previous NVM-based allocators store their metadata on the 
+NVM directly, which is updated every time an allocation request is fulfilled. Given that modern memory allocators have fairly
+complicated internal states and policies, this will incur large amount of data being written to the NVM on every memory
+allocation, which also stays on the critical path. Furthermore, in order for NVM objects to be found after a crash or reboot,
