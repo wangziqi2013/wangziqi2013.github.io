@@ -75,4 +75,8 @@ observation, the paper proposes modifying the OS's page allocator as follows. Fo
 a bucket of contiguous pages for the process. The bucket is initially empty. Whenever a page is allocated for the process, the OS
 reserves a range of physical pages around the allocated page (based on page availbility) and adds them into the bucket. The
 next time the same process requests a page, the OS can simply allocate from the bucket, maintaining a contiguous physical
-page map as much as possible. Furthermore, the 
+page map as much as possible. Inevitably, reserving pages on allocation will result in external fragmentation, i.e. some
+processes may not be able to find contiguous pages when it allocates a page. The OS maintains two watermarks to determine 
+when this allocation policy should be used. If the amount of memory is low, the OS begins allocating non-contiguous pages
+to NVMPersist applications. When the system is close to out of memory, the OS disables this policy and frees all pages 
+back to the physical page pool.
