@@ -46,3 +46,5 @@ The second problem is metadata overhead of memory allocators. Previous NVM-based
 NVM directly, which is updated every time an allocation request is fulfilled. Given that modern memory allocators have fairly
 complicated internal states and policies, this will incur large amount of data being written to the NVM on every memory
 allocation, which also stays on the critical path. Furthermore, in order for NVM objects to be found after a crash or reboot,
+non-volatile objects themselves are also associated with metadata, such as a string as the object's name, or the CRC code
+to verify integrity of the object. Such object metadata should also be written back to the NVM as part of the allocation process. 
