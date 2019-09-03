@@ -86,4 +86,8 @@ structure remain in the DRAM as usual. Essential metadata for a memory allocator
 address map. The physical address map records which ranges of physical addresses are occupied by active objects, and the 
 virtual address map stores the mapping between virtual address ranges and named objects. Note that the virtual address
 map is critical for NVM applications, due to the fact pointer values are virtual addresses. Pointers must still point
-to the same object as before the crash or reboot. 
+to the same object as before the crash or reboot. When a memory allocation request is fulfilled, the allocator logs the 
+changes to the virtual and physical address map, and write a log record to a dedicated allocator logging area. This 
+logging area is on a known location and can be used to rebuild the memory map (including page table and physical memory
+map) by replaying the allocation log (free and alloc cancel out). Internal states of the allocators can be rebuilt by
+software logic after the map is recovered.
