@@ -17,4 +17,7 @@ This paper identifies three problems with NVM applications on mobile platforms a
 with software-only approaches. Applications running on the NVM are classified into two categories. The first category
 of application, called NVMCap by the paper, only uses the NVM as an extra chunk of memory, the content of which is 
 no longer needed after a crash or system reboot. These applications include those whose use the NVM as a video buffer
-or 
+or a swap area. The second category is called NVMPersist, which rely on NVM's ability to retain the content of 
+application data after a crash or reboot. In practice, these two types of applications often co-exist on the same 
+mobile platform, which can introduce subtle problems, either by their own, or because of the subtle interactions
+between them. 
