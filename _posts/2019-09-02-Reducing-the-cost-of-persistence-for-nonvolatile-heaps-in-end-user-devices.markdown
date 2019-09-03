@@ -42,6 +42,10 @@ where NVMCap and NVMPersist applications are scheduled on different cores which 
 is shared by multiple caches, the flush instruction will have to invalidate all copies in the cache hierarchy, which itself
 is a global operation that would take many cycles to complete.
 
+**Note: This paper does not give any explanation of what is "cache sharing" (I think it is way-sharing in the same set)
+and similarly no explanation on what causes the higher miss rate. What's the difference between these two types of 
+applications and any two applications that share the same LLC?**
+
 The second problem is metadata overhead of memory allocators. Previous NVM-based allocators store their metadata on the 
 NVM directly, which is updated every time an allocation request is fulfilled. Given that modern memory allocators have fairly
 complicated internal states and policies, this will incur large amount of data being written to the NVM on every memory
@@ -57,4 +61,7 @@ more than half of NVM storage is dedicated to storing the address tag and other 
 approach, object-based logging, treats a predefined object as an indivisible logging unit. The entire redo image of the 
 object is copied to the log with one address tag indicating the base address of the object. This way, only very few metadata
 records are written compared with the amount of logged data. The problem with this approach is that if the objects are 
-large and modifications are small, space is wasted storing the unmodified part of the object.
+large and modifications are small, space will be wasted storing the unmodified part of the object.
+
+To solve the cache sharing proble, the paper levarages an architectural knowledge that continuous cache lines are typically
+mapped to different sets in the cache in most cache implementations.
