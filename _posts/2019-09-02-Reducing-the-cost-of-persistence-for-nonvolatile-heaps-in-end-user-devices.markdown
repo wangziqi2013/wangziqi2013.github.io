@@ -36,4 +36,9 @@ problem is cache sharing. As NVMPersist applications must regularly flush back d
 cache lines by NVMCap applications are expected to be invalidated often by the cache flush logic. This, however, is detrimental
 if NVMCap applications store its run time data in the same cache line, creating false sharing. These applications will observe
 higher than usual cache miss rates, even if they do not issue cache line flush instructions (nor are they needed for 
-ensuring correctness). The paper gives an example
+ensuring correctness). The paper gives an example: When a persistent hash table co-exists with other NVMCap applications,
+these NVMCap applications observe higher cache miss rates, ranging from 2% to 25% more. Even worse, on a multicore platform,
+where NVMCap and NVMPersist applications are scheduled on different cores which execute on disjoint caches, if a cache line
+is shared by multiple caches, the flush instruction will have to invalidate all copies in the cache hierarchy, which itself
+is a global operation that would take many cycles to complete.
+
