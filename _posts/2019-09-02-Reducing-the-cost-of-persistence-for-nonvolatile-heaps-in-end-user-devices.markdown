@@ -21,3 +21,11 @@ or a swap area. The second category is called NVMPersist, which rely on NVM's ab
 application data after a crash or reboot. In practice, these two types of applications often co-exist on the same 
 mobile platform, which can introduce subtle problems, either by their own, or because of the subtle interactions
 between them. 
+
+This paper assumes that the NVM device is directly attached to the memory bus, whose storage is exposed to the operating
+system as a byte-addressable memory. The paper recommends that the NVM device be mapped into the address space and managed 
+by the OS as a persistent heap, rather than using block I/O which adds another level of indirection and makes software
+the major bottleneck on the critical path. 
+
+The paper identifies three problems with NVMCap and NVMPersist applications. The first problem is cache sharing. As
+NVMCap applications
