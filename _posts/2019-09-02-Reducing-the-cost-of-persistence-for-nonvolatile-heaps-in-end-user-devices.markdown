@@ -48,3 +48,11 @@ complicated internal states and policies, this will incur large amount of data b
 allocation, which also stays on the critical path. Furthermore, in order for NVM objects to be found after a crash or reboot,
 non-volatile objects themselves are also associated with metadata, such as a string as the object's name, or the CRC code
 to verify integrity of the object. Such object metadata should also be written back to the NVM as part of the allocation process. 
+
+The third problem is logging which is widely used as the method for providing atomicity and durability to persistent 
+transactions. This paper assumes a redo logging approach, but the same principle applies to undo logging. Currently, two
+flavors of logging are used by various schemes. The first approach, word-based logging, simply records every memory modification
+at word granularity and writes a log record. The problem, however, has a metadata overhead of more than 50%, which means that
+more than half of NVM storage is dedicated to storing the address tag and other status bits instead of logged data. The second
+approach, object-based logging, records a range of updates as a single unit within an object. Only one object ID tag is
+associated with such an update even if it consists of many words. 
