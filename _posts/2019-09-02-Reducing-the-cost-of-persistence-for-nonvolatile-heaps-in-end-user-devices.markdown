@@ -70,4 +70,9 @@ large and modifications are small, space will be wasted storing the unmodified p
 To solve the cache sharing proble, the paper levarages an architectural knowledge that continuous cache lines are typically
 mapped to different sets in the cache in most cache implementations. The paper suggests that the physical pages allocated
 to a process should be made contiguous as much as possible, such that the cache lines of the applications are evenly distributed 
-within all cache sets, rather than biased towards a few sets and content for cache with other applications. 
+within all cache sets, rather than biased towards a few sets and content for cache slots with NVMCap applications. Based on this
+observation, the paper proposes modifying the OS's page allocator as follows. For each process in the system, the OS maintains
+a bucket of contiguous pages for the process. The bucket is initially empty. Whenever a page is allocated for the process, the OS
+reserves a range of physical pages around the allocated page (based on page availbility) and adds them into the bucket. The
+next time the same process requests a page, the OS can simply allocate from the bucket, maintaining a contiguous physical
+page map as much as possible. Furthermore, the 
