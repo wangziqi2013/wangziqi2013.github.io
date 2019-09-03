@@ -80,3 +80,10 @@ processes may not be able to find contiguous pages when it allocates a page. The
 when this allocation policy should be used. If the amount of memory is low, the OS begins allocating non-contiguous pages
 to NVMPersist applications. When the system is close to out of memory, the OS disables this policy and frees all pages 
 back to the physical page pool.
+
+To solve the second problem, the paper proposes that only essential metadata is logged while other complicated data
+structure remain in the DRAM as usual. Essential metadata for a memory allocator includes the physical address map and virtual
+address map. The physical address map records which ranges of physical addresses are occupied by active objects, and the 
+virtual address map stores the mapping between virtual address ranges and named objects. Note that the virtual address
+map is critical for NVM applications, due to the fact pointer values are virtual addresses. Pointers must still point
+to the same object as before the crash or reboot. 
