@@ -54,5 +54,7 @@ transactions. This paper assumes a redo logging approach, but the same principle
 flavors of logging are used by various schemes. The first approach, word-based logging, simply records every memory modification
 at word granularity and writes a log record. The problem, however, has a metadata overhead of more than 50%, which means that
 more than half of NVM storage is dedicated to storing the address tag and other status bits instead of logged data. The second
-approach, object-based logging, records a range of updates as a single unit within an object. Only one object ID tag is
-associated with such an update even if it consists of many words. 
+approach, object-based logging, treats a predefined object as an indivisible logging unit. The entire redo image of the 
+object is copied to the log with one address tag indicating the base address of the object. This way, only very few metadata
+records are written compared with the amount of logged data. The problem with this approach is that if the objects are 
+large and modifications are small, space is wasted storing the unmodified part of the object.
