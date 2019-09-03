@@ -25,7 +25,10 @@ between them.
 This paper assumes that the NVM device is directly attached to the memory bus, whose storage is exposed to the operating
 system as a byte-addressable memory. The paper recommends that the NVM device be mapped into the address space and managed 
 by the OS as a persistent heap, rather than using block I/O which adds another level of indirection and makes software
-the major bottleneck on the critical path. 
+the major bottleneck on the critical path. Applications request for memory allocation via special interfaces provided by
+the library. Different libraries calls are previsioned for NVMCap and NVMPersist applications to allocate memory, in order
+to achieve better overall storage management. Since DRAM is relatively precious resource on mobile platform, this paper 
+assumes no presence of DRAM cache as temporary store to evicted NVM data.
 
 The paper identifies three problems with NVMCap and NVMPersist applications. The first problem is cache sharing. As
 NVMCap applications
