@@ -91,3 +91,8 @@ changes to the virtual and physical address map, and write a log record to a ded
 logging area is on a known location and can be used to rebuild the memory map (including page table and physical memory
 map) by replaying the allocation log (free and alloc cancel out). Internal states of the allocators can be rebuilt by
 software logic after the map is recovered.
+
+To solve the last problem, the paper proposes hybird logging which enables both word level and object level logging.
+The library provides two different interfaces to allow programmers to choose from. The paper also proposes storing 
+log data and log metadata in two different segments to accelerate log entry iteration, since for object logging the 
+size of the object being logged can vary radically. 
