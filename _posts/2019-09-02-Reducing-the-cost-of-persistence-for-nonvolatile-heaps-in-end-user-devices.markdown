@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper identifies three problems with NVM applications on mobile platforms and manages to solve these problems
+with software-only approaches. Applications running on the NVM are classified into two categories. The first category
+of application, called NVMCap by the paper, only uses the NVM as an extra chunk of memory, the content of which is 
+no longer needed after a crash or system reboot. These applications include those whose use the NVM as a video buffer
+or 
