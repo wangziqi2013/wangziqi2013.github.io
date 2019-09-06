@@ -47,10 +47,11 @@ First, as we will see later, GPU memory access patterns are radically different 
 and other I/O devices on the system bus. This eccentric behavior of GPU programs makes IOMMU rather inefficient in handling
 GPU memory requests. Second, with a page table initialized by the driver, rather than the operating system running on 
 host CPU, it is either impossible to handle page faults or demand-paging, or requires significant OS enhancement.
+
 In the following sections, we assume a baseline design of GPUs equipped with CPU-like MMU hardware. The MMU hardware
 performs page walks on bahalf of the GPU using the same page table as the one used by the GPU driver. Prior to starting 
 a kernel on GPU, the driver should initialize the environment including data structures in its own address space. Memory
-allocation can be as simple as using the standard malloc() or mmap() interface. In addition,
-each CU is 
+allocation can be done as simple as using the standard malloc() or mmap() interface. In addition, each CU is extended with
+a private L1 TLB. Memory requests are first handed to the L1 TLB for address translation, and then sent to the coalescer.
 
 This paper makes three important observations which guide the design of an efficient MMU for the GPU.
