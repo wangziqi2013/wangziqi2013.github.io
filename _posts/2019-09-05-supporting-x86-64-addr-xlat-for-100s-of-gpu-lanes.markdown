@@ -108,4 +108,10 @@ is an important part of GPU memory management, since this enables more advanced 
 and fast memory allocation (e.g. mmap) to be used with GPU applications. The paper classifies page faults into two
 types. A minor page fault is a page fault that can be resolved without I/O. This often occurs when the GPU accesses 
 allocated memory for the first time (demand paging) or accesses memory after a process fork (copy-on-write). It can also
-be possibly triggered by a faulty program which accesses protected memory.
+be possibly triggered by a faulty program which accesses protected memory. To handle a minor page fault, first the 
+instruction on GPU is stalled as if the instruction is waiting for memory (and the stall hardware already exists). 
+Then, the GPU MMU sends an interrupt to the CPU via IOMMU to notify the CPU of the page fault event. The cached content of
+CR3 (i.e. pointer to the page table of the GPU driver). The CPU, on receiving the interrupt, context switches to the 
+GPU driver using the CR3, and then resolves the fault either by allocating a physical page in the case of damend paging, 
+or by halting the GPU driver in the case of illegal access. In the former case, the GPU can retry the memory access after
+the page fault is resolved. 
