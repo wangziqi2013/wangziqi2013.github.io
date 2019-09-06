@@ -92,5 +92,10 @@ access irregular data structures (e.g. BFS) or streams data without temporal loc
 proposes a multi-threaded page walker to replace the single-threaded one on the MMU. Note that the page walker is simply
 a state machine that traverses a radix tree of known depth, the thread context of a page walker can be as simple as a few
 registers storing the current level, the source TLB of the request (i.e. to whom to report the translated result), the address
-to be translated, and several control bits such as permissions. Adding the extra context information for multi-threaded 
+to be translated, and several control bits such as access permissions. Adding the extra context information for multi-threaded 
 page walker will not consume much storage and area.
+
+The last observation is that for applications, optimizing for page walk latency is more important than optimizing for lower 
+TLB miss rates. This is because these applications are, intrinsically, not TLB-friendly. They either access a irregular data
+structure, or they stream with low temporal locality. Even worse, all threads in a CU are executed in lock-step, which means 
+that these accesses with next to none locality will need to be handled in a short period of time. 
