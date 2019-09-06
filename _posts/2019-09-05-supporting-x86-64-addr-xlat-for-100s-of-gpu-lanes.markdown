@@ -97,5 +97,8 @@ page walker will not consume much storage and area.
 
 The last observation is that for applications, optimizing for page walk latency is more important than optimizing for lower 
 TLB miss rates. This is because these applications are, intrinsically, not TLB-friendly. They either access a irregular data
-structure, or they stream with low temporal locality. Even worse, all threads in a CU are executed in lock-step, which means 
-that these accesses with next to none locality will need to be handled in a short period of time. 
+structure, or they stream with large working sets and low temporal locality. Even worse, all threads in a CU are executed in 
+lock-step, which means that these accesses with next to none locality will need to be handled in a short period of time. 
+To solve this problem, the paper proposes adding a dedicated page walk cache which can provide low latency accessess to 
+intermediate results of the page walk. The dedicated page walk cache does not store data for normal operation, and is 
+queried using the physical address of the page table entry. 
