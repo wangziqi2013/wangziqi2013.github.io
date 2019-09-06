@@ -19,4 +19,7 @@ the performance of GPU applications for future big-data workloads for several re
 with CPU, data does not need to be copied to dedicated GPU memory before and after the task, which implies lower bandwidth
 requirement, energy consumption and latency. Second, it also simplifies programming for GPU applications, since the programmer
 can simply assume that all variables will be modified in-place by the GPU application. This differs from some GPU programming
-frameworks in which two copies of the input and ouput variables are maintained. 
+frameworks in which two copies of the input and ouput variables are maintained. Lastly, with virtual addresses, the pointer
+semantics will remain the same for GPU and CPU, which is crucial for handling pointer-based data structures, such as graph, 
+on GPU. Without virtual addressing support, before sending a pointer-based data structure to GPU, a mangling process is 
+executed first to pack data into a compact form and convert pointers to relative offsets. 
