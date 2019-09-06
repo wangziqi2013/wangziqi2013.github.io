@@ -21,7 +21,16 @@ version_mgmt:
    Page faults can be handled by the OS in the address space of the GPU driver without modifying the memory
    manegement part of the OS.
 
+**Lowlight:**
 
+1. This paper does not mention how the CR3 is obtained by the GPU. For example, on a context switch, the content of
+   CR3 is overwritten, and GPU cannot perform address translation if it does not have a cached copy. 
+
+2. The paper should mention that memory coalescing works slightly different for VA and PA. If the TLB is before the 
+   coalescer, then coalescer can use PA to perform coalescing, which can potentially be more optimized since it 
+   could reorder memory accesses to increase row buffer hit rate. If, however, the coalescer only sees VA, then there
+   is no such knowledge to be leveraged and access to DRAM may be slightly slower. This effect can be trivial, though,
+   because the OS tends to map consecutive virtual pages to consecutive physical frames.
 
 
 This paper explores the design choice of equipping GPUs with a memory manegement unit (MMU) in order for them to access
