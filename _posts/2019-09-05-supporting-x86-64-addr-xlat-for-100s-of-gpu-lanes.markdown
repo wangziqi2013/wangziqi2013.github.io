@@ -17,4 +17,4 @@ This paper explores the design choice of equipping GPUs with a memory manegement
 memory with virtual addresses. Allowing GPU and CPU to co-exist under the same virtual address space is critical to
 the performance of GPU applications for future big-data workloads for several reasons. First, if the GPU can share storage
 with CPU, data does not need to be copied to dedicated GPU memory before and after the task, which implies lower bandwidth
-requirement, energy consumption and latency.
+requirement, energy consumption and latency. 
