@@ -110,6 +110,7 @@ is that the page fault is not always triggered by the currently running process 
 CPU is involved, since only a running process can trigger page fault. When GPU is present, however, the page fault may
 belong to another process that is currently inactive, which requires the OS to correctly identify the faulting process
 and then perform a context switch to that process.
+
 The paper classifies page faults into two
 types. A minor page fault is a page fault that can be resolved without I/O. This often occurs when the GPU accesses 
 allocated memory for the first time (demand paging) or accesses memory after a process fork (copy-on-write). It can also
@@ -127,4 +128,7 @@ insight into how this can be done.
 Another challenge with virtual address GPUs is that the content of TLB might become stale due to the GPU driver modifying 
 the page table. When this happens, a TLB shootdown is initiated by the operating system on behalf of the process that modifies 
 the page table. The GPU must also be notified in the case of a TLB shootdown to avoid using a stale translation to access
-memory. The paper proposes letting the operating system
+memory. The paper proposes letting the operating system to send a shootdown message to the GPU, such that the per-CU
+TLB can also invalidate entries by their own. Again, the OS should be made aware of the fact that the currently running
+process is not necessarily the process that provides mapping for the GPU. The TLB shootdown will not be sent if the GPU
+page table is not the current one under modification.
