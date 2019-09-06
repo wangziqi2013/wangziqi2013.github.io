@@ -43,4 +43,5 @@ driver before the task is started. A TLB is also assumed to be present at the GP
 TLB will actually request an expensive address translation to the IOMMU. This proposal, however, has two important flaws.
 First, as we will see later, GPU memory access patterns are radically different from what one would normally expect from CPU
 and other I/O devices on the system bus. This eccentric behavior of GPU programs makes IOMMU rather inefficient in handling
-GPU memory requests. 
+GPU memory requests. Second, with a page table initialized by the driver, rather than the operating system running on 
+host CPU, it is either impossible to handle page faults or demand-paging, or requires significant OS enhancement.
