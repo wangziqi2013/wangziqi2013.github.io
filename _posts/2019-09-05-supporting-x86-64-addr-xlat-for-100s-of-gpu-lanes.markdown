@@ -114,4 +114,7 @@ Then, the GPU MMU sends an interrupt to the CPU via IOMMU to notify the CPU of t
 CR3 (i.e. pointer to the page table of the GPU driver). The CPU, on receiving the interrupt, context switches to the 
 GPU driver using the CR3, and then resolves the fault either by allocating a physical page in the case of damend paging, 
 or by halting the GPU driver in the case of illegal access. In the former case, the GPU can retry the memory access after
-the page fault is resolved. 
+the page fault is resolved. The second type of page fault is major page fault, which requires I/O to resolve. A major
+page fault is trigged when the page to be accessed resides in swap area on the disk, which may take significantly more
+cycles. The paper suggests that futuer GPUs may switch out the current context when this occurs, but does not give much
+insight into how this can be done. 
