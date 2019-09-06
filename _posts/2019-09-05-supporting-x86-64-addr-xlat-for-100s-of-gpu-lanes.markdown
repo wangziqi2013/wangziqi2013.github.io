@@ -23,3 +23,9 @@ frameworks in which two copies of the input and ouput variables are maintained. 
 semantics will remain the same for GPU and CPU, which is crucial for handling pointer-based data structures, such as graph, 
 on GPU. Without virtual addressing support, before sending a pointer-based data structure to GPU, a mangling process is 
 executed first to pack data into a compact form and convert pointers to relative offsets. 
+
+This paper assumes a general purpose GPU computing model which is described as follows. The GPU device consists of a cluster 
+(hundreds) of computing units (CU). Each CU further consists of several (tens of) lanes, which are essentially SIMD execution 
+lanes. The GPU accesses memory using memory instructions in the ISA. There are two types of memory in the GPU. The first type,
+called scratchpad memory, or local memory, is a software controlled local storage for the CU to perform low latency loads
+and stores, whose size is also restricted. The second type of memory, called 
