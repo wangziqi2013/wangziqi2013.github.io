@@ -28,4 +28,8 @@ This paper assumes a general purpose GPU computing model which is described as f
 (hundreds) of computing units (CU). Each CU further consists of several (tens of) lanes, which are essentially SIMD execution 
 lanes. The GPU accesses memory using memory instructions in the ISA. There are two types of memory in the GPU. The first type,
 called scratchpad memory, or local memory, is a software controlled local storage for the CU to perform low latency loads
-and stores, whose size is also restricted. The second type of memory, called 
+and stores, whose size is also restricted. The second type of memory, called global memory, is the address space shared
+by all CUs on the device, which, in this paper's proposal, is also shared with the CPU in the system. Since all threads in
+a CU execute the same instruction at the same cycle, memory accesses tend to be issued by a CU in bursts. To handle this,
+each CU is equipped with a memory coalescer, which buffers memory requests from all lanes, and coalesce them into as few 
+memory read requests as possible by combining two or more memory requests to the same cache line into one. 
