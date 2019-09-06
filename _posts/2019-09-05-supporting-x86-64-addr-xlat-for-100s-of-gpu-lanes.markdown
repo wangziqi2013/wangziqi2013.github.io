@@ -18,7 +18,8 @@ memory with virtual addresses. Allowing GPU and CPU to co-exist under the same v
 the performance of GPU applications for future big-data workloads for several reasons. First, if the GPU can share storage
 with CPU, data does not need to be copied to dedicated GPU memory before and after the task, which implies lower bandwidth
 requirement, energy consumption and latency. Second, it also simplifies programming for GPU applications, since the programmer
-can simply assume that all variables will be modified in-place by the GPU application. This differs from some GPU programming
+can simply assume that all variables will be modified in-place by the GPU application, rather than reasoning program bahavior
+with two disjoint address spaces in mind. This differs from some GPU programming
 frameworks in which two copies of the input and ouput variables are maintained. Lastly, with virtual addresses, the pointer
 semantics will remain the same for GPU and CPU, which is crucial for handling pointer-based data structures, such as graph, 
 on GPU. Without virtual addressing support, before sending a pointer-based data structure to GPU, a mangling process is 
@@ -45,3 +46,9 @@ First, as we will see later, GPU memory access patterns are radically different 
 and other I/O devices on the system bus. This eccentric behavior of GPU programs makes IOMMU rather inefficient in handling
 GPU memory requests. Second, with a page table initialized by the driver, rather than the operating system running on 
 host CPU, it is either impossible to handle page faults or demand-paging, or requires significant OS enhancement.
+In the following sections, we assume a baseline design of GPUs equipped with CPU-like MMU hardware. The MMU hardware
+performs page walks on bahalf of the GPU using the same page table as the one used by the GPU driver. Prior to starting 
+a kernel on GPU, the driver should initialize data in its own address space. . In addition,
+each CU is 
+
+This paper makes three important observations which guide the design of an efficient MMU for the GPU.
