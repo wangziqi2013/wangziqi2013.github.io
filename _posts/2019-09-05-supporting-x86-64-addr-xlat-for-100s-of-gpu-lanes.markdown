@@ -35,3 +35,9 @@ each CU is equipped with a memory coalescer, which buffers memory requests from 
 memory read requests as possible by combining two or more memory requests to the same cache line into one. To accelerate memory
 access, this paper also assumes that the GPU has a per-CU L1 write-through cache, and a L2 write-back cache shared between 
 all CUs.
+
+Prioir proposals of adding virtual memory support to GPUs relies on the address translation support provided by the IOMMU
+which already exists in today's system to provide memory mapped I/O. In these proposals, the IOMMU handles all address 
+translation requests issued by the GPU, and returns the physical address by walking a page table initialized by the CPU
+driver before the task is started. A TLB is also assumed to be present at the GPU side such that only those missing the 
+TLB will actually request an expensive address translation to the IOMMU.
