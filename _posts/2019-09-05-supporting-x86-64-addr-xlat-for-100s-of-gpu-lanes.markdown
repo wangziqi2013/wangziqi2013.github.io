@@ -40,4 +40,7 @@ Prioir proposals of adding virtual memory support to GPUs relies on the address 
 which already exists in today's system to provide memory mapped I/O. In these proposals, the IOMMU handles all address 
 translation requests issued by the GPU, and returns the physical address by walking a page table initialized by the CPU
 driver before the task is started. A TLB is also assumed to be present at the GPU side such that only those missing the 
-TLB will actually request an expensive address translation to the IOMMU.
+TLB will actually request an expensive address translation to the IOMMU. This proposal, however, has two important flaws.
+First, as we will see later, GPU memory access patterns are radically different from what one would normally expect from CPU
+and other I/O devices on the system bus. This eccentric behavior of GPU programs makes IOMMU rather inefficient in handling
+GPU memory requests. 
