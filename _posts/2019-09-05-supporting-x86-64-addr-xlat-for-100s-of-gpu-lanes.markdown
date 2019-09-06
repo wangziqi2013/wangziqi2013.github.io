@@ -74,4 +74,8 @@ a kernel on GPU, the driver should initialize the environment including data str
 allocation can be done as simple as using the standard malloc() or mmap() interface. In addition, each CU is extended with
 a private L1 TLB. Memory requests are first handed to the L1 TLB for address translation, and then sent to the coalescer.
 
-This paper makes three important observations which guide the design of an efficient MMU for the GPU.
+This paper makes three important observations which guide the design of an efficient MMU for the GPU. The first observation
+is that address coalescing works equally well for virtual addresses and physical addresses. In the baseline design, 
+memory addresses are first sent to the TLB for translation before they can be coalesced. This ensures that accesses to
+the same cache line can be combined, and also accesses to the same DRAM row can be clustered such that the row buffer
+is leveraged to provide low latency access without having to activating a different row for every access. 
