@@ -78,4 +78,7 @@ This paper makes three important observations which guide the design of an effic
 is that address coalescing works equally well for virtual addresses and physical addresses. In the baseline design, 
 memory addresses are first sent to the TLB for translation before they can be coalesced. This ensures that accesses to
 the same cache line can be combined, and also accesses to the same DRAM row can be clustered such that the row buffer
-is leveraged to provide low latency access without having to activating a different row for every access. 
+is leveraged to provide low latency access without having to activating a different row for every access. The paper observes,
+however, that this may overwhelm the TLB with bursts of memory requests, which in fact increases the latency of TLB
+access. Better performance is observed if the TLB is only accessed after memory accesses are coalesced, which implies
+that TLB access latency is a critical factor in the overall performance.
