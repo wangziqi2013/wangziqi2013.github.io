@@ -20,7 +20,8 @@ with CPU, data does not need to be copied to dedicated GPU memory before and aft
 requirement, energy consumption and latency. Second, it also simplifies programming for GPU applications, since the programmer
 can simply assume that all variables will be modified in-place by the GPU application, rather than reasoning program bahavior
 with two disjoint address spaces in mind. This differs from some GPU programming
-frameworks in which two copies of the input and ouput variables are maintained. Lastly, with virtual addresses, the pointer
+frameworks in which two copies of the input and ouput variables are maintained, and special library routines are used even
+for simple tasks such as allocating memory. Lastly, with virtual addresses, the pointer
 semantics will remain the same for GPU and CPU, which is crucial for handling pointer-based data structures, such as graph, 
 on GPU. Without virtual addressing support, before sending a pointer-based data structure to GPU, a mangling process is 
 executed first to pack data into a compact form and convert pointers to relative offsets. 
@@ -48,7 +49,8 @@ GPU memory requests. Second, with a page table initialized by the driver, rather
 host CPU, it is either impossible to handle page faults or demand-paging, or requires significant OS enhancement.
 In the following sections, we assume a baseline design of GPUs equipped with CPU-like MMU hardware. The MMU hardware
 performs page walks on bahalf of the GPU using the same page table as the one used by the GPU driver. Prior to starting 
-a kernel on GPU, the driver should initialize data in its own address space. . In addition,
+a kernel on GPU, the driver should initialize the environment including data structures in its own address space. Memory
+allocation can be as simple as using the standard malloc() or mmap() interface. In addition,
 each CU is 
 
 This paper makes three important observations which guide the design of an efficient MMU for the GPU.
