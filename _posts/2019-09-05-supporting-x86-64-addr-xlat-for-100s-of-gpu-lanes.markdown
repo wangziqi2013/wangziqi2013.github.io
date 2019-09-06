@@ -31,5 +31,7 @@ called scratchpad memory, or local memory, is a software controlled local storag
 and stores, whose size is also restricted. The second type of memory, called global memory, is the address space shared
 by all CUs on the device, which, in this paper's proposal, is also shared with the CPU in the system. Since all threads in
 a CU execute the same instruction at the same cycle, memory accesses tend to be issued by a CU in bursts. To handle this,
-each CU is equipped with a memory coalescer, which buffers memory requests from all lanes, and coalesce them into as few 
-memory read requests as possible by combining two or more memory requests to the same cache line into one. 
+each CU is equipped with a memory coalescer, which buffers memory requests from all lanes, and coalesces them into as few 
+memory read requests as possible by combining two or more memory requests to the same cache line into one. To accelerate memory
+access, this paper also assumes that the GPU has a per-CU L1 write-through cache, and a L2 write-back cache shared between 
+all CUs.
