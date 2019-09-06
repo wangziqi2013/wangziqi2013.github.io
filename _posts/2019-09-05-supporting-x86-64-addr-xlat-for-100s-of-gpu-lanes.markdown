@@ -13,6 +13,17 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlight:**
+
+1. Impressive performance achievemnt with simple observations and solutions. 
+
+2. The design of sharing the page table is a significant improvement over IOMMU-based, separate page table design.
+   Page faults can be handled by the OS in the address space of the GPU driver without modifying the memory
+   manegement part of the OS.
+
+
+
+
 This paper explores the design choice of equipping GPUs with a memory manegement unit (MMU) in order for them to access
 memory with virtual addresses. Allowing GPU and CPU to co-exist under the same virtual address space is critical to
 the performance of GPU applications for future big-data workloads for several reasons. First, if the GPU can share storage
