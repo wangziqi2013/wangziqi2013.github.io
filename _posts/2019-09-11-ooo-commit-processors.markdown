@@ -66,4 +66,10 @@ copied into the slot. The reference counter is also initialized to zero. When an
 checkpoint ID is also stored in a field of the instruction window. Renaming and issuing are unaffected and both work the 
 same as in a ROB-based processor. When an instruction completes, the checkpoint ID is used to find the checkpoint, whose
 reference counter is then decremented. During this process, no ROB is used to maintain the relative ordering of instructions,
-and therefore, instructions can complete out-of-order without blocking others in the ROB.
+and therefore, instructions can complete out-of-order without blocking others in the ROB. Store instructions must be kept
+in the store queue and not released to the memory system until the checkpoint commits, because otherwise, if the checkpoint
+is rolled back, the memory state will be inconsistent with the processor state.
+
+When the reference counter of a checkpoint reaches zero, and the checkpoint is at the head of the queue (i.e. oldest 
+uncommitted checkopint), and it is not the only checkpoint in the queue, we commit the current checkpoint simply by 
+releasing the buffer entry. 
