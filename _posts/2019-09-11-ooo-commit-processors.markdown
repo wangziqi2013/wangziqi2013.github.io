@@ -21,4 +21,7 @@ head of the ROB (i.e. the oldest uncommitted instruction). Instructions commit b
 file (in practice this can happen earlier than instruction commit), moving the store queue entry into the store buffer, or 
 forcing the processor to restart on the correct path on a branch mis-prediction.
 
-As the number of 
+As the number of instructions in the instruction window keep increasing for better ILP, the ROB has become a bottleneck 
+in the backend pipeline. There are two reasons for this. The first reason is that ROB forces instructions to commit 
+in the program order, which decreases instruction throughput if the head of the ROB is a long-latency instruction,
+such as loads that miss the L1 cache. 
