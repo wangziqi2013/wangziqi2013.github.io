@@ -53,4 +53,7 @@ For CAM-based renaming scheme, a checkpoint consists of only two of the three co
 suggests that we save the active and future free bits for every physical register, and infer the free bit on a checkpoint 
 recovery. Compared with mapping table based scheme in which a mapping table stores the physical register number for each
 logical register, the CAM-based scheme allows significantly smaller checkpoints due to the fact that the logical register 
-ID does not need to be saved. 
+ID does not need to be saved. Not saving the actual mapping will not result in using an invalid physical register as long 
+as the logical register ID is retained after the physical register becomes inactive. A checkpoint can always restore to 
+the same logical-to-physical mapping, since the entry will not be modified before the physical register is released, which
+can only happen when the current checkpoint commits. 
