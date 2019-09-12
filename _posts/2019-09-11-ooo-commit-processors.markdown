@@ -24,4 +24,6 @@ forcing the processor to restart on the correct path on a branch mis-prediction.
 As the number of instructions in the instruction window keep increasing for better ILP, the ROB has become a bottleneck 
 in the backend pipeline. There are two reasons for this. The first reason is that ROB forces instructions to commit 
 in the program order, which decreases instruction throughput if the head of the ROB is a long-latency instruction,
-such as loads that miss the L1 cache. 
+such as loads that miss the L1 cache. The second reason is that the hardware cost for supporting an ROB with thousands
+of entries is unacceptable with today's technology. The large ROB design simply cannot be achieved with reasonably 
+energy and area budget.
