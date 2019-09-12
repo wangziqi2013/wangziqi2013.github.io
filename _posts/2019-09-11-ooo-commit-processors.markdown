@@ -46,4 +46,11 @@ for an entry whose "free" bit is set, and then clear the bit. The third bit is "
 the corresponding physical register has been renamed in the current checkpoint, and can hence be freed at the end of the 
 checkpoint if it commits successfully (this is consistent with the register release scheme above). The renaming logic
 guarantees that only one of these three bits will be set, i.e. at any given time, a register must be either active, or 
-free, or inactive but still holds value that might be read by some instructions (i.e. out-of-order instructions). 
+free, or "future free" which means that it is inactive but still holds value that might be read by some instructions 
+(i.e. out-of-order instructions). 
+
+For CAM-based renaming scheme, a checkpoint consists of only two of the three control bits for each register. The paper 
+suggests that we save the active and future free bits for every physical register, and infer the free bit on a checkpoint 
+recovery. Compared with mapping table based scheme in which a mapping table stores the physical register number for each
+logical register, the CAM-based scheme allows significantly smaller checkpoints due to the fact that the logical register 
+ID does not need to be saved. 
