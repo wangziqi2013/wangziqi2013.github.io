@@ -62,4 +62,8 @@ The pipeline works as follows. The frontend maintains a checkpoint buffer, which
 control bits and the reference counter. At any moment of operation, there is always at least one checkpoint in the buffer. 
 The current checkopoint is the tail (newest) checkpoint, whose checkpoint ID is its index in the queue. When a new 
 checkpoint is added, a slot is allocated from the tail of the queue, and the current content of the renaming table is 
-copied into the slot. The reference counter is initialized to zero. 
+copied into the slot. The reference counter is also initialized to zero. When an instruction is dispatched, the current 
+checkpoint ID is also stored in a field of the instruction window. Renaming and issuing are unaffected and both work the 
+same as in a ROB-based processor. When an instruction completes, the checkpoint ID is used to find the checkpoint, whose
+reference counter is then decremented. During this process, no ROB is used to maintain the relative ordering of instructions,
+and therefore, instructions can complete out-of-order without blocking others in the ROB.
