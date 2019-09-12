@@ -40,4 +40,8 @@ Without a ROB for remembering instructions in their program order, processors ta
 execution state for a later restart. This paper assumes a CAM-based register renaming scheme, in which a CAM is used
 to map from logical registers to physical ones. The CAM has an entry for each physical register. The content stored in the 
 CAM are the ID of logical registers and three control bits. The first control bit is "valid" bit, which indicates whether
-the entry is the most up-to-date logical-to-physical register mapping. 
+the entry is the most up-to-date logical-to-physical register mapping. The second bit is "free" bit, which indicates 
+whether the current physical register is free to use. When a new physical register is needed, the hardware logic searches 
+for an entry whose "free" bit is set, and then clear the bit. The third bit is "future free" bit, which indicates whether
+the corresponding physical register has been renamed in the current checkpoint, and can hence be freed at the end of the 
+checkpoint if it commits successfully (this is consistent with the register release scheme above). 
