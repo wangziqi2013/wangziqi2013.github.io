@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper explores the design space for out-of-order instruction commit in out-of-order execution, superscalar processors.
+Conventionally, out-of-order execution processors have a FIFO reorder buffer (ROB) at the backend which is populated when 
+instructions are dispatched to the backend. Instructions are inserted into the ROB in the original dynamic program order,
+and remain there until the execution is finished. Instructions are only retired in the ROB when they are currently at the 
+head of the ROB (i.e. the oldest uncommitted instruction). Instructions commit by writing their results back to the register 
+file (in practice this can happen earlier)
