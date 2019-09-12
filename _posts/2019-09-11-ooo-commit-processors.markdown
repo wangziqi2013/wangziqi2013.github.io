@@ -57,3 +57,9 @@ ID does not need to be saved. Not saving the actual mapping will not result in u
 as the logical register ID is retained after the physical register becomes inactive. A checkpoint can always restore to 
 the same logical-to-physical mapping, since the entry will not be modified before the physical register is released, which
 can only happen when the current checkpoint commits. 
+
+The pipeline works as follows. The frontend maintains a checkpoint buffer, which is a FIFO queue holding the two sets of 
+control bits and the reference counter. At any moment of operation, there is always at least one checkpoint in the buffer. 
+The current checkopoint is the tail (newest) checkpoint, whose checkpoint ID is its index in the queue. When a new 
+checkpoint is added, a slot is allocated from the tail of the queue, and the current content of the renaming table is 
+copied into the slot. The reference counter is initialized to zero. 
