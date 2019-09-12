@@ -27,3 +27,8 @@ in the program order, which decreases instruction throughput if the head of the 
 such as loads that miss the L1 cache. The second reason is that the hardware cost for supporting an ROB with thousands
 of entries is unacceptable with today's technology. The large ROB design simply cannot be achieved with reasonably 
 energy and area budget.
+
+The paper observes that, on modern processors where register renaming is used to avoid WAR and WAW conflicts, the ROB
+is no longer necessary to ensure correctness of execution in absence of exceptions and mis-speculation (without register
+renaming, the ROB is used as a temporary physical register). Instead, the ROB is just used as a reference for undoing changes
+when exceptions happen, or when a branch is mis-speculated. 
