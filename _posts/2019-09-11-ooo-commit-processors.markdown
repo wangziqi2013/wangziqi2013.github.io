@@ -31,4 +31,7 @@ energy and area budget.
 The paper observes that, on modern processors where register renaming is used to avoid WAR and WAW conflicts, the ROB
 is no longer necessary to ensure correctness of execution in absence of exceptions and mis-speculation (without register
 renaming, the ROB is used as a temporary physical register). Instead, the ROB is just used as a reference for undoing changes
-when exceptions happen, or when a branch is mis-speculated. 
+when exceptions happen, or when a branch is mis-speculated. In addition, the undo information is often stored in the 
+ROB when an instruction has a destination register. The previous entry for the logical register is saved in the ROB
+entry of the instruction. When the current instruction commits, the previous physical register can be released, since 
+it is guaranteed that no more instruction can possibly access its value. 
