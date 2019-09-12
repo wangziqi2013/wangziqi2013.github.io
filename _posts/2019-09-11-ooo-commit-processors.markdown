@@ -35,3 +35,9 @@ when exceptions happen, or when a branch is mis-speculated. In addition, the und
 ROB when an instruction has a destination register. The previous entry for the logical register is saved in the ROB
 entry of the instruction. When the current instruction commits, the previous physical register can be released, since 
 it is guaranteed that no more instruction can possibly access its value. 
+
+Without a ROB for remembering instructions in their program order, processors take "checkpoints" regularly to save the 
+execution state for a later restart. This paper assumes a CAM-based register renaming scheme, in which a CAM is used
+to map from logical registers to physical ones. The CAM has an entry for each physical register. The content stored in the 
+CAM are the ID of logical registers and three control bits. The first control bit is "valid" bit, which indicates whether
+the entry is the most up-to-date logical-to-physical register mapping. 
