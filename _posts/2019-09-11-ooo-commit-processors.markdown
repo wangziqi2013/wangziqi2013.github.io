@@ -44,4 +44,6 @@ the entry is the most up-to-date logical-to-physical register mapping. The secon
 whether the current physical register is free to use. When a new physical register is needed, the hardware logic searches 
 for an entry whose "free" bit is set, and then clear the bit. The third bit is "future free" bit, which indicates whether
 the corresponding physical register has been renamed in the current checkpoint, and can hence be freed at the end of the 
-checkpoint if it commits successfully (this is consistent with the register release scheme above). 
+checkpoint if it commits successfully (this is consistent with the register release scheme above). The renaming logic
+guarantees that only one of these three bits will be set, i.e. at any given time, a register must be either active, or 
+free, or inactive but still holds value that might be read by some instructions (i.e. out-of-order instructions). 
