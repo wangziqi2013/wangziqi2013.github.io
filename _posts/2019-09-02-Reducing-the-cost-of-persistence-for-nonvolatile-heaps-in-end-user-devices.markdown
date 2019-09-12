@@ -4,7 +4,7 @@ title:  "Reducing the Cost of Persistence for Nonvolatile Heaps in End User Devi
 date:   2019-09-02 20:04:00 -0500
 categories: paper
 paper_title: "Reducing the Cost of Persistence for Nonvolatile Heaps in End User Devices"
-paper_link: 
+paper_link: https://ieeexplore.ieee.org/document/6835960
 paper_keyword: NVM; Page Coloring; Logging
 paper_year: HPCA 2014
 rw_set: 
