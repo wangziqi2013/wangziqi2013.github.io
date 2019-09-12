@@ -18,4 +18,7 @@ Conventionally, out-of-order execution processors have a FIFO reorder buffer (RO
 instructions are dispatched to the backend. Instructions are inserted into the ROB in the original dynamic program order,
 and remain there until the execution is finished. Instructions are only retired in the ROB when they are currently at the 
 head of the ROB (i.e. the oldest uncommitted instruction). Instructions commit by writing their results back to the register 
-file (in practice this can happen earlier)
+file (in practice this can happen earlier than instruction commit), moving the store queue entry into the store buffer, or 
+forcing the processor to restart on the correct path on a branch mis-prediction.
+
+As the number of 
