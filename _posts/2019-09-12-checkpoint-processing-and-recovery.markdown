@@ -45,3 +45,10 @@ is introduced to quickly apply the changed to be made to the renaming table onto
 from the current head of the ROB, and proceeds until it reaches the mispredicted branch (note: if there is an exception
 then we should handle exception first). After all changes are applied, the backend renaming table is copied to the frontend.
 
+On the other hand, instead of replicating a renaming table at the backend, some other researchers propose walking the ROB 
+from the tail, and undoing all changes that have been made to the frontend renaming table. This is done as follows. When
+an instruction is renamed, the hardware saves both the before register and the after register in the ROB entry allocated
+to the instruction. The before register saves two purposes. First, if the instruction commits, the before register can
+be released since its content is no longer needed. Second, if the instruction is on the wrong path, then the ROB walker
+uses this field to undo the changes this instruction has made to the renaming table during decoding. Execution could 
+resume after all instructions younger than the mispredicted branch are undone.
