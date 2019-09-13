@@ -82,3 +82,9 @@ and all checkpoints after. The paper proposes using a simple 4-bit saturate coun
 a branch is low confidence and whether a checkpoint should be created. The other condition is before the number of instructions
 in the current checkpoint becomes too large. In this case, if the checkpoint is rolled back, all instructions in the 
 checkpoint have to be re-executed, resulting in waste of cycles. 
+
+Registers are released when it can never be accessed in the future. To achieve this, several conditions must be met. First,
+the register must not be accessible in uncommitted checkpoints, because if the checkpoint is rolled back later, the register 
+may be used again during the re-execution of the checkpoint. Second, when a physical register is released, it must have 
+already been renamed, because otherwise the physical register is still the active register for a logical register, which
+can be accessed in the future execution. 
