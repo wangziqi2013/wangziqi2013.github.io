@@ -52,3 +52,8 @@ to the instruction. The before register saves two purposes. First, if the instru
 be released since its content is no longer needed. Second, if the instruction is on the wrong path, then the ROB walker
 uses this field to undo the changes this instruction has made to the renaming table during decoding. Execution could 
 resume after all instructions younger than the mispredicted branch are undone.
+
+In all above three schemes, the branch misprediction panalty is directly related to the size of the ROB. In the first scheme,
+it depends on the number of cycles required to commit instructions before the branch. In the latter two schcmes, the penalty is 
+dependent on the number of instructions older or younger than the branch. On a large ROB, none of them can achieve constant-time
+misprediction recovery, which motivates the checkpoint design.
