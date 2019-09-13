@@ -37,3 +37,11 @@ is detected, the frontend is stalled until the branch instruction reaches the he
 backend renaming table is copied to the frontend. At this moment, the content of the backend renaming table is exactly
 the state after the branch is executed. Execution could resume after the renaming table is copied. 
 
+In the above scheme, even when a branch has known to be mispredicted, the pipeline must wait until all older instructions
+than the branch are committed. If a long latency instruction is before the branch in ROB, this will take many cycles
+for the pipeline to recover. This delay, however, is unnecessary, since the execution of instructions in the backend 
+should not block the frontend from fetching instructions on the correct path. As an improvement, a hardware ROB walker
+is introduced to quickly apply the changed to be made to the renaming table onto the backend table. The ROB walker starts
+from the current head of the ROB, and proceeds until it reaches the mispredicted branch (note: if there is an exception
+then we should handle exception first). After all changes are applied, the backend renaming table is copied to the frontend.
+
