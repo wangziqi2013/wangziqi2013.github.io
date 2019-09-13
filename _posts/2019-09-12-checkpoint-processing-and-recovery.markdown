@@ -91,4 +91,9 @@ can be accessed in the future execution. Third, a register can still be accessed
 that registers are only accessed when instructions are issued to functional units, which is performed out-of-order (the 
 instructions that use the register can be before the instruction that redefines the register in program order, at the issue 
 time of which the physical registers have already been renamed). To satisfy these three conditions, physical registers 
-are reference counted
+are reference counted to ensure that they are never released before possibly accessed by an instruction. When instructions
+finish register renaming stage in the pipeline, we increment the counter for the physical registers that provide source 
+operands. When such instructions are issued, after reading the source operand values, the corresponding counters are 
+decremented. To further ensure that checkpoints will not access an invalid register when it rolls back, when a new checkpoint
+is created, counters for all active physical registers (i.e. those in the current logical-to-physical mapping) at the time
+of creation are incremented. Similarly, when a checkpoint is released, these counters are decremented. 
