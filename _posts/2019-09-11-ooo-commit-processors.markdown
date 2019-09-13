@@ -92,4 +92,7 @@ by the current checkpoint can also be released. This, however, can be tricky, be
 already changed as the pipeline keeps decoding new instructions for later checkpoints. One way of doing this is to postpone
 physical register release to the commit point of the next checkpoint, since the next checkpoint stores "future free"
 bits when it becomes the youngest checkpoint, at which point these "future free" bits encode the set of registers that
-are renamed in the current checkpoint.
+are renamed in the current checkpoint. The paper admits that this may harm performance, since physical registers are held
+longer than they should be. To avoid performance degradation, although not mentioned in the paper, when a checkpoint commits,
+the hardware may just extract the "future free" bits from the next checkpoint (there must be one, otherwise the current 
+checkpoint must not commit) and then release the physical registers.
