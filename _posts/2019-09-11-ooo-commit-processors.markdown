@@ -75,17 +75,12 @@ The pipeline works as follows. The frontend maintains a checkpoint buffer, which
 control bits and the reference counter. At any moment of operation, there is always at least one checkpoint in the buffer. 
 The current checkopoint is the tail (newest) checkpoint, whose checkpoint ID is its index in the queue. When a new 
 checkpoint is added, a slot is allocated from the tail of the queue, and the current content of the renaming table is 
-copied into the slot. The reference counter is also initialized to zero. When an instruction is dispatched, the current 
-checkpoint ID is also stored in a field of the instruction window. Renaming and issuing are unaffected and both work the 
-same as in a ROB-based processor. When an instruction completes, the checkpoint ID is used to find the checkpoint, whose
-reference counter is then decremented. During this process, no ROB is used to maintain the relative ordering of instructions,
-and therefore, instructions can complete out-of-order without blocking others in the ROB. Store instructions must be kept
-in the store queue and not released to the memory system until the checkpoint commits, because otherwise, if the checkpoint
-is rolled back, the memory state will be inconsistent with the processor state.
+copied into the slot. Furthermore, the "future free" bits are cleared, and the reference counter is also initialized to 
+zero. When an instruction is dispatched, the current checkpoint ID is also stored in a field of the instruction window. 
+Renaming and issuing are unaffected and both work the same as in a ROB-based processor. When an instruction completes, the 
+checkpoint ID is used to find the checkpoint, whose reference counter is then decremented. During this process, no ROB is 
+used to maintain the relative ordering of instructions, and therefore, instructions can complete out-of-order without 
+blocking others in the ROB. Store instructions must be kept in the store queue and not released to the memory system until 
+the checkpoint commits, because otherwise, if the checkpoint is rolled back, the memory state will be inconsistent with 
+the processor state.
 
-A checkpoint commits When: (1) the reference counter of a checkpoint reaches zero; (2) the checkpoint is at the head of 
-the queue (i.e. oldest uncommitted checkopint), and (3) it is not the only checkpoint in the queue. We commit the current 
-checkpoint simply by releasing the buffer entry. In addition, stores are released to the store buffer since the checkpoint 
-can never be rolled back. Physical registers that are renamed (i.e. whose "future free" bits are set in the current checkpoint) 
-by the current checkpoint can also be released. This, however, can be tricky, because the current rename map may have 
-already changed since the pipeline keeps decoding new instructions for later checkpoints. One way of 
