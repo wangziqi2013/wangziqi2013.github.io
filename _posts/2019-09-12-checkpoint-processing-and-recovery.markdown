@@ -22,4 +22,10 @@ should be executed and the execution be recovered from the current path as quick
 always possible with in-order commit, due to the fact that the register renaming table must be restored to the 
 exact state before the branch instruction, after which recovery can begin (e.g. flush the pipeline, invalidate 
 instructions on the wrong path, and load the PC with the correct path). The longer this takes, the larger the 
-penalty of misprediction will be. 
+penalty of misprediction will be. For a large ROB, as we will see in the following paragraphs, the cost of restoring
+the renaming table to a previous state proportionally grows with the ROB size. The second factor is the number of 
+physical registers. As the number of in-flight instructions increase in the instruction window, the number of 
+physical registers needed to hold the temporary values also increase. Simply adding more registers into the register file
+does not always work, since the register file access time is often on the critical path. In addition, register files are 
+usually multi-ported. Adding more registers is likely to incur intolerable area and power overhead of the access logic.
+
