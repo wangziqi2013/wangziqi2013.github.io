@@ -84,3 +84,12 @@ blocking others in the ROB. Store instructions must be kept in the store queue a
 the checkpoint commits, because otherwise, if the checkpoint is rolled back, the memory state will be inconsistent with 
 the processor state.
 
+A checkpoint commits When: (1) the reference counter of a checkpoint reaches zero; (2) the checkpoint is at the head of 
+the queue (i.e. oldest uncommitted checkopint), and (3) it is not the only checkpoint in the queue. We commit the current 
+checkpoint simply by releasing the buffer entry. In addition, stores are released to the store buffer since the checkpoint 
+can never be rolled back. Physical registers that are renamed (i.e. whose "future free" bits are set in the current checkpoint) 
+by the current checkpoint can also be released. This, however, can be tricky, because the current rename map may have 
+already changed as the pipeline keeps decoding new instructions for later checkpoints. One way of doing this is to postpone
+physical register release to the commit point of the next checkpoint, since the next checkpoint stores "future free"
+bits when it becomes the youngest checkpoint, at which point these "future free" bits encode the set of registers that
+are renamed in the current checkpoint.
