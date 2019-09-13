@@ -21,6 +21,11 @@ version_mgmt:
 2. The paper makes an interesting observation that by using a CAM for register renaming, only two of the three control
    bits need to be saved.
 
+**Lowlights:**
+
+1. The paper failed to mention why register renaming at the end of checkpoint i needs to be delayed to the end of 
+   checkpoint i + 1.
+
 This paper explores the design space for out-of-order instruction commit in out-of-order execution, superscalar processors.
 Conventionally, out-of-order execution processors have a FIFO reorder buffer (ROB) at the backend which is populated when 
 instructions are dispatched to the backend. Instructions are inserted into the ROB in the original dynamic program order,
