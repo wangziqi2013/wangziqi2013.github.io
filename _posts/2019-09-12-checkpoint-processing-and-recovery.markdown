@@ -29,3 +29,11 @@ physical registers needed to hold the temporary values also increase. Simply add
 does not always work, since the register file access time is often on the critical path. In addition, register files are 
 usually multi-ported. Adding more registers is likely to incur intolerable area and power overhead of the access logic.
 
+This paper lists three schemes that are commonly used by previous proposals. The first scheme uses a backend register 
+renaming table to reflect the current architectural state as instructions commit at the head of the ROB. Here "current state"
+is defined by all committed instructions. The backend register renaming table is only updated when an instruction commits. 
+The corresponding logical to physical mapping is updated according to the committing ROB entry. When a branch misprediction
+is detected, the frontend is stalled until the branch instruction reaches the head of the ROB, after which the 
+backend renaming table is copied to the frontend. At this moment, the content of the backend renaming table is exactly
+the state after the branch is executed. Execution could resume after the renaming table is copied. 
+
