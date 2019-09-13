@@ -96,4 +96,6 @@ finish register renaming stage in the pipeline, we increment the counter for the
 operands. When such instructions are issued, after reading the source operand values, the corresponding counters are 
 decremented. To further ensure that checkpoints will not access an invalid register when it rolls back, when a new checkpoint
 is created, counters for all active physical registers (i.e. those in the current logical-to-physical mapping) at the time
-of creation are incremented. Similarly, when a checkpoint is released, these counters are decremented. 
+of creation are incremented. Similarly, when a checkpoint is released, these counters are decremented. When an instruction
+renames logical register A from physical register X to Y, the "renamed" bit of register X is also set. A physical register 
+can be released, if the "renamed" bit is set, and if its reference counter is zero. 
