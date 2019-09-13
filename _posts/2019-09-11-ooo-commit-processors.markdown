@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlights:**
+
+1. Treating multiple instructions as a "complex" instruction and only commit them together or roll back together is 
+   a very nice optimization technique (optimization by coarsening).
+
+2. The paper makes an interesting observation that by using a CAM for register renaming, only two of the three control
+   bits need to be saved.
+
 This paper explores the design space for out-of-order instruction commit in out-of-order execution, superscalar processors.
 Conventionally, out-of-order execution processors have a FIFO reorder buffer (ROB) at the backend which is populated when 
 instructions are dispatched to the backend. Instructions are inserted into the ROB in the original dynamic program order,
@@ -70,6 +78,9 @@ and therefore, instructions can complete out-of-order without blocking others in
 in the store queue and not released to the memory system until the checkpoint commits, because otherwise, if the checkpoint
 is rolled back, the memory state will be inconsistent with the processor state.
 
-When the reference counter of a checkpoint reaches zero, and the checkpoint is at the head of the queue (i.e. oldest 
-uncommitted checkopint), and it is not the only checkpoint in the queue, we commit the current checkpoint simply by 
-releasing the buffer entry. 
+A checkpoint commits When: (1) the reference counter of a checkpoint reaches zero; (2) the checkpoint is at the head of 
+the queue (i.e. oldest uncommitted checkopint), and (3) it is not the only checkpoint in the queue. We commit the current 
+checkpoint simply by releasing the buffer entry. In addition, stores are released to the store buffer since the checkpoint 
+can never be rolled back. Physical registers that are renamed (i.e. whose "future free" bits are set in the current checkpoint) 
+by the current checkpoint can also be released. This, however, can be tricky, because the current rename map may have 
+already changed since the pipeline keeps decoding new instructions for later checkpoints. One way of 
