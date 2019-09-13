@@ -103,5 +103,9 @@ checkpoint in which the exception or misspeculation happen. Entries older than t
 the checkpoint buffer. The renaming table is also restored by copying the "valid" and "future free" bits back to the CAM.
 The hardware can infer the "free" bits by simply taking a NOR of the other two bits. The processor then resumes execution
 from the PC stored in the checkpoint. In the case of a branch misprediction, the branch is not predicted again, but rather
-just assume the alternate direction. In the case of an exception, the hardware takes a checkpoint when the instruction that
+just assumes the alternate direction. In the case of an exception, the hardware takes a checkpoint when the instruction that
 caused the exception is executed, which is used as the precise architectural state when the exception is raised.
+
+The paper suggests that a checkpoint be taken under the following three conditions. The first condition is branch. Although
+most branches are predicted correctly on modern hardware, saving a checkpoint at every branch will not incur too much space 
+overhead, since a checkpoint has the overhead of just two bits per physical register. The second condition 
