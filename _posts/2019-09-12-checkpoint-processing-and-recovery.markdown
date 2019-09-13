@@ -16,4 +16,10 @@ version_mgmt:
 This paper proposes a ROB-less microarchitecture design which uses snapshots and register reference counting to
 replace the regular ROB-based in-order commit scheme. The design decision was made based on the fact that future 
 generations of processors must have large instruction windows to exploit program ILP. The paper identifies two
-factors that may affect the performance of an out-of-order processor with ROB and in-order commit. 
+factors that may affect the performance of an out-of-order processor with ROB and in-order commit. The first factor
+is branch misprediction recovery time. When the processor mis-speculates on a wrong path, the branch instruction
+should be executed and the execution be recovered from the current path as quickly as possible. This, however, is not
+always possible with in-order commit, due to the fact that the register renaming table must be restored to the 
+exact state before the branch instruction, after which recovery can begin (e.g. flush the pipeline, invalidate 
+instructions on the wrong path, and load the PC with the correct path). The longer this takes, the larger the 
+penalty of misprediction will be. 
