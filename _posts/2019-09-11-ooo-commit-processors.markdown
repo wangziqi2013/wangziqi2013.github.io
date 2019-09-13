@@ -102,4 +102,6 @@ the checkpoint ID field of the instruction. The pipeline is flushed, and system 
 checkpoint in which the exception or misspeculation happen. Entries older than the faulting checkpoint are deleted from 
 the checkpoint buffer. The renaming table is also restored by copying the "valid" and "future free" bits back to the CAM.
 The hardware can infer the "free" bits by simply taking a NOR of the other two bits. The processor then resumes execution
-from the PC stored in the checkpoint. 
+from the PC stored in the checkpoint. In the case of a branch misprediction, the branch is not predicted again, but rather
+just assume the alternate direction. In the case of an exception, the hardware takes a checkpoint when the instruction that
+caused the exception is executed, which is used as the precise architectural state when the exception is raised.
