@@ -56,4 +56,10 @@ resume after all instructions younger than the mispredicted branch are undone.
 In all above three schemes, the branch misprediction panalty is directly related to the size of the ROB. In the first scheme,
 it depends on the number of cycles required to commit instructions before the branch. In the latter two schcmes, the penalty is 
 dependent on the number of instructions older or younger than the branch. On a large ROB, none of them can achieve constant-time
-misprediction recovery, which motivates the checkpoint design.
+misprediction recovery, which motivates this paper's checkpoint design.
+
+This paper assumes a mapping table implemented with regular SRAM, having one entry for each logical register. The physical 
+register number currently mapped to the logical register is stored in the entry. Although not mentioned, it is assumed 
+that a free list manages all free physical registers, which can be implemented as a bit vector, one bit per physical 
+register. Each physical register also has a one bit flag to indicate whether the physical register has been renamed
+in the current checkpoint. Physical registers are reference counted. 
