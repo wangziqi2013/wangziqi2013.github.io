@@ -96,3 +96,10 @@ are renamed in the current checkpoint. The paper admits that this may harm perfo
 longer than they should be. To avoid performance degradation, although not mentioned in the paper, when a checkpoint commits,
 the hardware may just extract the "future free" bits from the next checkpoint (there must be one, otherwise the current 
 checkpoint must not commit) and then release the physical registers.
+
+When a branch misprediction or exception is detected by the commit logic, the corresponding checkpoint is located using 
+the checkpoint ID field of the instruction. The pipeline is flushed, and system state is restored to the beginning of the 
+checkpoint in which the exception or misspeculation happen. Entries older than the faulting checkpoint are deleted from 
+the checkpoint buffer. The renaming table is also restored by copying the "valid" and "future free" bits back to the CAM.
+The hardware can infer the "free" bits by simply taking a NOR of the other two bits. The processor then resumes execution
+from the PC stored in the checkpoint. 
