@@ -108,4 +108,9 @@ caused the exception is executed, which is used as the precise architectural sta
 
 The paper suggests that a checkpoint be taken under the following three conditions. The first condition is branch. Although
 most branches are predicted correctly on modern hardware, saving a checkpoint at every branch will not incur too much space 
-overhead, since a checkpoint has the overhead of just two bits per physical register. The second condition 
+overhead, since a checkpoint has the overhead of just two bits per physical register. The second condition is when the 
+number of instructions in the current checkpoint exceeds a certain threshold. This is to reduce the penalty of checkpoint 
+recovery, since the larger the checkpoint is, the larger penalty there will be to re-execute from the beginning of the 
+checkpoint. The last condition is when the number of stores in the store queue exceeds a certain threshold. This is to
+avoid the store queue from becoming a source of structural hazard, since data written by store instructions within a 
+checkpoint are only released to the cache hierarchy when the checkpoint commits. 
