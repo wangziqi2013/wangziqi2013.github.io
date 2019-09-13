@@ -87,4 +87,8 @@ Registers are released when it can never be accessed in the future. To achieve t
 the register must not be accessible in uncommitted checkpoints, because if the checkpoint is rolled back later, the register 
 may be used again during the re-execution of the checkpoint. Second, when a physical register is released, it must have 
 already been renamed, because otherwise the physical register is still the active register for a logical register, which
-can be accessed in the future execution. 
+can be accessed in the future execution. Third, a register can still be accessed after it is renamed, due to the fact
+that registers are only accessed when instructions are issued to functional units, which is performed out-of-order (the 
+instructions that use the register can be before the instruction that redefines the register in program order, at the issue 
+time of which the physical registers have already been renamed). To satisfy these three conditions, physical registers 
+are reference counted
