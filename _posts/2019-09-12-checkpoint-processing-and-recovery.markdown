@@ -67,3 +67,8 @@ the reference counter, for a large instruction window, allowing the counter to p
 window is not optimal, since in practice only few instructions will refer to the same logical register. We will describe 
 the usage of reference counters and renamed bits below.
 
+The creation and commit of checkpoints resemble those in other checkpointing proposals. In general, there is a checkpoint 
+buffer sitting at the frontend which consists of several entries. When a checkpoint is taken, the logical to physical 
+mapping, the free list bit vector and the renamed bit are copied to a new entry of the checkpoint buffer. A checkpoints also
+has a reference counter that counts the number of uncommitted instructions in the checkpoint. When an instruction is dispatched,
+the reference counter is incremented, and when an instruction is completed in the backend, the counter is decremented.
