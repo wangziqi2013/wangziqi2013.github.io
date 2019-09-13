@@ -62,4 +62,8 @@ This paper assumes a mapping table implemented with regular SRAM, having one ent
 register number currently mapped to the logical register is stored in the entry. Although not mentioned, it is assumed 
 that a free list manages all free physical registers, which can be implemented as a bit vector, one bit per physical 
 register. Each physical register also has a one bit flag to indicate whether the physical register has been renamed
-in the current checkpoint. Physical registers are reference counted. 
+in the current checkpoint. Physical registers are reference counted. Although the paper did not mention the width of 
+the reference counter, for a large instruction window, allowing the counter to potentially count all instructions in the 
+window is not optimal, since in practice only few instructions will refer to the same logical register. We will describe 
+the usage of reference counters and renamed bits below.
+
