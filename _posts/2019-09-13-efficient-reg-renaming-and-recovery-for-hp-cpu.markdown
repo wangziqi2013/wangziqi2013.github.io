@@ -66,4 +66,6 @@ the physical register has no control bit set in any of the currently uncommitted
 with the control bits maintained as a circular queue and the mapping maintained as a CAM). The allocation logic simply tests
 all bits for a certain physical register with a NOR gate. An output of "1" indicates that the register is not referred to in
 all uncommitted checkpoints, which can be allocated to a new instruction without worrying about the same register
-being accessed by a different instruction after a roll back. 
+being accessed by a different instruction after a roll back. On a source operand renaming, the decoding logic selects 
+the entries in the CAM with the logical register as values, and then uses a priority decoder to output the final physical
+register number whose control bit is "1". Checkpoint restoration and resumption are similar to prior proposals.
