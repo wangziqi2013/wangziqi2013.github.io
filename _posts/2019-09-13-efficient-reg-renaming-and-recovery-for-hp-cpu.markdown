@@ -69,3 +69,9 @@ all uncommitted checkpoints, which can be allocated to a new instruction without
 being accessed by a different instruction after a roll back. On a source operand renaming, the decoding logic selects 
 the entries in the CAM with the logical register as values, and then uses a priority decoder to output the final physical
 register number whose control bit is "1". Checkpoint restoration and resumption are similar to prior proposals.
+
+This paper proposes combining both RAM-based and CAM-based scheme to leverage the best of each and avoid the disadvantages.
+To reduce recovery penalty, the renaming table is implemented with a CAM, and the checkpoint and recovery scheme is exactly 
+as described in the last paragraph. To avoid a long latency associative search in the CAM, a RAM-based renaming table is 
+used as a fast cache for the CAM mapping table. Each entry of the RAM mapping table also has a valid bit to indicate whether
+the entry contains valid physical register number. 
