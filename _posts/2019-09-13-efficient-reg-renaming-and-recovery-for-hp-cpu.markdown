@@ -26,9 +26,18 @@ When the branch is known to be mispredicted, the checkpoint is copied to the ren
 the ROB, but adds extra checkpoint buffer cost. In addition, register renaming needs to access the multi-ported CAM, the 
 latency and power consumption of which can be large.
 
-The paper reviews three different schemes in detail for RAM-based renaming algorithm. In such a design, A RAM structure 
+The paper reviews three different recovery schemes in detail for RAM-based renaming algorithm. In such a design, A RAM structure 
 indexed by the logical register number is used as the mapping table. For every logical register, there is an entry in
 the RAM structure which stores the physical register mapped to this entry. A free list bit vector maintains currently
 unused physical registers. When an instruction is decoded, the renaming logic first reads the physical register corresponding
 to the source operands, and then allocate a new physical register for the destination logical register. The mapping table
-entry for the destination register is updated to reflect the change 
+entry for the destination register is also updated to reflect the change. An ROB is also assumed to be at the backend
+and buffers instructions in the dynamic program order until they are committed. When a branch misspeculation is detected
+at the final stage of backend execution, the ROB is notified of this event, and depending on the recovery scheme, three
+different actions can be taken. In the simplest recovery scheme, we add a field into the ROB to remember the previous 
+physical register that is replaced by the newly allocated one. When a misprediction is detected, the pipeline stalls and 
+waits for the branch instruction to reach ROB head, at which time all instructions older than the branch have been committed
+and results are written back. Then a hardware walker is invoked to walk the ROB from the tail until the branch instruction
+(i.e. ROB head) is reached. For each ROB entry within this range, the physical register allocated to it is released,
+and the previous mapping is restored to the logical destination register. After this process completes, execution could 
+resume at the correct branch address. 
