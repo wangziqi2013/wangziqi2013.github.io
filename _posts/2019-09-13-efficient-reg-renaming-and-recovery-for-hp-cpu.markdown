@@ -60,4 +60,10 @@ counter is maintained for physical registers. As in many other checkpoint based 
 maintained as a circular FIFO queue provides storage for checkpointed renaming tables. Only the control bits are copies into
 the table when a checkpoint is taken. Each checkpoint is also associated with a reference coutner, which is incremented 
 when an instruction is decoded, and decremented when instructions commit. A checkpoint commits when it is at the tail 
-of the FIFO queue, and all instructions in the checkpoint are committed. 
+of the FIFO queue, and all instructions in the checkpoint are committed. Physical registers are considered as free, if 
+the physical register has no control bit set in any of the currently uncommitted checkpoints, including the current one
+(i.e. the one stored in the mapping table; in fact the buffer and mapping table can be implemented as a monolithic structure,
+with the control bits maintained as a circular queue and the mapping maintained as a CAM). The allocation logic simply tests
+all bits for a certain physical register with a NOR gate. An output of "1" indicates that the register is not referred to in
+all uncommitted checkpoints, which can be allocated to a new instruction without worrying about the same register
+being accessed by a different instruction after a roll back. 
