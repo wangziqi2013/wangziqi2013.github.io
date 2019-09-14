@@ -54,4 +54,10 @@ reported that the optimized design can reduce average branch misprediction panal
 The paper also introduces its baseline checkpointing design with a CAM-based mapping table. The mapping table has an entry
 for each physical register, which stores the logical register currently mapped to the physical register. Only a single
 control bit is needed per physical register, which indicates whether the physical register is currently active, i.e. whether
-the mapping is the current mapping to be used for source operand renaming. 
+the mapping is the current mapping to be used for source operand renaming. This bit serves as a "reference bit" of the physical
+register, the state of which encodes whether the physical register can possibly be used in a checkpoint. No explicit reference
+counter is maintained for physical registers. As in many other checkpoint based designs, a checkpoint buffer which is 
+maintained as a circular FIFO queue provides storage for checkpointed renaming tables. Only the control bits are copies into
+the table when a checkpoint is taken. Each checkpoint is also associated with a reference coutner, which is incremented 
+when an instruction is decoded, and decremented when instructions commit. A checkpoint commits when it is at the tail 
+of the FIFO queue, and all instructions in the checkpoint are committed. 
