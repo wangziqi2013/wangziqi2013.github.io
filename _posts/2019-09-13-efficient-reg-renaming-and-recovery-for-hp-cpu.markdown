@@ -74,4 +74,8 @@ This paper proposes combining both RAM-based and CAM-based scheme to leverage th
 To reduce recovery penalty, the renaming table is implemented with a CAM, and the checkpoint and recovery scheme is exactly 
 as described in the last paragraph. To avoid a long latency associative search in the CAM, a RAM-based renaming table is 
 used as a fast cache for the CAM mapping table. Each entry of the RAM mapping table also has a valid bit to indicate whether
-the entry contains valid physical register number. 
+the entry contains valid physical register number. The renaming process is then divided into three stages. In the first stage,
+the hardware checks whether the source operands are cached by the RAM by directly indexing into the RAM table. If the result
+is a hit, then no more table probing is needed, and the renaming logic do nothing in the next two stages. If the result is 
+a miss, then in the second stage, the CAM table is accessed to fetch the mapping. And then in the third stage, the RAM
+is accessed again to be updated with the latest mapping information (similar to a cache miss; some entries may also get evicted).
