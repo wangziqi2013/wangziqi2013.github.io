@@ -40,4 +40,9 @@ waits for the branch instruction to reach ROB head, at which time all instructio
 and results are written back. Then a hardware walker is invoked to walk the ROB from the tail until the branch instruction
 (i.e. ROB head) is reached. For each ROB entry within this range, the physical register allocated to it is released,
 and the previous mapping is restored to the logical destination register. After this process completes, execution could 
-resume at the correct branch address. 
+resume at the correct branch address. Resolving branch misprediction only at commit point, however, is noe optimal, since
+the misprediction can in fact be detected as soon as the branch instruction finishes execution. This is especially harmful
+if a long latency instruction older than the branch blocks ROB commit. To allow mispredictions to be resolved before the
+branch commits, some proposals use a backend renaming table which is only updated by committed transactions. The backend 
+renaming table has the same structure and interface with the frontend renaming table, and it reflects the execution
+state of only committed instructions. 
