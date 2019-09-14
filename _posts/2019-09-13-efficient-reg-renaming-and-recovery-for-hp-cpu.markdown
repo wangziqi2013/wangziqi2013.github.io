@@ -86,4 +86,9 @@ number). In the meantime, the current mapping between the logical register and p
 the RAM with the logical register number. If the result is a hit, then the physical register name is directly used to index 
 the CAM in the second stage, and the hardware clears the control bit of the physical register. Otherwise, we need to perform 
 an associative search to locate the current physical register of the destination logical register, and then update the 
-entry. 
+entry. Note that during this process, if an instruction has one of the source operand the same as one of the destination
+operand, the allocation will be incorrect, since it is possible that the source operand is read at the second stage, 
+while the new mapping from the destination to the physical register is written in the first stage. In this case,
+the source operand will be renamed to the newly allocated physical register, rather than the old value. This case should 
+be easy for hardware to detect and fix, by checking whether the source and destination are the same register, and then
+read out the old value in the first stage of destination renaming before updating both tables.
