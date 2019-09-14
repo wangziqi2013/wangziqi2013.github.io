@@ -12,3 +12,8 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes a hybrid register renaming scheme using both RAM and CAM to achieve low latency, low power consumption
+and fast branch misprediction recovery. Conventional register renaming schemes either use RAM-based or CAM-based mapping 
+table to encode the logical-to-physical relation. The paper observes that, however, that both schemes have inefficiencies
+that can become the bottleneck of the pipeline. 
