@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlights:**
+
+1. The register reclamation algorithm with ref count is an improvement over the previous scheme. In these schemes, registers 
+   are only reclaimed when the renaming checkpoint commits, while in fact they can be reclaimed when all instructions using them
+   as source operands have been issued and after all checkpoints that actually have this register as an active register commit.
+
 This paper proposes a ROB-less microarchitecture design which uses snapshots and register reference counting to
 replace the regular ROB-based in-order commit scheme. The design decision was made based on the fact that future 
 generations of processors must have large instruction windows to exploit program ILP. The paper identifies two
