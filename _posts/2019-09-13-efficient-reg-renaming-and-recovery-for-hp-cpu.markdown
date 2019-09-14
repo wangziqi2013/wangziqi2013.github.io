@@ -79,3 +79,12 @@ the hardware checks whether the source operands are cached by the RAM by directl
 is a hit, then no more table probing is needed, and the renaming logic do nothing in the next two stages. If the result is 
 a miss, then in the second stage, the CAM table is accessed to fetch the mapping. And then in the third stage, the RAM
 is accessed again to be updated with the latest mapping information (similar to a cache miss; some entries may also get evicted).
+Renaming the destination register is also a three-stage process. In the first stage, a new physical register is allocated 
+from the CAM by performing an associative search. The allocated physical register number is sent to the second stage of the 
+update process which we describe below. In the first stage of the update process, the current mapping between the logical 
+register and physical register is canceled by probing the RAM with the logical register number. If the result is a hit,
+then the physical register name is directly used to index the CAM in the second stage, and write the logical register
+number into the corresponding entry. Otherwise, we need to perform an associative search to locate the current physical
+register of the destination logical register, and then update the entry by clearing its control bit. In the same stage, we 
+also write the destination logical register number into the entry allocated in the first stage. Note that these two operations
+can be conducted in the same cycle, because only one associative search is performed.
