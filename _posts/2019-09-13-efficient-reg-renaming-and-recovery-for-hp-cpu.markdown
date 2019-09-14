@@ -51,4 +51,7 @@ and applies changes to the frontend renaming table as if it were applied to the 
 from ROB tail to the branch instruction to restore mapping entries using the undo image in the ROB. In the paper, it is 
 reported that the optimized design can reduce average branch misprediction panalty from 36 cycles to 15 cycles. 
 
-The paper also introduces its baseline checkpointing design with a CAM-based mapping table. 
+The paper also introduces its baseline checkpointing design with a CAM-based mapping table. The mapping table has an entry
+for each physical register, which stores the logical register currently mapped to the physical register. Only a single
+control bit is needed per physical register, which indicates whether the physical register is currently active, i.e. whether
+the mapping is the current mapping to be used for source operand renaming. 
