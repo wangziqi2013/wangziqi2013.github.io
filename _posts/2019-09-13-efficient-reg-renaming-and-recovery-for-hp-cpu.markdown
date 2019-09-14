@@ -25,3 +25,10 @@ the branch instruction can be restored easily in constant time by checkpointing 
 When the branch is known to be mispredicted, the checkpoint is copied to the renaming table, which does not require walking
 the ROB, but adds extra checkpoint buffer cost. In addition, register renaming needs to access the multi-ported CAM, the 
 latency and power consumption of which can be large.
+
+The paper reviews three different schemes in detail for RAM-based renaming algorithm. In such a design, A RAM structure 
+indexed by the logical register number is used as the mapping table. For every logical register, there is an entry in
+the RAM structure which stores the physical register mapped to this entry. A free list bit vector maintains currently
+unused physical registers. When an instruction is decoded, the renaming logic first reads the physical register corresponding
+to the source operands, and then allocate a new physical register for the destination logical register. The mapping table
+entry for the destination register is updated to reflect the change 
