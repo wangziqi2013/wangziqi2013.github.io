@@ -26,7 +26,7 @@ When the branch is known to be mispredicted, the checkpoint is copied to the ren
 the ROB, but adds extra checkpoint buffer cost. In addition, register renaming needs to access the multi-ported CAM, the 
 latency and power consumption of which can be large.
 
-The paper reviews three different recovery schemes in detail for RAM-based renaming algorithm. In such a design, A RAM structure 
+The paper reviews two different recovery schemes in detail for RAM-based renaming algorithm. In such a design, A RAM structure 
 indexed by the logical register number is used as the mapping table. For every logical register, there is an entry in
 the RAM structure which stores the physical register mapped to this entry. A free list bit vector maintains currently
 unused physical registers. When an instruction is decoded, the renaming logic first reads the physical register corresponding
@@ -40,9 +40,15 @@ waits for the branch instruction to reach ROB head, at which time all instructio
 and results are written back. Then a hardware walker is invoked to walk the ROB from the tail until the branch instruction
 (i.e. ROB head) is reached. For each ROB entry within this range, the physical register allocated to it is released,
 and the previous mapping is restored to the logical destination register. After this process completes, execution could 
-resume at the correct branch address. Resolving branch misprediction only at commit point, however, is noe optimal, since
+resume at the correct branch address. Resolving branch misprediction only at commit point, however, is not optimal, since
 the misprediction can in fact be detected as soon as the branch instruction finishes execution. This is especially harmful
 if a long latency instruction older than the branch blocks ROB commit. To allow mispredictions to be resolved before the
 branch commits, some proposals use a backend renaming table which is only updated by committed transactions. The backend 
 renaming table has the same structure and interface with the frontend renaming table, and it reflects the execution
-state of only committed instructions. 
+state of only committed instructions. With a backend renaming table, when the branch misprediction is detected, the ROB
+walker first copies the backend renaming table to the frontend, and then walks from the head of ROB to the beanch instruction,
+and applies changes to the frontend renaming table as if it were applied to the backend table. Then the ROB walker walks 
+from ROB tail to the branch instruction to restore mapping entries using the undo image in the ROB. In the paper, it is 
+reported that the optimized design can reduce average branch misprediction panalty from 36 cycles to 15 cycles. 
+
+The paper also introduces its baseline checkpointing design with a CAM-based mapping table. 
