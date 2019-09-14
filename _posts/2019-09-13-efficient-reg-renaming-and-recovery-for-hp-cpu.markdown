@@ -92,3 +92,9 @@ while the new mapping from the destination to the physical register is written i
 the source operand will be renamed to the newly allocated physical register, rather than the old value. This case should 
 be easy for hardware to detect and fix, by checking whether the source and destination are the same register, and then
 read out the old value in the first stage of destination renaming before updating both tables.
+
+When a branch misprediction is detected, the checkpoint is restored back to the CAM renaming table in constant time
+by copying the entries to the mapping table (or simply adjusting head pointers if the two structures are implemented 
+together). Since the underlying CAM has been updated by the checkpoint restoration, all entries in the RAM table 
+are invalidated by flash-clearing all valid bits. Execution can resume as soon as the checkpoint is restored without
+having to walk the ROB. 
