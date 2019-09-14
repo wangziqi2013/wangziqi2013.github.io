@@ -20,4 +20,8 @@ that can become the bottleneck of the pipeline. For RAM-based design, branch mis
 both require that the mapping table be restored precisely to a previous point during execution. Modern pipelined processors, 
 however, allow renaming of speculative instruction in the frontend to be performed in parallel while the branch (or faulty) 
 instruction is still executed in the backend. The changes made by these mis-speculated instructions must be undone before 
-the branch target can be fetched to avoid using the worng physical register. 
+the branch target can be fetched to avoid using the worng physical register. For CAM-based design, the renaming state before
+the branch instruction can be restored easily in constant time by checkpointing the renaming table into a checkpoint buffer.
+When the branch is known to be mispredicted, the checkpoint is copied to the renaming table, which does not require walking
+the ROB, but adds extra checkpoint buffer cost. In addition, register renaming needs to access the multi-ported CAM, the 
+latency and power consumption of which can be large.
