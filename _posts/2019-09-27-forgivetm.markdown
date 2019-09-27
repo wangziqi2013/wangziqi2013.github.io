@@ -88,4 +88,7 @@ incremented by one. If it does not exist, then the entry with the minimum counte
 When a line is to be added into the lazy write table, the predictor outputs the score of the address if it exists, or a
 predefined value if it does not (most likely zero). The higher the score is, the more likely the cache line will 
 cause the transaction to abort if exposed early, and the more potential benefit we can get if the line is acquired 
-lazily. 
+lazily. The paper identifies that stores to addresses on the thread stack and thread-local variables do not need to be 
+tracked. These stores benefit from this prediction scheme since they will not be tracked by the lazy write table. The predictor 
+table, however, does not need to be kept complete. An entry can be evicted without any extra action, since the output of 
+the table is only an indication of the relative
