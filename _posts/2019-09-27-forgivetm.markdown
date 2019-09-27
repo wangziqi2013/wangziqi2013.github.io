@@ -79,4 +79,13 @@ When inserting a new entry into the table, the processor may find out that the t
 will be evicted from the table, the write permission of which will then be explicitly acquired. The processor determines which
 line will be evicted by assigning each line in the table a "score", which is the output of the predictor. The table maintains
 two extra registers, one pointing to the minimum scored entry, and another maintains the maximum value. Both registers are
-updated when an entry is inserted and deleted from the table. 
+updated when an entry is inserted and deleted from the table. When the table overflows, the minimum scored line is evicted,
+and the cache controller will immediately acquire the write permission of the line by issuing a GETX request.
+
+The predictor is implemented as a table of counters. When a transaction aborts, the address tag of the cache line which
+caused the abort is used to probe the table. If the entry already exists, then the counter associated with the entry is 
+incremented by one. If it does not exist, then the entry with the minimum counter score is evicted, and a new entry is created.
+When a line is to be added into the lazy write table, the predictor outputs the score of the address if it exists, or a
+predefined value if it does not (most likely zero). The higher the score is, the more likely the cache line will 
+cause the transaction to abort if exposed early, and the more potential benefit we can get if the line is acquired 
+lazily. 
