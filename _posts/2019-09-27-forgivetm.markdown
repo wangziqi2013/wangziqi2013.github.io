@@ -40,4 +40,9 @@ have a larger working set, and aborting these transactions will waste more cycle
 
 ForgiveTM combines eager and lazy schemes by only exposing certain writes, while leaving the rest in a private per-transactional 
 table until commit or the table overflows. ForgiveTM assumes a baseline system similar to Intel TSX, and only adds incremental
-changes to the architecture without modifying the coherence protocol at all. 
+changes to the architecture without modifying the coherence protocol at all. In the baseline system, each cache line is 
+extended with a "T" bit, which indicates whether the cache line has been speculatively accessed by the processor. Loads
+and stores issued within the transaction will set the "T" bit in the cache after acquiring the cache line. To ensure that
+transactions can be rolled back, when a dirty, non-speculative cache line is accessed, the dirty content is first written
+back into lower level caches before that line can be updated. The "T" bit is cleared on both commits and aborts, and in
+the case of an abort, the valid bit is also cleared. Pre-transaction data can be fetched from lower level caches. 
