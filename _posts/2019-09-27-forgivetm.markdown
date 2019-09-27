@@ -29,4 +29,11 @@ is hard to design and verify, or assumes certain hardware structures that are di
 broadcasting network). Lazy conflict detection usually provides better performance and lower abort rates for three reasons. 
 First, the "vulnerabilty window", during which the transaction's reads and writes are exposed to other transactions, is smaller 
 with lazy detection schemes. In contrast, eager schemes expose reads and writes as coherence states once they are performed
-on the cache, and any coherence request will result in an abort. 
+on the cache, and any coherence request will result in an abort. Second, under lazy scheme, transactions can determine the 
+serialization order at a later time, e.g. when they are about to commit, rather than always serializing before the current 
+owner transaction of the cache line by forcing the latter to abort. This adds extra flexibility to the protocol and allows
+more read/write interleavings to commit. The last reason is that lazy conflict detection avoids certain pathologies in which
+transactions abort each other without making any progress due to the fact that transactions started later always attempt
+to serialize before the transaction that started earlier on a conflict. On a balanced system in which transactions are 
+of similar sizes, however, those started earlier should be given higher priorities to commit, since they are expected to 
+have a larger working set, and aborting these transactions will waste more cycles. 
