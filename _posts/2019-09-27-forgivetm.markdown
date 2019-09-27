@@ -48,3 +48,10 @@ back into lower level caches before that line can be updated. The "T" bit is cle
 the case of an abort, the valid bit is also cleared. Pre-transaction data can be fetched from lower level caches after 
 such an abort. ForgiveTM does not attempt to extend the baseline system to support unbounded transactions. In the case of a
 speculative state overflow, the transaction is aborted.
+
+ForgiveTM extends the cache controller hardware to recognize cache lines that should be exposed lazily, which is described 
+as follows. First, cache lines are extended with an "L" bit, which indicates that stores to the line should be exposed lazily.
+If this bit is set, stores to this line will ignore the coherence state, and will directly update the line content (since
+it is assumed that proper permissions have been acquired). In addition, ForgiveTM adds a table which records the tags
+of lines with the "L" bit set. 
+
