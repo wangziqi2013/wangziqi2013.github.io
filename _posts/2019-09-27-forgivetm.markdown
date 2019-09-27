@@ -16,4 +16,14 @@ version_mgmt:
 This paper proposes ForgiveTM, a bounded HTM design that features lower abort rate than commercial HTMs. ForgiveTM 
 reduces conflict aborts by leveraging the observation that the order of reads and writes within a transaction is 
 irrelevant to the order that they are issued to the shared cache, as long as these reads and writes are committed atomically 
-and that the coherence protocol provides most up-to-date lines for each request. 
+and that the coherence protocol provides most up-to-date lines for each request. The paper also idientifies that currently 
+available commercial HTMs are all eager due to the fact that Two-Phase Locking (2PL) style eager conflict detection maps 
+perfectly to the coherence protocol. For example, a read-shared (GETS) request us equivalent to a read-only lock in 2PL,
+while a read-exclusive request is equivalent to writer lock. During the execution, the cache controller monitors speculatively
+accessed cache lines during the transaction, and sets the corresponding bit. When a conflicting request is received
+from another core, the current transaction must be aborted to avoid violating the isolation propeerty. Past designs also
+propose lazy conclift detection, which allows transactions to proceed after conflicts are detected, and only resolve these
+conflicts at the time of commit (or abort if the transaction risks accessing inconsistent data). The lazy approach to
+conflict detection, however, as pointed out by the paper, often requires modifications of the coherence protocol, which
+is hard to design and verify, or assumes certain hardware structures that are difficult to implement (e.g. ordered 
+broadcasting network). 
