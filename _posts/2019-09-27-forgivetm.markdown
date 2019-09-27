@@ -55,7 +55,10 @@ If this bit is set, stores to this line will ignore the coherence state, and wil
 it is assumed that proper permissions have been acquired). In addition, ForgiveTM adds a table which records the tags
 of lines with the "L" bit set. A new tag will be added to the table when the line is to be modified by a store instruction
 if the table still has an empty slot. We postpone the discussion of table overflow to later paragraphs. The last change made
-by ForgiveTM is a predictor which gives hint on whether a cache line should be exposed lazily or not based on the number of 
+by ForgiveTM is a predictor which gives hints on whether a cache line should be exposed lazily or not based on the number of 
 aborts incurred by that line. The predictor is used to reduce the amount of storage required to store all lazily acquired
 lines.
 
+ForgiveTM works as follows. The bahavior of load instructions does not change as in the baseline system. Coherence protocol
+and conflict detection rule is also unmodified, i.e. the transaction aborts if the core receives a request for conflicting
+permissions from another core. This 
