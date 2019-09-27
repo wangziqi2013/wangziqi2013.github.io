@@ -72,4 +72,11 @@ Note that this pre-commit process does not have to be atomic: The processor simp
 address tag in the table, it issues a GETX request to the cache hierarchy. In the meantime, conflicting requests might also
 be received from other cores. No special action needs to be taken; the processor simply aborts if this happens. Compared with
 delayed-write schemes such as TCC, ForgiveTM does not requires any centralized arbitration, due to the fact that transactions
-have not committed yet when they run the pre-commit sequence.
+have not committed yet when they run the pre-commit sequence. After the pre-commit, if the transaction is still alive,
+it commits by clearing both the "T" bit and the "L" bit (if set) in its working set.
+
+When inserting a new entry into the table, the processor may find out that the table is already full. In this case, an entry
+will be evicted from the table, the write permission of which will then be explicitly acquired. The processor determines which
+line will be evicted by assigning each line in the table a "score", which is the output of the predictor. The table maintains
+two extra registers, one pointing to the minimum scored entry, and another maintains the maximum value. Both registers are
+updated when an entry is inserted and deleted from the table. 
