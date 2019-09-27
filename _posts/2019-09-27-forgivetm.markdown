@@ -53,5 +53,9 @@ ForgiveTM extends the cache controller hardware to recognize cache lines that sh
 as follows. First, cache lines are extended with an "L" bit, which indicates that stores to the line should be exposed lazily.
 If this bit is set, stores to this line will ignore the coherence state, and will directly update the line content (since
 it is assumed that proper permissions have been acquired). In addition, ForgiveTM adds a table which records the tags
-of lines with the "L" bit set. 
+of lines with the "L" bit set. A new tag will be added to the table when the line is to be modified by a store instruction
+if the table still has an empty slot. We postpone the discussion of table overflow to later paragraphs. The last change made
+by ForgiveTM is a predictor which gives hint on whether a cache line should be exposed lazily or not based on the number of 
+aborts incurred by that line. The predictor is used to reduce the amount of storage required to store all lazily acquired
+lines.
 
