@@ -91,4 +91,5 @@ cause the transaction to abort if exposed early, and the more potential benefit 
 lazily. The paper identifies that stores to addresses on the thread stack and thread-local variables do not need to be 
 tracked. These stores benefit from this prediction scheme since they will not be tracked by the lazy write table. The predictor 
 table, however, does not need to be kept complete. An entry can be evicted without any extra action, since the output of 
-the table is only an indication of the relative
+the table is only an indication of the relative level of contention on the cache line. An inaccurate prediction only
+degrades performance, but does not affect correctnss.
