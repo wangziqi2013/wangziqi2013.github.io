@@ -24,6 +24,9 @@ accessed cache lines during the transaction, and sets the corresponding bit. Whe
 from another core, the current transaction must be aborted to avoid violating the isolation propeerty. Past designs also
 propose lazy conclift detection, which allows transactions to proceed after conflicts are detected, and only resolve these
 conflicts at the time of commit (or abort if the transaction risks accessing inconsistent data). The lazy approach to
-conflict detection, however, as pointed out by the paper, often requires modifications of the coherence protocol, which
+conflict detection, however, as pointed out by the paper, often requires modifications to the coherence protocol, which
 is hard to design and verify, or assumes certain hardware structures that are difficult to implement (e.g. ordered 
-broadcasting network). 
+broadcasting network). Lazy conflict detection usually provides better performance and lower abort rates for three reasons. 
+First, the "vulnerabilty window", during which the transaction's reads and writes are exposed to other transactions, is smaller 
+with lazy detection schemes. In contrast, eager schemes expose reads and writes as coherence states once they are performed
+on the cache, and any coherence request will result in an abort. 
