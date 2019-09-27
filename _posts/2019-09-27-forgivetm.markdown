@@ -59,6 +59,10 @@ by ForgiveTM is a predictor which gives hints on whether a cache line should be 
 aborts incurred by that line. The predictor is used to reduce the amount of storage required to store all lazily acquired
 lines.
 
-ForgiveTM works as follows. The bahavior of load instructions does not change as in the baseline system. Coherence protocol
+ForgiveTM works as follows. The bahavior of load instructions does not change compared with the baseline system. Coherence protocol
 and conflict detection rule is also unmodified, i.e. the transaction aborts if the core receives a request for conflicting
-permissions from another core. This 
+permissions from another core. The behavior of writes, however, is changed depending on the predictor result. If the predictor
+indicates that the write is likely to incur aborts, then the write will be performed lazily. In this case, the processor
+only sends a GETS request instead of GETX for the write, and holds the cache line in shared state. The content of the line,
+however, is updated to reflect the store instruction. The T and L bits are also set to indicate that the cache line 
+is transactional, and that the GETX request is delayed. 
