@@ -13,3 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes ForgiveTM, a bounded HTM design that features lower abort rate than commercial HTMs. ForgiveTM 
+reduces conflict aborts by leveraging the observation that the order of reads and writes within a transaction is 
+irrelevant to the order that they are issued to the shared cache, as long as these reads and writes are committed atomically 
+and that the coherence protocol provides most up-to-date lines for each request. 
