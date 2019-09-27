@@ -37,3 +37,7 @@ transactions abort each other without making any progress due to the fact that t
 to serialize before the transaction that started earlier on a conflict. On a balanced system in which transactions are 
 of similar sizes, however, those started earlier should be given higher priorities to commit, since they are expected to 
 have a larger working set, and aborting these transactions will waste more cycles. 
+
+ForgiveTM combines eager and lazy schemes by only exposing certain writes, while leaving the rest in a private per-transactional 
+table until commit or the table overflows. ForgiveTM assumes a baseline system similar to Intel TSX, and only adds incremental
+changes to the architecture without modifying the coherence protocol at all. 
