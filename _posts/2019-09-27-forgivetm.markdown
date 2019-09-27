@@ -65,4 +65,11 @@ permissions from another core. The behavior of writes, however, is changed depen
 indicates that the write is likely to incur aborts, then the write will be performed lazily. In this case, the processor
 only sends a GETS request instead of GETX for the write, and holds the cache line in shared state. The content of the line,
 however, is updated to reflect the store instruction. The T and L bits are also set to indicate that the cache line 
-is transactional, and that the GETX request is delayed. 
+is transactional, and that the GETX request is delayed. An entry is also inserted into the lazy store table such that
+the processor can acquire proper permission of the line before commit. On transaction commit, the processor first attempts
+to acquire exclusive permissions to all cache lines in the table, before it executes the commit sequence in the baseline system.
+Note that this pre-commit process does not have to be atomic: The processor simply iterates over the table, and for each
+address tag in the table, it issues a GETX request to the cache hierarchy. In the meantime, conflicting requests might also
+be received from other cores. No special action needs to be taken; the processor simply aborts if this happens. Compared with
+delayed-write schemes such as TCC, ForgiveTM does not requires any centralized arbitration, due to the fact that transactions
+have not committed yet when they run the pre-commit sequence.
