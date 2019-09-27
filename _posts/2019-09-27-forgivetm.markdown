@@ -45,4 +45,6 @@ extended with a "T" bit, which indicates whether the cache line has been specula
 and stores issued within the transaction will set the "T" bit in the cache after acquiring the cache line. To ensure that
 transactions can be rolled back, when a dirty, non-speculative cache line is accessed, the dirty content is first written
 back into lower level caches before that line can be updated. The "T" bit is cleared on both commits and aborts, and in
-the case of an abort, the valid bit is also cleared. Pre-transaction data can be fetched from lower level caches. 
+the case of an abort, the valid bit is also cleared. Pre-transaction data can be fetched from lower level caches after 
+such an abort. ForgiveTM does not attempt to extend the baseline system to support unbounded transactions. In the case of a
+speculative state overflow, the transaction is aborted.
