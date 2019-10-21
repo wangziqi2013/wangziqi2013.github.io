@@ -21,11 +21,11 @@ conflict detection. We describe the scheme as follows.
 
 The paper assumes that non-heterogeneous TM implementations exist on both CPU and GPU. The paper does not specify the 
 implementation to be used, but rather, in order for a TM implementation to work correctly under HeTM, they must provide 
-the abstration that transactions on each device execute independently which can be regarded as an atomic operation. In addition,
-all transactions, including those that finally abort, must not dependent on other transactions that aborted, i.e. aborted 
-states should not affect the outcome of execution. The latter property is critical to HeTM, since transactions on both
-devices execute locally before they eventually synchronize. If transactions' outcome are dependent on uncommitted states, 
-the result of local executions may not be equivalent to the result of an abstract, globally serial history. 
+the abstration that transactions on each device are assigned commit timestamps which are consistent with the logical ordering. 
+In addition, all transactions, including those that finally abort, must not dependent on other transactions that aborted, 
+i.e. aborted states should not affect the outcome of execution. The latter property is critical to HeTM, since transactions 
+on both devices execute locally before they eventually synchronize. If transactions' outcome are dependent on uncommitted 
+states, the result of local executions may not be equivalent to the result of an abstract, globally serial history. 
 
 HeTM provides a transactional interface for programmers to wrap the transaction body and arguments. Instead of the traditional
 model of execution in which the body is executed immediately after the transaction begin instruction, HeTM adopts 
@@ -38,4 +38,8 @@ device based on the type of the queue and/or the queue length. For the CPU queue
 and dispatches it to an idle core for execution. For the GPU queue, the scheduler waits until there are sufficient number
 of instances, and then dispatch the batch to a transaction kernel running on the GPU. The transaction kernel is the GPU 
 version of the transaction body written by the programmer. Note that HeTM requires that programmers provide both implementations
-of the transaction body if transactions are to be executed on both devices. 
+of the transaction body if transactions are to be executed on both devices. Transactions in the shared queue can be dispatched
+to either device. 
+
+HeTM assumes that transactional metadata is only maintained for a subset of the available addresses. This subset of addresses
+is called a "Speculative Transaction Memory Region" (STMR). 
