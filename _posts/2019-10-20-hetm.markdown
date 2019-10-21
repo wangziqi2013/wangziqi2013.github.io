@@ -44,7 +44,15 @@ to either device.
 HeTM assumes that transactional metadata is only maintained for a subset of the available addresses. This subset of addresses
 is called a "Speculative Transaction Memory Region" (STMR). One copy of STMR is maintained by each device in their private
 memory, such that transactions at each device can execute independently without data communication until they synchronize.
-Note that this assumotion actually causes trouble for pointer-based data structures, since the semantics of pointers will
+Note that this assumption actually causes trouble for pointer-based data structures, since the semantics of pointers will
 change if the two STMRs are not mapped to the same base address. As a solution, the paper proposes that pointer operations
 be instrumented by the compiler, which transforms the value of pointers into relative addresses from the STMR base.
-HeTM also
+HeTM also assumes that transactional metadata are not co-located with data in STMR, i.e. transactional metadata can be 
+modified locally without causing conflicts. This is typically true for most HTMs and STMs. HeTM also maintains three additional
+data structures, one on the CPU side, two on the GPU side. On the CPU side, transactions maintain an append-only write-set 
+log which consists of (address, data, timestamp) tuples committed by CPU transactions. The timestamp is needed to identify
+the last write on a certain address which can potentially be written multiple times during an interval. On the GPU side,
+threads collaborately maintain two bitmaps: A RS bitmap in which a bit is set if the corresponding word is read by a
+transaction, and a WS bitmap maintained in a similar way which records addresses to be written. The two bitmaps
+need not be precise (i.e. they can be bloom filters), but it is required that all aliased addresses be recovered quickly 
+given the offset of a bit. 
