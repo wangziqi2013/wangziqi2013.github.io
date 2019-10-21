@@ -84,4 +84,7 @@ write set bitmap. Both STMRs are consistent after the roll back completes.
 As a special optimization, the paper proposes having doubly-buffered STMR on the GPU side. One shadow copy is maintained 
 in addition to the main copy. When the GPU executes transactions, only the main copy is modified, while the shadow
 copy serves as a reference of the pre-image before the current interval. When the GPU validation fails, the shadow copy is 
-used for recovery by directly copying the write-set log from the CPU onto the shadow copy.
+used for recovery by directly copying the write-set log from the CPU onto the shadow copy. At the beginning of the validation,
+we create a newer shadow copy while validation is being processed. Once the newer shadow copy is created, the next round
+can be immediately started on the GPU without waiting for validation outcome, essentially overlapping the execution of 
+the next round with the validation of the current round.
