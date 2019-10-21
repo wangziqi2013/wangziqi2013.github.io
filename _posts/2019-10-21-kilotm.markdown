@@ -15,4 +15,9 @@ version_mgmt:
 
 This paper proposes KiloTM, a hardware transactional memory design for GPGPU. This paper identifies several benefits
 of introducing HTM to GPGPU. First, GPGPU features heavily threaded workloads. Interactions between threads are difficult
-to manage, which poses great challenge for debugging and program verification. Second, 
+to manage, which poses great challenge for debugging and program verification. Second, the SIMT execution model used by 
+GPGPUs can cause deadlock for fine-grained locking. Threads waiting for a lock that has already been taken by some other
+threads can be permanently blocked due to the fact that SIMT introduces new implicit control dependencies between threads. 
+GPGPUs do not attempt to solve this problem, but rather, they offload the responsibility of finding synchronization bugs 
+to programmers. In this situation, HTM can be of great help since they are non-blocking, and enables fast prototyping
+of concurrent data structures at the cost of slightly slower execution.
