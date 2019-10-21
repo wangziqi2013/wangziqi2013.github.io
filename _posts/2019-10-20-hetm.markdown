@@ -12,3 +12,16 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presenrs HeTM, a unified transactional memory capable of running on both CPU and GPU. The paper
+begins by identifying that some modern workloads can benefit greatly from the high parallelism provided by GPGPU, while
+requiring transactional semantics, i.e. individual threads must appear that they are executed in a certain total ordering.
+The paper proposes a scheme for incorporating the TM semnatics into GPGPU's SIMT execution model, enabling concurrent execution of transactions on both devices while maintaining the global transactional semantics by the application of hierarchical 
+conflict detection. We describe the scheme as follows.
+
+The paper assumes that non-heterogeneous TM implementations exist on both CPU and GPU. The paper does not specify the 
+implementation to be used, but rather, in order for a TM implementation to work correctly under HeTM, they must provide 
+the abstration that transactions on each device execute independently which can be regarded as an atomic operation. In addition,
+all transactions, including those that finally abort, must not dependent on other transactions that aborted, i.e. aborted 
+states should not affect the outcome of execution. The latter property is critical to HeTM, since transactions on both
+devices execute locally before they synchronize. 
