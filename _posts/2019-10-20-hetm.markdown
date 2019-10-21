@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "HeTM: Transactional Memory for Heterogeneous Systems"
+date:   2019-10-20 23:03:00 -0500
+categories: paper
+paper_title: "HeTM: Transactional Memory for Heterogeneous Systems"
+paper_link: N/A
+paper_keyword: HTM; GPU
+paper_year: PACT 2019
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
