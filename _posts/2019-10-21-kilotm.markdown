@@ -77,6 +77,8 @@ memory with a timestamp older than RCID can always be detected by the previous v
 ignored by hazard detection. The second pointer is YCID, which is the youngest transaction that may have a WAR conflict
 with the current transaction. The YCID pointer is set by hazard detection stage. If the YCID pointer is not null after 
 this stage, the transaction will wait until the transaction whose cts equals YCID commits or aborts, and then re-validates. 
-This gives the transaction a second chance to check conflicts. The second validation is non-speculative, and must be 
-precise (by contrast, the first validation is speculative, and can even be conducted with a partial read set).
+This gives the transaction a second chance to check conflicts, which can reduce spurious aborts in the presence of false
+positives given by the hazard detection stage. The second validation is non-speculative, and must be precise (by contrast, 
+the first validation is speculative, and can even be conducted with a partial read set). Transactions commit at the last
+stage if the second validation succeeds, during which the write set is written back to the DRAM.
 
