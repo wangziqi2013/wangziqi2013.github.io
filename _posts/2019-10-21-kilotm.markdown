@@ -42,4 +42,7 @@ In KiloTM, the ISA is extended with a transaction begin and commit instruction, 
 On transaction begin, two records, R and T, are pushed onto the stack, with the PC pointing to the next instruction after 
 transaction begin, and the RPC undefined. The R record is pushed first, which records failed transactions in the current 
 round. The bit mask of the R record is initialized to empty. The T record is pushed after R record, which has an all-set 
-bit mask, and the SIMT core will start execution of the transaction body immediately using the T record. On transaction
+bit mask, and the SIMT core will start execution of the transaction body immediately using the T record. On commit, transactions 
+are validated. Those that are successfully committed are removed from the bit mask, and those aborted set the corresponding
+bits in the bit mask of the R record. The transaction commit instruction pops the T record off the stack, and inserts a 
+new T record initialized from the R record, after which the bit mask in the R record is cleared. 
