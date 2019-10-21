@@ -24,4 +24,5 @@ implementation to be used, but rather, in order for a TM implementation to work 
 the abstration that transactions on each device execute independently which can be regarded as an atomic operation. In addition,
 all transactions, including those that finally abort, must not dependent on other transactions that aborted, i.e. aborted 
 states should not affect the outcome of execution. The latter property is critical to HeTM, since transactions on both
-devices execute locally before they eventually synchronize. 
+devices execute locally before they eventually synchronize. If transactions' outcome are dependent on uncommitted states, 
+the result of local executions may not be equivalent to the result of an abstract, globally serial history. 
