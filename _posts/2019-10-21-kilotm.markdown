@@ -45,4 +45,6 @@ round. The bit mask of the R record is initialized to empty. The T record is pus
 bit mask, and the SIMT core will start execution of the transaction body immediately using the T record. On commit, transactions 
 are validated. Those that are successfully committed are removed from the bit mask, and those aborted set the corresponding
 bits in the bit mask of the R record. The transaction commit instruction pops the T record off the stack, and inserts a 
-new T record initialized from the R record, after which the bit mask in the R record is cleared. 
+new T record initialized from the R record, after which the bit mask in the R record is cleared. This allows transactions 
+that failed validation to be retried until they succeed, at which moment both T and R record have an empty bit mask. In
+this case, both records are popped from the stack, and execution continues with the next entry on the stack.
