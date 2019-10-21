@@ -80,3 +80,8 @@ identical view of the STMR.
 If, on the other hand, validation fails, all GPU transactions within the current interval are rolled back. The CPU
 write-set log is still applied as described above. The GPU work is then undone by fetching CPU data according to the 
 write set bitmap. Both STMRs are consistent after the roll back completes.
+
+As a special optimization, the paper proposes having doubly-buffered STMR on the GPU side. One shadow copy is maintained 
+in addition to the main copy. When the GPU executes transactions, only the main copy is modified, while the shadow
+copy serves as a reference of the pre-image before the current interval. When the GPU validation fails, the shadow copy is 
+used for recovery by directly copying the write-set log from the CPU onto the shadow copy.
