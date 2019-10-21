@@ -26,4 +26,8 @@ Although numerous HTM designs have been proposed, and few are already implemente
 HTM for GPGPUs is still a challenging task due to the different data accessing pattern of GPU programs. The paper lists
 several of them. First, while traditional CPU-based HTM can maintain transactional states in the L1 private cache at the 
 cache line granularity, this can result in massive false sharing for GPU workloads, since GPU transactions tend to access 
-adjacent words within a cache line. Second, 
+adjacent words within a cache line. Second, while CPU-based HTM can detect conflicts using the existing coherence protocol,
+GPUs typically do not possess coherent L1 caches. In fact, the paper points out that the private cache of a SIMT core is 
+only used to access private data, and when global data is to be accessed by the core, the private cache will not 
+be used. Broadcasting all accesses on the bus is also not acceptable, since every thread will send a message to all 
+others when a memory instruction is executed, incurring O(n^2) traffic for n threads. 
