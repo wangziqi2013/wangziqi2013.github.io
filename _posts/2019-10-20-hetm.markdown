@@ -33,4 +33,9 @@ a queuing execution model for better scheduling on GPU. The queuing model in HeT
 an instance of the transaction, which is then pushed into a transaction queue. For heterogeneous system consisting of
 a CPU and a GPU, three queues are provided: The CPU queue, the GPU queue, and the shared queue. An instance is pushed into
 the first two queues if the programmer specifies device affinity when starting the transaction. The transaction is pushed 
-into the shared queue otherwise. 
+into the shared queue otherwise. A scheduler selects transactions from the three queues, and dispstach them to the corresponding
+device based on the type of the queue and/or the queue length. For the CPU queue, the scheduler selects one instance at a time
+and dispatches it to an idle core for execution. For the GPU queue, the scheduler waits until there are sufficient number
+of instances, and then dispatch the batch to a transaction kernel running on the GPU. The transaction kernel is the GPU 
+version of the transaction body written by the programmer. Note that HeTM requires that programmers provide both implementations
+of the transaction body if transactions are to be executed on both devices. 
