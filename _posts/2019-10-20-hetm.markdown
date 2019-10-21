@@ -56,3 +56,11 @@ threads collaborately maintain two bitmaps: A RS bitmap in which a bit is set if
 transaction, and a WS bitmap maintained in a similar way which records addresses to be written. The two bitmaps
 need not be precise (i.e. they can be bloom filters), but it is required that all aliased addresses be recovered quickly 
 given the offset of a bit. 
+
+HeTM transactions are executed locally once they are dispatched. The scheduler monitors execution statistics on both
+devices, and pause the execution priodically for inter-device conflict detection. Intra-device conflict detections
+are performed by the TM library which is out of the scope of this paper. At the end of the execution interval, the scheduler
+sends the write-set log on CPU to the GPU. At a high level, the goal of synchronization is to check whether all GPU 
+transactions can be serialized after all CPU transactions. To this end, we must guarantee that data items modified by 
+CPU transactions are not read or written by the GPU (in the latter case, due to the fact that we copy CPU data to
+GPU at the end of the interval, if we allow write-write conflict, GPU writes might be undone).
