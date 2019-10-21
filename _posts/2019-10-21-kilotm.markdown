@@ -82,3 +82,7 @@ positives given by the hazard detection stage. The second validation is non-spec
 the first validation is speculative, and can even be conducted with a partial read set). Transactions commit at the last
 stage if the second validation succeeds, during which the write set is written back to the DRAM.
 
+The hazard detection stage uses a lookup table called the Last Write History (LWH) table. Conceptually, the LWH table
+outputs the cts of the last writer given a memory address. Transactions in the hazard detection stage query the LWH table
+with addresses in its read set, and computes the YCID. If the output of LWH table is older than RCID, the value will
+be ignored, as explained above. If the output is younger than both the RCID and the YCID (YCID is initialized to infinity)
