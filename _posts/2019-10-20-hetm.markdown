@@ -76,3 +76,7 @@ log. In this case, the GPU uses the timestamp to determine which write should ov
 also collects its local dirty data set (which is guaranteed to be disjoint with CPU dirty data set), and sends them to 
 the CPU. On receiving the updated data from GPU, the CPU applies them to its own STMR, such that both devices have an 
 identical view of the STMR.
+
+If, on the other hand, validation fails, all GPU transactions within the current interval are rolled back. The CPU
+write-set log is still applied as described above. The GPU work is then undone by fetching CPU data according to the 
+write set bitmap. Both STMRs are consistent after the roll back completes.
