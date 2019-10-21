@@ -30,4 +30,7 @@ adjacent words within a cache line. Second, while CPU-based HTM can detect confl
 GPUs typically do not possess coherent L1 caches. In fact, the paper points out that the private cache of a SIMT core is 
 only used to access private data, and when global data is to be accessed by the core, the private cache will not 
 be used. Broadcasting all accesses on the bus is also not acceptable, since every thread will send a message to all 
-others when a memory instruction is executed, incurring O(n^2) traffic for n threads. 
+others when a memory instruction is executed, incurring O(n^2) traffic for n threads. The last challenge is commit overhead.
+For massively threaded GPU applications, transaction commit can easily become a bottleneck if transactions are validated
+in a serial manner. Even if some form of serialization is inevitable to ensure correct ordering, a properly designed commit 
+algorithm should reduce this extra serialization to a minimum.
