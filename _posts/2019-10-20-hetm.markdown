@@ -26,3 +26,11 @@ all transactions, including those that finally abort, must not dependent on othe
 states should not affect the outcome of execution. The latter property is critical to HeTM, since transactions on both
 devices execute locally before they eventually synchronize. If transactions' outcome are dependent on uncommitted states, 
 the result of local executions may not be equivalent to the result of an abstract, globally serial history. 
+
+HeTM provides a transactional interface for programmers to wrap the transaction body and arguments. Instead of the traditional
+model of execution in which the body is executed immediately after the transaction begin instruction, HeTM adopts 
+a queuing execution model for better scheduling on GPU. The queuing model in HeTM wraps transaction body and arguments into
+an instance of the transaction, which is then pushed into a transaction queue. For heterogeneous system consisting of
+a CPU and a GPU, three queues are provided: The CPU queue, the GPU queue, and the shared queue. An instance is pushed into
+the first two queues if the programmer specifies device affinity when starting the transaction. The transaction is pushed 
+into the shared queue otherwise. 
