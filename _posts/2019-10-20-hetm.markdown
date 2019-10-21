@@ -68,4 +68,11 @@ tested with the GPU's own read set (which is a superset of the GPU write set). T
 be made efficient based on two observations. First, most transactions feature a significantly smaller write set than the
 read set. By sending the write-set log over the slower system bus to the GPU, only the most essential part of CPU
 transactions is transferred. Second, set intersection test has intrinsically high parallelism, which can be implemented 
-on the GPU fairly easily. 
+as a "validation kernel" on the GPU fairly easily. 
+
+If the validation succeeds, the GPU then iterates over the write-set log again, and applies dirty data from CPU to its 
+own STMR. Note that if an address is written multiple times on the CPU side, there will be multiple entries in the write-set 
+log. In this case, the GPU uses the timestamp to determine which write should override which. In the meantime, the GPU 
+also collects its local dirty data set (which is guaranteed to be disjoint with CPU dirty data set), and sends them to 
+the CPU. On receiving the updated data from GPU, the CPU applies them to its own STMR, such that both devices have an 
+identical view of the STMR.
