@@ -56,3 +56,14 @@ chunk of memory, such that the write coalescing hardware can efficiently stream 
 While the transaction is executed, no modification is made to shared memory. In order for a transaction to read its own
 dirty value, a per-thread bloom filter is also added to detect read-after-write within the same transaction. The write log
 is walked to forward dirty data to the read instruction if necessary.
+
+The last major change is the addition of validation hardware. KiloTM adopts backward OCC with value validation. Transactions
+are assigned commit timestamps (cts) by a centralized counter when they attempt to validate at the end of the transaction. 
+In general, a transaction can commit successfully if its read set is not written by any of the overlapping transaction 
+during the execution. In a naive serial commit scheme, transactions are validated by the validation hardware serially. A 
+validating transaction walks its read set and compares the value in the read log against the current value in the shared 
+memory. If all values match, then the read set is considered to be consistent, and the transaction commits. This scheme, 
+however, introduces intolerable delay as transactions are eventually serialized at the commit point. To increase parallelism,
+two optimizations are introduced into KiloTM. In the first optimization, the address space is partitioned into several
+parts, each with a piece of the validation hardware processing requests within the address range. This shortens the 
+delay of processing a single validation, but still does not increase parallelism. 
