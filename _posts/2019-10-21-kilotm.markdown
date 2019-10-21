@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Hardware Transactional Memory for GPU Architectures"
+date:   2019-10-21 14:40:00 -0500
+categories: paper
+paper_title: "Hardware Transactional Memory for GPU Architectures"
+paper_link: https://dl.acm.org/citation.cfm?id=2155655
+paper_keyword: HTM; GPU; KiloTM
+paper_year: MICRO 2011
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
