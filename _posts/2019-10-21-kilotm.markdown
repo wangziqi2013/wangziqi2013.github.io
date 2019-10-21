@@ -83,6 +83,16 @@ the first validation is speculative, and can even be conducted with a partial re
 stage if the second validation succeeds, during which the write set is written back to the DRAM.
 
 The hazard detection stage uses a lookup table called the Last Write History (LWH) table. Conceptually, the LWH table
-outputs the cts of the last writer given a memory address. Transactions in the hazard detection stage query the LWH table
-with addresses in its read set, and computes the YCID. If the output of LWH table is older than RCID, the value will
-be ignored, as explained above. If the output is younger than both the RCID and the YCID (YCID is initialized to infinity)
+outputs the cts of the last writer given a memory address, while in reality, it does not have to give precide information. 
+Transactions in the hazard detection stage query the LWH table with addresses in its read set, and computes the YCID. If 
+the output of LWH table is older than RCID, the value will be ignored, as explained above. If the output is younger than 
+both the RCID and the YCID (YCID is initialized to infinity), then the YCID is updated to the output value, meaning that 
+the read address may have been updated by an earlier transaction, and that the current transaction should wait until that 
+updating transaction commits before the second validation. To this end, the LWH table only needs to approximate the 
+last writer such that the output cts of an address must be younger than or equal to the actual cts that last updates the 
+address. The LWH table consists of two components. The primary component is a mapping table implemented as a set-associative 
+cache, which stores precise information of the last writer. New entries are added into this structure when a transaction
+completes the hazard detection stage. As new entries are added, existing entries will be evicted into a secondary component
+called a recency bloom filter. Evicted addresses from the primary component are hashed into one of the many slots in the 
+bloom filter. The slot is updated if the cts stored in the slot is older than the evicted cts. Although some addresses
+will be aliased, this scheme ensures that the bloom filter will always return either a precise cts, or a younger one. 
