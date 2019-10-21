@@ -96,3 +96,8 @@ completes the hazard detection stage. As new entries are added, existing entries
 called a recency bloom filter. Evicted addresses from the primary component are hashed into one of the many slots in the 
 bloom filter. The slot is updated if the cts stored in the slot is older than the evicted cts. Although some addresses
 will be aliased, this scheme ensures that the bloom filter will always return either a precise cts, or a younger one. 
+
+The paper also points out that transactions may access inconsistent data due to the fact that reads are not validated
+until the commit point. Although most transactions will simply abort when it comes to validation, in some corner cases, 
+transactions may be trapped into undefined behavior, such as infinite loops. To avoid such doomed transactions from blocking 
+the entire wrap from making progress, a watchdog timer is configured to interrupt transaction execution and trigger validation periodically. Transactions that are trapped into infinite loops can have a chance to validate and then abort prematurally.
