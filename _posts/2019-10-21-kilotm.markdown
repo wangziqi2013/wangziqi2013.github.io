@@ -66,4 +66,8 @@ memory. If all values match, then the read set is considered to be consistent, a
 however, introduces intolerable delay as transactions are eventually serialized at the commit point. To increase parallelism,
 two optimizations are introduced into KiloTM. In the first optimization, the address space is partitioned into several
 parts, each with a piece of the validation hardware processing requests within the address range. This shortens the 
-delay of processing a single validation, but still does not increase parallelism. 
+delay of processing a single validation, but still does not increase parallelism. The second optimization allows transactions
+to be validated in parallel. In the optimized scheme, transactions are validated in a pipelined manner. One potential problem 
+is that if in-flight transactions conflict with each other (i.e. Write-after-Read), we cannot detect them since the write 
+set is only published into shared memory at the last stage (if the transaction commits). To
+
