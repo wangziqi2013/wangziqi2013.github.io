@@ -34,3 +34,12 @@ others when a memory instruction is executed, incurring O(n^2) traffic for n thr
 For massively threaded GPU applications, transaction commit can easily become a bottleneck if transactions are validated
 in a serial manner. Even if some form of serialization is inevitable to ensure correct ordering, a properly designed commit 
 algorithm should reduce this extra serialization to a minimum.
+
+KiloTM involves two major hardware changes. The first change is on the SIMT execution model by allowing transactions to 
+be retried after they abort. In a classical stack-based SIMT execution model, any diverging instruction such as branches
+will result in two records to be pushed onto the SIMT stack, each representing an execution path controlled by a bit mask.
+In KiloTM, the ISA is extended with a transaction begin and commit instruction, which are both diverging instructions. 
+On transaction begin, two records, R and T, are pushed onto the stack, with the PC pointing to the next instruction after 
+transaction begin, and the RPC undefined. The R record is pushed first, which records failed transactions in the current 
+round. The bit mask of the R record is initialized to empty. The T record is pushed after R record, which has an all-set 
+bit mask, and the SIMT core will start execution of the transaction body immediately using the T record. On transaction
