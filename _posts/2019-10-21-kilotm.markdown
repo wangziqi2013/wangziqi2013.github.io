@@ -21,3 +21,9 @@ threads can be permanently blocked due to the fact that SIMT introduces new impl
 GPGPUs do not attempt to solve this problem, but rather, they offload the responsibility of finding synchronization bugs 
 to programmers. In this situation, HTM can be of great help since they are non-blocking, and enables fast prototyping
 of concurrent data structures at the cost of slightly slower execution.
+
+Although numerous HTM designs have been proposed, and few are already implemented on commercial CPUs, designing a working 
+HTM for GPGPUs is still a challenging task due to the different data accessing pattern of GPU programs. The paper lists
+several of them. First, while traditional CPU-based HTM can maintain transactional states in the L1 private cache at the 
+cache line granularity, this can result in massive false sharing for GPU workloads, since GPU transactions tend to access 
+adjacent words within a cache line. Second, 
