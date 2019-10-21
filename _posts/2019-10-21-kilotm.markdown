@@ -69,5 +69,11 @@ parts, each with a piece of the validation hardware processing requests within t
 delay of processing a single validation, but still does not increase parallelism. The second optimization allows transactions
 to be validated in parallel. In the optimized scheme, transactions are validated in a pipelined manner. One potential problem 
 is that if in-flight transactions conflict with each other (i.e. Write-after-Read), we cannot detect them since the write 
-set is only published into shared memory at the last stage (if the transaction commits). To
+set is only published into shared memory at the last stage (if the transaction commits). Such conflicts are called "hazards",
+and a separate hazard detection stage is added to the pipeline after the initial value validation is performed. To conduct
+hazard detection, transactions keep two extra pointers when they start validation. The first pointer is RCID, which points 
+to the oldest transaction that is still in the pipeline when the current transaction begins validation. Writes to shared 
+memory with a timestamp older than RCID can always be detected by the previous value validation stage, and hence will be 
+ignored by hazard detection. The second pointer is YCID, which is the youngest transaction that may have a WAR conflict
+with the current transaction. 
 
