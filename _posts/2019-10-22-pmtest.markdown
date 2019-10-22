@@ -12,3 +12,9 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents PMTest, a testing framework for persistent memory programs to detect common bugs such as writes
+not being persisted or incorrect write ordering. The paper claims that programming for NVM is difficult, even with pre-built
+libraries, for two reasons. First, programmers should track dirty objects, and issue appropriate function calls or instructions
+to flush them back to the NVM. Failing to do so will result in objects not being persisted after a crash, which renders the 
+object unrecoverable.
