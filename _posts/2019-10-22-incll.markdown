@@ -51,4 +51,9 @@ if the undo log and the dirty data resides in the same cache, no write ordering 
 hardware all guaratee that a cache line is persisted atomically, i.e. either the entire cache line is persisted, or
 none of it is persisted. Placing the undo log entry in the same cache line as dirty data therefore can reduce the 
 cache flush and memory fence overhead, since either the dirty data is written back to the NVM during exeution, and so does
-the undo log entry, or both of them are wiped out by the crash, doing no harm at all to the NVM image.
+the undo log entry, or both of them are wiped out by the crash, doing no harm at all to the NVM image. The second observation
+is that only the permutation field needs to be logged when inserting or deleting of elements from a node, since a physical
+slot can be invalidated simplying by writing a special value into the permutation field. Initially, all fields in the 
+permutation field indicates invalid mapping. When a new element is added, the key and value is appended to the physical
+array, and the permutation field is modified to map the key's logical slot to its physical location in the node. In order
+to undo this insert, simply restoring the permutation field to its before state is sufficient, 
