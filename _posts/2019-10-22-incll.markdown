@@ -20,3 +20,8 @@ data will be lost, and there would be no way to recover the system state to the 
 commercial hardware, the write ordering between the log entry and dirty data (which can reside in different cache lines) 
 must be enforced using cache flush and memory fence instructions, which can be inefficient if log flushes are frequent.
 
+Instead of precise undo logging, InCLL adopts an epoch-based checkpointing model, in which the data structure is checkpointed
+for every 50ms. The interval between two consecutive checkpoints is called an "epoch", during which the data stucture works
+normally as the volatile version. After a system crash, it is guaranteed that the state of the data structure can be 
+restored to the consistent state in the previously completed checkpoint. On the epoch boundary, all worker threads are blocked
+until the checkpointing is completed. A seperate checkpointing thread then 
