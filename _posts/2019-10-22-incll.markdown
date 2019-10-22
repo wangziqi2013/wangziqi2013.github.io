@@ -112,3 +112,10 @@ is completed. Note that in this scheme, the epoch number is only the low 16 bits
 value log is generated. We assume that the higher bits of the current epoch can be represented by the higher bits of the 
 nodeEpoch. If this is not true, or the log entry in the same cache line as the value to be updated has already been used, 
 external logging is used, if not already.
+
+Each node is only externally logged once during the same epoch, even if the object can be updated multiple times. This is 
+achieved by adding another external log epoch number into the node. Before a node is to be externally logged, we check
+whether this epoch number equals the current epoch. If true, the logging is skipped, since the before image of the 
+node already exists. Only logging each node once during an epoch helps recovery also, since the restoration can be done in
+parallel, because otherwise, if there are multiple undo images for the same node, these undo images must be applied in
+the reverse order they are created.
