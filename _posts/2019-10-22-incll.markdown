@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt: 
 ---
 
+**Highlights:**
+
+1. Taking advantage of the fact that a pointer in x86-64 only has 48 effective bits. 
+
+**Lowlights::**
+
+1. wbinvd is a previleged instruction. On epoch boundaries a system call must be performed to flush the entire cache.
+
 This paper presents In-Cache Line Logging (InCLL), a novel technique for accelerating undo logging in certain non-volatile
 data structures. InCLL is motivated by the fact that traditional undo-based logging has an important implication: the 
 undo log entry must reach the persistent NVM before dirty data does, because otherwise, when the system crashes, all in-cache
@@ -24,4 +32,5 @@ Instead of precise undo logging, InCLL adopts an epoch-based checkpointing model
 for every 50ms. The interval between two consecutive checkpoints is called an "epoch", during which the data stucture works
 normally as the volatile version. After a system crash, it is guaranteed that the state of the data structure can be 
 restored to the consistent state in the previously completed checkpoint. On the epoch boundary, all worker threads are blocked
-until the checkpointing is completed. A seperate checkpointing thread then 
+until the checkpointing is completed, leaving the data structure in a consistent state (i.e. no operation is currently going on). 
+A seperate checkpointing thread then flushes the system cache (using wbinvd)
