@@ -74,4 +74,5 @@ also stores the permutation field. A "nodeEpoch" field is also added to record t
 of the permutation field is logged. Second, a Masstree node now only stores 14 key-value pairs. The 14 8 byte keys are 
 stored in the next two cache lines following the permutation field and logging fields. Then, in the fourth cache line, we 
 store an 8 byte log entry for key 0 to key 6, and in the fifth cache line, we store key 7 to key 13, and then another 8
-byte log entry for the last seven keys. In this modified 
+byte log entry for the last seven keys. In this modified node layout, both the permutation log and the two value log entries
+are stored in the same cache line as the dirty data, leveraging the first observation in the previous paragraph. 
