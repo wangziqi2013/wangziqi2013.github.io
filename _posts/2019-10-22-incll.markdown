@@ -41,4 +41,7 @@ This paper uses Masstree as the platform to demonstrate how InCLL works with com
 of B+Tree and Radix tree. Instead of having "flat" nodes as in a regular radix tree, a B+Tree is used to support extremely
 large fanouts at each radix tree level. In masstree, each radix tree level has 2^64 fanouts, mapping a key of 64 bits to 
 one of the next level B+Tree. The B+Tree, therefore, has fixed key length (8 byte binary data) and value length (8 byte 
-pointers). 
+pointers). To further reduce data movement when inserting or deleting elements, a permutation field is added into each node 
+of the B+Tree, such that the elements need not be sorted. The permutation field is a 64 bit word mapping elements from their
+sorted location to physical location within the node, which can be modified atomically with regular store instructions
+if properly aligned. Each node of the Masstree consists 15 key-value pairs, plus the permutation field. 
