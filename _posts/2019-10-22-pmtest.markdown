@@ -47,4 +47,8 @@ from the trace to determine whether the invariants are satisfied.
 The background thread analysis the lifecycle of a memory variable based on the notion of epoches. The basic observation
 is that, once a memory object is written by a store instruction, due to the fact that the cache hierarchy can evict dirty
 line at unknown time, the lifecycle of this dirty line is from the mement the store is executed to the next sfence
-instruction, given that there is a clwb on the dirty address in-between.
+instruction, given that there is a clwb on the dirty address in-between. PMTest therefore divides the entire execution into
+consetive epoches, separated by sfence instructions in the trace. The initial epoch is set to zero, and every time a sfence
+instruction is seen, the thread increments the current epoch by one. The lifecycle of memory objects is maintained by
+an interval tree described as follows. The interval tree takes an address range as key, and outputs a begin and an end epoch,
+called a "persist interval" (for simplicity we assume objects have non-overlapping address ranges). 
