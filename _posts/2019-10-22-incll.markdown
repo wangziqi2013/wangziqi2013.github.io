@@ -81,4 +81,8 @@ When an element is inserted, assuming no node split happens, the permutation fie
 and value is written into the physical slot. The nodeEpoch field is also updated to indicate that a log entry has been
 written for the permutation field. The actual permutation is only updated after all of the above are written. Note that
 although a cache flush and memory fence is not needed here, this write ordering between the log entry and the in-place
-update is still critical to the correctness of the algorithm.
+update is still critical to the correctness of the algorithm. In addition, the nodeEpoch must only be updated after the 
+log entry is written, because otherwise if the system crashes between these two writes, the nodeEpoch will indicate a
+log entry is available, while the entry is in fact not written yet, causing recovery failure. The next time an element
+is inserted, we first check whether nodeEpoch equals the current system epoch. If this is the case, no extra logging 
+is needed, since it is sufficient to just log the permutation once.
