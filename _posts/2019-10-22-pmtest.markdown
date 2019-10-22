@@ -21,3 +21,9 @@ object unrecoverable. The second reason is that certain programming paradigm, su
 entry be persisted on NVM before the object can be modified in-place. This is because there is only very limited control 
 over how the cache hierarchy evicts dirty cache lines back to the NVM. If the dirty line reaches the NVM before the log entry
 does, then after a crash the dirty line cannot be undone. 
+
+In practice, programmers often deal with NVM with special instruction sequences or library calls. On x86 platform, a "clwb"
+(cache line write back) followed by "sfence" (store fence) constitutes what is known as a "persist barrier". The processor 
+will stall on the persist barrier until the cache line has been written back to the NVM. Various NVM libraries also provide
+capabilities to support persistent objects and/or logging and recovery. These library calls are also use the basic persistent 
+barrier as the most fundamental primitive.
