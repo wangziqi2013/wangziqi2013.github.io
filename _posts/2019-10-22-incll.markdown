@@ -123,3 +123,8 @@ modifications, such as node split/merge or internal node updates, are externally
 are relatively infrequent. 
 
 During recovery, the external log is first copies back to their original locations in parallel by a few recovery threads.
+InCLL logs may also be recovered at this stage, but the paper points out that since there can be a significant number 
+of leaf nodes, scanning all of them can be time consuming, while only a small subset of leafs have a log entry. It is hence
+recommended that leaf nodes be restored lazily during normal execution after the crash and recovery. The tree traversal
+routine first compares the epoch in which the log entry is written against the failed epoch, and if there is a match,
+the content of the node is first recovered by copying from the in-node log.
