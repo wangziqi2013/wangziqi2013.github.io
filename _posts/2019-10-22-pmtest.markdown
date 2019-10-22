@@ -51,4 +51,11 @@ instruction, given that there is a clwb on the dirty address in-between. PMTest 
 consetive epoches, separated by sfence instructions in the trace. The initial epoch is set to zero, and every time a sfence
 instruction is seen, the thread increments the current epoch by one. The lifecycle of memory objects is maintained by
 an interval tree described as follows. The interval tree takes an address range as key, and outputs a begin and an end epoch,
-called a "persist interval" (for simplicity we assume objects have non-overlapping address ranges). 
+called a "persist interval" (for simplicity we assume objects have non-overlapping address ranges). When an object is 
+written, the address range is added to the tree if not already there, and the persist interval is set to 
+[current epoch, +&infin;) (if the range already exists, it is not changed). An object also has a "flush interval", which 
+records the begin and end epoch in which the object is flushed but not guaranteed to be persisted. When a clwb instruction
+is processed, the flush interval of the address in clwb's operand is set to [current epoch, +&infin;), indicating that
+cache line flush has been initiated, but it is uncertain when it would finish. Note that addresses that are not flushed 
+will not be affected. Finally, when a sfence instruction is seen, for all addresse ranges that have a flush interval, 
+the persist interval is set to [original begin epoch, current epoch) after the current epoch is incremented.
