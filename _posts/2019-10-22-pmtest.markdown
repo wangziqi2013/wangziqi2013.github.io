@@ -73,4 +73,7 @@ address Y may be persisted unexpected (e.g. by a cache line eviction) before X i
 Besides the two correctness assertions, the analysis thread can also test some conditions that only affect perofrmance.
 For example, if the address range does not have a persist interval assigned when a clwb is executed on that object,
 we can conclude that the clwb is performed on a clean cache line, which is unnecessary. Similarly, if there is already a
-flush interval when clwb is executed, we know the memory object is flushed more than once. 
+flush interval when clwb is executed, we know the memory object is flushed more than once. To check whether the write ordering
+of undo log entries are enforced, the thread can also track log objects and their persistence status with another interval
+tree. If an object is written without having a corresponding log entry persisted, the object write and log write are in 
+the wrong order and may risk object corruption.
