@@ -30,7 +30,7 @@ barrier as the most fundamental primitive.
 
 The paper identifies two types of most common bugs in persistent programs. The first type is not persisting a memory object
 whose value should be preserved after a crash, which results in inconsistency. The second type is not enforcing the write 
-ordering required to preform logging or other tasks. This may cause dirty cache lines being written back out of the program 
+ordering required to perform logging or other tasks. This may cause dirty cache lines being written back out of the program 
 order, which also results in inconsistency or unrecoverable objects. The paper also identifies a few common pitfalls
 that may happen in NVM programming, such as flushing a clean cache line, flushing a dirty line more than once, and generating
 more than one undo log record for one checkpoint. These pitfalls do not affect correctness, but may have negtive performance 
@@ -43,3 +43,8 @@ background thread for analysis. In order to detect potential bugs, programmers s
 at proper locations (e.g. at the end of a NVM transaction) to "assert" invariants that should always be obeyed in a correct 
 program. The analysis thread will also take these testing function into consideration, and uses the information collected 
 from the trace to determine whether the invariants are satisfied.
+
+The background thread analysis the lifecycle of a memory variable based on the notion of epoches. The basic observation
+is that, once a memory object is written by a store instruction, due to the fact that the cache hierarchy can evict dirty
+line at unknown time, the lifecycle of this dirty line is from the mement the store is executed to the next sfence
+instruction, given that there is a clwb on the dirty address in-between.
