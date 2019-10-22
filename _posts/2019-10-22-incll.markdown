@@ -117,5 +117,9 @@ Each node is only externally logged once during the same epoch, even if the obje
 achieved by adding another external log epoch number into the node. Before a node is to be externally logged, we check
 whether this epoch number equals the current epoch. If true, the logging is skipped, since the before image of the 
 node already exists. Only logging each node once during an epoch helps recovery also, since the restoration can be done in
-parallel, because otherwise, if there are multiple undo images for the same node, these undo images must be applied in
-the reverse order they are created.
+parallel. Otherwise, if there are multiple undo images for the same node, these undo images must be applied in
+the reverse order they are created. The paper also suggest that only leaf node updates be logged with InCLL. All other 
+modifications, such as node split/merge or internal node updates, are externally logged, since these modifications
+are relatively infrequent. 
+
+During recovery, the external log is first copies back to their original locations in parallel by a few recovery threads.
