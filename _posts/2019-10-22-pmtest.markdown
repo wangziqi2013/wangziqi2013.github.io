@@ -27,3 +27,8 @@ In practice, programmers often deal with NVM with special instruction sequences 
 will stall on the persist barrier until the cache line has been written back to the NVM. Various NVM libraries also provide
 capabilities to support persistent objects and/or logging and recovery. These library calls are also use the basic persistent 
 barrier as the most fundamental primitive.
+
+The paper identifies two types of most common bugs in persistent programs. The first type is not persisting a memory object
+whose value should be preserved after a crash, which results in inconsistency. The second type is not enforcing the write 
+ordering required to preform logging or other tasks. This may cause dirty cache lines being written back out of the program 
+order, which also results in inconsistency or unrecoverable objects. 
