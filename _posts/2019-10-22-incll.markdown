@@ -25,6 +25,10 @@ version_mgmt:
 
 1. wbinvd is a previleged instruction. On epoch boundaries a system call must be performed to flush the entire cache.
 
+2. When the high bits of the current epoch cannot be represented by nodeEpoch during value logging, we can simply
+   perform a "no-op" permutation field logging first, which updates the nodeEpoch with current epoch, and then
+   the value log entry can use the higher bits of nodeEpoch.
+
 This paper presents In-Cache Line Logging (InCLL), a novel technique for accelerating undo logging in certain non-volatile
 data structures. InCLL is motivated by the fact that traditional undo-based logging has an important implication: the 
 undo log entry must reach the persistent NVM before dirty data does, because otherwise, when the system crashes, all in-cache
@@ -101,3 +105,9 @@ epoch in which the log is written without taking advantage of the special proper
 it is noted that Masstree values are always pointers. On x86-64 platform, a virtual address pointer only has 48 effective
 bits. Bit 48 to bit 63 are not used, which just duplicate bit 47. Furthermore, since most allocators nowadays will align 
 memory blocks to 16 byte boundary, the lowest four bits are always zero. The logging process is described as follows.
+First, the before value is copied into the log entry, with bit 0 to 3, bit 48 to 63 masked out. Then, the index of the 
+element and the 16 bit epoch is written into bit 0 to 3 and bit 48 to 63 of the log entry field respectively. The
+same write ordering applies as in element insertion. The true update is only performed after the updates to the log entry 
+is completed. Note that in this scheme, the epoch number is only the low 16 bits of the current epoch in which the 
+value log is generated. We assume that the higher bits of the current epoch can be represented by the higher bits of the 
+nodeEpoch. If this is not true, external logging is used, if not already.
