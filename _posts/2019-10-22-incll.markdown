@@ -56,4 +56,6 @@ is that only the permutation field needs to be logged when inserting or deleting
 slot can be invalidated simplying by writing a special value into the permutation field. Initially, all fields in the 
 permutation field indicates invalid mapping. When a new element is added, the key and value is appended to the physical
 array, and the permutation field is modified to map the key's logical slot to its physical location in the node. In order
-to undo this insert, simply restoring the permutation field to its before state is sufficient, 
+to undo this insert, simply restoring the permutation field to its before state is sufficient, as the newly inserted key
+and value will be demapped once the original permutation is restored. The same reasoning also applies to deletion of keys.
+The last observation is that, for 
