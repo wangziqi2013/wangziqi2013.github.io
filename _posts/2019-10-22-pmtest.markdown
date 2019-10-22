@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "PMTest: A Fast and Flexible Testing Framework for Persist Memory Programs"
+date:   2019-10-22 16:31:00 -0500
+categories: paper
+paper_title: "PMTest: A Fast and Flexible Testing Framework for Persist Memory Programs"
+paper_link: https://dl.acm.org/citation.cfm?id=3304015
+paper_keyword: NVM, Undo Logging; Testing; PMTest
+paper_year: ASPLOS 2019
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
