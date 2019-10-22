@@ -45,3 +45,10 @@ pointers). To further reduce data movement when inserting or deleting elements, 
 of the B+Tree, such that the elements need not be sorted. The permutation field is a 64 bit word mapping elements from their
 sorted location to physical location within the node, which can be modified atomically with regular store instructions
 if properly aligned. Each node of the Masstree consists 15 key-value pairs, plus the permutation field. 
+
+InCLL extends the non-volatile Masstree to support efficient crash consistency based on the following observations. First, 
+if the undo log and the dirty data resides in the same cache, no write ordering needs to be enforced, since existing
+hardware all guaratee that a cache line is persisted atomically, i.e. either the entire cache line is persisted, or
+none of it is persisted. Placing the undo log entry in the same cache line as dirty data therefore can reduce the 
+cache flush and memory fence overhead, since either the dirty data is written back to the NVM during exeution, and so does
+the undo log entry, or both of them are wiped out by the crash, doing no harm at all to the NVM image.
