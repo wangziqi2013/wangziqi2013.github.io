@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Fine-Grain Checkpointing With In-Cache-Line Logging"
+date:   2019-10-22 11:47:00 -0500
+categories: paper
+paper_title: "Fine-Grain Checkpointing With In-Cache-Line Logging"
+paper_link: https://dl.acm.org/citation.cfm?doid=3297858.3304046
+paper_keyword: NVM, Undo Logging; Masstree
+paper_year: ASPLOS 2019
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
