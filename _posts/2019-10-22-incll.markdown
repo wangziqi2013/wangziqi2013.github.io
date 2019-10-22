@@ -65,3 +65,13 @@ and value will be demapped once the original permutation is restored. The same r
 The last observation is that, for random update workloads, the chance that a node is updated more than once is rather low.
 InCLL can therefore optimize for one update per epoch with in-cache line logging, and fall back to external, object based 
 undo logging if this does not hold.
+
+InCLL changes the node layout of Masstree as follows. In the volatile version of the Masstree, a node consists of a permutation
+field, a metadata field, an array of 15 keys, and an array of 15 values, fitting into four 64 byte cache lines. InCLL changes
+the node layout by adding extra logging related field as follows. First, all nodes must be allocated to 64 byte aligned 
+addresses. Second, an undo image of the permutation field and several control bits are added to the first cache line which 
+also stores the permutation field. A "nodeEpoch" field is also added to record the most recent epoch in which the content 
+of the permutation field is logged. Second, a Masstree node now only stores 14 key-value pairs. The 14 8 byte keys are 
+stored in the next two cache lines following the permutation field and logging fields. Then, in the fourth cache line, we 
+store an 8 byte log entry for key 0 to key 6, and in the fifth cache line, we store key 7 to key 13, and then another 8
+byte log entry for the last seven keys. In this modified 
