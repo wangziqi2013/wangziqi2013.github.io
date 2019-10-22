@@ -42,7 +42,9 @@ program, which contains the above instructions executed by the processor in prog
 background thread for analysis. In order to detect potential bugs, programmers should also manually insert testing functions 
 at proper locations (e.g. at the end of a NVM transaction) to "assert" invariants that should always be obeyed in a correct 
 program. The analysis thread will also take these testing function into consideration, and uses the information collected 
-from the trace to determine whether the invariants are satisfied.
+from the trace to determine whether the invariants are satisfied. Currently two testing functions are supported: isPersist()
+to assert that the address has been persisted, and isOrderedBefore(X, Y) to assert that address X is guaranteed to be 
+persisted before address Y.
 
 The background thread analysis the lifecycle of a memory variable based on the notion of epoches. The basic observation
 is that, once a memory object is written by a store instruction, due to the fact that the cache hierarchy can evict dirty
