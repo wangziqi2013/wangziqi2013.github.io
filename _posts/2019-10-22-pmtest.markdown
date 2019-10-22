@@ -57,5 +57,8 @@ written, the address range is added to the tree if not already there, and the pe
 records the begin and end epoch in which the object is flushed but not guaranteed to be persisted. When a clwb instruction
 is processed, the flush interval of the address in clwb's operand is set to [current epoch, +&infin;), indicating that
 cache line flush has been initiated, but it is uncertain when it would finish. Note that addresses that are not flushed 
-will not be affected. Finally, when a sfence instruction is seen, for all addresse ranges that have a flush interval, 
-the persist interval is set to [original begin epoch, current epoch) after the current epoch is incremented.
+will not be affected. Finally, when a sfence instruction is seen, for all addresse ranges that have a flush interval whose
+end epoch is +&infin;, both the persist interval and the flush interval is set to [original begin epoch, current epoch) 
+after the current epoch is incremented. Note that in order to enumerate all addresses that satisfy this property, we can 
+simply remember all outstanding clwbs that have not seen a corresponding sfence, instead of walking the interval tree. 
+All clwbs are guaranteed to complete after next sfence is executed.
