@@ -37,3 +37,8 @@ making the NVM image also a consistent state. After a system crash, it is guaran
 can be restored to the consistent state in the previously completed checkpoint by applying the undo log entries to 
 objects that are modified in the failed epoch. 
 
+This paper uses Masstree as the platform to demonstrate how InCLL works with common data structures. Masstree is a combination
+of B+Tree and Radix tree. Instead of having "flat" nodes as in a regular radix tree, a B+Tree is used to support extremely
+large fanouts at each radix tree level. In masstree, each radix tree level has 2^64 fanouts, mapping a key of 64 bits to 
+one of the next level B+Tree. The B+Tree, therefore, has fixed key length (8 byte binary data) and value length (8 byte 
+pointers). 
