@@ -18,7 +18,7 @@ version_mgmt:
 1. Taking advantage of the fact that a pointer in x86-64 only has 48 effective bits.
 
 2. The InCLL logging scheme works equally well for sequential insert/delete and random update, leveraging 
-   the fact that inserts/deletes (but not a mixture) can be undone rather efficiently just by restoring the permutation 
+   the fact that inserts/deletes (but not the mixture) can be undone rather efficiently just by restoring the permutation 
    field.
 
 **Lowlights::**
@@ -94,3 +94,10 @@ change is not rolled back (the deleted pair will be lost, since its slot is recy
 happens, the paper suggests that the node be externally logged to avoid data corruption. Two extra control bits, isLogged
 and insAllowed, controls whether the node has been externally logged (and hence no further logging is needed for the entire
 node), and whether element deletion has happened such that all future inserts should trigger external logging.
+
+Logging node updates requires more delicate handling of the log entry, as we will see below. As the log entry only
+has 8 bytes, it would be difficult to squeeze both the before image of the modified value, the index of the value, and the
+epoch in which the log is written without taking advantage of the special property of the value stored in Masstree. Fortunately,
+it is noted that Masstree values are always pointers. On x86-64 platform, a virtual address pointer only has 48 effective
+bits. Bit 48 to bit 63 are not used, which just duplicate bit 47. Furthermore, since most allocators nowadays will align 
+memory blocks to 16 byte boundary, the lowest four bits are always zero. The logging process is described as follows.
