@@ -86,3 +86,11 @@ log entry is written, because otherwise if the system crashes between these two 
 log entry is available, while the entry is in fact not written yet, causing recovery failure. The next time an element
 is inserted, we first check whether nodeEpoch equals the current system epoch. If this is the case, no extra logging 
 is needed, since it is sufficient to just log the permutation once.
+
+Element deletion is logged in a similar manner. The only corner case that requires special handling is when an element 
+is first deleted, and then a new element is inserted into the same physical slot. In this case, simply restoring the 
+permutation field after a crash is not right, since the content of the key-value array has also been changed, while such
+change is not rolled back (the deleted pair will be lost, since its slot is recycled and allocated to a new pair). If this
+happens, the paper suggests that the node be externally logged to avoid data corruption. Two extra control bits, isLogged
+and insAllowed, controls whether the node has been externally logged (and hence no further logging is needed for the entire
+node), and whether element deletion has happened such that all future inserts should trigger external logging.
