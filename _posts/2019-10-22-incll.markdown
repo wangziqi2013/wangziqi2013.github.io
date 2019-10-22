@@ -30,7 +30,10 @@ must be enforced using cache flush and memory fence instructions, which can be i
 
 Instead of precise undo logging, InCLL adopts an epoch-based checkpointing model, in which the data structure is checkpointed
 for every 50ms. The interval between two consecutive checkpoints is called an "epoch", during which the data stucture works
-normally as the volatile version. After a system crash, it is guaranteed that the state of the data structure can be 
-restored to the consistent state in the previously completed checkpoint. On the epoch boundary, all worker threads are blocked
-until the checkpointing is completed, leaving the data structure in a consistent state (i.e. no operation is currently going on). 
-A seperate checkpointing thread then flushes the system cache (using wbinvd)
+normally as the volatile version. On the epoch boundary, all worker threads are blocked until the checkpointing is completed, 
+leaving the data structure in a consistent state (i.e. no operation is currently going on). A seperate checkpointing thread 
+then flushes the system cache (using "wbinvd" instruction), after which all dirty cache lines are persistent in the NVM, 
+making the NVM image also a consistent state. After a system crash, it is guaranteed that the state of the data structure 
+can be restored to the consistent state in the previously completed checkpoint by applying the undo log entries to 
+objects that are modified in the failed epoch. 
+
