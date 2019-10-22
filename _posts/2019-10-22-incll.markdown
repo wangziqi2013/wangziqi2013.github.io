@@ -15,7 +15,11 @@ version_mgmt:
 
 **Highlights:**
 
-1. Taking advantage of the fact that a pointer in x86-64 only has 48 effective bits. 
+1. Taking advantage of the fact that a pointer in x86-64 only has 48 effective bits.
+
+2. The InCLL logging scheme works equally well for sequential insert/delete and random update, leveraging 
+   the fact that inserts/deletes (but not a mixture) can be undone rather efficiently just by restoring the permutation 
+   field.
 
 **Lowlights::**
 
@@ -58,4 +62,6 @@ permutation field indicates invalid mapping. When a new element is added, the ke
 array, and the permutation field is modified to map the key's logical slot to its physical location in the node. In order
 to undo this insert, simply restoring the permutation field to its before state is sufficient, as the newly inserted key
 and value will be demapped once the original permutation is restored. The same reasoning also applies to deletion of keys.
-The last observation is that, for 
+The last observation is that, for random update workloads, the chance that a node is updated more than once is rather low.
+InCLL can therefore optimize for one update per epoch with in-cache line logging, and fall back to external, object based 
+undo logging if this does not hold.
