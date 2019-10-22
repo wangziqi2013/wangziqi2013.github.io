@@ -64,3 +64,8 @@ end epoch is +&infin;, both the persist interval and the flush interval is set t
 after the current epoch is incremented. Note that in order to enumerate all addresses that satisfy this property, we can 
 simply remember all outstanding clwbs that have not seen a corresponding sfence, instead of walking the interval tree. 
 All clwbs are guaranteed to complete after next sfence is executed.
+
+To test isOrdered(), the analysis thread simply checks whether the persist interval of the memory object has a finite
+end epoch. If true, then the object is guaranteed to have been persisted to the NVM. To test isOrderedBefore(X, Y), the
+analysis thread checks whether the end epoch of address X is no larger than the begin epoch of address Y. Because otherwise
+address Y may be persisted unexpected (e.g. by a cache line eviction) before X is guaranteed to be persisted.
