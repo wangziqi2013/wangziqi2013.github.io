@@ -76,3 +76,9 @@ stored in the next two cache lines following the permutation field and logging f
 store an 8 byte log entry for key 0 to key 6, and in the fifth cache line, we store key 7 to key 13, and then another 8
 byte log entry for the last seven keys. In this modified node layout, both the permutation log and the two value log entries
 are stored in the same cache line as the dirty data, leveraging the first observation in the previous paragraph. 
+
+When an element is inserted, assuming no node split happens, the permutation field is first logged, and then the new key 
+and value is written into the physical slot. The nodeEpoch field is also updated to indicate that a log entry has been
+written for the permutation field. The actual permutation is only updated after all of the above are written. Note that
+although a cache flush and memory fence is not needed here, this write ordering between the log entry and the in-place
+update is still critical to the correctness of the algorithm.
