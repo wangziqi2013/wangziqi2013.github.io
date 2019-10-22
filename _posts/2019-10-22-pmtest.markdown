@@ -69,3 +69,8 @@ To test isOrdered(), the analysis thread simply checks whether the persist inter
 end epoch. If true, then the object is guaranteed to have been persisted to the NVM. To test isOrderedBefore(X, Y), the
 analysis thread checks whether the end epoch of address X is no larger than the begin epoch of address Y. Because otherwise
 address Y may be persisted unexpected (e.g. by a cache line eviction) before X is guaranteed to be persisted.
+
+Besides the two correctness assertions, the analysis thread can also test some conditions that only affect perofrmance.
+For example, if the address range does not have a persist interval assigned when a clwb is executed on that object,
+we can conclude that the clwb is performed on a clean cache line, which is unnecessary. Similarly, if there is already a
+flush interval when clwb is executed, we know the memory object is flushed more than once. 
