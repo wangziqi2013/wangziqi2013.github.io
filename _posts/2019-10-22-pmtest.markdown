@@ -17,4 +17,7 @@ This paper presents PMTest, a testing framework for persistent memory programs t
 not being persisted or incorrect write ordering. The paper claims that programming for NVM is difficult, even with pre-built
 libraries, for two reasons. First, programmers should track dirty objects, and issue appropriate function calls or instructions
 to flush them back to the NVM. Failing to do so will result in objects not being persisted after a crash, which renders the 
-object unrecoverable.
+object unrecoverable. The second reason is that certain programming paradigm, such as undo logging, requires that the log
+entry be persisted on NVM before the object can be modified in-place. This is because there is only very limited control 
+over how the cache hierarchy evicts dirty cache lines back to the NVM. If the dirty line reaches the NVM before the log entry
+does, then after a crash the dirty line cannot be undone. 
