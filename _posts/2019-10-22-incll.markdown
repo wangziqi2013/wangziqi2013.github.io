@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents In-Cache Line Logging (InCLL), a novel technique for accelerating undo logging in certain non-volatile
+data structures. InCLL is motivated by the fact that traditional undo-based logging has an important implication: the 
+undo log entry must reach the persistent NVM before dirty data does, because otherwise, when the system crashes, all in-cache
+data will be lost, and there would be no way to recover the system state to the before state using undo image. With today's
+commercial hardware, the write ordering between the log entry and dirty data (which can reside in different cache lines) 
+must be enforced using cache flush and memory fence instructions, which can be inefficient if log flushes are frequent.
+
