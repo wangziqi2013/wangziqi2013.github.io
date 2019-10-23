@@ -57,4 +57,8 @@ implemented as a chained hash table, stores the ownership records of memory addr
 the call back function first hashes the address into one of the hash table buckets, locks the bucket, and then searchs the 
 linked list for the address. If the address is not found, it is inserted into the hash table. Otherwise, an existing 
 record indicates that the address has been transactionally accessed by another uncommitted transaction, and further actions
-are taken based on the type of the record and the current access. 
+are taken based on the type of the record and the current access. If the two accesses are compatible, i.e. read-read, then
+the reader transaction will add itself into the list of owners stored in the record, and the read could continue. In addition,
+both the read and write bits of UFO is also set, such that hardware transactions accessing the same address can be detected,
+which invokes the abort handler on the hardware transaction side. If the two accesses are incompatible, i.e. at least one
+of the accesses is a write, then conflict resolution is invoked to determine which transaction should abort. 
