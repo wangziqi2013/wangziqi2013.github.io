@@ -54,4 +54,11 @@ close to each other can communicate in shorter latency. If we group cores into s
 then lock passing within the cluster can be more efficient than using a global lock server. To achieve this, in addition
 to the master lock server, a few local lock servers are also designated. Based on the clustering scheme, each core cluster 
 has a local lock server, to which all local requests are sent. Local lock servers maintain the lock table as in 
-the master lock server. 
+the master lock server. On receiving a lock request, the local server checks its lock table to see whether the lock has
+been granted to any other client in the cluster. If positive, then the lock server will add the requestor into the 
+lock list, and when the lock is released, the local server can grant the lock directly to the next requestor without 
+having to contant the master lock server. On the other hand, if the local lock server does not have the lock in the 
+table, it needs to send a lock request to the master lock server as if the local server were a client. Once the 
+lock is granted by the master server, it can be further granted by the local lock server to clients in the cluster.
+In this case, clients in the cluster can acquire the lock without sending a message to the far away master server, 
+benefiting from the lower communication latency.
