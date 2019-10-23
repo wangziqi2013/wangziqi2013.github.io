@@ -17,6 +17,11 @@ This paper presents pLock, a distributed locking scheme for high performance com
 Typical HPC architectures use Explicit Message Passing (EMP) to implement inter-core communication. Shared data between
 cores must be explicitly sent and received by primitives rather than implicitly acquired via cache coherence protocol.
 In fact, most HPC does not implememt cache coherence and shared address space for efficiency reasons. As a result, these
-HPC platforms support the abstraction of critical sections using one or more dedicated lock servers. 
-This paper observes 
-that with an entirely different inter-core communication mechanism, shared memory synchronization can be rather inefficient
+HPC platforms support the abstraction of critical sections using one or more dedicated lock servers. Before entering the
+critical section, a core must send a request to the lock server, which is then granted if the lock is currently unheld,
+or queued into the requestor list by the lock server if otherwise. When a thread finishes the critical section, it
+sends an unlock message to the lock server, which causes the latter to either release the lock, or grant the lock
+to the next requestor in the requestor list. For N cores and S critical sections on each core, this will incur 3NS
+messages (1 for request, 1 for grant, and 1 for release).
+
+This paper observes that
