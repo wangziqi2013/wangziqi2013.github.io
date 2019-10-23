@@ -82,4 +82,10 @@ STM transactions turn off UFO detection when they begin, and restore the flag wh
 The contention management policy consists of two parts: Determining which transaction should abort, and determine when
 should a transaction be executed on STM. The paper suggests that, if a conflict happens between two transactions in the 
 same category, i.e. both are HTM transactions or both are STM transactions, then the policy should always favor older
-transaction. 
+transaction. If, however, HTM and STM transactions conflict, then the policy should favor STM transaction, since STM
+transactions typically are older and slower than HTM transaction (all transaction begin in HTM and then fails over to STM). 
+As for when transactions should fail over to STM, the paper suggests that for some types of aborts, such as cache overflow, 
+I/O, system call, or non-transient exceptions, the transaction should immediately fail over to STM, since these conditions
+will continue to appear even on a re-execution. If, however, the abort is caused by transient conditions such as contention,
+page faults, floating point faults, etc., the contention manager should retry the execution in HTM, and only fail over
+to the STM after several aborts.
