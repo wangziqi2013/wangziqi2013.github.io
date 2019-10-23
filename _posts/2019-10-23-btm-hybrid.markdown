@@ -47,3 +47,9 @@ respectively. The paper suggests that the DRAM bits can either be provided by a 
 to set permission bits for a cache line, it must be ensured that the line is the only instance of the address in the system
 to avoid inconsistencies. To achieve this, the cache controller first acquires exclusive ownership before setting any of the 
 bits in the cache tag. This feature has an important implication to the hybrid TM, as we will see below.
+
+The last component, the STM, is described as follows. The STM relies on compiler instrumentation to invoke the read and 
+write call back functions before each load and store instruction in the transaction body. The STM also maintains shared
+and private metadata. Each transaction has a private transactional working set which records its read and write set in 
+a hash set. This working set can be iterated over to enumerate all addresses accessed during the transaction. In addition,
+each transaction also has a status word, which can be checked by other transactions as well.
