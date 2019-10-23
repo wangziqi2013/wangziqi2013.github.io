@@ -37,3 +37,8 @@ receive messages using hardware primitives built into the ISA. In addition, no r
 network, and consequently, cores can only directly communicate with other cores on the same row or the same column.
 A message transferred on the network is 256 bit in length. 
 
+The paper solves the first problem using a technique called the "chaining lock". As in the canonical EMP-lock scheme,
+the lock server processes lock requests from clients, and maintains a list of lock requestors. Initially, the list
+is empty. As lock requests arrive, the list will gradually grow. The trick of chaining lock is that, when a new lock
+is granted to one of the requestors in the list, the lock server will piggyback the list of other waiting clients to the 
+lock requestor in the grant message. When the current lock requestor finishes the critical section
