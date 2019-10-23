@@ -22,3 +22,9 @@ hybrid TM often requires that the hardware check conflicts with software transac
 time consuming and complicated to implement, while conflicts only happen for a small fraction of the accesses. Second,
 many hybrid TM could not handle mixed transactional and non-transactional code in a strongly atomic manner. Non-transactional
 accesses may incur unintuitive behavior, for example, when the hybrid transaction aborts and tries to roll back. 
+
+The hybrid TM proposed by this paper is based on three distinct components: A best-effort hardware transactional memory,
+BTM; a software TM that replies on compiler instrumentation, and the hardware memory protection mechanism that glues 
+the HTM and STM together under the same conflict domain. In the following paragraphs we briefly introduce all these three 
+components.
+
