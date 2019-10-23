@@ -12,3 +12,11 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents pLock, a distributed locking scheme for high performance computing (HPC) implemented on SW26010 architecture.
+Typical HPC architectures use Explicit Message Passing (EMP) to implement inter-core communication. Shared data between
+cores must be explicitly sent and received by primitives rather than implicitly acquired via cache coherence protocol.
+In fact, most HPC does not implememt cache coherence and shared address space for efficiency reasons. As a result, these
+HPC platforms support the abstraction of critical sections using one or more dedicated lock servers. 
+This paper observes 
+that with an entirely different inter-core communication mechanism, shared memory synchronization can be rather inefficient
