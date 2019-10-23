@@ -17,4 +17,8 @@ This paper proposes a hybrid transactional memory that provides both fast hardwa
 The paper points out that neither HTM nor STM is feasible for real-life software development at the time of writing, because
 HTM transactions are either bounded or have to pay extra cost to support unboundedness, while STM suffers from high
 instrumentation and metadata overhead. Hybrid TM, as a seemingly suitable middle ground solution, can support both
-fast HTM transaction and comprehensive and unbounded STM transaction, but designing one is still challenging. 
+fast HTM transaction and comprehensive and unbounded STM transaction, but designing one is still challenging. First,
+hybrid TM often requires that the hardware check conflicts with software transactions. This hardware checking can be 
+time consuming and complicated to implement, while conflicts only happen for a small fraction of the accesses. Second,
+many hybrid TM could not handle mixed transactional and non-transactional code in a strongly atomic manner. Non-transactional
+accesses may incur unintuitive behavior, for example, when the hybrid transaction aborts and tries to roll back. 
