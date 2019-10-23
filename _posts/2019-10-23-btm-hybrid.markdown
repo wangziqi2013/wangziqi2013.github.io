@@ -61,4 +61,8 @@ are taken based on the type of the record and the current access. If the two acc
 the reader transaction will add itself into the list of owners stored in the record, and the read could continue. In addition,
 both the read and write bits of UFO is also set, such that hardware transactions accessing the same address can be detected,
 which invokes the abort handler on the hardware transaction side. If the two accesses are incompatible, i.e. at least one
-of the accesses is a write, then conflict resolution is invoked to determine which transaction should abort. 
+of the accesses is a write, then conflict resolution is invoked to determine which transaction should abort. The aborted 
+transaction iterates over its working set, and unlinks itself from all of the ownership records (and delete the record if
+it is the sole owner). Meanwhile, the surviving transaction needs to spin on the status word of the aborted transaction 
+to wait for the abort process to complete before it can resume execution. This prevents the conflicting transaction from 
+accessing partially rolled back state. 
