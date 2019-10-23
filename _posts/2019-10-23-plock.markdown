@@ -33,4 +33,7 @@ second problem is solved by adding local lock servers.
 The paper is based on SW26010 platform, which consists of "core groups". A core group is formed by connecting 64 cores
 in a 8 * 8 mesh, in which each non-boundary core is directly connected to its neighbors in the grid. Although each processor 
 has its own private and shared cache, no cache coherence is implemented in the core group. Processors explicitly send and 
-receive messages using hardware primitives built into the ISA.
+receive messages using hardware primitives built into the ISA. In addition, no routing is implemented on the on-chip 
+network, and consequently, cores can only directly communicate with other cores on the same row or the same column.
+A message transferred on the network is 256 bit in length. 
+
