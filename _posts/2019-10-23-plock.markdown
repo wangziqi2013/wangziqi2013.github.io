@@ -62,3 +62,9 @@ table, it needs to send a lock request to the master lock server as if the local
 lock is granted by the master server, it can be further granted by the local lock server to clients in the cluster.
 In this case, clients in the cluster can acquire the lock without sending a message to the far away master server, 
 benefiting from the lower communication latency.
+
+Although hierarchical locking does not decrease the actual number of messages sent over the network, it does localize
+messages such that a core only communicates with cores that are close by for most of the time. In addition, the paper also
+suggests that the chaining lock be applied to this scheme, such that locks can be passed between clients in a cluster 
+and also between local lock servers without the redundant release message, which results in both shorter latency
+and less message.
