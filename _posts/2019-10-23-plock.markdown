@@ -24,4 +24,9 @@ sends an unlock message to the lock server, which causes the latter to either re
 to the next requestor in the requestor list. For N cores and S critical sections on each core, this will incur 3NS
 messages (1 for request, 1 for grant, and 1 for release).
 
-This paper observes that
+This paper observes that this classical EMP scheme is suboptimal for two reasons. First, the 3NS message overhead can
+be further reduced by use of clever lock granting scheme. Second, on an architecture with non-uniform communication latency,
+lock acquisition and release may take longer for some cores for every request, which further degrades performance. This
+paper solves the first problem by allowing locks to be passed between peers to reduce lock granting message overhead. The 
+second problem is solved by adding local lock servers.
+
