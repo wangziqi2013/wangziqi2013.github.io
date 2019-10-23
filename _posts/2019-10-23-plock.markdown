@@ -30,3 +30,7 @@ lock acquisition and release may take longer for some cores for every request, w
 paper solves the first problem by allowing locks to be passed between peers to reduce lock granting message overhead. The 
 second problem is solved by adding local lock servers.
 
+The paper is based on SW26010 platform, which consists of "core groups". A core group is formed by connecting 64 cores
+in a 8 * 8 mesh, in which each non-boundary core is directly connected to its neighbors in the grid. Although each processor 
+has its own private and shared cache, no cache coherence is implemented in the core group. Processors explicitly send and 
+receive messages using hardware primitives built into the ISA.
