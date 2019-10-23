@@ -75,5 +75,11 @@ bits for the address are also changed. On every access issued by the hardware tr
 by hardware automatically without incurring any software overhead, and if a conflict truly arises, the hardware transaction
 will be notified, and the contention manager will be invoked. The paper also noted that although setting the UFO bits 
 requiring exclusive coherence permission on a cache line, which might cause false read-read conflicts (both HTM and STM
-reads a word, but STM needs to acquire exclusive ownership of the line), in experiments this effect has been hardly observed, 
-the effect of which is hence minimum.
+reads a word, but STM needs to acquire exclusive ownership of the line), in the paper's evaluations, this effect has been 
+hardly observed, the effect of which is therefore minimum. To avoid STM transactions conflict with each other via UFO,
+STM transactions turn off UFO detection when they begin, and restore the flag when they finish.
+
+The contention management policy consists of two parts: Determining which transaction should abort, and determine when
+should a transaction be executed on STM. The paper suggests that, if a conflict happens between two transactions in the 
+same category, i.e. both are HTM transactions or both are STM transactions, then the policy should always favor older
+transaction. 
