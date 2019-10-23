@@ -67,4 +67,5 @@ it is the sole owner). Meanwhile, the surviving transaction needs to spin on the
 to wait for the abort process to complete before it can resume execution. This prevents the conflicting transaction from 
 accessing partially rolled back state. For write accesses, the call back function also stores the pre-image of the 
 word accessed in the ownership record. This pre-image is restored to the memory location on transaction aborts. For 
-read accesses, only the address is stored. 
+read accesses, only the address is stored. When the transaction is committed, all ownership records are removed from the 
+otable as in abort handling, but writes are not undone.
