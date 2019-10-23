@@ -40,5 +40,10 @@ status and make appropriate decisions (retry or fall back to software).
 The hardware memory protection, called UFO (User Fault-On), allows user space programs to set permissions to individual
 cache lines. In the UFO design, each cache line in the cache hierarchy is extended with two extra bits in the tag array, one 
 for read accesses, and another for write accesses. If a memory access hits a cache line, and the corresponding bit is set,
-this access will raise an exception, which is then handled by a user-space call back function. The ISA is extended with 
-instructions that set these two permission bits. 
+this access will raise an exception, which is then handled by a user-space call back function. The ISA is also extended with 
+instructions that set these two permission bits. Furthermore, DRAM pages and disk swap files are also extended to store the two
+permission bits when a cache line is evicted from the cache to DRAM, and when a in-memory page is swapped out to the disk,
+respectively. The paper suggests that the DRAM bits can either be provided by a dedicated chip, or by the ECC bits. In order
+to set permission bits for a cache line, it must be ensured that the line is the only instance of the address in the system
+to avoid inconsistencies. To achieve this, the cache controller first acquires exclusive ownership before setting any of the 
+bits in the cache tag. This feature has an important implication to the hybrid TM, as we will see below.
