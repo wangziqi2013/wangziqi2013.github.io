@@ -28,3 +28,9 @@ BTM; a software TM that replies on compiler instrumentation, and the hardware me
 the HTM and STM together under the same conflict domain. In the following paragraphs we briefly introduce all these three 
 components.
 
+The hardware TM component, BTM, is similar to a best-effort HTM implemented in the L1 cache with lazy version management
+and eager conflict detection. Two extra bits, TR and TW, are added to the L1 tag array to indicate whether the cache line
+has been accessed by a transactional load or store instruction. Conflicts are detected via cache coherence in the same way 
+as Intel TSX. No I/O, exceptions or interrupts are allowed during the execution of a transaction, which result in an immediate
+abort. On transactional conflicts, the hardware compares the age of the two conflicting transaction, and the younger one
+is aborted. 
