@@ -48,3 +48,10 @@ the selected client can enter the critical section as if the lock were granted b
 scheme, we essentially combined the lock release and lock grant sequence into one message, saving (NS - 1) message (since
 there are (NS - 1) lock passing, and for each lock passing we save one message). The net result is that only (2Ns + 1) 
 message is sent in chaining lock, an almost 33% reduction.
+
+The second problem is solved using another technique called hierarchical lock. The observation is that cores that are 
+close to each other can communicate in shorter latency. If we group cores into smaller clusters based on the distance,
+then lock passing within the cluster can be more efficient than using a global lock server. To achieve this, in addition
+to the master lock server, a few local lock servers are also designated. Based on the clustering scheme, each core cluster 
+has a local lock server, to which all local requests are sent. Local lock servers maintain the lock table as in 
+the master lock server. 
