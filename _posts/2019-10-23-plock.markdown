@@ -41,4 +41,10 @@ The paper solves the first problem using a technique called the "chaining lock".
 the lock server processes lock requests from clients, and maintains a list of lock requestors. Initially, the list
 is empty. As lock requests arrive, the list will gradually grow. The trick of chaining lock is that, when a new lock
 is granted to one of the requestors in the list, the lock server will piggyback the list of other waiting clients to the 
-lock requestor in the grant message. When the current lock requestor finishes the critical section
+lock requestor in the grant message. When the current lock requestor finishes the critical section, instead of sending 
+a lock release mesaage back to the lock server, it selects one from the waiting list, and passes the rest of the list
+down to this selected client, together with a lock granted message. On reception of the granted message from its peer, 
+the selected client can enter the critical section as if the lock were granted by the master lock server. By using this
+scheme, we essentially combined the lock release and lock grant sequence into one message, saving (NS - 1) message (since
+there are (NS - 1) lock passing, and for each lock passing we save one message). The net result is that only (2Ns + 1) 
+message is sent in chaining lock, an almost 33% reduction.
