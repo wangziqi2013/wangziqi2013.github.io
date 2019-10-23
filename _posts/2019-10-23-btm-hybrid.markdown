@@ -36,3 +36,9 @@ abort. On transactional conflicts, the hardware compares the age of the two conf
 is aborted. If a transaction is aborted, the abort reason and the address related to the abort (if any) will be stored in
 a pair of transactional status registers. The control flow is then transferred to an abort handler which will read the abort
 status and make appropriate decisions (retry or fall back to software).
+
+The hardware memory protection, called UFO (User Fault-On), allows user space programs to set permissions to individual
+cache lines. In the UFO design, each cache line in the cache hierarchy is extended with two extra bits in the tag array, one 
+for read accesses, and another for write accesses. If a memory access hits a cache line, and the corresponding bit is set,
+this access will raise an exception, which is then handled by a user-space call back function. The ISA is extended with 
+instructions that set these two permission bits. 
