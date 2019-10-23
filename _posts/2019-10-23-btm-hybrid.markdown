@@ -73,4 +73,7 @@ all ownership records are removed from the otable as in abort handling, but writ
 Note that the HTM and STM interacts via UFO memory protection. When STM adds an address into its working set, the correspoinding
 bits for the address are also changed. On every access issued by the hardware transaction, the permission bits will be checked
 by hardware automatically without incurring any software overhead, and if a conflict truly arises, the hardware transaction
-will be notified, and the contention manager will be invoked. 
+will be notified, and the contention manager will be invoked. The paper also noted that although setting the UFO bits 
+requiring exclusive coherence permission on a cache line, which might cause false read-read conflicts (both HTM and STM
+reads a word, but STM needs to acquire exclusive ownership of the line), in experiments this effect has been hardly observed, 
+the effect of which is hence minimum.
