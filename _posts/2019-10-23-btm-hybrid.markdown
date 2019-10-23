@@ -52,4 +52,9 @@ The last component, the STM, is described as follows. The STM relies on compiler
 write call back functions before each load and store instruction in the transaction body. The STM also maintains shared
 and private metadata. Each transaction has a private transactional working set which records its read and write set in 
 a hash set. This working set can be iterated over to enumerate all addresses accessed during the transaction. In addition,
-each transaction also has a status word, which can be checked by other transactions as well.
+each transaction also has a status word, which can be checked by other transactions as well. An ownership table (otable),
+implemented as a chained hash table, stores the ownership records of memory addresses. For every transactional access,
+the call back function first hashes the address into one of the hash table buckets, locks the bucket, and then searchs the 
+linked list for the address. If the address is not found, it is inserted into the hash table. Otherwise, an existing 
+record indicates that the address has been transactionally accessed by another uncommitted transaction, and further actions
+are taken based on the type of the record and the current access. 
