@@ -65,4 +65,6 @@ of the accesses is a write, then conflict resolution is invoked to determine whi
 transaction iterates over its working set, and unlinks itself from all of the ownership records (and delete the record if
 it is the sole owner). Meanwhile, the surviving transaction needs to spin on the status word of the aborted transaction 
 to wait for the abort process to complete before it can resume execution. This prevents the conflicting transaction from 
-accessing partially rolled back state. 
+accessing partially rolled back state. For write accesses, the call back function also stores the pre-image of the 
+word accessed in the ownership record. This pre-image is restored to the memory location on transaction aborts. For 
+read accesses, only the address is stored. 
