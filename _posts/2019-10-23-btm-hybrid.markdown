@@ -33,4 +33,6 @@ and eager conflict detection. Two extra bits, TR and TW, are added to the L1 tag
 has been accessed by a transactional load or store instruction. Conflicts are detected via cache coherence in the same way 
 as Intel TSX. No I/O, exceptions or interrupts are allowed during the execution of a transaction, which result in an immediate
 abort. On transactional conflicts, the hardware compares the age of the two conflicting transaction, and the younger one
-is aborted. 
+is aborted. If a transaction is aborted, the abort reason and the address related to the abort (if any) will be stored in
+a pair of transactional status registers. The control flow is then transferred to an abort handler which will read the abort
+status and make appropriate decisions (retry or fall back to software).
