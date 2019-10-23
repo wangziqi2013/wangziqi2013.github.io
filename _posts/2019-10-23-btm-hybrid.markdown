@@ -60,7 +60,7 @@ record indicates that the address has been transactionally accessed by another u
 are taken based on the type of the record and the current access. If the two accesses are compatible, i.e. read-read, then
 the reader transaction will add itself into the list of owners stored in the record, and the read could continue. In addition,
 the write bit of UFO is also set, such that hardware transactions accessing the same address can be detected,
-which invokes the abort handler on the hardware transaction side (for write accesses, both the read and write bits are set). 
+which invokes the contention manager on the hardware transaction side (for write accesses, both the read and write bits are set). 
 If the two accesses are incompatible, i.e. at least one of the accesses is a write, then conflict resolution is invoked 
 to determine which transaction should abort. The aborted transaction iterates over its working set, and unlinks itself 
 from all of the ownership records (and delete the record if it is the sole owner). Meanwhile, the surviving transaction 
@@ -69,3 +69,8 @@ execution. This prevents the conflicting transaction from accessing partially ro
 call back function also stores the pre-image of the word accessed in the ownership record. This pre-image is restored to 
 the memory location on transaction aborts. For read accesses, only the address is stored. When the transaction is committed, 
 all ownership records are removed from the otable as in abort handling, but writes are not undone.
+
+Note that the HTM and STM interacts via UFO memory protection. When STM adds an address into its working set, the correspoinding
+bits for the address are also changed. On every access issued by the hardware transaction, the permission bits will be checked
+by hardware automatically without incurring any software overhead, and if a conflict truly arises, the hardware transaction
+will be notified, and the contention manager will be invoked. 
