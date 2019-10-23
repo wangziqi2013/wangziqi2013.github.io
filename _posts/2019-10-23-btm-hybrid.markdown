@@ -59,13 +59,13 @@ linked list for the address. If the address is not found, it is inserted into th
 record indicates that the address has been transactionally accessed by another uncommitted transaction, and further actions
 are taken based on the type of the record and the current access. If the two accesses are compatible, i.e. read-read, then
 the reader transaction will add itself into the list of owners stored in the record, and the read could continue. In addition,
-both the read and write bits of UFO is also set, such that hardware transactions accessing the same address can be detected,
-which invokes the abort handler on the hardware transaction side. If the two accesses are incompatible, i.e. at least one
-of the accesses is a write, then conflict resolution is invoked to determine which transaction should abort. The aborted 
-transaction iterates over its working set, and unlinks itself from all of the ownership records (and delete the record if
-it is the sole owner). Meanwhile, the surviving transaction needs to spin on the status word of the aborted transaction 
-to wait for the abort process to complete before it can resume execution. This prevents the conflicting transaction from 
-accessing partially rolled back state. For write accesses, the call back function also stores the pre-image of the 
-word accessed in the ownership record. This pre-image is restored to the memory location on transaction aborts. For 
-read accesses, only the address is stored. When the transaction is committed, all ownership records are removed from the 
-otable as in abort handling, but writes are not undone.
+the write bit of UFO is also set, such that hardware transactions accessing the same address can be detected,
+which invokes the abort handler on the hardware transaction side (for write accesses, both the read and write bits are set). 
+If the two accesses are incompatible, i.e. at least one of the accesses is a write, then conflict resolution is invoked 
+to determine which transaction should abort. The aborted transaction iterates over its working set, and unlinks itself 
+from all of the ownership records (and delete the record if it is the sole owner). Meanwhile, the surviving transaction 
+needs to spin on the status word of the aborted transaction to wait for the abort process to complete before it can resume 
+execution. This prevents the conflicting transaction from accessing partially rolled back state. For write accesses, the 
+call back function also stores the pre-image of the word accessed in the ownership record. This pre-image is restored to 
+the memory location on transaction aborts. For read accesses, only the address is stored. When the transaction is committed, 
+all ownership records are removed from the otable as in abort handling, but writes are not undone.
