@@ -46,7 +46,7 @@ a lock release mesaage back to the lock server, it selects one from the waiting 
 down to this selected client, together with a lock granted message. On reception of the granted message from its peer, 
 the selected client can enter the critical section as if the lock were granted by the master lock server. By using this
 scheme, we essentially combined the lock release and lock grant sequence into one message, saving (NS - 1) message (since
-there are (NS - 1) lock passing, and for each lock passing we save one message). The net result is that only (2Ns + 1) 
+there are (NS - 1) lock passing, and for each lock passing we save one message). The net result is that only (2NS + 1) 
 message is sent in chaining lock, an almost 33% reduction.
 
 The second problem is solved using another technique called hierarchical lock. The observation is that cores that are 
