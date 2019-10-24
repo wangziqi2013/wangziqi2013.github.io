@@ -30,6 +30,11 @@ version_mgmt:
    updated by the same thread repeatedly, at which time multiple write backs and synchronizations can be batched into
    one, at the cost of delayed visibility of data (i.e. not linearizable since non-overlapping readers after the writer 
    in real time cannot observe the change). The paper leaves out this important assumption and simply claim that 
-   deferred updates 
+   deferred updates are good in all cases.
 
-This paper proposes 
+This paper proposes a new synchronization paradigm called "Read-Log-Update" (RLU). Similar to Read-Copy-Update (RCU), 
+RLU duplicates the object under modification before applying changes to the private copy. The important difference,
+however, is that while RCU only supports updating single-entry objects (i.e. the object must only be accessed via one
+single pointer), due to the fact that RCU relies on atomic exchange of the sole pointer providing access to it, RLU
+has no such contraint, and supports a broader range of object types. 
+
