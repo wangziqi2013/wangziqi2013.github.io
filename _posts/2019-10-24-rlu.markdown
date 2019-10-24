@@ -48,3 +48,9 @@ readers and writers.
 Every thread has two local counters, local read counter and local commit counter, and a private buffer for the copy of 
 the object. The local read counter is initialized from the global clock before accessing the object, while the local commit 
 counter is set to +&infin; before the access. 
+
+In RLU, reader threads either access the master copy of the object, or access the private copy. Whether or not reads
+are redirected are determined by two factors. First, if the object is not currently locked, the reader should always
+access the master copy, since no writer has ever started updating the object. Second, if the object is locked, but the 
+writer (whose identity is the value of the lock) has not finished updating it, the reader should also refrain from
+accessing the partially updated object to avoid inconsist reads. On the writer side, 
