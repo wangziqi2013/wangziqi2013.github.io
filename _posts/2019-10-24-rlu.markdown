@@ -38,3 +38,9 @@ however, is that while RCU only supports updating single-entry objects (i.e. the
 single pointer), due to the fact that RCU relies on atomic exchange of the sole pointer providing access to it, RLU
 has no such contraint, and supports a broader range of object types. 
 
+We present the process of reading and writing an RLU object as follows. Each object in RLU is extended with a header, which
+contains a pointer pointing to the private copy of the object in a thread's log, or a NULL pointer. This object header serves 
+two purposes in RLU. First, it is a writer lock which serializes writers on the same object. A writer should first read 
+the lock before accessing the object, and checks whether the lock value is NULL. If not, the writer should retry. Second, 
+the header also provides a "redirection" mechanism for other reads to find the updated version, as we will see later.
+In addition, a global clock counter 
