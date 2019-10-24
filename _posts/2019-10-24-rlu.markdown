@@ -37,7 +37,14 @@ version_mgmt:
    is also fine, because the write timestamp is initialized to +&infin; every time write starts, readers will
    think that the write is from a far future and still access the master copy. 
 
+4. There should be two GC, one to the old master copy, another to the private log. The first GC happens after readers are
+   redirected to the private copy, during which readers to the master copy is drained. The second GC should also be after
+   the copy back is complete and the object is unlocked, since there can still be readers on the private copy. This
+   GC waits for readers to be drained from the log, only after which the log is reused. The second GC is not mentioned
+   anywhere in the paper.
 
+5. I would suggest paper authors not putting pseudo source code as much as possible. If the text is obsecure, pseudo
+   code can only introduce even more unclarity.
 
 This paper proposes a new synchronization paradigm called "Read-Log-Update" (RLU). Similar to Read-Copy-Update (RCU), 
 RLU duplicates the object under modification before applying changes to the private copy. The important difference,
