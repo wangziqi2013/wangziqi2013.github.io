@@ -32,6 +32,13 @@ version_mgmt:
    in real time cannot observe the change). The paper leaves out this important assumption and simply claim that 
    deferred updates are good in all cases.
 
+3. I can hardly image why the order of setting the local write counter and incrementing the global clock matters. If the 
+   former happens first, readers always see a valid version as shown in the paper. If the latter happens first, it 
+   is also fine, because the write timestamp is initialized to +&infin; every time write starts, readers will
+   think that the write is from a far future and still access the master copy. 
+
+
+
 This paper proposes a new synchronization paradigm called "Read-Log-Update" (RLU). Similar to Read-Copy-Update (RCU), 
 RLU duplicates the object under modification before applying changes to the private copy. The important difference,
 however, is that while RCU only supports updating single-entry objects (i.e. the object must only be accessed via one
@@ -53,4 +60,10 @@ In RLU, reader threads either access the master copy of the object, or access th
 are redirected are determined by two factors. First, if the object is not currently locked, the reader should always
 access the master copy, since no writer has ever started updating the object. Second, if the object is locked, but the 
 writer (whose identity is the value of the lock) has not finished updating it, the reader should also refrain from
-accessing the partially updated object to avoid inconsist reads. On the writer side, 
+accessing the partially updated object to avoid inconsist reads. On the writer side, given that the object is not 
+currently locked by another writer, the object will first be copied to the private buffer before any modification is 
+made. When the modification is complete, the writer will publish writes by allowing readers to be redirected from the 
+master copy to its private copy. This redicrection mechanism is described as follows. The writer thread first sets 
+its own commit counter to the current value of the global clock plus one, before it atomically increments the global clock.
+
+**Too many inconsistencies in the paper, not going to finish it**
