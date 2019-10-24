@@ -12,3 +12,18 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+**Highlights:**
+
+1. RLU can be considered as a reduced form of timestamp based STM, which makes it more lightweight and actually usable.
+
+**Lowlights:**
+
+1. The "RLU Deferring" section is highly unclear and even sometimes self-contradictory. For example, at the second page
+   of section 3.7, it is said "it significantly reduces the contention on the global clock, since this clock only gets
+   updated after RLU synchronization calls", while at everywhere else the global clock is said to be updated before 
+   the synchronize call.
+
+
+
+This paper proposes 
