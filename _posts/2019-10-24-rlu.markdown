@@ -24,6 +24,12 @@ version_mgmt:
    updated after RLU synchronization calls", while at everywhere else the global clock is said to be updated before 
    the synchronize call.
 
-
+2. I don't quite buy the argument that RLU deferral generally optimizes things, because the thread still has to execute a 
+   synchronization barrier waiting for all other threads, and then write back the log (i.e. in the general case
+   the number of synchronizations and write backs do not change). It is only beneficial when the same object is 
+   updated by the same thread repeatedly, at which time multiple write backs and synchronizations can be batched into
+   one, at the cost of delayed visibility of data (i.e. not linearizable since non-overlapping readers after the writer 
+   in real time cannot observe the change). The paper leaves out this important assumption and simply claim that 
+   deferred updates 
 
 This paper proposes 
