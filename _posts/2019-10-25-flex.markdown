@@ -71,4 +71,5 @@ Lastly, as the access speed of NVM is close to that of the DRAM, greater paralle
 In such a system, centralized coordination such as single global journaling device can easily become a bottleneck without
 proper tuning, as is the case with JBD mentioned above. In JBD, all threads generating a journal record will have to serialize
 with each other, since the JBD is protected by a single lock, resulting in limited concurrency. To solve this problem, the 
-paper suggests that
+paper suggests that a thread-local journaling space be maintained such that threads can generate their own record without
+interfering with each other. Better performance has been observed after replacing JBD with JDD.
