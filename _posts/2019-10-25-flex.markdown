@@ -38,3 +38,12 @@ Experiments show that undo logging generally has inferior performance compared w
 manipulation at the end of every transactions. Such file operations (delete or truncate) will very likely involve changing 
 multiple metadata pages, which will then be synchronized onto the NVM to guarantee persistence. On the contrary, redo logging
 does not require costly file operations at the end of the transaction, and hence can sustain a higher throughput.
+
+The second observation is that NVM allocation, different from volatile memory allocation, is a complicated task, the 
+invocation of which should be reduced to a minimum. The paper uses SQLite redo logging and Kyoto Cabinet's Write-Ahead 
+Logging as an example. In both designs, the redo log is a single file in the file system, the storage of which is allocated
+on-demand for every redo log entry. NVM storage allocation, however, is significantly more expensive than in-memory allocation,
+since all metadata must be made strictly consistent on the NVM, due to the fact that memory leaks and data corruption will 
+persist across crashes and reboots. The extra requirement for NVM consistency degrades allocation performance in both
+designs, which can be solved by two solutions. 
+
