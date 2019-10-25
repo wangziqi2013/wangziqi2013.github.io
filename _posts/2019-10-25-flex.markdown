@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper evaluates the performane of NVM on several disk-based and NVM-based storage systems. The emergence of NVM
+raises the new chanllenge of programming for fine-grained persistence devices that can be directly accessed by processors.
+On the other hand, existing software stacks, such as file systems, are mostly designed for block persistent devices 
+such as disks or SSD. These designs provide an entirely different set of interfaces for interacting with the
+device and fetching/updating data, and/or manage data/metadata in a way that is significantly inefficient for newer hardware, 
+making it a challenging task to migrate them from the old platforms to newer NVM-based platform.
