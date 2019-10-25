@@ -67,5 +67,8 @@ write, even in the case where multiple small metadata changes are made to differ
 As an improvement, the authors of the paper redesigned JBD2 and named it as Journaling DAX Device (JDD). JDD only logs 
 metadata to be affected by a write at a byte level, reduing the number of information to be written to the minimum. 
 
-In
-addition, as the access speed of NVM is close to that of the DRAM, threads
+Lastly, as the access speed of NVM is close to that of the DRAM, greater parallelism has been observed for NVM-based systems.
+In such a system, centralized coordination such as single global journaling device can easily become a bottleneck without
+proper tuning, as is the case with JBD mentioned above. In JBD, all threads generating a journal record will have to serialize
+with each other, since the JBD is protected by a single lock, resulting in limited concurrency. To solve this problem, the 
+paper suggests that
