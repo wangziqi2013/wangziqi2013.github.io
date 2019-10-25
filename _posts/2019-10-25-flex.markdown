@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Finding and Fixing Performance Pathologies in Persistent Memory Software Stacks"
+date:   2019-10-25 17:19:00 -0500
+categories: paper
+paper_title: "Finding and Fixing Performance Pathologies in Persistent Memory Software Stacks"
+paper_link: https://dl.acm.org/citation.cfm?id=3304077
+paper_keyword: NVM; File System
+paper_year: ASPLOS 2019
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
