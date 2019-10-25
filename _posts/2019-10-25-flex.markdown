@@ -59,3 +59,7 @@ allocated space. In addition, the paper also suggests that using cache flush ins
 fences for data persistence is better than using msync(), as msync() will write back an entire page even if only a small
 part of it is actually dirty. 
 
+The fourth observation is that the old assumption that data transfer can only be made atomically at 4KB blocks will become
+a problem with byte-addressable NVM. The paper uses the journaling block device, JBD2, as an example. Based on 
+reasons discussed above, JBD2 always writes journal for the modified metadata in 4KB page to ensure the atomicity of the 
+write, even in the case where multiple small metadata changes are made to different pages. 
