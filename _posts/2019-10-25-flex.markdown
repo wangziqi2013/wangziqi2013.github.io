@@ -45,5 +45,9 @@ Logging as an example. In both designs, the redo log is a single file in the fil
 on-demand for every redo log entry. NVM storage allocation, however, is significantly more expensive than in-memory allocation,
 since all metadata must be made strictly consistent on the NVM, due to the fact that memory leaks and data corruption will 
 persist across crashes and reboots. The extra requirement for NVM consistency degrades allocation performance in both
-designs, which can be solved by two solutions. 
+designs, which can be solved by two solutions. In the first solution, allocator metadata is not kept on the NVM. Instead,
+they are maintained in volatile memory, and will be rebuilt in the post-crash recovery procedure by a full address space 
+scan. The second solution takes advantage of a system call, fallocate, in which storage is pre-allocated for files that 
+are expected to grow. By calling fallocate on the WAL logging file, we can avoid frequent allocation, which amortizes
+the cost of expensive allocator calls over multiple appends to the log file. 
 
