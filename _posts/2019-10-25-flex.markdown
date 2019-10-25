@@ -62,4 +62,10 @@ part of it is actually dirty.
 The fourth observation is that the old assumption that data transfer can only be made atomically at 4KB blocks will become
 a problem with byte-addressable NVM. The paper uses the journaling block device, JBD2, as an example. Based on 
 reasons discussed above, JBD2 always writes journal for the modified metadata in 4KB page to ensure the atomicity of the 
-write, even in the case where multiple small metadata changes are made to different pages. 
+write, even in the case where multiple small metadata changes are made to different pages. This will translate into multiple
+4KB write to the NVM, with lots of space for improvement as the actual amount of data being changed is not that much. 
+As an improvement, the authors of the paper redesigned JBD2 and named it as Journaling DAX Device (JDD). JDD only logs 
+metadata to be affected by a write at a byte level, reduing the number of information to be written to the minimum. 
+
+In
+addition, as the access speed of NVM is close to that of the DRAM, threads
