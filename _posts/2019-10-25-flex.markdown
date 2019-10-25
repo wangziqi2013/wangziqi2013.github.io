@@ -28,3 +28,7 @@ accessing it in block granularity) may imply a potential performance problem, si
 read and write characteristics of NVM, and extra consistency requirements for NVM can all easily become a performance
 bottleneck. In the next paragraphs we discuss these problems pinpointed by the paper.
 
+The first observation is that metadata changes are costly even on NVM file systems, and we should avoid doing so as 
+much as possible. The paper uses SQList as an example. SQLite supports four different modes of logging, including both
+redo and undo logging. In the undo logging scheme, a logging file is generated for each transaction, keeping track of
+the before-image of modified data items during the transaction to endure atomicity. 
