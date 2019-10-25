@@ -21,4 +21,10 @@ for in-memory applications in order to interact with the device, and/or manage d
 very well for newer hardware. Both of these make it a challenging task to migrate them from the old platforms to newer 
 NVM-based platform.
 
-This paper explores the necessary by running a set of benchmarks on existing systems built on the disk interface 
+One of the most prominent differences between disks and NVM is that NVM can be directly accessed by loads and stores
+issued by user application, while disks can only be accessed via a predefined set of OS interfaces. A direct transformation
+from existing applications to NVM applications without changing the interface (i.e. treat NVM as a block device by only 
+accessing it in block granularity) may imply a potential performance problem, since the overhead of software stack, the 
+read and write characteristics of NVM, and extra consistency requirements for NVM can all easily become a performance
+bottleneck. In the next paragraphs we discuss these problems pinpointed by the paper.
+
