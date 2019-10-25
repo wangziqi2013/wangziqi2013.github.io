@@ -31,4 +31,10 @@ bottleneck. In the next paragraphs we discuss these problems pinpointed by the p
 The first observation is that metadata changes are costly even on NVM file systems, and we should avoid doing so as 
 much as possible. The paper uses SQList as an example. SQLite supports four different modes of logging, including both
 redo and undo logging. In the undo logging scheme, a logging file is generated for each transaction, keeping track of
-the before-image of modified data items during the transaction to endure atomicity. 
+the before-image of modified data items during the transaction to endure atomicity. This logging file is either truncated 
+or deleted, or marked as invalid by an extra persistent write at the end of the transaction. The redo logging, on the other
+hand, maintains a redo log across transactions, the content of which is replayed onto the database image after a crash. 
+Experiments show that undo logging generally has inferior performance compared with redo logging, because of the file
+manipulation at the end of every transactions. Such file operations (delete or truncate) will very likely involve changing 
+multiple metadata pages, which will then be synchronized onto the NVM to guarantee persistence. On the contrary, redo logging
+does not require costly file operations at the end of the transaction, and hence can sustain a higher throughput.
