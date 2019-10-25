@@ -51,3 +51,11 @@ scan. The second solution takes advantage of a system call, fallocate, in which 
 are expected to grow. By calling fallocate on the WAL logging file, we can avoid frequent allocation, which amortizes
 the cost of expensive allocator calls over multiple appends to the log file. 
 
+The third observation is that using memory mapped NVM regions and cache flushes is always better than relying on file 
+system interfaces. By mapping the NVM file to the virtual address space using mmap(), we circumvent the file system 
+entirely, removing the overhead of performing system calls and going through the file system software stack. When combined
+with pre-allocation of file storage, this approach also needs another system call, mremap(), to accommodate for the newly
+allocated space. In addition, the paper also suggests that using cache flush instructions (clwb, clflushopt) and memory 
+fences for data persistence is better than using msync(), 
+
+
