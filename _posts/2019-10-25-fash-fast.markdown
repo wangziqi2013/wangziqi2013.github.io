@@ -55,5 +55,12 @@ on the cache line. In our case, if the page header is not updated atomically as 
 partially updated state might be persisted to the NVM by an eviction, before we issue the cache line flush. If the system
 crashes at this point, the image recovered from the NVM is half-written, resulting in uncoverable data corruption. 
 On Intel platforms, the previous granularity is the cache line size, i.e. 64 bytes, while the second granularity is 
-8 byte, a single word.
+8 byte, the size of a machine word.
+
+**To make it simpler: There are two atomicity related issues for NVM-bases systems: Data that can be updated atomically,
+and data that can be persisted atomically (using only simple primitives such as clwb and sfence). The latter imply the 
+former, since if data cannot be updated atomically, an intervening cache eviction will inevitably make partial updates
+to the NVM storage. The former does not imply the latter, since even if data can be updated by the processor atomically
+(e.g. using HTM), the NVM still cannot accept them in an atomic batch, i.e. the NVM may have only persisted one cache line
+while discarded the other.**
 
