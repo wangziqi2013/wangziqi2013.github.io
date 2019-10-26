@@ -35,4 +35,7 @@ database rows, or keys in a B+Tree index. In such a mechanism, a page (presumabl
 growing from the lower end of the page which stores offsets of data items, and the content of the page growing from the 
 higher end, in which variably lengthed data items are stored. The page header consists of a integer counting the number
 of items in the page, a pointer pointing to the free list (maintained for unallocated space), and an array of offsets 
-which encodes locations of data items. 
+which encodes locations of data items. This page layout is similar to that of the Masstree, in which a permutation field
+is added to each node as an extra layer of indirection, which facilitates atomic insert and delete of elements, since 
+items are not no longer shifted (which is not atomic), but instead we update the permutation field using an atomic 
+Compare-And-Swap. 
