@@ -57,10 +57,15 @@ crashes at this point, the image recovered from the NVM is half-written, resulti
 On Intel platforms, the previous granularity is the cache line size, i.e. 64 bytes, while the second granularity is 
 8 byte, the size of a machine word.
 
-**To make it simpler: There are two atomicity related issues for NVM-bases systems: Data that can be updated atomically,
-and data that can be persisted atomically (using only simple primitives such as clwb and sfence). The latter imply the 
+**To make it simpler: There are two atomicity related issues for NVM-bases systems: Data that can be updated atomically
+on the CPU side, and data that can be persisted atomically on the NVM side. The latter implies the 
 former, since if data cannot be updated atomically, an intervening cache eviction will inevitably make partial updates
 to the NVM storage. The former does not imply the latter, since even if data can be updated by the processor atomically
 (e.g. using HTM), the NVM still cannot accept them in an atomic batch, i.e. the NVM may have only persisted one cache line
 while discarded the other.**
 
+In order to make atomic update to the page header in cases such as sorting the keys in a B+Tree (which involves shifting
+some offsets in the array), either we need conventional logging to make sure that these updates can always be undone
+or replayed, or we should devise a machanism which allows cache-lined sized atomic update on the processor side, and 
+then flush back the cache line to the NVM. In the latter scheme, according to the atomicity of both operations, no matter 
+at which stage the system crashes, the updated cache is either written in its entirety, or not applied at all.
