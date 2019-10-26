@@ -84,5 +84,9 @@ offset entry pointing to the just inserted item, potentially shifting other offs
 transaction to ensure atomicity. In the last step, we flush the updated header to the NVM, committing all the above changes.
 Element deletion is performed in a similar manner except that no storage is allocated from the free list. Updated items
 must not be overwritten, since otherwise the pre-image of the update might not be recoverable if the system crashes before
-the update is committed. Instead, we allocate new space for the updated item, and keeps old value unreferenced which will
-eventually reclaimed by GC.
+the update is committed. Instead, we allocate new space for the updated item, and keep old value unreferenced which will
+eventually reclaimed by GC. In case that the HTM aborts due to unrecoverable conditions (which should not happen in practice
+since the transaction only consists of single cache line update), the system falls back to logging, which will be 
+presented below.
+
+HTM may also seem viable when mutliple pages are updated, in which we simply 
