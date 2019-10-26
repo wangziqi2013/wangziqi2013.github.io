@@ -45,6 +45,12 @@ same cache line).
 This paper first demonstrates how to update the page header atomically with regard to the NVM using HTM. On most platforms,
 there are two granularities to characterize NVM. The first granularity is about the largest unit of data update when we
 issue a write back from the cache. In other words, this number describes the maximum nuber of bytes that can be persisted 
-atomically without observing any partial update. The second granularity is more related to the processor's ISA, which 
-defines the number of bytes that is guaranteed to be performed atomically by the processor, such that either all bits of 
-the write operation are persisted to the NVM, or none of them is. 
+atomically on the NVM side without observing any partial update, especially after a power outrage. The second granularity 
+is more related to the processor's ISA, which defines the number of bytes that is guaranteed to be performed atomically 
+by the processor, such that either all bits of the write operation are persisted to the NVM, or none of them is. This 
+property is generally related to how instructions are executed internally within a processor. For example, even if some 
+SIMD instructions may write multi-word value, these instructions may not be atomic, i.e. the partially updated state can 
+be observed by a third party (either another processor, or the NVM attached to the bus) by an eviction or coherence action 
+on the cache line. In our case, if the page header is not updated atomically as a single unit by the processor, the 
+pritially updated state might be persisted to the NVM by an eviction, before we issue the cache line flush. If the system
+crashes at this point, the image recovered from the NVM is half-written, resulting in uncoverable data corruption.
