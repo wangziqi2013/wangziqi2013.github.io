@@ -18,7 +18,11 @@ is motivated by the fact that current implementations of database systems are of
 as disks, in mind. As a consequence, logging is always performed in the granularity of a disk page, which is typically
 4KB nowadays. This introduces the write amplification problem, in which a small write is amplified by the large granularity
 of writes. To make it worse, modern file systems are equipped with a feature called journaling, which duplicates data 
-written to files in order to maintain the abstraction of atomic file write system call. If the database uses a file to
-store the persistent log, then the I/O operation to persiste the log will be duplicated due to file system level journaling,
+written to files in order to maintain the abstraction of failure-atomic file write system call. If the database uses a file to
+store the persistent log, then the I/O operation to persist the log will be duplicated due to file system level journaling,
 while in fact this journal is unnecessary since a corrupted log will not affect recovery (the database controls write ordering
 such that even if the log is corrupted, it can be identified and truncated).
+
+This paper makes two major contributions. First, for simple updates, such as updates that only touch one page (or one node
+of a B+Tree), by using hardware transaction memory support, we can extend the 8-byte atomic write provided by most NVM
+to cache line sized atomic write, enabling us to update a page in-place without generating any log record.
