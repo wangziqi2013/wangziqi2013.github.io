@@ -69,3 +69,10 @@ some offsets in the array), either we need conventional logging to make sure tha
 or replayed, or we should devise a machanism which allows cache-lined sized atomic update on the processor side, and 
 then flush back the cache line to the NVM. In the latter scheme, according to the atomicity of both operations, no matter 
 at which stage the system crashes, the updated cache is either written in its entirety, or not applied at all.
+
+This paper leverages HTM to perform atomic updates to a single cache line. Current implementation of Intel TSX RTM mandates
+that the transaction be aborted if any cache line in the working set is evicted from the cache hierarchy. Effectively, we 
+can "lock" a cache line within the cache hierarchy using RTM transactions, in order to perform a non-atomic series of
+updates to the cache line. With the help of HTM, an insertion into a slotted page is described as follows. First, unused
+storage is allocated within the page by finding a chunk of memory larger than the inserted item in the free list, and then
+writes the item into this chunk (and updates the free list pointers in other chunks). 
