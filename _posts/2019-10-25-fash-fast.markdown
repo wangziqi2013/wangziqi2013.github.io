@@ -38,4 +38,6 @@ of items in the page, a pointer pointing to the free list (maintained for unallo
 which encodes locations of data items. This page layout is similar to that of the Masstree, in which a permutation field
 is added to each node as an extra layer of indirection, which facilitates atomic insert and delete of elements, since 
 items are not no longer shifted (which is not atomic), but instead we update the permutation field using an atomic 
-Compare-And-Swap. 
+Compare-And-Swap (Note: This similarity is also reflected by a paper in ASPLOS published two years later after this one,
+in which the masstree node is updated atomically w.r.t. NVM by placing the permutation field and the undo log in the 
+same cache line). 
