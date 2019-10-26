@@ -29,3 +29,10 @@ to cache line sized atomic write, enabling us to update a page in-place without 
 multi-page or multi-node update, this paper also proposes a lightweight logging scheme that does not have the write
 amplification problem introduced by file systems. These two contributions, combined together, forms the basis of FASH 
 and FAST, which provide better performance when applied to a widely used database, SQLite.
+
+This paper is based on slotted page mechanism, which is a general solution to to store variably lengthed records, such as 
+database rows, or keys in a B+Tree index. In such a mechanism, a page (presumably 4KB) is divided two parts: A page header
+growing from the lower end of the page which stores offsets of data items, and the content of the page growing from the 
+higher end, in which variably lengthed data items are stored. The page header consists of a integer counting the number
+of items in the page, a pointer pointing to the free list (maintained for unallocated space), and an array of offsets 
+which encodes locations of data items. 
