@@ -25,4 +25,7 @@ such that even if the log is corrupted, it can be identified and truncated).
 
 This paper makes two major contributions. First, for simple updates, such as updates that only touch one page (or one node
 of a B+Tree), by using hardware transaction memory support, we can extend the 8-byte atomic write provided by most NVM
-to cache line sized atomic write, enabling us to update a page in-place without generating any log record.
+to cache line sized atomic write, enabling us to update a page in-place without generating any log record. Second, for 
+multi-page or multi-node update, this paper also proposes a lightweight logging scheme that does not have the write
+amplification problem introduced by file systems. These two contributions, combined together, forms the basis of FASH 
+and FAST, which provide better performance when applied to a widely used database, SQLite.
