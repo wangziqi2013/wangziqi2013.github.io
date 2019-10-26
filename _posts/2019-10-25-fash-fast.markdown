@@ -92,4 +92,11 @@ be presented below.
 HTM may also seem viable when mutliple pages are updated, in which we simply wrap the multiple page header update in the 
 same transaction, this practice, however, does not work, because this multi-cache line update cannot be flushed atomically
 back to the NVM. In this case, we have no choice, but just have to fall back to conventional logging. This paper proposes 
-a lightweight logging scheme as follows. 
+a lightweight logging scheme as follows. In the first step, all storage allocation and value updates are performed within
+the free area of the pages as described in the previous paragraph. These dirty values are also flushed back to the NVM
+before the next step. The logical view of the pages do not change at the end this stage. In the second step, we generate 
+log records for page headers to be updated into a small logging area mapped to the NVM address space, and then flush these 
+log records back to the NVM. After this step, a commit mark is written and flushed seperately to commit the log. Only after
+the commit mark is persisted, are the page modifications actually committed. In the last step, we apply the page header 
+changes to the corresponding pages, making available all the changes for later transactions to use. The log records 
+are invalidated by writing and flushing another mark after the in-place updates are done. 
