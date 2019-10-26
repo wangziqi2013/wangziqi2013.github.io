@@ -49,8 +49,11 @@ atomically on the NVM side without observing any partial update, especially afte
 is more related to the processor's ISA, which defines the number of bytes that is guaranteed to be performed atomically 
 by the processor, such that either all bits of the write operation are persisted to the NVM, or none of them is. This 
 property is generally related to how instructions are executed internally within a processor. For example, even if some 
-SIMD instructions may write multi-word value, these instructions may not be atomic, i.e. the partially updated state can 
-be observed by a third party (either another processor, or the NVM attached to the bus) by an eviction or coherence action 
+SIMD instructions can write multi-word value, these instructions may not be atomic, i.e. the partially updated state can 
+be observed by a third party (either another processor, or the NVM attached to the bus) via eviction or coherence action 
 on the cache line. In our case, if the page header is not updated atomically as a single unit by the processor, the 
-pritially updated state might be persisted to the NVM by an eviction, before we issue the cache line flush. If the system
-crashes at this point, the image recovered from the NVM is half-written, resulting in uncoverable data corruption.
+partially updated state might be persisted to the NVM by an eviction, before we issue the cache line flush. If the system
+crashes at this point, the image recovered from the NVM is half-written, resulting in uncoverable data corruption. 
+On Intel platforms, the previous granularity is the cache line size, i.e. 64 bytes, while the second granularity is 
+8 byte, a single word.
+
