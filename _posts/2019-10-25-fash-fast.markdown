@@ -82,3 +82,7 @@ the offset array and rebuilding the list (since the storage is never freed durin
 updated addresses in the previous step to the NVM using a persist barrier. Next, we update the page header to add a new 
 offset entry pointing to the just inserted item, potentially shifting other offsets. This update is wrapped into a RTM 
 transaction to ensure atomicity. In the last step, we flush the updated header to the NVM, committing all the above changes.
+Element deletion is performed in a similar manner except that no storage is allocated from the free list. Updated items
+must not be overwritten, since otherwise the pre-image of the update might not be recoverable if the system crashes before
+the update is committed. Instead, we allocate new space for the updated item, and keeps old value unreferenced which will
+eventually reclaimed by GC.
