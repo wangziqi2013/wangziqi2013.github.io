@@ -75,4 +75,10 @@ that the transaction be aborted if any cache line in the working set is evicted 
 can "lock" a cache line within the cache hierarchy using RTM transactions, in order to perform a non-atomic series of
 updates to the cache line. With the help of HTM, an insertion into a slotted page is described as follows. First, unused
 storage is allocated within the page by finding a chunk of memory larger than the inserted item in the free list, and then
-writes the item into this chunk (and updates the free list pointers in other chunks). 
+writes the item into this chunk (and updates the free list pointers in other chunks). At this stage, if the system crashes,
+no change has been made even if the updated free list and/or data has been written into the NVM, since the page header
+is the only reference when we read the content of a page. In addition, corrupted free list can always be fixed by scanning
+the offset array and rebuilding the list (since the storage is never freed during normal operation). Then, we flush the
+updated addresses in the previous step to the NVM using a persist barrier. Next, we update the page header to add a new 
+offset entry pointing to the just inserted item, potentially shifting other offsets. This update is wrapped into a RTM 
+transaction to ensure atomicity. In the last step, we flush the updated header to the NVM, committing all the above changes.
