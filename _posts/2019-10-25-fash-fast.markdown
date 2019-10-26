@@ -100,3 +100,12 @@ log records back to the NVM. After this step, a commit mark is written and flush
 the commit mark is persisted, are the page modifications actually committed. In the last step, we apply the page header 
 changes to the corresponding pages, making available all the changes for later transactions to use. The log records 
 are invalidated by writing and flushing another mark after the in-place updates are done. 
+
+Compared with traditional approach of using a log file for all dirty data, the lightweight logging approach has two
+obvious advantages. First, only page headers are logged, which saves both NVM bandwidth and log storage pressure. 
+Second, file system is not involved in the logging process, which avoids the "journaling of journal" problem described
+in the first paragraph. 
+
+On recovery, the log manager first checks the log area to see if there is any valid log entries. A valid log entry is one
+that has the commit mark written, and yet not invalidated. If such entry exists, the recovery manager replays the 
+log before removing it. In all other cases, the log can be truncated, since the system is always at a consistent state.
