@@ -80,4 +80,8 @@ as follows. First, log entries are generated and appended to the log as in singl
 log tails, we copy the new value of the log tail at each affected inode into the journal, and flushes the journal
 back to the NVM. The multi-inode update has been committed after this flush operation. The last step is to update the 
 log tails in each inode, and then flush the new value of the tails back to NVM. The journal is then truncated after all
-log tails have been persisted. 
+log tails have been persisted. Note that updating the journal is exactly like updating a single inode: We maintain the 
+journal as a 4KB cicular buffer, and use two pointers to indicate the head and tail. When new entries are appended to the 
+journal, we first write the entry, flush them back to NVM, update the tail, and then flushes the tail. This way the journal 
+is updated atomically, with the flush of the tail pointer as the atomic point. Truncating the journal is similar: we simply 
+update the head pointer to the current tail, and then flush the head pointer.
