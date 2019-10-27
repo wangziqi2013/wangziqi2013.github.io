@@ -84,4 +84,6 @@ log tails have been persisted. Note that updating the journal is exactly like up
 journal as a 4KB cicular buffer, and use two pointers to indicate the head and tail. When new entries are appended to the 
 journal, we first write the entry, flush them back to NVM, update the tail, and then flushes the tail. This way the journal 
 is updated atomically, with the flush of the tail pointer as the atomic point. Truncating the journal is similar: we simply 
-update the head pointer to the current tail, and then flush the head pointer.
+update the head pointer to the current tail, and then flush the head pointer. Again, since updates to a single 8-byte 
+pointer is always atomic with regard to failure, no complicated mechanism other than a persiste barrier is sufficient, making
+the entire sequence of update lightweight.
