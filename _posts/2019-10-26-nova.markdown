@@ -87,3 +87,9 @@ is updated atomically, with the flush of the tail pointer as the atomic point. T
 update the head pointer to the current tail, and then flush the head pointer. Again, since updates to a single 8-byte 
 pointer is always atomic with regard to failure, no complicated mechanism other than a persiste barrier is sufficient, making
 the entire sequence of update lightweight.
+
+Directories in NOVA are maintained as logs on the NVM. The creation, deletion of files, and updates to file attributes are 
+all stored as log entries to the directory's inode log. Updating the directory is the same as updating an inode using the 
+update scheme described above. To accelerate directory lookup, NOVA maintains an in-memory copy of the directory as a
+radix tree, such that the directory can be enumerated without having to walk the log.
+
