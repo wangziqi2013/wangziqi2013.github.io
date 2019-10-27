@@ -12,3 +12,10 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper presents NOVA, a file system optimized for NVM which provides strong atomicity guarantees. In order for a 
+file system operation to be atomic, either all of its sub-operations are committed to persistent storage, or none of them is
+committed. This is especially true when the file system suffers from a crash or failure, in which case the persistent
+storage may only contain partially updates states, due to the fact that page buffers maintained by the OS or hardware 
+caches can evict pages back to the storage at unpredicable times.
+
