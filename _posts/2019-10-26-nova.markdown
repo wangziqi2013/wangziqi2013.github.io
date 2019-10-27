@@ -56,4 +56,11 @@ NOVA organizes its inode table similar to a conventional file system. Instead of
 the master log as in log-structured file systems, NOVA maintains a central inode table at the beginning of the address
 space, and partitions the inode table across cores to make parallel inode allocation and scanning possible. An inode in
 NOVA consists of two pointers, a log head pointer and a log tail pointer. Logs are maintained in a per-inode manner, in
-the form of linked lists of log blocks. These log blocks do not necessarily occupy continuous storage on the NVM. 
+the form of linked lists of log blocks. These log blocks do not necessarily occupy continuous storage on the NVM. The log 
+head pointer points to the first log block of the inode, while the log tail pointer points to the last committed state of 
+the inode. States can be committed onto an inode by atomically moving the log tail pointer. The remaining part of the 
+address space is maintained as a heap, from which log blocks and data pages can be allocated in a non-log-structured manner. 
+Precise allocator states are maintained in the main memory as a block pool, which is persisted back to the NVM on a normal 
+shutdown. On a failure, the persistent version of allocator state might be inconsistent, in which case we need to reconstruct 
+the state by scanning all inodes and marking pages used by these inodes as active. After the scan, pages that are unmarked 
+are added to the pool.
