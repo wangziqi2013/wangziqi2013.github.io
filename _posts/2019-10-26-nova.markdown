@@ -19,3 +19,11 @@ committed. This is especially true when the file system suffers from a crash or 
 storage may only contain partially updates states, due to the fact that page buffers maintained by the OS or hardware 
 caches can evict pages back to the storage at unpredicable times.
 
+As a result, several techniques are implemented to prevent these partial updates from corrupting the state of the file 
+system, typically via a post-crash recovery process. The first technique is called journaling, in which all modifications
+to the file system, including metadata and data, are first written to a persistent journal, and then written in-place.
+A write ordering is enforced between the commit of the journal and the actual update of file system states to ensure 
+that these operations can always be replayed after the journal has been committed. In the post-crash recovery process, 
+if the journal is found to have committed, it will be replayed. The journal can only be removed after all dirty
+pages are flushed to the disk. The problem of journaling is that it doubles I/O traffic to the disk, since both the journal
+and the data need to be persisted. 
