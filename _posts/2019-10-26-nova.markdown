@@ -38,3 +38,9 @@ an append-only manner. Log-structured file systems can commit changes atomically
 end of the log, followed by an atomic swap of the log tail pointer. This scheme, however, suffers from garbage collection
 problem, since obsolete data and metadata will need to be constantly removed to reclaim storage. In the case where 
 no continuous storage can be reclaimed, live data needs to be moved around, which also causes unnecessary traffic.
+
+NOVA features log-structured atomic commit of both data and metadata changes, without the cost of expensive page-level 
+journaling, shadow paging, or garbage collection. This is achieved by adapting log-structured updates to provide the ideal 
+semantics of atomic operations, while not maintaining the log as a physically sequential object on the disk. This
+combination is valid for NVM, due to the fact that NVM writes are less sensitive to the sequentiality of data, while
+on a spinning disk or SSD it is best practice to make sequential write the common case. 
