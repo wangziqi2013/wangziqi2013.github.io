@@ -93,3 +93,10 @@ all stored as log entries to the directory's inode log. Updating the directory i
 update scheme described above. To accelerate directory lookup, NOVA maintains an in-memory copy of the directory as a
 radix tree, such that the directory can be enumerated without having to walk the log.
 
+File writes are committed to the inode of the file as an extent encoded as the begin address of the block and the 
+length of the extent. If a write request overwrites an existing extent, NOVA first copies the old extent into the new
+page, and then commit updates as a new extend with the new page (note that pages are flushed before committed). Such 
+copy-on-write style file update ensures that a file is never partially updated, as the old page is always consistent 
+before we commit the inode log. Old pages can be reclaimed after the write is committed. On a system crash, either old
+page or new page will be leaked (i.e. unreferenced). In this case, the recovery handler will scan the inode's write 
+history, and locate pages that are unreferenced, and unmark them in the allocator. 
