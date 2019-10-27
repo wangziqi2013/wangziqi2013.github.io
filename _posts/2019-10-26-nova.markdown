@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "NOVA: A Log-Strictured File System for Hybrid Volatile/Non-volatile Main Memories"
+date:   2019-10-26 23:39:00 -0500
+categories: paper
+paper_title: "NOVA: A Log-Strictured File System for Hybrid Volatile/Non-volatile Main Memories"
+paper_link: https://www.usenix.org/node/194455
+paper_keyword: NVM; File System; NOVA; Log-Structured
+paper_year: FAST 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
