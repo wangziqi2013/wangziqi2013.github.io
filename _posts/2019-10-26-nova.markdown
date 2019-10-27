@@ -103,6 +103,11 @@ history, and locate pages that are unreferenced, and unmark them in the allocato
 
 Similar to any log-structured file system, NOVA needs constant garbage collection (GC) to free up space occupied 
 by invalidated log entries. One major differences of NOVA is that it requires significantly less effort to be 
-spent on GC at runtime, for two reasons. First, NOVA maintains per-inode log, which implies that GC can be performed
+spent on GC at runtime, for three reasons. First, NOVA maintains per-inode log, which implies that GC can be performed
 on individual inodes seperately. The amount of data to be recollected and compressed per GC call is far less compared
-with the scheme that utilizes a centralized log. Second, NOVA 
+with the scheme that utilizes a centralized log. Second, NOVA only logs metadata updates without data (which itself is 
+GC'ed at the end of every write operation). The number of bytes in the log is therefore far less than a centralized log 
+that contains both data and metadata. The last reason is that NOVA does not maintain the log as a single sequential unit
+on the NVM. Instead, each inode has its own log which is then organized into a linked list. As a result, GC is performed 
+on a log block level. NOVA can continue its operation as long as a block can be reclaimed. These three combined together 
+make GC in NOVA lightweight. 
