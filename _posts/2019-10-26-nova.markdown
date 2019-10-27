@@ -44,3 +44,10 @@ journaling, shadow paging, or garbage collection. This is achieved by adapting l
 semantics of atomic operations, while not maintaining the log as a physically sequential object on the disk. This
 combination is valid for NVM, due to the fact that NVM writes are less sensitive to the sequentiality of data, while
 on a spinning disk or SSD it is best practice to make sequential write the common case. 
+
+Based on the physical location, NOVA metadata is divided into two types: An in-memory part which supports efficient 
+lookup but provides no atomic support, and a log-structured NVM part which is difficult to search with (have to scan 
+the log), but supports efficient atomic update. The in-memory part is constructed from the NVM part lazily during normal
+operations. When the file system is first mounted, only essential metadata is initialized from the super block. As 
+user applications issue file accesses, the in-memory representation of the inode, directory, etc. are initialized
+by scanning the log and applying all changes.
