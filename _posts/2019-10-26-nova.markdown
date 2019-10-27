@@ -100,3 +100,9 @@ copy-on-write style file update ensures that a file is never partially updated, 
 before we commit the inode log. Old pages can be reclaimed after the write is committed. On a system crash, either old
 page or new page will be leaked (i.e. unreferenced). In this case, the recovery handler will scan the inode's write 
 history, and locate pages that are unreferenced, and unmark them in the allocator. 
+
+Similar to any log-structured file system, NOVA needs constant garbage collection (GC) to free up space occupied 
+by invalidated log entries. One major differences of NOVA is that it requires significantly less effort to be 
+spent on GC at runtime, for two reasons. First, NOVA maintains per-inode log, which implies that GC can be performed
+on individual inodes seperately. The amount of data to be recollected and compressed per GC call is far less compared
+with the scheme that utilizes a centralized log. Second, NOVA 
