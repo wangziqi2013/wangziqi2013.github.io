@@ -45,9 +45,15 @@ semantics of atomic operations, while not maintaining the log as a physically se
 combination is valid for NVM, due to the fact that NVM writes are less sensitive to the sequentiality of data, while
 on a spinning disk or SSD it is best practice to make sequential write the common case. 
 
-Based on the physical location, NOVA metadata is divided into two types: An in-memory part which supports efficient 
+Based on the physical location, NOVA metadata is divided into two parts: An in-memory part which supports efficient 
 lookup but provides no atomic support, and a log-structured NVM part which is difficult to search with (have to scan 
 the log), but supports efficient atomic update. The in-memory part is constructed from the NVM part lazily during normal
 operations. When the file system is first mounted, only essential metadata is initialized from the super block. As 
-user applications issue file accesses, the in-memory representation of the inode, directory, etc. are initialized
-by scanning the log and applying all changes.
+user applications issue file accesses, the in-memory representation of the inode, directory, memory allocator, etc. are 
+initialized by scanning the log and applying all changes.
+
+NOVA organizes its inode table similar to a conventional file system. Instead of appending all inode modifications into
+the master log as in log-structured file systems, NOVA maintains a central inode table at the beginning of the address
+space, and partitions the inode table across cores to make parallel inode allocation and scanning possible. An inode in
+NOVA consists of two pointers, a log head pointer and a log tail pointer. Logs are maintained in a per-inode manner, in
+the form of linked lists of log blocks. These log blocks do not necessarily occupy continuous storage on the NVM. 
