@@ -63,4 +63,13 @@ address space is maintained as a heap, from which log blocks and data pages can 
 Precise allocator states are maintained in the main memory as a block pool, which is persisted back to the NVM on a normal 
 shutdown. On a failure, the persistent version of allocator state might be inconsistent, in which case we need to reconstruct 
 the state by scanning all inodes and marking pages used by these inodes as active. After the scan, pages that are unmarked 
-are added to the pool.
+are added to the pool. To facilitate multi-inode updates, each core is also allocated a journal on the NVM, the operation
+of which will be described later.
+
+We first describe single inode update in NOVA in this paragraph, and multi-node update in the next paragraph. In order
+to atomically update an inode, we first generate log entries describing the update, and then append these log entries to 
+the log blocks of the inode to be updated. The update is committed by moving the log tail pointer in the inode to the last
+entry that we just appended. This final commit operation is atomic since it is only a 8-byte memory write which is then
+flushed back to the NVM. The in-memory representation of the inode is also updated accordingly after the commit, but
+this does not have to be atomic with regard to failures (the inode is still locked to prevent other threads accessing it 
+though).
