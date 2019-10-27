@@ -73,3 +73,11 @@ entry that we just appended. This final commit operation is atomic since it is o
 flushed back to the NVM. The in-memory representation of the inode is also updated accordingly after the commit, but
 this does not have to be atomic with regard to failures (the inode is still locked to prevent other threads accessing it 
 though).
+
+Multi-inode updates are more complicated since we cannot update multiple cache lines atomically with regard to the NVM
+with simple primitives. As a solution, the journal is used to coordinate multiple log tail writes which we describe 
+as follows. First, log entries are generated and appended to the log as in single node update. Then, before moving the 
+log tails, we copy the new value of the log tail at each affected inode into the journal, and flushes the journal
+back to the NVM. The multi-inode update has been committed after this flush operation. The last step is to update the 
+log tails in each inode, and then flush the new value of the tails back to NVM. The journal is then truncated after all
+log tails have been persisted. 
