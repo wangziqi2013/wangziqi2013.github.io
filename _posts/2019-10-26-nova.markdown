@@ -26,4 +26,11 @@ A write ordering is enforced between the commit of the journal and the actual up
 that these operations can always be replayed after the journal has been committed. In the post-crash recovery process, 
 if the journal is found to have committed, it will be replayed. The journal can only be removed after all dirty
 pages are flushed to the disk. The problem of journaling is that it doubles I/O traffic to the disk, since both the journal
-and the data need to be persisted. 
+and the data need to be persisted. The second technique is shadow paging, which is commonly used in tree-structured file
+systems. In such a file system, it is assumed that directories and files are organized into a search tree, such that there
+is only one pointer to a page. When a page is to be updated, it is first duplicated by copying all contents of the 
+page to another page, and all modifications are performed on the new page. Non-atomic modifications to the page are
+committed by an atomic compare-and-swap to the parent of the page. In this scheme, any change made on any level
+of the tree will propagate to the root, since when we modify the pointer on the parent node, a new copy of the parent
+node is also created and then swapped into the grandparent node. This cascading effect unnecessary memory traffic and 
+can be expensive. 
