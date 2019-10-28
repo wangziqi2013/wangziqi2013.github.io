@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "NVWAL: Exploiting NVRAM in Write-Ahead Logging"
+date:   2019-10-28 13:40:00 -0500
+categories: paper
+paper_title: "NVWAL: Exploiting NVRAM in Write-Ahead Logging"
+paper_link: https://dl.acm.org/citation.cfm?id=2872392
+paper_keyword: NVM; WAL; SQLite; NVWAL; Database
+paper_year: ASPLOS 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
