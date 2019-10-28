@@ -43,8 +43,11 @@ to the corresponding device.
 On seeing the forwarded memory request from the memory bus, the SSD controller will begin a transaction to read or 
 write the indicated address. One difficulty in the design is that SSDs can only be accessed in block granularity,
 and the access speed is usually slower than DRAM. To solve this problem, FlatFlash proposes that the SSD dedicate
-its internal DRAM to serve as a page cache holding recently accessed pages from the SSD. As a ressult, the SSD memory,
-which is intended to be used as a storage for Flash Translation Layer (FTL) and other purposes, can no longer serve
+its internal DRAM as a page cache holding recently accessed pages from the SSD. As a ressult, the SSD memory,
+which is intended to be used as a storage for Flash Translation Layer (FTL) and other functions, can no longer serve
 their original purposes. The paper suggests that the OS now should act as a FTL which translates linear physical address
 to SSD internal physical addresses (which consists of indices of storage arrays at each level of the internal
-hierarchy). 
+hierarchy), which is then sent via the memory request to the SSD. On completion of the memory request, the SSD sends
+a PICe response message back to the processor, which contains 64 bytes of cache line data. 
+
+
