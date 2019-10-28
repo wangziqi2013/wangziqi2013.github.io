@@ -22,4 +22,8 @@ are mapped as inaccessible pages. When such addresses are accessed by memory ins
 the OS kernel, which then reads the page from the SSD, and swaps out the current page. This process involves an
 OS conducted address translation, one read and one write I/O, and one TLB shootdown (this can be avoided if the shootdown
 is performed lazily, i.e. we wait until the next time another core traps into the kernel by using the stale entry in
-its local TLB, at the cost of more mode switches), which is rather expensive.
+its local TLB, at the cost of more mode switches), which is rather expensive. The second problem is that if the working
+set size is larger than available amount of DRAM, then page swaps will be consistly trigger due to accesses to non-present
+pages, causing thrashing. This greatly reduces system efficiency as the overhead of swapping pages will quickly saturate 
+the system. The last problem is that for data with little or none locality, bringing an entire page into the DRAM
+is a waste on I/O bandwidth, since only a small portion of the page will be accessed before the page is evicted.
