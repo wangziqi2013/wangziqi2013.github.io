@@ -35,4 +35,7 @@ did not specify whether the SSD BAR indicates virtual or physical address, and I
 so I assume that it is physical address, and that the memory controller could identify this address and sends the 
 request to the PICe bridge). Once the SSD is mapped to the physical address space of the processor, both the OS and user 
 programs could access this portion of the physical address via OS-controller virtual address mapping, e.g. by calling 
-mmap(). 
+mmap(). On a memory access, the MMU will first translate the virtual address to the physical address and probe the cache
+as usual, and if there is a cache miss, the memory request will be sent to the memory bus. On seeing this request,
+the PICe controller will check whether the address is in the MMIO range, and if positive, the request will be forwarded
+to the corresponding device. 
