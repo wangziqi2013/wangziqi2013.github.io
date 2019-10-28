@@ -52,4 +52,21 @@ a PICe response message back to the processor, which contains 64 bytes of cache 
 
 The page cache on SSD is organized as a conventional set-associative cache. The paper suggests that the cache should use
 RRIP as the replacement poloicy, due to the fact that RRIP performs better when the access pattern is more random, which 
-is the norm for lower level storage in the hierarchy as locality has been filtered out by upper levels.
+is the norm for lower level storage in the hierarchy as locality has been filtered out by upper levels. 
+
+One of the most important feature of FlatFlash is page promotion, which migrates frequently accessed "hot" pages from the 
+page cache to the DRAM which is closer to the processor. Page promotion is initiated by the I/O controller on the processor 
+side, which maintains an access count for each cache line sized block in the page cache. The paper proposes an algorithm 
+for determining which page to promote and for updating page access counters in the event of accesses, evictions and 
+promotions. After the promotion decision has been made, the I/O controller begins to read out the content of the page 
+in cache line granularity (i.e. the same as normal memory read), and stores them into a free page allocated by the OS.
+To avoid race conditions during the promotion with concurrent memory accesses, the paper proposes adding a "Promotion
+Lookaside Buffer" (PLB) to store the progress of the promotion. In the PLB, an entry consists of a valid bit, a page 
+address tag, and a bitvector for every cache line in the page. When the promotion starts, the I/O controller inserts an 
+entry into the PLB and clears the bitvector. It then begins to read out cache lines and fills the DRAM page. After the 
+page is written, the corresponding bit is set. The race condition occurs when an evicted cache line is written back to
+the SSD while the cache line is being migrated. If care is not taken, the content of this dirty line might be lost.
+To solve this problem, the I/O controller also monitors cache write backs from the LLC. If the address of the line
+matches one of the entries in the PLB, then the line will be redirected to the DRAM page address, and the bit is set.
+
+
