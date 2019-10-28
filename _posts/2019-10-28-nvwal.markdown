@@ -47,6 +47,10 @@ which records the page number, offset, size of payload, and a pointer to the nex
 same block or another block. The next pointer is encoded in a format that is independent from the base address of the mmap'ed
 region, because otherwise next time the region is mapped to a potentially different address, the pointer will point 
 to invalid data. Following the log frame header, here comes the payload, whose size is determined by the size field in the 
-header. The header 
-Before a log block can be written, it needs to be allocated by the user-space 
-allocator.
+header. The header also contains a single bit, padded to 8 bytes, as the commit mark. The last log frame of a transaction
+will have its commit mark set and flushed to the NVM after all other log frames are written.
+Before a log block can be written, it needs to be allocated by the user-space allocator. The allocator maintains its 
+internal states within the DRAM, which will be lost during a recovery. To precisely recollect storage used by logs,
+we make the following observation: The journaling mechanism does not care whether a log block has been written back
+or not before the persistent barrier is issued. If the block is not invalid or corrupted (partially written) on the NVM,
+we simply discard its content and abort the transaction. 
