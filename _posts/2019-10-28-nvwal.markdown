@@ -59,4 +59,10 @@ is not allocated; Pending, which means that the block has been allocated, but it
 In-use, which means that the block contains valid data and must not be freed. Initially, all status words are free. 
 After the allocator returns the block, it is set to pending, and then data ia written into the block, before it
 is linked into the log chain. After being linked into the log chain, the block is set to in-use, which makes the block
-logically part of the journal. 
+logically part of the journal. During recovery, the recovery handler scans all blocks in the NVM region, and checks 
+their status words. Free blocks and pending blocks are freed, since they are likely not referenced by any valid block.
+
+**To be simple: The allocator is simply there to avoid non-collectable memory leaks. It does not guarantee that all
+blocks that are currently in-use will not be reclaimed. In fact, some pending blocks may have already been referenced 
+by other blocks, but we must still reclaim all pending blocks to avoid leaking. On special purpose application like this,
+it is acceptable that the post-crash GC overkills as long as the status word is checked every time before use.**
