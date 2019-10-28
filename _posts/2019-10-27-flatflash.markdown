@@ -72,3 +72,7 @@ On the other hand, a set bit in the bitvector also indicates to the I/O controll
 over from the SSD. The entry is removed after all lines are copied. The I/O controller also modifies the page table such
 that future accesses are redirected to the DRAM page. 
 
+Garbage collection in FlatFlash is performed in page granularity as well. When a dirty page is written back, the SSD block
+(which is the unit of erasure) that contains the page is read out to an internal buffer, and the page is merged into the 
+block. The modified block is then written to a new block. The mapping in the page table also needs to be modified accordingly
+by the garbage collector, since the page table maintains the internal hardware address for the SSD.
