@@ -50,4 +50,6 @@ to SSD internal physical addresses (which consists of indices of storage arrays 
 hierarchy), which is then sent via the memory request to the SSD. On completion of the memory request, the SSD sends
 a PICe response message back to the processor, which contains 64 bytes of cache line data. 
 
-
+The page cache on SSD is organized as a conventional set-associative cache. The paper suggests that the cache should use
+RRIP as the replacement poloicy, due to the fact that RRIP performs better when the access pattern is more random, which 
+is the norm for lower level storage in the hierarchy as locality has been filtered out by upper levels.
