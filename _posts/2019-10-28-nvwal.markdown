@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes NVWAL, a technique for improving log performance on SQLite, a widely adopted DBMS on mobile platforms.
+The current logging mechanism on SQLite stores block-level journals to the file systems. The journal is written first to 
+persistent storage before data items are updated. The transaction is logically committed by appending a special commit record
+to the journal after all log entries are persistent, and before any data item is updated. This way, the transaction can always
+be replayed after a crash by reapplying all the log entries in the journal. The journal of a transaction can be truncated, 
+if all dirty pages affected by the transaction has been written back to persistent storage, or overwritten by a later 
+transaction (note that since logging is performed at page granularity, the detection of overwriting can also be done at
+page level). 
