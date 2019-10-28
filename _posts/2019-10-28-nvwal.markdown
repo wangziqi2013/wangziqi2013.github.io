@@ -53,4 +53,10 @@ Before a log block can be written, it needs to be allocated by the user-space al
 internal states within the DRAM, which will be lost during a recovery. To precisely recollect storage used by logs,
 we make the following observation: The journaling mechanism does not care whether a log block has been written back
 or not before the persistent barrier is issued. If the block is not invalid or corrupted (partially written) on the NVM,
-we simply discard its content and abort the transaction. 
+we simply discard its content and abort the transaction. The allocator reserves a status word in the block header to
+record block allocation state. The status word can be in one of the three following states: Free, which means the block
+is not allocated; Pending, which means that the block has been allocated, but it has not been referenced by another block;
+In-use, which means that the block contains valid data and must not be freed. Initially, all status words are free. 
+After the allocator returns the block, it is set to pending, and then data ia written into the block, before it
+is linked into the log chain. After being linked into the log chain, the block is set to in-use, which makes the block
+logically part of the journal. 
