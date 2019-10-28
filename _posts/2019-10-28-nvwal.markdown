@@ -34,3 +34,12 @@ requires only very weak semantics guarantee. For example, POSIX mandates that fi
 of atomic writes, while the journal accepts the fact that any log flush can be interrupted by a failure as long as single
 8-byte writes are atomic (i.e. the commit mark). The mismatch between the capability of the file system and the actual
 requirement of the journaling mechanism amplifies writes, resulting in even more bandwidth waste. 
+
+NVWAL solves the above two problems by moving the log object to NVM. Instead of creating a separate log file and relying
+on the file system for maintaining metadata, NVWAL simply creates a persistent object using mmap() system call for 
+requesting a chunk of persistent storage mapped to NVM addresses. The NVM address mapped to the process's address 
+sapce is then divided into blocks, which is the basic unit of allocation and deallocation. To save the application
+from a time consuming system call every time it needs a chunk of memory, NVWAL also maintains the allocator metadata 
+itself, which permits both efficient storage management and correct recovery upon a failure. 
+
+We describe the logging process as follows.
