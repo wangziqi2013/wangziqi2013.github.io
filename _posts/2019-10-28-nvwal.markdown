@@ -66,9 +66,13 @@ untouched. This simple scheme accepts the fact that some "pending" blocks that a
 referenced by other valid blocks are reclaimed incorrectly. Such misbehavior of the memory allocator, however, is 
 tolerated as long as the status word is always checked before accessing a log block after the crash (actually I think
 the post-crash process can first truncate the log that discard blocks that are in the log chain but are reclaimed
-by the GC). 
+by the GC). Memory decllocation works in the reverse manner. In order to deallocate a block of memory, we first
+update the status word in the block to free, and then calls the allocator to reclaim its storage. This way, the block
+can be recognized by the recovery handler and reclaimed correctly. 
 
 **To be simple: The allocator is simply there to avoid memory leaks after the crash. It does not guarantee that all
 blocks that are currently in-use will not be reclaimed. In fact, some pending blocks may have already been referenced 
 by other blocks, but we must still reclaim all pending blocks to avoid leaking. On special purpose application like this,
-it is acceptable that the post-crash GC overkills as long as the status word is checked every time before use.**
+it is acceptable that the post-crash GC overkills as long as the status word is checked every time before use, and that
+log blocks for committed transactions are not reclaimed (they won't, since the write ordering between the commit mark
+and the status word dictates that if the commit mark is written then the status word must have been updated).**
