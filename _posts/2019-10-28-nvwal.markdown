@@ -88,6 +88,9 @@ persistence barrier before writing the commit mark but after all log frames are 
 only logs the entire page under modification if it is the first page in the log. Before a log frame is 
 generated, the log manager first goes through the log chain to check whether the same page has been logged. If positive,
 the log frame will be encoded in a differential form, i.e. only parts that are modified since the last log frame will 
-be recorded, saving bandwidth and log space.
+be recorded. This approach achieves a balance between logging bandwidth and read complexity. By always logging an entire 
+page as the first entry of a page in the log chain, reads can simply reconstruct the most up-to-date data by a log traversal
+if the data page is truly in the log (this can be detected quickly using a bloom filter, etc.). Otherwise, the 
+reader may also have to read the DRAM part of the log for byte ranges that is not in the log, making the read complicated.
 
 Periodically, SQlite
