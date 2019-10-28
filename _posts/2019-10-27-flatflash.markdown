@@ -68,5 +68,7 @@ page is written, the corresponding bit is set. The race condition occurs when an
 the SSD while the cache line is being migrated. If care is not taken, the content of this dirty line might be lost.
 To solve this problem, the I/O controller also monitors cache write backs from the LLC. If the address of the line
 matches one of the entries in the PLB, then the line will be redirected to the DRAM page address, and the bit is set.
-
+On the other hand, a set bit in the bitvector also indicates to the I/O controller that the line should not be copied 
+over from the SSD. The entry is removed after all lines are copied. The I/O controller also modifies the page table such
+that future accesses are redirected to the DRAM page. 
 
