@@ -42,4 +42,11 @@ sapce is then divided into blocks, which is the basic unit of allocation and dea
 from a time consuming system call every time it needs a chunk of memory, NVWAL also maintains the allocator metadata 
 itself, which permits both efficient storage management and correct recovery upon a failure. 
 
-We describe the logging process as follows.
+We describe the logging process as follows. The basic unit of logging is called a "log frame", which consists of a header
+which records the page number, offset, size of payload, and a pointer to the next log frame, which can be either in the 
+same block or another block. The next pointer is encoded in a format that is independent from the base address of the mmap'ed
+region, because otherwise next time the region is mapped to a potentially different address, the pointer will point 
+to invalid data. Following the log frame header, here comes the payload, whose size is determined by the size field in the 
+header. The header 
+Before a log block can be written, it needs to be allocated by the user-space 
+allocator.
