@@ -32,4 +32,5 @@ of metadata and data, the file system itself will also perform juornaling to the
 journal file. The "journaling of the journal" problem introduces unnecessary overhead, since the journaling mechanism 
 requires only very weak semantics guarantee. For example, POSIX mandates that file system should provide the abstraction 
 of atomic writes, while the journal accepts the fact that any log flush can be interrupted by a failure as long as single
-8-byte writes are atomic (i.e. the commit mark). Such 
+8-byte writes are atomic (i.e. the commit mark). The mismatch between the capability of the file system and the actual
+requirement of the journaling mechanism amplifies writes, resulting in even more bandwidth waste. 
