@@ -37,5 +37,14 @@ request to the PICe bridge). Once the SSD is mapped to the physical address spac
 programs could access this portion of the physical address via OS-controller virtual address mapping, e.g. by calling 
 mmap(). On a memory access, the MMU will first translate the virtual address to the physical address and probe the cache
 as usual, and if there is a cache miss, the memory request will be sent to the memory bus. On seeing this request,
-the PICe controller will check whether the address is in the MMIO range, and if positive, the request will be forwarded
+the PCIe controller will check whether the address is in the MMIO range, and if positive, the request will be forwarded
 to the corresponding device. 
+
+On seeing the forwarded memory request from the memory bus, the SSD controller will begin a transaction to read or 
+write the indicated address. One difficulty in the design is that SSDs can only be accessed in block granularity,
+and the access speed is usually slower than DRAM. To solve this problem, FlatFlash proposes that the SSD dedicate
+its internal DRAM to serve as a page cache holding recently accessed pages from the SSD. As a ressult, the SSD memory,
+which is intended to be used as a storage for Flash Translation Layer (FTL) and other purposes, can no longer serve
+their original purposes. The paper suggests that the OS now should act as a FTL which translates linear physical address
+to SSD internal physical addresses (which consists of indices of storage arrays at each level of the internal
+hierarchy). 
