@@ -93,4 +93,6 @@ page as the first entry of a page in the log chain, reads can simply reconstruct
 if the data page is truly in the log (this can be detected quickly using a bloom filter, etc.). Otherwise, the 
 reader may also have to read the DRAM part of the log for byte ranges that is not in the log, making the read complicated.
 
-Periodically, SQlite
+Periodically, SQLite executes a "checkpointing" process to merge the log content back to the persistent database file. 
+The checkpointing process simply copies over the content in the log frames into the database by the order that they are 
+generated. Uncommitted transactions are not copied, though.
