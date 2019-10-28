@@ -95,7 +95,9 @@ reader may also have to read the DRAM part of the log for byte ranges that is no
 
 Periodically, SQLite executes a "checkpointing" process to merge the log content back to the persistent database file. 
 The checkpointing process simply copies over the content in the log frames into the database by the order that they are 
-generated. Uncommitted transactions are not copied, though.
+generated. Uncommitted transactions are not copied, though. The same process is also executed during recovery. The recovery
+manager first performs block GC and truncates the log to remove blocks that are garbage collected, and then it runs the 
+checkpointing process to reapply all committed transactions to the database file on persistent storage.
 
 The paper also proposes not enforcing the write ordering between the log frames and the final commit mark for less stalls
 and better performance. By not flushing back cache lines of log frames, we risk the possibility that a log frame is not
