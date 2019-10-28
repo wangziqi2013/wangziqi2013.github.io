@@ -21,3 +21,10 @@ be replayed after a crash by reapplying all the log entries in the journal. The 
 if all dirty pages affected by the transaction has been written back to persistent storage, or overwritten by a later 
 transaction (note that since logging is performed at page granularity, the detection of overwriting can also be done at
 page level). 
+
+This approach to logging offers a significant performance improvement over the older undo logging mechanism, which
+requires writing back the undo log as soon as they are generated to prevent violation of write ordering. It is, however,
+still not optimal, due to two reasons. First, the logging granularity is large compared with the usual granularity of
+updates. The paper identifies that SQLite features frequent small updates, which are mainly made on the B+Tree structure.
+Much of the I/O bandwidth for writing the log is wasted because only a small fraction of the logged page is actually useful.
+The second reason
