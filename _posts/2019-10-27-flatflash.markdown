@@ -13,3 +13,8 @@ htm_cr:
 version_mgmt: 
 ---
 
+This paper proposes FlatFlash, an architecture that allows SSDs to be connected to the memory bus and used as 
+byte-addressable memory devices. While the size of big data workloads keep scaling, the capacity of DRAM based memory 
+in a system cannot grow as fast as the size of the workload. Current solutions for solving the memory scarcity problem
+is to use SSDs as backup storage accessed in block granularity, leveraging the address mapping and protection capability 
+of virtual memory. This solution, however, has several problems. 
