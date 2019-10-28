@@ -81,4 +81,13 @@ The logging process is described as follows: When a transaction intends to updat
 which describes the update in the header, with the after-image of the update in the payload. Updates to the database is 
 also reflected to the DRAM copy to allow more efficient reads, because otherwise all readers have to first check the 
 log to see if newer updates are present (I think on SQLite sebsite they are saying the opposite, i.e. readers must check
-the journal for newer updates. The paper, nevertheless, does not mention this). 
+the journal for newer updates. The paper, nevertheless, does not mention this). When the transaction is to be committed,
+the log manager sets the "commit mark" at the head of the last log block, and then flushes the bit to logically commit 
+the transaction. The write ordering between the log block write and commit mark write is enforced here by executing a 
+persistence barrier before writing the commit mark but after all log frames are generated. To save I/O bandwidth, NVWAL
+only logs the entire page under modification if it is the first page in the log. Before a log frame is 
+generated, the log manager first goes through the log chain to check whether the same page has been logged. If positive,
+the log frame will be encoded in a differential form, i.e. only parts that are modified since the last log frame will 
+be recorded, saving bandwidth and log space.
+
+Periodically, SQlite
