@@ -76,3 +76,9 @@ by other blocks, but we must still reclaim all pending blocks to avoid leaking. 
 it is acceptable that the post-crash GC overkills as long as the status word is checked every time before use, and that
 log blocks for committed transactions are not reclaimed (they won't, since the write ordering between the commit mark
 and the status word dictates that if the commit mark is written then the status word must have been updated).**
+
+The logging process is described as follows: When a transaction intends to update the database, it generates a log frame
+which describes the update in the header, with the after-image of the update in the payload. Updates to the database is 
+also reflected to the DRAM copy to allow more efficient reads, because otherwise all readers have to first check the 
+log to see if newer updates are present (I think on SQLite sebsite they are saying the opposite, i.e. readers must check
+the journal for newer updates. The paper, nevertheless, does not mention this). 
