@@ -34,7 +34,8 @@ function getAjax(url, success) {
 
 xhr = getAjax("https://github.com/users/wangziqi2013/contributions",
               function(text) {
-                var contri_div = text.getElementsByTagName("body");
+                //var contri_div = text.getElementsByTagName("body");
+                var contri_div = text.getElementsByClassName("js-calendar-graph");
                 if(contri_div.length != 1) {
                   setContributionError("Could not find contribution graph <div>");
                   return;
@@ -137,6 +138,7 @@ function onMouseClick(e) {
   getAjax("https://github.com/users/wangziqi2013/created_commits?from=" + date + "&to=" + date,
           function(text) {
             var body = text.getElementsByTagName("body");
+
             if(body.length != 1) {
               setContributionError("Could not find contribution detail body");
               return;
