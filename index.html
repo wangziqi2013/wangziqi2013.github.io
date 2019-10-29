@@ -11,7 +11,7 @@ function setContributionError(err_str) {
 function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     // Use a CORS proxy to build the URL
-    url = "https://crossorigin.me/" + url;
+    url = "https://cors-anywhere.herokuapp.com/" + url;
     xhr.open('GET', url, true);
     xhr.responseType = "document";
     xhr.onreadystatechange = function() {
