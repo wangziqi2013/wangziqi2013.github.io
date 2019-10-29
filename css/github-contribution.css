@@ -17,3 +17,8 @@
 .svg-tip.comparison li:last-child{border-top:3px solid #2188ff}.svg-tip-one-line{white-space:nowrap}
 
 .svg-tip .date{color:#fff}
+
+/* 2019.10.29 Newly added to adapt to the changes */
+.text-normal{font-weight:400!important}
+.mb-2{margin-bottom:8px!important}
+.f4{font-size:16px!important}@media (min-width:768px){.f4{font-size:16px!important}}
