@@ -8,10 +8,13 @@ function setContributionError(err_str) {
   return;
 }
 
+// This line defines the address of the cors server; change this line if the server no longer works
+CORS_SERVER = "https://cors-anywhere.herokuapp.com/";
+
 function getAjax(url, success) {
     var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     // Use a CORS proxy to build the URL
-    url = "https://cors-anywhere.herokuapp.com/" + url;
+    url = CORS_SERVER + url;
     xhr.open('GET', url, true);
     xhr.responseType = "document";
     xhr.onreadystatechange = function() {
