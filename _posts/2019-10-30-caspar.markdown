@@ -97,3 +97,12 @@ is serialized, in which situation it seems unnecessary to validate against the a
 value, in fact, the forwarded value does not always match the final CAS'ed result, due to factors such as branch 
 misspeculation. The paper notes that in most cases the forwarded value passes the validation, resulting in low abort
 rate and increased throughput.
+
+The paper at the end also proposes parallel validation, which enables multiple pending speculations to be validated in
+parallel rather than having the previous CAS sending the non-speculative value to the next CAS, unnecessarily serializing
+the validation process. Parallel validation works as follows. First, recall that when a core forwards the after-value of
+its CAS to the directory, the value will be saved into the corresponding entry of the queue. Second, the necessary condition
+for a speculation to be committed is that: (1) the previous CAS also commits, because otherwise the forwarded after-value
+is produced out of nowhere; (2) the current CAS must have used the correct value, i.e. the forwarded value must
+agree with the after-value in the memory after the CAS has completed. Instead of letting the receiver of the cache line 
+validate its speculation, the parallel validation algorithm
