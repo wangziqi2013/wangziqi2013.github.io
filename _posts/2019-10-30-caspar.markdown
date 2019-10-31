@@ -31,4 +31,7 @@ relies on the fact that in some commonly used lock-free data structures, such as
 is used to append a new node into the structure. First, a new node is allocated and its content is initialized. The partial
 state of this step is not visible to other cores, since this happens in the execution stack of the current thread. Second,
 the head pointer of the structure is read into a local variable, H. Thrid, we set the "next" pointer of the newly allocated
-node to the value stored in H. 
+node to the value stored in H. In the last step, a CAS is executed using H as the old value and the newly allocated object
+as the new value, which (hopefully) adds the new object before the previous object in the head. If an intervening thread
+executes its CAS before the current thread does, changing the value of the head pointer, the CAS of the current thread
+will fail, which results in one or more retries. 
