@@ -16,9 +16,9 @@ version_mgmt:
 **I don't quite buy the argument that forwarding to a CAS whose new depends on old will squash the previous CAS. If the 
 new is dependent on the old, this means the second CAS will read a value from the forwarded old pointer. Under the context
 of the first CAS, this means the second CAS will read a value from the new pointer. I cannot see how this can introduce
-data conflicts, as speculation begins only after the TL, but the new node is allocated before TL is executed, in the case
-of a push, or the new node is derived from the old pointer and not read/written at all. In neither of them the 
-speculation of the first CAS-pattern will conflict with the second CAS.**
+data conflicts, as speculation begins only after the TL, but the new node is allocated before TL is executed in the case
+of a push, or the new node is derived from the old pointer and not read/written at all in the case of a pop. In neither 
+case, the speculation of the first CAS-pattern will conflict with the second CAS.**
 
 This paper proposes CASPAR, a novel cache coherence extension to support efficient serialization based on Compare-And-Swap 
 (CAS) primitives. CAS is often used as the synchronization primitive in lock-free programming. Threads access an object 
@@ -81,4 +81,15 @@ in which case the directory removes the current owner from the head of the queue
 processor which becomes the new queue head. 
 
 CASPAR further extends the above architecture to support speculative execution of CAS-patterns by adding the second hardware
-component for eager forwarding of CAS after-values and post-CAS validation. 
+component for eager forwarding of CAS after-values and post-CAS validation. When a CAS insrruction is added into the ROB, we 
+collect its operands as soon as possible when the operands are ready, and then send the "new" operand of CAS to the directory
+via a special forwarding message. The directory will save this forwarded value (in word granularity) into the corresponding 
+entry of the hardware queue, and in the meantime, transfers the value also to the next entry in the queue, if there is one.
+On receiving the forwarded value from the directory, the core stalling on the acquisition of the variable (since it is 
+in the hardware queue) will unblock and enters speculative mode using the forwarded value as the value of the CAS variable.
+During speculation, any data conflict, cache overflow, exception or other unrecoverable events will cause speculation to
+fail, after which the core will fall back to serial execution of CAS. The speculation commits when the previous core's CAS
+completes, at which time the cache line is released. In this case, the directory will forward the cache line to the next
+core in the queue. The receiver of the cache line will validate the execution by comparing the earlier forwarded
+value with the actual value in the cache line (the offset is contained in the forwarded message). If these two values match,
+speculation commits. Otherwise, it will abort and retry from the TL instruction.
