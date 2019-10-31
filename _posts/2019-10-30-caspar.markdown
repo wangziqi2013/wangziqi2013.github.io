@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "CASPAR: Breaking Serialization in Lock-Free Multicore Synchronization"
+date:   2019-10-30 20:19:00 -0500
+categories: paper
+paper_title: "CASPAR: Breaking Serialization in Lock-Free Multicore Synchronization"
+paper_link: https://dl.acm.org/citation.cfm?id=2872400
+paper_keyword: CAS; Cache Coherence; CASPAR; Synchronization; Lock-Free
+paper_year: ASPLOS 2016
+rw_set: 
+htm_cd: 
+htm_cr: 
+version_mgmt: 
+---
