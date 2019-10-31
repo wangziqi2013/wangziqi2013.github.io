@@ -66,3 +66,12 @@ exclusive mode, expecting a CAS to later update the line. Before the AC is clear
 for an extended period, and the cache controller will reject all requests for the line from othe cores. To avoid deadlock,
 the cache controller only holds the line for a limited number of cycles. The line will be released after a timeout to
 allow other processors proceeding with the line.
+
+On the directory side, when a read-exslusive request is received by the directory, it adds the identity of the core into
+a hardware queue, which buffers all current requestors for the same line (there can be multiple queues, each for a certain
+address). Requests are not served before the current owner of the line completes its CAS and releases ownership of the line,
+in which case the directory removes the current owner from the head of the queue, and forwards the line to the next 
+processor which becomes the new queue head. 
+
+CASPAR further extends the above architecture to support speculative execution of CAS-patterns by adding the second hardware
+component for eager forwarding of CAS after-values and post-CAS validation. 
