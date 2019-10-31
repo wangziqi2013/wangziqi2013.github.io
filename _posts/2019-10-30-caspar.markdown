@@ -35,3 +35,8 @@ node to the value stored in H. In the last step, a CAS is executed using H as th
 as the new value, which (hopefully) adds the new object before the previous object in the head. If an intervening thread
 executes its CAS before the current thread does, changing the value of the head pointer, the CAS of the current thread
 will fail, which results in one or more retries. 
+
+The paper optimizes the above process based on the observation that thew "new" value is in fact independent from the "old"
+value of the CAS, and is available even before the old value is read from the head pointer. The second important observation
+is that, if all CASs are serialized by the hardware, then the "new" value of the current CAS instance will be the "old"
+value of the next CAS. On the other hand, 
