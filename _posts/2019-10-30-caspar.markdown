@@ -39,4 +39,6 @@ will fail, which results in one or more retries.
 The paper optimizes the above process based on the observation that thew "new" value is in fact independent from the "old"
 value of the CAS, and is available even before the old value is read from the head pointer. The second important observation
 is that, if all CASs are serialized by the hardware, then the "new" value of the current CAS instance will be the "old"
-value of the next CAS. On the other hand, 
+value of the next CAS. On the other hand, if CASs are serialized by hardware, the next CAS will not be able to know
+its "old" value before the previous CAS finishes (at which time the after-value of the previous CAS is released to the 
+cache hierarchy and acquired by the next CAS).
