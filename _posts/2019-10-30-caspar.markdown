@@ -42,3 +42,12 @@ is that, if all CASs are serialized by the hardware, then the "new" value of the
 value of the next CAS. On the other hand, if CASs are serialized by hardware, the next CAS will not be able to know
 its "old" value before the previous CAS finishes (at which time the after-value of the previous CAS is released to the 
 cache hierarchy and acquired by the next CAS).
+
+This paper breaks the serialization effect of CAS instructions described above using two techniques. First, a special
+piece of hardware is added both per-core and per-directory to serialize the execution of CAS instructions globally,
+reducing the chance of CAS failures due to contending threads. Second, instead of using cache coherent memory as the 
+only channel for passing values from a core to another (particularly, the after-value of CAS), a new eager forwarding 
+channel is added, the purpose of which is to pass the after-value of a previous CAS to the next core executing a CAS 
+before the first CAS is even executed. By doing so, the second CAS-pattern (i.e. from the reading of the head variable to
+the CAS) can be executed speculatively, only to be validated later after the first CAS instruction has committed with a
+non-speculative after-value, overlapping these CAS-patterns which results in increased parallelism. 
