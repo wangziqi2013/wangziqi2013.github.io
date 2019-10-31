@@ -12,3 +12,13 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes CASPAR, a novel cache coherence extension to support efficient serialization based on Compare-And-Swap 
+(CAS) primitives. CAS is often used as the synchronization primitive in lock-free programming. Threads access an object 
+using a pointer P optimistically, assuming that no interleaving thread will change the state half way during the read. 
+Updates are made to the object by creating a new object, and using CAS with the old value of the pointer used to access
+the object to atomically swap the new object to the pointer P. The paper identifies that lock-free programs written this
+way often suffer from limited scalability for two reasons. First, when the level of contention is high, the CAS is likely
+to fail by not observing another thread's intervening update. To deal with such failure, programmers typically use a 
+CAS loop to retry the read and update process, which only worsens contention on the variable, since threads will likely 
+to spin for multiple rounds before the CAS eventually succeeds. 
