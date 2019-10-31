@@ -25,3 +25,10 @@ to spin for multiple rounds before the CAS eventually succeeds. Second, due to t
 holding the variable to be acquired in exclusive ownership, this will essentially serialize the acquisition of the cache
 line containing the variable globally. A CAS cannot complete before the previous owner of the cache line finishes CAS
 and releases the line. 
+
+This paper proposes a hardware architecture to accelerate CAS execution on directory-based multicore systems. The proposal
+relies on the fact that in some commonly used lock-free data structures, such as stacks, queues, etc., the following pattern 
+is used to append a new node into the structure. First, a new node is allocated and its content is initialized. The partial
+state of this step is not visible to other cores, since this happens in the execution stack of the current thread. Second,
+the head pointer of the structure is read into a local variable, H. Thrid, we set the "next" pointer of the newly allocated
+node to the value stored in H. 
