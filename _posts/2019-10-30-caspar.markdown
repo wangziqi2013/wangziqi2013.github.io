@@ -105,4 +105,13 @@ its CAS to the directory, the value will be saved into the corresponding entry o
 for a speculation to be committed is that: (1) the previous CAS also commits, because otherwise the forwarded after-value
 is produced out of nowhere; (2) the current CAS must have used the correct value, i.e. the forwarded value must
 agree with the after-value in the memory after the CAS has completed. Instead of letting the receiver of the cache line 
-validate its speculation, the parallel validation algorithm
+validate its speculation, the parallel validation algorithm follows a Two-Phase Commit protocol to distributedly validate 
+on the sender side. To elaborate: Since the directory knows the speculative after-value of every core in the queue, it
+sends a "prepare" message to each core in the queue with the speculative after-value of that core. The core performs a
+local validate by checking (1) whether its CAS has completed; and (2) whether the after-value of the CAS matches the 
+value in the "prepare" message. For cores that pass the check, they stop processing instructions and coherence messages, 
+and enter a quiescent state to avoid unexpected abort. Then these cores reply to the directory indicating that they have 
+passed the test. For those that failed the test, they can execute normally and simply reply check failed. The directory,
+upon receiving all replies, commits core P(i+1), if P(i) has passed validation and P(i+1) itself have finished the CAS.
+Other cores are not affected (the paper does not mention how to abort in this case) except that they unblock (if blocked)
+and resume execution. They will be validated either serially, or in the later batchs.
