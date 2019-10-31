@@ -57,4 +57,7 @@ The first component in CASPAR is efficient hardware detection and serialization 
 acheive this, every core is extended with a small fully associative buffer that records operand addresses of failed CAS 
 instructions. A new adddress is inserted into this buffer when the number of failed CAS instructions exceed a certain threshold
 on this core during a time period. Entries are removed if they have not been accessed by CAS for a while. Then, for 
-every load instruction, this buffer is searched to see whether a load accessed an address recorded in the buffer. 
+every load instruction, this buffer is searched to see whether a load accessed an address recorded in the buffer. If true,
+the load is identified as the beginning of a CAS-pattern, and the address is identified as the target address of the  
+current ongoing CAS-pattern, called Active CAS (AC), which is stored in a register. The AC register will be cleared after
+the commit of a CAS instruction on that address. There can be only one AC at any moment during execution.
