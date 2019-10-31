@@ -50,4 +50,11 @@ only channel for passing values from a core to another (particularly, the after-
 channel is added, the purpose of which is to pass the after-value of a previous CAS to the next core executing a CAS 
 before the first CAS is even executed. By doing so, the second CAS-pattern (i.e. from the reading of the head variable to
 the CAS) can be executed speculatively, only to be validated later after the first CAS instruction has committed with a
-non-speculative after-value, overlapping these CAS-patterns which results in increased parallelism. 
+non-speculative after-value, overlapping these CAS-patterns which results in increased parallelism. We describe these 
+two mechanisms in details below.
+
+The first component in CASPAR is efficient hardware detection and serialization of contending CAS instructions. To
+acheive this, every core is extended with a small fully associative buffer that records operand addresses of failed CAS 
+instructions. A new adddress is inserted into this buffer when the number of failed CAS instructions exceed a certain threshold
+on this core during a time period. Entries are removed if they have not been accessed by CAS for a while. Then, for 
+every load instruction, this buffer is searched to see whether a load accessed an address recorded in the buffer. 
