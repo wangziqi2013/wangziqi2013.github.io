@@ -18,7 +18,7 @@ new is dependent on the old, this means the second CAS will read a value from th
 of the first CAS, this means the second CAS will read a value from the new pointer. I cannot see how this can introduce
 data conflicts, as speculation begins only after the TL, but the new node is allocated before TL is executed, in the case
 of a push, or the new node is derived from the old pointer and not read/written at all. In neither of them the 
-speculation of the first CAS-pattern will conflict with the second CAS**
+speculation of the first CAS-pattern will conflict with the second CAS.**
 
 This paper proposes CASPAR, a novel cache coherence extension to support efficient serialization based on Compare-And-Swap 
 (CAS) primitives. CAS is often used as the synchronization primitive in lock-free programming. Threads access an object 
