@@ -21,4 +21,7 @@ the object to atomically swap the new object to the pointer P. The paper identif
 way often suffer from limited scalability for two reasons. First, when the level of contention is high, the CAS is likely
 to fail by not observing another thread's intervening update. To deal with such failure, programmers typically use a 
 CAS loop to retry the read and update process, which only worsens contention on the variable, since threads will likely 
-to spin for multiple rounds before the CAS eventually succeeds. 
+to spin for multiple rounds before the CAS eventually succeeds. Second, due to the fact that CAS will cause the cache line
+holding the variable to be acquired in exclusive ownership, this will essentially serialize the acquisition of the cache
+line containing the variable globally. A CAS cannot complete before the previous owner of the cache line finishes CAS
+and releases the line. 
