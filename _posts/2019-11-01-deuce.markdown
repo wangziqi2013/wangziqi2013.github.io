@@ -29,4 +29,9 @@ of cache line size, and then XOR'ing the content of the line with the OTP. The g
 the line and the line's counter value, and a secret key which is assumed to be stored securely, which are then sent to 
 an AES encoder to generate the OTP. The property of AES guarantees that it is almost impossible to guess the value 
 of the OTP without knowing the secret key, which makes the NVM device secure. Counters are incremented when they are 
-used to generate the OTP, making sure that for each write, the value of the OTP is almost always different. 
+used to generate the OTP, making sure that for each write, the value of the OTP is almost always different. The counter 
+value on the NVM must also be updated when writing back the line, because otherwise it would be impossible to decrypt the
+line when it is fetched. The hardware must guarantee in some way that the counter and data are updated atomically. On 
+reading a line from the NVM, the device generates the OTP in the same manner as in the case of a write. The generation 
+of OTP can also be overlapped with NVM read, given that the counter is read first. Cache line data is decrypted by
+simply XOR'ing the line with the generated OTP.
