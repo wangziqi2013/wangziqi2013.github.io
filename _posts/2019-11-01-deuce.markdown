@@ -25,5 +25,8 @@ DEUCE is based on counter mode encryption, which protects the content stored on 
 party. Counter mode encryption works as follows. At initialization time, every cache line is assigned a counter value.
 These counter values are stored in a separate region on the NVM, and must be kept consistent with the data area. When
 a line is evicted back to the NVM, the memory controller encrypts the cache line by first generating a one-time pad (OTP)
-of cache line size, and then XOR'ing the content of the line with the OTP. The generation of OPT takes both the 
-address of the line and the line's counter value, which are 
+of cache line size, and then XOR'ing the content of the line with the OTP. The generation of OPT takes the address of 
+the line and the line's counter value, and a secret key which is assumed to be stored securely, which are then sent to 
+an AES encoder to generate the OTP. The property of AES guarantees that it is almost impossible to guess the value 
+of the OTP without knowing the secret key, which makes the NVM device secure. Counters are incremented when they are 
+used to generate the OTP, making sure that for each write, the value of the OTP is almost always different. 
