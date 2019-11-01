@@ -12,3 +12,12 @@ htm_cd:
 htm_cr: 
 version_mgmt: 
 ---
+
+This paper proposes DEUCE, a framework that provides cache line encryption capability to NVM via counter mode encryption.
+The paper identifies that in a standard counter mode encryption scheme, approximately half of the bits will be updated,
+resulting in more power consumption and wear. The problem can be solved if only updated data is encrypted, which affects
+a smaller set of bits per cache line. In addition, the paper also identifies that when performing writes, some bits are 
+flipped more frequently than others, resulting in uneven wear within a cache line. Such uneven wear cannot be allievated by
+regular wear leveling schemes, since these scheme operate on cache line granularity (or larger). If a single bit in the 
+cache line wears out, the entire storage unit for wear leveling will need to be marked as "bad".
+
