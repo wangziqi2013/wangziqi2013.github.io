@@ -21,3 +21,9 @@ flipped more frequently than others, resulting in uneven wear within a cache lin
 regular wear leveling schemes, since these scheme operate on cache line granularity (or larger). If a single bit in the 
 cache line wears out, the entire storage unit for wear leveling will need to be marked as "bad".
 
+DEUCE is based on counter mode encryption, which protects the content stored on the NVM from being leaked to a third 
+party. Counter mode encryption works as follows. At initialization time, every cache line is assigned a counter value.
+These counter values are stored in a separate region on the NVM, and must be kept consistent with the data area. When
+a line is evicted back to the NVM, the memory controller encrypts the cache line by first generating a one-time pad (OTP)
+of cache line size, and then XOR'ing the content of the line with the OTP. The generation of OPT takes both the 
+address of the line and the line's counter value, which are 
