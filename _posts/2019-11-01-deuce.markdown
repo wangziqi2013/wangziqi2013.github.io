@@ -5,7 +5,7 @@ date:   2019-11-01 11:34:00 -0500
 categories: paper
 paper_title: "DEUCE: Write-Efficient Encryption for Non-Volatile Memories"
 paper_link: https://dl.acm.org/citation.cfm?id=2694387
-paper_keyword: NVM; Counter Mode Encryption
+paper_keyword: NVM; Counter Mode Encryption; DEUCE
 paper_year: ASPLOS 2015
 rw_set: 
 htm_cd: 
@@ -35,3 +35,15 @@ line when it is fetched. The hardware must guarantee in some way that the counte
 reading a line from the NVM, the device generates the OTP in the same manner as in the case of a write. The generation 
 of OTP can also be overlapped with NVM read, given that the counter is read first. Cache line data is decrypted by
 simply XOR'ing the line with the generated OTP.
+
+The paper observes that even if only a single bit in the line is changed between a read and write (from/to the device), 
+this encryption mode will in average flip half of the bits in the cache line (which is the exact purpose of encryption).
+Compared with writing back without encryption, this causes more power to be dedicated to changing the bit on physical 
+hardware. 
+
+DEUCE reduces the number of bits that have to be flipped by using two counters, one trailing counter for encrypting data 
+that has not been changed, and another leading counter for encrypting data that has been modified. The trailing counter 
+can be derived from the leading counter, and changes rather infrequently. When a write back happens, we first check whether 
+the trailing counter will change from the last time. If not, then only dirty data needs to be encrypted, since neither the 
+tailing counter nor the address of the cache line will cause a change of the OTP. 
+
