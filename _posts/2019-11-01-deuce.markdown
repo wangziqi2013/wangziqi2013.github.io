@@ -52,4 +52,17 @@ metadata of the line. In addition, we also add a bit array to each line for reco
 the the entire cache line (e.g. 4 bytes). On every write operation on the line, the affected bits in the bit vector is set.
 When the line is to be written out, it does the following. First, the counter of the line is incremented. Then, we drive the
 leading counter and trailing counter described in the previous paragraph as follows. The leading counter is simply the 
-current line counter. 
+current line counter. The trailing counter is derived by masking off the least significant K bits of the line counter. 
+Masking off K bits means that the tailing counter will only change once for every 2^K writes. In the case that it does 
+not change, the cache controller simply reads the dirty data bit vector, and encrypts dirty data only. The encrypted 
+dirty data is then merged with the rest of the line, and written back to the NVM together with the updated counter value.
+If, on the other hand, the trailing counter value changes, the current non-dirty data must be re-encrypted, as we do not
+save the trailing counter, but only derive it from the line counter the next time the line is read. Not re-encrypting the 
+cache line will lead to corrupted data, since when the line is read back in, the derived trailing counter would 
+be different from the one used to encode it. The re-encryotion consists of one decryption and one encryption, which has 
+longer latency. Fortunately, as the number of bits K increases, it becomes more and more infrequent for this to happen. 
+In order for the decryptor to know which bytes to decrypt, when the cache line is written back, the bit vector is also
+persisted to the NVM atomically with the write. The next time this line is accessed, we read both the data and bit vector.
+The hardware decryptor generates two OTPs, one using the leading counter, and one using the trailing counter. The 
+decryptor then uses the bit vector to decide which OTP should be used to decode which bytes, which is the exact reverse
+of data encryption.
