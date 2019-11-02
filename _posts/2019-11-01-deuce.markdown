@@ -47,3 +47,9 @@ can be derived from the leading counter, and changes rather infrequently. When a
 the trailing counter will change from the last time. If not, then only dirty data needs to be encrypted, since neither the 
 tailing counter nor the address of the cache line will cause a change of the OTP. 
 
+DEUCE works as follows. Just like single counter encryption schemes, one counter per cache line is maintained as the 
+metadata of the line. In addition, we also add a bit array to each line for recording dirty status in a smaller granularity
+the the entire cache line (e.g. 4 bytes). On every write operation on the line, the affected bits in the bit vector is set.
+When the line is to be written out, it does the following. First, the counter of the line is incremented. Then, we drive the
+leading counter and trailing counter described in the previous paragraph as follows. The leading counter is simply the 
+current line counter. 
