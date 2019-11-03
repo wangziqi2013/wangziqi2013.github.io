@@ -58,4 +58,13 @@ and then commit the read phase. This way the read is guaranteed to be atomic wit
 all reads performed within the hardware transaction area are also considered as atomic at the commit point, which 
 eliminates read validation entirely. Second, if the write phase of transactions can also be made atomic, then we do not 
 have to maintain a write log (read logs are already eliminated by making read atomic, since reads no longer require
-validation), since the hardware will buffer writes. 
+validation), since the hardware will buffer writes. We now describe the three types of transactions in hardware NORec
+with different degrees of atomicity provided by hardware.
+
+The first type of pure hardware transaction, which contains both reads and writes. In the pure hardware transaction,  
+all reads and writes within the transaction can be considered as happened at the time of the transaction commit, given
+that no conflict is detected. To synchronize properly with software NORec, the commit should not happen when a 
+software transaction is currently committing, because otherwise it is possible that the write set of the hardware 
+NORec transaction overlaps with both the read and write set of the software transaction, causing a dependency cycle. 
+To achieve this, the hardware transaction first checks whether the global clock is locked before it commits. If positive,
+the hardware transaction will abort. 
