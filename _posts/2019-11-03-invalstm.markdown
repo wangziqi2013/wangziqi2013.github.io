@@ -5,7 +5,7 @@ date:   2019-11-03 15:58:00 -0500
 categories: paper
 paper_title: "An Efficient Software Transactional Memory Using Commit-Time Invalidation"
 paper_link: https://dl.acm.org/citation.cfm?id=1772970
-paper_keyword: STM; InvalTM; FOCC
+paper_keyword: STM; InvalSTM; FOCC
 paper_year: CGO 2010
 rw_set: Bloom Filter
 htm_cd: FOCC
@@ -13,3 +13,9 @@ htm_cr: FOCC
 version_mgmt: Lazy
 ---
 
+This paper presents InvalSTM, an STM design based on forward optimistic co currency control (FOCC). The paper identifies
+a few problems with commonly used concurrency scheme, BOCC, which is based on validation. First, BOCC only validates the 
+committing transaction against committed transactions that can overlap its execution. If the write set of any of the 
+overlapping transactions overlaps with the read set of the committing transaction, the latter has no choice but abort,
+since otherwise we violate the commit order. One consequence of this process is that a writing transaction to address X
+can abort all overlapping reading transactions on address X, making this scheme unfriendly for readers. 
