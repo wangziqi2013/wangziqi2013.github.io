@@ -25,5 +25,11 @@ and retry.
 
 Hardware NORec is based on NORec, a previously proposed pure software TM scheme. NORec eliminates the requirement for 
 having a direct-mapped or hashed metadata field for every accessing unit (i.e. the unit of version management and conflict
-detection) by using a global counter for serialization, and by using value validation. 
-
+detection) by using a global counter for serialization, and by using value validation. The global counter is consists of 
+two fields. The first one bit field on the highest bit is a lock bit, which indicates whether some transaction is currently 
+committing. The second field is a version field, which indicates the current read version, which is also the most up-to-date 
+committed version. The counter is stored in globally accessible memory as a properly aligned machine word, such that the 
+value of the counter can be loaded and atomically swapped using special instructions in the ISA. NORec works as follows. 
+First, on transaction begin, the transaction reads the global counter and saves its value into a local variable as the 
+local counter. Then, for every read operation, the instrumented code loads the value from memory, and checks whether the 
+current value of the clock equals the local counter, and that whether the global clock is unlocked. 
