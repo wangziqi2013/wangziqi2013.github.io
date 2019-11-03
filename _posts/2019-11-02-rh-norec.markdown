@@ -12,6 +12,10 @@ htm_cd: Hybrid
 htm_cr: Hybrid
 version_mgmt: Hybrid
 ---
+**To summarize: NORec family transactional memory has two invariants:
+
+1. Any update to shared data must be reflected on incrementing of the global counter;
+2. Writes must be serialized, i.e. write stages must not overlap.**
 
 This paper presents hardware NORec, a hybrid transactional memory design based on the lightweight NORec. The paper identifies
 that some aspects in STM design will cause slowdown of execution, making single thread performance of STM several times slower
@@ -61,7 +65,7 @@ have to maintain a write log (read logs are already eliminated by making read at
 validation), since the hardware will buffer writes. We now describe the three types of transactions in hardware NORec
 with different degrees of atomicity provided by hardware.
 
-The first type of pure hardware transaction, which contains both reads and writes. In the pure hardware transaction,  
+The first type is pure hardware transaction, which contains both reads and writes. In the pure hardware transaction,  
 all reads and writes within the transaction can be considered as happened at the time of the transaction commit, given
 that no conflict is detected. To synchronize properly with software NORec, the commit should not happen when a 
 software transaction is currently committing, because otherwise it is possible that the write set of the hardware 
@@ -71,4 +75,14 @@ the hardware transaction will abort. Otherwise, the transaction increments the g
 As an optimization, the hardware transaction should also check whether any software transaction is currently running. If 
 negative (which also adds the counter of software transaction into the read set, such that if any software transaction
 joins, the hardware transaction will abort), then no increment to the global clock is needed, since no software transaction
-will observe these changes anyway. 
+will observe these changes anyway. The global clock increment before transaction begin is necessary to ensure that
+software transaction can detect a clock change and then validate its read set.
+
+The second type of transaction is the non-atomic read but atomic write type. In such a transaction, the read phase is 
+entirely performed in software by instrumentation. The transaction begins as in NORec by reading the current value
+of the global clock and saving it as the local clock. Every read operation must therefore first access memory
+and then check whether the two clocks still match. In the case of a change, the current transaction will abort without
+causing value validation, since in this scheme no read log is maintained. In this stage, both committed hardware and software
+transaction will cause the check to fail. The transaction switches to write mode when the first write is issued. In this 
+case, the transaction acquires the global clock using a compare-and-swap with value of the local clock as the old,
+and the local clock with the bit set as new. This CAS serves two purposes atomically. 
