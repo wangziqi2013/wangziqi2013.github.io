@@ -32,4 +32,9 @@ committed version. The counter is stored in globally accessible memory as a prop
 value of the counter can be loaded and atomically swapped using special instructions in the ISA. NORec works as follows. 
 First, on transaction begin, the transaction reads the global counter and saves its value into a local variable as the 
 local counter. Then, for every read operation, the instrumented code loads the value from memory, and checks whether the 
-current value of the clock equals the local counter, and that whether the global clock is unlocked. 
+current value of the clock equals the local counter, and that whether the global clock is unlocked. If true, then the read 
+succeeds, because at the time of the read (actually slightly longer, since the check is performed after the load), no
+transaction has committed yet. Otherwise, the transaction must either abort, or perform value-based validation. The 
+value read by load instructions must also be stored in a read log in order to be later used by value validation. On transaction
+writes, the value is inserted into a local write log, which is not published to shared memory until transaction commit.
+On transaction commit, the transaction first locks the global clock by atomically swapping and setting the locked bit.
