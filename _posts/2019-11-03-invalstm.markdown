@@ -83,5 +83,13 @@ acquired, and then the read is performed after setting the bloom filter. The loc
 For both reads and writes, the transaction should also check its "valid" bit in the descriptor, and abort if this bit is 
 cleared. 
 
-On transaction validation, the commit lock and in-flight lock are both acquired.
-Then the validating transaction acquires all private locks of all active transactions in the in-flight list.
+On transaction validation, the commit lock and in-flight lock are both acquired. The validating transaction first validates 
+itself by checking whether the "valid" bit is still on. Then the validating transaction acquires all private locks of all 
+active transactions in the in-flight list. This blocks all active transactions from making any progress until the commit 
+or abort. Next, the validating transaction performs a bitwise AND between its write set and the read sets of all active 
+transactions. Should any non-empty intersection occurs, the identity of conflicting transactions and the current transaction 
+are sent to the contention manager for conflict resolution. The contention manager can choose to abort the validating 
+transaction or to abort all conflicting transactions. In the latter case, the "valid" bit of these transactions will be 
+cleared, such that they will abort in the next read/write or validate operation. On validation success, the transaction
+will iterate over its write set, and apply all changes made earlier to shared memory. The commit finishes by releasing all
+acquired locks.
