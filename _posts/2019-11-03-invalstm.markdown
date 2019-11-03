@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "An Efficient Software Transactional Memory Using Commit-Time Invalidation"
+date:   2019-11-03 15:58:00 -0500
+categories: paper
+paper_title: "An Efficient Software Transactional Memory Using Commit-Time Invalidation"
+paper_link: 
+paper_keyword: STM; InvalTM; FOCC
+paper_year: CGO 2010
+rw_set: Bloom Filter
+htm_cd: FOCC
+htm_cr: FOCC
+version_mgmt: Lazy
+---
+
