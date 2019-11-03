@@ -13,3 +13,10 @@ htm_cr: Hybrid
 version_mgmt: Hybrid
 ---
 
+This paper presents hardware NORec, a hybrid transactional memory design based on the lightweight NORec. The paper identifies
+that some aspects in STM design will cause slowdown of execution, making single thread performance of STM several times slower
+than non-instrumented execution. For example, NORec requires every transactional load and store be instrumented, in order 
+to maintain a read and write set for the transaction. This causes notable instruction explosion and metadata overhead, which
+decreases both the IPC due to excessive cache misses (both icache and dcache since instruction traces are also larger),
+and instruction throughput. 
+
