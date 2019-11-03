@@ -65,4 +65,12 @@ Note that the lock cannot be released before actual value commit, because otherw
 the serialization order by overwriting a value written by the former transaction. Second, a in-flight transaction linked list
 and an associated lock work together to serialize transaction begin with transaction validation and commit. Both the 
 commit lock and the in-flight lock are acquired before a transaction can proceed to validate. On the other hand, transactions 
-acquire the in-flight lock when they begin and removes themselves when they abort or are committed. 
+acquire the in-flight lock when they begin and removes themselves when they abort or are committed. Third, each transaction
+has a private transaction descriptor, which contains the following: A "valid" flag to indicate whether the transaction
+has been aborted by a validating transaction; A read-set and write-set implemented as fixed-length bloom filters. Using
+bloom filter for conflict detection makes validation a constant time operation, while making transactions vulnerable
+to false conflicts induced by address aliasing. In addition, each transaction has a private lock which is used to synchronize
+between the validation transaction and transactional reads. A hash table buffers new addresses for the write set, which
+is copied to the intended address on transaction commit.
+
+
