@@ -85,4 +85,12 @@ and then check whether the two clocks still match. In the case of a change, the 
 causing value validation, since in this scheme no read log is maintained. In this stage, both committed hardware and software
 transaction will cause the check to fail. The transaction switches to write mode when the first write is issued. In this 
 case, the transaction acquires the global clock using a compare-and-swap with value of the local clock as the old,
-and the local clock with the bit set as new. This CAS serves two purposes atomically. 
+and the local clock with the bit set as new. This CAS serves two purposes atomically. First, it checks that the read image
+has not changed at the point of the CAS by comparing the value of the two clocks. Second, it ensures that no changes to 
+the entire address space can be made after the CAS by setting the lock bit. Then, all loads and stores can be executed 
+directly on the memory address without having to check the clock and to insert entries into the log. The transaction commits
+by committing the hardware transaction, which publishes all writes to global memory. 
+
+The last type of transaction is atomic read and atomic write, provisioned by two independent hardware transactions. It further
+optimizes over the previous type on read abort rate, since in the non-atomic read type, every read instruction still has 
+to check the value of the global clock to ensure atomicity in software. 
