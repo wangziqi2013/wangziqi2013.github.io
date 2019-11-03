@@ -67,4 +67,8 @@ that no conflict is detected. To synchronize properly with software NORec, the c
 software transaction is currently committing, because otherwise it is possible that the write set of the hardware 
 NORec transaction overlaps with both the read and write set of the software transaction, causing a dependency cycle. 
 To achieve this, the hardware transaction first checks whether the global clock is locked before it commits. If positive,
-the hardware transaction will abort. 
+the hardware transaction will abort. Otherwise, the transaction increments the global clock (unlocked), and then commits. 
+As an optimization, the hardware transaction should also check whether any software transaction is currently running. If 
+negative (which also adds the counter of software transaction into the read set, such that if any software transaction
+joins, the hardware transaction will abort), then no increment to the global clock is needed, since no software transaction
+will observe these changes anyway. 
