@@ -23,4 +23,7 @@ serving as the serialization point for concurrent transaction. A reader transact
 load to maintain opacity. If the check fails, meaning that the transaction may access inconsistent data, it must abort 
 and retry.
 
+Hardware NORec is based on NORec, a previously proposed pure software TM scheme. NORec eliminates the requirement for 
+having a direct-mapped or hashed metadata field for every accessing unit (i.e. the unit of version management and conflict
+detection) by using a global counter for serialization, and by using value validation. 
 
