@@ -37,4 +37,10 @@ This paper is based on invalidiation, which performs read-write set intersection
 with transactions that have not committed, looking forward into the future). In its simplest form, a FOCC scheme does 
 not use any timestamp counter. Transactions are started by adding itself into a global list of active transactions.
 Reads and writes are performed in the same way as in a BOCC transaction, that is, wrirtes are buffered in a local hash
-table, while reads hitting the local write set will be forwarded from the write set, not read from shared memory. 
+table, while reads hitting the local write set will be forwarded from the write set, not read from shared memory. On
+transaction validation, which happens once before commit, the validating transaction checks its write set against the 
+read set of current active transactions. A conflict is detected if the read-write set intersection test results in non-empty
+set. To resolve conflicts, either the currently validating transaction aborts, or the (potentially many) conflicting 
+transactions abort, granting a degree of flexibility here. The contention manager can even let the validating transaction
+wait for the conflict transaction to commit or abort before committing it (the paper does not explore this possibility,
+though). After validation, the transaction commits by copying speculative writes into shared memory.
