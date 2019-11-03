@@ -28,4 +28,7 @@ loops, corrupted control flow, etc.. To deal with inconsistent reads, BOCC based
 to ensure that all reads are consistent with regard to transaction begin time (i.e. all reads can be logically considered
 to have happened at an atomic time when transaction begins). This incremental validation requires checking all reads in
 the current read set, resulting in an O(n^2) extra cost where n is the number of reads in a single transaction (O(n) elements 
-in the set and n checks performed, one for each read). 
+in the set and n checks performed, one for each read). The last problem is that for read-only transactions, BOCC still 
+requires a validation step, which may result in the abort of the transaction. Being able to support read-only transactions
+efficiently has been important to STM, since in fact many non-read-only transactions in its static form may turn out
+as read-only.
