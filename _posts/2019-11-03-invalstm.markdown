@@ -48,4 +48,10 @@ though). After validation, the transaction commits by copying speculative writes
 The implementation of InvalSTM is based on the above description of BOCC, with certain restrictions for simplicity.
 First, InvalSTM does not allow concurrent transaction commits. Doing so prevents committing transactions from aborting 
 each other, since a committing transaction may not know whether it has been aborted by another concurrent committing 
-transaction before the latter finishes validation, which effectively requires some form of synchronization.
+transaction before the latter finishes validation, which effectively requires some form of synchronization. Second, when
+validation is being performed on read sets of active transactions, it is required that these transactions not insert
+any new element into their read sets. Because otherwise, a transaction may proceed to read shared memory value after 
+validiation is done successfully on its read set, and before the new values are committed to shared memory. This way,
+the transaction is serialized before the committing transaction by not observing its update, but may later serialize 
+after the same transaction by overwriting a value that it wrote. The second form of serialization cannot be detected as 
+committed transactions do not save their write sets.
