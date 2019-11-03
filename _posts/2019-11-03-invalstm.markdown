@@ -18,4 +18,12 @@ a few problems with commonly used concurrency scheme, BOCC, which is based on va
 committing transaction against committed transactions that can overlap its execution. If the write set of any of the 
 overlapping transactions overlaps with the read set of the committing transaction, the latter has no choice but abort,
 since otherwise we violate the commit order. One consequence of this process is that a writing transaction to address X
-can abort all overlapping reading transactions on address X, making this scheme unfriendly for readers. 
+can abort all overlapping reading transactions on address X, making this scheme unfriendly for readers. Second, BOCC
+buffers updates to memory in its private workspace, and delays the final validation step to the commit point. Such
+lazy validation increases parallelism compared with eager conflict detection in which conflicts are detected as updates
+are made. It is, however, possible for uncommitted transaction to access inconsistent data due to concurrent read
+and commit. In other words, in BOCC, even if transactions are guranteed to be aborted if they reach the commit point,
+there is even no guarantee that this commit point will be reached eventually due to undefined behavior such as infinite 
+loops, corrupted control flow, etc.. To deal with inconsistent reads, BOCC based TM system must perform incremental validation
+to ensure that all reads are consistent with regard to transaction begin time (i.e. all reads can be logically considered
+to have happened at an atomic time when transaction begins). 
