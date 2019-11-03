@@ -38,3 +38,9 @@ transaction has committed yet. Otherwise, the transaction must either abort, or 
 value read by load instructions must also be stored in a read log in order to be later used by value validation. On transaction
 writes, the value is inserted into a local write log, which is not published to shared memory until transaction commit.
 On transaction commit, the transaction first locks the global clock by atomically swapping and setting the locked bit.
+Then a value validation is performed, if (1) the transaction is not read-only; and (2) the value of the global clock
+does not equal the value of the local counter (i.e. some transactions have committed). The value validation process iterates 
+over the read log, and compares whether the value in the read log equals the current value in shared memory. Validiation 
+succeeds if all values are idientical. The transaction finally commits by writing back all entries in the write set to 
+the shared memory. The global lock is released atomically with the clock value incremented by one. The last step can be 
+done by a single store instruction since on most platforms, an aligned store instruction is atomic. 
