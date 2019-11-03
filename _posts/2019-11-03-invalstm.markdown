@@ -62,4 +62,7 @@ join this list, since a new transaction may not be included in the validating tr
 The following data structures are used by InvalSTM. First, a global commit lock is added to serialize transaction validation
 and commit. This lock is acquired before transaction attempts to commit, and released after all updated values are written.
 Note that the lock cannot be released before actual value commit, because otherwise, a later committing transaction may violate 
-the serialization order by overwriting a value written by the former transaction.
+the serialization order by overwriting a value written by the former transaction. Second, a in-flight transaction linked list
+and an associated lock work together to serialize transaction begin with transaction validation and commit. Both the 
+commit lock and the in-flight lock are acquired before a transaction can proceed to validate. On the other hand, transactions 
+acquire the in-flight lock when they begin and removes themselves when they abort or are committed. 
