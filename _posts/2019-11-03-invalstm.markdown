@@ -53,5 +53,10 @@ validation is being performed on read sets of active transactions, it is require
 any new element into their read sets. Because otherwise, a transaction may proceed to read shared memory value after 
 validiation is done successfully on its read set, and before the new values are committed to shared memory. This way,
 the transaction is serialized before the committing transaction by not observing its update, but may later serialize 
-after the same transaction by overwriting a value that it wrote. The second form of serialization cannot be detected as 
-committed transactions do not save their write sets.
+after the same transaction by overwriting a value that it wrote, creating a dependency cycle. The second form of serialization 
+cannot be detected as committed transactions do not save their write sets. Third, in order to validate, the validating
+transaction must know the complete list of transactions that are currently active at the time it enters validation.
+This paper suggests that a linked list of transaction descriptors be used. During validation, no new transaction may
+join this list, since a new transaction may not be included in the validating transaction's list for read-write check.
+
+
