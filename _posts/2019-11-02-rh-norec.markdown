@@ -47,7 +47,15 @@ done by a single store instruction since on most platforms, an aligned store ins
 validations except the last one can be non-atomic, i.e. they can tolerate concurrent committing transactions as long as 
 the value does not change, since a non-atomic value validation only validates the transaction at the logical time
 of the first read issued as the validation check. For the last validation, concurrent committing transactions must be blocked,
-since we must guarantee that the transaction is valid during the entire write stage. Otherwise, a committing transaction may
-overwrite an item X read by the transaction, which is later written by the transaction, causing a dependency cycle as the 
-current transaction is serialized before the committing transaction by not observing its write, but in the meantime also
-serialized after that transaction by overwriting its write.
+since we must guarantee that the transaction is valid during the entire write stage. Otherwise, a committing transaction 
+may overwrite an item X read by the transaction, which is later written by the same transaction, causing a dependency cycle 
+as the current transaction is serialized before the committing transaction by not observing its write, but in the meantime 
+also serialized after that transaction by overwriting its write.
+
+The hardware NORec optimizes over NORec in two aspects. First, if the read phase of transactions can be made atomic
+via regular HTM (e.g. TSX), then what we need is to simply perform read as an atomic unit, and lock the version counter, 
+and then commit the read phase. This way the read is guaranteed to be atomic with writes, in addition to the fact that
+all reads performed within the hardware transaction area are also considered as atomic at the commit point, which 
+eliminates read validation entirely. Second, if the write phase of transactions can also be made atomic, then we do not 
+have to maintain a write log (read logs are already eliminated by making read atomic, since reads no longer require
+validation), since the hardware will buffer writes. 
