@@ -99,4 +99,6 @@ atomically at the current point in time before the transaction commit. When the 
 we first read the global clock, and then commit the read-only hardware transaction. Reading the global clock before transaction
 commit guarantees that the clock is also atomic with all loads in the transaction, i.e. they appear to happen in the same 
 logical time. Otherwise, a transaction may commit between transaction commit and the read of the global clock, making 
-reads invalid, which cannot be undetected.
+reads invalid, which cannot be detected. After that, the transaction switches mode, and begins the write transaction by
+atomically locking and validating the global clock. The write mode transaction works exactly the same as the second type,
+which has been described in the previous paragraph.
