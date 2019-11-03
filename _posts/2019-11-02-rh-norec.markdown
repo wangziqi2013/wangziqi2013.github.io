@@ -18,5 +18,9 @@ that some aspects in STM design will cause slowdown of execution, making single 
 than non-instrumented execution. For example, NORec requires every transactional load and store be instrumented, in order 
 to maintain a read and write set for the transaction. This causes notable instruction explosion and metadata overhead, which
 decreases both the IPC due to excessive cache misses (both icache and dcache since instruction traces are also larger),
-and instruction throughput. 
+and instruction throughput. What is more, the conflict resolution protocol in NORec relies on a single atomic global counter
+serving as the serialization point for concurrent transaction. A reader transaction must check the counter on every transactional
+load to maintain opacity. If the check fails, meaning that the transaction may access inconsistent data, it must abort 
+and retry.
+
 
