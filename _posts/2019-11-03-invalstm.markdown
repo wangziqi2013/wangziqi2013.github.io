@@ -93,3 +93,8 @@ transaction or to abort all conflicting transactions. In the latter case, the "v
 cleared, such that they will abort in the next read/write or validate operation. On validation success, the transaction
 will iterate over its write set, and apply all changes made earlier to shared memory. The commit finishes by releasing all
 acquired locks.
+
+For read-only transactions, no read-write test is necessary since its write set is empty. Still, the read transaction
+should acquire commit lock to check whether its "valid" bit is on, since it is possible that a validating transaction
+just invalidates this read-only transaction right before the latter decides to commit. Neither in-flight lock nor private
+locks are acquired in this case, which results in fast commit of read-only transactions. 
