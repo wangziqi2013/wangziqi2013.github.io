@@ -74,7 +74,14 @@ between the validation transaction and transactional reads. A hash table buffers
 is copied to the intended address on transaction commit.
 
 On transaction begin, the transaction first acquires the in-flight lock, and adds itself into the in-flight linked list.
-On a transactional write, values are buffered by the hash table, and the write-set bloom filter is set to reflect the 
-change. On a transactional read, the write hash table is first probed (maybe after probing the bloom filter and receiving
-a positive result) to search for dirty value written by the same transaction. If such value is found, then it is forwarded
-directly to the read without accessing global memory. 
+All metadata in the descriptor is initialized, and the "valid" bit is set. On a transactional write, values are buffered 
+by the hash table, and the write-set bloom filter is set to reflect the change. On a transactional read, the write hash 
+table is first probed (maybe after probing the bloom filter and receiving a positive result) to search for dirty value 
+written by the same transaction. If such value is found, then it is forwarded directly to the read without accessing 
+global memory. If, on the other hand, the read has to access memory, then the private lock of the transaction is first 
+acquired, and then the read is performed after setting the bloom filter. The lock is released after the read operation. 
+For both reads and writes, the transaction should also check its "valid" bit in the descriptor, and abort if this bit is 
+cleared. 
+
+On transaction validation, the commit lock and in-flight lock are both acquired.
+Then the validating transaction acquires all private locks of all active transactions in the in-flight list.
