@@ -44,3 +44,8 @@ set. To resolve conflicts, either the currently validating transaction aborts, o
 transactions abort, granting a degree of flexibility here. The contention manager can even let the validating transaction
 wait for the conflict transaction to commit or abort before committing it (the paper does not explore this possibility,
 though). After validation, the transaction commits by copying speculative writes into shared memory.
+
+The implementation of InvalSTM is based on the above description of BOCC, with certain restrictions for simplicity.
+First, InvalSTM does not allow concurrent transaction commits. Doing so prevents committing transactions from aborting 
+each other, since a committing transaction may not know whether it has been aborted by another concurrent committing 
+transaction before the latter finishes validation, which effectively requires some form of synchronization.
