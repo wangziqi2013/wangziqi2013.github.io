@@ -59,4 +59,7 @@ transaction must know the complete list of transactions that are currently activ
 This paper suggests that a linked list of transaction descriptors be used. During validation, no new transaction may
 join this list, since a new transaction may not be included in the validating transaction's list for read-write check.
 
-
+The following data structures are used by InvalSTM. First, a global commit lock is added to serialize transaction validation
+and commit. This lock is acquired before transaction attempts to commit, and released after all updated values are written.
+Note that the lock cannot be released before actual value commit, because otherwise, a later committing transaction may violate 
+the serialization order by overwriting a value written by the former transaction.
