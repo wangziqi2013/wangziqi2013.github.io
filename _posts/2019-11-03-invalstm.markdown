@@ -26,4 +26,6 @@ and commit. In other words, in BOCC, even if transactions are guranteed to be ab
 there is even no guarantee that this commit point will be reached eventually due to undefined behavior such as infinite 
 loops, corrupted control flow, etc.. To deal with inconsistent reads, BOCC based TM system must perform incremental validation
 to ensure that all reads are consistent with regard to transaction begin time (i.e. all reads can be logically considered
-to have happened at an atomic time when transaction begins). 
+to have happened at an atomic time when transaction begins). This incremental validation requires checking all reads in
+the current read set, resulting in an O(n^2) extra cost where n is the number of reads in a single transaction (O(n) elements 
+in the set and n checks performed, one for each read). 
