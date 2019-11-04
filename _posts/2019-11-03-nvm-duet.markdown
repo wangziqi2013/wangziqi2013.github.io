@@ -24,3 +24,6 @@ This persistence barrier serializes all store instructions before the barrier be
 i.e. the latter group must wait for the former to be fully committed into memory before they are. This results 
 in suboptimal scheduling of memory operations given that bank-level parallelism exists and can support multiple active 
 writes, while it is not always possible to find a write to feed a bank in the current epoch due to persistence barrier. 
+In practice, these barriers will not only serialize instructions that we intend to serialize, but also they enforce the 
+ordering on memory instructions that do not have any ordering requirement, e.g. memory instructions from another hardware 
+thread, anothe core, or to memory locations that are not necessarily persistent such as local scratch space and the stack. 
