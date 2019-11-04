@@ -62,3 +62,9 @@ can be moved to the current epoch, if one of the memory bank is free and there i
 in the current epoch. The second rule is that scheduling priority is always given to stores to persistent pages. 
 This allows the current epoch to be finished earlier and quicker, which may push volatile stores to the next epoch, making 
 it larger, out of which better scheduling decisions can be made because of increased number of options.
+
+The second optimization of NVM Duet is the capability to refresh memory cells only when it is strictly necessary. This 
+is based on the observation that volatile stores do not need to be retained by PCM for very long time after power 
+down, hence having a larger acceptable range of resistence. During normal operation, we monitor the resistence 
+of each cell regularly, and only refresh them (i.e. read out and write back) if the resistence level is close
+to the threshold for the current value. Otherwise, the cell is not refreshed. 
