@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "NVM Duet: Unified Working Memory and Persistent Store Architecture"
+date:   2019-11-03 21:22:00 -0500
+categories: paper
+paper_title: "NVM Duet: Unified Working Memory and Persistent Store Architecture"
+paper_link: https://dl.acm.org/citation.cfm?id=2541957
+paper_keyword: NVM; NVM Duet
+paper_year: ASPLOS 2014
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
