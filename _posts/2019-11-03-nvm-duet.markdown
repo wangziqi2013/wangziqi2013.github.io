@@ -36,7 +36,9 @@ Slow writes on PCM-based platforms can cause performance degradation in two aspe
 slower on PCM than reads, the memory controller will usually prioritize writes over reads, which increases read latency
 if the write queue is sufficiently full. On the CPU side, reads are often on the critical path of instructions reading
 from memory. Long read latency can easily become a performance bottleneck if the working set size is larger than the LLC
-and that cache misses are frequent.
+and that cache misses are frequent. Second, if the write queue is full, the LLC eviction will be stalled, since no more 
+entries can be inserted into the write queue. This will further block cache miss handling after the evict queue on LLC
+side is filled up, which eventually affects performance.
 
 This paper proposes adding a bit vector, called a AllocMap to the memory controller to record which memory page requires 
 data persistence, and which does not. For a 16GB PCM chip, the total space for AllocMap is just 512KB, which can be stored 
