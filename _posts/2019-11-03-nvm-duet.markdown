@@ -20,3 +20,7 @@ and store instructions. The paper identifies two problems that result in prolong
 The first problem is that writes are not always scheduled in an optimal manner given the hardware primitive for implementing
 software persistence barriers. At the time of writing this paper, Intel has proposed using clflush (and later an optimized
 form, clwb, is added to the ISA), sfence and pcommit (now deprecated) to force data to be written back into the NVM.
+This persistence barrier serializes all store instructions before the barrier before instructions issued after the barrier,
+i.e. the latter group must wait for the former to be fully committed into memory before they are. This results 
+in suboptimal scheduling of memory operations given that bank-level parallelism exists and can support multiple active 
+writes, while it is not always possible to find a write to feed a bank in the current epoch due to persistence barrier. 
