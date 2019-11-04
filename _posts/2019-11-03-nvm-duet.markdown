@@ -31,3 +31,11 @@ The second problem is that most workloads do not require all stores to be persis
 unnecessary for them to be retained for days or even months even if the address space is mapped to the NVM. It is a 
 waste of write latency and power to write all data with the same retention, while some of them can be safely lost on
 a power down without corrupting anything.
+
+This paper proposes adding a bit vector, called a AllocMap to the memory controller to record which memory page requires 
+data persistence, and which does not. For a 16GB PCM chip, the total space for AllocMap is just 512KB, which can be stored 
+easily by the on-chip SRAM. Initially, all bits are set to "0". On an operating system page mapping, the user specifies 
+whether a certain page should be mapped as persistent memory, which requires strong ordering indicated by memory barriers,
+or the page should be mapped as working memory, which just provides run-time storage of volatile data, and might be 
+reset or corrupted after a power loss. In the mmap() system call, the OS uses MMIO to communicate with the memory controller,
+and sets the corresponding 4KB bit to "1" if it is demanded by user to map it as working memory.
