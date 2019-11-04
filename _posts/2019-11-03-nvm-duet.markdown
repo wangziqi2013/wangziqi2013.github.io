@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes NVM Duet, a software-hardware co-design that enables better write performance within NVM by using
+more flexible scheduling and by taking advantage of the physical property. The discussion is based on byte addressable 
+Phase Change Memory (PCM) installed to the memory bus, which can be accessed in cache line granularity via load 
+and store instructions. The paper identifies two problems that result in prolonged write latency in current NVM architectures. 
+The first problem is that writes are not always scheduled in an optimal manner given the hardware primitive for implementing
+software persistence barriers. At the time of writing this paper, Intel has proposed using clflush (and later an optimized
+form, clwb, is added to the ISA), sfence and pcommit (now deprecated) to force data to be written back into the NVM.
