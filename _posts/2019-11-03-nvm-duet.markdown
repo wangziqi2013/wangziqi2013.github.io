@@ -38,4 +38,9 @@ easily by the on-chip SRAM. Initially, all bits are set to "0". On an operating 
 whether a certain page should be mapped as persistent memory, which requires strong ordering indicated by memory barriers,
 or the page should be mapped as working memory, which just provides run-time storage of volatile data, and might be 
 reset or corrupted after a power loss. In the mmap() system call, the OS uses MMIO to communicate with the memory controller,
-and sets the corresponding 4KB bit to "1" if it is demanded by user to map it as working memory.
+and sets the corresponding 4KB bit to "1" if it is demanded by user to map it as working memory. Note that the on-chip 
+storage for AllocMap does not need to be persistence. On a restart, the content of the AllocMap is lost, and the bit vector
+is reinitialized to all zeros. This does not affect correctness, however, as the purpose of the entire AllocMap is to 
+optimize write performance, not to change the semantics or functionality of persistent pages. 
+
+
