@@ -32,6 +32,12 @@ unnecessary for them to be retained for days or even months even if the address 
 waste of write latency and power to write all data with the same retention, while some of them can be safely lost on
 a power down without corrupting anything.
 
+Slow writes on PCM-based platforms can cause performance degradation in two aspects. First, since writes are typically
+slower on PCM than reads, the memory controller will usually prioritize writes over reads, which increases read latency
+if the write queue is sufficiently full. On the CPU side, reads are often on the critical path of instructions reading
+from memory. Long read latency can easily become a performance bottleneck if the working set size is larger than the LLC
+and that cache misses are frequent.
+
 This paper proposes adding a bit vector, called a AllocMap to the memory controller to record which memory page requires 
 data persistence, and which does not. For a 16GB PCM chip, the total space for AllocMap is just 512KB, which can be stored 
 easily by the on-chip SRAM. Initially, all bits are set to "0". On an operating system page mapping, the user specifies 
@@ -43,4 +49,6 @@ storage for AllocMap does not need to be persistence. On a restart, the content 
 is reinitialized to all zeros. This does not affect correctness, however, as the purpose of the entire AllocMap is to 
 optimize write performance, not to change the semantics or functionality of persistent pages. 
 
-
+When a memory write back is issued by the LLC to the NVM controller, the controller reads the corresponding bit of the 
+page that the cache line resides in, and associates the bit with the write back request before enqueuing the request 
+to the write queue. 
