@@ -59,5 +59,6 @@ associates the bit with the write back request before enqueuing the request to t
 schedules write back based on the two following rules. First, writes to working pages (associated with a "1" bit) can be 
 scheduled across memory barriers, since they are considered as volatile. This way, volatile stores in the following epoches
 can be moved to the current epoch, if one of the memory bank is free and there is no more memory operation for that bank
-in the current epoch. The second rule is that scheduling priority is always given to stores to the persistent pages. 
-This allows
+in the current epoch. The second rule is that scheduling priority is always given to stores to persistent pages. 
+This allows the current epoch to be finished earlier and quicker, which may push volatile stores to the next epoch, making 
+it larger, out of which better scheduling decisions can be made because of increased number of options.
