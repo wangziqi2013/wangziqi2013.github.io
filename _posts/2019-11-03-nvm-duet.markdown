@@ -51,6 +51,13 @@ storage for AllocMap does not need to be persistence. On a restart, the content 
 is reinitialized to all zeros. This does not affect correctness, however, as the purpose of the entire AllocMap is to 
 optimize write performance, not to change the semantics or functionality of persistent pages. 
 
-When a memory write back is issued by the LLC to the NVM controller, the controller reads the corresponding bit of the 
-page that the cache line resides in, and associates the bit with the write back request before enqueuing the request 
-to the write queue. 
+With AllocMap on the memory controller, the processor no longer needs to enforce memory ordering using instructions designed
+for memory consistency such as sfence. Instead, the memory fence is issued to the memory controlle directly such that 
+the controller knows which writes are before which when it schecules writes. When a memory write back is issued by the 
+LLC to the NVM controller, the controller reads the corresponding bit of the page that the cache line resides in, and 
+associates the bit with the write back request before enqueuing the request to the write queue. The write scheduler then 
+schedules write back based on the two following rules. First, writes to working pages (associated with a "1" bit) can be 
+scheduled across memory barriers, since they are considered as volatile. This way, volatile stores in the following epoches
+can be moved to the current epoch, if one of the memory bank is free and there is no more memory operation for that bank
+in the current epoch. The second rule is that scheduling priority is always given to stores to the persistent pages. 
+This allows
