@@ -67,4 +67,7 @@ The second optimization of NVM Duet is the capability to refresh memory cells on
 is based on the observation that volatile stores do not need to be retained by PCM for very long time after power 
 down, hence having a larger acceptable range of resistence. During normal operation, we monitor the resistence 
 of each cell regularly, and only refresh them (i.e. read out and write back) if the resistence level is close
-to the threshold for the current value. Otherwise, the cell is not refreshed. 
+to the threshold for the current value. Otherwise, the cell is not refreshed. Experiments and simulations show that
+most cells do not need frequent refresh, as the resistence of cells only drift by a small amount during the refresh
+interval. As a result, with the same hardware and power budget, more power cells can be refreshed in a refresh cycle 
+(some of them does not need any refreshing), resulting in a net reduction in power consumption and write latency.
