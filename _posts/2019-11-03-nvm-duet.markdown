@@ -27,3 +27,7 @@ writes, while it is not always possible to find a write to feed a bank in the cu
 In practice, these barriers will not only serialize instructions that we intend to serialize, but also they enforce the 
 ordering on memory instructions that do not have any ordering requirement, e.g. memory instructions from another hardware 
 thread, anothe core, or to memory locations that are not necessarily persistent such as local scratch space and the stack. 
+The second problem is that most workloads do not require all stores to be persistent. For those "volatile" stores, it is 
+unnecessary for them to be retained for days or even months even if the address space is mapped to the NVM. It is a 
+waste of write latency and power to write all data with the same retention, while some of them can be safely lost on
+a power down without corrupting anything.
