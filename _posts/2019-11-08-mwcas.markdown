@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Practical Multi-Word Compare-And-Swap Operation"
+date:   2019-11-08 18:29:00 -0500
+categories: paper
+paper_title: "A Practical Multi-Word Compare-And-Swap Operation"
+paper_link: https://dl.acm.org/citation.cfm?id=676137
+paper_keyword: MWCAS
+paper_year: DISC 2002
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
