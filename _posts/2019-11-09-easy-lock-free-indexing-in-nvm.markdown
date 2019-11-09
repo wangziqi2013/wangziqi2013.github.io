@@ -20,4 +20,11 @@ parallel data structure design and preogramming due to its strong semantics. Wit
 be compared and swapped in an atomic manner, which greatly benefits pointer-based data structures, in which a single
 operation typically involves changing several pointers and fields at different locations. Conventional lock-free programming
 using single word CAS must guarantee that each CAS transforms the data structure into a valid intermediate state, and that 
-threads must "help-along" on these intermediate states to ensure progress and proper synchronization.
+threads must "help-along" on these intermediate states to ensure progress and proper synchronization. Second, MWCAS unifies
+atomicity and persistency into the same framework. The descriptor-based implementation of MWCAS provides both atomicity
+and persistency, while in ad-hoc data structures, thread synchronization and persistence are often implemented by two distinct 
+mechanisms. The third reason is that MVCAS does not rely on specialized recovery and memory reclamation procedures to work.
+The programmer can simply wrap any multi-word atomic operation with MWCAS library, and recovery is handled automically after 
+crash. For memory reclamation, MWCAS implements its own epoch-based reclamation policy which delays the deallocation of 
+memory blocks until all threads have dropped their references to the block. This epoch-based mechanism is integrated
+into MWCAS both as its internal memory reclamation policy, and also exposed to users for better code reuse.
