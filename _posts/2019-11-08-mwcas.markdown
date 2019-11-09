@@ -151,4 +151,12 @@ of a1 is currenrly o1, data corruption might occur, if another thread has alread
 another MWCAS (MWCAS2) that changes the value of a1 back to o1. In this case, even though MWCAS1 has been finished by the 
 aforementioned thread, other threads are not aware of this, and will keep posting the descriptor pointer of MWCAS1 on 
 address a1, potentially making MWCAS1 non-atomic (if MWCAS2 reads the after-value of MWCAS1, then MWCAS1 is serialized both
-before MWCAS2 by letting MWCAS2 observing its value, and after MWCAS2 by overwriting a value written by MWCAS2). 
+before MWCAS2 by letting MWCAS2 observing its value, and after MWCAS2 by overwriting a value written by MWCAS2). This is 
+essentially the well-known ABA problem, which can be prevented on pointers by delaying memory reclaimation (i.e. delay 
+reusing a memory address) until all threads that can possibly observe that pointer enters quiescent state. For numerical 
+variables, however, this is inevitable as numerical variables can take any value at any moment. As a universal solution,
+the paper proposed using RDCSS to install the descriptor, rather than using single word CAS. The RDCSS checks two
+conditions: (1) Whether the current status of the MWCAS descriptor is still Undetermined; and (2) whether the current
+value at address ax matches the old value ox. By using RDCSS, if the MWCAS has been finished by another thread, the RDCSS
+would fail for all threads attempting to install the descriptor on the target word, since the status word has already been
+changed to Completed.
