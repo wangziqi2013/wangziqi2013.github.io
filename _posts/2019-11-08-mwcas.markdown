@@ -127,3 +127,10 @@ no global state change and is therefore safe. In other words, the "help-along" p
 global state change happens exactly once by using CAS to switching out the descriptor pointer in the last step of the 
 RDCSS operation. This "excat once" semantics is critical to the correctness of "help-along" protocol, as we will see
 in the full MWCAS protocol.
+
+The full MWCAS protocol works in a similar way as the RDCSS protocol. It follows the strict 2PL protocol which we describe
+as follows. First, a descriptor is installed to each of the target locations to be compared and swapped. This process is akin
+to locking these locations for update in the 2PL protocol. The descriptor pointer is installed using RDCSS on both the 
+target word (for CAS) and the status word within the descriptor (explained later), with the expected old value as old, 
+and descriptor pointer as new. Similar to the RDCSS protocol, we need to dedicate another bit in the target word to indicate
+that the word stores a MWCAS pointer rather than a regular value. Then, the thread 
