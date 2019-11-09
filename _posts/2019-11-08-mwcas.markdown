@@ -133,4 +133,7 @@ as follows. First, a descriptor is installed to each of the target locations to 
 to locking these locations for update in the 2PL protocol. The descriptor pointer is installed using RDCSS on both the 
 target word (for CAS) and the status word within the descriptor (explained later), with the expected old value as old, 
 and descriptor pointer as new. Similar to the RDCSS protocol, we need to dedicate another bit in the target word to indicate
-that the word stores a MWCAS pointer rather than a regular value. Then, the thread 
+that the word stores a MWCAS pointer rather than a regular value. This process is repeated for every target word in the 
+descriptor with the old values. Should any of these CAS fail, the MWCAS is considered to be failed, and the contents of
+the target words will be restored to their original values using CAS. Note that using CAS for value restoration is mandatory,
+as other threads may have completed the value restoration process. 
