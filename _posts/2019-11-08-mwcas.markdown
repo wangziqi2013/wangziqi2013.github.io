@@ -93,3 +93,13 @@ and unlock around a1 read can be removed, given that reading a single word is al
 on x86 for word aligned read). This lock-unlock pair is unnecessary, since any operation can still occur right before
 and after the lock and unlock, respectively, which cannot be distinguished by the version with lock (i.e. write a2, lock a2,
 read a2, unlock a2 is exactly the same as write a2, read a2; Similar reasoning applies to writing a2 after unlocking it).
+Similarly, reading and writing a1 no longer needs locking and unlocking around the access.
+
+After removing the lock on a1, we now have a single lock-unlock pair wrapping around this function body. To get rid of this
+lock and unlock pair, the paper proposes using "descriptors" to avoid blocking threads trying to access the data item
+under update. This mechanism works as follows. First, in order to notify threads that a RDCSS is being conducted on the 
+data item, the RDCSS procedure first prepares a descriptor, which is a small memory block that records the type
+of the descriptor, the two addresses, two old values, and the new value to be swapped if comparisons are successful. The 
+descriptor is allocated and initialized with the metadata of the RDCSS before it is linked into the data structure.
+Next, the thread initiating the RDCSS installs the descriptor to the target word (address a2 in our example) using a
+single word CAS against the old value (i.e. o2 in the example). 
