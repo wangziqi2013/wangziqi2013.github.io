@@ -159,4 +159,7 @@ the paper proposed using RDCSS to install the descriptor, rather than using sing
 conditions: (1) Whether the current status of the MWCAS descriptor is still Undetermined; and (2) whether the current
 value at address ax matches the old value ox. By using RDCSS, if the MWCAS has been finished by another thread, the RDCSS
 would fail for all threads attempting to install the descriptor on the target word, since the status word has already been
-changed to Completed.
+changed to Completed. Note that the same ABA problem will not occur for the second stage in which the descriptor pointer 
+on each target word is restored to the old value or updated to the new value. This is because in the second stage,
+the CAS for switching values uses the descriptor pointer as old value, which is guaranteed to be unique during the current
+session (i.e. the reclamation of the descriptor is delayed). 
