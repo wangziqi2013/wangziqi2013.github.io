@@ -43,4 +43,6 @@ condition check, and after the branch is executed (assuming that the condition i
 is serialized before the "write a1" operation by not observing its update, and in the meantime serialized after "read a2"
 by overwriting the value it just observed. This implies that the RDCSS sequence must not be atomic, since otherwise, the 
 atomic point will be both before "write a1" and "read a2", which is impossible, since "write a1" happens before "read a2"
-in the program order.
+in the program order. In other words, the other thread executing the write and read on a1, a2 observes partially updated 
+state by the RDCSS function (such observation does not necessarily involve reading a value; writing into its read set is
+also an implicit way of synchronization, i.e. anti-dependency), which violates the definition of atomicity.
