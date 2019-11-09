@@ -137,3 +137,13 @@ that the word stores a MWCAS pointer rather than a regular value. This process i
 descriptor with the old values. Should any of these CAS fail, the MWCAS is considered to be failed, and the contents of
 the target words will be restored to their original values using CAS. Note that using CAS for value restoration is mandatory,
 as other threads may have completed the value restoration process. 
+
+The MWCAS descriptor consists of an array of CAS entries and a status word. The CAS entry contains the target word address
+and the old and new values for the single word CAS. The status word can take three values: Undetermined, Failed, and 
+Completed. When it is first initialized, the status is set to Undetermined to indicate that the first stage installation
+is still under progress, and the completion of the MWCAS is not guaranteed. After the first stage installation (i.e. after
+all CASes have completed successfully), this word is switched to Completed using a CAS. Note again that using CAS is mandatory
+since multiple threads may attempt to change the status word concurrently. 
+
+One subtle data race might happen during the 
+first stage, in which case a thread 
