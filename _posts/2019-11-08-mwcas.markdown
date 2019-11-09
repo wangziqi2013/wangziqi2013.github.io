@@ -111,3 +111,11 @@ reserve a few bits in these pointers to indicate whether the pointer value repre
 For numerical values and bit fields, we may reserve a few higher order bits explicitly (most numerical values will not 
 have a chance to use up all 64 bits). 
 
+The RDCSS descriptor posted to the target word serves two purposes. First, threads accessing the word will not be able to
+proceed, because the descriptor is essentially an exclusive lock on the target word indicating an ongoing RDCSS, as shown
+in the previous example. Second, instead of letting worker threads wait on this RDCSS record, the presence of metadata in
+the descriptor block further allows threads to "help-along" each other by completing the RDCSS operation when they observe
+this descriptor. The RDCSS operation is completed by simply comparing the value of address a1 against the value of o1 in
+the descriptor, and CAS'ing the new value n2 into address a2 if comparison succeeds, or CAS'ing the old value o2 into a2
+if comparison fails. Note that we know the old value on a2 must be o2, since otherwise, the previous CAS will not succeed.
+
