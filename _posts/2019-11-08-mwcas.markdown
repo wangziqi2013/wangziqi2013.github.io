@@ -145,5 +145,10 @@ is still under progress, and the completion of the MWCAS is not guaranteed. Afte
 all CASes have completed successfully), this word is switched to Completed using a CAS. Note again that using CAS is mandatory
 since multiple threads may attempt to change the status word concurrently. 
 
-One subtle data race might happen during the 
-first stage, in which case a thread 
+One subtle data race might happen during the first stage if care is not taken. When multiple threads are attempting to 
+install the descriptor on a target word a1 with old value o1. If only single word CAS is used to check whether the value 
+of a1 is currenrly o1, data corruption might occur, if another thread has already finished the current MWCAS1, initiated 
+another MWCAS (MWCAS2) that changes the value of a1 back to o1. In this case, even though MWCAS1 has been finished by the 
+aforementioned thread, other threads are not aware of this, and will keep posting the descriptor pointer of MWCAS1 on 
+address a1, potentially making MWCAS1 non-atomic (if MWCAS2 reads the after-value of MWCAS1, then MWCAS1 is serialized both
+before MWCAS2 by letting MWCAS2 observing its value, and after MWCAS2 by overwriting a value written by MWCAS2). 
