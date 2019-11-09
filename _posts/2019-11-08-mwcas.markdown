@@ -13,6 +13,19 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights: **
+
+1. I like it when the paper mentions that the RDCSS and MWCAS are basically non-blocking variants of 2PL. This helps a 
+   lot in comprehending the algorithm at a high level. 
+2. The "reserve bit in a pointer" thing is not invented by this paper, but the paper did give a strong argument on why
+   this is applicable for both pointers and numerical valued variables.
+
+**Lowlights: **
+
+1. Correctness proof is somehow overcomplicated. I prefer the one I used in this summary which reduces the paper's 
+   algorithm to 2PL. 
+2. The paper does not give a concrete reason (e.g. an example) why RDCSS should be used instead of single word CAS.
+
 This paper presents an algorithm for implementing Multi-Word Compare-and-Swap (MWCAS). MWCAS is useful as a basic primitive 
 in constructing lock-free algorithms, as an enhancement to the already-present single word CAS on most platforms. Compared
 with previous proposals, this paper's MWCAS implementation has the following features that make it attractive to data
