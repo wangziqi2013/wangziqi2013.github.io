@@ -68,3 +68,28 @@ Since T1 obeys 2PL protocol, which demands that T1 must not lock any item after 
 T1 lock A must happen before T1 unlock B, and here concludes out proof, since by adding T1 lock A < T1 unlock B,
 we have derived T2 unlock A < T2 lock B, which violates the 2PL rule that no lock release shall happen before a lock
 acquisition. A contradiction!
+
+By proving that 2PL is correct, we now can rewrite the RDCSS in the following manner:
+
+```C
+uint64_t RDCSS(uint64_t *a1, uint64_t *a2, uint64_t o1, uint64_t o2, uint64_t n2) {
+  lock(a2);
+  uint64_t a2_local = *a2;  // Access protected by lock on a2
+  lock(a1);
+  uint64_t a1_local = *a1;  // Access protected by lock on a1
+  unlock(a1);
+  if(a1_local == o1 && a2_local == o2) *a2 = n2; // Protected by lock on a2
+  unlock(a2);
+  return a2_local;
+}
+```
+
+Correspondingly, all reads and writes to address a1 and a2 must be synchronized using the same locks on both addresses.
+Since 2PL guarantees atomicity of transactions, the implementation of RDCSS is atomic.
+
+Using locks solves the correctness problem, but has a large performance overhead, due to the fact that locks are not 
+scalable in a multicore environment. The algorithm seeks to optimize this base algorithm as follows. First, the lock
+and unlock around a1 read can be removed, given that reading a single word is always atomic (which is always the case
+on x86 for word aligned read). This lock-unlock pair is unnecessary, since any operation can still occur right before
+and after the lock and unlock, respectively, which cannot be distinguished by the version with lock (i.e. write a2, lock a2,
+read a2, unlock a2 is exactly the same as write a2, read a2; Similar reasoning applies to writing a2 after unlocking it).
