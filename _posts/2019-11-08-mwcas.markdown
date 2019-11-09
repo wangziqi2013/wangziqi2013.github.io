@@ -58,5 +58,13 @@ if T2 accesses A, and T1 accesses it later, then it must be that T2 releases the
 We can then deduce that before T1 accesses A, T2 must have already entered the shrinking phase of 2PL. If we look at the after
 sequence, however, T2 accessed B after T1 does. This implies that when T1 accesses B, it is unlocked, since otherwise
 T1 will have to wait for the lock. Then we know that T2 acquired the lock on B at some time point after T1 accesses B.
-We have the following ordering: (1) T2 unlock A < T1 access A; (2) T1 access B < T2 lock B. If T1 accesses A before T1 accesses
-B, then according to transitivity we have T2 unlock A < T2 lock B, which violates the 2PL rule. 
+We have the following ordering: 
+
+(1) T2 unlock A < T1 lock A < T1 access A < T1 unlock A; 
+
+(2) T1 lock B < T1 access B < T1 unlock B < T2 lock B. 
+
+Since T1 obeys 2PL protocol, which demands that T1 must not lock any item after any item is unlocked, we know that 
+T1 lock A must happen before T1 unlock B, and here concludes out proof, since by adding T1 lock A < T1 unlock B,
+we have derived T2 unlock A < T2 lock B, which violates the 2PL rule that no lock release shall happen before a lock
+acquisition. A contradiction!
