@@ -101,5 +101,13 @@ under update. This mechanism works as follows. First, in order to notify threads
 data item, the RDCSS procedure first prepares a descriptor, which is a small memory block that records the type
 of the descriptor, the two addresses, two old values, and the new value to be swapped if comparisons are successful. The 
 descriptor is allocated and initialized with the metadata of the RDCSS before it is linked into the data structure.
-Next, the thread initiating the RDCSS installs the descriptor to the target word (address a2 in our example) using a
-single word CAS against the old value (i.e. o2 in the example). 
+Next, the thread initiating the RDCSS installs the pointer to the descriptor to the target word (address a2 in our example) 
+using a single word CAS against the old value (i.e. o2 in the example). This is the serialization point between threads
+conducting the RDCSS and threads reading the value of the target word if the RDCSS succeeds (if it fails then there is no 
+serialization point, since the failed RDCSS does not change global state). The paper assumes that there is some way
+for threads to distinguish between a regular value in the data structure from a pointer to the descriptor. On x86 platforms,
+due to the fact that pointers have many redundant bits because of address alignment and 48-bit virtual address, we can 
+reserve a few bits in these pointers to indicate whether the pointer value represents a normal value or descriptor's address.
+For numerical values and bit fields, we may reserve a few higher order bits explicitly (most numerical values will not 
+have a chance to use up all 64 bits). 
+
