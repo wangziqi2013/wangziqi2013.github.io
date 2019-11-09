@@ -119,3 +119,11 @@ this descriptor. The RDCSS operation is completed by simply comparing the value 
 the descriptor, and CAS'ing the new value n2 into address a2 if comparison succeeds, or CAS'ing the old value o2 into a2
 if comparison fails. Note that we know the old value on a2 must be o2, since otherwise, the previous CAS will not succeed.
 
+The "help-along" protocol described in the previous paragraph introduces a data race when multiple threads (including
+the initiator thread) attempt to complete the RDCSS operation. This data race, however, does not affect correctness,
+since as soon as the first thread CAS'ed out the descriptor pointer from the target word, as a result of a successful 
+or failed comparison, all later threads attempting to complete the RDCSS opreation would fail the CAS, which introduces
+no global state change and is therefore safe. In other words, the "help-along" protocol in this case ensures that the 
+global state change happens exactly once by using CAS to switching out the descriptor pointer in the last step of the 
+RDCSS operation. This "excat once" semantics is critical to the correctness of "help-along" protocol, as we will see
+in the full MWCAS protocol.
