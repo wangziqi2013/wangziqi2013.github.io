@@ -38,3 +38,9 @@ uint64_t RDCSS(uint64_t *a1, uint64_t *a2, uint64_t o1, uint64_t o2, uint64_t n2
 }
 ```
 
+This procedure, however, is non-atomic. Imagine what will happen if another thread writes a1 and reads a2 after the "if"
+condition check, and after the branch is executed (assuming that the condition is true). In this case, the RDCSS sequence 
+is serialized before the "write a1" operation by not observing its update, and in the meantime serialized after "read a2"
+by overwriting the value it just observed. This implies that the RDCSS sequence must not be atomic, since otherwise, the 
+atomic point will be both before "write a1" and "read a2", which is impossible, since "write a1" happens before "read a2"
+in the program order.
