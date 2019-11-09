@@ -16,4 +16,11 @@ version_mgmt:
 This paper presents an algorithm for implementing Multi-Word Compare-and-Swap (MWCAS). MWCAS is useful as a basic primitive 
 in constructing lock-free algorithms, as an enhancement to the already-present single word CAS on most platforms. Compared
 with previous proposals, this paper's MWCAS implementation has the following features that make it attractive to data
-structure designers. First, 
+structure designers. First, this paper's design is non-blocking, which means that threads will always make progress by
+helping each other when they observe a partially finished MVCAS. This can help avoid certain pathologies with lock-based
+programming. Second, MVCAS in this paper is disjoint-access-parallel (D-A Parallel), meaning that accesses on disjoint data
+can proceed in parallel with blocking each other. This avoids unnecessary serialization of operations when they are not 
+operating on the same data items. Third, the MWCAS requires no extra metadata except a pool of descriptors, and only reserves 
+a few bits per word. This makes it generally applicable to pointer-based data structures as most pointers nowadays have 
+a few redundant bits that can be used to hold the metadata. Lastly, the MWCAS design only relies on a single hardware primitive,
+Compare-and-Swap, which makes it portable among different architectures.
