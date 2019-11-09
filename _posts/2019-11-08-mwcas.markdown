@@ -55,5 +55,8 @@ serialized both before and after the 2PL transaction T1. Then it must be seriali
 by any of the RAW, WAR or WAW. We can then deduce that the transaction T2 must have accessed a data item A before T1 does,
 and another data item B (which can be the same item or a different one) after T1 does. According to the locking principle,
 if T2 accesses A, and T1 accesses it later, then it must be that T2 releases the lock on A, and T1 acquires the lock. 
-We can then deduce that after T1 finishes, T2 must have already entered the shrinking phase of 2PL. If we look at the after
-sequence, however, T2 accessed B after T1 does. This implies that 
+We can then deduce that before T1 accesses A, T2 must have already entered the shrinking phase of 2PL. If we look at the after
+sequence, however, T2 accessed B after T1 does. This implies that when T1 accesses B, it is unlocked, since otherwise
+T1 will have to wait for the lock. Then we know that T2 acquired the lock on B at some time point after T1 accesses B.
+We have the following ordering: (1) T2 unlock A < T1 access A; (2) T1 access B < T2 lock B. If T1 accesses A before T1 accesses
+B, then according to transitivity we have T2 unlock A < T2 lock B, which violates the 2PL rule. 
