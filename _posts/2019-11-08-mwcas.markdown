@@ -46,3 +46,14 @@ atomic point will be both before "write a1" and "read a2", which is impossible, 
 in the program order. In other words, the other thread executing the write and read on a1, a2 observes partially updated 
 state by the RDCSS function (such observation does not necessarily involve reading a value; writing into its read set is
 also an implicit way of synchronization, i.e. anti-dependency), which violates the definition of atomicity.
+
+To ensure atomicity of RDCSS, we may use an existing algorithm, Two-Phase Locking, that generally works for any read-write 
+sequence. The 2PL scheme works by acquiring locks before accessing (reading and/writing) data items. The access must be
+wrapped between the lock and unlock pair. One additional requirement of 2PL is that once the thread starts releasing a 
+lock, no new lock shall be acquired. We prove the atomicity of 2PL by contradiction. Assume another transaction T2 is 
+serialized both before and after the 2PL transaction T1. Then it must be serialized both before and after the transaction 
+by any of the RAW, WAR or WAW. We can then deduce that the transaction T2 must have accessed a data item A before T1 does,
+and another data item B (which can be the same item or a different one) after T1 does. According to the locking principle,
+if T2 accesses A, and T1 accesses it later, then it must be that T2 releases the lock on A, and T1 acquires the lock. 
+We can then deduce that after T1 finishes, T2 must have already entered the shrinking phase of 2PL. If we look at the after
+sequence, however, T2 accessed B after T1 does. This implies that 
