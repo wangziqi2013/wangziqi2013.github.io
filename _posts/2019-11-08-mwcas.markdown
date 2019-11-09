@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents an algorithm for implementing Multi-Word Compare-and-Swap (MWCAS). MWCAS is useful as a basic primitive 
+in constructing lock-free algorithms, as an enhancement to the already-present single word CAS on most platforms. Compared
+with previous proposals, this paper's MWCAS implementation has the following features that make it attractive to data
+structure designers. First, 
