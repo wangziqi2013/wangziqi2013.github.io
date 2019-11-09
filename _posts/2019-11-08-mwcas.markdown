@@ -24,3 +24,17 @@ operating on the same data items. Third, the MWCAS requires no extra metadata ex
 a few bits per word. This makes it generally applicable to pointer-based data structures as most pointers nowadays have 
 a few redundant bits that can be used to hold the metadata. Lastly, the MWCAS design only relies on a single hardware primitive,
 Compare-and-Swap, which makes it portable among different architectures.
+
+The MWCAS algorithm is based on a more basic primitive, restricted double compare and single swap (RDCSS). RDCSS is an atomic
+primitive that checks two locations for expected values, and swaps the second location with the new value if the comparison
+results in success. Otherwise, the location is not updated as if the operation has not been executed. RDCSS can be expressed
+in C language in the following way:
+
+```C
+uint64_t RDCSS(uint64_t *a1, uint64_t *a2, uint64_t o1, uint64_t o2, uint64_t n2) {
+  uint64_t a2_local = *a2;
+  if(*a1 == o1 && a2_local == o2) *a2 = n2;
+  return a2_local;
+}
+```
+
