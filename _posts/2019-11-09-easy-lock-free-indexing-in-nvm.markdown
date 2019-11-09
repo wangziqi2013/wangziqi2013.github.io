@@ -27,4 +27,7 @@ mechanisms. The third reason is that MVCAS does not rely on specialized recovery
 The programmer can simply wrap any multi-word atomic operation with MWCAS library, and recovery is handled automically after 
 crash. For memory reclamation, MWCAS implements its own epoch-based reclamation policy which delays the deallocation of 
 memory blocks until all threads have dropped their references to the block. This epoch-based mechanism is integrated
-into MWCAS both as its internal memory reclamation policy, and also exposed to users for better code reuse.
+into MWCAS both as its internal memory reclamation policy, and also exposed to users for better code reuse. The authors
+also compared their software MWCAS with HTM. The conclusion is that HTM performs slightly better than MWCAS in performance,
+but its unstability (no progress guarantee due to spurious aborts) and lack of persistence support make MWCAS a better choice
+in general.
