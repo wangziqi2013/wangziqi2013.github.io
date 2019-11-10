@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents BzTree, a lock-free and persistent B+Tree data structure designed for hybrid DRAM and NVM systems.
+This paper identifies two atomicity requirements for in-memory B+Tree typically used as database indices. First, multi-step
+updates should be atomic with regard to other threads. This avoids exposing some inconsistent intermedaite states to other
+threads which may lead to data corruption or program failure. Second, multi-step updates should be atomic with
+regard to the NVM. Either none of the operations or all of them should be reflected on the NVM image at any point during
+the execution. Currently hardware primitives are insufficient to guarantee any of these two, with reliable progress guarantee
+(HTM can satisfy the first requirement, but there is no progress guarantee unless a software fall back path is provided). 
+
+
