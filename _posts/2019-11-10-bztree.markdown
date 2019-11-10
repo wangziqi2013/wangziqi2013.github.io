@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "BzTree: A High-Performance Latch-Free Range Index for Non-Volatile Memory"
+date:   2019-11-10 16:00:00 -0500
+categories: paper
+paper_title: "BzTree: A High-Performance Latch-Free Range Index for Non-Volatile Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=3164147
+paper_keyword: MWCAS; NVM; BzTree
+paper_year: VLDB 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
