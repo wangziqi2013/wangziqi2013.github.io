@@ -64,4 +64,7 @@ the fact that the first MWCAS has already been completed by thread Y. In this ca
 before the second CAS by having it observing its update, and serialized after the second CAS by overwriting its update
 on the same target word, violating the definition of atomicity. The problem is solved by checking both the target word
 and the status word using RDCSS, which only installs the descriptor pointer when the target word matches the old value
-in the entry, and the status word is still "Undertemined", meaning the MWCAS is still active. 
+in the entry, and the status word is still "Undertemined", meaning the MWCAS is still active. Also note that when installing
+the pointer, we should set one of the two bits in the pointer to indicate that the value is a pointer to descriptors
+rather than a regular value (MWCAS and RDCSS uses one bit, respectively). On seeting these bits, threads should "help-along" 
+and finish the MWCAS before it proceeds to finish its own job.
