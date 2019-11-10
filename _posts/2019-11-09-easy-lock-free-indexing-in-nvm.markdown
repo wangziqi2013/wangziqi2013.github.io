@@ -79,3 +79,13 @@ that this must be done using CAS, since concurrent threads might have already fi
 word to another value. If this CAS fails, the thread should just re-check the status word, and then act accordingly. 
 We then flush the status word using clwb and a memory fence. After the memory fence instruction returns, the MWCAS is fully
 committed, since at this moment, all updates can be redone after a crash. 
+
+One thing worth mentioning is that although the paper suggests that all target words should also be flushed before the commit, 
+I cannot see why this is necessary. If we think of the MWCAS scheme as a combination of write-ahead redo-logging and 2PL 
+(with help along), it appears to me that whether or not descriptors can be observed after a crash would affect recoverability.
+In fact, the goal of writing the descriptor is simply to let threads "help along" each other instead of blocking, meaning that
+descriptors, like locks, are transient states that are not necessarily persisted. During the post-crash recovery process,
+the recovery thread can always roll back an incomplete MWCAS by copying the old value back to the target word (if the NVM
+image indicates a descriptor pointer), or safely ignore the target word if its image on NVM is a regular value (equivalent
+to the case where the descriptor is never posted). Neither of these would require us to persist the full set of descriptor
+pointers before the MWCAS is committed.
