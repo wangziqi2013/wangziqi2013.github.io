@@ -94,3 +94,12 @@ If one of the RDCSS fails in the first stage, the MWCAS is aborted by setting th
 state does not need to be persisted to the NVM, since even if this state change is not reflected on the NVM
 before the crash, the on-NVM state will be "Undetermined", which will still result in a roll back. No pointer persistence
 is required also.
+
+In the second stage, threads uninstall descriptor pointers cooperatively from the target words, and either update them
+with the new value, if the MWCAS commits, or restores the old value, if the MWCAS fails. In whichever case, the values
+in the MWCAS entries are copied back to the target words using single word CAS, with the dirty bit set. Note that
+in this case the single word CAS will not introduce ABA problem, since the descriptor pointer is guaranteed to be unique
+during the session, and will only be reused after all threads that can have a reference to it enter quiescent state.
+After the second stage value copy is finished, threads then flush all target words to the NVM, and then changes the 
+state of the descriptor to "Free", and then persists the state. The MWCAS is considered as finished only after the 
+status word is changed to free and persisted on the NVM. 
