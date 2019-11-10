@@ -21,4 +21,6 @@ regard to the NVM. Either none of the operations or all of them should be reflec
 the execution. Currently hardware primitives are insufficient to guarantee any of these two, with reliable progress guarantee
 (HTM can satisfy the first requirement, but there is no progress guarantee unless a software fall back path is provided). 
 
-
+This paper presents the implementation of BzTree, which achieves atomic update with regard to both other threads and the NVM.
+The atomicity guarantees of BzTree are delivered under a unified Multi-Word Compare-and-Swap (MWCAS) framework, in which
+multiple aligned machine words can be tested for expected values and then updated to new values if all tests are successful. 
