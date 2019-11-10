@@ -54,10 +54,14 @@ which it "locks" all target words in the descriptor in a manner similar to 2PL. 
 the MWCAS descriptor, and then performs a "restricted double compare and single swap" (RDCSS) on the target word and the 
 status word of the descriptor, with "old" in the entry as old value for the target word, and the pointer to the descriptor 
 as "new" for the target word. The status word is only compared by the RDCSS but now swapped, and the value used for the 
-comparison is the state constant, "Undetermined". This extra comparison is to avoid a subtle race condition, in which 
+comparison is the state constant, "Undetermined". This extra comparison is to avoid a subtle ABA race condition, in which 
 two threads contend to finish the same MWCAS. Assuming we only use single word CAS to post descriptor pointers. In this 
 case, the first thread X first posts a descriptor, and then thread Y sneaks in, sees the descriptor, and "helps along" 
 to finish the MWCAS, updating all target words and changing the status word to "Completed". Then thread Y conducts another 
 MWCAS which reverts one of the target words A in the previous MWCAS to its old value. And finally, thread X wakes up, 
 attempts to post the descriptor on A, and the single word CAS succeeds since it sees the expected value on A, despite
-the fact that the first MWCAS has already been completed by thread Y. In this case,
+the fact that the first MWCAS has already been completed by thread Y. In this case, the first MWCAS is both serialized
+before the second CAS by having it observing its update, and serialized after the second CAS by overwriting its update
+on the same target word, violating the definition of atomicity. The problem is solved by checking both the target word
+and the status word using RDCSS, which only installs the descriptor pointer when the target word matches the old value
+in the entry, and the status word is still "Undertemined", meaning the MWCAS is still active. 
