@@ -31,3 +31,11 @@ into MWCAS both as its internal memory reclamation policy, and also exposed to u
 also compared their software MWCAS with HTM. The conclusion is that HTM performs slightly better than MWCAS in performance,
 but its unstability (no progress guarantee due to spurious aborts) and lack of persistence support make MWCAS a better choice
 in general.
+
+MWCAS provides a set of interface for users to add, remove, and update CAS entries. Every MWCAS instance is represented by
+a descriptor, which contains the metadata for performing the MWCAS operation. The paper suggest that descriptors be stored
+in a known location on the NVM, such that they can be found after the crash. MWCAS entries are partitioned between threads,
+such that threads do not need to synchronize when they need one. A MWCAS entry consists of a status word representing the 
+current state of the operation, and an array of entries for storing metadata. MWCAS metadata includes the address of the 
+target word, the old value to be compared, and the new value to be swapped. The paper also assumes that the target words 
+of MWCAS are either pointers, or small numerical values (much smaller than 2^64), or bit fields. 
