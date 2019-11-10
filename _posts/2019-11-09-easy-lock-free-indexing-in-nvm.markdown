@@ -89,3 +89,8 @@ the recovery thread can always roll back an incomplete MWCAS by copying the old 
 image indicates a descriptor pointer), or safely ignore the target word if its image on NVM is a regular value (equivalent
 to the case where the descriptor is never posted). Neither of these would require us to persist the full set of descriptor
 pointers before the MWCAS is committed.
+
+If one of the RDCSS fails in the first stage, the MWCAS is aborted by setting the status word to "Failed". The "Failed"
+state does not need to be persisted to the NVM, since even if this state change is not reflected on the NVM
+before the crash, the on-NVM state will be "Undetermined", which will still result in a roll back. No pointer persistence
+is required also.
