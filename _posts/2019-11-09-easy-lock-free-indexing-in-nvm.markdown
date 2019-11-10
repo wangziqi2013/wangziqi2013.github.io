@@ -73,4 +73,9 @@ To avoid deadlock, when installing pointers to target words, threads must first 
 using a globally agreed order (e.g. low to high or high to low). Otherwise, threads may be trapped into infinite recursion
 when they try to "help-along" each other.
 
-The first stage ends after all target words are updated with the descriptor pointer the using RDCSS
+The first stage ends successfully after all target words are updated with the descriptor pointer the using RDCSS. We 
+commit the MWCAS by atomically changing the status word from "Undetermined" to "Completed" using single word CAS. Note 
+that this must be done using CAS, since concurrent threads might have already finished the MWCAS by chaging the status 
+word to another value. If this CAS fails, the thread should just re-check the status word, and then act accordingly. 
+We then flush the status word using clwb and a memory fence. After the memory fence instruction returns, the MWCAS is fully
+committed, since at this moment, all updates can be redone after a crash. 
