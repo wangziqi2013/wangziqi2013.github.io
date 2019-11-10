@@ -38,4 +38,10 @@ in a known location on the NVM, such that they can be found after the crash. MWC
 such that threads do not need to synchronize when they need one. A MWCAS entry consists of a status word representing the 
 current state of the operation, and an array of entries for storing metadata. MWCAS metadata includes the address of the 
 target word, the old value to be compared, and the new value to be swapped. The paper also assumes that the target words 
-of MWCAS are either pointers, or small numerical values (much smaller than 2^64), or bit fields. 
+of MWCAS are either pointers, or small numerical values (much smaller than 2^64), or bit fields. In all three cases, 
+we can reserve three bits for denoting the current state of the value. According to the value of the bits, a target word 
+may contain either the original value, or the updated dirty value (if MWCAS succeeds), or a pointer to descriptors. The 
+paper suggests that two bits should be used to indicate whether it is pointer to MWCAS or RDCSS (see below) descriptor,
+and one "dirty" bit is to indicate whether the value has not been flushed back to NVM. If none of the three bits is 
+set, the value is considered to be non-dirty and non-descriptor, which can be accessed directly. Otherwise, we need to
+mask off these three bits, and act accordingly based on the type of the value, which we will describe below.
