@@ -68,3 +68,9 @@ in the entry, and the status word is still "Undertemined", meaning the MWCAS is 
 the pointer, we should set one of the two bits in the pointer to indicate that the value is a pointer to descriptors
 rather than a regular value (MWCAS and RDCSS uses one bit, respectively). On seeting these bits, threads should "help-along" 
 and finish the MWCAS before it proceeds to finish its own job.
+
+To avoid deadlock, when installing pointers to target words, threads must first sort the address, and only install pointers
+using a globally agreed order (e.g. low to high or high to low). Otherwise, threads may be trapped into infinite recursion
+when they try to "help-along" each other.
+
+The first stage ends after all target words are updated with the descriptor pointer the using RDCSS
