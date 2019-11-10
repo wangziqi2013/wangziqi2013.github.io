@@ -33,7 +33,7 @@ but its unstability (no progress guarantee due to spurious aborts) and lack of p
 in general.
 
 MWCAS provides a set of interface for users to add, remove, and update CAS entries. Every MWCAS instance is represented by
-a descriptor, which contains the metadata for performing the MWCAS operation. The paper suggest that descriptors be stored
+a descriptor, which contains the metadata for performing the MWCAS operation. The paper suggests that descriptors be stored
 in a known location on the NVM, such that they can be found after the crash. MWCAS entries are partitioned between threads,
 such that threads do not need to synchronize when they need one. A MWCAS entry consists of a status word representing the 
 current state of the operation, and an array of entries for storing metadata. MWCAS metadata includes the address of the 
@@ -45,3 +45,13 @@ paper suggests that two bits should be used to indicate whether it is pointer to
 and one "dirty" bit is to indicate whether the value has not been flushed back to NVM. If none of the three bits is 
 set, the value is considered to be non-dirty and non-descriptor, which can be accessed directly. Otherwise, we need to
 mask off these three bits, and act accordingly based on the type of the value, which we will describe below.
+
+The MWCAS operates in two stages. In the first stage, the thread initiating the MWCAS first allocates a descriptor
+from the pool, populates the descriptor with MWCAS entries, and persists the entry. The status word in the descriptor is
+initialized to "Undetermined". This needs to be done before the descriptor is linked to the data structure to avoid 
+undefined recovery behavior if the system crashes right after it is linked. Then the thread enters first stage, during
+which it "locks" all target words in the descriptor in a manner similar to 2PL. The thread first sorts the addresses in
+the MWCAS descriptor, and then performs a "restricted double compare and single swap" (RDCSS) on the target word and the 
+status word of the descriptor, with "old" in the entry as old value for the target word, and the pointer to the descriptor 
+as "new" for the target word. The status word is only compared by the RDCSS but now swapped, and the value used for the 
+comparison is the state constant, "Undetermined".
