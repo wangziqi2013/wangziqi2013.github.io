@@ -102,4 +102,10 @@ in this case the single word CAS will not introduce ABA problem, since the descr
 during the session, and will only be reused after all threads that can have a reference to it enter quiescent state.
 After the second stage value copy is finished, threads then flush all target words to the NVM, and then changes the 
 state of the descriptor to "Free", and then persists the state. The MWCAS is considered as finished only after the 
-status word is changed to free and persisted on the NVM. 
+status word is changed to free and persisted on the NVM. The descriptor's memory is reclaimed using an epoch-based
+reclamation policy. The "old" values are reclaimed in the same manner if indicated by the programmer (each entry
+in MWCAS has a field indicating the memory reclamation policy of the address). The "dirty" bit of target words is 
+also cleared after they are flushed to the NVM. Note that if a worker thread sees a word with "dirty" bit set, it must
+frist flush the dirty word back to NVM and clear the bit, before it can proceed to do its own job. The "dirty" bit is 
+set to force dirty data to be flushed back as the last step of redo-logging. The redo log entries can only be reclaimed 
+after all changes are applied to the persistent storage.
