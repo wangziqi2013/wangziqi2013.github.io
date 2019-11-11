@@ -26,4 +26,8 @@ are insufficient to provide the strong semantics of NVM allocation, which dictat
 ownership of a memory block must either be the application or the allocator. This invariant is not well observed in
 traditional memory allocators, because only the pointer is returned by the allocator to the application. If the crash
 happens before the pointer is linked into the application data and is properly flushed back to the NVM, and after the 
-allocator removes the block from its internal free list, 
+allocator removes the block from its internal free list, the block is permanently lost, since neither the allocator
+nor the application owns the memory. This problem, in its essence, is caused by non-atomic ownership transfer: During 
+the ownership transfer, there is a short time window in which the block is not owned by any party in the system, whose 
+only reference is stored on the volatile stack. On a power loss, the stack content will not be preserved, resulting in 
+memory leaks.
