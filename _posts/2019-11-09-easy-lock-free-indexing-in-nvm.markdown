@@ -109,3 +109,14 @@ also cleared after they are flushed to the NVM. Note that if a worker thread see
 frist flush the dirty word back to NVM and clear the bit, before it can proceed to do its own job. The "dirty" bit is 
 set to force dirty data to be flushed back as the last step of redo-logging. The redo log entries can only be reclaimed 
 after all changes are applied to the persistent storage.
+
+On recovery, the recovery manager searches the allocator pool for descriptors that are in non-Free state (Free state descriptors
+are simply ignored). For Undetermined and Failed descriptor, they are rolled back. Since new values are only written after
+the state is persisted to the NVM, we can assume that all of the values in the target words are either pointer to the descriptor
+(if they were flushed back to the NVM via cache eviction or explicit flush), or old values. In the latter case, no action
+is needed. In the former case, we copy the "old" field in the MWCAS entry to the target word. Note that at any given moment
+in time, a target word can be referenced by at most one non-Free descriptor (because of help-along, and the serialization of
+flushing the status word and the allocation of a new descriptor on the same target word), and therefore, the order or 
+recovery does not matter, since each target word is written at most once during the recovery process. For Completed state 
+descriptors, we copy the "new" field in the entry to the corresponding target word. After recovery, all descriotors are 
+freed.
