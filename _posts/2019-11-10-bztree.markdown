@@ -62,4 +62,8 @@ The last part is key-value pair storage, which is maintained as a stack which gr
 The next available byte is denoted by a field, "record count", in the status word, which is adjusted every time new entries 
 are inserted.
 
+Internal nodes of BzTree are simpler, as they do not support concurrent modification. Internal nodes simply consist of 
+a key-pointer array, a constant field recording the size of the node, and a status word serving as the serialization point
+between node update and replacement (insert/delete/split/merge). Internal nodes are immutable. Only the value field can
+be updated in-place directly, which needs to serialize against node replacement as we will show below.
 
