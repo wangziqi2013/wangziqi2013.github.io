@@ -152,3 +152,10 @@ of which is just to ensure that the status word is not changed during the node s
 node can be moved into the garbage chain, which is then freed after all threads being able to see it enter quiescence.
 Inner nodes of BzTree do not require consolidation, since they are immutable and does not support in-place insert. The 
 paper reports that this scheme improves performance by avoiding node search at intermediate level.
+
+Node split and merge works similarly. Since inner nodes are immutable, node split and merge must be finalized by creating 
+a new copy of the inner node for the affected inner node, and then performing a MWCAS in a similar manner as node consolidation
+on the grandparent node. For a spilt, the sibling node is created, and then inserted into the newly created inner node. 
+For a merge, a sibling is chosen (either left or right), and a new node is created by merging active entries in both
+nodes. During this process, we must ensure that the nodes under operation are always valid by first checking their freeze
+bit, and then use MWCAS to set the freeze bit. Replaced nodes are sent to the garbage collector for future reclamation.
