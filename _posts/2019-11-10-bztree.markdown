@@ -74,7 +74,8 @@ using binary search, and the second unordered region which stores entries out-of
 BzTree dictates that no key can exist in both region, i.e. a key is either in the sorted region, or in the unordered region.
 If the payload is embedded in the node as binary, BzTree allows an update to only store the "delta" of the binary, in
 which case the same key can exist in both region, and there can be multiple keys in the unordered region. But still, only 
-one key may exist in the sorted region.
+one key may exist in the sorted region. In the following discussion we assume that the value is a fixed sized pointer 
+to external objects to avoid confusion.
 
 The same BzTree construct can be used to support various tree configuration. For example, the paper suggests that the 
 slotted-page based node layout supports both fixed-size key and variably sized key. Similarly, values can be pointers
@@ -106,3 +107,10 @@ maintained as a non-zero counter. When the node is deleted, we simply set the of
 "visible" bit is clear, we can distinguish between an uninitialized node and a deleted node by comparing the offset
 field against zero. The offset field which is set to global epoch number will be also useful for recovery, as we will 
 see later.
+
+Key insert and key delete are serialized against each other on the status word. Node inserts MWCAS on the status
+word twice, one to allocate space, and another to make sure the status word has not changed since the allocation.
+Inserts and deletes are serialized against node consolidation, split and merge also on the status word by checking
+the "freeze" bit before the operation, and using the status word without "freeze" bit in MWCAS to ensure that no
+node replacement can happen during the insert/delete. One potential problem is that node insert is not atomic, since
+we need to copy the key and value into allocated space, which cannot be done easily with one MWCAS. 
