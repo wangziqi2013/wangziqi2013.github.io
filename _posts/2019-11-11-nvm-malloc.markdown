@@ -40,3 +40,13 @@ optimized, while persistence and durability is not a concern. These two copies o
 at certain points during the operation, such as when a new block is allocated to the application. On recovery, we rebuild
 the DRAM copy of metadata by scanning entire or only part of the NVM storage. This can be done by a background thread
 or lazily.
+
+nvm_malloc works in a similar way as jemalloc. The allocator divides the address space into chunks, which are fixed 
+sized, 4MB blocks requested from the OS. Each chunk has a chunk header if it is not allocated, or if it is the first chunk
+of an allocated huge block (a block may span several chunks). Huge allocations greater than 2MB are fulfilled directly
+by one or more continuous chunks. Some chunks are maintained as arenas to fulfill allocation requests of moderate sizes. 
+Arenas are self-contained, in a sense that all metadata related to allocation is contained in the arena, and that
+multiple arenas can handle allocation in parallel independently. Threads are mapped to different arenas to minimize contention.
+Within an arena chunk, we further break down memory into 4KB blocks. Allocation sizes and metadata headers are both rounded 
+into cache line granularity (64 Bytes), and aligned to cache line boundaries to avoid unexpectedly persisting unrelated 
+data due to false sharing. Within an arena, allocation requests are classified into two types. 
