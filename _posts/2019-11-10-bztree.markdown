@@ -67,6 +67,15 @@ a key-pointer array, a constant field recording the size of the node, and a stat
 between node update and replacement (insert/delete/split/merge). Internal nodes are immutable. Only the value field can
 be updated in-place directly, which needs to serialize against node replacement as we will show below.
 
+Entries in a leaf node is not always sorted. In fact, since BzTree performs log-structured updates to leaf nodes, entries 
+are appended to the end of free space when they are inserted. Given an initially sorted node (e.g. after consolidation), 
+this essentially divides the free space (and metadata array) into two regions: The first sorted reagion which can be searched
+using binary search, and the second unordered region which stores entries out-of-order. If the value is word size pointers,
+BzTree dictates that no key can exist in both region, i.e. a key is either in the sorted region, or in the unordered region.
+If the payload is embedded in the node as binary, BzTree allows an update to only store the "delta" of the binary, in
+which case the same key can exist in both region, and there can be multiple keys in the unordered region. But still, only 
+one key may exist in the sorted region.
+
 The same BzTree construct can be used to support various tree configuration. For example, the paper suggests that the 
 slotted-page based node layout supports both fixed-size key and variably sized key. Similarly, values can be pointers
 to objects, or can be embedded as variably sized objects. In addition, the same code can be used for both DRAM-only
