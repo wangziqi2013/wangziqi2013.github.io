@@ -136,3 +136,12 @@ Reading a leaf node consists of binary searching the sorted part, and scanning u
 the entry. For embedded objects, if delta is posted for each insert, we need to conduct a full scan of the node no matter whether
 the key is found by the binary search. The deltas are applied into the initial image of the embedded object in the order
 they are appended into the node.
+
+As new entries are appended into the leaf node, searching can become a performance bottleneck, as the length of the unordered
+array to scan for each lookup will keep growing. To reduce the extra overhead, we periodically "consolidate" the node by 
+sorting all entries in the node, and copying them into a new node. The old node is replaced by a atomic switch on the 
+parent node child pointer. We describe this process as follows. First, the freeze of the node is checked to ensure it 
+is still valid. Then, we perform a single word CAS using the MWCAS primitive (for persistency) to set the freeze bit
+of the leaf node. This MWCAS serializes the node consolidation against other concurrent operations on the node. Operations
+observing this MWCAS must re-traverse the tree, since the node will soon be replaced. Next, a new leaf node is allocated, 
+and entries in the old node is sorted and inserted into the new node. The last step is to install the new node
