@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents nvm_malloc, a persistent memory allocator. The paper identifies that traditional memory allocators
+designed for volatile memory are insufficient to ensure correct post-recovery execution for two reasons. First, without
+proper metadata synchronization and post-crash recovery, memory blocks allocated to application programs might still be 
+tracked as free memory after recovery, which results in data corruption as the same block can be allocated to fulfill
+another memory request, causing unexpected data race. Second, 
