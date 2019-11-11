@@ -144,4 +144,9 @@ parent node child pointer. We describe this process as follows. First, the freez
 is still valid. Then, we perform a single word CAS using the MWCAS primitive (for persistency) to set the freeze bit
 of the leaf node. This MWCAS serializes the node consolidation against other concurrent operations on the node. Operations
 observing this MWCAS must re-traverse the tree, since the node will soon be replaced. Next, a new leaf node is allocated, 
-and entries in the old node is sorted and inserted into the new node. The last step is to install the new node
+and entries in the old node is sorted and inserted into the new node. The last step is to install the new node into the 
+parent node. We assume each tree traversal maintains a node stack that stores nodes on the path. The parent node is first
+checked for validity, and then a MWCAS is performed on the parent node's status word and the corresponding child pointer
+to switch from the old child to the new child. Note that the MWCAS here is also a double compare and single swap, the purpose
+of which is just to ensure that the status word is not changed during the node switch. After asuccessful MWCAS, the old
+node can be moved into the garbage chain, which is then freed after all threads being able to see it enter quiescence.
