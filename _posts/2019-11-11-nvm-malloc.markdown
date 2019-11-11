@@ -41,7 +41,7 @@ at certain points during the operation, such as when a new block is allocated to
 the DRAM copy of metadata by scanning entire or only part of the NVM storage. This can be done by a background thread
 or lazily.
 
-nvm_malloc works in a similar way as jemalloc. The allocator divides the address space into chunks, which are fixed 
+We first describe the NVM image of nvm_alloc metadata. The allocator divides the address space into chunks, which are fixed 
 sized, 4MB blocks requested from the OS. Each chunk has a chunk header if it is not allocated, or if it is the first chunk
 of an allocated huge block (a block may span several chunks). Huge allocations greater than 2MB are fulfilled directly
 by one or more continuous chunks. Some chunks are maintained as arenas to fulfill allocation requests of moderate sizes. 
@@ -53,5 +53,9 @@ data due to false sharing. Within an arena, allocation requests are classified i
 2KB but smaller than 2MB, they are directly fulfilled from consecutive free blocks within the arena, if there is any (if 
 not then threads check other areas, or allocate a new chunk). The first block of the allocation is initialized with a 
 header which describes the type and size of the allocation. For requests less than 2KB, they are fulfilled by a single 
-block. The allocator further classifies the requested size into different size classes. For each size class, there is a 
-linked list of blocks that fulfill allocation of this class. One block can only be used for one size class. 
+block which we describe as follows. The allocator further classifies the requested size into different size classes. For 
+each size class, there is a linked list of blocks that fulfill allocation of this class. One block can only be used for 
+one size class. Within the block, the first 64 bytes are dedicated to the block header, which stores the block
+type, the ID of the arena, and an 8 byte bit map (63 entries at most) for describing the availbility of slots in the unit
+of the current class size. When a small allocation is made from a block, the corresponding bit is set to indicate that
+the block is no longer owner by the allocator.
