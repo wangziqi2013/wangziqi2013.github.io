@@ -49,4 +49,9 @@ Arenas are self-contained, in a sense that all metadata related to allocation is
 multiple arenas can handle allocation in parallel independently. Threads are mapped to different arenas to minimize contention.
 Within an arena chunk, we further break down memory into 4KB blocks. Allocation sizes and metadata headers are both rounded 
 into cache line granularity (64 Bytes), and aligned to cache line boundaries to avoid unexpectedly persisting unrelated 
-data due to false sharing. Within an arena, allocation requests are classified into two types. 
+data due to false sharing. Within an arena, allocation requests are classified into two types. For requests larger than 
+2KB but smaller than 2MB, they are directly fulfilled from consecutive free blocks within the arena, if there is any (if 
+not then threads check other areas, or allocate a new chunk). The first block of the allocation is initialized with a 
+header which describes the type and size of the allocation. For requests less than 2KB, they are fulfilled by a single 
+block. The allocator further classifies the requested size into different size classes. For each size class, there is a 
+linked list of blocks that fulfill allocation of this class. One block can only be used for one size class. 
