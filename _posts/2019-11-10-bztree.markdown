@@ -159,3 +159,12 @@ on the grandparent node. For a spilt, the sibling node is created, and then inse
 For a merge, a sibling is chosen (either left or right), and a new node is created by merging active entries in both
 nodes. During this process, we must ensure that the nodes under operation are always valid by first checking their freeze
 bit, and then use MWCAS to set the freeze bit. Replaced nodes are sent to the garbage collector for future reclamation.
+
+On recovery, no BzTree-specific routine is requires. The MWCAS library handles all unfinished operations by either rolling
+them back or reapplying changes. Note that insert operations consists of two atomic MWCAS, one to allocate space and 
+another to activate the entry. If the system crashes between these two steps, then a dead entry will be left in the 
+node, which may block future operations (since a key is left undermined). To deal with this, on every crash recovery,
+the global recovery epoch counter is incremented by one. On future tree operations, when we see a suspected dead entry
+(i.e. active bit cleared), we compare its offset field with the current epoch counter. If values do not match, we 
+know this entry is a dead entry from an incomplete insert before the crash, at which case we simply zero
+out the key and value, and mark it as deleted.
