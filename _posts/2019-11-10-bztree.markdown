@@ -18,8 +18,9 @@ This paper identifies two atomicity requirements for in-memory B+Tree typically 
 updates should be atomic with regard to other threads. This avoids exposing some inconsistent intermedaite states to other
 threads which may lead to data corruption or program failure. Second, multi-step updates should be atomic with
 regard to the NVM. Either none of the operations or all of them should be reflected on the NVM image at any point during
-the execution. Currently hardware primitives are insufficient to guarantee any of these two, with reliable progress guarantee
-(HTM can satisfy the first requirement, but there is no progress guarantee unless a software fall back path is provided). 
+execution. The problem, however, is that current hardware primitives are insufficient to guarantee any of these two, with 
+reliable progress guarantee (HTM can satisfy the first requirement, but there is no progress guarantee unless a software 
+fall back path is provided). 
 
 This paper presents the implementation of BzTree, which achieves atomic tree update with regard to both other threads and 
 the NVM. The atomicity guarantees of BzTree are delivered under a unified Multi-Word Compare-and-Swap (MWCAS) framework, 
@@ -28,3 +29,12 @@ successful. In addition, the MWCAS primitive is extended with logging support wh
 to reapply committed updates, while rolling back partial changes to recovery the data structure to a consistent state. 
 These two combined together ensures that the structure of the tree is always consistent both in the DRAM and in the NVM 
 at any moment during execution.
+
+The MWCAS operation proceeds in two stages. The MWCAS implementation used by BzTree assumes that the target words are
+either virtual address pointers, or small integers (much smaller than 2^64), or bit fields. In all three cases, we 
+can dedicate three control bits from the target word for defining the type of the word, which we discuss as follows. 
+The first bit is a "dirty" bit, which indicates that the current DRAM image may differ from the NVM image, and the value
+may not be persisted when a crash happens. The MWCAS protocol dictates that a dirty value must be persised to the NVM
+before they can be used. This is to prevent a thread accessing dirty data from making its own updates, which must
+be rolled back if later on crash happens and the dirty data is lost and cannot be recovered. (NOTE: I personally do not
+think this will happen).
