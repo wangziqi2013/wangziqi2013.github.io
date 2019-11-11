@@ -30,4 +30,13 @@ allocator removes the block from its internal free list, the block is permanentl
 nor the application owns the memory. This problem, in its essence, is caused by non-atomic ownership transfer: During 
 the ownership transfer, there is a short time window in which the block is not owned by any party in the system, whose 
 only reference is stored on the volatile stack. On a power loss, the stack content will not be preserved, resulting in 
-memory leaks.
+memory leaks. The second observation is that recovery does not require the allocator to restore everything to the exact
+consistent state at the byte level, as long as the logical view of memory is preserved. This important observation leads
+to the practice in which two copies of metadata being maintained for the allocator. The persistent copy, which is the
+NVM image of the allocator state, is only updated and read sparsely when absolutely necessary. This way we can organize 
+the NVM metadata in a way that is most efficient for logging and recovery. The DRAM copy of the metadata, on the other 
+hand, is queried every time a request is received. We organize DRAM metadata such that lookup and update performance is 
+optimized, while persistence and durability is not a concern. These two copies of metadata is only synchronized regularly 
+at certain points during the operation, such as when a new block is allocated to the application. On recovery, we rebuild
+the DRAM copy of metadata by scanning entire or only part of the NVM storage. This can be done by a background thread
+or lazily.
