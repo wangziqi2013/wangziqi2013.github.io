@@ -113,4 +113,11 @@ word twice, one to allocate space, and another to make sure the status word has 
 Inserts and deletes are serialized against node consolidation, split and merge also on the status word by checking
 the "freeze" bit before the operation, and using the status word without "freeze" bit in MWCAS to ensure that no
 node replacement can happen during the insert/delete. One potential problem is that node insert is not atomic, since
-we need to copy the key and value into allocated space, which cannot be done easily with one MWCAS. 
+we need to copy the key and value into allocated space, which cannot be done easily with one MWCAS. Node insert consists
+of two MWCAS, which exposts an intermediate state in which a metadata entry is allocated, but its content is not yet
+available for key comparison. This introduces problem for both read and concurrent inserts/deletes, since the key
+is unknown. In the simplest case, concurrent threads can just spin on the "visible" bit for a while to wait for the 
+key-value copy. If spinning seems infeasible, then the thread can continue its operation optimistically by assuming the 
+missing key does not conflict with its operation. To prevent the unfortunate case where the missing key does incur a conflict,
+the thread must recheck after it has allocated space for its own operation (assuming it is an insert) but before it sets
+the "visible" bit for its own entry.
