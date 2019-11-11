@@ -48,3 +48,10 @@ thread by replacing the regular value with a descriptor. If it is the case, the 
 incomplete RDCSS or MWCAS using information recorded in the descriptor. This "help-along" protocol makes BzTree unblocking,
 since threads can always make progress by helping other threads finish their operations, even if when the initiating thread
 of the operation is switched out by the OS. 
+
+We then describe the node layout as follows. A node consists of four parts. The first part is a node header, which consists 
+of a status word, and two constant fields for remembering the node block size and the number of sorted elements in the node
+(see below). The status word will be updated by MWCAS, so its highest three bits are reserved. The status word is the place
+where updates to the node, structural moficiation (split and merge), and node consolidation serializes against each other,
+as each of these three types of operations will first read the status word, and either update it or use it as a "snapshot"
+of the state when it is first read. 
