@@ -125,9 +125,14 @@ the offset field. Deletes and reads can safely ignore missing keys, as they just
 
 ***
 Note: In fact, I do not think BzTree is wait-free due to the fact that inserts require two atomic MWCAS operations. If a 
-thread never wakes up after allocating space but before initializing its metadata entry, then all following insert threads
+thread never wakes up after allocating space but before initializing its key-value, then all following insert threads
 will be blocked by this thread, since they cannot continue the insertion until the missing key is filled. On the other hand,
 they can choose to serialize before the potentially conflicting insert, as long as inserts use the new value of the status word 
 from the first MWCAS as the old exepcted value for the second MWCAS. This guarantees that if an intervening insert/delete
 happens on the node, the second MWCAS must fail due to updated status word. This workaround, however, is not on the paper.
 ***
+
+Reading a leaf node consists of binary searching the sorted part, and scanning unsorted part if binary search does not find
+the entry. For embedded objects, if delta is posted for each insert, we need to conduct a full scan of the node no matter whether
+the key is found by the binary search. The deltas are applied into the initial image of the embedded object in the order
+they are appended into the node.
