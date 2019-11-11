@@ -120,4 +120,14 @@ is unknown. In the simplest case, concurrent threads can just spin on the "visib
 key-value copy. If spinning seems infeasible, then the thread can continue its operation optimistically by assuming the 
 missing key does not conflict with its operation. To prevent the unfortunate case where the missing key does incur a conflict,
 the thread must recheck after it has allocated space for its own operation (assuming it is an insert) but before it sets
-the "visible" bit for its own entry.
+the "visible" bit for its own entry. If there is indeed a key conflict, the thread just deletes its own entry by clearing
+the offset field. Deletes and reads can safely ignore missing keys, as they just serialize before the insert.
+
+***
+Note: In fact, I do not think BzTree is wait-free due to the fact that inserts require two atomic MWCAS operations. If a 
+thread never wakes up after allocating space but before initializing its metadata entry, then all following insert threads
+will be blocked by this thread, since they cannot continue the insertion until the missing key is filled. On the other hand,
+they can choose to serialize before the potentially conflicting insert, as long as inserts use the new value of the status word 
+from the first MWCAS as the old exepcted value for the second MWCAS. This guarantees that if an intervening insert/delete
+happens on the node, the second MWCAS must fail due to updated status word. This workaround, however, is not on the paper.
+***
