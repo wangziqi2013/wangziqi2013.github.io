@@ -150,3 +150,5 @@ checked for validity, and then a MWCAS is performed on the parent node's status 
 to switch from the old child to the new child. Note that the MWCAS here is also a double compare and single swap, the purpose
 of which is just to ensure that the status word is not changed during the node switch. After asuccessful MWCAS, the old
 node can be moved into the garbage chain, which is then freed after all threads being able to see it enter quiescence.
+Inner nodes of BzTree do not require consolidation, since they are immutable and does not support in-place insert. The 
+paper reports that this scheme improves performance by avoiding node search at intermediate level.
