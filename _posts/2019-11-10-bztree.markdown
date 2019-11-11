@@ -93,4 +93,16 @@ and the metadata entry to set the visible bit in the metadata entry to true, whi
 frozen in the meantime by another thread. (Again, I think this should be a double compare and single swap, as we do
 not update the status word, but just to "lock" it to avoid concurrent modification).
 
-Node delete is simpler. After locating the deleted entry in the node, we 
+Node delete is simpler. After checking the freeze bit and locating the deleted entry in the node, we perform a MWCAS on 
+both status word and the metadata entry. We change the status word such that the delete has an observable effect which
+determines its serialization point against concurrent inserts and deletes. The "deleted key" field in status word is 
+therefore incremented using the MWCAS. As for the metadata entry, we clear the "visible" bit to indicate that the entry
+no longer exists.
+
+Note that when the "visible" bit is clear in an entry, there are two possibilities: The entry can either be allocated
+but not initialized, or the entry is just deleted. To distinguish between these two cases, we perform an addition update
+on the "offset" field when inserting into the node: The "offset" field is updated to a "global epoch number" which is 
+maintained as a non-zero counter. When the node is deleted, we simply set the offset field to zero. This way, when the 
+"visible" bit is clear, we can distinguish between an uninitialized node and a deleted node by comparing the offset
+field against zero. The offset field which is set to global epoch number will be also useful for recovery, as we will 
+see later.
