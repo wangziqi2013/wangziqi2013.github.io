@@ -73,3 +73,15 @@ to objects, or can be embedded as variably sized objects. In addition, the same 
 B+Tree, and hybrid DRAM-NVM B+Tree. The only difference is whether dirty values are flushed back to the NVM when they
 are set. For DRAM-only B+Tree, the dirty value is never turned on.
 
+We next describe tree operations. Tree insert consists of two atomic actions. First, we read the status word, and check
+whether the node has been frozen ("freeze" bit is set, which indicating the node will soon be replaced). If true, we retry
+the traversal from the tree root to avoid inserting into a node that will be discarded. Next, we reserve space for the 
+inserted key and value, and the metadata entry by performing a MWCAS on the status word, the "visible" bit of the metadata 
+entry, and the "offset" field of the same entry (actually I think this should be a single compare double swap as we
+do not care the initial value before the MWCAS). If the allocation is successful, we then copy the content of the key
+and value into the space just allocated from the free chunk. After that, we perform another MWCAS on the status word
+and the metadata entry to set the visible bit in the metadata entry to true, while guaranteeing that the node is not 
+frozen in the meantime by another thread. (Again, I think this should be a double compare and single swap, as we do
+not update the status word, but just to "lock" it to avoid concurrent modification).
+
+Node delete is simpler. After locating the deleted entry in the node, we 
