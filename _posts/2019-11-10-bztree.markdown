@@ -37,4 +37,14 @@ The first bit is a "dirty" bit, which indicates that the current DRAM image may 
 may not be persisted when a crash happens. The MWCAS protocol dictates that a dirty value must be persised to the NVM
 before they can be used. This is to prevent a thread accessing dirty data from making its own updates, which must
 be rolled back if later on crash happens and the dirty data is lost and cannot be recovered. (NOTE: I personally do not
-think this will happen).
+think this will happen). After persisting the word, the dirty flag can be cleared in the DRAM using a single word CAS.
+Note that CAS is necessary in this case, since there can be concurrent modifications on the same word by other threads.
+
+The remaining two bits are used to indicate whether the value stored in the target word is a regular value, a descriptor
+of MWCAS, or a descriptor of RDCSS. RDCSS descriptors are used to implement Restricted Double Compare and Single Swap.
+We use RDCSS in the first stage of MWCAS to avoid certain subtle race conditions that may break the atomicity of MWCAS.
+After reading a value, threads should always check these two bits to see whether the value is temporarily locked by another 
+thread by replacing the regular value with a descriptor. If it is the case, the thread should "help-along" and finish the 
+incomplete RDCSS or MWCAS using information recorded in the descriptor. This "help-along" protocol makes BzTree unblocking,
+since threads can always make progress by helping other threads finish their operations, even if when the initiating thread
+of the operation is switched out by the OS. 
