@@ -67,3 +67,9 @@ a key-pointer array, a constant field recording the size of the node, and a stat
 between node update and replacement (insert/delete/split/merge). Internal nodes are immutable. Only the value field can
 be updated in-place directly, which needs to serialize against node replacement as we will show below.
 
+The same BzTree construct can be used to support various tree configuration. For example, the paper suggests that the 
+slotted-page based node layout supports both fixed-size key and variably sized key. Similarly, values can be pointers
+to objects, or can be embedded as variably sized objects. In addition, the same code can be used for both DRAM-only
+B+Tree, and hybrid DRAM-NVM B+Tree. The only difference is whether dirty values are flushed back to the NVM when they
+are set. For DRAM-only B+Tree, the dirty value is never turned on.
+
