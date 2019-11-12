@@ -60,6 +60,11 @@ type, the ID of the arena, and an 8 byte bit map (63 entries at most) for descri
 of the current class size. When a small allocation is made from a block, the corresponding bit is set to indicate that
 the block is no longer owned by the allocator.
 
+In the following discussion, we use the word "chunk" to refer to the 4MB block used to support huge allocation and arenas.
+We use "block" to refer to the 4KB memory block which is the granularity of alignment for headers, and the granularity
+for large allocations. We use "region" to refer to a consecutive range of blocks, which can be either free or already
+allocated.
+
 Several invariants are maintained by the allocator to ensure correct recovery. First, all allocated blocks are aligned to
 64 byte cache line boundary to avoid false sharing, as we have discussed above. Second, for every allocation, the metadata
 header describing this allocation (and potentially other allocations, in the case of small requests) is always located in
@@ -74,3 +79,8 @@ also type-specific information such as allocation bit map, etc.. As mentioned ea
 size, and is aligned to cache line boundaries. This allows headers to be identified during recovery by simply scanning 
 the NVM address space, and jumping over the region body to the next region.
 
+We next describe the in-memory data structure that nvm_malloc uses to support fast query. First, each chunk has a search
+tree which tracks free blocks sorted by block address. Initially, the entire chunk is only one large region consisting of
+all blocks in the chunk except the first one (which is used for metadata and alighment). As blocks are allocated, existing 
+blocks in the search tree are selected in a best-fit basis, broken down to smaller blocks, and re-inserted into the tree.
+As mentioned earlier, each region in the tree has a header which describe the state of the block, the 
