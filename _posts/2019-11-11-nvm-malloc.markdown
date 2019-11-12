@@ -118,3 +118,10 @@ third step, the header is flushed back to the NVM again to activate the allocate
 words are updated with the address of the allocated block, and then flushed back to the NVM. In the last step, the status 
 word is changed from "Pending" to "Allocated" and then flushed, which implicitly invalidates the log entries in the header. 
 
+The second flush operation is the linearization point of the ownership transfer: If system crashes before this happens, 
+the block is still in Free state on the NVM, and therefore not allocated, and the application will not be able to access 
+them, since the target word values have not been updated. If the system crashes after the second flush, the status word
+is "Pending", which will cause the recovery process to reapply the last two steps described above, which updates the 
+target words with the allocated value. The last flush is simply log pruning to avoid excessive and unnecessary log replay.
+Deallocation works similarly: Instead of setting the target words to the allocated value, we simply set them to NULL 
+pointer, and change the status word to "Free Pending". 
