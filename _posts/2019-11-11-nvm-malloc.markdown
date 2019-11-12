@@ -104,5 +104,14 @@ enforce atomicity of ownership transfer. Memory allocation is processed in two s
 within nvm_malloc is searched and a new block is allocated. This process happens entirely in DRAM, and only the DRAM 
 metadata is modified to reflect the change. Concurrent allocation is serialized by locks on the arena and free list 
 (they are not serialized, however, when a small and a large allocation are invoked by different threads at the 
-concurrently, as long as the free list has at least one block). This step is called "reserve" in the paper. In the next '
-step
+concurrently, as long as the free list has at least one block). This step is called "reserve" in the paper, which
+uses a malloc-like interface (i.e. the pointer is returned as a value). In the next step, the newly allocated block is 
+"activated" by writing log entries to the header of the allocated memory. Threads call a function "nvm_activate" with
+both the pointer just returned from the allocator, and addresses that will be updated with the allocated pointer ("target 
+words"). Due to space limit of the header (64 bytes), at most two target words can be passed to the allocator, and for 
+slotted page allocation, at most two activations can be logged in the header (for the other two types of allocations,
+we can only have at most one activation record). The allocator then performs ownership transfer atomically as follows.
+First, it writes the address of the target words into the header, and flush the header. Next, the allocator changes the 
+status word in the header from "Free" to "Allocated" to reflect the allocation. For slotted page allocations, the 
+index should also be logged, and the bitmap should also be updated (before updating the status word). In the 
+last step, the 
