@@ -112,6 +112,9 @@ words"). Due to space limit of the header (64 bytes), at most two target words c
 slotted page allocation, at most two activations can be logged in the header (for the other two types of allocations,
 we can only have at most one activation record). The allocator then performs ownership transfer atomically as follows.
 First, it writes the address of the target words into the header, and flush the header. Next, the allocator changes the 
-status word in the header from "Free" to "Allocated" to reflect the allocation. For slotted page allocations, the 
+status word in the header from "Free" to "Pending" to reflect the allocation. For slotted page allocations, the 
 index should also be logged, and the bitmap should also be updated (before updating the status word). In the 
-last step, the 
+third step, the header is flushed back to the NVM again to activate the allocated address. After the flush, the target 
+words are updated with the address of the allocated block, and then flushed back to the NVM. In the last step, the status 
+word is changed from "Pending" to "Allocated" and then flushed, which implicitly invalidates the log entries in the header. 
+
