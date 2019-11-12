@@ -90,4 +90,11 @@ region, and flush back the modified header. This order of operation guarantees t
 of the region break-down, as long as the dirty value of the exiting header is not written back to the NVM, the break
 will not be committed. During recovery, the newly allocated region is merged back to the original region as if it has
 never happened, since the larger region's size is still the original size. We will not be able to recognize the newly
-written region header at the middle of the original region during the scan.
+written region header at the middle of the original region during the scan. 
+
+Each arena in nvm_malloc has a list of buckets, which holds metadata for different size classes. Each bucket in the arena
+represents a certain size class, which has a linked list of blocks dedicated to that size class. nvm_malloc only stores
+the headers of these blocks in the DRAM as a link list, from which free slots can be acquired by reading in the allocation
+bit map of each block and finding the index of a "0" bit. Full blocks are removed from this list, since they can no
+longer be used. When a pointer is freed, we first round down the pointer value to the nearest block boundary,
+and check if it is a slotted block. If true, then the block header is re-added into the linked list. 
