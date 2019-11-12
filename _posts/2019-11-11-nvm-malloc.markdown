@@ -124,10 +124,12 @@ them, since the target word values have not been updated. If the system crashes 
 is "Pending", which will cause the recovery process to reapply the last two steps described above, which updates the 
 target words with the allocated value. The last flush is simply log pruning to avoid excessive and unnecessary log replay.
 Deallocation works similarly: Instead of setting the target words to the allocated value, we simply set them to NULL 
-pointer, and change the status word to "Free Pending". 
+pointer, and change the status word to "Free Pending". Note that the thread freeing a memory region may not be the one
+that requests from its arena. The deallocating thread should therefore use the arena ID stored in the region
+header to determine which arena should this block be returned to.
 
 On recovery, the recovery process starts a background thread to scan the NVM address space. It begins with the lowest known 
 header address (which is mapped to a well-known location in the virtual address space), and keeps scanning by jumping to 
 the next header indicated by the size field in the current header. If the header status word indicates that there are 
 activation operations pending, the recovery process simply writes the region address to target words recorded in the 
-header. In the meantime
+header. In the meantime, the application can be resumed
