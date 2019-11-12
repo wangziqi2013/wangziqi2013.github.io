@@ -132,4 +132,9 @@ On recovery, the recovery process starts a background thread to scan the NVM add
 header address (which is mapped to a well-known location in the virtual address space), and keeps scanning by jumping to 
 the next header indicated by the size field in the current header. If the header status word indicates that there are 
 activation operations pending, the recovery process simply writes the region address to target words recorded in the 
-header. In the meantime, the application can be resumed
+header. The in-DRAM data structure is also rebuilt as the recovery process scans blocks.
+In the meantime, the application can be restarted immediately without blocking, i.e. the recovery seems instaneous.
+The restarted application should acquire new chunks from the OS to fulfill its memory allocation requests before the recovery
+process finishes. If the application deallocates a piece of memory, the deallocated region should be returned to the original
+arena, which also forces the recovery process to be executed for the affected block and arena. The background recovery
+thread should take proper measures to make sure that such concurrent updates to the DRAM metadata serialize properly.
