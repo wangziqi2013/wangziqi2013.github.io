@@ -98,3 +98,11 @@ the headers of these blocks in the DRAM as a link list, from which free slots ca
 bit map of each block and finding the index of a "0" bit. Full blocks are removed from this list, since they can no
 longer be used. When a pointer is freed, we first round down the pointer value to the nearest block boundary,
 and check if it is a slotted block. If true, then the block header is re-added into the linked list. 
+
+nvm_malloc features a set of interfaces that are different from traditional malloc/free, the major reason of which is to
+enforce atomicity of ownership transfer. Memory allocation is processed in two steps. In the first step, the metadata
+within nvm_malloc is searched and a new block is allocated. This process happens entirely in DRAM, and only the DRAM 
+metadata is modified to reflect the change. Concurrent allocation is serialized by locks on the arena and free list 
+(they are not serialized, however, when a small and a large allocation are invoked by different threads at the 
+concurrently, as long as the free list has at least one block). This step is called "reserve" in the paper. In the next '
+step
