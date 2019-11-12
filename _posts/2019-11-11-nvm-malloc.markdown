@@ -58,4 +58,13 @@ each size class, there is a linked list of blocks that fulfill allocation of thi
 one size class. Within the block, the first 64 bytes are dedicated to the block header, which stores the block
 type, the ID of the arena, and an 8 byte bit map (63 entries at most) for describing the availbility of slots in the unit
 of the current class size. When a small allocation is made from a block, the corresponding bit is set to indicate that
-the block is no longer owner by the allocator.
+the block is no longer owned by the allocator.
+
+Several invariants are maintained by the allocator to ensure correct recovery. First, all allocated blocks are aligned to
+64 byte cache line boundary to avoid false sharing, as we have discussed above. Second, for every allocation, the metadata
+header describing this allocation (and potentially other allocations, in the case of small requests) is always located in
+the first cache line sized area as the pointer returned. This implies that the metadata describing the allocation
+can always be located by aligning down (i.e. towards lower address) data pointer to the nearest block boundary (i.e. 4KB). 
+The third invariant is that at aby given moment in time, a block is either owned by the allocator, or owned by the application.
+The ownership transfer is performed using an atomic operation at hardware level, assuming that single word store and single 
+cache line write back are atomic with regard to failures.
