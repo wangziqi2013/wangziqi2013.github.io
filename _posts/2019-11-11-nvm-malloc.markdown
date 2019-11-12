@@ -80,7 +80,14 @@ size, and is aligned to cache line boundaries. This allows headers to be identif
 the NVM address space, and jumping over the region body to the next region.
 
 We next describe the in-memory data structure that nvm_malloc uses to support fast query. First, each chunk has a search
-tree which tracks free blocks sorted by block address. Initially, the entire chunk is only one large region consisting of
-all blocks in the chunk except the first one (which is used for metadata and alighment). As blocks are allocated, existing 
-blocks in the search tree are selected in a best-fit basis, broken down to smaller blocks, and re-inserted into the tree.
-As mentioned earlier, each region in the tree has a header which describe the state of the block, the 
+tree which tracks free regions sorted by block address. Initially, the entire chunk is only one large region consisting of
+all blocks in the chunk except the first one (which is used for metadata and alighment). As blocks and regions are allocated, 
+existing regions in the search tree are selected in a best-fit basis, broken down to smaller regions, and re-inserted into 
+the tree. As mentioned earlier, each region in the tree has a header which describes the current state of the region. 
+When a large region is broken down into smaller ones, a new header is written to the newly created region (which is at 
+the middle of the existing region), flushed back to the NVM, only after which can we modify the header of the existing 
+region, and flush back the modified header. This order of operation guarantees that even the system crashes at the middle 
+of the region break-down, as long as the dirty value of the exiting header is not written back to the NVM, the break
+will not be committed. During recovery, the newly allocated region is merged back to the original region as if it has
+never happened, since the larger region's size is still the original size. We will not be able to recognize the newly
+written region header at the middle of the original region during the scan.
