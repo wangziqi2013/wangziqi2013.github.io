@@ -67,4 +67,10 @@ the first cache line sized area as the pointer returned. This implies that the m
 can always be located by aligning down (i.e. towards lower address) data pointer to the nearest block boundary (i.e. 4KB). 
 The third invariant is that at aby given moment in time, a block is either owned by the allocator, or owned by the application.
 The ownership transfer is performed using an atomic operation at hardware level, assuming that single word store and single 
-cache line write back are atomic with regard to failures.
+cache line write back are atomic with regard to failures. The last invariant is that all allocated region and free region
+have a header, which stores the arena ID of the region, the type of the region (free, huge allocation, large allocation,
+or block for a certain size class), the allocation status (discussed later), and the size of the allocation. There are 
+also type-specific information such as allocation bit map, etc.. As mentioned earlier, the header is of single cache line 
+size, and is aligned to cache line boundaries. This allows headers to be identified during recovery by simply scanning 
+the NVM address space, and jumping over the region body to the next region.
+
