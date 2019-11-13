@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Project PBerry, an FPGA accelerated scheme for implementing efficient remote memory. The paper identifies
+two major problems of current implementation of distributed remote memory, which is based on software handling of page faults
+and demand paging. The first problem is write amplification. When a remote page is evicted out of the current host's main
+memory, it needs to be transferred to the remote machine in the granularity of a page. This is because current hardware 
+does not support cache line level dirty data tracking, while page level tracking is implemented in the MMU by setting 
+the "dirty" bit in the page table entry before a store instruction accesses the page. If only a few cache lines are modified
+in the page before it is evicted, it is a waste of bandwidth to transfer the entire page to remote host. The paper 
+suggests that for certain workloads, the majority of pages have less than 7 dirty cache lines. The second problem is 
