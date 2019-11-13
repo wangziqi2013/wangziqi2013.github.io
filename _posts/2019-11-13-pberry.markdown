@@ -52,4 +52,12 @@ DRAM cannot be tracked, since their write backs will not be sent to the FPGA.
 
 The second scheme configures the FPGA device as a cache controller, which operates on the same level as the LLC. The 
 FPGA in this case does not store data; Instead, only address tags and coherence states are stored, which allows higher 
-tracking capacity given the same amount of on-board memory.
+tracking capacity given the same amount of on-board memory. Tracking can begin without prior configuration of the 
+MMU and the OS; The FPGA device starts tracking by issuing read shared requests to all other LLC controllers. After 
+obtaining read permissions from the directory, it adds the tags (and only tags) into its internal memory as if it were 
+a large cache. When any of the cache lines under tracking are modified by other processors, an invalidation coherence request 
+will be forwarded to the FPGA, since all cache line copies are in shared state and need to be invalidated before the 
+write. The FPGA device then adds the address tag into the dirty data buffer. In this scheme, a write can only be 
+tracked once, since the tag has been invalidated by the first write. The FPGA needs to issue read shared requests again 
+in order to start the next round of tracking.
+
