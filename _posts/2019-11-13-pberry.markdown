@@ -42,4 +42,10 @@ a buffer accessible to the OS (note that most coherence protocols only write bac
 clean lines if they are evicted). When a read request misses upper level caches, they will also be forwarded to the FPGA
 device. We postpone the handling of read requests to later sections.
 
-
+One potential problem of this scheme is that the memory controller on the FPGA only has partial information about dirty
+lines. This is because dirty line tracking is triggered only by cache write backs. The processor cache, in the meantime,
+may also have a few dirty lines that have not been written back yet. To gather complete information, the FPGA device
+needs to inject read shared requests to upper level caches in order to force a write back (most protocols will perform
+dirty write back on M to S state transition). Another problem is that only a small subset of physical addresses can be 
+configured to be mapped to the FPGA, due to the fact that FPGA has limited on-board memory. Addresses mapped to local 
+DRAM cannot be tracked, since their write backs will not be sent to the FPGA.
