@@ -82,3 +82,15 @@ is larger than a threshold K, meaning that there are more than K dirty cache lin
 marked as dirty without any fine-grained tracking, in order to save space. If the result of testing cache line 
 bloom filter is positive, we still need to append the tag to the buffer, as this might be a false positive. No other 
 actions are needed, since this may just be the same dirty line being repeatedly written and evicted. 
+
+The paper also proposes eliminating the second write-protection page fault entirely by allowing the FPGA to make 
+requests to remote hosts for the page. This also requires that the OS map remote virtual pages to the physical address
+range handled by the FPGA, instead of marking them as not present in the software only scheme. This way, memory
+instructions on these pages will not incur costly page faults. Instead, the access request will miss the entire hierarchy, 
+which is then forwarded to the FPGA. The FPGA sends a data fetch packet to the remote host, requesting only the 
+cache line to be accessed by the processor. As pointed out by the paper, this scheme is similar to the critical word 
+first technique for handling cache misses (i.e. the requested word is loaded into the register via a short circuit path
+while the rest of the line is loaded in the background). The FPGA can then migrate the remote page in the background
+without blocking the reading instruction, which reduces critical path latency.
+
+To further 
