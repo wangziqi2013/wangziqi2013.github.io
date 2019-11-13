@@ -32,5 +32,10 @@ states collectively with other bus agents on the network. The FPGA is connected 
 implementations of bus protocols. The paper proposes two schemes for connecting the FPGA Module (PBF) to the 
 system bus. In the first scheme, the PBF acts as a memory controller, which snoops on cache line evictions from
 upper level caches. At system startup time, part of the physical address space is mapped to this FPGA device, such that
-upper level controllers will send cache lines mapped to this address range to the FPGA device rather than regular controller. 
-The OS is also configured such that remote pages are mapped to this physical address range. 
+upper level controllers will send cache lines mapped to this address range to the FPGA device rather than regular controller
+(or rely on snooping? I am not an expert on this, so I assume upper level cache controllers either "know" which address
+is mapped to which destination, or they put the address on a broadcasting bus, and wait for lower level devices
+to take the responsibility). 
+The OS is also configured such that remote pages are mapped to this physical address range. The FPGA device stores 
+evicted cache lines in its internal memory, and tracks the metadata (e.g. tags, sizes) in a buffer accessible to the OS.
+When an evicted line is received on the controller, 
