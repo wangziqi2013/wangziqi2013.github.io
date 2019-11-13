@@ -36,6 +36,10 @@ upper level controllers will send cache lines mapped to this address range to th
 (or rely on snooping? I am not an expert on this, so I assume upper level cache controllers either "know" which address
 is mapped to which destination, or they put the address on a broadcasting bus, and wait for lower level devices
 to take the responsibility). 
-The OS is also configured such that remote pages are mapped to this physical address range. The FPGA device stores 
-evicted cache lines in its internal memory, and tracks the metadata (e.g. tags, sizes) in a buffer accessible to the OS.
-When an evicted line is received on the controller, 
+The OS is also configured such that remote pages are mapped to this physical address range. When an evicted line is received 
+by the FPGA, it stores the data of evicted cache lines in its internal memory, and tracks metadata (e.g. tags, sizes) in 
+a buffer accessible to the OS (note that most coherence protocols only write back dirty cache lines, and will discard
+clean lines if they are evicted). When a read request misses upper level caches, they will also be forwarded to the FPGA
+device. We postpone the handling of read requests to later sections.
+
+
