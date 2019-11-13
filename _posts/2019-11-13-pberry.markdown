@@ -25,3 +25,12 @@ software overhead for handling remote pages. Two page faults are required to han
 trigger the transfer of the remote page (after which the page is write-protected), and another to release the write 
 protection on the page after adding it to the write set. The second page fault is necessary, since user level remote memory 
 libraries have no permission to access the page table. 
+
+Project PBerry assumes a cache coherent FPGA with a hardware component that can either be configured to be a memory
+controller handling requests to and from upper level hierarchiy, or as a cache controller which maintains cache line
+states collectively with other bus agents on the network. The FPGA is connected to the system bus via one of the 
+implementations of bus protocols. The paper proposes two schemes for connecting the FPGA Module (PBF) to the 
+system bus. In the first scheme, the PBF acts as a memory controller, which snoops on cache line evictions from
+upper level caches. At system startup time, part of the physical address space is mapped to this FPGA device, such that
+upper level controllers will send cache lines mapped to this address range to the FPGA device rather than regular controller. 
+The OS is also configured such that remote pages are mapped to this physical address range. 
