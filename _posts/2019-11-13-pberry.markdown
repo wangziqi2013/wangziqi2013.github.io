@@ -61,3 +61,7 @@ write. The FPGA device then adds the address tag into the dirty data buffer. In 
 tracked once, since the tag has been invalidated by the first write. The FPGA needs to issue read shared requests again 
 in order to start the next round of tracking.
 
+The second scheme tracks the entire address space without special MMU and OS support. It it, however, infeasible since
+it requires reconfiguring the internal cache structure of the FPGA to act as a "virtual" cache without storing data. 
+The paper subtly suggests that this may involve more work than the first scheme, and conducts no more discussion of this 
+scheme in later sections. 
