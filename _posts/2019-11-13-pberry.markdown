@@ -93,4 +93,7 @@ first technique for handling cache misses (i.e. the requested word is loaded int
 while the rest of the line is loaded in the background). The FPGA can then migrate the remote page in the background
 without blocking the reading instruction, which reduces critical path latency.
 
-To further 
+To further overlap normal execution and background page migration, the paper also suggests that the OS move its page table 
+to the FPGA. When an accessed is to be made to a remote virtual page, the MMU must initiate a page walk to obtain VA to
+PA mapping. The FPGA snoops on page walker memory traffic, and derives the physical address. It can then start 
+background transferration of the page even before the cache miss request is issued.
