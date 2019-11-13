@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Project PBerry: FPGA Acceleration for Remote Memory"
+date:   2019-11-13 12:27:00 -0500
+categories: paper
+paper_title: "Project PBerry: FPGA Acceleration for Remote Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=3321424
+paper_keyword: FPGA; Remote Memory
+paper_year: HotOS 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
