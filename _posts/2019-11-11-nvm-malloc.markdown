@@ -133,7 +133,7 @@ header address (which is mapped to a well-known location in the virtual address 
 the next header indicated by the size field in the current header. If the header status word indicates that there are 
 activation operations pending, the recovery process simply writes the region address to target words recorded in the 
 header. The in-DRAM data structure is also rebuilt as the recovery process scans blocks.
-In the meantime, the application can be restarted immediately without blocking, i.e. the recovery seems instaneous.
+In the meantime, the application can be restarted immediately without blocking, i.e. the recovery seems instantaneous.
 The restarted application should acquire new chunks from the OS to fulfill its memory allocation requests before the recovery
 process finishes. If the application deallocates a piece of memory, the deallocated region should be returned to the original
 arena, which also forces the recovery process to be executed for the affected block and arena. The background recovery
