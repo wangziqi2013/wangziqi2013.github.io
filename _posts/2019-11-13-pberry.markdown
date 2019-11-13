@@ -75,4 +75,10 @@ line distribution) should not be the top priority of this scheme.
 
 The paper proposes using two bloom filters to identify dense pages. A cache line bloom filter tracks the approximate set
 of cache lines that have already been added into the buffer. A page level counting bloom filter tracks the number of 
-cache lines in a page that have already been tracked. 
+cache lines in a page that have already been tracked. When a new cache line is to be added, we first check if it is 
+in the cache line bloom filter (with false positive). If negative, we set the bloom filter bit, and append the tag into 
+the buffer. We also increment the counter in the corresponding entry of the counting bloom filter. If the counter value 
+is larger than a threshold K, meaning that there are more than K dirty cache lines in this page, the entire page is 
+marked as dirty without any fine-grained tracking, in order to save space. If the result of testing cache line 
+bloom filter is positive, we still need to append the tag to the buffer, as this might be a false positive. No other 
+actions are needed, since this may just be the same dirty line being repeatedly written and evicted. 
