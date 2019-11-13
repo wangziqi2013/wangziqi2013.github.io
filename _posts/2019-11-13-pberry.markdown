@@ -49,3 +49,7 @@ needs to inject read shared requests to upper level caches in order to force a w
 dirty write back on M to S state transition). Another problem is that only a small subset of physical addresses can be 
 configured to be mapped to the FPGA, due to the fact that FPGA has limited on-board memory. Addresses mapped to local 
 DRAM cannot be tracked, since their write backs will not be sent to the FPGA.
+
+The second scheme configures the FPGA device as a cache controller, which operates on the same level as the LLC. The 
+FPGA in this case does not store data; Instead, only address tags and coherence states are stored, which allows higher 
+tracking capacity given the same amount of on-board memory.
