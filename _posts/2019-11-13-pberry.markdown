@@ -64,4 +64,15 @@ in order to start the next round of tracking.
 The second scheme tracks the entire address space without special MMU and OS support. It it, however, infeasible since
 it requires reconfiguring the internal cache structure of the FPGA to act as a "virtual" cache without storing data. 
 The paper subtly suggests that this may involve more work than the first scheme, and conducts no more discussion of this 
-scheme in later sections. 
+scheme in later sections. In our following discussion, we also only focus on the first scheme, since it integrates better
+with remote memory access.
+
+As mentioned earlier, when a cache line is written back to the FPGA from upper level caches, the line address is added to
+a buffer shared between the FPGA and the OS daemon. When multiple GBs of memory are being tracked in this scheme, the 
+storage requirement for address tags inevitably explodes, which may eventually exceed the capacity of on-board memory.
+In addition, since we assume that most remote pages are only accessed sparsely, tracking "dense" pages (regarding dirty 
+line distribution) should not be the top priority of this scheme.
+
+The paper proposes using two bloom filters to identify dense pages. A cache line bloom filter tracks the approximate set
+of cache lines that have already been added into the buffer. A page level counting bloom filter tracks the number of 
+cache lines in a page that have already been tracked. 
