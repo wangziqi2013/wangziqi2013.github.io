@@ -21,3 +21,7 @@ does not support cache line level dirty data tracking, while page level tracking
 the "dirty" bit in the page table entry before a store instruction accesses the page. If only a few cache lines are modified
 in the page before it is evicted, it is a waste of bandwidth to transfer the entire page to remote host. The paper 
 suggests that for certain workloads, the majority of pages have less than 7 dirty cache lines. The second problem is 
+software overhead for handling remote pages. Two page faults are required to handle a remote page correctly: one to 
+trigger the transfer of the remote page (after which the page is write-protected), and another to release the write 
+protection on the page after adding it to the write set. The second page fault is necessary, since user level remote memory 
+libraries have no permission to access the page table. 
