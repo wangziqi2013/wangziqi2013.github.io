@@ -97,4 +97,8 @@ The second advice is to use non-temporal stores for larger writes. As discussed 
 read traffic by not having to allocate space for a line before writing it, when the size of the write is large enough to 
 "blind write" an entire line on the underlying hardware (otherwise the read is still needed). On the NVM device with 256 
 bytes of storage, when the write size exceeds 512 bytes, we know that one 256 bytes page do not need to be read, since we 
-can always blind write into it. 
+can always blind write into it. For smaller writes, the paper suggests that cache lines should be flushed or written back
+as soon as writes finish, since this can achieve with better locality compared to only flushing cache lines at the end
+and having the cache controller evicting lines in an unpredictable manner. This is especially true when the size 
+of the working set exceeds the size of the cache, in which case part of the working set will definitely be evicted by
+the controller, causing lower EWR.
