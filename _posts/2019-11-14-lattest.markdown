@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This preprint draft paper presents several performance characteristics of the newly introduced commercial product of 
+byte-addressable NVM, 3D XPoint. The observations made in this paper are based on actual physical persistent NVM hardware, 
+which is most likely implemented with Phase-Change Memory technology. Byte-addressable NVM requires special support
+from the integrated memory controller on the processor chip to ensure the correctness of stores once they reach
+the write pending queue of the memory controller. The memory controller leverages Asynchronous DRAM Refresh capability
+to guarantee that even on a power failure, dirty data in the write queue can still be flushed back to the NVM, and so does
+dirty data within NVM's internal buffers and queues. 
