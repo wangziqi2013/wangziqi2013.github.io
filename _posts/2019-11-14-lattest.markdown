@@ -80,3 +80,11 @@ the write to two memory controllers increase (when the access size is exactly th
 to two memory controllers, except when the write is aligned on the size boundary). This effect increases contention on
 the memory controller size, which has limited queue capacity, since one write request now generates two or even more 
 requests on the memory controller, reducing the overall processing throughput for requests. 
+
+The paper also gives several advices on NVM programming based on the above observations. The first advice is that programmers
+should avoid small and random writes to the NVM, which could not be handled very well by the internal buffer, and will
+cause write amplification problem for writes. The paper proposes using Effective Write Ratio (EWR) is the standard of 
+measuring the degree of locality. EWR is the result of dividing the amount of writes (in size) from the CPU by the amount
+of physical writes performed to the NVM non-volatile component (collected from device's performance counter). EWR is an 
+indication of write amplification, since the smaller EWR is, the larger write amplification effect will be. For sequential
+writes, the paper reports a EWR of near 1.0 (it can even exceeds 1.0 if writes are combined in the buffer). 
