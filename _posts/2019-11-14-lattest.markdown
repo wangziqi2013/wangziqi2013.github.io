@@ -102,3 +102,10 @@ as soon as writes finish, since this can achieve with better locality compared t
 and having the cache controller evicting lines in an unpredictable manner. This is especially true when the size 
 of the working set exceeds the size of the cache, in which case part of the working set will definitely be evicted by
 the controller, causing lower EWR.
+
+The third advice is to limite the degree of concurrency on both the device and the memory controller. Due to the fact
+that NVM devices are sensitive to the locality of the workload, as the number of threads increase, the effectiveness
+of having internal buffers begins to drop, since independent threads are likely to access addresses that have low
+locality, causing thrashing on the internal buffer. In addition, when the size of the access is close to the size
+of strides for interleaved NVM devices, it is also likely that one request will be sent to two or more controllers,
+doubling the effective bandwidth on the controller side. 
