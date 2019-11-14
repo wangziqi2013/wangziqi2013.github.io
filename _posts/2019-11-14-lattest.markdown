@@ -19,4 +19,19 @@ which is most likely implemented with Phase-Change Memory technology. Byte-addre
 from the integrated memory controller on the processor chip to ensure the correctness of stores once they reach
 the write pending queue of the memory controller. The memory controller leverages Asynchronous DRAM Refresh capability
 to guarantee that even on a power failure, dirty data in the write queue can still be flushed back to the NVM, and so does
-dirty data within NVM's internal buffers and queues. 
+dirty data within NVM's internal buffers and queues. Although the memory controller communicates with the NVM device
+using 64 byte cache line sized blocks, the internal page size of the NVM device is 256 bytes due to density requirements
+and physical space limites. As we will see later, this page size configuration will introduce write amplification
+problem in some cases, as write operations into an NVM page will be internally performed as a read-modify-write sequence. 
+To reduce the frequency of writes into the non-volatile components, the NVM also provides an internal buffer (called XPBuffer
+in the paper) to combine writes. The buffer is also made persistent using residual powers on the device on a power failure. 
+It is also suggested by the paper that there are 64 such buffers, 256 bytes each, in the device. **Both** reads and writes 
+will allocate a buffer entry. 
+
+The paper presents two commonly used methods of persisting data to the NVM device. The first method is to issue a cached
+regular store, followed by a flush and memory fence. The memory fence will commit when the store reaches the write 
+pending queue of the controller, after which the store is guarantee to persist. The second method is to use non-temporal
+stores to circumvent the cache hierarchy. The non-temporal store will likely be write combined in the processor's write queue,
+and sent to memory controller directly without write-allocate. Since non-temporal writes are not ordered against other
+writes and even themselves, a memory fence must also be issued after the non-temporal store to ensure that later non-temorial
+srores do not override the current one. 
