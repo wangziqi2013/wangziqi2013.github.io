@@ -73,4 +73,10 @@ bandwidth keeps growing; After 256 bytes it simply plateaus. This can be explain
 Before access size reaches 256 bytes, which is exactly the size of the buffer, each access still needs to pay the 
 extra cost of opening a page and loading it into the buffer (assuming random workload), which has fixed cost regardless
 of the size of access. In other words, we need to pay an fixed cost of accessing X bytes of data, regardless of the 
-value of X. When X increases, bandwidth will also increase. 
+value of X. When X increases, bandwidth will also increase. The second observation is that when devices are interleaved
+(e.g. 4KB in the paper), when the write size is close to the interleaved size, write performance becomes worse, resulting
+in a "dip" in the bandwidth graph. This is because as the access size reaches the stride size, the probability of distributing
+the write to two memory controllers increase (when the access size is exactly the stride size, writes will always be sent 
+to two memory controllers, except when the write is aligned on the size boundary). This effect increases contention on
+the memory controller size, which has limited queue capacity, since one write request now generates two or even more 
+requests on the memory controller, reducing the overall processing throughput for requests. 
