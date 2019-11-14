@@ -54,3 +54,12 @@ while random reads are likely to miss the buffer, which requires accessing the p
 observation is on variance of latencies. In general, 3D XPoint features extremely low overall write latency variance. There 
 are, however, outliers for writes which have 100x higher latency than normal writes. The paper suspected that this is either
 casued by wear leveling, or as a result of thermal control.
+
+The paper also presents experiment results on bandwidth. The first observation on bandwidth is that 3D XPoint NVM features
+lower read and write bandwidth compared with DRAM. In addition, the gap between read and write bandwidth on NVM is larger
+than the gap on DRAM. The second observation is that NVM bandwidth does not scale as the number of threads concurrently
+accessing the device increase. The paper suggests in a later sections that this is caused by the contention on two parts:
+memory controller and the device's internal buffer. Since reads will allocate buffers in the NVM, as the number of independent
+reads from threads increase, locality drops such that more recent reads are likely to evict earlier reads, which then 
+require fetching data from the non-volatile component, reduing overall read bandwidth. In fact, when the number of reading
+threads exceed 10, read bandwidth starts to decrease. 
