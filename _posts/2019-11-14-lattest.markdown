@@ -91,4 +91,10 @@ writes, the paper reports a EWR of near 1.0 (it can even exceeds 1.0 if writes a
 with good locality, the EWR is also moderately high, illustrating the effectiveness of the internal buffer. When the distance
 between two highly related writes (e.g. first one writes the first 128 bytes of an 256 byte aligned array, and second one
 writes the second 128 bytes of the array after certain number of unrelated writes) exceeds 64, EWR becomes significantly
-worse, which subtly suggests that it is likely that there are 64 internal buffer entries within the device.
+worse, which subtly suggests that it is likely that there are 64 internal buffer entries within the device. 
+
+The second advice is to use non-temporal stores for larger writes. As discussed earlier, non-temporal writes can save 
+read traffic by not having to allocate space for a line before writing it, when the size of the write is large enough to 
+"blind write" an entire line on the underlying hardware (otherwise the read is still needed). On the NVM device with 256 
+bytes of storage, when the write size exceeds 512 bytes, we know that one 256 bytes page do not need to be read, since we 
+can always blind write into it. 
