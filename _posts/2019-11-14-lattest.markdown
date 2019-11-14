@@ -47,4 +47,10 @@ by the difference in the performance characteristics of underlying memory techno
 is just much slower than reading from the DRAM capacitor cells. Even more surprisingly, the paper also observed that 
 the read latency of NVM is around 3x higher than writing into the NVM, and that the latency of DRAM write and NVM write
 are alomost the same. This is because writing into the NVM only requires sending data to the memory controller, which buffers
-the request in the write pending queue. 
+the request in the write pending queue, while data being read from the NVM is sent by the device itself. The second observation
+is that sequential reads are much faster than random read. This is the natural result of having internal buffers which
+also allocate entries for reads. Sequential reads are likely to hit the buffer, and hence have lower average latency,
+while random reads are likely to miss the buffer, which requires accessing the physical non-volatile component. The third
+observation is on variance of latencies. In general, 3D XPoint features extremely low overall write latency variance. There 
+are, however, outliers for writes which have 100x higher latency than normal writes. The paper suspected that this is either
+casued by wear leveling, or as a result of thermal control.
