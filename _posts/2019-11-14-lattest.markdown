@@ -62,4 +62,15 @@ accessing the device increase. The paper suggests in a later sections that this 
 memory controller and the device's internal buffer. Since reads will allocate buffers in the NVM, as the number of independent
 reads from threads increase, locality drops such that more recent reads are likely to evict earlier reads, which then 
 require fetching data from the non-volatile component, reduing overall read bandwidth. In fact, when the number of reading
-threads exceed 10, read bandwidth starts to decrease. 
+threads exceed 10, read bandwidth starts to decrease. Writes have a similar contention issue, but is on the memory controller
+side: As the number of independent writes arriving at the controller increase, the chance that writes can be combined decrease.
+Furthermore, as NVM can drain the write queue at a much lower rate than DRAM, especially when locality is generally low
+for multiple threads, the queuing effect can make writes suffer from larger latency as the number of threads increase.
+
+The paper also conductes experiments of multi-threaded read and write bandwidth using the optimal thread count settings
+from the last experiment, while varing the access size. Our observation is that before the access size reaches 256 bytes,
+bandwidth keeps growing; After 256 bytes it simply plateaus. This can be explained by the presence of the internal buffer:
+Before access size reaches 256 bytes, which is exactly the size of the buffer, each access still needs to pay the 
+extra cost of opening a page and loading it into the buffer (assuming random workload), which has fixed cost regardless
+of the size of access. In other words, we need to pay an fixed cost of accessing X bytes of data, regardless of the 
+value of X. When X increases, bandwidth will also increase. 
