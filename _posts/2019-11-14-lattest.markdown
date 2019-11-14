@@ -40,3 +40,11 @@ for the write, and therefore, if the non-temproal store is able to fill an entir
 the cache controller does not have to read the address before writing into it. This prevents the NVM devices from being
 saturated prematurely by the extra read traffic, which is sometimes not intended (e.g. when we are writing log data
 which is barely read again until crash recovery).
+
+The paper makes the following observation regarding access latency. First, read latency is significantly higher than write
+latency on NVM. This is not the case with DRAM, which has an almost symmetric read-write latency. This can be explained 
+by the difference in the performance characteristics of underlying memory technologies, since reading from the PCM NVM
+is just much slower than reading from the DRAM capacitor cells. Even more surprisingly, the paper also observed that 
+the read latency of NVM is around 3x higher than writing into the NVM, and that the latency of DRAM write and NVM write
+are alomost the same. This is because writing into the NVM only requires sending data to the memory controller, which buffers
+the request in the write pending queue. 
