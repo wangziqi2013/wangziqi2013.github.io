@@ -34,4 +34,9 @@ pending queue of the controller, after which the store is guarantee to persist. 
 stores to circumvent the cache hierarchy. The non-temporal store will likely be write combined in the processor's write queue,
 and sent to memory controller directly without write-allocate. Since non-temporal writes are not ordered against other
 writes and even themselves, a memory fence must also be issued after the non-temporal store to ensure that later non-temorial
-srores do not override the current one. 
+srores do not override the current one. The paper suggests that using the second method to persiste large amount of data 
+is slightly faster than using the flush + fence sequence. This is because non-temproal stores do not allocate cache entry
+for the write, and therefore, if the non-temproal store is able to fill an entire cache line after write combining,
+the cache controller does not have to read the address before writing into it. This prevents the NVM devices from being
+saturated prematurely by the extra read traffic, which is sometimes not intended (e.g. when we are writing log data
+which is barely read again until crash recovery).
