@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "An Empirical Guide to the Behavior and Use of Scalable Persistent Memory"
+date:   2019-11-14 13:42:00 -0500
+categories: paper
+paper_title: "An Empirical Guide to the Behavior and Use of Scalable Persistent Memory"
+paper_link: https://arxiv.org/abs/1908.03583v1
+paper_keyword: NVM
+paper_year: arXiv, Aug 9 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
