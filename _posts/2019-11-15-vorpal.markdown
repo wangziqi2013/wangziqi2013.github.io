@@ -34,3 +34,8 @@ a fixed address-to-controller mapping, i.e. we use a hash function to map a phys
 relation is fixed. Each socket also has an interfacing component, called the gateway, which is responsible for communicating 
 local reads and writes to remote sockets. All remote traffic must go thruogh this component. As we will see later, this
 component can be critical to reducing the storage overhead when the scale of the system is large.
+
+Having multiple memory controllers can introduce problems for write ordering. For example, on today's architecture, we 
+enforce memory ordering using memory barriers, which consist of a sequence of cache line flush or write back instructions, 
+and a store fence at the end. The store fence will be removed from the pipeline only when data written back to the NVM 
+are acknowledged by the memory controller. 
