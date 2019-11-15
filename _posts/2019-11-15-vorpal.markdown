@@ -24,3 +24,9 @@ of FASEs, and then use a background thread to compute data flow ordering. The ba
 consistent image by performing BFS on the graph based on unlock-lock relation, advancing the "frontier" to determine whether
 a FASE should persist or be rolled back. FASEs within the frontier can be persisted safely (since their dependent FASEs
 are also committed), while those not within the frontier must wait.
+
+Vorpal is a hardware scheme that uses vector clock to encode the ordering of critical sections and store operations. 
+In the paper, it is assumed that the system consists multiple cores, which can be on different sockets. Each socket
+has a few memory controllers that process read and write requests from the LLC. Since physical address space might be 
+partitioned between these sockets, a store request generated at a core might be sent to a remote socket and written
+into remote memory. Local writes are processed by one of the local memory controllers on the chip. 
