@@ -67,12 +67,26 @@ the vector clock in the lock variable, and then the processor increments its own
 by one. This essentially synchronize all following memory writes against the unlocked critical section, which we always
 assume to have a data dependency (while dynamic data flow may not actually exist); (2) Clocks are also updated when
 a persist barrier is executed. In this case, the processor simply increments its own counter by one in the local clock, 
-which synrhconizes all writes before the barrier against writes after the barrier. 
+which synrhconizes all writes before the barrier against writes after the barrier. On the memory controller side, when
+a store has been processed by the controller, it updates its lock by merging the clock of the store with its own local 
+clock. The memory controller then selects the next store to process based on the following two rules: (1) All elements 
+except element i are either smaller than or equal to all corresponding elements in the controller's local clock; 
+(2) For element i, the value in the store instruction equals the corresponding value in the memory controller's clock 
+plus one. It is hence guaranteed that no timestamp can be smaller than the the selected store's timestamp, while being
+larger than the "abstract" timestamp which is the merge of all stores that have been processed. In practice, since 
+the controller only maintains the merge of a subset of all possible timestamps, the actual value in controller's 
+local vector might be smaller than the "abstract" timestamp. This is exactly the reason why memory controllers 
+need to broadcast theie local timestamps to others. On receiving such a broadcast, the memory controller merges the 
+broadcasted value with its own, after which the selection process is re-attempted.
 
 The notion of vector clocks guarantee that, if a clock-incrementing event A happens before another event B, then the 
 corresponding vector clock value at time point A is guaranteed to be smaller than the value at point B (the reverse,
 however, is not necessarily true). In our case, if critical section X acquirs a lock which is released by another critical 
 section Y, then all stores in X have a vector clock value larger than stores in Y. For vector clocks a and b, we say a < b 
-if and only if every element of a is smaller than every element of b on the same index. 
+if and only if every element of a is smaller than every element of b on the same index. Merging two locks is simply
+just taking the larger element from index i of both vectors, and put it into index i of the output vector.
 
-The paper proposes three slightly different Vorpal schemes based on the above baseline. The first scheme, Vorpal0
+The paper proposes three slightly different Vorpal schemes based on the above baseline. The first scheme, Vorpal0, requires 
+the least hardware change, but introduces unnecessary write orderings. In Vorpal0, in addition to the two rules of 
+incrementing local clocks, we add a third rule: (3) The local clock should also be incremented on every persistent store
+instruction, serialization the persistence of all stores even within a critical section. 
