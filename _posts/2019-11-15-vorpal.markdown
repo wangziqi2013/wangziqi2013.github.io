@@ -19,3 +19,8 @@ using locks whose modifications are expected to be persisted to the NVM. An FASE
 modifications within an FASE should be atomic, i.e. either all stores are persisted, or none of them is persisted. Second,
 during recovery, if a FASE is rolled back, then none of the FASEs that depent on it should be persisted. In other words,
 data flow ordering should also be obeyed when determining whether a FASE should persist or be rolled back during recovery.
+In the past, researchers proposed to use runtime libraries to instrument lock and unlock operation to delineate the boundaries
+of FASEs, and then use a background thread to compute data flow ordering. The background thread computes the most recent
+consistent image by performing BFS on the graph based on unlock-lock relation, advancing the "frontier" to determine whether
+a FASE should persist or be rolled back. FASEs within the frontier can be persisted safely (since their dependent FASEs
+are also committed), while those not within the frontier must wait.
