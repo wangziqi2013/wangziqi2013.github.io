@@ -45,3 +45,10 @@ persisted before the one that gets enqueued before the sfence instruction, causi
 multiple memory controllers, writes from the same thread must always be mapped to the same controller. Because otherwise,
 two writes separated by a persist barrier might be written back in the wrong order by two different memory controllers,
 even if both of them process writes in the queue in strict FIFO order. 
+
+Vorpal uses vector clocks to address the problem that hardware cannot resolve dependent writes without more ordering
+information. In the baseline design of Vorpal, each core has a vector clock of size C, where C is the number of cores
+in the system. Each element i in the vector of core j (except the case where i == j) represents the timestamp of processor 
+j when last time i and j communicates. Element j on processor j is this process's local timestamp. This local timestamp
+is incremented to indicate that all stores after the increment must be persisted only if stores before this timestamp
+are. We later show how this is achieved by letting the memory controller compare timestamps. 
