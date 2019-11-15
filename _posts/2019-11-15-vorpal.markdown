@@ -89,4 +89,10 @@ just taking the larger element from index i of both vectors, and put it into ind
 The paper proposes three slightly different Vorpal schemes based on the above baseline. The first scheme, Vorpal0, requires 
 the least hardware change, but introduces unnecessary write orderings. In Vorpal0, in addition to the two rules of 
 incrementing local clocks, we add a third rule: (3) The local clock should also be incremented on every persistent store
-instruction, serialization the persistence of all stores even within a critical section. 
+instruction, serializing the persistence of all stores even within a critical section. Despite of unnecessary serialization,
+this is the only way to ensure correctness of persistence without extra timestamp logic. Imagine the case where timestamps 
+are not incremented for stores within the same critical section. All stores within a critical section will have the same 
+timestamp. If a store gets delayed (i.e. cache coherence issues) in the cache hierarchy, while a following store with
+larger timestamps (from another critical section) arrives at the memory controller, the cache controller is not aware
+of the delayed store, and will proceed to persist the store from the next critical section. This violates the ordering
+guarantee provided by vector clocks.
