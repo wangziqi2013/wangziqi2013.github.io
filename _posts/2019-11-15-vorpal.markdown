@@ -38,4 +38,10 @@ component can be critical to reducing the storage overhead when the scale of the
 Having multiple memory controllers can introduce problems for write ordering. For example, on today's architecture, we 
 enforce memory ordering using memory barriers, which consist of a sequence of cache line flush or write back instructions, 
 and a store fence at the end. The store fence will be removed from the pipeline only when data written back to the NVM 
-are acknowledged by the memory controller. 
+are acknowledged by the memory controller. The controller guarantees the persistence of the store once it has been 
+enqueued, even on power failures (e.g. using ADR). The implicit assumption about this ordering guarantee is that: (1) memory
+controllers persist memory writes in exact FIFO order. Otherwise, another store instruction after sfence executed may be 
+persisted before the one that gets enqueued before the sfence instruction, causing ordering problem; (2) If there are 
+multiple memory controllers, writes from the same thread must always be mapped to the same controller. Because otherwise,
+two writes separated by a persist barrier might be written back in the wrong order by two different memory controllers,
+even if both of them process writes in the queue in strict FIFO order. 
