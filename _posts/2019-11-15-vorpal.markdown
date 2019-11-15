@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Vorpal, a novel vector clock based scheme for ensuring memory persistence order on byte-addressable 
+NVM. The paper assumes a programming model called Failure-Atomic Sections (FASE), which are critical sections synchronized
+using locks whose modifications are expected to be persisted to the NVM. An FASE must observe two properties. First, all
+modifications within an FASE should be atomic, i.e. either all stores are persisted, or none of them is persisted. Second,
+during recovery, if a FASE is rolled back, then none of the FASEs that depent on it should be persisted. In other words,
+data flow ordering should also be obeyed when determining whether a FASE should persist or be rolled back during recovery.
