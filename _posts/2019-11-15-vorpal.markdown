@@ -52,3 +52,11 @@ in the system. Each element i in the vector of core j (except the case where i =
 j when last time i and j communicates. Element j on processor j is this process's local timestamp. This local timestamp
 is incremented to indicate that all stores after the increment must be persisted only if stores before this timestamp
 are. We later show how this is achieved by letting the memory controller compare timestamps. 
+
+Store instructions are also tagged with a timestamp, which is the current vector clock of the processor that issues the 
+store. Memory controllers can read and compare timestamps to determine which store should persist first. Every memory
+controller also maintains a vector clock, which is updated (merged) by the timestamps of stores it just processed. Memory
+controllers periodically broadcast its local vector clock to other controllers, in order to guarantee progress. This is 
+necessary, since each memory controller only sees a subset of all stores generated from processors. Its local vector
+clock, therefore, is also a merge of all timestamps in this subset. The actual value at each memory controller might
+be smaller than the "logical" vector clock which is the merge of all writes issued by all processors.
