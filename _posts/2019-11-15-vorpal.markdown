@@ -96,3 +96,10 @@ timestamp. If a store gets delayed (i.e. cache coherence issues) in the cache hi
 larger timestamps (from another critical section) arrives at the memory controller, the cache controller is not aware
 of the delayed store, and will proceed to persist the store from the next critical section. This violates the ordering
 guarantee provided by vector clocks.
+
+In a slightly improved design, Vorpal-chunk, extra hardware is added to ensure that the above scenario does not happen.
+In this scheme, processors divide stores into "chunks", such that: (1) A chunk boundary is inserted when the current store 
+will be processed by a different controller from the previous store; and (2) on successful lock acquire and persistent barriers.
+All stores within a chunk have the same timestamp. The processor buffers the chunk and keeps appending elements to the buffer
+until the boundary is inserted, at which time the chunk is sent to the memory controller. Each chunk also contains metadata
+such as the vector clock of the chunk, and the number of stores, which is also sent to the memory controller. The 
