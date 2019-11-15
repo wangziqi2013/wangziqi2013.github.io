@@ -29,4 +29,8 @@ Vorpal is a hardware scheme that uses vector clock to encode the ordering of cri
 In the paper, it is assumed that the system consists multiple cores, which can be on different sockets. Each socket
 has a few memory controllers that process read and write requests from the LLC. Since physical address space might be 
 partitioned between these sockets, a store request generated at a core might be sent to a remote socket and written
-into remote memory. Local writes are processed by one of the local memory controllers on the chip. 
+into remote memory. Local writes are processed by one of the local memory controllers on the chip. The paper assumes 
+a fixed address-to-controller mapping, i.e. we use a hash function to map a physical address to a controller, and this 
+relation is fixed. Each socket also has an interfacing component, called the gateway, which is responsible for communicating 
+local reads and writes to remote sockets. All remote traffic must go thruogh this component. As we will see later, this
+component can be critical to reducing the storage overhead when the scale of the system is large.
