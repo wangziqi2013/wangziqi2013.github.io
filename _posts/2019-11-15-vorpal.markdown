@@ -66,5 +66,13 @@ successfully enters critical section protected by lock L. In this case, the loca
 the vector clock in the lock variable, and then the processor increments its own counter (i.e. element j for processor j)
 by one. This essentially synchronize all following memory writes against the unlocked critical section, which we always
 assume to have a data dependency (while dynamic data flow may not actually exist); (2) Clocks are also updated when
-a persist barrier is seen. In this case, the processor simply increments its own counter by one in the local clock, which
-synrhconizes all writes before the barrier against writes after the barrier. 
+a persist barrier is executed. In this case, the processor simply increments its own counter by one in the local clock, 
+which synrhconizes all writes before the barrier against writes after the barrier. 
+
+The notion of vector clocks guarantee that, if a clock-incrementing event A happens before another event B, then the 
+corresponding vector clock value at time point A is guaranteed to be smaller than the value at point B (the reverse,
+however, is not necessarily true). In our case, if critical section X acquirs a lock which is released by another critical 
+section Y, then all stores in X have a vector clock value larger than stores in Y. For vector clocks a and b, we say a < b 
+if and only if every element of a is smaller than every element of b on the same index. 
+
+The paper proposes three slightly different Vorpal schemes based on the above baseline. The first scheme, Vorpal0
