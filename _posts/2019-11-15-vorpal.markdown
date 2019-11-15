@@ -59,4 +59,12 @@ controller also maintains a vector clock, which is updated (merged) by the times
 controllers periodically broadcast its local vector clock to other controllers, in order to guarantee progress. This is 
 necessary, since each memory controller only sees a subset of all stores generated from processors. Its local vector
 clock, therefore, is also a merge of all timestamps in this subset. The actual value at each memory controller might
-be smaller than the "logical" vector clock which is the merge of all writes issued by all processors.
+be smaller than the "logical" vector clock which is the merge of all writes issued by all processors. Locks used
+as synchronization variables are also tagged with vector clocks, which is updated to the vector clock of the processor
+that unlocks it. In general, the local timestamp of a processor is updated when: (1) An acquire operation (i.e. lock) 
+successfully enters critical section protected by lock L. In this case, the local processor's timestamp is merged with
+the vector clock in the lock variable, and then the processor increments its own counter (i.e. element j for processor j)
+by one. This essentially synchronize all following memory writes against the unlocked critical section, which we always
+assume to have a data dependency (while dynamic data flow may not actually exist); (2) Clocks are also updated when
+a persist barrier is seen. In this case, the processor simply increments its own counter by one in the local clock, which
+synrhconizes all writes before the barrier against writes after the barrier. 
