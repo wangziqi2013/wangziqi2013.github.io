@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Vorpal: Vector Clock Ordering for Large Persistent Memory Systems"
+date:   2019-11-15 15:08:00 -0500
+categories: paper
+paper_title: "Vorpal: Vector Clock Ordering for Large Persistent Memory Systems"
+paper_link: https://dl.acm.org/citation.cfm?doid=3293611.3331598
+paper_keyword: NVM; Vorpal; Vector clock; FASE
+paper_year: PODC 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
