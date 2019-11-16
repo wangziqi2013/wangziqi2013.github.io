@@ -99,7 +99,15 @@ guarantee provided by vector clocks.
 
 In a slightly improved design, Vorpal-chunk, extra hardware is added to ensure that the above scenario does not happen.
 In this scheme, processors divide stores into "chunks", such that: (1) A chunk boundary is inserted when the current store 
-will be processed by a different controller from the previous store; and (2) on successful lock acquire and persistent barriers.
+will be processed by a different controller from the previous store; (2) on successful lock acquire and persistent barriers;
+and (3) the processor's store buffer is full.
 All stores within a chunk have the same timestamp. The processor buffers the chunk and keeps appending elements to the buffer
 until the boundary is inserted, at which time the chunk is sent to the memory controller. Each chunk also contains metadata
-such as the vector clock of the chunk, and the number of stores, which is also sent to the memory controller. The 
+such as the vector clock of the chunk, the number of stores, the next chunk's vector clock, and the ID of the controller
+that will be processing the next chunk (these fileds are filled only when the current chunk terminates), which is also 
+sent to the memory controller. On processing a chunk, the controller inserts the chunk and its metadata into a lookup
+table. Then for every store operation processed with the chunk's vector clock value, the counter is decremented. The 
+local clock of the controller, however, is unaffected (to avoid selecting stores after the critical section / barrier). 
+Stores within a chunk can be scheduled freely to maximize the hardware characteristics. When the value of the counter 
+reaches zero, the controller removes the matdata entry from its lookup table, and updates the local clock. 
+
