@@ -116,4 +116,12 @@ The last scheme is Vorpal-chunk+, which further optimizes over Vorpal-chunk to e
 as follows. Instead of creating a chunk on every controller switch, which essentially still serializes chunks sent to
 different controllers, we now allow the processor to create chunks whose processing is distributed across controllers. 
 In this scheme, no chunk boundary is inserted when we switch to a new controller, and the vector clock is not
-incremented. The metadata, however
+incremented. The metadata and associated stores in the buffer, however, is sent to the controller when a switch happens,
+and we update the metadata after flushing the buffer (e.g. the next controller ID). The last chunk of the critical section / 
+persistent epoch should also be marked. When controller receives the chunk, it processes the chunk as described in the 
+above paragraph. When the chunk is finished, instead of updating the local vector clock, the controller sends a 
+singnal to the "next controller" indicated by the metadata field "next controller ID" as a notification of previous chunk
+commit. On receiving the chunk commit message, the controller commits its local chunk, and then sends the same 
+message to the next controller in the chain of chunks. After the last controller on the chunk chain receives the 
+message, the entire chunk is committed. All controllers in this process needs to update their local clocks by
+merging the current chunk's timestamp. 
