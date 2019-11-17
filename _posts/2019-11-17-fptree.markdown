@@ -135,3 +135,10 @@ is always able to recognize the rough point where crash happens by checking the 
 all steps between two "persist points" are idempotent, i.e. they can be performed more-than-once without changing the 
 semantics of the operation, recovery by replaying these steps will be correct. Non-idempotent operations (e.g. memory 
 allocation, key appending, etc.), however, must be recorded by the log to ensure exact-once semantics. 
+
+Note that parent node update is not logged, since parent nodes are stored in volatile memory only, and will be rebuilt
+on recovery anyway. Parent nodes are updated by acquiring the same speculative lock as in node traversal while holding
+the leaf node lock. This is also comparable to the lock coupling protocol for updating internal nodes, in which the 
+intrenal node is locked while holding the leaf node lock. The difference is that in the lock coupling approach, deadlock
+might happen since there is no global lock ordering; A thread traversing down the tree may deadlock with another therad
+attempting to lock the internal node while owning the leaf node lock. 
