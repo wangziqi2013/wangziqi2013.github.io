@@ -114,3 +114,9 @@ the same key as described in the previous paragraph. If the key cannot be found,
 an empty slot in the tree node using the bitmap, and then writing the key-value pair into the slot. The insert is 
 committed by persisting the key-value slot and fingerprint value first, setting the corresponding bit in the bitmap, and 
 persisting the bitmap. 
+
+When the leaf node is full, the thread will split the leaf node as follows. After locking the leaf node, and before inserting
+the key-value pair, we check the size of the node. If it is full, then node split begins by first allocating a log entry
+from the log pool. Log entries are maintained in the NVM address space as an array of log objects. Each log object has fields
+(possibly overloaded for different purposes) that describes a tree modification operation. The log pool is stored at
+a known location of the NVM file, and can be located after crash to aid recovery. 
