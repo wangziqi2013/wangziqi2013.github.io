@@ -34,3 +34,11 @@ inserted, which is handled as in the first pattern, and then updated without bei
 log to describe the operation, flush the log, after which the actual content is updated in-place. The log can only be 
 removed after we flush the in-place update back to the NVM. During recovery, the log entries are first processed by replaying
 the operations recorded in the log.
+
+The second challenge is data recovery. This paper assumes using direct access (DAX) provided by the file system to expose
+the NVM address space to users using virtual memory. Users need to call mmap() on the NVM file, which allocates a range 
+of virtual addresses that are mapped to the corresponding physical pages that are used to store the content of the file. 
+DAX provides better control over access permission and storage management, since the file system only exposes the part of 
+physical addresses that are used to store the file to users. Unrelated NVM storage is protected by the MMU. When users 
+expand the NVM file, the file system allocates new pages from the NVM address space, and adds them to the file inode. 
+This process, however, does not guarantee that the same NVM file can always be mapped 
