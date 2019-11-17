@@ -41,4 +41,8 @@ of virtual addresses that are mapped to the corresponding physical pages that ar
 DAX provides better control over access permission and storage management, since the file system only exposes the part of 
 physical addresses that are used to store the file to users. Unrelated NVM storage is protected by the MMU. When users 
 expand the NVM file, the file system allocates new pages from the NVM address space, and adds them to the file inode. 
+Compared with conventional DAX implemented on block storage, DAX on NVM does not use damand paging and rely on page faults
+to bring file contents into a memory buffer before access. Instead, the OS directly maps the requested virtual addresses
+to physical pages on the underlying NVM hardware. Furthermore, fsync() on NVM DAX file no longer flushes the buffer. Instead,
+we issue flush instructions on every cache line of the affected page to ensure that the page is persistent on NVM.
 This process, however, does not guarantee that the same NVM file can always be mapped 
