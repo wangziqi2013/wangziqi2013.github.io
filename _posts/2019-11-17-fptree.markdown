@@ -67,4 +67,8 @@ We now describe FPTree node layout as follows. Internals nodes of FPTree are vol
 for internal nodes are allocated by regular memory allocator in volatile address space. The node consists of three
 parts: A counter recording the number of entries, an array of sorted keys, and an array of values corresponding to the 
 keys. Internal nodes are always sorted and updated in-place like regular B+Tree nodes. No lock field is needed for 
-thread synchronization, since FPTree worker threads wrap the critical section in hardware transactions (TSX). 
+thread synchronization, since FPTree worker threads wrap the critical section in hardware transactions (TSX). Leaf nodes
+of FPTree have more fields than interna nodes for three reasons. First, updates to leaf nodes must be persisted
+back to the NVM, which is slower than internal node updates. Leaf nodes therefore use log-structured update without 
+enforing key ordering. In other words, updates to leaf nodes simply append the key and value to the next available
+storage slot, flush the content of the slot, and sets a "valid" bit in the node header bitmap. 
