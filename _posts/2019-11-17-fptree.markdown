@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents FPTree, a B+Tree designed for byte-addressable non-volatile memory. This paper points out, at a high 
+level, several challenges of implementing data structures for NVM. First, the data structure should be able to recover to
+a consistent state after a crash. This is typically achieved by flushing certain data back to the NVM to enforce write
+ordering between metadata (commit mark, log entry, etc.) and data using persistence barrier. There are three common patterns
+for ensuring consistency. The first pattern is 
