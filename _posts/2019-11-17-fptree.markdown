@@ -24,5 +24,10 @@ to zero). This happens when inserting elements into a B+Tree node. In this case,
 and then perform write. A valid mark is set only after the write completes and is flushed back to the NVM. The valid mark 
 can be appended after the write as a log, or be set in a separate header structure. A second flush on the valid mark commits 
 the write operation. Since the mark can be set with only 8 byte atomic writes, the commit operation is also atomic with 
-regard to failures. The second pattern is writing data into valid area, but allows data to be invalidated (deleted) before 
-they can be written into again. This 
+regard to failures. The second pattern is writing data into invalid area, but allows data to be invalidated (deleted) before 
+they can be written into again. This corresponds to insert and delete operation on a tree node. The first half (insertion)
+is exactly the same as the previous pattern. The second half can be easily achieved by resetting the valid mark during 
+the first half to a value indicating deleted entry, and then flushing the mark, which commits the delete operation. 
+Garbage collection is required to reclaim deleted entries to avoid fragmentation. In the third pattern, an entry is first
+inserted, which is handled as in the first pattern, and then updated without being deleted. If the update can be done with
+8 byte atomic write, then we simply perform the update and then flush the value. Otherwise, 
