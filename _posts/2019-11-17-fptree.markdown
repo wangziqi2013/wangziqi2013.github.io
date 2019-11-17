@@ -51,3 +51,20 @@ being invalidated. To preserve the semantics of pointers, this paper proposes us
 pair storing the file ID and offset within the file. No special compiler instrumentation is needed, as the pointer
 format is only used within the B+Tree. Users always observe normal virtual address pointers in the rumtime. 
 
+The third challenge is memory allocation. Memory blocks already allocated to the application should not be re-allocated
+after the crash due to incorrectly recovered metadata. Similarly, memory blocks should always be tracked by either 
+the application or by the allocator. Failure to observe the second requirement results in memory leak, which is harder
+to resolve than in volatile memory, since memory leaks are also persistent. Prior researches propose to change the 
+allocator interface to enable atomic ownership transfer: On memory allocation, the address of the target pointer
+for receiving the allocated block is passed as an argument. The allocator ensures that either the memory block
+is allocated after recovery and the target word stores the address of the block, or that the block is not allocated,
+and the target word's value does not change. The same applies to deallocation: On memory free, the address of the 
+target word holding the block to be freed is passed as an argument. The allocator should ensure that either the 
+block is returned after recovery and the target word is set to NULL, or that the block is not returned, and the 
+target word's value unchanged. The memory allocator can internally achieve this using redo logging. 
+
+We now describe FPTree node layout as follows. Internals nodes of FPTree are volatile and never persisted. The memory
+for internal nodes are allocated by regular memory allocator in volatile address space. The node consists of three
+parts: A counter recording the number of entries, an array of sorted keys, and an array of values corresponding to the 
+keys. Internal nodes are always sorted and updated in-place like regular B+Tree nodes. No lock field is needed for 
+thread synchronization, since FPTree worker threads wrap the critical section in hardware transactions (TSX). 
