@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "FPTree: A Hybrid SCM-DRAM Persistent and Concurrent B-Tree for Storage Class Memory"
+date:   2019-11-17 15:35:00 -0500
+categories: paper
+paper_title: "FPTree: A Hybrid SCM-DRAM Persistent and Concurrent B-Tree for Storage Class Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=2915251
+paper_keyword: NVM; B+Tree
+paper_year: SIGMOD 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
