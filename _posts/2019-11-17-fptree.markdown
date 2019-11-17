@@ -106,3 +106,11 @@ concurrent node updates (all node updates will acquire the lock physically). The
 the node by reading in the fingerprint field, checks the hash of the search key against the 1-byte fingerprints, and 
 probes the actual key slot(s) if there is one or more matches. A key is found if the key values match and the bitmap
 indicates a valid key. The value is returned after the critical section is committed.
+
+Tree insertion takes place the same way as a key search until reaching the leaf node. Once the leaf node is found, the 
+thread sets the lock bit speculatively within the critical section, and commits the transaction, which physically
+acquires the lock, potentially aborting concurrent read transactions on the leaf node. The thread then searches for 
+the same key as described in the previous paragraph. If the key cannot be found, insertion is performed by first finding
+an empty slot in the tree node using the bitmap, and then writing the key-value pair into the slot. The insert is 
+committed by persisting the key-value slot and fingerprint value first, setting the corresponding bit in the bitmap, and 
+persisting the bitmap. 
