@@ -30,4 +30,7 @@ is exactly the same as the previous pattern. The second half can be easily achie
 the first half to a value indicating deleted entry, and then flushing the mark, which commits the delete operation. 
 Garbage collection is required to reclaim deleted entries to avoid fragmentation. In the third pattern, an entry is first
 inserted, which is handled as in the first pattern, and then updated without being deleted. If the update can be done with
-8 byte atomic write, then we simply perform the update and then flush the value. Otherwise, 
+8 byte atomic write, then we simply perform the update and then flush the value. Otherwise, we write a redo write-ahead 
+log to describe the operation, flush the log, after which the actual content is updated in-place. The log can only be 
+removed after we flush the in-place update back to the NVM. During recovery, the log entries are first processed by replaying
+the operations recorded in the log.
