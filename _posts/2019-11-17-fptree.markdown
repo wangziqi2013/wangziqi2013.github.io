@@ -77,4 +77,7 @@ field is added to help locating entries within the node. The fingerprint field s
 keys in the leaf node, supporting a maximum node capacity of 64 entries. The fingerprint field is also aligned to cache 
 line boundary, such that it can be read from NVM using one bus request, and then checked against the hash of the search 
 key with SIMD instructions efficiently. Analysis shows that hash collision within a node is extremely rare, such that
-on average only one extra probe is needed to determine whether the key truly exists. 
+on average only one extra probe is needed to determine whether the key truly exists. Lastly, since only leaf nodes
+are persisted on NVM, on recovery, we must be able to find all leaf nodes, and then rebuild inner levels. To achieve
+this, all leaf nodes include a "next node" pointer that points to the address (relative address) of the next node. 
+A pointer to the first node is stored on a well-known location to help recovery process finding the leaf chain.
