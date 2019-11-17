@@ -125,4 +125,9 @@ current leaf pointer into "current leaf pointer", and persists the field. If sys
 routine will re-allocate memory and complete the rest of node split. The thread then allocates a new leaf node by passing
 the address of the "new leaf pointer" field to the allocator. The allocator ensures atomic ownership transfer between itself
 and the log object. If the system crashes and both fields are set, then no new allocation is needed for recovery, since 
-the log object already contains the newly allocated leaf node. 
+the log object already contains the newly allocated leaf node. If, on the contrary, the new leaf pointer field is empty
+after a crash, then we know the allocation failed, which leads to a new allocation. The recovery procedure is always
+able to recognize the rough point where crash happens by checking the value of fields in the log entry. As long as 
+all steps between two "persist points" are idempotent, i.e. they can be performed more-than-once without changing the 
+semantics of the operation, recovery by replaying these steps will be correct. Non-idempotent operations (e.g. memory 
+allocation, key appending, etc.), however, must be recorded by the log to ensure exact-once semantics.
