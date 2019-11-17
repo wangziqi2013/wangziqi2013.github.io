@@ -71,4 +71,10 @@ thread synchronization, since FPTree worker threads wrap the critical section in
 of FPTree have more fields than interna nodes for three reasons. First, updates to leaf nodes must be persisted
 back to the NVM, which is slower than internal node updates. Leaf nodes therefore use log-structured update without 
 enforing key ordering. In other words, updates to leaf nodes simply append the key and value to the next available
-storage slot, flush the content of the slot, and sets a "valid" bit in the node header bitmap. 
+storage slot, flush the content of the slot, and sets a "valid" bit in the node header bitmap. Second, since keys are
+not sorted in leaf nodes, node search requires scanning the leaf node. To reduce the extra cost of node scan, a "fingerprint"
+field is added to help locating entries within the node. The fingerprint field stores 64 1-byte key hashes of all valid 
+keys in the leaf node, supporting a maximum node capacity of 64 entries. The fingerprint field is also aligned to cache 
+line boundary, such that it can be read from NVM using one bus request, and then checked against the hash of the search 
+key with SIMD instructions efficiently. Analysis shows that hash collision within a node is extremely rare, such that
+on average only one extra probe is needed to determine whether the key truly exists. 
