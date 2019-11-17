@@ -77,7 +77,21 @@ field is added to help locating entries within the node. The fingerprint field s
 keys in the leaf node, supporting a maximum node capacity of 64 entries. The fingerprint field is also aligned to cache 
 line boundary, such that it can be read from NVM using one bus request, and then checked against the hash of the search 
 key with SIMD instructions efficiently. Analysis shows that hash collision within a node is extremely rare, such that
-on average only one extra probe is needed to determine whether the key truly exists. Lastly, since only leaf nodes
+on average only one extra probe is needed to determine whether the key truly exists. Thirdly, since only leaf nodes
 are persisted on NVM, on recovery, we must be able to find all leaf nodes, and then rebuild inner levels. To achieve
 this, all leaf nodes include a "next node" pointer that points to the address (relative address) of the next node. 
 A pointer to the first node is stored on a well-known location to help recovery process finding the leaf chain.
+Fianlly, A "lock" bit in leaf nodes is used to synchronize update operations on the leaf. Threads first traverse 
+to the leaf node using HTM, lock the leaf node, and commits the HTM transaction. This can be thought of as a 
+coarse grained hand-over-hand locking, as the entire upper level (non-leaf levels) traversal is made atomic
+with HTM. 
+
+We next describe basic operations as follows. We begin with reads. Read operations (and also the traversal stage of 
+insert, delete, update) use hardware transactional memory to ensure atomicity. The paper recommends using the speculative 
+lock construct in Intel TBB as a mature solution. The speculative lock will first attempt to execute the critical
+section in HTM mode, and falls back to software mode if HTM transactions aborts repeatedly or because of unrecoverable
+reasons. The software mode uses a single global lock to synchronize all threads on the tree. As discussed in the 
+previous paragraph, the advantage of using HTM is ease of programming and verification. The tree traversal procedure
+can be thought of as a coarse grained hand-over-hand lock coupling, in which inner level traversal is made atomic
+by the speculative lock without having to pay the serialization overhead of using a single "upper level" lock due to
+fine grained conflict detection privided by HTM. 
