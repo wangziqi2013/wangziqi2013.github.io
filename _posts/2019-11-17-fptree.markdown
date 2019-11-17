@@ -141,4 +141,8 @@ on recovery anyway. Parent nodes are updated by acquiring the same speculative l
 the leaf node lock. This is also comparable to the lock coupling protocol for updating internal nodes, in which the 
 intrenal node is locked while holding the leaf node lock. The difference is that in the lock coupling approach, deadlock
 might happen since there is no global lock ordering; A thread traversing down the tree may deadlock with another therad
-attempting to lock the internal node while owning the leaf node lock. 
+attempting to lock the internal node while owning the leaf node lock. In our approach, this is impossible since HTM transactions
+abort eagerly on data conflicts (e.g. when the internal node is read while the current thread is inserting new elements).
+The thread should first check whether the internal node is the same node it uses to traverse the tree. If not, the current 
+node is found by re-traversing the tree. Otherwise, the internal node is updated in the critical section. We complete the 
+node split operation by committing the transaction and then releasing the leaf node lock.
