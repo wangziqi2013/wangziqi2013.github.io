@@ -16,5 +16,13 @@ version_mgmt:
 This paper presents FPTree, a B+Tree designed for byte-addressable non-volatile memory. This paper points out, at a high 
 level, several challenges of implementing data structures for NVM. First, the data structure should be able to recover to
 a consistent state after a crash. This is typically achieved by flushing certain data back to the NVM to enforce write
-ordering between metadata (commit mark, log entry, etc.) and data using persistence barrier. There are three common patterns
-for ensuring consistency. The first pattern is 
+ordering between metadata (commit mark, log entry, etc.) and data using persistence barrier. Considering that NVM writes
+are only atomic on 8 byte aligned words at the CPU side, and that data persistency is only atomic on cache line granularity
+at the NVM side, partial writes might occur after a crash, if the crash happens during or after the write. There are three 
+common patterns for ensuring consistency. The first pattern is writing data into invalid area (assumed to be initialized
+to zero). This happens when inserting elements into a B+Tree node. In this case, we first acquire storage for the write, 
+and then perform write. A valid mark is set only after the write completes and is flushed back to the NVM. The valid mark 
+can be appended after the write as a log, or be set in a separate header structure. A second flush on the valid mark commits 
+the write operation. Since the mark can be set with only 8 byte atomic writes, the commit operation is also atomic with 
+regard to failures. The second pattern is writing data into valid area, but allows data to be invalidated (deleted) before 
+they can be written into again. This 
