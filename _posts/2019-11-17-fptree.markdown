@@ -95,3 +95,14 @@ previous paragraph, the advantage of using HTM is ease of programming and verifi
 can be thought of as a coarse grained hand-over-hand lock coupling, in which inner level traversal is made atomic
 by the speculative lock without having to pay the serialization overhead of using a single "upper level" lock due to
 fine grained conflict detection privided by HTM. 
+
+Tree traversal begins at root level after acquiring the speculative lock, and ends at leaf level like regular tree 
+traversals. During the traversal, any attempty to modify inner nodes will conflict with traversal threads if the inner 
+node under modification is also in the read set. Once leaf node is found, the thread first checks whether the lock
+bit in the leaf node is set. If true, it aborts the transaction, since a concurrent update is modifying the leaf node,
+which makes it unsafe to read. The read operation also adds the leaf bit into the read set of the transaction, such
+that any later acquisition of the lock will force the transaction to abort, serializing the node read operation with
+concurrent node updates (all node updates will acquire the lock physically). The thread then performs key search within 
+the node by reading in the fingerprint field, checks the hash of the search key against the 1-byte fingerprints, and 
+probes the actual key slot(s) if there is one or more matches. A key is found if the key values match and the bitmap
+indicates a valid key. The value is returned after the critical section is committed.
