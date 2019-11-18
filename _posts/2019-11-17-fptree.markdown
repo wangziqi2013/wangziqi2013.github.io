@@ -161,4 +161,6 @@ of the log object to the memory allocator. The allocator ensures that either the
 pool and the pointer is set to NULL, or the node still belongs to the application, and the field is not nullified.
 The recovery routine checks whether the current node field of a delete log object is NULL. If positive, no memory
 block needs to be freed during recovery. Otherwise, the recovery routine will redo the node delete, and deallocate 
-the current leaf node stored in the log entry. 
+the current leaf node stored in the log entry. **The paper does not mention how and when parent node is updated in
+the pseudocode. I guess it should be the same as inserting the node, i.e. starting a HTM transaction while holding the 
+lock on the leaf node, and removing the entry in the internal node poitning to the node to be deleted**.
