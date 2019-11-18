@@ -156,4 +156,9 @@ node's lock is also checked). The thread then acquires a new log object for the 
 object stores the current node to be deleted, and the previous node (in the corner case where the first node in the 
 leaf chain is deleted, the previous node is not logged but set to a special value). The node delete operation is committed
 by flushing the log object, updating the previous node (or the head pointer to the leaf chain), flushing the updated
-fields, and deallocating the leaf node. In order to deallocate the node
+fields, and deallocating the leaf node. In order to deallocate the node, we pass the address of the current node field
+of the log object to the memory allocator. The allocator ensures that either the node is returned to the allocator
+pool and the pointer is set to NULL, or the node still belongs to the application, and the field is not nullified.
+The recovery routine checks whether the current node field of a delete log object is NULL. If positive, no memory
+block needs to be freed during recovery. Otherwise, the recovery routine will redo the node delete, and deallocate 
+the current leaf node stored in the log entry. 
