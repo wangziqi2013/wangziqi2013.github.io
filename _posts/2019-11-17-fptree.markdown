@@ -146,3 +146,14 @@ abort eagerly on data conflicts (e.g. when the internal node is read while the c
 The thread should first check whether the internal node is the same node it uses to traverse the tree. If not, the current 
 node is found by re-traversing the tree. Otherwise, the internal node is updated in the critical section. We complete the 
 node split operation by committing the transaction and then releasing the leaf node lock.
+
+Key deletion proceeds in a similar manner as key insertion. After acquiring the lock on the leaf node and locating 
+the key in the node, we simply clear the corresponding bit in the bitmap, and commit the deletion by persisting the bitmap.
+FPTree simplifies node merge by never merging nodes, but instead simply removing empty nodes from the leaf node chain. 
+If a node will become empty after the deletion, both the lock of the node and its previous node (**Note: The paper does
+not mention how to find the previous node**) are locked within the node traversal critical section (and the previous 
+node's lock is also checked). The thread then acquires a new log object for the node delete operation. The log delete 
+object stores the current node to be deleted, and the previous node (in the corner case where the first node in the 
+leaf chain is deleted, the previous node is not logged but set to a special value). The node delete operation is committed
+by flushing the log object, updating the previous node (or the head pointer to the leaf chain), flushing the updated
+fields, and deallocating the leaf node. In order to deallocate the node
