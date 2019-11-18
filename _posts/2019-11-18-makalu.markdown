@@ -34,5 +34,5 @@ in the most common programming paradigm using malloc(), the pointer returned is 
 (or register, which is also volatile), whose content is initialized, and then transferred to a field in the persistent 
 data structure. In this paradigm, there is a short time window in which the allocated block belongs to neither the allocator
 nor the data structure. If crash occurs in this time window, the block will be permanently lost, since no reference 
-to the block exists after crash recovery. To solve this problem, prior researches propose using a new allocator interface, 
+to the block exists after crash recovery. To solve this problem, prior researches propose using a new allocation paradigm, 
 which 
