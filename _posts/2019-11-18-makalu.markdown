@@ -35,4 +35,13 @@ in the most common programming paradigm using malloc(), the pointer returned is 
 data structure. In this paradigm, there is a short time window in which the allocated block belongs to neither the allocator
 nor the data structure. If crash occurs in this time window, the block will be permanently lost, since no reference 
 to the block exists after crash recovery. To solve this problem, prior researches propose using a new allocation paradigm, 
-which 
+which consists of three steps. In the first reservation step, the address of the memory block is returned to the caller,
+but the allocation is still held pending. If a crash happens, the allocator owns the block, since only volatile state
+is modified to reflect the fact that the block has been allocated. In the second initialize step,
+the application initializes the content of the block. In the last activation step, the address of the target word in
+persistent data structure, as well as the pointer to the block, is passed to an activation function. The activation
+function atomically transfers the ownership of the block from the allocator to the application, by directly writing the 
+address of the block to the target word and removing the block from the allocator's metadata the NVM. This process can
+be implemented with redo write-ahead logging, which commits the activation by the last atomic persistence of the 
+log commit mark. If crash happens after the commit point, the recovery routine will locate and replay the log, which
+makes it appear that the crash actually happened after the application has linked the block into the data structure.
