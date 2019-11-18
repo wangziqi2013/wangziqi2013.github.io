@@ -20,4 +20,14 @@ volatile auxiliary data structure, to facilitate efficient allocation and deallo
 of changing non-volatile states atomically with regard to failures, prior researches usually only maintain the consistency 
 of core data structure, while relying on a post-crash recovery routine to rebild auxiliary data structures. This way, 
 most allocation requests can be satisfied using DRAM-only auxiliary data structure, while the costly NVM allocation can 
-be amortized. The second challenge
+be amortized. The second challenge is to ensure that each block is allocated at most once even after crash. If core
+metadata is not maintained properly, already allocated block may appear as free after recovery, causing double allocation
+and data corruption. This challenge is usually solved by persisting the fact that a block has already been allocated to
+the NVM before returning the address of the allocated block to the application. If the system crashes before the persist
+completes, the memory block will not be used by the application, and it will be free after recovery. If, on the 
+other hand, the crash happens after the persist completes, the block will not be reused by the allocator after recovery,
+since the NVM image indicates that the block is already allocated. The third challenge, which is also the most important
+one, is to avoid memory leak after crash recovery. Memory leaks on NVM are more severe than in volatile memory system,
+since leaks are permanent, and cannot be reset by restarting the system. Memory leaks occur if the system crashes
+after a block is marked as allocated, retuened by the allocator, but before it is linked into the application. In fact,
+in the most common programming paradigm using malloc(), 
