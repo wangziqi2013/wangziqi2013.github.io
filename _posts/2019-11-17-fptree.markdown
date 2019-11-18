@@ -164,3 +164,11 @@ block needs to be freed during recovery. Otherwise, the recovery routine will re
 the current leaf node stored in the log entry. **The paper does not mention how and when parent node is updated in
 the pseudocode. I guess it should be the same as inserting the node, i.e. starting a HTM transaction while holding the 
 lock on the leaf node, and removing the entry in the internal node poitning to the node to be deleted**.
+
+On recovery, the memory allocator recovery routine is first invoked to determine block ownership for pending allocations
+and deallocations (although not mentioned in the paper, this is usually done by reapplying redo logs). The recovery handler 
+for BFTree is then invoked, which first scans the redo log array, and reapplies all active redo logs to complete pending 
+tree modifications and memory allocation/deallocation. The handler then rebuilds internal levels of the tree using 
+an algorithm that is similar to bulk insert. During this process, all leaf nodes are scanned. Leaf node locks are also
+released in case a leaf node cache line was evicted back to the NVM when the node is locked. Normal operations can resume
+after rebuilding the internal levels.
