@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Makalu, a memory allocator for byte-addressable non-volatile memory. This paper identifies three challenges
+of implementing memory allocator for NVM due to its non-volatility. The first challenge is to maintain the consistency of 
+allocator metadata, since memory allocator itself also maintains a set of data structures, both non-volatile core and 
+volatile auxiliary data structure, to facilitate efficient allocation and deallocation. To reduce persistency overhead
+of changing non-volatile states atomically with regard to failures, prior researches usually only maintain the consistency 
+of core data structure, while relying on a post-crash recovery routine to rebild auxiliary data structures. This way, 
+most allocation requests can be satisfied using DRAM-only auxiliary data structure, while the costly NVM allocation can 
+be amortized. The second challenge
