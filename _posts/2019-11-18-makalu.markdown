@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Makalu: Fast Recoverable Allocation of Non-Volatile Memory"
+date:   2019-11-18 14:12:00 -0500
+categories: paper
+paper_title: "Makalu: Fast Recoverable Allocation of Non-Volatile Memory"
+paper_link: https://dl.acm.org/citation.cfm?doid=2983990.2984019
+paper_keyword: NVM; malloc; Makalu; Memory management
+paper_year: OOPSLA 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
