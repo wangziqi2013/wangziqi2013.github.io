@@ -152,3 +152,9 @@ back.
 On a normal startup, the allocator first loads the header map into memory, and then initializes free list as empty. The
 free chunk list and reclamation list are also initialized by scanning the free header map for unallocation chunks and 
 partially allocated blocks, respectively. Normal execution could proceed after we rebuild the DRAM data structure.
+
+On a post-crash recovery, both the header map and block bitmap can be in an inconsistent state. To solve this, we 
+we first check the logging area for any pending operations that have not yet committed. If entries exist, and the version
+of the entries match the current log entry in the heap header, the pending operation is rolled back by copying the 
+before image back to the indicated address. We increment and flush the log version counter after recovery to commit the
+completion of recovery. We then scans the header areas within the heap, and rebuild the block header map. 
