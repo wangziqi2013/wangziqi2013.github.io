@@ -157,4 +157,9 @@ On a post-crash recovery, both the header map and block bitmap can be in an inco
 we first check the logging area for any pending operations that have not yet committed. If entries exist, and the version
 of the entries match the current log entry in the heap header, the pending operation is rolled back by copying the 
 before image back to the indicated address. We increment and flush the log version counter after recovery to commit the
-completion of recovery. We then scans the header areas within the heap, and rebuild the block header map. 
+completion of recovery. We then scan the header areas within the heap, and rebuild the block header map. For small
+and medium sized blocks, we clear the allocation bitmap in the header to avoid using potentially inconsistent metadata.
+The GC process is then invoked, which swaps all objects reachable from the root objects, and marks them as alive.
+The paper assumes that type information is embedded in the object, such that the GC knows which value is a 
+pointer. Persistent-to-volatile pointers are ignored. For every object identified as live object, we obtain its header
+via the global header map. 
