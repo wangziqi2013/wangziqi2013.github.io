@@ -7,7 +7,7 @@ permalink: /ziqiw/
 Resume
 ------
 
-<embed width="100%" height="1000px" navpanes="0" src="{{site.url}}/static/resume.pdf" type="application/pdf" />
+<embed width="100%" height="1000px" navpanes="0" src="{{site.url}}/static/resume.pdf" type="application/pdf" /> 
 
 Research
 --------
