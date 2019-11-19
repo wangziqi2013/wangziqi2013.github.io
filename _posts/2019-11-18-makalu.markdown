@@ -126,3 +126,11 @@ of operation (see below).
 Medium sized objects are allocated in the exact same way as small objects, except that objects are removed from the 
 global free list rather than thread-local free list. If no object is available, a new block is allocated from the 
 global chunk list using undo logging as well. Large objects directly allocate from the global chunk list.
+
+The logging scheme is described as follows. For each step during allocation, we copy the before value of the field to 
+be updated to the logging area located at the heap header, before updating the field in-place. Note that the log entry
+must be flushed before update can be done. Each log entry contains the address, the old value, and the current log version
+(also located in the header). After all updates are flushed, we commit the operation by atomically incrementing
+the log version counter in the heap header. This can be done by a processor fetch-and-increment instruction followed
+by a flush. After this point, all undo log entries are invalidated, since the version of the log does not match the 
+version in the heap header. 
