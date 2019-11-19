@@ -3,7 +3,12 @@ layout: page
 title: Ziqi Wang
 permalink: /ziqiw/
 ---
-  
+
+Resume
+------
+
+<embed width="80%" src="static/resume.pdf" type="application/pdf" />
+
 Research
 --------
 
