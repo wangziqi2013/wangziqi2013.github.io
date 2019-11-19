@@ -38,7 +38,9 @@ BwTree. I implemented the BwTree based on a [Microsoft Reaearch paper](https://w
 [Usable Privacy Policy Project (UPPP)](https://www.usableprivacy.org/ "UPPP") under the supervision of Professor Norman Sadeh. 
 I implemented a static analysis framework using call graph analysis for Android apps. 
 
-**(2017.09 - Present)** I am working with Professor Todd Mowry on page overlays and hardware transactional memory.
+**(2017.09 - 2019.04)** I am working with Professor Todd Mowry on page overlays and hardware transactional memory.
+
+**(2019.05 - Present)** I am working with Professor Todd Mowry on page overlays and NVM full system persistence.
 
 Publications
 ------------
@@ -51,6 +53,10 @@ Ziqi Wang, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kam
 Peter Story, Sebastian Zimmeck, Abhilasha Ravichander, Daniel Smullen, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "Natural Language Processing for Mobile App Privacy Compliance", AAAI Spring Symposium on Privacy Enhancing AI and Language Technologies (PAL 2019), Mar 2019
 
 Sebastian Zimmeck, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "MAPS: Scaling Privacy Compliance Analysis to a Million Apps", Privacy Enhancing Technologies Symposium (PETS 2019), 3, Jul 2019
+
+Ziqi Wang, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. ”Multiversioned Page Overlays: Enabling Faster
+Serializable Hardware Transactional Memory.” In 2019 28th International Conference on Parallel Architectures and
+Compilation Techniques (PACT). IEEE, 2019.
 
 Fun Stuff
 ---------
