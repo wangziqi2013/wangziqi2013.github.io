@@ -117,4 +117,8 @@ object list is empty. If not, an object is returned to the caller directly. If t
 reclamation list for partially allocated blocks of the same size class. If there is a block, it will then be removed 
 from the list, whose free objects are added into the thread-local free list. The block no longer needs to be tracked
 after this, since we can compute the block address using object's address. If the reclamation list is also empty, our 
-last resort is to allocate a free block from the global chunk list. 
+last resort is to allocate a free block from the global chunk list. This process involves removing a block from the 
+chunk list, initializing and adding the new block header to the header area on NVM, adding the mapping between block 
+address and block header to the block map, and finally updating the old block header. This process is not intrinsically 
+atomic since it contains several non-atomic multi-cache line writes. We use undo logging to ensure the atomicity
+of operation (see below).
