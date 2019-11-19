@@ -72,7 +72,6 @@ small and medium objects), the flag indicating whether the allocator owns the bl
 and the bitmap for object allocation within the block. A chunk header only stores the size of the chunk in the number of 
 blocks and the osnership flag.
 
-
 Makalu also assumes that objects allocated to the application are accessed via pointers. The application using Makalu
 must guarantee that objects not reachable from one of the 256 roots in the heap header are garbage nodes, which can be 
 reclaimed after crash recovery using an offline mark-and-sweep GC. The offline GC starts at each root pointer, and marks
@@ -100,7 +99,18 @@ even if such blocks exist, they will be discovered by the post-crash GC, and the
 
 Makalu also maintains a set of DRAM data structures to facilitate allocation. For each thread, there is a thread-local
 object list, which is a free list of objects (using object itself to store "next" pointer). Each size class has its own
-free list, which is used to serve small allocation requests falling into the particular size class. Two global lists are 
+free list, which is used to serve small allocation requests falling into the particular size class. Three global lists are 
 maintained to serve medium and large allocations. Medium allocation uses the global free list, which is similar to
 the per-thread segregated free list, except that every size class has a lock, which allows allocations on different sizes
 to proceed individually. Large allocations directly use the global chunk list to acquire a chunk of the requested size. 
+In addition, partially full blocks are also maintained in a global reclamation block list. This list stores free lists
+of blocks of different size classes. Each block in the list is partially allocated (i.e. some objects are allocated and
+some are not). This list is the result of truncating the small and medium sized free list, and also will be generated
+during offline garbage collection. In the former case, objects in the free lists are returned to the corresponding blocks.
+A block may not be fully empty after the truncation, which qualifies it to be added into the reclamation list. In the 
+latter case, the GC process will mark all objects that are currently in-use within small and medium size class blocks.
+Those that are not marked are still free, which will cause the block being added into the reclamation list also.
+
+We next describe the allocation process. For small objects (64 - 400 bytes), we first round the requested size to the 
+nearest multiple of 16 bytes, which is the smallest granularity of object allocation. We then check the first
+block in
