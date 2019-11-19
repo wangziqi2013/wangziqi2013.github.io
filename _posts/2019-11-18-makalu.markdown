@@ -148,3 +148,7 @@ On a normal shutdown, Makalu will write back the DRAM version of the header map 
 structure at the next startup. In addition, all objects in both free lists are returned to the corresponding blocks,
 updating their allocation bitmap, which are then flushed back to the NVM. Reclamation block headers are also written
 back.
+
+On a normal startup, the allocator first loads the header map into memory, and then initializes free list as empty. The
+free chunk list and reclamation list are also initialized by scanning the free header map for unallocation chunks and 
+partially allocated blocks, respectively. Normal execution could proceed after we rebuild the DRAM data structure.
