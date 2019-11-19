@@ -122,3 +122,7 @@ chunk list, initializing and adding the new block header to the header area on N
 address and block header to the block map, and finally updating the old block header. This process is not intrinsically 
 atomic since it contains several non-atomic multi-cache line writes. We use undo logging to ensure the atomicity
 of operation (see below).
+
+Medium sized objects are allocated in the exact same way as small objects, except that objects are removed from the 
+global free list rather than thread-local free list. If no object is available, a new block is allocated from the 
+global chunk list using undo logging as well. Large objects directly allocate from the global chunk list.
