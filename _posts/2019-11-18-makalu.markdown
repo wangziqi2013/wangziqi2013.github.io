@@ -61,9 +61,13 @@ second part is managed in chunks and blocks. A block is defined as 4KB of NVM me
 allocations, or divided into equal sized "objects" to serve small and medium allocations. A chunk is a continuous range
 of blocks, which is maintained by only one chunk header (there is a type field in the header) to save metadata. Initially,
 the entire heap consists of a single chunk, which is then divided into different sized chunks and blocks as memory 
-requests are served. One difference between Makalu and
-other NVM allocators is that Makalu stores block headers separately in a well-known location. There can be multiple block
-header regions within the heap
+requests are served. One difference between Makalu and other NVM allocators is that Makalu stores block headers separately 
+in a well-known location. There can be multiple block header regions within the heap. This happens when the current pool
+of headers run out, while there are still free storage in the heap, in which case we expand the end of the heap by a small
+amount to make a new block header region. Although not mentioned by the paper, all headers regions are supposed to be 
+linked together as a linked list, such that a full scan of the linked list can discover all blocks and chunks in the current 
+heap. The allocator always updates block headers atomically using undo logging to ensure a consistent view of blocks and 
+chunks after recovery. 
 
 Makalu solves the first two challenges exactly as we have described in the previous paragraph. To solve metadata consistency
 problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of chunk headers, block
