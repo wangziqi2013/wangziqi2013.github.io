@@ -134,3 +134,8 @@ must be flushed before update can be done. Each log entry contains the address, 
 the log version counter in the heap header. This can be done by a processor fetch-and-increment instruction followed
 by a flush. After this point, all undo log entries are invalidated, since the version of the log does not match the 
 version in the heap header. 
+
+When an object is freed, it is directly added into the thread-local list of the deallocating thread. Note that Makalu
+does not maintain thread ID for each object denoting the ID of the thread-local pool that this object is allocated
+from. The object will be returned to the block if the free list of this size class is longer than a threshold, at
+which point the free list will be truncated. Objects removed from the list will be returned to the corresponding block.
