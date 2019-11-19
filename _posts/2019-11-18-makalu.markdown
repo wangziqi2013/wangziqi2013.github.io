@@ -162,4 +162,8 @@ and medium sized blocks, we clear the allocation bitmap in the header to avoid u
 The GC process is then invoked, which swaps all objects reachable from the root objects, and marks them as alive.
 The paper assumes that type information is embedded in the object, such that the GC knows which value is a 
 pointer. Persistent-to-volatile pointers are ignored. For every object identified as live object, we obtain its header
-via the global header map. 
+via the global header map. If the object is a huge block, then the object header (chunk header) is set as being used.
+The rest of the chunks are added into the free chunk list. For small and medium sized objects, we locate its block
+header, and sets the corresponding bit in the bitmap. These blocks are also added into the block reclamation list.
+The rest of the blocks are also added back to the global chunk list, possibly merging with neighboring chunks. 
+Normal execution could resume after recovery.
