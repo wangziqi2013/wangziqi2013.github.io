@@ -139,3 +139,7 @@ When an object is freed, it is directly added into the thread-local list of the 
 does not maintain thread ID for each object denoting the ID of the thread-local pool that this object is allocated
 from. The object will be returned to the block if the free list of this size class is longer than a threshold, at
 which point the free list will be truncated. Objects removed from the list will be returned to the corresponding block.
+Large objects are freed by directly adding the chunk back to the chunk list, possibly merging this chunk with neighboring 
+chunks to reduce fragmentation. The header used by the deallocated object will be freed also.
+Occasionally, blocks in the reclamation list can become fully empty as a result of free list truncation. We return the 
+clean block back to the free chunk list in the same way as we deallocate a large object. 
