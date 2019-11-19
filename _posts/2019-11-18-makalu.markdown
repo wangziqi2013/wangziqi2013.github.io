@@ -49,9 +49,21 @@ makes it appear that the crash actually happened after the application has linke
 Makalu assumes the following configuration. The system is installed with both DRAM and NVM. The allocator requests a bulk
 of memory from the NVM region as a heap. The high end of the heap can be extended further if more memory is needed. Global 
 metadata is maintained at the very beginning of the heap. These global metadata include the starting and end address of the 
-heap, an array of root objects, the address of the block header map, the address of the logging area, the addresses of 
-block headers, etc. The paper assumes that the file is always mapped to the same virtual address, and hence absolute 
-virtual address pointers can be used. 
+heap, an array of root objects, the address of the block header map, the logging area, the current log version, the addresses 
+of block headers, etc. The paper assumes that the file is always mapped to the same virtual address, and hence absolute 
+virtual address pointers can be used. The heap storage is divided into three parts. The first part stores the heap metadata
+as descrived above. The second part stores block headers and data. The third part stores block header map, which maps arbitrary
+address within the data area to the corresponding block header address. The paper does not mention the details of the 
+header map and how it is allocated and stored, so we assume the block header map is simply a reserved chunk of memory,
+which can be stored at the end of the heap area every time a heap is created or expanded (on expansion, just reserve sufficient
+number of mapping area at the end of the expanded heap, and copy existing header to the new heder map). Memory in the 
+second part is managed in chunks and blocks. A block is defined as 4KB of NVM memory, which is either used to serve large 
+allocations, or divided into equal sized "objects" to serve small and medium allocations. A chunk is a continuous range
+of blocks, which is maintained by only one chunk header (there is a type field in the header) to save metadata. Initially,
+the entire heap consists of a single chunk, which is then divided into different sized chunks and blocks as memory 
+requests are served. One difference between Makalu and
+other NVM allocators is that Makalu stores block headers separately in a well-known location. There can be multiple block
+header regions within the heap
 
 Makalu solves the first two challenges exactly as we have described in the previous paragraph. To solve metadata consistency
 problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of chunk headers, block
