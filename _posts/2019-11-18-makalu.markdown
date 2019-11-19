@@ -46,6 +46,13 @@ be implemented with redo write-ahead logging, which commits the activation by th
 log commit mark. If crash happens after the commit point, the recovery routine will locate and replay the log, which
 makes it appear that the crash actually happened after the application has linked the block into the data structure.
 
+Makalu assumes the following configuration. The system is installed with both DRAM and NVM. The allocator requests a bulk
+of memory from the NVM region as a heap. The high end of the heap can be extended further if more memory is needed. Global 
+metadata is maintained at the very beginning of the heap. These global metadata include the starting and end address of the 
+heap, an array of root objects, the address of the block header map, the address of the logging area, the addresses of 
+block headers, etc. The paper assumes that the file is always mapped to the same virtual address, and hence absolute 
+virtual address pointers can be used. 
+
 Makalu solves the first two challenges exactly as we have described in the previous paragraph. To solve metadata consistency
 problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of chunk headers, block
 headers, and the metadata for the persistent file (assuming DAX file access protocol using mmap()). Core metadata is always 
@@ -54,3 +61,6 @@ lists, are maintained only in DRAM, which will be lost after a crash or normal s
 such as block header maps, and bitmaps within object block headers, have one persistent copy in NVM and one volatile copy
 in DRAM. Only the volatile copy is used and updated during regular operation. On a normal shutdown, these metadata are 
 written back to the corresponding NVM area to avoid a time consuming rebuild on every restart after normal shutdown.
+
+Makalu solves double allocation problem after the crash by always marking the block to be allocated (or partially allocated)
+before returning the address of the object. In Makalu, each block has a header that 
