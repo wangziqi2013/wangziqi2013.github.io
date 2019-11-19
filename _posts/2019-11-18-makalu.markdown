@@ -54,7 +54,7 @@ of block headers, etc. The paper assumes that the file is always mapped to the s
 virtual address pointers can be used. The heap storage is divided into three parts. The first part stores the heap metadata
 as descrived above. The second part stores block headers and data. The third part stores block header map, which maps arbitrary
 address within the data area to the corresponding block header address. The paper does not mention the details of the 
-header map and how it is allocated and stored, so we assume the block header map is simply a reserved chunk of memory,
+header map and how it is allocated and stored, so we assume the block header map is simply a hash table in a reserved chunk of memory,
 which can be stored at the end of the heap area every time a heap is created or expanded (on expansion, just reserve sufficient
 number of mapping area at the end of the expanded heap, and copy existing header to the new heder map). Memory in the 
 second part is managed in chunks and blocks. A block is defined as 4KB of NVM memory, which is either used to serve large 
@@ -112,5 +112,9 @@ latter case, the GC process will mark all objects that are currently in-use with
 Those that are not marked are still free, which will cause the block being added into the reclamation list also.
 
 We next describe the allocation process. For small objects (64 - 400 bytes), we first round the requested size to the 
-nearest multiple of 16 bytes, which is the smallest granularity of object allocation. We then check the first
-block in
+nearest multiple of 16 bytes, which is the smallest granularity of object allocation. We then check whether the thread-local
+object list is empty. If not, an object is returned to the caller directly. If the list is empty, we check the block
+reclamation list for partially allocated blocks of the same size class. If there is a block, it will then be removed 
+from the list, whose free objects are added into the thread-local free list. The block no longer needs to be tracked
+after this, since we can compute the block address using object's address. If the reclamation list is also empty, our 
+last resort is to allocate a free block from the global chunk list. 
