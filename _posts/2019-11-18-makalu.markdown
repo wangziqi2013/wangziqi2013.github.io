@@ -87,4 +87,9 @@ in DRAM. Only the volatile copy is used and updated during regular operation. On
 written back to the corresponding NVM area to avoid a time consuming rebuild on every restart after normal shutdown.
 
 Makalu solves double allocation problem after the crash by always marking the block to be allocated (or partially allocated)
-before returning the address of the object. In Makalu, each block has a header that 
+before returning the address of the object. Every block and chunk header has a field indicating whether the block has been 
+allocated to be used or in the free list. Before using the block or chunk to fulfill an allocation request, the header
+field is set and persisted, which effectively gives up ownership of the block or chunk (but part of the block may still
+be free). If the system crashes after the block header field is set, this block would appear to have been allocated to
+the application, causing memory leak without proper handling. In Makalu, the offline garbage collection ensures that 
+even if such blocks exist, they will be discovered by the post-crash GC, and the ownership will be returned to the allocator.
