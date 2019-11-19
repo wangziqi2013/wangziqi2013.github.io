@@ -69,8 +69,16 @@ linked together as a linked list, such that a full scan of the linked list can d
 heap. The allocator always updates block headers atomically using undo logging to ensure a consistent view of blocks and 
 chunks after recovery. 
 
+Makalu also assumes that objects allocated to the application are accessed via pointers. The application using Makalu
+must guarantee that objects not reachable from one of the 256 roots in the heap header are garbage nodes, which can be 
+reclaimed after crash recovery using an offline mark-and-sweep GC. The offline GC starts at each root pointer, and marks
+the block as being used in the header (if it is a large object), or marks the block as being used and sets the corresponding 
+allocation bitmap in the block header, if it is a small or medium sized object. Block header addresses can be obtained 
+from the block header map. Thie process continues recursively for every pointer field in the root object, until all reachable
+objects are marked. The allocator frees those blocks or objects that appear to be allocated, but unmarked. 
+
 Makalu solves the first two challenges exactly as we have described in the previous paragraph. To solve metadata consistency
-problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of chunk headers, block
+problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of the heap header, block
 headers, and the metadata for the persistent file (assuming DAX file access protocol using mmap()). Core metadata is always 
 persistent by using undo logging, and is maintained on the NVM. Auxiliary data structures, such as block and object free 
 lists, are maintained only in DRAM, which will be lost after a crash or normal shutdown. Other auxiliary data structures, 
