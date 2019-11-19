@@ -45,3 +45,12 @@ address of the block to the target word and removing the block from the allocato
 be implemented with redo write-ahead logging, which commits the activation by the last atomic persistence of the 
 log commit mark. If crash happens after the commit point, the recovery routine will locate and replay the log, which
 makes it appear that the crash actually happened after the application has linked the block into the data structure.
+
+Makalu solves the first two challenges exactly as we have described in the previous paragraph. To solve metadata consistency
+problem, Makalu makes a clear distinction between core and auxiliary metadata. Core metadata consists of chunk headers, block
+headers, and the metadata for the persistent file (assuming DAX file access protocol using mmap()). Core metadata is always 
+persistent by using undo logging, and is maintained on the NVM. Auxiliary data structures, such as block and object free 
+lists, are maintained only in DRAM, which will be lost after a crash or normal shutdown. Other auxiliary data structures, 
+such as block header maps, and bitmaps within object block headers, have one persistent copy in NVM and one volatile copy
+in DRAM. Only the volatile copy is used and updated during regular operation. On a normal shutdown, these metadata are 
+written back to the corresponding NVM area to avoid a time consuming rebuild on every restart after normal shutdown.
