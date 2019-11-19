@@ -143,3 +143,8 @@ Large objects are freed by directly adding the chunk back to the chunk list, pos
 chunks to reduce fragmentation. The header used by the deallocated object will be freed also.
 Occasionally, blocks in the reclamation list can become fully empty as a result of free list truncation. We return the 
 clean block back to the free chunk list in the same way as we deallocate a large object. 
+
+On a normal shutdown, Makalu will write back the DRAM version of the header map back to the NVM to avoid rebuilding this
+structure at the next startup. In addition, all objects in both free lists are returned to the corresponding blocks,
+updating their allocation bitmap, which are then flushed back to the NVM. Reclamation block headers are also written
+back.
