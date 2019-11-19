@@ -72,3 +72,10 @@ allows user to define syntax directed transformation rule, such that the compile
 instead of parse tree. C-specific typedef is also supported using a global symbol table, such that statements like "A * a" will be 
 parsed as a pointer definition if symbol "A" has been defined as a type, or as a multiplication expression statement otherwise. The 
 source code is available on my [Github](https://github.com/wangziqi2013/CFront) {% include icon-github.html username="wangziqi2013" %}.
+
+ORCID
+-----
+
+<div itemscope itemtype="https://schema.org/Person"><a itemprop="sameAs" content="https://orcid.org/0000-0003-0067-0701" href="https://orcid.org/0000-0003-0067-0701" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon">https://orcid.org/0000-0003-0067-0701</a></div>
+
+<img src="{{site.url}}/static/ORCID.png" width="200px" />
