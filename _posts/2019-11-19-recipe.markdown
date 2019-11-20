@@ -40,4 +40,7 @@ intermediate states will lead to errorneous behavior due to loss of information 
 copied to the local execution stack of the thread carrying out the modification operation), or due to contradictory metadata
 (e.g. metadata update is non-atomic), or read corrupt data (e.g. data update is non-atomic, and other threads read partially
 written data). To ensure the correctness of updates, data structure must satisfy the following requirements when
-performing updates. 
+performing updates. First, each step in a single update operation only atomically transform publicly available states from 
+one consistent state to another. This can always be done by performing log-structured updates: A log pointer or "validity bitmap"
+is maintained for each object that will be updated concurrently, which marks the end of the currently available log or 
+indicates "active slots" in the object (if it consists of slots, such as a B+Tree node). 
