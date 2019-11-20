@@ -89,4 +89,10 @@ delta record via CAS. For this type of data structures, the paper suggests that 
 data after each atomic step. On recovery, the data structure will always be in one of the several possible intermediate 
 states, which can be identified and completed by threads just like normal after restart.
 
-
+In the thrid type, updates are non-atomic, and do not preserve the consistency of the data structure. To compensate, 
+updating threads must synchronize against each other and against reading threads using locks. Transforming data
+structures of this type is non-straightforward, since consistency can be maintained with regard to concurrent threads, 
+while not with regard to failures. In other words, state changes in critical sections are undefined, which may
+leave the data structure in a state that is difficult or impossible to identify. To solve this problem, the paper 
+proposes first transforming the data structure to the second type, and then making it persistence by adding extra
+persistence barriers. 
