@@ -77,3 +77,11 @@ consistent, while the "invisible state" (such as log entries beyond the tail poi
 be inconsistent. The data structure should be able to tolerate such inconsistency, as they will also occur during normal
 operation.
 
+In the second type of synchronization, updates are not atomic, which consist of several atomic steps, and each atomic
+step transforms the data structure into consistent state that can be identified as a result of pending updates. A typical
+example is the BwTree, in which node split and merge are not atomic, but they post deltas on the node to be splitted or 
+merged to indicate that a structural modification (SMO) is going on. Concurrent threads will help to complete this SMO
+before they can proceed to their own work, serialization operations based on the order that they finish posting the 
+delta record via CAS. For this type of data structures, the paper suggests that we issue a persistence barrier on dirty
+data after each atomic step. On recovery, the data structure will always be in one of the several possible intermediate 
+states, which can be identified and completed by threads just like normal after restart.
