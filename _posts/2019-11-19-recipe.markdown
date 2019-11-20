@@ -28,4 +28,9 @@ garbage collector should ensure the consistency of its own metadata internally t
 allocating the same block more than once. If a memory block has been allocated (i.e. removed from allocator's free list) 
 but not yet linked into the data structure, it will be lost after the crash since the ownership transfer is non-atomic. 
 The garbage collector should be able to find these leaked blocks either by an offline scan before the restart, or 
-by performing online background GC. 
+by performing online background GC. The second assumption is that read operations must be non-blocking, while write
+can be blocking, but there should be a way of transforming writes to perform atomic updates between consistent states.
+As we will see later, this assumption forms the basis of code transformation. The last assumption is that the data
+structure's concurrency support must be correct. A buggy parallel implementation will result in a buggy persistent
+implementation. 
+
