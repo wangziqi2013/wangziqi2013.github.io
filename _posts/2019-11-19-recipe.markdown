@@ -22,3 +22,9 @@ using one atomic step. In the meantime, if we need failure atomicity on data str
 to the NVM and make them available to post-crash recovery routines in one atomic step, such that either all necessary
 information is on the NVM for replay all the changes, or none of them is available after recovery.
 
+The paper makes the following assumption. First, it is assumed that either a NVM-specific memory allocator is used
+to replace the volatile allocator, or the language runtime is able to perform garbage collection in the background.
+In either case, the garbage collector should ensure the consistency of its own metadata internally to avoid corrupting
+internal metadata or allocating the same block more than once. If a memory block has been allocated (i.e. removed 
+from allocator's free list) but not yet linked into the data structure, it will be lost after the crash since the ownership
+transfer is non-atomic. The garbage collector should be able to find these leaked blocks
