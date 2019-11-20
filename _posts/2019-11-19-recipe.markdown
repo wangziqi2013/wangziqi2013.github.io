@@ -62,6 +62,8 @@ sufficient information to complete or roll back the operation. This property mak
 after the crash, threads simply fix the data structure in the intermediate states back to normal using the same logic as 
 it does during normal execution. The last requirement is that data structure operations must be non-blocking, or at
 least can be transformed to non-blocking with reasonable effort. For reads, when they observe intermediate states
-created by concurrent update operations, readers must be able to figure out asd, instead of retrying or blocking on
-the temporararily created intermediate state. This is because a blocking read protocol expects some other threads 
-to finish the operation and restore the data structure to a 
+created by concurrent update operations, readers must be able to figure out a way of fixing the states, instead of retrying 
+or blocking on the temporararily created intermediate state (e.g. blocking on a lock). This is because a blocking read 
+protocol expects some other threads to finish the operation and restore the data structure to a within finite number of 
+steps. This is, however, unfortunately not true after a recovery, since no thread is currently working on restoring the 
+state back to normal, in which case helping along each other is necessary.
