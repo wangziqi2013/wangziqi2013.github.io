@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Recipe: Converting Concurrent DRAM Indexes to Persistent-Memory Indexes"
+date:   2019-11-19 23:10:00 -0500
+categories: paper
+paper_title: "Recipe: Converting Concurrent DRAM Indexes to Persistent-Memory Indexes"
+paper_link: https://dl.acm.org/citation.cfm?id=3359635
+paper_keyword: NVM; B+Tree
+paper_year: SOSP 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
