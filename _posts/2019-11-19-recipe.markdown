@@ -19,6 +19,9 @@ data structures from consistent states to the next consistent states. This help-
 any change for post-crash recovery, since system crashing is just all threads suddenly exiting the data structure.
 If the data structure is truly non-blocking, this is just a normal case.**
 
+**Important observation: Recovery of data structure is recovery of control flow information and execution context, if data
+can be persisted after they are written. (i.e. make sure the NVM image is the same as the DRAM image)**
+
 This paper propes Recipe, a code transformation technique for implementing failure atomic persistent data structures
 from their concurrent but non-persistent counterparts. The paper is motived by the fact that persistence and isolation
 are, in fact, similar to each other since they both require that data structure be able to recognize partially updated
@@ -85,3 +88,5 @@ before they can proceed to their own work, serialization operations based on the
 delta record via CAS. For this type of data structures, the paper suggests that we issue a persistence barrier on dirty
 data after each atomic step. On recovery, the data structure will always be in one of the several possible intermediate 
 states, which can be identified and completed by threads just like normal after restart.
+
+
