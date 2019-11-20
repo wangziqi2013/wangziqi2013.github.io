@@ -34,3 +34,10 @@ As we will see later, this assumption forms the basis of code transformation. Th
 structure's concurrency support must be correct. A buggy parallel implementation will result in a buggy persistent
 implementation. 
 
+On a high level, Recipe works by allowing intermediate states caused by modification operations on the data structure, 
+including data updates and structural updates, to be exposed to concurrent threads. Without proper synchronization, such 
+intermediate states will lead to errorneous behavior due to loss of information (e.g. maybe some information is temporarily
+copied to the local execution stack of the thread carrying out the modification operation), or due to contradictory metadata
+(e.g. metadata update is non-atomic), or read corrupt data (e.g. data update is non-atomic, and other threads read partially
+written data). To ensure the correctness of updates, data structure must satisfy the following requirements when
+performing updates. 
