@@ -104,3 +104,10 @@ during recovery still result in the same state.** With these guarantees, the rec
 information by identifies the exact point (or the range) where the crash happened. Then the recovery thread tranfers 
 its control flow to the point (or the starting point of the range) to complete the information, as if the crash had never
 happened, and that it were the original thread attempting to complete the operation. 
+
+In addition, the paper also proposes a better way of testing NVM programs. Prior researches either interrupt the program
+randomly during normal execution, or try to enumerate all possible contexts, and test each of them. This paper observes
+that the global visible state only changes when the atomic update operation is committed to the NVM, and therefore proposes
+only interrupting the program before and after each persistence barrier. The crash is simulated by conducting a longjmp
+from the context directly to the previously saved checkpoint, leaving the data structure in an intermediate state, after 
+which point crash recovery can be invoked.
