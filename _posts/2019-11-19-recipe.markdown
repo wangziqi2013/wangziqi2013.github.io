@@ -63,7 +63,17 @@ after the crash, threads simply fix the data structure in the intermediate state
 it does during normal execution. The last requirement is that data structure operations must be non-blocking, or at
 least can be transformed to non-blocking with reasonable effort. For reads, when they observe intermediate states
 created by concurrent update operations, readers must be able to figure out a way of fixing the states, instead of retrying 
-or blocking on the temporararily created intermediate state (e.g. blocking on a lock). This is because a blocking read 
-protocol expects some other threads to finish the operation and restore the data structure to a within finite number of 
+or blocking on the temporararily created intermediate state (e.g. spinning on a lock). This is because a blocking read 
+protocol expects some other threads to finish the operation and restore consistency within finite number of 
 steps. This is, however, unfortunately not true after a recovery, since no thread is currently working on restoring the 
-state back to normal, in which case helping along each other is necessary.
+state back to normal, in which case helping along each other is necessary. 
+
+The paper enumerates three types of data structure synchronization techniques where such transformation can be done easily. 
+In the first type, all data structure updates (including data update and structural update) are made available via an
+atomic store or CAS. In this case, simply persisting the last store using a persistence barrier suffice, since the 
+state of the data structure only changes on these persistence points. Crashes happening between the two persistence 
+points will automatically roll back the incomplete update. On recovery, the visible state of the data structure is still
+consistent, while the "invisible state" (such as log entries beyond the tail pointer, or data in inactive slots) might
+be inconsistent. The data structure should be able to tolerate such inconsistency, as they will also occur during normal
+operation.
+
