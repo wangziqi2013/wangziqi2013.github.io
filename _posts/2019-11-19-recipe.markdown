@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**To be short: The elegant definition of "non-blocking" actually already covers the case where threads crash in the middle
+of an operation. Non-blocking data structures typically require some sort of help-along protocol that transforms
+data structures from consistent states to the next consistent states. This help-along protocol can be used without
+any change for post-crash recovery, since system crashing is just all threads suddenly exiting the data structure.
+If the data structure is truly non-blocking, this is just a normal case.**
+
 This paper propes Recipe, a code transformation technique for implementing failure atomic persistent data structures
 from their concurrent but non-persistent counterparts. The paper is motived by the fact that persistence and isolation
 are, in fact, similar to each other since they both require that data structure be able to recognize partially updated
@@ -54,4 +60,8 @@ by posting a record indicating an incomplete operation, which contains the opera
 the operation, or update operations are carefully designed such that they create unique intermediate states with
 sufficient information to complete or roll back the operation. This property makes crash recovery trivial, since 
 after the crash, threads simply fix the data structure in the intermediate states back to normal using the same logic as 
-it does during normal execution.
+it does during normal execution. The last requirement is that data structure operations must be non-blocking, or at
+least can be transformed to non-blocking with reasonable effort. For reads, when they observe intermediate states
+created by concurrent update operations, readers must be able to figure out asd, instead of retrying or blocking on
+the temporararily created intermediate state. This is because a blocking read protocol expects some other threads 
+to finish the operation and restore the data structure to a 
