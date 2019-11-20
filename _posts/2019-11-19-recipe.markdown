@@ -43,4 +43,8 @@ written data). To ensure the correctness of updates, data structure must satisfy
 performing updates. First, each step in a single update operation only atomically transform publicly available states from 
 one consistent state to another. This can always be done by performing log-structured updates: A log pointer or "validity bitmap"
 is maintained for each object that will be updated concurrently, which marks the end of the currently available log or 
-indicates "active slots" in the object (if it consists of slots, such as a B+Tree node). 
+indicates "active slots" in the object (if it consists of slots, such as a B+Tree node). In order to perform atomic updates, 
+threads first allocate some space at the end of the log or acquire a free slot. Then threads updathe the object by
+appending to the log or writing data into the unused slot just acquired. During this process, the data appended to the 
+log or written to the slot is unavailable to other readers. In the last step, the updates are committed by atomically
+moving the log tail pointer or setting the bit in "validity bitmap" by using an atomic CAS.
