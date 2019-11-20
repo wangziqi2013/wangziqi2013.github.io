@@ -52,4 +52,6 @@ threads must be able to recognize such intermediate states, and help-along when 
 achieve this, either all update operations on objects explicitly identify themselves, like in BwTree and BzTree (PMWCAS),
 by posting a record indicating an incomplete operation, which contains the operation type and arguments for completing
 the operation, or update operations are carefully designed such that they create unique intermediate states with
-sufficient information to complete or roll back the operation. 
+sufficient information to complete or roll back the operation. This property makes crash recovery trivial, since 
+after the crash, threads simply fix the data structure in the intermediate states back to normal using the same logic as 
+it does during normal execution.
