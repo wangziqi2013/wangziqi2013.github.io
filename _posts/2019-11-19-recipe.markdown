@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper propes Recipe, a code transformation technique for implementing failure atomic persistent data structures
+from their concurrent but non-persistent counterparts. The paper is motived by the fact that persistence and isolation
+are, in fact, similar to each other since they both require that data structure be able to recognize partially updated
+states, and fix them cooperatively during execution. In other words, most data structures require that operations
+be atomic with regard to other concurrent operations. This can be achieved by making the changes publicly available
+using one atomic step. In the meantime, if we need failure atomicity on data structure, they must commit all changes 
+to the NVM and make them available to post-crash recovery routines in one atomic step, such that either all necessary
+information is on the NVM for replay all the changes, or none of them is available after recovery.
+
