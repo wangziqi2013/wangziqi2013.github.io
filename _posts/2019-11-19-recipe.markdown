@@ -95,4 +95,11 @@ structures of this type is non-straightforward, since consistency can be maintai
 while not with regard to failures. In other words, state changes in critical sections are undefined, which may
 leave the data structure in a state that is difficult or impossible to identify. To solve this problem, the paper 
 proposes first transforming the data structure to the second type, and then making it persistence by adding extra
-persistence barriers. 
+persistence barriers. The essence of the transformation is to allow control flow information to always be inferred 
+from the post-crash state, i.e. by reading an inconsistent state, threads should always be able to identify the exact
+point where the crash happens, and hence be able to complete the operation from that exact point. **If exact points cannot
+be identified, but instead we can only know that the crash happened between two persistence points, we must further guarantee 
+that all steps between these two points are either local operations, or are idempotent, such that re-executing them
+during recovery still result in the same state.** With these guarantees, the recovery thread first recovers control flow
+information by identifies the exact
+point (or the range) where the crash happened, and then 
