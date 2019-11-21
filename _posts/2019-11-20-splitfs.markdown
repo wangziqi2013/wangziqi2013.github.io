@@ -54,4 +54,9 @@ nor syncrhronized. Under sync mode, metadata operations are atomic and synchroni
 but non-atomic. Note that atomicity does not imply synchronicity, since even if a write operation is atomic, the content
 of the write can still be lost after a crash if it is not synchronous. Synchronicity also does not imply atomicity,
 since synchronicity of write operations only dictate that the content of the write will not be lost after the operation
-completes; Partial writes can still occur if the system crashed before the write can return. 
+completes; Partial writes can still occur if the system crashed before the write can return. Under strict mode, all metadata
+and data operations are atomic and synchronized, which means that their effect will be persistent right after the 
+call returns, and if a crash happens before the operation completes, no harm will be done, and all partial updates
+will be rolled back. In the following discussion, we focus on the strict mode to demonstrate how SplitFS levarages 
+EXT4 DAX.
+
