@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents SplitFS, a user-space file system implementation aiming at reducing software overhead when running on
+the NVM. Byte-addressable NVM is more sensitive to the overhead of software stack due to its lower latency and higher bandwidth
+compared with conventional disks and SSD. The paper observes that most kernel file systems introduce non-negligible software
+overhead by performing file system calls into the kernal on normal operations such as file open and read/write. For example,
+the paper points out that on write operations, the file system has to perform block allocation, logging, metadata update, 
+etc., which are all on the critical path. 
