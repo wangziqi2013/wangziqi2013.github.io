@@ -75,11 +75,13 @@ SplitFS is compiled as a user space library, and is loaded at binary load time u
 by the shell. The library overrides certain POSIX file system calls at glibc level (which is dynamically linked 
 into the executable). When a glibc file system call is made by the application, SplitFS intercepts that call, analyzes
 the type and argument, and either redirect that call to the underlying EXT4 DAX file system (with possibly altered
-arguments and/or issuing more calls), or simply handles the request by itself. 
+arguments and/or issuing more calls), or simply handles the request by itself. Since each application program has 
+an instance of SplitFS running with it, SplitFS can provide support for different file access semantics to different
+applications in the same operating system. 
 
 At a high level, SplitFS handles writes atomically and synchronously using two techniques. The first technique is based
 on the observation that EXT4 DAX metadata operations are atomic (but no more!), which is demanded by POSIX. With these
-atomic "abstract operations" at hand, SplitFS only performs logical logging, which logs the high level abstarct
+atomic "abstract operations" at hand, SplitFS only performs logical redo logging, which logs the high level abstarct
 operation on EXT4, and delegates the enforcement of atomicity of these abstract operations to EXT4. As a result, log
 entries in SplitFS are usually quite short, no larger than a single cache line for most simple operations, since only
 abstract EXT4 operations and their arguments are logged. The second technique is the use of staging files to buffer 
@@ -92,3 +94,11 @@ purpose of which is to atomically transfer the blocks in the staging file (i.e. 
 being modified. The atomicity of this operation again is guaranteed by EXT4 DAX. During this process, only one write I/O
 to the NVM is performed instead of two, which is common for file systems that juornals data to provide atomic writes
 (first write to the journal, and second write to the actual file in-place). 
+
+On write or append operations, SplitFS first redirect data of the write or append to one of the free staging file. To
+avoid allocating staging files from EXT4 DAX on-demand, which is on the critical path and involves relatively slower
+metadata operations, SplitFS maintains a pool of free staging files, and pre-allocates a few from EXT4 DAX when it
+starts up. SplitFS also writes logs to reflect EXT4 DAX operations, such that they can be redone. When the write 
+operation is to be committed, SplitFS issues a MOVE\_EXT call to EXT4 DAX, which atomically swaps dirty blocks in the 
+staging file to the original file, as described earlier. If synchronizicy is desired, SplitFS also issues fsync() on
+both files before the call returns.
