@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SplitFS: Reducing Software Overhead in File Systems for Persistent Memory"
+date:   2019-11-20 23:07:00 -0500
+categories: paper
+paper_title: "SplitFS: Reducing Software Overhead in File Systems for Persistent Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=3359631
+paper_keyword: NVM; File System; SplitFS
+paper_year: SOSP 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
