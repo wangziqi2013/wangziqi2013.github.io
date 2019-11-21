@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Note: Despite promising evaluation result, I do not quite buy the paper's argument that Split file system can reduce
+software overhead. I understand that using block transfer instead of write-ahead logging can save you some I/O (writing
+only once vs writing twice), but I cannot see how this reduce software overhead, or the paper uses the term "software
+overhead" to refer to logging?
+
+Another confusing argument in this paper is that while logical logging is used to enforce atomicity of multi-step operation
+(which is an innovation), the paper did not mention that in order for this to work, we should issue fsync() to the 
+underlying EXT4, and rely on atomicity guarantees of EXT4 and persistence guarantee of fsync() to logging abstract
+operations of EXT4.**
+
 This paper presents SplitFS, a user-space file system implementation aiming at reducing software overhead when running on
 the NVM. Byte-addressable NVM is more sensitive to the overhead of software stack due to its lower latency and higher bandwidth
 compared with conventional disks and SSD. The paper observes that most kernel file systems introduce non-negligible software
