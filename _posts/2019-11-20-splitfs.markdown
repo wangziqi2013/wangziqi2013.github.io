@@ -34,6 +34,11 @@ overhead" to refer to logging?
 underlying EXT4, and rely on atomicity guarantees of EXT4 and persistence guarantee of fsync() to log abstract
 operations of EXT4.
 
+3. The paper did not mention how to undo an operation, e.g. during renaming the target name clashes with an existing file.
+   Maybe SplitFS can check the condition by its own (which is redundant work), or it issues commands to EXT4 DAX
+   and let EXT4 report error. The latter requires ability of undoing partial changes, since if EXT4 DAX reports error
+   in the middle of an operation then SplitFS should roll back all prior actions.
+
 This paper presents SplitFS, a user-space file system implementation aiming at reducing software overhead when running on
 the NVM. Byte-addressable NVM is more sensitive to the overhead of software stack due to its lower latency and higher bandwidth
 compared with conventional disks and SSD. The paper observes that most kernel file systems introduce non-negligible software
@@ -109,3 +114,4 @@ so just scan the pool and remove any staging file that are not empty).
 On read operations, SplitFS first checks whether the read range overlaps a file range maintained in staging files. If
 true, reads are redirected to staging files with translated offsets. Otherwise reads are directly performed on the 
 master file.
+
