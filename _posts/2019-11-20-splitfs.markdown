@@ -106,3 +106,6 @@ committed, no harm will be done to the master file, since it has not been update
 deleted during recovery after they are identified (on clean shutdown there should not be any non-empty staging file,
 so just scan the pool and remove any staging file that are not empty). 
 
+On read operations, SplitFS first checks whether the read range overlaps a file range maintained in staging files. If
+true, reads are redirected to staging files with translated offsets. Otherwise reads are directly performed on the 
+master file.
