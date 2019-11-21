@@ -16,21 +16,23 @@ version_mgmt:
 **Highlight:**
 
 1. Performing logical logging using EXT4 DAX's underlying atomic operation as primitives is a great innovation.
+
 2. I like the idea of only writing data once while still providing data atomicity. Journaling file systems cannot
    do this because the journal is a shared object used for many purposes, such as metadata logging. This paper proposes 
    decoupling data logging from other journaling tasks, and doing per-file journaling (i.e. having multiple staging files 
    for handling writes). This has the advantage of both in-place update (optimized for read) and per-object journaling
    (optimized for write, less I/O).
 
-**Note: Despite promising results, I do not quite buy the paper's argument that Split file system can reduce
+**Lowlights:**
+1. Despite promising results, I do not quite buy the paper's argument that Split file system can reduce
 software overhead. I understand that using block swap instead of write-ahead logging can save you some I/O (writing
 only once vs writing twice), but I cannot see how this reduce software overhead, or the paper uses the term "software
 overhead" to refer to logging?
 
-Another confusing argument in this paper is that while logical logging is used to enforce atomicity of multi-step operation
+2. Another confusing argument in this paper is that while logical logging is used to enforce atomicity of multi-step operation
 (which is an innovation), the paper did not mention that in order for this to work, we should issue fsync() to the 
-underlying EXT4, and rely on atomicity guarantees of EXT4 and persistence guarantee of fsync() to logging abstract
-operations of EXT4.**
+underlying EXT4, and rely on atomicity guarantees of EXT4 and persistence guarantee of fsync() to log abstract
+operations of EXT4.
 
 This paper presents SplitFS, a user-space file system implementation aiming at reducing software overhead when running on
 the NVM. Byte-addressable NVM is more sensitive to the overhead of software stack due to its lower latency and higher bandwidth
