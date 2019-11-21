@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Performing logical logging using EXT4 DAX's underlying atomic operation as primitives is a great innovation.
+2. I like the idea of only writing data once while still providing data atomicity. Journaling file systems cannot
+   do this because the journal is a shared object used for many purposes, such as metadata logging. This paper proposes 
+   decoupling data logging from other journaling tasks, and doing per-file journaling (i.e. having multiple staging files 
+   for handling writes). This has the advantage of both in-place update (optimized for read) and per-object journaling
+   (optimized for write, less I/O).
+
 **Note: Despite promising results, I do not quite buy the paper's argument that Split file system can reduce
 software overhead. I understand that using block swap instead of write-ahead logging can save you some I/O (writing
 only once vs writing twice), but I cannot see how this reduce software overhead, or the paper uses the term "software
@@ -65,3 +74,4 @@ by the shell. The library overrides certain POSIX file system calls at glibc lev
 into the executable). When a glibc file system call is made by the application, SplitFS intercepts that call, analyzes
 the type and argument, and either redirect that call to the underlying EXT4 DAX file system (with possibly altered
 arguments and/or issuing more calls), or simply handles the request by itself. 
+
