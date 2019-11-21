@@ -36,4 +36,9 @@ of an existing file system has two obvious benefits. First, metadata operations 
 while they often have subtle outcomes and implications, which on a software engineering point of view, is difficult to
 get correct without many hours of testing. Rather than dedicating thousands of hours creating and debugging a brand new 
 mechanism that will not be used as frequently as normal data operations, just relying on existing mechanisms will be 
-a good balancing point reagrding both performance and ease of development. Second, 
+a good balancing point reagrding both performance and ease of development. Second, EXT4 only delivers limited semantics
+guarantees (i.e. POSIX), while in practice, a stricter or looser semantics may be desired. For example, the paper mentioned
+that SQLite does not require data writes to be fully atomic with regard to failures, since data writes are protected by
+logs, and log entry writes are ordered in a way that partially written log records can be identified. In such a use case,
+if the file system provides atomic write guarantees, we will have a write amplification problem, because every data and 
+log write will be first logged by the file system, which is unnecessary.
