@@ -80,4 +80,13 @@ on the observation that EXT4 DAX metadata operations are atomic (but no more!), 
 atomic "abstract operations" at hand, SplitFS only performs logical logging, which logs the high level abstarct
 operation on EXT4, and delegates the enforcement of atomicity of these abstract operations to EXT4. As a result, log
 entries in SplitFS are usually quite short, no larger than a single cache line for most simple operations, since only
-abstract EXT4 operations and their arguments are logged. 
+abstract EXT4 operations and their arguments are logged. The second technique is the use of staging files to buffer 
+updates before they finally commit. Under strict mode, we must guarantee that an operation is recoverable if its operation
+has returned to the caller, and otherwise all changes may be simply discarded (but it does no harm to commit them
+whenever commit is possible). On each write or append request, SplitFS will redirect these writes to a pre-allocated
+staging file on the underlying EXT4 DAX file system, and create log entries describing the write. When the write is 
+to be committed, SplitFS issues a special command, EXT4\_IOC\_MOVE\_EXT, to EXT4 DAX using ioctl interface, the 
+purpose of which is to atomically transfer the blocks in the staging file (i.e. dirty data of the write) to the actual
+being modified. The atomicity of this operation again is guaranteed by EXT4 DAX. During this process, only one write I/O
+to the NVM is performed instead of two, which is common for file systems that juornals data to provide atomic writes
+(first write to the journal, and second write to the actual file in-place). 
