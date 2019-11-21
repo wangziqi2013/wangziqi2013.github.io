@@ -47,3 +47,11 @@ logging can be done by the file system. SplitFS is able to provide different sem
 logging scheme in user space, which makes it more versatile. EXT4 DAX simply provides metadata atomicity guarantee, which
 enables logical logging to be used. 
 
+SplitFS provides three operating modes: POSIX, sync, and strict. Under POSIX mode, only metadata operations are guaranteed
+to be atomic with regard to failures. They are not necessarily synchronized (i.e. metadata updates may not be persisted
+and are prone to be lost even after the corresponding file system call returns). Data operations are neither atomic
+nor syncrhronized. Under sync mode, metadata operations are atomic and synchronized, and data operations are only synchronized
+but non-atomic. Note that atomicity does not imply synchronicity, since even if a write operation is atomic, the content
+of the write can still be lost after a crash if it is not synchronous. Synchronicity also does not imply atomicity,
+since synchronicity of write operations only dictate that the content of the write will not be lost after the operation
+completes; Partial writes can still occur if the system crashed before the write can return. 
