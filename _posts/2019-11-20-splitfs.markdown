@@ -99,6 +99,10 @@ On write or append operations, SplitFS first redirect data of the write or appen
 avoid allocating staging files from EXT4 DAX on-demand, which is on the critical path and involves relatively slower
 metadata operations, SplitFS maintains a pool of free staging files, and pre-allocates a few from EXT4 DAX when it
 starts up. SplitFS also writes logs to reflect EXT4 DAX operations, such that they can be redone. When the write 
-operation is to be committed, SplitFS issues a MOVE\_EXT call to EXT4 DAX, which atomically swaps dirty blocks in the 
-staging file to the original file, as described earlier. If synchronizicy is desired, SplitFS also issues fsync() on
-both files before the call returns.
+operation is to be committed, SplitFS writes a commit record to the log, and then issues a MOVE\_EXT call to EXT4 DAX, 
+which atomically swaps dirty blocks in the staging file to the master file, as described earlier. If synchronizicy is 
+desired, SplitFS also issues fsync() on both files before the call returns. If the system crashes before writes are 
+committed, no harm will be done to the master file, since it has not been updated in-place. The staging file will be
+deleted during recovery after they are identified (on clean shutdown there should not be any non-empty staging file,
+so just scan the pool and remove any staging file that are not empty). 
+
