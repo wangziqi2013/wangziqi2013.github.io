@@ -13,8 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
-**Note: Despite promising evaluation result, I do not quite buy the paper's argument that Split file system can reduce
-software overhead. I understand that using block transfer instead of write-ahead logging can save you some I/O (writing
+**Note: Despite promising results, I do not quite buy the paper's argument that Split file system can reduce
+software overhead. I understand that using block swap instead of write-ahead logging can save you some I/O (writing
 only once vs writing twice), but I cannot see how this reduce software overhead, or the paper uses the term "software
 overhead" to refer to logging?
 
@@ -29,3 +29,11 @@ compared with conventional disks and SSD. The paper observes that most kernel fi
 overhead by performing file system calls into the kernal on normal operations such as file open and read/write. For example,
 the paper points out that on write operations, the file system has to perform block allocation, logging, metadata update, 
 etc., which are all on the critical path. 
+
+SplitFS features a hybrid architecture in which metadata operations are delegatd to existing kernel file systems such
+as EXT4 DAX, while user data manipulation and semantics guarantees are delivered by a user space module. Building on top
+of an existing file system has two obvious benefits. First, metadata operations are rarer compared with data operations,
+while they often have subtle outcomes and implications, which on a software engineering point of view, is difficult to
+get correct without many hours of testing. Rather than dedicating thousands of hours creating and debugging a brand new 
+mechanism that will not be used as frequently as normal data operations, just relying on existing mechanisms will be 
+a good balancing point reagrding both performance and ease of development. Second, 
