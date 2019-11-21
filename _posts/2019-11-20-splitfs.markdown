@@ -75,3 +75,9 @@ into the executable). When a glibc file system call is made by the application, 
 the type and argument, and either redirect that call to the underlying EXT4 DAX file system (with possibly altered
 arguments and/or issuing more calls), or simply handles the request by itself. 
 
+At a high level, SplitFS handles writes atomically and synchronously using two techniques. The first technique is based
+on the observation that EXT4 DAX metadata operations are atomic (but no more!), which is demanded by POSIX. With these
+atomic "abstract operations" at hand, SplitFS only performs logical logging, which logs the high level abstarct
+operation on EXT4, and delegates the enforcement of atomicity of these abstract operations to EXT4. As a result, log
+entries in SplitFS are usually quite short, no larger than a single cache line for most simple operations, since only
+abstract EXT4 operations and their arguments are logged. 
