@@ -60,3 +60,8 @@ call returns, and if a crash happens before the operation completes, no harm wil
 will be rolled back. In the following discussion, we focus on the strict mode to demonstrate how SplitFS levarages 
 EXT4 DAX.
 
+SplitFS is compiled as a user space library, and is loaded at binary load time using LD\_PRELOAD directive provided 
+by the shell. The library overrides certain POSIX file system calls at glibc level (which is dynamically linked 
+into the executable). When a glibc file system call is made by the application, SplitFS intercepts that call, analyzes
+the type and argument, and either redirect that call to the underlying EXT4 DAX file system (with possibly altered
+arguments and/or issuing more calls), or simply handles the request by itself. 
