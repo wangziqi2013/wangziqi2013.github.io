@@ -115,3 +115,6 @@ On read operations, SplitFS first checks whether the read range overlaps a file 
 true, reads are redirected to staging files with translated offsets. Otherwise reads are directly performed on the 
 master file.
 
+On other metadata updates, such as renaming or moving a file, SplitFS simply logs the operation using EXT4 DAX commands, 
+commits the log record, and performs actual operations, before it returns results to the user. If synchronicity is also
+desired, SplitFS will call fsync() before returning to the caller.
