@@ -13,6 +13,21 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Atomic transformation between consistent states associates volatile consistency with non-volatile consistency, which is
+   the big innovation about this paper.
+
+**Lowlights:**
+
+1. What if values are duplicated at leaf level (e.g. if we store integers)? You cannot simply assume that a copy is going 
+   on even if duplicated values are seen. Although the paper proposes using read locks at leaf level to solve the value 
+   conflict problem, then FAST is only useful for NVM.
+2. I seriously doubt the correctness of concurrency control of FAST & FAIR. This paper will be better if it just assumes
+   single threaded access and leaves concurrency issues to future work.
+3. I also seriously doubt the claim in the paper that threads conflict on inner level more than they do on leaf level.
+4. Actually there is a concurrency bug as pointed out by a later paper (RECIPE).
+
 This paper presents FAST and FAIR, a B+Tree implementation designed for byte-addressable NVM. The paper identified two
 major challenges of designing persistent B+Tree. The first challenge is to handle inserts and deletes efficiently without
 exposing intermediate states, especially when keys are longer than 8 bytes, which is the largest unit of atomic update
@@ -96,4 +111,4 @@ synchronized, i.e. at any moment in time, if we detect duplicated values, then t
 the current pair of key and value is always copied before the next pair could. Since values in B+Trees are often 
 just pointers to external objects, or pointers to the next level, we can still derive the consistent node image
 by checking if two adjacent values are duplicated, and if true, then we know keys are also duplicated, in which case
-the duplicated pair will be ignored.  
+the duplicated pair will be ignored. 
