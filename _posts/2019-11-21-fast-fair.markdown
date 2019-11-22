@@ -61,4 +61,14 @@ until all keys are shifted. The NVM image, however, may be left in inconsistent 
 cache line boundary. In the above example, if element E is copied to the next cache line, and then element D is copied to
 the current location of E, after which the first cache line is evicted back to the NVM, then the NVM image is inconsistent,
 since the image is | A | B | C | D | D |, while the second cache line is | x | x | x |, resulting in permanent loss of key 
-E after recovery. 
+E after recovery. To avoid this problem, the paper points out that whenever elements are copied across cache line boundaries,
+the copying thread should flush the higher addressed cache line back to the NVM, persisting the key that it just moved,
+before the thread can overwrite the previous location of the moved element. In other words, the shifting protocol is designed
+such that at given moment in time, there should be at least one copy of each key in the NVM image of the node. In addition,
+among all elements to be shifted by the algorithm, at most one element can have two copies, which is the element currently
+being copied. As long as the above two rules are observed by the copying thread, the node image can always be recovered
+by scanning the two arrays (key array and value array), and ignoring the duplicated item. In practice, reading threads do
+not need to rebuild the entire node explicitly. In fact, the correct child node can be found by simply scanning 
+the node, keeping track of the current key and value respectively. The current key and value is updated if and only if the 
+next key or value is different from the current one. Since we assume keys and values can be copied atomically, both
+copies are valid during the shift. 
