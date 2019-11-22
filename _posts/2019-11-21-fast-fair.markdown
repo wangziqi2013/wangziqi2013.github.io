@@ -24,6 +24,13 @@ system crashes at this point, such intermediate state may not be able to be reso
 modification operations (SMO) initiated by threads attempting to split or merge a node. B+Tree SMOs consists of several
 steps, each of which will bring the affected nodes into inconsistent intermediate states. 
 
-
+Prior researches have proposed adapting logging concepts used in database systems into B+Tree implementations. For example,
+in order to update a single node atomically, an extra level of indirection is added to each node, which maps logical locations
+of elements into physical locations in the node. The node is updated by first appending new elements into the end of the 
+storage area, and then updating the mapping atomically using either 8 byte atomic update, or advanced techniques such as
+Hardware Transactional Memory (HTM). Since elements are not logically committed until the last atomic update step, even
+if the system crashes at some point during the update, intermediate results cannot be seen. This approach achieves easy
+node update, at the cost of limiting the node layout and node size, since the mapping field length cannot exceed a cache 
+line, which is the maximum unit of atomic persistence on the NVM side. 
 
 FAST & FAIR 
