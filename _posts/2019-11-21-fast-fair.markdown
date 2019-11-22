@@ -34,6 +34,10 @@ node update, at the cost of limiting the node layout and node size, since the ma
 line, which is the maximum unit of atomic persistence on the NVM side. The mapping layer can even be eliminated by 
 maintaining an in-node log and a single log tail pointer. Threads only update the tail pointer after they have appended 
 data to the end of the in-node log. This way, elements are no longer sorted in the node, and threads need to recovery the 
-current node content by scanning the log every time they traverse the node. 
+current node content by scanning the log every time they traverse the node. As a compromise, some designs allow a node 
+to be partially sorted: Part of the elements are sorted as a result of log consolitation, while new elements are still
+appended in a los-structured fashion until the next consolidation. Although this seems promising, the paper identified 
+that in-node logging requires an excessive number of cache line flush and memory fences, which are inserted after
+data append and after adjusting the tail pointer (or the mapping field). 
 
 FAST & FAIR 
