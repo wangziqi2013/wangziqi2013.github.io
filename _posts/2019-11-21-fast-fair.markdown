@@ -125,4 +125,9 @@ as follows. The first step of node split is to create a new node, which sibling 
 the old node, and has the upper half of the old node. We persist the sibling node before linking it to the old node.
 In the second step, the sibling pointer of the old node is changed to the new node. This step does not change the 
 logical node content, since the low key of the new node is lower than the high key of the old node, in which case
-threads will just ignore (and will try to fix it by completing the partial state during lazy recovery). 
+threads will just ignore it (and will try to fix it by completing the partial state during lazy recovery). In the second 
+step, we activate the sibling node by storing a NULL pointer to the split point in the old node. This store can be made 
+atomic as long as threads check value for NULL first during the scan (or changing the node size field). After this point,
+the new node is activated, and can be inserted into by threads traversing to it via the sibling pointer. In the last step,
+we insert a new element into the parent node using FAST. In the above protocol, all changes are flushed back to the NVM 
+after they are performed to ensure that updates appear on the NVM in intended order.
