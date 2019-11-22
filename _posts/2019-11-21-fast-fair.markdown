@@ -76,4 +76,12 @@ copies are valid during the shift.
 The FAST algorithm works even in an architecture that reorders non-dependent loads and stores. Our previous discussion
 assumes Total Store Ordering (TSO), in which stores will not be reordered, and dependent loads and stores are always committed
 in program order. As a result, since each store to a key slot (except the first one storing to NULL pointer field) is dependent
-on a previous load reading from the slot, key array loads and stores are serialized in program order. Furthermore, 
+on a previous load reading from the slot, key array loads and stores are serialized in program order. Furthermore, since
+stores to keys and values slot are always ordered, and value array stores are serialized after corresponding loads just like
+key arrays, we can conclude that in TSO architecture, key and value copy are synchronized, such that the dynamic instructions 
+for next key value pair (lower addressed) copy will not be executed before the ones for current key-value pair copy are 
+committed. In relaxed memory ordering, keys and values may be totally out-of-sync, in a sense that the two instruction
+flows for copying keys and values can be scheduled such that the current key and value being copies are not necessarily
+in the same pair. This relaxation, however, does not affect correctness of reads, because we do not assume that the 
+duplicated keys and values are on the same slot. Instead, we simply assume that there can be duplicated keys and values
+on a certain slot, in which case, we just ignore the duplicated item, and keep scanning the node.
