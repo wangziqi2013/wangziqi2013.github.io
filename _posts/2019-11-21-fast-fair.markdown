@@ -31,6 +31,9 @@ storage area, and then updating the mapping atomically using either 8 byte atomi
 Hardware Transactional Memory (HTM). Since elements are not logically committed until the last atomic update step, even
 if the system crashes at some point during the update, intermediate results cannot be seen. This approach achieves easy
 node update, at the cost of limiting the node layout and node size, since the mapping field length cannot exceed a cache 
-line, which is the maximum unit of atomic persistence on the NVM side. 
+line, which is the maximum unit of atomic persistence on the NVM side. The mapping layer can even be eliminated by 
+maintaining an in-node log and a single log tail pointer. Threads only update the tail pointer after they have appended 
+data to the end of the in-node log. This way, elements are no longer sorted in the node, and threads need to recovery the 
+current node content by scanning the log every time they traverse the node. 
 
 FAST & FAIR 
