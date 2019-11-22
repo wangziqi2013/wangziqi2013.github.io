@@ -1,0 +1,16 @@
+---
+layout: paper-summary
+title:  "Endurance Transient Inconsistency in Byte-Addressable Persistent B+Tree"
+date:   2019-11-22 13:57:00 -0500
+categories: paper
+paper_title: "Endurance Transient Inconsistency in Byte-Addressable Persistent B+Tree"
+paper_link: https://www.usenix.org/conference/fast18/presentation/hwang
+paper_keyword: NVM; B+Tree; FAST; FAIR
+paper_year: FAST 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+This paper 
