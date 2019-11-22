@@ -84,4 +84,13 @@ committed. In relaxed memory ordering, keys and values may be totally out-of-syn
 flows for copying keys and values can be scheduled such that the current key and value being copies are not necessarily
 in the same pair. This relaxation, however, does not affect correctness of reads, because we do not assume that the 
 duplicated keys and values are on the same slot. Instead, we simply assume that there can be duplicated keys and values
-on a certain slot, in which case, we just ignore the duplicated item, and keep scanning the node.
+on a certain slot, in which case, we just ignore the duplicated item, and keep scanning the node. 
+
+The above observation does not work for keys that cannot be atomically copied using 8 byte store instructions. In this
+case, threads may read partially copies keys, and fail the comparison (either invalid access, or comparison giving the 
+wrong result). One easy way of dealing with this is to enforce that all keys are 8 byte in size using indirection, i.e.
+only storing pointers to the actual key objects. This simple solution hurts performance as each key access now becomes
+a pointer dereference and brings a potential cache miss. Another more complicated solution is to enforce TSO by inserting
+memory barriers after copying each key-value pair. The memory barrier will order key copy and value copy to make them
+synchronized, i.e. at any moment in time, if we detect duplicated values, then the keys must also be duplicated, since
+the current pair of key and value is always copied before the next pair could. Since values
