@@ -50,4 +50,15 @@ FAST & FAIR differs from previous proposals in that it does not attempt to avoid
 states to concurrent readers and to the NVM. Instead, node updates and SMOs follow certain carefully designed protocol,
 such that the intermediate state is still consistent, from which the node image can be recovered. Compared with 
 previous approaches, FAST & FAIR does not double write traffic to the NVM, does not limit the maximum node size, and 
-no recovery time processing is needed. 
+no recovery time processing is needed. We present FAST and FAIR in the following sections.
+
+FAST, or Failure-Atomic Shift, is a technique for shifting elements in a sorted node without losing consistency. The 
+basic observation is that when elements are shifted from left to right (i.e. low to high address), elements can only
+be duplicated, but not lost, as long as we copy elements one by one from right to left. For example, for key array
+| A | B | C | D | E | x | x | x | (x means NULL pointer, indicating the end of the search array), if we insert between C
+and C, then we first copy element E to the next slot, resulting in a node with two identical "E" keys, and repeat 
+until all keys are shifted. The NVM image, however, may be left in inconsistent state if an element is copied across
+cache line boundary. In the above example, if element E is copied to the next cache line, and then element D is copied to
+the current location of E, after which the first cache line is evicted back to the NVM, then the NVM image is inconsistent,
+since the image is | A | B | C | D | D |, while the second cache line is | x | x | x |, resulting in permanent loss of key 
+E after recovery. 
