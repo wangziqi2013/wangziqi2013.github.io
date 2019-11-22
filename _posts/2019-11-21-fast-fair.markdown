@@ -118,4 +118,11 @@ while allowing concurrent readers. The idea of FAIR is based on B<sup>link</sup>
 only leaf nodes, has a sibling pointer. Threads are required to check the high key of the current node and the low key
 of the next node to determine whether it should traverse vertically to the next node when it reaches the next level via 
 a child pointer. Such traversal may span several sibling nodes if contention is really heavy on the sibling nodes (i.e. a 
-node is splited before the thread spliting it even had a chance to insert into its parent). 
+node is splited before the thread spliting it even had a chance to insert into its parent). By adding a sibling pointer,
+the partial state in which a sibling node is created but has not been added to the parent becomes a valid state, since 
+all elements in the original node can still be accessed even if the system crashes at this point. We describe node split 
+as follows. The first step of node split is to create a new node, which sibling pointer points to the next sibling of 
+the old node, and has the upper half of the old node. We persist the sibling node before linking it to the old node.
+In the second step, the sibling pointer of the old node is changed to the new node. This step does not change the 
+logical node content, since the low key of the new node is lower than the high key of the old node, in which case
+threads will just ignore (and will try to fix it by completing the partial state during lazy recovery). 
