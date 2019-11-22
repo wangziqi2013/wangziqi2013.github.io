@@ -137,3 +137,7 @@ sibling. Then the merging thread checks whether there are enough number of entri
 thread will insert the entry into the underflowed node first, before it deletes the element from the left node (by storing
 NULL into the value field). After nodes have been balanced, we re-insert the split key into the parent node using the 
 current low key of the right node.  
+
+On recovery, no special recovery routine needs to be taken. Since the tree structure is always kept consistent, the NVM
+image of the tree can be directly loaded to perform searches and updates. A thread, however, needs to fix inconsistency
+when they see one during normal execution tp ensure that later operations will be conducted on a non-transient state. 
