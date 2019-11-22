@@ -13,4 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper 
+This paper presents FAST and FAIR, a B+Tree implementation designed for byte-addressable NVM. The paper identified two
+major challenges of designing persistent B+Tree. The first challenge is to handle inserts and deletes efficiently without
+exposing intermediate states, especially when keys are longer than 8 bytes, which is the largest unit of atomic update
+on NVM mapped memory with regard to failures. Classical B+Tree maintains a sorted array of keys for both inner nodes
+and leaf nodes, in order to perform binary search. Inserting elements into the sorted array, as a consequence, involves
+right shifting some elements to higher addresses to make a new slot in the middle of the array. Without proper design, such
+element shifting may introduce temporary inconsistent states such as lost keys or accessing wrong child nodes. 
+
+FAST & FAIR 
