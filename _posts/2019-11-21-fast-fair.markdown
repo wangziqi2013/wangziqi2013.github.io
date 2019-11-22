@@ -93,4 +93,7 @@ only storing pointers to the actual key objects. This simple solution hurts perf
 a pointer dereference and brings a potential cache miss. Another more complicated solution is to enforce TSO by inserting
 memory barriers after copying each key-value pair. The memory barrier will order key copy and value copy to make them
 synchronized, i.e. at any moment in time, if we detect duplicated values, then the keys must also be duplicated, since
-the current pair of key and value is always copied before the next pair could. Since values
+the current pair of key and value is always copied before the next pair could. Since values in B+Trees are often 
+just pointers to external objects, or pointers to the next level, we can still derive the consistent node image
+by checking if two adjacent values are duplicated, and if true, then we know keys are also duplicated, in which case
+the duplicated pair will be ignored.  
