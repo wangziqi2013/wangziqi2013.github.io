@@ -72,3 +72,8 @@ not need to rebuild the entire node explicitly. In fact, the correct child node 
 the node, keeping track of the current key and value respectively. The current key and value is updated if and only if the 
 next key or value is different from the current one. Since we assume keys and values can be copied atomically, both
 copies are valid during the shift. 
+
+The FAST algorithm works even in an architecture that reorders non-dependent loads and stores. Our previous discussion
+assumes Total Store Ordering (TSO), in which stores will not be reordered, and dependent loads and stores are always committed
+in program order. As a result, since each store to a key slot (except the first one storing to NULL pointer field) is dependent
+on a previous load reading from the slot, key array loads and stores are serialized in program order. Furthermore, 
