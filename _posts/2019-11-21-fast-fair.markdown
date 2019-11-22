@@ -131,3 +131,9 @@ atomic as long as threads check value for NULL first during the scan (or changin
 the new node is activated, and can be inserted into by threads traversing to it via the sibling pointer. In the last step,
 we insert a new element into the parent node using FAST. In the above protocol, all changes are flushed back to the NVM 
 after they are performed to ensure that updates appear on the NVM in intended order.
+
+When a node underflows, FAIR first removes its entry from the parent node, which logically merges this node with its left
+sibling. Then the merging thread checks whether there are enough number of entries in the left node. If true, the 
+thread will insert the entry into the underflowed node first, before it deletes the element from the left node (by storing
+NULL into the value field). After nodes have been balanced, we re-insert the split key into the parent node using the 
+current low key of the right node.  
