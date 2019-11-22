@@ -19,6 +19,11 @@ exposing intermediate states, especially when keys are longer than 8 bytes, whic
 on NVM mapped memory with regard to failures. Classical B+Tree maintains a sorted array of keys for both inner nodes
 and leaf nodes, in order to perform binary search. Inserting elements into the sorted array, as a consequence, involves
 right shifting some elements to higher addresses to make a new slot in the middle of the array. Without proper design, such
-element shifting may introduce temporary inconsistent states such as lost keys or accessing wrong child nodes. 
+element shifting may introduce temporary inconsistent states such as lost keys or accessing wrong child nodes. If the 
+system crashes at this point, such intermediate state may not be able to be resolved. The second challenge is structural
+modification operations (SMO) initiated by threads attempting to split or merge a node. B+Tree SMOs consists of several
+steps, each of which will bring the affected nodes into inconsistent intermediate states. 
+
+
 
 FAST & FAIR 
