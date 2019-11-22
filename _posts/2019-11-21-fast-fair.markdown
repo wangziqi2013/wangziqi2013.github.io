@@ -40,10 +40,14 @@ appended in a los-structured fashion until the next consolidation. Although this
 that in-node logging requires an excessive number of cache line flush and memory fences, which are inserted after
 data append and after adjusting the tail pointer (or the mapping field). Multi-step SMOs are usually handled by lightweight
 logging or variants of that. Threads first create a log record describing the SMO, including the type of the operation
-and arguments, and flush the log record, which logically commit the SMO. The thread then locks the affected nodes (or 
-use non-blocking help-along protocol), and conduct the update in-place. The log record is removed only after all dirty 
+and arguments, and flush the log record, which logically commits the SMO. The thread then locks the affected nodes (or 
+use non-blocking help-along protocol), and conducts the update in-place. The log record is removed only after all dirty 
 items are flushed back to the NVM. On recovery, active log records are found and replayed by the recovery process.
 As noted by the paper, this approach is universally useful not only to B+Trees but also to some other common types of 
 data structures. It is, however, inefficient due to excessive usage of cache line flushes and memory fences.
 
-FAST & FAIR 
+FAST & FAIR differs from previous proposals in that it does not attempt to avoid exposing intermeidate inconsistent 
+states to concurrent readers and to the NVM. Instead, node updates and SMOs follow certain carefully designed protocol,
+such that the intermediate state is still consistent, from which the node image can be recovered. Compared with 
+previous approaches, FAST & FAIR does not double write traffic to the NVM, does not limit the maximum node size, and 
+no recovery time processing is needed. 
