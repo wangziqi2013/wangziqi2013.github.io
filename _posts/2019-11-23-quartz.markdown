@@ -23,5 +23,10 @@ large scale experiments. The second problem is accuracy. If simulators are to be
 only simulate a subset of all desired characteristics, such as latency-only or bandwidth-only, which may alter application
 behavior and lead to wrong conclusions. 
 
-Compared
-with previous simulators, Quartz does not simulate the full functionality
+Compared with previously proposed simulators, Quartz simulates both latency and bandwidth at almost-native speed. On one 
+hand, Quartz achieves high simulation throughput by running the application directly on hardware with no virtualization 
+layer, and only intervening the execution at certain time points such as thread synchronization. On the other hand,
+lack of program monitoring does not lead to worse accuracy, since Quartz relies on advanced hardware features, such as thermal
+control on DRAM controller, to upper bound memory bandwidth to a lower value for simulating slower NVM device.
+
+Quartz assumes that 
