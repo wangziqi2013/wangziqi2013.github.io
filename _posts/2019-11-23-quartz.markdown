@@ -65,4 +65,9 @@ obtained. We therefore must derive it using several counters.
 Thread synchronization also plays an important role in latency simulation. Without any thread synchronization, threads can
 overlap their latency of accessing the NVM perfectly, since they do not wait for each other. When synchronization exists, 
 however, one thread waiting for another may not overlap its latency of accessing NVM with the latency of the latter,
-since its memory operations are serialized after the memory operations of the thread it has waited. 
+since its memory operations are serialized after the memory operations of the thread it has waited. Imagine the case where 
+two threads are contending on the same lock. Thread 1 is currently in the critical section, and then releases the lock. 
+Threads 2 acquires the lock after thread 1 releases it, completes the critical section, and releases the lock. In the 
+meantime, thread 1 ends its current epoch and begins latency injection. Without epoch synchronization, thread 1 overlaps 
+its NVM access latency simulation with thread 2's execution of the critical section, while in relality, thread 2 must
+not acquire the lock until thread 1 finishes all NVM accesses during the critical section. 
