@@ -46,4 +46,10 @@ the cache is circumvented) to saturate memory bandwidth. During initialization, 
 thermal control value and maximum achievable bandwidth using this technique, and then sets the thermal control register
 to a value that matches the intended bandwidth. 
 
-
+To simulate latency, the easiest way is to intercept every load and store in the program, and add a fixed latency 
+(e.g. the difference between DRAM latency and speculated NVM latency) to it. This approach, however, has two problems.
+The first problem is that instrumenting every load and store will introduce non-negligible slowdown, which hurts 
+performance and changes program bahavior. The second problem is that the majority of memory operations for most
+applications will hit the cache, which means that the traffic to NVM is actually filtered out. Simply adding a fixed 
+for every memory access is not only unfair for those that hit the cache, but also over-estimates the latency of the 
+system. To solve these problems, 
