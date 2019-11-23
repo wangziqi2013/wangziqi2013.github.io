@@ -29,4 +29,9 @@ layer, and only intervening the execution at certain time points such as thread 
 lack of program monitoring does not lead to worse accuracy, since Quartz relies on advanced hardware features, such as thermal
 control on DRAM controller, to upper bound memory bandwidth to a lower value for simulating slower NVM device.
 
-Quartz assumes that 
+**Quartz assumes that NVM reads and writes are symmetric, i.e. they have the same bandwidth and latency. This assumption
+works well in the context of this paper, since at the time of writing nobody has done any evaluation on actual
+hardware. Quartz also assumes that NVM has similar scalability as DRAM, which is also not true on real NVM hardware.
+As future work, the performance model of Quartz may be extended such that the extra latency is inserted based not 
+only on the number of off-chip accesses, but also based on the ratio of reads and writes (collected off-line), and the 
+number of threads concurrently accessing the device.**
