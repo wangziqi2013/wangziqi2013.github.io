@@ -13,11 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper presents Quartz, a non-volatile memory simulator built on top of certain dvanced hardware features. At the time
+This paper presents Quartz, a non-volatile memory simulator built on top of certain advanced hardware features. At the time
 of writing this paper, commercial product of NVM hardware is not yet available on the market. As a result, NVM researchers 
 have to use simulators to evaluate their research. Although it is generally believed that NVM has similar performance 
 characteristics as DRAM except for lower bandwidth and higher latency, this paper identifies several problems with existing 
-NVM simulatoirs that can make them infeasible to use.
+NVM simulatoirs that can make them infeasible to use. The first problem is simulation speed. If we emulate the internals 
+of NVM hardware (which is also unknown), the slowdown can be quite significant, which prevents researchers from running
+large scale experiments. The second problem is accuracy. If simulators are to be made fast, then very likely the they
+only simulate a subset of all desired characteristics, such as latency-only or bandwidth-only, which may alter application
+behavior and lead to wrong conclusions. 
 
 Compared
 with previous simulators, Quartz does not simulate the full functionality
