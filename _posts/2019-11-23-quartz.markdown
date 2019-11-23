@@ -82,3 +82,13 @@ stay idle during the simulation). Quartz configure local memory controller and r
 to set different bandwidth upper bounds. Similarly, by reading remote performance counters, we are able to derive the 
 number of memory accesses only on the NVM (local DRAM does not need any latency injection, since it runs at native 
 speed) device. 
+
+Since no commercial NVM is available, Quartz is validated aginst a NUMA system where all memory references are made
+to the remote node. Since remote NUMA access has both higher latency and lower bandwidth, by running Quartz on a
+different machine where all memory references are mapped to the local node, and configuring the latency
+and bandwidth to match remote NUMA accesses, we can compare the final result of Quartz and the target machine by
+running the same latency and bandwidth test benchmark. Bandwidth is tested using non-temporal loads and stores 
+which circumvent the cache. Latency is tested using a simple pointer chasing program, in which all pointer accesses
+are guaranteed to be cache misses. Since fetching the target of a pointer from memory is dependent on the memory
+value itself, there is no memory level parallelism, which makes the measurement more accurate. Results show that
+Quartz achieves very low simulation error, which is below 9 percent for all workloads.
