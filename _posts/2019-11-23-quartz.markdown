@@ -35,3 +35,15 @@ hardware. Quartz also assumes that NVM has similar scalability as DRAM, which is
 As future work, the performance model of Quartz may be extended such that the extra latency is inserted based not 
 only on the number of off-chip accesses, but also based on the ratio of reads and writes (collected off-line), and the 
 number of threads concurrently accessing the device.**
+
+We next describe Quartz's simulation technique for bandwidth and latency, respectively. In order to simulate lower bandwidth
+of NVM, Quartz leverages the thermal control capability of modern DRAM controllers. Thermal control on these controllers
+is achieved by upper bounding the total bandwidth of DRAM, which is programmable by a few memory mapped registers. By writing
+a value into the thermal control register, the memory bandwidth will be throttled depending the value written into the register. 
+The paper confirms in the evaluation section that the throttled bandwidth grows linearly with the value written.
+The maximum bandwidth can be measured by spawning several threads and let each of them use non-temporal moves (such that 
+the cache is circumvented) to saturate memory bandwidth. During initialization, Quartz computes the relation between the 
+thermal control value and maximum achievable bandwidth using this technique, and then sets the thermal control register
+to a value that matches the intended bandwidth. 
+
+
