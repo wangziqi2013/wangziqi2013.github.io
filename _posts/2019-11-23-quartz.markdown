@@ -53,8 +53,11 @@ performance and changes program bahavior. The second problem is that the majorit
 applications will hit the cache, which means that the traffic to NVM is actually filtered out. Simply adding a fixed 
 for every memory access is not only unfair for those that hit the cache, but also over-estimates the latency of the 
 system. To solve these problems, Quartz both leverages hardware performance counters to collect statistical data
-about off-chip memory accesses, and epoch-based latency simulation. The hardware performance counters used by
-Quartz are the number of cycles the processed has stalled waiting for L2 cache, the number of memory operation
-that hit the L3, and the number of memory operation that miss the L3. Note that on Xeon platforms, the number of memory
-operations that hit the DRAM (or the number of cycles waiting for DRAM) cannot be directly obtained. We therefore
-must derive it based on several related counters. 
+about off-chip memory accesses, and epoch-based latency simulation, which devides the execution into epoches,
+and only simulate accumulated latency within the epoch at the end of it. To achieve this, Quartz must compute the
+number of processor cycles that are actually wasted on waiting for DRAM to respond, and then scale this value to
+match the simulated latency of NVM by multiplying this value with the latency ratio between NVM and DRAM. 
+The hardware performance counters used by Quartz are the number of cycles the processed has stalled waiting for L2 cache, 
+the number of memory operation that hit the L3, and the number of memory operation that miss the L3. Note that on Xeon 
+platforms, the number of memory operations that hit the DRAM (or the number of cycles waiting for DRAM) cannot be directly 
+obtained. We therefore must derive it using several counters. 
