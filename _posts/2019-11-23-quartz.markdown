@@ -69,5 +69,16 @@ since its memory operations are serialized after the memory operations of the th
 two threads are contending on the same lock. Thread 1 is currently in the critical section, and then releases the lock. 
 Threads 2 acquires the lock after thread 1 releases it, completes the critical section, and releases the lock. In the 
 meantime, thread 1 ends its current epoch and begins latency injection. Without epoch synchronization, thread 1 overlaps 
-its NVM access latency simulation with thread 2's execution of the critical section, while in relality, thread 2 must
-not acquire the lock until thread 1 finishes all NVM accesses during the critical section. 
+its NVM access latency simulation with thread 2's execution of the critical section, while in reality, thread 2 must
+not acquire the lock until thread 1 finishes all NVM accesses during the critical section. To properly synchronize 
+latency simulation, Quartz instruments thread synchronization primitives, and forces threads to end the current epoch and 
+begin latency simulation before entering and exiting a critical section.
+
+To simulate systems with both NVM and DRAM installed, Quartz must allow applications to access memory with different
+bandwidth and using different hardware counters. This is difficult with only one core, but easy to achieve with
+multi-socket machine. The observation is that multi-socket machines have independent memory controllers and hardware 
+counters on both sockets. By mapping DRAM to local node, while mapping NVM to the remote node (the remote node must
+stay idle during the simulation). Quartz configure local memory controller and remote memory controller seperately
+to set different bandwidth upper bounds. Similarly, by reading remote performance counters, we are able to derive the 
+number of memory accesses only on the NVM (local DRAM does not need any latency injection, since it runs at native 
+speed) device. 
