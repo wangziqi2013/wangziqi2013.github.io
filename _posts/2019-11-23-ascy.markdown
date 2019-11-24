@@ -39,4 +39,9 @@ and should not help other threads even if the concurrency protocol allows transi
 observing the state. To achveie this, updates on data structure objects must only transform the object from one consistent 
 state to another, without the possibility of observing inconsistent partially updated values. In addition, reader threads
 should be able to figure out such transient states when they see one, and recover the consistent image of the object locally
-without helping along. 
+without helping along. In practice, some data structures, such as Harries linked list as pointed out by the paper, requires
+that reader threads fix transient states by physically removing nodes that are removed from the list using CAS. If the removal
+fails, the thread should retry traversal from the list head. The paper also shows 10% -- 30% performance improvement after 
+optimizing out the help-along for reader threads. 
+
+The second rule of ASCY
