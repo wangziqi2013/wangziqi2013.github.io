@@ -54,3 +54,11 @@ ASCY rule #2 simply requires that the first phase of insert and delete operation
 and should not acquire locks or be blocked. Of course, since some data structures inevitablely involve some form of "help-along",
 such as letting threads complete an operation collaboratively or perform cleanups to guarantee progress. In such cases,
 stores to shared memory can be allowed, but should keep the number of writes to an absolute minimum.
+
+The third rule of ASCY further extends the second rule such that if an update operation could not proceed because certain
+checks fail (e.g. could not find the key for delete, or the key already exists for insert), the update operation should
+not perform any write on shared data except those absolutely necessary to ensure progress. This implies that condition
+check on objects must be lock-free regardless of concurrent writer threads, similar to read-only operations. Once the 
+optimistic condition check passes, the object is locked and the thread checks that previous reads are still valid
+(i.e. their values have not changed since the optimistic read). Updates can then proceed in a single-writer multiple-reader
+manner.
