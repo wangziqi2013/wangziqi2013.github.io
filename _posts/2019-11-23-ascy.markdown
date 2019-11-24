@@ -79,5 +79,7 @@ list of buckets, which store keys and values. CLHT features cache efficient desi
 cache line sized object aligned to cache line boundary. This guarantees that all operations on a bucket requires
 exactly one cache line fetch. A bucket consists of three parts. The first part is a 8 byte word, which is used as 
 a synchronization object, the details of which will be discussed later. The second part is key-value array, which
-stores keys and values in the bucket. Assuming eight byte keys and values, we can store four key-value pairs within a 
-bucket.
+stores keys and values in the bucket. Assuming eight byte keys and values, we can store three key-value pairs within a 
+bucket, where each key and value is aligned to eight byte boundary. The last eight byte word is "next" pointer used
+to link all buckets together under the same hash value. 
+
