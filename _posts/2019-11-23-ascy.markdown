@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+Thie paper proposes Asynchronous Concurrency (ASCY), a programming principle for designing concurrent data structures.
+The paper first identifies that the major source for scalability issues in concurrent data structures are store instructions
+to shared data which will cause these stores be serialized by the cache coherence protocol. In addition, without careful
+evaluation of these stores, they may also incur long-than-usual dynamic code path (e.g. in the form of retry), which 
+negatively affects both overall performance and power dissipation. 
