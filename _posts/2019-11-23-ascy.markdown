@@ -72,3 +72,12 @@ shared data should be identical to the case with non-concurrent data structures,
 reads for validation. In practice, since it is often impossible to perform lock-free updates using hardware primitives,
 locks are still needed to synchronize properly. Even in this case, the paper suggests that the number of writes to
 shared data should be reduced as much as possible to minimize unnecessary synchronization incurred by cache coherence. 
+
+Using these four rules, the paper proposes a cache efficient data structure, Cache-Line Hash Table (CLHT). CLHT is a 
+hash table using collision chain as its conflict resolution method. Elements with the same hash form a linked
+list of buckets, which store keys and values. CLHT features cache efficient design in a way that each bucket is a 
+cache line sized object aligned to cache line boundary. This guarantees that all operations on a bucket requires
+exactly one cache line fetch. A bucket consists of three parts. The first part is a 8 byte word, which is used as 
+a synchronization object, the details of which will be discussed later. The second part is key-value array, which
+stores keys and values in the bucket. Assuming eight byte keys and values, we can store four key-value pairs within a 
+bucket.
