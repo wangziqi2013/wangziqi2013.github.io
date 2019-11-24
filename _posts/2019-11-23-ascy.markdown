@@ -49,4 +49,8 @@ any global writes, be blocked, or retry. Here "traversal" (the original term in 
 is more understandable and is actually commonly used for tree structures) is defined as the process of finding the object
 to update. Often, searching data structure insert and delete are implemented as a two-phase operation. In the first phase,
 threads traverse the data structure to locate the object where the search key is stored. This process is identical with or 
-very similar to read-only operations. 
+very similar to read-only operations. In the second phase, the object we just located in the previous phase is updated. 
+ASCY rule #2 simply requires that the first phase of insert and delete operations behave as if they are read-only operations,
+and should not acquire locks or be blocked. Of course, since some data structures inevitablely involve some form of "help-along",
+such as letting threads complete an operation collaboratively or perform cleanups to guarantee progress. In such cases,
+stores to shared memory can be allowed, but should keep the number of writes to an absolute minimum.
