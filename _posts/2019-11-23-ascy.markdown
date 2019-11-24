@@ -61,4 +61,6 @@ not perform any write on shared data except those absolutely necessary to ensure
 check on objects must be lock-free regardless of concurrent writer threads, similar to read-only operations. Once the 
 optimistic condition check passes, the object is locked and the thread checks that previous reads are still valid
 (i.e. their values have not changed since the optimistic read). Updates can then proceed in a single-writer multiple-reader
-manner.
+manner. This resembles Optimistic Concurrency Control (OCC) method used in software transactional memory (STM),
+in which the write set is locked before we validiate the read set.
+
