@@ -30,3 +30,13 @@ distribution of latencies (tighter distribution implies more predictable perform
 that non-concurrent version of the data structure under evaluation can be used as an upper bound of performance to
 demonstrate the cost of synchronization. As reported by the paper, a "good" implementation is able to achieve less than
 10% performance loss compared with the non-concurrent counterpart. 
+
+The paper then shows the four rules of ASCY using common data structures as examples. The first rule of ASCY suggests that
+operations that are semantically read-only (i.e. key lookup, range scan, etc.) should neither write to shared memory, nor
+block on a lock or retry. Here "write" includes acquisition and release of a lock, help-along other threads to complete 
+an operation, and also updating states in shared objects. This rule implies that read should be lock-free, non-blocking,
+and should not help other threads even if the concurrency protocol allows transient states be fixed by all threads 
+observing the state. To achveie this, updates on data structure objects must only transform the object from one consistent 
+state to another, without the possibility of observing inconsistent partially updated values. In addition, reader threads
+should be able to figure out such transient states when they see one, and recover the consistent image of the object locally
+without helping along. 
