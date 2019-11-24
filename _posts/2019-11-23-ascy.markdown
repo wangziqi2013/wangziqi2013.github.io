@@ -17,4 +17,9 @@ Thie paper proposes Asynchronous Concurrency (ASCY), a programming principle for
 The paper first identifies that the major source for scalability issues in concurrent data structures are store instructions
 to shared data which will cause these stores be serialized by the cache coherence protocol. In addition, without careful
 evaluation of these stores, they may also incur long-than-usual dynamic code path (e.g. in the form of retry), which 
-negatively affects both overall performance and power dissipation. 
+negatively affects both overall performance and power dissipation. In addition, the paper also points out that optimizations
+to concurrent data structures are often limited to certain architectures and to certain workloads. If the optimized
+data structure is evaluated on a different platform or using a different set of workloads, they may even perform worse
+than unoptimized version. One of the example given by the paper is Read-Copy-Update, which is a commonly used concurrent
+data structure technique in Linux kernel. The paper points out that RCU is designed for read-dominant workloads, in which
+writes are very rare compared with reads. If the ratio of writes increase, the performance of RCU will drop sharply.
