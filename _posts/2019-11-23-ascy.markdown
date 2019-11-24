@@ -64,3 +64,11 @@ optimistic condition check passes, the object is locked and the thread checks th
 manner. This resembles Optimistic Concurrency Control (OCC) method used in software transactional memory (STM),
 in which the write set is locked before we validiate the read set.
 
+The last ASCY rule dictates that data structure updates (i.e. the second phase from above paragraphs) should perform
+wrires to shared variable only if synchronization is truly needed using that variable. Independent updates to semantically
+different objects should not therefore have any conflicting writes to the same address, since the coherence protocol
+will force these writes to be serialized, resulting in lower parallelism. Ideally, the number of wrires performed on
+shared data should be identical to the case with non-concurrent data structures, probably at the cost of performing more 
+reads for validation. In practice, since it is often impossible to perform lock-free updates using hardware primitives,
+locks are still needed to synchronize properly. Even in this case, the paper suggests that the number of writes to
+shared data should be reduced as much as possible to minimize unnecessary synchronization incurred by cache coherence. 
