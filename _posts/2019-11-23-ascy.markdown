@@ -44,4 +44,9 @@ that reader threads fix transient states by physically removing nodes that are r
 fails, the thread should retry traversal from the list head. The paper also shows 10% -- 30% performance improvement after 
 optimizing out the help-along for reader threads. 
 
-The second rule of ASCY
+The second rule of ASCY extends the first rule by requiring that all traversals in the data structure should not perform
+any global writes, be blocked, or retry. Here "traversal" (the original term in the paper is "parse", but I think traversal
+is more understandable and is actually commonly used for tree structures) is defined as the process of finding the object
+to update. Often, searching data structure insert and delete are implemented as a two-phase operation. In the first phase,
+threads traverse the data structure to locate the object where the search key is stored. This process is identical with or 
+very similar to read-only operations. 
