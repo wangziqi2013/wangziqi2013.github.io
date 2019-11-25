@@ -83,3 +83,12 @@ stores keys and values in the bucket. Assuming eight byte keys and values, we ca
 bucket, where each key and value is aligned to eight byte boundary. The last eight byte word is "next" pointer used
 to link all buckets together under the same hash value. 
 
+The item search and condition check protocol of CLHT are lock-free. Updates can be lock-based or lock-free. We 
+first introduce the lock-based protocol, followed by the lock-free one. In lock-based protocol, the synchronization
+object is simply used as a lock to synchronize writers on the bucket. Readers are neither synchronized with writers, 
+nor with each other. Writers on a bucket acquire the lock before they can update key and value. According to ASCY rule
+1 - 3, read-only threads and updating threads need to first obtain an atomic image of key-value pairs in the bucket
+before they complete or decide whether to perform the update. This atomic key-value pair read is achieved by first
+reading the value field, then reading the key, and eventually we read the value field again to validate. An atomic 
+snapshot is obtained if both value reads match. Since each update operation only updates one key-value pair, this operation
+is guaranteed to always either serialize before or after a concurrent update. 
