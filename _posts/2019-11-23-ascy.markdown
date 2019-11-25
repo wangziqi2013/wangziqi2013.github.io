@@ -91,4 +91,12 @@ nor with each other. Writers on a bucket acquire the lock before they can update
 before they complete or decide whether to perform the update. This atomic key-value pair read is achieved by first
 reading the value field, then reading the key, and eventually we read the value field again to validate. An atomic 
 snapshot is obtained if both value reads match. Since each update operation only updates one key-value pair, this operation
-is guaranteed to always either serialize before or after a concurrent update. 
+is guaranteed to always either serialize before or after a concurrent update. To elaborate: The validation succeeds iff
+the value is not updated between the two value reads. This implies that, as long as validation succeeds, for any concurrent 
+key-value pair updates, either both key and value update happens before the first value read, or the value update happens
+after the second value read. In the first case, the read is serialized after the update by observing its writes. 
+In the second case, if the key is read before the key insert, then this bucket is empty, and search will not succeed.
+If the key is read before a key delete, the read is serialized before the delete, which returns the value of the key
+before it is deleted. If, however, that the key is read after the key update. If this is an insert, the value will be
+NULL, and the reader knows this is an incomplete snapshot, which will cause a retry. If this is a delete, the key will
+be NULL, and the reader is serialized after the delete despite the fact that we read a non-NULL value.
