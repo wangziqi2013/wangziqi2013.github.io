@@ -108,4 +108,8 @@ which is incremented every time an update is performed, and three status fields 
 key-value pairs (free, occupied, under modification). Reads are performed in the same way as described above. Update 
 threads must guarantee that after checking the bucket, the condition must hold before it finishes th update. Two CAS
 operations are required to perform the update. After checking the condition, if the operation can proceed, the thread
-first uses CAS to allocate a slot from the three "status" fields ()
+first uses CAS to allocate a slot (or invalidate the slot in the case of delete) from the three "status" fields. For 
+deletes, the thread also increments the version number in the same CAS, and then returns. For inserts, the second CAS
+is performed after the key-value pair has been written. The second CAS increments the version number using the version
+number before it checks the condition as old value. If the second CAS fails, implying that the bucket has been updated
+by a concurrent thread, the inserting thread must release the slot, recheck the condition, and try again.
