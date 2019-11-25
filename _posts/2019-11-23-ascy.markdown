@@ -99,4 +99,13 @@ In the second case, if the key is read before the key insert, then this bucket i
 If the key is read before a key delete, the read is serialized before the delete, which returns the value of the key
 before it is deleted. If, however, that the key is read after the key update. If this is an insert, the value will be
 NULL, and the reader knows this is an incomplete snapshot, which will cause a retry. If this is a delete, the key will
-be NULL, and the reader is serialized after the delete despite the fact that we read a non-NULL value.
+be NULL, and the reader is serialized after the delete despite the fact that we read a non-NULL value. Inserts and deletes
+simply acquire the lock and update key-value pair accordingly. Deletes need to clear both key and value fields to ensure
+readers can always identify an incomplete delete and then retry.
+
+In the lock-free version, the synchronization object at the head of the cache line is divided into a version number,
+which is incremented every time an update is performed, and three status fields to indicate the status of the three 
+key-value pairs (free, occupied, under modification). Reads are performed in the same way as described above. Update 
+threads must guarantee that after checking the bucket, the condition must hold before it finishes th update. Two CAS
+operations are required to perform the update. After checking the condition, if the operation can proceed, the thread
+first uses CAS to allocate a slot from the three "status" fields ()
