@@ -85,4 +85,8 @@ by flushing the updated pointer in parent node back to the NVM.
 The paper also proposes adapting the above algorithm to support persistent Adaptive Radix Tree (ART). ART differs from 
 naive radix tree that it uses multiple node sizes to save memory. There are four node size classes in ART: 4, 16, 48 and 256
 (ART uses 8 bit key slice). For 4 and 16 nodes, the key slices for the current level are explicitly stored in arrays,
-which must be searched to find the pointer to the next level. 
+which must be searched to find the pointer to the next level. Write-Optimized ART (WOART) uses append-only update to insert 
+keys into the node, and adds an indirection layer to atomically enable or disable certain slots. Inserted key slices and 
+values are only committed when the update is written back to the NVM. For 48 node, a 256 element key array is used as 
+a direct map from key slices to value pointer array elements. The value pointer array consists of 48 child node pointers.
+Key slice insert operations on 48 nodes can be achieved by updating the key array atomically with 8 byte stores.
