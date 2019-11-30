@@ -24,3 +24,11 @@ level incurs more memory accesses which results in longer critical path. In addi
 recovery always restoring the tree to a consistent state, which incurs excessive writes, or we design each atomic step of
 SMO in such a way that the tree is always transformed between consistent states. The latter scheme complicates the tree
 update protocol and may introduce subtle bugs. 
+
+This paper proposes making radix tree persistent as a replacement for B+Trees as in-memory indexing structure. Compared
+with B+Tree, radix trees have the following properties. First, radix trees only accepts fixed sized keys, while B+Tree 
+accepts variably sized keys. Binary representations of keys are divided into fixed-sized slices, from MSB to LSB, the 
+numeric value of which are then used to index child nodes for the next level search. This process is repeated for every
+key slice, until the bottom level is reached. The way that a key slice is mapped to the next level node is implementation
+dependent. In its simplest form, a node just consists of an array of child node pointers, and we directly use the numeric
+value of the key slice as the index into this array to locate the child node. In more complicated schemes,
