@@ -42,6 +42,13 @@ prefix in the compressed node itself. In the paper, it is assumed that key slice
 of 16 child node pointers. Key slices are mapped to child nodes using direct mapped array indexed by the numeric value of 
 the four-bit slice. 
 
+Insert operations are easily made failure atomic by always updating the node in the tree in the last step. When a key is 
+to be inserted, we first traverse the tree using prefix of the key, until leaf level is reached, which means that the 
+key already exists, or until a NULL pointer is found in a non-leaf node. In the latter case, we create the rest part of 
+the path by allocating new nodes and linking them together. After flushing these new nodes back to the NVM, we update 
+the last node in the current path such that a child pointer is stored to the corresponding slot pointing to the newly
+allocated node. The insertion is completed by flushing the updated pointer back to the NVM.
+
 Path compression reduces the length of a path by merging nodes that only have one child node. For example, given a path
 down the tree: u, v, w, x, y, z (u is not nucessarily the root node), in which every node except z has only one child.
 The letter represents the value of the key slice that is used to traverse to the current node from the parent node
