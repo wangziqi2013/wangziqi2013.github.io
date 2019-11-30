@@ -82,3 +82,7 @@ reachable from the current node. In the last step, the newly allocated node is l
 value for key slice "u" to the new node. This update is simply an 8-byte aligned store. The path expansion is completed
 by flushing the updated pointer in parent node back to the NVM.
 
+The paper also proposes adapting the above algorithm to support persistent Adaptive Radix Tree (ART). ART differs from 
+naive radix tree that it uses multiple node sizes to save memory. There are four node size classes in ART: 4, 16, 48 and 256
+(ART uses 8 bit key slice). For 4 and 16 nodes, the key slices for the current level are explicitly stored in arrays,
+which must be searched to find the pointer to the next level. 
