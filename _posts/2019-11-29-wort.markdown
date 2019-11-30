@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes WORT, an algorithm for implementing radix tree and its variant, Adaptive Radix Tree (ART), on 
+persistent memory. The paper identifies that it is challenging to make B+Trees persistent, since B+Tree maintains
+keys within a node in sorted order for efficient search. In order to update a node, either we no longer require such
+sorted property of nodes, and update nodes in append-only manner or we add an extra level of indirection, and relies on 
+atomic update of the indirection word to insert keys atomically while maintaining sorted order. Both methods have problems,
+as append-only updates hurts search performance for large nodes due to loss of sorted key property, and the indirection
+level incurs more memory accesses which results in longer critical path. 
