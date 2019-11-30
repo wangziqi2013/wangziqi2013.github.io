@@ -58,4 +58,12 @@ To enable prefix comparison, each node has an 8-byte prefix header. The first tw
 level of the node and the number of bytes in the implied prefix. The remaining six bytes stores the actual prefix, enabling 
 path compression of 12 nodes at a maximum (since this paper assumes 4 bit key slices). 
 
-When a key whose prefix does not equal the implied prefix is inserted, 
+When a key whose prefix does not equal the implied prefix is inserted, the traversal of the insert operation will stop at 
+the compressed node z' as a result of unmatching key prefix. A path expansion is performed to reduce the size of the implied 
+prefix, and inserts the new node to store the newly inserted key's prefix. The paper uses the following algorithm for path 
+expansion. We assume that the newly inserted key has the same prefix until node x, i.e. the key has a prefix: u, v, w, a, b, c.
+In the first step, we create a new node that stores prefix "vw", which has two child nodes: on slice "a", the child node 
+is newly allocated also, and initialized to store prefix "bc"; on slice "x", the pointer to the old node z' is stored.
+In the second step, we update the prefix word in node z' to increment the node level by one, and to update the prefix size 
+to 2 while storing "yz" as the prefix. 
+
