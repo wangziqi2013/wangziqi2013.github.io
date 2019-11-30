@@ -53,4 +53,9 @@ Note that prefix u does not need to be stored, since it is already implied by th
 as the key to index the parent of node u. The compressed node z' is connected to the parent node of u in index position 
 "u", such that threads traversing the tree will reach node z' when it uses "u" as the key slice. To ensure correctness, 
 a prefix comparison is performed to check whether the actual prefix in the search key matches the implied prefix, and 
-if positive, the prefix will be skipped without being used to index child nodes. 
+if true, the prefix will be skipped without being used to index child nodes. Otherwise the key does not exist in the tree. 
+To enable prefix comparison, each node has an 8-byte prefix header. The first two bytes are used to record the current 
+level of the node and the number of bytes in the implied prefix. The remaining six bytes stores the actual prefix, enabling 
+path compression of 12 nodes at a maximum (since this paper assumes 4 bit key slices). 
+
+When a key whose prefix does not equal the implied prefix is inserted, 
