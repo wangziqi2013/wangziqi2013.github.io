@@ -31,4 +31,11 @@ accepts variably sized keys. Binary representations of keys are divided into fix
 numeric value of which are then used to index child nodes for the next level search. This process is repeated for every
 key slice, until the bottom level is reached. The way that a key slice is mapped to the next level node is implementation
 dependent. In its simplest form, a node just consists of an array of child node pointers, and we directly use the numeric
-value of the key slice as the index into this array to locate the child node. In more complicated schemes,
+value of the key slice as the index into this array to locate the child node. In more complicated schemes, an indirection
+level is used to compress the array when the array is sparse (i.e. most entries are NULL, indicating that the corresponding
+key prefix does not exist in the tree). The second property of radix tree is that the maximum height of the tree is fixed,
+which is proportional to the size of the key. To reduce the height of the tree or the height of certain paths, path compression
+is often used to merge nodes that only have one child node. The third property is that when keys are inserted sparsely
+in the key space, radix tree demonstrates very low memory utlization, since only a few slots in each node will be filled
+with non-NULL entries. Again, we use path compression to remove nodes that only have one child node and store the aggregated
+prefix in the compressed node itself.
