@@ -38,4 +38,13 @@ which is proportional to the size of the key. To reduce the height of the tree o
 is often used to merge nodes that only have one child node. The third property is that when keys are inserted sparsely
 in the key space, radix tree demonstrates very low memory utlization, since only a few slots in each node will be filled
 with non-NULL entries. Again, we use path compression to remove nodes that only have one child node and store the aggregated
-prefix in the compressed node itself.
+prefix in the compressed node itself. In the paper, it is assumed that key slices are 4 bits, and that each node consists
+of 16 child node pointers. Key slices are mapped to child nodes using direct mapped array indexed by the numeric value of 
+the four-bit slice. 
+
+Path compression reduces the length of a path by merging nodes that only have one child node. For example, given a path
+down the tree: u, v, w, x, y, z (u is not nucessarily the root node), in which every node except z has only one child.
+The letter represents the value of the key slice that is used to traverse to the current node from the parent node
+(e.g. node "u" is reached by using value "u" as the index to read the child pointer from the parent node). In this case,
+traversing through u to z is redundant, since the tree structure guarantees that any traversal starting from node u
+must reach node z, or stop half way if the key does not exist in the tree. Based on this observation, we 
