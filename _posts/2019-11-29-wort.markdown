@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "WORT: Write Optimal Radix Tree for Persistent Memory Storage Systems"
+date:   2019-11-29 20:23:00 -0500
+categories: paper
+paper_title: "WORT: Write Optimal Radix Tree for Persistent Memory Storage Systems"
+paper_link: https://www.usenix.org/conference/fast17/technical-sessions/presentation/lee-se-kwon
+paper_keyword: ART; Radix Tree; WORT
+paper_year: FAST 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
