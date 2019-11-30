@@ -65,5 +65,11 @@ expansion. We assume that the newly inserted key has the same prefix until node 
 In the first step, we create a new node that stores prefix "vw", which has two child nodes: on slice "a", the child node 
 is newly allocated also, and initialized to store prefix "bc"; on slice "x", the pointer to the old node z' is stored.
 In the second step, we update the prefix word in node z' to increment the node level by one, and to update the prefix size 
-to 2 while storing "yz" as the prefix. 
+to 2 while storing "yz" as the prefix. Since the prefix word is only 8 bytes, it can be updated and flushed back to 
+the NVM atomically. Note that at this stage, the two newly allocated nodes have not been linked into the tree, and the 
+tree is in an inconsistent intermediate state. Fortunately, such intermediate state can be identified by a post-crash
+recovery process by comparing the node depth value stored in the prefix with the actual node depth. If these two do not 
+match, there must have been an unfinished path compression which was interrupted by the crash. The state of the tree
+can be rolled back by simply decrementing the depth field, and re-computing the actual prefix using any of the two keys 
+reachable from the current node. 
 
