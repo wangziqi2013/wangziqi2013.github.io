@@ -47,4 +47,10 @@ down the tree: u, v, w, x, y, z (u is not nucessarily the root node), in which e
 The letter represents the value of the key slice that is used to traverse to the current node from the parent node
 (e.g. node "u" is reached by using value "u" as the index to read the child pointer from the parent node). In this case,
 traversing through u to z is redundant, since the tree structure guarantees that any traversal starting from node u
-must reach node z, or stop half way if the key does not exist in the tree. Based on this observation, we 
+must reach node z, or stop half way if the key does not exist in the tree. Based on this observation, we can compress
+this path into a single node z', which has the same content as node z, but also stores the implicit prefix "vwxyz".
+Note that prefix u does not need to be stored, since it is already implied by the fact that the traversal uses "u"
+as the key to index the parent of node u. The compressed node z' is connected to the parent node of u in index position 
+"u", such that threads traversing the tree will reach node z' when it uses "u" as the key slice. To ensure correctness, 
+a prefix comparison is performed to check whether the actual prefix in the search key matches the implied prefix, and 
+if positive, the prefix will be skipped without being used to index child nodes. 
