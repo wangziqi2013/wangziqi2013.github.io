@@ -70,5 +70,11 @@ leaf nodes is still consistent, and the system will recovery using the new node.
 thread updates the key-pointer pair in the inner node. This can also be done atomically using 8-byte atomic write without 
 locks. 
 
+Nodes split follows a similar process: We first lock the old node as in node updates and consolidation. We then create two
+nodes, one containing the lower half of the old node, another containing the upper half. These two nodes are linked 
+together using the sibling pointer, which is then linked to the next sibling of the old node. Split is committed by
+atomically updating and flushing the sibling pointer of the previous node. Note that threads traversing from upper levels
+will not see this inconsistent state, since the upper level nodes still point to the old node. 
+
 Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes,
 since leaf nodes are 
