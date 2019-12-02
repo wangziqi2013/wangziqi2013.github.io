@@ -61,8 +61,14 @@ entries that are not invalidated by a later entry with the same key) exceeds a c
 consolidated. Node consolidation is performed by collecting all live entries in the node, and inserting them into a new 
 node allocated from persistent memory address space. The new node's next pointer points to the current sibling of the 
 node being consolidated. The new node is then flushed back to the NVDIMM. The consolidation is committed by atomically
-changing the pointer in the previous sibling node from the old node to the new node. Nore 
-
+changing the pointer in the previous sibling node from the old node to the new node. Note that after this step, both
+the new and old nodes are accessible: Threads traversing down from inner nodes still access the old node, while threads
+traversing from the previous sibling see the new node. This does not matter, however, since we lock both the old and the 
+new node for exclusive write permission such that no thread may insert into or delete from the old node anymore. If
+the system crash at this moment, all inner nodes will be lost (since they are in volatile memory), but the image of 
+leaf nodes is still consistent, and the system will recovery using the new node. As the last step of consolidation, the 
+thread updates the key-pointer pair in the inner node. This can also be done atomically using 8-byte atomic write without 
+locks. 
 
 Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes,
 since leaf nodes are 
