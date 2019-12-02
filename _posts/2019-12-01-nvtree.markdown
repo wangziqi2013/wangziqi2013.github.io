@@ -80,6 +80,8 @@ This process will not introduce temporarily inconsistent states, since after we 
 accessing the upper half of the old node will be redirected to the newly created split sibling, while threads accessing
 the lower half still access the old node. Updates will be blocked by the per-node lock as in node consolidation.
 
-
-Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes,
-since leaf nodes are 
+Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes
+just like normal B+Tree nodes. Other inner nodes, on the other hand, only contains keys but not pointers. Assuming that
+a last level inner node contains m keys and (m + 1) pointers, and that both keys and pointers are 8-bites (the most common
+configuration used for in-memory indexing), an inner node can contain up to (2m + 1) keys, which utilizes node storage 
+more efficiently. 
