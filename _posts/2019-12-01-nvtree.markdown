@@ -30,5 +30,8 @@ leaf nodes are persisted and maintained in a consistent state, while inner nodes
 rebuilt from leaf nodes after a crash or unexpected shutdown from leaf nodes. Second, while previous proposals maintain
 keys in sorted order within a node by shifting elements when a new element is to be inserted, NV-Tree only performs append-only 
 updates to leaf nodes, which optimizes writing, but requires a full node scan to read elements. Inner nodes, on the other
-hand, are updated as usual since they will not be persisted to the NVDIMM. 
+hand, are updated as usual since they will not be persisted to the NVDIMM. The last design choice is that inner nodes on
+the same level are maintained in a consecutive chunk of memory, increasing node utilization and reducing cache misses 
+since no child pointers are stored in inner nodes except the last level. When inner nodes split, however, the entire array
+must be rebuilt.
 
