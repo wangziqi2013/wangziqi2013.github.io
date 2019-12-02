@@ -19,4 +19,8 @@ power from on-chip batteries. The battery-backed NVDIMM features non-volatile da
 while having the bandwidth and latency of DRAM. The paper points out that previous designs, such as LCB+Tree and CDDS-Tree,
 suffer from excessive cache line flushes and memory fences. LCB+Tree uses redo write-ahead logging for all update operations
 to ensure failure atomicity. The log record is first written, followed by a flush, after which we update data in-place and 
-then flush dirty data. The log entry is only removed after all dirty cache lines are flushed. In CDDS-Tree
+then flush dirty data. The log entry is only removed after all dirty cache lines are flushed. In CDDS-Tree, updates are
+performed directly in-place, by creating versions. In addition, to maintain sorted property of keys within a node, elements
+are shifted when a new key is to be inserted into the node. This requires the programmer to insert one cache line flush
+per element shift, resulting in high cache misses. 
+
