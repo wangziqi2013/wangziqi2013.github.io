@@ -35,3 +35,9 @@ the same level are maintained in a consecutive chunk of memory, increasing node 
 since no child pointers are stored in inner nodes except the last level. When inner nodes split, however, the entire array
 must be rebuilt.
 
+Updates to leaf nodes are performed in append-only manner. Concurrent updating threads serialize on a per-node lock, while
+reader threads can access the node in a lock-free manner while a concurrent update modifies the node. Each node has an item 
+count field at the beginning to count the number of valid elements within the node, followed by an array of key-value
+pairs as the body of the node. Each key-value pair also has a flag to describe the pair as either inserted or deleted. 
+A deleted pair indicates removal of a previously inserted element within the same node, while inserted pair indicates that
+the pair is currently live in the node whose value can be returned by a reading thread. 
