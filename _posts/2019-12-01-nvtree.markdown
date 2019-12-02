@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes NV-Tree, a B+Tree designed for byte-addressable non-volatile memory. Differing from previous proposals,
+this paper is based on battery-backed NVDIMM, which flushes data in the DRAM back to SSD on a power failure using residual
+power from on-chip batteries. The battery-backed NVDIMM features non-volatile data storage like SSD or PCM-based NVDIMM,
+while having the bandwidth and latency of DRAM. The paper points out that previous designs, such as LCB+Tree and CDDS-Tree,
+suffer from excessive cache line flushes and memory fences. LCB+Tree uses redo write-ahead logging for all update operations
+to ensure failure atomicity. The log record is first written, followed by a flush, after which we update data in-place and 
+then flush dirty data. The log entry is only removed after all dirty cache lines are flushed. In CDDS-Tree
