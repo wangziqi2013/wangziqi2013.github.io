@@ -41,3 +41,9 @@ count field at the beginning to count the number of valid elements within the no
 pairs as the body of the node. Each key-value pair also has a flag to describe the pair as either inserted or deleted. 
 A deleted pair indicates removal of a previously inserted element within the same node, while inserted pair indicates that
 the pair is currently live in the node whose value can be returned by a reading thread. 
+
+We next describe the node update protocol. The updating thread first acquires the per-node lock before any node access.
+Then the thread scans the node to determine whether the operation needs to modify the node. For inserts, if the last element
+is a live entry, then insert does not need to be performed, since we already have the element. Similarly, for deletes, if
+the last element of the deleted key is a deleted entry, or the key does not exist in the node, then the operation returns 
+immediately since the entry does not exist.
