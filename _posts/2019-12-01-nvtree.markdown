@@ -44,6 +44,13 @@ the pair is currently live in the node whose value can be returned by a reading 
 
 We next describe the node update protocol. The updating thread first acquires the per-node lock before any node access.
 Then the thread scans the node to determine whether the operation needs to modify the node. For inserts, if the last element
-is a live entry, then insert does not need to be performed, since we already have the element. Similarly, for deletes, if
-the last element of the deleted key is a deleted entry, or the key does not exist in the node, then the operation returns 
-immediately since the entry does not exist.
+of the inserted key is a live entry, then insert does not need to be performed, since we already have the element. Similarly, 
+for deletes, if the last element of the deleted key is a deleted entry, or the key does not exist in the node, then the 
+operation returns immediately since the entry does not exist. Otherwise, inserts of deletes are performed by first writing
+the key-value entry (deletes do not need the value), setting the flag correspondingly, and committed by an atomic increment
+of element count in the node header. The operation is committed to the persistent image by flushing the new value of the 
+counter back to the NVDIMM. If a crash happens before the counter value is flushed, but after the pair has been inserted,
+no recovery is needed, since node scan uses the counter to delimit between valid and invalid data in the node. Concurrent 
+reader threads serialize with updating threads by the order of reading and updating the counter. If the reader thread
+reads the counter after it is updated, the updates are then visible to the reader. 
+
