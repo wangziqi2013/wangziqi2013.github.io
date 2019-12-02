@@ -46,11 +46,23 @@ We next describe the node update protocol. The updating thread first acquires th
 Then the thread scans the node to determine whether the operation needs to modify the node. For inserts, if the last element
 of the inserted key is a live entry, then insert does not need to be performed, since we already have the element. Similarly, 
 for deletes, if the last element of the deleted key is a deleted entry, or the key does not exist in the node, then the 
-operation returns immediately since the entry does not exist. Otherwise, inserts of deletes are performed by first writing
-the key-value entry (deletes do not need the value), setting the flag correspondingly, and committed by an atomic increment
-of element count in the node header. The operation is committed to the persistent image by flushing the new value of the 
-counter back to the NVDIMM. If a crash happens before the counter value is flushed, but after the pair has been inserted,
-no recovery is needed, since node scan uses the counter to delimit between valid and invalid data in the node. Concurrent 
-reader threads serialize with updating threads by the order of reading and updating the counter. If the reader thread
-reads the counter after it is updated, the updates are then visible to the reader. 
+operation returns immediately since the entry does not exist. Otherwise, inserts and deletes are performed by first writing
+the key-value entry (deletes do not need the value) to the next unused entry (indicated by the current value of the counter), 
+setting the flag correspondingly, and committed by an atomic increment of element count in the node header. The operation 
+is committed to the persistent image by flushing the new value of the counter back to the NVDIMM. If a crash happens before 
+the counter value is flushed, but after the pair has been inserted, no recovery is needed, since node scan uses the counter 
+to delimit between valid and invalid data in the node. Concurrent reader threads serialize with updating threads by the 
+order of reading and updating the counter. If the reader thread reads the counter after it is updated, the updates are 
+then visible to the reader. 
 
+When there is no available entry in a leaf node, insert and delete operations must first consolidate or split the node
+depending on the number of live entries in the node. The leaf node is split, if the number of live entries (i.e.
+entries that are not invalidated by a later entry with the same key) exceeds a certain threshold. Otherwise the node is 
+consolidated. Node consolidation is performed by collecting all live entries in the node, and inserting them into a new 
+node allocated from persistent memory address space. The new node's next pointer points to the current sibling of the 
+node being consolidated. The new node is then flushed back to the NVDIMM. The consolidation is committed by atomically
+changing the pointer in the previous sibling node from the old node to the new node. Nore 
+
+
+Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes,
+since leaf nodes are 
