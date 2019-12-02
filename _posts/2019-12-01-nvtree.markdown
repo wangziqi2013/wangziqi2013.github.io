@@ -22,5 +22,13 @@ to ensure failure atomicity. The log record is first written, followed by a flus
 then flush dirty data. The log entry is only removed after all dirty cache lines are flushed. In CDDS-Tree, updates are
 performed directly in-place, by creating versions. In addition, to maintain sorted property of keys within a node, elements
 are shifted when a new key is to be inserted into the node. This requires the programmer to insert one cache line flush
-per element shift, resulting in high cache misses. 
+per element shift, resulting in more cache misses. Experiments show that both cache line flushes and node access incur
+non-negligible cache line misses.
+
+NV-Tree reduces the amount of cache line flushes and cache misses by making the following design choices. First, only
+leaf nodes are persisted and maintained in a consistent state, while inner nodes are kept volatile. Inner nodes are 
+rebuilt from leaf nodes after a crash or unexpected shutdown from leaf nodes. Second, while previous proposals maintain
+keys in sorted order within a node by shifting elements when a new element is to be inserted, NV-Tree only performs append-only 
+updates to leaf nodes, which optimizes writing, but requires a full node scan to read elements. Inner nodes, on the other
+hand, are updated as usual since they will not be persisted to the NVDIMM. 
 
