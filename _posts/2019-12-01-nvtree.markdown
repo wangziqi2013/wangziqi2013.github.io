@@ -74,7 +74,12 @@ Nodes split follows a similar process: We first lock the old node as in node upd
 nodes, one containing the lower half of the old node, another containing the upper half. These two nodes are linked 
 together using the sibling pointer, which is then linked to the next sibling of the old node. Split is committed by
 atomically updating and flushing the sibling pointer of the previous node. Note that threads traversing from upper levels
-will not see this inconsistent state, since the upper level nodes still point to the old node. 
+will not see this inconsistent state, since the upper level nodes still point to the old node. The spliting thread then
+installs the new key-pointer pair into the parent inner node, and updates the parent node's existing key-pointer pair.
+This process will not introduce temporarily inconsistent states, since after we install the new key-pointer pair, threads
+accessing the upper half of the old node will be redirected to the newly created split sibling, while threads accessing
+the lower half still access the old node. Updates will be blocked by the per-node lock as in node consolidation.
+
 
 Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes,
 since leaf nodes are 
