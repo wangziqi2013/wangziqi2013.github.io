@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "NV-Tree: Reducing Consistency Cost for NVM-based Single Level Systems"
+date:   2019-12-01 22:42:00 -0500
+categories: paper
+paper_title: "NV-Tree: Reducing Consistency Cost for NVM-based Single Level Systems"
+paper_link: https://www.usenix.org/conference/fast15/technical-sessions/presentation/yang
+paper_keyword: NV-Tree; NVM; B+Tree
+paper_year: FAST 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
