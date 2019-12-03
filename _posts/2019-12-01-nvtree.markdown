@@ -81,12 +81,17 @@ accessing the upper half of the old node will be redirected to the newly created
 the lower half still access the old node. Updates will be blocked by the per-node lock as in node consolidation.
 
 Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes
-just like normal B+Tree nodes. Other inner nodes, on the other hand, only contains keys but not pointers. Assuming that
+just like normal B+Tree nodes. Other inner nodes, on the other hand, only contain keys but not pointers. Assuming that
 a last level inner node contains m keys and (m + 1) pointers, and that both keys and pointers are 8-bytes (the most common
 configuration used for in-memory indexing), an inner node can contain up to (2m + 1) keys, which utilizes node storage 
 more efficiently. To aid finding the next level node without using an explicit pointer, the paper proposes that all inner
 nodes on the same level be allocated as a single chunk of memory. The number of nodes in the chunk is determined by the 
 number of nodes in the previous level and the fan-out of the tree. For example, assuming that the previous level has N
 nodes, and the fan-out of inner levels are (2m + 1), the next level memory chunk must have (N * (2m + 1)) nodes in order
-to give a child node to each element in the most extreme case. **Note: What I don't get is that if inner level
-nodes have (2m + 1) keys, then the fan-out should be (2m + 2)? In the paper the equation says (2m + 1)**.
+to assign a child node to each element in the most extreme case. **Note: What I don't get is that if inner level
+nodes have (2m + 1) keys, then the fan-out should be (2m + 2)? In the paper the equation says (2m + 1)**. During tree
+traversal, if the thread has found its path using the j-th key in node i of the current level, then the implicit next
+level node ID is calculated as ((2m + 1) * i + j + 1), given that the first key implicitly maps to the second child node
+(this is where j + 1 comes from). The offset of the node within the chunk can then be calculated using the base address
+and the node size. The last level inner node contains both keys and pointers to the leaf nodes, which is searched like 
+a normal B+Tree node.
