@@ -78,7 +78,9 @@ will not see this inconsistent state, since the upper level nodes still point to
 installs the new key-pointer pair into the parent inner node, and updates the parent node's existing key-pointer pair.
 This process will not introduce temporarily inconsistent states, since after we install the new key-pointer pair, threads
 accessing the upper half of the old node will be redirected to the newly created split sibling, while threads accessing
-the lower half still access the old node. Updates will be blocked by the per-node lock as in node consolidation.
+the lower half still access the old node. Updates will be blocked by the per-node lock as in node consolidation. Node
+merges are just like node splits, except that we cannot reclaim the memory of the node to be merged, since concurrent
+readers may still be accessing them. 
 
 Inner nodes are further divided into two types. Last level inner nodes contain key-pointer pairs that point to leaf nodes
 just like normal B+Tree nodes. Other inner nodes, on the other hand, only contain keys but not pointers. Assuming that
@@ -95,3 +97,12 @@ level node ID is calculated as ((2m + 1) * i + j + 1), given that the first key 
 (this is where j + 1 comes from). The offset of the node within the chunk can then be calculated using the base address
 and the node size. The last level inner node contains both keys and pointers to the leaf nodes, which is searched like 
 a normal B+Tree node.
+
+When an inner node becomes full, NV-Tree must rebuild the entire inner node hierarchy as described below. If a leaf node
+split would like to insert a new key-pointer pair into the last level inner node, but the parent node is empty, the rebuild 
+process will be triggered. The rebuild process allocates a larger chunk of memory such that each node in the chunk has only
+one element from the previous chunk, in order to amortize this expensive rebuils operation over as many inserts as possible. 
+New entries are inserted into the upper level to match the new layout of nodes. This rebuild process is performed recursively
+if upper levels also need a split, which will eventually propagate to the root node, in which case a new node is allocated.
+The pointer to the root node is part of the tree metadata, which will be used as the starting point of the traversal.
+
