@@ -106,3 +106,7 @@ New entries are inserted into the upper level to match the new layout of nodes. 
 if upper levels also need a split, which will eventually propagate to the root node, in which case a new node is allocated.
 The pointer to the root node is part of the tree metadata, which will be used as the starting point of the traversal.
 
+To reduce the overhead of rebuilding the tree every time it is loaded, the paper suggests that inner levels should be 
+written back to the NVDIMM on a normal shutdown. The root pointer should also be written back before a shutdown notice
+is written and flushed. If this shutdown notice is not found, inner levels are assumed to be corrupted, and will be rebuilt 
+from the scratch using the leaf node chain stored on NVDIMM.
