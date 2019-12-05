@@ -51,5 +51,14 @@ level bucket k, they can also be stored in lower level bucket floor(k / 2). Two 
 to two buckets in the upper level array, and these upper half array can use the corresponding lower half array to handle 
 overflows. The advantage of using two levels of buckets is that table resizing can be as simple as adding a third level
 on top of the current upper level, after which elements in the lower level can be moved gradually to the third level by
-rehashing them.
+rehashing them. 
 
+An insert operation in level hash table works as follows. We first hash the key using both hash functions, and check whether
+the two buckets in the upper level and the two buckets in the lower level already have the key. If not, the insertion process
+writes the key-value pair into one of the two upper level buckets, whichever has at least one free slot (if both are not 
+full, then select the one with fewer elements). If both buckets are full, we then try to move one of the elements in the 
+two top level buckets to its alternate location, by hashing the element again using the other hash function, and probe
+whether the alternate bucket is also full. If this is impossible for all eight elements in upper level buckets, we then
+proceed to the two corresponding lower level buckets and attempt to insert the element there using the same criterion. If, 
+unfortunately, both lower level buckets are also full, we also try to move elements to its alternate lower level bucket 
+to make space for the newly inserted element. 
