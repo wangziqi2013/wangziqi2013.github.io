@@ -46,7 +46,7 @@ existing elements to their alternate locations.
 
 We next describe level hashing data structure as follows. The hash table consists of two bucket arrays, one upper level 
 array, and another lower level array. Arrays consist of buckets, which contains several slots (less than 64). This paper 
-assumes four slots per bucket, but the design itself does not prevent more slots. For elements that are mapped to upper 
+assumes four slots per bucket to , but the design itself does not prevent more slots. For elements that are mapped to upper 
 level bucket k, they can also be stored in lower level bucket floor(k / 2). Two hash functions are used to map an element
 to two buckets in the upper level array, and these upper half array can use the corresponding lower half array to handle 
 overflows. The advantage of using two levels of buckets is that table resizing can be as simple as adding a third level
@@ -67,3 +67,16 @@ into the lower level. This is because the number of buckets in the lower level i
 the upper level, which implies higher chance of conflicts compared with the upper level. A conflict in lower level buckets 
 will trigger a hash table resize, which is relatively expensive. Giving priority to the upper level can increase the 
 load factor of the hash table before the next resize, as reported by the paper.
+
+Searching operation is simple: We first probe the two upper level buckets to search for the key. If key is not found, we 
+further probe the two bottom level buckets. Only two hash functions are computed and four buckets are searched in the 
+worst case. 
+
+When the table is resized, we first create an array of buckets whose size is double the current upper level size as a 
+third level. Bucket k in the third level uses bucket floor(k / 2) as the overflow bucket, just like bucket k in the 
+upper level uses bucket floor(k / 2) as overflow bucket. After creating the third level, all new inserts must only
+insert into the third level and the current upper level, while read operations must probe all three levels, checking 
+a maximum of six buckets. In the meantime, the resizing thread rehashes all elements in the current lower level. It is
+guaranteed that rehashing will not cascade due to conflicts on the third and upper levels, since each bucket in the 
+lower level is mapped to four buckets in the third level. After all elements in the lower level are rehashed, the current
+lower level is removed, and the previous upper level becomes the current lower level. 
