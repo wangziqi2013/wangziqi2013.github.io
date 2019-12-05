@@ -61,4 +61,9 @@ two top level buckets to its alternate location, by hashing the element again us
 whether the alternate bucket is also full. If this is impossible for all eight elements in upper level buckets, we then
 proceed to the two corresponding lower level buckets and attempt to insert the element there using the same criterion. If, 
 unfortunately, both lower level buckets are also full, we also try to move elements to its alternate lower level bucket 
-to make space for the newly inserted element. 
+to make space for the newly inserted element. If this cannot be done, then the hash table needs a resize, which will be 
+described later. Note that in the insertion scheme described above, we prioritize inserting into the upper level over inserting
+into the lower level. This is because the number of buckets in the lower level is only half of the number of buckets in 
+the upper level, which implies higher chance of conflicts compared with the upper level. A conflict in lower level buckets 
+will trigger a hash table resize, which is relatively expensive. Giving priority to the upper level can increase the 
+load factor of the hash table before the next resize, as reported by the paper.
