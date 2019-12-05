@@ -80,3 +80,10 @@ a maximum of six buckets. In the meantime, the resizing thread rehashes all elem
 guaranteed that rehashing will not cascade due to conflicts on the third and upper levels, since each bucket in the 
 lower level is mapped to four buckets in the third level. After all elements in the lower level are rehashed, the current
 lower level is removed, and the previous upper level becomes the current lower level. 
+
+To ensure atomic update, each bucket has a bitmap in its header. The bitmap is 8 byte in size, and is aligned to word boundary.
+Each bit in the bitmap represents whether the corresponding slot in the bucket is used or not. In addition, each slot has 
+a ont-bit spin lock to ensure exclusive access of the key-value pair for synchronizing between concurrent writer threads. 
+When we insert an element into the node, we first check the bitmap of the bucket to find a free slot. After a free slot
+is found, we lock the slot by atomically setting the bit flag of the slot. Next, the key-value pair is written into the 
+slot using regular writes, and then flushed back to the NVM. 
