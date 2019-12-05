@@ -94,4 +94,10 @@ written key-value pairs will not be marked in the bitmap. If the system crashes 
 is naturally rolled back as if it has never happened. For deletes, we simply check that the deleted key truly exist in
 one of the four possible buckets, and then unset the bit in the bitmap before flushing the bitmap back to the NVM.
 
-The paper 
+The paper proposes two schemes for updates. If in-place updates are to be used, then logging must be employed to ensure
+that partially written key-value pairs can be rolled back or replayed (depending on the type of log entry). This is a general
+solution that works when the current bucket does not have another empty slot. On the other hand, if the current bucket
+has an empty slot, then an update operation can be executed as a deleted followed by insert. To elaborate: In order to
+update a key-value pair, we first lock the updated slot and the empty slot by querying the bitmap in the header. We then
+copy the updated value into the updated slot and flush it back to the NVM. The update is committed by setting the new slot 
+and clearing the current slot atomically with a write, which is then committed by flushing the bitmap back to the NVM.
