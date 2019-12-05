@@ -86,4 +86,12 @@ Each bit in the bitmap represents whether the corresponding slot in the bucket i
 a ont-bit spin lock to ensure exclusive access of the key-value pair for synchronizing between concurrent writer threads. 
 When we insert an element into the node, we first check the bitmap of the bucket to find a free slot. After a free slot
 is found, we lock the slot by atomically setting the bit flag of the slot. Next, the key-value pair is written into the 
-slot using regular writes, and then flushed back to the NVM. 
+slot using regular writes, and then flushed back to the NVM. This write process does not need to be atomic, since the 
+bitmap has not been set yet, and hence the pair is invisible. In the last step, we set the bitmap header, write back
+the bitmap to the NVM, and unlock the slot. Only after we set the header could concurrent reader threads access the pair.
+Reader threads, on the other hand, do not need to acquire the per-slot lock to access the key-value pair, because partially
+written key-value pairs will not be marked in the bitmap. If the system crashes before the bitmap is set, the insertion
+is naturally rolled back as if it has never happened. For deletes, we simply check that the deleted key truly exist in
+one of the four possible buckets, and then unset the bit in the bitmap before flushing the bitmap back to the NVM.
+
+The paper 
