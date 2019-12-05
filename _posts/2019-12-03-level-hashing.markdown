@@ -17,7 +17,11 @@ This paper proposes level hashing, a hash table design for byte-addressable non-
 major difficulties of implementing hash tables on non-volatile memory. The first difficulty is consistency guarantees with
 regard to failures. The internal states of the hash table must remain consistent, or at least must be able to be detected
 after crash by the crash recovery process. This requires programmers to insert cache line write backs and memory barriers
-on certain points to guarantee correct persistent ordering, which hurts performance. The second difficulty is that DRAM-based
+on certain points to guarantee correct persistent ordering, which may hurt performance. The second difficulty is that DRAM-based
 hash table designs may not particularly optimize for writes since DRAM write bandwidth is significantly higher than NVM 
 bandwidth. On the contrary, on NVM based data structures, the number of writes must be minimized to accomodate for the lower
-write bandwidth.
+write bandwidth. Typical hash tables either use chained hashing or open addressing such as cuckoo hashing. Both schemes 
+require excessive writes that are necessary for storing the key-value pairs. For example, in chained hashing, the linked
+list under the bucket is modified to insert the newly allocated element, which requires both persistent malloc and linked 
+list insertion. In cuckoo hashing, cascading writes may occur as a result of multiple hash conflicts. These writes are
+not dedicated to storing the key-value paris but instead only maintains the internal consistency of the hash table.
