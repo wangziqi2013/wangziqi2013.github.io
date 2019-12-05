@@ -43,3 +43,13 @@ inserts such that they are not blocked by the resize. This is accomplished by a 
 contribution of level hashing is that it reduces the number of cascading writes to a minimum. In most cases, the element
 can find an empty slot in the first attempt. Even in the case of a rehash, at most one cascading write will be used to move
 existing elements to their alternate locations. 
+
+We next describe level hashing data structure as follows. The hash table consists of two bucket arrays, one upper level 
+array, and another lower level array. Arrays consist of buckets, which contains several slots (less than 64). This paper 
+assumes four slots per bucket, but the design itself does not prevent more slots. For elements that are mapped to upper 
+level bucket k, they can also be stored in lower level bucket floor(k / 2). Two hash functions are used to map an element
+to two buckets in the upper level array, and these upper half array can use the corresponding lower half array to handle 
+overflows. The advantage of using two levels of buckets is that table resizing can be as simple as adding a third level
+on top of the current upper level, after which elements in the lower level can be moved gradually to the third level by
+rehashing them.
+
