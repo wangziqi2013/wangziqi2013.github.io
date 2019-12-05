@@ -39,4 +39,7 @@ nor redo) or copy-on-write to perform atomic writes of key-value pairs, which ty
 store. Instead, key-value pairs are first written without being made visible to concurrent readers. A final update operation
 on an 8-byte word atomically commits the write and makes them visible to concurrent readers. Second, level hashing simplifies
 resizing by only rehashing a subset of keys instead of all keys. The rehashing process co-operates with normal reads and 
-inserts such that they are not blocked by the resize. This is accomplished by a two-level structure of buckets. 
+inserts such that they are not blocked by the resize. This is accomplished by a two-level structure of buckets. The third
+contribution of level hashing is that it reduces the number of cascading writes to a minimum. In most cases, the element
+can find an empty slot in the first attempt. Even in the case of a rehash, at most one cascading write will be used to move
+existing elements to their alternate locations. 
