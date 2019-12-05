@@ -25,3 +25,11 @@ require excessive writes that are necessary for storing the key-value pairs. For
 list under the bucket is modified to insert the newly allocated element, which requires both persistent malloc and linked 
 list insertion. In cuckoo hashing, cascading writes may occur as a result of multiple hash conflicts. These writes are
 not dedicated to storing the key-value paris but instead only maintains the internal consistency of the hash table.
+
+Level hashing is a variant of cuckoo hashing, in which each element can be mapped to multiple locations in the hash table
+using different hash functions (usually two). If the location has been occupied by another element, cuckoo hashing requires 
+that the current element key in that slot be rehashed using the other hash function, and the element is stored in the alternate 
+slot if it is free. This process may repeat for a few rounds until an empty slot is finally found, or the number of rounds 
+exceeds a certain threshold, in which case the hash table needs to be resized. During a lookup, the search key is hashed by
+both hash functions, and both slots are checked to see if they contain the search key. A hit is indicated if the key exists
+in any of the two slots.
