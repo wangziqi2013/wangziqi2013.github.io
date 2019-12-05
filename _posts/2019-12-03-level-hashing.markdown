@@ -33,3 +33,8 @@ slot if it is free. This process may repeat for a few rounds until an empty slot
 exceeds a certain threshold, in which case the hash table needs to be resized. During a lookup, the search key is hashed by
 both hash functions, and both slots are checked to see if they contain the search key. A hit is indicated if the key exists
 in any of the two slots.
+
+Level hashing improves cuckoo hashing in the following aspects. First, level hashing does not rely on logging (neither undo
+nor redo) or copy-on-write to perform atomic writes of key-value pairs (which typically cannot be written with one atomic
+store). Instead, key-value pairs are first written without being made visible to concurrent readers. A final update operation
+on an 8-byte word atomically commits the write and makes them visible to concurrent readers. Second, 
