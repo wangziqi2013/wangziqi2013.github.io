@@ -1,10 +1,10 @@
 ---
 layout: paper-summary
-title:  "Write-Optimized and High-Performance Hashing Index Scheme for Persistent Memory"
+title:  "Write-Optimized Dynamic Hashing for Persistent Memory"
 date:   2019-12-06 18:41:00 -0500
 categories: paper
-paper_title: "Write-Optimized and High-Performance Hashing Index Scheme for Persistent Memory"
-paper_link: https://www.usenix.org/conference/osdi18/presentation/zuo
+paper_title: "Write-Optimized Dynamic Hashing for Persistent Memory"
+paper_link: https://dl.acm.org/citation.cfm?id=3323302
 paper_keyword: NVM; Hash Table; CCEH; Extendible Hashing
 paper_year: FAST 2019
 rw_set:
