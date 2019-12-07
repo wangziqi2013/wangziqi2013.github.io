@@ -114,5 +114,9 @@ half-split state, as we will see below.
 
 Insertion and deletion do not change much from the baseline system. For insertion, instead of only searching for empty slots 
 in the current bucket indexed by the LSBs, the paper suggests that we may also try linear probing in the segment, i.e. we
-allow key-value pairs to overflow to adjacent buckets if the current bucket if full, and hash table lookup must also scan 
-the next few buckets until the search key is found. 
+allow key-value pairs to overflow to adjacent buckets if the current bucket is full. Hash table lookups must also scan 
+the next few buckets until the search key is found. In order for inserts and deletes to be atomic with regard to failures,
+inserting threads should first write the value, then the key, and finally use a per-item flag to indicate that the key-value
+pair has been inserted. This per-item flag could be the field that stores the hash value of the key. For deleles, we simply
+invalidate the per-item flag.
+
