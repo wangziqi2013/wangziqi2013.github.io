@@ -111,3 +111,8 @@ halfs until the desired size (rounded up to power of two) is reached. The last o
 are split, the number of directory entries that point to the segment is always 2<sup>(G - l)</sup> (l <= G), and these entries
 are always consecutive in the directory array as we have explained above. This property is critical to the recovery from
 half-split state, as we will see below. 
+
+Insertion and deletion do not change much from the baseline system. For insertion, instead of only searching for empty slots 
+in the current bucket indexed by the LSBs, the paper suggests that we may also try linear probing in the segment, i.e. we
+allow key-value pairs to overflow to adjacent buckets if the current bucket if full, and hash table lookup must also scan 
+the next few buckets until the search key is found. 
