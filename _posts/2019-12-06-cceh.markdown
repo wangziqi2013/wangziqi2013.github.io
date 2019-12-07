@@ -34,5 +34,8 @@ resizing the hash table, which limites its usage to only web caching (in which t
 or similar applications. The paper then proceed to identify that one of the major difficulties of designing a dynamic 
 hashing scheme is to support efficient resize operation of the hash table. Hash tables are expanded when a conflict occurs
 but cannot be resolved using the conflict resolution method (e.g. chaining, open addressing). Optionally, tables are shrinked
-to save storage when the number of elements falls below a certain threshold. In a naive resizing scheme, such as chaining
-or 
+to save storage when the number of elements falls below a certain threshold. In a naive resizing scheme, a larger hash
+table is built while blocking update operations (reads are not affected since they do not change the state of the table). 
+All elements in the old table are rehashed to the new table, which is expensive in terms of both the number of stores
+and the computation complexity. When running on NVM, this problem can only be exacerbated due to the lower write bandwidth
+compared with DRAM.
