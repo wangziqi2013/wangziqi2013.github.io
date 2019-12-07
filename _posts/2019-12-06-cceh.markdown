@@ -120,3 +120,9 @@ inserting threads should first write the value, then the key, and finally use a 
 pair has been inserted. This per-item flag could be the field that stores the hash value of the key. For deleles, we simply
 invalidate the per-item flag.
 
+When spliting a segment, we copy all key-value pairs whose (l + 1)-th bit is "1" to the corresponding buckets in the new 
+segment. Entries in the old segment are cleared lazily, as they do not affect correctness for reads. Updates will be redirected
+to the new segment after the directory is updated. When searching for an empty slot in a segment, those key-value pairs
+whose l MSB bits does not equal the l MSB bits in the hash value (i.e. index of the directory entry) will be considered as 
+invalid, since according to the definition, only those items whose l MSB bits equal the l MSB bits of the entry index are 
+valid.
