@@ -44,5 +44,11 @@ CCEH is based on extendible hashing, which has been proposed to amortize the ove
 many operations that are performed after the resize. Elements are rehashed lazily rather than eagerly as in non-extendible 
 hashing schemes in which all elements are rehashed and inserted into the resized table. We now introduce the basic form
 of extendible hashing as follows. The hash table consists of two parts: A directory array and a set of buckets mapped by
-the directory. Conventionally, each bucket is a page allocated from the page buffer pool, but we assume that buckets can
-be arbitrarily sized based on the system parameter such as cache line size and the key-value size.
+the directory. The directory is simply an array of pointers to buckets, which is addressed using bits from the hash value. 
+Conventionally, each bucket is a page allocated from the page buffer pool, but we assume that buckets can be arbitrarily 
+sized based on system parameters such as cache line size and the key-value size. Buckets can be shared by different directory 
+entries, which means that keys whose hash values are mapped to the corresponding directory entries can be stored in the 
+same bucket in a fully-associative manner. Read operation to a bucket must check all non-empty slots in order to decide 
+whether the search key exists or not. Two runtime parameters decide the behavior of operations. The first parameter 
+is the global depth G, which indicates the number of bits we use from the hash value to determine the directory. For 
+example, 
