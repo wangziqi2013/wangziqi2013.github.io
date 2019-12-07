@@ -72,3 +72,11 @@ and the second group consists of the rest. We then move the second group to the 
 Ek are updated, such that those whose indices has (l + 1)-th bit equalling zero still point to the old bucket (i.e. do not 
 change since they already point to the old pre-split bucket), and the rest will be updated to point to the new bucket.
 This way, the invariant between local depth of buckets and the directory entries that point to them are maintained. 
+
+When inserting into the extendible hash table, we first compute the hash value of the key, and then extract the index
+of directory entry using G. We then find the bucket by following the pointer stored in the directory entry. If an empty
+slot can be found in the bucket, then we place the key-value pair in the bucket, and insertion succeeds. Otherwise, we 
+check whether the value of l is smaller than G. If true, we split the bucket as described above, and retry the insertion
+on one of the two buckets depending on the (l + 1)-th bit of the hash value. Note that in the most extreme case, the 
+bucket to be inserted can still be full after insertion (i.e. there is no element whose (l + 1)-th bit is 0 or 1), the 
+split process may therefore be recursively called until at least one element is copied during the split. 
