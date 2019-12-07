@@ -135,4 +135,9 @@ such as inserts, deletes, and hash table resize, can be rolled back automaticall
 to external world was not flushed back to the NVM before the crash. To identify a partial directory update, we perform a 
 directory walk beginning from the first entry. Based on the observation that under a consistent state, a segment whose local
 depth is l will have a consecutive range of length 2<sup>G-l</sup> in the directory, we just verify that this invariant holds
-for all ranges that point to the same segment in the direcory. To elaborate: Recall that the 
+for all ranges that point to the same segment in the direcory. To elaborate: Recall that the update process will update
+from right to left. As long as the update is not fully completed, the leftmost entry of the new range still point to the 
+old segment. To detect this, we begin from the first entry in the directory. For each range whose length is calculated using 
+the segment local depth pointed to by the first entry of the range, we read the last entry in the range, and compare
+whether these two entries point to the same segment. If not, then we have identified an incomplete directory update 
+as a result of a split, which is then completed by updating all entries in the newly created range.
