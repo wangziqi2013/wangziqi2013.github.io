@@ -106,5 +106,8 @@ number of "1" bits in the higher end is l, and the total number of bits is G. Th
 values as directory indices. The second observation is that after the segment is split, we increment the local depth
 l for both the old and the new segments, and then update the upper half of this range in the directory to point to the new 
 segment (assuming we copy entries in the buckets whose (l + 1)-th bit is "1" to the new segment). This process is similar 
-to the buddy allocation system, in which a chunk of memory whose size is a power of two is broken down into to equally 
-halfs until the desired size (rounded up to power of two) is reached. The last 
+to the buddy allocation system, in which a chunk of memory whose size is a power of two is broken down into two equally 
+halfs until the desired size (rounded up to power of two) is reached. The last observation is that no matter how segments
+are split, the number of directory entries that point to the segment is always 2<sup>(G - l)</sup> (l <= G), and these entries
+are always consecutive in the directory array as we have explained above. This property is critical to the recovery from
+half-split state, as we will see below. 
