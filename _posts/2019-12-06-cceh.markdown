@@ -79,4 +79,11 @@ slot can be found in the bucket, then we place the key-value pair in the bucket,
 check whether the value of l is smaller than G. If true, we split the bucket as described above, and retry the insertion
 on one of the two buckets depending on the (l + 1)-th bit of the hash value. Note that in the most extreme case, the 
 bucket to be inserted can still be full after insertion (i.e. there is no element whose (l + 1)-th bit is 0 or 1), the 
-split process may therefore be recursively called until at least one element is copied during the split. 
+split process may therefore be recursively called until at least one element is copied during the split. If, on the other
+hand, the local depth l of the full bucket equals G, then the bucket can no longer be splited since there is no sharer. 
+In this case, we must resize the hash table by allocating a new directory array whose size is the double of the current one,
+and initialize the array by copying the current array twice into the new directory array (i.e. copy the old array into both
+the first half and the second half of the new array). Copying the current array twice essentially shares all buckets with
+newly added directory entries at the second half of the new directory array. This way, no rehashing is required, since the 
+newly added directory entries simply share the same bucket with their buddies in the first half. The global depth G is also 
+incremented to indicate that all buckets are now shared. 
