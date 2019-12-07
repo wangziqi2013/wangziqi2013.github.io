@@ -28,4 +28,11 @@ version_mgmt:
    make clear where the "local depth" is stored - directory or segment or per bucket?
 
 This paper proposes Cache Line Conscious Extendible Hashing (CCEH), a dynamic hashing scheme for byte-addressable persistent 
-memory.
+memory. The paper first identifies the importance of dynamic hashing as a foundation of general hash tables, which 
+allows the hash table to expand and shrink according to the workload. In contrast, static hashing does not support dynamically
+resizing the hash table, which limites its usage to only web caching (in which table entries can be evicted as conflict occurs)
+or similar applications. The paper then proceed to identify that one of the major difficulties of designing a dynamic 
+hashing scheme is to support efficient resize operation of the hash table. Hash tables are expanded when a conflict occurs
+but cannot be resolved using the conflict resolution method (e.g. chaining, open addressing). Optionally, tables are shrinked
+to save storage when the number of elements falls below a certain threshold. In a naive resizing scheme, such as chaining
+or 
