@@ -88,3 +88,13 @@ newly added directory entries at the second half of the new directory array. Thi
 newly added directory entries simply share the same bucket with their buddies in the first half. The global depth G is also 
 incremented to indicate that all buckets are now shared. The actual cost of rehashing is postponed to the point where a 
 bucket is full.
+
+This paper further extends the above baseline extendible hashing to NVM by adding a few optimizations and directory update 
+protocols such that partial updates during a bucket split can be identified and fixed in the recovery process. We introduce 
+them as follows. The first change between CEEH and baseline extendible hashing is that buckets are organized into segments,
+which is the basic unit of allocation and split. This saves memory space for the directory at the cost of copying buckets 
+that are not full during a segment split. In the following discussion we use G to refer to the depth of the hash table 
+with regard to segments. This paper suggests that we use G bits from the MSB in the hash value to address directory entries
+to make recovery simpler, as we will see below. In this scheme, given a hash value in binary as b1b2b3b4..bG...bH where H is
+the size of the hash value, we use b1b2...bG from the MSB as the index for the directory. Within a directory, we use 
+bits from the LSB to address buckets. 
