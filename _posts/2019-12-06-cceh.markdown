@@ -51,4 +51,8 @@ entries, which means that keys whose hash values are mapped to the corresponding
 same bucket in a fully-associative manner. Read operation to a bucket must check all non-empty slots in order to decide 
 whether the search key exists or not. Two runtime parameters decide the behavior of operations. The first parameter 
 is the global depth G, which indicates the number of bits we use from the hash value to determine the directory. For 
-example, 
+example, if the hash value is 0x12345679, and G equals 4, then we take four bits from the value (assuming we use LSB),
+which is nine, as the index of the directory entry we need to lookup. In addition, the the size of the directory array is 
+also determined by the value of G, which is 2^G. In our example there will be 16 elements in the directory. When the 
+hash table is expanded, we double the number of elements in the directory, and increment the value of G to make them
+consistent. The second 
