@@ -103,4 +103,8 @@ The second change is that CEEH updates directory entries from right to left when
 G and local depth of a segment as l, we make the following observations. First, before the segment is split, directory
 entries that share the segment form a consecutive range in the array, namely from 00..00..0 to 11..10..0, in which the
 number of "1" bits in the higher end is l, and the total number of bits is G. This is a result of using MSBs of the hash 
-values as directory indices. The second 
+values as directory indices. The second observation is that after the segment is split, we increment the local depth
+l for both the old and the new segments, and then update the upper half of this range in the directory to point to the new 
+segment (assuming we copy entries in the buckets whose (l + 1)-th bit is "1" to the new segment). This process is similar 
+to the buddy allocation system, in which a chunk of memory whose size is a power of two is broken down into to equally 
+halfs until the desired size (rounded up to power of two) is reached. The last 
