@@ -125,4 +125,7 @@ segment. Entries in the old segment are cleared lazily, as they do not affect co
 to the new segment after the directory is updated. When searching for an empty slot in a segment, those key-value pairs
 whose l MSB bits does not equal the l MSB bits in the hash value (i.e. index of the directory entry) will be considered as 
 invalid, since according to the definition, only those items whose l MSB bits equal the l MSB bits of the entry index are 
-valid.
+valid. After creating the new segment, we first persist the segment after populating it. We then update the higher half 
+of the directory range (see above) from right to left, i.e. from higher indices to lower indices. Cache line flushes
+and memory fences are inserted when directory entry updates cross cache lines, and at the end of the update. This ordering 
+is extremely important to ensure that we can recover from a failure half way through the update process.
