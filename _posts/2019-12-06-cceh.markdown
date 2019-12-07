@@ -68,4 +68,7 @@ to map to the same bucket whose local depth is l, the indices of these directory
 When we split a bucket when it is full, the local depth of the bucket is incremented if it is less than G, and then we rehash
 elements in the bucket as follows. First, a new bucket is allocated to hold rehashed key-value pairs. Next, for all active 
 slots in the old bucket, we divide them into two groups: The first group consists of keys whose (l + 1)-th bit equals 0,
-and the second group consists of the rest. We then copy the second group to the new bucket. The 
+and the second group consists of the rest. We then move the second group to the new bucket. The directory entries E1, E2, ...,
+Ek are updated, such that those whose indices has (l + 1)-th bit equalling zero still point to the old bucket (i.e. do not 
+change since they already point to the old pre-split bucket), and the rest will be updated to point to the new bucket.
+This way, the invariant between local depth of buckets and the directory entries that point to them are maintained. 
