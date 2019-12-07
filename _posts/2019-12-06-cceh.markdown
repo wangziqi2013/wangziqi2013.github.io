@@ -129,3 +129,10 @@ valid. After creating the new segment, we first persist the segment after popula
 of the directory range (see above) from right to left, i.e. from higher indices to lower indices. Cache line flushes
 and memory fences are inserted when directory entry updates cross cache lines, and at the end of the update. This ordering 
 is extremely important to ensure that we can recover from a failure half way through the update process.
+
+On recovery, we only need to fix potential inconsistencies caused by partially conducted segment split. All other operations,
+such as inserts, deletes, and hash table resize, can be rolled back automatically if the final step which exposes the changes
+to external world was not flushed back to the NVM before the crash. To identify a partial directory update, we perform a 
+directory walk beginning from the first entry. Based on the observation that under a consistent state, a segment whose local
+depth is l will have a consecutive range of length 2<sup>G-l</sup> in the directory, we just verify that this invariant holds
+for all ranges that point to the same segment in the direcory. To elaborate: Recall that the 
