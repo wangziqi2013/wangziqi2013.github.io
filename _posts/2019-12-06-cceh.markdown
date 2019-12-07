@@ -62,3 +62,10 @@ the key's hash value on the same bit position. In other words, instead of alloca
 and only letting it store keys whose hash value is mapped to the directory entry pointing to the bucket, we allow multiple
 directory entries to point to the same bucket, and hash values of keys mapped to the bucket have a common "prefix" whose 
 length is exactly l. The remaining (G - l) bits of the hash index can be arbitrary value.
+
+It is quite obvious that directory entries cannot be mapped to buckets arbitrarily. In order for entries E1, E2, ..., Ek
+to map to the same bucket whose local depth is l, the indices of these directory entries must have a common l bit prefix.
+When we split a bucket when it is full, the local depth of the bucket is incremented if it is less than G, and then we rehash
+elements in the bucket as follows. First, a new bucket is allocated to hold rehashed key-value pairs. Next, for all active 
+slots in the old bucket, we divide them into two groups: The first group consists of keys whose (l + 1)-th bit equals 0,
+and the second group consists of the rest. We then copy the second group to the new bucket. The 
