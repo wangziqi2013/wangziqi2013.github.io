@@ -39,3 +39,10 @@ table is built while blocking update operations (reads are not affected since th
 All elements in the old table are rehashed to the new table, which is expensive in terms of both the number of stores
 and the computation complexity. When running on NVM, this problem can only be exacerbated due to the lower write bandwidth
 compared with DRAM.
+
+CCEH is based on extendible hashing, which has been proposed to amortize the overhead of hash table resizing over potentially
+many operations that are performed after the resize. Elements are rehashed lazily rather than eagerly as in non-extendible 
+hashing schemes in which all elements are rehashed and inserted into the resized table. We now introduce the basic form
+of extendible hashing as follows. The hash table consists of two parts: A directory array and a set of buckets mapped by
+the directory. Conventionally, each bucket is a page allocated from the page buffer pool, but we assume that buckets can
+be arbitrarily sized based on the system parameter such as cache line size and the key-value size.
