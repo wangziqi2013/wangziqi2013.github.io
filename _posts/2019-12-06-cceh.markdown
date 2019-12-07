@@ -55,4 +55,10 @@ example, if the hash value is 0x12345679, and G equals 4, then we take four bits
 which is nine, as the index of the directory entry we need to lookup. In addition, the the size of the directory array is 
 also determined by the value of G, which is 2^G. In our example there will be 16 elements in the directory. When the 
 hash table is expanded, we double the number of elements in the directory, and increment the value of G to make them
-consistent. The second 
+consistent. The second parameter is l, the local depth of a bucket. Each bucket stores the value of l in its header,
+and this value encodes an important property of key-value pairs that can be stored in the current bucket. In order
+for a key-value pair to be stored in buck with depth l, the first l bits of the directory index must equal the bits in
+the key's hash value on the same bit position. In other words, instead of allocating one bucket to each directory entry
+and only letting it store keys whose hash value is mapped to the directory entry pointing to the bucket, we allow multiple
+directory entries to point to the same bucket, and hash values of keys mapped to the bucket have a common "prefix" whose 
+length is exactly l. The remaining (G - l) bits of the hash index can be arbitrary value.
