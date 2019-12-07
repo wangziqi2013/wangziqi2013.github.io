@@ -86,4 +86,5 @@ and initialize the array by copying the current array twice into the new directo
 the first half and the second half of the new array). Copying the current array twice essentially shares all buckets with
 newly added directory entries at the second half of the new directory array. This way, no rehashing is required, since the 
 newly added directory entries simply share the same bucket with their buddies in the first half. The global depth G is also 
-incremented to indicate that all buckets are now shared. 
+incremented to indicate that all buckets are now shared. The actual cost of rehashing is postponed to the point where a 
+bucket is full.
