@@ -98,3 +98,9 @@ with regard to segments. This paper suggests that we use G bits from the MSB in 
 to make recovery simpler, as we will see below. In this scheme, given a hash value in binary as b1b2b3b4..bG...bH where H is
 the size of the hash value, we use b1b2...bG from the MSB as the index for the directory. Within a directory, we use 
 bits from the LSB to address buckets. 
+
+The second change is that CEEH updates directory entries from right to left when splitting a segment. Given global depth 
+G and local depth of a segment as l, we make the following observations. First, before the segment is split, directory
+entries that share the segment form a consecutive range in the array, namely from 00..00..0 to 11..10..0, in which the
+number of "1" bits in the higher end is l, and the total number of bits is G. This is a result of using MSBs of the hash 
+values as directory indices. The second 
