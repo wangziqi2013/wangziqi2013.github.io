@@ -74,4 +74,8 @@ pointers, the left child, the right child, and the parent pointer. Instead of st
 that we only store two, which are the XOR value between left child and parent, and the XOR value between right child and 
 the parent. In order to visit child nodes, we need the pointer to the parent, which should already been accessible
 during the traversal. The pointer to left and right node can be obtained by XOR'ing the parent node value with each
-of the two stored values. 
+of the two stored values. The parent node is obtained when we are traversing bottom-up. Using either the left child
+or right child's address, we can recover the parent address by XOR'ing the node address with the left or node XOR'ed
+value respectively. One issue is that often we do not know whether a given child node is the left or right child. For 
+red-black trees, this is easy to solve, since we just compare the key of the child with the key of the current node. If
+the child key is smaller, then we use left child, otherwise we use right child.
