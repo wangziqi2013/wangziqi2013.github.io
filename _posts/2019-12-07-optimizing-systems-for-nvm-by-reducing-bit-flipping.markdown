@@ -62,4 +62,9 @@ linked list that stores collisions. Compared with doubly linked list, the singly
 storing the XOR value of the next node and the address of the current node, treating it like a doubly linked list 
 in which the previous pointer points to the current node itself. This way, although we do not reduce the number 
 of stores, we can still make sure that in most cases, the value written to the field will be mostly zeros with only
-a few flipping bits compared with the previous value. 
+a few flipping bits compared with the previous value. To further reduce writes, the paper makes the observation that
+most hash table entries only have zero or one element. In the common case of one element, the header pointer is supposed 
+to be set to NULL on a delete to indicate that the bucket is empty. The paper proposes that instead of overwriting
+the pointer to NULL, we only set the LSB of the pointer value, which should never occur during normal operation. During
+hash table operation, if the head pointer is found to have one in its LSB, the bucket is empty. This final optimization
+upper bounds the number of bit flips in the common case of deletion to only one bit.
