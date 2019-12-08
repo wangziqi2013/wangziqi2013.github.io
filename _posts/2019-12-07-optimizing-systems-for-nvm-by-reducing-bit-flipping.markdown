@@ -41,4 +41,12 @@ of the pointer is typically zero for alignment purposes, e.g. if the heap alloca
 the low 4 bits of the pointer will always be zero. Furthermore, the higher 16 bits of the virtual address always replicate 
 bit 47 in the virtual address, which is required for usable canonical addresses. The allocator itself may also attempt
 to maintain locality of memory blocks returned to the user. As a result, for two blocks of the same size returned from 
-an allocator, it is very likely that the two blocks are close to each other in the virtual address space.
+an allocator, it is very likely that the two blocks are close to each other in the virtual address space. If two such
+pointers are XOR'ed together, it would be expected that only a few in the 64-bit result will be non-zero. 
+
+The paper proposes doubly linked list using XOR'ed pointer, which we describe as follows. Instead of storing both the 
+previous node and next node pointer in a single node, an XOR'ed linked list only stores the XOR'ed value of the two pointers.
+This node layout has two advantages. First, by removing one pointer field from the node, we only update one 64 bit word
+when the node is updated by insertion or deletion, resulting in less bit flipping. Second, as we have shown above, the XOR
+value of two pointers to two same sized blocks will likely to have only a few non-zero bits. Updating this field, therefore, 
+is expected to only flip a few bits. 
