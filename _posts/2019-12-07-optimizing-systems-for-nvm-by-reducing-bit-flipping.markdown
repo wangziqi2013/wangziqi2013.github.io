@@ -38,4 +38,7 @@ This paper proposes three data structure and one stack frame optimization target
 during normal execution. We present these optimization as follows. The data structure optimization leverages the observation
 that on x86-64 platform, not all bits are flipped equally when updating a 64 bit pointer. To elaborate: The lower few bits
 of the pointer is typically zero for alignment purposes, e.g. if the heap allocator always returns blocks aligned to 16 bytes,
-the low 4 bits of the pointer will always be zero. 
+the low 4 bits of the pointer will always be zero. Furthermore, the higher 16 bits of the virtual address always replicate 
+bit 47 in the virtual address, which is required for usable canonical addresses. The allocator itself may also attempt
+to maintain locality of memory blocks returned to the user. As a result, for two blocks of the same size returned from 
+an allocator, it is very likely that the two blocks are close to each other in the virtual address space.
