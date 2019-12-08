@@ -30,4 +30,6 @@ the wear can be ditributed more evenly on the device, which results in more prog
 
 Previous proposals have been made to reduce the number of bit flips on the hardware level. The memory controller or cache
 controller may determine whether to flip all bits before reading and writing a cache line depending on the number of bits
-that need to be flipped. 
+that need to be flipped. The paper points out, however, that wise decisions are hard to make without higher level information
+about the workload. In addition, the hardware scheme needs to store metadata for encoding and decoding elsewhere, which 
+complicates the design since now every cache line sized block in the address space is associated with metadata.
