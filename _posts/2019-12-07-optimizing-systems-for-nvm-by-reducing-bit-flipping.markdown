@@ -22,3 +22,8 @@ NVM writes is proportional to the number of bits that actually get flipped. It i
 should optimize for reducing the number of flipped bits on NVM when it is updated. In other words, the majority of power
 consumed by DRAM is spent on cell refreshing, while the majority of power consumed by the NVM is spent on flipping bits.
 
+This paper then identifies two benefits of reducing bit flips for NVM writes. The first obvious benefit is that we can 
+reduce write latency and power consumption by not flipping certain bits if they are not changed by the write. The second,
+less obvious benefit is that by combining this technique with wear-leveling techniques such as cache line rotation (i.e.
+we rotate bits within a cache line for every few writes to make every bit in the line wear to approximately the same level), 
+the wear can be ditributed more evenly on the device, which results in more programming cycles and higher device lifetime.
