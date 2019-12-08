@@ -27,3 +27,4 @@ reduce write latency and power consumption by not flipping certain bits if they 
 less obvious benefit is that by combining this technique with wear-leveling techniques such as cache line rotation (i.e.
 we rotate bits within a cache line for every few writes to make every bit in the line wear to approximately the same level), 
 the wear can be ditributed more evenly on the device, which results in more programming cycles and higher device lifetime.
+
