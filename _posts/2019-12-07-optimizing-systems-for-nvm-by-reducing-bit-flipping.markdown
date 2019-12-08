@@ -28,3 +28,6 @@ less obvious benefit is that by combining this technique with wear-leveling tech
 we rotate bits within a cache line for every few writes to make every bit in the line wear to approximately the same level), 
 the wear can be ditributed more evenly on the device, which results in more programming cycles and higher device lifetime.
 
+Previous proposals have been made to reduce the number of bit flips on the hardware level. The memory controller or cache
+controller may determine whether to flip all bits before reading and writing a cache line depending on the number of bits
+that need to be flipped. 
