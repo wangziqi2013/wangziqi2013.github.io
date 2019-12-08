@@ -49,4 +49,7 @@ previous node and next node pointer in a single node, an XOR'ed linked list only
 This node layout has two advantages. First, by removing one pointer field from the node, we only update one 64 bit word
 when the node is updated by insertion or deletion, resulting in less bit flipping. Second, as we have shown above, the XOR
 value of two pointers to two same sized blocks will likely to have only a few non-zero bits. Updating this field, therefore, 
-is expected to only flip a few bits. 
+is expected to only flip a few bits. To obtain the next or the previous pointer of a node, we need to pass the address
+of the previous or the next node to the traversal procedure, and recover the pointers by XOR'ing the stored value with
+the address of the node. This is not a problem for linked list traversals, since the previous or the next node must have 
+already been known during the traversal.
