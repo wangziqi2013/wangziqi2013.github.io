@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes an optimization to reduce bit flips on Byte-addressable Non-volatile memory (NVM). The paper begins by
+pointing out that NVM is different from DRAM regarding write performance characteristics in a few aspects. First, NVM writes 
+(we assume PCM) need to flip bits by heating the small crystal in the cell. This process consumes approximately 50x more 
+power than DRAM write, and can be slower in terms of both throughput and latency. The second difference is that while 
+DRAM write power consumption is proportional to the number of words written into the DRAM array, the power consumption of 
+NVM writes is proportional to the number of bits that actually get flipped. It is therefore suggested by the paper that we 
+should optimize for reducing the number of flipped bits on NVM when it is updated. In other words, the majority of power
+consumed by DRAM is spent on cell refreshing, while the majority of power consumed by the NVM is spent on flipping bits.
+
