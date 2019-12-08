@@ -68,3 +68,10 @@ to be set to NULL on a delete to indicate that the bucket is empty. The paper pr
 the pointer to NULL, we only set the LSB of the pointer value, which should never occur during normal operation. During
 hash table operation, if the head pointer is found to have one in its LSB, the bucket is empty. This final optimization
 upper bounds the number of bit flips in the common case of deletion to only one bit.
+
+The paper then proposes a similar optimization on red-black binary tree. In a red-black tree, each node contains three
+pointers, the left child, the right child, and the parent pointer. Instead of storing three pointers, the paper proposes
+that we only store two, which are the XOR value between left child and parent, and the XOR value between right child and 
+the parent. In order to visit child nodes, we need the pointer to the parent, which should already been accessible
+during the traversal. The pointer to left and right node can be obtained by XOR'ing the parent node value with each
+of the two stored values. 
