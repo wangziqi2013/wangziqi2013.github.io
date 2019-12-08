@@ -57,4 +57,9 @@ NULL (whose value is zero), which does not change the actual value, the paper pr
 of the node itself in order to reduce the number of non-zero flipped bits. This simple modification does not affect correctness,
 since its pointer-based equivalence is just having a node pointing to itself at both ends.
 
-The paper proposed a similar constructs
+The paper proposed a similar construct for chaining hash tables. Each bucket of a chaining hash table contains a singly 
+linked list that stores collisions. Compared with doubly linked list, the singly linked list can be simplified by only
+storing the XOR value of the next node and the address of the current node, treating it like a doubly linked list 
+in which the previous pointer points to the current node itself. This way, although we do not reduce the number 
+of stores, we can still make sure that in most cases, the value written to the field will be mostly zeros with only
+a few flipping bits compared with the previous value. 
