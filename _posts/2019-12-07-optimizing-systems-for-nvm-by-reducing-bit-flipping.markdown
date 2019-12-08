@@ -33,3 +33,9 @@ controller may determine whether to flip all bits before reading and writing a c
 that need to be flipped. The paper points out, however, that wise decisions are hard to make without higher level information
 about the workload. In addition, the hardware scheme needs to store metadata for encoding and decoding elsewhere, which 
 complicates the design since now every cache line sized block in the address space is associated with metadata.
+
+This paper proposes three data structure and one stack frame optimization targeting at reducing the number of bit flips
+during normal execution. We present these optimization as follows. The data structure optimization leverages the observation
+that on x86-64 platform, not all bits are flipped equally when updating a 64 bit pointer. To elaborate: The lower few bits
+of the pointer is typically zero for alignment purposes, e.g. if the heap allocator always returns blocks aligned to 16 bytes,
+the low 4 bits of the pointer will always be zero. 
