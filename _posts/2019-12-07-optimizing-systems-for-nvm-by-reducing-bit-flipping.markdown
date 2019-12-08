@@ -84,4 +84,8 @@ The last optimization proposed by this paper is the usage of stack frame. Althou
 as global shared data by most NVM library, and hence will not be persisted, in full-system persistence schemes, they will
 also be saved to allow instataneous recovery. In this case, register spilling into the stack within a function can be another
 source of optimization, due to the fact that sometimes registers saved to the stack by different function instances have 
-the same value. 
+the same value. This often happens when multiple functions are called back-to-back in a tight loop. If these register spill 
+can follow the same layout on the stack, and always spill the same register to the same offset relative to the current stack
+frame, then it is likely that the value of the saved register will not change, and that the value is written on the same 
+location of the stack again and again. Such updates are totally free after the initial update has been written back
+to the NVM, since no bit is flipped.
