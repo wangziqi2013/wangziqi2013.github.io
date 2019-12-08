@@ -52,4 +52,9 @@ value of two pointers to two same sized blocks will likely to have only a few no
 is expected to only flip a few bits. To obtain the next or the previous pointer of a node, we need to pass the address
 of the previous or the next node to the traversal procedure, and recover the pointers by XOR'ing the stored value with
 the address of the node. This is not a problem for linked list traversals, since the previous or the next node must have 
-already been known during the traversal.
+already been known during the traversal. For nodes at both ends of the linked list, instead of XOR'ing the pointer with 
+NULL (whose value is zero), which does not change the actual value, the paper proposes to XOR the pointer with the address
+of the node itself in order to reduce the number of non-zero flipped bits. This simple modification does not affect correctness,
+since its pointer-based equivalence is just having a node pointing to itself at both ends.
+
+The paper proposed a similar constructs
