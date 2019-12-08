@@ -79,3 +79,9 @@ or right child's address, we can recover the parent address by XOR'ing the node 
 value respectively. One issue is that often we do not know whether a given child node is the left or right child. For 
 red-black trees, this is easy to solve, since we just compare the key of the child with the key of the current node. If
 the child key is smaller, then we use left child, otherwise we use right child.
+
+The last optimization proposed by this paper is the usage of stack frame. Although stack frames are not generally considered
+as global shared data by most NVM library, and hence will not be persisted, in full-system persistence schemes, they will
+also be saved to allow instataneous recovery. In this case, register spilling into the stack within a function can be another
+source of optimization, due to the fact that sometimes registers saved to the stack by different function instances have 
+the same value. 
