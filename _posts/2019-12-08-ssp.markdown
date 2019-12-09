@@ -95,7 +95,13 @@ page. If TLB misses, we populate the TLB entry as described above. A speculative
 bit is not set, by first performing a read as described above, and then changing the cache tag using the alternate 
 address. We set the current bit to indicate that the cache line has been allocated, and that all future writes can
 directly be performed on the speculative slot. If the current bit is already set, then we simply generate the address
-using the page address not indicated by the committed bit.
+using the page address not indicated by the committed bit without performing the read first. The updated bit is 
+also set accordingly to track dirty data. If a TLB entry whose updated bit vector is not empty is evicted from the 
+TLB, the paper suggests that the transaction should abort, since we will lose track of the full set of dirty data
+by evicting the entry. The aborted transaction must retry using a software handler with logging to complete the failure
+atomic section. 
+
+
 
 
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
