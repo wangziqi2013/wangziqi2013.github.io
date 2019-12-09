@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SSP, a hardware framework for achieving persistent transactions on byte-addressable non-volatile 
+memory system. The paper points out that existing software schemes, such as logging, shadow mapping, and log-structured
+update, are all inefficient in terms of both latency and throughput. For example, in the most two common logging schemes,
+redo logging and undo logging, old or new data must be written and flushed back to the NVM before the corrsponding location 
+can be updated in-place to avoid dirty data cache line being evicted back to the NVM before the log entries are persisted. 
+This introduces two problems. The first problem is write amplification, since data is written twice (if we consider 
+metadata writes and log truncation overhead, the overhead is even larger). 
