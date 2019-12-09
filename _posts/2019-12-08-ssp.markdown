@@ -90,7 +90,12 @@ page 0 or page 1. The physical address for probing the L1 cache is formed using 
 page table) if committed bit indicates that consistent data is in page 0 and that current bit is clear. We read from
 page 1 if committed bit indicates page 0 but current bit is set, or committed bit indicates page 1 and current bit is clear.
 
-The process is more complicated in the case of a write, since write operation allocates the write buffer. 
+The process is more complicated in the case of a write, since write operation allocates the slot from the non-committed 
+page. If TLB misses, we populate the TLB entry as described above. A speculative cache line is created, if the current
+bit is not set, by first performing a read as described above, and then changing the cache tag using the alternate 
+address. We set the current bit to indicate that the cache line has been allocated, and that all future writes can
+directly be performed on the speculative slot. If the current bit is already set, then we simply generate the address
+using the page address not indicated by the committed bit.
 
 
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
