@@ -39,3 +39,7 @@ the mapping table by scanning the entire log without having to recover the poten
 (the table is in volatile DRAM for lower access latency). The major concern of log-structured system is the overhead of 
 garbage collection, resulting in unnecessary data movement and data fragmentation.
 
+SSP is based on shadow paging that we described above, but overcomes the problem of write amplification by using finer 
+granularity tracking and hardware assistance for address remapping. The old page is not necessarily duplicated into the 
+buffer before updates can be applied, since SSP tracks shadow pages in cache line granularity. At a high level, each virtual 
+address mapped to NVM region is backed by two physical pages, page 0 and page 1. 
