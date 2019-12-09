@@ -99,7 +99,12 @@ using the page address not indicated by the committed bit without performing the
 also set accordingly to track dirty data. If a TLB entry whose updated bit vector is not empty is evicted from the 
 TLB, the paper suggests that the transaction should abort, since we will lose track of the full set of dirty data
 by evicting the entry. The aborted transaction must retry using a software handler with logging to complete the failure
-atomic section. 
+atomic section. Also note that in a multicore system with mutiple private TLBs, all cores should have the same view of
+the location of current dirty data written by any other core. This is achieved by synchronizing the current bit vector
+of a core with other TLBs when it is updated. The paper proposes using the cache coherence network to broadcast the TLB
+update message to other cores to force a TLB update. It is suggested by the evaluation section that the overhead
+of broadcasting is negligible, since only a small portion of writes will update the current bit vector (most of them
+hit the cache or are non-transactional).
 
 
 
