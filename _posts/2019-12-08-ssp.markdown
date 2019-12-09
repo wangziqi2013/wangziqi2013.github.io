@@ -67,5 +67,14 @@ of committed bits are atomic, i.e. when the system crashes, either committed bit
 slots contain committed data, or the committed bits reflect the before-commit state, and we discard data (which can be partially
 written) in the alternate location. 
 
+We next describe the architecture of SSP. The design of SSP consists of two parts, the on-core part and off-core part. The
+on-core part of SSP consists of an extended TLB and special logic on the cache controller. The TLB is extended with three bit
+vectors for access tracking, and an extra address field to rewrite an incoming cache line based on the location of the 
+committed data. The three bits vectors are committed vector, as described above, current vector, indicating the current 
+read image, and updated vector, tracking the write set. Note that the current vector may not equal the committed vector, 
+since a transaction may read dirty data written by its own. In this case, the dirty data should be returned rather than 
+being determined using the committed vector.
+
+
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
 unlikely in the future that such support would be available. To solve this issue, the paper proposes .
