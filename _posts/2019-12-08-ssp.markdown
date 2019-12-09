@@ -141,4 +141,10 @@ This paper also proposes a way of reducing storage requirement by performing pag
 can be consolidated, if no processor can access any of the cache line in both pages (since we overwrite the speculative version
 and deallocates one the two pages after consolidation). This requirement translates to the fact that when a page is to be 
 consolidated, none of the TLBs can contain an entry mapping the current page and its shadow buddy. To achieve this, the 
-memory controller maintains a reference counter for each page in its internal mapping table. 
+memory controller maintains a reference counter for each page in its internal mapping table. When a page walk acquires 
+information of a persistent page, the reference counter is incremented by one, and whenever a TLB entry is evicted from
+the TLB, it is decremented by one. A page is consolidated only if the reference counter is zero. Consolidation proceeds
+by first counting the number of consistent cache lines in each page, by doing a popcount on each of the bit vectors. Then
+consistent cache lines are migrated from the page with less popcount to the page with more popcount. After the migration
+is completed, the OS changes the page mapping in the page table such that the virtual address is mapped to the consolidated 
+page. The other page is released back to the free page pool which can then be allocated later.
