@@ -29,4 +29,13 @@ NVM area be translated by a translation layer, which identifies the current acti
 the target address for the memory operation. On commit, all dirty contents are written back to the in-memory shadow page, 
 and the stable version is switched from the old page to the new page atomically. This can be achieved by software 
 instrumentation provided by the compiler, or by a hardware mapping structure. Both will add the overhead of address translation
-and metadata maintenance to the critical path. 
+and metadata maintenance to the critical path. Log-structured updated leverages the fact that NVM performs the best for 
+sequential writes, and that atomic multi-word update can be achieved in an append-only manner by first appending data
+to the end of the log, and then switching the pointer to the log tail with an atomic 8-byte write. Updated are not committed
+until the atomic write is flushed back to the NVM. To facilitate runtime address computation, log-structured systems maintain
+a virtualized linear address space, in which addresses are mapped to offsets into the log by a volatile mapping table.
+The mapping table is updated every time an address is updated and appended to the end of the log. On a recovery, we rebuild 
+the mapping table by scanning the entire log without having to recover the potentially inconsistent image from the NVM
+(the table is in volatile DRAM for lower access latency). The major concern of log-structured system is the overhead of 
+garbage collection, resulting in unnecessary data movement and data fragmentation.
+
