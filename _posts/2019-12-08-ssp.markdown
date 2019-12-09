@@ -83,7 +83,11 @@ that applications should synchronize with locks or other approaches.
 When a cache line is read by a load instruction, the processor checks the TLB as in a normal read. If the TLB misses,
 a page walk will be initiated to fetch the page table entry from memory. SSP extends the page walker such that the 
 alternate page address and the three bit vectors are also loaded from the memory controller using the physical address.
-(**Note: This is likely a design flaw since we must serialize memory controller access after the page walk. 
+(**Note: This is likely a design flaw since we must serialize memory controller access after the page walk. Using
+virtual address to fetch the vectors will be better, but this requires that memory controller perform context switch.**)
+After the TLB entry is populated, we check the committed bit to determine whether the data should be read from 
+page 0 or page 1. The physical address for probing the L1 cache is formed using page 0's address (i.e. the one in the 
+page table) if committed bit is set, or page 1 (i.e. the alternate address read from memory controller) if clear.
 
 
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
