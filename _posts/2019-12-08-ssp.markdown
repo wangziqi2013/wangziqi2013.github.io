@@ -22,3 +22,11 @@ This introduces two problems. The first problem is write amplification, since da
 metadata writes and log truncation overhead, the overhead is even larger). The second problem is that the write ordering
 between log entries and in-place updated data is critical for correctness. Programmers must issue a software write barrier
 which stalls the processor until previous stores are accepted by the memory controller every time write ordering is desired. 
+For shadow mapping, one of the biggest concerns is write amplification, which can be significant when the amount of dirty
+data per tracking unit (e.g. 4KB pages) is small. Even if only a few cache lines are updated per page, the original
+page must be duplicated before update is conducted. In addition, shadow paging requires that every load and store to 
+NVM area be translated by a translation layer, which identifies the current active version to be updated, and re-writes
+the target address for the memory operation. On commit, all dirty contents are written back to the in-memory shadow page, 
+and the stable version is switched from the old page to the new page atomically. This can be achieved by software 
+instrumentation provided by the compiler, or by a hardware mapping structure. Both will add the overhead of address translation
+and metadata maintenance to the critical path. 
