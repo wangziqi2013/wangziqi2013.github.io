@@ -20,7 +20,15 @@ after the transaction commits. If a cache line is written during a transaction, 
 to notify all other cores that the address generation should use the non-committed slot, since the transaction has not
 been committed yet. The tricky part is, when the transaction has been committed, we toggle the persistent version of the 
 committed vector stored on the NVM, but leave the cached "committed" vectors in all other TLBs unchanged. We also
-do not clear the "current" vector such that address generation on those cores still use  
+do not clear the "current" vector such that address generation on those cores is still correct. On the committing core,
+however, logically speaking, the committed and current bit should be toggled together to indicate that the committed version 
+has changed and that the most recent version is the committed version. Such toggling has no effect on address generation 
+since they are XOR'ed together to determine the page address. The conclusion is, the commit process does not need to
+toggle any of the TLB bits since they are naturally correct. The on-NVM image of the committed bits are flipped by
+the memory controller, but such changes are not necessarily reflected on the TLB. A TLB entry is only refreshed when 
+it is evicted and reloaded, in which case the committed bits will be the on-NVM version, and the "current" bits are 
+all cleared. The on-NVM version of these bit vectors are never modified by TLB eviction since TLB may have cached
+a stale and incorrect version.
 
 This paper proposes SSP, a hardware framework for achieving persistent transactions on byte-addressable non-volatile 
 memory system. The paper points out that existing software schemes, such as logging, shadow mapping, and log-structured
