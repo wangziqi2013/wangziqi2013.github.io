@@ -150,6 +150,10 @@ is completed, the OS changes the page mapping in the page table such that the vi
 page. The other page is released back to the free page pool which can then be allocated later. Since the OS is involved
 in the consolidation process, the paper suggests that consolidation should be done periodically by a background OS thread. 
 **Although not mentioned by the paper, consolidation must also be done when there is no log pending on both pages.**
+**In addition, the paper does not mention how consolidation can be made atomic. In fact it is atomic as long as we
+only change the committed bit vector as the last step of consolidation using redo write-ahead logging.**
 
 On recovery, the system first scans the logging area (the address of which is stored in a known location), and replays the 
-log to recover, if the log has been committed (if not then discard the log).
+log to recover "committed" bit vectors if the log has been committed (if not then discard the log). The system can then 
+resume instantly without any data movement, since the committed vector indicates the current consistent image. Speculative
+data in the alternate location will be ignored.
