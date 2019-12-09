@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SSP: Eliminating Redundant Wrints in Failure-Atomic NVRAMs via Shadow Sub-Paging"
+date:   2019-12-08 22:01:00 -0500
+categories: paper
+paper_title: "Optimizing Systems for Byte-Addressable NVM by Reducing Bit Flipping"
+paper_link: https://dl.acm.org/citation.cfm?id=3358326
+paper_keyword: NVM; SSP; Shadow Mapping; Double Buffering
+paper_year: MICRO 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
