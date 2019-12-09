@@ -13,7 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
-
+**Note:** I think I got something wrong in the below discussion. It seems later to me that the authors may want to use
+"committed" vector to indicate the location of the current consistent image, while using "current" vector to indicate whether
+the most recent cache line is committed or speculative. The "current" vector is hence not transient, and must be preserved 
+after the transaction commits. If a cache line is written during a transaction, the current vector is modified globally
+to notify all other cores that the address generation should use the non-committed slot, since the transaction has not
+been committed yet. The tricky part is, when the transaction has been committed, we toggle the persistent version of the 
+committed vector stored on the NVM, but leave the cached "committed" vectors in all other TLBs unchanged. We also
+do not clear the "current" vector such that address generation on those cores still use  
 
 This paper proposes SSP, a hardware framework for achieving persistent transactions on byte-addressable non-volatile 
 memory system. The paper points out that existing software schemes, such as logging, shadow mapping, and log-structured
