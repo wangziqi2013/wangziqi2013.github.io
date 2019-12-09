@@ -42,9 +42,16 @@ garbage collection, resulting in unnecessary data movement and data fragmentatio
 SSP is based on shadow paging that we described above, but overcomes the problem of write amplification by using finer 
 granularity tracking and hardware assistance for address remapping. The old page is not necessarily duplicated into the 
 buffer before updates can be applied, since SSP tracks shadow pages in cache line granularity. At a high level, each virtual 
-address mapped to NVM region is backed by two physical pages, page 0 and page 1. At any given moment, the current consistent 
-image of memory can reside in both pages at cache line granularity, which is encoded by the per-page "committed" bit vector. 
-To elaborate: Each page has a persistent committed bit vector as part of the page metadata. The number of bits in the committed
-vector equals the number of cache lines in the page (64 for x86-64). A "1" bit indicates that the corresponding cache line
-is part of the current consistent image, while a "0" bit indicates that the cache line can be used to buffer speculative 
-updates that may become committed in the future. 
+address mapped to NVM region is backed by two physical pages, page 0 and page 1. Page 0 is mapped by the OS naturally as 
+in any virtual memory system, while page 1 is assigned to the virtual page by hardware (selected from a pool of free physical
+pages on the NVM device). At any given moment, the current consistent image of memory can reside in both pages at cache 
+line granularity, which is encoded by the per-page "committed" bit vector. To elaborate: Each page has a persistent committed 
+bit vector as part of the page metadata. The number of bits in the committed vector equals the number of cache lines in 
+the page (64 for x86-64). A "1" bit indicates that the corresponding cache line is part of the current consistent image, 
+while a "0" bit indicates that the cache line can be used to buffer speculative updates that may become committed in the 
+future. The memory controller is responsible for maintaining the committed vectors in a separate region of the NVM, and 
+updates the committed bit vectors in an atomic manner when the consistent image moves from one state to the next (e.g. 
+at the end of a persistent transaction). The memory controller also maintains the invariant that one and only one bit is 
+set in the committed bit vector of the two sibling pages assigned to a virtual page frame. When a cache line is to be updated, 
+we first consult the committed bit vector using the physical address of the page (i.e. the one mapped by the OS) to determine 
+which page to write into. If page 1 is to be used (i.e. the current committed version is on page 0), then we return the 
