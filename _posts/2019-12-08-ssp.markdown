@@ -75,6 +75,16 @@ read image, and updated vector, tracking the write set. Note that the current ve
 since a transaction may read dirty data written by its own. In this case, the dirty data should be returned rather than 
 being determined using the committed vector.
 
+SSP follows a transactional interface, but does not provide transactional memory capabilities. Applications start and end 
+a failure atomic region using SSP_BEGIN and SSP_END instructions. All stores within the failure atomic region will be 
+persisted in an atomic manner, i.e. either all of them are available after a crash, or none of them is. The paper suggests
+that applications should synchronize with locks or other approaches. 
+
+When a cache line is read by a load instruction, the processor checks the TLB as in a normal read. If the TLB misses,
+a page walk will be initiated to fetch the page table entry from memory. SSP extends the page walker such that the 
+alternate page address and the three bit vectors are also loaded from the memory controller using the physical address.
+(**Note: This is likely a design flaw since we must serialize memory controller access after the page walk. 
+
 
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
 unlikely in the future that such support would be available. To solve this issue, the paper proposes .
