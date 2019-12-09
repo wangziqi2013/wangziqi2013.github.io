@@ -55,3 +55,9 @@ at the end of a persistent transaction). The memory controller also maintains th
 set in the committed bit vector of the two sibling pages assigned to a virtual page frame. When a cache line is to be updated, 
 we first consult the committed bit vector using the physical address of the page (i.e. the one mapped by the OS) to determine 
 which page to write into. If page 1 is to be used (i.e. the current committed version is on page 0), then we return the 
+address of page 1 to the cache controller, with the data read from page 0 (since the granularity of update is smaller 
+than the granularity of memory transaction, a read is still needed in case other words is accessed later). When the cache
+controller receives the line, it rewrites the line tag using the address of page 1, such that the cache line is mapped
+to the same offset of page 1. This hardware remapping guarantees that even if the dirty line is evicted out of the cache
+during the transaction, the committed image will not be affected, and that the system can always recovery to the consistent
+state by using the committed image.
