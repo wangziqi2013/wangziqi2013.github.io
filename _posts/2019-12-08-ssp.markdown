@@ -60,4 +60,12 @@ than the granularity of memory transaction, a read is still needed in case other
 controller receives the line, it rewrites the line tag using the address of page 1, such that the cache line is mapped
 to the same offset of page 1. This hardware remapping guarantees that even if the dirty line is evicted out of the cache
 during the transaction, the committed image will not be affected, and that the system can always recovery to the consistent
-state by using the committed image.
+state by using the committed image. When the transaction commits, the cache controller writes all dirty lines that is still
+in the cache back to the NVM. Note that since the cache tag has been changed to the alternate location, the write back 
+is just like normal cache line write back. The memory controller must guarantee that the write back of data and the update
+of committed bits are atomic, i.e. when the system crashes, either committed bits reflect the after-commit state, and all
+slots contain committed data, or the committed bits reflect the before-commit state, and we discard data (which can be partially
+written) in the alternate location. 
+
+Current NVM hardware does not support atomic update of multiple cache lines, and it is 
+unlikely in the future that such support would be available. To solve this issue, the paper proposes .
