@@ -106,7 +106,11 @@ update message to other cores to force a TLB update. It is suggested by the eval
 of broadcasting is negligible, since only a small portion of writes will update the current bit vector (most of them
 hit the cache or are non-transactional).
 
-
+When a transaction is committed, the processor walks the TLB, and flushes back all dirty lines to the NVM. Note that
+dirty lines are not yet visible now. The processor then notifies the memory controller that the transaction can be 
+committed, and the memory controller persists the committed word atomically using redo write-ahead logging. The 
+memory controller first writes all intended changes to the committed vector to a logging area, flushs the log, and 
+then performs the updates in-place. The transaction is fully committed only after the log is committed.
 
 
 Current NVM hardware does not support atomic update of multiple cache lines, and it is 
