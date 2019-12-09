@@ -19,4 +19,6 @@ update, are all inefficient in terms of both latency and throughput. For example
 redo logging and undo logging, old or new data must be written and flushed back to the NVM before the corrsponding location 
 can be updated in-place to avoid dirty data cache line being evicted back to the NVM before the log entries are persisted. 
 This introduces two problems. The first problem is write amplification, since data is written twice (if we consider 
-metadata writes and log truncation overhead, the overhead is even larger). 
+metadata writes and log truncation overhead, the overhead is even larger). The second problem is that the write ordering
+between log entries and in-place updated data is critical for correctness. Programmers must issue a software write barrier
+which stalls the processor until previous stores are accepted by the memory controller every time write ordering is desired. 
