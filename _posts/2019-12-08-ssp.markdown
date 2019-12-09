@@ -137,3 +137,8 @@ be made globally consistent by sending broadcasts to other cores that have possi
 vector, my best guess is that this is necessary to avoid other cores accessing stale data which violates memory consistency 
 ordering. ** After transaction commit, both current vector and updated vector are cleared, since they are transactional local.
 
+This paper also proposes a way of reducing storage requirement by performing page consolidation. A page and its shadow buddy
+can be consolidated, if no processor can access any of the cache line in both pages (since we overwrite the speculative version
+and deallocates one the two pages after consolidation). This requirement translates to the fact that when a page is to be 
+consolidated, none of the TLBs can contain an entry mapping the current page and its shadow buddy. To achieve this, the 
+memory controller maintains a reference counter for each page in its internal mapping table. 
