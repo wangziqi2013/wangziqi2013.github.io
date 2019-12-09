@@ -42,4 +42,9 @@ garbage collection, resulting in unnecessary data movement and data fragmentatio
 SSP is based on shadow paging that we described above, but overcomes the problem of write amplification by using finer 
 granularity tracking and hardware assistance for address remapping. The old page is not necessarily duplicated into the 
 buffer before updates can be applied, since SSP tracks shadow pages in cache line granularity. At a high level, each virtual 
-address mapped to NVM region is backed by two physical pages, page 0 and page 1. 
+address mapped to NVM region is backed by two physical pages, page 0 and page 1. At any given moment, the current consistent 
+image of memory can reside in both pages at cache line granularity, which is encoded by the per-page "committed" bit vector. 
+To elaborate: Each page has a persistent committed bit vector as part of the page metadata. The number of bits in the committed
+vector equals the number of cache lines in the page (64 for x86-64). A "1" bit indicates that the corresponding cache line
+is part of the current consistent image, while a "0" bit indicates that the cache line can be used to buffer speculative 
+updates that may become committed in the future. 
