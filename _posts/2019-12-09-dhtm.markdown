@@ -30,4 +30,10 @@ DHTM is based on commercially available Intel Restricted Transactional Memory (R
 size in both space and time. RTM tracks the read and write set of the transaction using special bits in the L1 tag. To 
 guarantee isolation, a speculatively read block must be modified by another processor before the transaction commits,
 and a speculatively written block must not be read or written. RTM detects conflicts using the coherence protocol, which 
-maps perfectly to reader-writer locks in the above abstraction. 
+maps perfectly to reader-writer locks in the above abstraction. RTM provides only very limited support when a speculatively
+accessed cache line is evicted from the L1 cache, since lower level caches are not equipped with the special bit for 
+tracking speculative lines, and cache walks are more difficult to perform in lower level caches. When a speculatively
+written cache line overflows, the transaction will be aborted immediately since lower level cache does not track the write
+set. When a transactionally read transaction overflows, however, the hardware may insert the block address into a per-L1
+signature, which is tested against incoming coherence messages for conflict detection. A conflict is detected if either
+the conflicting address is speculatively accessed in the local L1 cache, or if the signature indicates positive. 
