@@ -26,3 +26,8 @@ resulting in longer latency on the critical path. Similarly, on transaction abor
 controller to restore memory locations updated by the transaction to the previous state. The abort is not logically completed
 until all data has been read and applied to the memory locations.
 
+DHTM is based on commercially available Intel Restricted Transactional Memory (RTM), which support transactions of limited
+size in both space and time. RTM tracks the read and write set of the transaction using special bits in the L1 tag. To 
+guarantee isolation, a speculatively read block must be modified by another processor before the transaction commits,
+and a speculatively written block must not be read or written. RTM detects conflicts using the coherence protocol, which 
+maps perfectly to reader-writer locks in the above abstraction. 
