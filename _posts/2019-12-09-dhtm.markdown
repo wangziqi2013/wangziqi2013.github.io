@@ -80,3 +80,6 @@ must be replayed before the second transaction, such that the final memory image
 of the cache line. After the write back completes, a log truncation log record is written to indicate that the log has
 been truncated logically, and no log replay is necessary after crash. No data dependency tracking is needed after
 write back finishes, since we know the first transaction's log will not be replayed.
+
+The abort process is similar to the one in RTM, except that we also write a abort record to the end of the log to indicate 
+that the log has been invalidated, and it should not be replayed on recovery. The log buffer is also cleared.
