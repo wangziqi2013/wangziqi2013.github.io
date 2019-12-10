@@ -59,3 +59,13 @@ cache line. This way, we avoid word-level logging by having too much metadata. W
 amplification by performing delta-logging without persisting unmodified bytes in the cache line. Log entries are persisted
 lazily such that an entry in the log buffer can absorb as many writes as possible before it is evicted, reducing unnecessary
 NVM writes. 
+
+We first assume that no speculative dirty data overflows from the L1 cache. Transactional loads and stores proceed as in
+RTM transactions, except that store instruction also writes into the log buffer. Conflict detection is also unchanged.
+When the transaction is to be committed, we first commit the transaction on-core like how RTM commits. Then we flush
+the log buffer to the NVM followed by a commit mark, the completion of which is the logical point that the transaction 
+commits. The after-commit state can be recovered by replaying the log if the system crashes after this point. To ensure
+that data is also updated in-place for later reads, we walk the L1 cache, and writes back dirty lines written by the 
+transaction. This process can be performed in the background, and the processor that just committed the transaction could
+resume execution on non-transactional code. No new transaction could be started, however, on the processor before the 
+background write back completes, since we rely on L1 cache tags to identify dirty data for the background write back. 
