@@ -17,5 +17,12 @@ This paper proposes DHTM, a hardware transactional memory scheme that supports d
 identifying the challenge of implementing HTM with durability support as efficient logging. Software logging does not work
 with HTM since current commercial HTM implementation will immediately abort when a cache line flush instruction evicts dirty
 data to the NVM. Naive hardware logging, such as LogTM, does not work well for NVM as well, since its abort and commit 
-latency will be much longer on NVM compared with DRAM-based implementation. 
+latency will be much longer on NVM compared with DRAM-based implementation. For example, in undo-logging based LogTM,
+transactions update data in-place after persisting the undo log to a log buffer stored on NVM. The write ordering is enforced
+by always persisting the undo log entry immediately before data is updated in-place in the cache. On transaction commit,
+the log can be safely discarded after all dirty data written by the transaction is persisted to the NVM. This process cannot
+be ovrelapped with normal execution, since the transaction is not logically committed until dirty data is written back, 
+resulting in longer latency on the critical path. Similarly, on transaction abort, the undo log is walked by the cache 
+controller to restore memory locations updated by the transaction to the previous state. The abort is not logically completed
+until all data has been read and applied to the memory locations.
 
