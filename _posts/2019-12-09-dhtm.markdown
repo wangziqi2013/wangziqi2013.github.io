@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes DHTM, a hardware transactional memory scheme that supports durable transactions. This paper begins by
+identifying the challenge of implementing HTM with durability support as efficient logging. Software logging does not work
+with HTM since current commercial HTM implementation will immediately abort when a cache line flush instruction evicts dirty
+data to the NVM. Naive hardware logging, such as LogTM, does not work well for NVM as well, since its abort and commit 
+latency will be much longer on NVM compared with DRAM-based implementation. 
+
