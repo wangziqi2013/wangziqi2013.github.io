@@ -100,4 +100,6 @@ the write set is tracked by directory states, rather than per-cache line status 
 in-cache commit as described above, after which dirty blocks are written back. For dirty blocks in the L1 cache, they
 can be identified by a less costly cache walk. For dirty blocks residing in the LLC, we walk the overflow area, and for
 each block address, we use it to probe the LLC, and schedule a write back if the line is found (it may not be found if the 
-line is later fetched back to L1 and the cache is not inclusive). 
+line is later fetched back to L1 and the cache is not inclusive). Aborts follow a similar two-phase process. In the first
+phase, in-cache abort is performed by clearing all status bits related to transactions. In the second stage, we walk the 
+overflow area, and invalidate all dirty lines in the LLC if found.
