@@ -37,3 +37,8 @@ written cache line overflows, the transaction will be aborted immediately since 
 set. When a transactionally read transaction overflows, however, the hardware may insert the block address into a per-L1
 signature, which is tested against incoming coherence messages for conflict detection. A conflict is detected if either
 the conflicting address is speculatively accessed in the local L1 cache, or if the signature indicates positive. 
+
+DHTM employs redo write-ahead logging for delivering durability guarantees. The write ordering of redo-logging dictates 
+that log records must be written back to the NVM before any dirty data item could. The paper therefore maintains an invariant
+that speculative data can never be evicted from the LLC. In the case that this happens, the transaction is aborted and 
+the control flow falls back to the software handler as in non-durable RTM transactions. 
