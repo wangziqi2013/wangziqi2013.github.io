@@ -111,4 +111,8 @@ since the line content is not crash-safe. To avoid reloading a dirty line in non
 must check the line to see if the upper level cache requesting a line fetch is the current owner of the line or not. If
 positive, then the directory knows that the line is transactionally written and preserves ownership with the sticky bit.
 The directory indicates to the line requestor that the line should be placed in modified state with the transactional bit
-being set. 
+being set. A similar check is performed when a line is evicted from the LLC. The directory must check whether the line
+is owned by an upper level cache. If it is the case, the upper level cache is notified about the eviction. The transaction
+will be aborted if the evicted line is part of an active transaction (the line can either reside in L1 or not in this 
+case). The eviction will also be cancelled in this case, since the line contains dirty data that belongs to an aborted 
+transaction.
