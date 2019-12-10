@@ -85,3 +85,13 @@ write back finishes, since we know the first transaction's log will not be repla
 
 The abort process is similar to the one in RTM, except that we also write an abort record to the end of the log to indicate 
 that the log has been invalidated, and it should not be replayed on recovery. The log buffer is also cleared.
+
+If dirty cache lines are allowed to be evicted to the LLC (but not out of the LLC), extra tracking of write sets are needed
+to avoid walking the potentially large LLC on each transaction commit and abort. DHTM assumes a directory based cache coherence
+protocol, and employs the "sticky state" from LogTM to track dirty cache lines that are written to the LLC. The sticky
+state essentially virtualizes the L1 cache to make it larger than it actually is by retaining ownership and not clearing 
+the bit when a dirty cache line is evicted from the L1 cache to the LLC. We describe it as follows. Transactional loads
+and stores are not affected. When a dirty cache line is evicted from the L1 cache, instead of aborting the current 
+transaction, we simply write back dirty data to the LLC, and preserve the ownership of the line by not changing the 
+directory bit and the state (it should be modified state). To avoid costly cache tag walk on commit and abort on the LLC,
+the cache controller also writes the address of the evicted block to a special overflowed area in the per-transaction log.
