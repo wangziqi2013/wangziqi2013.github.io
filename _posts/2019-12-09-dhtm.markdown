@@ -52,4 +52,10 @@ before the transaction commits, log entries are not immediately persisted to the
 to take advantage of write coalescing. It works as follows. The L1 cache controller is extended with a log buffer which
 stores log entries that have not yet been persisted. An entry in the log buffer consists of a cache block address and 
 dirty data that have been written in the address. When a store instruction updates data in the cache, the corresponding 
-entry in the log buffer is also updated in parallel with the cache access. 
+entry in the log buffer is also updated in parallel with the cache access. If the entry does not exist, an existing entry
+is evicted from the buffer and written into the NVM (althoug not mentioned by the paper, we can use a bitmap to indicate
+which bytes are valid in an entry if the entry contains "holes"), and then it is allocated for the currently updated 
+cache line. This way, we avoid word-level logging by having too much metadata. We also avoid the problem of large write 
+amplification by performing delta-logging without persisting unmodified bytes in the cache line. Log entries are persisted
+lazily such that an entry in the log buffer can absorb as many writes as possible before it is evicted, reducing unnecessary
+NVM writes. 
