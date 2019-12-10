@@ -69,3 +69,12 @@ that data is also updated in-place for later reads, we walk the L1 cache, and wr
 transaction. This process can be performed in the background, and the processor that just committed the transaction could
 resume execution on non-transactional code. No new transaction could be started, however, on the processor before the 
 background write back completes, since we rely on L1 cache tags to identify dirty data for the background write back. 
+In the meantime, if data conflict occurs, e.g. another core attempts to access a cache line written by the just committed
+transaction, we should first schedule a write back of the line, and then give up the ownership to the requesting processor.
+The requesting processor should write a data dependency log record in its log header to indicate that the log of 
+its own transaction can only be replayed after the just committed transaction's log. This is necessary, since if the 
+system crashes before the completion of the write back and after the logical commit of the second transaction, both 
+transactions may have a committed log but incompleted data write back. They also have a data conflict since the second 
+transaction may have overwritten the write set of the first transaction. In this case, the log of the first transaction
+must be replayed before the second transaction, such that the final memory image contains the most up-to-date version
+of the cache line.
