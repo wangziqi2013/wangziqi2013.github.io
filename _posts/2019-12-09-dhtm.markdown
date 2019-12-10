@@ -77,4 +77,6 @@ system crashes before the completion of the write back and after the logical com
 transactions may have a committed log but incompleted data write back. They also have a data conflict since the second 
 transaction may have overwritten the write set of the first transaction. In this case, the log of the first transaction
 must be replayed before the second transaction, such that the final memory image contains the most up-to-date version
-of the cache line.
+of the cache line. After the write back completes, a log truncation log record is written to indicate that the log has
+been truncated logically, and no log replay is necessary after crash. No data dependency tracking is needed after
+write back finishes, since we know the first transaction's log will not be replayed.
