@@ -41,4 +41,8 @@ the conflicting address is speculatively accessed in the local L1 cache, or if t
 DHTM employs redo write-ahead logging for delivering durability guarantees. The write ordering of redo-logging dictates 
 that log records must be written back to the NVM before any dirty data item could. The paper therefore maintains an invariant
 that speculative data can never be evicted from the LLC. In the case that this happens, the transaction is aborted and 
-the control flow falls back to the software handler as in non-durable RTM transactions. 
+the control flow falls back to the software handler as in non-durable RTM transactions. To solve the read redirect issue
+(if we only write redo log, then in order to read its own data, transactions must walk the log instead of reading in-place
+data), DHTM requires that each write to a cache line be duplicated into two stores. The first store is to the cache line
+data itself, while the second store is to the logging area. This way, transactions can always read its own dirty data
+by simply performing a read in the cache. We next introduce details of operations on DHTM.
