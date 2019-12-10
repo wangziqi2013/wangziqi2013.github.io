@@ -38,14 +38,16 @@ set. When a transactionally read transaction overflows, however, the hardware ma
 signature, which is tested against incoming coherence messages for conflict detection. A conflict is detected if either
 the conflicting address is speculatively accessed in the local L1 cache, or if the signature indicates positive. 
 
-DHTM employs redo write-ahead logging for delivering durability guarantees. The write ordering of redo-logging dictates 
-that log records must be written back to the NVM before any dirty data item could. The paper therefore maintains an invariant
-that speculative data can never be evicted from the LLC. In the case that this happens, the transaction is aborted and 
-the control flow falls back to the software handler as in non-durable RTM transactions. To solve the read redirect issue
-(if we only write redo log, then in order to read its own data, transactions must walk the log instead of reading in-place
-data), DHTM requires that each write to a cache line be duplicated into two stores. The first store is to the cache line
-data itself, while the second store is to the logging area. This way, transactions can always read its own dirty data
-by simply performing a read in the cache. We next introduce hardware extensions and details of operations on DHTM.
+DHTM employs redo write-ahead logging for delivering durability guarantees. Each transaction is allocated a transactional-local
+logging area on the NVM before it starts. The OS could enumerate all logging areas after a crash for recovery. The write 
+ordering of redo-logging dictates that log records must be written back to the NVM before any dirty data item could. The 
+paper therefore maintains an invariant that speculative data can never be evicted from the LLC. In the case that this 
+happens, the transaction is aborted and the control flow falls back to the software handler as in non-durable RTM transactions. 
+To solve the read redirect issue (if we only write redo log, then in order to read its own data, transactions must walk 
+the log instead of reading in-place data), DHTM requires that each write to a cache line be duplicated into two stores. 
+The first store is to the cache line data itself, while the second store is to the logging area. This way, transactions 
+can always read its own dirty data by simply performing a read in the cache. We next introduce hardware extensions and 
+details of operations on DHTM.
 
 To reduce memory traffic from the processor to NVM and to leverage the fact that a cache line can be written multiple times
 before the transaction commits, log entries are not immediately persisted to the NVM, but are buffered on-chip for a while
@@ -81,5 +83,5 @@ of the cache line. After the write back completes, a log truncation log record i
 been truncated logically, and no log replay is necessary after crash. No data dependency tracking is needed after
 write back finishes, since we know the first transaction's log will not be replayed.
 
-The abort process is similar to the one in RTM, except that we also write a abort record to the end of the log to indicate 
+The abort process is similar to the one in RTM, except that we also write an abort record to the end of the log to indicate 
 that the log has been invalidated, and it should not be replayed on recovery. The log buffer is also cleared.
