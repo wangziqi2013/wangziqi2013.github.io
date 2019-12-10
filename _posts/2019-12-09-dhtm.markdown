@@ -45,4 +45,11 @@ the control flow falls back to the software handler as in non-durable RTM transa
 (if we only write redo log, then in order to read its own data, transactions must walk the log instead of reading in-place
 data), DHTM requires that each write to a cache line be duplicated into two stores. The first store is to the cache line
 data itself, while the second store is to the logging area. This way, transactions can always read its own dirty data
-by simply performing a read in the cache. We next introduce details of operations on DHTM.
+by simply performing a read in the cache. We next introduce hardware extensions and details of operations on DHTM.
+
+To reduce memory traffic from the processor to NVM and to leverage the fact that a cache line can be written multiple times
+before the transaction commits, log entries are not immediately persisted to the NVM, but are buffered on-chip for a while
+to take advantage of write coalescing. It works as follows. The L1 cache controller is extended with a log buffer which
+stores log entries that have not yet been persisted. An entry in the log buffer consists of a cache block address and 
+dirty data that have been written in the address. When a store instruction updates data in the cache, the corresponding 
+entry in the log buffer is also updated in parallel with the cache access. 
