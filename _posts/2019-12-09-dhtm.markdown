@@ -95,3 +95,9 @@ and stores are not affected. When a dirty cache line is evicted from the L1 cach
 transaction, we simply write back dirty data to the LLC, and preserve the ownership of the line by not changing the 
 directory bit and the state (it should be modified state). To avoid costly cache tag walk on commit and abort on the LLC,
 the cache controller also writes the address of the evicted block to a special overflowed area in the per-transaction log.
+Note that only the address is written, since data is still stored by the LLC. Conflict detection works as usual, since
+the write set is tracked by directory states, rather than per-cache line status bits. On transaction commit, we perform 
+in-cache commit as described above, after which dirty blocks are written back. For dirty blocks in the L1 cache, they
+can be identified by a less costly cache walk. For dirty blocks residing in the LLC, we walk the overflow area, and for
+each block address, we use it to probe the LLC, and schedule a write back if the line is found (it may not be found if the 
+line is later fetched back to L1 and the cache is not inclusive). 
