@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Distributed Logless Atomic Durability with Persistent Memory"
+date:   2019-12-11 17:54:00 -0500
+categories: paper
+paper_title: "Distributed Logless Atomic Durability with Persistent Memory"
+paper_link: https://dl.acm.org/citation.cfm?doid=3352460.3358321
+paper_keyword: NVM; LAD; Memory Controller
+paper_year: MICRO 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
