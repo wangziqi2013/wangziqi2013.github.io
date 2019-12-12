@@ -23,3 +23,10 @@ manufactured using SRAM, and is quite unlikely to be replaced by STT-RAM in the 
 Cache Access (NUCA), which is common on server processors, partitions the LLC into several slices, each maintained by
 a separate controller. Atomicity of operations, such as flash-clearing all "speculative" bits, as proposed by Kiln, is
 not guaranteed. 
+
+The paper makes the following observation about implementing failure atomicity. First, in a distributed environment 
+such as NUCA and/or multi-core, atomicity of operation is not guaranteed, since devices act on their own, and only
+communicate through pre-defined interfaces. In order to ensure that all of these devices make the same decision, Two-Phase
+Commit (2PC) must be employed to determine the final state of the operation. Second, software logging is expensive, making
+hardware assisted failure atomicity an attractive option. Among popular hardware logging designs, the paper points out 
+that undo logging fits current NVDIMM the best for the following reasons: 
