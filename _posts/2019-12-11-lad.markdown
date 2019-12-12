@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlights:**
+
+1. L2 and below are basically write-through, which incurs very high latency for coherence messages and write backs
+
 This paper proposes Logless Atomic Durability (LAD), a hardware framework for supporting failure atomic transactions in
 which no logging is involved for most of the time. The paper identified the problem of software logging as write amplification
 and excessive write orderings which require persist barrier to be issued quite often, degrading performance. The paper also 
