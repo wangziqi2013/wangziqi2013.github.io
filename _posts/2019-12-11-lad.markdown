@@ -73,3 +73,9 @@ committed transaction ID of that thread. To limit the size of this mapping struc
 as the maximum number of threads that are allowed to execute concurrently. This mapping structure is updated when a thread
 commits and sends the global ID to the memory controller during the commit protocol. All newly added fields and structures 
 on the memory controller are also battery backed, such that their contents can be restored after a crash.
+
+We next describe the operation of LAD. When a new transaction is started, we assign a transaction ID by combining the current
+thread ID with the thread-local instance counter. The instance counter is incremented every time after the assignment. All
+store operations sent to the memory controller during the transaction are tagged with this transaction ID. Load operations
+are not affected. Store operations will set the corresponding bit in the per-core bitmap to indicate that the block
+has not been written back to the NVM for persistence. 
