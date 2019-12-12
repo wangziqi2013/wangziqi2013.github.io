@@ -49,12 +49,18 @@ atomic sections in which either all stores are persisted, or none of them is per
 using a "persistent{}" construct, which is translated into section begin and commit instructions. The processor will start 
 and commit the failure atomic section accordingly when these instructions are seen, and treat all stores within the section
 as failure atomic. Transactions in LAD are identified by a globally unique transaction identifier which consist of the 
-ID of the thread and the thread-local serial number of the transaction instance.
-Second, the paper assumes that the system consists of multiple memory controllers, which have non-volatile
-WPQ as discussed in the previous paragraph. The write set of a transaction can be scattered over all memory controllers,
-which require the processor to notify each of them about the transaction commit. In addition, this paper assumes an interconnection
-network in which packets to some controllers might be lost while some other controllers receive successfully. As we will see
-later, this assumption plays an important role in affecting the design of LAD, since a transaction can be only partially
-committed after the crash on some controllers, while uncommitted on the rest.
+ID of the thread and the thread-local serial number of the transaction instance. The thread-local serial number can be 
+allocated by just incrementing a counter that is accessed exclusively by the thread. In the following discussion, we 
+simply use the term "txn ID" to refer to the global identifier. Second, the paper assumes that the system consists of 
+multiple memory controllers, which have non-volatile WPQ as discussed in the previous paragraph. The write set of a transaction 
+can be scattered over all memory controllers, which require the processor to notify each of them about the transaction 
+commit. In addition, this paper assumes an interconnection network in which packets to some controllers might be lost while 
+some other controllers receive successfully. As we will see later, this assumption plays an important role in affecting 
+the design of LAD, since a transaction can be only partially committed after the crash on some controllers, while uncommitted 
+on the rest.
 
-LAD extends both the L1 cache controller by adding extra states. 
+LAD extends both the L1 cache controller and the memory controllers by adding extra states. On the cache controller side,
+we first add a bitmap in which each bit represents whether the corresponding block is dirty during the transaction. Dirty 
+blocks will be handled differently when they are evicted, requested via coherence, or when the transaction commits. We also
+add a thread-local counter which is part of the thread context for dispensing transaction ID. An ACK counter on L1 controller
+records the number of pending memory flushes that have not been acknowledged by the memory controller. 
