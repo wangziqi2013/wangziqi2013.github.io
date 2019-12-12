@@ -43,3 +43,9 @@ even made persistent using battery-backed SRAM to decrease latency of certain op
 of letting these buffers drain as quickly as possible, we only clear these buffers lazily, taking advantage of the non-volatility
 of the buffers to implement a small "shadow page" for the write set. In this paper, the write pending queue (WPQ) is 
 considered as non-volatile, which has been implemented on recent commercial products. 
+
+The paper makes the following assumptions, First, programmers rely on a transactional software interface to declare failure
+atomic sections in which either all stores are persisted, or none of them is persisted. The failure atomic section is denoted
+using a "persistent{}" construct, which is translated into section begin and commit instructions. The processor will start 
+and commit the failure atomic section accordingly when these instructions are seen, and treat all stores within the section
+as failure atomic. Second, the paper assumes 
