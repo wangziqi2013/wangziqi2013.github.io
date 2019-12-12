@@ -19,4 +19,7 @@ and excessive write orderings which require persist barrier to be issued quite o
 identifies that hardware schemes, such as Kiln, are making unrealistic assumptions which make the propal less attractive.
 For example, Kiln assumes that the LLC is manufactured using STT-RAM and that the LLC can atomically commit a transaction
 by performing a battery-backed cache tag walk. Neither of these two assumptions is realistic nowadays. Today's LLC is still
-manufactured using SRAM, and is quite unlikely to be replaced by STT-RAM in the near future. Furthermore, 
+manufactured using SRAM, and is quite unlikely to be replaced by STT-RAM in the near future. Furthermore, Non-uniform
+Cache Access (NUCA), which is common on server processors, partitions the LLC into several slices, each maintained by
+a separate controller. Atomicity of operations, such as flash-clearing all "speculative" bits, as proposed by Kiln, is
+not guaranteed. 
