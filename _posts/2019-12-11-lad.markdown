@@ -36,4 +36,10 @@ logging suffer from write amplification problem, undo logging has better access 
 logging, we need two row activations to write the undo log and the data, while in redo logging, we need one row activation
 to write redo data, and another two to read the log and to update data in-place after log commit; (3) Undo log entries 
 are never read except for recovery. The log can be trivially removed after the transaction has committed, while in redo
-logging the log has to be replayed for in-place updates. Based on the above reasons, 
+logging the log has to be replayed for in-place updates. Based on the above reasons, LAD uses undo logging whenever the 
+write set of a durable transaction exceeds what the hardware could support. The last observation is that the memory hierarchy
+naturally serves as an intermediate buffer for pending updates that are supposed to be atomic. Part of the hierarchy is 
+even made persistent using battery-backed SRAM to decrease latency of certain operations. The paper proposes that instead
+of letting these buffers drain as quickly as possible, we only clear these buffers lazily, taking advantage of the non-volatility
+of the buffers to implement a small "shadow page" for the write set. In this paper, the write pending queue (WPQ) is 
+considered as non-volatile, which has been implemented on recent commercial products. 
