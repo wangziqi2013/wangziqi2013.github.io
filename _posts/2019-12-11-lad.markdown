@@ -110,4 +110,8 @@ During recovery, memory controllers first restore the content of the WPQ and the
 A BIOS thread calculates the most recent committed transaction ID for each thread in the array by computing the maximum 
 thread-local transaction ID over all memory controllers. Note that memory controllers may not agree with each other about
 the maximum committed transaction ID, since at the time of the crash, some messages may have been delivered and processed,
-while others are not. 
+while others are not. After computing the vector, we first roll back transactions that have overflowed the WPQ but not committed
+as described in the previous paragraph. We then discard entries in the WPQ that belong to uncommitted transactions (we ignore
+the speculative bit, since it can be that the transaction is committed but the speculative bits are not cleared). In the 
+last step, we drain the memory controller's WPQ by writing back all entries to the NVM in the transaction order. Execution
+could resume after the recovery has been completed.
