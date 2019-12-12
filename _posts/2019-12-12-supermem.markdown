@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SuperMem: Enabling Application-transparent Secure Persistent Memory with Low Overheads"
+date:   2019-12-12 17:12:00 -0500
+categories: paper
+paper_title: "SuperMem: Enabling Application-transparent Secure Persistent Memory with Low Overheads"
+paper_link: https://dl.acm.org/citation.cfm?id=3358290
+paper_keyword: NVM; SuperMem; Counter Mode Encryption
+paper_year: MICRO 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
