@@ -29,4 +29,11 @@ such as NUCA and/or multi-core, atomicity of operation is not guaranteed, since 
 communicate through pre-defined interfaces. In order to ensure that all of these devices make the same decision, Two-Phase
 Commit (2PC) must be employed to determine the final state of the operation. Second, software logging is expensive, making
 hardware assisted failure atomicity an attractive option. Among popular hardware logging designs, the paper points out 
-that undo logging fits current NVDIMM the best for the following reasons: 
+that undo logging fits current NVDIMM the best for the following reasons: (1) For dynamic workloads (i.e. the write set
+is only known at the end of the transaction, not before the transaction), undo logging supports in-place update, which 
+eliminates the remapping table in order for a transaction to read its own dirty data; (2) Although both redo and undo
+logging suffer from write amplification problem, undo logging has better access locality than redo logging. In undo
+logging, we need two row activations to write the undo log and the data, while in redo logging, we need one row activation
+to write redo data, and another two to read the log and to update data in-place after log commit; (3) Undo log entries 
+are never read except for recovery. The log can be trivially removed after the transaction has committed, while in redo
+logging the log has to be replayed for in-place updates. Based on the above reasons, 
