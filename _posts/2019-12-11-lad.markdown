@@ -103,4 +103,11 @@ ID is also written into the log header to help deciding whether the log needs to
 check whether one or more undo log exists, and that whether the undo log entries belong to committed transactions. If logs
 exist, and they do not belong to committed transaction (i.e. transaction ID in the header larger than most recent committed
 ID), these logs are applied to the target locations in reverse chronological order (i.e. younger entries first). If logs 
-belong to committed transactions, they are simply discarded. 
+belong to committed transactions, they are simply discarded. The paper suggests that the OS is responsible for allocating
+the log space and performing GC to reclaim stale entries. 
+
+During recovery, memory controllers first restore the content of the WPQ and the most recent committed transaction array.
+A BIOS thread calculates the most recent committed transaction ID for each thread in the array by computing the maximum 
+thread-local transaction ID over all memory controllers. Note that memory controllers may not agree with each other about
+the maximum committed transaction ID, since at the time of the crash, some messages may have been delivered and processed,
+while others are not. 
