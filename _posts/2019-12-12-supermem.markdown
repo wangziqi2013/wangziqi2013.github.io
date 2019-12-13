@@ -88,4 +88,7 @@ and merges these two updates by applying the updated counter value to the existi
 write back is modified to indicate its type and the counters that are updated since last write back. The memory controller
 also marks such lines in the WPQ for efficient searching.
 
-The third feature of SuperMem is leveraging the internal parallelism of the NVM device. 
+The third feature of SuperMem is to leverage the internal parallelism of the NVM device. The paper makes the observation
+that if the data update accessed back B, while the counter access also accesses back B, then these two accesses are actually
+serialized by the device, reducing write throughput. If, on the other hand, that the data and counter updates are mapped 
+to different banks, then the NVM device could handle these two requests in parallel, which translates to increased bandwidth. 
