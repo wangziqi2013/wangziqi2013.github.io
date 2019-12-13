@@ -33,3 +33,14 @@ of memory updates, SCA adds a special programming construct which issues counter
 which acts like a barrier after which all pending counter and data updates are completed. The paper points out that although
 moderate speedup is achieved by combining SCA with logging, the change in software interface makes it difficult to use, 
 since most logging implementations reside in the library, which is out of the control of application programmers. 
+
+The paper assumes the following baseline hardware. First, counter mode encryption is employed to provide access to the NVM, 
+the content of which can only be accessed with a secure key. The baseline counter mode encryption works by dedicating 1/8
+storage on the NVM device to store 8 byte counters for each cache line sized block on the NVM. When a cache line is evicted 
+out of the LLC, the corresponding counter used to encrypt this line is also sent to the memory controller for persistence.
+The baseline design does not assume any synchronization between these two requests, and is hence susceptible to inconsistencies
+caused by power loss. We address this problem in SuperMem by adding an extra register to ensure that both data and counter
+are persisted atomically. In order to better overlap counter access and data access, a counter cache is added at the LLC
+level to remove NVM reads for frequently accessed counters. 
+
+SuperMem differs from previous propals in three aspects. First, SuperMem only assumes
