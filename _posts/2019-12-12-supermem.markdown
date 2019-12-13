@@ -48,4 +48,7 @@ then generates the OTP (One-Time Padding) using the counter, the access address,
 the read value is XOR'ed with the OTP, and the decoded result is sent to the cache hierarchy. This scheme avoids adding
 a significant number of cycles for decoding the cache line, since bitwise XOR is a fast operation. 
 
-SuperMem differs from previous propals in three aspects. First, SuperMem only assumes
+SuperMem differs from previous propals in three aspects. First, SuperMem does not assume any extra state backed by battery
+(ADR) on the memory controller, and only adds one extra register for stashing counter values when the cache line is not
+yet available. Second, SuperMem expolits spacial locality of access by encoding counters for cache lines within a page
+in a way such that they can be stored in a 64 byte cache line. 
