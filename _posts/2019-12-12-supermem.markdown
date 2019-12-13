@@ -28,4 +28,8 @@ in Selective Counter-Atomicity (SCA), it is observed that atomicity of updates a
 is used. This observation is based on the fact that when the transaction is interrupted by the crash before commit, the 
 data updated by the transaction is inconsistent anyway, which will then be discarded by the recovery process using undo 
 log entries or restored using redo log entries. The atomicity requirement for counter updates on these data can therefore 
-be relaxed to avoid stalling the processor waiting for the write back to complete. 
+be relaxed to avoid stalling the processor waiting for the write back to complete. In order to achieve selective atomicity
+of memory updates, SCA adds a special programming construct which issues counter cache write back instruction when executed,
+which acts like a barrier after which all pending counter and data updates are completed. The paper points out that although
+moderate speedup is achieved by combining SCA with logging, the change in software interface makes it difficult to use, 
+since most logging implementations reside in the library, which is out of the control of application programmers. 
