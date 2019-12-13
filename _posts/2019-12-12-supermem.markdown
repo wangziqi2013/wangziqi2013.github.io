@@ -87,3 +87,5 @@ counters arrive at the memory controller, the memory controller searches its WPQ
 and merges these two updates by applying the updated counter value to the existing request. The request of a counter
 write back is modified to indicate its type and the counters that are updated since last write back. The memory controller
 also marks such lines in the WPQ for efficient searching.
+
+The third feature of SuperMem is leveraging the internal parallelism of the NVM device. 
