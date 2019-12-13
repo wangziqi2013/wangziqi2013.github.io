@@ -18,4 +18,11 @@ of existing counter mode encryption schemes. First, current hardware platform do
 for more than one cache line sized block, which introduces the problem of inconsistent data block and counter value. To solve
 this issue, prior researches have proposed large battery-backed buffer on the memory controller to allow both the counter
 and the block to be buffered, upgrading the basic unit of atomicity from one cache line to two cache lines. Such a design,
-however, may significantly change the underlying hardware, or become difficult to implement within commercial systems. 
+however, may significantly change the underlying hardware, or become difficult to implement on commercial systems. 
+The second problem is that prior proposals do not take advantage of the potential locality in the access pattern of most
+applications. Counter mode encryption essentially doubles the number of cache lines written into the NVM device by updating
+the counter array whenever a cache line is evicted or flushed from the LLC. If care is not taken, this can easily become
+a performance bottleneck since the effective bandwidth of the NVM is halved. The last problem is that certain proposals 
+change NVM programming interface by adding additional directives to the library for optimizing counter accesses. For example,
+in Selective Counter-Atomicity (SCA), it is observed that atomicity of updates are not required for data when undo/redo logging
+is used. This observation is based on the fact that when the transaction is interupted by the crash, the 
