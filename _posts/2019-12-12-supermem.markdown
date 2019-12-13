@@ -25,4 +25,7 @@ the counter array whenever a cache line is evicted or flushed from the LLC. If c
 a performance bottleneck since the effective bandwidth of the NVM is halved. The last problem is that certain proposals 
 change NVM programming interface by adding additional directives to the library for optimizing counter accesses. For example,
 in Selective Counter-Atomicity (SCA), it is observed that atomicity of updates are not required for data when undo/redo logging
-is used. This observation is based on the fact that when the transaction is interupted by the crash, the 
+is used. This observation is based on the fact that when the transaction is interrupted by the crash before commit, the 
+data updated by the transaction is inconsistent anyway, which will then be discarded by the recovery process using undo 
+log entries or restored using redo log entries. The atomicity requirement for counter updates on these data can therefore 
+be relaxed to avoid stalling the processor waiting for the write back to complete. 
