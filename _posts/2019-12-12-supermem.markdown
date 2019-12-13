@@ -96,6 +96,14 @@ To formalize this, the paper proposes that the storage allocated to the counter 
 that if data update is mapped to bank K, then the counter update should be mapped to (K + B / 2) % B, where B is the number 
 of banks in the device. In other words, the counter update should always be half of the total number of banks away from 
 the data update. The reasoning behind this is that in most address mapping schemes, adjacent cache lines are often mapped 
-to different banks in a certain order to handle the common case of large sequential writes (e.g. logging). By placing the 
-bank of the counter update (B / 2) banks away from the data update, we try to minimize the chance that the current counter 
+to different banks in a certain order to handle the common case of large sequential writes (e.g. logging). By always placing 
+the bank of the counter update (B / 2) banks away from the data update, we try to minimize the chance that the current counter 
 update will conflict with a future data update, taking advantage of the internal parallelism of the NVM device. 
+
+When a minor counter overflows within a page, all minor counters are cleared, and the major counter is incremented, as 
+we have described in previous paragraphs. Logically speaking, this re-encrypting process must be atomic, while in reality
+the atomicity is not guaranteed. To fill the gap, we add another special purpose register called Re-encryption Status Register
+(RSR) to record the progress of page re-encoding. The RSR stores the old major counter, and a bit vector to indicate the 
+progress of page update. If a bit is set, then the corresponding cache line has been encrypted using the new counter.
+The RSR register is assumed to be within the persistence domain, the value of which will be saved to the NVM device using
+ADR before a crash. 
