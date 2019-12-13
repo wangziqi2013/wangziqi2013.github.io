@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SuperMem, a hardware design optimized for counter mode encryption. This paper identifies a few problems
+of existing counter mode encryption schemes. First, current hardware platform does not guarantee tha atomicity of persistence
+for more than one cache line sized block, which introduces the problem of inconsistent data block and counter value. To solve
+this issue, prior researches have proposed large battery-backed buffer on the memory controller to allow both the counter
+and the block to be buffered, upgrading the basic unit of atomicity from one cache line to two cache lines. Such a design,
+however, may significantly change the underlying hardware, or become difficult to implement within commercial systems. 
