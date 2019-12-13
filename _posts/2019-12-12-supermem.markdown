@@ -55,3 +55,10 @@ in a way such that they can be stored in a 64 byte cache line. In addition, Supe
 coalescing writes on the counter, which reduces the number of NVM writes. Lastly, SuperMem arranges data write and counter
 write in such a way that the internal parallelism of the NVM device is considered. Data and counters can be written in 
 parallel for the majority of cases.
+
+We first describe the mechanism for avoiding using ADR to flush extra states on power failure. SuperMem adds a special
+stashing register on the memory controller for storing the cache line and the counter. When a cache line is evicted 
+out of the LLC, the counter of the line is read from the counter cache (or NVM if cache misses), incremented by one, 
+and then used to encrypt the line. After this is done, we update both the counter and the line in the following update 
+sequence. First, after incrementing the counter, we write is back to the counter cache (evict one entry if necessary), 
+and also add the new value of the counter to the stashing register. 
