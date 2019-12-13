@@ -66,4 +66,7 @@ the cache line to the memory controller, which will then be added to the stashin
 step, the memory controller reserves two entries in its internal WPQ (wait for existing requests to drain if necessary),
 and atomically transfers the two cache lines into its ADR-backed WPQ. The datapath and logic are extended to support
 atomic transfer of two cache line sized requests. Once the atomic transfer completes, both the counter and the cache
-line data are guaranteed to persist, since the WPQ is backed by on-chip ADR.
+line data are guaranteed to persist, since the WPQ is backed by on-chip ADR. The paper noted that by writing back the 
+counter every time we update the NVM image, essentially the counter cache becomes write-through, and no dirty state is 
+maintained. Eviciting an entry from the counter cache no longer needs writing back the counter value. Instead, a simple
+invalidation of the entry suffices.
