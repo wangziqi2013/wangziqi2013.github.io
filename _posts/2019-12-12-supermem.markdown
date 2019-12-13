@@ -106,4 +106,12 @@ the atomicity is not guaranteed. To fill the gap, we add another special purpose
 (RSR) to record the progress of page re-encoding. The RSR stores the old major counter, and a bit vector to indicate the 
 progress of page update. If a bit is set, then the corresponding cache line has been encrypted using the new counter.
 The RSR register is assumed to be within the persistence domain, the value of which will be saved to the NVM device using
-ADR before a crash. 
+ADR before a crash. The page re-encryption process is just like a cache line eviction, in which cache lines are re-encrypted 
+using the new counter, and then sent to the memory controller with the updated counter. The only difference is that we also
+set the corresponding bit when the two requests are transferred atomically to the WPQ. Note that during a page re-encryption,
+the counter in the WPQ can be coalesced as we described above, which reduces the actual number of updates of the counter 
+cache line. When the system crashes, the recovery process reads the value of the RSR to check whether there is any pending 
+page re-encryption. If positive, the old major counter and the old minor counter is read from the RSR and NVM respectively
+to load cache lines that have not been re-encrypted (note that minor counters are still in their old value if the 
+cache line has not been re-encrypted). The re-encryption process could resume after reading all lines from the NVM by
+completing this process for the remaining cache lines.
