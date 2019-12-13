@@ -61,4 +61,9 @@ stashing register on the memory controller for storing the cache line and the co
 out of the LLC, the counter of the line is read from the counter cache (or NVM if cache misses), incremented by one, 
 and then used to encrypt the line. After this is done, we update both the counter and the line in the following update 
 sequence. First, after incrementing the counter, we write is back to the counter cache (evict one entry if necessary), 
-and also add the new value of the counter to the stashing register. 
+and also add the new value of the counter to the stashing register. Then, after the data has been encoded, we send
+the cache line to the memory controller, which will then be added to the stashing register as well. In the last
+step, the memory controller reserves two entries in its internal WPQ (wait for existing requests to drain if necessary),
+and atomically transfers the two cache lines into its ADR-backed WPQ. The datapath and logic are extended to support
+atomic transfer of two cache line sized requests. Once the atomic transfer completes, both the counter and the cache
+line data are guaranteed to persist, since the WPQ is backed by on-chip ADR.
