@@ -41,6 +41,11 @@ out of the LLC, the corresponding counter used to encrypt this line is also sent
 The baseline design does not assume any synchronization between these two requests, and is hence susceptible to inconsistencies
 caused by power loss. We address this problem in SuperMem by adding an extra register to ensure that both data and counter
 are persisted atomically. In order to better overlap counter access and data access, a counter cache is added at the LLC
-level to remove NVM reads for frequently accessed counters. 
+level to remove NVM reads for frequently accessed counters. When a memory requests misses the LLC, the cache controller 
+initiates two requests in parallel, one for accessing the NVM device, and the other for accessing the counter cache. Since
+the counter cache has lower latency than NVM, the counter value will be returned before the read completes. The cache controller
+then generates the OTP (One-Time Padding) using the counter, the access address, and the secret key. When the read completes,
+the read value is XOR'ed with the OTP, and the decoded result is sent to the cache hierarchy. This scheme avoids adding
+a significant number of cycles for decoding the cache line, since bitwise XOR is a fast operation. 
 
 SuperMem differs from previous propals in three aspects. First, SuperMem only assumes
