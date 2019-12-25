@@ -80,4 +80,6 @@ conducted recursively until the request reaches a cache that holds this block or
 beyond the LLC and reading from the DRAM. An interesting design decision in zSim is that when upper level cache issues
 a request to the lower level cache, the coherence state of the block in the upper level cache is determined by the 
 lower level cache controller. This design decision is made to simplify the creation of "E" state, which requires information
-held by the lower level cache (i.e. the shared vector). 
+held by the lower level cache (i.e. the shared vector). As a result, when upper level caches issue the request, it 
+must also pass a pointer to lower level caches such that the latter can assign the coherence state of the block when
+the request is handled. This pointer is stored in the `state` field of the `MemReq` object. 
