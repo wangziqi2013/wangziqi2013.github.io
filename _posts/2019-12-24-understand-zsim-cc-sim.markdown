@@ -28,7 +28,7 @@ always named using the name of the class defined within that file. If you are un
 a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most of the time.
 
 | File Name (only showing headers) | Important Modules/Declarations |
------------------------------------|--------------------------------|
+|----------------------------------|--------------------------------|
 | memory\_hierarchy.h | Coherence messages and states declaration, BaseCache, MemObject, MemReq |
 | cache\_arrays.h | Tag array lookup and replacement policy |
 | cache.h | Actual implementation of the cache class, and cache operations |
@@ -83,3 +83,5 @@ lower level cache controller. This design decision is made to simplify the creat
 held by the lower level cache (i.e. the shared vector). As a result, when upper level caches issue the request, it 
 must also pass a pointer to lower level caches such that the latter can assign the coherence state of the block when
 the request is handled. This pointer is stored in the `state` field of the `MemReq` object. 
+
+We summarize the fields and their purposes in the tables
