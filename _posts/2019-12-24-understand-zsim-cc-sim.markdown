@@ -42,3 +42,16 @@ to simulate cache tag contention (zSim simulates shared resource contention in a
 program for a short interval, assuming that path-altering interferences are rare). In this article, we focus on the functionality 
 and architecture of the cache subsystem, rather than detailed timing model and discrete event simulation. To this end, we 
 only discuss the basic cache model, and leave the discussion of timing cache to future works.
+
+## Cache Systems Interface
+
+In this section we discuss cache subsystem interfaces. In zSim, all memory objects, including cache and memory, must inherit 
+from the virtual base class, `MemObject`, which features only one neat interface, `access()`. The `access()` call takes 
+one `MemReq` object as argument, which contains all arguments for the memory request. The return value of the base cache 
+`access()` call is the finish time of the operation, assuming no contention (if contention is not simulated, then it is 
+the actual completion time of the operation, as in our case). 
+
+Cache objects also inherit from the base class, `BaseCache`, which defines another interface call, `invalidate()`. This 
+function call does not take `MemReq` as argument, but instead, takes the address of the line, the invalidation type,
+and a boolean flag pointer to indicate to the caller whether the invalidated line is dirty (and hence a write back to lower
+level cache is required). 
