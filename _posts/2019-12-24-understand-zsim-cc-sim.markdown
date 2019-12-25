@@ -156,3 +156,12 @@ each block, and access latencies for reading the tag array (`accLat`) and invali
 The following table lists all data members of `class Cache` and a short description. In the following sections we will
 discuss these cache components individually.
 
+| `Cache` field name | Purpose |
+|:--------------:|-----------|
+| cc | Coherence controller; Implements the state machine and shared vector for every cached block |
+| array | Tag array; Stores the address tags of cached blocks |
+| rp | Implements the replacement policy via an abstract interface |
+| numLines | Total number of blocks (capacity) of the cache object |
+| accLat | Latency for accessing tha tag array, ignoring contention |
+| invLat | Latency for invalidating a block in the array, ignoring contention |
+{:.mbtablestyle}
