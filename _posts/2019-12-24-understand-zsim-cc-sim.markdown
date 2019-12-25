@@ -92,5 +92,11 @@ fetch, or coherence invalidation. For lower-to-upper requests, such as block inv
 Instead, lower level caches directly call into upper level cache's `invalidate` method, potentially broadcasting the
 invalidation request to several upper levels recursively.
 
+We summarize the fields and their purposes in the following table.
 
+| Object field name | Purpose |
+|:--------------:|-----------|
+| lineAddr | The cache line address to be requested |
+| type | Coherence type of the request, can be one of the GETS, GETX, PUTS, PUTX |
+| state | Pointer to the requestor's coherence state. Lower level caches should set this
 {:.mbtablestyle}
