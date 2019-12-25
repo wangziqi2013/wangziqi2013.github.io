@@ -120,3 +120,14 @@ that are close to the root level "lower level caches". To avoid such confusion, 
 the term "child cache" to refer to caches that are closer to the leaf level which usually have smaller capacity and operate
 faster. We use the term "parent cache" to refer to caches that are closer to the root level which are larger but slower.
 
+A cache object can be partitioned into multiple banks, each having different network latency from its child caches. 
+Although this seems to break the tree abstraction of the cache hierarchy, the partitioned cache can still be regarded as
+a logical cache object without losing generality. The partitioned parent cache models the so called Non-Uniform Cache Access 
+(NUCA), which is typically applied to the LLC to increase parallelism and to avoid having a non-scalable monolithic storage. 
+Accesses from child caches are first mapped to one of the banks using a hash function, and then dispatched to the parent 
+partition (see `MESIBottomCC::getParentId`). In zSim, each partition is treated as a separate cache object, which can be 
+accessed using the regular `access()` interface. Latencies from the children to the parent partitions are stored in a network 
+latency configuration file, which is loaded at zSim initialization time. When a child cache accesses a partition of the 
+parent, the corresponding child-to-parent latency value is added to the total access latency in order to model NUCA (see 
+`parentRTTs` in `class MESIBottomCC`).
+
