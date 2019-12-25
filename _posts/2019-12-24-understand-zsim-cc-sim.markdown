@@ -98,5 +98,14 @@ We summarize the fields and their purposes in the following table.
 |:--------------:|-----------|
 | lineAddr | The cache line address to be requested |
 | type | Coherence type of the request, can be one of the GETS, GETX, PUTS, PUTX |
-| state | Pointer to the requestor's coherence state. Lower level caches should set this
+| state | Pointer to the requestor's coherence state. Lower level caches should set this state to reflect the result of
+processing the request from the upper level |
+| cycle | Time when the request is issued to the component |
+| flags | Hints to lower level caches; Most of them are unimportant to the core functionality of the cache |
 {:.mbtablestyle}
+
+Note that this is not a complete list of all `MemReq` fields. Some fields are dedicated to concurrency control and race
+detection, which will not be covered in this article. To make things simple, we always assume that only a single thread
+will access the cache hierarchy, and hence all states are stable. In practice, multiple threads may access the same
+cache object from different directions (upper-to-lower for line fetch, and lower-to-upper for invalidation). zSim has an
+ad-hoc locking protocol to ensure that concurrent cache accesses can always be serialized.
