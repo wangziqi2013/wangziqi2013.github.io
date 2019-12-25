@@ -143,5 +143,8 @@ Three types of events can occur at a cache object. The first type is access, whi
 child cache to fetch a line, write back a dirty line, or perform state degradation. Accesses are always issued to lower
 level caches wrapped by the `MemReq` object. The second type is invalidation, which in the current implementation
 is always sent from a parent cache to inform child caches that certain addresses can no longer be cached due to a
-conflicting access or an eviction. The third type is eviction, which naturally happens when a new block is allocated 
-but the current set is full. 
+conflicting access or an eviction. Note that invalidations do not use `MemReq` objects, and instead they call the child
+caches' `invalidate()` method with the type of the invalidation (`INV` means full invalidation; `INVX` means downgrade to 
+shared state). The third type is eviction, which naturally happens when a new block is brought into the cache, but the 
+current set is full. An existing block is evicted to make space for the new block, which also incurs invalidation
+message sent to child caches if the evicted block is also cached by at least one child caches.
