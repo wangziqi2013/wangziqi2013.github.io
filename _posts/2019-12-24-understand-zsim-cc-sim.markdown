@@ -6,7 +6,7 @@ categories: article
 ontop: true
 ---
 
-## Introduction
+### Introduction
 
 zSim is a fast processor simulator used for modeling the bahavior of memory subsystems. zSim is based on PIN, a binary
 instrumention tool that allows programmers to instrument instructions at run time and insert customized function calls.
@@ -20,7 +20,7 @@ of the simulator's big picture. And also, it is always best practice to read the
 [source code](https://github.com/s5z/zsim) when things are unclear. In the following sections, we will use the official
 source code github repo given above as the reference when source code is discussed. 
 
-## Source Files
+### Source Files
 
 Below is a table of source code files under the /src/ directory of the project that we will be talking about. For each file
 we also list its important classes and declarations for reader's convenience. One thing that worth noting is that a file is not
@@ -28,12 +28,13 @@ always named using the name of the class defined within that file. If you are un
 a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most of the time.
 
 | File Name (only showing headers) | Important Modules/Declarations |
-|----------------------------------|--------------------------------|
+|:--------------------------------:|--------------------------------|
 | memory\_hierarchy.h | Coherence messages and states declaration, BaseCache, MemObject, MemReq |
 | cache\_arrays.h | Tag array lookup and replacement policy |
 | cache.h | Actual implementation of the cache class, and cache operations |
 | coherence\_ctrls.h | MESI coherence state machine and actions |
 | init.h | Cache hierarchy and parameter initialization |
+{:.mbtablestyle}
 
 Note that zSim actually provides several implementations of caches, which can be selected by editing the configuration file. 
 The most basic cache implementation is in cache.h, and it defines the basic timing and operation of a working cache, and 
@@ -43,7 +44,7 @@ program for a short interval, assuming that path-altering interferences are rare
 and architecture of the cache subsystem, rather than detailed timing model and discrete event simulation. To this end, we 
 only discuss the basic cache model, and leave the discussion of timing cache to future works.
 
-## Cache Systems Interface
+### Cache Systems Interface
 
 In this section we discuss cache subsystem interfaces. In zSim, all memory objects, including cache and memory, must inherit 
 from the virtual base class, `MemObject`, which features only one neat interface, `access()`. The `access()` call takes 
@@ -64,7 +65,7 @@ writes from upper levels. `invalidate()` implements how the cache handles invali
 (depending on the position of the cache object in the hierarchy). Both methods are blocking: A begin time (absolute cycle 
 number) is taken as part of the argument, and a finish time is returned as the cycle the operation completes.
 
-## MemReq object
+### MemReq object
 
 The `MemReq` object is used in two scenarios. First, an external component (e.g. the simulated processor) may issue a 
 memory request to the hierarchy by creating a `MemReq` object before it calls the `access()` method (in zSim, we have an
