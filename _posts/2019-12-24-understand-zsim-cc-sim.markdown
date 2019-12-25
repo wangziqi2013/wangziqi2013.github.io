@@ -131,8 +131,17 @@ latency configuration file, which is loaded at zSim initialization time. When a 
 parent, the corresponding child-to-parent latency value is added to the total access latency in order to model NUCA (see 
 `parentRTTs` in `class MESIBottomCC`).
 
+Although zSim supports both inclusive and non-inclusive caches (see `nonInclusiveHack` flag in MESI controllers), in
+the following discussion, we assume that caches are always inclusive. The implication of inclusive caches is that 
+when a block is invalidated or evicted in the parent level, all children caches that hold a copy of the same block must
+also invalidate or write back (in case of a dirty line) the block to maintain inclusiveness. In addition, when a block
+is loaded into a child cache by a request, the same block must also be loaded into all parent level caches as the 
+requested is passed down recursively. The author of zSim also suggested in a code comment that the non-inclusive path is 
+not fully tested, which may incur unexpected behavior. 
 
-
-Although zSim supports both inclusive and non-inclusive caches (see `nonInclusiveHack` flag in MESI controllers), we only
-discuss inclusive caches, since the author suggested that the non-inclusive path is not fully tested, which may incur unexpected
-behavior. 
+Three types of events can occur at a cache object. The first type is access, which is issued by the processor or by a 
+child cache to fetch a line, write back a dirty line, or perform state degradation. Accesses are always issued to lower
+level caches wrapped by the `MemReq` object. The second type is invalidation, which in the current implementation
+is always sent from a parent cache to inform child caches that certain addresses can no longer be cached due to a
+conflicting access or an eviction. The third type is eviction, which naturally happens when a new block is allocated 
+but the current set is full. 
