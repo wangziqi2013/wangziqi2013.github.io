@@ -98,8 +98,7 @@ We summarize the fields and their purposes in the following table.
 |:--------------:|-----------|
 | lineAddr | The cache line address to be requested |
 | type | Coherence type of the request, can be one of the GETS, GETX, PUTS, PUTX |
-| state | Pointer to the requestor's coherence state. Lower level caches should set this state to reflect the result of
-processing the request from the upper level |
+| state | Pointer to the requestor's coherence state. Lower level caches should set this state to reflect the result of processing the request from the upper level |
 | cycle | Time when the request is issued to the component |
 | flags | Hints to lower level caches; Most of them are unimportant to the core functionality of the cache |
 {:.mbtablestyle}
@@ -109,3 +108,15 @@ detection, which will not be covered in this article. To make things simple, we 
 will access the cache hierarchy, and hence all states are stable. In practice, multiple threads may access the same
 cache object from different directions (upper-to-lower for line fetch, and lower-to-upper for invalidation). zSim has an
 ad-hoc locking protocol to ensure that concurrent cache accesses can always be serialized.
+
+### Cache System Architecture
+
+In this section we discuss the abstract model of zSim's cache system. The cache system is organized as a tree structure,
+with a single root representing the last-level cache (LLC), and intermediate nodes representing intermediate level caches
+(e.g. L2). At the leaf level, we have the processor and the attached private L1d and L1i cache. Note that zSim does not 
+"visualize" the cache hierarchy in the usual way, in which processors are at the top, and the LLC is placed at the bottom.
+This may cause some naming problems since we used to call those that are closer to the leaf level "upper level caches", and those
+that are close to the root level "lower level caches". To avoid such confusion, in the discussion that follows, we use 
+the term "child cache" to refer to caches that are closer to the leaf level which usually have smaller capacity and operate
+faster. We use the term "parent cache" to refer to caches that are closer to the root level which are larger but slower.
+
