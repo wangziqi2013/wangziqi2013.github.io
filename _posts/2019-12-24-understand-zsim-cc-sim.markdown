@@ -23,6 +23,16 @@ source code github repo given above as the reference when source code is discuss
 ## Source Files
 
 Below is a table of source code files under the /src/ directory of the project that we will be talking about. For each file
-we also list important classes and declarations for reader's convenience. One thing that worth noting is that a file is not
-always named using the name of the class defined within that file. If you are unsure where a class is defined, simply do
+we also list its important classes and declarations for reader's convenience. One thing that worth noting is that a file is not
+always named using the name of the class defined within that file. If you are unsure where a class is defined, simply doing
 a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most of the time.
+
+| File Name (only showing headers) | Important Modules/Declarations |
+-----------------------------------|--------------------------------|
+| memory\_hierarchy.h | Coherence messages and states declaration, BaseCache, MemObject, MemReq |
+| cache\_arrays.h | Tag array lookup and replacement policy |
+| cache.h | Actual implementation of the cache class, and cache operations |
+| coherence\_ctrls.h | MESI coherence state machine and actions |
+| init.h | Cache hierarchy and parameter initialization |
+
+
