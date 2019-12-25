@@ -93,9 +93,9 @@ fetch, or coherence invalidation. For lower-to-upper requests, such as block inv
 Instead, lower level caches directly call into upper level cache's `invalidate` method, potentially broadcasting the
 invalidation request to several upper levels recursively.
 
-We summarize the fields and their purposes in the following table.
+We summarize the fields and their descriptions in the following table.
 
-| Object field name | Purpose |
+| `MemReq` field name | Description |
 |:--------------:|-----------|
 | lineAddr | The cache line address to be requested |
 | type | Coherence type of the request, can be one of the GETS, GETX, PUTS, PUTX |
@@ -153,3 +153,6 @@ message sent to child caches if the evicted block is also cached by at least one
 Each simulated cache object consists a tag array for storing address tags and eviction information, a replacement policy 
 object that is purely logical, a coherence controller object which maintains the coherence states and shared vectors of 
 each block, and access latencies for reading the tag array (`accLat`) and invalidating a block (`invLat`) respectively.
+The following table lists all data members of `class Cache` and a short description. In the following sections we will
+discuss these cache components individually.
+
