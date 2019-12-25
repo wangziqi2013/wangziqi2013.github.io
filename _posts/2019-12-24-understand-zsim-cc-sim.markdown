@@ -35,4 +35,10 @@ a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most 
 | coherence\_ctrls.h | MESI coherence state machine and actions |
 | init.h | Cache hierarchy and parameter initialization |
 
-
+Note that zSim actually provides several implementations of caches, which can be selected by editing the configuration file. 
+The most basic cache implementation is in cache.h, and it defines the basic timing and operation of a working cache, and 
+no more. A more detailed implementation, called `TimingCache`, is also available, which adds a weave phase timing model 
+to simulate cache tag contention (zSim simulates shared resource contention in a separate phase after running the simulated 
+program for a short interval, assuming that path-altering interferences are rare). In this article, we focus on the functionality 
+and architecture of the cache subsystem, rather than detailed timing model and discrete event simulation. To this end, we 
+only discuss the basic cache model, and leave the discussion of timing cache to future works.
