@@ -131,3 +131,8 @@ latency configuration file, which is loaded at zSim initialization time. When a 
 parent, the corresponding child-to-parent latency value is added to the total access latency in order to model NUCA (see 
 `parentRTTs` in `class MESIBottomCC`).
 
+
+
+Although zSim supports both inclusive and non-inclusive caches (see `nonInclusiveHack` flag in MESI controllers), we only
+discuss inclusive caches, since the author suggested that the non-inclusive path is not fully tested, which may incur unexpected
+behavior. 
