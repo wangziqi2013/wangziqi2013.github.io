@@ -30,9 +30,10 @@ a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most 
 | File Name (only showing headers) | Important Modules/Declarations |
 |:--------------------------------:|--------------------------------|
 | memory\_hierarchy.h | Coherence messages and states declaration, BaseCache, MemObject, MemReq |
-| cache\_arrays.h | Tag array lookup and replacement policy |
+| cache\_arrays.h | Tag array organization and operations |
 | cache.h | Actual implementation of the cache class, and cache operations |
 | coherence\_ctrls.h | MESI coherence state machine and actions |
+| repl\_policies.h | Cache replacement policy implementations |
 | init.h | Cache hierarchy and parameter initialization |
 {:.mbtablestyle}
 
@@ -148,3 +149,7 @@ caches' `invalidate()` method with the type of the invalidation (`INV` means ful
 shared state). The third type is eviction, which naturally happens when a new block is brought into the cache, but the 
 current set is full. An existing block is evicted to make space for the new block, which also incurs invalidation
 message sent to child caches if the evicted block is also cached by at least one child caches.
+
+Each simulated cache object consists a tag array for storing address tags and eviction information, a replacement policy 
+object that is purely logical, a coherence controller object which maintains the coherence states and shared vectors of 
+each block, and access latencies for reading the tag array (`accLat`) and invalidating a block (`invLat`) respectively.
