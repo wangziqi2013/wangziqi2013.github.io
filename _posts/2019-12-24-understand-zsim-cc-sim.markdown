@@ -51,7 +51,18 @@ one `MemReq` object as argument, which contains all arguments for the memory req
 `access()` call is the finish time of the operation, assuming no contention (if contention is not simulated, then it is 
 the actual completion time of the operation, as in our case). 
 
-Cache objects also inherit from the base class, `BaseCache`, which defines another interface call, `invalidate()`. This 
-function call does not take `MemReq` as argument, but instead, takes the address of the line, the invalidation type,
-and a boolean flag pointer to indicate to the caller whether the invalidated line is dirty (and hence a write back to lower
-level cache is required). 
+Cache objects also inherit from the base class, `BaseCache`, which itself inherits from `MemObject`, and defines another 
+interface call, `invalidate()`. This function call does not take `MemReq` as argument, but instead, it takes the address 
+of the line, the invalidation type, and a boolean flag pointer to indicate to the caller whether the invalidated line is 
+dirty (and hence a write back to lower level cache is required). Note that in zSim, the `invalidate()` call only invalidiates
+the block in the current cache object, and indicates to the caller via the boolean flag whether a write back is induced 
+by the invalidation. It is therefore the caller's responsibility to write back the dirty block to the lower level using
+a PUTX transaction, as we will see below. The return value of `invalidate()` is also the response time of the operation.
+
+Overall, the cache object interface in zSim is rather simple: `access()` implements how the cache handles reads and 
+writes from upper levels. `invalidate()` implements how the cache handles invalidations from the processor or lower levels
+(depending on the position of the cache object in the hierarchy). Both methods are blocking: A begin time (absolute cycle 
+number) is taken as part of the argument, and a finish time is returned as the cycle the operation completes.
+
+## MemReq object
+
