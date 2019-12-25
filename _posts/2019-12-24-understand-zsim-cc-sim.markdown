@@ -19,3 +19,10 @@ is computed. For more information about zSim, please refer to the
 of the simulator's big picture. And also, it is always best practice to read the official 
 [source code](https://github.com/s5z/zsim) when things are unclear. In the following sections, we will use the official
 source code github repo given above as the reference when source code is discussed. 
+
+## Source Files
+
+Below is a table of source code files under the /src/ directory of the project that we will be talking about. For each file
+we also list important classes and declarations for reader's convenience. One thing that worth noting is that a file is not
+always named using the name of the class defined within that file. If you are unsure where a class is defined, simply do
+a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most of the time.
