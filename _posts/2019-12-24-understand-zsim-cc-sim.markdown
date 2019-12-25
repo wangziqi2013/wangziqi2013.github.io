@@ -44,7 +44,7 @@ program for a short interval, assuming that path-altering interferences are rare
 and architecture of the cache subsystem, rather than detailed timing model and discrete event simulation. To this end, we 
 only discuss the basic cache model, and leave the discussion of timing cache to future works.
 
-### Cache Systems Interface
+### Cache Interface
 
 In this section we discuss cache subsystem interfaces. In zSim, all memory objects, including cache and memory, must inherit 
 from the virtual base class, `MemObject`, which features only one neat interface, `access()`. The `access()` call takes 
