@@ -66,3 +66,18 @@ number) is taken as part of the argument, and a finish time is returned as the c
 
 ## MemReq object
 
+The `MemReq` object is used in two scenarios. First, an external component (e.g. the simulated processor) may issue a 
+memory request to the hierarchy by creating a `MemReq` object before it calls the `access()` method (in zSim, we have an
+extra level of `FilterCache`, in which case the `FilterCache` object issues the request). The caller of `access()` function
+needs to pass the address to be accessed (`lineAddr` field) and the begin cycle (`cycle` field) of the cache access. The 
+type of the access in terms of coherence is also specified by initializing the `type` field. In this scenario, no coherence 
+state in involved, and the access type can only be `GETS` or `GETX`. In the second scenario, an upper level cache may
+issue request to lower level caches to fulfill a request processed on the upper level. For example, when an upper level
+cache evicts a dirty block to the lower level, it must initiate a cache write transaction by creating a `MemReq` object
+and making it a `PUTX` request. In addition, when a request misses the upper level cache, a `MemReq` object must be
+created to fetch the block from lower level caches or degrade coherence states in other caches. The process can be
+conducted recursively until the request reaches a cache that holds this block or has full ownership, potentially reaching
+beyond the LLC and reading from the DRAM. An interesting design decision in zSim is that when upper level cache issues
+a request to the lower level cache, the coherence state of the block in the upper level cache is determined by the 
+lower level cache controller. This design decision is made to simplify the creation of "E" state, which requires information
+held by the lower level cache (i.e. the shared vector). 
