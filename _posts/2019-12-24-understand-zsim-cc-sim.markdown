@@ -402,3 +402,9 @@ into the cache from a parent level cache. To this end, the controller creates a 
 cache `access()` method recursively. The coherence state of the current block will be set by the parent level `access()` 
 method after it returns, which should be either `S` (already peer caches holding the block) or `E` (when it is the only 
 holder of the block in parent's sharer list, and the parent itself also has `E` or `M` permission). 
+
+For a `GETX` request, if the current block state is `E`, then the block silently transfers to `M` state without notifying
+the parent cache. The fact that a dirty block is held by the current cache will be available to the parent when an invalidation
+forces the `M` state block to be written back. If, however, the current state is `I` or `S`, then just like the case for
+`GETS`, the controller creates a `GETX` `MemReq` object, and feeds it to parent cache's `access()` method. The final
+state of the block will be set by the parent instance of `access()`, which should be `M`.
