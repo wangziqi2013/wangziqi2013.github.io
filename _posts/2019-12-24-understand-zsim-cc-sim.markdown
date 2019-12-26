@@ -285,8 +285,7 @@ following sections.
 | `MESITopCC` Field Name | Description |
 |:--------------:|-----------|
 | array | The sharer vector of cached blocks. Each entry in the array is a bit vector in which one bit is reserved for each child cache. A boolean flag also indicates whether the block is cached by children caches in exclusive states (used for silent upgrade). |
-| children | A list of children cache objects. Children caches are assumed to be not partitioned, and each child cache maintains
-state of its own |
+| children | A list of children cache objects. Children caches are assumed to be not partitioned, and each child cache maintains state of its own |
 | childrenRTTs | A list of network latencies to children caches; This can model L1i and L1d |
 | numLines | Number of blocks in the cache. Also number of directory entries |
 {:.mbtablestyle}
@@ -379,3 +378,14 @@ Imprecise sharer lists do not affect correctness, but will incur extra coherence
 hold the block. zSim decouples the creation and processing of `PUTS` requests. `PUTS` requests are always sent whenever possible,
 but parent caches just ignore them. Since zSim does not model network utilization, and assumes that all invalidations
 are sent in parallel, not cleaning the sharer list eagerly will not affect simulation result. 
+
+### GETS/GETX Access
+
+We discuss `access()` method in two sections. In this section, we present how `GETS` and `GETX` are handled. In the next
+section, we present `PUTS` and `PUTX`.
+
+The cache object's `access()` method begins by performing a lookup in the tag array. If the address is not cached,
+and the request is a `GETS` or `GETX`, then we need to first evict an existing block (`preinsert()` and `processEviction`), 
+and then load the intended block from parent level caches by calling coherence controller's `processAccess`. If the parent 
+level cache does not contain the block, this process may be recursively repeated until reaching a parent level cache that 
+holds the block with sufficient permission, or finally hit the DRAM (or other types of main memory). 
