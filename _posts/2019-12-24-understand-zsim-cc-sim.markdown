@@ -213,3 +213,11 @@ shifted to remove lower bit zeros. Then for each address tag in the set, we comp
 If true, a hit is indicated and the index of the tag array entry is returned. Otherwise we return -1.
 If indicated by the caller, we also inform the replacement policy that the address has been accessed on a hit. The replacement 
 policy object may then promote the hit block according to its own policy (e.g. moving to the end of the LRU stack).
+
+In `preinsert()`, the tag array either finds an empty slot, or more likely, finds a slot to be evicted. This is exactly 
+where the replacement policy comes into play. The `preinsert()` method first initializes a `SetAssocCands` object, which
+is just a pair of indices indicating the begin and end index of the set in which replacement happens, and then passes
+this object to the replacement policy's `rankCands()` method. Note that `preinsert()` has no idea whether a block is 
+invalid or dirty when it makes decision on eviction, so it just asssumes that all blocks in the set are candicates
+for eviction, and always returns the index of the selected candidate. The coherence controller, on the other hand, knows
+the exact state of the selected block, and will enforce correct behavior. 
