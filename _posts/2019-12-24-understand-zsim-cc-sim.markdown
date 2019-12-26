@@ -282,7 +282,7 @@ following sections.
 
 <br />
 
-| `MESIBottomCC` Field Name | Description |
+| `MESITopCC` Field Name | Description |
 |:--------------:|-----------|
 | array | The sharer vector of cached blocks. Each entry in the array is a bit vector in which one bit is reserved for each child cache. A boolean flag also indicates whether the block is cached by children caches in exclusive states (used for silent upgrade). |
 | children | A list of children cache objects. Children caches are assumed to be not partitioned, and each child cache maintains
@@ -290,6 +290,11 @@ state of its own |
 | childrenRTTs | A list of network latencies to children caches; This can model L1i and L1d |
 | numLines | Number of blocks in the cache. Also number of directory entries |
 {:.mbtablestyle}
+
+One unfortunate fact with zSim source code is that methods of `class MESICC` and `class MESITerminalCC` have the same name 
+as methods of `class MESIBottomCC` and `class MESITopCC`, which adds significant difficulties navigating the source files. 
+The rule of thumb is that `class MESICC` and `class MESITerminalCC` methods are all defined in coherence\_ctrls.h, while 
+most of the `class MESIBottomCC` and `class MESITopCC` methods are defined in the cpp file.
 
 We next describe coherence actions one by one.
 
@@ -341,3 +346,4 @@ Note that by returning `bcc`'s completion time, zSim assumes that `tcc`'s broadc
 such that the latter can only proceed after the former returns. This design decision is reasonable, as dirty write back 
 needs to see the dirty line first, which is transferred in a side channel from one of the child caches to the coherence
 controller. 
+
