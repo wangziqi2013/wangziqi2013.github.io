@@ -308,7 +308,8 @@ on which `invalidate()` is called and levels below are assumed to hold a block i
 
 In a non-terminal coherence controller, `processInv()` simply calls `processInval()` on `tcc` and then calls the method 
 of the same name on `bcc`. The completion cycle, however, is the cycle when `tcc` finishes broadcasting. This reflects an
-important assumption made by zSim: dirty line write backs to parent caches are out of the critical path.
+important assumption made by zSim: broadcasting is on the critical path, while transfer of dirty data and local state
+changes are not.
 
 In `tcc`'s `processInval()`, `sendInvalidates()` is called to broadcast the invalidation request to child caches that 
 have a "1" bit in the sharer list. To elaborate: This function walks the sharer list of the block, and for each potential
@@ -328,3 +329,15 @@ copy, the dirty write back flag will be set exactly once during the invalidation
 the current `M` or `E` states (other states are illegal) to `S`, and set the write back flag if the current state is `M`.
 No actual write back takes place during invalidation. The caller of cache object's `invalidate()` method should handle dirty
 write back by starting a `PUTX` transaction on parent caches or to other memory objects (e.g. DRAM, NVM).
+
+### Eviction
+
+Cache line eviction is triggered naturally as new blocks are loaded into the cache when the set is full. No external 
+interface is available for the cache object to initiate an eviction. Instead, the cache controller calls `processEviction()`
+on the coherence controller when the tag array's `preinsert()` returns a valid block number, indicating that a block
+should be evicted. Coherence controller's `processEviction()` calls the method of the same name (unfortunate coincidence) 
+on `tcc` and `bcc` respectively, in this order, and returns the `bcc` completion time as the eviction completion time.
+Note that by returning `bcc`'s completion time, zSim assumes that `tcc`'s broadcasting and `bcc`'s write back are serialized, 
+such that the latter can only proceed after the former returns. This design decision is reasonable, as dirty write back 
+needs to see the dirty line first, which is transferred in a side channel from one of the child caches to the coherence
+controller. 
