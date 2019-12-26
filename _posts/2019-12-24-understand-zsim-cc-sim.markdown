@@ -320,3 +320,11 @@ the final completion cycle is the maximum of all child cache invalidations. Afte
 the controller changes the directory entry of the current block based on the invalidation type. For full invalidation,
 the directory entry is cleared, since the block no longer exists in the cache. For downgrades, the directory entry's 
 exclusive flag is cleared, but we keep sharer list bit vector intact.
+
+After `tcc`'s `processInval()` method returns, `bcc`'s `processInval()` method is invoked to handle local state changes.
+For full invalidations, we always set the coherence state to `I`, and set write back flag if the state is currently `M`
+to signal a dirty write back to the caller. Note that since at most one cache in the entire hierarchy can have a dirty 
+copy, the dirty write back flag will be set exactly once during the invalidation process. For downgrades, we simply change
+the current `M` or `E` states (other states are illegal) to `S`, and set the write back flag if the current state is `M`.
+No actual write back takes place during invalidation. The caller of cache object's `invalidate()` method should handle dirty
+write back by starting a `PUTX` transaction on parent caches or to other memory objects (e.g. DRAM, NVM).
