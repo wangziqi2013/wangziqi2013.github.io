@@ -243,13 +243,26 @@ for LRU eviction.
 
 ### Coherence Overview
 
-zSim simulates MESI coherence protocol using an implementation of directory-based MESI state machine on the memory hierarchy.
-zSim does not model the full set features of the protocol, as only stable states are simulated. zSim also does not model the 
-on-chip network traffic. Latencies of the network is assigned statically, and they will not change based on network utilization. 
+zSim simulates MESI coherence protocol using an implementation of directory-based MESI state machine across the memory hierarchy.
+zSim does not model the full set features of the protocol, since only stable states are simulated. zSim also does not model the 
+on-chip network traffic incurred by coherence activities. Latencies of the network is assigned statically, and they will 
+not change based on network utilization. 
 
 Each cache object has a coherence controller, which maintains the coherence states of all blocks currently residing in the 
 cache. Since zSim caches are inclusive, the coherence directory is implemented as in-cache sharer lists, one for each cached 
 block. The number of bits in the sharer list per block equals the number of children caches. A "1" bit in the list indicates 
 that the corresponding child cache may have a cached copy on the same address, dirty or clean. The sharer list is queried when invalidations are sent to the children caches, and is updated when a new block is fetched by a child cache.
 
-E
+The coherence controller is further divided into two logical parts: A "top controller" maintains the directory and sends 
+invalidation to children caches, and a "bottom controller" maintains the state for cached blocks and handles requests from
+child caches. These two logical parts are largely independent from each other, and are implemented as separate modules.
+The following table lists the coherence controller module name and the responsibility of the module.
+
+| Coherence Module Name | Description |
+|:--------------:|-----------|
+| CC | Virtual base class of the controller; Specifies interface of coherence controllers |
+| MESIBottomCC | Bottom coherence controller; Maintains block states and handles child requests | 
+| MESITopCC | Top coherence controller; Maintains directory states and handles invalidations |
+| MESICC | Includes both MESIBottomCC and MESITopCC to implement the coherence controller for non-leaf level caches |
+| MESITerminalCC | Coherence controller for leaf level caches (e.g. L1d, L1i). Only includes MESIBottomCC, since leaf level caches do not have directory states to maintain |
+{:.mbtablestyle}
