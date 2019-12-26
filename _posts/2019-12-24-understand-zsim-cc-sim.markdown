@@ -197,4 +197,7 @@ The set size is computed by dividing the number of lines with the number of sets
 two to simplify tag address mapping. The set mask is also computed to map any integer from the hash function to the range
 from zero to set size minus one.
 
-
+A hash function is associated with the tag array to compute the index of the set given a block address. The hash function
+is relatively unimportant for set-associative caches, since we just perform an identity mapping (i.e. do not change the 
+address) and let the set mask map the block address into the set number. For other types of tag arrays, such as Z array,
+the hash function must be an non-trivial one, and can be assigned by specifying`array.hash` in the configurtation file.
