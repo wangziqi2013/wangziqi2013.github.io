@@ -179,4 +179,13 @@ slot to store inserted tag. If an empty slot cannot be found, as should be the m
 will be made empty first by writing back the current block data, and then returning its index. The address to be written
 back is returned to the caller via the last argument, `wbLineAddr`, and the index of the selected slot is the returned
 value. `postinsert()` will actually store the new address tag into the target slot given both the address and the index
-of the slot.
+of the slot. 
+
+Note that zSim only guarantees that `preinsert()` and `postinsert()` will not be nested, i.e. the pending insertion must 
+complete before the next one could be performed. It is, however, possible that `lookup()` be called between the two methods 
+as a result of write backs from child caches. One example is when a middle-level cache evicts a block that has been written
+drity in child caches. After `preinsert()` returns, the cache controller processes the eviction of the block, which 
+requires sending invalidations to child caches. On receiving the invalidation, the child cache holding a dirty copy of
+the block will initiate a write back which directly sends the dirty block to the current cache, before the latter 
+initiates a `PUTX` transaction to its parent cache. `lookup()` will be called to find the slot for writing back the dirty
+block during the process of the `PUTX` request in the parent cache.
