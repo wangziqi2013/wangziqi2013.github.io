@@ -156,7 +156,7 @@ each block, and access latencies for reading the tag array (`accLat`) and invali
 The following table lists all data members of `class Cache` and a short description. In the following sections we will
 discuss these cache components individually.
 
-| `Cache` field name | Purpose |
+| `Cache` field name | Description |
 |:--------------:|-----------|
 | cc | Coherence controller; Implements the state machine and shared vector for every cached block |
 | array | Tag array; Stores the address tags of cached blocks |
@@ -165,3 +165,18 @@ discuss these cache components individually.
 | accLat | Latency for accessing tha tag array, ignoring contention |
 | invLat | Latency for invalidating a block in the array, ignoring contention |
 {:.mbtablestyle}
+
+### Tag Array
+
+The tag array object is defined in file cache\_array.h. Tag arrays are one-dimensional array of address tags that can be 
+accessed using a single index. Although some cache organization may divide the array into associative sets, the 1-D array
+abstraction is still used for identifying a cache block. All tag arrays must inherit from the base class, `CacheArray`,
+which provides three methods: `lookup()`, `preinsert()`, and `postinsert()`. The lookup method returns the index of the 
+block if its address is found in the tag array, or -1 if not found. Optionally, the lookup method will also change the 
+replacement metadata of the cache line, which is indicated by the `updateReplacement` flag in the argument list. The `preinsert()`
+method is called before inserting a new address tag into the tag array. This method will search the tag array for an empty
+slot to store inserted tag. If an empty slot cannot be found, as should be the majority of the cases, an existing slot
+will be made empty first by writing back the current block data, and then returning its index. The address to be written
+back is returned to the caller via the last argument, `wbLineAddr`, and the index of the selected slot is the returned
+value. `postinsert()` will actually store the new address tag into the target slot given both the address and the index
+of the slot.
