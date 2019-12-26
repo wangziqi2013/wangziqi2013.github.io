@@ -202,6 +202,10 @@ is relatively unimportant for set-associative caches, since we just perform an i
 address) and let the set mask map the block address into the set number. For other types of tag arrays, such as Z array,
 the hash function must be an non-trivial one, and can be assigned by specifying`array.hash` in the configurtation file.
 
+A replacement policy object is responsible for deciding which block should be evicted, if any, when a new block is brought 
+into the set. As discussed in the previous section, the replacement policy object stores its own metadata, which can be 
+optionally updated on every tag array access.
+
 The tag array is declared as a one-dimensional pointer named `array`. In order to access set X, the begin index
 is computed as (`ways` * X), and the end index is (`ways` * (X + 1)). To perform an array lookup given a block address,
 we first compute the set number by AND'ing the address with the set mask. Note that all block addresses have been right 
