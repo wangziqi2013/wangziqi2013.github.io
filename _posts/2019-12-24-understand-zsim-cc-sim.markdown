@@ -443,3 +443,8 @@ but a different child cache owns the block in exclusive state, then invalidation
 owner of the line to shared state (using `INVX`), before `S` permission could be granted to the requestor. If the current
 state is shared, meaning that the block is not exclusively owned by the current cache, but also shared by other caches,
 the requestor simply gets `S` state without invalidation. In all three cases, the requestor is marked in the sharer list. 
+
+If the downgrade or full invalidation incurred by `GETS` or `GETX` results in a dirty write back, it will be passed to the 
+coherence controller, and handled in `processWritebackOnAccess()`. Recall that zSim assumes the dirty block is transferred 
+via a side channel, which is not on the critical path of the invalidation process, this does not add to the latency of 
+the operation, but only simply changes the state of the current block from `M` or `E` to `M` (other from states are illegal).
