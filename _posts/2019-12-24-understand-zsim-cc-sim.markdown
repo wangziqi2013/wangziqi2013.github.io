@@ -6,7 +6,7 @@ categories: article
 ontop: true
 ---
 
-### Introduction
+## Introduction
 
 zSim is a fast processor simulator used for modeling the bahavior of memory subsystems. zSim is based on PIN, a binary
 instrumention tool that allows programmers to instrument instructions at run time and insert customized function calls.
@@ -111,7 +111,7 @@ will access the cache hierarchy, and hence all states are stable. In practice, m
 cache object from different directions (upper-to-lower for line fetch, and lower-to-upper for invalidation). zSim has an
 ad-hoc locking protocol to ensure that concurrent cache accesses can always be serialized.
 
-### Cache System Architecture
+## Cache System Architecture
 
 In this section we discuss the abstract model of zSim's cache system. The cache system is organized as a tree structure,
 with a single root representing the last-level cache (LLC), and intermediate nodes representing intermediate level caches
@@ -241,6 +241,8 @@ validity of the block; (2) the number of sharers; and (3) the local timestamp va
 favorable it is to evict the block. The replacement policy selects the block with the smallest score as the candidate
 for LRU eviction.
 
+## Simulating Cache Coherence
+
 ### Coherence Overview
 
 zSim simulates MESI coherence protocol using an implementation of directory-based MESI state machine across the memory hierarchy.
@@ -278,6 +280,8 @@ following sections.
 | numLines | Number of blocks in the cache. Also number of coherence states |
 {:.mbtablestyle}
 
+<br />
+
 | `MESIBottomCC` Field Name | Description |
 |:--------------:|-----------|
 | array | The sharer vector of cached blocks. Each entry in the array is a bit vector in which one bit is reserved for each child cache. A boolean flag also indicates whether the block is cached by children caches in exclusive states (used for silent upgrade). |
@@ -286,3 +290,9 @@ state of its own |
 | childrenRTTs | A list of network latencies to children caches; This can model L1i and L1d |
 | numLines | Number of blocks in the cache. Also number of directory entries |
 {:.mbtablestyle}
+
+We next describe coherence actions one by one.
+
+### Invalidation
+
+Invalidation can be initiated at any level of the cache by calling the `invalidate()` method
