@@ -415,3 +415,13 @@ coherence controllers. The first invariant is that a controller can grant permis
 it holds the same or higher permission. For example, a controller holding an `S` state line should not grant `M` permission
 to the child without acquiring `M` permission with its parent first. The second invariant is that non-terminal cache 
 controllers always send data it has fetched to children caches (except for prefetching, which we do not discuss). 
+
+On receiving a request from a child cache, a non-terminal coherence controller first attempts to acquire equal or higher
+permission requested by the child cache if it does not hold the block in that permission. This translates to calling 
+`bcc`'s `processAccess()`, which has exactly the same effect as in a terminal controller. After `processAccess()` returns, 
+the current cache should have sufficient permission to grant the child cache's request, which is performed by calling
+`tcc`'s `processAccess()`. This function takes a boolean flag indicating whether the current state of the block is exclusive
+(i.e. `M` or `E`) as one of the arguments (recall that `tcc` has no access to the current state of the block, but only the 
+state of the child block). The function also takes argument on whether a dirty write back is incurred as a result
+of permission downgrade in one of its children caches. 
+
