@@ -34,6 +34,7 @@ a `grep -r "class ClsName"` or `grep -r "struct ClsName"` will suffice for most 
 | cache.h | Actual implementation of the cache class, and cache operations |
 | coherence\_ctrls.h | MESI coherence state machine and actions |
 | repl\_policies.h | Cache replacement policy implementations |
+| hash.h | Hash function defined to map block address to sets and to LLC partitions |
 | init.h | Cache hierarchy and parameter initialization |
 {:.mbtablestyle}
 
@@ -189,3 +190,11 @@ requires sending invalidations to child caches. On receiving the invalidation, t
 the block will initiate a write back which directly sends the dirty block to the current cache, before the latter 
 initiates a `PUTX` transaction to its parent cache. `lookup()` will be called to find the slot for writing back the dirty
 block during the process of the `PUTX` request in the parent cache.
+
+We next take a closer look at these three method functions. For simplicity, we assume set-associative tag storage, which is 
+implemented by `class SetAssocArray`. On initialization, the number of blocks and sets are passed as construction argument.
+The set size is computed by dividing the number of lines with the number of sets. The number of sets must be a power of 
+two to simplify tag address mapping. The set mask is also computed to map any integer from the hash function to the range
+from zero to set size minus one.
+
+
