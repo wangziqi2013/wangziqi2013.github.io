@@ -295,4 +295,14 @@ We next describe coherence actions one by one.
 
 ### Invalidation
 
-Invalidation can be initiated at any level of the cache by calling the `invalidate()` method
+Invalidation can be initiated at any level of the cache by calling the `invalidate()` method. In fact, even the coherence 
+protocol calls this method to invalidate blocks in child caches. The semantics of `invalidate()` method guarantees that
+the block to be invalidated will not be cached on the level it is called as well as all children levels. In this section
+we show how `invalidate()` interacts with cache coherence.
+
+The `invalidate()` method first performs a cache lookup using the `lookup()` method of the tag array (not updating LRU states).
+If the block is found in the tag array, the address and the index of the block is passed to the coherence controller's 
+method `processInv`. Note that `invalidate()` handles both downgrades (`INVX`) and true invalidations (`INV`). The type
+of invalidation is specified using the `type` parameter. When downgrade is requested, the current level 
+on which `invalidate()` is called and levels below are assumed to hold a block in `M` or `E` state.
+
