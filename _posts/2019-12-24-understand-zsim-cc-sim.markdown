@@ -201,3 +201,11 @@ A hash function is associated with the tag array to compute the index of the set
 is relatively unimportant for set-associative caches, since we just perform an identity mapping (i.e. do not change the 
 address) and let the set mask map the block address into the set number. For other types of tag arrays, such as Z array,
 the hash function must be an non-trivial one, and can be assigned by specifying`array.hash` in the configurtation file.
+
+The tag array is declared as a one-dimensional pointer named `array`. In order to access set X, the begin index
+is computed as (`ways` * X), and the end index is (`ways` * (X + 1)). To perform an array lookup given a block address,
+we first compute the set number by AND'ing the address with the set mask. Note that all block addresses have been right 
+shifted to remove lower bit zeros. Then for each address tag in the set, we compare whether it equals the given address.
+If true, a hit is indicated and the index of the tag array entry is returned. Otherwise we return -1.
+If indicated by the caller, we also inform the replacement policy that the address has been accessed on a hit. The replacement 
+policy object may then promote the hit block according to its own policy (e.g. moving to the end of the LRU stack).
