@@ -425,3 +425,12 @@ the current cache should have sufficient permission to grant the child cache's r
 state of the child block). The function also takes argument on whether a dirty write back is incurred as a result
 of permission downgrade in one of its children caches. 
 
+At a high level, `processAccess()` will set the child block state and its own directory state based on the type of the 
+request and the state of the block in the current cache. We elaborate the concrete handling case-by-case. If the request 
+is `GETX`, then we check the sharer list to see whether the block is currently shared by multiple children caches. 
+If true, `sendInvalidates()` is called to revoke all shared cache lines in children caches. Note that when `tcc` begins
+processing the request, the current cache block state must already be exclusive. This does not contradict the fact
+that one or more of its children caches may have a shared or exclusive copy of the block. If the invalidation results 
+in a dirty write back, the flag will be set, and the write back will be processed by the coherence controller. After
+invalidation, we set the requestor as the exclusive owner of the cache line by clearing all bits in the sharer list except
+the request's. 
