@@ -347,3 +347,7 @@ such that the latter can only proceed after the former returns. This design deci
 needs to see the dirty line first, which is transferred in a side channel from one of the child caches to the coherence
 controller. 
 
+The `processEviction()` method of `tcc` simply wraps `sendInvalidates()` method, which signals children caches of the 
+cache line invalidation operation. The invalidation type is set to `INV`, indicating that blocks must be fully invalidated.
+The dirty write back flag is passed to a local variable of coherence controller's `processEviction()`, which is then passed 
+to `bcc`'s `processEviction()` to actually perform the write back. 
