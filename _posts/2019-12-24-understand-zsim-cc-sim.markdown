@@ -369,7 +369,9 @@ If the block state is `E` or `S`, meaning no dirty data needs to be written, the
 other hand, the block state is `M`, a `PUTX` `MemReq` object is created and fed to the parent cache's `access()` method. 
 `I` state blocks will be simply ignored, since they neither have any sharer nor require any form of write back.
 In all cases, the completion cycle of the parent `access()` method will be returned to the caller as the completion
-cycle of the eviction operation.
+cycle of the eviction operation. As discussed in early sections, the current block state will be set by the parent
+cache when the request is handled by `access()` method. After parent cache `access()` returns, the block state 
+should be `I`, indicating the block is no longer cached in any part of the hierarchy down below the current level.
 
 One design decision is whether to send `PUTS` requests to parent caches when the block is clean. In general, sending clean 
 write backs help parent cache to manage their sharer lists by removing the sharer eagerly and making the list precise.
