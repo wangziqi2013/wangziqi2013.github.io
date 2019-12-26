@@ -459,3 +459,13 @@ are illgeal). `tcc`, on the other hand, does not ignore `PUTS`, but clears the b
 `PUTX` is handled in exact the same way as `PUTS`, if `PUTX_KEEPEXCL` flag is not set in the request object (this flag
 demands that dirty data be written back, but keep the child block in `E` state). In both cases, the child cache state 
 is set to `I`, indicating that the block has been written back, and is no longer cached by the child level.
+
+### Beyond Last Level Cache
+
+When a `GETX`/`GETS` request reaches the last level cache (LCC), but still cannot find the cached block, or when the 
+LLC evicts a dirty block, where does the request go? In zSim, all memory objects are instances of the base class 
+`MemObject`, including cache and the main memory. During initialization, the LLC is connected to the main memory
+by setting its `parents` list pointing to a main memory object, which also features the elegant `access()` interface
+(note that main memory objects do not have `invalidate()`, since this is added in `class BaseCache`). As a result,
+`MemReq` going beyond the LLC will be sent to main memory objects, which is then simulated just like caches, probably
+with a significantly different timing.
