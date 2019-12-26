@@ -229,9 +229,14 @@ is also written into the array.
 
 ### Replacement Policy
 
-The replacement policy is implemented as a ranking function. In this section we only discuss LRU. The policy can be specified
-using the `repl.type` key in the configuration file. zSim implements LRU using timestamps. A single global timestamp is 
-incremented for every access to the tag array. Each block also has a local timestamp which stores the value of the global
-timestamp when it is accessed. A larger local timestamp means the block is closer to the MRU position. The LRU policy
-simply selects the valid block with the smallest local timestamp as the eviction candidate.
+The replacement policy is implemented as a ranking function. The policy can be specified using the `repl.type` key in the 
+configuration file. In this section we only discuss LRU, which is implemented by `class LRUReplPolicy`. zSim implements 
+LRU using timestamps. A single global timestamp is incremented for every access to the tag array. Each block also has a 
+local timestamp which stores the value of the global timestamp when it is accessed. A larger local timestamp means the 
+block is closer to the MRU position. 
 
+The ranking function, `rankCands()` (also `rank()`), iterates over the `SetAssocCands` object, and for each block in the set, 
+it computes a score based on the LRU counter. If the LRU policy is sharer-aware, the score will be affected by: (1) the 
+validity of the block; (2) the number of sharers; and (3) the local timestamp value. The higher the score is, the less
+favorable it is to evict the block. The replacement policy selects the block with the smallest score as the candidate
+for LRU eviction.
