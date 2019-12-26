@@ -306,3 +306,13 @@ method `processInv`. Note that `invalidate()` handles both downgrades (`INVX`) a
 of invalidation is specified using the `type` parameter. When downgrade is requested, the current level 
 on which `invalidate()` is called and levels below are assumed to hold a block in `M` or `E` state.
 
+In a non-terminal coherence controller, `processInv()` simply calls `processInval()` on `tcc` and then calls the method 
+of the same name on `bcc`. The completion cycle, however, is the cycle when `tcc` finishes broadcasting. This reflects an
+important assumption made by zSim: dirty line write backs to parent caches are out of the critical path.
+
+In `tcc`'s `processInval()`, `sendInvalidates()` is called to broadcast the invalidation request to child caches that 
+have a "1" bit in the sharer list. To elaborate: This function walks the sharer list of the block, and for each potential
+sharer, it calls the cache object's `invalidate()` method recursively (recall that we are now in the initial `invalidate()`'s
+call chain). The type of invalidation and the boolean flag indicating dirty write back are passed unmodified. zSim assumes
+that all invalidations are signaled to child caches at the same time. The completion cycle of a single invalidation is 
+computed as the response cycle from the child cache plus the network latency. 
