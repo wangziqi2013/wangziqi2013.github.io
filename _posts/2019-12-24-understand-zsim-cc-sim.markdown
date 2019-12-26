@@ -240,3 +240,16 @@ it computes a score based on the LRU counter. If the LRU policy is sharer-aware,
 validity of the block; (2) the number of sharers; and (3) the local timestamp value. The higher the score is, the less
 favorable it is to evict the block. The replacement policy selects the block with the smallest score as the candidate
 for LRU eviction.
+
+### Coherence Overview
+
+zSim simulates MESI coherence protocol using an implementation of directory-based MESI state machine on the memory hierarchy.
+zSim does not model the full set features of the protocol, as only stable states are simulated. zSim also does not model the 
+on-chip network traffic. Latencies of the network is assigned statically, and they will not change based on network utilization. 
+
+Each cache object has a coherence controller, which maintains the coherence states of all blocks currently residing in the 
+cache. Since zSim caches are inclusive, the coherence directory is implemented as in-cache sharer lists, one for each cached 
+block. The number of bits in the sharer list per block equals the number of children caches. A "1" bit in the list indicates 
+that the corresponding child cache may have a cached copy on the same address, dirty or clean. The sharer list is queried when invalidations are sent to the children caches, and is updated when a new block is fetched by a child cache.
+
+E
