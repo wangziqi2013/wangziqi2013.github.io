@@ -434,3 +434,12 @@ that one or more of its children caches may have a shared or exclusive copy of t
 in a dirty write back, the flag will be set, and the write back will be processed by the coherence controller. After
 invalidation, we set the requestor as the exclusive owner of the cache line by clearing all bits in the sharer list except
 the request's. 
+
+If the request is `GETS`, the current state of the block after `bcc`'s `processAccess()` can be any of the valid state. 
+In MESI protocol, if the current cache holds the block in an exclusive state, and there is no other sharer of the block, 
+`tcc` could grant `E` permission to the requestor, since it is certain that the current cache holds a globally unique copy 
+of the line, and could grant write permission to one of its children. If, on the other hand, that the current state is exclusive,
+but a different child cache owns the block in exclusive state, then invalidation is still needed to downgrade the current
+owner of the line to shared state (using `INVX`), before `S` permission could be granted to the requestor. If the current
+state is shared, meaning that the block is not exclusively owned by the current cache, but also shared by other caches,
+the requestor simply gets `S` state without invalidation. In all three cases, the requestor is marked in the sharer list. 
