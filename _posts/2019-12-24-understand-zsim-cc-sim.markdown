@@ -351,3 +351,11 @@ The `processEviction()` method of `tcc` simply wraps `sendInvalidates()` method,
 cache line invalidation operation. The invalidation type is set to `INV`, indicating that blocks must be fully invalidated.
 The dirty write back flag is passed to a local variable of coherence controller's `processEviction()`, which is then passed 
 to `bcc`'s `processEviction()` to actually perform the write back. 
+
+After sending the invalidation, `bcc`'s `processEviction()` method changes the local state and conducts the write back.
+It first checks the dirty write back flag which is set by `tcc`'s invalidation process. If the flag is set, meaning a
+child cache has a dirty block on the invalidated address, the `bcc` first changes the local state from `E` or `M` to `M`
+(other from states are illegal). Note that local `E` state implies that the child cache first reads the line using GETS,
+acquiring the line in `E` state, and then does a silent transition from `E` to `M`. Local `M` state implies that the 
+child cache originally acquired the line using `GETX`, which sets all caches holding the block to `M` state along the way
+the block is passed to it.
