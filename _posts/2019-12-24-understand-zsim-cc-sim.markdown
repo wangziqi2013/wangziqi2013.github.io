@@ -375,9 +375,10 @@ should be `I`, indicating the block is no longer cached in any part of the hiera
 One design decision is whether to send `PUTS` requests to parent caches when the block is clean. In general, sending clean 
 write backs help parent cache to manage their sharer lists by removing the sharer eagerly and making the list precise.
 Imprecise sharer lists do not affect correctness, but will incur extra coherence messages to caches that do not actually
-hold the block. zSim decouples the creation and processing of `PUTS` requests. `PUTS` requests are always sent whenever possible,
-but parent caches just ignore them. Since zSim does not model network utilization, and assumes that all invalidations
-are sent in parallel, not cleaning the sharer list eagerly will not affect simulation result. 
+hold the block. zSim decouples the creation and processing of `PUTS` requests. `PUTS` requests are always sent whenever 
+possible, but parent caches may just ignore them. Since zSim does not model network utilization, and assumes that all 
+invalidations are sent in parallel, not cleaning the sharer list eagerly will not affect simulation result (despite that,
+zSim still clears the sharer list on clean write backs).
 
 ### GETS/GETX Access
 
@@ -448,3 +449,13 @@ If the downgrade or full invalidation incurred by `GETS` or `GETX` results in a 
 coherence controller, and handled in `processWritebackOnAccess()`. Recall that zSim assumes the dirty block is transferred 
 via a side channel, which is not on the critical path of the invalidation process, this does not add to the latency of 
 the operation, but only simply changes the state of the current block from `M` or `E` to `M` (other from states are illegal).
+
+### PUTS/PUTX Access
+
+`PUTS` and `PUTX` are exclusively used for write backs, which can only occur at non-terminal levels in the hierarchy.
+These two requests are also first handled by `bcc` and then `tcc`. `bcc` ignores `PUTS`, since they are clean data
+and will not change the block state. For `PUTX`, the block state will transit from `M` or `E` to `M` (other from states
+are illgeal). `tcc`, on the other hand, does not ignore `PUTS`, but clears the bit of the child cache from the sharer list.
+`PUTX` is handled in exact the same way as `PUTS`, if `PUTX_KEEPEXCL` flag is not set in the request object (this flag
+demands that dirty data be written back, but keep the child block in `E` state). In both cases, the child cache state 
+is set to `I`, indicating that the block has been written back, and is no longer cached by the child level.
