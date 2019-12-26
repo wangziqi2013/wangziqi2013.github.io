@@ -386,6 +386,19 @@ section, we present `PUTS` and `PUTX`.
 
 The cache object's `access()` method begins by performing a lookup in the tag array. If the address is not cached,
 and the request is a `GETS` or `GETX`, then we need to first evict an existing block (`preinsert()` and `processEviction`), 
-and then load the intended block from parent level caches by calling coherence controller's `processAccess`. If the parent 
+and then load the intended block from parent level caches by calling coherence controller's `processAccess()`. If the parent 
 level cache does not contain the block, this process may be recursively repeated until reaching a parent level cache that 
-holds the block with sufficient permission, or finally hit the DRAM (or other types of main memory). 
+holds the block with sufficient permission, or finally hit the DRAM (or other types of main memory). If the address is 
+cached, we still need to call `processAccess()` to update its coherence state, since a cache hit may also change the 
+coherence state of the block (e.g. if a `GETX` request hits a `E` state line, the state will transfer to `M` silently).
+The invariant is that no matter a block is evicted or hit, `processAccess()` always sees a valid cache line number, 
+which is the slot for loading the new block or changing existing coherence states (recall that after a block is evicted,
+its coherence state in the former holder will be `I`).
+
+In the terminal level coherence controller, `processAccess()` only calls `bcc`'s method of the same name. For `GETS` requests,
+we check the current coherence state. If it is `E`, `S` or `M`, then the controller already has sufficient permission for
+accessing the block, and no coherence action will take place. If the block is in `I` state, the block needs to be brought
+into the cache from a parent level cache. To this end, the controller creates a `GETS` `MemReq` object, and calls parent 
+cache `access()` method recursively. The coherence state of the current block will be set by the parent level `access()` 
+method after it returns, which should be either `S` (already peer caches holding the block) or `E` (when it is the only 
+holder of the block in parent's sharer list, and the parent itself also has `E` or `M` permission). 
