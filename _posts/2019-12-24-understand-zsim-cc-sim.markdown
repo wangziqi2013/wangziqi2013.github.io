@@ -358,4 +358,13 @@ child cache has a dirty block on the invalidated address, the `bcc` first change
 (other from states are illegal). Note that local `E` state implies that the child cache first reads the line using GETS,
 acquiring the line in `E` state, and then does a silent transition from `E` to `M`. Local `M` state implies that the 
 child cache originally acquired the line using `GETX`, which sets all caches holding the block to `M` state along the way
-the block is passed to it.
+the block is passed to it. Also note that zSim assumes that children caches will pass the dirty block to the current controller
+using a side channel, which is not on the critical path of broadcasting, instead of using regular `MemReq`. This assumption 
+is justified by the fact that writing data back level-by-level is unnecessary, since these written back copies between 
+the bottommost dirty block owner and the current cache object will be invalidated anyway.
+
+The type of the write back depends on the state of the block after handling dirty write backs from children caches.
+If the block state is `E` or `S`, meaning no dirty data needs to be written, the coherence controller creates a 
+`PUTS` `MemReq` object, and calls parent cache `access()` method to handle the write back synchronously. 
+In both cases, the completion cycle of the parent `access()` method will be returned to the caller as the completion
+cycle of the eviction operation.
