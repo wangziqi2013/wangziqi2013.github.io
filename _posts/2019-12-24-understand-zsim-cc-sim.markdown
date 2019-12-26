@@ -277,3 +277,12 @@ following sections.
 | parentRTTs | A list of network latencies to parent partitions; This models NUCA |
 | numLines | Number of blocks in the cache. Also number of coherence states |
 {:.mbtablestyle}
+
+| `MESIBottomCC` Field Name | Description |
+|:--------------:|-----------|
+| array | The sharer vector of cached blocks. Each entry in the array is a bit vector in which one bit is reserved for each child cache. A boolean flag also indicates whether the block is cached by children caches in exclusive states (used for silent upgrade). |
+| children | A list of children cache objects. Children caches are assumed to be not partitioned, and each child cache maintains
+state of its own |
+| childrenRTTs | A list of network latencies to children caches; This can model L1i and L1d |
+| numLines | Number of blocks in the cache. Also number of directory entries |
+{:.mbtablestyle}
