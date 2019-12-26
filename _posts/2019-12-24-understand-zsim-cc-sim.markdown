@@ -96,7 +96,7 @@ invalidation request to several upper levels recursively.
 
 We summarize the fields and their descriptions in the following table.
 
-| `MemReq` field name | Description |
+| `MemReq` Field Name | Description |
 |:--------------:|-----------|
 | lineAddr | The cache line address to be requested |
 | type | Coherence type of the request, can be one of the GETS, GETX, PUTS, PUTX |
@@ -157,7 +157,7 @@ each block, and access latencies for reading the tag array (`accLat`) and invali
 The following table lists all data members of `class Cache` and a short description. In the following sections we will
 discuss these cache components individually.
 
-| `Cache` field name | Description |
+| `Cache` Field Name | Description |
 |:--------------:|-----------|
 | cc | Coherence controller; Implements the state machine and shared vector for every cached block |
 | array | Tag array; Stores the address tags of cached blocks |
@@ -265,4 +265,15 @@ The following table lists the coherence controller module name and the responsib
 | MESITopCC | Top coherence controller; Maintains directory states and handles invalidations |
 | MESICC | Includes both MESIBottomCC and MESITopCC to implement the coherence controller for non-leaf level caches |
 | MESITerminalCC | Coherence controller for leaf level caches (e.g. L1d, L1i). Only includes MESIBottomCC, since leaf level caches do not have directory states to maintain |
+{:.mbtablestyle}
+
+We also list the members of `class MESIBottomCC` and `class MESITopCC` to aid our discussion of coherence actions in the 
+following sections.
+
+| `MESIBottomCC` Field Name | Description |
+|:--------------:|-----------|
+| array | The coherence states of cached blocks; States are one of the `M`, `E`, `S`, `I` as in the standard MESI protocol |
+| parents | A list of parent cache partitions. A hash function maps the block address into parent ID when the parent cache is to be accessed. All parent cache partitions collectively maintains state for the entire address space |
+| parentRTTs | A list of network latencies to parent partitions; This models NUCA |
+| numLines | Number of blocks in the cache. Also number of coherence states |
 {:.mbtablestyle}
