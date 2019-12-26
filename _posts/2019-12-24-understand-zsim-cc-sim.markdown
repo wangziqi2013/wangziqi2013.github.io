@@ -217,7 +217,12 @@ policy object may then promote the hit block according to its own policy (e.g. m
 In `preinsert()`, the tag array either finds an empty slot, or more likely, finds a slot to be evicted. This is exactly 
 where the replacement policy comes into play. The `preinsert()` method first initializes a `SetAssocCands` object, which
 is just a pair of indices indicating the begin and end index of the set in which replacement happens, and then passes
-this object to the replacement policy's `rankCands()` method. Note that `preinsert()` has no idea whether a block is 
+this object to the replacement policy's `rankCands()` method. The `rankCands()` method returns the index of the selected
+block, which is then returned together with the address tag. Note that `preinsert()` has no idea whether a block is 
 invalid or dirty when it makes decision on eviction, so it just asssumes that all blocks in the set are candicates
 for eviction, and always returns the index of the selected candidate. The coherence controller, on the other hand, knows
 the exact state of the selected block, and will enforce correct behavior. 
+
+The logic of `postinsert()` is simple. The replacement policy is notified that the selected block has been invalidated,
+and that a new block is inserted. The metadata for the block will be updated to reflect the replacement. The new address
+is also written into the array.
