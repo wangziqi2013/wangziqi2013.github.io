@@ -219,10 +219,19 @@ where the replacement policy comes into play. The `preinsert()` method first ini
 is just a pair of indices indicating the begin and end index of the set in which replacement happens, and then passes
 this object to the replacement policy's `rankCands()` method. The `rankCands()` method returns the index of the selected
 block, which is then returned together with the address tag. Note that `preinsert()` has no idea whether a block is 
-invalid or dirty when it makes decision on eviction, so it just asssumes that all blocks in the set are candicates
-for eviction, and always returns the index of the selected candidate. The coherence controller, on the other hand, knows
-the exact state of the selected block, and will enforce correct behavior. 
+invalid or dirty when it makes decision on eviction. The coherence controller, on the other hand, knows the exact state 
+of the selected block, and will enforce correct behavior. As a result, the replacement policy will query the state of the 
+block when it evaluates the block for eviction to avoid evicting invalid blocks.
 
 The logic of `postinsert()` is simple. The replacement policy is notified that the selected block has been invalidated,
 and that a new block is inserted. The metadata for the block will be updated to reflect the replacement. The new address
 is also written into the array.
+
+### Replacement Policy
+
+The replacement policy is implemented as a ranking function. In this section we only discuss LRU. The policy can be specified
+using the `repl.type` key in the configuration file. zSim implements LRU using timestamps. A single global timestamp is 
+incremented for every access to the tag array. Each block also has a local timestamp which stores the value of the global
+timestamp when it is accessed. A larger local timestamp means the block is closer to the MRU position. The LRU policy
+simply selects the valid block with the smallest local timestamp as the eviction candidate.
+
