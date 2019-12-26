@@ -365,6 +365,15 @@ the bottommost dirty block owner and the current cache object will be invalidate
 
 The type of the write back depends on the state of the block after handling dirty write backs from children caches.
 If the block state is `E` or `S`, meaning no dirty data needs to be written, the coherence controller creates a 
-`PUTS` `MemReq` object, and calls parent cache `access()` method to handle the write back synchronously. 
-In both cases, the completion cycle of the parent `access()` method will be returned to the caller as the completion
+`PUTS` `MemReq` object, and calls parent cache `access()` method to handle the write back synchronously. If, on the 
+other hand, the block state is `M`, a `PUTX` `MemReq` object is created and fed to the parent cache's `access()` method. 
+`I` state blocks will be simply ignored, since they neither have any sharer nor require any form of write back.
+In all cases, the completion cycle of the parent `access()` method will be returned to the caller as the completion
 cycle of the eviction operation.
+
+One design decision is whether to send `PUTS` requests to parent caches when the block is clean. In general, sending clean 
+write backs help parent cache to manage their sharer lists by removing the sharer eagerly and making the list precise.
+Imprecise sharer lists do not affect correctness, but will incur extra coherence messages to caches that do not actually
+hold the block. zSim decouples the creation and processing of `PUTS` requests. `PUTS` requests are always sent whenever possible,
+but parent caches just ignore them. Since zSim does not model network utilization, and assumes that all invalidations
+are sent in parallel, not cleaning the sharer list eagerly will not affect simulation result. 
