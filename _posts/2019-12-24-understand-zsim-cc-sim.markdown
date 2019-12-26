@@ -406,5 +406,12 @@ holder of the block in parent's sharer list, and the parent itself also has `E` 
 For a `GETX` request, if the current block state is `E`, then the block silently transfers to `M` state without notifying
 the parent cache. The fact that a dirty block is held by the current cache will be available to the parent when an invalidation
 forces the `M` state block to be written back. If, however, the current state is `I` or `S`, then just like the case for
-`GETS`, the controller creates a `GETX` `MemReq` object, and feeds it to parent cache's `access()` method. The final
-state of the block will be set by the parent instance of `access()`, which should be `M`.
+`GETS`, the controller creates a `GETX` `MemReq` object, and feeds it to parent cache's `access()` method in order to
+invalidate all shared copies held by its peer caches (and peers of its parent, etc.). The final state of the block will 
+be set by the parent instance of `access()`, which should be `M`.
+
+The handling of `GETS` and `GETX` are more complicated on non-terminal caches. There are two invariants in non-terminal 
+coherence controllers. The first invariant is that a controller can grant permission to its children caches only if
+it holds the same or higher permission. For example, a controller holding an `S` state line should not grant `M` permission
+to the child without acquiring `M` permission with its parent first. The second invariant is that non-terminal cache 
+controllers always send data it has fetched to children caches (except for prefetching, which we do not discuss). 
