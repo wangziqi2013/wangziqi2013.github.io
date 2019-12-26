@@ -315,4 +315,8 @@ have a "1" bit in the sharer list. To elaborate: This function walks the sharer 
 sharer, it calls the cache object's `invalidate()` method recursively (recall that we are now in the initial `invalidate()`'s
 call chain). The type of invalidation and the boolean flag indicating dirty write back are passed unmodified. zSim assumes
 that all invalidations are signaled to child caches at the same time. The completion cycle of a single invalidation is 
-computed as the response cycle from the child cache plus the network latency. 
+computed as the response cycle from the child cache plus the network latency. Since all requests are signaled in parallel,
+the final completion cycle is the maximum of all child cache invalidations. After all children caches have responded,
+the controller changes the directory entry of the current block based on the invalidation type. For full invalidation,
+the directory entry is cleared, since the block no longer exists in the cache. For downgrades, the directory entry's 
+exclusive flag is cleared, but we keep sharer list bit vector intact.
