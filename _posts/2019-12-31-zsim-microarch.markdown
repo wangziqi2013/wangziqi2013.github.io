@@ -28,10 +28,10 @@ functionalities implemented in the file.
 
 | File Name (only showing headers) | Important Modules/Declarations |
 |:--------------------------------:|--------------------------------|
-| decoder.h | Pre-decoding and Decoding stage simulation; Instruction to uop translation; `DynBbl`, execution port definition; Register dependency definition. |
-| ooo\_core.h | Out-of-Order core microarchitecture simulation, incluuding instruction fetch, instruction window, reorder buffer, loads and stores, and register file simulation. |
 | zsim.cpp | Instrumentation routines for basic blocks, loads and stores, and branch instructions. | 
+| decoder.h | Pre-decoding and Decoding stage simulation; Instruction to uop translation; `DynBbl`, execution port definition; Register dependency definition. |
 | core.h | Core interface for analysis routines; Core interface for simulation.  |
+| ooo\_core.h | Out-of-Order core microarchitecture simulation, incluuding instruction fetch, instruction window, reorder buffer, loads and stores, and register file simulation. |
 {:.mbtablestyle}
 
 ### Dynamic Basic Block Instrumentation
@@ -62,11 +62,13 @@ independent from: (1) the decoding and execution of previous basic blocks; and (
 simulated pipeline. In the following discussion, we will see that the decoder uses relative cycle starting from zero 
 when it simulates decoding on the basic block, and that the pipeline will translate such relative cycle to the actual cycle.
 
+### Instruction Instrumentation
+
 Individual instructions in basic blocks are also instrumented by `Trace()` using `Instruction()`. For each instruction 
 in each basic block, `Instruction()` is called to determine whether the instruction will be instrumented and which type
 of instrumentation is injected. In an unmodified version of zSim, we instrument instructions that access memory by injecting
-`LoadFuncPtr()` and `StoreFuncPtr()` before them. Note that if an instruction accesses multiple memory locations, or both
-loads from and stores into memory, multiple instrumentations will be injected for the same instruction. In the following 
+`IndirectLoadSingle()` and `IndirectStoreSingle()` before them. Note that if an instruction accesses multiple memory locations, 
+or both loads from and stores into memory, multiple instrumentations will be injected for the same instruction. In the following 
 discussion, we will see that load and store call backs does nothing more than simply logging the address of loads and stores, 
 which serves as the basis of memory system simulation. Predicated loads and stores are also instrumented in a similar way,
 but we do not cover them in this article (and in practice they are rare). We also instrument branch instructions by injecting 
@@ -75,3 +77,6 @@ taken) for branch prediction simulation. Unsupported instructions (often impleme
 op"), virtualized instructions (those that must be emulated to hide the simulator or to change the bahavior, such as CPUID 
 and RDTSC) and simulator hints are also injected in `Instruction()`. In general, the flexibility of instruction instrumentation 
 enables much opportunity for third-party customization and extension.
+
+### Core Interface
+
