@@ -44,7 +44,7 @@ the control flow (by inserting its own private instrumentations), and will redir
 instrumented code blocks will be executed instead of the original. This instrument-once scheme avoids the overhead of 
 re-instrumentation when instructions are revisited regularly.
 
-In zSim, a trace is defined as a single-entry multiple-exit code block. Control flow could only enter the code block from 
+In PIN, a trace is defined as a single-entry multiple-exit code block. Control flow could only enter the code block from 
 the top (i.e. lowest address instruction), but can exit the trace via branch instructions in the middle. Naturally, a trace 
 consists multiple basic blocks, each beginning from the termination point of the previous basic block (or the beginning 
 of the trace), and terminates at the branch instruction exiting the trace. Note that basic blocks and traces are recognized 
@@ -56,7 +56,7 @@ will be discarded.
 In function `Trace()`, we iterate through all basic blocks contained in the trace, and calls `BBL_InsertCall()` to inject 
 analysis routine `IndirectBasicBlock()` before the basic block is executed, which will be called at runtime. We also
 simulate instruction decoding statically for the current basic block by calling `Decoder::decodeBbl()`. This function
-returns a `class BblInfo` object, which is passed to the analysis routine `IndirectBasicBlock()` for dynamic simulation.
+returns a `struct BblInfo` object, which is passed to the analysis routine `IndirectBasicBlock()` for dynamic simulation.
 Note that at this time, the basic block has not been executed yet, and the static decoder can only output decoder timings
 independent from: (1) the decoding and execution of previous basic blocks; and (2) the actual timing of the dynamically 
 simulated pipeline. In the following discussion, we will see that the decoder uses relative cycle starting from zero 
@@ -80,3 +80,14 @@ enables much opportunity for third-party customization and extension.
 
 ### Core Interface
 
+The core interface is defined in core.h. Two important data structures are defined in this header file. The first is 
+`struct BblInfo`, which stores information of a basic block, such as the size, number of instructions, micro-ops (uops), 
+and their relative decoder cycles. The last two are only used for Out-of-Order core simulation, and will not be generated 
+for other core types. Note that `BblInfo` (and the `DynBbl` it contains) is generated during instrumentation stage when 
+PIN first sees the basic block, rather than analysis stage when the instrumented code block is executed during run time. 
+This implies that as long as a basic block does not change (e.g. it might be broken down into smaller basic blocks if 
+control flow transfers to the middle of the block during execution), it is only decoded once, and the same decoder timing 
+is reused across multiple executions of the same block. When a basic block is about to be executed, the `BblInfo` struct 
+will be passed to the core via the `IndirectBasicBlock()` interface.
+
+The second 
