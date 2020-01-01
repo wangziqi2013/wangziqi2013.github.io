@@ -53,3 +53,11 @@ blocks (traces) if a branch instruction jumps to the middle of the block (trace)
 basic block (trace) will be re-instrumented by calling the instrumentation routine registered to PIN, and the old instrumentation 
 will be discarded.
 
+In function `Trace()`, we iterate through all basic blocks contained in the trace, and calls `BBL_InsertCall()` to inject 
+analysis routine `IndirectBasicBlock()` before the basic block is executed, which will be called at runtime. We also
+simulate instruction decoding statically for the current basic block by calling `Decoder::decodeBbl()`. This function
+returns a `class BblInfo` object, which is passed to the analysis routine `IndirectBasicBlock()` for dynamic simulation.
+Note that at this time, the basic block has not been executed yet, and the static decoder can only output decoder timings
+independent from: (1) the decoding and execution of previous basic blocks; and (2) the actual timing of the dynamically 
+simulated pipeline. In the following discussion, we will see that the decoder uses relative cycle starting from zero 
+when it simulates decoding on the basic block, and that the pipeline will translate such relative cycle to the actual cycle.
