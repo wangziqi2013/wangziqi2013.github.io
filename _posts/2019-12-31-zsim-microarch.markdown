@@ -71,4 +71,7 @@ discussion, we will see that load and store call backs does nothing more than si
 which serves as the basis of memory system simulation. Predicated loads and stores are also instrumented in a similar way,
 but we do not cover them in this article (and in practice they are rare). We also instrument branch instructions by injecting 
 `IndirectRecordBranch()` before them. This call back also just logs the target address and branch outcome (taken or not 
-taken) for branch prediction simulation. 
+taken) for branch prediction simulation. Unsupported instructions (often implemented by prefixing a special no-op as "magic 
+op"), virtualized instructions (those that must be emulated to hide the simulator or to change the bahavior, such as CPUID 
+and RDTSC) and simulator hints are also injected in `Instruction()`. In general, the flexibility of instruction instrumentation 
+enables much opportunity for third-party customization and extension.
