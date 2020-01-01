@@ -14,3 +14,13 @@ microarchitecture simulation in zSim. We will put our focus on Out-of-Order core
 of pipelined, Out-of-Order execution. We will also give a brief discussion on other types of cores, such as simple
 core and timing core. 
 
+As mentioned in the previous article, zSim is implemented as a binary instrumentation library using the PIN framework.
+Simulation is started by invoking the PIN executable with the path of both the zSim library (called a "pintool") and the 
+path of the application. The PIN executable then loads the application binary into memory, before it instruments the binary
+using directives (called "instrumentation routines") provided by the pintool. Instructions in the simulated binary is still
+executed by the native hardware, except that at certain points, such as load/store instructions, basic block boundaries, system
+calls, etc., the control will be transferred to the simulator for various purposes. These routines that are executed in
+the run time is called "analysis routines", in which the timing model of zSim is implemented. We do not cover the details of instrumentation. Instead, in this short introduction, we concentrate on, at a high level, how the simulated application 
+interacts with zSim and how controls are transferred between the simulator and the binary.
+
+### Basic Block Instrumentation
