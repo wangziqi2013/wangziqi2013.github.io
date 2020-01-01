@@ -38,11 +38,18 @@ functionalities implemented in the file.
 
 The instrumentation routine for basic blocks can be found in the `main()` function (zsim.cpp). zSim registers a call back
 `Trace()` to PIN using library call `TRACE_AddInstrumentFunction()`, the effect of which is that the `Trace()` call back
-will be invoked every time PIN sees an uninstrumented trace during execution. In zSim, a trace is defined as a single-entry
-multiple-exit code block. Control flow could only enter the code block from the top (i.e. lowest address instruction), but
-can exit the trace via branch instructions in the middle. Naturally, a trace consists multiple basic blocks, each beginning
-from the termination point of the previous basic block (or the beginning of the trace), and terminates at the branch instruction
-exiting the trace. Note that basic blocks and traces are recognized by the PIN framework dynamically, meaning that a dynamic 
-basic block (or trace) in PIN may be broken into two smaller basic blocks (traces) if a branch instruction jumps to the 
-middle of the block (trace) in the run time. In this case, each new basic block (trace) will be re-instrumented by calling 
-the instrumentation routine registered to PIN, and the old instrumentation will be discarded.
+will be invoked every time PIN sees an uninstrumented trace during execution. This instrumentation routine provides directives
+on how the trace should be instrumented (e.g. where to insert extra function calls, and which calls to insert). zSim monitors
+the control flow (by inserting its own private instrumentations), and will redirect branch instructions such that 
+instrumented code blocks will be executed instead of the original. This instrument-once scheme avoids the overhead of 
+re-instrumentation when instructions are revisited regularly.
+
+In zSim, a trace is defined as a single-entry multiple-exit code block. Control flow could only enter the code block from 
+the top (i.e. lowest address instruction), but can exit the trace via branch instructions in the middle. Naturally, a trace 
+consists multiple basic blocks, each beginning from the termination point of the previous basic block (or the beginning 
+of the trace), and terminates at the branch instruction exiting the trace. Note that basic blocks and traces are recognized 
+by the PIN framework dynamically, meaning that a dynamic basic block (or trace) in PIN may be broken into two smaller basic 
+blocks (traces) if a branch instruction jumps to the middle of the block (trace) in the run time. In this case, each new 
+basic block (trace) will be re-instrumented by calling the instrumentation routine registered to PIN, and the old instrumentation 
+will be discarded.
+
