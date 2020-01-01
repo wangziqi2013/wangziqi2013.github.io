@@ -61,3 +61,14 @@ Note that at this time, the basic block has not been executed yet, and the stati
 independent from: (1) the decoding and execution of previous basic blocks; and (2) the actual timing of the dynamically 
 simulated pipeline. In the following discussion, we will see that the decoder uses relative cycle starting from zero 
 when it simulates decoding on the basic block, and that the pipeline will translate such relative cycle to the actual cycle.
+
+Individual instructions in basic blocks are also instrumented by `Trace()` using `Instruction()`. For each instruction 
+in each basic block, `Instruction()` is called to determine whether the instruction will be instrumented and which type
+of instrumentation is injected. In an unmodified version of zSim, we instrument instructions that access memory by injecting
+`LoadFuncPtr()` and `StoreFuncPtr()` before them. Note that if an instruction accesses multiple memory locations, or both
+loads from and stores into memory, multiple instrumentations will be injected for the same instruction. In the following 
+discussion, we will see that load and store call backs does nothing more than simply logging the address of loads and stores, 
+which serves as the basis of memory system simulation. Predicated loads and stores are also instrumented in a similar way,
+but we do not cover them in this article (and in practice they are rare). We also instrument branch instructions by injecting 
+`IndirectRecordBranch()` before them. This call back also just logs the target address and branch outcome (taken or not 
+taken) for branch prediction simulation. 
