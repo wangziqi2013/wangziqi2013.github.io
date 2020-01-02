@@ -131,9 +131,21 @@ We list important fields of `class OOOCore` and their descriptions in the follow
 | storeAddrs | Addresses of memory store accesses within the current basic block. |
 | loads | Current number of memory load accesses (used to index loadAddrs) |
 | stores | Current number of memory stores accesses (used to index storeAddrs) |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| lastStoreCommitCycle | The commit cycle of the most recent store uop. This is used to model fence. |
+| lastStoreAddrCommitCycle | The commit cycle of address computation uop of the most recent store uop. This is used to model fence, data dependency of store uops, and load-store forwarding. |
+| loadQueue | Load address queue. Models queue contention. |
+| storeQueue | Store address queue. Models store contention. |
+| curCycleRFReads | Register file reads in the current cycle. Models register file bandwidth. |
+| curCycleIssuedUops | Instructions issued to the window in the current cycle. Models instruction issue bandwidth. |
+| insWindow | Instruction window for buffering instructions that have not yet been dispatched. |
+| rob | Reorder buffer. Models reorder buffer contention. |
+| branchPred | Branch predictor. |
+| branchTaken | Whether the branch in the current basic block is taken or not. |
+| branchTakenNpc | The next fetch address if the branch instruction is taken. |
+| branchNotTakenNpc | The next fetch address if the branch instruction is not taken. |
+| decodeCycle | The decoder cycle of the most recent uop. Models decoder bandwidth limit. |
+| uopQueue | The uop queue between decoder and the instruction window. Models the uop queue in Nahelem microarchitecture. |
+| fwdArray | An direct-mapped array of store addresses. Models store-load forwarding. |
+| cRec | Core recorder for weave phase timing model. Not covered. |
+| addressRandomizationTable | Randomizes page addresses. Models virtual to physical mapping (since zSim can only see virtual addresses, but in practice the cache system uses physical address). |
 {:.mbtablestyle}
