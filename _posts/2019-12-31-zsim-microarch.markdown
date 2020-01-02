@@ -93,18 +93,26 @@ will be passed to the core via the `IndirectBasicBlock()` interface.
 The second data structure is `struct InstrFuncPtrs`, which stores analysis routine function pointers. During initialization,
 each core type creates an instance of `struct InstrFuncPtrs`, and populates this structure with its own static member functions.
 zSim stores the current instance being used in a global structure, `InstrFuncPtrs fPtrs[MAX_THREADS]`, which is defined in zsim.cpp.
-Note that one instance of the struct per thread is required, since zSim also uses this extra level of indirection to implement
+Note that each thread has a private copy of this struct, since zSim also uses this extra level of indirection to implement
 per thread features, such as system call virtualization and fast forwarding. We list fields of `struct InstrFuncPtrs` and 
 their descriptions in the following table.
 
-| Field Name | Description | Core Method Called |
+| Field Name | Description | Core Method Called (`OOOCore`) |
 |:--------------------------------:|--------------------------------|---|
-| loadPtr | Called before instructions that read from memory for each operand | `OOOCore::LoadFunc` |
-| storePtr | Called before instructions that write into memory for each operand | `OOOCore::StoreFunc` |
-| bblPtr | Called before a basic block is about to be executed | `OOOCore::BblFunc` |
-| branchPtr | Called before control flow instructions, including conditional and unconditional branches | `OOOCore::BranchFunc` |
-| predLoadPtr | Called before predicated load instructions for each operand | `OOOCore::PredLoadFunc` |
-| predStorePtr | Called before predicated store instructions for each operand | `OOOCore::PredStoreFunc` |
+| loadPtr | Called before instructions that read from memory for each operand | `OOOCore::LoadFunc()` |
+| storePtr | Called before instructions that write into memory for each operand | `OOOCore::StoreFunc()` |
+| bblPtr | Called before a basic block is about to be executed | `OOOCore::BblFunc()` |
+| branchPtr | Called before control flow instructions, including conditional and unconditional branches | `OOOCore::BranchFunc()` |
+| predLoadPtr | Called before predicated load instructions for each operand | `OOOCore::PredLoadFunc()` |
+| predStorePtr | Called before predicated store instructions for each operand | `OOOCore::PredStoreFunc()` |
 | type | Type of the instance; Could be one of the `FPTR_ANALYSIS`, `FPTR_JOIN` or `FPTR_NONE` | N/A |
 {:.mbtablestyle}
 
+These analyais routines only perform simple bookkeeping except `OOOCore::BblFunc()`. `OOOCore::LoadFunc()` and `OOOCore::StoreFunc()`
+call `OOOCore::load()` and `OOOCore::store()` respectively, which log the memory access address into an array, `loadAddrs`
+and `storeAddrs`. These addresses will be used for cache system simulation after the current basic block has finished
+execution. Similarly, `OOOCore::PredLoadFunc()` and `OOOCore::PredStoreFunc()` log the addresses of predicated memory
+accesses if the condition evaluates to true, or -1 if false. `OOOCore::BranchFunc()` log the branch outcome, the taken
+and not taken address, and the address of the branch instruction itself by setting fields `branchTaken`, `branchTakenNpc`,
+`branchNotTakenNpc` and `branchPc`. Only one entry for branch logging is required, since according to the definition, 
+branches will only occur as the last instruction of a basic block.
