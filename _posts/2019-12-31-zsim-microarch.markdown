@@ -96,3 +96,14 @@ zSim stores the current instance being used in a global structure, `InstrFuncPtr
 Note that one instance of the struct per thread is required, since zSim also uses this extra level of indirection to implement
 per thread features, such as system call virtualization and fast forwarding. We list fields of `struct InstrFuncPtrs` and 
 their descriptions in the following table.
+
+| Field Name | Description | Core Method Called |
+|:--------------------------------:|--------------------------------|---|
+| loadPtr | Called before instructions that read from memory for each operand |  |
+| storePtr | Called before instructions that write into memory for each operand |  |
+| bblPtr | Called before a basic block is about to be executed |  |
+| branchPtr | Called before control flow instructions, including conditional and unconditional branches |  |
+| predLoadPtr | Called before predicated load instructions for each operand |  |
+| predStorePtr | Called before predicated store instructions for each operand |  |
+| type | Type of the instance; Could be one of the `FPTR_ANALYSIS`, `FPTR_JOIN` or `FPTR_NONE` | N/A |
+{:.mbtablestyle}
