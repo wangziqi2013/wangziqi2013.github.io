@@ -149,3 +149,13 @@ We list important fields of `class OOOCore` and their descriptions in the follow
 | cRec | Core recorder for weave phase timing model. Not covered. |
 | addressRandomizationTable | Randomizes page addresses. Models virtual to physical mapping (since zSim can only see virtual addresses, but in practice the cache system uses physical address). |
 {:.mbtablestyle}
+
+## Microarchitecture Simulation
+
+### Decoder Simulation
+
+As discussed in previous sections, the decoding stage is simulated when PIN instruments a new basic block. The decoder 
+timing information is stored as relative cycles, beginning at cycle zero, which will be expanded to actual cycles of the 
+microarchitecture during dynamic simulation. For each basic block, the decoding stage is only simulated once, and stored
+for later execution. This technique eliminates the overhead of decoding the same basic block every time it is executed, 
+resulting in better simulation throughput.
