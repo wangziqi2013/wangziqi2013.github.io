@@ -99,11 +99,12 @@ their descriptions in the following table.
 
 | Field Name | Description | Core Method Called |
 |:--------------------------------:|--------------------------------|---|
-| loadPtr | Called before instructions that read from memory for each operand |  |
-| storePtr | Called before instructions that write into memory for each operand |  |
-| bblPtr | Called before a basic block is about to be executed |  |
-| branchPtr | Called before control flow instructions, including conditional and unconditional branches |  |
-| predLoadPtr | Called before predicated load instructions for each operand |  |
-| predStorePtr | Called before predicated store instructions for each operand |  |
+| loadPtr | Called before instructions that read from memory for each operand | `OOOCore::LoadFunc` |
+| storePtr | Called before instructions that write into memory for each operand | `OOOCore::StoreFunc` |
+| bblPtr | Called before a basic block is about to be executed | `OOOCore::BblFunc` |
+| branchPtr | Called before control flow instructions, including conditional and unconditional branches | `OOOCore::BranchFunc` |
+| predLoadPtr | Called before predicated load instructions for each operand | `OOOCore::PredLoadFunc` |
+| predStorePtr | Called before predicated store instructions for each operand | `OOOCore::PredStoreFunc` |
 | type | Type of the instance; Could be one of the `FPTR_ANALYSIS`, `FPTR_JOIN` or `FPTR_NONE` | N/A |
 {:.mbtablestyle}
+
