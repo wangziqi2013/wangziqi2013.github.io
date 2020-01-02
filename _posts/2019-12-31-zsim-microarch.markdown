@@ -90,4 +90,9 @@ control flow transfers to the middle of the block during execution), it is only 
 is reused across multiple executions of the same block. When a basic block is about to be executed, the `BblInfo` struct 
 will be passed to the core via the `IndirectBasicBlock()` interface.
 
-The second 
+The second data structure is `struct InstrFuncPtrs`, which stores analysis routine function pointers. During initialization,
+each core type creates an instance of `struct InstrFuncPtrs`, and populates this structure with its own static member functions.
+zSim stores the current instance being used in a global structure, `InstrFuncPtrs fPtrs[MAX_THREADS]`, which is defined in zsim.cpp.
+Note that one instance of the struct per thread is required, since zSim also uses this extra level of indirection to implement
+per thread features, such as system call virtualization and fast forwarding. We list fields of `struct InstrFuncPtrs` and 
+their descriptions in the following table.
