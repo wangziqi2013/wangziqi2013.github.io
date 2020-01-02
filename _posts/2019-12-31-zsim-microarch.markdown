@@ -116,3 +116,24 @@ accesses if the condition evaluates to true, or -1 if false. `OOOCore::BranchFun
 and not taken address, and the address of the branch instruction itself by setting fields `branchTaken`, `branchTakenNpc`,
 `branchNotTakenNpc` and `branchPc`. Only one entry for branch logging is required, since according to the definition, 
 branches will only occur as the last instruction of a basic block.
+
+We list important fields of `class OOOCore` and their descriptions in the following table.
+
+| `OOOCore` Field Name | Description |
+|:--------------:|-----------|
+| l1i | L1 instruction cache; This cache is of `class FilterCache` type, which simulates the timing of private caches with less overhead than `class Cache` objects.  |
+| l1d | L1 data cache; This cache is of `class FilterCache` type, which simulates the timing of private caches with less overhead than `class Cache` objects. |
+| phaseEndCycle | The current bound phase end cycle; Used in bound-weave execution of threads to improve simulation accuracy. Not covered in this article. |
+| curCycle | Current issue cycle, i.e. the cycle that the most recently simulated uop enters instruction window. |
+| regScoreboard | An array of register available cycles. Used to model data flow dependency between instructions. |
+| prevBbl | The current basic block that just finished execution when `OOOCore::bbl()` is called (name is misleading). |
+| loadAddrs | Addresses of memory load accesses within the current basic block. |
+| storeAddrs | Addresses of memory store accesses within the current basic block. |
+| loads | Current number of memory load accesses (used to index loadAddrs) |
+| stores | Current number of memory stores accesses (used to index storeAddrs) |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+{:.mbtablestyle}
