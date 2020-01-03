@@ -204,3 +204,10 @@ the store unit, and port 3 being the address generation unit. An uop can be issu
 can be found in decoder.cpp. Macro `PORT_0` to `PORT_5` defines the constant for a single port. `PORTS_015` is defined as 
 the bitwise OR of `PORT_0`, `PORT_1` and `PORT_5`, which is used to indicate that the uop can be executed by any of the 
 three general-purpose ALU.
+
+zSim assumes that most function units are pipelined, which means that one uop can be dispatched each cycle regardless 
+of the latency (intermediate states of the functional units are stored in the pipeline buffer of the unit). Some uops,
+however, must be handled in a non-pipelined manner, which means that no uop can be dispatched to the functional unit
+after the uop has been dispatched. The number of cycles of non-pipelined execution of the uop is stored in the `extraSlots`
+field. When modeling instruction dispatching, no uop can be dispatched to a port within `extraSlots` future cycles if the 
+most recent uop has a non-zero `extraSlots` value.
