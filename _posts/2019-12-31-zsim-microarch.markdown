@@ -158,9 +158,7 @@ is (Agner's Blog)[https://www.agner.org/optimize/], in which the structure of th
 in detail. zSim also uses materials in this blog as a reference. If you are uncertain about why a microarchitectural parameter 
 is modeled in a particular way, it is suggested that you use the mentioned blog as the ultimate reference.
 
-## Microarchitecture Simulation
-
-### Decoder Simulation
+## Decoder Simulation
 
 As discussed in previous sections, the decoding stage is simulated when PIN instruments a new basic block. The decoder 
 timing information is stored as relative cycles, beginning at cycle zero, which will be expanded to actual cycles of the 
@@ -169,6 +167,8 @@ for later execution. This technique eliminates the overhead of decoding the basi
 for the first time, which can result in better simulation throughput. The decoder implementation is in decoder.cpp. The entry 
 point of the decoder is `decodeBbl()`.
 
+## Micro-Ops
+
 zSim is designed to model microarchitectures similar to Core2 and Nahalem, in which x86 instructions are decoded into
 RISC-like micro-ops (uops). One instruction can be translated into multiple uops if the instruction conatins several
 computation that cannot be executed by a single function unit. For example, for a store instruction, there are two
@@ -176,4 +176,18 @@ steps involved: address computation and the actual store. The decoder will corre
 into two uops, the first using the address generation unit to calculate the store address and store it into an 
 internal temporary register, and the second will read the temporary register before executed by the store unit. These two
 uops must be executed respecting the data flow order, and retired in the reorder buffer atomically.
+
+The data structure for uops is `struct DynUop`, which is defined in decoder.h. Just like a RISC instruction, an uop contains
+source and destination registers. These registers can be architectural registers or internal temporary registers for uops
+to store intermediate results, and they are used to model data-flow dependencies in out-of-order execution. Note that zSim 
+does not model register renaming, i.e. uops directly use architectural register to establish dependencies. This may introduce 
+unnecessary data flow dependencies, as shown by the below example:
+
+```
+1 | mov eax, ebx
+2 | mov [esi], eax
+3 | mov eax, ecx
+4 | mov [edi], eax
+```
+
 
