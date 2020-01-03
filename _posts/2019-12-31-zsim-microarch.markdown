@@ -190,4 +190,9 @@ unnecessary data flow dependencies, as shown by the below example:
 4 | mov [edi], eax
 ```
 
-
+In this example, if regster `eax` is not renamed, then instruction 1, 2, 3, 4 must be executed serially, since they form 
+RAW, WAR, and RAW dependencies respectively. If, on the other hand, `eax` is renamed, then instruction 1, 2 can be executed 
+out-of-order against instruction 3, 4, since `eax` will be renamed to a different register, and the WAR between instruction 
+2 and 3 can be eliminated. By not allowing instruction 1, 2 and 3, 4 to be issued in parallel, zSim may slightly underestimate 
+IPC. It is, however, also expected that such instruction sequence will be eliminated by an optimizing compiler already, 
+and hence does not introduce too much error in the simulation result.
