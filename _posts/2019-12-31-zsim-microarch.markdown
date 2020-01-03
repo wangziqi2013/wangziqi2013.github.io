@@ -280,4 +280,16 @@ read and written. We list fields of `class Decoder::Instr` and their description
 
 ### Converting Instructions to Uops
 
+As discussed in previous sections, before a basic block is instrumented by PIN, the instrumentation routine `Trace()` calls
+`decodeBbl()`, defined in decoder.cpp, to statically decode the basic block. The decoded information is returned via a 
+`BblInfo` object, which contains metadata of the block and timing information of decoded uops.
+
+Function `decodeBbl()` loops through the list of instructions using PIN iterator functions. For every instruction visited,
+we first check whether uop fusion is possible. Uop fusion is a technique to generate less than one uop per instruction
+by leveraging common code patterns, similar to pattern-based compression algorithms. zSim only models uop fusion pattern 
+consisting of a compare or test instruction followed by a jump. Extra conditions also apply, such that the compare or 
+test instruction must not use immediate value as operands, and that the jump must not be an indirect jump. The function
+checks whether these conditions hold by calling `canFuse()`, and if the result is positive, `decodeFusedInstrs()` is called
+to emit a single uop for the fused pattern. The single uop use both RFLAGS and RIP as destination registers.
+
 The main function for converting instructions to uops is `decodeInstr()`, defined in decoder.cpp.
