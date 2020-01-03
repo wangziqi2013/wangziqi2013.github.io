@@ -299,3 +299,7 @@ and uninretesting. The rule of mapping instructions to uops can be found in (Agn
 x86 instruction set, but there are still unsupported instructions, such as fence instructions (`LFENCE`, `SFENCE` and 
 `MFENCE`).
 
+Besides `uopVec`, another four arrays track how instructions are broken intp uops. They are all indexed by instruction
+IDs within the basic block. `instrAddr` stores addresses of instructions. `instrBytes` stores number of bytes of 
+instructions. `instrUops` stores the number of uops each instruction generates. Lastly, `instrDesc` stores the `INS`
+object itself. These information are later used to determine pre-decoder and decoder cycles of generated uops.
