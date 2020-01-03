@@ -230,3 +230,15 @@ We list fields and descriptions of `struct DynUop` in the following table.
 | portMask | Ports that this uop can be scheduled on. |
 | extraSlots | Blocks the port on which the uop is scheduled from dispatching for this number of cycles. |
 
+### Registers
+
+To model data flow dependencies between uops and between instructions, we store source and destination registers in 
+`struct DynUop`. A uop cannot be issued before all its dependent source registers become available (i.e. uops
+that write to them are committed). A uop updates the timestamp of these registers when it commits to "wake up"
+following uops. To model dependencies between instructions, we directly use architectural registers, which are obtained 
+from PIN, as source (destination) operands for uops that read the operand from a previous instruction (write the result
+for a later instruction). To model dependencies between uops, we use temporary registers that may not physically exist
+on a chip, but are just there to encode the dependency. In practice, these temporary "registers" may just be ROB entries.
+All registers are represented using a constant register number.
+
+Register number constants are defined in decoder.h
