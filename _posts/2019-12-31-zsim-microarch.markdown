@@ -169,4 +169,11 @@ for later execution. This technique eliminates the overhead of decoding the basi
 for the first time, which can result in better simulation throughput. The decoder implementation is in decoder.cpp. The entry 
 point of the decoder is `decodeBbl()`.
 
-zSim is designed to model microarchitectures similar to Core2 and Nahalem.
+zSim is designed to model microarchitectures similar to Core2 and Nahalem, in which x86 instructions are decoded into
+RISC-like micro-ops (uops). One instruction can be translated into multiple uops if the instruction conatins several
+computation that cannot be executed by a single function unit. For example, for a store instruction, there are two
+steps involved: address computation and the actual store. The decoder will correspondingly translate the store instruction 
+into two uops, the first using the address generation unit to calculate the store address and store it into an 
+internal temporary register, and the second will read the temporary register before executed by the store unit. These two
+uops must be executed respecting the data flow order, and retired in the reorder buffer atomically.
+
