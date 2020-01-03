@@ -311,3 +311,10 @@ On x86 platform, this is not a trivial task, since x86 instructions are variably
 To complicate things even more, instruction prefixes can be applied to add extra features or to change the semantics such 
 as operand size. zSim does not model decoding latency of prefixed instructions. Prefixes themselves, however, are still
 modeled, such that a prefixed instruction may lower the decoding bandwidth by occpying more storage.
+
+zSim models the pre-decoder using three cricial paremeters: Block size, maximum instruction per cycle, and maximum number
+of pre-decoded bytes per cycle. The pre-decoder reads instruction memory in 16-byte blocks. It will not proceed to fetch
+the next 16 byte before finishing all instructions in the current block. Within a block, at most 6 instructions or 16
+bytes (i.e. entire block) can be processed in a cycle, whichever is reached first.
+
+
