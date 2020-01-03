@@ -210,3 +210,11 @@ however, must be handled in a non-pipelined manner, which means that no uop can 
 after the uop has been dispatched. The number of cycles of non-pipelined execution of the uop is stored in the `extraSlots`
 field. When modeling instruction dispatching, no uop can be dispatched to a port within `extraSlots` future cycles if the 
 most recent uop has a non-zero `extraSlots` value.
+
+Each uop also contains a type field, which can be of value `UOP_GENERAL`, `UOP_LOAD`, `UOP_STORE`, `UOP_STORE_ADDR`, or 
+`UOP_FENCE`. Among these types, `UOP_GENERAL` refers to uops that are not part of a load, a store or a fence instruction
+(note that some instructions may effectively be treated as a fence). zSim does not model general uops besides their 
+latencies and port masks. `UOP_LOAD` and `UOP_STORE` refer to load and store uops respectively. `UOP_STORE_ADDR` refers
+to the uop that calculates store addresses. We handle this type differently to model store-load forwarding, since we
+can only determine whether a load needs forwarding after all previous stores addresses are computed.
+
