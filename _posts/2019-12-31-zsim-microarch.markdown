@@ -303,3 +303,11 @@ Besides `uopVec`, another four arrays track how instructions are broken intp uop
 IDs within the basic block. `instrAddr` stores addresses of instructions. `instrBytes` stores number of bytes of 
 instructions. `instrUops` stores the number of uops each instruction generates. Lastly, `instrDesc` stores the `INS`
 object itself. These information are later used to determine pre-decoder and decoder cycles of generated uops.
+
+### Simulating Pre-Decoder
+
+In Nehalem pipeline, fetched instructions are first delivered to a pre-decoder, in which instruction boundaries are drawn.
+On x86 platform, this is not a trivial task, since x86 instructions are variably sized, with a maximum length of 15 bytes.
+To complicate things even more, instruction prefixes can be applied to add extra features or to change the semantics such 
+as operand size. zSim does not model decoding latency of prefixed instructions. Prefixes themselves, however, are still
+modeled, such that a prefixed instruction may lower the decoding bandwidth by occpying more storage.
