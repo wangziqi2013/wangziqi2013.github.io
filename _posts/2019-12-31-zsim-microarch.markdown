@@ -317,4 +317,8 @@ of pre-decoded bytes per cycle. The pre-decoder reads instruction memory in 16-b
 the next 16 byte before finishing all instructions in the current block. Within a block, at most 6 instructions or 16
 bytes (i.e. entire block) can be processed in a cycle, whichever is reached first.
 
-
+zSim also assumes that basic blocks can be decoded independent from each other. In other words, the decoder should be 
+in a clean state in which there is no undecoded instructions from the previous basic block. This assumptions is generally
+true, if the compiler aligns every basic block to 16-byte boundaries, since the pre-decoder will not proceed to fetch
+the next block before finishing the current block. Even in the cases that this cannot be satisfied, a comment in 
+decoder.c claims that the error should be small.
