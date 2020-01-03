@@ -292,4 +292,10 @@ test instruction must not use immediate value as operands, and that the jump mus
 checks whether these conditions hold by calling `canFuse()`, and if the result is positive, `decodeFusedInstrs()` is called
 to emit a single uop for the fused pattern. The single uop use both RFLAGS and RIP as destination registers.
 
-The main function for converting instructions to uops is `decodeInstr()`, defined in decoder.cpp.
+If the instruction cannot be fused with the next one, then `decodeInstr()` is called to emit uops for the current instruction.
+Uops will be emitted into an array, `uopVec`. We do not cover details of uop emission, since they are mostly mechanical
+and uninretesting. The rule of mapping instructions to uops can be found in (Agner's Blog)[https://www.agner.org/optimize/],
+(Instruction Tables (PDF))[https://www.agner.org/optimize/instruction_tables.pdf]. zSim implemented a large subset of the 
+x86 instruction set, but there are still unsupported instructions, such as fence instructions (`LFENCE`, `SFENCE` and 
+`MFENCE`).
+
