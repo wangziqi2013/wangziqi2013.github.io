@@ -229,6 +229,7 @@ We list fields and descriptions of `struct DynUop` in the following table.
 | type | Type of the uop. |
 | portMask | Ports that this uop can be scheduled on. |
 | extraSlots | Blocks the port on which the uop is scheduled from dispatching for this number of cycles. |
+{:.mbtablestyle}
 
 ### Architectural and Temporary Registers
 
@@ -260,7 +261,22 @@ and 16-bit partial register instructions for efficiency reasons, which makes sim
 Before an PIN instruction object (`class INS`) can be processed by the decoder, we first pre-process the `INS` object to 
 extract its register and memory operands. The zSim pre-processed instruction object is defined as `class Decoder::Instr`.
 Its constructor takes a PIN `INS` object as argument, and populates the register operands, register outputs, memory loads
-and memoey stores
+and memoey stores. Note that an instruction may have more than two operands, and each operand can be both read and written
+by the same instruction. Correspondingly, in the `Instr` representation, one operand may occur as both source and destination, or both
+read and written. We list fields of `class Decoder::Instr` and their descriptions in the following table.
+
+| `Decoder::Instr` Field Name | Description |
+|:--------------:|------------------|
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+|  |  |
+{:.mbtablestyle}
 
 ### Converting Instructions to Uops
 
