@@ -150,6 +150,14 @@ We list important fields of `class OOOCore` and their descriptions in the follow
 | addressRandomizationTable | Randomizes page addresses. Models virtual to physical mapping (since zSim can only see virtual addresses, but in practice the cache system uses physical address). |
 {:.mbtablestyle}
 
+### Microarchitecture Documentation
+
+Since Intel has never published any detailed description of its microarchitecture, most of the details can only be obtained
+via experimentation (timing measurements) and educated guesses. One extremely useful resource of microarchitectural documents
+is (Agner's Blog)[https://www.agner.org/optimize/], in which the structure of the pipeline and micro-op (uop) maps are described
+in detail. zSim also uses materials in this blog as a reference. If you are uncertain about why a microarchitectural parameter 
+is modeled in a particular way, it is suggested that you use the mentioned blog as the ultimate reference.
+
 ## Microarchitecture Simulation
 
 ### Decoder Simulation
@@ -157,5 +165,8 @@ We list important fields of `class OOOCore` and their descriptions in the follow
 As discussed in previous sections, the decoding stage is simulated when PIN instruments a new basic block. The decoder 
 timing information is stored as relative cycles, beginning at cycle zero, which will be expanded to actual cycles of the 
 microarchitecture during dynamic simulation. For each basic block, the decoding stage is only simulated once, and stored
-for later execution. This technique eliminates the overhead of decoding the same basic block every time it is executed, 
-resulting in better simulation throughput.
+for later execution. This technique eliminates the overhead of decoding the basic block every time it is executed, except
+for the first time, which can result in better simulation throughput. The decoder implementation is in decoder.cpp. The entry 
+point of the decoder is `decodeBbl()`.
+
+zSim is designed to model microarchitectures similar to Core2 and Nahalem.
