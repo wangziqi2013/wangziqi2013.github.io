@@ -322,3 +322,13 @@ in a clean state in which there is no undecoded instructions from the previous b
 true, if the compiler aligns every basic block to 16-byte boundaries, since the pre-decoder will not proceed to fetch
 the next block before finishing the current block. Even in the cases that this cannot be satisfied, a comment in 
 decoder.c claims that the error should be small.
+
+Current pre-decoder cycle is stored in a local variable `pcyc`, beginning from zero. `pblk` stores the relative block
+number of the 16-byte block the current instruction resides in, starting from the beginning of the basic block. `pcnt`
+stores the number of instructions that have been pre-decoded. `psz` stores the number of bytes that have been pre-decoded.
+We iterate over all instructions in the current basic block. We scan the maximum instruction "prefix" that: (1) is 
+smaller than 16 bytes; (2) contains less than six instructions; and (3) does not cross 16 byte boundary. Note that condition
+(1) and (3) are not entirely identical, since the basic block may not begin at 16-byte boundary. We assign pre-decoder 
+cycle to instructions by updating the array `predecCycle` using the current value of `pcyc`. If any of the above three
+conditions could not hold, we increment `pcyc`, indicating that the pre-decoder must process the following instructions
+in the next cycle.
