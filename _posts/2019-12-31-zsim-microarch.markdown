@@ -196,3 +196,11 @@ out-of-order against instruction 3, 4, since `eax` will be renamed to a differen
 2 and 3 can be eliminated. By not allowing instruction 1, 2 and 3, 4 to be issued in parallel, zSim may slightly underestimate 
 IPC. It is, however, also expected that such instruction sequence will be eliminated by an optimizing compiler already, 
 and hence does not introduce too much error in the simulation result.
+
+uops also have a fixed latency, which describe the number of cycles it takes to execute the uop after it is dispatched to 
+the functional unit. The port mask is a 8-bit flag array indicating which ports could the uop be dispatched to. On Nehalem,
+there are six execution ports, from which port 0, 1, 5 being general-purpose ALUs, port 2 being the load unit, port 4 being 
+the store unit, and port 3 being the address generation unit. An uop can be issued to one or more ports. Port constant definition
+can be found in decoder.cpp. Macro `PORT_0` to `PORT_5` defines the constant for a single port. `PORTS_015` is defined as 
+the bitwise OR of `PORT_0`, `PORT_1` and `PORT_5`, which is used to indicate that the uop can be executed by any of the 
+three general-purpose ALU.
