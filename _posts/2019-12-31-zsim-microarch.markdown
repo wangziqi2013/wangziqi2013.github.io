@@ -167,7 +167,7 @@ for later execution. This technique eliminates the overhead of decoding the basi
 for the first time, which can result in better simulation throughput. The decoder implementation is in decoder.cpp. The entry 
 point of the decoder is `decodeBbl()`.
 
-## Micro-Ops
+### Micro-Ops
 
 zSim is designed to model microarchitectures similar to Core2 and Nahalem, in which x86 instructions are decoded into
 RISC-like micro-ops (uops). One instruction can be translated into multiple uops if the instruction conatins several
@@ -182,13 +182,12 @@ source and destination registers. These registers can be architectural registers
 to store intermediate results, and they are used to model data-flow dependencies in out-of-order execution. Note that zSim 
 does not model register renaming, i.e. uops directly use architectural register to establish dependencies. This may introduce 
 unnecessary data flow dependencies, as shown by the below example:
-
-```
+{% highlight assmebly %}
 1 | mov eax, ebx
 2 | mov [esi], eax
 3 | mov eax, ecx
 4 | mov [edi], eax
-```
+{% endhighlight %}
 
 In this example, if regster `eax` is not renamed, then instruction 1, 2, 3, 4 must be executed serially, since they form 
 RAW, WAR, and RAW dependencies respectively. If, on the other hand, `eax` is renamed, then instruction 1, 2 can be executed 
