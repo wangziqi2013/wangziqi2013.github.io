@@ -332,3 +332,9 @@ smaller than 16 bytes; (2) contains less than six instructions; and (3) does not
 cycle to instructions by updating the array `predecCycle` using the current value of `pcyc`. If any of the above three
 conditions could not hold, we increment `pcyc`, indicating that the pre-decoder must process the following instructions
 in the next cycle.
+
+### Simulating Decoder
+
+Decoder is simulated right after we finish simulating pre-decoder. The decoder logic assumed by zSim can be expressed as 
+"4-1-1-1" rule: At most four instructions can be decoded at a time using the three simple decoders and one complex decoder.
+The three simple decoders 
