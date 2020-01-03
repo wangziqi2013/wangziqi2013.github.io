@@ -267,15 +267,15 @@ read and written. We list fields of `class Decoder::Instr` and their description
 
 | `Decoder::Instr` Field Name | Description |
 |:--------------:|------------------|
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
-|  |  |
+| ins | PIN instruction object. |
+| loadOps | An array of memory read operand IDs. Used with PIN `INS_OperandMemoryBaseReg()` and `INS_OperandMemoryIndexReg()`. |
+| numLoads | Number of memory read operands (i.e. the size of the `loadOps` array). |
+| storeOps | An array of memory write operand IDs. Used with PIN `INS_OperandMemoryBaseReg()` and `INS_OperandMemoryIndexReg()`. |
+| numStores | Number of memory write operands (i.e. the size of the `loadOps` array). |
+| inRegs | An array of source register IDs, both explicit and implicit (e.g. FLAGS). |
+| numInRegs | Number of source registers (i.e. the size of the `inRegs` array). |
+| outRegs | An array of destination register IDs, both explicit and implicit (e.g. FLAGS). |
+| numOutRegs | Number of destination registers (i.e. the size of the `numOutRegs` array). |
 {:.mbtablestyle}
 
 ### Converting Instructions to Uops
