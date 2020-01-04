@@ -383,12 +383,19 @@ processed by these components. Uops are fed to the pipeline in the order they ar
 consistent with program order. Each simulated component maintains its own clock, which represents the last time an uop is 
 processed by the component. This in-order simulation technique makes sense even for out-of-order cores, since most components 
 of an out-of-order core are still in-order, such as fetch, decode, issue, and retirement. Loads and stores are pushed into 
-the load and store queue in program order as well. 
+the load and store queue in program order as well. For out-of-order components, such as instruction dispatch logic, 
+maintaining a single clock is insufficient, since an instruction "from the past" (with regard to the clock) may emerge, but
+past states have already been "forgotten" by the component after the clock is driven forward. To solve this problem,
+we maintain multiple clocks and the corresponding states (e.g. execution port occupation mask) to allow dispatching 
+instructions into the future without driving forward the clock. In this case, the clock is updated conservatively
+and lazily when no instruction from the past can ever arrive.
 
-In general, this simulation scheme is faster than tick-by-tick simulation 
-of all components, since a component can "skip" idle cycles if a prior pipeline stage is blocked, for example, by resource 
-hazards. In this case, zSim core model will simply drive forward the clock of the current component to the future cycle 
-in which the next uop is processed by the prior component. This is equivalent to stalling the current component until 
-pipelined execution resumes, except that these idle cycles are never simulated.
+Generally speaking, this simulation technique is faster than tick-by-tick simulation of all components, since a component can 
+"skip" idle cycles if a prior pipeline stage is stalled, for example, by resource hazards. In this case, zSim core model 
+will simply drive forward the clock of the current component to the future cycle in which the next uop is processed by the 
+prior component. This is equivalent to stalling the current component until pipelined execution resumes, except that these 
+idle cycles are never simulated.
+
+
 
 We next describe each stage of the pipeline in a separate section.
