@@ -358,7 +358,8 @@ simulation of the basic block, as we will discuss below.
 
 After decoder simulation completes, a `BblInfo` object is allocated to store static information of the basic block,
 including the size, the number of instructions, and decoded uops. The `BblInfo` object contains a `DynBbl` object
-at the end, 
+at the end, which itself contains an array of `DynUop` objects. These structs are variably-sized to increase access 
+locality. The `BblInfo` object will also be passed to the analysis routine before the basic block is executed.
 
 ## Simulating the Rest of the Pipeline
 
