@@ -397,11 +397,21 @@ prior component. This is equivalent to stalling the current component until pipe
 idle cycles are never simulated.
 
 The simulation maintains two invariants. The first invariant is that the processing time of the same uop must be monotonically
-increasing down flowing through the pipeline. In other words, assume an uop is processed by pipeline stage A at cycle x, 
-and pipeline stage B at cycle y. As long as A is an earlier stage than B, x must be strictly less than y. This translates 
-to the coding pattern that if the uop is simulated by component A at local clock x, and the current clock of component B 
-is y, then we first drive the clock of component B forward by taking the maximum between x and y, and assign it to y. This 
-way, we guarantee that all components' local clocks are synchronized. The second invariant is that for a FIFO circular 
-buffer of size SZ and a series of elements x1, x2, x3, ..., xn, n >> SZ, 
+increasing through the pipeline. In other words, if an uop is processed by pipeline stage A at cycle x, and pipeline stage 
+B at cycle y, then as long as A is an earlier stage than B, x must be strictly less than y. This translates to the coding 
+pattern that if the uop is simulated by component A at local clock x, and the current clock of component B is y, then we 
+first drive the clock of component B forward by taking the maximum between x and y, and assign it to y. This way, we guarantee 
+that all components' local clocks are synchronized. 
+
+The second invariant is that for a FIFO circular buffer of size SZ and a series of elements x<sub>1</sub>, x<sub>2</sub>, 
+x<sub>3</sub>, ..., x<sub>n</sub>, n >> SZ, for any arbitrary element x<sub>i</sub>, the enqueue time of xi must be larger 
+than the dequeue time of the previous element at the same slot, x<sub>i - SZ</sub>. Note that the FIFO property itself 
+suggests that for any element x<sub>i</sub>, the dequeue time of x<sub>i</sub> must be larger than the dequeue time its 
+previous element, x<sub>i - 1</sub>. Furthermore, when the queue is mostly full, an element x<sub>i</sub> will be enqueued 
+as soon as the previous element in the slot x<sub>i - SZ</sub> is dequeued. In this case, the lower bound of x<sub>i</sub>'s 
+enqueue time becomes a strict lower bound, meaning that we can compute exact enqueue time by keeping track of the most recent 
+leave time for all slots. In the following discussion, we will see that this invariant is applied to all FIFO buffer structures,
+such as uop buffer, ROB, and load store queue.
+
 
 We next describe each stage of the pipeline in a separate section.
