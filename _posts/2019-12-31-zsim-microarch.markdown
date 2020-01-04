@@ -413,5 +413,11 @@ enqueue time becomes a strict lower bound, meaning that we can compute exact enq
 leave time for all slots. In the following discussion, we will see that this invariant is applied to all FIFO buffer structures,
 such as uop buffer, ROB, and load store queue.
 
-
 We next describe each stage of the pipeline in a separate section.
+
+### Uop Buffer
+
+The uop buffer is a circular FIFO structure sitting between the decoder and the instruction window in Nehalem architecture
+(in Core 2 it is between the pre-decoder and decoder). It serves as a temporary storage for uops from tight loops, such
+that the loop body can be directly fetched from the buffer rather than from the fetch-decode frontend, reducing latency 
+and energy consumption. 
