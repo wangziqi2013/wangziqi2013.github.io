@@ -396,7 +396,7 @@ will simply drive forward the clock of the current component to the future cycle
 prior component. This is equivalent to stalling the current component until pipelined execution resumes, except that these 
 idle cycles are never simulated.
 
-The simulation maintains two invariants. The first invariant is that the processing time of the same uop must be monotonically
+The simulation maintains two invariants. The first invariant is that the processing cycle of the same uop must be monotonically
 increasing through the pipeline. In other words, if an uop is processed by pipeline stage A at cycle x, and pipeline stage 
 B at cycle y, then as long as A is an earlier stage than B, x must be strictly less than y. This translates to the coding 
 pattern that if the uop is simulated by component A at local clock x, and the current clock of component B is y, then we 
@@ -407,11 +407,16 @@ The second invariant is that for a FIFO circular buffer of size SZ and a series 
 x<sub>3</sub>, ..., x<sub>n</sub>, n >> SZ, for any arbitrary element x<sub>i</sub>, the enqueue time of xi must be larger 
 than the dequeue time of the previous element at the same slot, x<sub>i - SZ</sub>. Note that the FIFO property itself 
 suggests that for any element x<sub>i</sub>, the dequeue time of x<sub>i</sub> must be larger than the dequeue time its 
-previous element, x<sub>i - 1</sub>. Furthermore, when the queue is mostly full, an element x<sub>i</sub> will be enqueued 
-as soon as the previous element in the slot x<sub>i - SZ</sub> is dequeued. In this case, the lower bound of x<sub>i</sub>'s 
-enqueue time becomes a strict lower bound, meaning that we can compute exact enqueue time by keeping track of the most recent 
-leave time for all slots. In the following discussion, we will see that this invariant is applied to all FIFO buffer structures,
-such as uop buffer, ROB, and load store queue.
+previous element, x<sub>i - 1</sub>. zSim implicitly enforces this property by simulating uops in-order. Furthermore, when 
+the queue is mostly full, an element x<sub>i</sub> will be enqueued as soon as the previous element in the slot x<sub>i - SZ</sub> 
+is dequeued. In this case, the lower bound of x<sub>i</sub>'s enqueue time becomes a strict lower bound, meaning that we 
+can compute exact enqueue time by keeping track of the most recent leave time for all slots. When the queue is not full,
+implying that the producer cannot sustain the bandwidth of the consumer, producer becomes the bottleneck, in which case
+the producer's processing cycle of the uop will be larger than the leave time on the corresponding slot (i.e. the uop is
+not enqueued as soon as the previous uop is removed, since the uop has not been produced by prvious pipeline stages yet). 
+By applying the first invariant, we drive the time of the buffer forwarding by using producer's time as the enqueue cycle. 
+In the following discussion, we will see that this invariant is applied to all FIFO buffer structures, such as uop buffer, 
+ROB, and load store queue.
 
 We next describe each stage of the pipeline in a separate section.
 
