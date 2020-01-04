@@ -337,6 +337,18 @@ in the next cycle.
 
 Decoder is simulated right after we finish simulating pre-decoder. The decoder logic assumed by zSim can be summarized as 
 "4-1-1-1" rule: At most four instructions can be decoded at a time using the three simple decoders and one complex decoder.
-The three simple decoders can decode instructions that generate one uop at a time, and the complex decoder can decode
-instructions that generate up to four uops. More complicated instructions are decoded using the micro-sequenced ROM, which
-is not modeled, since they are rarely used in practice.
+The three simple decoders can decode instructions that are less than eight bytes in size, and generate one uop at a time.
+The complex decoder can decode instructions that generate up to four uops (including simple instructions), and there is 
+no limit on instruction size. More complicated instructions are decoded using the micro-sequenced ROM, which is not modeled, 
+since they are rarely used in practice.
+
+The decoder stage is simulated as follows. Local variable `dcyc` tracks the current decoder cycle. For each uop generated,
+we keep the `dcyc` value of an uop always no less than the pre-decoder cycle (`predecCycle`) of the corresponding instruction
+by adjusting `dcyc` to `predecCycle[i]` where `i` is the index of the instruction. This indicates that the pre-decoder 
+becomes the bottleneck, and the decoder is stalled for `predecCycle[i] - dcyc` cycles waiting for the pre-decoder. Variable 
+`dsimple` and `dcomplex` tracks the number of simple and complex instructions. If at a given cycle, no more instruction 
+can be decoded according to the "4-1-1-1" rule, we just increment current decoder cycle `dcyc` to indicate that
+the next instruction can only be decoded in a different cycle than previous instructions. `dsimple` and `dcomplex` are 
+incremented accordingly based on the type of the decoded instruction. We assign `dcyc` to uop's object `decCycle` field
+for later use. 
+
