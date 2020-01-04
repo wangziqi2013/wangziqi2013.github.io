@@ -352,3 +352,6 @@ the next instruction can only be decoded in a different cycle than previous inst
 incremented accordingly based on the type of the decoded instruction. We assign `dcyc` to uop's object `decCycle` field
 for later use. 
 
+Note that both `dcyc` and `pcyc` (pre-decoder cycles) are initialized to zero, meaning that we simulate basic block decoding
+starting from cycle zero. These "relative" cycles will be converted to actual cycles of the processor pipeline during dynamic 
+simulation of the basic block, as we will discuss below.
