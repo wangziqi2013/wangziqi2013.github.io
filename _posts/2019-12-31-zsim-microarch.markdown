@@ -360,15 +360,16 @@ After decoder simulation completes, a `BblInfo` object is allocated to store sta
 including the size, the number of instructions, and decoded uops. The `BblInfo` object contains a `DynBbl` object
 at the end, 
 
-## Issue, Dispatch, Execution and Retire
+## Simulating the Rest of the Pipeline
 
 The rest of the pipeline is simulated dynamically after execution of the basic block is completed. Simulation is performed 
-in the granularity of basic blocks. Recall that zSim instrumented all basic blocks such that the call back `OOOCore::BblFunc()` 
+in the granularity of basic blocks. Recall that zSim instrumentes all basic blocks such that the call back `OOOCore::BblFunc()` 
 will be invoked before the basic block is executed. This function further calls into `OOOCore::bbl()`, the entry point of
 pipeline simulation. 
 
-At the beginning of the function, we first check whether it is the first basic block ever executed since simulation starts. 
+At the beginning of the function, we first check whether it is the first basic block ever executed since simulation started. 
 If true, then no simulation is performed, since zSim only simulates a basic block after its execution has completed. Otherwise, 
 we simulate the basic block pointed to by `prevBbl`, and save the current basic block pointer in `prevBbl`. Both the previous and the 
 next basic blocks are needed, since zSim simulates both the execution of the previous basic block and the fetch of the 
-next basic block. Branch prediction is also simulated for the branch instruction at the end of the previous block.
+next basic block. Branch prediction is also simulated for the branch instruction at the end of the previous block. 
+
