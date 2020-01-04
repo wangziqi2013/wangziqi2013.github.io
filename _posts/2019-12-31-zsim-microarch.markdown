@@ -335,6 +335,8 @@ in the next cycle.
 
 ### Simulating Decoder
 
-Decoder is simulated right after we finish simulating pre-decoder. The decoder logic assumed by zSim can be expressed as 
+Decoder is simulated right after we finish simulating pre-decoder. The decoder logic assumed by zSim can be summarized as 
 "4-1-1-1" rule: At most four instructions can be decoded at a time using the three simple decoders and one complex decoder.
-The three simple decoders 
+The three simple decoders can decode instructions that generate one uop at a time, and the complex decoder can decode
+instructions that generate up to four uops. More complicated instructions are decoded using the micro-sequenced ROM, which
+is not modeled, since they are rarely used in practice.
