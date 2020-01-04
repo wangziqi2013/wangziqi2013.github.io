@@ -396,6 +396,12 @@ will simply drive forward the clock of the current component to the future cycle
 prior component. This is equivalent to stalling the current component until pipelined execution resumes, except that these 
 idle cycles are never simulated.
 
-
+The simulation maintains two invariants. The first invariant is that the processing time of the same uop must be monotonically
+increasing down flowing through the pipeline. In other words, assume an uop is processed by pipeline stage A at cycle x, 
+and pipeline stage B at cycle y. As long as A is an earlier stage than B, x must be strictly less than y. This translates 
+to the coding pattern that if the uop is simulated by component A at local clock x, and the current clock of component B 
+is y, then we first drive the clock of component B forward by taking the maximum between x and y, and assign it to y. This 
+way, we guarantee that all components' local clocks are synchronized. The second invariant is that for a FIFO circular 
+buffer of size SZ and a series of elements x1, x2, x3, ..., xn, n >> SZ, 
 
 We next describe each stage of the pipeline in a separate section.
