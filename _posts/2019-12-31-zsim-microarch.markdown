@@ -355,3 +355,15 @@ for later use.
 Note that both `dcyc` and `pcyc` (pre-decoder cycles) are initialized to zero, meaning that we simulate basic block decoding
 starting from cycle zero. These "relative" cycles will be converted to actual cycles of the processor pipeline during dynamic 
 simulation of the basic block, as we will discuss below.
+
+After decoder simulation completes, a `BblInfo` object is allocated to store static information of the basic block,
+including the size, the number of instructions, and decoded uops. The `BblInfo` object contains a `DynBbl` object
+at the end, 
+
+## Issue, Dispatch, Execution and Retire
+
+The rest of the pipeline is simulated dynamically after execution of the basic block is completed. Simulation is performed 
+in the granularity of basic blocks. Recall that zSim instrumented all basic blocks such that the call back `OOOCore::BblFunc()` 
+will be invoked before the basic block is executed. This function further calls into `OOOCore::bbl()`, the entry point of
+pipeline simulation. 
+
