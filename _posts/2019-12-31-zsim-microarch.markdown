@@ -376,7 +376,7 @@ we simulate the basic block pointed to by `prevBbl`, and save the current basic 
 next basic blocks are needed, since zSim simulates both the execution of the previous basic block and the fetch of the 
 next basic block. Branch prediction is also simulated for the branch instruction at the end of the previous block. 
 
-### Simulation Technique Overview
+### The Inductive Model
 
 zSim simulates all important pipeline components for a single uop in one iteration, deriving the cycles in which the uop is 
 received and released by these components. Only components that can the pipeline are simulated, such as the issue queue, 
@@ -388,22 +388,26 @@ cores, since most components of an out-of-order core are still in-order, such as
 and stores are pushed into the load and store queue in program order as well.
 
 zSim core simulation works by computing the receiving and releasing cycles of an uop for every simulated component using
-two inductions. The first induction states that, given a series of uops, uop<sub>1</sub> ... uop<sub>n</sub>, 
+two inductions rules. The first induction rule states that, given a series of uops, uop<sub>1</sub> ... uop<sub>n</sub>, 
 and a series of pipeline components (in the physical order), S<sub>1</sub>, ..., X, Y, ..., S<sub>m</sub>, we can compute 
 the receiving and releasing cycle of any uop<sub>i</sub> on component Y, if the releasing cycles of all previous uops on 
-all components are known. The second induction states that, given a series of uops and stages identical to what was stated
+all components are known. The second induction rule states that, given uops and stages identical to what was stated
 above, we can compute the releasing cycle on *X* and the receiving cycle on *Y* for any uop<sub>i</sub>, if (1) the 
 receiving cycle of uop<sub>i</sub> on *X*; (2) the receiving and releasing cycles of uop<sub>i</sub> on all previous 
-components; and (3) the releasing cycles of all previous uops on all components, are known. We next use an example to 
-illustrate this process. 
+components; and (3) the releasing cycles of all previous uops on all components, are known. From a high level, the second
+induction allows us to start from the initial component (the receiving cycle on which is known) and derive the 
+receiving and releasing cycles of the uop on all components by indictively applying thr rule while "push" the uop
+down the pipeline. The first induction allows us to derive the timing of all uops in the program order if we can
+compute the timing of a single uop on all components using the second rule. We next use an example to illustrate this process. 
 
 Assume *X* and *Y* are two stalling pipeline components. Without loss of generality, we also assume that there are *k* 
 non-stalling stages in-between. Given that we have already derived the receiving and releasing cycle of all previous uops in a basic 
 block, and that the receiving cycle of the 
 current uop by stage *X*, C<sub>X</sub>, is also known. Our goal is to compute the releasing cycle of the 
 current uop at stage *X* and the receiving cycle at *Y*. If this is possible, then we can inductively compute the receiving 
-and releasing cycles of the uop on all components by repeatedly applying the same rule. In addition, we can also inductively
-compute the receiving and releasing cycles of all uops on all components. Note that 
+and releasing cycles of the uop on all components by repeatedly applying the same rule, solving the second induction. 
+In addition, we can also inductively compute the receiving and releasing cycles of all uops on all components by
+solving the first induction. Note that 
 in our model, adjacent uops can be received and released by a component in the same cycle, since modern out-of-order cores 
 are likely also superscalar, meaning that more than one uops are transferred from one stage to the next on the datapath 
 in every cycle. In the following example, we assume a datapath of width one to simply discussion.
