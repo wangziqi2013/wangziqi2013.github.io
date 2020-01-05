@@ -390,14 +390,23 @@ and stores are pushed into the load and store queue in program order as well.
 zSim core simulation works by computing the receiving and releasing cycles of an uop for every simulated component. We 
 use an example to illustrate this process. Assuming *X* and *Y* are two pipeline stages. Without loss of generality, we 
 also assume that there are *k* non-stalling stages in-between. Given that we have already
-derived the receiving and releasing cycle of all previous uops in a basic block, and that the releasing cycle of the 
-current uop by stage *X*, C<sub>X</sub>, is also known. Our goal is to compute the receiving and releasing cycle of the 
-current uop at stage *Y*. If this is possible, then we can inductively compute the receiving and releasing cycles
-of the uop on all components by repeatedly applying the same rule. Note that in our model, adjacent uops can be 
-received and released by a component in the same cycle, since modern out-of-order cores are likely also superscalar,
-meaning that more than one uops are transferred from one stage to the next on the datapath in every cycle.
+derived the receiving and releasing cycle of all previous uops in a basic block, and that the receiving cycle of the 
+current uop by stage *X*, C<sub>X</sub>, is also known. Our goal is to compute the releasing cycle of the 
+current uop at stage *X* and the receiving cycle at *Y*. If this is possible, then we can inductively compute the receiving 
+and releasing cycles of the uop on all components by repeatedly applying the same rule. Note that in our model, adjacent 
+uops can be received and released by a component in the same cycle, since modern out-of-order cores are likely also 
+superscalar, meaning that more than one uops are transferred from one stage to the next on the datapath in every cycle. 
+In the following example, we assume a datapath of width one to simply discussion.
 
 There are two possibilities to consider. In the simpler case, stage Y does not buffer uops. It stalls the pipeline 
+immediately if the uop cannot be processed in the current cycle. One example is register fetch, in which the pipeline
+is stalled if some source registers of the uop are not yet available. Recall that we have already computed the release
+cycle of the previous uop on stage Y, call it C<sub>Y</sub>. Since stage Y does not buffer uops, it can only receive
+an uop after the previousu uop has been released (in actual hardware these two happens in the same cycle, though).
+We compare the value of (C<sub>X</sub> + k) and C<sub>Y</sub>. If (C<sub>X</sub> + k) > C<sub>Y</sub>, meaning that if 
+the uop is released at cycle C<sub>X</sub>, it will arrive at component *Y* before the previous uop has been processed,
+we must stall component *X* for (C<sub>X</sub> + k - C<sub>Y</sub>) cycles to allow component *Y* sufficient time
+to process the previous uop. If, on the other hand, 
 
 When a uop traverses from stage X to stage Y = X + k (assuming all intermediate
 stages are non-buffering), there are two possibilities. First, if local clock of stage X, C<sub>X</sub> (assuming this
