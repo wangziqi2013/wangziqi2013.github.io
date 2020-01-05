@@ -387,20 +387,19 @@ the decoder, which is also consistent with program order. This in-order simulati
 cores, since most components of an out-of-order core are still in-order, such as fetch, decode, issue, and retirement. Loads 
 and stores are pushed into the load and store queue in program order as well.
 
-zSim core simulation works by computing the receiving and releasing cycles of an uop for every simulated component using
-two inductions rules. The first induction rule states that, given a series of uops, uop<sub>1</sub> ... uop<sub>n</sub>, 
+zSim core simulation leverages two inductive rules to compute the receiving and releasing cycles of an uop for every 
+simulated component. The first inductive rule states that, given a series of uops, uop<sub>1</sub> ... uop<sub>n</sub>, 
 and a series of pipeline components (in the physical order), S<sub>1</sub>, ..., X, Y, ..., S<sub>m</sub>, we can compute 
 the receiving and releasing cycle of any uop<sub>i</sub> on component Y, if the releasing cycles of all previous uops on 
-all components are known. The second induction rule states that, given uops and stages identical to what was stated
+all components are known. The second inductive rule states that, given uops and stages identical to what was stated
 above, we can compute the releasing cycle on *X* and the receiving cycle on *Y* for any uop<sub>i</sub>, if (1) the 
 receiving cycle of uop<sub>i</sub> on *X*; (2) the receiving and releasing cycles of uop<sub>i</sub> on all previous 
 components; and (3) the releasing cycles of all previous uops on all components, are known. 
 
-From a high level, the second induction allows us to start from the initial component (the receiving cycle on which is 
-known) and derive the receiving and releasing cycles of one single uop on all components by indictively applying thr rule 
-while "pushing" the uop down the pipeline. The first induction allows us to derive the timing of all uops in the program 
-order if we can compute the timing of a single uop on all components using the second rule. We next use an example to 
-illustrate this process. 
+From a high level, The first induction allows us to derive the timing of all uops in the program order. 
+the second induction allows us to start from the initial component (the receiving cycle on which is 
+known) and derive the receiving and releasing cycles of one single uop on all components by indictively applying the rule 
+while "pushing" the uop down the pipeline. We next use an example to illustrate this process. 
 
 Assume *X* and *Y* are two stalling pipeline components. Without loss of generality, we also assume that there are *k* 
 non-stalling stages in-between. Given that we have already derived the receiving and releasing cycle of all previous uops in a basic 
