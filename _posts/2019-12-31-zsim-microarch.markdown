@@ -403,10 +403,12 @@ immediately if the uop cannot be processed in the current cycle. One example is 
 is stalled if some source registers of the uop are not yet available. Recall that we have already computed the release
 cycle of the previous uop on stage Y, call it C<sub>Y</sub>. Since stage Y does not buffer uops, it can only receive
 an uop after the previousu uop has been released (in actual hardware these two happens in the same cycle, though).
-We compare the value of (C<sub>X</sub> + k) and C<sub>Y</sub>. If (C<sub>X</sub> + k) > C<sub>Y</sub>, meaning that if 
+We compare the value of (C<sub>X</sub> + k) and C<sub>Y</sub>. If (C<sub>X</sub> + k) < C<sub>Y</sub>, meaning that if 
 the uop is released at cycle C<sub>X</sub>, it will arrive at component *Y* before the previous uop has been processed,
-we must stall component *X* for (C<sub>X</sub> + k - C<sub>Y</sub>) cycles to allow component *Y* sufficient time
-to process the previous uop. If, on the other hand, 
+we must stall component *X* for (C<sub>Y</sub> - k - C<sub>X</sub>) cycles to allow component *Y* sufficient time
+to process the previous uop. The release cycle of the current uop on *X* is therefore (C<sub>Y</sub> - k),
+and the receiving cycle on *Y* is C<sub>Y</sub>. If, on the other hand, (C<sub>X</sub> + k) > C<sub>Y</sub>, the uop can 
+be released as soon as possible, since component *Y* will be idle for (C<sub>X</sub> - C<sub>Y</sub> + k) cycles before component X arrives.
 
 When a uop traverses from stage X to stage Y = X + k (assuming all intermediate
 stages are non-buffering), there are two possibilities. First, if local clock of stage X, C<sub>X</sub> (assuming this
