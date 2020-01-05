@@ -154,7 +154,7 @@ We list important fields of `class OOOCore` and their descriptions in the follow
 
 Since Intel has never published any detailed description of its microarchitecture, most of the details can only be obtained
 via experimentation (timing measurements) and educated guesses. One extremely useful resource of microarchitectural documents
-is (Agner's Blog)[https://www.agner.org/optimize/], in which the structure of the pipeline and micro-op (uop) maps are described
+is [Agner's Blog](https://www.agner.org/optimize/), in which the structure of the pipeline and micro-op (uop) maps are described
 in detail. zSim also uses materials in this blog as a reference. If you are uncertain about why a microarchitectural parameter 
 is modeled in a particular way, it is suggested that you use the mentioned blog as the ultimate reference.
 
@@ -294,8 +294,8 @@ to emit a single uop for the fused pattern. The single uop use both RFLAGS and R
 
 If the instruction cannot be fused with the next one, then `decodeInstr()` is called to emit uops for the current instruction.
 Uops will be emitted into an array, `uopVec`. We do not cover details of uop emission, since they are mostly mechanical
-and uninretesting. The rule of mapping instructions to uops can be found in (Agner's Blog)[https://www.agner.org/optimize/],
-(Instruction Tables (PDF))[https://www.agner.org/optimize/instruction_tables.pdf]. zSim implemented a large subset of the 
+and uninretesting. The rule of mapping instructions to uops can be found in [Agner's Blog](https://www.agner.org/optimize/),
+[Instruction Tables (PDF)](https://www.agner.org/optimize/instruction_tables.pdf). zSim implemented a large subset of the 
 x86 instruction set, but there are still unsupported instructions, such as fence instructions (`LFENCE`, `SFENCE` and 
 `MFENCE`).
 
@@ -420,11 +420,20 @@ ROB, and load store queue.
 
 We next describe each stage of the pipeline in a separate section.
 
-### Uop Buffer
+### Decoder Cycle
 
-The uop buffer is a circular FIFO structure sitting between the decoder and the instruction window in Nehalem architecture
+In the dyanmic core model, the current decoder cycle is maintained in `OOOCore`'s member variable `decodeCycle`, which is
+updated when a new uop is simulated at the beginning of the loop by adding the difference between the current uop's relative
+decoder cycle and the previous uop's relative decoder cycle onto the variable. The decoder cycle represents the minimum
+cycle in which the uop is available to later stages of the pipeline.
+
+### Issue Queue
+
+The Issue Queue is a circular FIFO uop buffer sitting between the decoder and the instruction window in Nehalem architecture
 (in Core 2 it is between the pre-decoder and decoder). It serves as a temporary storage for uops from tight loops, such
 that the loop body can be directly fetched from the buffer rather than from the fetch-decode frontend, reducing latency 
-and energy consumption. On the other hand, zSim does not assume any temporary uop buffer in the pipeline, and always 
-simulates uops (instructions) from the fetch stage. The uop buffer modeled by zSim is simply a FIFO queue structure between 
+and energy consumption. On the other hand, zSim does not model any temporary uop cache in the pipeline, and always 
+simulates uops (instructions) from the fetch stage. The issue queue modeled by zSim is simply a FIFO queue structure between 
 the decode and the issue stage, on which resource hazard may happen. 
+
+The issue queue is implemented in decoder.h as `class CycleQueue`, and defined in `class OOOCore` as `uopQueue`. 
