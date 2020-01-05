@@ -393,9 +393,11 @@ also assume that there are *k* non-stalling stages in-between. Given that we hav
 derived the receiving and releasing cycle of all previous uops in a basic block, and that the releasing cycle of the 
 current uop by stage *X*, C<sub>X</sub>, is also known. Our goal is to compute the receiving and releasing cycle of the 
 current uop at stage *Y*. If this is possible, then we can inductively compute the receiving and releasing cycles
-of all buffering components of the uop by repeatedly applying the same rule. 
+of the uop on all components by repeatedly applying the same rule. Note that in our model, adjacent uops can be 
+received and released by a component in the same cycle, since modern out-of-order cores are likely also superscalar,
+meaning that more than one uops are transferred from one stage to the next on the datapath in every cycle.
 
-If component 
+There are two possibilities to consider. In the simpler case, stage Y does not buffer uops. It stalls the pipeline 
 
 When a uop traverses from stage X to stage Y = X + k (assuming all intermediate
 stages are non-buffering), there are two possibilities. First, if local clock of stage X, C<sub>X</sub> (assuming this
