@@ -387,9 +387,12 @@ the decoder, which is also consistent with program order. This in-order simulati
 cores, since most components of an out-of-order core are still in-order, such as fetch, decode, issue, and retirement. Loads 
 and stores are pushed into the load and store queue in program order as well.
 
-zSim core simulation for these in-order components works by computing the receiving and releasing cycles of the uop on every
-simulated component. Local clock of a component represents the cycle that the component 
-processes the previous uop in program order. When a uop traverses from stage X to stage Y = X + k (assuming all intermediate
+zSim core simulation for these in-order components works by computing the receiving and releasing cycles of an uop for 
+every simulated component. We use an example to illustrate this process. Assuming X and Y are two pipeline stages.
+Without loss of generality, assume that there are also k non-buffering stages in-between. Given that we have already
+derived the receiving and releasing cycle of all previous uops in a basic block, and that the releasing cycle of the 
+current uop by stage X, C<sub>X</sub>, is also known.
+When a uop traverses from stage X to stage Y = X + k (assuming all intermediate
 stages are non-buffering), there are two possibilities. First, if local clock of stage X, C<sub>X</sub> (assuming this
 is the cycle of simulating the uop on stage X), and the local clock of stage Y, C<sub>Y</sub>, satisfies the following 
 condition: C<sub>X</sub> + k < C<sub>Y</sub>, then stage Y have to stall waiting for the uop from stage X to propagate to stage 
