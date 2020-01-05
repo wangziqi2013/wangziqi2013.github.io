@@ -394,20 +394,19 @@ the receiving and releasing cycle of any uop<sub>i</sub> on component Y, if the 
 all components are known. The second induction rule states that, given uops and stages identical to what was stated
 above, we can compute the releasing cycle on *X* and the receiving cycle on *Y* for any uop<sub>i</sub>, if (1) the 
 receiving cycle of uop<sub>i</sub> on *X*; (2) the receiving and releasing cycles of uop<sub>i</sub> on all previous 
-components; and (3) the releasing cycles of all previous uops on all components, are known. From a high level, the second
-induction allows us to start from the initial component (the receiving cycle on which is known) and derive the 
-receiving and releasing cycles of the uop on all components by indictively applying thr rule while "push" the uop
-down the pipeline. The first induction allows us to derive the timing of all uops in the program order if we can
-compute the timing of a single uop on all components using the second rule. We next use an example to illustrate this process. 
+components; and (3) the releasing cycles of all previous uops on all components, are known. 
+
+From a high level, the second induction allows us to start from the initial component (the receiving cycle on which is 
+known) and derive the receiving and releasing cycles of one single uop on all components by indictively applying thr rule 
+while "pushing" the uop down the pipeline. The first induction allows us to derive the timing of all uops in the program 
+order if we can compute the timing of a single uop on all components using the second rule. We next use an example to 
+illustrate this process. 
 
 Assume *X* and *Y* are two stalling pipeline components. Without loss of generality, we also assume that there are *k* 
 non-stalling stages in-between. Given that we have already derived the receiving and releasing cycle of all previous uops in a basic 
 block, and that the receiving cycle of the 
 current uop by stage *X*, C<sub>X</sub>, is also known. Our goal is to compute the releasing cycle of the 
-current uop at stage *X* and the receiving cycle at *Y*. If this is possible, then we can inductively compute the receiving 
-and releasing cycles of the uop on all components by repeatedly applying the same rule, solving the second induction. 
-In addition, we can also inductively compute the receiving and releasing cycles of all uops on all components by
-solving the first induction. Note that 
+current uop at stage *X* and the receiving cycle at *Y*. Note that 
 in our model, adjacent uops can be received and released by a component in the same cycle, since modern out-of-order cores 
 are likely also superscalar, meaning that more than one uops are transferred from one stage to the next on the datapath 
 in every cycle. In the following example, we assume a datapath of width one to simply discussion.
@@ -434,43 +433,8 @@ uop on the same slot can be easily computed as uop<sub>i - SZ</sub>. Recall that
 of all previous uops on all components are known. Then this problem essentially boils down to determining the releasing
 cycle on *X* and receiving cycle on *Y* given that the current uop uop<sub>i</sub> cannot be received by component *Y* 
 before uop<sub>i - SZ</sub> leaves the buffer, the value of which is known. The same reasoning in the previous case
-can be applied, and the conclusion is basically the same, except that for buffered components, we should keep leave 
-time for all buffer slots 
-
- For out-of-order components, such as instruction dispatch logic, 
-maintaining a single clock is insufficient, since an instruction "from the past" (with regard to the clock) may emerge, but
-past states have already been "forgotten" by the component after the clock is driven forward. To solve this problem,
-we maintain multiple clocks and the corresponding states (e.g. execution port occupation mask) to allow dispatching 
-instructions into the future without driving forward the clock. In this case, the clock is updated conservatively
-and lazily when no instruction from the past can ever arrive.
-
-Generally speaking, simulation in zSim is faster than tick-by-tick simulation of all pipeline components, since a component can 
-"skip" idle cycles if a prior pipeline stage is stalled, for example, by resource hazards. In this case, zSim core model 
-will simply drive forward the clock of the current component to the future cycle in which the next uop is processed by the 
-prior component. This is equivalent to stalling the current component until pipelined execution resumes, except that these 
-idle cycles are never simulated.
-
-The simulation maintains two invariants. The first invariant is that the processing cycle of the same uop must be monotonically
-increasing through the pipeline. In other words, if an uop is processed by pipeline stage A at cycle x, and pipeline stage 
-B at cycle y, then as long as A is an earlier stage than B, x must be strictly less than y. This translates to the coding 
-pattern that if the uop is simulated by component A at local clock x, and the current clock of component B is y, then we 
-first drive the clock of component B forward by taking the maximum between x and y, and assign it to y. This way, we guarantee 
-that all components' local clocks are synchronized. 
-
-The second invariant is that for a FIFO circular buffer of size SZ and a series of elements x<sub>1</sub>, x<sub>2</sub>, 
-x<sub>3</sub>, ..., x<sub>n</sub>, n >> SZ, for any arbitrary element x<sub>i</sub>, the enqueue time of xi must be larger 
-than the dequeue time of the previous element at the same slot, x<sub>i - SZ</sub>. Note that the FIFO property itself 
-suggests that for any element x<sub>i</sub>, the dequeue time of x<sub>i</sub> must be larger than the dequeue time its 
-previous element, x<sub>i - 1</sub>. zSim implicitly enforces this property by simulating uops in-order. Furthermore, when 
-the queue is mostly full, an element x<sub>i</sub> will be enqueued as soon as the previous element in the slot x<sub>i - SZ</sub> 
-is dequeued. In this case, the lower bound of x<sub>i</sub>'s enqueue time becomes a strict lower bound, meaning that we 
-can compute exact enqueue time by keeping track of the most recent leave time for all slots. When the queue is not full,
-implying that the producer cannot sustain the bandwidth of the consumer, producer becomes the bottleneck, in which case
-the producer's processing cycle of the uop will be larger than the leave time on the corresponding slot (i.e. the uop is
-not enqueued as soon as the previous uop is removed, since the uop has not been produced by prvious pipeline stages yet). 
-By applying the first invariant, we drive the time of the buffer forwarding by using producer's time as the enqueue cycle. 
-In the following discussion, we will see that this invariant is applied to all FIFO buffer structures, such as uop buffer, 
-ROB, and load store queue.
+can be applied, and the conclusion is basically the same except that we maintain a separate releasing cycle for each slot 
+on buffered components.
 
 We next describe each stage of the pipeline in a separate section.
 
