@@ -435,7 +435,9 @@ before uop<sub>i - SZ</sub> leaves the buffer, the value of which is known. The 
 can be applied, and the conclusion is basically the same except that we maintain a separate releasing cycle for each slot 
 on buffered components.
 
-In the last case, component *Y* has an attached buffer, which is not necessarily FIFO. 
+In the last case, component *Y* has an attached buffer, which is not necessarily FIFO. This is the case for instruction
+window, in which uops enter the window in program order, but can leave in a different order determined by uops scheduling
+algorithms. 
 
 We next describe each stage of the pipeline in a separate section.
 
