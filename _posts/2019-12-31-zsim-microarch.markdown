@@ -437,4 +437,8 @@ and energy consumption. On the other hand, zSim does not model any temporary uop
 simulates uops (instructions) from the fetch stage. The issue queue modeled by zSim is simply a FIFO queue structure between 
 the decode and the issue stage, on which resource hazard may happen. 
 
-The issue queue is implemented in decoder.h as `class CycleQueue`, and defined in `class OOOCore` as `uopQueue`. 
+The issue queue is implemented in decoder.h as `class CycleQueue`, and defined in `class OOOCore` as `uopQueue`. The size
+of the issue queue is a statically determined value implemented as a template argument. This also applies to other
+queue and buffer structures such as the ROB, load store queue, and instruction window. According to code comments, this
+design decision is made to avoid the extra level of indirection introduced by dynamically determined structure sizes, since 
+in that case the array could not be directly embedded in the struct, as the size of the type is unknown to the compiler.
