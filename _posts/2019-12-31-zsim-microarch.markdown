@@ -422,10 +422,11 @@ We next describe each stage of the pipeline in a separate section.
 
 ### Decoder Cycle
 
-In the dyanmic core model, the current decoder cycle is maintained in `OOOCore`'s member variable `decodeCycle`, which is
-updated when a new uop is simulated at the beginning of the loop by adding the difference between the current uop's relative
-decoder cycle and the previous uop's relative decoder cycle onto the variable. The decoder cycle represents the minimum
-cycle in which the uop is available to later stages of the pipeline.
+In the dyanmic core implementation, the current decoder cycle is maintained in `OOOCore`'s member variable `decodeCycle`, 
+which is updated when a new uop is simulated at the beginning of the loop by adding the difference between the current uop's 
+relative decoder cycle and the previous uop's relative decoder cycle (stored in `prevDecCycle` and updated to the current
+uop's relative cycle after) onto the variable. The decoder cycle represents the minimum cycle in which the uop is available 
+to later stages of the pipeline.
 
 ### Issue Queue
 
