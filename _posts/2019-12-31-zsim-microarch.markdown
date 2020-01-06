@@ -433,7 +433,7 @@ adjacent uops can be received and released by a component in the same cycle, sin
 are likely also superscalar, meaning that more than one uops are transferred from one stage to the next on the datapath 
 in every cycle. To simplify discussion, we assume a datapath of width one in the following example.
 
-There are three possibilities to consider. In the simpler case, stage Y does not buffer uops. It stalls the pipeline 
+There are two possibilities to consider. In the simpler case, stage Y does not buffer uops. It stalls the pipeline 
 immediately if the uop cannot be processed in the current cycle. One example is register fetch, in which the pipeline
 is stalled if some source registers of the uop are not yet available. Recall that we have already computed the release
 cycle of the previous uop on stage Y, call it C<sub>Y</sub>. Since stage Y does not buffer uops, it can only receive
@@ -459,7 +459,9 @@ before uop<sub>i - SZ</sub> leaves the buffer, the value of which is known. The 
 can be applied, and the conclusion is basically the same except that we maintain a separate releasing cycle for each slot 
 on buffered components.
 
-In the last case, component *Y* has an attached buffer, which is not necessarily FIFO. This is the case for instruction
+### Discrete Event Simulation
+
+What if component *Y* has an attached buffer, which is not necessarily FIFO? This is the case for instruction
 window, where uops enter in program order, but can leave in a different order determined by the uop scheduling
 algorithm. The buffer is essentially fully-associative, meaning that uops can be received as long as there is a vacant 
 slot. In this case, we no longer maintain separate releasing cycle for each slot, since the slot of an uop cannot be 
