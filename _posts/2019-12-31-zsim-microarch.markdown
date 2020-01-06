@@ -510,6 +510,16 @@ structure in core simulation in which we store states for events scheduled in th
 can be diapatched out-of-order. The member variable of `OOOCore`, `curCycle`, represents the current instruction window
 cycle. All methods except one of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
 driving the instruction window clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
-can also be considered as the receiving cycle of the previous uop in program order.
+can be considered as the receiving cycle of the previous uop in program order. Since uops are always received in-order,
+when an uop is received at cycle C, we first drive the clock `curCycle` to cycle C before scheduling the uop by calling
+`advancePos()`.
+
+At a high level, the instruction window maps cycles in the future to the corresponding port states implemented as 
+`struct WinCycle` objects. These port state objects track which ports are in-use. Port can become in-use for a given cycle 
+either because an uop is scheduled on that port during the cycle, or because the functional unit is non-pipelined and a 
+uop using the function unit was scheduled a few cycles before (recall `extraSlots` in `DynUop`), or because the load store 
+queue imposes back pressure to block instruction issue. If a port is already in-use, no uop can be scheduled on that port. 
+
+Optimizations are 
 
 There are two parameters
