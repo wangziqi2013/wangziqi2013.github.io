@@ -384,7 +384,16 @@ to enable better compiler optimization. According to code comments, the pipeline
 bottlenecks of zSim, the efficiency of which is critical to overall simulation performance. In the following table,
 we list all configurable system parameters, with an explanation for each and their default values.
 
+| Parameter Name | Type | Explanation | Default Value |
+|:--------------:|------|-------------|---------------|
+| FETCH_STAGE | Macro | Fetch stage's position in the pipeline | 1 | 
+| DECODE_STAGE | Macro | Decode stage's position in the pipeline | 4 | 
+| ISSUE_STAGE | Macro | Issue stage's position in the pipeline | 7 | 
+| DISPATCH_STAGE | Macro | Dispatch stage's position in the pipeline | 13 | 
+| L1D_LAT | Macro | l1d latency in the perspective of the pipeline | 4 | 
+| FETCH_BYTES_PER_CYCLE | Macro | Number of bytes the fetch unit reads per cycle | 16 | 
 
+{:.mbtablestyle}
 
 ### The Inductive Model
 
