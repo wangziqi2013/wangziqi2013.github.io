@@ -392,7 +392,12 @@ we list all configurable system parameters, with an explanation for each and the
 | DISPATCH_STAGE | Macro | Dispatch stage's position in the pipeline | 13 | 
 | L1D_LAT | Macro | l1d latency in the perspective of the pipeline | 4 | 
 | FETCH_BYTES_PER_CYCLE | Macro | Number of bytes the fetch unit reads per cycle | 16 | 
-
+| ISSUES_PER_CYCLE | Macro | Maximum number of uops that can be inserted into the instruction per cycle  | 4 | 
+| RF_READS_PER_CYCLE | Macro | Maximum number of reads to RF | 3 |
+| BranchPredictorPAg\<NB, HB, LB\> | Template | Branch predictor parameters (not covered) | 11, 18, 14 | 
+| WindowStructure\<H, WSZ\> | Template | WSZ specified instruction window size. H is only used internally. | 1024, 54 |
+| ReorderBuffer\<SZ, W\> | Template | SZ is the size of ROB; W is the maximum number of uops that can be retired per cycle. | 168, 4 for ROB; 64, 4 for load queue; 36, 4 for store queue |
+| CycleQueue\<SZ\> | Template | Size of the issue queue | 28 |
 {:.mbtablestyle}
 
 ### The Inductive Model
