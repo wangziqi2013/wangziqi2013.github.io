@@ -544,7 +544,9 @@ whether the window is full by comparing `occupancy` with `WSZ`. If it is full, n
 in which case we call `advancePos()` to drive the clock forward until at least one slot is vacant. The receiving 
 cycle of the uop is `curCycle` as mentioned in previous paragraphs.
 
-
+The releasing cycle of the uop is computed by calling member function `schedule()`. This function attempts to find a
+cycle in the future in which one of the ports required to dispatch the uop is not in-use. When such a cycle is found,
+we update the `dispatchCycle` reference in the argument list to the releasing cycle of the uop. 
 
 
 
