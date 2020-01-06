@@ -531,6 +531,10 @@ The actual implementation of `struct WinCycle` is overly complicated due to the 
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
 objects, two extra arrays, `curWin` and `nextWin`, are added to "buffer" cycles in the near future, such that instruction 
 window access is a constant time array indexing operation, instead of log(N) as in `std::map`. The size of the two windows
-are specified by the template argument `H`. `curWin`
+are specified by the template argument `H`. `curWin` is indexed by `curPos`, which points to the `struct WinCycle` object
+representing port state in `curCycle`. The value of `curPos` is also incremented every time we drive forward `curCycle` 
+by one. When `curPos` reaches the end of `curWin`, we swaps `curWin` and `nextWin`, in which port states in the next `H` 
+cycles are buffered, and resets `curPos`. The `nextWin` after switch (i.e. the old `curWin`) is then populated by moving 
+the next `H` cycles' port states from the map, `ubWin` (stands for "unbounded window"). 
 
 There are two parameters
