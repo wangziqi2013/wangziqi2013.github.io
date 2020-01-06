@@ -504,3 +504,12 @@ cycle of the current uop. The decoder is stalled if the current `decodeCycle` is
 we drive the decoder's local clock forward by setting `decodeCycle` to the value of `uopQueue.minAllocCycle()`. 
 
 ### Instruction Window
+
+The instruction window is implemented in ooo\_core.h as `class WindowStructure`. The instruction window is the only data
+structure in core simulation in which we store states for events scheduled in the future, due to the fact that uops
+can be diapatched out-of-order. The member variable of `OOOCore`, `curCycle`, represents the current instruction window
+cycle. All methods except one of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
+driving the instruction window clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
+can also be considered as the receiving cycle of the previous uop in program order.
+
+There are two parameters
