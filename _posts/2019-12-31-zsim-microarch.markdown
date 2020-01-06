@@ -520,6 +520,13 @@ either because an uop is scheduled on that port during the cycle, or because the
 uop using the function unit was scheduled a few cycles before (recall `extraSlots` in `DynUop`), or because the load store 
 queue imposes back pressure to block instruction issue. If a port is already in-use, no uop can be scheduled on that port. 
 
+`struct WinCycle` consists of an 8-byte port mask and a uop counter. The port mask field `occUnits` tracks which ports 
+are already in-use. The uop counter `count` tracks the number of uops scheduled in the corresponding cycle. Note that 
+although the code comment mentions using "POPCNT", which is a x86 instruction for counting the number of "1"s in a mask,
+to replace `count` field, this is incorrect, since the value of `count` does not always equal to the POPCNT of `occUnits`.
+This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue imposes back 
+pressure.
+
 Optimizations are 
 
 There are two parameters
