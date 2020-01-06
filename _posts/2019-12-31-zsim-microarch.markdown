@@ -538,7 +538,14 @@ switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' p
 for "unbounded window").
 
 The member variable `occupancy` tracks the current size of the window, which equals the sum of `count` in all existing 
-`struct WinCycle` objects. When an uop is to be scheduled at cycle `curCycle`, we first check whether the window 
-is full by comparing `occupancy` with `WSZ`.
+`struct WinCycle` objects. When an uop is to be received by the instruction window at cycle `curCycle`, we first drive
+it forward to the releasing cycle of the previous stage by calling `advancePos()` (explained later). We then check 
+whether the window is full by comparing `occupancy` with `WSZ`. If it is full, no more uop can be received at `curCycle`,
+in which case we call `advancePos()` to drive the clock forward until at least one slot is vacant. The receiving 
+cycle of the uop is `curCycle` as mentioned in previous paragraphs.
+
+
+
+
 
 There are two parameters
