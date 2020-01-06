@@ -385,7 +385,7 @@ bottlenecks of zSim, the efficiency of which is critical to overall simulation p
 we list all configurable system parameters, with an explanation for each and their default values.
 
 | Parameter Name | Type | Explanation | Default Value |
-|:--------------:|------|-------------|---------------|
+|:--------------:|:----:|-------------|:-------------:|
 | FETCH_STAGE | Macro | Fetch stage's position in the pipeline | 1 | 
 | DECODE_STAGE | Macro | Decode stage's position in the pipeline | 4 | 
 | ISSUE_STAGE | Macro | Issue stage's position in the pipeline | 7 | 
@@ -396,7 +396,7 @@ we list all configurable system parameters, with an explanation for each and the
 | RF_READS_PER_CYCLE | Macro | Maximum number of reads to RF | 3 |
 | BranchPredictorPAg\<NB, HB, LB\> | Template | Branch predictor parameters (not covered) | 11, 18, 14 | 
 | WindowStructure\<H, WSZ\> | Template | WSZ specified instruction window size. H is only used internally. | 1024, 54 |
-| ReorderBuffer\<SZ, W\> | Template | SZ is the size of ROB; W is the maximum number of uops that can be retired per cycle. | 168, 4 for ROB; 64, 4 for load queue; 36, 4 for store queue |
+| ReorderBuffer\<SZ, W\> | Template | SZ is the size of ROB; W is the maximum number of uops that can be retired per cycle. | 168, 4 for ROB<br />64, 4 for load queue<br />36, 4 for store queue |
 | CycleQueue\<SZ\> | Template | Size of the issue queue | 28 |
 {:.mbtablestyle}
 
