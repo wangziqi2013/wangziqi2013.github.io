@@ -462,11 +462,14 @@ on buffered components.
 In the last case, component *Y* has an attached buffer, which is not necessarily FIFO. This is the case for instruction
 window, where uops enter in program order, but can leave in a different order determined by the uop scheduling
 algorithm. The buffer is essentially fully-associative, meaning that uops can be received as long as there is a vacant 
-slot. In this case, we no longer maintain separate releasing cycle for each slot. Instead, we use a single "occupancy"
-variable to track the current number of elements in a given cycle. This is the only situation where a clock is associated
-with a component, and zSim calls this as "issue-centric simulation" since the processor clock is basically the current 
-clock of the instruction window. Note that although uops leave the component out-of-order, in-order simulation of uops
-is still feasible, since at the end of the pipeline, uops must leave the ROB in program order.
+slot. In this case, we no longer maintain separate releasing cycle for each slot. Instead, we use discrete event simulation
+(DES) with an explicit "current clock" variable associated with the component. The releasing of uops can be scheduled as 
+events in an event queue. The receiving time of an uop can be determined by checking if the window is full in the current 
+cycle. If true, the clock is driven forward until a vacant slot occurs as the result of processing uop releasing events. 
+This is the only situation where a clock is associated with a component, and zSim calls this as "issue-centric simulation" 
+since the processor clock is basically the current clock of the instruction window. Note that although uops leave the 
+component out-of-order, in-order simulation of uops is still feasible, since at the end of the pipeline, uops must leave 
+the ROB in program order.
 
 We next describe each stage of the pipeline in a separate section.
 
@@ -535,11 +538,11 @@ are specified by the template argument `H`. `curWin` is indexed by `curPos`, whi
 representing port state in `curCycle`. The value of `curPos` is also incremented every time we drive forward `curCycle` 
 by one. When `curPos` reaches the end of `curWin`, we swap `curWin` and `nextWin` and reset `curPos`. The `nextWin` after 
 switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' port states from the map, `ubWin` (stands 
-for "unbounded window").
+for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
 The member variable `occupancy` tracks the current size of the window, which equals the sum of `count` in all existing 
 `struct WinCycle` objects. When an uop is to be received by the instruction window at cycle `curCycle`, we first drive
-it forward to the releasing cycle of the previous stage by calling `advancePos()` (explained later). We then check 
+it forward to the releasing cycle of the previous stage by calling `advancePos()`. We then check 
 whether the window is full by comparing `occupancy` with `WSZ`. If it is full, no more uop can be received at `curCycle`,
 in which case we call `advancePos()` to drive the clock forward until at least one slot is vacant. The receiving 
 cycle of the uop is `curCycle` as mentioned in previous paragraphs.
