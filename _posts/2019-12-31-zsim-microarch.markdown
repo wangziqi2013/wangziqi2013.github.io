@@ -511,7 +511,7 @@ can be diapatched out-of-order. The member variable of `OOOCore`, `curCycle`, re
 cycle. All methods except one of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
 driving the instruction window clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
 can be considered as the receiving cycle of the previous uop in program order. Since uops are always received in-order,
-when an uop is received at cycle C, we first drive the clock `curCycle` to cycle C before scheduling the uop by calling
+when an uop is received at cycle C, we should drive the clock `curCycle` to cycle C before scheduling the uop by calling
 `advancePos()`.
 
 At a high level, the instruction window maps cycles in the future to the corresponding port states implemented as 
@@ -529,12 +529,16 @@ pressure.
 
 The actual implementation of `struct WinCycle` is overly complicated due to the optimizations that are applied
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
-objects, two extra arrays, `curWin` and `nextWin`, are added to "buffer" cycles in the near future, such that instruction 
+objects, two extra arrays, `curWin` and `nextWin`, are added to "buffer" cycles in the near future. This way, instruction 
 window access is a constant time array indexing operation, instead of log(N) as in `std::map`. The size of the two windows
 are specified by the template argument `H`. `curWin` is indexed by `curPos`, which points to the `struct WinCycle` object
 representing port state in `curCycle`. The value of `curPos` is also incremented every time we drive forward `curCycle` 
-by one. When `curPos` reaches the end of `curWin`, we swaps `curWin` and `nextWin`, in which port states in the next `H` 
-cycles are buffered, and resets `curPos`. The `nextWin` after switch (i.e. the old `curWin`) is then populated by moving 
-the next `H` cycles' port states from the map, `ubWin` (stands for "unbounded window"). 
+by one. When `curPos` reaches the end of `curWin`, we swap `curWin` and `nextWin` and reset `curPos`. The `nextWin` after 
+switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' port states from the map, `ubWin` (stands 
+for "unbounded window").
+
+The member variable `occupancy` tracks the current size of the window, which equals the sum of `count` in all existing 
+`struct WinCycle` objects. When an uop is to be scheduled at cycle `curCycle`, we first check whether the window 
+is full by comparing `occupancy` with `WSZ`.
 
 There are two parameters
