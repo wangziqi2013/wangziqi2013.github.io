@@ -462,14 +462,15 @@ on buffered components.
 In the last case, component *Y* has an attached buffer, which is not necessarily FIFO. This is the case for instruction
 window, where uops enter in program order, but can leave in a different order determined by the uop scheduling
 algorithm. The buffer is essentially fully-associative, meaning that uops can be received as long as there is a vacant 
-slot. In this case, we no longer maintain separate releasing cycle for each slot. Instead, we use discrete event simulation
-(DES) with an explicit "current clock" variable associated with the component. The releasing of uops can be scheduled as 
-events in an event queue. The receiving time of an uop can be determined by checking if the window is full in the current 
-cycle. If true, the clock is driven forward until a vacant slot occurs as the result of processing uop releasing events. 
-This is the only situation where a clock is associated with a component, and zSim calls this as "issue-centric simulation" 
-since the processor clock is basically the current clock of the instruction window. Note that although uops leave the 
-component out-of-order, in-order simulation of uops is still feasible, since at the end of the pipeline, uops must leave 
-the ROB in program order.
+slot. In this case, we no longer maintain separate releasing cycle for each slot, since the slot of an uop cannot be 
+determined statically. Instead, we use discrete event simulation (DES) with an explicit "current clock" variable associated 
+with the component. The releasing of uops can be scheduled as events in the future, the time of which is computed according
+to the scheduling algorithm and availbility of issuing ports (explained later in section "Instruction Window"). The receiving 
+time of an uop can be determined by checking if the window is full in the current cycle. If true, the clock is driven forward 
+until a vacant slot occurs as the result of processing uop releasing events. This is the only situation where a clock is 
+associated with a component, and zSim calls this as "issue-centric simulation" since the processor clock is basically the 
+current clock of the instruction window. Note that although uops leave the component out-of-order, in-order simulation of 
+uops is still feasible, since at the end of the pipeline, uops must leave the ROB in program order.
 
 We next describe each stage of the pipeline in a separate section.
 
@@ -508,14 +509,16 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 
 ### Instruction Window
 
-The instruction window is implemented in ooo\_core.h as `class WindowStructure`. The instruction window is the only data
-structure in core simulation in which we store states for events scheduled in the future, due to the fact that uops
-can be diapatched out-of-order. The member variable of `OOOCore`, `curCycle`, represents the current instruction window
-cycle. All methods except one of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
-driving the instruction window clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
-can be considered as the receiving cycle of the previous uop in program order. Since uops are always received in-order,
-when an uop is received at cycle C, we should drive the clock `curCycle` to cycle C before scheduling the uop by calling
-`advancePos()`.
+The instruction window is implemented in ooo\_core.h as `class WindowStructure`. The instruction window implements a simple
+DES event queue in which we store uop releasing events (a.k.a. dispatching) scheduled in the future, in order to model 
+out-of-order uop dispatching. The member variable of `OOOCore`, `curCycle`, represents the current event queue
+cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
+driving the event queue clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
+can be also considered as the receiving cycle of the previous uop in program order. Since uops are always received in-order,
+when an uop is released by the previous stage at cycle C, we should drive the clock `curCycle` to cycle C before scheduling 
+the uop by calling `advancePos()`.
+
+At a high level, when an uop is received 
 
 At a high level, the instruction window maps cycles in the future to the corresponding port states implemented as 
 `struct WinCycle` objects. These port state objects track which ports are in-use. Port can become in-use for a given cycle 
@@ -530,7 +533,7 @@ to replace `count` field, this is incorrect, since the value of `count` may not 
 This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue imposes back 
 pressure.
 
-The actual implementation of `struct WinCycle` is overly complicated due to the optimizations that are applied
+The actual implementation of the event queue is overly complicated due to the optimizations that are applied
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
 objects, two extra arrays, `curWin` and `nextWin`, are added to "buffer" cycles in the near future. This way, instruction 
 window access is a constant time array indexing operation, instead of log(N) as in `std::map`. The size of the two windows
