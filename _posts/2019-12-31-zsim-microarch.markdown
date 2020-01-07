@@ -531,6 +531,12 @@ to avoid confusing readers. Similarly, when two terminologies refer to the same 
 the code. One example is "instruction window" and "reservation station". We choose the former despite the fact that
 Intel uses the latter to refer to the exact same structure.
 
+There are three major stages in the backend, each taking at least two cycles to complete. This sums up to six cycles between
+uop issue and dispatch at a minimum, given no unresolved data dependency. The first stage is register renaming. The RAT 
+allows renaming four uops per cycle, regardless of whether the same register is renamed multiple times. Since this is 
+consistent with the issue width, we do not need to model RAT. As a ressult, the renaming stage does not introduce stalls, 
+and always completes in two cycles.
+
 ### Instruction Window
 
 The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
