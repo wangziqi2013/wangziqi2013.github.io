@@ -532,8 +532,13 @@ counting "1" bits, to replace `count` field, this is incorrect, since the value 
 of `occUnits`. This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue 
 imposes back pressure.
 
-The member variable `occupancy` tracks the current size of the window, which equals the sum of `count` in all existing 
-event objects. 
+The member variable `occupancy` tracks the size of the window at cycle `curCycle`, which equals the sum of `count` in all 
+event objects scheduled after `curCycle`. When an event object is processed as we drive forward the clock, the value of 
+`count` is deducted from `occupancy` to simulate uop dispatching after which the window slots occupied by dispatched uops
+become free. When an uop is issued in the current cycle, we look into future event objects, and schedule the uop
+for dispatching in the nearest cycle in which one of the required port of the uop is not in-use. This is equivalent
+to buffering the uop in the window from the current cycle until the dispatch cycle. The variable `occupancy` is also 
+incremented to reflect the fact that one slot is occupied by the uop.
 
 The actual implementation of the event queue is overly complicated due to the optimizations that are applied
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
