@@ -521,12 +521,13 @@ single cycle. zSim keeps track of the current issue cycle in `OOOCore`'s member 
 core simulator "issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving 
 cycle of the previous uop in program order. 
 
-Uops that are issued in the same cycle form a "batch" that traverse through the backend pipeline. One interesting aspect
+Uops that are issued in the same cycle form a "batch" that traverse through the backend pipeline. One interesting property
 is that an uop stall at any stage of the backend pipeline can be modeled as issuing the uop and all following uops one 
 cycle later. We justify this using two observations. First, the delivery of the uop to instruction window and ROB will 
 be delayed for one cycle anyway at the end of the six stage backend pipeline, and this is all that we care. Second, uops 
-are always issued in-order, meaning that if an uop is stalled in RF read stage, all following uops must also be stalled 
-by at least the same amount.
+are always issued in-order, meaning that if an uop is stalled in the middle of the pipeline, all following uops must also 
+be stalled by at least the same amount of time. On real hardware, this is equivalent to inserting bubbles into the next
+stage and stalling previous stages, while withholding (some of the) uops in the current stage.
 
 Readers should be careful not to confuse uop issue with uop dispatch. In zSim, issue is a terminology that refers to moving
 uops to the backend pipeline stage, while dispatch means moving the uops to the functional units through one of the six 
