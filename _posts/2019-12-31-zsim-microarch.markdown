@@ -564,8 +564,18 @@ just let it stay in the issue queue for one more cycle, and reset `curCycleIssue
 As discussed above, the RAT has a renaming bandwidth of four uops per cycle, which matches the maximum issue width, and 
 therefore does not constitute a bottleneck in any situation. The RF, on the other hand, only supports at most three reads 
 in one cycle. If the uops issued in the same cycle need to access more than three registers from the RF, only the first 
-few requests in the program order can be handled. The rest uops will be stalled for one cycle, and retry reading the RF 
-in the next cycle. Note that zSim does not model register write backs and read-write contention. 
+few requests can be handled in the program order (i.e. requests from uops that come earlier in program order have higher 
+priority). The rest uops will be stalled for one cycle, and retry reading the RF in the next cycle. Note that zSim does 
+not model register write backs and read-write contention. 
+
+zSim models RF read stall slightly differently than what was described above. On actual hardware, we can stall an uop
+by withholding it in the current stage, stalling previous stages, and inserting bubbles into the next stage. zSim does
+not model concrete pipeline states. Instead, it assumes that uops magically know, at issue time, whether their RF read
+would be stalled by one cycle if it were issued in `curCycle`. If it is the case, then the uop will not be issued in
+`curCycle`, essentially stalling uop issue for one cycle, instead of stalling in the middle of the backend pipeline.
+This artifact, however, does not affect the timing of uop, since (1) the delivery of the uop to instruction window and ROB 
+will be delayed for one cycle anyway at the end of the six stage backend pipeline; (2) uops are always issued in-order, 
+meaning that if an uop is stalled in RF read stage, all following uops must also be stalled.
 
 ### Instruction Window
 
