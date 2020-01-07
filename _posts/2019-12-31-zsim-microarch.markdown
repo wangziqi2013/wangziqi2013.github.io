@@ -510,7 +510,7 @@ In ooo\_core.cpp, `uopQueue.minAllocCycle()` is called to return the value of `b
 cycle of the current uop. The decoder is stalled if the current `decodeCycle` is less than the return value, in which case
 we drive the decoder's local clock forward by setting `decodeCycle` to the value of `uopQueue.minAllocCycle()`. 
 
-## Simulating The Backend
+## Simulating The Backend Pipeline
 
 ### Backend Overview
 
@@ -708,6 +708,11 @@ of issue stage). The uop must not be dispatched before: (1) Its two source opera
 after issue, at cycle `MAX(c2, c3) + (DISPATCH_STAGE - ISSUE_STAGE)` (the `MAX` here seems to imply that ROB allocation 
 stalls uop issue for (`c2` - `c3`) cycles, if `c2 > c3`, but `curCycle` is not incremented to account for the issue stall).
 
+On invocation, `schedule()`'s helper function `scheduleInternal()` first checks whether the window is currently full. 
+If true, the pipeline will be stalled by one extra cycle due to resource hazard. This is where `advancePos()` is called
+within `scheduleInternal()`. Note that although `scheduleInternal()` uses a loop to simulate pipeline stall, implying that 
+the stall may take more than one cycles. This can happen if no uop is scheduled for dispatching in the next cycle due
+to ports being closed not for uop dispatching. 
 
 The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
 `touchOccupancy` and `recordPort`. In fact, what this function does is simpler than it seems to be. When a uop
@@ -721,5 +726,4 @@ scheduled. We need to remember the port it is scheduled on and close the port fo
 `touchOccupancy` and `recordPort` to `true`. This indicates that `occupancy` will be incremented, and that the member 
 variable of the instruction window, `lastPort`, will also be updated to remember the port on which the uop is scheduled.
 
-
-
+## Simulating Uop Execution
