@@ -519,7 +519,14 @@ engine, load store unit, and the Reorder Buffer (ROB). Uops are "issued" to the 
 bandwidth of `ISSUES_PER_CYCLE` uops per cycle, meaning that each backend pipeline stage can handle that many uops in a 
 single cycle. zSim keeps track of the current issue cycle in `OOOCore`'s member variable, `curCycle`, making the entire 
 core simulator "issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving 
-cycle of the previous uop in program order.
+cycle of the previous uop in program order. 
+
+Uops that are issued in the same cycle form a "batch" that traverse through the backend pipeline. One interesting aspect
+is that an uop stall at any stage of the backend pipeline can be modeled as issuing the uop and all following uops one 
+cycle later. We justify this using two observations. First, the delivery of the uop to instruction window and ROB will 
+be delayed for one cycle anyway at the end of the six stage backend pipeline, and this is all that we care. Second, uops 
+are always issued in-order, meaning that if an uop is stalled in RF read stage, all following uops must also be stalled 
+by at least the same amount.
 
 Readers should be careful not to confuse uop issue with uop dispatch. In zSim, issue is a terminology that refers to moving
 uops to the backend pipeline stage, while dispatch means moving the uops to the functional units through one of the six 
@@ -573,9 +580,9 @@ by withholding it in the current stage, stalling previous stages, and inserting 
 not model concrete pipeline states. Instead, it assumes that uops magically know, at issue time, whether their RF read
 would be stalled by one cycle if it were issued in `curCycle`. If it is the case, then the uop will not be issued in
 `curCycle`, essentially stalling uop issue for one cycle, instead of stalling in the middle of the backend pipeline.
-This artifact, however, does not affect the timing of uop, since (1) the delivery of the uop to instruction window and ROB 
-will be delayed for one cycle anyway at the end of the six stage backend pipeline; (2) uops are always issued in-order, 
-meaning that if an uop is stalled in RF read stage, all following uops must also be stalled.
+This artifact, however, does not affect the timing of uop, since 
+
+The core tracks the number of 
 
 ### Instruction Window
 
