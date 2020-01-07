@@ -649,15 +649,16 @@ cycle, since the previous `W` uops have already exhausted the retirement bandwid
 After retiring the current uop, we store the actual retirement cycle `curRetireCycle` into `buf[idx]`, and increment
 `idx`. Resource hazard on the ROB will stall uop issue if an uop is to be inserted into an ROB slot, but
 the retirement cycle stored in that slot is larger than the issue cycle. In this case we model the stall by adjusting
-`curCycle` to `buf[idx]`.
+`curCycle` to `buf[idx]`, the return value of ROB's `minAllocCycle()`. The core implementation, however, somehow does not 
+include this. It looks as if resource hazard on ROB never stalls uop issue.
 
 ### Instruction Window
 
 The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
 out-of-order uop dispatching, we compute, for each uop received, the nearest cycle in the future that the uop can be 
-dispatched, and schedule a dispatch event in the future dispatch cycle. The member variable of `OOOCore`, `curCycle`, 
-represents the current event queue cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, 
-and may possibly update it, driving the event queue clock forward (e.g. when the window is full). 
+dispatched, and schedule a dispatch event in the future dispatch cycle. The state of the instruction window at any point
+during the simulation is on the cycle when the current uop arrives at the window. In other words, for an uop issued at
+`curCycle` (after adjustment for backend pipeline stalls), the state of the window is the state at (`curCycle` + 6).
 
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
