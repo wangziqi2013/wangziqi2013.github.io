@@ -663,7 +663,10 @@ during the simulation is on the cycle when the current uop arrives at the window
 The instruction window maintains one of the most important invariants in zSim: When `curCycle` is adjusted for modeling
 backend pipeline stalls and external stalls, we should always call `advansePos()` to synchronously update 
 the state of the window by one cycle (`longAdvance()` updates window state by a potentially large number of cycles, but this 
-function seems unused, as I did a `grep -r longAdvance` and found no usage of it).
+function seems unused, as I did a `grep -r longAdvance` and found no usage of it). This invariant must be solidly observed
+even when the instruction window itself stalls the pipeline due to a resource hazard. As we drive forward `curCycle`,
+event objects scheduled in the future are processed, which updates the window state (mainly the size) to simulate
+uop departure.
 
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
