@@ -511,12 +511,12 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 
 ### Instruction Window
 
-The instruction window is in ooo\_core.h as `class WindowStructure`. The instruction window implements a simple
-DES event queue in which we store uop releasing events (a.k.a. dispatching) scheduled in the future, in order to model 
-out-of-order uop dispatching. The member variable of `OOOCore`, `curCycle`, represents the current event queue
-cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
-driving the event queue clock forward (e.g. when the window is full). With the inductive model in mind, `curCycle`
-can be also considered as the receiving cycle of the previous uop in program order.
+The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
+out-of-order uop dispatching, we compute, for each uop received, the nearest cycle in the future that the uop can be 
+dispatched, and schedule a dispatch event to update the window state. The member variable of `OOOCore`, `curCycle`, 
+represents the current event queue cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, 
+and may possibly update it, driving the event queue clock forward (e.g. when the window is full). With the inductive model 
+in mind, `curCycle` can be also considered as the receiving cycle of the previous uop in program order.
 
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
