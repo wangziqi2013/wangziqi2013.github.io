@@ -588,7 +588,16 @@ The core tracks the number of RF reads from uops issued at `curCycle` in member 
 numbre of register read requests exceeds the maximum, `RF_READS_PER_CYCLE`, we stall the issue of the current and all following 
 uops by one cycle by incrementing `curCycle` and deducting `RF_READS_PER_CYCLE` from `curCycleRFReads`.
 
-### 
+### Register Scoreboard
+
+One question is left unanswered in the previous section: How do we know the number of registers to read from RF for each 
+uop? To answer this question, we must define the register renaming and propagating model. zSim assumes that only one physical
+register file exists, which stores the value of architectural registers. When an uop commits, the value it computes 
+(if any) is temporarily buffered in the ROB, and broadcasted to the backend pipeline. Uops in the backend pipeline 
+snoop on the ROB broadcasting bus, and grab the value from the bus if it matches one of the sources operands. When an
+uop retires, the temporary value in the ROB is written back to the physical RF. At any time during the execution, the 
+physical RF always represents the current consistent architectural state, which simplifies exception handling and branch
+misprediction. 
 
 ### Instruction Window
 
