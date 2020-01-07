@@ -511,7 +511,7 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 
 ### Instruction Window
 
-The instruction window is implemented in ooo\_core.h as `class WindowStructure`. The instruction window implements a simple
+The instruction window is in ooo\_core.h as `class WindowStructure`. The instruction window implements a simple
 DES event queue in which we store uop releasing events (a.k.a. dispatching) scheduled in the future, in order to model 
 out-of-order uop dispatching. The member variable of `OOOCore`, `curCycle`, represents the current event queue
 cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, and may possibly update it,
@@ -522,22 +522,18 @@ At a high level, the instruction window maps future cycles to event objects impl
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
 either because an uop is scheduled on that port during the cycle, or because the functional unit is non-pipelined and a 
 uop using the function unit was scheduled a few cycles before (recall `extraSlots` in `DynUop`), or because the load store 
-queue imposes back pressure to block instruction issue. If a port is already in-use, no uop can be scheduled on that port. 
+queue imposes back pressure to block instruction issue. If a port is already in-use, no uop can be scheduled on that port
+during the event cycle. 
 
-A `struct WinCycle` event object consists of an 8-byte port mask and a uop counter. The port mask field `occUnits` tracks 
-which ports are already in-use. The uop counter `count` tracks the number of uops scheduled in the corresponding cycle. 
-Note that although the code comment mentions using "POPCNT", which is a x86 instruction for counting "1" bits, to replace 
-`count` field, this is incorrect, since the value of `count` may not equal to the POPCNT of `occUnits`.
-This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue imposes back 
-pressure.
+At a closer look, the `struct WinCycle` event object consists of an 8-byte port mask and a uop counter. The port mask 
+field `occUnits` tracks which ports are already in-use. The uop counter `count` tracks the number of uops scheduled in 
+the corresponding cycle. Note that although the code comment mentions using "POPCNT", which is a x86 instruction for 
+counting "1" bits, to replace `count` field, this is incorrect, since the value of `count` may not equal to the POPCNT 
+of `occUnits`. This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue 
+imposes back pressure.
 
 The member variable `occupancy` tracks the current size of the window, which equals the sum of `count` in all existing 
-event objects. When an uop is to be received by the instruction window, we first synchronize the window with the previous 
-pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
-by comparing `occupancy` with `WSZ`. If the window is full, the uop cannot be received at `curCycle`, in which case we 
-drive the event queue forward until at least one vacant slot occurs.
-
-
+event objects. 
 
 The actual implementation of the event queue is overly complicated due to the optimizations that are applied
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
@@ -549,10 +545,18 @@ by one. When `curPos` reaches the end of `curWin`, we swap `curWin` and `nextWin
 switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' port states from the map, `ubWin` (stands 
 for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
+### Simulating Issue and Dispatch
+
+There are two parameters
+
+When an uop is to be received by the instruction window, we first synchronize the window with the previous 
+pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
+by comparing `occupancy` with `WSZ`. If the window is full, the uop cannot be received at `curCycle`, in which case we 
+drive the event queue forward until at least one vacant slot occurs.
+
 The releasing cycle of the uop is computed by calling member function `schedule()`. This function attempts to find a
 cycle in the future in which one of the ports required to dispatch the uop is not in-use. When such a cycle is found,
 we update the `dispatchCycle` reference in the argument list to the releasing cycle of the uop. 
 
 
 
-There are two parameters
