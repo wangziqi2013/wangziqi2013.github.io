@@ -580,9 +580,15 @@ by withholding it in the current stage, stalling previous stages, and inserting 
 not model concrete pipeline states. Instead, it assumes that uops magically know, at issue time, whether their RF read
 would be stalled by one cycle if it were issued in `curCycle`. If it is the case, then the uop will not be issued in
 `curCycle`, essentially stalling uop issue for one cycle, instead of stalling in the middle of the backend pipeline.
-This artifact, however, does not affect the timing of uop, since 
+This artifact, however, does not affect the timing of uops at the end of the backend pipeline, as we have arguged in 
+previous sections. Note that although RF read stall is equivalent to delaying uop issue by one cycle, this is 
+not reflected in the issue queue. The issue queue always stores `curCycle` before it is incremented for RF read stalls.
 
-The core tracks the number of 
+The core tracks the number of RF reads from uops issued at `curCycle` in member variable `curCycleRFReads`. If the aggregated
+numbre of register read requests exceeds the maximum, `RF_READS_PER_CYCLE`, we stall the issue of the current and all following 
+uops by one cycle by incrementing `curCycle` and deducting `RF_READS_PER_CYCLE` from `curCycleRFReads`.
+
+### 
 
 ### Instruction Window
 
