@@ -512,17 +512,20 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 
 ## Simulating The Backend
 
-The backend of the pipeline consists of the register aliasing table, the register file, the out-of-order execution engine, 
-load store unit, and the reorder buffer. Uops are "issued" to the backend from the issue queue at a maximum bandwidth of 
-`ISSUES_PER_CYCLE` uops per cycle, meaning that each backend pipeline stage can handle that many uops in a single cycle. 
-zSim keeps track of the current issue cycle in `OOOCore`'s member variable, `curCycle`, making the entire core simulator
-"issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving cycle of 
-the previous uop in program order.
+### Backend Overview
 
-zSim defines "issue" as inserting an uop into the instruction window. zSim assumes that the instruction is fully associative,
-such that an uop can be inserted as long as there is one free slot. An related terminology is "dispatch", which, in zSim,
-refers to the action of sending uops to execution ports. After dispatching, an uop leaves the instruction window, and 
-the slot it occupies becomes free.
+The backend of the pipeline consists of the Register Aliasing Table (RAT), the Register File (RF), the out-of-order execution 
+engine, load store unit, and the Reorder Buffer (ROB). Uops are "issued" to the backend from the issue queue at a maximum 
+bandwidth of `ISSUES_PER_CYCLE` uops per cycle, meaning that each backend pipeline stage can handle that many uops in a 
+single cycle. zSim keeps track of the current issue cycle in `OOOCore`'s member variable, `curCycle`, making the entire 
+core simulator "issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving 
+cycle of the previous uop in program order.
+
+Readers should be careful not confuse uop issue with uop dispatch. In zSim, issue is a terminology that refers to moving
+uops to the backend pipeline stage, while dispatch means moving the uops to the functional units through one of the six 
+execution ports. An uop is first issued to the backend, renamed by the RAT, then added into the ROB and the 
+instruction window, only after which could the uop be dispatched when all source operands are ready and an execution
+port is available.
 
 ### Instruction Window
 
