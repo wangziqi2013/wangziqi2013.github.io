@@ -605,17 +605,29 @@ using the commit cycle and two destination register IDs. Unfortunately, zSim doe
 Instead, it simply assumes that registers that are committed after the uop is issued can be read from the broadcasting
 bus with zero dynamic overhead, while registers that are committed before the uop must be read from the physical RF.
 
+Note that in the code comment right above RF read simulation, it is said that 
+`// if srcs are not available at issue time, we have to go thru the RF`. This is incorrect. The author even confused himself
+with the ROB-based renaming model. In fact, if sources are not available at issue time, the uops can snoop them on
+the broadcasting bus, eliminating the RF read. The code below also contradicts the comment: 
+`curCycleRFReads += ((c0 < curCycle)? 1 : 0) + ((c1 < curCycle)? 1 : 0);`. RF reads are requested only when the results
+are already available before instruction issue.
+
 Another purpose of the scoreboard is to ensure that an uop can only be dispatched after all its source operands are 
 computed by previous uops in the program order. Local variable `cOps` stores the minimum cycle the uop can be dispatched.
 
 ### Reorder Buffer (ROB)
 
-The ROB, just like the issue queue, is also modeled as a FIFO circular buffer. The implementation of the ROB can be found
+The ROB, just like issue queue, is also modeled as a FIFO circular buffer. The implementation of the ROB can be found
 in ooo\_core.h, `class ReorderBuffer`. One important difference between the ROB and issue queue is that uops may commit 
 out-of-order, but they always leave the ROB in-order. Besides, more than one uops can leave the ROB in one cycle. This is 
 defined as the ROB's width, specified using template argument `W`.
 
+The ROB class maintains two more member variables than the issue queue: `curRetireCycle` and `curCycleRetires`. 
+`curRetireCycle` tracks the maximum retire cycle of all previous uops. Recall that uops are always simulated in-order,
+previous uops' retire cycle is always known. `curCycleRetires` tracks the number of entries we have retired in the 
+current retire cycle. If this number reaches the ROB width, we simply increment `curRetireCycle` and resets `curCycleRetires`.
 
+The ROB maintains the invariant that the current uop must 
 
 ### Instruction Window
 
