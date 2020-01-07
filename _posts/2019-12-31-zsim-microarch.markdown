@@ -535,12 +535,15 @@ execution ports. An uop is first issued to the backend, renamed by the RAT, then
 instruction window, only after which could the uop be dispatched when all source operands are ready and an execution
 port is available. Readers should also note that Intel may not use these two terminologies in the same way zSim uses them
 for historical reasons. In the following discussion, we will strictly stick to zSim's interpretation of "issue" and "dispatch"
-to avoid confusing readers. Similarly, when two terminologies refer to the same thing, we only use the one suggested by 
+to avoid confusion. Similarly, when two terminologies refer to the same thing, we only use the one suggested by 
 the code. One example is "instruction window" and "reservation station". We choose the former despite the fact that
 Intel uses the latter to refer to the exact same structure.
 
 There are three major stages in the backend, each taking at least two cycles to complete. This sums up to six cycles between
-uop issue and dispatch at a minimum, given no unresolved data dependency. The first stage is register renaming. The RAT 
+uop issue and dispatch at a minimum. As pointed out in previous paragraphs, zSim always models stall in the middle of the 
+backend pipeline by delaying the issue of the current and all following uops as if the current uop magically knew a stall
+will happen if it were issued without the delay. With this in mind, we can think of the backend pipeline as always taking
+six cycles to complete after we adjust the issue cycle to model stalls. The first stage is register renaming. The RAT 
 allows renaming four uops per cycle, regardless of whether the same register is renamed multiple times. Since this is 
 consistent with the issue width, we do not need to model RAT. As a ressult, the renaming stage does not introduce stalls, 
 and always completes in two cycles. The second stage is register read and instruction window, in which the renamed source 
