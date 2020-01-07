@@ -560,6 +560,14 @@ drive the window forward by one clock, and resets `curCycleIssuedUops`.
 
 ### Simulating Issue and Dispatch
 
+After an uop has been inserted into the issue queue, we compute the cycle that the uop can leave the issue queue and 
+be inserted into the instruction window by comparing the enqueue cycle (`decoderCycle`) with `curCycle`. If the latter
+is smaller, we first drive `curCycle` forward to `decoderCycle` (`curCycleIssuedUops` are also updated accordingly;
+we simply ignore it in the following text to avoid complicating the discussion), since uops are inserted in-order. 
+Then we check whether the issue limit of the current cycle has been reached. If positive, we drive `curCycle` forward
+by one cycle. Note that it is guaranteed that some uops will be dispatched if we drive the clock by one, since uops 
+are scheduled greedily on the nearest future cycle in which the port is available.
+
 When an uop is to be received by the instruction window, we first synchronize the window with the previous 
 pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
 by comparing `occupancy` with `WSZ`. If the window is full, the uop cannot be received at `curCycle`, in which case we 
