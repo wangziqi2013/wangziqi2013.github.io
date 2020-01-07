@@ -608,6 +608,15 @@ bus with zero dynamic overhead, while registers that are committed before the uo
 Another purpose of the scoreboard is to ensure that an uop can only be dispatched after all its source operands are 
 computed by previous uops in the program order. Local variable `cOps` stores the minimum cycle the uop can be dispatched.
 
+### Reorder Buffer (ROB)
+
+The ROB, just like the issue queue, is also modeled as a FIFO circular buffer. The implementation of the ROB can be found
+in ooo\_core.h, `class ReorderBuffer`. One important difference between the ROB and issue queue is that uops may commit 
+out-of-order, but they always leave the ROB in-order. Besides, more than one uops can leave the ROB in one cycle. This is 
+defined as the ROB's width, specified using template argument `W`.
+
+
+
 ### Instruction Window
 
 The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
