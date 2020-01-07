@@ -541,7 +541,7 @@ is ROB and instruction window, in which the uop is inserted into both the ROB an
 earlier, FIFO buffer structure can be simulated using an array of releasing cycles. The instruction window can be simulated
 using DES. In the following sections we cover the three stages in full details.
 
-### RAT and Register Read
+### Simulating Issue Stage
 
 After the uop is inserted into the issue queue in `decodeCycle`, we compare `decodeCycle` and `curCycle` to determine
 which component should be stalled. Recall that `curCycle` represents the issue cycle of the previous uop. If `decodeCycle`
@@ -549,13 +549,23 @@ is greater than `curCycle`, meaning the current uop is enqueued after the previo
 issue logic for (`decodeCycle` - `curCycle`) cycles, and adjust `curCycle` to `decodeCycle`. Otherwise, `decodeCycle`
 is smaller than or equal to `curCycle`, which means that the previous uop is only issued (`curCycle` - `decodeCycle`) 
 cycles after the current uop is inserted. In this case, the current uop will stay in the issue queue for 
-(`curCycle` - `decodeCycle`) cycles to wait for the issue of the previous uop first.
+(`curCycle` - `decodeCycle`) cycles to wait for the issue of the previous uop first. Note that in the latter scenario,
+we do not stall the decoder by adjusting `decodeCycle` to `curCycle`, since the decoder is stalled naturally by the 
+return value of `minAllocCycle()` when the issue queue becomes full.
 
- The current uop can leave the issue queue in `curCycle`
-if the number of already issued uops, which is stored in `curCycleIssuedUops`, have not reached the issue limit, `RF_READS_PER_CYCLE`. 
-If this is the case, we increment `curCycleIssuedUops` by one, and record the release cycle of the uop in the issue queue
-by calling `markLeave()` member function with `curCycle` as argument. Otherwise, the current uop cannot be issued at the 
-current cycle. In this case, we just let it stay in the issue queue for one more cycle, and reset `curCycleIssuedUops`.
+The current uop can leave the issue queue in `curCycle` if the number of already issued uops, which is stored in 
+`curCycleIssuedUops`, have not reached the issue limit, `RF_READS_PER_CYCLE`. If this is the case, we increment 
+`curCycleIssuedUops` by one, and record the release cycle of the uop in the issue queue by calling `markLeave()` member 
+function with `curCycle` as argument. Otherwise, the current uop cannot be issued at the current cycle. In this case, we 
+just let it stay in the issue queue for one more cycle, and reset `curCycleIssuedUops`.
+
+### Simulating RAT and RF
+
+As discussed above, the RAT has a renaming bandwidth of four uops per cycle, which matches the maximum issue width, and 
+therefore does not constitute a bottleneck in any situation. The RF, on the other hand, only supports at most three reads 
+in one cycle. If the uops issued in the same cycle need to access more than three registers from the RF, only the first 
+few requests in the program order can be handled. The rest uops will be stalled for one cycle, and retry reading the RF 
+in the next cycle. Note that zSim does not model register write backs and read-write contention. 
 
 ### Instruction Window
 
