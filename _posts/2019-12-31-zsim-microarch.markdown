@@ -720,25 +720,5 @@ scheduled. We need to remember the port it is scheduled on and close the port fo
 `touchOccupancy` and `recordPort` to `true`. This indicates that `occupancy` will be incremented, and that the member 
 variable of the instruction window, `lastPort`, will also be updated to remember the port on which the uop is scheduled.
 
-### Simulating Issue
-
-After an uop has been inserted into the issue queue, we compute the cycle that the uop can leave the issue queue and 
-be inserted into the instruction window by comparing the enqueue cycle `decoderCycle` with `curCycle`. If the latter
-is smaller, we first drive `curCycle` forward to `decoderCycle` to synchronize window state with the tentative issue 
-cycle at `decoderCycle`. We then check whether the issue limit of the current cycle has been reached. If true, we drive 
-`curCycle` forward by one. Note that it is guaranteed that some uops will be dispatched and therefore at least one slot 
-will be freed, if we drive the clock by one. This is because uops are scheduled greedily on the nearest future cycle in 
-which the port is available; If the window is already full, then at least one uop must have been scheduled for dispatching 
-in the next cycle, since otherwise, according to the greedy scheduling algorithm, all later cycles should be empty, and 
-the window should not be full, a contradiction!
-
-After the issue cycle is computed, we update the releasing cycle of the issue queue slot to `curCycle` as well, since
-the uop leaves the issue queue after it has been inserted into the instruction window. This is done by calling issue
-queue's method `markLeave()` with `curCycle`.
-
-### Simulating Dispatch
-
-The uop still traverses through the pipeline after it is issued into the instruction window. Six extra pipeline stages 
-are needed to complete the pre-dispatch work: Register renaming, ROB insert, and source register read. 
 
 
