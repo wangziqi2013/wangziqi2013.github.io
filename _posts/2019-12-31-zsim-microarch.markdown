@@ -699,6 +699,14 @@ forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` 
 `nextWin` after switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' event objects from `ubWin` 
 (stands for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
+At the end of the backend pipeline, the uop is inserted into the instruction window by calling `schedule()`. This function
+takes two arguments. The first is `curCycle` reference, the second is the minimum dispatch cycle computed using source
+operand commit cycle, the ROB allocation cycle, and the uop issue cycle `curCycle` (to be honest, I do not quite understand 
+why ROB allocation does not stall the pipeline on resource hazard, and why ROB allocation seems to happen at the beginning
+of issue stage). The uop must not be dispatched before: (1) Its two source operands become available at cycle `cOps`;
+(2) ROB entry is allocated at the beginning of issue stage (`c2`); (3) The uop physically arrives at the instruction window 
+after issue, at cycle `MAX(c2, c3) + (DISPATCH_STAGE - ISSUE_STAGE)` (the `MAX` here seems to imply that ROB allocation 
+stalls uop issue for (`c2` - `c3`) cycles, if `c2 > c3`, but `curCycle` is not incremented to account for the issue stall).
 
 
 The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
