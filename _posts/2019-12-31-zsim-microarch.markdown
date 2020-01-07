@@ -543,14 +543,15 @@ There are three major stages in the backend, each taking at least two cycles to 
 uop issue and dispatch at a minimum. As pointed out in previous paragraphs, zSim always models stall in the middle of the 
 backend pipeline by delaying the issue of the current and all following uops as if the current uop magically knew a stall
 will happen if it were issued without the delay. With this in mind, we can think of the backend pipeline as always taking
-six cycles to complete after we adjust the issue cycle to model stalls. The first stage is register renaming. The RAT 
-allows renaming four uops per cycle, regardless of whether the same register is renamed multiple times. Since this is 
-consistent with the issue width, we do not need to model RAT. As a ressult, the renaming stage does not introduce stalls, 
-and always completes in two cycles. The second stage is register read and instruction window, in which the renamed source 
-register is read. zSim models register read throughput limit, which is specified in `RF_READS_PER_CYCLE`. The third stage 
-is ROB and instruction window, in which the uop is inserted into both the ROB and the instruction window. As discussed
-earlier, FIFO buffer structure can be simulated using an array of releasing cycles. The instruction window can be simulated
-using DES. In the following sections we cover the three stages in full details.
+six cycles to complete after we adjust the issue cycle to model stalls. 
+
+The first stage is register renaming. The RAT allows renaming four uops per cycle, regardless of whether the same register 
+is renamed multiple times. Since this is consistent with the issue width, we do not need to model RAT. As a ressult, the 
+renaming stage does not introduce stalls, and always completes in two cycles. The second stage is register read, in which 
+the renamed source register is read. zSim models register read throughput limit, which is specified in `RF_READS_PER_CYCLE`. 
+The third stage is ROB and instruction window, in which the uop is inserted into both the ROB and the instruction window. 
+As discussed earlier, FIFO buffer structure can be simulated using an array of releasing cycles. The instruction window 
+can be simulated using DES. In the following sections we cover the three stages in full details.
 
 ### Simulating Uop Issue
 
@@ -576,8 +577,9 @@ As discussed above, the RAT has a renaming bandwidth of four uops per cycle, whi
 therefore does not constitute a bottleneck in any situation. The RF, on the other hand, only supports at most three reads 
 in one cycle. If the uops issued in the same cycle need to access more than three registers from the RF, only the first 
 few requests can be handled in the program order (i.e. requests from uops that come earlier in program order have higher 
-priority). The rest uops will be stalled for one cycle, and retry reading the RF in the next cycle. Note that zSim does 
-not model register write backs and read-write contention. 
+priority), and these uops can be released to the next pipeline stage. The rest uops will be withheld in the RF read stage 
+for one more cycle, in which RF read will be re-attempted. Note that zSim does not model register write backs and read-write 
+contention, meaning that the RF read bandwidth does not change in the presence of concurrent write backs. 
 
 zSim models RF read stall slightly differently than what was described above. On actual hardware, we can stall an uop
 by withholding it in the current stage, stalling previous stages, and inserting bubbles into the next stage. zSim does
