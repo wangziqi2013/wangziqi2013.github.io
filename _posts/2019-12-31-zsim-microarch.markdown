@@ -660,6 +660,11 @@ dispatched, and schedule a dispatch event in the future dispatch cycle. The stat
 during the simulation is on the cycle when the current uop arrives at the window. In other words, for an uop issued at
 `curCycle` (after adjustment for backend pipeline stalls), the state of the window is the state at (`curCycle` + 6).
 
+The instruction window maintains one of the most important invariants in zSim: When `curCycle` is adjusted for modeling
+backend pipeline stalls and external stalls, we should always call `advansePos()` to synchronously update 
+the state of the window by one cycle (`longAdvance()` updates window state by a potentially large number of cycles, but this 
+function seems unused, as I did a `grep -r longAdvance` and found no usage of it).
+
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
 either because an uop is scheduled on that port during the cycle, or because the functional unit is non-pipelined and a 
@@ -674,8 +679,9 @@ counting "1" bits, to replace `count` field, this is incorrect, since the value 
 of `occUnits`. This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue 
 imposes back pressure.
 
-The member variable `occupancy` tracks the size of the window at cycle `curCycle`, which equals the sum of `count` in all 
-event objects scheduled after `curCycle`. When an event object is processed as we drive forward the clock, the value of 
+The member variable `occupancy` tracks the size of the window when the current uop issued at `curCycle` (after adjustment)
+arrives at the window, which equals the sum of `count` in all event objects scheduled before the current uop. When an event 
+object is processed as we drive forward the clock, the value of 
 `count` is deducted from `occupancy` to simulate uop dispatching after which the window slots occupied by dispatched uops
 become free. When an uop is issued in the current cycle, we look into future event objects, and schedule the uop
 for dispatching in the nearest cycle in which one of the required port of the uop is not in-use. This is equivalent
