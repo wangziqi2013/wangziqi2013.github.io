@@ -599,6 +599,12 @@ uop retires, the temporary value in the ROB is written back to the physical RF. 
 physical RF always represents the current consistent architectural state, which simplifies exception handling and branch
 misprediction. 
 
+zSim models the above mechanism using a register scoreboard, which, for each architectural and temporary register, stores 
+the most recent commit time of uops that write into the register. The register scoreboard is updated when an uop commits
+using the commit cycle and two destination register IDs. Unfortunately, zSim does not model register write back on retirement.
+Instead, it simply assumes that registers that are committed after the uop is issued can be read from the broadcasting
+bus with zero dynamic overhead, while registers that are committed before the uop must be read from the physical RF.
+
 ### Instruction Window
 
 The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
