@@ -513,7 +513,7 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 
 The instruction window implements a simple DES event queue as `class WindowStructure` (ooo\_core.h). In order to model 
 out-of-order uop dispatching, we compute, for each uop received, the nearest cycle in the future that the uop can be 
-dispatched, and schedule a dispatch event to update the window state. The member variable of `OOOCore`, `curCycle`, 
+dispatched, and schedule a dispatch event in the future dispatch cycle. The member variable of `OOOCore`, `curCycle`, 
 represents the current event queue cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, 
 and may possibly update it, driving the event queue clock forward (e.g. when the window is full). With the inductive model 
 in mind, `curCycle` can be also considered as the receiving cycle of the previous uop in program order.
@@ -550,9 +550,11 @@ forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` 
 `nextWin` after switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' event objects from `ubWin` 
 (stands for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
-### Simulating Issue and Dispatch
+Two parameters controls the behavior of the window. The first is template argument `WSZ`, which specifies the window
+size. When the window is full, no more uops can be scheduled in the current cycle, and we must drive the event queue
+forward until a window slot is freed. 
 
-There are two parameters
+### Simulating Issue and Dispatch
 
 When an uop is to be received by the instruction window, we first synchronize the window with the previous 
 pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
