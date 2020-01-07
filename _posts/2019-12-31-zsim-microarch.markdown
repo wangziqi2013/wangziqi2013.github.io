@@ -664,9 +664,7 @@ The instruction window maintains one of the most important invariants in zSim: W
 backend pipeline stalls and external stalls, we should always call `advansePos()` to synchronously update 
 the state of the window by one cycle (`longAdvance()` updates window state by a potentially large number of cycles, but this 
 function seems unused, as I did a `grep -r longAdvance` and found no usage of it). This invariant must be solidly observed
-even when the instruction window itself stalls the pipeline due to a resource hazard. As we drive forward `curCycle`,
-event objects scheduled in the future are processed, which updates the window state (mainly the size) to simulate
-uop departure.
+even when the instruction window itself stalls the pipeline due to a resource hazard. 
 
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
@@ -682,14 +680,14 @@ counting "1" bits, to replace `count` field, this is incorrect, since the value 
 of `occUnits`. This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue 
 imposes back pressure.
 
-The member variable `occupancy` tracks the size of the window when the current uop issued at `curCycle` (after adjustment)
+The member variable `occupancy` tracks the size of the structure when the current uop issued at `curCycle` (after adjustment)
 arrives at the window, which equals the sum of `count` in all event objects scheduled before the current uop. When an event 
-object is processed as we drive forward the clock, the value of 
-`count` is deducted from `occupancy` to simulate uop dispatching after which the window slots occupied by dispatched uops
-become free. When an uop is issued in the current cycle, we look into future event objects, and schedule the uop
-for dispatching in the nearest cycle in which one of the required port of the uop is not in-use. This is equivalent
-to buffering the uop in the window from the current cycle until the dispatch cycle. The variable `occupancy` is also 
-incremented to reflect the fact that one slot is occupied by the uop.
+object is processed as we drive forward `curCycle`, the value of `count` is deducted from `occupancy` to simulate uop 
+dispatching after which the window slots occupied by dispatched uops become free. When the uop issued at `currCycle`
+is received by the window, we look into future event objects, and schedule the uop for dispatching greedily in the nearest 
+cycle in which one of the required ports of the uop is not in-use. This is equivalent to buffering the uop in the window 
+from the cycle of receival until the dispatch cycle. The variable `occupancy` is also incremented after scheduling an uop 
+to simulate the fact that one slot is occupied by the uop.
 
 The actual implementation of the event queue is overly complicated due to the optimizations that are applied
 for better time complexity and data locality. Instead of using a single `std::map` for mapping cycles to `struct WinCycle` 
