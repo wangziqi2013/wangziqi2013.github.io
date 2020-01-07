@@ -521,11 +521,15 @@ single cycle. zSim keeps track of the current issue cycle in `OOOCore`'s member 
 core simulator "issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving 
 cycle of the previous uop in program order.
 
-Readers should be careful not confuse uop issue with uop dispatch. In zSim, issue is a terminology that refers to moving
+Readers should be careful not to confuse uop issue with uop dispatch. In zSim, issue is a terminology that refers to moving
 uops to the backend pipeline stage, while dispatch means moving the uops to the functional units through one of the six 
-execution ports. An uop is first issued to the backend, renamed by the RAT, then added into the ROB and the 
+execution ports. An uop is first issued to the backend, renamed by the RAT, then inserted into the ROB and the 
 instruction window, only after which could the uop be dispatched when all source operands are ready and an execution
-port is available.
+port is available. Readers should also note that Intel may not use these two terminologies in the same way zSim uses them
+for historical reasons. In the following discussion, we will strictly stick to zSim's interpretation of "issue" and "dispatch"
+to avoid confusing readers. Similarly, when two terminologies refer to the same thing, we only use the one suggested by 
+the code. One example is "instruction window" and "reservation station". We choose the former despite the fact that
+Intel uses the latter to refer to the exact same structure.
 
 ### Instruction Window
 
