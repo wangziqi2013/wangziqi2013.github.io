@@ -469,10 +469,9 @@ determined statically. Instead, we use discrete event simulation (DES) with an e
 with the component. The releasing of uops can be scheduled as events in the future, the time of which is computed according
 to the scheduling algorithm and availbility of issuing ports (explained later in section "Instruction Window"). The receiving 
 time of an uop can be determined by checking if the window is full in the current cycle. If true, the clock is driven forward 
-until a vacant slot occurs as the result of processing uop releasing events. This is the only situation where a clock is 
-associated with a component, and zSim calls this as "issue-centric simulation" since the processor clock is basically the 
-current clock of the instruction window. Note that although uops leave the component out-of-order, in-order simulation of 
-uops is still feasible, since at the end of the pipeline, uops must leave the ROB in program order.
+until a vacant slot occurs as the result of processing uop releasing events. Note that although uops leave the component 
+out-of-order, in-order simulation of uops is still feasible, since at the end of the pipeline, uops must leave the ROB in 
+program order.
 
 ## Simulating The Rest of Frontend
 
@@ -514,7 +513,11 @@ we drive the decoder's local clock forward by setting `decodeCycle` to the value
 ## Simulating The Backend
 
 The backend of the pipeline consists of the register aliasing table, the register file, the out-of-order execution engine, 
-load store unit, and the reorder buffer. 
+load store unit, and the reorder buffer. Uops are "issued" to the backend from the issue queue at a maximum bandwidth of 
+`ISSUES_PER_CYCLE` uops per cycle, meaning that each backend pipeline stage can handle that many uops in a single cycle. 
+zSim keeps track of the current issue cycle in `OOOCore`'s member variable, `curCycle`, making the entire core simulator
+"issue-centric". With the inductive model in mind, `curCycle` can also be considered as the backend receiving cycle of 
+the previous uop in program order.
 
 zSim defines "issue" as inserting an uop into the instruction window. zSim assumes that the instruction is fully associative,
 such that an uop can be inserted as long as there is one free slot. An related terminology is "dispatch", which, in zSim,
@@ -527,8 +530,7 @@ The instruction window implements a simple DES event queue as `class WindowStruc
 out-of-order uop dispatching, we compute, for each uop received, the nearest cycle in the future that the uop can be 
 dispatched, and schedule a dispatch event in the future dispatch cycle. The member variable of `OOOCore`, `curCycle`, 
 represents the current event queue cycle. All but one methods of `class WindowStructure` takes a reference of `curCycle`, 
-and may possibly update it, driving the event queue clock forward (e.g. when the window is full). With the inductive model 
-in mind, `curCycle` can be also considered as the receiving cycle of the previous uop in program order.
+and may possibly update it, driving the event queue clock forward (e.g. when the window is full). 
 
 At a high level, the instruction window maps future cycles to event objects implemented as `struct WinCycle`. These 
 event objects track which ports are in-use at the event cycle. Port can become in-use for a given cycle 
