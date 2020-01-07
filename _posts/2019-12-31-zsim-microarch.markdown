@@ -627,7 +627,12 @@ The ROB class maintains two more member variables than the issue queue: `curReti
 previous uops' retire cycle is always known. `curCycleRetires` tracks the number of entries we have retired in the 
 current retire cycle. If this number reaches the ROB width, we simply increment `curRetireCycle` and resets `curCycleRetires`.
 
-The ROB maintains the invariant that the current uop must 
+The ROB maintains the invariant that the current uop must not retire earlier than previous uops. Retirement is handled by
+member function `markRetire`, with argument `minRetireCycle`, which is, in fact, the commit cycle of the uop. We compare
+`minRetireCycle` with `curRetireCycle`. If the latter is smaller, the current uop is committed earlier than previous uops,
+and it has to wait in the ROB for (`curRetireCycle` - `minRetireCycle`) cycles before retirement. If, on the other hand,
+the latter is larger, we know the ROB remains idle for (`minRetireCycle` - `curRetireCycle`) cycles after retiring the 
+previous uops, in which case we simply adjusting `curRetireCycle` to `minRetireCycle` and reset `curCycleRetires`.
 
 ### Instruction Window
 
