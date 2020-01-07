@@ -395,8 +395,8 @@ we list all configurable system parameters, with an explanation for each and the
 | ISSUES_PER_CYCLE | Macro | Maximum number of uops that can be inserted into the instruction per cycle  | 4 | 
 | RF_READS_PER_CYCLE | Macro | Maximum number of reads to RF | 3 |
 | BranchPredictorPAg\<NB, HB, LB\> | Template | Branch predictor parameters (not covered) | 11, 18, 14 | 
-| WindowStructure\<H, WSZ\> | Template | WSZ specified instruction window size. H is only used internally. | 1024, 54 |
-| ReorderBuffer\<SZ, W\> | Template | SZ is the size of ROB; W is the maximum number of uops that can be retired per cycle. | 168, 4 for ROB<br />64, 4 for load queue<br />36, 4 for store queue |
+| WindowStructure\<H, WSZ\> | Template | WSZ specified instruction window size. H is only used internally. | 1024, 36 |
+| ReorderBuffer\<SZ, W\> | Template | SZ is the size of ROB; W is the maximum number of uops that can be retired per cycle. | 128, 4 for ROB<br />64, 4 for load queue<br />36, 4 for store queue |
 | CycleQueue\<SZ\> | Template | Size of the issue queue | 28 |
 {:.mbtablestyle}
 
@@ -555,7 +555,7 @@ forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` 
 `nextWin` after switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' event objects from `ubWin` 
 (stands for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
-Two parameters controls the behavior of the window. The first is template argument `WSZ`, which specifies the window
+Two parameters control the behavior of the window. The first is template argument `WSZ`, which specifies the window
 size. When the window is full, no more uops can be scheduled in the current cycle, and we must drive the event queue
 forward until a window slot is freed. The second is the macro `ISSUES_PER_CYCLE` defined in ooo\_core.cpp. This value
 limits the maximum number of uops that can be issued to the window from the issue queue. The simulator keeps track of 
@@ -590,6 +590,11 @@ the window should not be full, a contradiction!
 
 After the issue cycle is computed, we update the releasing cycle of the issue queue slot to `curCycle` as well, since
 the uop leaves the issue queue after it has been inserted into the instruction window. This is done by calling issue
-queue's method `markLeave()`.
+queue's method `markLeave()` with `curCycle`.
+
+### Simulating Dispatch
+
+The uop still traverses through the pipeline after it is issued into the instruction window. Six extra pipeline stages 
+are needed to complete the pre-dispatch work: Register renaming, ROB insert, and source register read. 
 
 
