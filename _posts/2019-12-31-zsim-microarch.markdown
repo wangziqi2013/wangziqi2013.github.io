@@ -562,8 +562,14 @@ the update of `curCycleIssuedUops` when driving forward the clock to avoid compl
 The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
 `touchOccupancy` and `recordPort`. In fact, what this function does is simpler than it seems to be. When a uop
 is scheduled on a pipelined functional unit, `scheduleInternal()` is called with `touchOccupancy` being `true` and 
-`recordPort` being false, indicating that the `occupancy` of the instruction window will be incremented by one 
-as the result of uop issue, and that we do not care which port it is issued into.
+`recordPort` being `false`, indicating that `occupancy` will be incremented by one as the result of uop issue, and that 
+we do not care which port it is issued into. When we want to close the port, however, no actual uop is inserted
+into the window, and instead, we simply mark the port as in-use in the scheduled cycle to prevent later uops from
+being scheduled on the port. In this case both `touchOccupancy` and `recordPort` are `false` (see `poisonRange()`
+and the `else` branch of `schedule()`). In the last case, an uop requiring non-pipelined functional units is scheduled. 
+We need to remember the port it is scheduled on and close the port for `extraSlots` cycles by setting both `touchOccupancy` 
+and `recordPort` to `true`. This indicates that `occupancy` will be incremented, and that the member variable of the 
+instruction window, `lastPort`, will also be updated to remember the port on which the uop is scheduled.
 
 ### Simulating Issue and Dispatch
 
