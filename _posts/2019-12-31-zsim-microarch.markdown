@@ -647,8 +647,8 @@ cycle, since the previous `W` uops have already exhausted the retirement bandwid
 `curRetireCycle` and resetting `curCycleRetires`.
 
 After retiring the current uop, we store the actual retirement cycle `curRetireCycle` into `buf[idx]`, and increment
-`idx`. Resource hazard on the ROB will stall instruction issue if an uop is to be inserted into an ROB slot, but
-the retirement cycle stored in that slot is larger than the issue cycle. In this case we stall uop issue by adjusting
+`idx`. Resource hazard on the ROB will stall uop issue if an uop is to be inserted into an ROB slot, but
+the retirement cycle stored in that slot is larger than the issue cycle. In this case we model the stall by adjusting
 `curCycle` to `buf[idx]`.
 
 ### Instruction Window
