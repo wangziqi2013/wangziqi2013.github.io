@@ -564,8 +564,8 @@ The scheduling logic `scheduleInternal()` is also overly complicated by the use 
 is scheduled on a pipelined functional unit, `scheduleInternal()` is called with `touchOccupancy` being `true` and 
 `recordPort` being `false`, indicating that `occupancy` will be incremented by one as the result of uop issue, and that 
 we do not care which port it is issued into. When we want to close the port, however, no actual uop is inserted
-into the window, and instead, we simply mark the port as in-use in the scheduled cycle to prevent later uops from
-being scheduled on the port. In this case both `touchOccupancy` and `recordPort` are `false` (see `poisonRange()`
+into the window. Instead, we simply mark the port as in-use in the scheduled cycle to prevent later uops from
+being dispatched on the port. In this case both `touchOccupancy` and `recordPort` are `false` (see `poisonRange()`
 and the `else` branch of `schedule()`). In the last case, an uop requiring non-pipelined functional units is scheduled. 
 We need to remember the port it is scheduled on and close the port for `extraSlots` cycles by setting both `touchOccupancy` 
 and `recordPort` to `true`. This indicates that `occupancy` will be incremented, and that the member variable of the 
@@ -575,11 +575,13 @@ instruction window, `lastPort`, will also be updated to remember the port on whi
 
 After an uop has been inserted into the issue queue, we compute the cycle that the uop can leave the issue queue and 
 be inserted into the instruction window by comparing the enqueue cycle `decoderCycle` with `curCycle`. If the latter
-is smaller, we first drive `curCycle` forward to `decoderCycle` since uops are inserted in-order. 
-Then we check whether the issue limit of the current cycle has been reached. If true, we drive `curCycle` forward
+is smaller, we first drive `curCycle` forward to `decoderCycle` to synchronize the window state with the tentative issue 
+cycle. We then check whether the issue limit of the current cycle has been reached. If true, we drive `curCycle` forward
 by one cycle. Note that it is guaranteed that some uops will be dispatched and therefore at least one slot will be freed, 
-if we drive the clock by one. This is because uops are scheduled greedily on the nearest future cycle in which the port is 
-available.
+if we drive the clock by one. This is because uops are scheduled greedily on the nearest future cycle in which the port 
+is available; If the window is already full, then at least one uop must have been scheduled for dispatching in the next 
+cycle, since otherwise, according to the greedy scheduling algorithm, all later cycles should be empty, and the windows 
+should not be full, a contradiction!
 
 When an uop is to be received by the instruction window, we first synchronize the window with the previous 
 pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
