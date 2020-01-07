@@ -699,14 +699,7 @@ forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` 
 `nextWin` after switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' event objects from `ubWin` 
 (stands for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
-Two parameters control the behavior of the window. The first is template argument `WSZ`, which specifies the window
-size. When the window is full, no more uops can be scheduled in the current cycle, and we must drive the event queue
-forward until a window slot is freed. The second is the macro `ISSUES_PER_CYCLE` defined in ooo\_core.cpp. This value
-limits the maximum number of uops that can be issued to the window from the issue queue. The simulator keeps track of 
-the number of issued uops in `curCycle` in `OOOCore`'s member variable `curCycleIssuedUops`. For each uop, the simulator 
-always attempts to issue in `curCycle`, unless `curCycleIssuedUops` exceeds `ISSUES_PER_CYCLE`, in which case we simply
-drive the window forward by one cycle, and resets `curCycleIssuedUops`. In the following text, we simply ignore 
-the update of `curCycleIssuedUops` when driving forward the clock to avoid complicating the discussion.
+
 
 The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
 `touchOccupancy` and `recordPort`. In fact, what this function does is simpler than it seems to be. When a uop
