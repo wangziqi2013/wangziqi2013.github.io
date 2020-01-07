@@ -552,7 +552,11 @@ forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` 
 
 Two parameters controls the behavior of the window. The first is template argument `WSZ`, which specifies the window
 size. When the window is full, no more uops can be scheduled in the current cycle, and we must drive the event queue
-forward until a window slot is freed. 
+forward until a window slot is freed. The second is the macro `ISSUES_PER_CYCLE` defined in ooo\_core.cpp. This value
+limits the maximum number of uops that can be issued to the window from the issue queue. The simulator keeps track of 
+the number of issued uops in `curCycle` in `OOOCore`'s member variable `curCycleIssuedUops`. For each uop, the simulator 
+always attempts to issue in `curCycle`, unless `curCycleIssuedUops` exceeds `ISSUES_PER_CYCLE`, in which case we simply
+drive the window forward by one clock, and resets `curCycleIssuedUops`.
 
 ### Simulating Issue and Dispatch
 
