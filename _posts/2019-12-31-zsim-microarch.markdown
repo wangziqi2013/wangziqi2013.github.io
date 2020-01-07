@@ -709,10 +709,12 @@ after issue, at cycle `MAX(c2, c3) + (DISPATCH_STAGE - ISSUE_STAGE)` (the `MAX` 
 stalls uop issue for (`c2` - `c3`) cycles, if `c2 > c3`, but `curCycle` is not incremented to account for the issue stall).
 
 On invocation, `schedule()`'s helper function `scheduleInternal()` first checks whether the window is currently full. 
-If true, the pipeline will be stalled by one extra cycle due to resource hazard. This is where `advancePos()` is called
-within `scheduleInternal()`. Note that although `scheduleInternal()` uses a loop to simulate pipeline stall, implying that 
-the stall may take more than one cycles. This can happen if no uop is scheduled for dispatching in the next cycle due
-to ports being closed not for uop dispatching. 
+If true, the pipeline will be stalled by at least one extra cycle due to resource hazard. This is where `advancePos()` 
+is called within `scheduleInternal()`. Note that `scheduleInternal()` uses a loop to simulate pipeline stall, implying that 
+the stall may take more than one cycle. This can happen if no uop is scheduled for dispatching in the next cycle due
+to ports being closed not for uop dispatching. After inserting the uop into the window, we traverse through future
+event objects after `schedCycle` to find a cycle in which one of the required ports are available for dispatching. The 
+`schedCycle` in the caller is updated accordingly when the function returns.
 
 The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
 `touchOccupancy` and `recordPort`. In fact, what this function does is simpler than it seems to be. When a uop
