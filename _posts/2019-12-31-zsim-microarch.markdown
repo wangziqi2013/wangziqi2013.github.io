@@ -535,7 +535,8 @@ There are three major stages in the backend, each taking at least two cycles to 
 uop issue and dispatch at a minimum, given no unresolved data dependency. The first stage is register renaming. The RAT 
 allows renaming four uops per cycle, regardless of whether the same register is renamed multiple times. Since this is 
 consistent with the issue width, we do not need to model RAT. As a ressult, the renaming stage does not introduce stalls, 
-and always completes in two cycles.
+and always completes in two cycles. The second stage is register read and instruction window, in which the renamed source 
+register is read. zSim models register read throughput limit, which is specified in `RF_READS_PER_CYCLE`. 
 
 ### Instruction Window
 
