@@ -548,7 +548,7 @@ is ROB and instruction window, in which the uop is inserted into both the ROB an
 earlier, FIFO buffer structure can be simulated using an array of releasing cycles. The instruction window can be simulated
 using DES. In the following sections we cover the three stages in full details.
 
-### Simulating Issue Stage
+### Simulating Uop Issue
 
 After the uop is inserted into the issue queue in `decodeCycle`, we compare `decodeCycle` and `curCycle` to determine
 which component should be stalled. Recall that `curCycle` represents the issue cycle of the previous uop. If `decodeCycle`
@@ -604,6 +604,9 @@ the most recent commit time of uops that write into the register. The register s
 using the commit cycle and two destination register IDs. Unfortunately, zSim does not model register write back on retirement.
 Instead, it simply assumes that registers that are committed after the uop is issued can be read from the broadcasting
 bus with zero dynamic overhead, while registers that are committed before the uop must be read from the physical RF.
+
+Another purpose of the scoreboard is to ensure that an uop can only be dispatched after all its source operands are 
+computed by previous uops in the program order. Local variable `cOps` stores the minimum cycle the uop can be dispatched.
 
 ### Instruction Window
 
