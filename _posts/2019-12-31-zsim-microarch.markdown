@@ -545,10 +545,10 @@ for better time complexity and data locality. Instead of using a single `std::ma
 objects, two extra arrays, `curWin` and `nextWin`, are added to "buffer" cycles in the near future. This way, instruction 
 window access is a constant time array indexing operation, instead of log(N) as in `std::map`. The size of the two windows
 are specified by the template argument `H`. `curWin` is indexed by `curPos`, which points to the `struct WinCycle` object
-representing port state in `curCycle`. The value of `curPos` is also incremented every time we drive forward `curCycle` 
-by one. When `curPos` reaches the end of `curWin`, we swap `curWin` and `nextWin` and reset `curPos`. The `nextWin` after 
-switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' port states from the map, `ubWin` (stands 
-for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
+representing port state in `curCycle`. The value of `curPos` is also incremented by the same amount every time we drive 
+forward `curCycle`. When `curPos` reaches the end of `curWin`, we swap `curWin` and `nextWin` and reset `curPos`. The 
+`nextWin` after switch (i.e. the old `curWin`) is then refilled by moving the next `H` cycles' event objects from `ubWin` 
+(stands for "unbounded window"). This window-filling logic is implemented in member function `advancePos()`.
 
 ### Simulating Issue and Dispatch
 
