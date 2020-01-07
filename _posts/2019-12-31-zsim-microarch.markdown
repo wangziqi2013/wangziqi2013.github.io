@@ -556,17 +556,24 @@ forward until a window slot is freed. The second is the macro `ISSUES_PER_CYCLE`
 limits the maximum number of uops that can be issued to the window from the issue queue. The simulator keeps track of 
 the number of issued uops in `curCycle` in `OOOCore`'s member variable `curCycleIssuedUops`. For each uop, the simulator 
 always attempts to issue in `curCycle`, unless `curCycleIssuedUops` exceeds `ISSUES_PER_CYCLE`, in which case we simply
-drive the window forward by one clock, and resets `curCycleIssuedUops`.
+drive the window forward by one cycle, and resets `curCycleIssuedUops`. In the following text, we simply ignore 
+the update of `curCycleIssuedUops` when driving forward the clock to avoid complicating the discussion.
+
+The scheduling logic `scheduleInternal()` is also overly complicated by the use of the two boolean template arguments, 
+`touchOccupancy` and `recordPort`. In fact, what this function does is simpler than it seems to be. When a uop
+is scheduled on a pipelined functional unit, `scheduleInternal()` is called with `touchOccupancy` being `true` and 
+`recordPort` being false, indicating that the `occupancy` of the instruction window will be incremented by one 
+as the result of uop issue, and that we do not care which port it is issued into.
 
 ### Simulating Issue and Dispatch
 
 After an uop has been inserted into the issue queue, we compute the cycle that the uop can leave the issue queue and 
-be inserted into the instruction window by comparing the enqueue cycle (`decoderCycle`) with `curCycle`. If the latter
-is smaller, we first drive `curCycle` forward to `decoderCycle` (`curCycleIssuedUops` are also updated accordingly;
-we simply ignore it in the following text to avoid complicating the discussion), since uops are inserted in-order. 
-Then we check whether the issue limit of the current cycle has been reached. If positive, we drive `curCycle` forward
-by one cycle. Note that it is guaranteed that some uops will be dispatched if we drive the clock by one, since uops 
-are scheduled greedily on the nearest future cycle in which the port is available.
+be inserted into the instruction window by comparing the enqueue cycle `decoderCycle` with `curCycle`. If the latter
+is smaller, we first drive `curCycle` forward to `decoderCycle` since uops are inserted in-order. 
+Then we check whether the issue limit of the current cycle has been reached. If true, we drive `curCycle` forward
+by one cycle. Note that it is guaranteed that some uops will be dispatched and therefore at least one slot will be freed, 
+if we drive the clock by one. This is because uops are scheduled greedily on the nearest future cycle in which the port is 
+available.
 
 When an uop is to be received by the instruction window, we first synchronize the window with the previous 
 pipeline stage by driving forward `curCycle` to the releasing cycle of the uop. We then check whether the window if full 
