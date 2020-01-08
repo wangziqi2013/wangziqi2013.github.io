@@ -753,6 +753,19 @@ buffer on which resource hazards may happen. After a load or store uop is dispat
 on the load or store queue object respectively to obtain the minimum enqueue cycle. If this value is larger than the 
 dispatch cycle, we stall the functional unit by calling `poisonRange()`, imposing back pressure to the instruction window.
 The window will then close the port to prevent following uops from being issued until the current uop can be inserted
-into the load or store queue.
+into the load or store queue. Uops are removed from the load or store queue when they commit. For store instructions, 
+they might be moved to a store buffer to overlap coherence actions with execution. This, unfortunately, is not modeled
+by zSim. We next describe how loads and stores are executed in details.
+
+For store uops, after they are inserted into the store queue, we serialize the uop with all previous store addresses.
+This is done by taking the maximum of the dispatch cycle and `lastStoreAddrCommitCycle`. Note that the dependency between
+the current store address and the store uop is already modeled by register dependency. Here we also model the implicit
+dependency between the current store uop and all previous store address computation uops using `lastStoreAddrCommitCycle`,
+since store address uops may commit out-of-order. Next, we take the virtual address of the store from `OOOCore`'s member 
+variable `storeAddrs`, which is populated by load and store instrumentations as the basic block is executed on native 
+hardware. We then derive the store completion cycle by calling into the cache hierarchy using `l1d->store()`. The return 
+value `reqSatisfiedCycle` is the commit cycle of the store uop. 
+
+
 
 ## Simulating The Frontend Fetcher
