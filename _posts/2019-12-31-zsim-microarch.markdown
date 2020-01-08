@@ -821,9 +821,27 @@ cache, since the misprediction has already been identified, and the fetcher can 
 we keep sending request to the L1 instruction cache `lineSize / FETCH_BYTES_PER_CYCLE` cycles later. This delay is
 to model the frontend fetcher's bandwidth limit, which is often smaller than cache line size (16 bytes on Nehalem). 
 It is also noted by code comment that at most five blocks are fetched from the wrong path. This number is merely
-from experience on average misprediction penalty.
+from experience on average misprediction penalty. At the end of the simulation, `fetchCycle` is updated to the 
+commit cycle of the branch uop, since wrong path fetching only stops when the branch uop commits.
 
 Note that wrong path fetching does not change the timing of any uops in the current basic block. The author claimed in
 code comment that wrong path fetching mainly models the contention on the cache hierarchy, such as cache misses due to
 unnecessary code fetch. zSim also does not model the branch target buffer (BTB) which predicts the branch path PC.
 It is assumed that if branch outcome is correctly predicted, the next basic block can be fetched immediately after that.
+
+### Simulating Next Block Fetching
+
+zSim simulates the fetching of the next basic block at the end of the current basic block by injecting load requests
+into L1 instruction cache at current issue cycle (this is an artifact caused by weave phase model), and adding the latencies
+onto `decodeCycle`, such that the simulation of the next basic block appears to start only after the entire block is fetched.
+This somehow deviates from actual hardware, in which the frontend fetcher and the backend pipeline work in parallel,
+and the pipeline will not wait for the entire basic block to be fetched before it resumes execution. zSim justifies
+this design choice by assuming that the frontend pipeline could not hide the potentially large latency to fetch instructions.
+Whenever the fetcher retrieves a block from the cache hierarchy, the pipeline will be stalled waiting for the fetch to 
+complete.
+
+The instruction fetch is simulated by calling `l1i->load()` with cache block addresses in the next basic block 
+starting from `bblAddr`. The latency of the memory read is added onto `fetchCycle`. After all fetches complete, 
+we compute the decoder cycle of the first instruction in the next basic block as `fetchCycle + (DECODE_STAGE - FETCH_STAGE)`,
+implying that decoding stage remains idle until all instructions are fetched. To this end, we drive the decoder clock 
+forward by setting it to `minFetchDecCycle`, if the latter is larger.
