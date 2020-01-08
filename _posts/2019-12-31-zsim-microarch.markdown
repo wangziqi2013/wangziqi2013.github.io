@@ -744,7 +744,10 @@ uop is that all loads and stores serialize on the most recent store address uop.
 stores, since without store address we cannot decide whether load data can be forwarded from a previous store. Stores 
 serialize on previous stores since x86 does not allow store-store reordering. The commit of store address uops is 
 tracked by `OOOCore`'s member variable `lastStoreAddrCommitCycle`. It is updated to the commit cycle of the store uop
-if the commit cycle is larger than `lastStoreAddrCommitCycle`.
+if the commit cycle is larger than `lastStoreAddrCommitCycle`. Store address cycle is used to implement full fence, 
+which stalls all loads and stores from being executed until the fence uop commits.
+
+### Simulating Load and Store
 
 Loads and stores also allocate an entry in the load queue or store queue respectively. Surprisingly, zSim models load
 and store queue exactly as an ROB with smaller capacity and a potentially different retirement bandwidth. Code comment
@@ -770,5 +773,9 @@ On certain conditions, the store uop may forward its data to a later load uop. z
 array `fwdArray`, which is a direct mapped structure mapping 4-byte aligned store addresses to the commit cycle.
 When a store uop commits, we also update the forward array by setting the corresponding entry to the commit cycle
 and the address of the store. 
+
+When a store commits, `OOOCore`'s member variable `lastStoreCommitCycle` is also updated to reflect the maximum commit cycle
+of all committed store uops. As we will see later, fence uops use this variable to compute the commit cycle of the fence
+instruction to prevent load and store reordering of any kind.
 
 ## Simulating The Frontend Fetcher
