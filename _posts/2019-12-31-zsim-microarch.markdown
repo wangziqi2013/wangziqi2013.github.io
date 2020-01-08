@@ -778,4 +778,13 @@ When a store commits, `OOOCore`'s member variable `lastStoreCommitCycle` is also
 of all committed store uops. As we will see later, fence uops use this variable to compute the commit cycle of the fence
 instruction to prevent load and store reordering of any kind.
 
+Load uops are processed similarly. We first allocate a load queue entry, possibly stalling uop dispatch on the load port.
+We then serialize the load uop with `lastStoreAddrCommitCycle` by adjusting the dispatch cycle to the larger of these two.
+Note that by serializing load uop with `lastStoreAddrCommitCycle`, we are essentially stalling the load unit. This,
+however, is not simulated by zSim, since the instruction window can still schedule load uops even when the load unit
+is stalled waiting for the store address. After all store addresses are resolved, we take the virtual address of the load
+from `loadAddrs` , and calls `l1d->load()` to simulate the cache hierarchy. In the meantime, we also test the `fwdArray`
+using the load address to see if a previous store can forward its data to the current load uop. The load commit 
+cycle is the larger one between cache read cycle and forwarding cycle (since the store may from long time ago).
+
 ## Simulating The Frontend Fetcher
