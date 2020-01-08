@@ -800,7 +800,7 @@ can only be executed after the fence commits.
 The last instruction of a basic block is a branch instruction to the next basic block. After all uops in the current 
 basic block are simulated, we proceed to simulate branch prediction and instruction fetch of the next basic block.
 
-### Branch Prediction
+### Simulate Wrong Path Fetching
 
 The branch predictor (`class BranchPredictorPAg`, ooo\_core.h) works in a straightforward way which does not require much 
 explanation (and we do not cover details here). The branch predictor exposes only one method, `predict()`, which takes the 
@@ -809,3 +809,8 @@ happens. Note that zSim assumes the predictor updates its internal state right a
 hardware this is impossible, since the branch outcome is only known after the brach instruction commits. Since zSim does 
 not model the case where predictions overlap, this is a good approximation and does not introduce too much inaccuracy.
 
+If the branch predictor indicates a misprediction, we simulate wrong path fetching by issuing instruction fetch requests
+to the L1 data cache. To achieve this, we first compute the fetch cycle of the branch instruction, in which the prediction
+is made. Recall that all uops have been simulated at this moment, the fetch cycle of the last instruction is therefore 
+fetched at cycle `decodeCycle - (DECODE_STAGE - FETCH_STAGE)`, since `decodeCycle` stores the dynamic cycle of the last 
+uop generation. 
