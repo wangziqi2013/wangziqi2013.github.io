@@ -766,6 +766,9 @@ variable `storeAddrs`, which is populated by load and store instrumentations as 
 hardware. We then derive the store completion cycle by calling into the cache hierarchy using `l1d->store()`. The return 
 value `reqSatisfiedCycle` is the commit cycle of the store uop. 
 
-
+On certain conditions, the store uop may forward its data to a later load uop. zSim models forwarding using a forward
+array `fwdArray`, which is a direct mapped structure mapping 4-byte aligned store addresses to the commit cycle.
+When a store uop commits, we also update the forward array by setting the corresponding entry to the commit cycle
+and the address of the store. 
 
 ## Simulating The Frontend Fetcher
