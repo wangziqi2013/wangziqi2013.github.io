@@ -728,4 +728,24 @@ scheduled. We need to remember the port it is scheduled on and close the port fo
 `touchOccupancy` and `recordPort` to `true`. This indicates that `occupancy` will be incremented, and that the member 
 variable of the instruction window, `lastPort`, will also be updated to remember the port on which the uop is scheduled.
 
-## Simulating Uop Execution
+### Simulating Uop Execution
+
+After dispatching, uops are executed by functional units. zSim assumes that the execution latency of an uop is always fixed 
+and can be determined statically, except for loads and stores. The commit cycle for these uops is simply dispatch cycle 
+plus the execution latency stored in `lat` field of the `DynUop` object. zSim assumes that most functional units are 
+pipelined, such that even if execution of uops can take multiple cycles, the functional unit can take one input uop
+per cycle. Some special uops, however, must be executed by non-pipelined functional units such as the divider or some
+SIMD units. In this case, the port will be closed for `extraSlots` cycles, meaning that no uop can ever be dispatched
+to the port within `extraSlots` cycles after the last dispatch. This feature is implemented by instruction window's 
+`schedule()`, which has been discussed above.
+
+Store addresses are computed by the Address Generation Unit (AGU) located at port 3. One special property of store address
+uop is that all loads and stores serialize on the most recent store address uop. Loads need the addresses of all previous
+stores, since without store address we cannot decide whether load data can be forwarded from a previous store. Stores 
+serialize on previous stores since x86 does not allow store-store reordering. The commit of store address uops is 
+tracked by `OOOCore`'s member variable `lastStoreAddrCommitCycle`. It is updated to the commit cycle of the store uop
+if the commit cycle is larger than `lastStoreAddrCommitCycle`.
+
+
+
+## Simulating The Frontend Fetcher
