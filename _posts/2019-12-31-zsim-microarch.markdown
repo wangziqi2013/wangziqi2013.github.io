@@ -800,7 +800,7 @@ can only be executed after the fence commits.
 The last instruction of a basic block is a branch instruction to the next basic block. After all uops in the current 
 basic block are simulated, we proceed to simulate branch prediction and instruction fetch of the next basic block.
 
-### Simulate Wrong Path Fetching
+### Simulating Wrong Path Fetching
 
 The branch predictor (`class BranchPredictorPAg`, ooo\_core.h) works in a straightforward way which does not require much 
 explanation (and we do not cover details here). The branch predictor exposes only one method, `predict()`, which takes the 
@@ -820,3 +820,10 @@ The latency is added onto the fetch cycle to derive the fetch response cycle. If
 cache, since the misprediction has already been identified, and the fetcher can simply abort the fetch request. Otherwise,
 we keep sending request to the L1 instruction cache `lineSize / FETCH_BYTES_PER_CYCLE` cycles later. This delay is
 to model the frontend fetcher's bandwidth limit, which is often smaller than cache line size (16 bytes on Nehalem). 
+It is also noted by code comment that at most five blocks are fetched from the wrong path. This number is merely
+from experience on average misprediction penalty.
+
+Note that wrong path fetching does not change the timing of any uops in the current basic block. The author claimed in
+code comment that wrong path fetching mainly models the contention on the cache hierarchy, such as cache misses due to
+unnecessary code fetch. zSim also does not model the branch target buffer (BTB) which predicts the branch path PC.
+It is assumed that if branch outcome is correctly predicted, the next basic block can be fetched immediately after that.
