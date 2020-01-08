@@ -676,7 +676,7 @@ during the event cycle.
 At a closer look, the `struct WinCycle` event object consists of an 8-byte port mask and a uop counter. The port mask 
 field `occUnits` tracks which ports are already in-use. The uop counter `count` tracks the number of uops scheduled in 
 the corresponding cycle. Note that although the code comment mentions using "POPCNT", which is a x86 instruction for 
-counting "1" bits, to replace `count` field, this is incorrect, since the value of `count` may not equal to the POPCNT 
+counting "1" bits, to replace `count` field, this is incorrect, since the value of `count` may not equal the POPCNT 
 of `occUnits`. This happens when the port is closed due to a non-pipelined functioal unit or when the load store queue 
 imposes back pressure.
 
@@ -796,3 +796,16 @@ serialize, to after its own commit cycle. This way, loads and stores after the f
 can only be executed after the fence commits. 
 
 ## Simulating The Frontend Fetcher
+
+The last instruction of a basic block is a branch instruction to the next basic block. After all uops in the current 
+basic block are simulated, we proceed to simulate branch prediction and instruction fetch of the next basic block.
+
+### Branch Prediction
+
+The branch predictor (`class BranchPredictorPAg`, ooo\_core.h) works in a straightforward way which does not require much 
+explanation (and we do not cover details here). The branch predictor exposes only one method, `predict()`, which takes the 
+address of the branch instruction, and the actual outcome of the branch. The return value indicates whether a misprediction 
+happens. Note that zSim assumes the predictor updates its internal state right after the prediction is made. On actual
+hardware this is impossible, since the branch outcome is only known after the brach instruction commits. Since zSim does 
+not model the case where predictions overlap, this is a good approximation and does not introduce too much inaccuracy.
+
