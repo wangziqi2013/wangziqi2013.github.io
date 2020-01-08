@@ -746,6 +746,13 @@ serialize on previous stores since x86 does not allow store-store reordering. Th
 tracked by `OOOCore`'s member variable `lastStoreAddrCommitCycle`. It is updated to the commit cycle of the store uop
 if the commit cycle is larger than `lastStoreAddrCommitCycle`.
 
-
+Loads and stores also allocate an entry in the load queue or store queue respectively. Surprisingly, zSim models load
+and store queue exactly as an ROB with smaller capacity and a potentially different retirement bandwidth. Code comment
+points out that, in practice, load and store queues are often fully associative. In our case, we only simulate them as FIFO
+buffer on which resource hazards may happen. After a load or store uop is dispatched, they first call `minAllocCycle()`
+on the load or store queue object respectively to obtain the minimum enqueue cycle. If this value is larger than the 
+dispatch cycle, we stall the functional unit by calling `poisonRange()`, imposing back pressure to the instruction window.
+The window will then close the port to prevent following uops from being issued until the current uop can be inserted
+into the load or store queue.
 
 ## Simulating The Frontend Fetcher
