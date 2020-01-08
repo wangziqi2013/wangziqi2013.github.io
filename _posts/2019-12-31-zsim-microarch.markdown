@@ -787,4 +787,12 @@ from `loadAddrs` , and calls `l1d->load()` to simulate the cache hierarchy. In t
 using the load address to see if a previous store can forward its data to the current load uop. The load commit 
 cycle is the larger one between cache read cycle and forwarding cycle (since the store may from long time ago).
 
+### Simulating Fence Uops
+
+zSim only supports very simple fence uop that stalls all loads and stores after the fence until it commits. Such fence
+uop will be issued when special instructions, such as `CPUID`, or special prefixes, such as `LOCK`, are decoded. The 
+fence uop serializes all memory uops after it by setting `lastStoreAddrCommitCycle`, on which both load and store 
+serialize, to after its own commit cycle. This way, loads and stores after the fence (uops are simulated in-order)
+can only be executed after the fence commits. 
+
 ## Simulating The Frontend Fetcher
