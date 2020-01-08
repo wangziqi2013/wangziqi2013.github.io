@@ -810,7 +810,13 @@ hardware this is impossible, since the branch outcome is only known after the br
 not model the case where predictions overlap, this is a good approximation and does not introduce too much inaccuracy.
 
 If the branch predictor indicates a misprediction, we simulate wrong path fetching by issuing instruction fetch requests
-to the L1 data cache. To achieve this, we first compute the fetch cycle of the branch instruction, in which the prediction
-is made. Recall that all uops have been simulated at this moment, the fetch cycle of the last instruction is therefore 
-fetched at cycle `decodeCycle - (DECODE_STAGE - FETCH_STAGE)`, since `decodeCycle` stores the dynamic cycle of the last 
-uop generation. 
+to the L1 instruction cache until the branch is resolved at commit time. To achieve this, we first compute the fetch cycle 
+of the branch instruction, during which the prediction is made. Recall that all uops have been simulated at this moment, 
+the fetch cycle of the last instruction is therefore fetched at cycle `decodeCycle - (DECODE_STAGE - FETCH_STAGE)`, since 
+`decodeCycle` stores the dynamic cycle of the last uop generation. The wrong path fetching begins at the fetch cycle of 
+the branch instruction. The simulator then computes the fetch latency of accessing L1 instruction cache using `l1i->load()`. 
+The latency is added onto the fetch cycle to derive the fetch response cycle. If the response cycle is greater than 
+`lastCommitCycle`, which, in our case, is the commit cycle of the branch instruction, we stop fetching from L1 instruction
+cache, since the misprediction has already been identified, and the fetcher can simply abort the fetch request. Otherwise,
+we keep sending request to the L1 instruction cache `lineSize / FETCH_BYTES_PER_CYCLE` cycles later. This delay is
+to model the frontend fetcher's bandwidth limit, which is often smaller than cache line size (16 bytes on Nehalem). 
