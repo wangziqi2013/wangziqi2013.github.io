@@ -20,3 +20,13 @@ or overwriting states written by the former. This way, cache operations can form
 a total ordering to be determined. Logically speaking, in a total ordering, the concurrent execution of cache operations 
 is equivalent to a serialized execution in terms of input, output of each operation as well as the final state. The
 order of serialized execution is given by the total ordering.
+
+In the following discussion, we introduce thread synchronization within zSim's cache hierarchy implementation. Note that
+concurrency control here does not refer to concurrency enabled coherence protocol with transient states. zSim only models 
+the basic MESI protocol in which all states are stable. Transient state simulation requires a complicated state machine, 
+which cannot be easily implemented and verified. zSim applies concurrency control protocol only to protect its internal
+data structure and to ensure correct semantics of coherence actions. 
+
+## Source Files and Documentation
+
+We list source files and modules related to our discussion in the following table.
