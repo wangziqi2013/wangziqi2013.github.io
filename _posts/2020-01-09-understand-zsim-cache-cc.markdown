@@ -30,3 +30,11 @@ data structure and to ensure correct semantics of coherence actions.
 ## Source Files and Documentation
 
 We list source files and modules related to our discussion in the following table.
+
+| File Name                        | Important Modules/Declarations |
+|:--------------------------------:|--------------------------------|
+| cache.h/cpp | `class Cache`'s `access()` and `invalidate()` shows how synchronization routines are called during a cache operation. |
+| coherence\_ctrl.h/cpp | `class MESITopCC` and `class MESIBottomCC` implement request lock and invalidation lock respectively. |
+| filter\_cache.h/cpp | `class FilterCache` implements a low overhead traffic filter above L1 cache to avoid the locking protocol. |
+| init.cpp | Initialization of filter caches |
+{:.mbtablestyle}
