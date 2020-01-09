@@ -38,3 +38,8 @@ We list source files and modules related to our discussion in the following tabl
 | filter\_cache.h/cpp | `class FilterCache` implements a low overhead traffic filter above L1 cache to avoid the locking protocol. |
 | init.cpp | Initialization of filter caches |
 {:.mbtablestyle}
+
+Besides, our discussion is based on a tutorial on zSim memory simulation published by zSim developers at MIT. The tutorial
+is focesed on teaching the audience on how to extend zSim with user customized modules, while this article is more focused 
+on explaining how things work in zSim's existing code base. The tutorial can be found 
+[here](http://zsim.csail.mit.edu/tutorial/slides/memory.pdf).
