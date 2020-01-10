@@ -46,3 +46,9 @@ on explaining how things work in zSim's existing code base. The tutorial can be 
 
 ## Concurrency Control in Cache Objects
 
+### Two-Phase Locking (2PL)
+
+Generally speaking, two-phase locking is the most commonly used lock-based concurrency control protocol. It is based on
+the lock and unlock primitive, which grants exclusive access of a thread to a single object. zSim's cache concurrency
+control protocol is also a variant of 2PL. We briefly describe 2PL in this section. 
+
