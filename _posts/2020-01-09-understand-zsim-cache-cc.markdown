@@ -63,4 +63,6 @@ but A must not access state written by B. We prove this by contradiction. The fi
 object A will read or write. After A releases the lock, B could read or write the object as well, serializing itself
 after A. The second half can be proven by contradiction. Assume that A also accesses B's state. This implies that thread
 A must have acquired a lock B releases. According to the 2PL property, B must not release any lock before it acquires 
-all locks for objects in its working set. We can infer that B must have already been in the shrink phase
+all locks for objects in its working set. We can infer that B must have already been in the shrinking phase. This, however,
+is inconsistent with the fact that B blocks on A, since this implies that B is still in growing phase, and has at least
+one or more locks to acquire. A contradiction!
