@@ -27,7 +27,7 @@ the basic MESI protocol in which all states are stable. Transient state simulati
 which cannot be easily implemented and verified. zSim applies concurrency control protocol only to protect its internal
 data structure and to ensure correct semantics of coherence actions. 
 
-## Source Files and Documentation
+### Source Files and Documentation
 
 We list source files and modules related to our discussion in the following table.
 
@@ -40,6 +40,9 @@ We list source files and modules related to our discussion in the following tabl
 {:.mbtablestyle}
 
 Besides, our discussion is based on a tutorial on zSim memory simulation published by zSim developers at MIT. The tutorial
-is focesed on teaching the audience on how to extend zSim with user customized modules, while this article is more focused 
+is focused on teaching the audience on how to extend zSim with user customized modules, while this article is more focused 
 on explaining how things work in zSim's existing code base. The tutorial can be found 
 [here](http://zsim.csail.mit.edu/tutorial/slides/memory.pdf).
+
+## Concurrency Control in Cache Objects
+
