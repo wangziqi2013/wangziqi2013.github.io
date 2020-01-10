@@ -66,7 +66,10 @@ after A. The second half can be proven by contradiction. Assume that A also acce
 A must have acquired a lock B releases. According to the 2PL property, B must not release any lock before it acquires 
 all locks for objects in its working set. We can infer that B must have already been in the shrinking phase. This, however,
 is inconsistent with the fact that B blocks on A, since this implies that B is still in growing phase, and has at least
-one or more locks to acquire. A contradiction!
+one or more locks to acquire. A contradiction! Note that this is not the complete correctness proof of 2PL, since pair-wise
+cycle-freedom is not sufficient to guarantee cycle-free of the final dependency cycle, if cycles with more than two nodes 
+exist. The full correctness proof of 2PL uses induction on the number of nodes in the cycle, and is rather straightforward,
+which we do not present.
 
 ### 2PL in Cache Invalidate
 
@@ -98,7 +101,7 @@ atomicity of invalidation operatons in the presence of concurrent invalidations 
 structure of the cache hierarchy and the way invalidation request propagates. We next present the correctness proof. 
 
 As shown in the 2PL correctness proof, the risk of releasing locks early resides in the fact that another thread B may 
-serialize after the currenr thread A by accessing the object whose lock is released, and in the meantime serialize
+serialize after the current thread A by accessing the object whose lock is released, and in the meantime serialize
 before thread A by having A accessing its state after A releases the lock, hence introducing a dependency cycle. We 
 argue that these two will never happen together in the cache hierarchy based on two reasons. First, invalidations
 can only propagate from top to bottom, but not vice versa. Second, the cache hierarchy is organized as a tree,
@@ -106,9 +109,17 @@ with the root being the LLC and leaves being L1 private caches. If the root of a
 can be propagated to the subtree before the subtree root is released.
 
 We prove the correctness of the protocol by a case-by-case discussion. Without losing generality, we assume that thread 
-A begins invalidation first on node X of the hierarchy. In the first case, thread B starts an invalidation on a node Y 
+A begins invalidation on node X of the hierarchy. In the first case, thread B starts an invalidation on a node Y 
 within the subtree. Assuming thread B's working set (cache objects it touches) overlaps with thread A's working set (otherwise 
-the proof is trivially done). Then thread B may access a cache object before thread A accesses them or after. In the first 
+the proof is trivially done). Then thread B may access cache object Y before thread A accesses them or after. In the first 
 subcase, thread B will lock node Y until its invalidation completes. In this subcase, thread A cannot access any node
 in B's working set before it completes, since thread A will otherwise block on cache Y, and that B's working set will
-only contain nodes under Y. In the second subcase, B accesses Y after A does. Since A releases the lock on Y
+only contain nodes under Y. Thread A therefore serializes before thread B. In the second subcase, B accesses Y after A 
+does. Since A releases the lock on Y only after it has done with all children caches of Y, B can only lock Y and start
+its invalidation process after A completes invalidation on substree starting from Y. Given that a cache object is never
+accessed twice, this implies that B can only access cache objects after A does, and A will never access states written
+by B, serializing A before B.
+
+In the second case, B starts invalidation on a node Y outside of the subtree. We similarly assume that their working 
+sets overlap. The proof is identical to the previous one, except that we switch A, B and X, Y.
+
