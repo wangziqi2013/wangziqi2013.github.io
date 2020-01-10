@@ -105,4 +105,10 @@ can only propagate from top to bottom, but not vice versa. Second, the cache hie
 with the root being the LLC and leaves being L1 private caches. If the root of a subtree is locked, no request
 can be propagated to the subtree before the subtree root is released.
 
-
+We prove the correctness of the protocol by a case-by-case discussion. Without losing generality, we assume that thread 
+A begins invalidation first on node X of the hierarchy. In the first case, thread B starts an invalidation on a node Y 
+within the subtree. Assuming thread B's working set (cache objects it touches) overlaps with thread A's working set (otherwise 
+the proof is trivially done). Then thread B may access a cache object before thread A accesses them or after. In the first 
+subcase, thread B will lock node Y until its invalidation completes. In this subcase, thread A cannot access any node
+in B's working set before it completes, since thread A will otherwise block on cache Y, and that B's working set will
+only contain nodes under Y. In the second subcase, B accesses Y after A does. Since A releases the lock on Y
