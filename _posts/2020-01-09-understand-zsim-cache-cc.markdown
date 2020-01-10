@@ -85,3 +85,13 @@ that the wait would be long, and the thread traps into the kernel by calling `fu
 in order to block the thread in the kernel, which allows better usage of CPU cycles at the cost of an expensive system 
 call.
 
+For some unknown reason, the author of zSim does not add `endInv()` into `class MESICC` and `class MESITerminalCC` to 
+release the lock in `bcc` object. Instead, the lock is released at the end of `processInv()` in both classes, which
+is the last action taken before `processInv()` and cache object's `invalidate()` returns. Recall that `validate()`
+is called recursively in function `sendInvalidates()`, which is used by `processInval()` in `class MESITopCC`. This 
+is essentially a slightly modified 2PL protocol, in which locks in each cache object's `bcc` are acquired while the 
+invalidation message propagates down the hierarchy to child caches, and released when the `invalidation()` on the current
+level returns. In this model, there seems to be multiple growing and shrinking phases if a cache block is shared by
+multiple children caches, since we invoke `invalidate()` once for a child cache that holds the block, which releases
+the lock before we invoke the same function for the next child cache. This makes the entire invalidation non-atomic,
+since 2PL property does not hold
