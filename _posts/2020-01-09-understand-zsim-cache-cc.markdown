@@ -78,3 +78,10 @@ variable is declared as `lock_t`, which in file locks.h is declared as `volatile
 object implements a simple lock as a 32 bit volatile integer. The lock is acquired using library call `futex_lock()`
 and released using `futex_unlock()`. 
 
+In this article, we do not cover the details of these two functions. To be short: The custom futex lock in zSim combines 
+spin lock with kernel futex lock. When the wait period is small, this function will not trap into the kernel, and instead 
+only spins on the volatile variable. When the waiting time exceeds a certain threshold (1000 spin loops), it is expected
+that the wait would be long, and the thread traps into the kernel by calling `futex()` system call via GNU portal `syscall()`
+in order to block the thread in the kernel, which allows better usage of CPU cycles at the cost of an expensive system 
+call.
+
