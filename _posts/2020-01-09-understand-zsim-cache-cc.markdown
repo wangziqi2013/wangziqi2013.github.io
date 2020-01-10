@@ -37,6 +37,7 @@ We list source files and modules related to our discussion in the following tabl
 | coherence\_ctrl.h/cpp | `class MESITopCC` and `class MESIBottomCC` implement request lock and invalidation lock respectively. |
 | filter\_cache.h/cpp | `class FilterCache` implements a low overhead traffic filter above L1 cache to avoid the locking protocol. |
 | init.cpp | Initialization of filter caches |
+| locks.h | Futex lock object type declaration. |
 {:.mbtablestyle}
 
 Besides, our discussion is based on a tutorial on zSim memory simulation published by zSim developers at MIT. The tutorial
@@ -66,3 +67,14 @@ A must have acquired a lock B releases. According to the 2PL property, B must no
 all locks for objects in its working set. We can infer that B must have already been in the shrinking phase. This, however,
 is inconsistent with the fact that B blocks on A, since this implies that B is still in growing phase, and has at least
 one or more locks to acquire. A contradiction!
+
+### 2PL in Cache Invalidate
+
+Let's consider cache line invalidation first. When an invalidation is triggered either by an eviction or by an external
+event, the `invalidate()` method of the `class Cache` object is invoked. At the beginning of this method, we call
+`cc->startInv()`. This function does nothing else besides calling `bcc->lock()`. If we further look into class `MESIBottomCC`,
+we will find that this function is nothing more than just calling `futex_lock()` on its member veriable `ccLock`. This
+variable is declared as `lock_t`, which in file locks.h is declared as `volatile uint32_t` type. In one word, the `bcc`
+object implements a simple lock as a 32 bit volatile integer. The lock is acquired using library call `futex_lock()`
+and released using `futex_unlock()`. 
+
