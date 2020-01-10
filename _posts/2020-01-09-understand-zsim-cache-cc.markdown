@@ -49,6 +49,18 @@ on explaining how things work in zSim's existing code base. The tutorial can be 
 ### Two-Phase Locking (2PL)
 
 Generally speaking, two-phase locking is the most commonly used lock-based concurrency control protocol. It is based on
-the lock and unlock primitive, which grants exclusive access of a thread to a single object. zSim's cache concurrency
-control protocol is also a variant of 2PL. We briefly describe 2PL in this section. 
+the lock and unlock primitive, which acquires and releases exclusive access of a thread to a single object. zSim's cache 
+concurrency control protocol is also a variant of 2PL. We briefly describe 2PL in this section. 
 
+2PL requires objects to be locked before they are accessed. The read and write set may not be known in advance, which can 
+be derived dynamically as the critical section is executed. The most important aspect of 2PL is the two-phased property:
+Objects are locked as they are accessed within a critical section. No object should be released before the last object
+is locked. This property essentially divides the execution of the critial section into two phases: a growing phase in which
+locks can only be acquired, and a shrinking phase in which locks can only be released. 2PL property guarantees serializability.
+One easy way to visualize this is to consider what if one thread A blocks another thread B by holding a lock B intends to
+acquire. In this case, B must serialize after A, and not vice versa, since B can only read or overwrite state written by A,
+but A must not access state written by B. We prove this by contradiction. The first half is easy, since B blocks on an
+object A will read or write. After A releases the lock, B could read or write the object as well, serializing itself
+after A. The second half can be proven by contradiction. Assume that A also accesses B's state. This implies that thread
+A must have acquired a lock B releases. According to the 2PL property, B must not release any lock before it acquires 
+all locks for objects in its working set. We can infer that B must have already been in the shrink phase
