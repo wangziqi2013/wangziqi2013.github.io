@@ -21,11 +21,11 @@ a total ordering to be determined. Logically speaking, in a total ordering, the 
 is equivalent to a serialized execution in terms of input, output of each operation as well as the final state. The
 order of serialized execution is given by the total ordering.
 
-In the following discussion, we introduce thread synchronization within zSim's cache hierarchy implementation. Note that
-concurrency control here does not refer to concurrency enabled coherence protocol with transient states. zSim only models 
-the basic MESI protocol in which all states are stable. Transient state simulation requires a complicated state machine, 
-which cannot be easily implemented and verified. zSim applies concurrency control protocol only to protect its internal
-data structure and to ensure correct semantics of coherence actions. 
+In the following discussion, we present thread synchronization within zSim's cache hierarchy implementation in detail. 
+Note that concurrency control here does not refer to concurrency enabled coherence protocol with transient states. zSim 
+only models the basic MESI protocol in which all states are stable. Transient state simulation requires a complicated 
+state machine, which cannot be easily implemented and verified. zSim applies concurrency control protocol only to protect 
+its internal data structure and to ensure correct semantics of coherence actions. 
 
 ### Source Files and Documentation
 
@@ -96,3 +96,13 @@ multiple children caches, since we invoke `invalidate()` once for a child cache 
 the lock before we invoke the same function for the next child cache. This protocol, however, still guarantees the 
 atomicity of invalidation operatons in the presence of concurrent invalidations at any level, due to the special
 structure of the cache hierarchy and the way invalidation request propagates. We next present the correctness proof. 
+
+As shown in the 2PL correctness proof, the risk of releasing locks early resides in the fact that another thread B may 
+serialize after the currenr thread A by accessing the object whose lock is released, and in the meantime serialize
+before thread A by having A accessing its state after A releases the lock, hence introducing a dependency cycle. We 
+argue that these two will never happen together in the cache hierarchy based on two reasons. First, invalidations
+can only propagate from top to bottom, but not vice versa. Second, the cache hierarchy is organized as a tree,
+with the root being the LLC and leaves being L1 private caches. If the root of a subtree is locked, no request
+can be propagated to the subtree before the subtree root is released.
+
+
