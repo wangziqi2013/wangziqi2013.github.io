@@ -93,5 +93,6 @@ is essentially a slightly modified 2PL protocol, in which locks in each cache ob
 invalidation message propagates down the hierarchy to child caches, and released when the `invalidation()` on the current
 level returns. In this model, there seems to be multiple growing and shrinking phases if a cache block is shared by
 multiple children caches, since we invoke `invalidate()` once for a child cache that holds the block, which releases
-the lock before we invoke the same function for the next child cache. This makes the entire invalidation non-atomic,
-since 2PL property does not hold
+the lock before we invoke the same function for the next child cache. This protocol, however, still guarantees the 
+atomicity of invalidation operatons in the presence of concurrent invalidations at any level, due to the special
+structure of the cache hierarchy and the way invalidation request propagates. We next present the correctness proof. 
