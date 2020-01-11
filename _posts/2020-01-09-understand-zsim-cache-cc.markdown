@@ -142,5 +142,8 @@ equal to D. We next prove by contradiction that the property still holds for tre
 
 Without losing generality, we assume that a cycle is formed after the invalidation protocol is executed on the current
 root node X (the node that has height D + 1). The cycle is in this form: `X -> ... -> Y -> ... -> Z -> ... -> X`, in which
-Y and Z are nodes in the original subtree of depth D. Since both Y and Z are below X in the tree, according to what we have
-proved above, we know (X, Y) -> (Y, Y) and (Z, Z) -> (X, Z)
+Y and Z are nodes in the original subtree of depth D, and notation like X -> Y indicates that the invalidation protocol
+starting at X is serialized before the protocol starting at Y. Since both Y and Z are below X in the tree, according to 
+what we have proved above, we know (1) (X, Y) -> (Y, Y) and (2) (Z, Z) -> (X, Z). Since Y -> Z, but it is unclear if Y
+is above Z or below Z, we need a case-by-case discussion. Assuming Y is below Z, then we have (3) (X, Z) -> (X, Y)
+since the protocol starting X always lock cache objects on the path down the hierarchy.
