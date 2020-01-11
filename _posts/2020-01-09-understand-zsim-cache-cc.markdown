@@ -146,4 +146,14 @@ Y and Z are nodes in the original subtree of depth D, and notation like X -> Y i
 starting at X is serialized before the protocol starting at Y. Since both Y and Z are below X in the tree, according to 
 what we have proved above, we know (1) (X, Y) -> (Y, Y) and (2) (Z, Z) -> (X, Z). Since Y -> Z, but it is unclear if Y
 is above Z or below Z, we need a case-by-case discussion. Assuming Y is below Z, then we have (3) (X, Z) -> (X, Y)
-since the protocol starting X always lock cache objects on the path down the hierarchy.
+since the protocol starting X always lock cache objects on the path down the hierarchy. We also know (4) (Y, Y) -> (Z, Y)
+since Y -> Z. Put them all together in the order (2)(3)(1)(4), we have the following relation: 
+`(Z, Z) -> (X, Z) -> (X, Y) -> (Y, Y) -> (Z, Y)`. Since ``(Z, Z) -> (X, Z) -> (X, Y)` implies that Z has released the 
+lock on its root, otherwise X will not be able to lock Y. This contradicts with (Z, Y), indicating that invalidation
+starting at Z has not terminated yet, since it locks node Y after X locks node Z. A contradiction!
+
+In the second case, we have Y above Z. Relation (1) and (2) do not change. Relation (3) becomes (Y, Y) -> (Y, Z) since
+the protocol starting at Y always locks the node itself first. (4) becomes (Y, Z) -> (Z, Z). If we put them together in 
+the order (1)(3)(4)(2), we have `(X, Y) -> (Y, Y) -> (Y, Z) -> (Z, Z) -> (X, Z)`. Similarly, `(X, Y) -> (Y, Y)` suggests that
+X has released lock on Y, but `(Z, Z) -> (X, Z)` indicates that X acquires lock on Z after it released lock on Y.
+This is contradictory to the protocol, hence concluding the proof.
