@@ -127,5 +127,9 @@ Combining the two cases, we conclude that no matter how invalidations are interl
 ordering between any pair of them. Furthermore, the partial ordering only exists when two invalidation threads A and B
 share at least one cache object in their working sets. This suggests that w.l.o.g. one of A, B must start invalidation
 in the subtree of another. Recall from the 2PL proof that we still need to prove the "no cycle" property for arbitrary
-number of threads. 
+number of threads. We next present the proof.
+
+The proof uses structural induction on the tree hierarchy, with notation (X, Y) meaning "the root of subtree X is locked 
+before the root of subtree Y". According to transitivity of "happens-before" relation, if we know (X, Y) and (Y, Z), then 
+we also know (X, Z). 
 
