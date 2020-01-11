@@ -157,3 +157,10 @@ the protocol starting at Y always locks the node itself first. (4) becomes (Y, Z
 the order (1)(3)(4)(2), we have `(X, Y) -> (Y, Y) -> (Y, Z) -> (Z, Z) -> (X, Z)`. Similarly, `(X, Y) -> (Y, Y)` suggests that
 X has released lock on Y, but `(Z, Z) -> (X, Z)` indicates that X acquires lock on Z after it released lock on Y.
 This is contradictory to the protocol, hence concluding the proof.
+
+## 2PL in Access
+
+In the cache object's `access()` method, we call `cc->startAccess()` at the beginning, and conclude the access by calling 
+`cc->endAccess(req)` at the end of the function. If we look into what these two functions do, we will find that they are 
+essentially the same as invalidation if we ignore the operations on `bcc`'s lock and `req.childLock` for now. `startAccess()`
+simply acquires the same lock on `tcc` object, and `endAccess()` releases the `tcc` lock.
