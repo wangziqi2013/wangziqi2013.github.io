@@ -133,3 +133,11 @@ The proof uses structural induction on the tree hierarchy, with notation (X, Y) 
 before the root of subtree Y". According to transitivity of "happens-before" relation, if we know (X, Y) and (Y, Z), then 
 we also know (X, Z). 
 
+The induction hypothesis says if the invalidation protocol running on a subtree of height D will not incur cycles, then for 
+trees with depth (D + 1), there will be no cycle either. In the base case, D equals 1, and we only have one single cache.
+in which case the hypothesis trivially holds. Assuming that the property holds for all all trees with height less than or
+equal to D. We next prove by contradiction that the property still holds for tree of height (D + 1).
+
+Without losing generality, we assume that a cycle is formed after the invalidation protocol is executed on the current
+root node X (the node that has height D + 1). The cycle is in this form: `X -> ... -> Y -> ... -> Z -> ... -> X`, in which
+Y and Z are nodes in the original subtree of depth D. 
