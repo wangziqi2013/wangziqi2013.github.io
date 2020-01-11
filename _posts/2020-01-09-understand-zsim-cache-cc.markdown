@@ -129,9 +129,11 @@ share at least one cache object in their working sets. This suggests that w.l.o.
 in the subtree of another. Recall from the 2PL proof that we still need to prove the "no cycle" property for arbitrary
 number of threads. We next present the proof.
 
-The proof uses structural induction on the tree hierarchy, with notation (X, Y) meaning "the root of subtree X is locked 
-before the root of subtree Y". According to transitivity of "happens-before" relation, if we know (X, Y) and (Y, Z), then 
-we also know (X, Z). 
+The proof uses structural induction on the tree hierarchy, with notation (X, Y) meaning "the root of subtree Y is locked 
+by an invalidation starting at node X". Using this notation, the above conclusion can be expressed as: If A is serialized
+before B, then either A is above B, and (A, B) -> (B, B), or A is below B, and (A, A) -> (B, A). Here "->" means "happens 
+before". Furthermore, according to transitivity of the "happens-before" relation, if we know (A, B) -> (C, D) and 
+(C, D) -> (E, F) then we have (A, B) -> (E, F).
 
 The induction hypothesis says if the invalidation protocol running on a subtree of height D will not incur cycles, then for 
 trees with depth (D + 1), there will be no cycle either. In the base case, D equals 1, and we only have one single cache.
@@ -140,4 +142,5 @@ equal to D. We next prove by contradiction that the property still holds for tre
 
 Without losing generality, we assume that a cycle is formed after the invalidation protocol is executed on the current
 root node X (the node that has height D + 1). The cycle is in this form: `X -> ... -> Y -> ... -> Z -> ... -> X`, in which
-Y and Z are nodes in the original subtree of depth D. 
+Y and Z are nodes in the original subtree of depth D. Since both Y and Z are below X in the tree, according to what we have
+proved above, we know (X, Y) -> (Y, Y) and (Z, Z) -> (X, Z)
