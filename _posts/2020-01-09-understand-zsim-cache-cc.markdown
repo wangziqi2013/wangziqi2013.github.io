@@ -158,9 +158,18 @@ the order (1)(3)(4)(2), we have `(X, Y) -> (Y, Y) -> (Y, Z) -> (Z, Z) -> (X, Z)`
 X has released lock on Y, but `(Z, Z) -> (X, Z)` indicates that X acquires lock on Z after it released lock on Y.
 This is contradictory to the protocol, hence concluding the proof.
 
-## 2PL in Access
+## 2PL in Cache Access
 
 In the cache object's `access()` method, we call `cc->startAccess()` at the beginning, and conclude the access by calling 
 `cc->endAccess(req)` at the end of the function. If we look into what these two functions do, we will find that they are 
 essentially the same as invalidation if we ignore the operations on `bcc`'s lock and `req.childLock` for now. `startAccess()`
 simply acquires the same lock on `tcc` object, and `endAccess()` releases the `tcc` lock.
+
+The 2PL patter is again found in the cache access protocol, this time using the lock word in `tcc` object. Different from
+cache invalidation, the cache access locking protocol is standard 2PL, based on two observations. First, cache object's 
+`access()` is called recursively if the current level does not contain the block or does not have sufficient permission.
+This clearly divides the execution of the topmost `access()` into two phases. In the first recursion phase, we keep calling
+into parent cache's `access()` method, and acquiring locks. No lock will be released in this phase, which corresponds to 
+the growing phase in 2PL. In the second phase, we decurse from the parent level function, and before function returns,
+the lock is released. This corresponds to the shrinking phase in 2PL. Based on the above reasoning, we can claim that
+the cache access protocol
