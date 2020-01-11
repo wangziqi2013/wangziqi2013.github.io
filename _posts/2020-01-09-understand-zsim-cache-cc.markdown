@@ -123,3 +123,9 @@ by B, serializing A before B.
 In the second case, B starts invalidation on a node Y outside of the subtree. We similarly assume that their working 
 sets overlap. The proof is identical to the previous one, except that we switch A, B and X, Y.
 
+Combining the two cases, we conclude that no matter how invalidations are interleaved, we can always establish a partial
+ordering between any pair of them. Furthermore, the partial ordering only exists when two invalidation threads A and B
+share at least one cache object in their working sets. This suggests that w.l.o.g. one of A, B must start invalidation
+in the subtree of another. Recall from the 2PL proof that we still need to prove the "no cycle" property for arbitrary
+number of threads. 
+
