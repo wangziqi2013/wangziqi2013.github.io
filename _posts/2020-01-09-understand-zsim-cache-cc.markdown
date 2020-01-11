@@ -172,4 +172,18 @@ This clearly divides the execution of the topmost `access()` into two phases. In
 into parent cache's `access()` method, and acquiring locks. No lock will be released in this phase, which corresponds to 
 the growing phase in 2PL. In the second phase, we decurse from the parent level function, and before function returns,
 the lock is released. This corresponds to the shrinking phase in 2PL. Based on the above reasoning, we can claim that
-the cache access protocol
+the cache access protocol is serializable.
+
+## Synchronizing Cache Access and Invalidation
+
+One big challenge of synchronizing cache invalidation and cache access is to design a protocol that both scale to large
+cache hierarchies and do not introduce deadlock. On one extreme of the spectrum, we just use a big global lock for all
+accesses to the cache hierarchy. This obviously guarantees correctness, at the cost of performance and scalability. On the
+other end of the spectrum, we use fine-grained lock-coupling, releasing the lock on the previous node after acquiring 
+lock on the current node. This scheme, unfortunately, needs to take care of various transient states, since a pending
+request may be later overridden by another request on the same slot, forcing us to use transient states to track these
+cascaded request on the same block. One example is a pending block that is supposed to be fetched in in M state 
+being requested by a `GETS` before the fetch completes. The request will not be blocked since the cache object is not
+locked. In this case, we must remember the transition from M to S using a transient state while the block is being fetched.
+This is similar to what actually happens in a high performance coherence protocol implemented on hardware, but is 
+definitely over-complicated for a simulator like zSim.
