@@ -269,3 +269,12 @@ to determine whether the slot has been affected by concurrent invalidations or n
 indicates whether the current request should be processed as usual, or we should ignore the request just because
 the request is no longer valid after the concurrent invalidation. This value will be returned to cache object's 
 `access()` method. If the request is skipped (return value being `true`), the entire cache access will be skipped.
+
+In `CheckForMESIRace()`, we compare the current state of the child cache's slot and the state when the request was initial
+made. There are a few possibilities. If the request is a `PUTS`, and the invalidation just moves the slot's state to I,
+then we do not need to perform the `PUTS`. If the request is `PUTX`, and the invalidation request moves it to 
+state I, we also skip the request for the same reason. If, however, the invalidation request only downgrades the state to
+S, we still need the request, but the request type is changed from `PUTX` to `PUTS` to reflect the state change.
+For `GETX` requests, no matter how the state changes, we still need the `GETX` to bring the block into the cache in M
+state. For `GETS` requests, there cannot be any invalidation, since `GETS` is only sent when the initial state is I,
+which will not be changed at all by invalidation.
