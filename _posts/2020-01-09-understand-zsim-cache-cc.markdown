@@ -231,4 +231,12 @@ the locking protocol. Recall that `startAccess()` is called at the beginning of 
 and `endAccess()` is called after everything has completed on the current level. The cache access locking protocol
 maintains the invariant that at any moment in time when the thread is working on cache X to serve a request initiated from
 leaf cache Y, as long as we are between `startAccess()` and `endAccess()` of X, it is guaranteed that the access locks on 
-the path from X to Y, as well as the invalidation lock of X, are acquired.
+the path from X to Y, as well as the invalidation lock of X, are acquired. Under this invariant, we can safely assume that
+no concurrent invalidation and access will alter the state of any node on the path from X to Y, and all member functions
+of the coherence controller class can be written in a race-free manner. In order to implement this invariant, in addition
+to the 2PL-style acquisition and release of `tcc`'s lock, when the thread moves from the current cache Z to its parent W,
+we first release the invalidation lock on cache Z, allowing pending invalidations to proceed to Z and its children caches,
+and then attempt to acquire the invalidation lock of W. This will create a short window in which invalidations can be 
+propagated from W to Z, and the acquisition of W's invalidation lock will only be granted after the current active invalidation 
+(if any) completes on cache W, hence breaking the invariant. After the invalidation lock of W are acquired, the invariant
+is re-established, and we can access cache W's internal state safely.
