@@ -300,3 +300,9 @@ in order to access the tag array and state array within a cache object (there is
 L1 accesses will result in a cache hit, which does not cause the state and the tag of the slot to change. If both the state
 and the tag can be accessed read-only and atomically, no locking would be required, since the cache access transaction is 
 trivially atomic.
+
+The `FilterCache` objects are initialized in init.cpp, function `BuildCacheBank()`, called by `BuildCacheGroup()`, which
+is further called by `InitSystem()`. In the top level function, boolean variable `isTerminal` determines whether the 
+current cache object to be initialized is a terminal cache (that has no child) or not. If it is a terminal cache, then
+in `BuildCacheBank()`, we instanciate `class FilterCache` objects instead if `class Cache` objects, and connect the 
+filter cache to the processor's `l1i` and `lid`.
