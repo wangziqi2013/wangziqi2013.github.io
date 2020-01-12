@@ -278,3 +278,6 @@ S, we still need the request, but the request type is changed from `PUTX` to `PU
 For `GETX` requests, no matter how the state changes, we still need the `GETX` to bring the block into the cache in M
 state. For `GETS` requests, there cannot be any invalidation, since `GETS` is only sent when the initial state is I,
 which will not be changed at all by invalidation.
+
+## FilterCache Optimization
+
