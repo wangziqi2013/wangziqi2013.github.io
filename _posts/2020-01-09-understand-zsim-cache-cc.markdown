@@ -292,3 +292,11 @@ lock is acquired due to the usage of atomic RMW instruction. In practice, we wou
 degree of contention is not high. To this end, zSim uses `FilterCache` to optimize out locking and unlocking on L1 caches
 by exploiting the atomicity of 64 bit aligned memory operations as well as the locality of access, as we will see below.
 
+`class FilterCache` is implemented in file filter\_cache.h/cpp as a subclass of `class Cache`, inheriting the implementation
+of `access()` and `invalidate()` without overriding them. `class FilterCache` does not implement any new semantics for 
+existing cache access methods, but instead, acts as a traffic filter to the underlying L1 internal states. Recall that
+in order to access the tag array and state array within a cache object (there is no sharers list array in L1 cache), both 
+`tcc` and `bcc` must be locked to guarantee a consistent view of these internal states. In the majority of cases, however, 
+L1 accesses will result in a cache hit, which does not cause the state and the tag of the slot to change. If both the state
+and the tag can be accessed read-only and atomically, no locking would be required, since the cache access transaction is 
+trivially atomic.
