@@ -287,3 +287,8 @@ which will not be changed at all by invalidation.
 
 ## FilterCache Optimization
 
+Locking, no matter how lightweight it is made to be, will almost definitely incur a cache miss and memory fence when the 
+lock is acquired due to the usage of atomic RMW instruction. In practice, we would like to avoid locking paradigm when the 
+degree of contention is not high. To this end, zSim uses `FilterCache` to optimize out locking and unlocking on L1 caches
+by exploiting the atomicity of 64 bit aligned memory operations as well as the locality of access, as we will see below.
+
