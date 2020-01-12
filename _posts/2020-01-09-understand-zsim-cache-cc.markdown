@@ -249,3 +249,14 @@ hierarchy from Z to W, they will not be blocked by invalidation on cache W, sinc
 on Z before acquiring the invalidation lock on W. This allows the invalidation to propagate from W to nodes in the 
 subtree. The cache access will only be granted the invalidation lock on W after the current active invalidation completes
 and releases the invalidation lock on W, serializing the access after the invalidation. 
+
+By allowing invalidation requests to propagate during the short window between releasing lock on Z and acquiring lock
+on W, we solved the deadlock problem. This, however, incurs a new problem: After we acquired the invalidation lock on W, 
+internal states of cache objects below the subtree rooted at W may have been altered by the invalidation. For those cache 
+lines affected by the invalidation, we only care those that are relevent to the current request, i.e. that have the same 
+tag as the requested address. Also, given the fact that the cache hierarchy is inclusive, we can just check cache Z for 
+the state change of the slot that will be affected by the request. We next describe this process in details.
+
+In `startAccess()`, we first release the lock word pointed to by `req.childLock`. If we take a look at `processAccess()`
+of class `MESTBottomCC`, it is not difficult to figure out that the `childLock` field of `class MemReq` is simply
+a pointer to the invalidation lock of the child node when the access request is handled by its parent. 
