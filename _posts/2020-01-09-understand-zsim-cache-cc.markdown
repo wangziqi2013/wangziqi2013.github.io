@@ -244,4 +244,8 @@ acquiring the invalidation lock on the child node Z on the path, and then releas
 Note that here we do not create any short window of vulnerability which allows invalidations to be propagated to the subtree
 rooted at W, because we lock the child before unlocking the parent.
 
-
+The locking protocol described above will not introduce any deadlock, since when cache accesses propagate up in the 
+hierarchy from Z to W, they will not be blocked by invalidation on cache W, since we release the invalidation lock
+on Z before acquiring the invalidation lock on W. This allows the invalidation to propagate from W to nodes in the 
+subtree. The cache access will only be granted the invalidation lock on W after the current active invalidation completes
+and releases the invalidation lock on W, serializing the access after the invalidation. 
