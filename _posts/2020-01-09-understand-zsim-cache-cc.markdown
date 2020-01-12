@@ -205,7 +205,12 @@ Sorting the lock set on addresses before the critical section is also infeasible
 their lock set (lock words in the working set cache objects) dynamically, which means that the lock set cannot
 be known in advance.
 
-One simple observation is that no matter what the resulting protocol will be like, both tcc and bcc locks must be acquired
+One simple observation is that no matter what the resulting protocol will be like, both `tcc` and `bcc` locks must be acquired
 when the thread access the tag, coherence, and sharers array of a cache object, since the thread must have exclusive access 
 to the object to avoid corrupting the state. A second observation is that on the tree hierarchy, if we acquire the 
-invalidation lock 
+invalidation lock on a subtree rooted at X, then no invalidation may propagate from any level above X down to any node
+within the subtree X, since invalidation requests need to acquire the invalidation lock on X first before they can propagate.
+At anytime, as long as we have acquired the invalidation lock on node X, we can conclude that no invalidation is currently
+happening on any node within X, and that before we release this lock, no invalidation can be propagated from any level above
+X. This observation, however, is still not strong enough to guarantee no invalidation can ever happen in the subtree X.
+
