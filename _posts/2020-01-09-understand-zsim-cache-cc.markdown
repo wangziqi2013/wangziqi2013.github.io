@@ -293,6 +293,10 @@ from higher levels may still interfere with cache access. Correspondingly, in `s
 unlock the given `childLock` in the request object, and locks its own `bcc`. In `endAccess()`, `childLock` will be 
 re-acquired before releasing `bcc`. 
 
+Curious readers may naturally ask one question: who is the child cache of a terminal cache? As we will see in the next 
+section, zSim also implements a virtual L0 direct-mapped cache as a "filter cache", the purpose of which is to reduce lock 
+operations by reducing the traffic seen by the L1 terminal. 
+
 ## FilterCache Optimization
 
 Locking, no matter how lightweight it is made to be, will almost definitely incur a cache miss and memory fence when the 
