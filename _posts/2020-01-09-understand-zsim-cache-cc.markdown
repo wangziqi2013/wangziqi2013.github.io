@@ -165,7 +165,7 @@ In the cache object's `access()` method, we call `cc->startAccess()` at the begi
 essentially the same as invalidation if we ignore the operations on `bcc`'s lock and `req.childLock` for now. `startAccess()`
 simply acquires the same lock on `tcc` object, and `endAccess()` releases the `tcc` lock.
 
-The 2PL patter is again found in the cache access protocol, this time using the lock word in `tcc` object. Different from
+The 2PL pattern is again found in the cache access protocol, this time using the lock word in `tcc` object. Different from
 cache invalidation, the cache access locking protocol is standard 2PL, based on two observations. First, cache object's 
 `access()` is called recursively if the current level does not contain the block or does not have sufficient permission.
 This clearly divides the execution of the topmost `access()` into two phases. In the first recursion phase, we keep calling
@@ -182,8 +182,18 @@ accesses to the cache hierarchy. This obviously guarantees correctness, at the c
 other end of the spectrum, we use fine-grained lock-coupling, releasing the lock on the previous node after acquiring 
 lock on the current node. This scheme, unfortunately, needs to take care of various transient states, since a pending
 request may be later overridden by another request on the same slot, forcing us to use transient states to track these
-cascaded request on the same block. One example is a pending block that is supposed to be fetched in in M state 
+cascaded request on the same block. One example is a pending block that is supposed to be fetched in M state 
 being requested by a `GETS` before the fetch completes. The request will not be blocked since the cache object is not
 locked. In this case, we must remember the transition from M to S using a transient state while the block is being fetched.
 This is similar to what actually happens in a high performance coherence protocol implemented on hardware, but is 
 definitely over-complicated for a simulator like zSim.
+
+One compromise is to let invalidation and access use the same lock, and each procedure continues to use 2PL for ensuring
+serializability. Unfortunately, this protocol suffers from deadlock, since there is no globally agreed order on the acquisition
+of locks. One example is given in the slides (see above sections for the link) where two threads, A and B, start concurrent 
+requests on cache objects X and Y respectively. Assuming these two have a common parent cache Z. A requests a block in
+S state, shared by both X and Y, to be upgraded to M state, while B requests a block that is currently not in cache Y.
+Sorting the lock set on addresses before the critical section is also infeasible, since both protocols derive
+their lock set (lock words in the working set cache objects) dynamically, which means that the lock set cannot
+be known in advance.
+
