@@ -197,3 +197,6 @@ Sorting the lock set on addresses before the critical section is also infeasible
 their lock set (lock words in the working set cache objects) dynamically, which means that the lock set cannot
 be known in advance.
 
+One simple observation is that no matter what the resulting protocol will be like, both tcc and bcc locks must be acquired
+when we access the tag, coherence, and sharers array of a cache object, since the thread must have exclusive access to
+the object to avoid corrupting the state. 
