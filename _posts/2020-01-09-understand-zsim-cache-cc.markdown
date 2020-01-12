@@ -176,6 +176,8 @@ the cache access protocol is serializable.
 
 ## Synchronizing Cache Access and Invalidation
 
+Let's forget about lock words in `bcc` and `tcc` temporarily, and consider how a locking protocol can be implemented
+to synchronize between cache access and invalidation.
 One big challenge of synchronizing cache invalidation and cache access is to design a protocol that both scale to large
 cache hierarchies and do not introduce deadlock. On one extreme of the spectrum, we just use a big global lock for all
 accesses to the cache hierarchy. This obviously guarantees correctness, at the cost of performance and scalability. On the
@@ -204,5 +206,6 @@ their lock set (lock words in the working set cache objects) dynamically, which 
 be known in advance.
 
 One simple observation is that no matter what the resulting protocol will be like, both tcc and bcc locks must be acquired
-when we access the tag, coherence, and sharers array of a cache object, since the thread must have exclusive access to
-the object to avoid corrupting the state. 
+when the thread access the tag, coherence, and sharers array of a cache object, since the thread must have exclusive access 
+to the object to avoid corrupting the state. A second observation is that on the tree hierarchy, if we acquire the 
+invalidation lock 
