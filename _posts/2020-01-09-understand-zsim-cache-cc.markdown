@@ -285,6 +285,14 @@ For `GETX` requests, no matter how the state changes, we still need the `GETX` t
 state. For `GETS` requests, there cannot be any invalidation, since `GETS` is only sent when the initial state is I,
 which will not be changed at all by invalidation.
 
+### Terminal Caches
+
+The cache controller for terminal caches are simpler than middle level caches, since terminal caches do not have sharers 
+list to maintain and hence do not have `tcc` objects. Invalidation lock is still present in `bcc`, since invalidation
+from higher levels may still interfere with cache access. Correspondingly, in `startAccess()`, terminal caches only 
+unlock the given `childLock` in the request object, and locks its own `bcc`. In `endAccess()`, `childLock` will be 
+re-acquired before releasing `bcc`. 
+
 ## FilterCache Optimization
 
 Locking, no matter how lightweight it is made to be, will almost definitely incur a cache miss and memory fence when the 
@@ -293,7 +301,8 @@ degree of contention is not high. To this end, zSim uses `FilterCache` to optimi
 by exploiting the atomicity of 64 bit aligned memory operations as well as the locality of access, as we will see below.
 
 `class FilterCache` is implemented in file filter\_cache.h as a subclass of `class Cache`, inheriting the implementation
-of `access()` and `invalidate()` without overriding them. `class FilterCache` does not implement any new semantics for 
+of `access()` without overriding it, but provides a slightly more complicated `invalidate()` which calls into the base class
+`invalidate()` for the actual functionality. `class FilterCache` does not implement any new semantics for 
 existing cache access methods, but instead, acts as a traffic filter to the underlying L1 internal states. Recall that
 in order to access the tag array and state array within a cache object (there is no sharers list array in L1 cache), both 
 `tcc` and `bcc` must be locked to guarantee a consistent view of these internal states. In the majority of cases, however, 
@@ -322,5 +331,7 @@ locking protocol discussed above. Compared to the standard "tag and state" appro
 block, using two tags allow us to encode both the state and the tag in only one variable: Read accesses only
 check `rdAddr`, and write accesses only check `wrAddr`. On x86 platform, aligned 64 bit reads are always atomic, and 
 therefore, we do not need to worry about concurrent invalidations while `FilterCache` is accessed, since the invalidation
-must either serializes before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed to
-not be seen.
+must either serialize before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed not to
+be seen.
+
+
