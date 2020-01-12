@@ -226,4 +226,9 @@ is that zSim does not expect programmers to call `invalidate()` manually on any 
 level cache, since this will break the invalidation-free property we just proved above. For last level caches this will 
 be fine, since the invalidation lock on node X is always sufficient to ensure the no-invalidation property.
 
-
+Based on the above three lemmas, we can now take a look at `startAccess()` and `endAccess()` in `class MESICC` to understand
+the locking protocol. Recall that `startAccess()` is called at the beginning of each `access()` method of a cache object,
+and `endAccess()` is called after everything has completed on the current level. The cache access locking protocol
+maintains the invariant that at any moment in time when the thread is working on cache X to serve a request initiated from
+leaf cache Y, as long as we are between `startAccess()` and `endAccess()` of X, it is guaranteed that the access locks on 
+the path from X to Y, as well as the invalidation lock of X, are acquired.
