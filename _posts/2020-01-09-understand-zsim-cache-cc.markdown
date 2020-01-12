@@ -259,4 +259,13 @@ the state change of the slot that will be affected by the request. We next descr
 
 In `startAccess()`, we first release the lock word pointed to by `req.childLock`. If we take a look at `processAccess()`
 of class `MESTBottomCC`, it is not difficult to figure out that the `childLock` field of `class MemReq` is simply
-a pointer to the invalidation lock of the child node when the access request is handled by its parent. 
+a pointer to the invalidation lock of the child node when the access request is handled by its parent. Then we lock
+both `bcc` and `tcc` using their `lock()` method. After both are locked, according to the discussion above,
+we do not need to worry about state changes on the path anymore, but we should handle the possible state change
+caused by invalidation requests propagated to the subtree during the short window. To allow fast checking of 
+child state on the affected slot, in `MemReq` objects, the child cache also stores a pointer to the state variable
+of the slot, and a value of the slot's state when the request is made. In `startAccess()`, we call `CheckForMESIRace()`
+to determine whether the slot has been affected by concurrent invalidations or not. The return value of the function
+indicates whether the current request should be processed as usual, or we should ignore the request just because
+the request is no longer valid after the concurrent invalidation. This value will be returned to cache object's 
+`access()` method. If the request is skipped (return value being `true`), the entire cache access will be skipped.
