@@ -210,14 +210,20 @@ when the thread access the tag, coherence, and sharers array of a cache object, 
 to the object to avoid corrupting the state. A second lemma is that on the tree hierarchy, if we acquire the 
 invalidation lock on a subtree rooted at X, then no invalidation may propagate from any level above X down to any node
 within the subtree X, since invalidation requests need to acquire the invalidation lock on X first before they can propagate.
-At anytime, as long as we have acquired the invalidation lock on node X, we can conclude that no invalidation is currently
-happening on any node within X, and that before we release this lock, no invalidation can be propagated from any level above
-X. This lemma, however, is still not strong enough to guarantee no invalidation can ever happen in the subtree X,
-since invalidations can be triggered within tree X. We therefore need the third lemma, which says that if nodes on the path 
-from node X to a particular leaf node Y are all access locked, and that the invalidation lock on node X is also acquired, 
-then no invalidation may happen within the path from X to Y. This is because in zSim, invalidations can only be triggered 
-by three events: eviction, `GETS` downgrade, and `GETX` invalidation. In order for the invalidation to propagate to any
-node in the path from X to Y, these three events must be able to reach a node in the path. This is, however, impossible,
-since the access locks are all acquired, and any attempt to access nodes on the path will be blocked until the access
-locks are released. In addition, no invalidation may propagate from higher levels than X into the subtree, as we 
-have shown in the second lemma.
+At anytime, as long as we have acquired the invalidation lock on node X, we can conclude that no invalidation can be 
+propagated from any level above X. This lemma, however, is still not strong enough to guarantee no invalidation can ever 
+happen in the subtree X, since invalidations can be triggered within tree X by requests initiated at leaf level. We therefore 
+need the third lemma, which says that if nodes on the path from node X to a particular leaf node Y are all access locked, 
+and that the invalidation lock on node X is also acquired, then no invalidation may happen within the path from X to Y. 
+This is because in zSim, invalidations can only be triggered by three events: eviction, `GETS` downgrade, and `GETX` invalidation. 
+In order for the invalidation to propagate to anynode in the path from X to Y, these three events must be able to reach 
+a node in the path. This is, however, impossible, since the access locks are all acquired, and any attempt to access nodes 
+on the path will be blocked until the access locks are released. In addition, no invalidation may propagate from higher 
+levels than X into the subtree, as we have shown in the second lemma.
+
+Note that in the above reasoning, we assumed that invalidations can only be triggered by cache accesses. One implication
+is that zSim does not expect programmers to call `invalidate()` manually on any intermediate cache object except the last 
+level cache, since this will break the invalidation-free property we just proved above. For last level caches this will 
+be fine, since the invalidation lock on node X is always sufficient to ensure the no-invalidation property.
+
+
