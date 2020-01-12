@@ -193,6 +193,12 @@ serializability. Unfortunately, this protocol suffers from deadlock, since there
 of locks. One example is given in the slides (see above sections for the link) where two threads, A and B, start concurrent 
 requests on cache objects X and Y respectively. Assuming these two have a common parent cache Z. A requests a block in
 S state, shared by both X and Y, to be upgraded to M state, while B requests a block that is currently not in cache Y.
+At the beginning, A locks X and B locks Y. Then A proceeds to cache Z, locks it, and starts an invalidation transaction 
+to invalidate the copy in cache Y. The invalidation transaction attempts to lock Z, but is blocked on the lock currently
+held by thread B, since we assume that both types of transaction will use the same lock. Thread B then attempts to lock 
+cache Z. This, unfortunately, introduces a deadlock, since now B is waiting for A to unlock cache Z, while A is waiting
+for B to unlock cache Y. 
+
 Sorting the lock set on addresses before the critical section is also infeasible, since both protocols derive
 their lock set (lock words in the working set cache objects) dynamically, which means that the lock set cannot
 be known in advance.
