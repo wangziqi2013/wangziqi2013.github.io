@@ -311,3 +311,11 @@ The `FilterCache` object adds a direct-mapped cache abstraction (which does not 
 for simulation performance reasons) on top of the set-associative L1 cache. The direct-mapped cache has the same number
 of sets as the underlying L1 cache, but only one way for each set. Only the most recently accessed way in each set of
 the L1 is stored in the L1's direct-mapped array. 
+
+Each entry in the direct mapped array is called a `struct FilterEntry` object, consisting of three fields: A `rdAddr` field
+indicating the most recently accessed line tag that we only have read permission; a `wrAddr` field indicating the most
+recently accessed tag we have read and write permission, and `availCycle` indicating the cycle these blocks are available
+in the underlying L1 cache. Note that `rdAddr` and `wrAddr` must either point to the same line, in the case of a recent
+write, or having `wrAddr` being set to -1 to indicate that we do not have write permission to the most recently accessed
+block, and hence a downgrade or fetch transaction must be started using the heavy-weight `access()` interface with the 
+locking protocol discussed above. 
