@@ -158,7 +158,7 @@ the order (1)(3)(4)(2), we have `(X, Y) -> (Y, Y) -> (Y, Z) -> (Z, Z) -> (X, Z)`
 X has released lock on Y, but `(Z, Z) -> (X, Z)` indicates that X acquires lock on Z after it released lock on Y.
 This is contradictory to the protocol, hence concluding the proof.
 
-## 2PL in Cache Access
+### 2PL in Cache Access
 
 In the cache object's `access()` method, we call `cc->startAccess()` at the beginning, and conclude the access by calling 
 `cc->endAccess(req)` at the end of the function. If we look into what these two functions do, we will find that they are 
@@ -175,6 +175,8 @@ the lock is released. This corresponds to the shrinking phase in 2PL. Based on t
 the cache access protocol is serializable.
 
 ## Synchronizing Cache Access and Invalidation
+
+### What Does Not Work
 
 Let's forget about lock words in `bcc` and `tcc` temporarily, and consider how a locking protocol can be implemented
 to synchronize between cache access and invalidation.
@@ -204,6 +206,8 @@ for B to unlock cache Y.
 Sorting the lock set on addresses before the critical section is also infeasible, since both protocols derive
 their lock set (lock words in the working set cache objects) dynamically, which means that the lock set cannot
 be known in advance.
+
+### Invalidation-Freedom of Subtrees
 
 One simple lemma is that no matter what the resulting protocol will be like, both `tcc` and `bcc` locks must be acquired
 when the thread access the tag, coherence, and sharers array of a cache object, since the thread must have exclusive access 
@@ -256,6 +260,8 @@ internal states of cache objects below the subtree rooted at W may have been alt
 lines affected by the invalidation, we only care those that are relevent to the current request, i.e. that have the same 
 tag as the requested address. Also, given the fact that the cache hierarchy is inclusive, we can just check cache Z for 
 the state change of the slot that will be affected by the request. We next describe this process in details.
+
+### Protocol Description
 
 In `startAccess()`, we first release the lock word pointed to by `req.childLock`. If we take a look at `processAccess()`
 of class `MESTBottomCC`, it is not difficult to figure out that the `childLock` field of `class MemReq` is simply
