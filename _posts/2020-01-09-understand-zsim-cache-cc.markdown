@@ -318,4 +318,9 @@ recently accessed tag we have read and write permission, and `availCycle` indica
 in the underlying L1 cache. Note that `rdAddr` and `wrAddr` must either point to the same line, in the case of a recent
 write, or having `wrAddr` being set to -1 to indicate that we do not have write permission to the most recently accessed
 block, and hence a downgrade or fetch transaction must be started using the heavy-weight `access()` interface with the 
-locking protocol discussed above. 
+locking protocol discussed above. Compared to the standard "tag and state" approach of representing states of a cache 
+block, using two tags allow us to encode both the state and the tag in only one variable: Read accesses only
+check `rdAddr`, and write accesses only check `wrAddr`. On x86 platform, aligned 64 bit reads are always atomic, and 
+therefore, we do not need to worry about concurrent invalidations while `FilterCache` is accessed, since the invalidation
+must either serializes before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed to
+not be seen.
