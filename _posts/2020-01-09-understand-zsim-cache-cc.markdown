@@ -239,4 +239,9 @@ we first release the invalidation lock on cache Z, allowing pending invalidation
 and then attempt to acquire the invalidation lock of W. This will create a short window in which invalidations can be 
 propagated from W to Z, and the acquisition of W's invalidation lock will only be granted after the current active invalidation 
 (if any) completes on cache W, hence breaking the invariant. After the invalidation lock of W are acquired, the invariant
-is re-established, and we can access cache W's internal state safely.
+is re-established, and we can access cache W's internal state safely. In `endAccess()`, we maintain the invariant by first
+acquiring the invalidation lock on the child node Z on the path, and then releasing the invalidation lock on parent W.
+Note that here we do not create any short window of vulnerability which allows invalidations to be propagated to the subtree
+rooted at W, because we lock the child before unlocking the parent.
+
+
