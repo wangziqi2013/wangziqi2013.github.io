@@ -20,3 +20,6 @@ github_username2:  wangziqi2016
 
 # Build settings
 markdown: kramdown
+
+plugins_dir:
+  - jekyll-sitemap
