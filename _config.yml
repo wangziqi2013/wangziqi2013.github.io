@@ -23,3 +23,6 @@ markdown: kramdown
 
 plugins:
   - jekyll-sitemap
+  - jekyll-paginate
+
+paginate: 5
