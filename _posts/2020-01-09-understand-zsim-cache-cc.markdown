@@ -338,4 +338,16 @@ therefore, we do not need to worry about concurrent invalidations while `FilterC
 must either serialize before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed not to
 be seen.
 
+zSim treats filter caches as an extra level below the L1 cache, rather than within the L1 cache. The core simulatior uses
+`load()` and `store()` to access the filter cache for load and store uops respectively. In `load()`, we first compute the
+set number as done in the regular cache object. We then read the `FilterEntry`'s member variable `availCycle`, and then 
+read `rdAddr`. If the `rdAddr` matches the line address, filter cache is hit, and the larger one of `availCycle` and 
+input argument `curCycle` (dispatch cycle of the load uop) is returned as the cache hit cycle. Note that it is entirely
+possible for `availCycle` to be larger than `curCycle`, since the cache access is overlapped with uop issue and execution.
+The current uop may read a block fetched by an earlier uop that will only be delivered to the L1 cache in the future after
+the current uop is dispatched. In this case, the current uop is stalled in the load queue for roughtly 
+(`availCycle` - `curCycle`) cycles before it commits. `store()` is handled similarly except that we compare the input 
+line address with `wrAddr` rather than `rdAddr`.
+
+
 
