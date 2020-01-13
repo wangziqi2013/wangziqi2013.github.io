@@ -380,4 +380,10 @@ the `filterLock` will be re-acquired to block invalidations on the filter cache 
 of both the filter cache and the L1 will be consistent until the filter lock is released. We also set the `rdAddr`
 and `wrAddr` according to the type of the request. If the request is a write, then both tags are set, since we have
 both read and write permission to the block in L1. If the request is a read, then only the read tag is set, since 
-writes must incur a filter cache miss which is handled by the L1 cache object.
+writes must incur a filter cache miss which is handled by the L1 cache object. `availCycle` of the `FilterEntry` object
+is also updated. If the request is an upgrade request, indicated by the fact that the requested address is identical
+to the read address tag (and write address tag must be -1), then we do not update `availCycle` for two reasons. First,
+upgrade requests do not block later reads (reads will be forwarded from the store uop), so there is no need to stall
+reads by updating `availCycle` to the completion cycle of the upgrade coherence transaction. Second, zSim serializes 
+writes, such that the following store uop will not execute until the previous store uop commits. In this case, store
+uops' timing will be determined by their commit cycle, and updating `availCycle` will not affect them.
