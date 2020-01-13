@@ -93,7 +93,7 @@ release the lock in `bcc` object. Instead, the lock is released at the end of `p
 is the last action taken before `processInv()` and cache object's `invalidate()` returns. Recall that `validate()`
 is called recursively in function `sendInvalidates()`, which is used by `processInval()` in `class MESITopCC`. This 
 is essentially a slightly modified 2PL protocol, in which locks in each cache object's `bcc` are acquired while the 
-invalidation message propagates down the hierarchy to child caches, and released when the `invalidation()` on the current
+invalidation message propagates down the hierarchy to child caches, and released when the `invalidate()` on the current
 level returns. In this model, there seems to be multiple growing and shrinking phases if a cache block is shared by
 multiple children caches, since we invoke `invalidate()` once for a child cache that holds the block, which releases
 the lock before we invoke the same function for the next child cache. This protocol, however, still guarantees the 
@@ -371,8 +371,8 @@ touch `availCycle` at all. The ordering of the two reads in fact makes little se
 
 ### Filter Cache Miss Handling
 
-When `load()` and `store()` miss the filter cache, we call the underlying L1 cache's `access()` method and derive the
-timing of the block. The call procedure is quite standard. In order to make the locking protocol happy, we define
+When `load()` and `store()` miss the filter cache, we call the underlying L1 cache's `access()` method in `replace()` and 
+derive the timing of the block. The call procedure is quite standard. In order to make the locking protocol happy, we define
 a dummy MESI state in the stack, and include a pointer to that state in the `MemReq` object. The locking protocol
 will access this dummy variable in `CheckForMESIRace()` and `class MESTBottomCC`'s `processAccess()`. For 
 `CheckForMESIRace()`, the check will always pass without entering the if branch body, since filter cache 
@@ -395,4 +395,12 @@ writes, such that the following store uop will not execute until the previous st
 uops' timing will be determined by their commit cycle, and updating `availCycle` will not affect them.
 
 ### Filter Cache Invalidation
+
+One of the most frustrating things about `class FilterCache` is that the `invalidate()` method overrides the underlying 
+`Cache` object's method. The parent cache calls the derived class `invalidate()` first before the base class method is 
+called. This violates the abstraction that filter cache is a L0 write-through cache, since they see invalidations even
+before the L1 parent. The `invalidate()` method first acquires `filterLock` to serialize the invalidation with concurrent
+accesses. Within the `filterLock` critical section, we clear the two address tags if they match the invalidated address,
+or otherwise nothing will happen. After clearing the address tags, we call underlying `class Cache` object's `invalidate()`
+to perform the actual invalidation. 
 
