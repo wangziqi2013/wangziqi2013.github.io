@@ -1,0 +1,245 @@
+---
+layout: default
+---
+
+<script language="javascript">
+function setContributionError(err_str) {
+  alert(err_str);
+  return;
+}
+
+// This line defines the address of the cors server; change this line if the server no longer works
+CORS_SERVER = "https://cors-anywhere.herokuapp.com/";
+
+function getAjax(url, success) {
+    var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    // Use a CORS proxy to build the URL
+    url = CORS_SERVER + url;
+    xhr.open('GET', url, true);
+    xhr.responseType = "document";
+    xhr.onreadystatechange = function() {
+      if(xhr.readyState > 3) {
+        if(xhr.status == 200) {
+          success(xhr.responseXML);
+        }
+      }
+
+      return;
+    };
+    
+    xhr.send();
+    
+    return xhr;
+}
+
+xhr = getAjax("https://github.com/users/wangziqi2013/contributions",
+              function(text) {
+                //var contri_div = text.getElementsByTagName("body");
+                var contri_div = text.getElementsByClassName("js-calendar-graph");
+                if(contri_div.length != 1) {
+                  setContributionError("Could not find contribution graph <div>");
+                  return;
+                }
+
+                var target_div = document.getElementById("contributions");
+                if(target_div == null) {
+                  setContributionError("Could not find target contribution <div>");
+                  return;
+                }
+
+                target_div.innerHTML = contri_div[0].innerHTML;
+
+                var svg_list = target_div.getElementsByTagName("rect");
+                var total_count = 0;
+                for(var i = 0;i < svg_list.length;i++) {
+                  var rect = svg_list[i];
+                  rect.addEventListener("mouseover", onMouseEnter);
+                  rect.addEventListener("mouseout", onMouseLeave);
+                  //rect.addEventListener("click", onMouseClick);
+                  
+                  // Count total contributions
+                  total_count += parseInt(rect.getAttribute("data-count"));
+                }
+
+                // Show total contribution last year
+                var contri_count_div = document.getElementById("contri-count");
+                if(contri_count_div == null) {
+                  return;
+                }
+
+                contri_count_div.innerHTML = 
+                  total_count.toString() + " contributions last year";
+
+                return;
+              }
+      );
+</script>
+
+<script language="javascript">
+function getDate(e) {
+  var t = e.split("-").map(function(e) {
+          return parseInt(e, 10)
+      }),
+      r = t[0],
+      a = t[1],
+      o = t[2];
+  return new Date(Date.UTC(r, a - 1, o));
+}
+
+function pluralize(num, word) {
+  if(num <= 1) {
+    return word;
+  } else {
+    return word + "s";
+  }
+}
+
+var month_name = ["January", "February", "March", "April", "May", "June", "July", "August",
+                  "September", "October", "November", "December"];
+
+function onMouseEnter(e) {
+  e.target.matches("rect.day") && (onMouseLeave(), function(e) {
+      var n = document.body;
+      var r = e.getAttribute("data-date");
+      var a = function(e, t) {
+          // MMM DD, YYYY
+          var n = month_name[t.getUTCMonth()].slice(0, 3) + " " + t.getUTCDate() + ", " + t.getUTCFullYear(),
+          // No contribution or a string 
+          r = 0 === e ? "No" : e.toString();
+          // Create the element and add the class
+          a = document.createElement("div");
+          a.classList.add("svg-tip", "svg-tip-one-line");
+          var o = document.createElement("strong");
+          o.textContent = r + " " + pluralize(e, "contribution");
+          a.append(o, " on " + n);
+          return a;
+      }(parseInt(e.getAttribute("data-count")), getDate(r));
+      n.appendChild(a);
+      var o = e.getBoundingClientRect(),
+          s = o.left + window.pageXOffset - a.offsetWidth / 2 + o.width / 2,
+          i = o.bottom + window.pageYOffset - a.offsetHeight - 2 * o.height;
+      a.style.top = i + "px", a.style.left = s + "px"
+  }(e.target));
+
+  return;
+}
+
+function onMouseLeave() {
+  var e = document.querySelector(".svg-tip");
+  e && e.remove();
+
+  return;
+}
+
+function onMouseClick(e) {
+  var grid = e.target;
+  var date = grid.getAttribute("data-date");
+  
+  getAjax("https://github.com/users/wangziqi2013/created_commits?from=" + date + "&to=" + date,
+          function(text) {
+            var body = text.getElementsByTagName("body");
+
+            if(body.length != 1) {
+              setContributionError("Could not find contribution detail body");
+              return;
+            }
+            
+            var target_div = document.getElementById("contri-detail");
+            if(target_div == null) {
+              setContributionError("Could not find contribution details <div>");
+              return;
+            }
+
+            target_div.innerHTML = body[0].innerHTML;
+
+            return;
+          }
+  );
+  
+  return;
+}
+</script>
+
+<div id="filter_div" align="left">
+  Filter Keyword
+  <input type="text" id="input_filter">
+  <button type="button" onClick="filter_post('category', getElementById('input_filter').value.toLowerCase())">Category</button>
+  <button type="button" onClick="filter_post('title', getElementById('input_filter').value.toLowerCase())">Title</button>
+  <button type="button" onClick="filter_post('keyword', getElementById('input_filter').value.toLowerCase())">Keyword</button>
+  {% for my_page in site.pages %}
+    {% if my_page.title == "About" %}
+      <a class="page-link" href="{{ my_page.url | prepend: site.baseurl | append: '#search_help' }}">Search Help</a>
+    {% endif %}
+  {% endfor %}
+  <br /><br />
+</div>
+
+<hr /><br />
+
+<div class="home">
+  <h1 class="page-heading">Top Posts</h1>
+
+  <ul class="post-list">
+    {% for post in site.posts %}
+      {% if post.ontop == true %}
+        <li class="post_item" data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
+          <span class="post-meta">
+            <strong>[Top]</strong>
+            {% if post.layout == "paper-summary" %}
+              <strong>[Paper Review]</strong>
+            {% endif %}
+            {{ post.date | date: "%b %-d, %Y" }}
+            {% if post.paper_year %}
+              , Paper published in {{ post.paper_year }}
+            {% endif %}
+          </span>
+
+          <h2 style="display: inline">
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </h2>
+          
+          {% if post.layout == "paper-summary" %}
+            <strong>Keyword: </strong> {{ post.paper_keyword }}
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+    <hr />
+    <br />
+    <h1 class="page-heading">Posts</h1>
+    {% for post in site.posts %}
+      {% if post.ontop != true %}
+        <li class="post_item" data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
+          <span class="post-meta">
+            {% if post.layout == "paper-summary" %}
+              <strong>[Paper Review]</strong>
+            {% endif %}
+            {{ post.date | date: "%b %-d, %Y" }}
+            {% if post.paper_year %}
+              , Paper published in {{ post.paper_year }}
+            {% endif %}
+          </span>
+
+          <h2 style="display: inline">
+            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+          </h2>
+          
+          {% if post.layout == "paper-summary" %}
+            <strong>Keyword: </strong> {{ post.paper_keyword }}
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe">Subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+  <p class="rss-subscribe">Switch to <a href="{{ "/index-small.html" | prepend: site.baseurl }}">Small</a></p>
+  <p class="rss-subscribe">Switch to <a href="{{ "/index.html" | prepend: site.baseurl }}">Paginated</a></p>
+
+  <hr />
+  <div id="contri-count" style="text-align:center"></div>
+  <div id="contributions" style="text-align:center"></div>
+  
+  <hr />
+
+</div>
