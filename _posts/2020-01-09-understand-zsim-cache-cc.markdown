@@ -297,12 +297,14 @@ Curious readers may naturally ask one question: who is the child cache of a term
 section, zSim also implements a virtual L0 direct-mapped cache as a "filter cache", the purpose of which is to reduce lock 
 operations by reducing the traffic seen by the L1 terminal. 
 
-## FilterCache Optimization
+## Filter Cache Optimization
 
 Locking, no matter how lightweight it is made to be, will almost definitely incur a cache miss and memory fence when the 
 lock is acquired due to the usage of atomic RMW instruction. In practice, we would like to avoid locking paradigm when the 
 degree of contention is not high. To this end, zSim uses `FilterCache` to optimize out locking and unlocking on L1 caches
 by exploiting the atomicity of 64 bit aligned memory operations as well as the locality of access, as we will see below.
+
+### The Direct Mapped Abstract Cache
 
 `class FilterCache` is implemented in file filter\_cache.h as a subclass of `class Cache`, inheriting the implementation
 of `access()` without overriding it, but provides a slightly more complicated `invalidate()` which calls into the base class
@@ -338,6 +340,8 @@ therefore, we do not need to worry about concurrent invalidations while `FilterC
 must either serialize before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed not to
 be seen.
 
+### Interfacing with Core Object
+
 zSim treats filter caches as an extra level below the L1 cache, rather than within the L1 cache. The filter cache is 
 write-through, in a sense that L1 block will be requested in M state when the filter cache misses. The core simulatior uses
 `load()` and `store()` to access the filter cache for load and store uops respectively. In `load()`, we first compute the
@@ -365,6 +369,8 @@ address tag is read correctly, but `availCycle` is undefined. In practice, howev
 touch `availCycle` at all. The ordering of the two reads in fact makes little sense, contradicting what was said in 
 `FilterCache`'s code comment. 
 
+### Filter Cache Miss Handling
+
 When `load()` and `store()` miss the filter cache, we call the underlying L1 cache's `access()` method and derive the
 timing of the block. The call procedure is quite standard. In order to make the locking protocol happy, we define
 a dummy MESI state in the stack, and include a pointer to that state in the `MemReq` object. The locking protocol
@@ -387,3 +393,6 @@ upgrade requests do not block later reads (reads will be forwarded from the stor
 reads by updating `availCycle` to the completion cycle of the upgrade coherence transaction. Second, zSim serializes 
 writes, such that the following store uop will not execute until the previous store uop commits. In this case, store
 uops' timing will be determined by their commit cycle, and updating `availCycle` will not affect them.
+
+### Filter Cache Invalidation
+
