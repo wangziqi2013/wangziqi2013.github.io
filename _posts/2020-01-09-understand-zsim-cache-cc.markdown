@@ -376,4 +376,8 @@ tag using `rdAddr` and `wrAddr` rather than traditional "tags and states". Furth
 cache object, `filterLock`, is passed as the filter cache's invalidation lock in the `MemReq` object. This lock
 is passed in acquired state, and will be released by `startAccess()` immediately to allow pending invalidations
 on the L1 to proceed (`filterLock` is first checked on L1 invalidation). After the underlying `access()` returns,
-the `filterLock` will be re-acquired to block invalidations on the filter cache and L1 cache. 
+the `filterLock` will be re-acquired to block invalidations on the filter cache and L1 cache. The internal state
+of both the filter cache and the L1 will be consistent until the filter lock is released. We also set the `rdAddr`
+and `wrAddr` according to the type of the request. If the request is a write, then both tags are set, since we have
+both read and write permission to the block in L1. If the request is a read, then only the read tag is set, since 
+writes must incur a filter cache miss which is handled by the L1 cache object.
