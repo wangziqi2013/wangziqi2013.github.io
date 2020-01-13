@@ -338,7 +338,8 @@ therefore, we do not need to worry about concurrent invalidations while `FilterC
 must either serialize before or after the `FilterCache` access. Inconsistent intermediate states are guaranteed not to
 be seen.
 
-zSim treats filter caches as an extra level below the L1 cache, rather than within the L1 cache. The core simulatior uses
+zSim treats filter caches as an extra level below the L1 cache, rather than within the L1 cache. The filter cache is 
+write-through, in a sense that L1 block will be requested in M state when the filter cache misses. The core simulatior uses
 `load()` and `store()` to access the filter cache for load and store uops respectively. In `load()`, we first compute the
 set number as done in the regular cache object. We then read the `FilterEntry`'s member variable `availCycle`, and then 
 read `rdAddr`. If the `rdAddr` matches the line address, filter cache is hit, and the larger one of `availCycle` and 
@@ -364,3 +365,15 @@ address tag is read correctly, but `availCycle` is undefined. In practice, howev
 touch `availCycle` at all. The ordering of the two reads in fact makes little sense, contradicting what was said in 
 `FilterCache`'s code comment. 
 
+When `load()` and `store()` miss the filter cache, we call the underlying L1 cache's `access()` method and derive the
+timing of the block. The call procedure is quite standard. In order to make the locking protocol happy, we define
+a dummy MESI state in the stack, and include a pointer to that state in the `MemReq` object. The locking protocol
+will access this dummy variable in `CheckForMESIRace()` and `class MESTBottomCC`'s `processAccess()`. For 
+`CheckForMESIRace()`, the check will always pass without entering the if branch body, since filter cache 
+races do not change this dummy state (we have other methods for dealing with that; see below). For `processAccess()`,
+the state will be set accordingly, but we discard the value anyway, since filter cache encodes state and address
+tag using `rdAddr` and `wrAddr` rather than traditional "tags and states". Furthermore, the member variable of filter 
+cache object, `filterLock`, is passed as the filter cache's invalidation lock in the `MemReq` object. This lock
+is passed in acquired state, and will be released by `startAccess()` immediately to allow pending invalidations
+on the L1 to proceed (`filterLock` is first checked on L1 invalidation). After the underlying `access()` returns,
+the `filterLock` will be re-acquired to block invalidations on the filter cache and L1 cache. 
