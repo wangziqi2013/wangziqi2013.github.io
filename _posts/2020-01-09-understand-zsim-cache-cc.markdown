@@ -404,3 +404,8 @@ accesses. Within the `filterLock` critical section, we clear the two address tag
 or otherwise nothing will happen. After clearing the address tags, we call underlying `class Cache` object's `invalidate()`
 to perform the actual invalidation. 
 
+Filter cache's `invalidate()` synchronizes with concurrent `load()` and `store()` using atomic reads and writes guaranteed
+by the host machine. It synchronizes with the underlying `access()` method via the locking protocol we discussed
+in previous sections. And lastly, this method synchronizes with `replace()` by acquiring `filterLock`. The serialization
+order between `invalidate()` and `replace()` does not matter, since the actual order that matters is between invalidation
+and `load()`/`store()`.
