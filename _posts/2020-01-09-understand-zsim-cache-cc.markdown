@@ -354,5 +354,13 @@ is crucial. This is because we deliberately allow harmless race to happen here w
 concurrently in the filter cache (`load()` and `store()` will not race with `access()` of the L1 cache, since only the 
 current thread will access the L1 and the filter cache). In this case, both `rdAddr` and `wrAddr` will be reset to -1, 
 indicating that no address will ever hit the filter cache. Loads and stores serialize with concurrent invalidations by 
-the coherence order of the block holding the address tag on the host machine. 
+the coherence order of the block holding the address tag on the host machine. In other words, the serialization order
+of loads and stores with invalidations are determined by which of them accesses the address tag first. If loads
+or stores access first, they should be serialized before the invalidation, with `availCycle` being a valid value.
+If, on the other hand, loads and stores only access the address tag after invalidation, then `availCycle` is undefined, 
+since logically speaking, the line is no longer in the filter cache and the L1 cache. If we read the address tag first
+and `availCycle` later, a racing invalidation may invalidate the line between the two variable reads, in which case the 
+address tag is read correctly, but `availCycle` is undefined. In practice, however, the invalidation routine does not
+touch `availCycle` at all. The ordering of the two reads in fact makes little sense, contradicting what was said in 
+`FilterCache`'s code comment. 
 
