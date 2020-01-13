@@ -349,5 +349,14 @@ the current uop is dispatched. In this case, the current uop is stalled in the l
 (`availCycle` - `curCycle`) cycles before it commits. `store()` is handled similarly except that we compare the input 
 line address with `wrAddr` rather than `rdAddr`.
 
-
+Note that the order of reading the two member variables of `FilterEntry`, `availCycle` and `rdAddr`/`wrAddr`, is crucial.
+This is because we deliberately allow harmless race to happen here when an invalidation request is handled concurrently
+in the filter cache (`load()` and `store()` will not race with `access()` of the L1 cache, since only the current thread
+will access the L1 and the filter cache). In this case, both `rdAddr` and `wrAddr` will be reset to -1, indicating that
+no address will ever hit the filter cache. Loads and stores serialize with concurrent invalidations by the coherence order
+of the block holding `rdAddr` and `wrAddr` respectively on the host machine. In other words, the serialization order
+of loads and stores with invalidations are determined which of them accesses to `rdAddr` or `wrAddr` first. If loads
+or stores access first, they should be serialized before the invalidation, and the `availCycle` should be a valid value.
+If, on the other hand, loads and stores only access `rdAddr` or `wrAddr` after invalidation, then `availCycle` is
+in fact undefined, since logically speaking, the line is no longer in the filter cache and the L1 cache. 
 
