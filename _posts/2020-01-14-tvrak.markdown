@@ -76,4 +76,7 @@ In addition, write critical path is longer by reading the old block from the NVM
 two issues, in the final Tvrak design, two caches, a checksum cache and a diff cache, are added to reduce the latency and 
 bandwidth of accessing diff and cache line level checksums. These two caches are of write back type such that the 
 actual update of the NVM image is delayed. The backup power source should guarantee that these two caches can be safely
-written back on a power failure. 
+written back on a power failure. The paper also suggests that we dedicate a few ways from the LLC banks for storing cached
+metadata. Note that the dedicated storage from LLC does not need to be very large, since checksums of a 64 byte cache line
+only consumes 4 bytes. A slot in the LLC can cover 16 consecutive liness checksum. The lookup algorithm of the dedicated
+checksum cache should be modified a little such that four more bits are masked off, since each tag now covers 16 lines.
