@@ -36,3 +36,8 @@ This is of course necessary when we want a hundred percent detection guarantee o
 hardware failures are relatively rare event, we may want to loose this guarantee a little, which can result in better
 performance. 
 
+Vilamb starts two background threads for redundancy verification and update respectively. The verification threads scrubbles
+the NVM device by reading clean blocks in the DAX address space, computing their checksums, and comparing the checksum with 
+the one stored in a separate device. If the two checksums mismatch, then the thread has found a potential corruption, which
+is then reported to the OS. Note that only clean pages are verified, since Vilamb tolerates temporary inconsistency between
+page content and checksum for dirty pages. 
