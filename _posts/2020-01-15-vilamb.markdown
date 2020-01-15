@@ -26,3 +26,8 @@ dirty blocks cause the checksums and parities to be updated using the diff betwe
 hardware solution, however, requires long and tedious verification at IC level, and is unlikely to be adopted by commercial
 serves in the near future. 
 
+Vilamb is a software solution to redundancy problems that features easy-to-use interface and non-intrusive detection mechanism.
+Previous software solutions often require special interface for intercepting memory accesses, which are otherwise transparent
+to the library, and to mark the begin and the end of the redundancy-protected region. For example, Palingon, a software library
+for writing redundancy-protected software, mandates that programmers should use its transactional interface and decorate each
+load and store with a library wrapper. This requires re-compiling the application, which is sometimes even not easily achievable.
