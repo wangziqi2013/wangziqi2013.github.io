@@ -41,3 +41,11 @@ the NVM device by reading clean blocks in the DAX address space, computing their
 the one stored in a separate device. If the two checksums mismatch, then the thread has found a potential corruption, which
 is then reported to the OS. Note that only clean pages are verified, since Vilamb tolerates temporary inconsistency between
 page content and checksum for dirty pages. 
+
+The updating thread updates checksums in the background without affecting normal loads and stores. The checksum updating
+process in Vilamb leverages two important observations. First, updating the page level checksum is sub-optimal due to the 
+read amplification effect is causes, as the entire page must be read before the new checksum is computed. On the contrary,
+Vilamb amortizes the cost of reading the entire page over several small updates to the page. The background thread only
+checks the dirty status of a page periodically instead of on every access. Due to access locality of most pages, it is 
+likely that more than one writes have updated the page, making the cost of computing page checksum relatively smaller 
+over these writes. The second ovservation
