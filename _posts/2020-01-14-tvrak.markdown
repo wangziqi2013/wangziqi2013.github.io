@@ -18,5 +18,8 @@ critical for certain types of NVM applications to avoid firmware bugs or random 
 several types of data corruption, such as unexpectedly dropped writes, corrupted mapping table, and random bit flips.
 To deal with these problems, a classical method is to compute a page checksum for each 4KB page in the page buffer before 
 it is written back to the disk. The checksum is stored in a separate bank or device to minimize the chance of correlated 
-failures. 
+failures. With NVM directed mapped access (DAX) enabled, however, this scheme no longer works, since the DAX address 
+space is directly mapped onto the NVM device's physical address space, rather than to a page buffer. The consequence
+is that the OS no longer has control over which pages are being modified in the DAX address space and which ones are 
+written back, since the dirty bit and write back mechanism are now both controlled by the hardware.
 
