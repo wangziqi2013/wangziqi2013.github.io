@@ -70,3 +70,10 @@ on NVM. On LLC reads, only the cache line level checksum and the data block is r
 cache lines to only one more. On LLC write back, both checksums and the parity block are updated. The write amplification
 has grown from two more writes to three more writes. Although the paper did not claim anything on this, I claim that
 this trade-off is still beneficial, since write backs are not on the critical path in most cases, while reads are.
+
+Having to read the block from the NVM still consumes bandwidth and lowers available bandwidth for data operations.
+In addition, write critical path is longer by reading the old block from the NVM for computing diff. To solve these
+two issues, in the final Tvrak design, two caches, a checksum cache and a diff cache, are added to reduce the latency and 
+bandwidth of accessing diff and cache line level checksums. These two caches are of write back type such that the 
+actual update of the NVM image is delayed. The backup power source should guarantee that these two caches can be safely
+written back on a power failure. 
