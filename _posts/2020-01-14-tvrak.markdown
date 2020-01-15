@@ -1,7 +1,7 @@
 ---
 layout: paper-summary
 title:  "TVRAK: Software-Managed Hardware Offload for DAX NVM Storage Redundancy"
-date:   2019-12-14 19:18:00 -0500
+date:   2020-01-14 19:18:00 -0500
 categories: paper
 paper_title: "TVRAK: Software-Managed Hardware Offload for DAX NVM Storage Redundancy"
 paper_link: http://users.ece.cmu.edu/~rkateja/pubs/tvarak.pdf
@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Tvarak, a hardware design for NVM redundancy management. The paper points out that redundancy is 
+critical for certain types of NVM applications to avoid firmware bugs or random data corruption. The paper also identifies
+several types of data corruption, such as unexpectedly dropped writes, corrupted mapping table, and random bit flips.
+To deal with these problems, a classical method is to compute a page checksum for each 4KB page in the page buffer before 
+it is written back to the disk. The checksum is stored in a separate bank or device to minimize the chance of correlated 
+failures. 
+
