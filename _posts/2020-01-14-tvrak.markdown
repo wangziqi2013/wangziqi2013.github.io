@@ -61,3 +61,10 @@ they use, it is suggested by the paper that the final checksum can be updated us
 the parity update is also computed, and the three cache lines are updated atomically by the controller (the atomicity
 protocol of which is not mentioned).
 
+To solve the read amplification problem in the naive design, the paper proposes also storing cache line granularity
+checksums in addition to page level checksums. This seems to be overly redundant and a waste of storage, since cache
+line level checksum takes 63 times more space to maintain. The paper argues, however, that we only use cache line 
+level checksum for verification during normal operation, and leaves page level redundancy for crash recovery. To this
+end, the paper proposes that we allocate cache line level checksum in the DRAM, while still keep the page level checksum
+on NVM. On LLC reads, only the cache line level checksum and the data block is read, reducing read overhead from 64 more 
+cache lines to only one more. 
