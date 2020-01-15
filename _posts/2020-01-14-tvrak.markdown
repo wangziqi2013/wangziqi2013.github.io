@@ -67,4 +67,6 @@ line level checksum takes 63 times more space to maintain. The paper argues, how
 level checksum for verification during normal operation, and leaves page level redundancy for crash recovery. To this
 end, the paper proposes that we allocate cache line level checksum in the DRAM, while still keep the page level checksum
 on NVM. On LLC reads, only the cache line level checksum and the data block is read, reducing read overhead from 64 more 
-cache lines to only one more. 
+cache lines to only one more. On LLC write back, both checksums and the parity block are updated. The write amplification
+has grown from two more writes to three more writes. Although the paper did not claim anything on this, I claim that
+this trade-off is still beneficial, since write backs are not on the critical path in most cases, while reads are.
