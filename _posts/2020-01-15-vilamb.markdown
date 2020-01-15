@@ -54,3 +54,10 @@ case of DAX, since all virtual page frames are mapped to a physical page on NVDI
 for this address range is largely not used. Vilamb takes advantage of these dirty bits to identify pages that have been
 modified since the last scan, as we will discuss in the following. 
 
+At the beginning of each scan, Vilamb first scans the page table entries for pages mapped to the DAX region, and notes 
+down all pages with their dirty bit set. Then, for each dirty page found, it first makes a persistent copy of the dirty 
+bit on NVM to notify the background thread that the current page is potentially inconsistent with the checksum. Then it 
+clears the dirty bit, and reads the page content to compute the checksum. A racing store, in the meantime, may set the 
+dirty bit of the page, but Vilamb is good with these stores, since dirty pages are assumed to be inconsistent with the 
+checksum. The persistent dirty bit is cleared only after we completed the checksum update. A background scrubbling thread 
+should not verify the page is either the page table bit or the "shadow" dirty bit is set. 
