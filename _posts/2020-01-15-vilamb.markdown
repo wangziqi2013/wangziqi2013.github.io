@@ -48,4 +48,9 @@ read amplification effect is causes, as the entire page must be read before the 
 Vilamb amortizes the cost of reading the entire page over several small updates to the page. The background thread only
 checks the dirty status of a page periodically instead of on every access. Due to access locality of most pages, it is 
 likely that more than one writes have updated the page, making the cost of computing page checksum relatively smaller 
-over these writes. The second ovservation
+over these writes. The second ovservation is that the "dirty" bit in the page table is not being used by the OS if the 
+page is mapped to a physical page, but will be updated by MMU when a store instruction accesses the page anyway. In the
+case of DAX, since all virtual page frames are mapped to a physical page on NVDIMM, the dirty bit in page table entries
+for this address range is largely not used. Vilamb takes advantage of these dirty bits to identify pages that have been
+modified since the last scan, as we will discuss in the following. 
+
