@@ -60,4 +60,8 @@ bit on NVM to notify the background thread that the current page is potentially 
 clears the dirty bit, and reads the page content to compute the checksum. A racing store, in the meantime, may set the 
 dirty bit of the page, but Vilamb is good with these stores, since dirty pages are assumed to be inconsistent with the 
 checksum. The persistent dirty bit is cleared only after we completed the checksum update. A background scrubbling thread 
-should not verify the page is either the page table bit or the "shadow" dirty bit is set. 
+should not verify the page is either the page table bit or the "shadow" dirty bit is set. Note that we must clear the 
+dirty bit before starting to compute checksum, since otherwise a racing store may be ignored by resetting the dirty bit
+at the end. We should also keep a persistent copy of the dirty bit, to avoid the scrubbling thread treating the page
+whose checksum has not been updated (but dirty bit has been reset) as clean, and raises spurious faults.
+
