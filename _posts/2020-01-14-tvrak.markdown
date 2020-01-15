@@ -80,3 +80,10 @@ written back on a power failure. The paper also suggests that we dedicate a few 
 metadata. Note that the dedicated storage from LLC does not need to be very large, since checksums of a 64 byte cache line
 only consumes 4 bytes. A slot in the LLC can cover 16 consecutive liness checksum. The lookup algorithm of the dedicated
 checksum cache should be modified a little such that four more bits are masked off, since each tag now covers 16 lines.
+
+The last optimization is on the computation of diff. One observation is that the diff is readily available when a 
+cache block is written back from the L2 to the LLC. Note that this assumes inclusive LLC, which may not always be 
+the case expecially in larger systems where the sum of L2 ways exceeds the number of LLC way. Assuming an inclusive cache,
+the old line content is always in the LLC when a dirty line is written back. In this case, we compute the diff between
+the two lines, and write the diff to its LLC partition. Updates to page level checksums are delay to the time when the 
+diff is written back. 
