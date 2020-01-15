@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Vilamb, a software solution to redundancy problems of NVM DAX storage. In conventional file 
+systems, redundancy information of pages can be verified and updated when pages are fetched into or evicted from the page
+buffer, which is controlled by the file system. For NVDIMM DAX mapped pages, however, the OS has no control over the fetch 
+and eviction of cache line sized blocks, since the cache controller determines when a block enters and leaves the cache
+hierarchy. 
