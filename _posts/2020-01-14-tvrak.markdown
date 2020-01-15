@@ -47,4 +47,10 @@ special care being taken, when another core requests the data from its LLC befor
 from the write back buffer but after the dirty line is written to the device. In this case the old checksum and the new 
 line content will be seen by the other core, which raises spurious execptions.
 
+The paper also suggests that extra metadata be maintained along with page checksums, such as parity blocks for recovery.
+The parity block is not accessed during normal operation. When a block is detected to be corrupted due to firmware bugs
+or random bit flips, the parity block is read to recover the content of the corrupted block. The parity block should 
+also be updated when a dirty cache line is written back by the LLC. All updates should be made atomic by the redundancy 
+controller.
+
 In the naive design, checksums are stored in 
