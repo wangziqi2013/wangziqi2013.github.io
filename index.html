@@ -50,27 +50,25 @@ layout: default
     <br />
     <h1 class="page-heading">Posts</h1>
     {% for post in paginator.posts %}
-      {% if post.ontop != true %}
-        <li class="post_item" data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
-          <span class="post-meta">
-            {% if post.layout == "paper-summary" %}
-              <strong>[Paper Review]</strong>
-            {% endif %}
-            {{ post.date | date: "%b %-d, %Y" }}
-            {% if post.paper_year %}
-              , Paper published in {{ post.paper_year }}
-            {% endif %}
-          </span>
-
-          <h2 style="display: inline">
-            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-          </h2>
-          
+      <li class="post_item" data-category="{{ post.categories }}" data-title="{{ post.title }}" data-keyword="{{ post.paper_keyword }}">
+        <span class="post-meta">
           {% if post.layout == "paper-summary" %}
-            <strong>Keyword: </strong> {{ post.paper_keyword }}
+            <strong>[Paper Review]</strong>
           {% endif %}
-        </li>
-      {% endif %}
+          {{ post.date | date: "%b %-d, %Y" }}
+          {% if post.paper_year %}
+            , Paper published in {{ post.paper_year }}
+          {% endif %}
+        </span>
+
+        <h2 style="display: inline">
+          <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+        </h2>
+        
+        {% if post.layout == "paper-summary" %}
+          <strong>Keyword: </strong> {{ post.paper_keyword }}
+        {% endif %}
+      </li>
     {% endfor %}
   </ul>
 
