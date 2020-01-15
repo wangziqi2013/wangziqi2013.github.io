@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "TVRAK: Software-Managed Hardware Offload for DAX NVM Storage Redundancy"
+date:   2019-12-14 19:18:00 -0500
+categories: paper
+paper_title: "TVRAK: Software-Managed Hardware Offload for DAX NVM Storage Redundancy"
+paper_link: http://users.ece.cmu.edu/~rkateja/pubs/tvarak.pdf
+paper_keyword: NVM; Tvrak; Checksum; Redundancy
+paper_year: CMU Technical Report 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
