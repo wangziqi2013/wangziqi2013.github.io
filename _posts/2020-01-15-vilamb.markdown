@@ -65,3 +65,9 @@ dirty bit before starting to compute checksum, since otherwise a racing store ma
 at the end. We should also keep a persistent copy of the dirty bit, to avoid the scrubbling thread treating the page
 whose checksum has not been updated (but dirty bit has been reset) as clean, and raises spurious faults.
 
+Vilamb's asynchronous update scheme opens a window of vulnerability in which errors can be missed. For example, assuming
+a store instruction is errorneously discarded by the firmware. This will not be identified by the background scrubbling
+thread, since it only checks clean pages. Later on, when the updating thread refreshes checksum values for dirty
+pages, the page's checksum will be updated using the current content of the page, potentially reading those not already
+cached from the NVM device. In this case, the problem will remain undetected, since the checksum is computed using
+already corrupted data. 
