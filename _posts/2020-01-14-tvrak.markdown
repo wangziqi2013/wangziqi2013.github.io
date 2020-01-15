@@ -27,6 +27,11 @@ Tvarak solves this problem by adding a redundancy controller on the LLC level ri
 a malfunctioning firmware will not destroy redundancy data). The redundancy controller performs two tasks. The fist
 task to to verify the integrity of data when a cache line sized block is fetched from the NVM. An error will be raised
 if the stored checksum of the block (or a larger block, depending on the granularity) unmatches the computed checksum.
-The second task is to update the checksum when a dirty block is written back
+The second task is to update the checksum when a dirty block is written back to the NVM device. A new checksum will
+be computed using the diff between the dirty line and the clean line on the device. Note that one invariant maintained
+by Tvarak is that the checksum stored on the disk should always match the image on the device. This requires the checksum 
+be updated atomically as data is updated. Power failure is not a concern here, since in the paper it is assumed that the 
+system has a battery-backed power source. The system is just assumed to have enough power to write back everything
+in the cache and to the checksum device.
 
 In the naive design, 
