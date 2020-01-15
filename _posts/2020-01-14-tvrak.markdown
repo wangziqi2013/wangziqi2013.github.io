@@ -39,6 +39,12 @@ and ending physical address of the region. Although the paper did not explicitly
 underlying physical address on the device to be consecutive, since otherwise the range may not be able to be stored in a 
 pair (or several pairs) of registers. When a fetch request reaches LLC, the redundancy controller first computes the 
 checksum of the fetched block, and then read the chechsum from the device, and compares these two. If the two values
-mismatch, an execption will be raised which forces the OS to handle the issue. 
+mismatch, an execption will be raised which forces the OS to handle the issue. Similarly, when a data block is to
+be written to the LLC, the controller first reads old value from the device image, computes the diff, and then uses the 
+diff to compute a new checksum. Both the checksum and the data are updated atomically after that. Note that here atomicity 
+refers to the invariant that no interleaving request may see partially updated data-checksum pair. This might happen without
+special care being taken, when another core requests the data from its LLC before the current checksum is released
+from the write back buffer but after the dirty line is written to the device. In this case the old checksum and the new 
+line content will be seen by the other core, which raises spurious execptions.
 
 In the naive design, checksums are stored in 
