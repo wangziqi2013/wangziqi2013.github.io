@@ -53,4 +53,11 @@ or random bit flips, the parity block is read to recover the content of the corr
 also be updated when a dirty cache line is written back by the LLC. All updates should be made atomic by the redundancy 
 controller.
 
-In the naive design, checksums are stored in 
+In the naive design, checksums are stored in page granularity. This requires that the entire page being read when LLC
+requests a cache line from the device, which suffers from severe read amplification problem. Writes do not require 
+reading the page, since only the block being written back is affected. The controller only reads back the old 
+content of the line, and computes the diff. Although I am not familiar with CRC32C which is the checksum algorithm
+they use, it is suggested by the paper that the final checksum can be updated using only a diff. In the meantime,
+the parity update is also computed, and the three cache lines are updated atomically by the controller (the atomicity
+protocol of which is not mentioned).
+
