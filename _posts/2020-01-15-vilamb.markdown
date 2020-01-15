@@ -31,3 +31,8 @@ Previous software solutions often require special interface for intercepting mem
 to the library, and to mark the begin and the end of the redundancy-protected region. For example, Palingon, a software library
 for writing redundancy-protected software, mandates that programmers should use its transactional interface and decorate each
 load and store with a library wrapper. This requires re-compiling the application, which is sometimes even not easily achievable.
+Besides, Palingon verifies and updates redundancy information for a page as soon as it is read or written by a memory instruction.
+This is of course necessary when we want a hundred percent detection guarantee of data corruption, but given that actual 
+hardware failures are relatively rare event, we may want to loose this guarantee a little, which can result in better
+performance. 
+
