@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Vilamb: Low Overhead Asynchronous Redundancy for Direct Access NVM"
+date:   2020-01-15 16:57:00 -0500
+categories: paper
+paper_title: "Vilamb: Low Overhead Asynchronous Redundancy for Direct Access NVM"
+paper_link: http://users.ece.cmu.edu/~rkateja/pubs/fast20.pdf
+paper_keyword: NVM; Vilamb; Checksum; Redundancy
+paper_year: FAST 2020 Preprint
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
