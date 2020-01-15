@@ -34,4 +34,11 @@ be updated atomically as data is updated. Power failure is not a concern here, s
 system has a battery-backed power source. The system is just assumed to have enough power to write back everything
 in the cache and to the checksum device.
 
-In the naive design, 
+When a region of memory is mapped as DAX by the file system, the OS will notify the redundancy controller about the starting
+and ending physical address of the region. Although the paper did not explicitly mention this, the design forces the 
+underlying physical address on the device to be consecutive, since otherwise the range may not be able to be stored in a 
+pair (or several pairs) of registers. When a fetch request reaches LLC, the redundancy controller first computes the 
+checksum of the fetched block, and then read the chechsum from the device, and compares these two. If the two values
+mismatch, an execption will be raised which forces the OS to handle the issue. 
+
+In the naive design, checksums are stored in 
