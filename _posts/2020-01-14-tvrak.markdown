@@ -23,3 +23,10 @@ space is directly mapped onto the NVM device's physical address space, rather th
 is that the OS no longer has control over which pages are being modified in the DAX address space and which ones are 
 written back, since the dirty bit and write back mechanism are now both controlled by the hardware.
 
+Tvarak solves this problem by adding a redundancy controller on the LLC level right above the device firmware (such that
+a malfunctioning firmware will not destroy redundancy data). The redundancy controller performs two tasks. The fist
+task to to verify the integrity of data when a cache line sized block is fetched from the NVM. An error will be raised
+if the stored checksum of the block (or a larger block, depending on the granularity) unmatches the computed checksum.
+The second task is to update the checksum when a dirty block is written back
+
+In the naive design, 
