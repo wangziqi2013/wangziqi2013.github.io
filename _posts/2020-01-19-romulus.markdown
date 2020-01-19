@@ -45,3 +45,14 @@ backup, these pointers will still point to objects in the main copy, rather than
 By implementing the allocator as part of the duplicated state, Romulus allows any allocator to be used without worrying 
 about inconsistencies in the allocator after recovery and the resulting memory leak or double allocation.
 
+Romulus is implemented with C++ programming language as a library. Persistent objects are wrapped with templates using
+the volatile type as argument. All mutation operators of the object is overloaded with a method that flushes the object
+into persistent storage before the mutation method returns. Object flush is implemented using clwb instruction on x86 
+platform. Besides object flush, Romulus also implements sync operation using sfence. We will see later that at most four 
+sfences are issued for one Romulus transaction.
+
+Transactions are marked with begin\_transaction and end\_transaction. Nested transactions are flattened, such that only
+the outermost transaction\_end will commit the transaction. On transaction begin, we change the status variable from IDLE
+to MUT, indicating that the main copy is no longer consistent. On every mutation operation during the transaction, we 
+flush the affected object back to the NVM before the method returns. These flushes are not ordered with each other to
+increase inter-bank parallelism. 
