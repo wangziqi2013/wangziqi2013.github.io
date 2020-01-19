@@ -32,6 +32,10 @@ three values: IDLE, meaning no transaction is running on the file, and the main 
 MUT, meaning a transaction is modifying the content of the file, and that the main copy can be in an inconsistent state;
 COPY, meaning that the transaction has finished execution, but we are still copying the main copy to the back copy.
 The transaction is considered as already committed in COPY state, because on a crash recovery, we just need to redo
-this copy process, and then change the state variable to IDLE. 
+this copy process, and then change the state variable to IDLE. The second and third part of the DAX mapped file are 
+two copies of working data. As discussed above, at any point during execution, at least one of these two copies are 
+consistent with the state of most recently committed transaction. Modifications are always made to the main copy by
+user applications. The back copy is only written by library routines for synchronization after a transaction commit. 
+Reading applications may or may not read into the back copy depending on the Romulus algorithm, as we will see below.
 
 Memory allocation
