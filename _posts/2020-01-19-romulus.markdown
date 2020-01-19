@@ -38,4 +38,8 @@ consistent with the state of most recently committed transaction. Modifications 
 user applications. The back copy is only written by library routines for synchronization after a transaction commit. 
 Reading applications may or may not read into the back copy depending on the Romulus algorithm, as we will see below.
 
-Memory allocation
+Memory allocation is also implemented within the persistent region. Allocator metadata and object list are both stored
+at the beginning of the last two areas, such that the consistency of the allocator also depends on the consistency of
+the two areas. Note that allocators must use relative offsets, because otherwise when the main image is copied to the 
+backup, these pointers will still point to objects in the main copy, rather than the corresponding object in the backup. 
+By implementing the allocator as part of the duplicated 
