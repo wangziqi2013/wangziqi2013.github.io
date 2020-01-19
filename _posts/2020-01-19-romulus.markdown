@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Romulus, an NVM library that implements persistent critical regions and transactions. Traditional 
+logging methods, such as undo or redo logging, either use too many persistent barriers to ensure writr ordering,
+or requires read instrumentation to redirect read instructions to the redo log. Romulus solves both problems using shadow
+paging in which each data item has two copies, one in the master copy (called main copy), the other in the backup copy
+(called back copy). Romulus maintains the invariant that at any given moment in time, either the main copy is being 
+mutated by an ongoing transaction and the back copy represents the last consistent state, or the main copy represents
+the most up-to-date consistent state, and the back copy is being updated to match the new copy. This way, when the system
+crashes, we always have a consistent copy of data to start the application with.
+
