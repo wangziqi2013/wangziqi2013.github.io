@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Romulus: Efficient Algorithms for Persistent Transactional Memory"
+date:   2020-01-15 16:57:00 -0500
+categories: paper
+paper_title: "Romulus: Efficient Algorithms for Persistent Transactional Memory"
+paper_link: https://dl.acm.org/doi/10.1145/3210377.3210392
+paper_keyword: NVM; Transaction; Romulus
+paper_year: SPAA 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
