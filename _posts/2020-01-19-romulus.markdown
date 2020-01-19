@@ -26,6 +26,12 @@ Romulus assumes that the persistent storage is exposed to the user address space
 addresses are assumed to be mapped to the same virtual address on each restart, such that no extra pointer operation
 is required to maintain the same pointer semantics. The DAX file is divided into three parts. The first part is the 
 area header, which stores metadata on the DAX mapped file. This part is common in many NVM based designs, which stores
-the name of the mapping, the metadata, and statistics information. 
+the name of the mapping, the metadata, and statistics information. The most important thing in this part is a status 
+variable describing the current progress of transactions and the after-commit copy process. The state variable can take
+three values: IDLE, meaning no transaction is running on the file, and the main copy and the back copy are both consistent;
+MUT, meaning a transaction is modifying the content of the file, and that the main copy can be in an inconsistent state;
+COPY, meaning that the transaction has finished execution, but we are still copying the main copy to the back copy.
+The transaction is considered as already committed in COPY state, because on a crash recovery, we just need to redo
+this copy process, and then change the state variable to IDLE. 
 
 Memory allocation
