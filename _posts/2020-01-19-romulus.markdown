@@ -78,3 +78,16 @@ commits, the library call only copies addresses that are present in the log, red
 Note that the paper claims that this logging optimization, unlike redo or undo logging, does not introduce extra write 
 amplification, since application written data is always duplicated one more times, without writing them into the log.
 The system maintains a constant write amplification factor of two.
+
+The paper also proposes three ways of supporting concurrent transactions with proper isolation. In the simplest manner, 
+the application can just use a single global lock for serializing concurrent reads and writes, since only one copy of 
+active data is maintained. In the second way, we use flat combining to aggregate update threads' requests into a 
+local buffer, which will then be taken and fulfilled by a dedicated thread. Only the dedicated thread can access the 
+main copy, and it processes each request from the buffer on behalf of other threads. Requestor threads need to wait
+for the return value to appear in the buffer before they can return from the function call to maintain linearizability.
+In the last method, only one update thread is allowed to execute transaction on the main copy and to copy the main image
+to the back image. Reader threads either access the main image or the back image based on the current state variable.
+The paper uses an "offset" variable for determining the current read location. The offset variable is added to read
+addresses within the transaction area to redirect reads to the corresponding copy. When the state variable is IDLE and 
+COPY, we read from the main image since it is consistent. When the variable is MUT, we read from the back image, since
+the main image is under modification.
