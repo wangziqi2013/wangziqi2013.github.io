@@ -70,8 +70,11 @@ then the recovery routine copies the main image to back image again to complete 
 two cases, since copying one image to the other is an idempotent operation, if the system crashes again during recovery,
 no special handling is required, and the recovery process can simply restart.
 
-The paper proposes one optimizations for reducing the amount of data copied when a transaction commits. The transaction
+The paper proposes one optimization for reducing the amount of data copied when a transaction commits. The transaction
 commit process requires copying the entire main image to the back image, even if only a small subset of the main image
 is updated by the transaction. The optimization maintains a log of addresses within DRAM. When a mutating method 
 is called, the start address and the length of affected area is also written into the DRAM log. When the transaction
-commits, the 
+commits, the library call only copies addresses that are present in the log, reducing the amount of data that is copied.
+Note that the paper claims that this logging optimization, unlike redo or undo logging, does not introduce extra write 
+amplification, since application written data is always duplicated one more times, without writing them into the log.
+The system maintains a constant write amplification factor of two.
