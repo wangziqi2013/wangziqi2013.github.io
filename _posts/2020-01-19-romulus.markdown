@@ -22,3 +22,10 @@ mutated by an ongoing transaction and the back copy represents the last consiste
 the most up-to-date consistent state, and the back copy is being updated to match the new copy. This way, when the system
 crashes, we always have a consistent copy of data to start the application with.
 
+Romulus assumes that the persistent storage is exposed to the user address space via direct access (DAX) files. Physical
+addresses are assumed to be mapped to the same virtual address on each restart, such that no extra pointer operation
+is required to maintain the same pointer semantics. The DAX file is divided into three parts. The first part is the 
+area header, which stores metadata on the DAX mapped file. This part is common in many NVM based designs, which stores
+the name of the mapping, the metadata, and statistics information. 
+
+Memory allocation
