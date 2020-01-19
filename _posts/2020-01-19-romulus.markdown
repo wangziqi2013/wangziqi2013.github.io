@@ -42,4 +42,6 @@ Memory allocation is also implemented within the persistent region. Allocator me
 at the beginning of the last two areas, such that the consistency of the allocator also depends on the consistency of
 the two areas. Note that allocators must use relative offsets, because otherwise when the main image is copied to the 
 backup, these pointers will still point to objects in the main copy, rather than the corresponding object in the backup. 
-By implementing the allocator as part of the duplicated 
+By implementing the allocator as part of the duplicated state, Romulus allows any allocator to be used without worrying 
+about inconsistencies in the allocator after recovery and the resulting memory leak or double allocation.
+
