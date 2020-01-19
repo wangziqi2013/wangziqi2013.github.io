@@ -55,4 +55,11 @@ Transactions are marked with begin\_transaction and end\_transaction. Nested tra
 the outermost transaction\_end will commit the transaction. On transaction begin, we change the status variable from IDLE
 to MUT, indicating that the main copy is no longer consistent. On every mutation operation during the transaction, we 
 flush the affected object back to the NVM before the method returns. These flushes are not ordered with each other to
-increase inter-bank parallelism. 
+increase inter-bank parallelism. When the transaction commits, we first execute a barrier to stall the processor until
+all previous modifications have reached the NVM. Then we change the state of the status variable to COPY to indicate 
+that the main copy is already consistent. A second barrier is issued to ensure that the status change propagates to
+the NVM. In the next step, we copy the main image to the back image byte-wise, and issue the third barrier after all
+copies are done. In the last step, we change the status variable to IDLE to indicate that both images are now consistent.
+A fourth flush is issued to ensure that the variable propagates to the NVM before we return and commits the transaction.
+
+On recovery, 
