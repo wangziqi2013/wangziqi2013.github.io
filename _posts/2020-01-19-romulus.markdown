@@ -62,4 +62,10 @@ the NVM. In the next step, we copy the main image to the back image byte-wise, a
 copies are done. In the last step, we change the status variable to IDLE to indicate that both images are now consistent.
 A fourth flush is issued to ensure that the variable propagates to the NVM before we return and commits the transaction.
 
-On recovery, 
+On recovery, we check the value of the status variable, and act accordingly. If the value is IDLE, then no recovery is 
+needed, since both copies are consistent with the most up-to-date state. If the value is MUT, meaning that the main copy
+is being modified, then we copy the back image over to overwrite the main image, rolling back partial updates made by the
+incomplete transaction. If the value is COPY, meaning that the system crashes while we copy the value to back image,
+then the recovery routine copies the main image to back image again to complete the commit process. Note that in the last
+two cases, since copying one image to the other is an idempotent operation, if the system crashes again during recovery,
+no special handling is required, and the recovery process can simply restart.
