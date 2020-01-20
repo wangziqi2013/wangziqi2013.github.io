@@ -882,4 +882,7 @@ bound phase. When the weave phase starts, these cache access events are simulate
 hazard on MSHR and cache tag array. If an event is scheduled at time `t` in contention-free execution, but previous 
 operations are delayed by `x` cycles because of contention, then the event can only be scheduled in at least cycle `t + x`.
 Furthermore, if multiple tag access events are scheduled on the same cache at cycle `t`, only one of them should be 
-granted, and the others must be scheduled at least one cycle later. 
+granted, and the others must be scheduled at least one cycle later. After weave phase ends, the extra number of cycles
+are added onto the process's clock (and several other clocks) to model the fact that the process has to spend more time
+than expected due to contention from other cores. A similar process also exists in `OOOCore`, in which the `advance()`
+method of the instruction window object is called to drain instructions for adjusting the cycle.
