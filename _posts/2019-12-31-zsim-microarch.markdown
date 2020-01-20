@@ -851,3 +851,12 @@ forward by setting it to `minFetchDecCycle`, if the latter is larger.
 Besides Nehalem style out-of-order core, zSim offers three other core models with different complexity and timing property
 for users to choose from. In the following table, we list core types and source files with a short description of their 
 timing property. We then cover each type with a subsection briefly.
+
+| Core Type | Source File (Header) | Description |
+|:---------:|:--------------------:|-------------|
+| `NullCore` | null\_core.h | IPC = 1 core for all instructions, including memory instruction. No memory system simulation. No weave phase timing model. |
+| `SimpleCore` | simple\_core.h | IPC = 1 core for all instructions except memory instructions. Memory instructions have variable timing based on memory system simulation. Instructions are executed in-order and synchronously. Long instructions will block later instruction until it is completed. |
+| `TimingCore` | timing\_core.h | Same as SimpleCore, except that time records are added during cache access to simulate cache contention in the weave phase. |
+| `OOOCore` | ooo\_core.h | Out-of-order pipeline with timing record added for cache accesses. |
+{:.mbtablestyle}
+
