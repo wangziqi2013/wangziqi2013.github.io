@@ -845,3 +845,9 @@ starting from `bblAddr`. The latency of the memory read is added onto `fetchCycl
 we compute the decoder cycle of the first instruction in the next basic block as `fetchCycle + (DECODE_STAGE - FETCH_STAGE)`,
 implying that decoding stage remains idle until all instructions are fetched. To this end, we drive the decoder clock 
 forward by setting it to `minFetchDecCycle`, if the latter is larger.
+
+## Simpler Core Models
+
+Besides Nehalem style out-of-order core, zSim offers three other core models with different complexity and timing property
+for users to choose from. In the following table, we list core types and source files with a short description of their 
+timing property. We then cover each type with a subsection briefly.
