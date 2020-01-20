@@ -872,3 +872,14 @@ instructions will block later instructions until the long instruction complete. 
 the basic block is executed. Cache line addresses of the basic block are injected into L1i cache serially, and the 
 varibale `curCycle` is updated to the completion cycle of the last instruction fetch.
 
+### TimingCore
+
+The `TimingCore` class is defined in timing\_core.h/cpp. It is a compromise between the most complicated out-of-order
+core with full contention simulation and a simple core with no contention simulation. The timing core still follows the
+IPC = 1 model of `SimpleCore`, assuming that instructions are executed serially, one at a time. The difference
+between these two is that `TimingCore` will generate timing records and events while the cache is accessed during the 
+bound phase. When the weave phase starts, these cache access events are simulated and scheduled to model resource
+hazard on MSHR and cache tag array. If an event is scheduled at time `t` in contention-free execution, but previous 
+operations are delayed by `x` cycles because of contention, then the event can only be scheduled in at least cycle `t + x`.
+Furthermore, if multiple tag access events are scheduled on the same cache at cycle `t`, only one of them should be 
+granted, and the others must be scheduled at least one cycle later. 
