@@ -885,4 +885,9 @@ Furthermore, if multiple tag access events are scheduled on the same cache at cy
 granted, and the others must be scheduled at least one cycle later. After weave phase ends, the extra number of cycles
 are added onto the process's clock (and several other clocks) to model the fact that the process has to spend more time
 than expected due to contention from other cores. A similar process also exists in `OOOCore`, in which the `advance()`
-method of the instruction window object is called to drain instructions for adjusting the cycle.
+method of the instruction window object is called to drain instructions for adjusting the cycle. 
+
+The above paragraph is only a minimum description of how bound and weave phase work together to properly model contention
+and to control "slacks" (difference between simulated clocks) between simulated cores. The weave phase timing model is far 
+more complicated than it seems to be. I might also add a new article on zSim timing model to this series, in order to further 
+explain the mechanics of discrete event simulation based weave phase.
