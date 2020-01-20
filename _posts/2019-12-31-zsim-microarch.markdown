@@ -865,5 +865,10 @@ timing property. We then cover each type with a subsection briefly.
 The `NullCore` class is defined in null\_core.h/cpp. It is a simple IPC = 1 core which basically counts the number of instructions
 executed, and no more. No extra timing model, such as cache timing and contention modeling, is implemented for this type.
 
-
+The `SimpleCore` class is defined in simple\_core.h/cpp. It is an IPC = 1 core with memory system simulation. Memory instructions
+(no uop is used) are simulated using the call back `LoadFunc()` and `StoreFunc()` as the instrumented basic block is executed.
+It is assumed that instructions are executed serially, and only one instruction can be active at one time. Long memory
+instructions will block later instructions until the long instruction complete. Instruction fetch is also simulated before
+the basic block is executed. Cache line addresses of the basic block are injected into L1i cache serially, and the 
+varibale `curCycle` is updated to the completion cycle of the last instruction fetch.
 
