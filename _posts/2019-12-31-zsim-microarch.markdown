@@ -860,3 +860,10 @@ timing property. We then cover each type with a subsection briefly.
 | `OOOCore` | ooo\_core.h | Out-of-order pipeline with timing record added for cache accesses. |
 {:.mbtablestyle}
 
+### NullCore and SimpleCore
+
+The `NullCore` class is defined in null\_core.h/cpp. It is a simple IPC = 1 core which basically counts the number of instructions
+executed, and no more. No extra timing model, such as cache timing and contention modeling, is implemented for this type.
+
+
+
