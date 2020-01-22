@@ -108,7 +108,7 @@ can only propagate from top to bottom, but not vice versa. Second, the cache hie
 with the root being the LLC and leaves being L1 private caches. If the root of a subtree is locked, no request
 can be propagated to the subtree before the subtree root is released.
 
-We prove the correctness of the protocol by a case-by-case discussion. Without losing generality, we assume that thread 
+We prove the correctness of the protocol by a case-by-case discussion. Without loss of generality, we assume that thread 
 A begins invalidation on node X of the hierarchy. In the first case, thread B starts an invalidation on a node Y 
 within the subtree. Assuming thread B's working set (cache objects it touches) overlaps with thread A's working set (otherwise 
 the proof is trivially done). Then thread B may access cache object Y before thread A accesses them or after. In the first 
@@ -140,7 +140,7 @@ trees with depth (D + 1), there will be no cycle either. In the base case, D equ
 in which case the hypothesis trivially holds. Assuming that the property holds for all all trees with height less than or
 equal to D. We next prove by contradiction that the property still holds for tree of height (D + 1).
 
-Without losing generality, we assume that a cycle is formed after the invalidation protocol is executed on the current
+Without loss of generality, we assume that a cycle is formed after the invalidation protocol is executed on the current
 root node X (the node that has height D + 1). The cycle is in this form: `X -> ... -> Y -> ... -> Z -> ... -> X`, in which
 Y and Z are nodes in the original subtree of depth D, and notation like X -> Y indicates that the invalidation protocol
 starting at X is serialized before the protocol starting at Y. Since both Y and Z are below X in the tree, according to 
@@ -148,7 +148,7 @@ what we have proved above, we know (1) (X, Y) -> (Y, Y) and (2) (Z, Z) -> (X, Z)
 is above Z or below Z, we need a case-by-case discussion. Assuming Y is below Z, then we have (3) (X, Z) -> (X, Y)
 since the protocol starting X always lock cache objects on the path down the hierarchy. We also know (4) (Y, Y) -> (Z, Y)
 since Y -> Z. Put them all together in the order (2)(3)(1)(4), we have the following relation: 
-`(Z, Z) -> (X, Z) -> (X, Y) -> (Y, Y) -> (Z, Y)`. Since ``(Z, Z) -> (X, Z) -> (X, Y)` implies that Z has released the 
+`(Z, Z) -> (X, Z) -> (X, Y) -> (Y, Y) -> (Z, Y)`. `(Z, Z) -> (X, Z) -> (X, Y)` implies that Z has released the 
 lock on its root, otherwise X will not be able to lock Y. This contradicts with (Z, Y), indicating that invalidation
 starting at Z has not terminated yet, since it locks node Y after X locks node Z. A contradiction!
 
@@ -355,7 +355,7 @@ the current uop is dispatched. In this case, the current uop is stalled in the l
 line address with `wrAddr` rather than `rdAddr`.
 
 Note that the order of reading the two member variables of `FilterEntry`, `availCycle` and the address tag `rdAddr`/`wrAddr`, 
-is crucial. This is because we deliberately allow harmless race to happen here when an invalidation request is handled 
+is crucial. This is because we deliberately allow harmless race to happen when an invalidation request is handled 
 concurrently in the filter cache (`load()` and `store()` will not race with `access()` of the L1 cache, since only the 
 current thread will access the L1 and the filter cache). In this case, both `rdAddr` and `wrAddr` will be reset to -1, 
 indicating that no address will ever hit the filter cache. Loads and stores serialize with concurrent invalidations by 
@@ -376,7 +376,7 @@ derive the timing of the block. The call procedure is quite standard. In order t
 a dummy MESI state in the stack, and include a pointer to that state in the `MemReq` object. The locking protocol
 will access this dummy variable in `CheckForMESIRace()` and `class MESTBottomCC`'s `processAccess()`. For 
 `CheckForMESIRace()`, the check will always pass without entering the if branch body, since filter cache 
-races do not change this dummy state (we have other methods for dealing with that; see below). For `processAccess()`,
+races do not change this dummy state (we have other methods for dealing with races; see below). For `processAccess()`,
 the state will be set accordingly, but we discard the value anyway, since filter cache encodes state and address
 tag using `rdAddr` and `wrAddr` rather than traditional "tags and states". Furthermore, the member variable of filter 
 cache object, `filterLock`, is passed as the filter cache's invalidation lock in the `MemReq` object. This lock
