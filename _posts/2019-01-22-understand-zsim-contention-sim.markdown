@@ -141,7 +141,14 @@ The slab object is defined as `struct Slab` within the allocator class. The obje
 pointer, two variables tracking the current size and capacity repectively. Allocating from a slab is simply incrementing 
 the pointer by the number of bytes requested, if free space is more than the requested size, or returns empty pointer.
 `struct SlabList` implements a singly linked list that chains all slabs allocated in the same bound phase together. The
-slab list provides a similar interface to standard C++ STL library, 
+slab list provides a similar interface to standard C++ STL library, the semantics of which are straightforward. Two lists
+are maintained by the slab allocator, one `curPhaseList` tracking all slab objects allocated in the current bound phase,
+and a `freeList` tracking freed slabs for recycling. The allocator never return memory back to the C allocator. An extra
+`liveList` tracks all slabs that are not allocated by the current bound phase, but can still be accessed. Slabs in the 
+live list are tagged with the maximum zll clock in which events are allocated. The current allocating slab is tracked
+by variable `curSlab`.
+
+
 
 ### Timing Events
 
