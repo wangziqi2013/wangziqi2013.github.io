@@ -95,13 +95,13 @@ contention or resource hazard, the event can be re-enqueued to a later cycle aft
 
 zSim maintains two clocks to simplify developer's reasoning on the timing model. One clock is the `curCycle` member variable
 of `class OOOCore` and other core types representing the issue cycle (or execution cycle, for simpler core types) of the 
-most recent uop. `curCycle` will be adjusted by the amount of extra cycles introduced by contention simulation at the end
-of every weave phase. The second clock is the global Zero Load Latency (zll) clock, which is never adjusted for contention,
-and is used to represent the absolute position in the simulation timeline. The skew between the zll clock and the core's 
-clock is stored as a member variable, `gapCycle`, in core recorder objects. `gapCycle` represents aggregated number of 
-cycles added onto `curCycle` as a result of weave phase simulation. 
+most recent uop. `curCycle` will be adjusted by the number of extra cycles introduced by contention simulation, if any, 
+at the end of every weave phase. The second clock is the global Zero Load Latency (zll) clock, which is never adjusted for 
+contention, and is used to represent the absolute position in the simulation timeline. The skew between the zll clock and 
+the core's clock is stored as a member variable, `gapCycle`, in core recorder objects. `gapCycle` represents aggregated 
+number of cycles added onto `curCycle` as a result of weave phase simulation. 
 
-The zll clock serves as a unique reference clock for specifying time points in the bound and weave phases. The `curCycle`
+The zll clock serves as a unique reference clock for specifying time points between the bound and weave phases. The `curCycle`
 of simulated cores cannot be used as reference, since `curCycle` might be "stretched" after contention simulation. For example,
 image the developer refers to a time point `C2` in the current bound phase, but there is an event occuring at time `C1`,
 where `C1 < C2`. If the simulation of the event at time `C2` incurs an extra delay of `D` cycles, then the actual time
@@ -118,7 +118,7 @@ by inheritance. Another important timing event class is `class DelayEvent` defin
 `class TimingEvent`. This event does nothing but simply delay the execution of all child events by a specified number of 
 cycles. In the following discussion, we will see that the delay event is used universally to "fill the gap" between two 
 events that have a non-zero time period between them. `class CrossingEvent` is also defined to allow multithreaded DES
-of the weave phase. We delay the discussion of multithreaded simulation to the end of this article. Before that, the
+of the weave phase. We postpone the discussion of multithreaded simulation to the end of this article. Before that, the
 contention simulation is assumed to be single threaded with only a single domain.
 
 ### Memory Management
@@ -131,6 +131,8 @@ within `EventRecorder` objects. Memory is allocated and released in large chunks
 library. In addition, a chunk is only released after all event objects in the chunk are no longer used, the status of which
 is tracked by a high watermark. Correspondingly, `operator delete` is not allowed to be called on event objects, since the 
 slab is freed as a whole rather than individually for each event objects.
+
+
 
 ### Timing Events
 
