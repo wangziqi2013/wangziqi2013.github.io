@@ -152,6 +152,14 @@ When an allocation is requested by calling `alloc()`, the allocator first tries 
 a new slab by calling `allocSlab()`. `allocSlab()` attemps to dequeue one from `freeList`, and calls system allocator
 to allocate one from the global heap. The current slab is also pushed into `curPhaseList`.
 
+When a weave phase completes, we attempt to reclaim some slabs by calling `advance()` with two arguments, both in zll clocks. 
+The first argument, `prodCycle`, is the maximum cycle in the last bound phase, which is used to tag the current slab list 
+for later reclamation, serving as a high water mark. After simulating events whose creation cycle is greater than the tag, 
+the current slab list can be moved to the free list. The second argument, `usedCycle`, is the zll clock of the most recently 
+simulated event. All slabs from previous phases whose tag is smaller than this value can be moved to the free list. 
+
+
+
 ### Timing Events
 
 The timing event object has a few member variables with the word "cycle" in it. Among them, `privCycle` seems to be unused 
