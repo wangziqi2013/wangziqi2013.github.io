@@ -42,6 +42,12 @@ static latency of the component is considered when computing operation timing, a
 simulation article. For example, during bound phase simulation, MSHRs are assumed to be non-existent, and cache tag accesses
 always take `accLat` cycles. These static latencies are then used to update simulated core cycles. 
 
+One of the most fundamental assumptions in zSim is that the access path derived during the bound phase is a very good 
+approximation of the actual access path in an actual execution where contention is present. In other words, the part of
+the memory hierarchy that will be traversed will not change much between isolated simulation and concurrent execution.
+Only the timing of the access will change due to contention and resource hazards. The zSim paper also proves that 
+"path-altering interferences" are very rare compared with the number of accesses.
+
 
 
 ### Zero Load Letency Clock
