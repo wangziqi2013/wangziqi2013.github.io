@@ -44,7 +44,7 @@ that the event chain is not necessarily a singly linked list. In fact, in some c
 children nodes to model concurrent hardware operations. All events are assumed to be contention-free, and only the 
 static latency of the component is considered when computing operation timing, as we have described in the previous cache
 simulation article. For example, during bound phase simulation, MSHRs are assumed to be non-existent, and cache tag accesses
-always take `accLat` cycles. These static latencies are then used to update simulated core cycles. 
+always take `accLat` cycles. Core cycles are also updated using timing derived from static latencies. 
 
 One of the most fundamental assumptions in zSim is that the access path derived during the bound phase is a very good 
 approximation of the actual access path in an actual execution where contention is present. In other words, the part of
@@ -65,6 +65,14 @@ are expected to be small.
 
 ### The Weave Phase
 
-
+After all threads finish their bound phase, the weave phase is started to simulate contention and adjust clock cycles of 
+simulated cores using discrete event simulation (DES). Recall that simulated cores build event chains during the bound 
+phase using the static, contention-free timing model. Static latencies represent the minimum number of cycles between two 
+events, which can be "stretched" to account for contention and resource hazards. During the weave phase, all events from 
+the cores are enqueued into the corresponding cycles, and then executed. At the beginning of the weave phase, only the 
+earliest event is enqueued and executed. By executing an event at cycle `C`, we may add extra delay `t`, in addition to the
+static delay `D`, to the execution of its children events, if there is another event (from the same core or from other cores) 
+interfering with the current event in cycle `C`. In this case, the execution of its children events will happen at 
+cycle `C + D + t` rather than cycle `C + D` as in bound phase simulation. 
 
 ### Zero Load Letency Clock
