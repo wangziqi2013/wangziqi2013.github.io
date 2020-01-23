@@ -175,3 +175,9 @@ contention simulation for proper synchronization between simulation domains, as 
 these three variables can determine when an event could start. In fact, only the completion cycle of parents and the delays 
 between events determine the start cycle of the current event. 
 
+Child pointer or pointers are stored in the union `child` and `children`. Children events are added by calling `addChild()`.
+The member variable `state` maintains a state machine for events. An event can be in one of the following states: `EV_NONE`
+before it is enqueued; `EV_QUEUED` after it is enqueued by the parent event; `EV_RUNNING` after it is being simulated;
+`EV_HELD` when the execution of the event is delayed and it might be requeued in the future; `EV_DONE` when the event is 
+done. It seems that the event state is only used in assertions for verifying event behavior, and not used to perform
+any actual change.
