@@ -95,3 +95,11 @@ and is used to represent the absolute position in the simulation timeline. The s
 clock is stored as a member variable, `gapCycle`, in core recorder objects. `gapCycle` represents aggregated number of 
 cycles added onto `curCycle` as a result of weave phase simulation. 
 
+The zll clock serves as a unique reference clock for specifying time points in the bound and weave phases. The `curCycle`
+of simulated cores cannot be used as reference, since `curCycle` might be "stretched" after contention simulation. For example,
+image the developer refers to a time point `C2` in the current bound phase, but there is an event occuring at time `C1`,
+where `C1 < C2`. If the simulation of the event at time `C2` incurs an extra delay of `D` cycles, then the actual time
+point after adjustment will be `C2 + D` rather than `C2`, since all later events need to be delayed by `D` cycles as 
+well. Cycle `C2` no longer refers to the time point it was supposed to after contention simulation. Instead, if we use
+the zll clock of the current bound phase, and translate the zll clock by `gapCycle` cycles, the result still refers to the 
+same point in the bound phase, since the zll clock is an aggregation of all weave phase adjustments.
