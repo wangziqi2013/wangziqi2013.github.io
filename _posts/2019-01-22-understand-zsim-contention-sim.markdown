@@ -48,6 +48,13 @@ the memory hierarchy that will be traversed will not change much between isolate
 Only the timing of the access will change due to contention and resource hazards. The zSim paper also proves that 
 "path-altering interferences" are very rare compared with the number of accesses.
 
-
+The bound phase only runs for a short interval to avoid significant clock skew between simulated cores. Since zSim does 
+not impose much control over the execution of threads, the actual simulation timing may be inconsistent with clocks of 
+simulated cores, resuling in clock inversion. For example, during the simulation of two cores, C1 and C2, since the 
+simulated thread running on C1 and C2 run independently without simulator synchronization within the bound phase interval,
+it is possible that after C1 performs an operation at simulated clock t1 in real time clock T1, C2 performs another operation
+at simulated clock t2 in real time clock T2, where t1 < t2 but T2 < T1. In this case, the simulated behavior of C2 may 
+disagree with actual behavior on real hardware, since C2 observes the simulated state after C1 modifies it in real time, 
+but the actual state it observes should not contain any modification happening after T2.
 
 ### Zero Load Letency Clock
