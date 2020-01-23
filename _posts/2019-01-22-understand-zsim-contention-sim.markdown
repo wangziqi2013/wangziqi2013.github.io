@@ -29,6 +29,8 @@ article by discussing how contention simulation can be optimized using parallel 
 
 ## Bound-Weave Simulation
 
+### The Bound Phase
+
 zSim divides timing simulation into two logically separate phases, bound phase and weave phase. In the bound phase, all
 threads are scheduled to only simulate a relatively short interval (e.g. 10000 cycles), before they are swapped out by
 the scheduler. Note that if the number of cores is smaller than the number of simulated threads, some cores might be
@@ -55,6 +57,10 @@ simulated thread running on C1 and C2 run independently without simulator synchr
 it is possible that after C1 performs an operation at simulated clock t1 in real time clock T1, C2 performs another operation
 at simulated clock t2 in real time clock T2, where t1 < t2 but T2 < T1. In this case, the simulated behavior of C2 may 
 disagree with actual behavior on real hardware, since C2 observes the simulated state after C1 modifies it in real time, 
-but the actual state it observes should not contain any modification happening after T2.
+but the actual state it observes should not contain any modification happening after T2. zSim admits clock inversion like
+this during a bound phase, but since threads synchronize with each other constantly, the aggregated amount of skews
+are expected to be small. 
+
+### The Weave Phase
 
 ### Zero Load Letency Clock
