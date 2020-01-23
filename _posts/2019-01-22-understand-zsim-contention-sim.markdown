@@ -121,6 +121,17 @@ events that have a non-zero time period between them. `class CrossingEvent` is a
 of the weave phase. We delay the discussion of multithreaded simulation to the end of this article. Before that, the
 contention simulation is assumed to be single threaded with only a single domain.
 
+### Memory Management
+
+Event objects are allocated from the heap using C++ `new` operator. The base class `TimingEvent` overrides this operator,
+and adds an extra `class EventRecorder` object as argument. As a result, event objects must be allocated in the form
+of replacement `new`s, which looks like the following: `new (eventRecorder) EventObjectName(args)` (`eventRecorder`
+is an `EventRecorder` object). This is an optimization for memory allocation and garbage collection using slab allocators 
+within `EventRecorder` objects. Memory is allocated and released in large chunks to amortize the overhead of calling C
+library. In addition, a chunk is only released after all event objects in the chunk are no longer used, the status of which
+is tracked by a high watermark. Correspondingly, `operator delete` is not allowed to be called on event objects, since the 
+slab is freed as a whole rather than individually for each event objects.
+
 ### Timing Events
 
 The timing event object has a few member variables with the word "cycle" in it. Among them, `privCycle` seems to be unused 
@@ -131,4 +142,7 @@ are assignments). The second variable is `cycle`, which stores the largest cycle
 are more than one parents, this variable is useful, since the event will not begin until all parents are done. The third
 variable is `setMinStartCycle`, which stores the lower bound of the event's start cycle. This variable is initialized when 
 the contention-free start cycle of the event is computed in the bound phase. This variable is only used in multi-threaded
-contention simulation for proper synchronization between simulation domains, as we will see later.
+contention simulation for proper synchronization between simulation domains, as we will see later. Note that none of 
+these three variables can determine when an event could start. In fact, only the completion cycle of parents and the delays 
+between events determine the start cycle of the current event. 
+
