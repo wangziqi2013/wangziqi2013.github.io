@@ -29,14 +29,16 @@ article by discussing how contention simulation can be optimized using parallel 
 
 ## Bound-Weave Simulation
 
-### The Bound Phase
-
 zSim divides timing simulation into two logically separate phases, bound phase and weave phase. In the bound phase, all
 threads are scheduled to only simulate a relatively short interval (e.g. 10000 cycles), before they are swapped out by
 the scheduler. Note that if the number of cores is smaller than the number of simulated threads, some cores might be
 scheduled to simulate more than one thread. The simulation guarantees that the thread has exclusive ownership of the 
 core while it is simulated in the bound phase. Different threads are scheduled on the same core serially without any
-interleaving. During the bound phase, threads record critical events during memory operations, such as cache tag access, 
+interleaving. 
+
+### The Bound Phase
+
+During the bound phase, threads record critical events during memory operations, such as cache tag access, 
 cache eviction, and cache write back, and link these events together in the order that they occur as an event chain. Note
 that the event chain is not necessarily a singly linked list. In fact, in some cases, one event node may have multiple 
 children nodes to model concurrent hardware operations. All events are assumed to be contention-free, and only the 
@@ -62,5 +64,7 @@ this during a bound phase, but since threads synchronize with each other constan
 are expected to be small. 
 
 ### The Weave Phase
+
+
 
 ### Zero Load Letency Clock
