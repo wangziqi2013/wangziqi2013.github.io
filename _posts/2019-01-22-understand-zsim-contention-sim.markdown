@@ -125,4 +125,10 @@ contention simulation is assumed to be single threaded with only a single domain
 
 The timing event object has a few member variables with the word "cycle" in it. Among them, `privCycle` seems to be unused 
 anywhere except in event queue function `enqueue()` and `enqueueSyned()` to remember the cycle the event is most
-recently enqueued.
+recently enqueued. This variable seems not being used elsewhere, which is likely just added for debugging (I did a 
+`grep -r "privCycle" --exclude tags` and only found three instances; One is the member definition and the other two 
+are assignments). The second variable is `cycle`, which stores the largest cycle when all parents are finished. If there
+are more than one parents, this variable is useful, since the event will not begin until all parents are done. The third
+variable is `setMinStartCycle`, which stores the lower bound of the event's start cycle. This variable is initialized when 
+the contention-free start cycle of the event is computed in the bound phase. This variable is only used in multi-threaded
+contention simulation for proper synchronization between simulation domains, as we will see later.
