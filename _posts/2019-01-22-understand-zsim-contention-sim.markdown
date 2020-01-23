@@ -39,6 +39,9 @@ cache eviction, and cache write back, and link these events together in the orde
 that the event chain is not necessarily a singly linked list. In fact, in some cases, one event node may have multiple 
 children nodes to model concurrent hardware operations. All events are assumed to be contention-free, and only the 
 static latency of the component is considered when computing operation timing, as we have described in the previous cache
-simulation article. For example, 
+simulation article. For example, during bound phase simulation, MSHRs are assumed to be non-existent, and cache tag accesses
+always take `accLat` cycles. These static latencies are then used to update simulated core cycles. 
+
+
 
 ### Zero Load Letency Clock
