@@ -157,8 +157,9 @@ The first argument, `prodCycle`, is the maximum cycle in the last bound phase, w
 for later reclamation, serving as a high water mark. After simulating events whose creation cycle is greater than the tag, 
 the current slab list can be moved to the free list. The second argument, `usedCycle`, is the zll clock of the most recently 
 simulated event. All slabs from previous phases whose tag is smaller than this value can be moved to the free list. 
-
-
+`advance()` is called when a weave phase is completed. The caller of this method passes the zll clock of the current interval's 
+end cycle as `prodCycle`, and the last simulated event's creation zll clock as `usedCycle`. This way, we maintain memory
+safety by enforcing that events still accessible by future weave phases can never be released.
 
 ### Timing Events
 
