@@ -85,4 +85,13 @@ If a long event introduces a large clock skew, such that the core's clock even e
 next bound phase will be skipped, and the core directly run the weave phase after all bound phases are completed. Otherwise
 the core continues bound phase execution of the next basic block (we only switch phase on basic block boundaries; see below).
 
-### Zero Load Letency Clock
+### Zero Load Latency Clock
+
+zSim maintains two clocks to simplify developer's reasoning on the timing model. One clock is the `curCycle` member variable
+of `class OOOCore` and other core types representing the issue cycle (or execution cycle, for simpler core types) of the 
+most recent uop. `curCycle` will be adjusted by the amount of extra cycles introduced by contention simulation at the end
+of every weave phase. The second clock is the global Zero Load Latency (zll) clock, which is never adjusted for contention,
+and is used to represent the absolute position in the simulation timeline. The skew between the zll clock and the core's 
+clock is stored as a member variable, `gapCycle`, in core recorder objects. `gapCycle` represents aggregated number of 
+cycles added onto `curCycle` as a result of weave phase simulation. 
+
