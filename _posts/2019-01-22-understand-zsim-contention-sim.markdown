@@ -148,7 +148,9 @@ and a `freeList` tracking freed slabs for recycling. The allocator never return 
 live list are tagged with the maximum zll clock in which events are allocated. The current allocating slab is tracked
 by variable `curSlab`.
 
-
+When an allocation is requested by calling `alloc()`, the allocator first tries `curSlab`, and if it fails, allocates
+a new slab by calling `allocSlab()`. `allocSlab()` attemps to dequeue one from `freeList`, and calls system allocator
+to allocate one from the global heap. The current slab is also pushed into `curPhaseList`.
 
 ### Timing Events
 
