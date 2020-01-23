@@ -103,3 +103,12 @@ point after adjustment will be `C2 + D` rather than `C2`, since all later events
 well. Cycle `C2` no longer refers to the time point it was supposed to after contention simulation. Instead, if we use
 the zll clock of the current bound phase, and translate the zll clock by `gapCycle` cycles, the result still refers to the 
 same point in the bound phase, since the zll clock is an aggregation of all weave phase adjustments.
+
+## DES Infrastructure
+
+The DES infrastructure consists of timing events and the event queue. Timing events are defined in timing\_event.h/cpp
+as `class TimingEvent`. This class is a virtual class, meaning that it cannot be instanciated directly, and must be extended
+by inheritance. Another important timing event class is `class DelayEvent` defined in the same file as the subclass of 
+`class TimingEvent`. This event does nothing but simply delay the execution of all child events by the same number of cycles.
+In the following discussion, we will see that the delay event is used universally to "fill the gap" between two events
+that have a non-zero time period between them. 
