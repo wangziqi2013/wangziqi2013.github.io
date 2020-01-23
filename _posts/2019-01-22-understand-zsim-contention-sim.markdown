@@ -18,5 +18,11 @@ remembering the missing status. When the cache miss is fulfilled, the MSHR provi
 data and state of the cache line. Similarly, when multiple requests attempt to access the cache tag, only one request can
 be granted permission, since most cache controllers have only one circuit for reading and updating the tag array. 
 
+These contention situations are not properly simulated in the static cache timing model, since interactions between threads
+are not taken into consideration. Instead, we rely on the locking protocol to maintain an illustration that at any time
+during the cache transaction, only the current request may access the entire hierarchy. This technique simplifies cache
+system implementation, at the cost of ignoring potentially complicated interactions between different threads. In this article,
+we discuss zSim's contention model and direcrete event contention simulation mechanism in details. We first introduce the 
+bound-weave model of zSim in order for readers to grasp the basic idea of using dependency chains and 
 
 ### Bound-Weave Simulation
