@@ -212,3 +212,12 @@ simulating it later, since the delay event is never inserted into the event queu
 when an event can be inserted into the queue. In zSim, if there is a `C` cycle interval between two events on different 
 simulated components, the simulator code will insert a delay event to properly model that, instead of using `preDelay` or 
 `postDelay` of the two events.
+
+### The Event Queue
+
+The per-thread event queue is an object within the global `class ContentionSim` object. `class ContentionSim` contains 
+a member array `domains`, which stores thread-local data for each contention simulation thread in the weave phase. 
+Each element of the object is of type `struct DomainData`, which contains a `class PrioQueue<TimingEvent, PQ_BLOCKS>`
+object `pq` and a cycle variable `curCycle` tracking the current DES cycle. We postpone the discussion of other member
+variables to multithreaded contention simulation, and only focus on single threaded DES in this section.
+
