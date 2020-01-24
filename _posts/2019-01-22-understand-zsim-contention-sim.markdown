@@ -175,9 +175,22 @@ contention simulation for proper synchronization between simulation domains, as 
 these three variables can determine when an event could start. In fact, only the completion cycle of parents and the delays 
 between events determine the start cycle of the current event. 
 
-Child pointer or pointers are stored in the union `child` and `children`. Children events are added by calling `addChild()`.
-The member variable `state` maintains a state machine for events. An event can be in one of the following states: `EV_NONE`
-before it is enqueued; `EV_QUEUED` after it is enqueued by the parent event; `EV_RUNNING` after it is being simulated;
-`EV_HELD` when the execution of the event is delayed and it might be requeued in the future; `EV_DONE` when the event is 
-done. It seems that the event state is only used in assertions for verifying event behavior, and not used to perform
-any actual change.
+Child pointer or pointers are stored in the union structure `child` and `children`. Children events are added by calling 
+`addChild()`. The member variable `state` maintains a state machine for events. An event can be in one of the following 
+states: `EV_NONE` before it is enqueued; `EV_QUEUED` after it is enqueued by the parent event; `EV_RUNNING` after it is 
+being simulated; `EV_HELD` when the execution of the event is delayed and it might be requeued in the future; `EV_DONE` 
+when the event is done. It seems that the event state is only used in assertions for verifying event behavior, and not 
+used to perform any actual change. Based on the above reason, we ignore the state variable to simplify discussion in the 
+following text.
+
+Two delay member variables, `preDelay` and `postDelay`, determine the latency between parent and child events. When a 
+parent event finishes execution, child events will be notified after an extra `preDelay` cycles after the parent completion
+cycle. When all parents of a child event is completed, the child event will be enqueued after an extra `postDelay` cycle
+delay. 
+
+Member function `run()` is called by the DES driver during the weave state, which performs some state transition and state 
+check, and then calls `simulate()`. All derived classes of `class TimingEvent` should implement `simulate()`. This function
+takes an argument `simCycle`, which is the cycle the event is simulated. Whenever an event completes execution, member
+function `done()` should be called to notify children events of the completion of the parent. `done()` is called with
+argument `doneCycle` which is not necessarily the same as `simCycle`. The children nodes are notified at cycle 
+`doneCycle + postDelay`, as discussed above. 
