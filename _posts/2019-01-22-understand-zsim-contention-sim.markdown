@@ -218,9 +218,10 @@ simulated components, the simulator code will insert a delay event to properly m
 The per-thread event queue is included by the global `class ContentionSim` object. `class ContentionSim` contains 
 a member array `domains`, which stores thread-local data for each contention simulation thread in the weave phase. 
 Each element of the object is of type `struct DomainData`, which contains a `class PrioQueue<TimingEvent, PQ_BLOCKS>`
-object `pq`, a cycle variable `curCycle` tracking the current DES cycle, and a lock, `pqLock`, to serialize threads
-attempting to insert into the queue during the bound phase. We postpone the discussion of other member variables to 
-multithreaded contention simulation, and only focus on single threaded DES in this section.
+object `pq`, a cycle variable `curBlock` tracking the absolute starting cycle of the first event's block (see below), 
+and a lock, `pqLock`, to serialize threads attempting to insert into the queue during the bound phase. We postpone the 
+discussion of other member variables to multithreaded contention simulation, and only focus on single threaded DES in 
+this section.
 
 The priority queue object is defined in prio\_queue.h as `class PrioQueue`. The implementation of the queue is also
 overly complicated for optimization, just like the instruction window in out-of-order core. Events in the near future 
@@ -228,3 +229,14 @@ are stored in `struct PQBlock`, which contains a 64-element array. A 64-bit inte
 list using the `next` pointer. The queue object tracks events in the future `64 * B` cycles in the array `blocks`, where
 `B` is a template argument specifing the number of `PQBlock`s. The rest of the events are stored in a regular multimap 
 object, `feMap`.
+
+Inserting into and removing the top event from the queue is straightforward. For insertion, we compute the block offset
+and the slot offset within the block, and calls `enqueue()` of the block object if the event is scheduled for the near future. 
+Otherwise, we directly insert the event into the multimap `feMap`. For dequeue, we scan `PQBlock` objects to find the first 
+non-empty block, and compute the offset within that block before calling `dequeue()`. If all blocks are empty, we iterate 
+through `feMap` and populate the empty blocks before retry the dequeue operation. Note that the argument `deqCycle` will
+be updated accordingly to the actual cycle the event is stored.
+
+The event queue also provides a member function `firstCycle()`, which returns the absolute cycle of the nearest event in
+the event queue. This function is used to probe the next event cycle, which as we will see later, is used by the DES driver
+to determine when the current weave phase simulation should terminate.
