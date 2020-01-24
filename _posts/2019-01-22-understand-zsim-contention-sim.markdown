@@ -186,7 +186,7 @@ following text.
 Two delay member variables, `preDelay` and `postDelay`, determine the latency between parent and child events. When a 
 parent event finishes execution, child events will be notified after an extra `preDelay` cycles after the parent completion
 cycle. When all parents of a child event is completed, the child event will be enqueued after an extra `postDelay` cycle
-delay.
+delay. In addition, for `class DelayEvent`, the `preDelay` variable also stores the static delay value.
 
 Member function `run()` is called by the DES driver during the weave state, which performs some state transition and state 
 check, and then calls `simulate()`. All derived classes of `class TimingEvent` should implement `simulate()`. This function
@@ -194,6 +194,13 @@ takes an argument `simCycle`, which is the cycle the event is simulated. Wheneve
 function `done()` should be called to notify children events of the completion of the parent. `done()` is called with
 argument `doneCycle` which is not necessarily the same as `simCycle`. The children nodes are notified at cycle 
 `doneCycle + postDelay`, as discussed above. The notification of child nodes is implemented using a template function,
-`visitChildren`, which takes a lambda function as call back. The template traverses all child nodes and invokes the call 
+`visitChildren()`, which takes a lambda function as call back. The template traverses all child nodes and invokes the call 
 back on each of them. For child node notification, the call back function simply calls the `parentDone()` function of the 
 event node with the cycle of notification.
+
+The `parentDone()` in the base `TimingEvent` class is straightforward. It decrements the variable, `numParents`, which 
+tracks the number of active parents, and saves the maximum parent completion time in the member variable `cycle`. If all 
+parent events are completed, the event itself is enqueued into the event queue by calling `zinfo->contentionSim->enqueue()`
+with an enqueue cycle `cycle + preDelay`. Here `preDelay` is the latency between last parent notification and the actual
+enqueue time. 
+
