@@ -248,9 +248,15 @@ The bound phase ends when the last core calls `TakeBarrier()` (defined in zsim.c
 into the scheduler and the barrier, and finally `EndOfPhaseActions()` (defined in zsim.cpp) will be invoked to start
 the weave phase. Recall that `globPhaseCycles` is the global zll clock used by zSim to uniquely specify a time point. 
 We first compute the zll cycle of the end of the weave phase as `zinfo->globPhaseCycles + zinfo->phaseLength`, in which
-`phaseLength` specifies the maximum number of cycles we simulate in the bound and weave phase. This
-
+`phaseLength` specifies the maximum number of cycles we simulate in the bound and weave phase. This value is configrable
+using the option `sim.phaseLength` in the configuration file. Then we call into `zinfo->contentionSim->simulatePhase()`
+to wake up weave threads, as we will see below.
 
 ### Weave Phase Thread Pool
 
-The weave phase is not run by application threads. Instead, zSim starts `` threads in the background during initialization.
+The weave phase implements its own thread pool in contention\_sim.h/cpp. The weave phase is not run by application threads. 
+Instead, zSim starts `numSimThreads` threads in the background during initialization. This number of configurable using
+configuration file option `sim.contentionThreads`. Weave phase threads spawns into function `SimThreadTrampoline()`,
+which assigns each thread an internal ID, `thid`, by atomically incrementing a shared counter, and then calls into
+`simThreadLoop()` with the ID. Function `simThreadLoop()` first blocks all weave phase threads on the thread-local lock 
+variable `wakeLock`. These threads will only be unblocked when the weave phase begins during the simulation.
