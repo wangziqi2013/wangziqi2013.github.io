@@ -215,7 +215,7 @@ simulated components, the simulator code will insert a delay event to properly m
 
 ### The Event Queue
 
-The per-thread event queue is an object within the global `class ContentionSim` object. `class ContentionSim` contains 
+The per-thread event queue is included by the global `class ContentionSim` object. `class ContentionSim` contains 
 a member array `domains`, which stores thread-local data for each contention simulation thread in the weave phase. 
 Each element of the object is of type `struct DomainData`, which contains a `class PrioQueue<TimingEvent, PQ_BLOCKS>`
 object `pq`, a cycle variable `curCycle` tracking the current DES cycle, and a lock, `pqLock`, to serialize threads
@@ -223,8 +223,8 @@ attempting to insert into the queue during the bound phase. We postpone the disc
 multithreaded contention simulation, and only focus on single threaded DES in this section.
 
 The priority queue object is defined in prio\_queue.h as `class PrioQueue`. The implementation of the queue is also
-overly complicated for optimization, just like the instruction window class inout-of-order core. Events in the near future 
-are stored in `struct PQBlock` as a 64-element array. A 64-bit integer serves as the bit mask to indicate whether the corresponding
-cycle has at least one event scheduled. Events scheduled on the same cycle are chained into a singly linked list.
-The queue object tracks events in the future `64 * B` cycles in the array `blocks`, and the rest in a regular multimap object,
-`feMap`.
+overly complicated for optimization, just like the instruction window in out-of-order core. Events in the near future 
+are stored in `struct PQBlock`, which contains a 64-element array. A 64-bit integer serves as a bit mask to indicate whether the corresponding cycle has at least one event scheduled. Events scheduled on the same cycle are chained into a singly linked 
+list using the `next` pointer. The queue object tracks events in the future `64 * B` cycles in the array `blocks`, where
+`B` is a template argument specifing the number of `PQBlock`s. The rest of the events are stored in a regular multimap 
+object, `feMap`.
