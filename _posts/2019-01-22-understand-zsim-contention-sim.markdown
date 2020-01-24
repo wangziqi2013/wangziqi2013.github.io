@@ -186,11 +186,14 @@ following text.
 Two delay member variables, `preDelay` and `postDelay`, determine the latency between parent and child events. When a 
 parent event finishes execution, child events will be notified after an extra `preDelay` cycles after the parent completion
 cycle. When all parents of a child event is completed, the child event will be enqueued after an extra `postDelay` cycle
-delay. 
+delay.
 
 Member function `run()` is called by the DES driver during the weave state, which performs some state transition and state 
 check, and then calls `simulate()`. All derived classes of `class TimingEvent` should implement `simulate()`. This function
 takes an argument `simCycle`, which is the cycle the event is simulated. Whenever an event completes execution, member
 function `done()` should be called to notify children events of the completion of the parent. `done()` is called with
 argument `doneCycle` which is not necessarily the same as `simCycle`. The children nodes are notified at cycle 
-`doneCycle + postDelay`, as discussed above. 
+`doneCycle + postDelay`, as discussed above. The notification of child nodes is implemented using a template function,
+`visitChildren`, which takes a lambda function as call back. The template traverses all child nodes and invokes the call 
+back on each of them. For child node notification, the call back function simply calls the `parentDone()` function of the 
+event node with the cycle of notification.
