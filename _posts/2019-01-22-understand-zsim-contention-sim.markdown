@@ -204,3 +204,11 @@ parent events are completed, the event itself is enqueued into the event queue b
 with an enqueue cycle `cycle + preDelay`. Here `preDelay` is the latency between last parent notification and the actual
 enqueue time. 
 
+In `class DelayEvent`, the `parentDone()` function is overridden to optimize static delays. Since the delay value is 
+statically known during the bound phase, `parentDone()` will simply call `done()` with `cycle + preDelay` to recursively
+incoke the `parentDone()` function of children events. This way, we do not pay the overhead of enqueuing an event and 
+simulating it later, since the delay event is never inserted into the event queue. Note that although the variable name
+`minStartCycle` implies that it stores the minumum cycle for an event to start, this variable is not used to determine
+when an event can be inserted into the queue. In zSim, if there is a `C` cycle interval between two events on different 
+simulated components, the simulator code will insert a delay event to properly model that, instead of using `preDelay` or 
+`postDelay` of the two events.
