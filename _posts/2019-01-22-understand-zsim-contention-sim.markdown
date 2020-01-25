@@ -272,18 +272,23 @@ thread will then return back to the scheduler, and start the next bound phase, t
 In `simulatePhase()`, the application thread calls `cSimStart()` and `cSimEnd()` at the beginning and the end of the function
 respectively to notify cores of the start and end of contention simulation. We will cover this part later. The thread
 also unlocks weave phase threads by looping through the thread pool, and unblocking these threads using `futex_unlock()`.
-The thread then blocks itself on `waitLock`. I am not sure whether there is a eace condition on the order of `waitLock`
+The thread then blocks itself on `waitLock`. I am not sure whether there is a race condition on the order of `waitLock`
 locking and unlocking. If the application thread is stalled by the host OS for a long time, then it is possible that
 `waitLock` is unlocked before the thread is rescheduled by the host OS and then acquire the wait lock. If this happens,
 the application thread may be permanently blocked on `waitLock`, which hangs the entire simulation.
 
 ### The DES Event Loop
 
-Function `simulatePhaseThread()` implements the main event loop of weave phase DES. This function implements two independent
-control paths, one for single domain simulation, the other for multi-domain simulation. zSim restricts the number of domains
+Function `simulatePhaseThread()` implements the main event loop of weave phase DES. This function contains two independent
+code paths, one for single domain simulation, the other for multi-domain simulation. zSim restricts the number of domains
 to be a multiple of the number of threads, meaning that all threads must simulate the same number of domains, from
-`firstDomain` to `supDomain` (both are member variables of `struct DomainData`). In this section we only cover sing-threaded, 
-single-domain simulation.
+`firstDomain` to `supDomain`, both being member variables of `struct DomainData` and hence thread-local. In this section 
+we only cover sing-threaded, single-domain simulation.
 
 In the single-thread execution path, we keep taking events from the top of the priority queue, and check whether the event
-cycle is within the value of `limit`. Recall that this argument is weave phase end zll clock value.
+cycle is within the value of `limit`. Recall that this argument is the zll clock on which weave phase should end. The 
+weave phase thread enters the event loop by comparing the next event cycle with `limit` using `pq.firstCycle() < limit`.
+If true, meaning that we still have events in the interval to simulate, the thread then dequeues the event using
+`pq.dequeue`, and calls `run()` method of the event object, after it updates the `curCycle` of the domain to the event 
+cycle. After the event loop, the `curCycle` of the domain is set to `limit` regardless of the next event in the queue
+(if any).
