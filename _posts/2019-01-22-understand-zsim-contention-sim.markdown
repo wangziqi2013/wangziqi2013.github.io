@@ -242,6 +242,14 @@ The event queue also provides a member function `firstCycle()`, which returns th
 the event queue. This function is used to probe the next event cycle, which as we will see later, is used by the DES driver
 to determine when the current weave phase simulation should terminate.
 
+The `class ContentionSim` object also provides two interfaces for inserting an event into the priority queue. The first
+is `enqueueSynced()`, which acquires the per-queue lock before inserting the object into the queue. This method is called
+during the bound phase where application threads may insert events into each other's domain, hence creating race condition
+when two threads attempt to insert into the same domain concurrently. The other is `enqueue()`, which does not acquire 
+the lock before inserting events. This method is called during the weave phase, and is only called by the thread reponsible
+for the domain. `class TimingEvent`'s two method functions, `queue()` and `requeue()`, wraps `enqueueSynced()` and `enqueue()`
+respectively.
+
 ## Weave Phase
 
 The bound phase ends when the last core calls `TakeBarrier()` (defined in zsim.cpp). This function will further call
