@@ -331,10 +331,17 @@ as a result of eviction and/or downgrading a cache block. zSim assumes that inva
 meaning that invalidation transactions will not change the timing of access transactions as well as themselves. In the 
 following sections we will see that invalidation requests will not be simulated by the weave phase contention model.
 
-A cache transaction starting from any cache object will generate a event chain in the form of `struct TimingRecord`.
-This object contains the request and response cycle of the cache transaction.
+A cache transaction starting from any cache object will generate an event chain in the form of `struct TimingRecord`.
+This object contains the request/response cycle and the begin/end event of the cache transaction. The event chain
+is not necessarily a singly linked list where each node has only one child. Instead, some events may have two 
+children events, one for starting a put transaction to write back a block to the parent cache, and another for forwarding 
+the get request to the parent level. The event chain of the current level will be returned to the caller of the 
+`access()` method via a global data structure, `zinfo->eventRecorders`.
 
-At each level during a get transaction, two operations might happen. 
+Event records are implemented in file event\_recorder.h as `class EventRecorder`. For single-domain contention simulation,
+it is just a stack of timing records, `trStack`, plus a memory allocator, `slabAlloc`, as we have seen above. 
+
+
 
 ### The Timing Cache
 
