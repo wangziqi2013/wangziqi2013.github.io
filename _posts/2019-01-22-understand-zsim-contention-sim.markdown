@@ -431,6 +431,10 @@ the first half of the event chain. Note that if the delay is zero, no delay even
 `startEv` to `r->startEvent` instead. Similar connection is done for `endEv` and `r->endEvent`. If `r` is not provided 
 (`NULL` value), we simply link `startEv` and `endEv` with a delay event of value `endCycle - startCycle` in-between. 
 
+The actual event connection is very simple: If an access record is returned by the parent level, we call `connect()`
+with the access timing record, and `MissStartEvent` object, `MissResponseEvent` as `startEv` and `endEv`. The `startCycle`
+and `endCycle` are `req.cycle + accLat` and `getDoneCycle` respectively. Note that we need of offset the start cycle
+by `accLat` cycles, since the `postDelay` of the `MissStartEvent` object already provides `accLat` delay.
 
 ### Simulating MSHR
 
