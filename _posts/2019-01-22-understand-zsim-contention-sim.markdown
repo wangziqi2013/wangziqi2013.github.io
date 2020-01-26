@@ -308,3 +308,37 @@ phase) is larger than the zll clock cycle of the next interval. If true, we skip
 skews between cores at least do not increase. If it is not the case, but `curCycle` is somewhere between the previous and 
 the next interval boundaries (i.e. there is some adjustment due to contention, but the number of cycle is smaller than 
 interval size), we let the bound phase run, and stop it as soon as `curCycle` reaches the interval boundary.
+
+## Cache Contention Model
+
+In a previous article, we discussed the static timing model of zSim cache objects. The static timing model consists of 
+the cache hierarchy, the upward propagation of `PUT` and `GET` requests, and the downward propagation of invalidations.
+The largest issue with the static timing model is that potentially concurrent accesses only incur fixed delay, while in 
+reality, shared resources can only be accessed by a limited number of requests at a time, due to the fixed number of 
+accessing circuits or buffer space (e.g. MSHR). 
+
+The cache contention model solves concurrent access problem using various access events. These events are generated 
+independently by cores accessing a cache object during the bound phase. Events generated in this stage only uses the local
+clock of the core. Then, in the following weave phase(s), events from different cores are inserted into a single event queue, 
+which are then executed under the unified zll clock. 
+
+### Generating The Event Chain
+
+Before we discuss the cache timing model, we first give a brief overview of the process in which event chains are generated.
+A cache access transaction begins with an `access()` request of type `GETS` or `GETX` from the bottom level, which may 
+recursively call into parent cache's `access()` method. Invalidations and put requests are generated during this process 
+as a result of eviction and/or downgrading a cache block. zSim assumes that invalidations are always contention-free, 
+meaning that invalidation transactions will not change the timing of access transactions as well as themselves. In the 
+following sections we will see that invalidation requests will not be simulated by the weave phase contention model.
+
+A cache transaction starting from any cache object will generate a event chain in the form of `struct TimingRecord`.
+This object contains the request and response cycle of the cache transaction.
+
+At each level during a get transaction, two operations might happen. 
+
+### The Timing Cache
+
+`class TimingCache` is a subclass of `class Cache`, defined in timing\_cache.h/cpp. In addition to the static timing
+model implemented in the base class, the timing cache also implements a weave phase contention model. Timing cache
+overrides the `access()` method of the base class cache to extend the semantics of accesses. Timing cache does not 
+model contention caused by invalidation or downgrade, and therefore `invalidate()` is not overridden.
