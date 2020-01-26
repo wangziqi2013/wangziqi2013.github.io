@@ -393,5 +393,10 @@ a downgrade, in which case we pop the record, and save it into local variable `a
 to `true`. Note that in most cases there should not be any timing record for access, since in the case of cache hits,
 the parent cache will not be called, and hence no record is generated.
 
-After collecting the timing record
+The next step is to connect these timing records into an event chain, potentially adding extra events to account 
+for the delay between access events. We first initialize a local `TimingRecord` object `tr`, and initialize this object 
+using information from the current request.
 
+### Simulating MSHR
+
+### Simulating Tag Lookup
