@@ -390,12 +390,25 @@ After processing eviction, the timing cache proceeds to process access by callin
 this function returns with two cycles, we again check whether the current number of records in the event recorder
 is `initialRecords + 1`. If true, we know parent `access()` is called recursively to fetch the block or to perform
 a downgrade, in which case we pop the record, and save it into local variable `accessRecord` after setting `hasAccessRecord` 
-to `true`. Note that in most cases there should not be any timing record for access, since in the case of cache hits,
-the parent cache will not be called, and hence no record is generated.
+to `true`.
+
+### Connecting Events
 
 The next step is to connect these timing records into an event chain, potentially adding extra events to account 
 for the delay between access events. We first initialize a local `TimingRecord` object `tr`, and initialize this object 
-using information from the current request.
+using information from the current request. We leave the `startEvent` and the `endEvent` fields to `NULL`, which will
+be filled later.
+
+We first check whether the request hits on the current level by comparing `getDoneCycle - req.cycle` against `accLat`.
+Recall that `getDoneCycle` is the cycle `bcc` returns, and `req.cycle` is the cycle the request is made. If the difference
+between these two equals `accLat`, the only possibility is that no parent `access()` is called, neither by eviction
+nor by access, because otherwise the parent cache will add an extra `accLat` in addition to the current cache. This
+happens when the request hits the current level, or when the current level has the line but needs invalidation. Either
+case, we compute the overall access latency, `hitLat`, as `respCycle - req.cycle`, and create a `class HitEvent` object. 
+The `postDelay` of the hit event is set to `hitLat`, indicating that the tag array cannot be accessed for other purposes
+from the cycle the request is received, to the cycle the tag array lookup and invalidation completes. We also set both
+`startEvent` and the `endEvent` field of `tr` to the hit event, indicating that the current level is the last level
+of the , before we push
 
 ### Simulating MSHR
 
