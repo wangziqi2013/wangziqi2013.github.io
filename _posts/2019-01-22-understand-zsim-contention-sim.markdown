@@ -368,7 +368,8 @@ The access protocol, cache coherence and the locking protocol in the timing cach
 class cache. The only difference is that in a timing cache, the `processAccess()` method is passed one more extra argument,
 `getDoneCycle`, to return the cycle when the `bcc` finishes processing the get request, which can be the cycle the parent
 cache's `access()` returns in the case of a cache miss, or the same cycle passed to this function if the request is a hit. 
-In other words, when we call into the parent cache's `access()` method for a get request, two response cycles are returned.
+In other words, this cycle represents the earliest cycle the address tag to be accessed is present in the current cache.
+As a result, when we call into the parent cache's `access()` method for a get request, two response cycles are returned.
 The first cycle, `getDoneCycle`, represents the time when the block is delivered by the parent cache. The second cycle,
 `respCycle`, represents the time when the invalidation, if any, finishes. Note that these two can both occur, if, for example,
 a `GETX` request hits a `S` state line in the cache. The request must be forwarded to the parent cache with exclusive 
@@ -408,7 +409,9 @@ case, we compute the overall access latency, `hitLat`, as `respCycle - req.cycle
 The `postDelay` of the hit event is set to `hitLat`, indicating that the tag array cannot be accessed for other purposes
 from the cycle the request is received, to the cycle the tag array lookup and invalidation completes. We also set both
 `startEvent` and the `endEvent` field of `tr` to the hit event, indicating that the current level is the last level
-of the , before we push
+the access traverses in the hierarchy, before we push `tr` into the event recorder.
+
+If the latency between the request receival and the cycle where block is available 
 
 ### Simulating MSHR
 
