@@ -442,7 +442,7 @@ If eviction record is available, we also add eviction delay between `MissStartEv
 calling `connect()`. The start and end cycles are `req.cycle + accLat` and `evDoneCycle` respectively. Note that in contention
 simulation, the eviction event is considered to happen in parallel with the parent level `access()` method. As a result, 
 the latency of eviction is not added to the parent cache access path, but instead, as a parallel path with the access 
-event chain.
+event chain. The MSHR can only be released after both the parent `access()` and eviction finishes.
 
 ### Simulating MSHR
 
