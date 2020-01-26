@@ -432,9 +432,13 @@ the first half of the event chain. Note that if the delay is zero, no delay even
 (`NULL` value), we simply link `startEv` and `endEv` with a delay event of value `endCycle - startCycle` in-between. 
 
 The actual event connection is very simple: If an access record is returned by the parent level, we call `connect()`
-with the access timing record, and `MissStartEvent` object, `MissResponseEvent` as `startEv` and `endEv`. The `startCycle`
-and `endCycle` are `req.cycle + accLat` and `getDoneCycle` respectively. Note that we need of offset the start cycle
-by `accLat` cycles, since the `postDelay` of the `MissStartEvent` object already provides `accLat` delay.
+with the access timing record, and `MissStartEvent`, `MissResponseEvent` objects as `startEv` and `endEv` respectively. 
+The `startCycle` and `endCycle` are `req.cycle + accLat` and `getDoneCycle` respectively. Note that we need of offset 
+the start cycle by `accLat` cycles, since the `postDelay` of the `MissStartEvent` object already provides `accLat` delay. 
+We also directly connect the `MissWriteBackEvent` object to the `MissResponseEvent` object using `addChild()`, since the 
+response event does not incur any extra delay.
+
+If eviction record is available, we also add eviction delay between `MissStartEvent` and `MissWriteBackEvent` object
 
 ### Simulating MSHR
 
