@@ -359,7 +359,18 @@ of the `MemReq` object to identify the requesting core and to locate the event r
 
 ### The Timing Cache
 
-`class TimingCache` is a subclass of `class Cache`, defined in timing\_cache.h/cpp. In addition to the static timing
-model implemented in the base class, the timing cache also implements a weave phase contention model. Timing cache
-overrides the `access()` method of the base class cache to extend the semantics of accesses. Timing cache does not 
-model contention caused by invalidation or downgrade, and therefore `invalidate()` is not overridden.
+`class TimingCache` is a subclass of `class Cache`, defined in timing\_cache.h/cpp, which implements a weave phase contention 
+model in addition to the static timing model. Timing cache overrides the `access()` method of the base class cache to 
+extend the semantics of accesses. Timing cache does not model contention caused by invalidation or downgrade, and 
+therefore `invalidate()` is not overridden.
+
+The access protocol, cache coherence and the locking protocol in the timing cache remain almost the same as in the base 
+class cache. The only difference is that in a timing cache, the `processAccess()` method is passed one more extra argument,
+`getDoneCycle`, to return the cycle when the `bcc` finishes processing the get request, which can be the cycle the parent
+cache's `access()` returns in the case of a cache miss, or the same cycle passed to this function if the request is a hit. 
+In other words, when we call into the parent cache's `access()` method for a get request, two response cycles are returned.
+The first cycle, `getDoneCycle`, represents the time when the block is delivered by the parent cache. The second cycle,
+`respCycle`, represents the time when the invalidation, if any, finishes. Note that these two can both occur, if, for example,
+a `GETX` request hits a `S` state line in the cache. The request must be forwarded to the parent cache with exclusive 
+permission to upgrade state by calling `access()`, and after the parent access method returns, we send invalidations to
+other lower level caches to invalidate their copies of the `S` state line.
