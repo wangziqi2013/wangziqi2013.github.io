@@ -373,4 +373,6 @@ The first cycle, `getDoneCycle`, represents the time when the block is delivered
 `respCycle`, represents the time when the invalidation, if any, finishes. Note that these two can both occur, if, for example,
 a `GETX` request hits a `S` state line in the cache. The request must be forwarded to the parent cache with exclusive 
 permission to upgrade state by calling `access()`, and after the parent access method returns, we send invalidations to
-other lower level caches to invalidate their copies of the `S` state line.
+other lower level caches to invalidate their copies of the `S` state line. zSim does not assume that these two process
+can be overlapped, since in the `processAccess()` method of `class MESICC`, the `respCycle` from `bcc`'s `processAccess()`
+is passed to tcc's `processAccess()` as the start cycle.
