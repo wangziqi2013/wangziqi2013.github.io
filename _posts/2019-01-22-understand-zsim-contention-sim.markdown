@@ -322,7 +322,7 @@ independently by cores accessing a cache object during the bound phase. Events g
 clock of the core. Then, in the following weave phase(s), events from different cores are inserted into a single event queue, 
 which are then executed under the unified zll clock. 
 
-### Generating The Event Chain
+### Event Chain
 
 Before we discuss the cache timing model, we first give a brief overview of the process in which event chains are generated.
 A cache access transaction begins with an `access()` request of type `GETS` or `GETX` from the bottom level, which may 
