@@ -438,7 +438,10 @@ the start cycle by `accLat` cycles, since the `postDelay` of the `MissStartEvent
 We also directly connect the `MissWriteBackEvent` object to the `MissResponseEvent` object using `addChild()`, since the 
 response event does not incur any extra delay.
 
-If eviction record is available, we also add eviction delay between `MissStartEvent` and `MissWriteBackEvent` object
+If eviction record is available, we also add eviction delay between `MissStartEvent` and `MissWriteBackEvent` object by
+calling `connect()`. The start and end cycles are `req.cycle + accLat` and `evDoneCycle` respectively. Note that in contention
+simulation, the eviction event is considered to happen in parallel with the parent level `access()` method, since the latency
+of eviction is added to the parent cache access, but instead, as a parallel path with the access event chain.
 
 ### Simulating MSHR
 
