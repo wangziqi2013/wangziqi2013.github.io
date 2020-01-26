@@ -420,6 +420,16 @@ with lower priority. The second tag array is necessary, since the tag array and 
 accessed needs to be updated. This is also reflected by the fact that parent cache's `bcc` modifies child cache's 
 `MESIState` variable before the access method returns.
 
+In order to connect events into an event chain, the timing cache defines an in-line lambda function `connect()`, which
+takes a begin event `startEv`, an end event `endEv`, a begin cycle `startCycle`, an end cycle `endCycle`, and optionally 
+a previous timing record `r` to connect to. The `connect()` lambda function first inserts delays between the current start 
+event and the start event in the previous timing record by computing the difference between `reqCycle` of the timing 
+record and `startCycle`. This represents the time interval between `startEv` and `r->startEvent`. We then create a delay
+event `dUp`, whose delay value is the difference just computed, and connect `startEv` to the delay event. The delay
+event is then connected to `r->startEvent` to complete the first half of the event chain. Note that if the delay is zero,
+no delay event is created, and we directly connect `startEv` to `r->startEvent` instead. Similar connection is done for 
+`endEv` and `r->endEvent`.
+
 
 ### Simulating MSHR
 
