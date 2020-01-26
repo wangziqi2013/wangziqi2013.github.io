@@ -386,5 +386,12 @@ clean write backs in the form of `PUTS`. The coherence controller will simply di
 `access()` on the parent, and hence there will be no timing record in this case. The eviction timing record will
 be saved in local variable `writebackRecord`. The flag variable `hasWritebackRecord` will also be set to `true`.
 
+After processing eviction, the timing cache proceeds to process access by calling `cc->processAccess()`. After 
+this function returns with two cycles, we again check whether the current number of records in the event recorder
+is `initialRecords + 1`. If true, we know parent `access()` is called recursively to fetch the block or to perform
+a downgrade, in which case we pop the record, and save it into local variable `accessRecord` after setting `hasAccessRecord` 
+to `true`. Note that in most cases there should not be any timing record for access, since in the case of cache hits,
+the parent cache will not be called, and hence no record is generated.
 
+After collecting the timing record
 
