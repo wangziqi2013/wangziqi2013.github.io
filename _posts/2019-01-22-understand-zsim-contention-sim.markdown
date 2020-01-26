@@ -376,3 +376,15 @@ permission to upgrade state by calling `access()`, and after the parent access m
 other lower level caches to invalidate their copies of the `S` state line. zSim does not assume that these two process
 can be overlapped, since in the `processAccess()` method of `class MESICC`, the `respCycle` from `bcc`'s `processAccess()`
 is passed to tcc's `processAccess()` as the start cycle.
+
+In timing cache's access() method, we first remember the initial number of records in the event recorder before we 
+start the access protocol, and save it to `initialRecords`. Then, we perform locking, tag array lookup, and eviction
+as in the base class cache. After the `processEviction()` returns, we check whether the number of records in the 
+event recorder is `initialRecords + 1`. If true, then we have performed an `access()` call to the parent cache, resulting
+in the generation of an access record. Note that the current implementation of zSim coherence controller filters out
+clean write backs in the form of `PUTS`. The coherence controller will simply discard the request without calling 
+`access()` on the parent, and hence there will be no timing record in this case. The eviction timing record will
+be saved in local variable `writebackRecord`. The flag variable `hasWritebackRecord` will also be set to `true`.
+
+
+
