@@ -515,3 +515,11 @@ holds. First, if `C` is no smaller than `lastAccCycle + 1`, meaning that the tag
 for reasons that we will discuss below, but the essence does not change. In this case, we also update `lastAccCycle` to 
 `C` to indicate that future requests can only start from at least `C + 1`. 
 
+Second, if the first check fails, we then seek to schedule the low priority access at cycle `C - 1` by comparing 
+`lastFreeCycle` and `C - 1`. If these two are equal, then we take the free cycle by setting `lastFreeCycle` to zero,
+indicating that it cannot be used for scheduling another low priority access. Note that this slightly violates the 
+philosophy of DES, since we schedule an event "into the past" at cycle `C - 1` when the event itself is only executed 
+at cycle `C`. zSim author claims that such slight change of timing will not affect simulation result, since the 
+low priority access is often not on the critical path, but this simplifies scheduling of low priority events, since
+an event scheduled into the past will never be affected by any future decision. This is also the reason why we move the 
+simulation cycle forward by one cycle even if the access circuit is idle. 
