@@ -471,11 +471,17 @@ equivalent to blocking all pending requests until one MSHR is released by a prio
 
 ### Simulating Tag Lookup
 
-zSim assumes that the cache tag access circuit can only support one access for each cycle. Although each tag access may
+zSim assumes that the cache tag access circuit can only support one access on each cycle. Although each tag access may
 take more than one cycles (depending on `accLat`), it is assumed that the access process is pipelined, such that one 
 request can be processed each cycle. The tag access simulation needs to detect race conditions where more than one 
 access is requested, and postpone all but one requests to later cycles. 
 
 Recall that the tag array needs to be accessed twice for every miss access. One for the tag array lookup to determine if 
 the request hits a line in the current cache. The second access happens after the parent cache responded to update
-the address tag and/or the coherence state. Cache hits only access the array once
+the address tag and/or the coherence state. Cache hits, on the other hand, only access the array once at the beginning.
+zSim treats tag array lookup operation as high priority, and tag array update operation as low priority. High priority 
+accesses will be queued for a future cycle in the order they arrive, if they can not be fulfilled immediately. Low priority 
+accesses, on the other hand, are not queued with high priority ones for guaranteed completion. Instead, they are only 
+processed when the access circuit is idle. Starvation may happen temporarily to low priority accesses if requests keep 
+coming to the cache. This, however, will not lead to a permanent starvation, since no more high priority requests will 
+be handled after all MSHRs are occupied.
