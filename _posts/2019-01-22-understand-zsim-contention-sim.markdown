@@ -698,3 +698,9 @@ respectively for clock adjustment. Garbage collection is performed by calling `a
 as we have discussed above.
 
 ## OOOCore Contention Model
+
+To be continued...
+
+## Multi-Domain Contention Simulation
+
+To be continued...
