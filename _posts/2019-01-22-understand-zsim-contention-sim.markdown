@@ -485,3 +485,12 @@ accesses, on the other hand, are not queued with high priority ones for guarante
 processed when the access circuit is idle. Starvation may happen temporarily to low priority accesses if requests keep 
 coming to the cache. This, however, will not lead to a permanent starvation, since no more high priority requests will 
 be handled after all MSHRs are occupied.
+
+The timing cache provides two methods, `highPrioAccess` and `tryLowPrioAccess`, for modeling high and low priority accesses 
+respectively. `highPrioAccess` returns the cycle of completion of high piriority accesses, while `tryLowPrioAccess` may
+return zero indicating that the low priority access must wait until a future cycle in which no high priority access is
+pending. This future cycle cannot be known in advance. Imagine that if we schedule a low priority access at a future cycle 
+`F`, which is the nearest idle cycle at the time the access event is processed at cycle `C`. If another high priority 
+access is processed after `C` but before `F`, then the high priority access must be scheduled at cycle `F`, which makes 
+the previous scheduling of the low priority event invalid. 
+
