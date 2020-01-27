@@ -527,3 +527,16 @@ simulation cycle forward by one cycle even if the access circuit is idle.
 If neither condition is met, `tryLowPrioAccess` returns zero, and the low priority access will be re-enqueued at the next
 cycle to re-attempt access. Note that there is no pending queue for low priority accesses, since the condition of 
 unblocking a low priority access can only be known after a free interval is created.
+
+## Core Contention Model
+
+The core contention model consists of two aspects. The first aspect is bound and weave phase scheduling, which interleaves
+these two phases in a way such that inter-core skews are minimized. The second aspect is clock adjustment and event chain
+maintenance. We cover these two aspects in the following sections.
+
+### Bound-Weave Scheduling
+
+zSim schedules bound and weave phases after it has finished simulating a basic block. The scheduling decision is made
+in basic block call back fuction of the core. For `class TimingCore`, the function is `BblAndRecordFunc()`, while
+for `class OOOCore`, the function is `BblFunc()`. Other core types do not support weave phase timing model, and hence
+does not need the scheduling function.
