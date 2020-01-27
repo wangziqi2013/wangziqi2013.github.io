@@ -610,7 +610,7 @@ When the event is simulated, it also stores the actual start cycle in member var
 compute the extra number of cycles incurred by taking the difference between `startCycle` and `origStartCycle + gapCycle`,
 where `gapCycle` is the skew between the zll clock and the core's `curCycle` as we have discussed at the beginning of 
 this article. Besides, a timing core event also incurs a delay between the two events before and after it. This feature
-is used to model the static time period between two memory accesses.
+is used to model the static time period between two memory accesses. The event itself does not incur any extra delay, though.
 
 Note that whenever we need to specify a bound phase time point that will be possibly referred to in a later phase, we should 
 either use the zll clock to represent the time point, or adjust the value after each weave phase as `curCycle` is adjusted. 
@@ -629,6 +629,13 @@ in addition to the access record. Note that the function argument `startCycle` i
 rather than the response cycle. If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above 
 it, which is of type `GETS` or `GETX`. We compute the delay between the current access and the end event of the previous 
 access using `startCycle - prevRespCycle`, given that `prevRespCycle` is the bound phase cycle of the last event in the 
-previous event chain. We then create a new `TimingCoreEvent` object
+previous event chain. We then create a new `TimingCoreEvent` object with the delay value being what has been computed right
+above. The `origStartCycle` of the event is set to `prevRespCycle - gapCycles`, meaning that the event logically happens 
+in the same cycle as `prevRespCycle`. Note that weave phase simulation progress is only reported when a `TimingCoreEvent`
+event is executed, which is inserted only at cache event chain boundaries. This implies that we do not know the progress 
+of simulation within the event chain of a cache access. In other words, if the weave simulation terminates while it is 
+inside the event chain of a cache access, events that are after the most recently simulated `TimingCoreEvent` object will 
+not be reported.
+
 
 ### OOOCore Event Chain
