@@ -451,14 +451,14 @@ be only from the same way as the new line to be inserted.
 
 ### Simulating MSHR
 
-Miss Status Handling Register (MSHRs) buffer the status of outstanding cache misses, if a cache request cannot be processed
-on the current level, which results in sending a request to the parent level. There are only a limited number of MSHRs
-on real hardware, which may incur resource hazards when multiple requests are processed in parallel. If MSHRs become the 
-bottleneck, entries in the load/store queue will be stalled until a MSHR is released. zSim models MSHR and the stall
-effect by postponing the execution of MSHR acquisition events, as we will see below.
+Miss Status Handling Register (MSHRs) buffer the status of outstanding cache accesses, no matter whether the access is a 
+cache hit or miss. There are only a limited number of MSHRs on real hardware, which may incur resource hazards when multiple 
+requests are processed in parallel. If MSHRs become the bottleneck, entries in the load/store queue will be stalled until 
+a MSHR is released. zSim models MSHR and the stall effect by postponing the execution of MSHR acquisition events, as we 
+will see below.
 
-The `MissStartEvent` and `MissWriteBackEvent` collaboratively simulate MSHR using a member variable of `class TimingCache`,
-`activeMisses`. When the `MissStartEvent` is simulated, we first check whether `activeMisses` equals `numMSHRs`,
+`HitEvent`, `MissStartEvent` and `MissWriteBackEvent` collaboratively simulate MSHR using a member variable of `class TimingCache`,
+`activeMisses`. When a `MissStartEvent` or `HitEvent` is simulated, we first check whether `activeMisses` equals `numMSHRs`,
 another member variable of `class TimingCache` which is initialized from option `mshrs` in the configuration file. If true,
 the miss start event cannot be simulated at the current cycle, in which case we simply call `hold()` to change the state
 of the event to `EV_HELD` (recall that states are only used for assertion), and then insert it into `pendingQueue`. The 
@@ -474,4 +474,8 @@ equivalent to blocking all pending requests until one MSHR is released by a prio
 zSim assumes that the cache tag access circuit can only support one access for each cycle. Although each tag access may
 take more than one cycles (depending on `accLat`), it is assumed that the access process is pipelined, such that one 
 request can be processed each cycle. The tag access simulation needs to detect race conditions where more than one 
-access is requested, and postpone all but one requests to later cycles.
+access is requested, and postpone all but one requests to later cycles. 
+
+Recall that the tag array needs to be accessed twice for every miss access. One for the tag array lookup to determine if 
+the request hits a line in the current cache. The second access happens after the parent cache responded to update
+the address tag and/or the coherence state. Cache hits only access the array once
