@@ -648,11 +648,26 @@ of a cache access. In other words, if the weave simulation terminates while it i
 events that are after the most recently simulated `TimingCoreEvent` object will not be reported. This implies that 
 `lastEventSimulated` actually points to the last `TimingCoreEvent` simulated, rather than the last event.
 
+### The First Event Ever Simulated
+
+In the previous discussion, we assumed that there is always a previous event chain, which is pointed to by `prevRespEvent`.
+This may not always be true without special care being taken, since if a weave phase exhausted all events in the 
+core's event chain, then during the next bound phase, `prevRespEvent` will be undefined. This issued can be solved as 
+long as the core always create an artificial placeholder event that is guaranteed not to be simulated by the weave phase 
+right before it starts, and move `prevRespEvent` to point to that event (which is indeed what zSim does; see below). The 
+question is, when the simulator is just started, which event should we use as `prevRespEvent`?
+
 ### Timing Core Simulation Start and End
 
 In this section we cover how weave phase starts and ends with the core event chain. We do not cover join/leave meahcnism
-of the thread scheduler, which is essentially a technique to avoid deadlocks on system calls. We also disregard the core 
-state machine, since it is unrelated to normal execution.
+of the thread scheduler, which is essentially a technique to avoid deadlocks on blocking system calls. We also disregard 
+the core state machine, since it is unrelated to normal execution. In the following discussion we assume the core state 
+is always `RUNNING`, and that `notifyJoin` and `notifyLeave()` are never called after thread initialization.
+
+
+
+Before weave phase starts, the core function `cSimStart()` is called by `class ContentionSim`'s method function, 
+`simulatePhase()`. Similarly, `cSimEnd()` is called after the weave phase completes. 
 
 
 
