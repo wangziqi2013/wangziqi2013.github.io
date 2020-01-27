@@ -508,3 +508,10 @@ is no pending request). There are two possibilities when we schedule a high prio
 In the second case, `lastAccCycle + 1` is smaller than simulation cycle `C`, in which case there is at least one free 
 cycle between the last and the current access. We update `lastFreeCycle` to `C - 1` to indicate that there is a free 
 cycle at time `C - 1` that can be used to probably schedule a low priority event, regardless of what happens in the future.
+
+When a low priority access is simulated at cycle `C`, the access can be processed immediately if one of the two following 
+holds. First, if `C` is no smaller than `lastAccCycle + 1`, meaning that the tag access circuit is currently idle at cycle
+`C`, then the low priority access can be granted. In the actual code, all cycles are moved backwards by one (minus one) 
+for reasons that we will discuss below, but the essence does not change. In this case, we also update `lastAccCycle` to 
+`C` to indicate that future requests can only start from at least `C + 1`. 
+
