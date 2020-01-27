@@ -393,6 +393,10 @@ is `initialRecords + 1`. If true, we know parent `access()` is called recursivel
 a downgrade, in which case we pop the record, and save it into local variable `accessRecord` after setting `hasAccessRecord` 
 to `true`.
 
+Note that zSim only simulates cache contention and resource hazard on shared, non-terminal caches. L1 terminal cache and 
+the virtual private cache must be declared to be of type `Simple` in the configuration file. This suggests that in most 
+cases, cache access will not generate any event chain due to the fact that L1 filters out most traffic to shared caches.
+
 ### Connecting Events
 
 The next step is to connect these timing records into an event chain, potentially adding extra events to account 
