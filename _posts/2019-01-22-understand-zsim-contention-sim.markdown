@@ -609,7 +609,8 @@ stores the zll clock in which it is generated and linked into the core event cha
 When the event is simulated, it also stores the actual start cycle in member variable `startCycle`. We can therefore 
 compute the extra number of cycles incurred by taking the difference between `startCycle` and `origStartCycle + gapCycle`,
 where `gapCycle` is the skew between the zll clock and the core's `curCycle` as we have discussed at the beginning of 
-this article.
+this article. Besides, a timing core event also incurs a delay between the two events before and after it. This feature
+is used to model the static time period between two memory accesses.
 
 Note that whenever we need to specify a bound phase time point that will be possibly referred to in a later phase, we should 
 either use the zll clock to represent the time point, or adjust the value after each weave phase as `curCycle` is adjusted. 
@@ -623,10 +624,11 @@ which is more complicated than simply using the zll cycle.
 
 ### Timing Core Event Chain
 
-The core recorder's method `recordAccess()` first checks the stack bottom to determine whether it is the first or second 
-case discussed above. Note that the function argument `startCycle` is the cycle the cache access is started, rather than 
-the response cycle. If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above it, which is 
-of type `GETS` or `GETX`. We compute the delay between the current access and the end event of the previous access
-using `startCycle - prevRespCycle`, given that `prevRespCycle` is the bound phase cycle of the previous .
+The core recorder's method `recordAccess()` first checks the stack bottom to determine whether an eviction record is present
+in addition to the access record. Note that the function argument `startCycle` is the cycle the cache access is started, 
+rather than the response cycle. If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above 
+it, which is of type `GETS` or `GETX`. We compute the delay between the current access and the end event of the previous 
+access using `startCycle - prevRespCycle`, given that `prevRespCycle` is the bound phase cycle of the last event in the 
+previous event chain. We then create a new `TimingCoreEvent` object
 
 ### OOOCore Event Chain
