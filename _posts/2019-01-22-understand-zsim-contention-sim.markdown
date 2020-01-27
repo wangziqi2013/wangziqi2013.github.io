@@ -590,8 +590,13 @@ The core recorder object `cRec` is of type `class CoreRecorder`, defined in core
 private L1 cache, which does not generate any event chain, as we have discussed above. If, however, the request misses 
 the L1 cache, then two possibilities might occur. In the first case, the L1 cache fetches a block from the L2 by calling 
 `access()`, without an eviction. In this case, there would be only one timing record in the event recorder, which is of 
-type `GETS` or `GETX`. In the second case, . In both cases, `record()` will call `recordAccess()` to handle the event 
-chain.
+type `GETS` or `GETX`. In the second case, the L1 first evicts a block to the L2 by calling `access()`, and then fetches 
+the target block from the L2 by calling `access()` again. The L1 itself will not connect these two event chains, since L1
+caches are always non-timing cache. Recall that the event recorder behaves like a LIFO stack, and that the cache access 
+protocol always evicts a line before the new line is fetched. In this case, we know the top of the timing record stack 
+must be a `GETS` or `GETX` record, and the stack bottom is a `PUTS` (impossible for inclusive caches) or `PUTX` record. 
+In both cases, `record()` will call `recordAccess()` to handle the event chain.
+
 
 
 ### OOOCore Event Chain
