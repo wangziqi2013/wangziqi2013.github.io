@@ -462,8 +462,11 @@ The `MissStartEvent` and `MissWriteBackEvent` collaboratively simulate MSHR usin
 another member variable of `class TimingCache` which is initialized from option `mshrs` in the configuration file. If true,
 the miss start event cannot be simulated at the current cycle, in which case we simply call `hold()` to change the state
 of the event to `EV_HELD` (recall that states are only used for assertion), and then insert it into `pendingQueue`. The 
-`pendingQueue` is nothing more than a list of events that are currently held waiting for MSHRs. When `MissWriteBackEvent`
-is simulated at cycle `C`, if the tag update succeeds (see below), concluding the cache access, we decrement `activeMisses` 
-by one, which releases the MSHR being used by the current request. 
+`pendingQueue` is nothing more than a list of events that are currently held waiting for MSHRs. 
+
+When `MissWriteBackEvent` is simulated at cycle `C`, if the tag update succeeds (see below), concluding the cache access, 
+we decrement `activeMisses` by one, which releases the MSHR being used by the current request. Then we iterate over 
+the pending queue, and re-insert all cache access start events held waiting for MSHR into cycle `C + 1`. This is 
+equivalent to blocking all pending requests until one MSHR is released by a prior request.
 
 ### Simulating Tag Lookup
