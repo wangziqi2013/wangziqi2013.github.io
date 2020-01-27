@@ -629,9 +629,13 @@ in addition to the access record. Note that the function argument `startCycle` i
 rather than the response cycle. If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above 
 it, which is of type `GETS` or `GETX`. We compute the delay between the current access and the end event of the previous 
 access using `startCycle - prevRespCycle`, given that `prevRespCycle` is the bound phase cycle of the last event in the 
-previous event chain. We then create a new `TimingCoreEvent` object with the delay value being what has been computed right
+previous event chain. We then create a new `TimingCoreEvent` object `ev` with the delay value being what has been computed right
 above. The `origStartCycle` of the event is set to `prevRespCycle - gapCycles`, meaning that the event logically happens 
-in the same cycle as `prevRespCycle`. Note that weave phase simulation progress is only reported when a `TimingCoreEvent`
+in the same cycle as `prevRespCycle`. We then connect `ev` to both the put and get access event chain, via two delay
+events `dr` and `dr1` respectively. The delay values are simply the difference between the request begin cycle and 
+`startCycle`. 
+
+Note that weave phase simulation progress is only reported when a `TimingCoreEvent`
 event is executed, which is inserted only at cache event chain boundaries. This implies that we do not know the progress 
 of simulation within the event chain of a cache access. In other words, if the weave simulation terminates while it is 
 inside the event chain of a cache access, events that are after the most recently simulated `TimingCoreEvent` object will 
