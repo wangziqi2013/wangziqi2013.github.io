@@ -470,3 +470,8 @@ the pending queue, and re-insert all cache access start events held waiting for 
 equivalent to blocking all pending requests until one MSHR is released by a prior request.
 
 ### Simulating Tag Lookup
+
+zSim assumes that the cache tag access circuit can only support one access for each cycle. Although each tag access may
+take more than one cycles (depending on `accLat`), it is assumed that the access process is pipelined, such that one 
+request can be processed each cycle. The tag access simulation needs to detect race conditions where more than one 
+access is requested, and postpone all but one requests to later cycles.
