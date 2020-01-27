@@ -571,7 +571,7 @@ depending on the size of the basic block (or the length of the memory access). T
 introduces a delay of `k > 1` intervals, although very unlikely since the static delay should be modeled in the bound 
 phase.
 
-### Core Recorder
+### Timing Core Recorder
 
 The core itself also maintains an event chain, which connects all memory accesses made by the core in the order that they
 are performed. The core may also add extra events to ensure proper ordering of actions within its pipeline, or to track
@@ -610,6 +610,14 @@ When the event is simulated, it also stores the actual start cycle in member var
 compute the extra number of cycles incurred by taking the difference between `startCycle` and `origStartCycle + gapCycle`,
 where `gapCycle` is the skew between the zll clock and the core's `curCycle` as we have discussed at the beginning of 
 this article.
+
+Note that whenever we need to specify a time point across bound and weave phases, the zll clock should be used instead of
+the core's `curCycle`. In the above case, we use the zll clock to express `origStartCycle`, rather than using the logical 
+core clock. Recall that events generated in a bound phase may not be all simulated in the next weave phase due to some
+events being enqueued into cycles belonging to the next interval. If the core's logical clock were used, the `origStartCycle`
+would need to be updated also as the core adjusts its `curCycle`, because in this case, `origStartCycle` is directly derived 
+from `curCycle`. This suggests that the core should track and update all `TimingCoreEvent` objects it has generated but 
+not yet simulated, which is more complicated than simply using the zll cycle.
 
 `recordAccess()` first checks the stack bottom to determine whether it is the first or second case discussed above.
 If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above it, which is of type `GETS`
