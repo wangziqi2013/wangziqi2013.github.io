@@ -444,6 +444,16 @@ simulation, the eviction event is considered to happen in parallel with the pare
 the latency of eviction is not added to the parent cache access path, but instead, as a parallel path with the access 
 event chain. The MSHR can only be released after both the parent `access()` and eviction finishes.
 
+Note that the `cands > ways` branch is irrelevant for normal timing caches. This branch takes care of the timing for 
+evaluating [ZCache](https://people.csail.mit.edu/sanchez/papers/2010.zcache.micro.pdf), which is a cache organization 
+proposal from MIT. Normal timing caches always have `cands` equals `ways`, meaning that the replacement candidates must
+be only from the same way as the new line to be inserted. 
+
 ### Simulating MSHR
+
+The `MissStartEvent`, `MissResponseEvent` and `MissWriteBackEvent` simulate MSHR using a member variable of `class TimingCache`,
+`activeMisses`. When the `MissStartEvent` is simulated at cycle `C`, we first check 
+
+`mshrs` in the configuration file.
 
 ### Simulating Tag Lookup
