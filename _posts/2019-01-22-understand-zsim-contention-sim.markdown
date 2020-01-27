@@ -637,11 +637,14 @@ events `dr` and `dr1` respectively. The delay values are simply the difference b
 cycle of the last event in the access event chain, respectively. The eviction event chain will not be connected to any 
 later events. They are only simulated to model contention with access events.
 
-Note that weave phase simulation progress is only reported when a `TimingCoreEvent`
-event is executed, which is inserted only at cache event chain boundaries. This implies that we do not know the progress 
-of simulation within the event chain of a cache access. In other words, if the weave simulation terminates while it is 
-inside the event chain of a cache access, events that are after the most recently simulated `TimingCoreEvent` object will 
-not be reported.
+If only an access record is in the core recorder, then we connect the access record after `prevRespCycle` in the same 
+manner as described above using `TimingCoreEvent` and delay events. The only difference is that the `TimingCoreEvent`
+object has only one child, instead of two.
+
+Note that weave phase simulation progress is only reported when a `TimingCoreEvent` object is executed, which is inserted 
+only at cache event chain boundaries. This implies that we do not know the progress of simulation within the event chain 
+of a cache access. In other words, if the weave simulation terminates while it is inside the event chain of a cache access, 
+events that are after the most recently simulated `TimingCoreEvent` object will not be reported.
 
 
 ### OOOCore Event Chain
