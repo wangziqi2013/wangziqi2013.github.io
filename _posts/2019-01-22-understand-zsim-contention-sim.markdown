@@ -587,6 +587,11 @@ if any, onto the core's event chain.
 The core recorder object `cRec` is of type `class CoreRecorder`, defined in core\_recorder.h/cpp. Its member function
 `record()` is called every time after a `load()` and `store()` returns. This function checks the per-core event recorder
 (note that event recorder is not the core recorder). In most cases, the access will either hit the filter cache or the 
-private L1 cache, which does not generate any event chain (zSim only models non-timing L1 cache, as shown in init.cpp).
+private L1 cache, which does not generate any event chain, as we have discussed above. If, however, the request misses 
+the L1 cache, then two possibilities might occur. In the first case, the L1 cache fetches a block from the L2 by calling 
+`access()`, without an eviction. In this case, there would be only one timing record in the event recorder, which is of 
+type `GETS` or `GETX`. In the second case, . In both cases, `record()` will call `recordAccess()` to handle the event 
+chain.
+
 
 ### OOOCore Event Chain
