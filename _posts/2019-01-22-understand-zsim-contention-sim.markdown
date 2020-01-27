@@ -494,3 +494,9 @@ pending. This future cycle cannot be known in advance. Imagine that if we schedu
 access is processed after `C` but before `F`, then the high priority access must be scheduled at cycle `F`, which makes 
 the previous scheduling of the low priority event invalid. 
 
+In order to model the queuing effect of high priority accesses, the timing cache maintains a member variable `lastAccCycle`,
+to represent the scheduling cycle of the last high priority access. When a high priority access event is processed,
+it compares the simulation cycle `C` with `lastAccCycle + 1`. If the latter is larger, then the event must be queued for
+`lastAccCycle - C` cycles before it is handled by hardware.
+
+The timing cache also
