@@ -633,7 +633,9 @@ previous event chain. We then create a new `TimingCoreEvent` object `ev` with th
 above. The `origStartCycle` of the event is set to `prevRespCycle - gapCycles`, meaning that the event logically happens 
 in the same cycle as `prevRespCycle`. We then connect `ev` to both the put and get access event chain, via two delay
 events `dr` and `dr1` respectively. The delay values are simply the difference between the request begin cycle and 
-`startCycle`. 
+`startCycle`. In the last step, we update both `prevRespEvent` and `prevRespCycle` to the event object and the bound phase
+cycle of the last event in the access event chain, respectively. The eviction event chain will not be connected to any 
+later events. They are only simulated to model contention with access events.
 
 Note that weave phase simulation progress is only reported when a `TimingCoreEvent`
 event is executed, which is inserted only at cache event chain boundaries. This implies that we do not know the progress 
