@@ -523,3 +523,7 @@ at cycle `C`. zSim author claims that such slight change of timing will not affe
 low priority access is often not on the critical path, but this simplifies scheduling of low priority events, since
 an event scheduled into the past will never be affected by any future decision. This is also the reason why we move the 
 simulation cycle forward by one cycle even if the access circuit is idle. 
+
+If neither condition is met, `tryLowPrioAccess` returns zero, and the low priority access will be re-enqueued at the next
+cycle to re-attempt access. Note that there is no pending queue for low priority accesses, since the condition of 
+unblocking a low priority access can only be known after a free interval is created.
