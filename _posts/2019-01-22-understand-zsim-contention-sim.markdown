@@ -499,4 +499,12 @@ to represent the scheduling cycle of the last high priority access. When a high 
 it compares the simulation cycle `C` with `lastAccCycle + 1`. If the latter is larger, then the event must be queued for
 `lastAccCycle - C` cycles before it is handled by hardware.
 
-The timing cache also
+The timing cache also tracks the current "interval" of busy cycles using a member variable `lastFreeCycle`. An interval
+of busy cycles will form if we schedule one access right after the other. This can be a result of queuing requests and 
+schedule them in the future, or just lucky timing (i.e. an event arrived just after the last one is finished and there
+is no pending request). There are two possibilities when we schedule a high priority access. In the first case,
+`lastAccCycle + 1` is larger than simulation cycle `C`, meaning we must queue the current request to the future cycle
+`lastAccCycle + 1`, and there will be no free cycle between the previous tag access and the current one.
+In the second case, `lastAccCycle + 1` is smaller than simulation cycle `C`, in which case there is at least one free 
+cycle between the last and the current access. We update `lastFreeCycle` to `C - 1` to indicate that there is a free 
+cycle at time `C - 1` that can be used to probably schedule a low priority event, regardless of what happens in the future.
