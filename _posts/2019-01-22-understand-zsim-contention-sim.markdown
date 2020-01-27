@@ -684,12 +684,17 @@ must be in the event queue during normal operatio, in order to avoid calling `qu
 `prevRespEvent` is also updated to the newly added event.
 
 Note that even though we insert a timing core event at the end of the interval, it is not guaranteed to be executed
-during the incoming weave phase. This happens if contention simulation incurs extra delay on the event chain. In this case,
+during the incoming weave phase. This can happen if contention simulation incurs extra delay on the event chain. In this case,
 the simulation might stop before it executes the timing core event orignally inserted at `prevRespCycle`, since this cycle 
 might now be larger than the end of interval cycle on zll lock due to contention delay. As a consequence, the core recorder 
 will not be reported to in the current weave phase, which may cause underestimation of the clock adjustment value. This
 will happen if events between the last `TimingCoreEvent` simulated by the weave phase and the one inserted at the interval 
 end also incur extra delay due to contention.
+
+After the weave phase, `cSimEnd()` is called with `curCycle` of the core. We compute the clock skew by subtracting the 
+original start cycle relative to `curCycle`, `lastEventSimulated->origStartCycle + gapCycles`, from the actual cycle it 
+is simulated, which is `lastEventSimulated->startCycle`. The skew is then added onto `curCycle`, `gapCycles` and `prevRespCycle`
+respectively for clock adjustment.
 
 
 ### OOOCore Event Chain
