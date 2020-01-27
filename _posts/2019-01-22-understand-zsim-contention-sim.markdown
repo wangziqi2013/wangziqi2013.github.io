@@ -672,11 +672,24 @@ of the thread scheduler, which is essentially a technique to avoid deadlocks on 
 the core state machine, since it is unrelated to normal execution. In the following discussion we assume the core state 
 is always `RUNNING`, and that `notifyJoin` and `notifyLeave()` are never called after thread initialization.
 
-
-
 Before weave phase starts, the core function `cSimStart()` is called by `class ContentionSim`'s method function, 
-`simulatePhase()`. Similarly, `cSimEnd()` is called after the weave phase completes. 
+`simulatePhase()`. Similarly, `cSimEnd()` is called after the weave phase completes. In `cSimStart()`, the core recorder
+concludes the current bound phase by inserting a `TimingCoreEvent` at `curCycle` with delay `curCycle - prevRespCycle`. 
+Logically speaking, this timing core event starts at `prevRespCycle` reporting the simulated cycle of the last event in 
+the most recent cache access event chain. `prevRespEvent` and `prevRespCycle` are updated accordingly. Then, the core 
+reocrder inserts a second `TimingCoreEvent` after the previous one, at `curCycle` (by setting delay to zero). This event
+is guaranteed not to be simulated in the incoming weave phase, since `curCycle` is already larger than or equal to the 
+interval end cycle at this stage. The second timing core event is added to maintain the invariant that at least one event 
+must be in the event queue during normal operatio, in order to avoid calling `queue()` except in `notifyJoin()`.
+`prevRespEvent` is also updated to the newly added event.
 
+Note that even though we insert a timing core event at the end of the interval, it is not guaranteed to be executed
+during the incoming weave phase. This happens if contention simulation incurs extra delay on the event chain. In this case,
+the simulation might stop before it executes the timing core event orignally inserted at `prevRespCycle`, since this cycle 
+might now be larger than the end of interval cycle on zll lock due to contention delay. As a consequence, the core recorder 
+will not be reported to in the current weave phase, which may cause underestimation of the clock adjustment value. This
+will happen if events between the last `TimingCoreEvent` simulated by the weave phase and the one inserted at the interval 
+end also incur extra delay due to contention.
 
 
 ### OOOCore Event Chain
