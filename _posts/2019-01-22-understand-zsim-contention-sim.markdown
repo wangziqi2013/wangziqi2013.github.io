@@ -650,12 +650,20 @@ events that are after the most recently simulated `TimingCoreEvent` object will 
 
 ### The First Event Ever Simulated
 
-In the previous discussion, we assumed that there is always a previous event chain, which is pointed to by `prevRespEvent`.
-This may not always be true without special care being taken, since if a weave phase exhausted all events in the 
-core's event chain, then during the next bound phase, `prevRespEvent` will be undefined. This issued can be solved as 
-long as the core always create an artificial placeholder event that is guaranteed not to be simulated by the weave phase 
-right before it starts, and move `prevRespEvent` to point to that event (which is indeed what zSim does; see below). The 
-question is, when the simulator is just started, which event should we use as `prevRespEvent`?
+In the previous discussion, we assumed that there is always a previous event chain, the last event of which is pointed 
+to by `prevRespEvent`. This may not always be true without special care being taken, since if a weave phase exhausted all 
+events in the core's event chain, then during the next bound phase, `prevRespEvent` will be undefined. This issued can 
+be solved as long as the core always create an artificial placeholder event that is guaranteed not to be simulated by the 
+weave phase right before it starts, and move `prevRespEvent` to point to that event (which is indeed what zSim does; see 
+below). The question is, when the simulator is just started, which event should we use as `prevRespEvent`?
+
+In fact, PIN intercepts the request when application threads are spawned. These threads will call `notifyJoin()` of the 
+core recorder for first-time initialization (this function is also called on other occasions, but we ignore them for now).
+Cores are initialized at `HALTED` state. `notifyJoin()` creates a `TimingCoreEvent` of zero delay, and sets `prevRespEvent` 
+to the event object. This event is then inserted into the queue by calling `queue()`. After this point, as long as the 
+core does not leave the scheduler barrier by calling `notifyLeave()`, it is guaranteed that at least one event of the 
+core event chain is in the queue, the completion of which will drive the simulation forward. As a result, the timing event 
+method `queue()` never needs to be called during normal operation.
 
 ### Timing Core Simulation Start and End
 
