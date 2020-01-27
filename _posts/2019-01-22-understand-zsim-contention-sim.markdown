@@ -635,7 +635,8 @@ in the same cycle as `prevRespCycle`. We then connect `ev` to both the put and g
 events `dr` and `dr1` respectively. The delay values are simply the difference between the request begin cycle and 
 `startCycle`. In the last step, we update both `prevRespEvent` and `prevRespCycle` to the event object and the bound phase
 cycle of the last event in the access event chain, respectively. The eviction event chain will not be connected to any 
-later events. They are only simulated to model contention with access events.
+later events. They are only simulated to model contention with access events. The event recorder is also cleared after
+events are connected.
 
 If only an access record is in the core recorder, then we connect the access record after `prevRespCycle` in the same 
 manner as described above using `TimingCoreEvent` and delay events. The only difference is that the `TimingCoreEvent`
@@ -644,7 +645,15 @@ object has only one child, instead of two.
 Note that weave phase simulation progress is only reported when a `TimingCoreEvent` object is executed, which is inserted 
 only at cache event chain boundaries. This implies that we do not know the progress of simulation within the event chain 
 of a cache access. In other words, if the weave simulation terminates while it is inside the event chain of a cache access, 
-events that are after the most recently simulated `TimingCoreEvent` object will not be reported.
+events that are after the most recently simulated `TimingCoreEvent` object will not be reported. This implies that 
+`lastEventSimulated` actually points to the last `TimingCoreEvent` simulated, rather than the last event.
+
+### Timing Core Simulation Start and End
+
+In this section we cover how weave phase starts and ends with the core event chain. We do not cover join/leave meahcnism
+of the thread scheduler, which is essentially a technique to avoid deadlocks on system calls. We also disregard the core 
+state machine, since it is unrelated to normal execution.
+
 
 
 ### OOOCore Event Chain
