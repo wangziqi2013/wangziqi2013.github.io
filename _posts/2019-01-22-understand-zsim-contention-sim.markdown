@@ -532,7 +532,7 @@ If neither condition is met, `tryLowPrioAccess` returns zero, and the low priori
 cycle to re-attempt access. Note that there is no pending queue for low priority accesses, since the condition of 
 unblocking a low priority access can only be known after a free interval is created.
 
-## Core Contention Model
+## Timing Core Contention Model
 
 The core contention model consists of two aspects. The first aspect is bound and weave phase scheduling, which interleaves
 these two phases in a way such that inter-core skews are minimized. The second aspect is clock adjustment and event chain
@@ -571,7 +571,7 @@ depending on the size of the basic block (or the length of the memory access). T
 introduces a delay of `k > 1` intervals, although very unlikely since the static delay should be modeled in the bound 
 phase.
 
-### Timing Core Recorder
+### Core Recorder
 
 The core itself also maintains an event chain, which connects all memory accesses made by the core in the order that they
 are performed. The core may also add extra events to ensure proper ordering of actions within its pipeline, or to track
@@ -622,7 +622,7 @@ all simulated in the next weave phase due to some events being enqueued into cyc
 This would suggest that the core should track and update all `TimingCoreEvent` objects it has generated but not yet simulated, 
 which is more complicated than simply using the zll cycle.
 
-### Timing Core Event Chain
+### Core Event Chain
 
 The core recorder's method `recordAccess()` first checks the stack bottom to determine whether an eviction record is present
 in addition to the access record. Note that the function argument `startCycle` is the cycle the cache access is started, 
@@ -665,7 +665,7 @@ core does not leave the scheduler barrier by calling `notifyLeave()`, it is guar
 core event chain is in the queue, the completion of which will drive the simulation forward. As a result, the timing event 
 method `queue()` never needs to be called during normal operation.
 
-### Timing Core Simulation Start and End
+### Contention Simulation Start and End
 
 In this section we cover how weave phase starts and ends with the core event chain. We do not cover join/leave meahcnism
 of the thread scheduler, which is essentially a technique to avoid deadlocks on blocking system calls. We also disregard 
@@ -694,7 +694,7 @@ end also incur extra delay due to contention.
 After the weave phase, `cSimEnd()` is called with `curCycle` of the core. We compute the clock skew by subtracting the 
 original start cycle relative to `curCycle`, `lastEventSimulated->origStartCycle + gapCycles`, from the actual cycle it 
 is simulated, which is `lastEventSimulated->startCycle`. The skew is then added onto `curCycle`, `gapCycles` and `prevRespCycle`
-respectively for clock adjustment.
+respectively for clock adjustment. Garbage collection is performed by calling `advance()` on the per-core event recorder
+as we have discussed above.
 
-
-### OOOCore Event Chain
+## OOOCore Contention Model
