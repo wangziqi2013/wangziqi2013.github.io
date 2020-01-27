@@ -451,9 +451,12 @@ be only from the same way as the new line to be inserted.
 
 ### Simulating MSHR
 
-The `MissStartEvent`, `MissResponseEvent` and `MissWriteBackEvent` simulate MSHR using a member variable of `class TimingCache`,
-`activeMisses`. When the `MissStartEvent` is simulated at cycle `C`, we first check 
+Miss Status Handling Register (MSHRs) buffer the status of outstanding cache misses, if a cache request cannot be processed
+on the current level, which results in sending a request to the parent level. There are only a limited number of MSHRs
+on real hardware, which may incur resource hazards when multiple requests are processed in parallel. If MSHRs become the 
+bottleneck, entries in the load/store queue will be stalled until a MSHR is released. zSim models MSHR and the stall
+effect by postponing the execution of MSHR acquisition events, as we will see below.
 
-`mshrs` in the configuration file.
+
 
 ### Simulating Tag Lookup
