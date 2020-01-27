@@ -611,18 +611,22 @@ compute the extra number of cycles incurred by taking the difference between `st
 where `gapCycle` is the skew between the zll clock and the core's `curCycle` as we have discussed at the beginning of 
 this article.
 
-Note that whenever we need to specify a bound phase time point that will be possibly referred to in a later phase, the 
-zll clock should be used instead of the core's `curCycle`, in order to make sure that the time point is also adjusted
-implicitly by `gapCycle`. In the above case, we use the zll clock to express `origStartCycle`, rather than using the 
-logical score clock. Recall that events generated in a bound phase may not be all simulated in the next weave phase due 
-to some events being enqueued into cycles belonging to the next interval. If the core's logical clock were used, the 
-`origStartCycle` would need to be updated also as the core adjusts its `curCycle`, because in this case, `origStartCycle` 
-is directly derived from `curCycle` using a constant offset, and it should be adjusted whenever `curCycle` is adjusted. 
+Note that whenever we need to specify a bound phase time point that will be possibly referred to in a later phase, we should 
+either use the zll clock to represent the time point, or adjust the value after each weave phase as `curCycle` is adjusted. 
+For example, in the above discussion, `prevRespCycle` is adjusted every time `curCycle` is adjusted, which is easy to
+do since they are both member variables of the core. For `origStartCycle` in `TimingCoreEvent` objects, however, we use 
+the zll clock ather than the logical core clock. The reason is that If the core's logical clock were used, the `origStartCycle` 
+would need to be updated also as the core adjusts its `curCycle`, because events generated in a bound phase may not be 
+all simulated in the next weave phase due to some events being enqueued into cycles belonging to the next interval.
 This would suggest that the core should track and update all `TimingCoreEvent` objects it has generated but not yet simulated, 
 which is more complicated than simply using the zll cycle.
 
-`recordAccess()` first checks the stack bottom to determine whether it is the first or second case discussed above.
-If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above it, which is of type `GETS`
-or `GETX`. 
+### Timing Core Event Chain
+
+The core recorder's method `recordAccess()` first checks the stack bottom to determine whether it is the first or second 
+case discussed above. Note that the function argument `startCycle` is the cycle the cache access is started, rather than 
+the response cycle. If the stack bottom is of type `PUTS` or `PUTX`, we know there is one more record above it, which is 
+of type `GETS` or `GETX`. We compute the delay between the current access and the end event of the previous access
+using `startCycle - prevRespCycle`, given that `prevRespCycle` is the bound phase cycle of the previous .
 
 ### OOOCore Event Chain
