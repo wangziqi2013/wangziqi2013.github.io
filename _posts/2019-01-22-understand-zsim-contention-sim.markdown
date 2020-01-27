@@ -564,9 +564,25 @@ Note that the scheduling of bound and weave phase is only an attempt from the co
 Unbounded skew can still be introduced, for example, if the core simulates a long basic block (or memory access) which 
 advances the `curCycle` by `k > 1` intervals, the clock skew between the core and other cores can be arbitrarily large 
 depending on the size of the basic block (or the length of the memory access). The same worst case happens if an event 
-introduces a delay of `k > 1` intervals, although very unlikely since the static delay should be modeled in the bound phase. 
-
+introduces a delay of `k > 1` intervals, although very unlikely since the static delay should be modeled in the bound 
+phase.
 
 ### TimingCore Event Chain
+
+The core itself also maintains an event chain, which connects all memory accesses made by the core in the order that they
+happen. The core may also add extra events to ensure proper ordering of actions within its pipeline if it has one. In this 
+section we discuss the event chain of `class TimingCore`, which is relatively simpler. We discuss the more complicated 
+event chain of `class OOOCore` in the next section. 
+
+Recall that timing cores assume IPC = 1 except for memory instructions. Memory instructions invoke cache `load()` and 
+`store()`, which simulates both static timing and contention if the core is connected to timing caches. In `class TimingCore`, 
+function `loadAndRecord()` and `storeAndRecord()` perform memory operation. In addition to calling the underlying filter 
+cache's methods, these two functions invoke the core recorder, `cRec`, to connect the event chain produced by the access, 
+if any, onto the core's event chain. 
+
+The core recorder object `cRec` is of type `class CoreRecorder`, defined in core\_recorder.h/cpp. Its member function
+`record()` is called every time after a `load()` and `store()` returns. This function checks the per-core event recorder
+(note that event recorder is not the core recorder). In most cases, the access will either hit the filter cache or the 
+private L1 cache, which does not generate any event chain (zSim only models non-timing L1 cache, as shown in init.cpp).
 
 ### OOOCore Event Chain
