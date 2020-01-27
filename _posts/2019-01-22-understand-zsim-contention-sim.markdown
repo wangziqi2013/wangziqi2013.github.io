@@ -540,3 +540,12 @@ zSim schedules bound and weave phases after it has finished simulating a basic b
 in basic block call back fuction of the core. For `class TimingCore`, the function is `BblAndRecordFunc()`, while
 for `class OOOCore`, the function is `BblFunc()`. Other core types do not support weave phase timing model, and hence
 does not need the scheduling function.
+
+The core object maintains a variable `phaseEndCycle`, which is nothing more than a copy of the zll clock. Every time 
+after we made a scheduling decision, this clock is incremented by the interval size, `zinfo->phaseLength`, indicating 
+that the core enters the next interval. When a basic block finishes simulation in the bound phase, we check whether 
+`curCycle` is larger than or equal to `phaseEndCycle`. If negative, this function returns, giving the control flow back 
+to the application code. If the condition is true, meaning that we have already simulated more cycles than the interval 
+size in the contention-free bound phase, the weave phase will be scheduled to simulate contention. As we have discussed
+above, the core calls `TakeBarrier()`, blocking itself until all other cores finish their bound phases, after which the
+weave phase threads are waken up to perform DES.
