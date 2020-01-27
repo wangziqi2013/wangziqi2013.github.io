@@ -457,6 +457,13 @@ on real hardware, which may incur resource hazards when multiple requests are pr
 bottleneck, entries in the load/store queue will be stalled until a MSHR is released. zSim models MSHR and the stall
 effect by postponing the execution of MSHR acquisition events, as we will see below.
 
-
+The `MissStartEvent` and `MissWriteBackEvent` collaboratively simulate MSHR using a member variable of `class TimingCache`,
+`activeMisses`. When the `MissStartEvent` is simulated, we first check whether `activeMisses` equals `numMSHRs`,
+another member variable of `class TimingCache` which is initialized from option `mshrs` in the configuration file. If true,
+the miss start event cannot be simulated at the current cycle, in which case we simply call `hold()` to change the state
+of the event to `EV_HELD` (recall that states are only used for assertion), and then insert it into `pendingQueue`. The 
+`pendingQueue` is nothing more than a list of events that are currently held waiting for MSHRs. When `MissWriteBackEvent`
+is simulated at cycle `C`, if the tag update succeeds (see below), concluding the cache access, we decrement `activeMisses` 
+by one, which releases the MSHR being used by the current request. 
 
 ### Simulating Tag Lookup
