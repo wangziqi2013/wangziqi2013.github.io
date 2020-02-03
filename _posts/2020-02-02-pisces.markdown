@@ -22,3 +22,8 @@ consistent with data dependencies (also transaction's serialization order) to av
 For SI, however, only write-write conflicts are detected, and transactions are ordered by the order that they overwrite
 data items. This prevents reading transactions from being blocked by a pending writing transaction it reads from, which
 decreases transaction commit latency.
+
+The paper assumes a baseline MVCC model as follows. Transactions maintain a private write set for storing uncommitted data.
+Data items are maintained as a linked list of versions, each having a timestamp indicating the commit time of the transaction
+that creates it. A global timestamp counter maintains the current logical time. On transaction begin, the transaction 
+reads the value of the global timestamp counter as the begin timestamp, bts. 
