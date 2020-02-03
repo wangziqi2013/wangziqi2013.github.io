@@ -32,4 +32,8 @@ On transactional reads, the version chain of the data item is traversed until th
 or equal to the bts is reached. This version is then accessed directly from the version chain to fulfill the read. For writes,
 the version chain is traversed in the same manner as in reads. The version is duplicated in the private buffer of the writing
 thread, before it can be updated by the write. If the data item is already in the buffer, then writes will be performed
-on the data item without traversing the version chain. 
+on the data item without traversing the version chain. On commit, the transaction first locks all modified data items by
+acquiring locks on the version chain. The lock blocks only concurrent commits, but not reader threads, since versions 
+are immutable. After all data items are locked, the transaction validates itself by checking whether any other transaction
+has committed on the locked items since it has started. This is done by comparing whether the latest commit timestamp
+is larger than bts. If true, the transaction detected a write-write conflict, which leads to an abort. 
