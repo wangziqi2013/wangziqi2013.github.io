@@ -25,5 +25,11 @@ decreases transaction commit latency.
 
 The paper assumes a baseline MVCC model as follows. Transactions maintain a private write set for storing uncommitted data.
 Data items are maintained as a linked list of versions, each having a timestamp indicating the commit time of the transaction
-that creates it. A global timestamp counter maintains the current logical time. On transaction begin, the transaction 
-reads the value of the global timestamp counter as the begin timestamp, bts. 
+that creates it. Only committed version is stored in the version chain. Uncommitted versions is buffered privately as described
+above. A global timestamp counter maintains the current logical time. On transaction begin, the transaction reads the value 
+of the global timestamp counter as the begin timestamp, bts. The bts is used when accessing data items for read and writes. 
+On transactional reads, the version chain of the data item is traversed until the oldest version whose timestamp is smaller than
+or equal to the bts is reached. This version is then accessed directly from the version chain to fulfill the read. For writes,
+the version chain is traversed in the same manner as in reads. The version is duplicated in the private buffer of the writing
+thread, before it can be updated by the write. If the data item is already in the buffer, then writes will be performed
+on the data item without traversing the version chain. 
