@@ -33,7 +33,8 @@ or equal to the bts is reached. This version is then accessed directly from the 
 the version chain is traversed in the same manner as in reads. The version is duplicated in the private buffer of the writing
 thread, before it can be updated by the write. If the data item is already in the buffer, then writes will be performed
 on the data item without traversing the version chain. On commit, the transaction first locks all modified data items by
-acquiring locks on the version chain. The lock blocks only concurrent commits, but not reader threads, since versions 
-are immutable. After all data items are locked, the transaction validates itself by checking whether any other transaction
+acquiring locks on the version chain. The lock blocks both concurrent commits and accesses, the reason of which will be 
+explained below. After all data items are locked, the transaction validates itself by checking whether any other transaction
 has committed on the locked items since it has started. This is done by comparing whether the latest commit timestamp
-is larger than bts. If true, the transaction detected a write-write conflict, which leads to an abort. 
+is larger than bts. If true, the transaction detected a write-write conflict, which leads to an abort. If not, the transaction
+first writes a redo log to the NVM for persistence. After the redo log is 
