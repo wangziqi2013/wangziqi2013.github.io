@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "Pisces: A Scalable and Efficient Persistent Transactional Memory"
+date:   2020-02-02 23:02:00 -0500
+categories: paper
+paper_title: "Pisces: A Scalable and Efficient Persistent Transactional Memory"
+paper_link: https://www.usenix.org/system/files/atc19-gu_0.pdf
+paper_keyword: NVM; Transaction; Pisces
+paper_year: USENIX ATC 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
