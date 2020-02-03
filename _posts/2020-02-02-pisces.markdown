@@ -41,4 +41,9 @@ transaction first acquires a commit timestamp, cts, by atomically incrementing t
 as cts. To ensure failure-atomicity of updates, the transaction then writes a redo log to the NVM for persistence. The 
 redo log consists of dirty data items it has created in the write buffer. After the redo log is persisted, the transaction
 updates version chain by copying updated versions with its cts as version timestamp. In the last step, the transaction
-releases all locks in the write set, and completes. On recovery
+releases all locks in the write set, and completes. On recovery, redo logs are replayed in the order of the commit timestamp
+to reflect the correct write ordering.
+
+The paper identifies two issues with the above simple MVCC model. First, traversing version chains has a large overhead,
+both because the reader thread must examine a large number of version timestamps, but also because the pointer chasing 
+and the resulting cache misses. 
