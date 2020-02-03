@@ -54,3 +54,9 @@ write set is most likely not atomic. If reader threads are not blocked, then it 
 an incorrect version simply because the committing transaction has not updated the version chain to add its own version 
 yet. In the above transaction model, the reader transaction must wait for the committing transaction to fully add its 
 write set to the version chain before it can proceed to read.
+
+Pisces solves the above two issues by adapting the following. First, only two versions are allowed, one current version,
+another newer version. The current version is accessed in-place as the data item is normally stored. The newer version exists
+in a transactional-local log, which is exposed to readers after the writing transaction commits. At most one pointer chasing
+is required to find the correct version to read. To avoid having threads reading even older and non-existing versions,
+when we update the current version in-place, we must wait for such threads to exit before the current version is updated.
