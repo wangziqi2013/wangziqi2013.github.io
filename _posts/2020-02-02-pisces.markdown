@@ -36,5 +36,9 @@ on the data item without traversing the version chain. On commit, the transactio
 acquiring locks on the version chain. The lock blocks both concurrent commits and accesses, the reason of which will be 
 explained below. After all data items are locked, the transaction validates itself by checking whether any other transaction
 has committed on the locked items since it has started. This is done by comparing whether the latest commit timestamp
-is larger than bts. If true, the transaction detected a write-write conflict, which leads to an abort. If not, the transaction
-first writes a redo log to the NVM for persistence. After the redo log is 
+is larger than bts. If true, the transaction has detected a write-write conflict, which leads to an abort. If not, the 
+transaction first acquires a commit timestamp, cts, by atomically incrementing the global counter, and uses the new value 
+as cts. To ensure failure-atomicity of updates, the transaction then writes a redo log to the NVM for persistence. The 
+redo log consists of dirty data items it has created in the write buffer. After the redo log is persisted, the transaction
+updates version chain by copying updated versions with its cts as version timestamp. In the last step, the transaction
+releases all locks in the write set, and completes. On recovery
