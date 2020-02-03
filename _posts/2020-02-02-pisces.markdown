@@ -60,3 +60,7 @@ another newer version. The current version is accessed in-place as the data item
 in a transactional-local log, which is exposed to readers after the writing transaction commits. At most one pointer chasing
 is required to find the correct version to read. To avoid having threads reading even older and non-existing versions,
 when we update the current version in-place, we must wait for such threads to exit before the current version is updated.
+To solve the second problem, we no longer associate a commit timestamp with every data item. Instead, versions (in fact,
+only the newer version) only contain a pointer to the transaction that has created it. When the commit timestamp is updated,
+we only update the commit timestamp field in the transaction descriptor, which can be done atomically. The timestamp of 
+version can then be read by following the pointer to the transaction descriptor in which the cts can be found, if exists.
