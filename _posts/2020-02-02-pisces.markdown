@@ -15,5 +15,10 @@ version_mgmt:
 
 This paper presents Pisces, a software transactional memory design for Non-Volatile DIMM. Pisces uses a limited form
 of multiversion concurrency control (MVCC) protocol, dual version concurrency control (DVCC), to implement snapshot-isolation
-(SI) transactional semantics. The paper points out that SI is feasible for NVM, since unlike serializable transactions,
-read-write dependencies do not need to be observed on recovery. Otherwise
+(SI) transactional semantics. The paper points out that SI is feasible for NVM compared with serializability in terms of 
+blocked readers. For serializable semantics, readers must wait for a dirty data item to be fully persisted and the transaction 
+to be committed, before the read transaction does. On recovery, the logs of transactions must be replayed on the order 
+consistent with data dependencies (also transaction's serialization order) to avoid incorrectly overwriting a value. 
+For SI, however, only write-write conflicts are detected, and transactions are ordered by the order that they overwrite
+data items. This prevents reading transactions from being blocked by a pending writing transaction it reads from, which
+decreases transaction commit latency.
