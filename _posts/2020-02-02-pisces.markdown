@@ -46,4 +46,11 @@ to reflect the correct write ordering.
 
 The paper identifies two issues with the above simple MVCC model. First, traversing version chains has a large overhead,
 both because the reader thread must examine a large number of version timestamps, but also because the pointer chasing 
-and the resulting cache misses. 
+and the resulting cache misses. The second issue is that readers are still blocked while a transaction commits on the 
+data item it intends to read. This is because the committing transaction acquires the commit timestamp before it persists
+the write set. After the cts is acquired, all later transactions shuold be able to read committed data of the committing 
+transaction. This, however, may not always be possible, since the operation of updating version chains for the entire 
+write set is most likely not atomic. If reader threads are not blocked, then it is possible that the thread accesses
+an incorrect version simply because the committing transaction has not updated the version chain to add its own version 
+yet. In the above transaction model, the reader transaction must wait for the committing transaction to fully add its 
+write set to the version chain before it can proceed to read.
