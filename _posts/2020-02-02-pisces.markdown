@@ -72,4 +72,8 @@ a newer version, which represents a version created by a later thread. Both vers
 the current version can be accessed for write. The current version contains the object itself, and a pointer to the newer
 version object. The pointer is set to NULL if there is no newer version. The pointer is also used as lock for blocking
 concurrent writers. Pisces eagerly locks data items to be updated during the read phase, which eliminates the need for 
-validation, at the cost of slightly lower parallelism.
+validation, at the cost of slightly lower parallelism. The newer version object contains a pointer to the transaction's
+descriptor for accessing the commit timestamp of the version, as we have discussed above. In addition, the object contains
+a "persist timestamp", pts, to indicate log replay order during crash recovery. A pointer of the original current object 
+is also included in the newer version object. The newer object is mapped to NVM logging area, while the current object
+is mapped to the process's persistent heap as usual.
