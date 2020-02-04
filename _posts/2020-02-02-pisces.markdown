@@ -129,3 +129,8 @@ can no longer be accessed after the pointer is removed from the current version.
 as inaccessible when the next writer on the same object commits. The newer version can be removed after the commit of 
 the next writing transaction, since it also waits for earlier threads (started before its cts) to exit before commit 
 concludes.
+
+After all log entries of a transaction is marked as invalid, the entire transaction's log can be reclaimed for GC. This,
+however, must be done in the order indicated by their persistence timestamp, since otherwise we may miss a later update
+with larger pts, while we apply an earlier update. The paper proposes an epoch-based approach for reclaiming transaction
+logs. We do not cover it here, since it is just commonly used epoch-based reclamation.
