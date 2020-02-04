@@ -83,4 +83,11 @@ status variable. The descriptor is stored in shared DRAM area, which will be acc
 current transaction.
 
 Pisces operates as follows. Transaction begin does not change as in the baseline MVCC model. In addition, the transaction
-also initialiozes
+also initializes the desdriptor by setting bts to the bts acquired from the global counter, and setting cts to positive 
+infinity. This is to ensure that objects created by this transaction is invisible to concurrent reading transactions before
+cts is set to the actual commit timestamp. On transactional reads, the instrumented read instruction first checks whether 
+the pointer of the current object is NULL. If true, then there is no second version to read, and we access the current version.
+Otherwise, we find the new version object, as well as the transaction descriptor. We compare the writer transaction's cts
+against the current cts. If the latter is larger, then we read the newer version, since the writer transaction has committed,
+and it is serialized before the current transaction in terms of SI. If the latter is smaller, however, the writer has not
+committed yet, and we still read the current version.
