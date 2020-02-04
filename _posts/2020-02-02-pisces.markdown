@@ -113,3 +113,12 @@ the race condition from happening, the paper proposes using a lock variable "inC
 concurrent reading transactions. "inCritical" is set to true before the transaction updates the global counter and cts
 in its descriptor, and to false after this is done (a fence may also be needed, as implied by the pseudocode in the paper).
 
+After the logical commit, the transaction then flushes the write set into the log using cache line flushes and a persistence 
+barrier. The cts in the descriptor is also written at the end of the log to indicate that the log object is completed (otherwise
+if system crashes while we are flushing the log, we may not be able to distinguish the integrity of the log). At this point, 
+the transaction is also logically committed with regard to failures. 
+
+To conclude the commit process, the transaction then writes back new version to the current version after older transactions
+that can still access the current version exit. These older transactions have a begin timestamp smaller than the current 
+commit timestamp. Write back is performed by copying the new version back to the current version, and clearing the 
+pointer in the current version. This also unblocks pending writers on the object, if any. 
