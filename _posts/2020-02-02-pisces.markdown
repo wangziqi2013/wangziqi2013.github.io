@@ -134,3 +134,7 @@ After all log entries of a transaction is marked as invalid, the entire transact
 however, must be done in the order indicated by their persistence timestamp, since otherwise we may miss a later update
 with larger pts, while we apply an earlier update. The paper proposes an epoch-based approach for reclaiming transaction
 logs. We do not cover it here, since it is just commonly used epoch-based reclamation.
+
+On recovery, transaction logs are located by inspecting each transaction's local data. Logs are applied in the order 
+indicated by their pts. Earlier log entries are applied first, followed by later entries. The system can resume execution
+after the log replay process.
