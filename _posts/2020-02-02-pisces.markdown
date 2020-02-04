@@ -91,3 +91,9 @@ Otherwise, we find the new version object, as well as the transaction descriptor
 against the current cts. If the latter is larger, then we read the newer version, since the writer transaction has committed,
 and it is serialized before the current transaction in terms of SI. If the latter is smaller, however, the writer has not
 committed yet, and we still read the current version.
+
+On transactional writes, we check the pointer in the current version as well. If the pointer is non-empty, the transaction
+will abort immediately, since there is an uncommitted writer, incurring an eager write-write conflict. Otherwise, the 
+transaction allocates a log entry on the NVM as the newer version, and attempts to install the pointer using atomic CAS.
+If the CAS succeeds, the object is successfully locked by the current transaction, granting full access permission until
+transaction commit. Otherwise, the transaction should abort. 
