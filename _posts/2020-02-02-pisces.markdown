@@ -77,3 +77,10 @@ descriptor for accessing the commit timestamp of the version, as we have discuss
 a "persist timestamp", pts, to indicate log replay order during crash recovery. A pointer of the original current object 
 is also included in the newer version object. The newer object is mapped to NVM logging area, while the current object
 is mapped to the process's persistent heap as usual.
+
+Each transaction has a descriptor which stores the metadata of the transaction, including its begin ts, commit ts, and a 
+status variable. The descriptor is stored in shared DRAM area, which will be accessed by other transactions during the 
+current transaction.
+
+Pisces operates as follows. Transaction begin does not change as in the baseline MVCC model. In addition, the transaction
+also initialiozes
