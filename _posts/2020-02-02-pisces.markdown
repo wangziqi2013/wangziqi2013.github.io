@@ -63,4 +63,13 @@ when we update the current version in-place, we must wait for such threads to ex
 To solve the second problem, we no longer associate a commit timestamp with every data item. Instead, versions (in fact,
 only the newer version) only contain a pointer to the transaction that has created it. When the commit timestamp is updated,
 we only update the commit timestamp field in the transaction descriptor, which can be done atomically. The timestamp of 
-version can then be read by following the pointer to the transaction descriptor in which the cts can be found, if exists.
+the newer version can then be read by following the pointer to the transaction descriptor in which the cts can be found, 
+if exists.
+
+We describe the data structure of versions and transaction descriptors as follows. In Pisces, at most two versions are 
+maintained for each data item, one current version, which represents the last stable (committed) image of the object, and 
+a newer version, which represents a version created by a later thread. Both versions can be accessed for read, but only
+the current version can be accessed for write. The current version contains the object itself, and a pointer to the newer
+version object. The pointer is set to NULL if there is no newer version. The pointer is also used as lock for blocking
+concurrent writers. Pisces eagerly locks data items to be updated during the read phase, which eliminates the need for 
+validation, at the cost of slightly lower parallelism.
