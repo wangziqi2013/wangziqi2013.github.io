@@ -96,4 +96,17 @@ On transactional writes, we check the pointer in the current version as well. If
 will abort immediately, since there is an uncommitted writer, incurring an eager write-write conflict. Otherwise, the 
 transaction allocates a log entry on the NVM as the newer version, and attempts to install the pointer using atomic CAS.
 If the CAS succeeds, the object is successfully locked by the current transaction, granting full access permission until
-transaction commit. Otherwise, the transaction should abort. 
+transaction commit. Otherwise, the transaction should abort. The current version is then duplicated in the newer version, 
+and all later reads and updates are also made to the newer version. The transaction also maintains a set of pointers to 
+the newer versions as its write set.
+
+On transaction commit, no validation is performed, since objects are locked as soon as they are updated. The transaction
+can commit without any further action, if the write set is empty. This is a huge advantage compared with serializable 
+transactional memory, since read-only transactions constitute a non-negligible part of total transactions. The committing
+transaction obtains the cts via an atomic fetch-increment of the global counter. The transaction logically commits by setting
+the cts in the transaction descriptor using the commit timestamp. Note that there is a short window after the global counter
+is updated and before cts in the descriptor is set, in which new transactions could start, read the object, finding the 
+object being invisible since the cts has not been set yet. In this case the new version will be ignored, since the 
+cts is still infinity. This is, however, incorrect, since the timestamp of the new transaction equals the commit 
+time of the current transaction, suggesting that the new version should be visible to the new transaction. To prevent
+the race condition from happening, the paper proposes using 
