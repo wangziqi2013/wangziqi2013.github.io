@@ -122,3 +122,10 @@ To conclude the commit process, the transaction then writes back new version to 
 that can still access the current version exit. These older transactions have a begin timestamp smaller than the current 
 commit timestamp. Write back is performed by copying the new version back to the current version, and clearing the 
 pointer in the current version. This also unblocks pending writers on the object, if any. 
+
+The newer version should not be removed after transaction commit, since there can potentially be threads started after 
+the logical commit and before the completion of the commit process accessing the newer version. In theory, a log entry 
+can no longer be accessed after the pointer is removed from the current version. In practice, Pisces treats all log objects
+as inaccessible when the next writer on the same object commits. The newer version can be removed after the commit of 
+the next writing transaction, since it also waits for earlier threads (started before its cts) to exit before commit 
+concludes.
