@@ -46,4 +46,13 @@ detection, Pangolin appends a checksum field to every user object and metadata o
 checksum algorithm is `Adler32` instead of more commonly used `CRC32` for its support of incremental checksum update. 
 This is extremely important when the object is large, and the partial update is relatively small compared with the object 
 size. In this case, CRC32 requires rescanning the entire object to compute the checksum, while Adler32 can derive the 
-new checksum only using partial updates. 
+new checksum only using partial updates. For data correction, Pangolin uses parity chunks to fix single chunk corruption.
+Chunks are organized into a logical two dimensional array, consisting of chunk rows and chunk columns. The chunk row
+size `S` is a configurable parameter when the DAX file is initialized. Beginning from the first chunk in the DAX file,
+`S` adjacent chunks constitute a chunk row, and chunks from different rows that are of the same offset constitute a chunk 
+column. Pangolin dedicate the last chunk row to store parity data for chunk columns before them. The last chunk row is not
+read on normal operations, and will be used to restore the corrupted chunk on detection of errors.
+Multiple corruptions, however, cannot be corrected using parity. The paper suggests that this is very unlikely, and that
+Pangolin does not support correcting multiple chunks in the same chunk column. This can be solved by duplicating data
+into another device or partition, which is out of the scope of the paper.
+
