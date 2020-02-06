@@ -35,5 +35,9 @@ Pangolin is based on an object level persistence library called `libpmemobj`. Th
 which maps a file stored on NVM into virtual address space. Application programs, however, are not allowed to directly
 write into the DAX file for the purpose of redundancy verification and update. The DAX file is divided into chunks, which
 is used for memory allocation within the heap. Metadata and data are both stored in the DAX file, the details of which
-are not covered in the paper. Before an object is accessed, 
+are not covered in the paper. Before an object is accessed, it must be opened using a library call, and after all updates
+the object should be committed into NVM using another library call. The library supports two modes, one object mode which
+only guarantees eight byte atomic update, and another transactional mode which supports multi-word atomic updates with
+higher persistence overhead. To support relocation of DAX mapped objects, all pointers are represented in relative format 
+using object IDs. A library call translates object IDs to pointers that can be used by applications to address the object.
 
