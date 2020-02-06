@@ -63,3 +63,11 @@ data on NVM (recall that Pangolin disallows updating NVM directly by application
 object is copied into the micro buffer. The computed checksum is then compared with the one in the object header to 
 see if they match or not. If they do not match, data corruption is detected, and online recovery is triggered. We postpone
 the process of online recovery to later paragraphs for clarity.
+
+Reads and writes onto the object must be conducted using the library call as well to record modified ranges on the object
+image. These information is stored in the micro buffer header for later access. Objects in the DRAM micro buffer are protected 
+from buffer overflow and invalid array indexing using canary bytes inserted around the object. These canary bytes have random
+values which are duplicated in the micro buffer header also. The library checks the value of these bytes when the object
+is committed to the NVM for possible overwrites. Software bugs can be detected and fixed this way if the two values mismatch.
+
+To update the parity on commit, the 
