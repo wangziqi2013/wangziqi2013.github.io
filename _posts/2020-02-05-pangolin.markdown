@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Pangolin: A Fault-Tolerant Persistent Memory Programming Library"
+date:   2020-02-05 20:33:00 -0500
+categories: paper
+paper_title: "Pangolin: A Fault-Tolerant Persistent Memory Programming Library"
+paper_link: https://www.usenix.org/system/files/atc19-zhang-lu.pdf
+paper_keyword: NVM; Pangolin; Redo Logging
+paper_year: USENIX ATC 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
