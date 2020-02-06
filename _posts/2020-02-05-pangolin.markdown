@@ -41,9 +41,9 @@ only guarantees eight byte atomic update, and another transactional mode which s
 higher persistence overhead. To support relocation of DAX mapped objects, all pointers are represented in relative format 
 using object IDs. A library call translates object IDs to pointers that can be used by applications to address the object.
 
-Pangolin uses a combination of checksum and parity to ensure detection and correction of data corruption. For corruption
+Pangolin uses a combination of checksum and parity to ensure detection and correction of data corruption. For data corruption
 detection, Pangolin appends a checksum field to every user object and metadata object residing in the mapped file. The 
 checksum algorithm is `Adler32` instead of more commonly used `CRC32` for its support of incremental checksum update. 
 This is extremely important when the object is large, and the partial update is relatively small compared with the object 
 size. In this case, CRC32 requires rescanning the entire object to compute the checksum, while Adler32 can derive the 
-new checksum only using partial updates.
+new checksum only using partial updates. 
