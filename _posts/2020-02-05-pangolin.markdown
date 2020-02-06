@@ -75,4 +75,10 @@ During normal operation, if the signal is received, the library will imemdiately
 also remap the fauly hardware page to another address. Such remapping needs to be kept persistent, such that between
 system reboots the faulty page will not be reused.
 
-To update the parity on commit, the 
+Read only objects can be opened without allocating a micro buffer. This forfeits the one-time checksum verification
+on object open. The paper suggests that read-only object can be verified by a background scrubbling process, or verify
+the object on each access. 
+
+We next cover parity update. On transaction or object commit, the library first writes redo log records to the NVM
+logging area, and then apply updates to the object in-place. The log is cleared after object updates are fully persisted.
+Note that only affected ranges are updated, while untouched data is not written. The library then
