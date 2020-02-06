@@ -26,6 +26,9 @@ This paper assumes the collaboration between the hardware error detection mechan
 replies on ECC bits to detect errors, but cannot fix them. On detection of data corruption, an interrupt called 
 Machine Check Exception is raised by the hardware to the processor. The processor forwards the interrupt to the OS, which 
 further raises a SIGBUS error to the application. The default SIGBUS signal handler will force the application to exit
-to avoid the error being propagated.
+to avoid the error being propagated. The OS will also take measures to remap the corrupted hardware page to another physical
+location using the ACPI interface. These corupted pages will be marked as "poisoned" by the OS using page protection
+mechanism to avoid future reads and writes. Currently all error checking mechanism works on page level, since this is the 
+basic unit of memory mapping in most cases.
 
 Pangolin is based on an object level persistence library called `libpmemobj`.
