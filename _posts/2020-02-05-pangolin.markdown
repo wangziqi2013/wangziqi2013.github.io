@@ -99,3 +99,9 @@ this short window, then parity and data will be inconsistent. Pangolin does not 
 data to reduce write amplification. On a post-crash recovery, it is assumed that parity bits are all corrupted, which 
 will be recomputed using data pages. The paper argues that the chance of two corrupted pages in the same chunk column 
 after a crash is very low, giving justification to preferring performance over correctness guarantee.
+
+The post-crash recovery of Pangolin is not different from other redo log based systems. The recovery procedure first
+attempts to locate the redo log in the log buffer. If the log is completed, then it is replayed in-place. Otherwise,
+the log has not been fully persisted before the crash, and we know in-place data is still consistent. After log replay,
+parity pages are recomputed, assuming that data pages are always correct. If SIGBUS is raised at this point, then Pangolin
+admits a unrecoverable error, which forces the application to stop.
