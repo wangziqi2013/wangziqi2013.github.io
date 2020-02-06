@@ -17,7 +17,12 @@ This paper proposes Pangolin, a software library providing redundancy and repair
 The paper identifies two causes of data corruptions in NVM-based systems. The first reason is hardware error, which can 
 be either medium error, or faulty firmware. This type of error can be detected by internal ECC circult, which is reported
 to the processor via interrupts. The second reason is software error, which happens when a bug in the library overwrites
-a piece of memory it should not have modified. Such type of errors cannot be caught by hardware
+a piece of memory it should not have modified. Such type of errors cannot be caught by hardware, since the hardware does
+not recognize logical errors in the software level. The goal of the design is to find and correct most errors of these 
+two types. The paper also suggests that compared with prior proposals, Pangolin uses less space, is more efficient, 
+and ssupports online error detection. 
 
 This paper assumes that the underlying hardware may suffer from data corruption due to missing writes or faulty mapping 
 hardware. The hardware provides error detection mechanism using ECC to .
+
+Pangolin is based on an object level persistence library called `libpmemobj`.
