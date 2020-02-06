@@ -70,4 +70,9 @@ from buffer overflow and invalid array indexing using canary bytes inserted arou
 values which are duplicated in the micro buffer header also. The library checks the value of these bytes when the object
 is committed to the NVM for possible overwrites. Software bugs can be detected and fixed this way if the two values mismatch.
 
+The third way of detecting errors is to rely on OS's SIGBUS signal. The library overrides the signal handler on initialization.
+During normal operation, if the signal is received, the library will imemdiately enter recovery procedure. The OS should 
+also remap the fauly hardware page to another address. Such remapping needs to be kept persistent, such that between
+system reboots the faulty page will not be reused.
+
 To update the parity on commit, the 
