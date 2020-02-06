@@ -105,3 +105,8 @@ attempts to locate the redo log in the log buffer. If the log is completed, then
 the log has not been fully persisted before the crash, and we know in-place data is still consistent. After log replay,
 parity pages are recomputed, assuming that data pages are always correct. If SIGBUS is raised at this point, then Pangolin
 admits a unrecoverable error, which forces the application to stop.
+
+Online correction of data corruption is triggered when corruption is reported by either the OS, the background scrubbling
+thread, or the library itself. The correction thread first sets a "freeze" bit in the DAX file to prevent new transactions 
+from starting. In addition, it waits for all current threads to exit. This is to guarantee that the correction thread has 
+full permission for accessing the parity chunk row, because otherwise we may read partially inconsistent parity data. 
