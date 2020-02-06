@@ -81,4 +81,13 @@ the object on each access.
 
 We next cover parity update. On transaction or object commit, the library first writes redo log records to the NVM
 logging area, and then apply updates to the object in-place. The log is cleared after object updates are fully persisted.
-Note that only affected ranges are updated, while untouched data is not written. The library then
+Note that only affected ranges are updated, while untouched data is not written. Checksums are not treated differently
+by the library; They are just like normal data that is updated transactionally. The library then computes new parity for
+affected chunks, and update the parity chunk using bitwise XOR. There are two issues in the above naive algorithm. 
+The first issue is that if multiple transactions are updating the parity concurrently, the parity itself might be corrupted
+due to lost updates. The paper proposes using atomic XOR instructions that are implemented on modern processors. Each
+updating transaction first computes the XOR between old and new data, and they apply the result to the parity chunk
+using atomic XOR. Since XOR operations are commutative, the net result is equivalent to updating the parity chunk with
+both updates. The paper also proposes using vectorized XOR, which is not atomic on most architectures, to reduce the 
+overhead of atomicity (e.g. implicit atomic barrier). These instructions are more efficient, but extra measures must be 
+taken to serialize concurrent transactions. It is suggested
