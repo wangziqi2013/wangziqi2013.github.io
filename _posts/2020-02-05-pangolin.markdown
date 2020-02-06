@@ -93,3 +93,9 @@ overhead of atomicity (e.g. implicit atomic barrier). These instructions are mor
 taken to serialize concurrent transactions. It is suggested that per-chunk reader-writer locks being used to update parity 
 chunks. If the region is small, then atomic XOR is used, and reader lock is acquired. If the region is large, then we 
 use vectorized instruction to update parity, but acquire write lock for exclusiveness.
+
+The second issue is that there is a short window between atomic data update and parity update. If the system crashes within
+this short window, then parity and data will be inconsistent. Pangolin does not try to update parity bits atomically with
+data to reduce write amplification. On a post-crash recovery, it is assumed that parity bits are all corrupted, which 
+will be recomputed using data pages. The paper argues that the chance of two corrupted pages in the same chunk column 
+after a crash is very low, giving justification to preferring performance over correctness guarantee.
