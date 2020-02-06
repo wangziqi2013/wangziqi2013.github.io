@@ -22,7 +22,10 @@ not recognize logical errors in the software level. The goal of the design is to
 two types. The paper also suggests that compared with prior proposals, Pangolin uses less space, is more efficient, 
 and ssupports online error detection. 
 
-This paper assumes that the underlying hardware may suffer from data corruption due to missing writes or faulty mapping 
-hardware. The hardware provides error detection mechanism using ECC to .
+This paper assumes the collaboration between the hardware error detection mechanism, the OS, and the library. The hardware
+replies on ECC bits to detect errors, but cannot fix them. On detection of data corruption, an interrupt called 
+Machine Check Exception is raised by the hardware to the processor. The processor forwards the interrupt to the OS, which 
+further raises a SIGBUS error to the application. The default SIGBUS signal handler will force the application to exit
+to avoid the error being propagated.
 
 Pangolin is based on an object level persistence library called `libpmemobj`.
