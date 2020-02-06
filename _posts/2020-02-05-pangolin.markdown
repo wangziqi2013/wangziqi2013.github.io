@@ -31,4 +31,9 @@ location using the ACPI interface. These corupted pages will be marked as "poiso
 mechanism to avoid future reads and writes. Currently all error checking mechanism works on page level, since this is the 
 basic unit of memory mapping in most cases.
 
-Pangolin is based on an object level persistence library called `libpmemobj`.
+Pangolin is based on an object level persistence library called `libpmemobj`. The library uses direct access (DAX) interface
+which maps a file stored on NVM into virtual address space. Application programs, however, are not allowed to directly
+write into the DAX file for the purpose of redundancy verification and update. The DAX file is divided into chunks, which
+is used for memory allocation within the heap. Metadata and data are both stored in the DAX file, the details of which
+are not covered in the paper. Before an object is accessed, 
+
