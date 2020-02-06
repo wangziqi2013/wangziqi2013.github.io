@@ -90,4 +90,6 @@ updating transaction first computes the XOR between old and new data, and they a
 using atomic XOR. Since XOR operations are commutative, the net result is equivalent to updating the parity chunk with
 both updates. The paper also proposes using vectorized XOR, which is not atomic on most architectures, to reduce the 
 overhead of atomicity (e.g. implicit atomic barrier). These instructions are more efficient, but extra measures must be 
-taken to serialize concurrent transactions. It is suggested
+taken to serialize concurrent transactions. It is suggested that per-chunk reader-writer locks being used to update parity 
+chunks. If the region is small, then atomic XOR is used, and reader lock is acquired. If the region is large, then we 
+use vectorized instruction to update parity, but acquire write lock for exclusiveness.
