@@ -56,3 +56,10 @@ Multiple corruptions, however, cannot be corrected using parity. The paper sugge
 Pangolin does not support correcting multiple chunks in the same chunk column. This can be solved by duplicating data
 into another device or partition, which is out of the scope of the paper.
 
+We next cover the details of error detection and correction. The error detection happens when an object is opened in
+read-write mode for update. The opening library call allocates a DRAM buffer of the object size, called "micro buffer", 
+and copies the object content into the DRAM buffer. All updates from the application are made on this buffer to protect
+data on NVM (recall that Pangolin disallows updating NVM directly by application). The checksum is also computed as the 
+object is copied into the micro buffer. The computed checksum is then compared with the one in the object header to 
+see if they match or not. If they do not match, data corruption is detected, and online recovery is triggered. We postpone
+the process of online recovery to later paragraphs for clarity.
