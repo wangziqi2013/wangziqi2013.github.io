@@ -74,3 +74,9 @@ in the worst case. Another improvement is to have two different types of invalid
 compression has been applied to the slot data, and the second type indicates 4:1 compression. This way, we can also always
 figure out the correct slot to read using the predictor within two probes.
 
+In order to reduce the number of probes, especially given that the extra probe can severely reduce effective bandwidth,
+PTMC proposes using a predictor to determine which address to probe first (home address or alternate address; for block 3
+it is home address and slot 2 address). The underlying conjecture is that in most cases, cache lines on the same page have
+similar compressability. The predictor, therefore, consists of a table of 2-bit values, indicating the last compression
+status of an access. 
+
