@@ -54,9 +54,13 @@ compressed block 2, 3 in the home address of block 2. Other blocks, if any, are 
 home locations. In the last case, all four blocks can be stored in a single slot. In this case, we store all compressed 
 blocks in the home address of block 0.
 
-All blocks in the group except block 3 has at most two possible locations: Block 0 can only be stored in its home address.
-Block 1 can be stored in either slot 0 (2:1 or 4:1 compression) or slot 1. Block 2 can be stored in either slot 0 
-(4:1 compression) or slot 2. Block 3, however, has three possible locations. Despite its home location, if block 2 and 3 
-are compressed together
+All blocks in the group except block 3 has at most two possible locations, meaning that we can always find the block to
+read in at most two probes, one to the home address, the other to the alternate address. 
+Block 0 can only be stored in its home address. Block 1 can be stored in either slot 0 (2:1 or 4:1 compression) or slot 1. 
+Block 2 can be stored in either slot 0 (4:1 compression) or slot 2. Block 3, however, has three possible locations. 
+Despite its home location, if block 2 and 3 are compressed together (2:1 compression), then block 3 is stored in slot 2. 
+Otherwise, in the case of 4:1 compression, block 3 will be found in slot 0.
+
+
 
 PTMC solves the above challenge using the following techniques. First, each cache line 
