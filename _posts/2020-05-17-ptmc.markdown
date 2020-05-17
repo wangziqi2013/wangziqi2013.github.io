@@ -41,7 +41,9 @@ The goal of PTMC is to reduce memory bandwidth consumption by taking advantage o
 can be compressed and colocated in the same block, when either of them is read out using the normal access protocol,
 the other one can also be fetched to the LLC for free, achieving the effect of near-by block prefetching.
 The paper suggests that the prefetched block should only be inserted into the LLC to avoid disrupting locality in 
-upper levels.
+upper levels. Note that the DRAM compression scheme does not attempt to conserve memory by utilizing extra slots
+due to compression. Marker values are stored in these unused slots in order for reads to redirect correctly, as we will 
+see below.
 
 Cache blocks in PTMC has limited associativity to reduce the complexity of address translation. Starting from address
 zero, each four blocks form a group. There are three cases. In the first case, neither block 0, 1 can be stored in one 
@@ -51,5 +53,10 @@ in a single slot after compression. In this case, we store compressed block 0, 1
 compressed block 2, 3 in the home address of block 2. Other blocks, if any, are stored in uncompressed form in their 
 home locations. In the last case, all four blocks can be stored in a single slot. In this case, we store all compressed 
 blocks in the home address of block 0.
+
+All blocks in the group except block 3 has at most two possible locations: Block 0 can only be stored in its home address.
+Block 1 can be stored in either slot 0 (2:1 or 4:1 compression) or slot 1. Block 2 can be stored in either slot 0 
+(4:1 compression) or slot 2. Block 3, however, has three possible locations. Despite its home location, if block 2 and 3 
+are compressed together
 
 PTMC solves the above challenge using the following techniques. First, each cache line 
