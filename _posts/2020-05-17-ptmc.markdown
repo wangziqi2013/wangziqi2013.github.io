@@ -39,6 +39,10 @@ but may also introduce compatibility issues for commodity systems.
 
 The goal of PTMC is to reduce memory bandwidth consumption by taking advantage of free prefetching. If two cache lines
 can be compressed and colocated in the same block, when either of them is read out using the normal access protocol,
-the other one can also be fetched to the LLC for free, effectively achieving the effect of near-by block prefetching.
+the other one can also be fetched to the LLC for free, achieving the effect of near-by block prefetching.
+The paper suggests that the prefetched block should only be inserted into the LLC to avoid disrupting locality in 
+upper levels.
+
+
 
 PTMC solves the above challenge using the following techniques. First, each cache line 
