@@ -107,5 +107,10 @@ slightly reduces the locality we can exploit, since these are adjacent lines in 
 the same slot. If, however, after the eviction, the compression ratio decreases from 4:1 to 2:1 or even to 1:1 (uncompressed),
 more than one slots need to be updated for the eviction, worsening bandwidth consumption.
 "Gang evition" also prevents a read-modify-update sequence when evicting a line belonging to a compressed group, since 
-the invariant is maintained such that either all lines are present in the cache at the same time, or none of them is present.
+the invariant is maintained such that either somes lines are present in the cache at the same time, or none of them is present
+after an eviction.
 
+PTMC may decrease performance by turning clean evictions into memory writes if the evicted line is clean but compressable.
+In addition, the gang eviction mechanism also introduces some extra writes if the evicted group cannot be stored in the 
+same slot after compression. Both will incur extra traffic to the DRAM, which may decreases system throughput.
+To deal with
