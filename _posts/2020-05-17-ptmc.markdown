@@ -61,6 +61,16 @@ Block 2 can be stored in either slot 0 (4:1 compression) or slot 2. Block 3, how
 Despite its home location, if block 2 and 3 are compressed together (2:1 compression), then block 3 is stored in slot 2. 
 Otherwise, in the case of 4:1 compression, block 3 will be found in slot 0.
 
+In order to find block 3 with at most two probes, the paper proposes that we store an invalid block marker if a slot 
+is unused due to compression. For example, in the case of 4:1 compression, all slots expect slot 0 will be written an
+invalid marker, which is a 64 byte sequence randomly generated at boot time (collisions are dealt with in later paragraphs). 
+With invalid marker, block 3 can be located with at most two probes. We always probe slot 2 first. If slot 2 contains 
+an invalid marker, then it must be a 4:1 compression, and block 3 can be found in slot 0. Otherwise, if slot 2
+contains an uncompressed block, we know block 3 must reside in slot 3, since otherwise it would be stored in slot 3
+in compressed form. If slot 2 contains compressed blocks, then it must be the case that block 2 and 3 are compressed 
+together in slot 2. Although the paper suggests that a predictor always be used to determine the order of access,
+this cannot be applied to block 3 in each group, since we may need three probes in order to read the block correctly
+in the worst case. Another improvement is to have two different types of invalid markers. The first type indicates 2:1 
+compression has been applied to the slot data, and the second type indicates 4:1 compression. This way, we can also always
+figure out the correct slot to read using the predictor within two probes.
 
-
-PTMC solves the above challenge using the following techniques. First, each cache line 
