@@ -36,3 +36,9 @@ several issues such as TLB coherence, OS overhead, and software compatibility.
 The last challenge is to implemente a compression scheme suitable for commodity DRAM. Some proposals seek to change 
 DRAM access protocol to allow smaller or larger blocks be bursted. This requires not only a re-design of the DRAM controller,
 but may also introduce compatibility issues for commodity systems. 
+
+The goal of PTMC is to reduce memory bandwidth consumption by taking advantage of free prefetching. If two cache lines
+can be compressed and colocated in the same block, when either of them is read out using the normal access protocol,
+the other one can also be fetched to the LLC for free, effectively achieving the effect of near-by block prefetching.
+
+PTMC solves the above challenge using the following techniques. First, each cache line 
