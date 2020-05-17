@@ -4,7 +4,7 @@ title:  "Enabling Transparent Memory Compression on Commodity Memory"
 date:   2020-05-17 01:24:00 -0500
 categories: paper
 paper_title: "Enabling Transparent Memory Compression on Commodity Memory"
-paper_link: [Enabling Transparent Memory Compression on Commodity Memory](https://ieeexplore.ieee.org/document/8675200)
+paper_link: https://ieeexplore.ieee.org/document/8675200
 paper_keyword: Memory Compression
 paper_year: HPCA 2019
 rw_set:
@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Practical and Transparent Memory Compression (PTMC), an OS-transparent DRAM compression scheme running 
+on commodity DRAM modules, which has low metadata overhead. The paper points out that prior DRAM compression proposals 
+suffer from the following overhead or difficulties. First, in order to locate a cache line sized block in the DRAM module
+given a physical address, the compression scheme needs to translate the physical address into the actual address that
+stores the compressed line, since a compressed line may not be stored in its home location. Depending on the degree of 
+associativity (i.e. the number of possible locations a block may be stored), the translation needs to be performed using 
+a translation table of various complexity. 
