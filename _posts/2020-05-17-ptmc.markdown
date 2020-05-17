@@ -115,4 +115,8 @@ In addition, the gang eviction mechanism also introduces some extra writes if th
 same slot after compression. Both will incur extra traffic to the DRAM, which may decreases system throughput.
 To deal with such performance degradation, the paper proposes Dynamic-PTMC, which leverages set sampling to determine whether
 PTMC is turned on or off for a particular period of time. 1% of the LLC sets always use PTMC, and they monitor events that
-increase or decrease system performance. 
+increase or decrease system performance. The remaining 99% sets of the LLC turn PTMC on or off depending on the actual
+performance of the 1% samples. When a bandwidth benefit event occurs (e.g. a prefetched line is hit), a 12-bit saturating 
+counter is incremented. When a bandwidth cost event occurs, the same saturating counter is decremented. The status of PTMC
+is solely dependent on whether the MSB of the counter is 1 or 0. The paper reports that the dynamic scheme could attain
+less than 1% performance loss in all benchmarks, even those with low locality and cache line reuse.
