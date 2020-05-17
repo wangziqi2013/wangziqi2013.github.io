@@ -33,3 +33,6 @@ which is then written into the TLB or the page table.
 This way, The OS needs to be notified on every compression status change, and the TLB entries are modified. This introduces
 several issues such as TLB coherence, OS overhead, and software compatibility.
 
+The last challenge is to implemente a compression scheme suitable for commodity DRAM. Some proposals seek to change 
+DRAM access protocol to allow smaller or larger blocks be bursted. This requires not only a re-design of the DRAM controller,
+but may also introduce compatibility issues for commodity systems. 
