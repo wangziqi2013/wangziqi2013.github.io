@@ -113,4 +113,6 @@ after an eviction.
 PTMC may decrease performance by turning clean evictions into memory writes if the evicted line is clean but compressable.
 In addition, the gang eviction mechanism also introduces some extra writes if the evicted group cannot be stored in the 
 same slot after compression. Both will incur extra traffic to the DRAM, which may decreases system throughput.
-To deal with
+To deal with such performance degradation, the paper proposes Dynamic-PTMC, which leverages set sampling to determine whether
+PTMC is turned on or off for a particular period of time. 1% of the LLC sets always use PTMC, and they monitor events that
+increase or decrease system performance. 
