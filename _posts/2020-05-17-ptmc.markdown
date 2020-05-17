@@ -100,3 +100,9 @@ line read from DRAM is inverted to restore the logical value. Given that the cha
 the table need not be very large, and the paper suggests that 16 entries may just suffic. In very rare cases of a table
 overflow, the DRAM controller may choose to dump the table into a memory-mapped area to ensure correctness.
 
+PTMC also modifies the line replacement protocol in the LLC by forcing all cached lines in a compressed slot be evicted 
+when any of the line in the slot is evicted. In the worst case, one LLC eviction may trigger three more evictions, which
+slightly reduces the locality we can exploit, since these are adjacent lines in physical address space. Note that the 
+"gang eviction" does not necessarily incur more bandwidth, as long as the group can still be compressed and stored in 
+the same slot. If, however, after the eviction, the compression ratio decreases from 4:1 to 2:1 or even to 1:1 (uncompressed),
+more than one slots need to be updated for the eviction, worsening bandwidth consumption.
