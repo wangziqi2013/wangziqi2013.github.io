@@ -27,3 +27,9 @@ that even if each line only needs 1 bit storage (the bare minimum, which is the 
 the total table size can still be as large as 32MB. These two types of overhead makes the translation scheme clumsy to
 deploy and use.
 
+The second challenge is the Operating System. Some designs do not use a dedicated translation table. Instead, they delegate
+the task of mapping uncompressed physical addresses to DRAM addresses to the OS, and let the OS determine the mapping,
+which is then written into the TLB or the page table. 
+This way, The OS needs to be notified on every compression status change, and the TLB entries are modified. This introduces
+several issues such as TLB coherence, OS overhead, and software compatibility.
+
