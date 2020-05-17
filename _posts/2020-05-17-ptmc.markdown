@@ -88,3 +88,9 @@ boot time. By placing the marker at the last 4 bytes of the slot, the total effe
 lines are reduced to 60 bytes, which, according to the paper, only marginally decreases the opportunity of compression.
 When two or four lines are compressed into the same 60 byte block, we write the marker at the end of the block based on
 the compression ratio (4:1 or 2:1). When the block is accessed, the DRAM controller will first check whether the block
+is compressed, and then decompress them using the corresponding algorithm.
+
+Ordinary, uncompressed data may happen to collide with the in-line marker by having the last four bytes matching the 
+in-line marker. Although the paper claims that the chances are really low for randomly generated markers, this must 
+be handled properly to avoid data corruption. The paper proposes that whenever a cache line is evicted from the LLC,
+the controller always check whether its last four bytes match one of the two markers. 
