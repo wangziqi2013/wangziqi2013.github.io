@@ -82,3 +82,9 @@ status of an access. The physical address is first hashed to one of the entries 
 location to access the line. If the prediction is wrong, the table is updated, and the alternate location is accessed.
 The paper reports that the predictor has an accuracy of 98%, which suffices to eliminate the second probe in most cases.
 
+PTMC uses in-line markers to indicate the compression status of the line if it contains valid data (unused lines are 
+filled with invalid marker discussed above). The marker is a 4-byte word of a specific pattern, which is generated during 
+boot time. By placing the marker at the last 4 bytes of the slot, the total effective storage for holding compressed 
+lines are reduced to 60 bytes, which, according to the paper, only marginally decreases the opportunity of compression.
+When two or four lines are compressed into the same 60 byte block, we write the marker at the end of the block based on
+the compression ratio (4:1 or 2:1). When the block is accessed, the DRAM controller will first check whether the block
