@@ -78,5 +78,7 @@ In order to reduce the number of probes, especially given that the extra probe c
 PTMC proposes using a predictor to determine which address to probe first (home address or alternate address; for block 3
 it is home address and slot 2 address). The underlying conjecture is that in most cases, cache lines on the same page have
 similar compressability. The predictor, therefore, consists of a table of 2-bit values, indicating the last compression
-status of an access. 
+status of an access. The physical address is first hashed to one of the entries of the table, and uses the predicted 
+location to access the line. If the prediction is wrong, the table is updated, and the alternate location is accessed.
+The paper reports that the predictor has an accuracy of 98%, which suffices to eliminate the second probe in most cases.
 
