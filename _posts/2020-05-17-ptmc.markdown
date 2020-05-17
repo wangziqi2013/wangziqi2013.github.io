@@ -43,6 +43,13 @@ the other one can also be fetched to the LLC for free, achieving the effect of n
 The paper suggests that the prefetched block should only be inserted into the LLC to avoid disrupting locality in 
 upper levels.
 
-
+Cache blocks in PTMC has limited associativity to reduce the complexity of address translation. Starting from address
+zero, each four blocks form a group. There are three cases. In the first case, neither block 0, 1 can be stored in one 
+block after compression, nor do block 2 and 3. In this case, all four blocks must be stored uncompressed in their home
+locations, and no address mapping is required. In the second case, either block 0, 1, or block 2, 3, or both, can be stored
+in a single slot after compression. In this case, we store compressed block 0, 1 in the home address of block 0, and/or 
+compressed block 2, 3 in the home address of block 2. Other blocks, if any, are stored in uncompressed form in their 
+home locations. In the last case, all four blocks can be stored in a single slot. In this case, we store all compressed 
+blocks in the home address of block 0.
 
 PTMC solves the above challenge using the following techniques. First, each cache line 
