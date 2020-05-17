@@ -96,4 +96,7 @@ be handled properly to avoid data corruption. The paper proposes that whenever a
 the controller always check whether its last four bytes match one of the two markers. If true, the bits in the line 
 is inverted, and the address of the line is inserted into a small on-chip table. When the line is accessed later from
 the DRAM, the physical address of the line is checked against the table. If the address hits, the content of the 
-line read from DRAM is inverted to restore the logical value.
+line read from DRAM is inverted to restore the logical value. Given that the chances of collision are really slim,
+the table need not be very large, and the paper suggests that 16 entries may just suffic. In very rare cases of a table
+overflow, the DRAM controller may choose to dump the table into a memory-mapped area to ensure correctness.
+
