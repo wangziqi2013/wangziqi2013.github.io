@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Enabling Transparent Memory Compression on Commodity Memory"
+date:   2020-05-17 01:24:00 -0500
+categories: paper
+paper_title: "Enabling Transparent Memory Compression on Commodity Memory"
+paper_link: [Enabling Transparent Memory Compression on Commodity Memory](https://ieeexplore.ieee.org/document/8675200)
+paper_keyword: Memory Compression
+paper_year: HPCA 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
