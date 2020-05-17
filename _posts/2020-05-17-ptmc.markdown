@@ -19,4 +19,11 @@ suffer from the following overhead or difficulties. First, in order to locate a 
 given a physical address, the compression scheme needs to translate the physical address into the actual address that
 stores the compressed line, since a compressed line may not be stored in its home location. Depending on the degree of 
 associativity (i.e. the number of possible locations a block may be stored), the translation needs to be performed using 
-a translation table of various complexity. 
+a translation table of various complexity. The translation table inevitably incurrs two types of overheads. The first
+type is bandwidth overhead, since each DRAM access needs to first access the table to determine the location of the line.
+Such bandwidth overhead may offset the bandwidth benefit brought by compression, as pointed out by the paper.
+The second type of overhead is storage overhead, especially when the compressed working set is large. The paper estimates 
+that even if each line only needs 1 bit storage (the bare minimum, which is the case for 2-way associative placing schemes),
+the total table size can still be as large as 32MB. These two types of overhead makes the translation scheme clumsy to
+deploy and use.
+
