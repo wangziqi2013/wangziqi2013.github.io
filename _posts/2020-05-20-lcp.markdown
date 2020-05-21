@@ -36,3 +36,8 @@ and compressed address space. Some designs, such as IBM MXT, explicitly define t
 the physical address be translated when DRAM is accessed. This translation typically lies on the critical path of 
 DRAM operations, which can degrade performance, unless speculation is employed to overlap access with address mapping a 
 bit. Speculation itself, however, may introduce extra complexity and verification cost. 
+The last challenge is that even compression is conducted on a coarser granularity, such as pages, there is still 
+the problem of locating a compressed line within the page. Due to the fact that compressed lines may not be of 
+unified sizes, in order to access a line in the middle of a page, the DRAM controller should either compute the prefix
+sum of all previous cache line sizes, or per-compute and cache such information in a dedicated cache. This also complicates
+the design, and increases DRAM's access latency.
