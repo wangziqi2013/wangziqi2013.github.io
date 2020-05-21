@@ -23,3 +23,8 @@ hierarchy. Memory designs either employ compression as a prefetching scheme, all
 into the LLC in the same transaction to fulfill a cache miss, or redesign memory bus protocol such that less data can be 
 fetched per-transaction, increasing bus transaction throughput. 
 
+The paper points out that both commercial memory compression schemes or proposals face several challenges that make
+the above two goals difficult to achieve. First, memory compression changes one of the most fundamental abstraction
+abstration that the physical address space is linearly mapped to the virtual address space. The linear map not only
+simplifies physical address computation, but also simplifies memory management, since the OS can conveniently divide the 
+physical address space into uniformly sized pages, and manage it as a page buffer pool.
