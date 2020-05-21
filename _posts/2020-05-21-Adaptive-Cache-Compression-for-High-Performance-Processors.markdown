@@ -28,6 +28,8 @@ L2 runs in compression mode, which can be turned off if the system determines th
 The L2 cache uses LRU as replacement algorithm. The LRU stack is necessary for the algorithm to identify accesses
 that gain benefit or do not gain benefit from compression. The paper also suggests that any replacement algorithm would 
 work, as long as an ordered stack is maintained for a set (or more precisely, for the last few ways enabled by compression).
+The paper also proposes adding a small victim cache as a buffer between L1 eviction path and L2, to absorb longer L2
+write latency.
 
 The L2 cache is organized as follows. Different from traditional set-associative caches where each tag is statically bound
 to a data slot of 64 bytes, the L2 cache proposed by this paper does not bind tags and data slots statically. Instead,
@@ -44,3 +46,12 @@ cache is that the base and size field are never invalidated, unless the coherenc
 invalidated by an L1 request (to maintain exclusiveness) or evicted from the L2 cache, we still keep the mapping valid,
 and set the state to NP, meaning valid data is not present, but the mapping is still present. When a block is acquired 
 by coherence, it is set to "I", in which case segments used by the tag is unmapped.
+Note that LRU requires "I" lines and "NP" lines be moved to the end of the LRU stack, since LRU always prioritizes 
+using space that do not contain valid data to evicting valid data.
+
+The L2 cache maintains an invariant that data layout in the segment must be consistent with tag layout, i.e. data segments 
+of tag i must be stored in smaller segments before tag j, as long as i < j. In order to read the data of tag j, the 
+cache controller takes the size field of all tag i (i < j), and computes the sum as the beginning segment of tag j's 
+data. This can be done efficiently using a multi-way parallel prefix adder. 
+
+
