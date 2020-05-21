@@ -58,5 +58,14 @@ The paper assumes Frequent Pattern Compression (FPC) without giving any detail o
 be implemented on hardware with very little extra hardware and reasonable run-time latency, which makes it ideal
 for L2 cache compression. When a read access is received by L2 cache, address tags are checked as usual. If a hit 
 is signaled, the segment offset of the tag is computed as described above, and segments are read until all of them are 
-delivered. 
+delivered. These segments are decompressed before senting to L1.
 
+When a cache line is evicted or fetched by L1, the L2 controller does not immediately invalidiate the tag. Instead, both
+line base and size are preserved the address tag, and the state is set to NP. 
+
+
+
+The paper did not explain how "I" state works, and neither can I figure out without wild guessing. Given the fact
+that the size field is always used, and the paper suggests that segment compaction is done lazily, I cannot see 
+how using "I" state benefits the overall efficiency. Maybe it is just used to initialize the cache at boot time, 
+allowing size 0 be used when the tag is actually unbounded to data segments.
