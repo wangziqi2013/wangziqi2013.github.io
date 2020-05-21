@@ -35,3 +35,8 @@ to a data slot of 64 bytes, the L2 cache proposed by this paper does not bind ta
 are divided into 32 8-byte segments, which can hold 4 uncompressed cache lines, but if some or all of them are compressed,
 up to 8 lines can be stored with any set in the best case. 
 
+Tags are bound to data segments dynamically at run-time. Each cache tag contains two fields describing data: base and 
+size. The base field points to one of the 32 segments as the starting segment of line data. The size field indicates the 
+number of segments the line needs to take. Partial segments are always rounded up, and the compression algorithm is 
+responsible to distinguish useful data from garbage from the last partially filled block. The tag also stores regular 
+information, such as coherence states and address tag. 
