@@ -25,3 +25,7 @@ which should have been already been evicted get hit, where in a non-compressed c
 This paper assumes a two-level, exclusive cache hierarchy (pressumably on a single core). The L1 cache is entirely
 not compressed, since L1 latency is one of the most critical factor for instruction throughput, while L2 runs in 
 compression mode, which can be turned off if the system determines that no benefit is gained from compression.
+The L2 cache uses LRU as replacement algorithm. The LRU stack is necessary for the algorithm to identify accesses
+that gain benefit or do not gain benefit from compression. The paper also suggests that any replacement algorithm would 
+work, as long as an ordered stack is maintained for a set (or more precisely, for the last few ways enabled by compression).
+
