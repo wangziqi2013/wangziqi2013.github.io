@@ -61,7 +61,7 @@ is signaled, the segment offset of the tag is computed as described above, and s
 delivered. These segments are decompressed before senting to L1.
 
 When a cache line is evicted or fetched by L1, the L2 controller does not immediately invalidiate the tag. Instead, both
-line base and size are preserved the address tag, and the state is set to NP. 
+line base, size and the address tag are preserved the address tag, and the state is set to NP. 
 
 When the line is written back by L1 or fetched again, the controller first checks whether the selected tag state is NP. 
 If true, it checks whether the size is sufficient for holding the block. If also true, then the block is written into the 
@@ -83,3 +83,14 @@ stack position 4 (inclusive), and the line is not compressed, then it would have
 turned off, and the benefit is zero. If, however, that the hit line is above position 4, but is compressed, then 
 compression does not introduce extra benefits, but we have to pay for the extra decompression cycles, which can be 
 quantitized by adding a benefit of -M where M is the latency of decompression.
+
+L2 misses are also classicied into different categories based on whether compression can bring any benefit. If the cache 
+miss hits a line in NP state (which is classicied as a miss, but since we preserved the address tag, it can still show
+what position the line is in the LRU stack), we sum up compressed sizes (not actual size, as in cache access) of all 
+previous tags in the LRU stack, and compare that with the number of segments per set. If the sum is smaller than the 
+number, meaning there is sill space if the line were not evicted or fetched, but since some of the lines may not 
+be stored compressed, the block was evicted somewhere earlier during execution (I think the author ignored L1 fetch here).
+In this case, the miss is considered as avoidable, since it is some uncompressed lines that prevent the current line 
+from being cached. If, on the other hand, the sum of all previous compressed sizes exceed the segment count, the 
+miss is unavoidable.
+
