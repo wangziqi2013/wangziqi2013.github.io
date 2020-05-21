@@ -91,6 +91,12 @@ previous tags in the LRU stack, and compare that with the number of segments per
 number, meaning there is sill space if the line were not evicted or fetched, but since some of the lines may not 
 be stored compressed, the block was evicted somewhere earlier during execution (I think the author ignored L1 fetch here).
 In this case, the miss is considered as avoidable, since it is some uncompressed lines that prevent the current line 
-from being cached. If, on the other hand, the sum of all previous compressed sizes exceed the segment count, the 
-miss is unavoidable.
+from being cached. Correspondingly, the benefit of compression is N where N is L2 miss latency. 
+If, on the other hand, the sum of all previous compressed sizes exceed the segment count, the miss is unavoidable even
+if all lines before it on the stack were compressed.
 
+A saturating counter is used as predictor on whether compression should be used when a new line is to be brought into L2
+or written back from L1. On a hit or miss, the benefit is added to or subtracted from the current value of the counter.
+The most significnt bit determines whether the next allocation from the cache would use compressed or uncompressed data 
+path. The paper proposes a 19-bit saturating counter, which can be slowly and gradually trained to turn compression on
+or off depending on the trait of the workload.
