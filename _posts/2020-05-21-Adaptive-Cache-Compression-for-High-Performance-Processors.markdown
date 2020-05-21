@@ -39,4 +39,8 @@ Tags are bound to data segments dynamically at run-time. Each cache tag contains
 size. The base field points to one of the 32 segments as the starting segment of line data. The size field indicates the 
 number of segments the line needs to take. Partial segments are always rounded up, and the compression algorithm is 
 responsible to distinguish useful data from garbage from the last partially filled block. The tag also stores regular 
-information, such as coherence states and address tag. 
+information, such as coherence states and address tag. One notable difference between the proposed design and a regular
+cache is that the base and size field are never invalidated, unless the coherence state is "I". When a cache line is 
+invalidated by an L1 request (to maintain exclusiveness) or evicted from the L2 cache, we still keep the mapping valid,
+and set the state to NP, meaning valid data is not present, but the mapping is still present. When a block is acquired 
+by coherence, it is set to "I", in which case segments used by the tag is unmapped.
