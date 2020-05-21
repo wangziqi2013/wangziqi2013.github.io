@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Linear Compressed Pages: A Low Complexity, Low-Latency Main Memory Compression Framework"
+date:   2020-05-20 22:40:00 -0500
+categories: paper
+paper_title: "Linear Compressed Pages: A Low Complexity, Low-Latency Main Memory Compression Framework"
+paper_link: https://ieeexplore.ieee.org/document/7847624/
+paper_keyword: Memory Compression; LCP
+paper_year: MICRO 2013
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
