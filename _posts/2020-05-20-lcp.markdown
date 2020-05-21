@@ -97,3 +97,7 @@ selects the best algorithm based on compression ratio. The page size is also sel
 that can accommodate the compressed page. When a cache line is written back, the memory controller first attempts to
 compress the line using the current compression algorithm. If the line can still fit into the compressed slot, the 
 controller simply writes it to the slot (and unsetting the overflow bit, if it is on). 
+Otherwise, the controller writes it to the overflow area if it already exists. 
+If, however, the cache line does not belong to the overflow area, meaning the line was initially in the regular compressed
+part, the controller allocates one slot from the overflow area, setting the bit, adding its index, after which the line
+is written into the overflow slot.
