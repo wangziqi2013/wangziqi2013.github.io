@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes an adaptive scheme for performing cache compression using a combination of LRU and predictors.
+Cache compression serves the purpose of increasing the effective cache size, allowing more data to be cached at the 
+certain level, which increases the chance that a request will hit the cache.
+The paper, however, points out that cache compression is in fact a trade-off between hit latencies and hit rates.
+By performing in-cache compression on write back and decompression on line fetch, more cycles are dedicated to
+hardware compression and decompression, which is on the critical path. Such costs are hard to eliminate due to the 
+way a cache is accessed. On the other hand, since more cache lines can be stored on a level, chances are that lines
+which should have been already been evicted get hit, where in a non-compressed cache these accesses would incur misses.
+
