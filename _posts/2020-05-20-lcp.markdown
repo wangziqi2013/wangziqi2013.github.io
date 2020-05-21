@@ -106,3 +106,10 @@ If the overflow area is full, and a new line is to be inserted into it, the memo
 the MMU, which further interrupts the OS. The OS either allocates a larger page to allow more overflow lines, or, if 
 the old page is 2KB, the OS will stop compressing the page, and instruct the memory controller to decompress the 
 line to a full 4KB flat page. 
+
+LCP also takes advantage of prefetching when the DRAM controller reads a line from the DRAM. The observation is that 
+existing bus protocols always transfers the same amount of data per-transaction, which is hardcoded to be the size 
+of an uncompressed cache line. LCP leverages this as a way of prefetcing adjacent cache lines into the LLC to improve 
+cache hit rate for applications with good locality. To even increase the chance that a prefetched line will be actually
+used in the future, a stream prefetcher may be used at LLC level, which discards lines that are predicted to be not 
+used. This can avoid cache pollution.
