@@ -51,7 +51,12 @@ the index multiplied by a constant. Both observations imply that if we sacrifice
 exchange for uniformity of cache line sizes, the complexity of the resulting compression can be significantly lowered.
 
 Compressed pages in LCP are sorted into a few per-defined sizes. The paper suggests using 512B, 1KB, 2KB and 4KB size
-classes, which correspond to 8:1, 4:1, 2:1 and no compression cases. The simplcity of page size classes also simplify
-OS memory management, since the OS can still manage the physical address space as a page buffer pool, expect that there
-are multiple size classes just like how malloc() works.
+classes, which correspond to different compression ratios (there is no fixed ratio as goals). 
+The simplcity of page size classes also simplify OS memory management, since the OS can still manage the physical address 
+space as a page buffer pool, expect that there are multiple size classes just like how malloc() works.
 
+We next introduce the page layout as follows. Each compressed page, no matter the size, consists of three parts. The first
+part is compressed cache lines, linearly mapped into the page. The size of each compressed line is determined by the 
+compression algorithm, and can hence be known when the algorithm is selected. Note every cache line in the page is stored
+in this part. For those who cannot be compressed to fit into a slot, they are classified as "exceptions", and will be 
+stored in the overflow area, as we will see below. 
