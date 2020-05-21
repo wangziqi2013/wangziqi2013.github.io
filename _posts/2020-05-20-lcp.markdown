@@ -41,3 +41,12 @@ the problem of locating a compressed line within the page. Due to the fact that 
 unified sizes, in order to access a line in the middle of a page, the DRAM controller should either compute the prefix
 sum of all previous cache line sizes, or per-compute and cache such information in a dedicated cache. This also complicates
 the design, and increases DRAM's access latency.
+
+LCP, on the other hand, avoids the above complexities by taking advantage of the following observations. First, cache 
+lines on the same page typically have similar compressability, since they often store data of the same kind from the 
+same process. It is, in most cases, beneficial to assume that these cache lines can be compressed into similar sizes.
+The second observation is that both address mapping and tag address mapping can be performed with trivial hardware 
+if the mapping is linear, i.e. the hardware address of compressed lines can be decomposed into a base address plus 
+the index multiplied by a constant. Both observations imply that if we sacrifice some efficiency of compression in 
+exchange for uniformity of cache line sizes, the complexity of the resulting compression can be significantly lowered.
+
