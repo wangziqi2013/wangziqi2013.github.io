@@ -86,3 +86,8 @@ modified to output the base address of compressed page for each memory request.
 Note that although the offset is not changed by LCP, the physical address of a cache line may not be consistent with the 
 actual physical address. The actual tagging scheme, therefore, has to use both the base page address and the offset of 
 the line within the page. 
+
+To avoid the extra metadata lookup during DRAM access, the paper proposes adding a matadata cache to the memory controller
+which caches most recently accessed pages' metadata field. Experiments show that for most workloads this cache has high
+hit rate, and thus can eliminate most metadata accesses, further saving DRAM bandwidth.
+
