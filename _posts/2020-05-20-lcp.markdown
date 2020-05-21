@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Linearly Compressed Pages (LCP), a main memory compression framework featuring easy algorithm design,
+low-cost deployment, and memory management. Broadly speaking, main memory compression schemes exist to satisfy one or both 
+of the two goals.
+The first goal is to reduce memory usage by allowing cache lines or pages to be packed in a more compact form after 
+compression. This way less physical memory can be allocated to a full 4KB page frame, and hence more pages can be mapped
+into virtual memory at the same time. The second
+
