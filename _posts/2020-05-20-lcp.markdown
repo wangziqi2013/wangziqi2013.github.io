@@ -59,4 +59,8 @@ We next introduce the page layout as follows. Each compressed page, no matter th
 part is compressed cache lines, linearly mapped into the page. The size of each compressed line is determined by the 
 compression algorithm, and can hence be known when the algorithm is selected. Note every cache line in the page is stored
 in this part. For those who cannot be compressed to fit into a slot, they are classified as "exceptions", and will be 
-stored in the overflow area, as we will see below. 
+stored in the overflow area, as we will see below. The second part is metadata field, which contains an index to interpret
+the overflow area. The metadata field further consists of a bit field indicating which slot of the overflow area is valid,
+and an index array for each overflow slot, indicating the offset of the line in the page. The overflow area must be 
+accessed by checking the bit field first, after which cache lines can be read from the compressed or overflow area.
+The last part is the overflow area, the size of which is determined by the page size and compressed cache line size.
