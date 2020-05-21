@@ -32,4 +32,7 @@ With compression, pages can be variably sized, which introduces external fragmen
 Second, by compressing cache lines, we store them in a different hardware address as the translated physical address.
 This complicates the semantics of cache tags, as the cache tag used to indicate both the physical address and hardware 
 address. By introducing compression, there are now three address spaces: Virtual address space, physical address,
-and 
+and compressed address space. Some designs, such as IBM MXT, explicitly define three address spaces, and require that
+the physical address be translated when DRAM is accessed. This translation typically lies on the critical path of 
+DRAM operations, which can degrade performance, unless speculation is employed to overlap access with address mapping a 
+bit. Speculation itself, however, may introduce extra complexity and verification cost. 
