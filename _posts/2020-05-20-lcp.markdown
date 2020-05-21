@@ -25,6 +25,11 @@ fetched per-transaction, increasing bus transaction throughput.
 
 The paper points out that both commercial memory compression schemes or proposals face several challenges that make
 the above two goals difficult to achieve. First, memory compression changes one of the most fundamental abstraction
-abstration that the physical address space is linearly mapped to the virtual address space. The linear map not only
+that the physical address space is linearly mapped to the virtual address space. The linear map not only
 simplifies physical address computation, but also simplifies memory management, since the OS can conveniently divide the 
-physical address space into uniformly sized pages, and manage it as a page buffer pool.
+physical address space into uniformly sized pages, and manage it as a fix-sized page buffer pool. 
+With compression, pages can be variably sized, which introduces external fragmentation as in malloc().
+Second, by compressing cache lines, we store them in a different hardware address as the translated physical address.
+This complicates the semantics of cache tags, as the cache tag used to indicate both the physical address and hardware 
+address. By introducing compression, there are now three address spaces: Virtual address space, physical address,
+and 
