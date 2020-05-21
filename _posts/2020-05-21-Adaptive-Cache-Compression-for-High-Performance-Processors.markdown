@@ -63,9 +63,14 @@ delivered. These segments are decompressed before senting to L1.
 When a cache line is evicted or fetched by L1, the L2 controller does not immediately invalidiate the tag. Instead, both
 line base and size are preserved the address tag, and the state is set to NP. 
 
-
+When the line is written back by L1 or fetched again, the controller first checks whether the selected tag state is NP. 
+If true, it checks whether the size is sufficient for holding the block. If also true, then the block is written into the 
+segments without rearranging the layout. If, however, the block size exceeds segments available for the tag, then the data
+segments as well as tags need to be compacted to make space for the new block, and also eliminate any external fragmentation
+that prevents any new blocks from being installed (e.g. moving "NP" and "I" tags to the end of the tag array).
 
 The paper did not explain how "I" state works, and neither can I figure out without wild guessing. Given the fact
-that the size field is always used, and the paper suggests that segment compaction is done lazily, I cannot see 
-how using "I" state benefits the overall efficiency. Maybe it is just used to initialize the cache at boot time, 
-allowing size 0 be used when the tag is actually unbounded to data segments.
+that the size field must always be kept valid for lookup, and the paper suggests that segment compaction is done lazily, 
+I cannot see how using "I" state benefits the overall efficiency. 
+Maybe it is just used to initialize the cache at boot time, allowing size 0 be used when the tag is actually unbounded 
+to data segments.
