@@ -74,3 +74,9 @@ that the size field must always be kept valid for lookup, and the paper suggests
 I cannot see how using "I" state benefits the overall efficiency. 
 Maybe it is just used to initialize the cache at boot time, allowing size 0 be used when the tag is actually unbounded 
 to data segments.
+
+A predictor is also featured in the design to turn off compression when the cost of increased latency outweigh the benefit
+of increased hit rate. The paper classifies hits into three classes using the position of the line in LRU stack. If the
+line being hit is below 4 (i.e. closer to the LRU end of the stack; same below), then the hit would have not been possible
+without compression. In this case the scheme brings N cycles of benefit where N is L2 penalty. If the line is above LRU
+stack position 4 (inclusive), then it would have been a hit even if compression is turned off, and the benefit is zero.
