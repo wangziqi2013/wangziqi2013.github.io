@@ -22,3 +22,6 @@ hardware compression and decompression, which is on the critical path. Such cost
 way a cache is accessed. On the other hand, since more cache lines can be stored on a level, chances are that lines
 which should have been already been evicted get hit, where in a non-compressed cache these accesses would incur misses.
 
+This paper assumes a two-level, exclusive cache hierarchy (pressumably on a single core). The L1 cache is entirely
+not compressed, since L1 latency is one of the most critical factor for instruction throughput, while L2 runs in 
+compression mode, which can be turned off if the system determines that no benefit is gained from compression.
