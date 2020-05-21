@@ -54,4 +54,9 @@ of tag i must be stored in smaller segments before tag j, as long as i < j. In o
 cache controller takes the size field of all tag i (i < j), and computes the sum as the beginning segment of tag j's 
 data. This can be done efficiently using a multi-way parallel prefix adder. 
 
+The paper assumes Frequent Pattern Compression (FPC) without giving any detail of the algorithm. The algorithm can 
+be implemented on hardware with very little extra hardware and reasonable run-time latency, which makes it ideal
+for L2 cache compression. When a read access is received by L2 cache, address tags are checked as usual. If a hit 
+is signaled, the segment offset of the tag is computed as described above, and segments are read until all of them are 
+delivered. 
 
