@@ -64,3 +64,13 @@ the overflow area. The metadata field further consists of a bit field indicating
 and an index array for each overflow slot, indicating the offset of the line in the page. The overflow area must be 
 accessed by checking the bit field first, after which cache lines can be read from the compressed or overflow area.
 The last part is the overflow area, the size of which is determined by the page size and compressed cache line size.
+
+// TODO: ADD PAGE TABLE
+
+When accessing the DRAM, the memory controller operates as follows. First, it locates the address of the page, which is 
+indicated by the upper level LLC (OS explicitly allocates pages on the compressed address space). The size and type of the 
+page is also sent to the memory controller in the same request. Then, the controller computes the address of the metadata 
+field using page size and type information, and reads the metadata of the page. If the intended cache line is stored in 
+the overflow area, indicated by a bit in the bit field and a matching index in the index array, the line is read out and 
+directly sent to the LLC. Otherwise, the line is stored in compressed area, and the cache controller needs to decompress
+the cache line using page type information in the request. 
