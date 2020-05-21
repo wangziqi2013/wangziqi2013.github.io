@@ -79,4 +79,7 @@ A predictor is also featured in the design to turn off compression when the cost
 of increased hit rate. The paper classifies hits into three classes using the position of the line in LRU stack. If the
 line being hit is below 4 (i.e. closer to the LRU end of the stack; same below), then the hit would have not been possible
 without compression. In this case the scheme brings N cycles of benefit where N is L2 penalty. If the line is above LRU
-stack position 4 (inclusive), then it would have been a hit even if compression is turned off, and the benefit is zero.
+stack position 4 (inclusive), and the line is not compressed, then it would have been a hit even if compression is 
+turned off, and the benefit is zero. If, however, that the hit line is above position 4, but is compressed, then 
+compression does not introduce extra benefits, but we have to pay for the extra decompression cycles, which can be 
+quantitized by adding a benefit of -M where M is the latency of decompression.
