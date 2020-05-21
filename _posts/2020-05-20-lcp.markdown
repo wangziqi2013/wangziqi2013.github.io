@@ -101,3 +101,8 @@ Otherwise, the controller writes it to the overflow area if it already exists.
 If, however, the cache line does not belong to the overflow area, meaning the line was initially in the regular compressed
 part, the controller allocates one slot from the overflow area, setting the bit, adding its index, after which the line
 is written into the overflow slot.
+
+If the overflow area is full, and a new line is to be inserted into it, the memory controller raises an exception to
+the MMU, which further interrupts the OS. The OS either allocates a larger page to allow more overflow lines, or, if 
+the old page is 2KB, the OS will stop compressing the page, and instruct the memory controller to decompress the 
+line to a full 4KB flat page. 
