@@ -31,4 +31,7 @@ work, as long as an ordered stack is maintained for a set (or more precisely, fo
 
 The L2 cache is organized as follows. Different from traditional set-associative caches where each tag is statically bound
 to a data slot of 64 bytes, the L2 cache proposed by this paper does not bind tags and data slots statically. Instead,
-8 tags are provisioned for each set, implying that the effective set size can be doubled in the best case. 
+8 tags are provisioned for each set, implying that the effective set size can be doubled in the best case. Data slots
+are divided into 32 8-byte segments, which can hold 4 uncompressed cache lines, but if some or all of them are compressed,
+up to 8 lines can be stored with any set in the best case. 
+
