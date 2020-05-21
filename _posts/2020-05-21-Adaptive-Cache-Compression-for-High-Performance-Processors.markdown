@@ -23,9 +23,12 @@ way a cache is accessed. On the other hand, since more cache lines can be stored
 which should have been already been evicted get hit, where in a non-compressed cache these accesses would incur misses.
 
 This paper assumes a two-level, exclusive cache hierarchy (pressumably on a single core). The L1 cache is entirely
-not compressed, since L1 latency is one of the most critical factor for instruction throughput, while L2 runs in 
-compression mode, which can be turned off if the system determines that no benefit is gained from compression.
+not compressed, since L1 latency is one of the most critical factors for instruction throughput. The 4-way set associative 
+L2 runs in compression mode, which can be turned off if the system determines that no benefit is gained from compression.
 The L2 cache uses LRU as replacement algorithm. The LRU stack is necessary for the algorithm to identify accesses
 that gain benefit or do not gain benefit from compression. The paper also suggests that any replacement algorithm would 
 work, as long as an ordered stack is maintained for a set (or more precisely, for the last few ways enabled by compression).
 
+The L2 cache is organized as follows. Different from traditional set-associative caches where each tag is statically bound
+to a data slot of 64 bytes, the L2 cache proposed by this paper does not bind tags and data slots statically. Instead,
+8 tags are provisioned for each set, implying that the effective set size can be doubled in the best case. 
