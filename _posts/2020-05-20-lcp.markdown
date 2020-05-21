@@ -91,3 +91,9 @@ To avoid the extra metadata lookup during DRAM access, the paper proposes adding
 which caches most recently accessed pages' metadata field. Experiments show that for most workloads this cache has high
 hit rate, and thus can eliminate most metadata accesses, further saving DRAM bandwidth.
 
+When a page is initially created or read from the disk (if it is previously swapped out), the memory controller first
+attempts to compress the page using one of the programmed compression algorithm. The memory controller then 
+selects the best algorithm based on compression ratio. The page size is also selected such that it is the smallest size
+that can accommodate the compressed page. When a cache line is written back, the memory controller first attempts to
+compress the line using the current compression algorithm. If the line can still fit into the compressed slot, the 
+controller simply writes it to the slot (and unsetting the overflow bit, if it is on). 
