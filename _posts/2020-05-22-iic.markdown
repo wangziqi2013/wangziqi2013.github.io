@@ -88,7 +88,10 @@ hit if addresses match.
 Data slot is read after hit is signaled, which is serialized after tag comparison. If a miss is signaled, the software
 handler is invoked to evict a line, after which the controller will fetch the missing address.
 
-The software handler
+The software handler running the replacement algorithm can either be programmed into the cache controller, or can be a 
+dedicated hardware thread on the processor. The paper did not describe how the cache hardware may interact with 
+software handler running on the CPU, since these internal states are necessary for decision making, but inaccessible 
+as the cache is supposed to be transparent.
 
 // Overhead
 
