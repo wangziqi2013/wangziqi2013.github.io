@@ -125,3 +125,9 @@ to the next stack of lower priority as described above. The one evicted by the l
 the eviction victim. On a cache hit, the hit tag will be promoted to the next high priority level and inserted into the 
 head of the stack (or just promoted to the head for the highest priority stack), to honor the fact that there might also 
 be a steady stream of references in the future.
+
+New cache lines are treated differently, because they are supposted to stay in the L2 cache at least for a while in
+order to determine whether they will be referenced or not. The algorithm thus also has a new block stack, which only
+cycles cache lines in itself, but is never considered for eviction. After a certain period of time, cache lines
+in this stack will be moved out, and inserted into one of the normal stacks. Time is tracked with timestamps using 
+a centralized timestamp counter.
