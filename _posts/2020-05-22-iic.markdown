@@ -36,5 +36,8 @@ replacements. In the worst case, all cache lines in the set are locked, and the 
 when a new cache line is to be brought into the same set. The same applies to hardware transactional memory, such as 
 Intel TSX, in which a set conflict misses (too many transactionally written lines in a set) will abort the transaction
 and block progress. With a fully associative cache design, neither of the above two use cases can become a problem until
-all lines in the cache are locked, which is an extremely rare corner case.
+all lines in the cache are locked, which is an extremely rare corner case. The last reason is that cache partition can be  
+implemented more efficiently on a fully associative cache. On regular caches, partitioning are often done on separate ways,
+which has its limit.
+
 
