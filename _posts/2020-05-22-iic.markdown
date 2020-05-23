@@ -105,4 +105,11 @@ to take before it is found. The last overhead is software handler overhead, whic
 than the regular LRU policy on low associative caches. In order to alleviate this, the paper proposes that the DRAM access
 for misses should be initiated while the handler is still running. These two processes can thus be overlapped.
 
-The cache lookup is performed as follows. First, the requested address is hashed into
+The paper also proposes Generational Replacement Algorithm as a replacement for the commonly used LRU (or its variants). 
+The observation is that the L2 cache only sees a filtered trace where most locality is not present. Based on this
+observation, LRU does not work well, since a frequently accessed cache line may stay in L1 for majority of the time,
+and therefore never accessed in a long period of time. Page table management algorithms also do not work well, since 
+the page table's access bit is set on every memory access going through the TLB, which exposes locality better than L2
+cache.
+
+
