@@ -13,4 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
-
+This paper proposes Indirect Index Cache (IIC), a fully associative cache design featuring better hit rate and more flexible
+replacement policies. The paper begins by identifying similarities between cache memory and virtual pages. Both are 
+proposed and implemented as a measurement of dealing with the increasing speed gap between components in the memory hierarchy.
+The difference is that on commercial produces, cache memories, at all levels, are typically implemented as a hardware-managed
+array of tag and data. Tags are statically mapped to data slots. In order to access data using an address tag, tags
+(or more likely, a subset of tags) need to be searched until a matching entry is found, after which the data slot is 
+located at the same offset and accessed. Virtual
