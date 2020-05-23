@@ -112,4 +112,12 @@ and therefore never accessed in a long period of time. Page table management alg
 the page table's access bit is set on every memory access going through the TLB, which exposes locality better than L2
 cache.
 
-
+The generational algorithm leverages the concept of access frequency. Instead of only relying on the last time an address
+is accessed in the L2 cache, the frequency of access is also important, since a "hot" cache line may only occasionally 
+be evicted out of L1, but as long as it remains "hot", there should be a steady stream of accessed into the L2 for that
+address, regardless of the last time the line is accessed. The generational algorithm exposes this by having multiple 
+LRU stacks. The paper gives an example of four stacks (in the paper it is called "pools"): Stack 0 has the lowest priority,
+and is considered for eviction. Stack 1 - 3 has increasing priority. When a block is at the head of stack 1 - 3, and the 
+reference bit is not set, the algorithm will move the tag of the block down one level to the end of the next lower priority
+stack, decreasing its priority and increasing the likelihood that the line will be evicted in the future if not accessed
+within a certain number of misses.
