@@ -77,11 +77,19 @@ replacement metadata. The chain field only need suffcient number of bits to inde
 while the "repl" field contains 32 bits for organizing the replacement FIFO lists, as we will see below.
 
 The IIC works as a hardware hash table using chaining for conflict resolution.
-As a software chaining hash table, ICC hardware consists of two parts. The first part is hash buckets, which is organized
+As a software chaining hash table, ICC hardware consists of two parts. The first part is the primary table, which is organized
 like a regular 4-way set associoative cache (with significantly smaller number of sets). An incoming address is hashed 
 into one of the many sets, called a "bucket", and perform a regular CAM lookup within the set.
 If none of the address tags match, instead of declaring cache miss as in a regular cache, the hardware will continue
 searching the chained tags until the end is reached or until a hit is signaled.
 Note that all tags within a bucket share one "chain" field, which is only stored once. 
+The hardware tag walker repeatedly follows the "chain" field to the next tag, compares the address, and signals a 
+hit if addresses match. 
+Data slot is read after hit is signaled, which is serialized after tag comparison. If a miss is signaled, the software
+handler is invoked to evict a line, after which the controller will fetch the missing address.
+
+The software handler
+
+// Overhead
 
 The cache lookup is performed as follows. First, the requested address is hashed into
