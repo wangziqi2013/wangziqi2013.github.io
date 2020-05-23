@@ -120,4 +120,8 @@ LRU stacks. The paper gives an example of four stacks (in the paper it is called
 and is considered for eviction. Stack 1 - 3 has increasing priority. When a block is at the head of stack 1 - 3, and the 
 reference bit is not set, the algorithm will move the tag of the block down one level to the end of the next lower priority
 stack, decreasing its priority and increasing the likelihood that the line will be evicted in the future if not accessed
-within a certain number of misses.
+within a certain number of misses. On each cache miss, the algorithm selects one cache line from each stack, and moves it
+to the next stack of lower priority as described above. The one evicted by the lowest proprity stack is selected as 
+the eviction victim. On a cache hit, the hit tag will be promoted to the next high priority level and inserted into the 
+head of the stack (or just promoted to the head for the highest priority stack), to honor the fact that there might also 
+be a steady stream of references in the future.
