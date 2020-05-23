@@ -19,4 +19,7 @@ proposed and implemented as a measurement of dealing with the increasing speed g
 The difference is that on commercial produces, cache memories, at all levels, are typically implemented as a hardware-managed
 array of tag and data. Tags are statically mapped to data slots. In order to access data using an address tag, tags
 (or more likely, a subset of tags) need to be searched until a matching entry is found, after which the data slot is 
-located at the same offset and accessed. Virtual
+located at the same offset and accessed. Virtual memory, on the other hand, works differently. There is no fixed binding
+between a virtual page frame and a physical page (although some implementations may enforce one to aid virtual address
+caches or better performance). Any virtual page frame can hold any physical page. Hardware must consult a dedicated 
+mapping structure to acquire the mapping instead. 
