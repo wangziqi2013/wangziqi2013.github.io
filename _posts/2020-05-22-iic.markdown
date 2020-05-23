@@ -121,13 +121,16 @@ and is considered for eviction. Stack 1 - 3 has increasing priority. When a bloc
 reference bit is not set, the algorithm will move the tag of the block down one level to the end of the next lower priority
 stack, decreasing its priority and increasing the likelihood that the line will be evicted in the future if not accessed
 within a certain number of misses. On each cache miss, the algorithm selects one cache line from each stack, and moves it
-to the next stack of lower priority as described above. The one evicted by the lowest proprity stack is selected as 
-the eviction victim. On a cache hit, the hit tag will be promoted to the next high priority level and inserted into the 
-head of the stack (or just promoted to the head for the highest priority stack), to honor the fact that there might also 
-be a steady stream of references in the future.
+to the next stack of lower priority as described above, if the reference bit is clear, or to the next higher priority stack
+if the bit is set to honor the fact that there might also be a steady stream of references in the future.
+The one evicted by the lowest proprity stack is selected as the eviction victim. 
+No action is needed for a cache hit except the hardware setting the reference bit automatically.
 
 New cache lines are treated differently, because they are supposted to stay in the L2 cache at least for a while in
 order to determine whether they will be referenced or not. The algorithm thus also has a new block stack, which only
 cycles cache lines in itself, but is never considered for eviction. After a certain period of time, cache lines
 in this stack will be moved out, and inserted into one of the normal stacks. Time is tracked with timestamps using 
 a centralized timestamp counter.
+
+The implementation of the generational algorithm requires one bit for the reference bit, two 12 bit index fields to
+form the doubly linked list of LRU stacks, and the timestamp for the new block stack. 
