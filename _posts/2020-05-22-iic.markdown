@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlights:** 
+
+1. This paper uses a different definition of full associativity. It mostly means that an address can be stored anywhere 
+   on the entire address space in other occasions, and even earlier part
+   of this paper. But then later on it is revealed that ths proposed design is just chaining extension of a regular
+   4-way set associative table, which IS NOT FULLY ASSOCIATIVE AT ALL! It still takes a hash function to map an address to only
+   a subset of the tags. It can be arguably justified by the fact that the primary table is far smaller than the tag pool,
+   but again it is not fully associative. 
+2. IIC does not save the CAM
+
 This paper proposes Indirect Index Cache (IIC), a fully associative L2 cache design featuring better hit rate and more flexible
 replacement policies. The paper begins by identifying similarities between cache memory and virtual pages. Both are 
 proposed and implemented as a measurement of dealing with the increasing speed gap between components in the memory hierarchy.
@@ -61,9 +71,9 @@ The IIC works as a hardware hash table using chaining for conflict resolution.
 As a software chaining hash table, ICC hardware consists of two parts. The first part is hash buckets, which is organized
 like a regular 4-way set associoative cache (with significantly smaller number of sets). An incoming address is hashed 
 into one of the many sets, called a "bucket", and perform a regular CAM lookup within the set.
-
-
-Note that all tags within a bucket can share one "chain" field, which saves some storage as 
+If none of the address tags match, instead of declaring cache miss as in a regular cache, the hardware will continue
+searching the chained tags until the end is reached or until a hit is signaled.
+Note that all tags within a bucket share one "chain" field, which saves some storage as 
 
 
 The cache lookup is performed as follows. First, the requested address is hashed into
