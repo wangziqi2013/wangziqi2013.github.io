@@ -23,3 +23,10 @@ located at the same offset and accessed. Virtual memory, on the other hand, work
 between a virtual page frame and a physical page (although some implementations may enforce one to aid virtual address
 caches or better performance). Any virtual page frame can hold any physical page. Hardware must consult a dedicated 
 mapping structure to acquire the mapping instead. 
+
+Being able to map cache lines in a fully associative manner is beneficial to cache memory design and application performance,
+as pointed out by the paper. There are three reasons. First, a fully associative cache enables better chance of finding 
+an ideal victim for replacement on capacity misses. On traditional caches, the victim must be found within the same set
+as the address to be accessed. Fully associative cache treats all lines in the cache as candidates, allowing more 
+complicated algorithm to be used for replacements. 
+
