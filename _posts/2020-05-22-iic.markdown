@@ -29,6 +29,8 @@ version_mgmt:
    On the other hand, IIC can be implemented even if each tag is statically bound to a data slot. 
 4. The paper does not discuss how an empty tag can be found when a new one is to be allocated. Given the large number 
    of tags, this process is likely to be time consuming without some clever data structure.
+5. So essentially this paper only describes a cache organization with flexible way sizes and a novel algo. for replacement.
+   Even so the paper makes unrealistic assumption about the hardware environment running the repl. algo.
 
 This paper proposes Indirect Index Cache (IIC), a fully associative L2 cache design featuring better hit rate and more flexible
 replacement policies. The paper begins by identifying similarities between cache memory and virtual pages. Both are 
@@ -80,7 +82,6 @@ like a regular 4-way set associoative cache (with significantly smaller number o
 into one of the many sets, called a "bucket", and perform a regular CAM lookup within the set.
 If none of the address tags match, instead of declaring cache miss as in a regular cache, the hardware will continue
 searching the chained tags until the end is reached or until a hit is signaled.
-Note that all tags within a bucket share one "chain" field, which saves some storage as 
-
+Note that all tags within a bucket share one "chain" field, which is only stored once. 
 
 The cache lookup is performed as follows. First, the requested address is hashed into
