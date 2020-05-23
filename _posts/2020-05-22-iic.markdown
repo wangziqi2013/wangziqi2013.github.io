@@ -24,6 +24,11 @@ version_mgmt:
 2. IIC does not save the tag CAM lookup overhead at all. The first primary table lookup is still a 4-way set associative
    lookup without any optimization. The only optimization is that data array is not accessed in parallel at the cost
    of longer latency.
+3. The idea of not statically binding tag and data does not contribute to the overall merit. In fact, 
+   there must be an equal number of tags and data slots, otherwise it makes no sense (this is not virtual memory).
+   On the other hand, IIC can be implemented even if each tag is statically bound to a data slot. 
+4. The paper does not discuss how an empty tag can be found when a new one is to be allocated. Given the large number 
+   of tags, this process is likely to be time consuming without some clever data structure.
 
 This paper proposes Indirect Index Cache (IIC), a fully associative L2 cache design featuring better hit rate and more flexible
 replacement policies. The paper begins by identifying similarities between cache memory and virtual pages. Both are 
