@@ -50,3 +50,10 @@ replacement candidate among tens of thousands of addresses, which may not be imp
 Besides, LRU is not particularly good for L2 caches, since the L2 only observes a filtered subset of the actual trace,
 where most locality has been absorbed by the L1 level.
 
+IIC is organized as a chaining hash table. A tag in IIC consists of several fields. The regular address field stores the 
+address, and supports CAM-style lookup by the reading logic. The coherence state and other state fields store regular 
+coherence and internal state information, which is orthogonal to the cache organization. The most important fields are 
+"chain" field, which stores the next element pointer of the chaining hash table, and the "repl" field which stores 
+replacement metadata. The chain field only need suffcient number of bits to index all tags (12 bits in the paper),
+while the "repl" field contains 32 bits for organizing the replacement FIFO lists, as we will see below.
+
