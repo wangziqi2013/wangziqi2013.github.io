@@ -30,8 +30,11 @@ an ideal victim for replacement on capacity misses. On traditional caches, the v
 as the address to be accessed. Fully associative cache treats all lines in the cache as candidates, allowing more 
 complicated algorithm to be used for replacements. Second, some advanced designs can be implemented easily on fully 
 associative cache, such as cache line pinning and hardware transactional memory. Cache line pinning "locks" a certain
-cache line in the cache either to retain atomicity of data operations or to protect the line from cache thrashing.
+cache block in the set, either to retain atomicity of data operations on that block or to protect the line from cache thrashing.
 With a limited associativity per set, locking a line in the cache always means losing some of the flexibility of 
 replacements. In the worst case, all cache lines in the set are locked, and the hardware will be trapped into a deadlock
-when a new cache line is to be brought into the same set. 
+when a new cache line is to be brought into the same set. The same applies to hardware transactional memory, such as 
+Intel TSX, in which a set conflict misses (too many transactionally written lines in a set) will abort the transaction
+and block progress. With a fully associative cache design, neither of the above two use cases can become a problem until
+all lines in the cache are locked, which is an extremely rare corner case.
 
