@@ -93,6 +93,10 @@ dedicated hardware thread on the processor. The paper did not describe how the c
 software handler running on the CPU, since these internal states are necessary for decision making, but inaccessible 
 as the cache is supposed to be transparent.
 
-// Overhead
+The paper identifies four major overheads of IIC. The first is tag storage overhead, since IIC uses almost 2x more bits
+than a regular 4-way set associative cache. The paper claims, however, that tag storage is always insignificant in overall
+cache storage, since the majority of the SRAM storage is dedicated to data array. The second overhead is serialized 
+tag and data access. This may add a few extra cycles on the critical path, since in regular caches we can access tag and 
+data slot in the same cycle (and discard data if no hit is signaled). 
 
 The cache lookup is performed as follows. First, the requested address is hashed into
