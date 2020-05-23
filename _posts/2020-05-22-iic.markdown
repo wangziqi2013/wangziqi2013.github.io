@@ -125,6 +125,8 @@ to the next stack of lower priority as described above, if the reference bit is 
 if the bit is set to honor the fact that there might also be a steady stream of references in the future.
 The one evicted by the lowest proprity stack is selected as the eviction victim. 
 No action is needed for a cache hit except the hardware setting the reference bit automatically.
+(**I think the author is just trying to use 1 bit to approximate coarse-grained frequency tracking instead of actually
+tracking each reference from L1 and save them and then perform a global min operation**)
 
 New cache lines are treated differently, because they are supposted to stay in the L2 cache at least for a while in
 order to determine whether they will be referenced or not. The algorithm thus also has a new block stack, which only
