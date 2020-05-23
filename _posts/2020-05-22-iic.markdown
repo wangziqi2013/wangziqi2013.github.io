@@ -28,5 +28,10 @@ Being able to map cache lines in a fully associative manner is beneficial to cac
 as pointed out by the paper. There are three reasons. First, a fully associative cache enables better chance of finding 
 an ideal victim for replacement on capacity misses. On traditional caches, the victim must be found within the same set
 as the address to be accessed. Fully associative cache treats all lines in the cache as candidates, allowing more 
-complicated algorithm to be used for replacements. 
+complicated algorithm to be used for replacements. Second, some advanced designs can be implemented easily on fully 
+associative cache, such as cache line pinning and hardware transactional memory. Cache line pinning "locks" a certain
+cache line in the cache either to retain atomicity of data operations or to protect the line from cache thrashing.
+With a limited associativity per set, locking a line in the cache always means losing some of the flexibility of 
+replacements. In the worst case, all cache lines in the set are locked, and the hardware will be trapped into a deadlock
+when a new cache line is to be brought into the same set. 
 
