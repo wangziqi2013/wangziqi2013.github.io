@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes Indirect Index Cache (IIC), a fully associative cache design featuring better hit rate and more flexible
+This paper proposes Indirect Index Cache (IIC), a fully associative L2 cache design featuring better hit rate and more flexible
 replacement policies. The paper begins by identifying similarities between cache memory and virtual pages. Both are 
 proposed and implemented as a measurement of dealing with the increasing speed gap between components in the memory hierarchy.
 The difference is that on commercial produces, cache memories, at all levels, are typically implemented as a hardware-managed
@@ -44,5 +44,9 @@ This paper proposes two challenges to solve for fully associative caches. The fi
 and cache lookup. Classical caches typically use direct mapping, or Content-Addressable Memory, or both, to generate the 
 index of the data slot, and then access data. For fully associative caches, the entire CAM array needs to be accessed,
 since an address can potentially be cached anywhere in the array, which is not practical for both the energy and the 
-decoding logic.
+decoding logic. The second challenge is to design and implement an efficient replacement algorithm to deal with the 
+large associativity and special access pattern of the L2 cache. Compared with regular caches, IIC needs to select a
+replacement candidate among tens of thousands of addresses, which may not be implemented efficiently using the old LRU.
+Besides, LRU is not particularly good for L2 caches, since the L2 only observes a filtered subset of the actual trace,
+where most locality has been absorbed by the L1 level.
 
