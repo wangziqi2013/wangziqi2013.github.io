@@ -97,6 +97,10 @@ The paper identifies four major overheads of IIC. The first is tag storage overh
 than a regular 4-way set associative cache. The paper claims, however, that tag storage is always insignificant in overall
 cache storage, since the majority of the SRAM storage is dedicated to data array. The second overhead is serialized 
 tag and data access. This may add a few extra cycles on the critical path, since in regular caches we can access tag and 
-data slot in the same cycle (and discard data if no hit is signaled). 
+data slot in the same cycle (and discard data if no hit is signaled). The paper justifies this using the fact that some 
+commercial designs already serialize tag and data access for decreased energy consumption. The third overhead is the chaining
+and tag walk overhead. The paper proposes that after each successful lookup, the tag that actually hits (if any) should be 
+moved to the first entry in the collision chain. This way the more frequent a tag is hit, the less steps it is expected
+to take before it is found.
 
 The cache lookup is performed as follows. First, the requested address is hashed into
