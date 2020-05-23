@@ -57,3 +57,13 @@ coherence and internal state information, which is orthogonal to the cache organ
 replacement metadata. The chain field only need suffcient number of bits to index all tags (12 bits in the paper),
 while the "repl" field contains 32 bits for organizing the replacement FIFO lists, as we will see below.
 
+The IIC works as a hardware hash table using chaining for conflict resolution.
+As a software chaining hash table, ICC hardware consists of two parts. The first part is hash buckets, which is organized
+like a regular 4-way set associoative cache (with significantly smaller number of sets). An incoming address is hashed 
+into one of the many sets, called a "bucket", and perform a regular CAM lookup within the set.
+
+
+Note that all tags within a bucket can share one "chain" field, which saves some storage as 
+
+
+The cache lookup is performed as follows. First, the requested address is hashed into
