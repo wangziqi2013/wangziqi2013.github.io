@@ -40,4 +40,9 @@ all lines in the cache are locked, which is an extremely rare corner case. The l
 implemented more efficiently on a fully associative cache. On regular caches, partitioning are often done on separate ways,
 which has its limit.
 
+This paper proposes two challenges to solve for fully associative caches. The first challenge is effect address mapping
+and cache lookup. Classical caches typically use direct mapping, or Content-Addressable Memory, or both, to generate the 
+index of the data slot, and then access data. For fully associative caches, the entire CAM array needs to be accessed,
+since an address can potentially be cached anywhere in the array, which is not practical for both the energy and the 
+decoding logic.
 
