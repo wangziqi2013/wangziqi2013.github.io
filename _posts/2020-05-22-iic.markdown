@@ -101,6 +101,8 @@ data slot in the same cycle (and discard data if no hit is signaled). The paper 
 commercial designs already serialize tag and data access for decreased energy consumption. The third overhead is the chaining
 and tag walk overhead. The paper proposes that after each successful lookup, the tag that actually hits (if any) should be 
 moved to the first entry in the collision chain. This way the more frequent a tag is hit, the less steps it is expected
-to take before it is found.
+to take before it is found. The last overhead is software handler overhead, which may incur significantly longer latency
+than the regular LRU policy on low associative caches. In order to alleviate this, the paper proposes that the DRAM access
+for misses should be initiated while the handler is still running. These two processes can thus be overlapped.
 
 The cache lookup is performed as follows. First, the requested address is hashed into
