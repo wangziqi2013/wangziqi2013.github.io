@@ -40,6 +40,15 @@ at most B blocks of size b each. If these two caches are of equal sizes, then B 
 the workload accesses K distinc locations on the address space where T < K < B, regular caches can always perform better
 than a sector cache due to less misses. This observation is also confirmed in the paper with real world workloads.
 
-The issue with sector caches is that a single tag maps a relative large space in the address space. If an access 
+The issue with sector caches is that a single tag maps a relative large area in the address space. If an access 
 falls out of the mapped range of the tag, it will be a miss to the tag, regardless of how large the mapped area is.
-One of the most straightforward additions is to allow several tags share a data block. Instead of always 
+One of the most straightforward additions is to allow several tags share a data block. Instead of always map a linear
+region on the address space, we now allow mapping several non-overlapping regions within the same block. The 
+difference between a decoupled sector cache and a regular sector cache is that these mapped regions may "interleave"
+with each other, i.e. blocks on different offsets may be using different base address tags.
+
+To help finding which sectors in the block belong to which tags, each sector now is equipped with two extra fields.
+The first is the normal "valid" field, which is moved from the tag, since now there are multiple tags, and having each
+of them saving a separate "valid" bit causes unnecessary redundancy. If the valid field is off for sector on offset i, 
+the sector is not mapped by any of the tag. If the valid field is on, then the sector is mapped, but the base address is 
+still unknown. 
