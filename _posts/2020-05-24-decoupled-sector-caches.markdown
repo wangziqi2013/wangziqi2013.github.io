@@ -83,6 +83,12 @@ independent of the overall organnization of the cache. After locating the set us
 the cache controller should further locate the tags and sectors for address comparison.
 For a set-associative tags consisting of x sets and y ways, where (x * y) = P, we first take the low log2(x) bits from the
 address as the set index, and then read out all tags within the set. If any one of the address tag matchs the bits 
-after the tag set index, a tag hit is signaled
+after the tag set index, a tag hit is signaled. In the meantime, the sector is also located using a similar process. For 
+a sector array consisting of x' sets and y' ways, where (x' * y') = S, we use log2(x') bits from the address to first
+determine the sector set. Then all y' ways are read out, and the one whose tag ID field matches the tag that gets hit
+is the data sector that gets hit. If both a tag hit and sector hit are signaled, a cache hit is signaled. In all
+other cases, cache miss occurs, and replacement will be made.
 
-
+Two types of misses can occur with a decoupled sector cache.
+Eviction policies should also be defined when a sector is to be evicted. Note that the eviction policy
+should be defined on the tag side, rather than sector side, unless the sector is set-associative and the miss
