@@ -28,7 +28,9 @@ by allowing a large cache line to be further divided into smaller units, called 
 unit of data transfer and coherence just like a regular cache line. The address tag of the sector, however, is only
 implied by the tag of the entire block and its index within the block. Given a sector size s, index i, and tag address t,
 the implied address of the sector is t + s * i, i.e. all sectors in a cache block are linearly mapped to the underlying 
-address space. In this paper the term "sector" is used to indicate the basic unit of data transfer, and term "line" or 
+address space. 
+Coherence and valid bits are still stored on a per-sector basis to support individual line fetch and invalidation. 
+In this paper the term "sector" is used to indicate the basic unit of data transfer, and term "line" or 
 "block" are used to indicate all sectors under the same tag.
 
 Although sector caches reduce the number of tags for the same number of sectors, it inevitably decreases cache hits
@@ -36,4 +38,8 @@ for some workloads, since sector cache assumes higher locality for applications.
 T tags can at most map at most T blocks of size (s * S) each, while a regular cache with B blocks (and B tags) can map
 at most B blocks of size b each. If these two caches are of equal sizes, then B = T * S, which implies that as long as 
 the workload accesses K distinc locations on the address space where T < K < B, regular caches can always perform better
-than a sector cache due to less misses.
+than a sector cache due to less misses. This observation is also confirmed in the paper with real world workloads.
+
+The issue with sector caches is that a single tag maps a relative large space in the address space. If an access 
+falls out of the mapped range of the tag, it will be a miss to the tag, regardless of how large the mapped area is.
+One of the most straightforward additions is to allow several tags share a data block. Instead of always 
