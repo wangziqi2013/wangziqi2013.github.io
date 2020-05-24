@@ -61,3 +61,11 @@ has "valid" bit on, and the address tag indicated by the second field matches th
 Note that in the meantime the tag lookup is still performed, and the tag is located by comparing the address with 
 corresponding bits in the requested address. We compare the identity of the tag and the ID stored in the second field,
 and signal a hit if these two matches.
+
+The tag lookup algorithm is slightly modified to fit into this model while the set lookup is unchanged from a regular 
+cache.
+Given X sets and a Y way set-associative sector cache with P tags and S sectors per line, we extract the 
+lowest log2(X) bits after the sector offset to address the tag, and use the rest of the high-order bits minus the lowest 
+log2(P) bits as the address tag to be stored in the tag array (also used for comparison). The log2(P) bits between 
+the set index and address tag are then used to address tags within the set. Note that now each set contains (Y * P) tags,
+and each element contains P tags. 
