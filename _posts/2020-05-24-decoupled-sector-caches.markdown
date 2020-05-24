@@ -19,6 +19,8 @@ address, the corresponding data block is always fetched from the lower level. Su
 storage to store address tags, which does not contribute to processor performance (note that this paper was published in
 1994, at which time transistors are not as dense as it is today). This is especially true for caches with shorter lines.
 For example, if the cache line size is 16 bytes as in MIPS R4000 architecture, the 24 bit tag cost can be as large as 
-18.75%.
+18.75%. The paper also points out that increasing cache line size can effectively improve the utilization of on-chip
+SRAM storage. This, however, has negative effect such as increased bandwidth usage per transaction and possibilities of 
+false sharing in the case of coherence.
 
-
+Sector caches reduce the cost of 
