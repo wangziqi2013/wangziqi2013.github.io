@@ -56,3 +56,8 @@ If the valid field is off for sector on offset i, the sector is not mapped by an
 then the sector is mapped, but the base address is still unknown. 
 The second per-sector field identifies the tag that maps the sector. Given that P tags can share a cache block, 
 this field consists of log2(P) (rounded up) bits, which stores the identity of the tag mapping the address.
+On a cache lookup, both fields are checked. The cache controller signals a hit, if and only if the sector on the offset
+has "valid" bit on, and the address tag indicated by the second field matches the requested address.
+Note that in the meantime the tag lookup is still performed, and the tag is located by comparing the address with 
+corresponding bits in the requested address. We compare the identity of the tag and the ID stored in the second field,
+and signal a hit if these two matches.
