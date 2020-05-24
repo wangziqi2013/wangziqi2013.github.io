@@ -77,4 +77,12 @@ bits before the set index) indeed belongs to the tag, a hit is signaled. Otherwi
 
 ![Address Translation](/static/2020-05-24-01.png)
 
-Our previous discussion . The paper also suggests 
+Our previous discussion assumes direct-mapped tag array and sector, which is indexed by a few middle bits from the requested
+address. The paper also suggests that the organization of tag arrays and sectors can also be set-associative themselves, 
+independent of the overall organnization of the cache. After locating the set using a log2(X) bit set index,
+the cache controller should further locate the tags and sectors for address comparison.
+For a set-associative tags consisting of x sets and y ways, where (x * y) = P, we first take the low log2(x) bits from the
+address as the set index, and then read out all tags within the set. If any one of the address tag matchs the bits 
+after the tag set index, a tag hit is signaled
+
+
