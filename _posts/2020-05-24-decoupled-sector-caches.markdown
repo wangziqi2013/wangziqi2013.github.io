@@ -74,3 +74,7 @@ where there is only Y tags per set, and 1 tag per set element. No bit between th
 to retrieving a tag from decoupled P tags. After the tag is retrieved, in case there is an address match, we also check
 the sector's tag ID field. If these two match, indicating that the sector stored on the offset (addressed using log2(S) 
 bits before the set index) indeed belongs to the tag, a hit is signaled. Otherwise a miss is signaled.
+
+![Address Translation](/static/2020-05-24-01.png)
+
+Our previous discussion . The paper also suggests 
