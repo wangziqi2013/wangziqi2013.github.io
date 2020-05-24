@@ -71,4 +71,6 @@ the set index and address tag are then used to address tags within the set. Note
 and each element contains P tags. We use the middle log2(P) bits to address one tag from each set element, and compare
 the rest of the high bits to determine if there is a hit. This is slightly more complicated than a non-sector cache,
 where there is only Y tags per set, and 1 tag per set element. No bit between the set index and address tag is dedicated 
-to retrieving a tag from decoupled P tags.
+to retrieving a tag from decoupled P tags. After the tag is retrieved, in case there is an address match, we also check
+the sector's tag ID field. If these two match, indicating that the sector stored on the offset (addressed using log2(S) 
+bits before the set index) indeed belongs to the tag, a hit is signaled. Otherwise a miss is signaled.
