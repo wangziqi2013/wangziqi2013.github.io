@@ -48,7 +48,11 @@ difference between a decoupled sector cache and a regular sector cache is that t
 with each other, i.e. blocks on different offsets may be using different base address tags.
 
 To help finding which sectors in the block belong to which tags, each sector now is equipped with two extra fields.
-The first is the normal "valid" field, which is moved from the tag, since now there are multiple tags, and having each
-of them saving a separate "valid" bit causes unnecessary redundancy. If the valid field is off for sector on offset i, 
-the sector is not mapped by any of the tag. If the valid field is on, then the sector is mapped, but the base address is 
-still unknown. 
+The first is the normal "valid" field indicating whether the sector is mapped by any of the tag. This field used to be 
+stored for each sector together with the address tag in a normal sector cache. 
+In the proposed design, however, they are now stored in a per-sector manner, since now there are multiple tags, and 
+having each of them saving a separate "valid" bit vector causes unnecessary redundancy. 
+If the valid field is off for sector on offset i, the sector is not mapped by any of the tag. If the valid field is on, 
+then the sector is mapped, but the base address is still unknown. 
+The second per-sector field identifies the tag that maps the sector. Given that P tags can share a cache block, 
+this field consists of log2(P) (rounded up) bits, which stores the identity of the tag mapping the address.
