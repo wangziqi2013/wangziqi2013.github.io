@@ -97,7 +97,10 @@ Two types of misses can occur with a decoupled sector cache. The first type is w
 found for that tag. This is a minor miss, since we only need to evict an existing sector from the current set, without
 invalidating any tag. An eviction policy should be defined for sector sets to handle minor misses, if sectors are 
 set-associative.
-
+A major miss happens when none of the tags match the requested address. In this case, one tag from the current set
+should be evicted. In addition, all sectors with the tag ID matching the evicted tag should also be evicted. This is 
+a rather complicated process that can increase cache miss handling latency, but the paper claims that it can be partially
+or fully overlapped with data fetching.
 
 
 
