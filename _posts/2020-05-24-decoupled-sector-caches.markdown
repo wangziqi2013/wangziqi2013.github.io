@@ -88,7 +88,13 @@ a sector array consisting of x' sets and y' ways, where (x' * y') = S, we use lo
 determine the sector set. Then all y' ways are read out, and the one whose tag ID field matches the tag that gets hit
 is the data sector that gets hit. If both a tag hit and sector hit are signaled, a cache hit is signaled. In all
 other cases, cache miss occurs, and replacement will be made.
+As pointed out by the paper, the tag array and sector array need not be of the same organization. They are merely a 
+way of determining which subset of tags or sets could an address be stored. Higher associativity means an address could
+be found in more potential locations, enabling more flexible caching policy, at the cost of more read operations
+and more complex comparison hardware when the set is accessed (all ways are read).
 
 Two types of misses can occur with a decoupled sector cache.
 Eviction policies should also be defined when a sector is to be evicted. Note that the eviction policy
 should be defined on the tag side, rather than sector side, unless the sector is set-associative and the miss
+
+
