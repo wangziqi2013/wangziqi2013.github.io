@@ -68,4 +68,7 @@ Given X sets and a Y way set-associative sector cache with P tags and S sectors 
 lowest log2(X) bits after the sector offset to address the tag, and use the rest of the high-order bits minus the lowest 
 log2(P) bits as the address tag to be stored in the tag array (also used for comparison). The log2(P) bits between 
 the set index and address tag are then used to address tags within the set. Note that now each set contains (Y * P) tags,
-and each element contains P tags. 
+and each element contains P tags. We use the middle log2(P) bits to address one tag from each set element, and compare
+the rest of the high bits to determine if there is a hit. This is slightly more complicated than a non-sector cache,
+where there is only Y tags per set, and 1 tag per set element. No bit between the set index and address tag is dedicated 
+to retrieving a tag from decoupled P tags.
