@@ -23,4 +23,7 @@ For example, if the cache line size is 16 bytes as in MIPS R4000 architecture, t
 SRAM storage. This, however, has negative effect such as increased bandwidth usage per transaction and possibilities of 
 false sharing in the case of coherence.
 
-Sector caches reduce the cost of 
+Sector caches use larger-than-usual block size without introducing excessive data transfer and coherence invalidation 
+by allowing a large cache line to be further divided into smaller units, called "sectors". Sectors are the basic
+unit of data transfer and coherence just like a regular cache line. The address tag of the sector, however, is only
+implied by the tag of the entire block and its index within the block. 
