@@ -93,8 +93,11 @@ way of determining which subset of tags or sets could an address be stored. High
 be found in more potential locations, enabling more flexible caching policy, at the cost of more read operations
 and more complex comparison hardware when the set is accessed (all ways are read).
 
-Two types of misses can occur with a decoupled sector cache.
-Eviction policies should also be defined when a sector is to be evicted. Note that the eviction policy
-should be defined on the tag side, rather than sector side, unless the sector is set-associative and the miss
+Two types of misses can occur with a decoupled sector cache. The first type is when the tag hits, but no sector can be 
+found for that tag. This is a minor miss, since we only need to evict an existing sector from the current set, without
+invalidating any tag. An eviction policy should be defined for sector sets to handle minor misses, if sectors are 
+set-associative.
+
+
 
 
