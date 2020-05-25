@@ -57,4 +57,5 @@ called "ways". Given a N-way partition, the cache also defined N hash functions 
 The N hash functions map the address into one of the W slots on each way respectively (hash function H<sub>i</sub> only 
 maps the address for way<sub>i</sub>). Cache lookup requires reading the tags of each slot from each way, and compares 
 that with the requested address. If any one of the slots indicate an address match, a hit is signaled. Otherwise, it will 
-be a cache miss.
+be a cache miss. The physical implementation of ways can just be SRAM register files with one read port. Each way has its 
+own read port and R/W logic to support parallel tag comparison.
