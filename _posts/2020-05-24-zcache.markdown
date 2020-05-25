@@ -13,3 +13,9 @@ htm_cr:
 version_mgmt:
 ---
 
+This paper proposes ZCache, a cache array design that decouples ways from associativity. Traditional set-associative 
+cache lookup and replacement policies are based on the concept of sets, which consists of a few ways. All addresses
+are mapped to individual sets, in which the address can be stored by any of the way. The paper points out that
+this organization prevents an optimal or near optimal replacement decision from being made, since the replacement policy,
+regardless of which policy it is as long as the domain is within the set, can only evict an existing block from the 
+current set, while some where in the cache a better candidate may exist. 
