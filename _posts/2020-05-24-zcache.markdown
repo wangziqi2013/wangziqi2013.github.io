@@ -33,5 +33,8 @@ One easy way of increasing the chance that a better candicate can be selected du
 associativity, i.e. the number of ways, in the cache organization. This has been done on commercial products where
 the LLC is highly associative, featuring more than 16 ways. Having a larger set to select candidates from of course 
 enables better decisions to be made, but this benefit comes at a cost: 
-
+During cache lookup, all 16 way tags and data in the set need to be read out from the SRAM register file, 
+and then compared with the requested address, even though only at most one of the 16 data reads will be useful. 
+On modern hardware, such parallel SRAM read is a major source of cache power consumption and heat
+dissipation, and is likely not to be scaled further for the next genetation product. 
 
