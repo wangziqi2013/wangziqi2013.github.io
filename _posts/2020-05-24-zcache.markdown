@@ -19,3 +19,9 @@ are mapped to individual sets, in which the address can be stored by any of the 
 this organization prevents an optimal or near optimal replacement decision from being made, since the replacement policy,
 regardless of which policy it is as long as the domain is within the set, can only evict an existing block from the 
 current set, while some where in the cache a better candidate may exist. 
+
+The paper identifies the root cause of non-optimal or even bad replacement decisions as coupled cache replacement policy
+and cache line placement policy on a miss. Associativity is defined for both replacement and placement. When a miss occurs
+and the target line is fetched from the lower level, the placement policy dictates which blocks could be used to store
+the line. When a set conflict miss occurs, the replacement policy determines, from a pool of candidates, which lines 
+should be evicted for the new line. 
