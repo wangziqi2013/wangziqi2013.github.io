@@ -84,4 +84,10 @@ used for scheduling for reading next-level conflicting set. This iterative proce
 
 Values in candicate buffers are pointers to the tag (i.e. way ID and slot ID). These values also implicitly form a 
 tree structure. No explicit parent is stored, since the tree is of fixed fan-out, and parents can be implied by the index 
-of an element.
+of an element. We need parent information because it is used for repositioning.
+
+The actual replacement algorithm proposed by the paper is LRU. Conventional LRU implementation does not work for ZCache,
+since there is no set ordering unlike a conventional set in which an LRU stack can be formed. The paper proposes using 
+simple timestamp based LRU. A centralized counter dispenses the current timestamp with regard to cache operations. When
+a hit or line fetch occurs, the timestmap is written into the tag of the line. During eviction, the cache controller 
+scans the candidate buffer, and evicts the line with the smallest timestamp. 
