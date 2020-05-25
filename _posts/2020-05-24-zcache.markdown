@@ -69,4 +69,7 @@ When a cache miss occurs, one existing line in the cache must be evicted for rep
 eviction, the algorithm simply find the conflicting addresses for the requested address A, and evict one of 
 them (e.g. B) to make space. ZCache goes one step forward by allowing a cache line (e.g. C) in the conflicting set of 
 conflicting addresses be evicted also, after which the conflicting address B is moved to the secondary conflicting slot of
-C, and the requested address is moved to the slot of B.
+C, and the requested address is moved to the slot of B. This can be applied recursively for several iterations as long 
+as tags are always repositioned into its conflicting addresses, after the latter has been evicted or repositioned.
+The paper calls this process a "tag walk", and points out that this is essentially a BFS search on the "set conflict"
+relation.
