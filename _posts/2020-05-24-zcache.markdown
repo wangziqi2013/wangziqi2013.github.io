@@ -82,4 +82,6 @@ inserted into the candicate buffer since they serve as candidates of eviction. I
 used for scheduling for reading next-level conflicting set. This iterative process stops when a certain threshold 
 (in terms of levels) is reached, at which time the candicate buffer holds a list of possible candicates for eviction. 
 
-
+Values in candicate buffers are pointers to the tag (i.e. way ID and slot ID). These values also implicitly form a 
+tree structure. No explicit parent is stored, since the tree is of fixed fan-out, and parents can be implied by the index 
+of an element.
