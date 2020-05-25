@@ -24,4 +24,6 @@ The paper identifies the root cause of non-optimal or even bad replacement decis
 and cache line placement policy on a miss. Associativity is defined for both replacement and placement. When a miss occurs
 and the target line is fetched from the lower level, the placement policy dictates which blocks could be used to store
 the line. When a set conflict miss occurs, the replacement policy determines, from a pool of candidates, which lines 
-should be evicted for the new line. 
+should be evicted for the new line. In a traditional set-associative cache, these two policies are equivalent: The 
+replacement policy always selects a block in the current set the address is mapped into, and the newly fetched line 
+is also always stored in the same slot. 
