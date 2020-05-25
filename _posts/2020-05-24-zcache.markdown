@@ -51,3 +51,10 @@ way, the set conflict relation is not longer transitive, since address A, B conf
 necessarily imply that A and C must also conflict, since A, B and B, C may conflict on different sets. This way, the 
 transitive closure of the transitive relation is much larger than in the first case, since more cache lines can be included
 while we "reach out" to other conflicting addresses by following the relation.
+
+In practice, ZCache can be implemented as follows. The tag and data slots are partitioned into equal-sized parts of size W, 
+called "ways". Given a N-way partition, the cache also defined N hash functions (preferably) for any given address.
+The N hash functions map the address into one of the W slots on each way respectively (hash function H<sub>i</sub> only 
+maps the address for way<sub>i</sub>). Cache lookup requires reading the tags of each slot from each way, and compares 
+that with the requested address. If any one of the slots indicate an address match, a hit is signaled. Otherwise, it will 
+be a cache miss.
