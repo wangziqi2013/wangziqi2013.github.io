@@ -29,3 +29,9 @@ should be evicted for the new line. In a traditional set-associative cache, thes
 replacement policy always selects a block in the current set the address is mapped into, and the newly fetched line 
 is also always stored in the same slot, such that cache lookup operations only compare tags in the current set. 
 
+One easy way of increasing the chance that a better candicate can be selected during eviction is to increase the 
+associativity, i.e. the number of ways, in the cache organization. This has been done on commercial products where
+the LLC is highly associative, featuring more than 16 ways. Having a larger set to select candidates from of course 
+enables better decisions to be made, but this benefit comes at a cost: 
+
+
