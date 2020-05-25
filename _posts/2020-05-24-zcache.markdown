@@ -1,0 +1,15 @@
+---
+layout: paper-summary
+title:  "The ZCache: Decoupling Ways and Associativity"
+date:   2020-05-24 23:12:00 -0500
+categories: paper
+paper_title: "The ZCache: Decoupling Ways and Associativity"
+paper_link: https://ieeexplore.ieee.org/document/5695536/
+paper_keyword: zCache
+paper_year: MICRO 2010
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
