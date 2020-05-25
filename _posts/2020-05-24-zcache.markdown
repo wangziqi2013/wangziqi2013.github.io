@@ -59,3 +59,8 @@ maps the address for way<sub>i</sub>). Cache lookup requires reading the tags of
 that with the requested address. If any one of the slots indicate an address match, a hit is signaled. Otherwise, it will 
 be a cache miss. The physical implementation of ways can just be SRAM register files with one read port. Each way has its 
 own read port and R/W logic to support parallel tag comparison.
+
+Recall that according to the definition of set conflicts, an address A stored on way i conflicts with other addresses B
+stored on way j slot k, if and only if A also hash into slot k on way j. In other words, the conflict set of any address
+stored in the cache consists of all addresses that happen to be hashed into the same slot on other ways.
+
