@@ -78,3 +78,8 @@ The actual implementation of the tag walk is described as follows. A small candi
 SRAM is added to the cache controller. On signaling a miss, the cache controller computes the conflicting set for 
 each level in a breadth-first manner. It first schedules reading the first level W conflicting tags of the requested 
 address by reading into the banked register file holding tags. After the output is available, these tags are then 
+inserted into the candicate buffer since they serve as candidates of eviction. In the meantime, the output is also
+used for scheduling for reading next-level conflicting set. This iterative process stops when a certain threshold 
+(in terms of levels) is reached, at which time the candicate buffer holds a list of possible candicates for eviction. 
+
+
