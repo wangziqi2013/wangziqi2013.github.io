@@ -42,4 +42,8 @@ ZCache decouples associativity from replacement by allowing a larger number of b
 the current set. A "set conflict" is defined as two addresses having a non-zero chance of being mapped 
 onto the same physical slot. This "conflict" relation is transitive for traditional cache organization, since one address
 can only be statically mapped to one set using the lower bits in the requested address. 
+Using this definition, when a miss occurs, the cache line to be evicted must be within the transitive closure of the 
+"conflict" relation using the current content of the set, since the new line being fetched from lower leval can only
+be stored in one of the conflicting addresses' slots.
+
 
