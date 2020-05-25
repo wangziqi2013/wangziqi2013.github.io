@@ -90,4 +90,8 @@ The actual replacement algorithm proposed by the paper is LRU. Conventional LRU 
 since there is no set ordering unlike a conventional set in which an LRU stack can be formed. The paper proposes using 
 simple timestamp based LRU. A centralized counter dispenses the current timestamp with regard to cache operations. When
 a hit or line fetch occurs, the timestmap is written into the tag of the line. During eviction, the cache controller 
-scans the candidate buffer, and evicts the line with the smallest timestamp. 
+scans the candidate buffer, and evicts the line with the smallest timestamp. Repositioning is performed after the 
+line (which is not necessarily at leaf level) is evicted by reading the parent node and store it into the child that
+was just evicted or repositioned. Although this tag walk, scan and repositioning process will have larger latency than
+simple LRU, the paper claims that such latency can be overlapped with line fetch on cache misses, which, in the case 
+of LLC, will take hundreds of cycles.
