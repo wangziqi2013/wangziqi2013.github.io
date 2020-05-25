@@ -46,4 +46,8 @@ Using this definition, when a miss occurs, the cache line to be evicted must be 
 "conflict" relation using the current content of the set, since the new line being fetched from lower leval can only
 be stored in one of the conflicting addresses' slots.
 
-
+ZCache extends the semantics of "set conflict" by allowing one address being statically mapped to more than one sets. This
+way, the set conflict relation is not longer transitive, since address A, B conflicting and  B, C conflicting do not 
+necessarily imply that A and C must also conflict, since A, B and B, C may conflict on different sets. This way, the 
+transitive closure of the transitive relation is much larger than in the first case, since more cache lines can be included
+while we "reach out" to other conflicting addresses by following the relation.
