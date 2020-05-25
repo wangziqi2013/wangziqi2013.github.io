@@ -38,3 +38,8 @@ and then compared with the requested address, even though only at most one of th
 On modern hardware, such parallel SRAM read is a major source of cache power consumption and heat
 dissipation, and is likely not to be scaled further for the next genetation product. 
 
+ZCache decouples associativity from replacement by allowing a larger number of blocks to be selected as candicates beyond
+the current set. A "set conflict" is defined as two addresses having a non-zero chance of being mapped 
+onto the same physical slot. This "conflict" relation is transitive for traditional cache organization, since one address
+can only be statically mapped to one set using the lower bits in the requested address. 
+
