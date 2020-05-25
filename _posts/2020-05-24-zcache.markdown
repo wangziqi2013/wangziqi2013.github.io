@@ -62,5 +62,11 @@ own read port and R/W logic to support parallel tag comparison.
 
 Recall that according to the definition of set conflicts, an address A stored on way i conflicts with other addresses B
 stored on way j slot k, if and only if A also hash into slot k on way j. In other words, the conflict set of any address
-stored in the cache consists of all addresses that happen to be hashed into the same slot on other ways.
+stored in the cache consists of all addresses that happen to be hashed into the same slot on other ways. An address tag
+can always be found by the lookup as long as it is stored in one of the conflicting slots. 
 
+When a cache miss occurs, one existing line in the cache must be evicted for replacement. In the classical way of performing 
+eviction, the algorithm simply find the conflicting addresses for the requested address A, and evict one of 
+them (e.g. B) to make space. ZCache goes one step forward by allowing a cache line (e.g. C) in the conflicting set of 
+conflicting addresses be evicted also, after which the conflicting address B is moved to the secondary conflicting slot of
+C, and the requested address is moved to the slot of B.
