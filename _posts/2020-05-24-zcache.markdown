@@ -73,3 +73,8 @@ C, and the requested address is moved to the slot of B. This can be applied recu
 as tags are always repositioned into its conflicting addresses, after the latter has been evicted or repositioned.
 The paper calls this process a "tag walk", and points out that this is essentially a BFS search on the "set conflict"
 relation.
+
+The actual implementation of the tag walk is described as follows. A small candidate buffer implemented as a single-port
+SRAM is added to the cache controller. On signaling a miss, the cache controller computes the conflicting set for 
+each level in a breadth-first manner. It first schedules reading the first level W conflicting tags of the requested 
+address by reading into the banked register file holding tags. After the output is available, these tags are then 
