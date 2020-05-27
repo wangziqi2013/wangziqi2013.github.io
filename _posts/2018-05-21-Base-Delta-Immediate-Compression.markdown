@@ -79,3 +79,9 @@ Each tag contains an index field pointing to one of the segments as the beginnin
 Tags also contain a three-bit field decsribing one of the eight compression schemes the line is encoded with.
 The size of a compressed line need not be explicitly stored, since compressed sizes can be derived from 
 the compression type (a simple hardware lookup table suffices).
+
+The unified data slot is managed using a simple algorithm. A bit vector indicates whether a segment is currently in-use. 
+On a line fetch or write back from upper levels, the hardware circuit first compresses the line, determines the after-compression
+size (round up to match segment size), and then check the bit vector for a consecutive run of n free segments, where
+n is the compressed size. If this could be found, then bits in the bit vector are set for all n segments, and the index
+of the starting segment is stored in the tag. 
