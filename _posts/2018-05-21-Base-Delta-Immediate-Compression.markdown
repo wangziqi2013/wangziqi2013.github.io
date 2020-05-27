@@ -71,4 +71,11 @@ B&Delta;I also requires changing the cache organization in order to be effective
 compression is to allow more cache lines to be stored in a single set to increase the effective cache size. The paper 
 leverages the observation that in all commercial workloads used for evaluation, the maximum compression ratio is 2.0,
 while most workloads have an average compression ratio of 1.5. This implies that doubling the number of tags per set
-is sufficient in most cases.
+is sufficient in most cases. In addition, data slots are no longer statically bound to tag slots. Instead, all data slots
+within the set are merged into a single unified array, which is then divided into 8 byte units called "segments". 
+Segments are the basic unit of storage in a compressed cache, and compressed lines must be stored in non-overlapping
+and consecutive segments. 
+Each tag contains an index field pointing to one of the segments as the beginning of the compressed line. 
+Tags also contain a three-bit field decsribing one of the eight compression schemes the line is encoded with.
+The size of a compressed line need not be explicitly stored, since compressed sizes can be derived from 
+the compression type (a simple hardware lookup table suffices).
