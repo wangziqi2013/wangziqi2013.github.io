@@ -85,3 +85,5 @@ On a line fetch or write back from upper levels, the hardware circuit first comp
 size (round up to match segment size), and then check the bit vector for a consecutive run of n free segments, where
 n is the compressed size. If this could be found, then bits in the bit vector are set for all n segments, and the index
 of the starting segment is stored in the tag. 
+Otherwise, the cache controller schedules evictions to make space for the incoming line. Since lines are compressed and 
+are of different sizes, more than one evictions may be scheduled.
