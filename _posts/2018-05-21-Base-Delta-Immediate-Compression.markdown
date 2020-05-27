@@ -66,3 +66,9 @@ If B&Delta;I is used for compression, the process is divided into two stages. In
 values and compresses them using fewer bits. The locations of values that have been compressed are represented using a bit mask.
 Then in the second stage, the circuit selectively compresses only values on those locations where the bit is clear. The first 
 location with a clear bit will be chosen as the base value. 
+
+B&Delta;I also requires changing the cache organization in order to be effective. Recall that the goal of performing cache
+compression is to allow more cache lines to be stored in a single set to increase the effective cache size. The paper 
+leverages the observation that in all commercial workloads used for evaluation, the maximum compression ratio is 2.0,
+while most workloads have an average compression ratio of 1.5. This implies that doubling the number of tags per set
+is sufficient in most cases.
