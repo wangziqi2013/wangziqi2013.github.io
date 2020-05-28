@@ -35,4 +35,10 @@ as we will see below.
 As discussed in the previous section, V-Way Cache only doubles the number of tags while keeping the number of data slots
 unchanged. This is similar to virtual memory system where the virtual address space is larger than physical address space.
 In such a system, the virtual address space can never be fully populated, since the maximum number of active pages allowed
-will not exceed the capacity of the physical address space. 
+will not exceed the capacity of the physical address space. This design has the benefit of more flexible resource management.
+When multiple processes share the same physical memory, virtual address mapping creates the illusion that each of the process
+have exclusive permission to the resource, while the actual resource management can divide resource between processes
+based on demands, or even forces barely used pages of some other processes to be evicted to the disk. 
+This works as long as each process only uses part of the physical resource available.
+
+
