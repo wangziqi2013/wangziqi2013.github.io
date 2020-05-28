@@ -101,5 +101,9 @@ accessed in the future, as most accesses will just hit the L1.
 Instead of using last access time, access frequency is a better matric for measuring whether an address is likely to
 be used in the future, since access frequency in the past does imply similar frequency in the future. 
 
+V-Way cache uses a frequency based replacement algorithm with reuse counters, as the number of reuses within a time
+span can approximate the frequency of a cache line being accessed. Each data slot has a 2-bit saturating counter. 
+When the data block is hit by an access, the counter is incremented using saturating logic, i.e. the value saturates 
+at value 3 and will not increase afterwards.
 
 
