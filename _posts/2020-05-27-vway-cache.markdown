@@ -67,3 +67,8 @@ FPTR and BPTR must always mutually point to each other. This design change also 
 must be serialized. Although this may increase acceass latency by a few cycles, since some caches allow parallel 
 access of tag and data, the paper suggests that for L2 caches this is not an issue, and some commercial designs already
 serialize these two for lower power consumption.
+
+The V-Way cache works as follows. On a cache access request, the tag array is indexed using the lower middle bits of 
+the requested address. Once the set is located, tags are read in parallel and compared as in a regular cache. A cache
+hit is signaled if one of the address tags match, and the corresponding FPTR is used to access the data register file,
+from which cache data is returned.
