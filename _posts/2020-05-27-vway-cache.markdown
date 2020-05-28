@@ -19,4 +19,8 @@ first is that accesses are not evenly distributed over sets. Some cache sets are
 imbalance between set accesses may degrade performance, since these frequently accessed sets will observe higher-than-usual
 cache miss rates. The second factor is local replacement. Traditional set-associative caches restrict replacement decisions
 to be made within the current set, which is often quite small. Theoretically speaking, the optimal replacement decision
-can be made with knowledge into the future by invalidating the line that is needed in the furthest future. 
+can be made with knowledge into the future by invalidating the line that is needed in the furthest future, regardless of 
+the set it resides in. An sub-optimal but often sufficient decision can also be made while looking into the past and 
+select the least recently accessed lines under the assumption that past access patternn also indicates the future. 
+Both models are not practical in modern caches, since this would require a fully associative cache in which an address
+can be mapped to any data slot. 
