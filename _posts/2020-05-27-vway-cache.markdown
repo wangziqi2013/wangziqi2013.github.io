@@ -92,3 +92,14 @@ This is also similar to virtual memory managent with multiple processes: If anot
 that is rarely used, it is better to evict that page to serve the page fault of the current process, rather than
 evicting a page in the current process's working set, which may turn out to be a more frequently accessed page than
 the other candidate.
+
+The paper proposes a reuse-count based global eviction algorithm for V-Way Cache. V-Way Cache is proposed for L2 and LLC
+level, which only see a filtered trace of all memory accesses. In other words, locality of access is significantly lower
+in L2 and LLC than in an L1 cache. Based on this observation, traditional algorithms such as LRU do not work well for 
+L2 and LLC, since an address being accessed in the recent past does not not necessarily imply that it will also be likely
+accessed in the future, as most accesses will just hit the L1. 
+Instead of using last access time, access frequency is a better matric for measuring whether an address is likely to
+be used in the future, since access frequency in the past does imply similar frequency in the future. 
+
+
+
