@@ -71,4 +71,9 @@ serialize these two for lower power consumption.
 The V-Way cache works as follows. On a cache access request, the tag array is indexed using the lower middle bits of 
 the requested address. Once the set is located, tags are read in parallel and compared as in a regular cache. A cache
 hit is signaled if one of the address tags match, and the corresponding FPTR is used to access the data register file,
-from which cache data is returned.
+from which cache data is returned. Cache misses, however, are more complicated than in a regular cache. There are 
+two cases for cache misses. In the first case, the tag array is full, and no more tags can be inserted into the set.
+In this case, a local replacement algorithm for tags are used, and one of the tags in the set is evicted. The 
+replacement algorithm can be any conventional algorithm, and it only makes local decision. The data slot is also 
+recycled for the new incoming cache line. Neither FPTR nor BPTR are mofidied, since the tag-data slot mapping does 
+not change. 
