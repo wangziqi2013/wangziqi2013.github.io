@@ -41,4 +41,13 @@ have exclusive permission to the resource, while the actual resource management 
 based on demands, or even forces barely used pages of some other processes to be evicted to the disk. 
 This works as long as each process only uses part of the physical resource available.
 
+The same reasoning holds true for V-Way cache, except that we treat individual sets as processes in the above discussion,
+and treat data slots as physical address space.
+The overall idea is that, by doubling the number of tags on each way without increasing the number of data slots,
+the cache controller could temporarily "borrow" data slots from other under-utilized sets to fulfill memory accesses
+on a frequently accessed set. This is similar to how a virtual memory manager evicts a less used page of other 
+processes to make space for a frequently accessed page of the current process.
 
+, as the number of 
+data slots do not change. In addition, V-Way cache decouples static mapping between tags and data slots. A data slot
+can be mapped by any of the tags. This allows data slots to be "borrowed"
