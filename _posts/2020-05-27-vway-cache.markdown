@@ -83,3 +83,12 @@ an empty data slot, it will be used. Otherwise, the replacement algorithm evicts
 information, rather than the set's local information. Once the decision is made, the tag that currently maps the data slot
 will be invalidated by following the BPTR of the selected data slot, and clearing the valid bit for that tag. The data
 slot is then recycled by setting its BPTR to the empty tag. The FPTR of the empty tag is also set to the data slot.
+
+The above discussion suggests that two replacement algorithms determine the eviction victim in the two cases respectively.
+Local decisions are made when there is not enough number of tags in the current set, while global decisions are 
+made when there is an empty tag, but a new data slot is required. Global decisions can always result in a better
+replacement strategy, since they consider all cache lines in the cache, rather than only a small subset of them. 
+This is also similar to virtual memory managent with multiple processes: If another process has in-memory page
+that is rarely used, it is better to evict that page to serve the page fault of the current process, rather than
+evicting a page in the current process's working set, which may turn out to be a more frequently accessed page than
+the other candidate.
