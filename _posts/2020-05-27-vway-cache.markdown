@@ -105,5 +105,11 @@ V-Way cache uses a frequency based replacement algorithm with reuse counters, as
 span can approximate the frequency of a cache line being accessed. Each data slot has a 2-bit saturating counter. 
 When the data block is hit by an access, the counter is incremented using saturating logic, i.e. the value saturates 
 at value 3 and will not increase afterwards.
-
+The cache controller also maintains a scan pointer "PTR". The pointer stores the index of the data slot that will be 
+tested next during miss handling. When a miss occurs, the cache controller checks the current counter value of the 
+data slot pointed to by PTR. If the value is zero, then the data slot is evicted, after which it is used to fulfill
+the cache miss. Otherwise, the counter value is decremented, the PTR advances to the next element, or wrap back
+to the beginning of the data array when it reaches the end. This should eventually stop at a data slot and evict it,
+since counter values always decrease by one for each loop.
+Although
 
