@@ -23,4 +23,13 @@ can be made with knowledge into the future by invalidating the line that is need
 the set it resides in. An sub-optimal but often sufficient decision can also be made while looking into the past and 
 select the least recently accessed lines under the assumption that past access patternn also indicates the future. 
 Both models are not practical in modern caches, since this would require a fully associative cache in which an address
-can be mapped to any data slot. 
+can be mapped to any data slot. Expanding associativity is also unacceptable in many cases, since they most likely would
+only marginally increase hit rate, at the cost of increased power consumption and larger decoder to the SRAM array.
+
+Increasing the number of sets is also a viable way of increasing cache hits. The problem is that this essentially
+doubles the storage cost of the cache, not to mention increased on-chip area dedicated to larger decoding and 
+accessing logic. One observation is that tag storage only contributes, by a small fraction, to a cache's total area and 
+energy consumption. The V-Way cache design doubles the number of tags while keeping the number of data slots unchanged,
+as we will see below.
+
+
