@@ -57,4 +57,9 @@ less tag comparison logic and power consumption, but statically distributes addr
 This might be ineffective if the access skew is not caused by the extra high index bit (i.e. one of the two sets still
 see more accesses than the other). The paper assumes the former mainly because of the observation that most sets 
 will have free tags anyway (due to under-provisioning of data slots).
-
+Second, data slots are decoupled from tags. This is necessary for the under-provisioning design to work, just as in 
+virtual memory systems physical pages are not statically bound to virtual page frames. 
+The V-Way Cache allows any data slot to be mapped by any tag, such that data slots can be "borrowed" from other sets.
+To this end, there is a "forward pointer", or FPTR field for every tag slot indicating the data slot it maps to.
+Similarly, data slots are organized as a linear array (implemented as a SRAM register file), each having a "backward 
+pointer", or BPTR, pointing to the tag that maps the data slot.
