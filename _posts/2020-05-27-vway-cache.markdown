@@ -32,4 +32,7 @@ accessing logic. One observation is that tag storage only contributes, by a smal
 energy consumption. The V-Way cache design doubles the number of tags while keeping the number of data slots unchanged,
 as we will see below.
 
-
+As discussed in the previous section, V-Way Cache only doubles the number of tags while keeping the number of data slots
+unchanged. This is similar to virtual memory system where the virtual address space is larger than physical address space.
+In such a system, the virtual address space can never be fully populated, since the maximum number of active pages allowed
+will not exceed the capacity of the physical address space. 
