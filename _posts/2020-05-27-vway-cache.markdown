@@ -111,5 +111,10 @@ data slot pointed to by PTR. If the value is zero, then the data slot is evicted
 the cache miss. Otherwise, the counter value is decremented, the PTR advances to the next element, or wrap back
 to the beginning of the data array when it reaches the end. This should eventually stop at a data slot and evict it,
 since counter values always decrease by one for each loop.
-Although
+Although eviction handling has variable, and sometimes long, latency due to the data slot scan, the paper argues that:
+(1) Data slot scan can be overlapped with line fetching from the next level, which itself can be performed in the backgroubnd;
+(2) In most cases, the scan stops after only a few steps. This is because not all lines are accessed uniformly in the cache.
+Some lines are often accessed less frequently than other lines. Also, since tags are not mapped linearly to the data
+storage, data slots are randomized in the array. It is unlikely that a striding access pattern would cause a large
+continuous range of blocks all having large counter value.
 
