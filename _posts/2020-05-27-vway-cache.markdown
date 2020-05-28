@@ -62,4 +62,8 @@ virtual memory systems physical pages are not statically bound to virtual page f
 The V-Way Cache allows any data slot to be mapped by any tag, such that data slots can be "borrowed" from other sets.
 To this end, there is a "forward pointer", or FPTR field for every tag slot indicating the data slot it maps to.
 Similarly, data slots are organized as a linear array (implemented as a SRAM register file), each having a "backward 
-pointer", or BPTR, pointing to the tag that maps the data slot.
+pointer", or BPTR, pointing to the tag that maps the data slot. The cache controller maintains the invariant that
+FPTR and BPTR must always mutually point to each other. This design change also implies that tag and data slot accesses
+must be serialized. Although this may increase acceass latency by a few cycles, since some caches allow parallel 
+access of tag and data, the paper suggests that for L2 caches this is not an issue, and some commercial designs already
+serialize these two for lower power consumption.
