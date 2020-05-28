@@ -46,8 +46,15 @@ and treat data slots as physical address space.
 The overall idea is that, by doubling the number of tags on each way without increasing the number of data slots,
 the cache controller could temporarily "borrow" data slots from other under-utilized sets to fulfill memory accesses
 on a frequently accessed set. This is similar to how a virtual memory manager evicts a less used page of other 
-processes to make space for a frequently accessed page of the current process.
+processes to make space for a frequently accessed page of the current process. As long as set accesses are skewed,
+this will create an illusion that some sets are larger than the rest.
 
-, as the number of 
-data slots do not change. In addition, V-Way cache decouples static mapping between tags and data slots. A data slot
-can be mapped by any of the tags. This allows data slots to be "borrowed"
+The actual V-Way hardware is discussed as follows. First, the number of tags are doubled, and one more bit is 
+used to index the tag array. As an alternative (not mentioned by the paper, but is interesting to consider),
+sets are still indexed using the same number of bits, but the number of ways within the set is doubled, such
+that more tags are read for address comparison after indexing the set. The former layout has the advantage of 
+less tag comparison logic and power consumption, but statically distributes addresses over the two individual sets.
+This might be ineffective if the access skew is not caused by the extra high index bit (i.e. one of the two sets still
+see more accesses than the other). The paper assumes the former mainly because of the observation that most sets 
+will have free tags anyway (due to under-provisioning of data slots).
+
