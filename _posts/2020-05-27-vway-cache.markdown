@@ -76,4 +76,10 @@ two cases for cache misses. In the first case, the tag array is full, and no mor
 In this case, a local replacement algorithm for tags are used, and one of the tags in the set is evicted. The 
 replacement algorithm can be any conventional algorithm, and it only makes local decision. The data slot is also 
 recycled for the new incoming cache line. Neither FPTR nor BPTR are mofidied, since the tag-data slot mapping does 
-not change. 
+not change. In the second case, there is at least one empty slot in the set. The paper argues that this is more common,
+since data slots are under-provisioned. In this case, no tag needs to be evicted. The cache controller, however, should
+find an empty data slot in the data array which is then mapped by an arbitrary empty tag in the set. If there is already
+an empty data slot, it will be used. Otherwise, the replacement algorithm evicts a data slot based on global access
+information, rather than the set's local information. Once the decision is made, the tag that currently maps the data slot
+will be invalidated by following the BPTR of the selected data slot, and clearing the valid bit for that tag. The data
+slot is then recycled by setting its BPTR to the empty tag. The FPTR of the empty tag is also set to the data slot.
