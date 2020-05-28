@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes the V-Way Cache, a cache organization featuring lower set conflict miss rates and better replacement 
+decisions. The paper points out that two factors affect cache hit rate and performance in set-associative caches. The 
+first is that accesses are not evenly distributed over sets. Some cache sets are favored more than the rest. Such 
+imbalance between set accesses may degrade performance, since these frequently accessed sets will observe higher-than-usual
+cache miss rates. The second factor is local replacement. Traditional set-associative caches restrict replacement decisions
+to be made within the current set, which is often quite small. Theoretically speaking, the optimal replacement decision
+can be made with knowledge into the future by invalidating the line that is needed in the furthest future. 
