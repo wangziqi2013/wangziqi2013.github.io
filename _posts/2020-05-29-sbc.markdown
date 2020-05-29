@@ -45,4 +45,6 @@ counter is incremented for each miss in the set, and decremented for each hit. A
 current set is over-utlized, and should borrow a few ways from an under-utilized set. A value below N, on the other hand, 
 indicates that the way is under-utilized, and can spare a few ways to other sets.
 
-Static Set Balancing Cache works by always merging
+Static Set Balancing Cache works by always merging sets whose index only differ by the highest bit. This results in the 
+same design as doubling the number of tags, but does not incur wider tag reads per access. Each tag in the cache 
+is added with a "d" bit to signal whether the line was migrated from another set, or it is local. 
