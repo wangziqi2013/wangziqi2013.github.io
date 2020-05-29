@@ -64,3 +64,10 @@ set, while the LRU line is evicted. There are two reasons for this. First, by in
 can ensure that the line can at least be used a few times before it is evicted. Second, if we insert the line into LRU
 location, then a second migration will evict the first line, which makes no sense, since this just unnecessarily
 capped maximum line migration to one.
+
+Dynamic Set Balancing Cache does not force static migration between sets. Any set can migrate to any other set. In the 
+paper, the over-utilized set is called the source, and the under-utilized set is called destination. 
+Theoratically speaking, shifting from static to dynamic scheme would be as easy as comparing all sets' saturating counter
+with the threshold, when the current set is already saturated. This, however, requires a large associative comparator 
+for every cache access, which offsets the purpose of reducing associativity. 
+
