@@ -57,3 +57,9 @@ for blocks stored in the victim cache. Each entry in the min-heap has an integer
 a pointer to the victim cache for whom the frequency is maintained. 
 The victim cache is organized as a hash table with chaining for conflict resolution. 
 These two components work together to reduce the number of cache misses in LLC, as we will see below.
+
+The min-heap storage is a N-entry array, where N is the number of blocks in the victim cache. The implementation
+is quite standard: The min-heap is stored as a logical full binary tree. Nodes are numbered from root to leaf, left to right.
+The root node has an index of zero, which is also stored at location zero of the array. Child nodes of any node i can
+be accessed at index 2i and (2i + 1). Parent node of any node j (except the root) can be accessed at index (j / 2) 
+(rounding towards zero). 
