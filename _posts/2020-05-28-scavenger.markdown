@@ -104,3 +104,8 @@ In this case, the controller finds another tag in a similar manner as above, cop
 to the new slot, changes its predecessor's and successor's pointer, and fills in the slot with request data and address.
 The "head" bit is also set to indicate that there is a conflict list in the current slot. For reads, this also signals 
 a miss.
+
+When an element is to be removed, we simply change its predecessor's and successor's pointers to skip that element,
+unless it is the head node. We cannot remove a head node, unless its "tail" bit is also set, in which case the 
+"valid" bit is just cleared. In the general case, the content of the next node is copied to the head node, and the next 
+node is removed from the chain. If the next node is also the tail node, we also set the "tail" bit of its predecessor.
