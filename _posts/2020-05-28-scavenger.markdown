@@ -69,4 +69,8 @@ property. In the second case, some block in the victim cache is hit by an upper 
 node in the min-heap is removed. Of course, we cannot physically remove the node from the min-heap array. By "removing"
 a node, we actually set its frequency value to zero, such that it will always be the root level element (or all nodes
 from the current node to the root have zero value). In this case, the node value is changed to zero, after which a 
-percolate up operation is performed.
+percolate up operation is performed. In a special mode called the "random mode", the victim cache also allows a random
+element to be selected and replaced by a new line evicted from the LLC. In this case, the min-heap must also support
+the operation of increasing or decreasing a node's value, and then either percolate up or down to maintain the heap
+property. This can be achieved easily by first comparing the new value with its parent and children nodes, and then 
+perform percolate up or down operation.
