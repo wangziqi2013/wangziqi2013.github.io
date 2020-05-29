@@ -39,6 +39,10 @@ and providing more ways in this case can help performance. On the other hand, if
 locality on the set is good, or few accesses actually hit the set. In both cases, some ways of the set can be spared
 for use by another over-utilized set by evicting existing lines at the end of the LRU stack.
 
-
+The paper proposes using a saturating counter to measure the saturation level of a set. Given an N way cache, the 
+saturation counter only needs to support a maximum value of (2N - 1) (so it is still a power of two). The per-set
+counter is incremented for each miss in the set, and decremented for each hit. A value of (2N - 1) indicates that the 
+current set is over-utlized, and should borrow a few ways from an under-utilized set. A value below N, on the other hand, 
+indicates that the way is under-utilized, and can spare a few ways to other sets.
 
 Static Set Balancing Cache works by always merging
