@@ -71,3 +71,10 @@ Theoratically speaking, shifting from static to dynamic scheme would be as easy 
 with the threshold, when the current set is already saturated. This, however, requires a large associative comparator 
 for every cache access, which offsets the purpose of reducing associativity. 
 
+The paper proposes using a small cache to track cache lines that are below the threshold. An associative buffer is added
+to the cache, which records cache set indices whose saturation level is below the threshold N, where N is the number 
+of ways in the cache. Two comparator trees compute the minimum element and the maximum element (and their indices) in 
+the array respectively.
+The minimum element is used when a set is needed as the destination for migration, while the maximum element is needed
+to minitor the high-water mark in the saturation cache. Whenever a set not in the cache whose saturation counter drops 
+the maximum, the maximum element is removed from the saturation cache, and the set with a lower value is added.
