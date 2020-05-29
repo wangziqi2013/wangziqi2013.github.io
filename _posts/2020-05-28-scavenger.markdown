@@ -30,5 +30,9 @@ Scavenger enhances the classical monolithic LLC cache organization as follows. G
 bytes the total storage could be), Scavanger divides them into two separate parts. The first part is a conventional
 set-associative cache of half of the storage budget. The second part is organized as a fully-associative priority heap 
 using the rest half of the storage budget. The hardware also tracks the access frequency of addresses that miss the 
-conventional part of the LLC using a bloom filter. 
-
+conventional part of the LLC using a bloom filter. When a line is evicted from the conventional part, its access frequency 
+is estimated using the bloom filter. If the frequency is higher than the lowest frequency line currently in the priority
+queue, the lowest frequency line in the queue will be evicted back to the main memory, and the evicted line is inserted.
+In addition, on an access request from the upper level, both parts are probed for the requested addess. These two parts
+maintain exclusive sets of addresses. If the priority queue is hit by the request, the block being hit will be migrated
+back to the conventional part of the LLC.
