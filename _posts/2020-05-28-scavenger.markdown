@@ -26,3 +26,9 @@ evicted lines from the LLC for an extra period of time before they are truly wri
 does not help in our case, since the observation also points out that the interval between two repeated references is 
 far more larger than any of the reasonable implementations of a fully-associative victim cache.
 
+Scavenger enhances the classical monolithic LLC cache organization as follows. Given a storage budget (e.g. number of 
+bytes the total storage could be), Scavanger divides them into two separate parts. The first part is a conventional
+set-associative cache of half of the storage budget. The second part is organized as a fully-associative priority heap 
+using the rest half of the storage budget. The hardware also tracks the access frequency of addresses that miss the 
+conventional part of the LLC using a bloom filter. 
+
