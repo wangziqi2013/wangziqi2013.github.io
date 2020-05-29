@@ -28,4 +28,9 @@ in the previous cache whose index only differs by the highest bit, i.e. one less
 new cache, and one more lower bit is used in the address tag. Such static mapping does not always fulfill our needs, 
 since both sets can be busy, and merging them together does not really help.
 
+This paper proposes two set balancing models. The first model, Static Set Balancing Cache (SSBC), is similar to doubling
+the number of ways in terms of the static merging scheme, but still, it does not require wider tag read circuit. The 
+second model, Dynamic Set Balancing Cache (DSBC), dynamically matches an under-utilized set with an over-utilized set,
+which enables potentially better resource scheduling. 
+
 
