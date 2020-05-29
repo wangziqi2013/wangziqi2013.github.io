@@ -91,7 +91,7 @@ element, such that we can find the element after locating a tag in the victim ca
 status of an element in the array. A "valid" bit indicates whether the rest of the slot is valid. A "head" bit indicates
 whether the current element is the starting element of a list. If this bit is clear, while "valid" bit is on, then the 
 element is part of the chain on another list. The last "tail" bit indicates whether the current element is the tail of
-a conflict list. A "next" and "prev" pointer allows slots to be linked in a doubly linked list.
+a conflict list. A "next" and "prev" pointer allow slots to be linked in a doubly linked list.
 
 Addresses are mapped to slots by using a few middle bits to form the slot index. There are three cases. If the slot 
 has "valid" bit clear, then it has not been used by another list, and there is no list on the current slot. For a write
