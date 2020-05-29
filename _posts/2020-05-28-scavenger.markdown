@@ -65,4 +65,8 @@ be accessed at index 2i and (2i + 1). Parent node of any node j (except the root
 (rounding towards zero). The heap needs to support two basic operations. The first operation is needed when a new line
 is to be inserted, after the minimum element is removed. In this case, the root node's frequency value is changed to
 the new line's frequency value (which is always larger), and a percolate down operation is performed to maintain heap 
-property. 
+property. In the second case, some block in the victim cache is hit by an upper level request, and the corresponding 
+node in the min-heap is removed. Of course, we cannot physically remove the node from the min-heap array. By "removing"
+a node, we actually set its frequency value to zero, such that it will always be the root level element (or all nodes
+from the current node to the root have zero value). In this case, the node value is changed to zero, after which a 
+percolate up operation is performed.
