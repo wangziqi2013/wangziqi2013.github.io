@@ -74,3 +74,10 @@ element to be selected and replaced by a new line evicted from the LLC. In this 
 the operation of increasing or decreasing a node's value, and then either percolate up or down to maintain the heap
 property. This can be achieved easily by first comparing the new value with its parent and children nodes, and then 
 perform percolate up or down operation.
+
+Although the paper also proposes a pipelined implementation, we will not cover it here. A non-pipelined version of the 
+min-heap can be implemented using a RAM bank storing frequency value and pointers to victim cache tags. Three read
+ports and two write ports are required to compare the current value with its two children, and then swap the node
+with one of its children. Other operations require less read and/or write ports.
+
+
