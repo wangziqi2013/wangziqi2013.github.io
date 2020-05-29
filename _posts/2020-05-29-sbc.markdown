@@ -19,3 +19,8 @@ accessed with uniform probablity. In other words, some sets in the cache will re
 the rest. Unfortunately, in set-associative caches, tags and data slots are statically allocated for each set, and 
 there is no way to allieviate such imbalance by moving tags and data slots around. 
 
+This paper seeks a new approach of balancing traffic between sets without introducing an extra level of indirection.
+In a conventional cache, similar effect can be achieved by doubling the associativity of the cache while keeping total
+number of data slots unchanged. This approach, however, has two major flaws. The first flaw is that for each cache 
+access, no matter a hit or not, the number of tags that have to be read from the SRAM file also doubles, which consumes
+2x the power than it used to. The second flaw is that
