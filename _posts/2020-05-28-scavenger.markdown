@@ -62,4 +62,7 @@ The min-heap storage is a N-entry array, where N is the number of blocks in the 
 is quite standard: The min-heap is stored as a logical full binary tree. Nodes are numbered from root to leaf, left to right.
 The root node has an index of zero, which is also stored at location zero of the array. Child nodes of any node i can
 be accessed at index 2i and (2i + 1). Parent node of any node j (except the root) can be accessed at index (j / 2) 
-(rounding towards zero). 
+(rounding towards zero). The heap needs to support two basic operations. The first operation is needed when a new line
+is to be inserted, after the minimum element is removed. In this case, the root node's frequency value is changed to
+the new line's frequency value (which is always larger), and a percolate down operation is performed to maintain heap 
+property. 
