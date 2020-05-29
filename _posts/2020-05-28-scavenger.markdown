@@ -97,5 +97,10 @@ has "valid" bit clear, then it has not been used by another list, and there is n
 operation, the cache controller sets both "valid" and "head" bit, and fills in data and tag. For reads this signals a miss.
 In the second case, both "valid" and "head" bits are set. This implies that there is a conflict chain in the current
 slot. The write operation needs to find another tag (either by deallocating or finding an empty tag) and link it after 
-the current head element.
-
+the current head element. For reads, this signals a hit if any of the address tags match while walking the list.
+In the last case, the "valid" bit is on, but "head" bit is off. This is a more complicated case, since this implies
+that the current element is in-use by another list whose hash value does not equal the current slot's index. 
+In this case, the controller finds another tag in a similar manner as above, copies the currnent slot's content
+to the new slot, changes its predecessor's and successor's pointer, and fills in the slot with request data and address.
+The "head" bit is also set to indicate that there is a conflict list in the current slot. For reads, this also signals 
+a miss.
