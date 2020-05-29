@@ -33,4 +33,12 @@ the number of ways in terms of the static merging scheme, but still, it does not
 second model, Dynamic Set Balancing Cache (DSBC), dynamically matches an under-utilized set with an over-utilized set,
 which enables potentially better resource scheduling. 
 
+Both models rely on the concept of saturation level of a set, which is measured by the number of cache misses observed 
+by the set. The intuition is that if a set has seen many cache misses, accesses on the set must be of low locality, 
+and providing more ways in this case can help performance. On the other hand, if a set barely sees any miss, then either 
+locality on the set is good, or few accesses actually hit the set. In both cases, some ways of the set can be spared
+for use by another over-utilized set by evicting existing lines at the end of the LRU stack.
 
+
+
+Static Set Balancing Cache works by always merging
