@@ -109,3 +109,9 @@ When an element is to be removed, we simply change its predecessor's and success
 unless it is the head node. We cannot remove a head node, unless its "tail" bit is also set, in which case the 
 "valid" bit is just cleared. In the general case, the content of the next node is copied to the head node, and the next 
 node is removed from the chain. If the next node is also the tail node, we also set the "tail" bit of its predecessor.
+
+When upper level cache misses, the request is sent to both the conventional cache and the priority queue. At most one 
+of these two can be hit. If the priority queue is hit by performing a tag walk on the hash table, the corresponding 
+slot in the min-heap is set to zero, and the tag is removed. Both tag and data are inserted back to the conventional
+cache, after evicting a line from the conventional cache. When a line is evicted from the conventional cache, either
+because a line was migrated back, or because a new line is to be fetched from the lower level
