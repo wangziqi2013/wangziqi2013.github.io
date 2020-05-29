@@ -52,7 +52,15 @@ is added with a "d" bit to signal whether the line was migrated from another set
 line migration, and cleared by the cache controller when the other set has evicted all lines with "d" bit set. This
 can be detected using a per-set OR gate with the "d" bit from the tag.
 
-On a cache read, the controller first computes the regular set index, and probes the set as usual. If there is a miss,
+On a cache access, the controller first computes the regular set index, and probes the set as usual. If there is a miss,
 then the "sc" bit is checked. If "sc" bit is 1, indicating one or more migrated line, the other set is also probed.
 If the result is still a miss, then a miss is signaled. Otherwise, a hit is signaled. Note that the line being hit
 is not miraged back to reduce design complexity.
+
+On an eviction, the cache controller first checks whether the current cache set and the other set is above and below 
+the migration threshold. If both requirements are met, the evicted line is migrated to the other set without 
+being written back to the lower level cache. The migrated line is inserted to the MRU location of the destination
+set, while the LRU line is evicted. There are two reasons for this. First, by inserting into the MRU location, we 
+can ensure that the line can at least be used a few times before it is evicted. Second, if we insert the line into LRU
+location, then a second migration will evict the first line, which makes no sense, since this just unnecessarily
+capped maximum line migration to one.
