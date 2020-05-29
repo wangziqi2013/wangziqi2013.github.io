@@ -78,3 +78,13 @@ the array respectively.
 The minimum element is used when a set is needed as the destination for migration, while the maximum element is needed
 to minitor the high-water mark in the saturation cache. Whenever a set not in the cache whose saturation counter drops 
 the maximum, the maximum element is removed from the saturation cache, and the set with a lower value is added.
+Note that the saturation cache only stores sets whose saturation counter is below the threshold. If a set's 
+counter exceeds this threshold, it will be removed from the cache, and the corresponding slot is reset, such that the
+value is set to the threshold to make sure they will always be prioritized over other valid lines.
+The cache is accessed for each saturation counter value change.
+
+The access and eviction protocol barely change for dynamic set balanced cache scheme, except that each set can now
+become a source or destination of another set. To this end, the paper proposes adding a per-set "s/d" bit, where a 
+"0" bit indicates the set is destination, and "1" indicates source. 
+In addition, a per-set migration destination index is also added to explicitly record the destination.
+If the "s/d" bit is 1, and an access just misses in the set, the destination set is checked using the same address.
