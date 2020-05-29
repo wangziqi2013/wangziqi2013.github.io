@@ -23,4 +23,9 @@ This paper seeks a new approach of balancing traffic between sets without introd
 In a conventional cache, similar effect can be achieved by doubling the associativity of the cache while keeping total
 number of data slots unchanged. This approach, however, has two major flaws. The first flaw is that for each cache 
 access, no matter a hit or not, the number of tags that have to be read from the SRAM file also doubles, which consumes
-2x the power than it used to. The second flaw is that
+2x the power than it used to. The second flaw is that by doubling the number of ways, we effectively merge two sets 
+in the previous cache whose index only differs by the highest bit, i.e. one less bit is used to index the set in the 
+new cache, and one more lower bit is used in the address tag. Such static mapping does not always fulfill our needs, 
+since both sets can be busy, and merging them together does not really help.
+
+
