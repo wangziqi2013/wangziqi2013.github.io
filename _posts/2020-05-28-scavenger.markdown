@@ -41,7 +41,7 @@ As discussed above, the access frequency estimator is implemented as a counting 
 into three segments (this paper assumes 32 bit address). The paper observes that the upper bits of the address are often
 not changing much from access to access, while the lower bits change significantly. The implementation, therefore, divides 
 an address into low 15 bits, middle 8 bits, and high 3 bits (note that the address is block aligned, with the lowest bits
-being zero), and each segment addresses one counter in each of the three individual counting bloom filters.
+being zero), and each segment addresses one 8 bit counter in each of the three individual counting bloom filters.
 To further increase accuracy, bit 9 - 18 and bit 19 - 24 are also used to form two extra segments, which address 
 another two counting bloom filters. 
 All counters addressed by these segments are incremented by one if the access misses the conventional LLC.
@@ -51,6 +51,7 @@ Selecting the minimum value from multiple bloom filters help reducing address al
 bloom filters. 
 The paper also suggests that these bloom filters can be implemented as individual RAM banks, each with a built-in 
 incrementing logic and a read port.
+To deal with counter saturating problems, all counters are reset once a pre-determined number of counters have saturated.
 
 The priority queue part of the LLC consists of a min-heap and a victim cache. The min-heap maintains frequency information 
 for blocks stored in the victim cache. Each entry in the min-heap has an integer field representing the frequency, and 
