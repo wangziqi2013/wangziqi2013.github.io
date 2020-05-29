@@ -18,3 +18,6 @@ cache. The paper points out at the beginning that as cache sizes increase, doubl
 marginal benefit by reducing the miss rate. In the forseenable future where more transistors can be integrated within the
 same area and power budget, existing cache architectures may not scale well.
 
+The paper makes one critical observation that most LLC cache misses (it was actually L2 at the time of writing) are on
+addresses that have been repeatedly accessed in the past, i.e. some addresses are referenced by the upper level on a regular
+basis after they were evicted. 
