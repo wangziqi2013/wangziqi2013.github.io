@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Scavenger, a last-level cache (LLC) design that features a regular cache and a priority heap as victim
+cache. The paper points out at the beginning that as cache sizes increase, doubling the size of a cache can only bring 
+marginal benefit by reducing the miss rate. In the forseenable future where more transistors can be integrated within the
+same area and power budget, existing cache architectures may not scale well.
+
