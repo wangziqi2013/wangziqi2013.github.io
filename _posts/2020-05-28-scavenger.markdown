@@ -96,7 +96,8 @@ Addresses are mapped to slots by using a few middle bits to form the slot index.
 has "valid" bit clear, then it has not been used by another list, and there is no list on the current slot. For a write
 operation, the cache controller sets both "valid" and "head" bit, and fills in data and tag. For reads this signals a miss.
 In the second case, both "valid" and "head" bits are set. This implies that there is a conflict chain in the current
-slot. The write operation needs to find another tag (either by deallocating or finding an empty tag) and link it after 
+slot. The write operation needs to find another tag (either by deallocating or finding an empty tag. In practice, when this
+happens, we must have already deallocated the root element in the min-heap) and link it after 
 the current head element. For reads, this signals a hit if any of the address tags match while walking the list.
 In the last case, the "valid" bit is on, but "head" bit is off. This is a more complicated case, since this implies
 that the current element is in-use by another list whose hash value does not equal the current slot's index. 
@@ -114,4 +115,8 @@ When upper level cache misses, the request is sent to both the conventional cach
 of these two can be hit. If the priority queue is hit by performing a tag walk on the hash table, the corresponding 
 slot in the min-heap is set to zero, and the tag is removed. Both tag and data are inserted back to the conventional
 cache, after evicting a line from the conventional cache. When a line is evicted from the conventional cache, either
-because a line was migrated back, or because a new line is to be fetched from the lower level
+because a line was migrated back, or because a new line is to be fetched from the lower level, the frequency of the 
+evicted address is estimated. If the estimated frequency is larger than the smallest value in the min-heap, which is tracked
+by a register, then the current root of the min-heap is removed, and the new frequency value is added. Correspondingly,
+the tag slot of the root element is found using the tag pointer in the min-heap. The evicted tag and data are also written
+into the hash table using the insertion algorithm described above. 
