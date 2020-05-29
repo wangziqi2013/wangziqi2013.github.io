@@ -36,3 +36,9 @@ queue, the lowest frequency line in the queue will be evicted back to the main m
 In addition, on an access request from the upper level, both parts are probed for the requested addess. These two parts
 maintain exclusive sets of addresses. If the priority queue is hit by the request, the block being hit will be migrated
 back to the conventional part of the LLC.
+
+As discussed above, the access frequency predictor is implemented as a counting bloom filter. An incoming address is divided 
+into three segments (this paper assumes 32 bit address). The paper observes that the upper bits of the address are often
+not changing much from access to access, while the lower bits change significantly. The implementation, therefore, divides 
+an address into low 15 bits, middle 8 bits, and high 3 bits (note that the address is block aligned, with the lowest bits
+being zero), and each segment addresses one counter in each of the three individual counter bloom filters.
