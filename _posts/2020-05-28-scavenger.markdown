@@ -52,3 +52,8 @@ bloom filters.
 The paper also suggests that these bloom filters can be implemented as individual RAM banks, each with a built-in 
 incrementing logic and a read port.
 
+The priority queue part of the LLC consists of a min-heap and a victim cache. The min-heap maintains frequency information 
+for blocks stored in the victim cache. Each entry in the min-heap has an integer field representing the frequency, and 
+a pointer to the victim cache for whom the frequency is maintained. 
+The victim cache is organized as a hash table with chaining for conflict resolution. 
+These two components work together to reduce the number of cache misses in LLC, as we will see below.
