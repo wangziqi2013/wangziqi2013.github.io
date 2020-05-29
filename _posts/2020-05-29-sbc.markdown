@@ -52,3 +52,7 @@ is added with a "d" bit to signal whether the line was migrated from another set
 line migration, and cleared by the cache controller when the other set has evicted all lines with "d" bit set. This
 can be detected using a per-set OR gate with the "d" bit from the tag.
 
+On a cache read, the controller first computes the regular set index, and probes the set as usual. If there is a miss,
+then the "sc" bit is checked. If "sc" bit is 1, indicating one or more migrated line, the other set is also probed.
+If the result is still a miss, then a miss is signaled. Otherwise, a hit is signaled. Note that the line being hit
+is not miraged back to reduce design complexity.
