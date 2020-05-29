@@ -80,4 +80,7 @@ min-heap can be implemented using a RAM bank storing frequency value and pointer
 ports and two write ports are required to compare the current value with its two children, and then swap the node
 with one of its children. Other operations require less read and/or write ports.
 
-
+Recall that a line evicted from the conventional LLC will take the slot occpied by the current minimum frequency block,
+conventional set-associative cache does not work, since a block must be able to be stored in the min-frequency slot.
+Organizing the victim cache as a fully-associative array is also prohibitively expensive, since most LLCs will have several 
+MBs of storage and tens of thousands of tags.
