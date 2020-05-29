@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Set Balancing Cache (SBC), a technique that conditionally merges sets within a cache for better 
+overall performance. The paper begins by pointing out that in current set-associative designs, sets are often not 
+accessed with uniform probablity. In other words, some sets in the cache will receive significantly more activity than
+the rest. Unfortunately, in set-associative caches, tags and data slots are statically allocated for each set, and 
+there is no way to allieviate such imbalance by moving tags and data slots around. 
+
