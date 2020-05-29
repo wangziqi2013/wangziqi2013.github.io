@@ -83,4 +83,11 @@ with one of its children. Other operations require less read and/or write ports.
 Recall that a line evicted from the conventional LLC will take the slot occpied by the current minimum frequency block,
 conventional set-associative cache does not work, since a block must be able to be stored in the min-frequency slot.
 Organizing the victim cache as a fully-associative array is also prohibitively expensive, since most LLCs will have several 
-MBs of storage and tens of thousands of tags.
+MBs of storage and tens of thousands of tags. The paper proposes a chaining hash table structure. The chaining hash table
+is implememted as an RAM array, with tag, data, min-heap pointer, and various control bits (data does not need to be co-located
+and can be accessed via an extra level of indirection). Among these fields, the min-heap pointer points to the min-heap 
+element, such that we can find the element after locating a tag in the victim cache. Three control bits determine the 
+status of an element in the array. A "valid" bit indicates whether the rest of the slot is valid. A "head" bit indicates
+whether the current element is the starting element of a list. If this bit is clear, while "valid" bit is on, then the 
+element is part of the chain on another list. The last "tail" bit indicates whether the current element is the tail of
+a conflict list. 
