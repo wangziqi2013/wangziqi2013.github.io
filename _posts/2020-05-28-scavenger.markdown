@@ -20,7 +20,9 @@ same area and power budget, existing cache architectures may not scale well.
 
 The paper makes one critical observation that most LLC cache misses (it was actually L2 at the time of writing) are on
 addresses that have been repeatedly accessed in the past, i.e. some addresses are referenced by the upper level on a regular
-basis after they were evicted. One simple solution would be to add a small victim cache on the LLC level, which holds 
+basis, while they are not accessed frequently enough to avoid being evicted by the upper level replacement algorithm 
+before the next reference. One simple solution would be to add a small victim cache on the LLC level, which holds 
 evicted lines from the LLC for an extra period of time before they are truly written back to the memory. This, however, 
 does not help in our case, since the observation also points out that the interval between two repeated references is 
 far more larger than any of the reasonable implementations of a fully-associative victim cache.
+
