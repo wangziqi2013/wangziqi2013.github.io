@@ -72,4 +72,8 @@ To solve this issue, the paper also proposes adding a "rehash" bit to each slot.
 stores a line as its secondary location. The access protocol is also slightly modified as follows. When the first probe
 at the primary location fails, the cache controller tests the rehash bit before testing the secondary location. If the 
 rehash bit is set to 1, then the line at the primary location is evicted before the new line is fetched, and no swap
-happens.
+happens. When a cache line is migrated to its secondary location, the "rehash" bit it set, and when a line with this bit 
+is evicted due to a miss, the bit is cleared (this must be the case that another address takes its primary location).
+This makes sense, since we swap lines on every secondary hit, such that the more recently accessed line is always stored 
+on the primary location. If the "rehash" bit is on, indicating that the current slot stores a less frequently accessed line
+evicted from its primary location, then we evict this line, instead of the line on the primary location.
