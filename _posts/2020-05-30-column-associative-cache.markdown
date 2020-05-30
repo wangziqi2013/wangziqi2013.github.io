@@ -36,4 +36,6 @@ On an cache access request, slot at index b(x) is first tested. If tags match, t
 cache miss. Otherwise, if there is a miss, the slot at f(x) is also tested. If the test indicates a hit, then a 
 hit is signaled, and the data item at f(x) is swapped with the one at b(x).
 
-
+Note that in order to correctly test tags for address match, the highest inddex bit should be stored as the tag, 
+as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
+is used to generate the index).
