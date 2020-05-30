@@ -37,3 +37,7 @@ by only flipping the highest bit in the set index. A dedicated structure, called
 tracks these remapped addresses and the sets they are mapped to. The last aspect is that group-associative cache classifies
 slots into disposable or non-disposable. A disposable line can be evicted for displacements of non-disposable lines, while
 non-disposable lines should not be evicted unless they are evicted by OUT or SHT.
+
+We now introduce details of operations as follows. The SHT is maintained as a fully-associative buffer consisting of 
+set indices that have been recently accessed. This table is updated every time an access takes place, no matter
+whether the access results in hit or miss. 
