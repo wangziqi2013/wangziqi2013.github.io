@@ -49,4 +49,6 @@ specified. It is, however, later implied in the paper that OUT can be a set-asso
 with a replacement policy just like a set-associative cache. 
 Addresses can be inserted and evicted from OUT as well. Addresses mapped by OUT will override the tag field in the slot, 
 i.e. if the OUT maps address A to slot x, then the tag field of slot x is ignored during a cache lookup.
-
+Sets mapped by OUT also have their "d" bit cleared. The "d" bit is only set once the address is evicted from the OUT
+table, and the set index is not in SHT. Note that the paper also suggests that SHT and OUT must be exclusive. A slot
+mapped by OUT must not be in the SHT, although the reason is not given.
