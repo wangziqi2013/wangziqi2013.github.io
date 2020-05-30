@@ -32,4 +32,8 @@ The proposed design works as follows. Instead of only storing a cache line in on
 two hash functions, one using the conventional mapping, i.e. taking lower bits from the line address, and use it 
 as the index for the set, and the other just flips the highest bit of the aforementioned index to form a new index. 
 In this paper the first index is called b(x) and the second is called f(x), where x is the requested address.
-On an cache access
+On an cache access request, slot at index b(x) is first tested. If tags match, the line is returned as in a normal
+cache miss. Otherwise, if there is a miss, the slot at f(x) is also tested. If the test indicates a hit, then a 
+hit is signaled, and the data item at f(x) is swapped with the one at b(x).
+
+
