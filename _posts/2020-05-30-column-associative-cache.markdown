@@ -39,7 +39,9 @@ locality of computation.
 
 On an cache access request, slot at index b(x) is first tested. If tags match, the line is returned as in a normal
 cache miss. Otherwise, if there is a miss, the slot at f(x) is also tested. If the test indicates a hit, then a 
-hit is signaled, and the data item at f(x) is swapped with the one at b(x).
+hit is signaled, and the data item at f(x) is swapped with the one at b(x). The swap operation ensures that 
+more recently accessed data will always be put on the first-hit location, which reduces the chance that a 
+second probe is needed, helping reducing the hit latency.
 
 Note that in order to correctly test tags for address match, the highest index bit should be stored as the tag, 
 as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
