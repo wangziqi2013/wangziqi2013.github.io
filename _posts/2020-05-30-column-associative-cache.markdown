@@ -67,3 +67,9 @@ The root cause of the prssimistic case is the fact that simple hash-rehash desig
 If an address misses its primary location, then either it hits the secondary location, or it evicts the line from the 
 secondary location. If the secondary location also happens to be a more frequently accessed line than the one on
 the primary location, then such eviction decision is sub-optimal.
+
+To solve this issue, the paper also proposes adding a "rehash" bit to each slot. The "rehash" bit is set, when the slot
+stores a line as its secondary location. The access protocol is also slightly modified as follows. When the first probe
+at the primary location fails, the cache controller tests the rehash bit before testing the secondary location. If the 
+rehash bit is set to 1, then the line at the primary location is evicted before the new line is fetched, and no swap
+happens.
