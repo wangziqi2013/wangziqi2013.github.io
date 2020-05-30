@@ -61,4 +61,7 @@ frequently used data.
 
 On a cache access, the SHT is updated regardless of whether the access hits or not, unless it hits the OUT.
 The cache controller probes OUT and the direct-mapped tag array in parallel. If the tag array indicates a hit, then
-the data is directly returned. 
+the data is directly returned. Otherwise, if OUT is hit, then the index of the slot is read out, and the data array
+is accessed in the next cycle. After an OUT hit, the line is also swapped with the line in the primary location,
+since the OUT mapped line is expected to be accessed later, and swapping it to the primary location reduces
+hit latency (i.e. tag check and data read can be performed on the same cycle).
