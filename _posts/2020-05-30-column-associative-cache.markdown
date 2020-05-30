@@ -80,4 +80,13 @@ evicted from its primary location, then we evict this line, instead of the line 
 A better way to call the "rehash" bit is actually "less used" bit, to emphasize that fact that the slot is secondary choice
 for the address currently stored in it, and the cache controller should priority evicting this line rather than the 
 address in the primary slot, which can just be swapped there because of a cache hit. 
-At system startup, all "rehash" bits are set to prioritize evicting the location on first probe.
+At system startup, all "rehash" bits are set to prioritize evicting the location on first probe. 
+On invalidation of any kind (forced invalidation, coherence invalidation), the bit is unchanged. Note that one may
+feel tempted to set the rehash bit on invalidation. This will break the design, since some accesses may incur 
+false cache miss. To see why this happens, imagine the case where addresses A and B both map to the same 
+primary and secondary locations. Both A and B are accessed (in this order). Now the primary location contains 
+address B while the secondary address contains A. If now an external invalidation sets the "rehash" bit on the primary
+slot, then any future access to address A will never hit the secondary location, and two copies of address A exist.
+
+Note that skipping the secondary location for an address if its primary location's rehash bit is set may incur 
+false cache misses. 
