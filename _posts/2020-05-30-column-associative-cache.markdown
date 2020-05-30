@@ -39,9 +39,17 @@ locality of computation.
 
 On an cache access request, slot at index b(x) is first tested. If tags match, the line is returned as in a normal
 cache miss. Otherwise, if there is a miss, the slot at f(x) is also tested. If the test indicates a hit, then a 
-hit is signaled, and the data item at f(x) is swapped with the one at b(x). The swap operation ensures that 
-more recently accessed data will always be put on the first-hit location, which reduces the chance that a 
-second probe is needed, helping reducing the hit latency.
+second hit is signaled, and the data item at f(x) is swapped with the one at b(x). 
+If the second probe still results in a miss, then a cache miss is signaled, and a request is made to the next level.
+After the request is fulfilled by the next level, the newly fetched line is installed into the secondary location,
+and the two locations are swapped.
+The swap operation ensures that more recently accessed data will always be put on the first-hit location, which reduces 
+the chance that a second probe is needed, helping reducing the hit latency.
+Evictions are also needed, if the second probe misses, and the secondary location already contains a valid line.
+
+**Note: Although this paper adopts a different way of comprehending the operations, this is essentially the same 
+as a design in which evicted lines are unconditionally kicked to the secondary location after evicting the cache 
+line on that location.**
 
 Note that in order to correctly test tags for address match, the highest index bit should be stored as the tag, 
 as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
