@@ -27,3 +27,9 @@ overhead, such as extra decoding and fully-associative accessing logic, and extr
 The goal of this paper is to achieve the efficiency of a two-way set-associative cache, without the overhead 
 of extra decoding logic and data slots. The latency of the resulting design should also be as low as a direct-mapped
 cache.
+
+The proposed design works as follows. Instead of only storing a cache line in one location, the cache controller has
+two hash functions, one using the conventional mapping, i.e. taking lower bits from the line address, and use it 
+as the index for the set, and the other just flips the highest bit of the aforementioned index to form a new index. 
+In this paper the first index is called b(x) and the second is called f(x), where x is the requested address.
+On an cache access
