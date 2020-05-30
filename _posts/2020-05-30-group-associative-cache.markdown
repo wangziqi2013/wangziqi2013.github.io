@@ -21,4 +21,8 @@ have been evicted by a global ereplacement policy, and reused for hosting those 
 
 Existing set-associative designs allow a line to be stored in multiple possible locations, called "ways", to achieve lower
 miss rate then direct-mapped caches. This, however, does not fully solve the proble, since replacement decisions are also
-made within a set, without global replacement. 
+made within a set, without global replacement. Prior works such as victim caches and column-associative caches also do
+not work well. Victim cache attempts to solve the problem by adding extra decoding logic and data slots, which can be 
+practically difficult or even impossible at the time of writing this paper. Column-associative caches only allow one 
+address to be remapped to a statically fixed location, without actually tracking line usage frequency, which can itself
+be a problem, since frequently used lines may just evict each other.
