@@ -77,3 +77,8 @@ If there is no empty entry in OUT, then an eviction decision should be made, and
 The paper suggests that LRU be used for the set-associative OUT. When the entry is evicted, the "d" bit of the 
 corresponding slot is also set, since the line has been in OUT for a while, but never accessed according to LRU.
 Then the data of the slot is evicted, after which the incoming data is written.
+
+The paper also proposes integrating cache line prefetcing with group-associative caches. When prefetched lines arrive
+at the cache, the "d" bit of the slot is tested. If "d" bit is on, then the line is evicted, since it is not expected
+to be accessed later, and the prefetched line takes the slot. If the "d" bit is cleared, then the prefetched line is 
+inserted into the cache similar to how a miss is handled.
