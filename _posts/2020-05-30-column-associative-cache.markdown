@@ -32,10 +32,15 @@ The proposed design works as follows. Instead of only storing a cache line in on
 two hash functions, one using the conventional mapping, i.e. taking lower bits from the line address, and use it 
 as the index for the set, and the other just flips the highest bit of the aforementioned index to form a new index. 
 In this paper the first index is called b(x) and the second is called f(x), where x is the requested address.
+The reasons for flipping the highest bit are that: (1) This simplifies tag management, since only one more bit
+at the flipped location is needed to be stored as the tag; (2) These two addresses are expected not to be accessed
+together, since they are far away from each other in all cases regardless of the tag part, which is consistent with
+locality of computation. 
+
 On an cache access request, slot at index b(x) is first tested. If tags match, the line is returned as in a normal
 cache miss. Otherwise, if there is a miss, the slot at f(x) is also tested. If the test indicates a hit, then a 
 hit is signaled, and the data item at f(x) is swapped with the one at b(x).
 
-Note that in order to correctly test tags for address match, the highest inddex bit should be stored as the tag, 
+Note that in order to correctly test tags for address match, the highest index bit should be stored as the tag, 
 as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
 is used to generate the index).
