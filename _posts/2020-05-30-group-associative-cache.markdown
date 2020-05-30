@@ -44,4 +44,9 @@ whether the access results in hit or miss. Each set also has a per-set disposabl
 of which will be explained below. If a set is entered into the SHT by an access, the "d" bit of that set will also be 
 cleared to indicate that the set may be referenced again shortly. 
 
+The OUT table is maintained as an associative buffer mapping addresses to slot indices. the structure of OUT is not 
+specified. It is, however, later implied in the paper that OUT can be a set-associative search structure, 
+with a replacement policy just like a set-associative cache. 
+Addresses can be inserted and evicted from OUT as well. Addresses mapped by OUT will override the tag field in the slot, 
+i.e. if the OUT maps address A to slot x, then the tag field of slot x is ignored during a cache lookup.
 
