@@ -40,4 +40,8 @@ non-disposable lines should not be evicted unless they are evicted by OUT or SHT
 
 We now introduce details of operations as follows. The SHT is maintained as a fully-associative buffer consisting of 
 set indices that have been recently accessed. This table is updated every time an access takes place, no matter
-whether the access results in hit or miss. 
+whether the access results in hit or miss. Each set also has a per-set disposable bit (the "d" bit), the semantics 
+of which will be explained below. If a set is entered into the SHT by an access, the "d" bit of that set will also be 
+cleared to indicate that the set may be referenced again shortly. 
+
+
