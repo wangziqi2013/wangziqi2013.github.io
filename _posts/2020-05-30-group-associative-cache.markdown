@@ -30,4 +30,8 @@ be a problem, since frequently used lines may just evict each other.
 Group-associative caches, on the other hand, differs from previous works in three aspects. First, it explicitly tracks 
 recently accessed sets in a buffer structure, called the Set-reference History Table (SHT). This allows the hareware 
 to identify potentially frequently accessed sets, and protect them from future write requests by remapping these writes
-to a different set. The second 
+to a different set. The second aspect is that group-associative cache remaps addresses in a fully-associative manner,
+i.e. an address that is supposed to be mapped to a protected set can be remapped to any set in the cache, as long as 
+the set is not protected. This enables a broader range of mapping relation than, for example, statically fixing the mapping 
+by only flipping the highest bit in the set index. A dedicated structure, called Out-of-position Direction, or OUT,
+tracks these remapped addresses and the sets they are mapped to. The last
