@@ -77,3 +77,7 @@ is evicted due to a miss, the bit is cleared (this must be the case that another
 This makes sense, since we swap lines on every secondary hit, such that the more recently accessed line is always stored 
 on the primary location. If the "rehash" bit is on, indicating that the current slot stores a less frequently accessed line
 evicted from its primary location, then we evict this line, instead of the line on the primary location.
+A better way to call the "rehash" bit is actually "less used" bit, to emphasize that fact that the slot is secondary choice
+for the address currently stored in it, and the cache controller should priority evicting this line rather than the 
+address in the primary slot, which can just be swapped there because of a cache hit. 
+At system startup, all "rehash" bits are set to prioritize evicting the location on first probe.
