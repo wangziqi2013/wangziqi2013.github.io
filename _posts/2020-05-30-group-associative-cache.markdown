@@ -34,4 +34,6 @@ to a different set. The second aspect is that group-associative cache remaps add
 i.e. an address that is supposed to be mapped to a protected set can be remapped to any set in the cache, as long as 
 the set is not protected. This enables a broader range of mapping relation than, for example, statically fixing the mapping 
 by only flipping the highest bit in the set index. A dedicated structure, called Out-of-position Direction, or OUT,
-tracks these remapped addresses and the sets they are mapped to. The last
+tracks these remapped addresses and the sets they are mapped to. The last aspect is that group-associative cache classifies
+slots into disposable or non-disposable. A disposable line can be evicted for displacements of non-disposable lines, while
+non-disposable lines should not be evicted unless they are evicted by OUT or SHT.
