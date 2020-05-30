@@ -55,3 +55,10 @@ Note that in order to correctly test tags for address match, the highest index b
 as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
 is used to generate the index). Otherwise, two addresses only differing by the flipped bit will singal false positives
 for each other.
+
+The hash-rehash design discussed above may suffer from miserable thrashing, if two addresses, A and B, are alternatively 
+requested, and b(A) = f(B) (which also implies that b(B) = f(A)). In this pessimistic case, an access to A will incur a 
+secondary slot miss, which evicts B, fetches A, and swaps A to its primary location. Then an access to B incurs a secondary
+miss as well, which evicts A from its primary location, fetchs B, and swaps B to its primary location. Such thrashing behavior
+is not expected in an optimal design, since both can just co-exist within the same virtual set, i.e. A being stored at
+location b(A) while B being stored at location b(B). 
