@@ -52,3 +52,9 @@ i.e. if the OUT maps address A to slot x, then the tag field of slot x is ignore
 Sets mapped by OUT also have their "d" bit cleared. The "d" bit is only set once the address is evicted from the OUT
 table, and the set index is not in SHT. Note that the paper also suggests that SHT and OUT must be exclusive. A slot
 mapped by OUT must not be in the SHT, although the reason is not given.
+
+The size of OUT and SHT should be carefully tuned in advance to avoid hurting performance. If these two structures are 
+too small, not sufficient number of cache lines and slots can be stored, and the effect is not easily observable.
+On the other hand, if these two structures are too large, then even non-frequently used cache lines will also be 
+aggressively identifyed and remapped, which again negatively impacts performance, since the cache still stores less
+frequently used data. 
