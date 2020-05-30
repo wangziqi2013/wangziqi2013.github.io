@@ -24,4 +24,6 @@ can only be mapped to one slot, instead of many. Prior proposals such as victim 
 certain sets using a small, fully-associative buffer to hold evicted lines from the L1. It, however, adds undesirable
 overhead, such as extra decoding and fully-associative accessing logic, and extra data slots to store cache line data. 
 
-
+The goal of this paper is to achieve the efficiency of a two-way set-associative cache, without the overhead 
+of extra decoding logic and data slots. The latency of the resulting design should also be as low as a direct-mapped
+cache.
