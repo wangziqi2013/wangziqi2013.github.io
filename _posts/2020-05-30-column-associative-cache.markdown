@@ -62,3 +62,8 @@ secondary slot miss, which evicts B, fetches A, and swaps A to its primary locat
 miss as well, which evicts A from its primary location, fetchs B, and swaps B to its primary location. Such thrashing behavior
 is not expected in an optimal design, since both can just co-exist within the same virtual set, i.e. A being stored at
 location b(A) while B being stored at location b(B). 
+
+The root cause of the prssimistic case is the fact that simple hash-rehash design is biased towards the secondary location.
+If an address misses its primary location, then either it hits the secondary location, or it evicts the line from the 
+secondary location. If the secondary location also happens to be a more frequently accessed line than the one on
+the primary location, then such eviction decision is sub-optimal.
