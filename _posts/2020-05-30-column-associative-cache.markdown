@@ -88,5 +88,7 @@ primary and secondary locations. Both A and B are accessed (in this order). Now 
 address B while the secondary address contains A. If now an external invalidation sets the "rehash" bit on the primary
 slot, then any future access to address A will never hit the secondary location, and two copies of address A exist.
 
-Note that skipping the secondary location for an address if its primary location's rehash bit is set may incur 
-false cache misses. 
+The paper also disproves the possibility that an address A be stored in its secondary location y, while the primary location
+x has its rehash bit set. In order for this to happen, either A is stored to y before the rehash bit on x is set, or 
+vice versa. In the first case, another address B must have probed y and x (in this order), resulting in misses, fetched
+a line, and swapped with it. In this case, the actual address stored in y must be B, not A. In the 
