@@ -69,4 +69,11 @@ hit latency (i.e. tag check and data read can be performed on the same cycle).
 If neither OUT nor tag array signals a hit, the miss is handled based on whether the "d" bit is set on the primary location.
 If set, then the line is not identified as a frequently accessed line, and can be directly evicted. Otherwise, the line 
 should be "pinned" in the cache as long as possible, and the cache controller will find a disposable victim elsewhere.
+If the OUT table has empty entries, then the empty entry will be taken, and the cache controller scans the tag array
+and finds a disposable line with "d" bit on. The line will then be evicted, after which the entry mapping the requested 
+address to the line is added to OUT.
 
+If there is no empty entry in OUT, then an eviction decision should be made, and one entry is evicted out of OUT.
+The paper suggests that LRU be used for the set-associative OUT. When the entry is evicted, the "d" bit of the 
+corresponding slot is also set, since the line has been in OUT for a while, but never accessed according to LRU.
+Then the data of the slot is evicted, after which the incoming data is written.
