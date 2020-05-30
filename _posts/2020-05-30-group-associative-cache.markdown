@@ -65,3 +65,8 @@ the data is directly returned. Otherwise, if OUT is hit, then the index of the s
 is accessed in the next cycle. After an OUT hit, the line is also swapped with the line in the primary location,
 since the OUT mapped line is expected to be accessed later, and swapping it to the primary location reduces
 hit latency (i.e. tag check and data read can be performed on the same cycle).
+
+If neither OUT nor tag array signals a hit, the miss is handled based on whether the "d" bit is set on the primary location.
+If set, then the line is not identified as a frequently accessed line, and can be directly evicted. Otherwise, the line 
+should be "pinned" in the cache as long as possible, and the cache controller will find a disposable victim elsewhere.
+
