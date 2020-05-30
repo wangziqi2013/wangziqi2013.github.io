@@ -19,4 +19,6 @@ limited subset of all sets in the cache. This inevitably divides the cache stora
 infrequently accessed lines, or "holes". The existence of holes negatively impacts cache performance, since they could 
 have been evicted by a global ereplacement policy, and reused for hosting those frequently accessed lines.
 
-
+Existing set-associative designs allow a line to be stored in multiple possible locations, called "ways", to achieve lower
+miss rate then direct-mapped caches. This, however, does not fully solve the proble, since replacement decisions are also
+made within a set, without global replacement. 
