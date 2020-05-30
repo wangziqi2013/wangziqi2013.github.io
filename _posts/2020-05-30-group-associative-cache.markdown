@@ -58,3 +58,7 @@ too small, not sufficient number of cache lines and slots can be stored, and the
 On the other hand, if these two structures are too large, then even non-frequently used cache lines will also be 
 aggressively identifyed and remapped, which again negatively impacts performance, since the cache still stores less
 frequently used data. 
+
+On a cache access, the SHT is updated regardless of whether the access hits or not, unless it hits the OUT.
+The cache controller probes OUT and the direct-mapped tag array in parallel. If the tag array indicates a hit, then
+the data is directly returned. 
