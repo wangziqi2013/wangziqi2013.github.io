@@ -43,4 +43,5 @@ hit is signaled, and the data item at f(x) is swapped with the one at b(x).
 
 Note that in order to correctly test tags for address match, the highest index bit should be stored as the tag, 
 as in a two-way set-associative cache design of the same size (the number of ways is reduced by half, so one less bit
-is used to generate the index).
+is used to generate the index). Otherwise, two addresses only differing by the flipped bit will singal false positives
+for each other.
