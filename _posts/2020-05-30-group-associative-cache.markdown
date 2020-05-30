@@ -26,3 +26,8 @@ not work well. Victim cache attempts to solve the problem by adding extra decodi
 practically difficult or even impossible at the time of writing this paper. Column-associative caches only allow one 
 address to be remapped to a statically fixed location, without actually tracking line usage frequency, which can itself
 be a problem, since frequently used lines may just evict each other.
+
+Group-associative caches, on the other hand, differs from previous works in three aspects. First, it explicitly tracks 
+recently accessed sets in a buffer structure, called the Set-reference History Table (SHT). This allows the hareware 
+to identify potentially frequently accessed sets, and protect them from future write requests by remapping these writes
+to a different set. The second 
