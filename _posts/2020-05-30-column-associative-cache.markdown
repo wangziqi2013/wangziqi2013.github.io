@@ -91,4 +91,7 @@ slot, then any future access to address A will never hit the secondary location,
 The paper also disproves the possibility that an address A be stored in its secondary location y, while the primary location
 x has its rehash bit set. In order for this to happen, either A is stored to y before the rehash bit on x is set, or 
 vice versa. In the first case, another address B must have probed y and x (in this order), resulting in misses, fetched
-a line, and swapped with it. In this case, the actual address stored in y must be B, not A. In the 
+a line, and swapped with it. In this case, the actual address stored in y must be B, not A. In the second case, the bit is 
+already set when A is stored to y. This, however, is only achievable when the access first probes x since x is the primary
+location. After x is probed, A will be stored in x without probing y, since the rehash bit is set, and priority
+is given to address A.
