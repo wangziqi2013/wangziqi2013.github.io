@@ -82,4 +82,8 @@ When a line is evicted from the LLC, if the compressed size is smaller than the 
 no relocation is needed, as discussed above. If, however, the size reduction is beyond the hystereses, then existing 
 lines and subpages after the target line should be relocated, if such relocation can cause a size reduction of the 
 page. The paper actually did not talk much about size reduction, and only simply assumes that the page is compressed
-once it is fetched from the disk. 
+once it is fetched from the disk. If the compressed size is larger, and cannot be accommodated by the hystereses,
+then existing lines and subpages are relocated by shifting them toward higher addresses.
+The operating system maintains a page pool of different size classes. If the size class of a page changes after 
+relocation, an exception is raised to the OS for relocating the entire page to a different size class. In other cases,
+the memory controller can just perform DMA writes to relocation cache blocks in the background.
