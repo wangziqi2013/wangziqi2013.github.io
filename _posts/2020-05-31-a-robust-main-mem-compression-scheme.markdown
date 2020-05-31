@@ -67,3 +67,10 @@ decompressing when fetched, while in the latter design, it is the LLC controller
 It should be noted that putting the BST on the LLC has the obvious advantage of fast reads of zero-filled lines, since
 no memory request is actually generated after the size of the line is determined.
 
+Address translation between uncompressed and compressed address spaces happen when a line is fetched into or evicted 
+from the LLC. The tagging logic is not changed, which still uses physical address in the uncompressed address space.
+When a block address is to be translated, the page entry in the BST is accessed. The translation logic first converts 
+the sizes of all subpages and blocks within the same subpage before the target block to actual sizes, and 
+then sum them up to eventually output the final offset of the block in the page. In the case of a LLC evict, the 
+compression logic is also invoked in parallel to overlap some compression overhead. For line fetches, the decompression
+logic is invoked after the line is read from the memory.
