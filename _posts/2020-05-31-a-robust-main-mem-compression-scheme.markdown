@@ -64,3 +64,6 @@ information and these size classes. The paper suggests that size classes can be 
 or co-located with LLC in a buffer called the Block Size Table (BST). 
 In the former design, the memory controller is responsible for compressing a block when it is evicted from the LLC and 
 decompressing when fetched, while in the latter design, it is the LLC controller that should be responsible for these tasks.
+It should be noted that putting the BST on the LLC has the obvious advantage of fast reads of zero-filled lines, since
+no memory request is actually generated after the size of the line is determined.
+
