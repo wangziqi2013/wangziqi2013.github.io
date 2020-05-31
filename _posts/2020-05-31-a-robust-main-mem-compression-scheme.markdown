@@ -87,3 +87,7 @@ then existing lines and subpages are relocated by shifting them toward higher ad
 The operating system maintains a page pool of different size classes. If the size class of a page changes after 
 relocation, an exception is raised to the OS for relocating the entire page to a different size class. In other cases,
 the memory controller can just perform DMA writes to relocation cache blocks in the background.
+BST entries are also updated if any of the size class changes for the page. The updated BST entry should be written
+synchronized to the page table (in either write back mode or write through mode) to ensure correct future translation.
+If multiple BSTs are present, their contents should be kept in consistent with each other using a mechanism similar to
+cache coherence and/or TLB shootdown. 
