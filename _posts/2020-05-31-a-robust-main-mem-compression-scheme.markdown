@@ -22,4 +22,7 @@ which can often be performed on the background. Second, a compressed main memory
 physical addresses linearly within a page. The mapping depends on both the compressibility of the page and the 
 placement policy as well as page layout. This inevitably adds more metadata to maintain for each page. A carefully 
 designed compression scheme should prevent these metadata from incurring extra memory bandwidth and/or occupying too
-much on-chip space. 
+much on-chip space. The last challenge is that compressed pages or blocks may not always be stored compactly within
+a page. Fragmentation is always a concern when both blocks and pages are variably sized, which reduces the efficiency
+of space saving and complicates OS storage management. 
+
