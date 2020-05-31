@@ -55,3 +55,11 @@ after it is written and evicted from the LLC, no cache line needs to be moved, a
 can be accommodated by the hystereses area. Even if the increase of size in cache blocks trigger a cache line
 relocation, as long as the increased amount does not exceed the extra space after the subpage, no other subpage
 within the same needs to be relocated.
+
+Size classes of blocks and subpages are encoded in page table entries. For n size classes, log2(n) bits are used in total
+to encode one block and subpage. The size class of the page is also stored as part of the page property. The paper did 
+not mention how these extra information can be stored within the existing page table layout, in which only a few 
+unused bytes are available for extension. When a TLB miss occurs, the page table walker fetchs both translation
+information and these size classes. The paper suggests that size classes can be stored either on the memory controller,
+or co-located with LLC in a buffer called the Block Size Table (BST). 
+
