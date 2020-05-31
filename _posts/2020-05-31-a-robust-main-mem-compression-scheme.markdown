@@ -16,4 +16,10 @@ version_mgmt:
 This paper proposes a simple but yet efficient main memory compression scheme. The proposed scheme is meant to be general
 enough to be applied to any system with minimum application level modification, and also efficient for space saving
 under the current virtual memory framework. The paper identifies three major challenges of designing a main memory 
-compression scheme.
+compression scheme. First, decompression is on the critical path, since the processor has to stall the read uop to
+wait for the decompression to complete. Compression, on the other hand, is only triggered when a line is evicted,
+which can often be performed on the background. Second, a compressed main memory no longer maps virtual addresses to
+physical addresses linearly within a page. The mapping depends on both the compressibility of the page and the 
+placement policy as well as page layout. This inevitably adds more metadata to maintain for each page. A carefully 
+designed compression scheme should prevent these metadata from incurring extra memory bandwidth and/or occupying too
+much on-chip space. 
