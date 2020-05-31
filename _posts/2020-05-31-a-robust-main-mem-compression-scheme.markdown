@@ -26,3 +26,7 @@ much on-chip space. The last challenge is that compressed pages or blocks may no
 a page. Fragmentation is always a concern when both blocks and pages are variably sized, which reduces the efficiency
 of space saving and complicates OS storage management. 
 
+To solve the first challenge, the paper observes that in some cases, a number of cache lines are just filled with zeros,
+which makes them a perfect candidate for highly efficient compression. Besides, frequent pattern compression (FPC) also
+works pretty well on most of the workloads. Compared with more complicated, directory-based schemes, using a variant 
+of FPC optimized for zero-compression has the following benefits. 
