@@ -34,4 +34,5 @@ hardware, and they only incur a few extra cycles on the critical path for decomp
 whose usage is ubiquitous, e.g. for initialization, sparse matrix, representing NULL pointers, etc. Optimizing for zero
 can achieve a reasonable compression ratio even compared with more complicated algorithms. In fact, the paper suggests 
 that 50% compression ratio is achievable with the simple variation of FPC.
-
+The paper also noted that the selection of compression algorithm is orthogonal to the compression scheme discussed in
+later sections. Any reasonable algorithm fits into the framework as long as it is implementable on hardware.
