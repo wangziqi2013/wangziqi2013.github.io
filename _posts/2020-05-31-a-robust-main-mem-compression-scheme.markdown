@@ -71,6 +71,9 @@ Address translation between uncompressed and compressed address spaces happen wh
 from the LLC. The tagging logic is not changed, which still uses physical address in the uncompressed address space.
 When a block address is to be translated, the page entry in the BST is accessed. The translation logic first converts 
 the sizes of all subpages and blocks within the same subpage before the target block to actual sizes, and 
-then sum them up to eventually output the final offset of the block in the page. In the case of a LLC evict, the 
-compression logic is also invoked in parallel to overlap some compression overhead. For line fetches, the decompression
-logic is invoked after the line is read from the memory.
+then sum them up to eventually output the final offset of the block in the page. 
+A few cascaded adders can achieve this with negligible area and cycle overhead.
+In the case of a LLC evict, the compression logic is also invoked in parallel to overlap some compression overhead. 
+For line fetches, the decompression logic is invoked after the line is read from the memory.
+
+
