@@ -62,4 +62,5 @@ not mention how these extra information can be stored within the existing page t
 unused bytes are available for extension. When a TLB miss occurs, the page table walker fetchs both translation
 information and these size classes. The paper suggests that size classes can be stored either on the memory controller,
 or co-located with LLC in a buffer called the Block Size Table (BST). 
-
+In the former design, the memory controller is responsible for compressing a block when it is evicted from the LLC and 
+decompressing when fetched, while in the latter design, it is the LLC controller that should be responsible for these tasks.
