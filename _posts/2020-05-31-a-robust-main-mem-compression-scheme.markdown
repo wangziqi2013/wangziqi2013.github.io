@@ -55,6 +55,8 @@ after it is written and evicted from the LLC, no cache line needs to be moved, a
 can be accommodated by the hystereses area. Even if the increase of size in cache blocks trigger a cache line
 relocation, as long as the increased amount does not exceed the extra space after the subpage, no other subpage
 within the same needs to be relocated.
+Similarly, when a line shrinks in size after compression, the hystereses also prevents other lines or subpages
+from being relocated.
 
 Size classes of blocks and subpages are encoded in page table entries. For n size classes, log2(n) bits are used in total
 to encode one block and subpage. The size class of the page is also stored as part of the page property. The paper did 
@@ -76,4 +78,8 @@ A few cascaded adders can achieve this with negligible area and cycle overhead.
 In the case of a LLC evict, the compression logic is also invoked in parallel to overlap some compression overhead. 
 For line fetches, the decompression logic is invoked after the line is read from the memory.
 
-
+When a line is evicted from the LLC, if the compressed size is smaller than the original size, but within the hystereses,
+no relocation is needed, as discussed above. If, however, the size reduction is beyond the hystereses, then existing 
+lines and subpages after the target line should be relocated, if such relocation can cause a size reduction of the 
+page. The paper actually did not talk much about size reduction, and only simply assumes that the page is compressed
+once it is fetched from the disk. 
