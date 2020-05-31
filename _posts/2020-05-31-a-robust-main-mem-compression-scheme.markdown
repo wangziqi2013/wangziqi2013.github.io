@@ -29,4 +29,9 @@ of space saving and complicates OS storage management.
 To solve the first challenge, the paper observes that in some cases, a number of cache lines are just filled with zeros,
 which makes them a perfect candidate for highly efficient compression. Besides, frequent pattern compression (FPC) also
 works pretty well on most of the workloads. Compared with more complicated, directory-based schemes, using a variant 
-of FPC optimized for zero-compression has the following benefits. 
+of FPC optimized for zero-compression has the following benefits. First, these algorithms are easier to implement on
+hardware, and they only incur a few extra cycles on the critical path for decompression. Second, zero is a special values
+whose usage is ubiquitous, e.g. for initialization, sparse matrix, representing NULL pointers, etc. Optimizing for zero
+can achieve a reasonable compression ratio even compared with more complicated algorithms. In fact, the paper suggests 
+that 50% compression ratio is achievable with the simple variation of FPC.
+
