@@ -36,3 +36,8 @@ can achieve a reasonable compression ratio even compared with more complicated a
 that 50% compression ratio is achievable with the simple variation of FPC.
 The paper also noted that the selection of compression algorithm is orthogonal to the compression scheme discussed in
 later sections. Any reasonable algorithm fits into the framework as long as it is implementable on hardware.
+
+The overall model is discussed as follows. In addition to existing memory management units such as pages and blocks, the
+paper proposes dividing logical pages into smaller units called subpages. Given 8KB page frames, the size of subpages can
+be 1KB. Subpages are introduced to avoid excessive relocating of cache lines within the page when the compressed size 
+of a line changes. 
