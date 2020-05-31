@@ -91,3 +91,9 @@ BST entries are also updated if any of the size class changes for the page. The 
 synchronized to the page table (in either write back mode or write through mode) to ensure correct future translation.
 If multiple BSTs are present, their contents should be kept in consistent with each other using a mechanism similar to
 cache coherence and/or TLB shootdown. 
+
+When data is being relocated within the page, all accesses to the page should be blocked by the controller to avoid
+tricky race conditions. This might harm performance, since it incurs stalls that are not usually present on an uncompressed
+main memory. The paper argues, however, that this only happens when a dirty block is evicted from the LLC. According to
+the replacement algorithm, this suggests that the page is not recently accessed by upper level caches, and therefore
+it is unlikely that an fetch request is generated from the upper level as well.
