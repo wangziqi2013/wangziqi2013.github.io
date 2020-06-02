@@ -67,3 +67,10 @@ On initiating a line eviction, all sub-lines in the block are set to "old". When
 to the eviction buffer, it is set to "invalid". When a new sub-block is fetched, it is set to "new".
 This way, the controller maximizes the number of lines in the cache and fually utilizes all cycles without idling too 
 much.
+
+The memory subsystem is built around the address mapping scheme from real addres to physical addresses. Address mapping
+is performed using a translation table located at low address end of the physical address space. Real addresses are 
+first aligned to 1KB boundaries, and then direct-mapped to the table. Each table entry takes 16 bytes, consisting of 
+four pointers and a status field. The status field describes the compression status such as size and mode of the 1KB 
+block, while the four pointers point to four 256 byte sectors. Note that not all four pointers may point to valid
+data at all time, since compressed block may occupy less than four blocks.
