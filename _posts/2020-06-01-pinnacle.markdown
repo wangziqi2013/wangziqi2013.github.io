@@ -46,4 +46,7 @@ two purposes. First, it accelerates access to compressed data without having to 
 on each access, since data blocks are stored in uncompressed, 1KB block form on-chip. Second, the cache serves as an 
 interface between the system LLC and the compression logic, since the former uses a conventional cache block size of 64 
 bytes, optimized for machine access and bus transfer, while the latter has significantly larger blocks of size 1KB,
-which is required by the compression logic. 
+which is required by the compression logic. Cache blocks can be accessed in the unit of 32 bytes from upper level
+caches (I think this design decision is made irrelevant to compression, but just to comply to the bus protocol), with
+the critical unit delivered first. The cache itself is of 4-way set-associative organization, with 8192 sets. It operates
+similar to a set-associative cache using LRU within the way for replacements. 
