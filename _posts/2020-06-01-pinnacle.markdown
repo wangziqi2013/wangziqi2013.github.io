@@ -15,3 +15,8 @@ version_mgmt:
 
 The link to original MXT paper: [https://ieeexplore.ieee.org/document/5389099]()
 
+This paper introduces Pinnacle, a memory controller module designed for Pentium and Xeon platform featuring main memory
+compression. It implements IBM MXT memory compression technology, which supports upto 2x storage reduction and a
+maximum of 64:1 compression on certain contents. As pointed out at the beginning of this paper, Pinnacle makes a trade-off
+between access latency and greater functionality. 
+
