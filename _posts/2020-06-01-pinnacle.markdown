@@ -68,9 +68,14 @@ to the eviction buffer, it is set to "invalid". When a new sub-block is fetched,
 This way, the controller maximizes the number of lines in the cache and fually utilizes all cycles without idling too 
 much.
 
-The memory subsystem is built around the address mapping scheme from real addres to physical addresses. Address mapping
+The memory subsystem is built around the address mapping scheme from real addresses to physical addresses. Address mapping
 is performed using a translation table located at low address end of the physical address space. Real addresses are 
 first aligned to 1KB boundaries, and then direct-mapped to the table. Each table entry takes 16 bytes, consisting of 
-four pointers and a status field. The status field describes the compression status such as size and mode of the 1KB 
+four pointers and a status field. This adds an extra 1/64 space overhead to maintain the mapping table, as each 16 byte 
+entry can map 1KB of storage.
+The status field describes the compression status such as size and mode of the 1KB 
 block, while the four pointers point to four 256 byte sectors. Note that not all four pointers may point to valid
-data at all time, since compressed block may occupy less than four blocks.
+data at all time, since compressed block may occupy less than four blocks. In fact, space saving with Pinnacle is achieved 
+by using less than four sectors to store the block. 
+In the most extreme case, if a block can be compressed to less than 114 bits, then the entire block is stored in-line
+within the entry, which eliminates any explicit storage consumption, achieving a compression ratio of 64:1.
