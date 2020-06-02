@@ -49,4 +49,8 @@ bytes, optimized for machine access and bus transfer, while the latter has signi
 which is required by the compression logic. Cache blocks can be accessed in the unit of 32 bytes from upper level
 caches (I think this design decision is made irrelevant to compression, but just to comply to the bus protocol), with
 the critical unit delivered first. The cache itself is of 4-way set-associative organization, with 8192 sets. It operates
-similar to a set-associative cache using LRU within the way for replacements. 
+similar to a set-associative cache using LRU within the way for replacements. The cache also features a directory tracking
+the status of each block. In addition to conventional attributes such as tag, valid bit and dirty bit, the directory
+also tracks the 256 byte sectors that are accessed by upper level caches using a bit vector. If these sectors are not 
+accessed since they were brought into the cache, the controller can simply invalidate them without sending coherence 
+messages to the upper level (I think they are assuming inclusive cache hierarchy here).
