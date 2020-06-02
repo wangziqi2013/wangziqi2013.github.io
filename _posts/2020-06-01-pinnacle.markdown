@@ -38,3 +38,12 @@ the OS, that the actual amount of usable RAM is doubled. The OS, however, should
 the virtual memory manager does not over-commit physical memory when the average compression ratio is below 2:1, which 
 is can be a fatal error which crashes the system.
 
+This paper covers three major components of Pinnacle: The cache subsystem, memory subsystem, and the compression/decompression
+circuit. We reveal the details for each of them in the following discussion.
+
+The cache subsystem, as its name suggests, maintains an on-chip cache private to the controller. The private cache serves
+two purposes. First, it accelerates access to compressed data without having to go through the decompression latency
+on each access, since data blocks are stored in uncompressed, 1KB block form on-chip. Second, the cache serves as an 
+interface between the system LLC and the compression logic, since the former uses a conventional cache block size of 64 
+bytes, optimized for machine access and bus transfer, while the latter has significantly larger blocks of size 1KB,
+which is required by the compression logic. 
