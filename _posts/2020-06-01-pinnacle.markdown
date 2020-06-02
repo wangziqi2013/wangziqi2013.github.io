@@ -20,3 +20,9 @@ compression. It implements IBM MXT memory compression technology, which supports
 maximum of 64:1 compression on certain contents. As pointed out at the beginning of this paper, Pinnacle makes a trade-off
 between access latency and greater functionality. 
 
+Pinnacle supports a memory hierarchy consisting of multiple cores, private L1, L2 caches, and a shared Last-Level Cache 
+(LLC). The memory controller sits between the LLC and the memory modules, which also participates in cache coherence by 
+snooping on the system bus. Pinnacle internally distinguishes between the conventional physical address space after
+MMU translation and the actual hardware address on DRAM modules. The former is called as "real address space", while the 
+latter is called "physical address space". In the following discussion, we adhere to these terms and their definitions.
+
