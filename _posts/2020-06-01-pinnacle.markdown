@@ -63,3 +63,7 @@ Each element in the bit vector can be one of the following values: Invalid, new 
 that has already been evicted, but new content has not yet arrived. Accesses to invalid sub-lines will stall until
 the new content is fetched. An "old" sub-line is the one that has not yet been moved to the eviction buffer. They remain
 accessible until they become invalid. A "new" sub-line, on the contrary, is from the 
+On initiating a line eviction, all sub-lines in the block are set to "old". When a sub-line is moved from the data slot
+to the eviction buffer, it is set to "invalid". When a new sub-block is fetched, it is set to "new".
+This way, the controller maximizes the number of lines in the cache and fually utilizes all cycles without idling too 
+much.
