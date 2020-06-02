@@ -1,0 +1,17 @@
+---
+layout: paper-summary
+title:  "Pinnacle: IBM MXT in a Memory Controller Chip"
+date:   2020-06-01 23:01:00 -0500
+categories: paper
+paper_title: "Pinnacle: IBM MXT in a Memory Controller Chip"
+paper_link: https://ieeexplore.ieee.org/document/918003
+paper_keyword: Compression; MXT; Pinnacle
+paper_year: IEEE Micro 2001
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+The link to original MXT paper: [https://ieeexplore.ieee.org/document/5389099]()
+
