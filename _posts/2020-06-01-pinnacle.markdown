@@ -54,3 +54,8 @@ the status of each block. In addition to conventional attributes such as tag, va
 also tracks the 256 byte sectors that are accessed by upper level caches using a bit vector. If these sectors are not 
 accessed since they were brought into the cache, the controller can simply invalidate them without sending coherence 
 messages to the upper level (I think they are assuming inclusive cache hierarchy here).
+
+Larger blocks in the cache can potentially introduce high latency on block eviction and fetch. The paper reveals that
+Pinnacle pipelines block eviction and fetch on a conflict miss in order to counter the long latency of these two 
+operations. Each block has a bit vector indicating the eviction/fetch status of 32 byte sub-lines, aligning with the 
+access granularity from the upper level. 
