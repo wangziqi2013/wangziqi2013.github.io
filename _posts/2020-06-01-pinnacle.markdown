@@ -59,3 +59,7 @@ Larger blocks in the cache can potentially introduce high latency on block evict
 Pinnacle pipelines block eviction and fetch on a conflict miss in order to counter the long latency of these two 
 operations. Each block has a bit vector indicating the eviction/fetch status of 32 byte sub-lines, aligning with the 
 access granularity from the upper level. 
+Each element in the bit vector can be one of the following values: Invalid, new and old. An invalid sub-line is the one 
+that has already been evicted, but new content has not yet arrived. Accesses to invalid sub-lines will stall until
+the new content is fetched. An "old" sub-line is the one that has not yet been moved to the eviction buffer. They remain
+accessible until they become invalid. A "new" sub-line, on the contrary, is from the 
