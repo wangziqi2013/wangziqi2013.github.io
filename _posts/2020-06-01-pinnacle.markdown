@@ -26,3 +26,8 @@ snooping on the system bus. Pinnacle internally distinguishes between the conven
 MMU translation and the actual hardware address on DRAM modules. The former is called as "real address space", while the 
 latter is called "physical address space". In the following discussion, we adhere to these terms and their definitions.
 
+Cache lines are stored in compressed form on the DRAM. They are decompressed when they are fetched into a special cache 
+maintained by the Pinnacle controller itself, and compressed again when evicted. The organization of the cache will
+be discussed below. 
+Pinnacle assumes a 2:1 compression ratio in average, although in best cases it could compress a line to 1/64-th of 
+the original size.
