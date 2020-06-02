@@ -85,3 +85,7 @@ Free sectors are tracked by a linked list, the head of which is stored in a regi
 are allocated from free sectors, which is initialized at system startup time. The paper also suggests that there 
 is a hardware cache for the first two nodes of the linked list to accelerate sector allocation.
 
+The paper also mentions that sectors can be shared by different 1KB blocks within the same 4KB page in the real
+address space. Such sharing happens at 32 byte granularity, which is also aligned to the access granularity from upper
+levels. This reduces internal fragmentation as well as storage consumption. The paper, however, did not reveal
+a detailed model for sector sharing and address mapping within a sector.
