@@ -31,3 +31,8 @@ maintained by the Pinnacle controller itself, and compressed again when evicted.
 be discussed below. 
 Pinnacle assumes a 2:1 compression ratio in average, although in best cases it could compress a line to 1/64-th of 
 the original size.
+At system startup time, after memory check passes, the BIOS configures the actual physical DRAM to be 
+twice as large as the actual DRAM installed on the system. This creates an illusion to all upper level software, includng
+the OS, that the actual amount of usable RAM is doubled. The OS, however, should also be slightly modified such that
+the virtual memory manager does not over-commit physical memory when the average compression ratio is below 2:1, which 
+is can be a fatal error which crashes the system.
