@@ -79,3 +79,9 @@ data at all time, since compressed block may occupy less than four blocks. In fa
 by using less than four sectors to store the block. 
 In the most extreme case, if a block can be compressed to less than 114 bits, then the entire block is stored in-line
 within the entry, which eliminates any explicit storage consumption, achieving a compression ratio of 64:1.
+
+Pinnacle manages physical address space as a pool of 256 byte sectors (except for regions with compression disabled).
+Free sectors are tracked by a linked list, the head of which is stored in a register. The linked list node themselves
+are allocated from free sectors, which is initialized at system startup time. The paper also suggests that there 
+is a hardware cache for the first two nodes of the linked list to accelerate sector allocation.
+
