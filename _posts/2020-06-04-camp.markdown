@@ -58,4 +58,7 @@ SIP works by setting up one or more "virtual caches" which is driven by accesses
 Each virtual cache runs a ranking algorithm with different parameters (i.e. which size class should be given a higher priority).
 The virtual cache does not address any data slot. Instead, it only serves as a "dry run" of the intended ranking algorithm, 
 and maintain statistics.
-
+During execution, the cache controller may start a "sampling interval", in which accesses made to the set samples in the 
+main cache are also routed to the virtual cache. Each virtual cache will demonstrate a different behavior based on the 
+algorithm it is assigned. At the end of the sampling interval, the statistics of the virtual caches are compared with
+the main cache. The algorithm with better performance will be used for the next sampling interval.
