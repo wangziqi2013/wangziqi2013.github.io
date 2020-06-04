@@ -44,4 +44,13 @@ In the baseline version of MVE, the paper assumes a conventional set-associative
 No particular replacement algorithm is assumed, but the algorithm must use a priority value to rank all ways in a set
 as candidates, and the one with the highest priority value is evicted. In LRU, this value corresponds to the distance
 of the way in LRU stack to the top of the stack (i.e. the one at the tail of the stack has the highest priority). 
-In RRIP, the priority value is the re-reference prediction value, RRPV. 
+In RRIP, the priority value is the re-reference prediction value, RRPV. On eviction, the MVE computes a value Vi for
+each way in the set using the formula: Vi = pi / si, where pi is the inverse of the priority, while si is the size
+of the compressed block corresponding to the tag. 
+This formula discourages the eviction of blocks with smaller sizes, since several smaller blocks may need to be evicted
+in order to serve one large, hardly compressed block, which reduces the effective cache size.
+Note that the value pi actually denotes the "importance" of the block.
+In LRU, it is the distance of the block in the LRU stack to the tail of the stack, while in RRIP, it is computed by
+subtracting RRPV from the maximum RRIP counter value. 
+After computing the Vi for each i in the set, the cache controller evicts the one with the smallest Vi. 
+
