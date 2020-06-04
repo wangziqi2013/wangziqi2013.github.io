@@ -81,6 +81,10 @@ replacement policy with decoupled tag array and data array. Instead of staticall
 V-Way cache doubles the number of sets in the tag array, and uses an indirection field to allow tags addressing arbitrary
 data slots in the global data array. This way, an eviction decision can often be made by evicting a data slot from
 another less frequently accessed set, and then associate the tag in the current slot with the data slot, increasing
-the number of ways in a given set.
+the number of ways in a given set. 
+In order to make replacement decisions, each data slot has a counter tracking access frequency to the block. The 
+counter is incremented when accesses hit. On eviction, a PTR pointer is used to scan the global data array (with wrap-around).
+The cache controller evicts the first encountered block with zero counter value, and decrements all other counters
+when the counter is checked against zero.
 
-
+G-MVE 
