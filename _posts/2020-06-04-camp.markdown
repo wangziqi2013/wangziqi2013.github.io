@@ -19,3 +19,7 @@ as to increase effective cache size. Its effectiveness, however, also depends on
 policies such as LRU, or, commercially adopted policies such as RRIP, may not be optimal for compressed caches. To solve
 this issue, more factors need to be taken into consideration when designing management policies for compressed caches.
 
+The paper makes two critical observations. First, due to the fact that compressed blocks are of different sizes, sometimes
+significantly different, Belady's OPT cache replacement algorithm may no longer be optimal in terms of number of misses, 
+if multiple cache blocks need to be evicted as replacement for a larger block. In this case, cache replacement policies 
+that implicitly or explicitly relies on future reuse distances may no longer provide good performance numbers.
