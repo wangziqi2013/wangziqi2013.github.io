@@ -1,0 +1,17 @@
+---
+layout: paper-summary
+title:  "Exploiting Compressed Block Size as an Indicator of Future Reuse"
+date:   2020-06-04 12:19:00 -0500
+categories: paper
+paper_title: "Exploiting Compressed Block Size as an Indicator of Future Reuse"
+paper_link: https://ieeexplore.ieee.org/document/7056021/
+paper_keyword: CAMP; Cache; Compression
+paper_year: HPCA 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+
+
