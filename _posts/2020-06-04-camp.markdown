@@ -66,4 +66,12 @@ the main cache. The algorithm with better performance will be used for the next 
 In the case of SIP, given n different compressed size classes and m sets per virtual cache for sampling, the cache 
 controller maintains an extra n * m tags as described above. Each of the n size classes prioritize blocks of the 
 size class when they are fetched into the cache. For each virtual cache i, a counter Ci is maintained to track the 
-"relative" number of misses between the current algorithm and the main cache. 
+"relative" number of misses between the current algorithm and the main cache. When a miss happens in the sampled
+set of the main cache, the counter is incremented by one to indicate that the algorithm halps reducing misses. 
+On the other hand, if a miss occurs in the virtual cache, but not the main cache, then the counter is decremented
+to indicate that the algorithm actually hurts performance. In the case of both hits or misses, the counter 
+is not changed. At the end of the interval, the algorithm with the largest positive counter value is selected as the 
+main cache's ranking algorithm. If all counter values are negative, then the main cache's algorithm is unchanged.
+During the next interval, the main cache will rank the selected size class with high priority when they are brought
+into the cache. In RRIP, this translates into assigning an RRPV value of zero, while in LRU this is equivalent to inserting
+the block to the head of the LRU stack.
