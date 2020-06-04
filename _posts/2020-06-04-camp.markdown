@@ -32,3 +32,10 @@ only allocate from a pool of larger memory blocks, and will optimize for localit
 to each other in the address space, and hence easily compressible to similar sizes. Another example is sparse matrix
 in which most elements are zero. In such a matrix, most cache lines will be compressed to contain only one or two non-zero
 values, with the rest being easily compressible. 
+
+The above two observations motivate CAMP, which consists of two policies: Minimum Value Eviction (MVE), which is an
+improved version of existing eviction policies, and Size-based Insertion Policy (SIP), which determines the priority
+of blocks for eviction when they are fetched into the cache. These two policies complement each other. The initial priority
+for eviction when a line is brought into the cache is determined by SIP, while the replacement decision is made using a 
+combination of the eviction priority and other factors (as we will see below). Eviction prioirties are also updated 
+when cache blocks are hit.
