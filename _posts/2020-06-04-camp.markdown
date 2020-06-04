@@ -54,3 +54,8 @@ In LRU, it is the distance of the block in the LRU stack to the tail of the stac
 subtracting RRPV from the maximum RRIP counter value. 
 After computing the Vi for each i in the set, the cache controller evicts the one with the smallest Vi. 
 
+SIP works by setting up one or more "virtual caches" which is driven by accesses to a small subset of sets in the main cache. 
+Each virtual cache runs a ranking algorithm with different parameters (i.e. which size class should be given a higher priority).
+The virtual cache does not address any data slot. Instead, it only serves as a "dry run" of the intended ranking algorithm, 
+and maintain statistics.
+
