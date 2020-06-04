@@ -62,3 +62,8 @@ During execution, the cache controller may start a "sampling interval", in which
 main cache are also routed to the virtual cache. Each virtual cache will demonstrate a different behavior based on the 
 algorithm it is assigned. At the end of the sampling interval, the statistics of the virtual caches are compared with
 the main cache. The algorithm with better performance will be used for the next sampling interval.
+
+In the case of SIP, given n different compressed size classes and m sets per virtual cache for sampling, the cache 
+controller maintains an extra n * m tags as described above. Each of the n size classes prioritize blocks of the 
+size class when they are fetched into the cache. For each virtual cache i, a counter Ci is maintained to track the 
+"relative" number of misses between the current algorithm and the main cache. 
