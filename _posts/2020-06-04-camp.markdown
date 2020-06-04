@@ -92,3 +92,10 @@ computes Vi = pi / si, where pi is the frequency counter and si is the compresse
 and the block with the minimum Vi is evicted until there is sufficient room for the new block. 
 The reason that 64 tags are scans are as follows. First, the algorithm can terminate within a fixed number of cycles. 
 Second, in the most extreme case, 64 1 byte lines need to be evicted in order to make room for a uncompressed 64 byte line. 
+
+G-SIP could not directly copy the idea of set sampling from SIP, since sets are not isolated from each other when making
+replacement decisions. The paper proposes using set dueling to achieve a similar effect with global data array. With 
+n class sizes, both the data slot and tag slot is partitioned into (n + 1) regions. 
+G-SIP enforces the rule that replacement decisions can only be made within the same region as the tag. 
+The paper claims that this only has minimum impact on performance, given a large number of sets.
+
