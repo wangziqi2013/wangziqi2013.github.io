@@ -98,4 +98,10 @@ replacement decisions. The paper proposes using set dueling to achieve a similar
 n class sizes, both the data slot and tag slot is partitioned into (n + 1) regions. 
 G-SIP enforces the rule that replacement decisions can only be made within the same region as the tag. 
 The paper claims that this only has minimum impact on performance, given a large number of sets.
-
+Cache lines brought into region i is assigned a priority value if the size class falls into size class i. The last region
+runs the default V-Way Cache replacement algorithm, in which the new line is always assigned the minimum priority. 
+A miss counter is associated with each region, which is incremented when a cache miss occurs on a tag within the region. 
+The cache controller periodically starts training the cache, and terminates training after a short period. The duration
+is selected such that parameter training only occupies a small amount of run time.
+At the end of the interval, the size class with the smallest miss counter value is selected, which is then used for 
+priority assignment.
