@@ -28,4 +28,7 @@ code and arrays in the data structure.
 For example, a nested loop iterating over array elements can generate regular access patterns to the array. 
 In addition, arrays in program data structures typically contain data of the same type, sometimes even within a small 
 dynamic value range, such as pointers to small objects allocated by a malloc(). Most malloc() implementations will
-only allocate from a pool of larger memory blocks, and will optimize for locality. 
+only allocate from a pool of larger memory blocks, and will optimize for locality. The resulting objects will be close 
+to each other in the address space, and hence easily compressible to similar sizes. Another example is sparse matrix
+in which most elements are zero. In such a matrix, most cache lines will be compressed to contain only one or two non-zero
+values, with the rest being easily compressible. 
