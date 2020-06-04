@@ -87,4 +87,8 @@ counter is incremented when accesses hit. On eviction, a PTR pointer is used to 
 The cache controller evicts the first encountered block with zero counter value, and decrements all other counters
 when the counter is checked against zero.
 
-G-MVE 
+G-MVE improves the above replacement algorithm as follows. Instead of only using frequency value, the cache controller
+computes Vi = pi / si, where pi is the frequency counter and si is the compressed block size. A maximum of 64 Vi is scanned,
+and the block with the minimum Vi is evicted until there is sufficient room for the new block. 
+The reason that 64 tags are scans are as follows. First, the algorithm can terminate within a fixed number of cycles. 
+Second, in the most extreme case, 64 1 byte lines need to be evicted in order to make room for a uncompressed 64 byte line. 
