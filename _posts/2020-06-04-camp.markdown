@@ -13,5 +13,9 @@ htm_cr:
 version_mgmt:
 ---
 
-
+This paper proposes Compression Aware Management Policies (CAMP), which is a set of cache management policy specifically
+tuned for compressed caches. Cache compression has been proposed by prior publications to reduce memory traffic as well
+as to increase effective cache size. Its effectiveness, however, also depends on the cache management policy. Conventional
+policies such as LRU, or, commercially adopted policies such as RRIP, may not be optimal for compressed caches. To solve
+this issue, more factors need to be taken into consideration when designing management policies for compressed caches.
 
