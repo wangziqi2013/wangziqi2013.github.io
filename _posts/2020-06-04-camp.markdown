@@ -25,3 +25,7 @@ if multiple cache blocks need to be evicted as replacement for a larger block. I
 that implicitly or explicitly relies on future reuse distances may no longer provide good performance numbers.
 The second observation is that cache blocks of similar sizes may have a similar access pattern, because of loops in program
 code and arrays in the data structure. 
+For example, a nested loop iterating over array elements can generate regular access patterns to the array. 
+In addition, arrays in program data structures typically contain data of the same type, sometimes even within a small 
+dynamic value range, such as pointers to small objects allocated by a malloc(). Most malloc() implementations will
+only allocate from a pool of larger memory blocks, and will optimize for locality. 
