@@ -75,3 +75,12 @@ main cache's ranking algorithm. If all counter values are negative, then the mai
 During the next interval, the main cache will rank the selected size class with high priority when they are brought
 into the cache. In RRIP, this translates into assigning an RRPV value of zero, while in LRU this is equivalent to inserting
 the block to the head of the LRU stack.
+
+The paper also proposes porting CAMP to the V-Way Cache design, named G-MVE and G-SIP. The V-Way cache features a global
+replacement policy with decoupled tag array and data array. Instead of statically binding one data slot to one tag,
+V-Way cache doubles the number of sets in the tag array, and uses an indirection field to allow tags addressing arbitrary
+data slots in the global data array. This way, an eviction decision can often be made by evicting a data slot from
+another less frequently accessed set, and then associate the tag in the current slot with the data slot, increasing
+the number of ways in a given set.
+
+
