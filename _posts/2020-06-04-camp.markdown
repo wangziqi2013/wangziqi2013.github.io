@@ -23,3 +23,5 @@ The paper makes two critical observations. First, due to the fact that compresse
 significantly different, Belady's OPT cache replacement algorithm may no longer be optimal in terms of number of misses, 
 if multiple cache blocks need to be evicted as replacement for a larger block. In this case, cache replacement policies 
 that implicitly or explicitly relies on future reuse distances may no longer provide good performance numbers.
+The second observation is that cache blocks of similar sizes may have a similar access pattern, because of loops in program
+code and arrays in the data structure. 
