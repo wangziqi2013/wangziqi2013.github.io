@@ -39,3 +39,9 @@ of blocks for eviction when they are fetched into the cache. These two policies 
 for eviction when a line is brought into the cache is determined by SIP, while the replacement decision is made using a 
 combination of the eviction priority and other factors (as we will see below). Eviction prioirties are also updated 
 when cache blocks are hit.
+
+In the baseline version of MVE, the paper assumes a conventional set-associative cache organized into sets and ways. 
+No particular replacement algorithm is assumed, but the algorithm must use a priority value to rank all ways in a set
+as candidates, and the one with the highest priority value is evicted. In LRU, this value corresponds to the distance
+of the way in LRU stack to the top of the stack (i.e. the one at the tail of the stack has the highest priority). 
+In RRIP, the priority value is the re-reference prediction value, RRPV. 
