@@ -69,4 +69,6 @@ bits. The paper suggests that 8 unused bits are used as a coarse-grain filter to
 not holes. During a page walk, the second level bit vector is accessed and checked first. If the bit is set, then the 
 first level bit vector is further accessed from the global bit vector, addressed with the translared physical address.
 A "1" bit in the global bit vector indicates that the shadow table entry should be accessed, the address of which can 
-be computed easily by adding 4KB to the base address of the main table entry.
+be computed easily by adding 4KB to the base address of the main table entry. The paper also notes that the first level
+bit vector for a 2MB page consists of 512 bits or 64 bytes, which can be read out with exact one extra memory access.
+The global bit vector can also be cached in the cache hierarchy for accelerated access in the future.
