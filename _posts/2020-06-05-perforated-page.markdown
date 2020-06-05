@@ -98,9 +98,11 @@ the type of page that is actually returned. The corresponding entry is then inse
 the request is fulfilled.
 
 L2 TLB hit logic is also changed. If only 2MB entry is hit, the L2 TLB lookup logic should always lookup the bit vector
-to determine whether the hit is actually on a 4KB hole. To avoid having to access the bits in the page table and/or global 
-bit vector arraay for each L2 TLB hit, the paper proposes that the bit vector also be cached in L2 TLB entries. A special
-mode bit is added per-L2 entry to indicate the storage mode. Address tags are also needed to determine the offset of these
-bit vectors within the 2MB page. Bit vectors are brought into the L2 TLB on-demand, i.e. they are only installed when 
-a page walker returns them as a result of the page walk. The paper claims that at most 17 entries
-are needed to store the L2 TLB entry and the bit vector, while the number is 512 entries in the case of 4KB pages.
+to determine whether the hit is actually on a 4KB hole (if entries of both types are found, then it must be a 4KB hole). 
+To avoid having to access the bits in the page table and/or global bit vector arraay for each L2 TLB hit, the paper proposes 
+that the bit vector also be cached in L2 TLB entries. A special mode bit is added per-L2 entry to indicate the storage mode. 
+Address tags are also needed to determine the offset of these bit vectors within the 2MB page. Bit vectors are brought 
+into the L2 TLB on-demand, i.e. they are only installed when a page walker returns them as a result of the page walk. 
+The paper claims that at most 17 entries are needed to store the L2 TLB entry and the bit vector, while the number is 
+512 entries in the case of 4KB pages. This comparison, however, is incorrect, since in the worst case, the 512 4KB mapping
+entries are also inserted into the L2 TLB.
