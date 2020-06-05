@@ -90,4 +90,9 @@ the evicted entry may not physically exist in the L2 TLB, the insertion logic of
 evicted entry is generated earlier by the lookup logic, and merge both bits into the 2MB mapping entry if it is the case.
 The paper did not mention this either.
 
-
+If L2 TLB lookup signals a TLB miss, the page walker is invoked to lookup the page table. On reaching the page table entry
+for the 2MB page, the page walker checks whether the target address is a hole, or it lies within the 2MB page using the 
+algorithm described earlier. If the target address is a hole page, then the shadow table entry is accessed, and the 4KB
+base address is returned. Otherwise the 2MB physical address is returned. The page walker should indicate to L2 TLB on
+the type of page that is actually returned. The corresponding entry is then inserted into both L1 and L2 TLB, before 
+the request is fulfilled.
