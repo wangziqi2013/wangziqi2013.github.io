@@ -18,4 +18,6 @@ overhead. Existing huge page support on commercial processors rely on the OS's a
 chunks which can then be mapped to an aligned 2MB virtual address range. Huge pages reduce the number of TLB entries
 for mapping a consecutive range of memory than using regular 4KB pages. This design, however, has to overcome several 
 difficulties such as memory fragmentation and data movement overhead. The paper identifies three major challenges 
-while using huge pages. The first
+while using huge pages. The first challenge is memory bloating, which happens when a huge page is only sparsely accessed.
+Since huge pages must be assigned physical storage as a whole, most memory storage is wasted. With regular 4KB page,
+this will not be an issue, since each 4KB page can be mapped individually. 
