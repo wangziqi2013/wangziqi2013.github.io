@@ -72,3 +72,8 @@ A "1" bit in the global bit vector indicates that the shadow table entry should 
 be computed easily by adding 4KB to the base address of the main table entry. The paper also notes that the first level
 bit vector for a 2MB page consists of 512 bits or 64 bytes, which can be read out with exact one extra memory access.
 The global bit vector can also be cached in the cache hierarchy for accelerated access in the future.
+
+The TLB lookup protocol is modified as follows. First, for perforated pages, the 2MB entry is only cached by L2 TLB.
+The paper made a design decision of not adding any extra bits in L1 TLB to avoid radically changing L1 TLB access 
+latency of complexity, which is of critical importance for fast memory accesses. The consequence is that L1 TLBs could
+not distinguish between a perforated page and a hole within the page, if 2MB entries are cached. 
