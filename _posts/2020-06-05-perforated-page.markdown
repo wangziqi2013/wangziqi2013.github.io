@@ -45,4 +45,7 @@ a physical address layout which contains valid 4KB pages in the 2MB physical ran
 correspond to these valid pages are remapped as "holes", even a highly fragmented physical address layout could support
 huge page mapping, eliminating the need of memory defragmentation.
 
+Perforated design consists of two major components: Extended page table for extra level of mapping, and a modified L2
+TLB organization and lookup protocol. We discuss these two in the following paragraphs.
+
 
