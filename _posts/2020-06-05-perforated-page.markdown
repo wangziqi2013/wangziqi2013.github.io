@@ -55,4 +55,8 @@ page table walks. The paper proposes that the extra level of indirection can be 
 page table, and calls it "shadow page table". When initializing a page table for perforated pages, the OS should
 allocate two pages, instead of one, when creating the page table entry. The shadow table entry has the same format
 as a last-level page table entry for mapping 4KB pages, with the same layout for base address and permission bits.
-
+The extra bit vector, however, does not fit into any table entry, since there are 512 bits (64 bytes) in total.
+The paper proposes a two-level hiararchy for the bit vector. First, precise bit vectors are stored globally in a direct-mapped
+memory region in the physical address space, which is initialized on system startup. The bit vector stores mapping
+information for all 4KB physical frames, with "1" bit indicating that the physical frame is a "hole", and "0" bit
+otherwise. 
