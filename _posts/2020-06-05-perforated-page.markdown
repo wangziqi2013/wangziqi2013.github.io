@@ -20,4 +20,14 @@ for mapping a consecutive range of memory than using regular 4KB pages. This des
 difficulties such as memory fragmentation and data movement overhead. The paper identifies three major challenges 
 while using huge pages. The first challenge is memory bloating, which happens when a huge page is only sparsely accessed.
 Since huge pages must be assigned physical storage as a whole, most memory storage is wasted. With regular 4KB page,
-this will not be an issue, since each 4KB page can be mapped individually. 
+this will not be an issue, since each 4KB page can be mapped individually. This is especially problematic if the OS
+has Transparent Huge Page (THP) enabled, in which the OS's VMM detects allocation pattern that can fit into a huge page,
+and automatically use huge pages to satisfy the allocation. The OS has no idea about the access pattern of these allocated
+huge pages, resulting in possible mismatch between page size and access density.
+The second challenge is deduplication, which is implemented by some application level software and/or the OS kernel.
+The deduplication process tries to find identical pages mapped by different processes, and then remap them to the same
+physical frame. With 2MB huge page, the chance that an iddentical page be found is most likely small, since a single byte
+within the 2MB range will render deduplication impossible. As a result, the OS needs to actively decompose huge pages 
+previously allocated into standard 4KB pages. This not only creates extra memory management overhead, but also increases
+TLB pressure, since more entries are needed to map the same physical memory. 
+The 
