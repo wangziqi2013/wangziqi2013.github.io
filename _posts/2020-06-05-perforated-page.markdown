@@ -59,4 +59,7 @@ The extra bit vector, however, does not fit into any table entry, since there ar
 The paper proposes a two-level hiararchy for the bit vector. First, precise bit vectors are stored globally in a direct-mapped
 memory region in the physical address space, which is initialized on system startup. The bit vector stores mapping
 information for all 4KB physical frames, with "1" bit indicating that the physical frame is a "hole", and "0" bit
-otherwise. 
+otherwise. The overall overhead for the bit vector is small for two reasons. First, it takes only one bit to map a 4KB 
+physical page, resulting in a total storage overhead of only 0.003%. Second, the bit vector maps physical address space
+rather than virtual address. The actual cost of the bit vector is propotional to the amount of physical memory installed,
+rather than the size of virtual address space which can be huge.
