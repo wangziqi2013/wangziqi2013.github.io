@@ -48,4 +48,11 @@ huge page mapping, eliminating the need of memory defragmentation.
 Perforated design consists of two major components: Extended page table for extra level of mapping, and a modified L2
 TLB organization and lookup protocol. We discuss these two in the following paragraphs.
 
+In order to map 4KB pages within a 2MB huge page, an extra level of page table entry must be added below the 2MB table
+entry. In addition, the page table must also contain information to identify which aligned 4KB address ranges are 
+individually mapped as "holes". Both information must be easily located since they are on the critical path of 
+page table walks. The paper proposes that the extra level of indirection can be located right next to the main
+page table, and calls it "shadow page table". When initializing a page table for perforated pages, the OS should
+allocate two pages, instead of one, when creating the page table entry. The shadow table entry has the same format
+as a last-level page table entry for mapping 4KB pages, with the same layout for base address and permission bits.
 
