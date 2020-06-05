@@ -36,6 +36,11 @@ memory traffic, since physical pages are copied around for defragmentation.
 
 Perforated page design solves the above issues by allowing huge pages to be mapped with an unlimited number of 4KB "holes" 
 in the virtual address space, making the 2MB virtual address range partially non-consecutive. These holes in the 2MB page
-serve two differeit purposes. First, virtual address holes do not need to be backed by any physical pages. If a hole
+serve three differeit purposes. First, virtual address holes do not need to be backed by any physical pages. If a hole
 is known to be never accessed by the application, the physical page backing the hole can be released, which increases
-memory utilization.
+memory utilization. Second, even if holes are backed by physical memory, they enable the OS's VMM to somehow exert finer
+grained management over the mapped page. In the deduplication examples above, a deduplicated "hole" page can be individually 
+allocated, if it is to be mapped by multiple different processes. The last purpose is that 2MB pages can be mapped with
+a physical address layout which contains valid 4KB pages in the 2MB physical range. As long as virtual addresses that
+correspond to these valid pages are remapped as "holes", even a highly fragmented physical address layout could support
+
