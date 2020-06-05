@@ -63,3 +63,10 @@ otherwise. The overall overhead for the bit vector is small for two reasons. Fir
 physical page, resulting in a total storage overhead of only 0.003%. Second, the bit vector maps physical address space
 rather than virtual address. The actual cost of the bit vector is propotional to the amount of physical memory installed,
 rather than the size of virtual address space which can be huge.
+
+The second level of the bit vector is stored in the page table entry of the 2MB page mapping, taking advantage of unused
+bits. The paper suggests that 8 unused bits are used as a coarse-grain filter to quickly rule out 4KB regions that are 
+not holes. During a page walk, the second level bit vector is accessed and checked first. If the bit is set, then the 
+first level bit vector is further accessed from the global bit vector, addressed with the translared physical address.
+A "1" bit in the global bit vector indicates that the shadow table entry should be accessed, the address of which can 
+be computed easily by adding 4KB to the base address of the main table entry.
