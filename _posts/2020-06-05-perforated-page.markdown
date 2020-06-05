@@ -30,4 +30,8 @@ physical frame. With 2MB huge page, the chance that an iddentical page be found 
 within the 2MB range will render deduplication impossible. As a result, the OS needs to actively decompose huge pages 
 previously allocated into standard 4KB pages. This not only creates extra memory management overhead, but also increases
 TLB pressure, since more entries are needed to map the same physical memory. 
-The 
+The last challenge is posed by the fact that the OS will also actively compact physical pages to reduce fragmentation,
+and then promote large chunks of memory into huge pages. The background compact and promoting process incurrs extra 
+memory traffic, since physical pages are copied around for defragmentation. 
+
+
