@@ -43,4 +43,6 @@ grained management over the mapped page. In the deduplication examples above, a 
 allocated, if it is to be mapped by multiple different processes. The last purpose is that 2MB pages can be mapped with
 a physical address layout which contains valid 4KB pages in the 2MB physical range. As long as virtual addresses that
 correspond to these valid pages are remapped as "holes", even a highly fragmented physical address layout could support
+huge page mapping, eliminating the need of memory defragmentation.
+
 
