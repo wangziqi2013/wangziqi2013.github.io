@@ -34,4 +34,8 @@ The last challenge is posed by the fact that the OS will also actively compact p
 and then promote large chunks of memory into huge pages. The background compact and promoting process incurrs extra 
 memory traffic, since physical pages are copied around for defragmentation. 
 
-
+Perforated page design solves the above issues by allowing huge pages to be mapped with an unlimited number of 4KB "holes" 
+in the virtual address space, making the 2MB virtual address range partially non-consecutive. These holes in the 2MB page
+serve two differeit purposes. First, virtual address holes do not need to be backed by any physical pages. If a hole
+is known to be never accessed by the application, the physical page backing the hole can be released, which increases
+memory utilization.
