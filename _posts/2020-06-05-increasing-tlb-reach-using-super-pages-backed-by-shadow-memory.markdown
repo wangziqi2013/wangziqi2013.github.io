@@ -68,4 +68,6 @@ On servicing an incoming memory request, the memory controller first checks the 
 target address is in the shadow address space, the MTLB is queried. Any invalid entry in the page table is considered
 as a paged out, which is delivered back to the OS as a page fault via external exception. The paper suggests that some 
 architectures do not expect page faults from an external source after in-core TLB lookup. In this case, the external
-exception should indicate that the memory operation failed (e.g. parity error). 
+exception should indicate that the memory operation failed (e.g. parity error). On receiving such an exception, the OS
+should check whether the exception target address lies within the shadow address space, and that whether it is truly a 
+MTLB page fault. The MTLB hardware should set a special mark in the page table to signal the cause of the page fault.
