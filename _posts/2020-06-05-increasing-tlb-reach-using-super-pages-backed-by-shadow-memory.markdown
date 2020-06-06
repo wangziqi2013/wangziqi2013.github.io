@@ -52,3 +52,10 @@ The MTLB proposal consists of three parts. The first part is the page table spec
 semantics of the table. The second part is the MTLB hardware that supports address translation from shadow address 
 to the physical address space. The third part is Operating Systems support for MTLB. We discuss each parts in the 
 following paragraphs.
+
+The page table for shadow address space is organized as a flat, direct-mapped array. The paper argues that the storage
+overhead for such an array would be reasonable, since a 32 bit pointer (recall that at the time of writing, 32 bit 
+pointers is the mainstream) can map a 4KB page in the shadow address space, a mere 0.1% storage overhead. At system
+startup time, the BIOS routine configures the memory controller via memory-mapped I/O by specifying the range of 
+shadow address space. Typically, the shadow address space is located at high end of the physical address, and should
+exclude addresses assignd for memory-mapped I/O.
