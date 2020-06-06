@@ -35,7 +35,8 @@ There are two obvious advantages of performing two-level address translation wit
 First, since the shadow address space is large, memory fragmentation is no longer an issue. The OS could just maintain 
 a larger address pool, and select the most suited address block from the shadow address space as the target address for 
 virtual memory mapping.
-
+Second, the MTLB can still map shadow addresses in 4KB granularity, which enables more flexible memory management
+while keeping address translation overhead low on the performance-critical in-core TLB.
 
 The paper also finds adding a seperate TLB to the memory controller appealing for several reasons. First, this TLB is 
 only accessed when a memory request is issued from the LLC, and the target address is within the shadow address space.
