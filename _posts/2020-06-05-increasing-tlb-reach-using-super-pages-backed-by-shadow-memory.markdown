@@ -27,6 +27,11 @@ much higher storage overhead if the huge page is only accessed sparsely.
 MTLB solves this problem by inserting an optinal address space between the virtual and physical address space, called
 real address space. The real address space is part of the physical address space, which is not backed by actual hardware
 resource. The paper makes an important observation that, at the time of writing, the 32 to 40 bit physical address space
-is far more than the capacity of memory modules installed, resulting in a sparsely populated physical address space.
+is far larger than the capacity of memory modules installed, resulting in a sparsely populated physical address space.
 In other words, in such a configuration, the majority of the physical address space is not used, which could be allocated
-to the shadow address space. 
+to the shadow address space. Memory requests to the shadow address space are translated using a mapping table and a
+memory controller TLB (MTLB) to physical addresses. Since the shadow address space is large, memory fragmentation is
+not an issue, since the OS could just maintain a larger address pool, and select the most suited address block from the 
+shadow address space as the target address for virtual memory mapping.
+
+
