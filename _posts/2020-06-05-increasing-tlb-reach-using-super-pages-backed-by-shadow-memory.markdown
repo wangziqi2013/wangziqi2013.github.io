@@ -77,6 +77,13 @@ must be that the OS intended to not allocate physical storage for that page unti
 
 MTLB also maintains access and dirty bits for table entries. These entries are useful for determining eviction victims 
 and for scheduling write backs. Shadow mapped pages can also be swapped out to the disk if the dirty bit is set. 
+The paper points out, however, that access bits in MTLB and in the associated page table are only an approximation
+of the actual access stream, due to the fact that the memory controller only sees a small subset of accesses.
+Conventional algorithms such as CLOCK will not work on MTLB since the accessed bit is not set regularly for every
+access from the processor. The dirty bit, on the other hand, is always accurate, since after installing or updating a 
+new mapping, we always flush the cache hierarchy on the shadow address whose mapping has been changed to avoid accessing
+out-of-date data. This guarantees the first write access to the shadow address region can always be seen by the memory
+controller. The controller simply monitors GETX requests from the LLC, and sets the dirty bit accordingly.
 
 The tagging logic in all levels of caches is not changed. The tags will use shadow addresses in exact the same way
 as physical addresses. The cache line content, however, should be invalidated, if the shadow mapping changes. This is 
