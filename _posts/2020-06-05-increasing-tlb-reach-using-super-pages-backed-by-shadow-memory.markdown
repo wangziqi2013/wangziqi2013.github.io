@@ -59,3 +59,9 @@ pointers is the mainstream) can map a 4KB page in the shadow address space, a me
 startup time, the BIOS routine configures the memory controller via memory-mapped I/O by specifying the range of 
 shadow address space. Typically, the shadow address space is located at high end of the physical address, and should
 exclude addresses assignd for memory-mapped I/O.
+
+The MTLB hardware is located on the memory controller, whose content is maintained by a hardware page walker.
+The MTLB is organized like a set-associative cache, due to its larger capacity than an in-core TLB which is often
+fully associative. The hardware page walker is simpler than the one in the MMU, thanks to the flat mapping structure of 
+the shadow page table.
+
