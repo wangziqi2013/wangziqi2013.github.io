@@ -23,3 +23,10 @@ One of the existing techniques for reducing the number of entries in the TLB and
 is to use huge pages, where a single TLB entry can map a significantly larger page than conventional 4KB pages. Large page
 itself, however, poses a challenge to the OS's VMM, since it has a much lower tolerance for memory fragmentation, and 
 much higher storage overhead if the huge page is only accessed sparsely.
+
+MTLB solves this problem by inserting an optinal address space between the virtual and physical address space, called
+real address space. The real address space is part of the physical address space, which is not backed by actual hardware
+resource. The paper makes an important observation that, at the time of writing, the 32 to 40 bit physical address space
+is far more than the capacity of memory modules installed, resulting in a sparsely populated physical address space.
+In other words, in such a configuration, the majority of the physical address space is not used, which could be allocated
+to the shadow address space. 
