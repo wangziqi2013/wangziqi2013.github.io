@@ -38,4 +38,7 @@ detected after a signature comparison. Cache hits, however, cannot solely depend
 however low it is, must be adddressed. The paper then proposes storing the full address tags at the end of the data slot,
 which are read out and compared against the requested address only if one or more signatures hit. Given the low 
 probablities of collision, the data slot read cost is very likely going to be paid anyway, if a signature hit occurs, 
-therefore rendering this scheme costless in terms of storage and latency in most cases.
+therefore rendering this scheme costless in terms of storage and latency in most cases. At the end of the paper, a similar
+but more space effective scheme is also proposed for storing superblocks consisting of four adjacent compressed blocks.
+The superblock is encoded in a way that is distinguashable from regular Touche blocks, which also has zero extra 
+tag storage overhead.
