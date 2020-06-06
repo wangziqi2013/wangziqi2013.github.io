@@ -34,4 +34,9 @@ memory controller TLB (MTLB) to physical addresses. Since the shadow address spa
 not an issue, since the OS could just maintain a larger address pool, and select the most suited address block from the 
 shadow address space as the target address for virtual memory mapping.
 
-
+The paper also finds adding a seperate TLB to the memory controller appealing for several reasons. First, this TLB is 
+only accessed when a memory request is issued from the LLC, and the target address is within the shadow address space.
+Since most memory requests just hit the cache hierarchy without making to the memory controller, the load on the MTLB
+is usually light, enabling a design with simpler hardware and a larger array. Second, the MTLB only needs one read and 
+write port, since at most one memory request can be handled at a time for most controllers. In-core TLBs may need more 
+than one, due to the fact that multiple load-store unit may exist and can access the TLB in the same cycle.
