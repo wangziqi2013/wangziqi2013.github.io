@@ -43,8 +43,9 @@ only accessed when a memory request is issued from the LLC, and the target addre
 Since most memory requests just hit the cache hierarchy without making to the memory controller, the load on the MTLB
 is usually light, enabling a design with simpler hardware and a larger array. Second, the MTLB only needs one read and 
 write port, since at most one memory request can be handled at a time for most controllers. In-core TLBs may need more 
-than one, due to the fact that multiple load-store unit may exist and can access the TLB in the same cycle. The last 
+than one, due to the fact that multiple load-store unit may exist and can access the TLB in the same cycle. The third 
 reason is that only one type of mapping is supported by the MTLB. Neither separate banks nor page size predictors are 
-needed in MTLB.
+needed in MTLB. Lastly, the fine-grained mapping scheme in MTLB also enables separate permission bits for each regular
+page sized block, which can be useful sometimes even for a huge page (e.g. cheap copy-on-write).
 
 
