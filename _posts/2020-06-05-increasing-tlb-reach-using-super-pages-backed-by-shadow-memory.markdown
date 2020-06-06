@@ -88,3 +88,9 @@ controller. The controller simply monitors GETX requests from the LLC, and sets 
 The tagging logic in all levels of caches is not changed. The tags will use shadow addresses in exact the same way
 as physical addresses. The cache line content, however, should be invalidated, if the shadow mapping changes. This is 
 similar to how virtual address caches should be flushed on a context switch.
+
+The OS treats shadow address space as system resource, and has an allocator specifically for that. At OS initialization
+time, the range of shadow address space and the base address of the MTLB page table is communicated with the memory 
+controller via memory-mapped I/O. The OS then divides the shadow address space into aligned huge page frames, which is
+maintained as a buffer pool of uniformed size. When an allocation request is made by the application, the OS first aligns
+the requested size to a multiple of the huge page size by rounding down the requested size.
