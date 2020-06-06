@@ -19,4 +19,7 @@ performance on modern hardware, since the reach of the TLB is only a few hundred
 the system can easily exceed several MB in capacity (at the time of writing). With large working sets whose size exceeds 
 the reach of the TLB, the TLB can become a bottleneck because of frequent TLB misses and page walks.
 
-
+One of the existing techniques for reducing the number of entries in the TLB and therefore increasing the TLB reach
+is to use huge pages, where a single TLB entry can map a significantly larger page than conventional 4KB pages. Large page
+itself, however, poses a challenge to the OS's VMM, since it has a much lower tolerance for memory fragmentation, and 
+much higher storage overhead if the huge page is only accessed sparsely.
