@@ -30,3 +30,8 @@ base address tag plus implicit offset in the data slot similar to sectors in a s
 set loses most of the associativity provided by overprovisioned tags, since only adjacent blocks can be stored in a way, 
 resulting in reduced effective cache size.
 
+The touche design solves this trade-off using hashed address tags. Hashing allows us to reduce the size of the tag given
+that the chances of collision are low. The hashed tag, called a signature, can be stored in the tag array design for 
+full-sized address tags with other signatures of compressed blocks in the same data slot. Signatures enable the 
+cache lookup protocol to rule out cache misses in the early stages of the process, since they can be immediately
+detected after a signature comparison. 
