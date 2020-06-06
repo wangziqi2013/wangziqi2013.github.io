@@ -19,3 +19,8 @@ static mapping relation between tag and data slots. This way, more logical lines
 a single data slot, while more than one tags are used to address them. A set lookup should read all the tags out and 
 compare them with the requested address to determine if the requests hits or not.
 
+The paper assumes a compressed Last-Level Cache (LLC) design, with arbitrary compression algorithms as long as the algorithm
+has a way to identify compressed block size using a few bits inddicating compression type.
+The paper observes that a tradde-off has to be made between cache area overhead and effective cache size benefit by
+applying compression. Overprovisioning of tags per slot of course increases the chance that more compressed blocks
+can be stored in the same data slot. This, however, requires more parallel tag read and comparison for every LLC
