@@ -74,3 +74,10 @@ MTLB page fault. The MTLB hardware should set a special mark in the page table t
 Note that illegal access error cannot arise from a MTLB page fault, since the OS has full controler over the accessibility
 of the physical and shadow address space. If an address is mapped into shadow address space, but raises a page fault, it 
 must be that the OS intended to not allocate physical storage for that page until a later on-demand fill.
+
+MTLB also maintains access and dirty bits for table entries. These entries are useful for determining eviction victims 
+and for scheduling write backs. Shadow mapped pages can also be swapped out to the disk if the dirty bit is set. 
+
+The tagging logic in all levels of caches is not changed. The tags will use shadow addresses in exact the same way
+as physical addresses. The cache line content, however, should be invalidated, if the shadow mapping changes. This is 
+similar to how virtual address caches should be flushed on a context switch.
