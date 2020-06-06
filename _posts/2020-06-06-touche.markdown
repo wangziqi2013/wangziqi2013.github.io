@@ -24,5 +24,9 @@ has a way to identify compressed block size using a few bits inddicating compres
 The paper observes that a tradde-off has to be made between cache area overhead and effective cache size benefit by
 applying compression. Overprovisioning of tags per slot of course increases the chance that more compressed blocks
 can be stored in the same data slot. This, however, requires more parallel tag read and comparison for every LLC access,
-which increases both area and power consumption. 
+which increases both area and power consumption. On the other hand, some prior designs propose using superblocks to reduce
+the number of tags per data slot. Superblocks are consecutive compressed blocks whose address tags can be encoded by a 
+base address tag plus implicit offset in the data slot similar to sectors in a sector cache. In such a design, the cache 
+set loses most of the associativity provided by overprovisioned tags, since only adjacent blocks can be stored in a way, 
+resulting in reduced effective cache size.
 
