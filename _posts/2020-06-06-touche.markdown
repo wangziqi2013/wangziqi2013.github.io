@@ -23,4 +23,6 @@ The paper assumes a compressed Last-Level Cache (LLC) design, with arbitrary com
 has a way to identify compressed block size using a few bits inddicating compression type.
 The paper observes that a tradde-off has to be made between cache area overhead and effective cache size benefit by
 applying compression. Overprovisioning of tags per slot of course increases the chance that more compressed blocks
-can be stored in the same data slot. This, however, requires more parallel tag read and comparison for every LLC
+can be stored in the same data slot. This, however, requires more parallel tag read and comparison for every LLC access,
+which increases both area and power consumption. 
+
