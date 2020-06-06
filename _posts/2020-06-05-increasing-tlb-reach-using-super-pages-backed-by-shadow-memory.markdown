@@ -44,4 +44,7 @@ Since most memory requests just hit the cache hierarchy without making to the me
 is usually light, enabling a design with simpler hardware and a larger array. Second, the MTLB only needs one read and 
 write port, since at most one memory request can be handled at a time for most controllers. In-core TLBs may need more 
 than one, due to the fact that multiple load-store unit may exist and can access the TLB in the same cycle. The last 
-reason is that only one type of mapping is supported by the MTLB
+reason is that only one type of mapping is supported by the MTLB. Neither separate banks nor page size predictors are 
+needed in MTLB.
+
+
