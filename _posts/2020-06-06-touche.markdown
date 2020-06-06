@@ -13,5 +13,9 @@ htm_cr:
 version_mgmt:
 ---
 
-
+This paper proposes Touche, a cache compression tagging scheme for reducing tag storage overhead on compression cache slots.
+Conventional cache compression schemes often require adding more tags for the same number of data slots, and loosen the 
+static mapping relation between tag and data slots. This way, more logical lines can be stored in the compressed form within
+a single data slot, while more than one tags are used to address them. A set lookup should read all the tags out and 
+compare them with the requested address to determine if the requests hits or not.
 
