@@ -1,0 +1,17 @@
+---
+layout: paper-summary
+title:  "Touche: Towards Ideal and Efficient Cache Compression By Mitigating Tag Area Overhead"
+date:   2020-06-06 18:25:00 -0500
+categories: paper
+paper_title: "Touche: Towards Ideal and Efficient Cache Compression By Mitigating Tag Area Overhead"
+paper_link: https://dl.acm.org/doi/10.1145/3352460.3358281
+paper_keyword: Touche; Cache Compression; Cache Tag
+paper_year: MICRO 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+
+
