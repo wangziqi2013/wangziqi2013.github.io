@@ -71,3 +71,6 @@ architectures do not expect page faults from an external source after in-core TL
 exception should indicate that the memory operation failed (e.g. parity error). On receiving such an exception, the OS
 should check whether the exception target address lies within the shadow address space, and that whether it is truly a 
 MTLB page fault. The MTLB hardware should set a special mark in the page table to signal the cause of the page fault.
+Note that illegal access error cannot arise from a MTLB page fault, since the OS has full controler over the accessibility
+of the physical and shadow address space. If an address is mapped into shadow address space, but raises a page fault, it 
+must be that the OS intended to not allocate physical storage for that page until a later on-demand fill.
