@@ -34,4 +34,8 @@ The touche design solves this trade-off using hashed address tags. Hashing allow
 that the chances of collision are low. The hashed tag, called a signature, can be stored in the tag array design for 
 full-sized address tags with other signatures of compressed blocks in the same data slot. Signatures enable the 
 cache lookup protocol to rule out cache misses in the early stages of the process, since they can be immediately
-detected after a signature comparison. 
+detected after a signature comparison. Cache hits, however, cannot solely depend on signatures, since signature collisions,
+however low it is, must be adddressed. The paper then proposes storing the full address tags at the end of the data slot,
+which are read out and compared against the requested address only if one or more signatures hit. Given the low 
+probablities of collision, the data slot read cost is very likely going to be paid anyway, if a signature hit occurs, 
+therefore rendering this scheme costless in terms of storage and latency in most cases.
