@@ -41,4 +41,11 @@ probablities of collision, the data slot read cost is very likely going to be pa
 therefore rendering this scheme costless in terms of storage and latency in most cases. At the end of the paper, a similar
 but more space effective scheme is also proposed for storing superblocks consisting of four adjacent compressed blocks.
 The superblock is encoded in a way that is distinguashable from regular Touche blocks, which also has zero extra 
-tag storage overhead.
+tag storage overhead. We next discuss each of these designs in details.
+
+Signatures are generated when a request with an address is received. The set lookup protocol does not change. The higher
+27 bits right after the index bits are used to generate the signature as follows. First, the 27 bits are divided into three 
+9 bit segments. Then the three segments are XOR'ed together to form a 9 bit string. The 9 bit string is then divided into
+4 bit and 5 bit parts. Both parts index into a table consisting of 16 and 32 randomly generated entries, the sizes of which
+are 4 and 5 bits, respectively. After table lookup, the two entries from the tables are concatenated to form the final
+9 bit signature. 
