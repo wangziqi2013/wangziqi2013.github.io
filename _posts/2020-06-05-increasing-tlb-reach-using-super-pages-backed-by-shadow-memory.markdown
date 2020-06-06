@@ -48,4 +48,7 @@ reason is that only one type of mapping is supported by the MTLB. Neither separa
 needed in MTLB. Lastly, the fine-grained mapping scheme in MTLB also enables separate permission bits for each regular
 page sized block, which can be useful sometimes even for a huge page (e.g. cheap copy-on-write).
 
-
+The MTLB proposal consists of three parts. The first part is the page table specification that defines the format and 
+semantics of the table. The second part is the MTLB hardware that supports address translation from shadow address 
+to the physical address space. The third part is Operating Systems support for MTLB. We discuss each parts in the 
+following paragraphs.
