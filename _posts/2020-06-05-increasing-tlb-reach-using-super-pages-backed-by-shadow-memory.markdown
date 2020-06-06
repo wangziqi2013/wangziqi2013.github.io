@@ -93,4 +93,7 @@ The OS treats shadow address space as system resource, and has an allocator spec
 time, the range of shadow address space and the base address of the MTLB page table is communicated with the memory 
 controller via memory-mapped I/O. The OS then divides the shadow address space into aligned huge page frames, which is
 maintained as a buffer pool of uniformed size. When an allocation request is made by the application, the OS first aligns
-the requested size to a multiple of the huge page size by rounding down the requested size.
+the requested size to a multiple of the huge page size by rounding down the requested size. The first and last few 
+unaligned pages are still mapped using conventional scheme. The middle pages are then mapped by the conventional TLB
+into shadow address space. The OS also installs mappings into the MTLB page table to map the shadow address space to
+physical pages. Cache flush is also performed before the allocation returns.
