@@ -64,4 +64,8 @@ The MTLB hardware is located on the memory controller, whose content is maintain
 The MTLB is organized like a set-associative cache, due to its larger capacity than an in-core TLB which is often
 fully associative. The hardware page walker is simpler than the one in the MMU, thanks to the flat mapping structure of 
 the shadow page table.
-
+On servicing an incoming memory request, the memory controller first checks the target address of the request. If the 
+target address is in the shadow address space, the MTLB is queried. Any invalid entry in the page table is considered
+as a paged out, which is delivered back to the OS as a page fault via external exception. The paper suggests that some 
+architectures do not expect page faults from an external source after in-core TLB lookup. In this case, the external
+exception should indicate that the memory operation failed (e.g. parity error). 
