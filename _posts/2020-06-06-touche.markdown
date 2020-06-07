@@ -81,3 +81,8 @@ blocks can be inferenced from the compression size information. Metadata is stor
 Three metadata fields are statically allocated, and each metadata field consists of a full address tag, valid and dirty
 bit, compression type, and other per-line properties such as the coherence state. On a tag signature hit, the data slot
 on the corresponding way is read out, and the full address tag is compared. A cache hit is signaled if the full tag matches.
+
+Note that the three statically metadata fields are always at the end of the cache line, no matter how many blocks are 
+actually stored in the data slot. This will slightly reduce the effective size of the cache. The paper claims, however,
+that the impact is minimum.
+
