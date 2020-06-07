@@ -67,4 +67,9 @@ The replacement bits are used as usual. Touche does not encourage having separat
 On cache line eviction, the victim is selected on a per-data slot basis. After the victim slot is selected, the eviction
 logic will randomly evict one or more lines within the slot, if it contains compressed lines.
 
-Touche 
+Signatures matches are insufficient for determining cache hits or not, since different tags may happen to hash into
+the same signature value, although this case is rare compared with true hits. On a signature hit, it is necessary
+to further check the actual address tag which is stored in the data array. Note that Touche serializes tag and 
+data array accesses. Although this adds a few cycles of extra latency, unlike L1 cache in which the latency is critical
+for performance, in an LLC design, it is likely that the tag and data array accesses are already serialized in the 
+original read logic as a way of avoiding fully associative data array accesses. Such accesses are 
