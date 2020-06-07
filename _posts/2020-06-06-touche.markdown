@@ -86,3 +86,9 @@ Note that the three statically metadata fields are always at the end of the cach
 actually stored in the data slot. This will slightly reduce the effective size of the cache. The paper claims, however,
 that the impact is minimum.
 
+The paper also proposes support for superblocks in Touche using the superblock marker, or SMARK. Superblocks are four
+consecutive blocks aligned to the four-block boundary, compressed to fit within a single data slot. Superblocks is effective
+in further improving the effective cache size, since more blocks can be stored in a data slot. Although one more 
+block is stored, superblocks can be supported due to its locality. Instead of storing three independent hash values 
+in the tag array, superblocks only use the aligned starting address of the first cache line to generate the hash value,
+which is then concatenated with a special bit string, called a SMARK. 
