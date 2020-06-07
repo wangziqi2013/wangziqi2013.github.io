@@ -97,4 +97,7 @@ the cache controller first checks whether a tag contains a SMARK. If true, then 
 hash value of the aligned request address (by clearing the lowest two bits). If the two values match, the data slot 
 is read out for tag check. Per-block tags are not maintained. Instead, the aligned address tag is stored at the 
 end of the data slot, in addition to per-slot status bits.
-The paper did not talk about 
+
+The paper did not talk about how superblocks can be discovered, except saying that the cache controller should be 
+locality aware, and always check neighboring blocks for the possibilities of forming a superblock when inserting 
+a block into the data slot.
