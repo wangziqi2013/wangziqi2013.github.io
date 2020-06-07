@@ -76,3 +76,7 @@ original read logic as a way of avoiding fully associative data array accesses. 
 incurs longer latency than just accessing a single tag array, since in some designs the data array has significantly longer 
 latency than tags. 
 
+Compressed blocks are stored one after another in the data slot. At most three can be stored. The boundaries of the 
+blocks can be inferenced from the compression size information. Metadata is stored at the end of the data slot.
+Three metadata fields are statically allocated, and each metadata field consists of a full address tag, valid and dirty
+bit, compression type, and other per-line properties such as the coherence state. 
