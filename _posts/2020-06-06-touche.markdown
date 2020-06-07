@@ -79,4 +79,5 @@ latency than tags.
 Compressed blocks are stored one after another in the data slot. At most three can be stored. The boundaries of the 
 blocks can be inferenced from the compression size information. Metadata is stored at the end of the data slot.
 Three metadata fields are statically allocated, and each metadata field consists of a full address tag, valid and dirty
-bit, compression type, and other per-line properties such as the coherence state. 
+bit, compression type, and other per-line properties such as the coherence state. On a tag signature hit, the data slot
+on the corresponding way is read out, and the full address tag is compared. A cache hit is signaled if the full tag matches.
