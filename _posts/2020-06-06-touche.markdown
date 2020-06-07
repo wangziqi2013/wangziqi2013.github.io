@@ -53,8 +53,13 @@ which will be used for signature generation throughout the rest of the power cyc
 
 Once generated, the signature is either used for tag comparison, or will be inserted into the tag array. The paper assumes
 27 bit tag size in the LLC, plus five extra control bits: 1 bit for valid, 1 bit for dirty, and 3 bits for replacement 
-(assuming an 8-way set-associative LLC). The 27 bit address the tag stores signatures of the three compressed blocks
+(assuming an 8-way set-associative LLC). 
+In the uncompressed case, the semantics of valid and dirty bits are implied by their names. 
+If the data slot holds compressed blocks, however, these two bits use the unique combination to indicate to the cache 
+controller that the rest of the tag and data slot should be interpreted in the compressed form, which we describe below.
+The unique combination will never occur during normal, uncompressed operation, in which the dirty bit is set, but valid
+bit is clear. 
+The 27 bit address the tag stores signatures of the three compressed blocks
 in the data slot, or, if compression is not enabled for this slot, stores the 27 bit address tag. 
 If one or more compressed blocks are invalid, the signature value is insignificant, and the actual tag comparison logic 
-will find this out. The next two bits are valid and dirty bits. In the uncompressed case, their semantics are implied
-by their names. If the data slot holds compressed blocks, 
+will find this out. The next two bits are valid and dirty bits. 
