@@ -59,7 +59,9 @@ If the data slot holds compressed blocks, however, these two bits use the unique
 controller that the rest of the tag and data slot should be interpreted in the compressed form, which we describe below.
 The unique combination will never occur during normal, uncompressed operation, in which the dirty bit is set, but valid
 bit is clear. 
-The 27 bit address the tag stores signatures of the three compressed blocks
-in the data slot, or, if compression is not enabled for this slot, stores the 27 bit address tag. 
-If one or more compressed blocks are invalid, the signature value is insignificant, and the actual tag comparison logic 
-will find this out. The next two bits are valid and dirty bits. 
+The 27 bit address the tag stores signatures of the three compressed blocks in the data slot, or, if compression is not 
+enabled for this slot, stores the 27 bit address tag. If one or more compressed blocks are invalid, the signature value 
+is insignificant, and the actual tag comparison logic will find this out. 
+The replacement bits are used as usual. Touche does not encourage having separate replacement bits per compressed line.
+On cache line eviction, the victim is selected on a per-data slot basis. After the victim slot is selected, the eviction
+logic will randomly evict one or more lines within the slot, if it contains compressed lines.
