@@ -72,4 +72,7 @@ the same signature value, although this case is rare compared with true hits. On
 to further check the actual address tag which is stored in the data array. Note that Touche serializes tag and 
 data array accesses. Although this adds a few cycles of extra latency, unlike L1 cache in which the latency is critical
 for performance, in an LLC design, it is likely that the tag and data array accesses are already serialized in the 
-original read logic as a way of avoiding fully associative data array accesses. Such accesses are 
+original read logic as a way of avoiding fully associative data array accesses. Such accesses are either power hungry, or 
+incurs longer latency than just accessing a single tag array, since in some designs the data array has significantly longer 
+latency than tags. 
+
