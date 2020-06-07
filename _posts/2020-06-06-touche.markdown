@@ -91,4 +91,10 @@ consecutive blocks aligned to the four-block boundary, compressed to fit within 
 in further improving the effective cache size, since more blocks can be stored in a data slot. Although one more 
 block is stored, superblocks can be supported due to its locality. Instead of storing three independent hash values 
 in the tag array, superblocks only use the aligned starting address of the first cache line to generate the hash value,
-which is then concatenated with a special bit string, called a SMARK. 
+which is then concatenated with a special bit string, called a SMARK. The SMARK helps the cache controller to identify 
+a superblock by using a randomly generated value not in the two tables for generating regular hash values. On tag accesses, 
+the cache controller first checks whether a tag contains a SMARK. If true, then the hash value is compared with the 
+hash value of the aligned request address (by clearing the lowest two bits). If the two values match, the data slot 
+is read out for tag check. Per-block tags are not maintained. Instead, the aligned address tag is stored at the 
+end of the data slot, in addition to per-slot status bits.
+The paper did not talk about 
