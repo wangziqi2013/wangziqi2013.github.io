@@ -34,4 +34,7 @@ or mapping tables are maintained in order to access ECC, featuring zero metadata
 
 We next discuss COP design as follows. The paper assumes a low-cost compression and decompression algorithm that can 
 reduce the size of a 64 byte line by at least 34 bits. We will see below how these 34 bits are arranged within the line
-to provide single-erro correction and double-error detection (SECDEC) capabilities. 
+to provide single-erro correction and double-error detection (SECDEC) capabilities. COP does not pursue high compression
+ratio, and the design trades off compression ratio with possibilities of applying compression. In other works, compression
+algorithms that provide more than 34 bits of storage saving makes little sense in COP, but it is important that most
+cache lines should be compressible to at least 478 bits to allow ECC in-lining.
