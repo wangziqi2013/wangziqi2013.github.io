@@ -26,5 +26,11 @@ line properly.
 
 Attache focus on solving the bandwidth reduction problem without increasing effective memory size, and therefore the address
 mapping scheme is a rather simple one. Still, compressed lines should identify themselves to the uncompression engine,
-since different lines have different compressibility. Conventional memory compression schemes often use a metadata cache
-to enable fast retrieval of metadata for recently accessed blocks. 
+since some lines are simply stored uncompressed, while others have different compressibility. 
+Conventional memory compression schemes often use a metadata cache to enable fast retrieval of metadata for recently 
+accessed blocks. Metadata caches, however, have several problems.
+First, the cache cannot be very large, due the physical and budget constraint of SRAM caches. If the size of the working
+set exceeds cache size, then each memory access will incur two DRAM references: one for the metadata of the requested
+address, and the other for the actual data. The benefit of bandwidth reduction diminishes, as the number of DRAM operations
+is doubled. Even worse, in such a scenario, it is likely that the application is bandwidth hungry. Bandwidth reduction
+is the most critical feature in this case, but unfortunately the benefits are only marginal.
