@@ -65,3 +65,8 @@ mode allows parallel activation and read of the higher and lower sub-rank, each 
 The observation is that if compressed blocks can fit into a sub-rank (i.e. at least 2:1 compression), then two compressed
 blocks can be accessed at the same time, potentially increasing the effective DRAM bandwiddth by 2x.
 
+We next discuss the details of operation as follows. As described in previous sections, each compressed block is preceded
+with a marker value and a special bit for disambiguiation. The marker value is chosen as a 15 bit random string generated
+at system initialization time, stored in the DRAM controller, and used throughout the power cycle. A block written back
+from the LLC will be stored in the compressed form, if the compressed size is no larger than 30 bytes, since a sub-rank 
+can store at most 32 bytes of data, and the first two bytes are occupied by the marker and the bit.
