@@ -79,3 +79,8 @@ in lower and higher sub-ranks should be swapped, since the DRAM controller will 
 is compressed or not, before it reads the sub-rank that potentially contains the marker. In the case of odd rows, since
 the first half of the uncompressed line should be stored in the higher sub-rank, such that the DRAM controller could
 always read the higher sub-rank first and then check for marks.
+
+On receiving a memory request, the DRAM controller first computes the sub-rank to be accessed, and then activates the 
+row. After the row becomes available in the row buffer, the controller checks the first 15 bits of the row to see
+if it equals the marker bit string. If false, the sub-rank contains the first half of an uncompressed line. The other 
+sub-rank is then accessed, and both halves are concatenated to form the full cache line.
