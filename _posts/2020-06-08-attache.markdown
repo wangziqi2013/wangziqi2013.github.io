@@ -69,4 +69,13 @@ We next discuss the details of operation as follows. As described in previous se
 with a marker value and a special bit for disambiguiation. The marker value is chosen as a 15 bit random string generated
 at system initialization time, stored in the DRAM controller, and used throughout the power cycle. A block written back
 from the LLC will be stored in the compressed form, if the compressed size is no larger than 30 bytes, since a sub-rank 
-can store at most 32 bytes of data, and the first two bytes are occupied by the marker and the bit.
+can store at most 32 bytes of data, and the first two bytes are occupied by the marker and the special bit. Any blocks
+larger than 30 bytes after compression will be stored uncompressed.
+
+To increase the chance that two compressed lines can be accessed in parallel, the paper suggests that even row lines,
+if compressed, should be stored in the lower sub-rank, while odd row lines should be stored in the higher sub-rank.
+Uncompressed lines on even rows are stored in both sub-ranks as-is, but when the line is on odd row, the two sub-lines
+in lower and higher sub-ranks should be swapped, since the DRAM controller will not be able to know whether the line
+is compressed or not, before it reads the sub-rank that potentially contains the marker. In the case of odd rows, since
+the first half of the uncompressed line should be stored in the higher sub-rank, such that the DRAM controller could
+always read the higher sub-rank first and then check for marks.
