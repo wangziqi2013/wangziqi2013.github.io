@@ -44,5 +44,8 @@ Attache optimizes metadata usage in main memory compression schemes by getting r
 storing a special marker and a bit indicating compression status at the beginning of a compressed DRAM block. 
 The memory controller will check for the marker after a block is read. If the mark is present, and the compression status
 bit indicates that the line is indeed compressed, the line is sent to the decompression engine for further 
-processing. Otherwise, if the marker is not found, or if the bit indicates that the line is not compressed, the block
-is considered as uncompressed, and will be returned directly.
+processing. Marker conflicts, however, may arise if an uncompressed block happen to have the same bit pattern at the beginning
+of the block as the marker. To solve this rare coincidence, the bit after the marker is dedicated as the disambiguity
+bit, in a sense that if the marker exists, and the bit is set, then the block is truly a compressed block.
+Otherwise, if the marker is not found, or if the bit is cleared, the block is considered as uncompressed.
+
