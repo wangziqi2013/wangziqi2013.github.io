@@ -42,4 +42,7 @@ that multiple compression algorithms be attempted on a cache line evicted from t
 selected as the compression algorithm for the specific line. A 2-bit compression type field is stored with the line 
 as well, in order for the line to be decompressed. This 2-bit overhead is already included in the 34 bit overhead of ECC.
 
-In the common case that a cache line can be compressed to less than 478 bits
+In the common case that a cache line can be compressed to less than 478 bits, the DRAM controller will compute ECC
+for each of the 15 bytes (120 bits) segment in the compressed block, padded with zero if the compressed size is less
+than 478 bits. Note that the 2 bit compression type field is also ECC-protected, summing to a total of 480 bits. 
+These 480 bits are then divided into four equally sized segments, with 120 bit for each segment.
