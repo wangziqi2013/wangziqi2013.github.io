@@ -90,3 +90,11 @@ In the rare case, the bit after the marker is zero, indicating that a marker con
 retrieves the missing bit from the dedicated area, the base of which is stored in a controller register.
 This will generate an extra DRAM read. After the bit is retrieved, the other sub-rank is also read, and the original
 content of the uncompressed block is restored by replacing the special bit with the bit read in the previous step.
+
+The above access sequence serializes the access of two sub-ranks, if the cache line is uncompressed. Such serialization
+is largely unnecessary, because current DRAM interface supports parallel read of the two sub-ranks. To better take 
+advantage of the parallelism, the paper proposes reading both sub-ranks in the same time window when the cache line 
+is uncompressed. This, however, is a circular argument, because the content of the block is needed to determine
+whether it is compressed, but without knowing the compressibility of the block, it makes no sense to read both
+sub-ranks in parallel.
+To
