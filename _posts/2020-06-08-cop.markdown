@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes COP, a memory ECC design which delivers protection without the extra hardware overhead. 
+Conventional ECC-protected memory module often has an extra chip on a rank, enabling an extra 8 bytes of data to be read
+in parallel with 64 byte cache line data. Such dedicated ECC hardware not only cost more than a regular non-ECC memory,
+but also consumes substantially more power during operation, due to the extra read on the ECC chip.
+Prior publications also seek to implement hardware ECC check for non-ECC memory modules. A dedicated ECC region is 
+allocated from the physical memory, which stores the ECC bits for each memory block in the rest of the address space.
+These schemes, however, suffer from various problems.
