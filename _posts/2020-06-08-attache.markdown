@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Attache, a main memory compression framework for reducing bandwidth using special signatures.
+Main memory compression is proposed in prior publications to serve two main purposes. First, memory compression
+reduces bus bandwidth consumption by transferring compressed blocks, which are variably sized and are smaller than
+uncompressed block, instead of fix sized cache blocks. Second, more blocks can fit into the same amount of physical
+storage, if compressed blocks are stored in a way that the extra space can be collected and taken advantage of.
+Conventional main memory scheme faces two major challenges. First, the compressed
