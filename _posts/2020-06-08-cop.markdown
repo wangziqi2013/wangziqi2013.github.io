@@ -37,4 +37,9 @@ reduce the size of a 64 byte line by at least 34 bits. We will see below how the
 to provide single-erro correction and double-error detection (SECDEC) capabilities. COP does not pursue high compression
 ratio, and the design trades off compression ratio with possibilities of applying compression. In other works, compression
 algorithms that provide more than 34 bits of storage saving makes little sense in COP, but it is important that most
-cache lines should be compressible to at least 478 bits to allow ECC in-lining.
+cache lines should be compressible to at least 478 (512 - 34) bits to allow ECC in-lining. To this end, the paper suggests
+that multiple compression algorithms be attempted on a cache line evicted from the LLC. The one with the best outcome is 
+selected as the compression algorithm for the specific line. A 2-bit compression type field is stored with the line 
+as well, in order for the line to be decompressed. This 2-bit overhead is already included in the 34 bit overhead of ECC.
+
+In the common case that a cache line can be compressed to less than 478 bits
