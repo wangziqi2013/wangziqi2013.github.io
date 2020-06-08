@@ -23,3 +23,8 @@ main memory in order for the space advantage to be leveraged. The memory control
 for locating compressed lines given their physical addresses. The second challenge is that compressed lines need to
 identify themselves such that the decompression engine could recognize the compression algorithm and process the 
 line properly.
+
+Attache focus on solving the bandwidth reduction problem without increasing effective memory size, and therefore the address
+mapping scheme is a rather simple one. Still, compressed lines should identify themselves to the uncompression engine,
+since different lines have different compressibility. Conventional memory compression schemes often use a metadata cache
+to enable fast retrieval of metadata for recently accessed blocks. 
