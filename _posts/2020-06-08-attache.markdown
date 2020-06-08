@@ -40,3 +40,9 @@ Lastly, with a metadata cache, metadata access and DRAM data access are serializ
 the exact location and/or the compression scheme of the requested address. The latency of DRAM accesses is therefore longer,
 which is also on the critical path of DRAM accesses.
 
+Attache optimizes metadata usage in main memory compression schemes by getting rid of a dedicated metadata area and 
+storing a special marker and a bit indicating compression status at the beginning of a compressed DRAM block. 
+The memory controller will check for the marker after a block is read. If the mark is present, and the compression status
+bit indicates that the line is indeed compressed, the line is sent to the decompression engine for further 
+processing. Otherwise, if the marker is not found, or if the bit indicates that the line is not compressed, the block
+is considered as uncompressed, and will be returned directly.
