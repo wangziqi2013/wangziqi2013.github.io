@@ -31,3 +31,7 @@ advantages compared with previous schemes. First, no extra storage is required f
 is compressed in cache line granularity. Second, one DRAM access can fetch both data and ECC, which will not affect
 performance as in designs in which data and ECC accesses are serialized. The last advantage is that no extra indirections
 or mapping tables are maintained in order to access ECC, featuring zero metadata overhead. 
+
+We next discuss COP design as follows. The paper assumes a low-cost compression and decompression algorithm that can 
+reduce the size of a 64 byte line by at least 34 bits. We will see below how these 34 bits are arranged within the line
+to provide single-erro correction and double-error detection (SECDEC) capabilities. 
