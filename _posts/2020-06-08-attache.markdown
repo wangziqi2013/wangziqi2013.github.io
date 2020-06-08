@@ -34,3 +34,9 @@ set exceeds cache size, then each memory access will incur two DRAM references: 
 address, and the other for the actual data. The benefit of bandwidth reduction diminishes, as the number of DRAM operations
 is doubled. Even worse, in such a scenario, it is likely that the application is bandwidth hungry. Bandwidth reduction
 is the most critical feature in this case, but unfortunately the benefits are only marginal.
+The second reason is that a cache will incur load and eviction traffic when a miss occurs. These traffic will further 
+consume bandwidth on the memory bus, since the final destination of metadata is DRAM.
+Lastly, with a metadata cache, metadata access and DRAM data access are serialized, since the controller does not know 
+the exact location and/or the compression scheme of the requested address. The latency of DRAM accesses is therefore longer,
+which is also on the critical path of DRAM accesses.
+
