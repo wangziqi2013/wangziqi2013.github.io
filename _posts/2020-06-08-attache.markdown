@@ -48,4 +48,12 @@ processing. Marker conflicts, however, may arise if an uncompressed block happen
 of the block as the marker. To solve this rare coincidence, the bit after the marker is dedicated as the disambiguity
 bit, in a sense that if the marker exists, and the bit is set, then the block is truly a compressed block.
 Otherwise, if the marker is not found, or if the bit is cleared, the block is considered as uncompressed.
+For uncompressed blocks, since one bit in the block is used as the special bit, the actual value of that particular bit
+has to be stored elsewhere. In the paper it is suggested that a dedicated area in the DRAM be used as the storage 
+for the extra bit.
 
+One of the most critical observations is that when the marker check passes, the chance that the block is indeed compressed 
+is pretty high, since the probablity of marker conflict exponentially decreases with marker size. In the rare case of marker 
+conflicts, one special bit is used to further distinguish between compressed and uncompressed blocks. This special
+bit is always checked after marker comparison as the last resort. Since marker conflicts are rare, in most cases 
+this special bit 
