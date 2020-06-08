@@ -19,4 +19,7 @@ in parallel with 64 byte cache line data. Such dedicated ECC hardware not only c
 but also consumes substantially more power during operation, due to the extra read on the ECC chip.
 Prior publications also seek to implement hardware ECC check for non-ECC memory modules. A dedicated ECC region is 
 allocated from the physical memory, which stores the ECC bits for each memory block in the rest of the address space.
-These schemes, however, suffer from various problems.
+These schemes, however, suffer from various problems. First, the extra ECC region significantly reduces the amount of 
+usable memory, which can take up to 12.5% of total storage. Second, even if ECC is only sparsely maintained as in 
+some designs, the mapping structures needed for locating the ECC data given a line address is also a non-negligible 
+cost in both performance and storage.
