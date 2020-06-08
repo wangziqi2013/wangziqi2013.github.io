@@ -102,3 +102,6 @@ The top level predictor, called global predictor, consists of four 2-bit saturat
 is used to determine whether compressibility is globally feasible using the last four access results. 
 Addresses are direct-mapped to one of the four counters, and the counter is incremented if the prediction is correct. 
 On an incorrect prediction, the counter is set to value zero.
+The second level, called page predictor, tracks the compressibility of a page as a whole. The page predictor is addressed
+using the page number of the requested address. Page predictors are incremented when a prediction is correct. Otherwise,
+the value is copied from the value of the corresponding global predictor.
