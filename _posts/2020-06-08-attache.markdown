@@ -18,4 +18,8 @@ Main memory compression is proposed in prior publications to serve two main purp
 reduces bus bandwidth consumption by transferring compressed blocks, which are variably sized and are smaller than
 uncompressed block, instead of fix sized cache blocks. Second, more blocks can fit into the same amount of physical
 storage, if compressed blocks are stored in a way that the extra space can be collected and taken advantage of.
-Conventional main memory scheme faces two major challenges. First, the compressed
+Conventional main memory scheme faces two major challenges. First, the compressed block needs to be relocated in the 
+main memory in order for the space advantage to be leveraged. The memory controller should maintain a mapping table
+for locating compressed lines given their physical addresses. The second challenge is that compressed lines need to
+identify themselves such that the decompression engine could recognize the compression algorithm and process the 
+line properly.
