@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "COP: To Compress and Protect Main Memory"
+date:   2020-06-08 17:17:00 -0500
+categories: paper
+paper_title: "COP: To Compress and Protect Main Memory"
+paper_link: https://dl.acm.org/doi/10.1145/2872887.2750377
+paper_keyword: COP; Memory Compression; ECC
+paper_year: ISCA 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
