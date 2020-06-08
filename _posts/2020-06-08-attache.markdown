@@ -52,8 +52,10 @@ For uncompressed blocks, since one bit in the block is used as the special bit, 
 has to be stored elsewhere. In the paper it is suggested that a dedicated area in the DRAM be used as the storage 
 for the extra bit.
 
-One of the most critical observations is that when the marker check passes, the chance that the block is indeed compressed 
-is pretty high, since the probablity of marker conflict exponentially decreases with marker size. In the rare case of marker 
-conflicts, one special bit is used to further distinguish between compressed and uncompressed blocks. This special
-bit is always checked after marker comparison as the last resort. Since marker conflicts are rare, in most cases 
-this special bit 
+One of the most critical observations is that metadata access is required on every memory request, which should be highly
+optimized and should be latency- and bandwidth-free.
+On the other hand, by using a marker value, most uncompressed lines can be ruled out by the marker comparison after fetching
+the line from the row buffer, since the probablity of marker conflict exponentially decreases with marker size, and thus 
+marker conflict can be handled in a sub-optimal manner.
+In Attache, when a marker conflict occurs, an extra memory access is made to fetch the extra bit to restore the original
+content of the block. The performance cost of the extra access is negligible given that this case is rare.
