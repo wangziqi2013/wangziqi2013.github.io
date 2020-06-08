@@ -83,4 +83,10 @@ always read the higher sub-rank first and then check for marks.
 On receiving a memory request, the DRAM controller first computes the sub-rank to be accessed, and then activates the 
 row. After the row becomes available in the row buffer, the controller checks the first 15 bits of the row to see
 if it equals the marker bit string. If false, the sub-rank contains the first half of an uncompressed line. The other 
-sub-rank is then accessed, and both halves are concatenated to form the full cache line.
+sub-rank is then accessed, and both halves are concatenated to form the full cache line. Otherwise, if the first 15 bits
+of the sub-rank matches the marker, the controller proceeds to check the next bit after the marker. If this bit is set,
+the rest of the sub-rank is treated as a compressed line, which will be sent to the decompression engine.
+In the rare case, the bit after the marker is zero, indicating that a marker conflict has occurred. The cache controller
+retrieves the missing bit from the dedicated area, the base of which is stored in a controller register.
+This will generate an extra DRAM read. After the bit is retrieved, the other sub-rank is also read, and the original
+content of the uncompressed block is restored by replacing the special bit with the bit read in the previous step.
