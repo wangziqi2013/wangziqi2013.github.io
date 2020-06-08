@@ -22,4 +22,12 @@ allocated from the physical memory, which stores the ECC bits for each memory bl
 These schemes, however, suffer from various problems. First, the extra ECC region significantly reduces the amount of 
 usable memory, which can take up to 12.5% of total storage. Second, even if ECC is only sparsely maintained as in 
 some designs, the mapping structures needed for locating the ECC data given a line address is also a non-negligible 
-cost in both performance and storage.
+cost in both performance and storage. The last problem is that ECC data is accessed for each memory request, which
+adds to DRAM latency, which degrades performance.
+
+COP, on the other hand, conbines compression with ECC such that ECC is stored in-line with compressed data, given that
+the compression ratio is high enough to allow small ECC to be fitted in. By using compression, COP has three obvious
+advantages compared with previous schemes. First, no extra storage is required for maintaining ECC, since DRAM data
+is compressed in cache line granularity. Second, one DRAM access can fetch both data and ECC, which will not affect
+performance as in designs in which data and ECC accesses are serialized. The last advantage is that no extra indirections
+or mapping tables are maintained in order to access ECC, featuring zero metadata overhead. 
