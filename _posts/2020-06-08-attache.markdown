@@ -105,3 +105,10 @@ On an incorrect prediction, the counter is set to value zero.
 The second level, called page predictor, tracks the compressibility of a page as a whole. The page predictor is addressed
 using the page number of the requested address. Page predictors are incremented when a prediction is correct. Otherwise,
 the value is copied from the value of the corresponding global predictor.
+The last level, called line predictor, tracks compressibility of lines using a bit vector. Each line predictor is 
+a bit vector having one bit per cache block within a page, which is addressed using page numbers just like page predictors. 
+When a line is predicted as compressible and is correct, the bit is set. Otherwise the bit is cleared. In addition,
+for each update in the line predictor, the page predictor of the line is also checked. If the page predictor 
+indicates that the page itself is also compressible, i.e. most recent lines in the page are compressed, the two neighboring
+lines are also set in the line predictor, reflecting the fact that one compressible line in a page may also indicate 
+the compressibility of adjacent lines with spatial locality.
