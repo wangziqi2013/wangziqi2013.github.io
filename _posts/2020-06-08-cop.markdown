@@ -46,6 +46,10 @@ In the common case that a cache line can be compressed to less than 478 bits, th
 for each of the 15 bytes (120 bits) segment in the compressed block, padded with zero if the compressed size is less
 than 478 bits. Note that the 2 bit compression type field is also ECC-protected, summing to a total of 480 bits. 
 These 480 bits are then divided into four equally sized segments, with 120 bit for each segment.
-This paper assumes (120, 128) ECC coding, in which each 120 bit segment can be protected by a 8 bit 
+This paper assumes (120, 128) ECC coding, in which each 120 bit segment can be protected by an 8 bit 
 code with SECDEC property. Each ECC code is stored right after the 120 bit segment, forming a 128 bit code word.
 The four 128 bit code word are then written into the DRAM row, as if it is regular data.
+
+In the less common case, the incoming cache line cannot be compressed to under 478 bits by any of the four compression
+schemes. The DRAM controller simply disables ECC on these lines, and just store them as-is, with the exception of 
+code word conflicts, called aliases, as we will see below. 
