@@ -59,3 +59,9 @@ the line from the row buffer, since the probablity of marker conflict exponentia
 marker conflict can be handled in a sub-optimal manner.
 In Attache, when a marker conflict occurs, an extra memory access is made to fetch the extra bit to restore the original
 content of the block. The performance cost of the extra access is negligible given that this case is rare.
+
+Attache assumes a sub-rank memory access interface, in which data can be accessed in half-line granularity. This access
+mode allows parallel activation and read of the higher and lower sub-rank, each providing a half-line sized block.
+The observation is that if compressed blocks can fit into a sub-rank (i.e. at least 2:1 compression), then two compressed
+blocks can be accessed at the same time, potentially increasing the effective DRAM bandwiddth by 2x.
+
