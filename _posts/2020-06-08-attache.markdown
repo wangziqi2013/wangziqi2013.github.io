@@ -97,4 +97,8 @@ advantage of the parallelism, the paper proposes reading both sub-ranks in the s
 is uncompressed. This, however, is a circular argument, because the content of the block is needed to determine
 whether it is compressed, but without knowing the compressibility of the block, it makes no sense to read both
 sub-ranks in parallel.
-To
+To solve this issue, the paper introduces three levels predictor for deciding the compressibility of a line.
+The top level predictor, called global predictor, consists of four 2-bit saturating counters. The global predictor
+is used to determine whether compressibility is globally feasible using the last four access results. 
+Addresses are direct-mapped to one of the four counters, and the counter is incremented if the prediction is correct. 
+On an incorrect prediction, the counter is set to value zero.
