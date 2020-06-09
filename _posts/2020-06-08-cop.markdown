@@ -75,4 +75,6 @@ such pessimistic cases, the paper recommends that the DRAM controller first XOR 
 generated string to break the potential correlation between bits, before compression is applied.
 
 Recall that the SECDED code can detect at most two errors in the same block without silent data corruption. The scheme
-described above is, in fact, consistent with the SECDEC property. If 
+described above is, in fact, consistent with the SECDEC property. Given a compressible line, it will be mistakenly
+recognized as uncompressible only if at least three errors occur on different segments, reducing the number of valid 
+code words to below three. Such corruption would be unable to be detected even if regular ECC technique were used.
