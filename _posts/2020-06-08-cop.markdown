@@ -68,6 +68,11 @@ be extremely rare, since only uncompressible lines will be considered, and alias
 conflicts occur. Given the probablity of a single conflict being 1/2^8 (for any 120 bit segment, assuming that the 
 rest 8 bits are independent from the segment's bit pattern, only one in all possible 2^8 values can be the valid ECC),
 and that conflicts are independent from each other, the chance that an alias would happen is lower than 0.00002%.
+In realistic workloads, however, bit patterns within and between segments are often not independent from each other.
+In the worst case, due to either malicious attack or some really unfortunate computation sequence, the content of 
+segments can be highly correlated, which increases the chance of collision by several magnitudes. To deal with 
+such pessimistic cases, the paper recommends that the DRAM controller first XOR the evicted block with a randomly 
+generated string to break the potential correlation between bits, before compression is applied.
 
 Recall that the SECDED code can detect at most two errors in the same block without silent data corruption. The scheme
 described above is, in fact, consistent with the SECDEC property. If 
