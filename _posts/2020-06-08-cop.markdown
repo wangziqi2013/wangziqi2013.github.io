@@ -60,7 +60,11 @@ the block is treated as compressed, and will be sent to the decompression engine
 On the other hand, if less than or equal to two code words are valid, the line is deemed as uncompressible, which will
 be read out as-is.
 
-
+There are rare cases, however, that an uncompressible cache line actually contains more than two valid code words by
+coincidence. These lines are called "aliases", and should never be written back to the DRAM. The paper suggests that
+the LLC controller should be responsible for detecting aliases, and avoid evicting them (although this may require
+adding extra ECC hardware to LLC controller, the paper seems not to mention this). The paper argues that this would 
+be extremely rare, since only uncompressible lines will be considered, and aliases only happens when 
 
 Recall that the SECDED code can detect at most two errors in the same block without silent data corruption. The scheme
 described above is, in fact, consistent with the SECDEC property. If 
