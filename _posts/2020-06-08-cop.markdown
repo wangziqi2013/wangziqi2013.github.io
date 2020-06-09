@@ -52,4 +52,15 @@ The four 128 bit code word are then written into the DRAM row, as if it is regul
 
 In the less common case, the incoming cache line cannot be compressed to under 478 bits by any of the four compression
 schemes. The DRAM controller simply disables ECC on these lines, and just store them as-is, with the exception of 
-code word conflicts, called aliases, as we will see below. 
+code word conflicts, called aliases, as we will see below. One of the most important contribution of this paper is 
+the identification of uncompressible lines, since COP is metadata-free, which implies no metadata could assist such
+identification. To solve issue, the paper proposes that hardware check the validity of the four code words.
+If more than two of them are valid code words, i.e. the ECC bits is the correct code for the rest of the code word, 
+the block is treated as compressed, and will be sent to the decompression engine.
+On the other hand, if less than or equal to two code words are valid, the line is deemed as uncompressible, which will
+be read out as-is.
+
+
+
+Recall that the SECDED code can detect at most two errors in the same block without silent data corruption. The scheme
+described above is, in fact, consistent with the SECDEC property. If 
