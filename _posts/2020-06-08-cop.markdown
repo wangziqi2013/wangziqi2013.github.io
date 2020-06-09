@@ -78,3 +78,6 @@ Recall that the SECDED code can detect at most two errors in the same block with
 described above is, in fact, consistent with the SECDEC property. Given a compressible line, it will be mistakenly
 recognized as uncompressible only if at least three errors occur on different segments, reducing the number of valid 
 code words to below three. Such corruption would be unable to be detected even if regular ECC technique were used.
+For uncompressed lines, since COP does not protect them from the beginning, only one error, though very rare, can
+transform it into a valid compressed block given that the uncompressible block already contains two valid code block,
+and that the error happens to transform a third block to be valid.
