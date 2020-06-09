@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. I can't see how this scheme provides SECDED. If two errors occur on the same compressed line and are on the 
+   same segment, the number of valid code words will drop to two, which causes the line to be mistakenly recognized
+   as uncompressed. This, however, should not silently fail, since SECDED code should report data corruption for 
+   two bit error.
+   
 This paper proposes COP, a memory ECC design which delivers protection without the extra hardware overhead. 
 Conventional ECC-protected memory module often has an extra chip on a rank, enabling an extra 8 bytes of data to be read
 in parallel with 64 byte cache line data. Such dedicated ECC hardware not only cost more than a regular non-ECC memory,
@@ -76,7 +83,7 @@ generated string to break the potential correlation between bits, before compres
 
 Recall that the SECDED code can detect at most two errors in the same block without silent data corruption. The scheme
 described above is, in fact, consistent with the SECDEC property. Given a compressible line, it will be mistakenly
-recognized as uncompressible only if at least three errors occur on different segments, reducing the number of valid 
+recognized as uncompressible only if at least two errors occur on different segments, reducing the number of valid 
 code words to below three. Such corruption would be unable to be detected even if regular ECC technique were used.
 For uncompressed lines, since COP does not protect them from the beginning, only one error, though very rare, can
 transform it into a valid compressed block given that the uncompressible block already contains two valid code block,
