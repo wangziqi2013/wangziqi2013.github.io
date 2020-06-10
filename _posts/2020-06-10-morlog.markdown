@@ -49,4 +49,9 @@ The second contribution of the paper is the eager-undo and lazy-redo log flushin
 sections, only the first undo and the last redo log entries are actually useful for crash recovery. To leverage such
 differences in the characteristics of logging, the paper adds two log buffers on-chip, one for mixed logging, and 
 the other for redo only. Both undo and redo entries are generated into the mixed logging buffer on the first write to 
-a clean L1 cache line. 
+a clean L1 cache line. These entries are kept within the buffer for an extra N cycles to exploit possible chances
+of log coalescing, in which subsequent writes may modify the same cache line, and these writes could just be incorporated
+into an existing entry for the same line. The log entry is flushed back to the NVM after N cycles, where N is the 
+minimum number of cycles it takes for a cache block from L1 to traverse thehierarchy and finally reach the NVM,
+ensuring that the undo entry can always be written before dirty data.
+
