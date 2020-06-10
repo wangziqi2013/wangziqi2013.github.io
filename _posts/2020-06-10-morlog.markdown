@@ -98,4 +98,8 @@ moving log flushing to the backend, while still guaranteeing correctness. The me
 transaction commit, the commit record is written without waiting for redo log entry flush. Then the processor can start
 the next transaction. In the meantime, a background cache tag walker searches the cache and counts the number of blocks
 in ULog state with the TxID and TID matching the transaction that just committed. The count is then persisted to the log 
-buffer as a special entry. 
+buffer as a special entry. Redo entries are allowed to be written back via normal redo buffer eviction. On recovery, the 
+recovery handler scans the log after it has seen a commit record for possible redo entries and the special counter entry.
+If the counter entry is found, and the number of redo entries that appear after the commit record match the value in
+the counter entry, the transaction is still considered as committed, since all its dirty data can be restored from
+the log. Otherwise, the transaction fails, and should be rolled back using undo logs.
