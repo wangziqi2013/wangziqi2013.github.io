@@ -18,5 +18,9 @@ Conventional undo and redo logging suffers from performance overhead from severa
 enforing the write ordering between log entries and data on the same address, which would require eagerly flushing undo 
 log entries before data is written in the cache, given that the cache controller may write back the cache line any monent 
 after it becomes dirty. In addition, undo logging requires that dirty data be persisted on the NVM before a transaction 
-commits, which can cause long commit latency. On the other hand, 
+commits, which can cause long commit latency. On the other hand, redo logging, though not need requiring flushing log 
+entries before the commit point, should prevent dirty blocks from being written back before the transaction commits.
+This is to avoid write backs of uncommitted data corrupting the consistent before-transaction image on the NVM.
+Both schemes, if used naively in their canonical forms, require non-negligible changes to the cache controller and eviction
+logic.
 
