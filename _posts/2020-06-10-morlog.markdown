@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes MorLog, a hardware logging scheme for providing atomic persistence to transactional NVM systems. 
+Conventional undo and redo logging suffers from performance overhead from several aspects. First, undo logging requires 
+enforing the write ordering between log entries and data on the same address, which would require eagerly flushing undo 
+log entries before data is written in the cache, given that the cache controller may write back the cache line any monent 
+after it becomes dirty. In addition, undo logging requires that dirty data be persisted on the NVM before a transaction 
+commits, which can cause long commit latency. On the other hand, 
+
