@@ -92,3 +92,10 @@ since: (1) we could always perform an associative search when writing an URLog l
 ULog state; (2) We could always walk the redo buffer on commit, which is even easier than walking the cache tag
 to find ULog state lines in order to flish the redo entries.**
 
+The paper further proposes a delay flushing mechanism for avoiding flushing all redo log entries on the commit point. 
+Although this mechanism may roll back committed transactions on a restoration, it increases transaction throughput by 
+moving log flushing to the backend, while still guaranteeing correctness. The mechanism works as follows. First, on
+transaction commit, the commit record is written without waiting for redo log entry flush. Then the processor can start
+the next transaction. In the meantime, a background cache tag walker searches the cache and counts the number of blocks
+in ULog state with the TxID and TID matching the transaction that just committed. The count is then persisted to the log 
+buffer as a special entry. 
