@@ -54,6 +54,8 @@ of log coalescing, in which subsequent writes may modify the same cache line, an
 into an existing entry for the same line. The undo log entry is flushed back to the NVM after N cycles, where N is the 
 minimum number of cycles it takes for a cache block from L1 to traverse thehierarchy and finally reach the NVM,
 ensuring that the undo entry can always be written before dirty data.
+On transaction commit, both buffers are flushed, if they are not already empty (the mixed buffer is likely to be empty
+or only contains a small number of entries, since it eagerly writes back entries once generated).
 
 When a mixed buffer entry is written back, only the undo entry is sent to the memory controller, bypassing the cache 
 hierarchy to avoid complicated timing issues. The redo log entry, however, are transferred to the redo buffer for 
@@ -89,3 +91,4 @@ Anyway we just need a notion of "undo entries already persisted". Whether redo e
 since: (1) we could always perform an associative search when writing an URLog line to determine if it is URLog state or 
 ULog state; (2) We could always walk the redo buffer on commit, which is even easier than walking the cache tag
 to find ULog state lines in order to flish the redo entries.**
+
