@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "MorLog: Morphable Hardware Logging for Atomic Persistence in Non-Volatile Main Memory"
+date:   2020-06-10 12:33:00 -0500
+categories: paper
+paper_title: "MorLog: Morphable Hardware Logging for Atomic Persistence in Non-Volatile Main Memory"
+paper_link: https://www.iscaconf.org/isca2020/papers/466100a610.pdf
+paper_keyword: Logging; Undo Log; Redo Log; MorLog
+paper_year: ISCA 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
