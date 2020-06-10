@@ -121,3 +121,11 @@ is already read out from the array, which provides a great chance to perform suc
 (which is often a 64 bit word).
 When flushing log buffers, the L1 controller checks whether all bits are clear. If true, the entry is sliently discarded,
 since it contains no valid data to log.
+
+Delta-encoded lines are compressed with a pattern-matching algorithm to further reduce its size, leveraging special
+constructs such as leading or trailin zeros/ones. The paper notes, however, that if the majority of bytes are dirty,
+compression may unfortunately result in more bytes being used than uncompressed log entries. In this case, the paper
+suggests that SLDE be used, in which another FPC encoding engine compresses the log entry in parallel with DLDC
+compression. 
+The final form of the compressed log entry is determined by the compression ratio. An extra field is also attached to 
+the log entry to indicate the compression algorithm.
