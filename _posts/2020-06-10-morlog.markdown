@@ -106,3 +106,12 @@ the log. Otherwise, the transaction fails, and should be rolled back using undo 
 Note that in this case, the eviction of a dirty block should not directly cause the redo entry to be dropped. Either 
 the redo entry is written back as usual, or a dummy entry is written to notify the recovery handler that dirty
 data has been persisted.
+
+The paper then proposes a compression scheme for reducing the size of the log, called Differencial Log Data Compression 
+(DLDC) and Selective Log Data Encoding (SLDE). DLDC simply takes advantage of the fact that sparsely written lines need
+not be logged at cache line granularity. In fact, only logging the affected bytes can guarantee correctness, with less
+log storage to be consumed. The paper proposes adding a bit vector for each L1 entry, the bit of which will be set when
+a write updates its value. The bit vector can be per-byte or per-word, which determines the logging granularity.
+Both log buffer entries are also extended with bit vectors, which will be set when log entries are generated or 
+merged. Logging area only keeps delta data without copying the entire cache line.
+
