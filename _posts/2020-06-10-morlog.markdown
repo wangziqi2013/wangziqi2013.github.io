@@ -40,4 +40,9 @@ First, the cache no longer needs to be flushed on transaction commit, since dirt
 of redo log entries. Second, the cache no longer needs to hold dirty blocks without evicting them before transaction
 commits, since undo log entries help restoring the pre-image of data even if the NVM image has been pollutedd by a
 premature write back from the cache hierarchy. Two write ordering restrictions remain, however, to maintain the 
-correctness of the algorithm. First
+correctness of the algorithm. First, redo log entries still need to be written back on commit point to persist the 
+transaction's working set. Second, undo log entries still have to be written before dirty block reaches the NVM.
+The paper loosens the second ordering restriction a little by taking advantage of the minimum number of cycles it will 
+take a block to traverse through the cache hierarchy to reach NVM.
+
+The second contribution of the paper
