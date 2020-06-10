@@ -27,5 +27,10 @@ but will take extra space on the NVM. For example, in undo logging, the actual u
 first write since transaction begin. Later writes do not have to be logged, since the pre-image they record is merely
 dirty data generated within the same transaction. Similarly, in redo logging, only the last write to an address should
 be logged, if the address is updated multiple times. Previous redo log entries will be overwritten during recovery by
-the last entry, rendering them totally useless and a waste of space.
+the last entry, rendering them totally useless and a waste of space. The last issue is log storage overhead and logging
+granularity. For hardware logging, the most natural granularity of log genetation is a cache line, which will be included
+as a fixed sized pre- or post-image field in the log entry. Cache lines, however, may only contain a few bytes of dirty 
+data, making the writing of the clean bytes unnecessary. In addition, cache lines often contain replicative or redundant
+data, making compression an attractive measure for reducing log storage, the opportunity of which was never explored 
+before this paper.
 
