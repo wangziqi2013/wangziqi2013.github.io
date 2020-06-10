@@ -81,3 +81,10 @@ whose TxID and TID match the transaction should have their corresponding redo en
 is in ULog state, while URLog lines do not require any extra write backs. 
 Both ULog and URLog state lines transit lazily to Dirty state when they are written by a transaction with different IDs
 then the one that creates them.
+**Note that the paper gives a rather obsecure description of these states, especially the difference between ULog state 
+and URLog state lines, and whether these lines are scanned by tag walk on commit. 
+I doubt whether it is necessary to have split URLog and ULog line, since they make no difference even if combined.
+Anyway we just need a notion of "undo entries already persisted". Whether redo entries are persisted is of no importance,
+since: (1) we could always perform an associative search when writing an URLog line to determine if it is URLog state or 
+ULog state; (2) We could always walk the redo buffer on commit, which is even easier than walking the cache tag
+to find ULog state lines in order to flish the redo entries.**
