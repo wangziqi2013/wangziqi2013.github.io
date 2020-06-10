@@ -22,5 +22,10 @@ commits, which can cause long commit latency. On the other hand, redo logging, t
 entries before the commit point, should prevent dirty blocks from being written back before the transaction commits.
 This is to avoid write backs of uncommitted data corrupting the consistent before-transaction image on the NVM.
 Both schemes, if used naively in their canonical forms, require non-negligible changes to the cache controller and eviction
-logic.
+logic. Second, if not treated with care, it is easy to generate redundant log entries that are not useful for recovery,
+but will take extra space on the NVM. For example, in undo logging, the actual useful log entry is the one taken on the 
+first write since transaction begin. Later writes do not have to be logged, since the pre-image they record is merely
+dirty data generated within the same transaction. Similarly, in redo logging, only the last write to an address should
+be logged, if the address is updated multiple times. Previous redo log entries will be overwritten during recovery by
+the last entry, rendering them totally useless and a waste of space.
 
