@@ -45,4 +45,8 @@ transaction's working set. Second, undo log entries still have to be written bef
 The paper loosens the second ordering restriction a little by taking advantage of the minimum number of cycles it will 
 take a block to traverse through the cache hierarchy to reach NVM.
 
-The second contribution of the paper
+The second contribution of the paper is the eager-undo and lazy-redo log flushing scheme. As discussed in previous 
+sections, only the first undo and the last redo log entries are actually useful for crash recovery. To leverage such
+differences in the characteristics of logging, the paper adds two log buffers on-chip, one for mixed logging, and 
+the other for redo only. Both undo and redo entries are generated into the mixed logging buffer on the first write to 
+a clean L1 cache line. 
