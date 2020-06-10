@@ -54,8 +54,14 @@ of log coalescing, in which subsequent writes may modify the same cache line, an
 into an existing entry for the same line. The undo log entry is flushed back to the NVM after N cycles, where N is the 
 minimum number of cycles it takes for a cache block from L1 to traverse thehierarchy and finally reach the NVM,
 ensuring that the undo entry can always be written before dirty data.
+
 When a mixed buffer entry is written back, only the undo entry is sent to the memory controller, bypassing the cache 
 hierarchy to avoid complicated timing issues. The redo log entry, however, are transferred to the redo buffer for 
 delay write backs.
 This design decision is made based on the observation that redo log enties do not form write ordering with dirty data,
 and that redo entries are better postponed to the end of the transaction for maximum chances of log coalescing.
+The redo buffer is flushed when transaction commits as in normal redo-based systems.
+When a dirty block is written back from the LLC, the LLC controller will also notify the on-chip redo buffer to drop
+the corresponding redo entry, since data in the redo entry has already been persisted by the write back.
+
+
