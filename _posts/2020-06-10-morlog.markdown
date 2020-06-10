@@ -34,3 +34,10 @@ data, making the writing of the clean bytes unnecessary. In addition, cache line
 data, making compression an attractive measure for reducing log storage, the opportunity of which was never explored 
 before this paper.
 
+Based on the above observation, this paper makes the following contributions. First, it implements mixed redo-undo 
+logging by simultaneously generating both undo and redo log entries on an L1 write, which get rid of two write orderings. 
+First, the cache no longer needs to be flushed on transaction commit, since dirty data has been persisted in the form
+of redo log entries. Second, the cache no longer needs to hold dirty blocks without evicting them before transaction
+commits, since undo log entries help restoring the pre-image of data even if the NVM image has been pollutedd by a
+premature write back from the cache hierarchy. Two write ordering restrictions remain, however, to maintain the 
+correctness of the algorithm. First
