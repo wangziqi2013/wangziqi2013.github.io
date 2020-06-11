@@ -104,3 +104,11 @@ In this case, it appears to the coherence protocol as if the block were already 
 Write requests from upper levels can never hit the victim cache, if the LLC is inclusive, since ownership of this block 
 must have already been dropped and transferred to the lower level, implying that no upper level cache should have
 ownership (and therefore a dirty copy) either. 
+The benefit of this design is that by always writing back dirty data on a block swap, the victim cache only contains
+clean blocks. In this case, at most one write back will be scheduled on such a swap, which only occurs when the 
+baseline block is dirty and when it could not find a valid victim cache slot.
+The shortcoming of this approach, however, is that cache compression never reduces write back bandwidth from the LLC,
+since dirty lines are always written back eagerly as if they were evicted.
+If eviction bandwidth is an issue, then the protocol would allow dirty blocks to enter the victim cache, slightly
+complicating eviction handling from both caches at the same request, but filters out some eviction bandwidth especially
+if a dirty victim block will be re-referenced before it is evicted from the victim cache.
