@@ -24,3 +24,10 @@ physical slot, but the actual data layout in the slot requires extra compaction,
 more complicated logic and more energy. The second difficulty is that tag reading logic changes much by adding the one
 more level of indirection. More physical slots are activated during the read process, which is against the energy saving
 goal on commercial products.
+
+The second problem of previous tag mapping schemes is that eviction algorithms no longer work the same, as more 
+cache lines than the number of ways can be stored in a set. In addition, since cache lines are no longer of uniform
+sizes, the eviction algorithm may have to write back more than one dirty blocks to the lower level before sufficient
+number of bytes is available for the line fetch. Even worse, if tags and data slots are not fully associative, eviction
+candidates within a cache is even more restricted, which can degrade performance, since the well-tuned replacement
+algorithm no longer behaves in the same way as in an uncompressed cache.
