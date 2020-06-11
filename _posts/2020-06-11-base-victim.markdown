@@ -60,6 +60,11 @@ The difference between a victim cache design with a victim cache of the same org
 that, in the paper's proposal, the victim cache "borrows" storage from the statically mapped physical slot of the 
 baseline cache. Space borrowing is made possible by the usage of compression, since data blocks in the baseline cache
 take less space, enabling the victim tag on the same location to map an extra victim block to the rest of the physical
-slot.
+slot. We next describe the operation of these two caches.
 
-On an access request, all tags in the 
+On an access request, all tags in the selected set are read out and checked against the requested address. This is equivalent
+to checking both the baseline cache and the victim cache on an access. 
+If a cache hit is signaled, the hit must either be in the baseline cache, or in the victim cache.
+If the hit occurs in the baseline cache, no special operation takes place, and the hit is processed the same manner as in
+a regular cache (e.g. updating LRU stack). 
+If, however, the hit occurs in the victim cache,
