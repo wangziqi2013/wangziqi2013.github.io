@@ -64,7 +64,10 @@ slot. We next describe the operation of these two caches.
 
 On an access request, all tags in the selected set are read out and checked against the requested address. This is equivalent
 to checking both the baseline cache and the victim cache on an access. 
-If a cache hit is signaled, the hit must either be in the baseline cache, or in the victim cache.
+If a cache hit is signaled, the hit must either be in the baseline cache, or in the victim cache, due to exclusiveness.
 If the hit occurs in the baseline cache, no special operation takes place, and the hit is processed the same manner as in
 a regular cache (e.g. updating LRU stack). 
-If, however, the hit occurs in the victim cache,
+If, however, the hit occurs in the victim cache, the block is swapped with an evicted line from the baseline cache.
+This is equivalent to fetching a new line from the lower level on a baseline cache miss, if the victim cache were not 
+present. Our optimization reduces the latency of such misses.
+
