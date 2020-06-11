@@ -82,6 +82,13 @@ cache shares the same physical slots with the baseline cache, the cache controll
 and finds a way in the current set whose upper half is larger than the compressed victim size. In the case of multiple
 candidates being found in the victim cache, the replacement algorithm is invoked to evict one of them to the lower level,
 after which the evicted block is inserted. 
-
+Similarly, when a block from the victim cache is to be inserted into the baseline cache on a victim cache hit, the 
+baseline replacement algorithm is invoked, and one line is evicted from the baseline to make space for the line fill.
+Note that the block to be brought into the baseline cache may not fit into the physical slot, if the upper half of the 
+slot contains a victim cache block that prevents both from fitting into the physical slot. In this case, the victim block
+on the upper half is evicted, as we always prioritize baseline cache blocks over victim blocks. 
+In total, in order to perform a block swap between the victim cache and the baseline cache, at most two write backs are
+generated to the lower level, with one always being one of the victim blocks (during baseline cache insertion), and the 
+other being either victim block or the baseline block (during victim cache insertion). 
 
 TODO: POLICIES (1) WHETHER TO WRITE BACK ON VICTIM INSERTION; (2) WHETHER TO RELOCATE ON VICTIM EVICTION
