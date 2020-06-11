@@ -56,4 +56,10 @@ of the same organization running the same replacement algorithm.
 The baseline and victim cache operate individually as two independent caches, with the victim cache holding victim
 blocks evicted by the baseline cache. Exclusiveness is maintained between these two caches, such that one address
 can only exist in at most one of the two caches.
+The difference between a victim cache design with a victim cache of the same organization as the baseline cache is 
+that, in the paper's proposal, the victim cache "borrows" storage from the statically mapped physical slot of the 
+baseline cache. Space borrowing is made possible by the usage of compression, since data blocks in the baseline cache
+take less space, enabling the victim tag on the same location to map an extra victim block to the rest of the physical
+slot.
 
+On an access request, all tags in the 
