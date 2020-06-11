@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes Base-Victim cache compression architecture, which improves over previous tag mapping scheme designed
+This paper proposes Base-Victim LLC compression architecture, which improves over previous tag mapping scheme designed
 for compressed caches. Conventional tag mapping schemes suffer from several problems, as pointed out by the paper.
 First, to accommodate more cache lines in a fixed number of ways, compressed caches often over-provision tag arrays
 in each set, and allows fully associative mapping between tags and data slots. In addition, since compressed blocks 
@@ -51,4 +51,9 @@ Better performance could be achieved as a result of compression and the resultin
 Both parts of the compressed cache also run different instances of replacement protocols.
 In the paper, the baseline cache runs conventional LRU, while the victim cache runs random eviction.
 
+One of the most important invariant is that the content of the baseline cache would always equal to a regular cache 
+of the same organization running the same replacement algorithm. 
+The baseline and victim cache operate individually as two independent caches, with the victim cache holding victim
+blocks evicted by the baseline cache. Exclusiveness is maintained between these two caches, such that one address
+can only exist in at most one of the two caches.
 
