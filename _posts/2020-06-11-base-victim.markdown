@@ -96,7 +96,11 @@ If the request misses in both caches, then a regular line fill is initiated to t
 from the lower level is directly inserted into the baseline cache, to ensure that the baseline cache always behave the 
 same way as a regular cache as if the victim cache were not present.
 
-TODO: POLICIES (1) WHETHER TO WRITE BACK ON VICTIM INSERTION; (2) WHETHER TO RELOCATE ON VICTIM EVICTION
-Two design decisions 
-The paper also noted that, when a block is evicted from the baseline cache, it appears as if to the coherence protocol
-that the block no longer
+When a block is moved from the baseline cache to the victim cache, it is up to the protocol designer whether the 
+block should abandon ownership if it is in dirty state (M state). 
+If the protocol indicates that ownership should be abandoned, then when such block swap happens, the cache controller
+should also revoke the exclusive permission of the block from upper level caches if the hierarchy is inclusive.
+In this case, it appears to the coherence protocol as if the block were already evicted from the LLC.
+Write requests from upper levels can never hit the victim cache, if the LLC is inclusive, since ownership of this block 
+must have already been dropped and transferred to the lower level, implying that no upper level cache should have
+ownership (and therefore a dirty copy) either. 
