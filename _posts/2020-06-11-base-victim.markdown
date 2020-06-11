@@ -40,4 +40,7 @@ and lower half of the data slot respectively. Since a compressed block can eithe
 half, internal fragmentation is impossible, as long as the upper half is always aligned to the end of the data slot by 
 the last byte (i.e. the last byte of the upper half compressed line is always the last byte of the physical slot).
 
-Instead of treating every tag in the 
+Instead of treating every tag in the tag array equally as first-class citizen, this paper proposes dividing the tag array,
+and henceforth the logical cache storage, into two equally sized parts, called the baseline cache and the victim cache. 
+Recall that each way has two tags statically mapped to the way's physical slot. It is also statically designated that 
+one of the two tags belong to the baseline cache, and the other belongs to the victim cache.
