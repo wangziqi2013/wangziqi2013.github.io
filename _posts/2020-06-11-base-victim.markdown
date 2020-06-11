@@ -89,10 +89,14 @@ slot contains a victim cache block that prevents both from fitting into the phys
 on the upper half is evicted, as we always prioritize baseline cache blocks over victim blocks. 
 In total, in order to perform a block swap between the victim cache and the baseline cache, at most two write backs are
 generated to the lower level, with one always being one of the victim blocks (during baseline cache insertion), and the 
-other being either victim block or the baseline block (during victim cache insertion). 
+other being either victim block or the baseline block (during victim cache insertion). The number of blocks evicted 
+can also be zero (perfect swap) or one (always happen during victim cache insertion).
 
 If the request misses in both caches, then a regular line fill is initiated to the lower level, and the block fetched
 from the lower level is directly inserted into the baseline cache, to ensure that the baseline cache always behave the 
 same way as a regular cache as if the victim cache were not present.
 
 TODO: POLICIES (1) WHETHER TO WRITE BACK ON VICTIM INSERTION; (2) WHETHER TO RELOCATE ON VICTIM EVICTION
+Two design decisions 
+The paper also noted that, when a block is evicted from the baseline cache, it appears as if to the coherence protocol
+that the block no longer
