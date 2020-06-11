@@ -74,3 +74,14 @@ The baseline cache initiates a fill just like a regular cache would do on a cach
 invoked to find a victim. Once the victim is found, it is evicted from the baseline, and opportunistically inserted into 
 the victim cache. The victim block that gets hit, on the other hand, is inserted into the baseline cache. We next describe
 how these two operations are achieved in the proposal.
+
+A block evicted from the baseline cache is always opportunistically inserted into the victim cache, not necessarily on the
+same way as it was in the baseline. 
+The cache controller attempts to find a slot in the victim cache that could hold the victim block. Recall that the victim
+cache shares the same physical slots with the baseline cache, the cache controller simply scans the tag slot array
+and finds a way in the current set whose upper half is larger than the compressed victim size. In the case of multiple
+candidates being found in the victim cache, the replacement algorithm is invoked to evict one of them to the lower level,
+after which the evicted block is inserted. 
+
+
+TODO: POLICIES (1) WHETHER TO WRITE BACK ON VICTIM INSERTION; (2) WHETHER TO RELOCATE ON VICTIM EVICTION
