@@ -21,4 +21,6 @@ have smaller size than a full physical slot, the physical slot is divided into m
 address to the middle of a slot using segment offset. Such fine grained tag mapping scheme creates two difficulties.
 The first difficulty is internal fragmentation, which happens when two compressed lines could have fit into the same
 physical slot, but the actual data layout in the slot requires extra compaction, moving segments around, which takes
-more complicated logic and more energy. 
+more complicated logic and more energy. The second difficulty is that tag reading logic changes much by adding the one
+more level of indirection. More physical slots are activated during the read process, which is against the energy saving
+goal on commercial products.
