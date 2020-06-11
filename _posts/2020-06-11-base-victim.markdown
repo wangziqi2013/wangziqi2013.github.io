@@ -31,3 +31,13 @@ sizes, the eviction algorithm may have to write back more than one dirty blocks 
 number of bytes is available for the line fetch. Even worse, if tags and data slots are not fully associative, eviction
 candidates within a cache is even more restricted, which can degrade performance, since the well-tuned replacement
 algorithm no longer behaves in the same way as in an uncompressed cache.
+
+This paper makes a trade-off between the flexibility of tag mapping schemes and the simplicity of implementation. 
+Tags are still over-provisioned per set by doubling the number of tags in a standard set-associative cache, allowing 
+a maximum compression ratio of 2:1. Tags and data blocks are still statically bound, allowing no fully associative tag 
+mapping as in some other designs. Compressed blocks can be placed in one of the two tags, which map to the upper half
+and lower half of the data slot respectively. Since a compressed block can either reside in the upper half or the lower 
+half, internal fragmentation is impossible, as long as the upper half is always aligned to the end of the data slot by 
+the last byte (i.e. the last byte of the upper half compressed line is always the last byte of the physical slot).
+
+Instead of treating every tag in the 
