@@ -44,3 +44,11 @@ Instead of treating every tag in the tag array equally as first-class citizen, t
 and henceforth the logical cache storage, into two equally sized parts, called the baseline cache and the victim cache. 
 Recall that each way has two tags statically mapped to the way's physical slot. It is also statically designated that 
 one of the two tags belong to the baseline cache, and the other belongs to the victim cache.
+The tag mapping and replacement protocol ensures that the baseline parts operate exactly the same as a regular set-associative
+cache, suggesting that the hit ratio of the compressed cache would be at least the performance of the regular cache,
+drawing a lower bound for the compressed cache design.
+Better performance could be achieved as a result of compression and the resulting larger effective cache size.
+Both parts of the compressed cache also run different instances of replacement protocols.
+In the paper, the baseline cache runs conventional LRU, while the victim cache runs random eviction.
+
+
