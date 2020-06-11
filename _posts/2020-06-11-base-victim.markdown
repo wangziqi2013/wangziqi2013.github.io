@@ -70,4 +70,7 @@ a regular cache (e.g. updating LRU stack).
 If, however, the hit occurs in the victim cache, the block is swapped with an evicted line from the baseline cache.
 This is equivalent to fetching a new line from the lower level on a baseline cache miss, if the victim cache were not 
 present. Our optimization reduces the latency of such misses.
-
+The baseline cache initiates a fill just like a regular cache would do on a cache miss. The replacement algorithm is also
+invoked to find a victim. Once the victim is found, it is evicted from the baseline, and opportunistically inserted into 
+the victim cache. The victim block that gets hit, on the other hand, is inserted into the baseline cache. We next describe
+how these two operations are achieved in the proposal.
