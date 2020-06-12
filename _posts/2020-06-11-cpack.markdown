@@ -34,5 +34,8 @@ can be used to encode an incoming word. Second, if the dictionary is fully assoc
 larger than cache line capacity makes little sense, since in the worst case none of the dictionary entry serve as patterns
 for encoding, resulting in the entire cache being inserted into the dictionary. If, however, fully-associative dictionary
 is not an option, suggesting set-associative dictionary design, dictionaries larger than 64 bytes are useful, since code
-words may not be evenly distributed into all sets, justifying some degrees of redundancy.
+words may not be evenly distributed into all sets, justifying some degrees of redundancy. The last point is that the 
+size of the encoded pattern in the diationary is a logarithm of dictionary size in number of bits. For example, a dictionary
+of size 2^k must be addressed using k bits. A large dictionary may benefit on one hand, but on the other hand they also
+decrease the compression ratio by forcing more encoding bits.
 
