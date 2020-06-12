@@ -68,4 +68,9 @@ always be rebuilt, since all arguments to the dictionary genetation function are
 The dictionary is constructed as follows. When an input word is not encoded using fixed pattern, the dictionary comparison
 logic will either signal a match, a partial match, or no match, to the hardware encoder. The dictionary comparator
 consists of a comparator array for each valid entry in the dictionary (or each valid entry in the set, if the dictionary is
-set-associative). Each comparator checks the input word against the entry for full or partial match. 
+set-associative). Each comparator checks the input word against the entry for full or partial match. A full match means
+all four bytes in the input word matches the entry, which will output 10 type prefix followed by the four bit dictionary
+index. Partial matches are further classified into two bytes prefix match and three bytes prefix match. "Prefix match"
+means that only higher bytes are matched, but not lower bytes. In the former case, type field of 1100 is output, followed
+by the two lower (uncompressible) bytes. In the latter case, 1110 is output, followed by the one lowest byte of the 
+input word.
