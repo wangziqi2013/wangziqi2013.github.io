@@ -24,4 +24,11 @@ The paper consists of two parts. The first part discusses the hardware implement
 hybrid of pattern-based encoding and dictionary-based compression (like LZW). The second part of the paper discusses
 the compressed cache organization, which uses a restricted tag mapping scheme to achieve low cost cache management. 
 
+The compression algorithm combines pattern matching and dictionary encoding, which will be discussed as follows.
+Logically speaking, compression is performed on 32 bit words, which are processed one-by-one. The compression engine
+maintains a dynamically generated dictionary to translate an incoming word into a smaller code. Thedictionary is implemented 
+as a fixed size CAM array of 32 bit entries, with a comparator at each entry. 
+The size of the dictionary affects several aspects of the design. First, a smaller dictionary may not be sufficient to
+encode all patterns, which decreases the efficiency of compression, since some entries will be evicted before they 
+can be used to encode an incoming word.
 
