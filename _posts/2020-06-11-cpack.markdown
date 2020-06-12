@@ -16,7 +16,7 @@ version_mgmt:
 This paper proposes C-Pack, a cache compression architecture featuring realistic design assumptions and validiation steps
 that actually fit into processor's design flow. The paper points out that existing cache compression algorithms either make 
 unrealistic assumptions about the design complexity or compression/decompression latency, making the algorithm difficult 
-to implement and deploy. In addition, some design algorithms are designed to work well with large blocks in order to
+to implement and deploy. In addition, some compression algorithms are designed to be used with large blocks in order to
 find sufficient number of patterns, which may not work well with 64 byte cache lines, and often requires an extra indirection
 or caching level.
 
@@ -44,3 +44,12 @@ When an entry is to be inserted into the dictionary, and the dictionary is full,
 in associative caches. The eviction candidate can be selected using common policies such as LRU or FIFO. Any deterministic
 policy will work. Non-deterministic policies, such as random, however, could not be used, since decompression must replicate
 the full process of constructing the dictionary while decoded words are inserted into the dictionary.
+
+The compression algorithm is described as follows. First, the input cache line is divided into 32 bit words, which is 
+then fed into the compression circuit. The encoded output consists a stream of code words. Each code word is prefixed
+with two or three bit code word type. Two bit code types are used for patterns and/or dictionary matches with higher 
+frequencies, while three bit code word types are used for cases with lower frequencies.
+Note that the actual hardware processes two words at a time, but the operation is 
+equivalent to processing input words one-by-one. For each input word, the compression circuit checks for both fixed patterns
+such as zeros and for dictionary matches. C-Pack supports two fixed patters: All zero and small one-byte integer with
+leading zeros. 
