@@ -37,5 +37,10 @@ is not an option, suggesting set-associative dictionary design, dictionaries lar
 words may not be evenly distributed into all sets, justifying some degrees of redundancy. The last point is that the 
 size of the encoded pattern in the diationary is a logarithm of dictionary size in number of bits. For example, a dictionary
 of size 2^k must be addressed using k bits. A large dictionary may benefit on one hand, but on the other hand they also
-decrease the compression ratio by forcing more encoding bits.
+decrease the compression ratio by forcing more encoding bits. The paper suggested that the optimal dictionary size is 
+64 bytes (16 entries), which can be encoded using 4 bits.
 
+When an entry is to be inserted into the dictionary, and the dictionary is full, an existing entry must be evicted as
+in associative caches. The eviction candidate can be selected using common policies such as LRU or FIFO. Any deterministic
+policy will work. Non-deterministic policies, such as random, however, could not be used, since decompression must replicate
+the full process of constructing the dictionary while decoded words are inserted into the dictionary.
