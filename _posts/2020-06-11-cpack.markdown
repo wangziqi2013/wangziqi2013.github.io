@@ -20,3 +20,8 @@ to implement and deploy. In addition, some design algorithms are designed to wor
 find sufficient number of patterns, which may not work well with 64 byte cache lines, and often requires an extra indirection
 or caching level.
 
+The paper consists of two parts. The first part discusses the hardware implemented compression algorithm, which is a 
+hybrid of pattern-based encoding and dictionary-based compression (like LZW). The second part of the paper discusses
+the compressed cache organization, which uses a restricted tag mapping scheme to achieve low cost cache management. 
+
+
