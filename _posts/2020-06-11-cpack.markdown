@@ -79,4 +79,7 @@ In all cases above, the input word is inserted into the dictionary, potentially 
 is already full. If the dictionary is fully associative and the size is larger than cache line size, no eviction is ever
 possible, since at most 16 bytes will be inserted.
 
-
+The actual hardware processes two input words at a time, checking both words for fixed patterns and dictionary matches
+in parallel. A data hazard may happen, however, if the second word would match an entry inserted by the first first word,
+or if the second word matches an entry evicted by inserting the first word. In both cases, the result would be different
+from encoding the two words serially. 
