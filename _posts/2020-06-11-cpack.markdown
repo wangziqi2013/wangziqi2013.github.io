@@ -75,3 +75,8 @@ means that only higher bytes are matched, but not lower bytes. In the former cas
 by the two lower (uncompressible) bytes and the dictionary index. In the latter case, 1110 is output, followed by the one 
 lowest byte of the input word and the dictionary index.
 If none could be found, all four bytes are output, with type prefix being 01.
+In all cases above, the input word is inserted into the dictionary, potentially evicting an existing entry if the dictionary 
+is already full. If the dictionary is fully associative and the size is larger than cache line size, no eviction is ever
+possible, since at most 16 bytes will be inserted.
+
+
