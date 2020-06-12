@@ -82,4 +82,7 @@ possible, since at most 16 bytes will be inserted.
 The actual hardware processes two input words at a time, checking both words for fixed patterns and dictionary matches
 in parallel. A data hazard may happen, however, if the second word would match an entry inserted by the first first word,
 or if the second word matches an entry evicted by inserting the first word. In both cases, the result would be different
-from encoding the two words serially. 
+from encoding the two words serially. To solve this issue, when encoding the second word, we also compare it with the 
+first word, and disregard the entry to be evicted from the dictionary, if the first word does not match a fixed pattern.
+Note that if the first word matches a fixed pattern, then the dictionary would not be changed by encoding the first word, 
+so both operations could take place in parallel without any hazard.
