@@ -72,5 +72,6 @@ set-associative). Each comparator checks the input word against the entry for fu
 all four bytes in the input word matches the entry, which will output 10 type prefix followed by the four bit dictionary
 index. Partial matches are further classified into two bytes prefix match and three bytes prefix match. "Prefix match"
 means that only higher bytes are matched, but not lower bytes. In the former case, type field of 1100 is output, followed
-by the two lower (uncompressible) bytes. In the latter case, 1110 is output, followed by the one lowest byte of the 
-input word.
+by the two lower (uncompressible) bytes and the dictionary index. In the latter case, 1110 is output, followed by the one 
+lowest byte of the input word and the dictionary index.
+If none could be found, all four bytes are output, with type prefix being 01.
