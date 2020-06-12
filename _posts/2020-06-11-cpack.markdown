@@ -47,9 +47,13 @@ the full process of constructing the dictionary while decoded words are inserted
 
 The compression algorithm is described as follows. First, the input cache line is divided into 32 bit words, which is 
 then fed into the compression circuit. The encoded output consists a stream of code words. Each code word is prefixed
-with two or three bit code word type. Two bit code types are used for patterns and/or dictionary matches with higher 
-frequencies, while three bit code word types are used for cases with lower frequencies.
+with two or four bit code word type. Two bit code types are used for patterns and/or dictionary matches with higher 
+frequencies, while four bit code word types are used for cases with lower frequencies.
+Note that there is no three bit code word type field to reduce encoding complexity.
 Note that the actual hardware processes two words at a time, but the operation is 
 equivalent to processing input words one-by-one. For each input word, the compression circuit checks for both fixed patterns
 such as zeros and for dictionary matches. C-Pack supports two fixed patters: All zero and small one-byte integer with
-leading zeros. 
+leading zeros, with code word types being 00 and 1101. If the encoding circuit detects such a pattern, it will output 
+the code word with the type field as prefix. For all-zero case, only the type field is sufficient for decoding.
+For zero-prefixed small integer case, the code word type field is followed by the lowest byte. This byte will be 
+padded with three bytes of zeros on higher bytes during decompression.
