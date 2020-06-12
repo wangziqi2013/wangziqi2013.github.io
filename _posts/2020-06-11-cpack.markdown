@@ -1,0 +1,17 @@
+---
+layout: paper-summary
+title:  "C-Pack: A High-Performance Microprocessor Cache Compression Algorithm"
+date:   2020-06-11 23:26:00 -0500
+categories: paper
+paper_title: "C-Pack: A High-Performance Microprocessor Cache Compression Algorithm"
+paper_link: https://dl.acm.org/doi/10.1109/TVLSI.2009.2020989
+paper_keyword: Compression; Cache Tags; C-Pack
+paper_year: TVLSI 2010
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+This paper proposes C-Pack, a cache compression architecture featuring realistic design assumptions and validiation steps
+that actually fit into processor's design flow. 
