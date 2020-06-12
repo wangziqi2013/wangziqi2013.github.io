@@ -86,3 +86,14 @@ from encoding the two words serially. To solve this issue, when encoding the sec
 first word, and disregard the entry to be evicted from the dictionary, if the first word does not match a fixed pattern.
 Note that if the first word matches a fixed pattern, then the dictionary would not be changed by encoding the first word, 
 so both operations could take place in parallel without any hazard.
+
+The paper also proposes a cache tag mapping scheme that works with the compression scheme. The paper observes that a 
+fully associative mapping between tags and segmented data slots (as in segmented cache designs) only brings marginal
+benefit, because the segmented cache is often fragmented, requiring constant compaction and rearrangement. In addition,
+replacements in segmented caches often cannot follow the LRU order, since multiple lines may be evicted for a line fill
+request. The paper simplifies the segmented cache design by only over-provisioning 2x the number of tags as in regular
+cache. Data slots are still statically bound to tags except that each data slot can be mapped by two tags. As a result,
+at most two compressed lines can fit in the same physical slot, achieving a best compression ratio of 2:1. 
+On a line fill request, the cache controller first attempts to find a slot that still has sufficient number of bytes
+to hold the new line. If true, the newly fetched line is brought into that slot without any eviction. Otherwise, at most
+two compressed blocks are evicted from a physical slot.
