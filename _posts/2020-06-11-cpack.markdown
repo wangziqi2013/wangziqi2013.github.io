@@ -30,5 +30,9 @@ maintains a dynamically generated dictionary to translate an incoming word into 
 as a fixed size CAM array of 32 bit entries, with a comparator at each entry. 
 The size of the dictionary affects several aspects of the design. First, a smaller dictionary may not be sufficient to
 encode all patterns, which decreases the efficiency of compression, since some entries will be evicted before they 
-can be used to encode an incoming word.
+can be used to encode an incoming word. Second, if the dictionary is fully associative, then dictionaries whose sizes are
+larger than cache line capacity makes little sense, since in the worst case none of the dictionary entry serve as patterns
+for encoding, resulting in the entire cache being inserted into the dictionary. If, however, fully-associative dictionary
+is not an option, suggesting set-associative dictionary design, dictionaries larger than 64 bytes are useful, since code
+words may not be evenly distributed into all sets, justifying some degrees of redundancy.
 
