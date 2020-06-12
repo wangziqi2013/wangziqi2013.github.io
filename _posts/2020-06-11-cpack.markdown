@@ -51,16 +51,21 @@ with two or four bit code word type. Two bit code types are used for patterns an
 frequencies, while four bit code word types are used for cases with lower frequencies.
 Note that there is no three bit code word type field to reduce encoding complexity.
 Note that the actual hardware processes two words at a time, but the operation is 
-equivalent to processing input words one-by-one. For each input word, the compression circuit checks for both fixed patterns
-such as zeros and for dictionary matches. C-Pack supports two fixed patters: All zero and small one-byte integer with
-leading zeros, with code word types being 00 and 1101. If the encoding circuit detects such a pattern, it will output 
-the code word with the type field as prefix. For all-zero case, only the type field is sufficient for decoding.
-For zero-prefixed small integer case, the code word type field is followed by the lowest byte. This byte will be 
-padded with three bytes of zeros on higher bytes during decompression.
+equivalent to processing input words one-by-one. For each input word, the compression circuit checks, in parallel, for 
+both fixed patterns such as zeros and for dictionary matches. C-Pack supports two fixed patters: 
+All zero and small one-byte integer with leading zeros, with code word types being 00 and 1101. If the encoding circuit 
+detects such a pattern, it will output the code word with the type field as prefix. For all-zero case, only the type field 
+is sufficient for decoding. For zero-prefixed small integer case, the code word type field is followed by the lowest byte. 
+This byte will be padded with three bytes of zeros on higher bytes during decompression.
 
 Dictionary matching are slightly more complicated. The dictionary is not explicitly stored with the compressed line.
 Instead, the compression algorithm builds the dictionary in a deterministic manner as it streams through the input
-words. The same directory is reconstructed at decompression time using exactly the same algorithm for compression.
+words. The same dictionary is reconstructed at decompression time using exactly the same algorithm for compression.
 The algorithm guarantees that the content of the dictionary after encoding word at index k is a function of word k and 
 all previous input words, i.e. as long as we have recovered words till index k, the content of the dictionary can
 always be rebuilt, since all arguments to the dictionary genetation function are known.
+
+The dictionary is constructed as follows. When an input word is not encoded using fixed pattern, the dictionary comparison
+logic will either signal a match, a partial match, or no match, to the hardware encoder. The dictionary comparator
+consists of a comparator array for each valid entry in the dictionary (or each valid entry in the set, if the dictionary is
+set-associative). Each comparator checks the input word against the entry for full or partial match. 
