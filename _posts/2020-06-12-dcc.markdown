@@ -43,3 +43,10 @@ rather than regular blocks. As discussed above, a super block consists of four r
 the four-block boundary. The lower two bits of the block address is used as the block offset instead of forming the 
 set index. Set index bits are extracted after the block offset.
 
+Recall that DCC allows fully associative mapping between tags and segments. To this end, the tag no longer have a pointer
+to the beginning segment in which a compressed block is stored. Instead, each segment is described by a back pointer field
+consisting of two fields. The first field, tag index, indicates the super block tag the segment is allocated to. The second
+field, block offset, indicates the offset of the regular block of which compressed data is stored in the segment.
+Block data is still required to be stored in-order, i.e. if a compressed block is stored in more than one segments, the
+cache controller must follow a certain order to combine these segments into a full block.
+
