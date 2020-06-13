@@ -81,3 +81,8 @@ of the compressed block increases after a cache write, such that one or more seg
 block, the controller also needs to signal a miss, and evict one of the existing segments in the current super block.
 Similarly, if the size of the compressed block, in the number of segments, becomes smaller, the controller should deallocate
 the last segment used by the same block by marking it as invalid (e.g. setting the invalid bit).
+
+As the baseline DCC design reduces external fragmentation and tagging overhead by allowing fully associative segments and 
+super tags, the paper also proposes Co-DCC to further reduce internal fragmentation caused by compressed blocks not 
+fully utilizing the trailing bytes of a segment, if the compressed block size is not a multiple of segment size.
+Co-DCC works by allowing blocks within a super block to be stored compactly
