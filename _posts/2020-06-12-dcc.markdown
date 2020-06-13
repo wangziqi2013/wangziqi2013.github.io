@@ -92,5 +92,9 @@ block tag should store the starting byte offset of the block in the segment for 
 Co-DCC extends the per-block state tags with a 7 bit "begin offset" field to indicate the byte address of the compressed
 block in the first segment. If the compressed block could not be accommodated by the single segment in which it starts,
 it is also assumed that in the following segments (not necessarily the same one, since segments are fully associative),
-the remaining data of the block starts at offset zero, i.e. there must not be no "hole" inside compressed block data.
-
+the remaining data of the block starts at offset zero, i.e. there must not be no "hole" inside compressed 
+block data. In addition, to track where the last block of the super block ends, the super block tag is also extended with 
+an "end" field, which stores the last byte of the current super block.
+To support fully-associative tag mapping and storing multiple blocks within one segment, now each segment back pointer 
+consists of the tag ID field, which is unchaned from the baseline DCC, and a bit vector field, "sharers", which tracks 
+the blocks that are stored in the segment.
