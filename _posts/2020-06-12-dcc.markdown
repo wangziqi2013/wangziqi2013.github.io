@@ -29,3 +29,6 @@ more compressed blocks are expected to be stored in the set. More tags per-set, 
 power and access latency, since the larger the tag array, the more power and cycles it takes to access the array on
 every access.
 
+This paper takes advantage of two observations. First, LLC still preserves the spatial locality of access. Given a super
+block whose size is four regular 64 byte blocks and is aligned to four-block boundary, in most cases, more than 1 regular
+blocks within the super block are cached by the LLC. 
