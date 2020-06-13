@@ -62,5 +62,7 @@ address tag. A cache hit is signaled, if (1) one of the n super block tags match
 block offset matches at least one block offset field in back pointers; (3) The tag ID of the matching back pointer entry 
 in condition (2) is the same as the matching tag in condition (1). These three conditions can be checked using simple
 combination logic after a comparator array, which does not add significant latency to the cache access logic.
-On a cache hit,
+On a cache hit, the controller circuit reads out all segments that match both the tag ID and the block offset ID in
+the previous step, and concatenates these segments together to form the compressed line. The compressed line is then
+sent to the decoding logic for decompression.
 
