@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Decoupled Compressed Cache: Exploiting Spatial Locality for Energy-Optimized Compressed Caching"
+date:   2020-06-12 23:00:00 -0500
+categories: paper
+paper_title: "Decoupled Compressed Cache: Exploiting Spatial Locality for Energy-Optimized Compressed Caching"
+paper_link: https://dl.acm.org/doi/10.1145/2540708.2540715
+paper_keyword: Compression; Cache Tags; DCC
+paper_year: MICRO 2013
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
