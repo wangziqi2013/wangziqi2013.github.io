@@ -48,5 +48,11 @@ to the beginning segment in which a compressed block is stored. Instead, each se
 consisting of two fields. The first field, tag index, indicates the super block tag the segment is allocated to. The second
 field, block offset, indicates the offset of the regular block of which compressed data is stored in the segment.
 Block data is still required to be stored in-order, i.e. if a compressed block is stored in more than one segments, the
-cache controller must follow a certain order to combine these segments into a full block.
+cache controller must follow a certain order to combine these segments into a full block. The paper suggests that these
+back pointers be stored in a separate bank, which could be access in parallel with super block tags during cache accesses.
+Valid bits are maintained per-segment to aid segment allocation. Coherence states and compression states are maintained 
+per-block within the super block tag. The paper assumes a super block size of four, and therefore, each super block tag
+contains four copies of coherence states and compression type fields.
 
+On cache accesses, the cache controller first computes the set index by extaring bits from the requested address, and
+then read out all super block tags within the set. The requested address is then compared
