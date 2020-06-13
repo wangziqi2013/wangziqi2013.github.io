@@ -55,4 +55,12 @@ per-block within the super block tag. The paper assumes a super block size of fo
 contains four copies of coherence states and compression type fields.
 
 On cache accesses, the cache controller first computes the set index by extaring bits from the requested address, and
-then read out all super block tags within the set. The requested address is then compared
+then read out all super block tags within the set. The requested address is then compared with tag addresses. In the meantime,
+the block offset is also extracted from the requested address, and the back pointers of the same set are also accessed
+in parallel with address tags. The cache controller also compares the block offset field with block offset from the 
+address tag. A cache hit is signaled, if (1) one of the n super block tags match the requested address; (2) The extracted
+block offset matches at least one block offset field in back pointers; (3) The tag ID of the matching back pointer entry 
+in condition (2) is the same as the matching tag in condition (1). These three conditions can be checked using simple
+combination logic after a comparator array, which does not add significant latency to the cache access logic.
+On a cache hit,
+
