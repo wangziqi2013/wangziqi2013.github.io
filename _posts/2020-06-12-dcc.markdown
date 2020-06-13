@@ -31,4 +31,9 @@ every access.
 
 This paper takes advantage of two observations. First, LLC still preserves the spatial locality of access. Given a super
 block whose size is four regular 64 byte blocks and is aligned to four-block boundary, in most cases, more than 1 regular
-blocks within the super block are cached by the LLC. 
+blocks within the super block are cached by the LLC. The second observation is that external fragmentation can be easily
+solved by making the segment array fully-associative. As a result, a compressed block does not have to be stored in a 
+consecutive range of segments. Instead, the block can reside in several non-continuous segments, which will be concatenated 
+together by the block read circult on cache accesses.
+
+
