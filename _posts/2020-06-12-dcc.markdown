@@ -85,4 +85,12 @@ the last segment used by the same block by marking it as invalid (e.g. setting t
 As the baseline DCC design reduces external fragmentation and tagging overhead by allowing fully associative segments and 
 super tags, the paper also proposes Co-DCC to further reduce internal fragmentation caused by compressed blocks not 
 fully utilizing the trailing bytes of a segment, if the compressed block size is not a multiple of segment size.
-Co-DCC works by allowing blocks within a super block to be stored compactly
+Co-DCC works by allowing blocks within a super block to be stored compactly without havig to align each compressed 
+block to the beginning of a segment. By loosening this constraint, now each segment could contain potentially four blocks
+from the same super block (different super blocks could not share a segment to simplify cache lookup), and the super 
+block tag should store the starting byte offset of the block in the segment for each block.
+Co-DCC extends the per-block state tags with a 7 bit "begin offset" field to indicate the byte address of the compressed
+block in the first segment. If the compressed block could not be accommodated by the single segment in which it starts,
+it is also assumed that in the following segments (not necessarily the same one, since segments are fully associative),
+the remaining data of the block starts at offset zero, i.e. there must not be no "hole" inside compressed block data.
+
