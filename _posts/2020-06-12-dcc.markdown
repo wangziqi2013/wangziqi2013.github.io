@@ -66,7 +66,7 @@ On a cache hit, the controller circuit reads out all segments that match both th
 the previous step, and concatenates these segments together to form the compressed line. The compressed line is then
 sent to the decoding logic for decompression.
 
-Two types of cache misses could happen during an access. The first type of miss is signaled when there is a super block
+Three types of cache misses could happen during an access. The first type of miss is signaled when there is a super block
 tag match, but none of the segments match condition (2) and (3). In this case, the super block tag is preserved, but 
 one of the four blocks are evicted. The cache controller selects the block to be evicted using some replacement
 algorithms, and then invalidate all segments (with possible write backs) with tag ID and block offset matching the block 
@@ -75,3 +75,9 @@ does not matter in this case. The cache controller will evict one of the n super
 with a matching tag ID (block offset is ignored in this case). There should be two independent replacement algorithms,
 one within a super block, and the other for super blocks as a whole. The paper, however, does not give any detail on the 
 algorithm.
+
+The last type of cache miss is unique to compressed architecture, which only happens during a cache write. If the size 
+of the compressed block increases after a cache write, such that one or more segments are needed to store the compressed
+block, the controller also needs to signal a miss, and evict one of the existing segments in the current super block.
+Similarly, if the size of the compressed block, in the number of segments, becomes smaller, the controller should deallocate
+the last segment used by the same block by marking it as invalid (e.g. setting the invalid bit).
