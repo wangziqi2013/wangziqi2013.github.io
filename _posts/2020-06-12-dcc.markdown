@@ -98,3 +98,8 @@ an "end" field, which stores the last byte of the current super block.
 To support fully-associative tag mapping and storing multiple blocks within one segment, now each segment back pointer 
 consists of the tag ID field, which is unchaned from the baseline DCC, and a bit vector field, "sharers", which tracks 
 the blocks that are stored in the segment.
+On a cache lookup, a block can be read from the segments satisfying the following conditions: (1) Tag ID matchs the tag
+of the requested address (assuming the tag also hits); (2) the segment back pointer has the block set in the sharer list.
+The compressed block data begins in the first segment with the sharer bit set, at byte offset indicated by "begin" field,
+and ends in the last segment with the sharer bit set. The actual size of the block should be indicated by the compression
+type field. 
