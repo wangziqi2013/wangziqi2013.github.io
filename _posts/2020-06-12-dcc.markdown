@@ -70,4 +70,8 @@ Two types of cache misses could happen during an access. The first type of miss 
 tag match, but none of the segments match condition (2) and (3). In this case, the super block tag is preserved, but 
 one of the four blocks are evicted. The cache controller selects the block to be evicted using some replacement
 algorithms, and then invalidate all segments (with possible write backs) with tag ID and block offset matching the block 
-to be invalidated.
+to be invalidated. The second type miss occurs when none of the tags match the requested address. Condition (2) and (3)
+does not matter in this case. The cache controller will evict one of the n super blocks, together with all segments 
+with a matching tag ID (block offset is ignored in this case). There should be two independent replacement algorithms,
+one within a super block, and the other for super blocks as a whole. The paper, however, does not give any detail on the 
+algorithm.
