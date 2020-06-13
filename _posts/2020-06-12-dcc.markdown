@@ -36,4 +36,10 @@ solved by making the segment array fully-associative. As a result, a compressed 
 consecutive range of segments. Instead, the block can reside in several non-continuous segments, which will be concatenated 
 together by the block read circult on cache accesses.
 
+We next describe DCC in details. Similar to segmented caches, the DCC allows arbitrary mapping between tags and segments
+within a cache set. The physical storage of the set is divided into 16 byte segments. Tags are not over-privisioned.
+For a n-way set-associative cache, there are still n address tags. These tags, however, now store addresses of super blocks,
+rather than regular blocks. As discussed above, a super block consists of four regular blocks, which is also aligned to
+the four-block boundary. The lower two bits of the block address is used as the block offset instead of forming the 
+set index. Set index bits are extracted after the block offset.
 
