@@ -103,3 +103,6 @@ of the requested address (assuming the tag also hits); (2) the segment back poin
 The compressed block data begins in the first segment with the sharer bit set, at byte offset indicated by "begin" field,
 and ends in the last segment with the sharer bit set. The actual size of the block should be indicated by the compression
 type field. 
+Note that the "end" field is not necessary in reading the blocks from a super block. When allocating new space from a partially
+filled segment, however, the "end" field is used to identify the beginning offset of the next block, which will then
+be adjusted.
