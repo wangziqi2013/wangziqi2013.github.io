@@ -23,3 +23,9 @@ required to be stored in consecutive range of blocks. Even if the total number o
 these segments may not form a consecutive range that is large enough to hold the block, requiring compaction of existing 
 blocks. On modern cache architecture, segments are usually implemented as data array banks. Compaction a set would require 
 reading and writing all the banks, causing extra power consumption and head dissipation.
+The last issue is tagging overhead. In conventional segmented cache schemes, the maximum number of compressed blocks
+that can be stored within a set is bounded by the number of tags per-set. Over-provisioning of tags are required if 
+more compressed blocks are expected to be stored in the set. More tags per-set, however, have a nagative impact on
+power and access latency, since the larger the tag array, the more power and cycles it takes to access the array on
+every access.
+
