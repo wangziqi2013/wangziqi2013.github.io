@@ -14,7 +14,12 @@ version_mgmt:
 ---
 
 This paper proposes Decoupled Compressed Cache (DCC), a tag mapping framework for compressed LLC featuring low area cost
-and high space utilization. The paper points out that previous tag mapping schemes have three major flaws. The first is 
-internal fragmentation, which happens when compressed blocks could only be aligned to a certain segment boundary, as in 
-segmented cache designs. Blocks could not take advantage of every byte of the physical segment allocated to it, wasting 
-the rest storage of the segment. 
+and high space utilization. The paper points out that previous segmented tag mapping schemes have three major issues. The 
+first is internal fragmentation, which happens when compressed blocks could only be aligned to a certain segment boundary, 
+as in segmented cache designs. Blocks could not take advantage of every byte of the physical segment allocated to it, 
+wasting the rest storage of the segment. 
+The second issue is external fragmentation, leading to suboptimal utilization of the segments if compressed blocks are
+required to be stored in consecutive range of blocks. Even if the total number of bytes in free segments are sufficient,
+these segments may not form a consecutive range that is large enough to hold the block, requiring compaction of existing 
+blocks. On modern cache architecture, segments are usually implemented as data array banks. Compaction a set would require 
+reading and writing all the banks, causing extra power consumption and head dissipation.
