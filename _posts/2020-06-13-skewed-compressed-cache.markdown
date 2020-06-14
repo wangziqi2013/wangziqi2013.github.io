@@ -61,7 +61,7 @@ conflicting on way W1 does not necessarily suggest that they also conflict on wa
 that will be conflicts with each other in a regular set-associative cache being unlikely to conflict, resulting in
 higher cache hit ratio. 
 
-The skewed compressed cache, overall, demonstrates skewness on two levels. On the first level, it partitions a 
+The skewed compressed cache, overall, demonstrates skewness on three levels. On the first level, it partitions a 
 highly-associative LLC (e.g. 16 ways) into a few different way groups (4 in the paper), and also classifies compressed 
 blocks into four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompressible are in CF0; Blocks that can be compressed
 to between 1/2 and 1/4 of the original size are in CF1; Blocks that can be compressed to between 1/4 and 1/8 of the original
@@ -72,10 +72,14 @@ on the CF: For CF value of k, the data slot will be interpreted as having 2^k se
 block indicated by the valid bit vector of the tag.
 The skewness on CF breaks one of the most important invariants in conventional caches that an address tag can
 only appear at most once in the tag array at all times. 
-With super block and CF-based group selection, one address tag can appear in several locations. Still, within each way group,
-the same address tag can only occur at most once.
+With super block and CF-based group selection, one address tag can appear in several locations. 
 Compared with convention designs, in which a super block is at most bound to all segments within the set at a considerable
 metadata cost, this arrangement increases the number of possible locations a super block be stored in the cache, while 
 keeping the slot address mapping and space managment simple and intuitive.
 
-The second level of skewness comes from the fact that 
+The second level of skewness comes from the fact that blocks from the same super block can also be hashed to different 
+set indices, even in a way group. This further increases the number of possible locations compressed blocks from a super 
+block could be stored.
+Recall that adjacent blocks often demonstrate similar compressibility. The hashing scheme is designed to generate the
+same index for blocks that are adjacent to each other, to maximize the change that the full 64 physical slot on that
+index be fully utilized, since blocks of the same CF on the same super block are always hashed into the same way group.
