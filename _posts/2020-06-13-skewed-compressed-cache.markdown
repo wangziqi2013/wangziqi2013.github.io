@@ -45,3 +45,10 @@ same set. This is no longer true in a skewed cache, since each way now has its o
 conflicting on way W1 does not necessarily suggest that they also conflict on way W2, thus guaranteeing addresses
 that will be conflicts with each other in a regular set-associative cache being unlikely to conflict, resulting in
 higher cache hit ratio. 
+
+The skewed compressed cache, overall, demonstrates skewness on two levels. On the first level, it partitions a 
+highly-associative LLC into a few different way groups (4 in the paper), and also classifies compressed blocks into
+four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompressible are in CF0; Blocks that can be compressed
+to between 1/2 and 1/4 of the original size are in CF1; Blocks that can be compressed to between 1/4 and 1/8 of the original
+size are in CF2; Blocks that can be compressed to under 1/8 of the original size are in CF3.
+
