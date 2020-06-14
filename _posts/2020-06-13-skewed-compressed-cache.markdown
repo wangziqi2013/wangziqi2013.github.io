@@ -20,4 +20,7 @@ based on the data pattern, sub-optimal placement of compressed data will result 
 more frequent compaction operation on the data slot. The second challenge is to minimize the number of tags while making
 the best use of the physical storage. In the conventional scheme where each tag could only map one logical block, 
 designers often have to over-provision tags to enable storing more logical blocks in the cache, which also increases
-area and power consumption.
+area and power consumption. The third challenge is to correctly locate the compressed block in the physical storage,
+since on compressed architectures, blocks are not necessarily stored on a pre-defined size boundary, which must be
+explicitly coded into the tag as well. In addition, the associativity between tags and physical slots are often more
+flexible to enable one tag to map any or a subset of segments (assuming segmented cache design) in the current set.
