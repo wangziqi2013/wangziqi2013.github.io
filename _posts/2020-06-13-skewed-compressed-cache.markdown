@@ -80,7 +80,13 @@ With super block and CF-based group selection, one address tag can appear in sev
 Compared with convention designs, in which a super block is at most bound to all segments within the set at a considerable
 metadata cost, this arrangement increases the number of possible locations a super block be stored in the cache, while 
 keeping the slot address mapping and space managment simple and intuitive.
-Note that
+Note that to avoid systematic bias over some way groups, the mapping function between CF type and addresses should take 
+both the address bits and the CF as arguments. This way, for different addresses, the CF to way group mapping is also 
+different (but deterministic). In addition, the reverse of the hash function should also be easily computable, i.e.
+we can also use the requested address and the way group to compute CF of blocks the way group will store for a
+certain super block. The latter is important for accessing an address with only its address being known to the 
+controller. In this case, the CF of the accessed block is unknown, and therefore, all way groups must be checked
+using the CF computed using the way group index and the requested address.
 
 The second level of skewness comes from the fact that blocks from the same super block can also be hashed to different 
 set indices, even in a way group. This further increases the number of possible locations compressed blocks from a super 
