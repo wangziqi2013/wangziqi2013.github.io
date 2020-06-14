@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Using super block tags while allowing the same tag be used in different way groups and even in the same way
+
 This paper proposes skewed compressed cache, a compressed cache design that features skewed set and way selection.
 The paper identifies three major challenges of designing a compressed cache architecture. The first challenge is to
 store compressed blocks compacted in the fixed size physical slot. Since compressed block sizes could vary significantly
@@ -81,5 +85,14 @@ The second level of skewness comes from the fact that blocks from the same super
 set indices, even in a way group. This further increases the number of possible locations compressed blocks from a super 
 block could be stored.
 Recall that adjacent blocks often demonstrate similar compressibility. The hashing scheme is designed to generate the
-same index for blocks that are adjacent to each other, to maximize the change that the full 64 physical slot on that
+same index for blocks that are adjacent to each other, to maximize the chance that the full 64 physical slot on that
 index be fully utilized, since blocks of the same CF on the same super block are always hashed into the same way group.
+Blocks with different CFs also use different hash functions. For CF0 blocks, the hash function takes the tag bits 
+(i.e. all bits above the block offset expect the lowest 2, which will be used for way group selection; see below) and 
+all three block offset bits in the requested address to generate the set index, since these blocks cannot be compressed,
+and must not be hashed to the same index (will be a conflict otherwise).
+For CF1 blocks, each adjacent two of them in the super block should be hashed to the same index, while all others should
+be to different sets. The hash function, therefore, takes the upper two bits of the block offset and the super block tag,
+indicating that adjacent two blocks (aligned) will always be hashed to the same index, since these blocks only differ in
+the lowest bit of the block offset.
+
