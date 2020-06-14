@@ -17,4 +17,7 @@ This paper proposes skewed compressed cache, a compressed cache design that feat
 The paper identifies three major challenges of designing a compressed cache architecture. The first challenge is to
 store compressed blocks compacted in the fixed size physical slot. Since compressed block sizes could vary significantly
 based on the data pattern, sub-optimal placement of compressed data will result in loss of effective cache size and 
-more frequent compaction operation on the data slot. 
+more frequent compaction operation on the data slot. The second challenge is to minimize the number of tags while making
+the best use of the physical storage. In the conventional scheme where each tag could only map one logical block, 
+designers often have to over-provision tags to enable storing more logical blocks in the cache, which also increases
+area and power consumption.
