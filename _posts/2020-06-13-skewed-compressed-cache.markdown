@@ -80,6 +80,7 @@ With super block and CF-based group selection, one address tag can appear in sev
 Compared with convention designs, in which a super block is at most bound to all segments within the set at a considerable
 metadata cost, this arrangement increases the number of possible locations a super block be stored in the cache, while 
 keeping the slot address mapping and space managment simple and intuitive.
+Note that
 
 The second level of skewness comes from the fact that blocks from the same super block can also be hashed to different 
 set indices, even in a way group. This further increases the number of possible locations compressed blocks from a super 
@@ -103,3 +104,11 @@ them will always be hashed to the same index.
 The last level of skewness lies in the fact that different hash functions can be used for each way in a way group (
 the previously discussed hash functions are applied to only a single way). By using a per-way hash function, addresses
 that conflict with each other could now be scattered on different indices on different ways, further reducing conflicts.
+
+Cache accesses are performed as follows. If the access is a read, the cache controller computes the CF of the address
+on each way group by taking the XOR of the two loest bit of the block tag and the way group index (0 - 3 in our case).
+Then the set index on each way of the way group is computed in parallel using the CF of each way group, and the rest
+of the bits in the requested address.
+A cache hit is signaled, if (1) The super block tag matches the requested address; (2) the corresponding valid bit is set
+for the block index in the requested address in one of these matching tags. The physical slot is then accessed and data
+is read out using the 
