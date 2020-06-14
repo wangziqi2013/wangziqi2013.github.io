@@ -40,6 +40,14 @@ block per tag, the tag now maps a few consecutive and aligned regular blocks in 
 Tags and physical 64 byte slots are still statically, one-to-one mapped, to enable fast access of both tag and data.
 Note that not all blocks within the super block are necessarily present at the same time. In fact, with compression
 applied, it is possible that a few compressed blocks in the super block share the same physical block.
+To further simplify address mapping within the physical slot (i.e. how to find starting and ending bytes of blocks),
+the paper assumes that each super block tag has a compression factor (CF), which determines the size of the compressed blocks
+stored in the physical slot. The cache controller, once has inferred the CF, which is implicitly coded in the address tag 
+(see below on how), just treats the physical slot's content as fixed size blocks, and access compressed blocks at static 
+offsets. To describe which blocks are present in the cache, each super block has a vector of block status, including coherence
+states, valid bits, etc., for potentially all blocks in the super block.
+If a valid bit is on, the block is considered as present, which are stored in-order (i.e. the order compressed blocks
+are stored is consistent with the order suggested by the bit vector) in the physical slot.
 
 This paper also borrows the skewed cache design in uncompressed caches. The original idea skewed cache is based on the 
 fact that real-world workloads often do not distribute accesses evenly too all sets, underutilizing some sets while 
