@@ -39,6 +39,9 @@ This paper also borrows the skewed cache design in uncompressed caches. The orig
 fact that real-world workloads often do not distribute accesses evenly too all sets, underutilizing some sets while 
 incurring excessive conflict misses on some other sets. To reduce conflict misses, the skew cache design proposes that
 the cache be partitioned into equally sized ways, and that different hash functions be used on different ways to locate
-the tag. By using different hash functions, the "conflict" with relation is no longer transitive: In the regular cache
-design, if address A, B conflict on way X, and B, C also conflict on way X, then A, C will always conflict on the 
-same way. This is no longer true
+the tag. By using different hash functions, the "conflict with" relation is no longer transitive: In the regular cache
+design, if address A, B conflict on set X, and B, C also conflict on set X, then A, C will always conflict on the 
+same set. This is no longer true in a skewed cache, since each way now has its own conflict relation. Two addresses
+conflicting on way W1 does not necessarily suggest that they also conflict on way W2, thus guaranteeing addresses
+that will be conflicts with each other in a regular set-associative cache being unlikely to conflict, resulting in
+higher cache hit ratio. 
