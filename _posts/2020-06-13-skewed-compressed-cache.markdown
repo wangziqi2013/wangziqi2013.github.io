@@ -99,3 +99,7 @@ For CF2 blocks, the hash function takes the highest one bit and the super block 
 the same 64 byte physical slot, and every adjacent four (i.e. upper and lower half of the super block) will be hashed to
 the same index this way. Lastly, for CF3 blocks, the hash function ignores the block offset bits, indicating that all of
 them will always be hashed to the same index.
+
+The last level of skewness lies in the fact that different hash functions can be used for each way in a way group (
+the previously discussed hash functions are applied to only a single way). By using a per-way hash function, addresses
+that conflict with each other could now be scattered on different indices on different ways, further reducing conflicts.
