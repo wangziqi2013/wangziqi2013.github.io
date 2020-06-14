@@ -34,3 +34,11 @@ tag and external fragmentation overhead, since one tag plus an implicit offset i
 a block, similar to address computation in sector caches. In addition, adjacent blocks can be stored compactly without 
 worrying too much about physical storage management, since they can just be classifyed into one uniform size, and be 
 naively stored as fixed size blocks.
+
+This paper also borrows the skewed cache design in uncompressed caches. The original idea skewed cache is based on the 
+fact that real-world workloads often do not distribute accesses evenly too all sets, underutilizing some sets while 
+incurring excessive conflict misses on some other sets. To reduce conflict misses, the skew cache design proposes that
+the cache be partitioned into equally sized ways, and that different hash functions be used on different ways to locate
+the tag. By using different hash functions, the "conflict" with relation is no longer transitive: In the regular cache
+design, if address A, B conflict on way X, and B, C also conflict on way X, then A, C will always conflict on the 
+same way. This is no longer true
