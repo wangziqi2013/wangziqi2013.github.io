@@ -24,3 +24,9 @@ area and power consumption. The third challenge is to correctly locate the compr
 since on compressed architectures, blocks are not necessarily stored on a pre-defined size boundary, which must be
 explicitly coded into the tag as well. In addition, the associativity between tags and physical slots are often more
 flexible to enable one tag to map any or a subset of segments (assuming segmented cache design) in the current set.
+
+In order to solve these challenges, the paper noted that two types of locality exist in the majority of the workloads.
+Spatial locality exists such that adjacent address blocks are often brought into the LLC by near-by instructions, which
+are also cached in the LLC at the same time. Meanwhile, these adjacent blocks are also tend to be compressed into similar
+sizes, due to the usage of arrays and/or data structures containing small integers, etc.
+These two observations, combined together, suggest that blocks 
