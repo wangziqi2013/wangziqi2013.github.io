@@ -35,6 +35,12 @@ a block, similar to address computation in sector caches. In addition, adjacent 
 worrying too much about physical storage management, since they can just be classifyed into one uniform size, and be 
 naively stored as fixed size blocks.
 
+Based on the above conclusion, the paper proposes a tag mapping scheme with super blocks. Instead of only mapping one 
+block per tag, the tag now maps a few consecutive and aligned regular blocks in the address space, called a super block.
+Tags and physical 64 byte slots are still statically, one-to-one mapped, to enable fast access of both tag and data.
+Note that not all blocks within the super block are necessarily present at the same time. In fact, with compression
+applied, it is possible that a few compressed blocks in the super block share the same physical block.
+
 This paper also borrows the skewed cache design in uncompressed caches. The original idea skewed cache is based on the 
 fact that real-world workloads often do not distribute accesses evenly too all sets, underutilizing some sets while 
 incurring excessive conflict misses on some other sets. To reduce conflict misses, the skew cache design proposes that
@@ -47,8 +53,10 @@ that will be conflicts with each other in a regular set-associative cache being 
 higher cache hit ratio. 
 
 The skewed compressed cache, overall, demonstrates skewness on two levels. On the first level, it partitions a 
-highly-associative LLC into a few different way groups (4 in the paper), and also classifies compressed blocks into
-four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompressible are in CF0; Blocks that can be compressed
+highly-associative LLC (e.g. 16 ways) into a few different way groups (4 in the paper), and also classifies compressed 
+blocks into four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompressible are in CF0; Blocks that can be compressed
 to between 1/2 and 1/4 of the original size are in CF1; Blocks that can be compressed to between 1/4 and 1/8 of the original
-size are in CF2; Blocks that can be compressed to under 1/8 of the original size are in CF3.
+size are in CF2; Blocks that can be compressed to under 1/8 of the original size are in CF3. For any given address, 
+it can only be stored within one of the four ways groups, depending on its CF. If the address tag is found in a CF,
+then the cache controller can immeidately determine the CF of the address tag
 
