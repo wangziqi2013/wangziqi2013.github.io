@@ -116,5 +116,13 @@ on each way group by taking the XOR of the two loest bit of the block tag and th
 Then the set index on each way of the way group is computed in parallel using the CF of each way group, and the rest
 of the bits in the requested address.
 A cache hit is signaled, if (1) The super block tag matches the requested address; (2) the corresponding valid bit is set
-for the block index in the requested address in one of these matching tags. The physical slot is then accessed and data
-is read out using the 
+for the block index in the requested address in one of these matching tags. The segment data is then accessed and data
+is read out using the CF to interpret the slot.
+
+Write accesses are slightly more complicated. First, the original data should be accessed as if it were a read operation.
+On a cache hit, the CF of the compressed new data is compared against the existing data in the cache. If CF does not change,
+the compressed new block could be directly written into the physical slot. Otherwise, the block must be migrated
+from the current way group to another way group. To conduct this, the cache controller first computes the new destination
+way group and set index using the requested address and its new CF. Note that the mapping uses XOR, which is easily
+reversible by just taking the XOR between the lowest two bits of the super block tag and the new CF. Then the block is 
+migrated to the new way group and set by invalidating and old one after copying it over.
