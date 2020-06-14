@@ -131,4 +131,9 @@ Block eviction is also simpler than most segmented cache designs. Two types of e
 super block tag conflicts, which happens when a new super block is to be brought into the cache, but a conflict happens
 between the new super block and an existing one. In this case, only the tag in the way group is invalidated, and blocks
 stored in the physical slot are written back if dirty. Other tags of the super block, including those in the same set
-and those in other way groups still remain untouched.
+and those in other way groups still remain untouched. The second type of eviction happens when the set indexing
+hash function conflicts, and blocks of the same super block conflict on the same way. Since all blocks are of the 
+same CF in the sameway group (and also the same way), these conflicting blocks can simply just be installed after
+evicting one of them from the physical slot they are currently in.
+In both cases, no complicated space allocation and re-compaction needs to take place, since blocks mapped to the 
+same physical slot are always of the same CF.
