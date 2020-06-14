@@ -67,6 +67,15 @@ blocks into four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompres
 to between 1/2 and 1/4 of the original size are in CF1; Blocks that can be compressed to between 1/4 and 1/8 of the original
 size are in CF2; Blocks that can be compressed to under 1/8 of the original size are in CF3. For any given address, 
 it can only be stored within one of the four ways groups, depending on its CF. If the address tag is found in a CF,
-then the cache controller can immeidately infer the CF of the address tag, and interpret the layout of the data slot 
+then the cache controller can immeidately infer the CF of the address tag, and interpret the layout of the data slot based
+on the CF: For CF value of k, the data slot will be interpreted as having 2^k segments, eaching hosting a compressed
+block indicated by the valid bit vector of the tag.
+The skewness on CF breaks one of the most important invariants in conventional caches that an address tag can
+only appear at most once in the tag array at all times. 
+With super block and CF-based group selection, one address tag can appear in several locations. Still, within each way group,
+the same address tag can only occur at most once.
+Compared with convention designs, in which a super block is at most bound to all segments within the set at a considerable
+metadata cost, this arrangement increases the number of possible locations a super block be stored in the cache, while 
+keeping the slot address mapping and space managment simple and intuitive.
 
-
+The second level of skewness comes from the fact that 
