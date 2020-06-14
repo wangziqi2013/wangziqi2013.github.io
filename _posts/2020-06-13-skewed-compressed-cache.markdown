@@ -48,6 +48,7 @@ offsets. To describe which blocks are present in the cache, each super block has
 states, valid bits, etc., for potentially all blocks in the super block.
 If a valid bit is on, the block is considered as present, which are stored in-order (i.e. the order compressed blocks
 are stored is consistent with the order suggested by the bit vector) in the physical slot.
+The paper uses a super block size of eight.
 
 This paper also borrows the skewed cache design in uncompressed caches. The original idea skewed cache is based on the 
 fact that real-world workloads often do not distribute accesses evenly too all sets, underutilizing some sets while 
@@ -66,5 +67,6 @@ blocks into four compression factors (CF): 0, 1, 2, 3. Blocks that are uncompres
 to between 1/2 and 1/4 of the original size are in CF1; Blocks that can be compressed to between 1/4 and 1/8 of the original
 size are in CF2; Blocks that can be compressed to under 1/8 of the original size are in CF3. For any given address, 
 it can only be stored within one of the four ways groups, depending on its CF. If the address tag is found in a CF,
-then the cache controller can immeidately determine the CF of the address tag
+then the cache controller can immeidately infer the CF of the address tag, and interpret the layout of the data slot 
+
 
