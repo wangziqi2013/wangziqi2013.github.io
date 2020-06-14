@@ -95,4 +95,7 @@ For CF1 blocks, each adjacent two of them in the super block should be hashed to
 be to different sets. The hash function, therefore, takes the upper two bits of the block offset and the super block tag,
 indicating that adjacent two blocks (aligned) will always be hashed to the same index, since these blocks only differ in
 the lowest bit of the block offset.
-
+For CF2 blocks, the hash function takes the highest one bit and the super block tag, since four such blocks could fit into
+the same 64 byte physical slot, and every adjacent four (i.e. upper and lower half of the super block) will be hashed to
+the same index this way. Lastly, for CF3 blocks, the hash function ignores the block offset bits, indicating that all of
+them will always be hashed to the same index.
