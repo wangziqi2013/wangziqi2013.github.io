@@ -126,3 +126,9 @@ from the current way group to another way group. To conduct this, the cache cont
 way group and set index using the requested address and its new CF. Note that the mapping uses XOR, which is easily
 reversible by just taking the XOR between the lowest two bits of the super block tag and the new CF. Then the block is 
 migrated to the new way group and set by invalidating and old one after copying it over.
+
+Block eviction is also simpler than most segmented cache designs. Two types of eviction may happen. The first type is 
+super block tag conflicts, which happens when a new super block is to be brought into the cache, but a conflict happens
+between the new super block and an existing one. In this case, only the tag in the way group is invalidated, and blocks
+stored in the physical slot are written back if dirty. Other tags of the super block, including those in the same set
+and those in other way groups still remain untouched.
