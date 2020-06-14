@@ -29,4 +29,8 @@ In order to solve these challenges, the paper noted that two types of locality e
 Spatial locality exists such that adjacent address blocks are often brought into the LLC by near-by instructions, which
 are also cached in the LLC at the same time. Meanwhile, these adjacent blocks are also tend to be compressed into similar
 sizes, due to the usage of arrays and/or data structures containing small integers, etc.
-These two observations, combined together, suggest that blocks 
+These two observations, combined together, suggest that blocks that are adjacent to each other could be cached with little
+tag and external fragmentation overhead, since one tag plus an implicit offset is sufficient to generate the address of 
+a block, similar to address computation in sector caches. In addition, adjacent blocks can be stored compactly without 
+worrying too much about physical storage management, since they can just be classifyed into one uniform size, and be 
+naively stored as fixed size blocks.
