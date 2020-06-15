@@ -5,7 +5,7 @@ date:   2020-05-22 20:51:00 -0500
 categories: paper
 paper_title: "A Fully-Associative Software-Managed Cache Design"
 paper_link: https://dl.acm.org/doi/10.1145/1028176.1006719
-paper_keyword: Cache
+paper_keyword: Cache; IIC; Indirect Indexed Cache
 paper_year: ISCA 2000
 rw_set:
 htm_cd:
