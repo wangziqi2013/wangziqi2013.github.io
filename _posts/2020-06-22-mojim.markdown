@@ -70,4 +70,7 @@ This suggests that all log entries must be transferred to the mirrored copy befo
 after which the system call could return. The second write ordering is between dirty data and the commit record. Dirty
 data can only be written back after the commit record is persisted. The second writr ordering conveys different messages
 to the master and the mirror. For master copies, there is no guarantee that the hardware cache will not write back dirty
-data before the commit record.
+data before the commit record, and therefore, the master copy by itself is not atomic at all. On the other hand, however,
+if we think of the master copy as a large buffer, and the mirrored copy as actual data, both write orderings are observed,
+since dirty data will never be directly transferred from the master to the mirror, which makes the second write ordering
+trivially true.
