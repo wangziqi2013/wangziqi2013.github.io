@@ -23,9 +23,12 @@ page sizes, since the lowest few bits of the page number itself is a function of
 set index is infeasible.
 
 There are four different proposals to solve this problem. First, the TLB can be made fully associative to avoid having
-to extract the set index fron the page number at all. All TLB entries are extendes with a "mask" field, which is derived
-from the page size of the translation when it is inserted into the TLB. The tag stored in the entry is the actual virtual
+to extract the set index from the page number at all. All TLB entries are extended with a "mask" field, which is derived
+from the page size of the PTE when it is inserted into the TLB. The tag stored in the entry is the actual virtual
 page number, with lower page offset bits setting to zero. The "mask" field is AND'ed with the requested
 virtual address on a lookup, masking off lower bits of the address. On a translation request, the requested virtual address 
 is AND'ed with all "mask" fields respectively, and then compared with tags of all entries. A hit indicates that a valid 
-translation exists. 
+translation exists. Having a fully associative TLB, however, requires activating all entries on all memory requests.
+The extra read and comparison logic would pose a challenge for both area and power consumption.
+
+The 
