@@ -112,3 +112,10 @@ recent sync point. In fact, current hardware caches, just like a "steal no force
 evict a dirty block any time after it is written. The application is assumed to implement its own transactional
 support to roll back such partial updates at the master node on crash recovery, but the paper does not cover such
 implementational details.
+
+Log entries received from the master copy is written into dedicated log buffers by the RDMA receiving end on the mirror
+node. The mirror node periodically replays the log onto its NVM image, when the log buffer is full or when the number of 
+received packts exceeds a certain threshold, after which the log buffer is truncated and reclaimed. If tier-two backup
+nodes are configured, the mirror copy also sends log entries to backup nodes in the background. These backup nodes
+are not strictly synchronized with the master and mirrored copy, which only guarantees recovery to one of the recent
+sync points, but not always the most recent one. 
