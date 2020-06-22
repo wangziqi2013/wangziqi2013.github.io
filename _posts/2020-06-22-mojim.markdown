@@ -35,6 +35,10 @@ version_mgmt:
    What's more, the paper claims that for system with N machines, Mojim could tolerate N - 1 failures. In a master-mirror
    configuration, we do not need to worry about the case where both master and mirror copy fails.
 
+3. I did not get how metadata log is used. Does mirrored copy always recovery to exact sync points?
+   How does master copy know which data should be sent after the metadata log's tail (master copy does not keep a log
+   and has no idea which data were sent after the log tail)
+
 This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
 by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
 that is order of magnitudes larger than DRAM. The resulting design considers less about the effect of performance impact 
@@ -95,6 +99,9 @@ fetch the most up-to-date lines with coherence protocol. After receiving these l
 onto the NVM without occupying any CPU cycle, which also uses RDMA. The mirrored copy then writes a commit mark,
 persists it to the NVM, and sends back an acknowledgement to the master copy. The master copy, meanwhile, blocks on
 the network until the acknowledgement from the mirror is received, after which msync() function returns.
+The mirrored copy also maintains a "metadata log" which records the IDs of requests that it has received. On crash
+recovery, this log is used to figure out the last log entry that the mirrored copt has received. The master copy will 
+then send log entries after this point to
 
 Crashes are detected via heartbeat signals. On detecting a crash, the master or the mirror will start crash recovery
 immediately. If the mirror crashed, the master copy will first flush the entire cache to ensure that dirty data is 
@@ -118,4 +125,5 @@ node. The mirror node periodically replays the log onto its NVM image, when the 
 received packts exceeds a certain threshold, after which the log buffer is truncated and reclaimed. If tier-two backup
 nodes are configured, the mirror copy also sends log entries to backup nodes in the background. These backup nodes
 are not strictly synchronized with the master and mirrored copy, which only guarantees recovery to one of the recent
-sync points, but not always the most recent one. 
+sync points, but not always the most recent one. As a result, msync() will not wait for backup nodes to complete their
+persistence.
