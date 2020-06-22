@@ -24,6 +24,9 @@ version_mgmt:
 2. If only bit 21 - 23 are used for hashing, then for regular 8KB pages, it still has the problem that adjacent pages
    of the same size class are mapped to the same partition, since bit 21 - 23 of these pages are identical. This
    is not as bad as the last proposal, but still only two out of eight ways are fully utilized.
+   Although skewness can be leveraged to reduce set conflict misses, this still has negative impact if the majority of
+   misses are not set conflict miss, but are capacity misses (i.e. working set size is larger than the total size
+   that the TLB could map).
 
 This technical report proposes a noval TLB design, skewed associative TLB, in order to support multiple page sizes
 with a unified TLB. MMU nowadays support multiple granularities of page mapping, with page sizes ranging from a few KBs 
@@ -109,3 +112,5 @@ hardware implementation can use two lookup tables consisting of 32 entries, one 
 for backward mapping. Note that bits must be selected such that all addresses in the page always have the same 
 size class assignment, because otherwise, addresses within a page may be classified to different size classes, which
 is incorrect as all addresses in a page must be of the same size class.
+
+
