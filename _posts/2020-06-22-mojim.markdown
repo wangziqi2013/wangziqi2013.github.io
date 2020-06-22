@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Redo logging could achieve atomic commit and replication together without any extra overhead
+
+2. Having a mirrored copy overcomes the biggest issue with redo logging: Write ordering between dirty data and commit record,
+   as the data transfer between the master and mirror is software controlled, unlike a cache.
+
 This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
 by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
 that is order of magnitudes larger than DRAM. The resulting design considers less about the effect of performance impact 
