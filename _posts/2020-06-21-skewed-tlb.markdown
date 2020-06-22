@@ -83,6 +83,11 @@ each partition, the lower bits of the page size can be extracted according to th
 that partition, since the page size of a partition is statically determined by the hash function. All ways 
 in all partitions are then probed in parallel, with potentially different indices. If a partition indicates a hit
 (at most one hit is possible, since an address can always only be mapped to at most one size class), the entry is
-read out, and the size class of the entry is known. Offsets bits are then extracted from the requested address
-using the offset mask of the corresponding size class, and then added onto the page base address before returned
-to the pipeline.
+read out, and the size class of the entry is computed using the second property of the hash function. 
+Offsets bits are extracted from the requested address using the offset mask of the corresponding size class, and 
+then added onto the page base address before returned to the pipeline.
+
+The paper also proposes that the hash function can be implemented by hashing 21 - 23 from the address and the size class
+to different partitions. Each partition can only be assigned excatly one size class for a certain address. The actual
+hardware implementation can use two lookup tables consisting of 32 entries, one for forward mapping, the other
+for backward mapping.
