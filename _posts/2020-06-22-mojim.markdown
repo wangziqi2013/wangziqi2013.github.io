@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Reliable and Highly Available Non-Volatile Memory System"
+date:   2020-06-22 05:51:00 -0500
+categories: paper
+paper_title: "A Reliable and Highly Available Non-Volatile Memory System"
+paper_link: https://dl.acm.org/doi/10.1145/2786763.2694370
+paper_keyword: NVM; Mojim; Replication
+paper_year: SIGARCH 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
