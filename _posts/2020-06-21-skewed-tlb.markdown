@@ -78,4 +78,11 @@ the TLB, the TLB controller knows its size class from the page table walk or fro
 ID in which it will be inserted into is then computed using the first property of the hash function described in the 
 previous section. The address is then inserted into the corresponding partition, potentially evicting an entry from
 one of the two possible locations if no empty way is available (we will see how ways within a partition is managed
-below). 
+below). For reads, the requested address is hashed with all size classes in parallel into partition IDs. Within
+each partition, the lower bits of the page size can be extracted according to the size class associated with
+that partition, since the page size of a partition is statically determined by the hash function. All ways 
+in all partitions are then probed in parallel, with potentially different indices. If a partition indicates a hit
+(at most one hit is possible, since an address can always only be mapped to at most one size class), the entry is
+read out, and the size class of the entry is known. Offsets bits are then extracted from the requested address
+using the offset mask of the corresponding size class, and then added onto the page base address before returned
+to the pipeline.
