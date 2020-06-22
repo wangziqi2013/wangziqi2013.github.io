@@ -104,3 +104,11 @@ execution. The master copy is rebuilt in the meantime using the image of the mir
 If, however, the master copy crashes before the flush completes, the image on the NVM will be potentially inconsistent,
 since some dirty blocks might be lost in the volatile cache. This "vulnerability window" may becomes an issue if the 
 master copy also crashes within the window, leading to inconsistent image and potential data losses.
+
+To avoid the vulnerability window, the paper also proposes msync with cache flush. The library always flushes the 
+cache of the mirror copy before msync() returns, thus avoiding the window at all when the mirror crashes. Note that
+Mojim does not guarantee that the image on the NVM will not contain any dirty update from execution after the most
+recent sync point. In fact, current hardware caches, just like a "steal no force" database page buffer pool, can
+evict a dirty block any time after it is written. The application is assumed to implement its own transactional
+support to roll back such partial updates at the master node on crash recovery, but the paper does not cover such
+implementational details.
