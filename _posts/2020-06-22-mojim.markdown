@@ -34,4 +34,9 @@ At last, by providing several options with different consistency guarantees, app
 the degree of consistency and performance. Switching between consistency levels are achieved by deciding whether the 
 application should wait for mirror persistence, or whether dirty data should be flushed, etc.
 
-
+We next introduce the system configuration of Mojim. Mojin is implemented as a kernel-level library that interacts 
+with application programmers via system calls or other exposed interfaces such as memory allocation. The system consists
+of a master copy with NVM installed, on which applications are executed, and a mirrored copy which is read-only.
+Background tasks such as auditing can be scheduled on the mirrored copy as long as they are read-only.
+A few optional backup copy can also be supported. Mojim guarantees that copies on the master and mirror are strongly
+consistent, while only weakly consistent between these two and the backup copy.
