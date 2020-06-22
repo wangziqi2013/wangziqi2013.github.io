@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. I don't get why bit 21 - 23 are used to generage the hash function, since bit 21 is the highest offset bit of a 4MB
+   page (22 bit offsets, from bit 0 to bit 21). In this case, the upper and lower half of the page will have different
+   hash mappings from size class to partition (and also the opposite). In this case, it is unlikely but still possible 
+   that a hit will be signaled (as long as the index bits coincide for different size class index extraction schemes,
+   even if the size class is wrong), and the page is classified into the wrong size class. The offset extraction mask
+   will also be wrong, leading to incorrect translation.
+
+
 This technical report proposes a noval TLB design, skewed associative TLB, in order to support multiple page sizes
 with a unified TLB. MMU nowadays support multiple granularities of page mapping, with page sizes ranging from a few KBs 
 to a few GBs. This introduces the problem of correctly finding the translation entry given a virtual address, since the 
@@ -87,7 +97,12 @@ read out, and the size class of the entry is computed using the second property 
 Offsets bits are extracted from the requested address using the offset mask of the corresponding size class, and 
 then added onto the page base address before returned to the pipeline.
 
-The paper also proposes that the hash function can be implemented by hashing 21 - 23 from the address and the size class
+To avoid the shortcoming of static division of TLB resources for different size classes, the paper suggests that
+each address should have different static mappings
+
+The paper proposes that the hash function can be implemented by hashing 21 - 23 from the address and the size class
 to different partitions. Each partition can only be assigned excatly one size class for a certain address. The actual
 hardware implementation can use two lookup tables consisting of 32 entries, one for forward mapping, the other
-for backward mapping.
+for backward mapping. Note that bits must be selected such that all addresses in the page always have the same 
+size class assignment, because otherwise, addresses within a page may be classified to different size classes, which
+is incorrect as all addresses in a page must be of the same size class.
