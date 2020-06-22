@@ -48,3 +48,7 @@ data within the address range will be persisted atomically with regard to crashe
 is not atomic on the master itself). Second, the master and mirrored copy will be synchronized atomically, such that the 
 mirrored copy always contain the most up-to-date content of the master after the call returns.
 
+Mojim employs redo logging to perform both atomic commit and data replication. Recall that in redo logging, two types of
+write ordering must be observed to ensure correctness. First, log entries should be persisted before the commit record.
+This suggests that all log entries must be transferred to the mirrored copy before the commit mark is written, only
+after which the system call could return.
