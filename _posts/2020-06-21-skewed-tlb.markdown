@@ -113,4 +113,8 @@ for backward mapping. Note that bits must be selected such that all addresses in
 size class assignment, because otherwise, addresses within a page may be classified to different size classes, which
 is incorrect as all addresses in a page must be of the same size class.
 
-
+To reduce conflict misses in a partition, where only two physical ways are available, the paper further proposes using 
+the skewed hash function design, where the mapping from an address with known size class to an index in each way does not 
+simply use low address bits. Instead, two different hash functions are used to avoid pages with the same index bits 
+in the conventional scheme conflicting on the same set, thus effectively improving the associativity to eight, as claimed
+by the paper.
