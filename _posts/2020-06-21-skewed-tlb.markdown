@@ -51,4 +51,8 @@ In the last proposal, indices bits are not extracted from the lowest bits of the
 which causes problem if the low page number bits of small pages are actually page offset bits in larger pages. 
 Instead, the index bits are extracted from a static set of bits, which are aligned to the lowest bits of the page
 number for the largest size class. This way, the index bits are independent from the size class, which can be 
-determined before the size class is known. The drawback of this approach,
+determined before the size class is known. The drawback of this approach, however, is that for smaller size classes,
+adjacent pages are highly likely to be mapped to the same entry, since the index bits are, in fact, higher bits
+of their page numbers. This is extremely bad for workloads with spatial locality, where most memory accesses are 
+"clustered" to only a few ranges in the virtual address space. In this case, only a few sets will be leveraged,
+which will suffer an unacceptablly high level of contention.
