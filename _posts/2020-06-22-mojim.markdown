@@ -30,4 +30,8 @@ hardware cache, without enforcing a software write back and possibly blocking on
 With simpler replication protocol, the data exchange between master and mirror copy is as simple as master sending the 
 log entries to the mirror, and the mirror acknowledgment of tansmission completion. No complicated two-phase 
 commit is used, since only one mirror copy is present.
+At last, by providing several options with different consistency guarantees, applications can make trade-off between
+the degree of consistency and performance. Switching between consistency levels are achieved by deciding whether the 
+application should wait for mirror persistence, or whether dirty data should be flushed, etc.
+
 
