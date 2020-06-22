@@ -29,6 +29,11 @@ version_mgmt:
 
 2. In m-sync scheme (most common one), if a mirror copy crashed, why flushing the cache of the master copy? I cannot 
    see how this affects recoverability. The mirror should be able to be rebuilt whether or not the master flushes the cache.
+   Furthermore, flushing the cache will pollute the master's image (although it is always potentially polluted).
+   As long as you do not dump register file, data on the master copy is always inconsistent and execution could not resume.
+   (I guess the application should cook its own transactional support?)
+   What's more, the paper claims that for system with N machines, Mojim could tolerate N - 1 failures. In a master-mirror
+   configuration, we do not need to worry about the case where both master and mirror copy fails.
 
 This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
 by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
@@ -91,4 +96,8 @@ onto the NVM without occupying any CPU cycle, which also uses RDMA. The mirrored
 persists it to the NVM, and sends back an acknowledgement to the master copy. The master copy, meanwhile, blocks on
 the network until the acknowledgement from the mirror is received, after which msync() function returns.
 
-
+Crashes are detected via heartbeat signals. On detecting a crash, the master or the mirror will start crash recovery
+immediately. If the mirror crashed, the master copy will first flush the entire cache to ensure that dirty data is 
+always present on the NVM. Then the mirrored copy is rebuilt or restarted. If the master copy crashed, the mirrored copy
+replays log entries with a commit record, and discards the rest. The mirrored copy then acts as the master, and resumes
+execution. The master copy is rebuilt in the meantime using the image of the mirrored copy.
