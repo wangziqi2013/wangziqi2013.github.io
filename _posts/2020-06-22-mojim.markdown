@@ -83,4 +83,12 @@ for persistence. On crash recovery, the system image is guaranteed to be recover
 the function at that sync point has returned. How to correctly identify and place sync points are left to the application 
 programmer.
 
+In the most common mode, the protocol ensures the consistency of the system for most of the time. At a sync point, the 
+master copy generates log entries for dirty data in the given range or ranges, and then send these data to the mirrored
+copy via RDMA. Note that no cache flush is involved in this process, since RDMA nowadays is cache-coherent, and can directly 
+fetch the most up-to-date lines with coherence protocol. After receiving these lines, the mirrored copy persists them
+onto the NVM without occupying any CPU cycle, which also uses RDMA. The mirrored copy then writes a commit mark,
+persists it to the NVM, and sends back an acknowledgement to the master copy. The master copy, meanwhile, blocks on
+the network until the acknowledgement from the mirror is received, after which msync() function returns.
+
 
