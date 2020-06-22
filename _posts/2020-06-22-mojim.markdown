@@ -101,3 +101,6 @@ immediately. If the mirror crashed, the master copy will first flush the entire 
 always present on the NVM. Then the mirrored copy is rebuilt or restarted. If the master copy crashed, the mirrored copy
 replays log entries with a commit record, and discards the rest. The mirrored copy then acts as the master, and resumes
 execution. The master copy is rebuilt in the meantime using the image of the mirrored copy.
+If, however, the master copy crashes before the flush completes, the image on the NVM will be potentially inconsistent,
+since some dirty blocks might be lost in the volatile cache. This "vulnerability window" may becomes an issue if the 
+master copy also crashes within the window, leading to inconsistent image and potential data losses.
