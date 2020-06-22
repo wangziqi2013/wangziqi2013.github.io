@@ -58,8 +58,7 @@ of their page numbers. This is extremely bad for workloads with spatial locality
 which will suffer an unacceptablly high level of contention.
 
 The skewed TLB design partially adoptes the second proposal in which the TLB ways are statically divided for different
-size classes. For an address X, when its translation entry is to be inserted into the TLB, the TLB controller knows
-its size class from the page table walk or from the lower level TLB. Given a TLB design with i ways and j size classes
+size classes. Given a TLB design with i ways and j size classes
 (assuming i is a multiple of j), we statically partition the TLB into i / j parts (we use P to refer to this value),
 and assign a size class to each part in a per-address basis. The paper uses the example of Alpha platform where 
 there are four size classes: 8KB, 64KB, 512KB, 4MB. The TLB consists of 8 ways, which is partitioned into 4 parts,
@@ -67,5 +66,11 @@ each having two ways. For simplicity of discussion, we name the four partitions 
 Ways are stored in seperated banks such that they can be addressed in parallel as in a conventional set-associative design.
 For a given address X, each of the four ways is assigned a size class using a easily computable hash function.
 The hash function must satisfy the following two properties. First, given an address X and one of the four size
-classes, the hash function should output a partition that dedicates to storing the mapping of the address, if the 
-address is indeed of the given size class.
+classes, the hash function should output a partition ID that dedicates to storing the mapping of the address, if the 
+address is indeed of the given size class. The second property is that, given an address X and a partition ID,
+it should be equally easy to compute the reverse mapping, which outputs the size class of the address-partition
+combination.
+In the following discussion, we first consider how the skewed TLB works on a single address, and then generalize 
+it to all addresses.
+
+
