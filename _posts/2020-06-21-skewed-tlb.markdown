@@ -39,4 +39,10 @@ This approach may result in sub-optimal allocation of resource, since TLB entrie
 usage pattern disagrees with the static division, some TLB slices will be underutilized, while others undergo contention.
 (Thoughts: What if I can dynamically adjust ways or even sets using a predictor?)
 
-
+The third proposal is that multiple indices of different page sizes are generated in parallel, and then potentially 
+multiple different sets are probed for tag check. This proposal will considerably increase the access latency of the
+TLB, since it is generally impossible to read multiple sets in the same cycle, as most tag banks have only a limited
+number of read ports. Besides, the power consumption of the TLB would be several times of the baseline design, since
+more decoding and tag comparison operations are performed.
+(Thoughts: If we partition sets into different banks, and use a hash function that can scatter the hash result into
+different banks with high probablity, then we can still probe these banks in parallel. )
