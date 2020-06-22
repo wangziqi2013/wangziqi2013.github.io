@@ -25,4 +25,9 @@ protocols with redo logging, and different levels of consistency between the mas
 First, with high bandwidth interlink between the master and the mirror, the network latency can be reduced to a minimum,
 resulting in less blocks of the application. In addition, by using RDMA interface, rather than TCP or any buffered network
 interface, no extra software buffering is used for data transfer between the master and the mirror, reducing software 
-buffering and data movement overhead to a minimum.
+buffering and data movement overhead to a minimum. The RDMA device could directly fetch cache-coherence data from the 
+hardware cache, without enforcing a software write back and possibly blocking on the operation.
+With simpler replication protocol, the data exchange between master and mirror copy is as simple as master sending the 
+log entries to the mirror, and the mirror acknowledgment of tansmission completion. No complicated two-phase 
+commit is used, since only one mirror copy is present.
+
