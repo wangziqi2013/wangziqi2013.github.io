@@ -27,6 +27,9 @@ version_mgmt:
 
 1. Write amplification of logging reduces the life time of NVM device by half
 
+2. In m-sync scheme (most common one), if a mirror copy crashed, why flushing the cache of the master copy? I cannot 
+   see how this affects recoverability. The mirror should be able to be rebuilt whether or not the master flushes the cache.
+
 This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
 by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
 that is order of magnitudes larger than DRAM. The resulting design considers less about the effect of performance impact 
@@ -79,3 +82,5 @@ Mojim divides falut-free program execution into sync points, at which moments ms
 for persistence. On crash recovery, the system image is guaranteed to be recovered to the most recent sync point given that
 the function at that sync point has returned. How to correctly identify and place sync points are left to the application 
 programmer.
+
+
