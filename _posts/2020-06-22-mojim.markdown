@@ -47,6 +47,8 @@ the master copy and the mirrored copy. The replication is guaranteed to be atomi
 data within the address range will be persisted atomically with regard to crashes after the call returns (note that it 
 is not atomic on the master itself). Second, the master and mirrored copy will be synchronized atomically, such that the 
 mirrored copy always contain the most up-to-date content of the master after the call returns.
+The second system call is gmsync(), which has the same semantics as msync(), but supports sending multiple address
+ranges to be atomically replicated.
 
 Mojim employs redo logging to perform both atomic commit and data replication. Recall that in redo logging, two types of
 write ordering must be observed to ensure correctness. First, log entries should be persisted before the commit record.
