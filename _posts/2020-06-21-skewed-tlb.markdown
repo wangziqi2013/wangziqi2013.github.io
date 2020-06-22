@@ -31,4 +31,11 @@ is AND'ed with all "mask" fields respectively, and then compared with tags of al
 translation exists. Having a fully associative TLB, however, requires activating all entries on all memory requests.
 The extra read and comparison logic would pose a challenge for both area and power consumption.
 
-The 
+The second type proposal divides TLB resources statically into several smaller TLBs (i.e. into smaller number of ways), 
+each responsible for a size class. On a TLB lookup, all smaller TLBs are looked up in parallel using the static page
+size mask assigned to each of them. Results are also checked in parallel, and the page size is determined by the 
+size class of the TLB that signals the hit.
+This approach may result in sub-optimal allocation of resource, since TLB entries are divided statically. If the actual
+usage pattern disagrees with the static division, some TLB slices will be underutilized, while others undergo contention.
+
+
