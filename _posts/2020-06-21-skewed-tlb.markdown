@@ -46,3 +46,9 @@ number of read ports. Besides, the power consumption of the TLB would be several
 more decoding and tag comparison operations are performed.
 (Thoughts: If we partition sets into different banks, and use a hash function that can scatter the hash result into
 different banks with high probablity, then we can still probe these banks in parallel. )
+
+In the last proposal, indices bits are not extracted from the lowest bits of the page number of each size class,
+which causes problem if the low page number bits of small pages are actually page offset bits in larger pages. 
+Instead, the index bits are extracted from a static set of bits, which are aligned to the lowest bits of the page
+number for the largest size class. This way, the index bits are independent from the size class, which can be 
+determined before the size class is known. The drawback of this approach,
