@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
+by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
+that is order of magnitudes larger than DRAM. The resulting design considers less about the effect of performance impact 
+with the presence of software overhead, network stack overhead, and network roundtrip latency. In the NVM-era, as the 
+speed of NVM is comparable or even close to that of DRAM, the system becomes more sensitive to software and network
+overhead, suffering performance degradation if not tuned specifically for NVM.
+
