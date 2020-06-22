@@ -61,4 +61,8 @@ The skewed TLB design partially adoptes the second proposal in which the TLB way
 size classes. For an address X, when its translation entry is to be inserted into the TLB, the TLB controller knows
 its size class from the page table walk or from the lower level TLB. Given a TLB design with i ways and j size classes
 (assuming i is a multiple of j), we statically partition the TLB into i / j parts (we use P to refer to this value),
-and assign a size class to each part in a per-address basis. 
+and assign a size class to each part in a per-address basis. The paper uses the example of Alpha platform where 
+there are four size classes: 8KB, 64KB, 512KB, 4MB. The TLB consists of 8 ways, which is partitioned into 4 parts,
+each having two ways. Ways are stored in seperated banks such that they can be addressed in parallel as in a 
+conventional set-associative design.
+For a given address X, ea
