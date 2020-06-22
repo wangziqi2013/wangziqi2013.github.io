@@ -37,5 +37,6 @@ size mask assigned to each of them. Results are also checked in parallel, and th
 size class of the TLB that signals the hit.
 This approach may result in sub-optimal allocation of resource, since TLB entries are divided statically. If the actual
 usage pattern disagrees with the static division, some TLB slices will be underutilized, while others undergo contention.
+(Thoughts: What if I can dynamically adjust ways or even sets using a predictor?)
 
 
