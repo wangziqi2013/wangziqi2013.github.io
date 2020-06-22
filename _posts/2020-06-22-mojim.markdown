@@ -74,3 +74,8 @@ data before the commit record, and therefore, the master copy by itself is not a
 if we think of the master copy as a large buffer, and the mirrored copy as actual data, both write orderings are observed,
 since dirty data will never be directly transferred from the master to the mirror, which makes the second write ordering
 trivially true.
+
+Mojim divides falut-free program execution into sync points, at which moments msync() or gmsync() are called to request
+for persistence. On crash recovery, the system image is guaranteed to be recovered to the most recent sync point given that
+the function at that sync point has returned. How to correctly identify and place sync points are left to the application 
+programmer.
