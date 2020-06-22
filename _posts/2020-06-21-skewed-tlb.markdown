@@ -21,7 +21,9 @@ version_mgmt:
    that a hit will be signaled (as long as the index bits coincide for different size class index extraction schemes,
    even if the size class is wrong), and the page is classified into the wrong size class. The offset extraction mask
    will also be wrong, leading to incorrect translation.
-
+2. If only bit 21 - 23 are used for hashing, then for regular 8KB pages, it still has the problem that adjacent pages
+   of the same size class are mapped to the same partition, since bit 21 - 23 of these pages are identical. This
+   is not as bad as the last proposal, but still only two out of eight ways are fully utilized.
 
 This technical report proposes a noval TLB design, skewed associative TLB, in order to support multiple page sizes
 with a unified TLB. MMU nowadays support multiple granularities of page mapping, with page sizes ranging from a few KBs 
