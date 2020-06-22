@@ -56,3 +56,9 @@ adjacent pages are highly likely to be mapped to the same entry, since the index
 of their page numbers. This is extremely bad for workloads with spatial locality, where most memory accesses are 
 "clustered" to only a few ranges in the virtual address space. In this case, only a few sets will be leveraged,
 which will suffer an unacceptablly high level of contention.
+
+The skewed TLB design partially adoptes the second proposal in which the TLB ways are statically divided for different
+size classes. For an address X, when its translation entry is to be inserted into the TLB, the TLB controller knows
+its size class from the page table walk or from the lower level TLB. Given a TLB design with i ways and j size classes
+(assuming i is a multiple of j), we statically partition the TLB into i / j parts (we use P to refer to this value),
+and assign a size class to each part in a per-address basis. 
