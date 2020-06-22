@@ -20,6 +20,13 @@ version_mgmt:
 2. Having a mirrored copy overcomes the biggest issue with redo logging: Write ordering between dirty data and commit record,
    as the data transfer between the master and mirror is software controlled, unlike a cache.
 
+3. Redo logging is also a good way of performing checkpointing at arbitrary boundaries selected by software. This is 
+   similar to what we try to achieve in NVOverlay
+
+**Lowlight:**
+
+1. Write amplification of logging reduces the life time of NVM device by half
+
 This paper proposes Mojim, an NVM-based replication scheme featuring both high performance and reliability. The paper begins
 by identifying the problem with current replication schemes based on disks. These schemes often assume a disk access latency
 that is order of magnitudes larger than DRAM. The resulting design considers less about the effect of performance impact 
@@ -60,4 +67,7 @@ ranges to be atomically replicated.
 Mojim employs redo logging to perform both atomic commit and data replication. Recall that in redo logging, two types of
 write ordering must be observed to ensure correctness. First, log entries should be persisted before the commit record.
 This suggests that all log entries must be transferred to the mirrored copy before the commit mark is written, only
-after which the system call could return.
+after which the system call could return. The second write ordering is between dirty data and the commit record. Dirty
+data can only be written back after the commit record is persisted. The second writr ordering conveys different messages
+to the master and the mirror. For master copies, there is no guarantee that the hardware cache will not write back dirty
+data before the commit record.
