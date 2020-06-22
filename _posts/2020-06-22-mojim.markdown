@@ -20,3 +20,9 @@ with the presence of software overhead, network stack overhead, and network roun
 speed of NVM is comparable or even close to that of DRAM, the system becomes more sensitive to software and network
 overhead, suffering performance degradation if not tuned specifically for NVM.
 
+Mojim solves the above challenge using a combination of high-bandwidth network with RDMA interface, simpler replicating
+protocols with redo logging, and different levels of consistency between the master working copy and the mirrored copy.
+First, with high bandwidth interlink between the master and the mirror, the network latency can be reduced to a minimum,
+resulting in less blocks of the application. In addition, by using RDMA interface, rather than TCP or any buffered network
+interface, no extra software buffering is used for data transfer between the master and the mirror, reducing software 
+buffering and data movement overhead to a minimum.
