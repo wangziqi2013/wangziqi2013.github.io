@@ -39,4 +39,12 @@ with application programmers via system calls or other exposed interfaces such a
 of a master copy with NVM installed, on which applications are executed, and a mirrored copy which is read-only.
 Background tasks such as auditing can be scheduled on the mirrored copy as long as they are read-only.
 A few optional backup copy can also be supported. Mojim guarantees that copies on the master and mirror are strongly
-consistent, while only weakly consistent between these two and the backup copy.
+consistent (if it is configured so), while only weakly consistent between these two and the backup copy.
+The kernel library works with a NVM file system which manages files on the NVM, and maps the file content using mmap()
+to the calling process's virtual address space. Mojim provides two simple interfaces for the file system and application
+programmers to initiate data replication. The first is msync(), which synchronizes a given address range between both
+the master copy and the mirrored copy. The replication is guaranteed to be atomic in two aspects. First, all dirty
+data within the address range will be persisted atomically with regard to crashes after the call returns (note that it 
+is not atomic on the master itself). Second, the master and mirrored copy will be synchronized atomically, such that the 
+mirrored copy always contain the most up-to-date content of the master after the call returns.
+
