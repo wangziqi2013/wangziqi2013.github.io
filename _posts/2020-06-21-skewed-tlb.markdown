@@ -100,7 +100,8 @@ Offsets bits are extracted from the requested address using the offset mask of t
 then added onto the page base address before returned to the pipeline.
 
 To avoid the shortcoming of static division of TLB resources for different size classes, the paper suggests that
-each address should have different static mappings
+addresses should have different mappings from size classes to partition IDs. As long as addresses are accessed uniformly,
+there should be roughly the same number of translation entries for each of the size class within any of the four partitions.
 
 The paper proposes that the hash function can be implemented by hashing 21 - 23 from the address and the size class
 to different partitions. Each partition can only be assigned excatly one size class for a certain address. The actual
