@@ -101,7 +101,7 @@ persists it to the NVM, and sends back an acknowledgement to the master copy. Th
 the network until the acknowledgement from the mirror is received, after which msync() function returns.
 The mirrored copy also maintains a "metadata log" which records the IDs of requests that it has received. On crash
 recovery, this log is used to figure out the last log entry that the mirrored copt has received. The master copy will 
-then send log entries after this point to
+then send log entries after this point to help the mirrored copy to stay synchronized and consistent.
 
 Crashes are detected via heartbeat signals. On detecting a crash, the master or the mirror will start crash recovery
 immediately. If the mirror crashed, the master copy will first flush the entire cache to ensure that dirty data is 
