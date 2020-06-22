@@ -73,4 +73,9 @@ combination.
 In the following discussion, we first consider how the skewed TLB works on a single address, and then generalize 
 it to all addresses.
 
-
+We next describe the operation of the skewed TLB. For an address X, when its translation entry is to be inserted into 
+the TLB, the TLB controller knows its size class from the page table walk or from the lower level TLB. The partition
+ID in which it will be inserted into is then computed using the first property of the hash function described in the 
+previous section. The address is then inserted into the corresponding partition, potentially evicting an entry from
+one of the two possible locations if no empty way is available (we will see how ways within a partition is managed
+below). 
