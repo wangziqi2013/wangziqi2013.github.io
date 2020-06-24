@@ -35,3 +35,10 @@ bypass the cache. The problem, however, is that non-cacheable accesses incurs pe
 operations, while only a subset of them needs to see a certain memory ordering. Besides, all memory operations will
 occur on the system bus if caching is disabled, which has a limited bandwidth. Frequent accesses to the NVM device
 not only saturates NVM bandwidth quickly, but also impacts performance of other unrelated applications.
+The second option is non-temporal stores, which are special store instructions whose data is not expected to be accessed
+in the near future, thus bypassing the cache hierarchy. Due to the extensive usage of non-temporal stores in streaming 
+workloads, the processor is also equipped with a special write combining buffer, which tries to combine multiple smaller 
+stores into a full cache line as much as possible to reduce write amplification of the store. Using non-temporal
+stores, however, may imply unexpected results or complicated interactions with cached loads. The implementation
+should then be very careful on placing memory barriers to avoid loading stale data or severe performance loss.
+The 
