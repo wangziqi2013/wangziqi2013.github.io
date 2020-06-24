@@ -108,4 +108,9 @@ into RTM. The fall back path with conventional logging will be used instead.
 As discussed in previous sections, PMFS uses a dedicated logging area on the NVM image to perform logging. The logging area
 is maintained as a circular log buffer. Log entries are aligned to 64 byte cache line boundaries to simplify validation. 
 Each log entry consists of 48 bytes of data, a gen_id field for validation, a txn_id field to distinguish between different
-metadata update operations, and other necessary fields in the header. 
+metadata update operations, and other necessary fields in the header. With undo logging, log entries are truncated after
+a metadata update transaction commits, necessitating an efficient way of identifying invalid log entries when newer entries
+wrap around from the tail. In addition, after a crash recovery, all log entries are invalidated automatically, which also
+implies that there should be a way to quickly invalidate all previous log entries before the crash. 
+PMFS uses the gen_id 
+field to validate log entries to 
