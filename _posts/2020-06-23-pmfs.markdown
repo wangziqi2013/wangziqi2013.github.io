@@ -43,7 +43,9 @@ stores, however, may imply unexpected results or complicated interactions with c
 should then be very careful on placing memory barriers to avoid loading stale data or severe performance loss.
 The last option is to use a persistence barrier consisting of cache line flush instructions and a store fence. The 
 persistence barrier is compatible with most other instructions. PMFS chooses persistence barrier to enforce 
-write ordering due to its simplicity and efficiency.
+write ordering due to its simplicity and efficiency. In order to issue flush instructions, the paper assumes that software
+should track dirty data in cache line granularity, and only flushes dirty data with a barrier. It is not discussed
+how dirty data tracking can be implemented, though.
 The paper also mentions hardware accelerated persistence such as epoch persistence. This approach, as pointed out
 by the paper, requires extensive hardware modification, such as cache line tagging and customized eviction algorithms.
 It is unlikely that future hardware with adopt this due to its complexity.
