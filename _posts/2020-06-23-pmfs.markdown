@@ -22,4 +22,9 @@ use the NVM as conventional block device with lower latency and higher throughpu
 block layer abstraction and the disk buffer cache, reducing software stack and data movement overhead, but maintain the
 conventional file system interface and semantics.
 
-The paper chose the last for three reasons.
+The paper chose the last for three reasons. First, legacy applications relying on file system interface still work on
+PMFS with reduced latency and increased bandwidth, which eases software migration. Second, by getting rid of the software 
+block layer, PMFS does not suffer from abstraction and data movement overhead, since data exchange happens directly
+between the application and NVM storage. The last reason is that applications can also benefit from more powerful interface
+such as mmap(), which directly maps a range of virtual addresses to the NVM physical address, enabling the application 
+to directly read from and write into NVM.
