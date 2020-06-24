@@ -44,3 +44,6 @@ should then be very careful on placing memory barriers to avoid loading stale da
 The last option is to use a persistence barrier consisting of cache line flush instructions and a store fence. The 
 persistence barrier is compatible with most other instructions. PMFS chooses persistence barrier to enforce 
 write ordering due to its simplicity and efficiency.
+The paper also mentions hardware accelerated persistence such as epoch persistence. This approach, as pointed out
+by the paper, requires extensive hardware modification, such as cache line tagging and customized eviction algorithms.
+It is unlikely that future hardware with adopt this due to its complexity.
