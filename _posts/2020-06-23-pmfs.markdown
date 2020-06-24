@@ -78,4 +78,7 @@ pages to reduce TLB and page fault overhead. Using large pages, on the other han
 by introducing external fragmentation on the physical address space, and/or incuring extra write amplification when 
 file data can potentially be modified by different processes via copy-on-write (note that this is different from the 
 copy-on-write technique for ensuring atomic data updates, as we will see below).
-The paper suggests that the page size is either given at mount time, or 
+The paper suggests that the page size is either given at mount time, or inferred from file system calls that reveal
+possible future use pattern.
+
+
