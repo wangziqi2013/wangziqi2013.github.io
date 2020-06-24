@@ -135,3 +135,8 @@ buffer to indicate that all previous entries are truncated.
 On crash recovery, the recovery handler scans the log buffer from the log head pointer. It first tries to locate the
 last uncommitted transaction by finding a suffix of the log without the commit record. The uncommitted transaction
 is then rolled back by copying the pre-image in the log entries to their corresponding locations.
+
+Data operations are also guaranteed to be atomic with shadow paging. New pages are allocated in a copy-on-write fashion 
+when an existing page is updated. The new page is linked into the file object after the operation completes by updating
+the inode's B+Tree, which is a metadata operation. Although the paper claims that data may become durable before metadata
+does, I did not see how this can be achieved, since the data pages will not be visible before metadata update commits.
