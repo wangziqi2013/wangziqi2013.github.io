@@ -73,4 +73,9 @@ which is only written back on an ordered shut down, and loaded on the next mount
 On a system crash, the internal states will be lost. The recovery handler should scan all nodes in the file system to
 rebuild the allocation map after all other recovery steps are taken.
 
-
+When mmap() is called on a file, PMFS will decide whether the file is mapped with regular 4KB pages, or larger sized 
+pages to reduce TLB and page fault overhead. Using large pages, on the other hand, can negatively impact performance
+by introducing external fragmentation on the physical address space, and/or incuring extra write amplification when 
+file data can potentially be modified by different processes via copy-on-write (note that this is different from the 
+copy-on-write technique for ensuring atomic data updates, as we will see below).
+The paper suggests that the page size is either given at mount time, or 
