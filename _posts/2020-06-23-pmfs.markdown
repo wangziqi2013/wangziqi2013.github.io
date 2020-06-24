@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "System Software for Persistent Memory"
+date:   2020-06-23 21:07:00 -0500
+categories: paper
+paper_title: "System Software for Persistent Memory"
+paper_link: https://dl.acm.org/doi/10.1145/2592798.2592814
+paper_keyword: NVM; PMFS
+paper_year: EuroSys 2014
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
