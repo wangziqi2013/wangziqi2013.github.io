@@ -32,4 +32,6 @@ to directly read from and write into NVM.
 The paper then proceeds to discuss three different techniques for forcing write ordering on the current architecture.
 The first uses non-cachable pages, which are set via page table attribute bits. Loads and stores to these pages will
 bypass the cache. The problem, however, is that non-cacheable accesses incurs performance overheads for all memory
-operations, while only a subset of them needs to see a certain memory ordering. 
+operations, while only a subset of them needs to see a certain memory ordering. Besides, all memory operations will
+occur on the system bus if caching is disabled, which has a limited bandwidth. Frequent accesses to the NVM device
+not only saturates NVM bandwidth quickly, but also impacts performance of other unrelated applications.
