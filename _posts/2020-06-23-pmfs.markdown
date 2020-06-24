@@ -50,8 +50,11 @@ The paper also mentions hardware accelerated persistence such as epoch persisten
 by the paper, requires extensive hardware modification, such as cache line tagging and customized eviction algorithms.
 It is unlikely that future hardware with adopt this due to its complexity.
 
-The paper then gives an overview of PMFS's architecture. Three special design considerations affect the design decisions
+The paper then gives an overview of PMFS's architecture. Two special design considerations affect the design decisions
 of PMFS. The first consideration is byte-addressability of NVM, which enables fine-grained logging at arbitrary byte
 boundaries. PMFS is therefore optimized to use smaller granularities for logging. In addition, some operations are 
 intrinsically atomic on the current architecture. Logging is not required for those operations.
-
+The second consideration is based on the fact that the NVM device can be directly mapped to the virtual address space.
+If not protected properly, a stray write within the kernel or device driver can permanently alter data or metadata on 
+PMFS, leading to data corruption. The design of PMFS should therefore take address space protection into consideration,
+reducing the possibility that unintended writes be made to the mapped address to a minimum.
