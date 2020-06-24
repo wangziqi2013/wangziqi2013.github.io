@@ -97,4 +97,8 @@ Three extra lightweight techniques are used to perform atomic updates in-place w
 is 64 byte store primitives, which are always atomic as long as they are not crossing cache line boundaries. The 
 second is the stronger double-word compare and swap instruction, LOCK CMPXCHG16B, which atomically swaps two consecutive
 words in the same cache line. This locked version of this instruction guarantees that the cache line will not be evicted 
-halfway between the first and the second swap.
+halfway between the first and the second swap. The last method is to rely on Restructed Transactional Memory (RTM) support.
+RTM attempts to retain all dirty cache lines written by a transaction, until the hardware limit is reached, in which case
+the transaction is aborted. Before this happens, the transaction can update as many cache lines as it want without 
+worrying about evictions. If too many aborts occur for a single update attempt, the working set of the update may not fit 
+into RTM. The fall back path with conventional logging will be used instead.
