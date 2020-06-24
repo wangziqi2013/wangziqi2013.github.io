@@ -110,7 +110,13 @@ is maintained as a circular log buffer. Log entries are aligned to 64 byte cache
 Each log entry consists of 48 bytes of data, a gen_id field for validation, a txn_id field to distinguish between different
 metadata update operations, and other necessary fields in the header. With undo logging, log entries are truncated after
 a metadata update transaction commits, necessitating an efficient way of identifying invalid log entries when newer entries
-wrap around from the tail. In addition, after a crash recovery, all log entries are invalidated automatically, which also
+wrap around from the tail. In addition, after crash recovery, all log entries are invalidated automatically, which also
 implies that there should be a way to quickly invalidate all previous log entries before the crash. 
-PMFS uses the gen_id 
-field to validate log entries to 
+PMFS uses the gen_id field to validate log entries. A generation number of maintained in the super block of PMFS, which
+is incremented when the log buffer wraps back and also after a crash recovery. When a log entry is generated, the 
+content of the entry is first written without touching gen_id. The gen_id is always written last before the persistence 
+barrier to ensure that this field will at least be persisted no earlier than the rest of the fields. 
+Recall that log entries are cache line aligned, this does not require any extra persistent barrier, since either the gen_id 
+field is written back together with all other fields of the entry, making the writes atomic, or the cache line is evicted 
+before gen_id field is written, in which case it is still invalid until the final persistence barrier.
+Either case, when the new value of gen_id reaches NVM, the content of the log entry is guaranteed to be valid.
