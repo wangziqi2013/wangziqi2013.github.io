@@ -41,4 +41,6 @@ workloads, the processor is also equipped with a special write combining buffer,
 stores into a full cache line as much as possible to reduce write amplification of the store. Using non-temporal
 stores, however, may imply unexpected results or complicated interactions with cached loads. The implementation
 should then be very careful on placing memory barriers to avoid loading stale data or severe performance loss.
-The 
+The last option is to use a persistence barrier consisting of cache line flush instructions and a store fence. The 
+persistence barrier is compatible with most other instructions. PMFS chooses persistence barrier to enforce 
+write ordering due to its simplicity and efficiency.
