@@ -49,3 +49,9 @@ how dirty data tracking can be implemented, though.
 The paper also mentions hardware accelerated persistence such as epoch persistence. This approach, as pointed out
 by the paper, requires extensive hardware modification, such as cache line tagging and customized eviction algorithms.
 It is unlikely that future hardware with adopt this due to its complexity.
+
+The paper then gives an overview of PMFS's architecture. Three special design considerations affect the design decisions
+of PMFS. The first consideration is byte-addressability of NVM, which enables fine-grained logging at arbitrary byte
+boundaries. PMFS is therefore optimized to use smaller granularities for logging. In addition, some operations are 
+intrinsically atomic on the current architecture. Logging is not required for those operations.
+
