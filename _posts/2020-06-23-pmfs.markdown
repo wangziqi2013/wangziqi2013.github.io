@@ -140,3 +140,10 @@ Data operations are also guaranteed to be atomic with shadow paging. New pages a
 when an existing page is updated. The new page is linked into the file object after the operation completes by updating
 the inode's B+Tree, which is a metadata operation. Although the paper claims that data may become durable before metadata
 does, I did not see how this can be achieved, since the data pages will not be visible before metadata update commits.
+
+PMFS maps the entire NVM device to the kernel virtual address space to simplify address management. This, however, 
+increases the risk of a rougue device driver or a faulty OS module permanently corrupting NVM data with strayed writes.
+Similarly, when the application maps a chunk of data using mmap(), there is also the risk that this chunk of memory
+may be corrupted by the OS.
+
+
