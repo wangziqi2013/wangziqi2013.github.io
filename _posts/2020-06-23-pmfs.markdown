@@ -145,6 +145,8 @@ PMFS maps the entire NVM device to the kernel virtual address space to simplify 
 increases the risk of a rougue device driver or a faulty OS module permanently corrupting NVM data with strayed writes.
 Similarly, when the application maps a chunk of data using mmap(), there is also the risk that this chunk of memory
 may be corrupted by the OS.
+Changing page permission from read-write to read-only when the NVM pages are not intended to be written is theoratically
+possible, but in practice, it incurs excessive TLB shootdown traffic, which degrades performance.
 The paper proposes that the virtual memory control bit CR0.WP be used to prevent kernel process from unintended writes
 to the NVM space. When CR0.WP is on, the kernel process does not have permission to write a read-only kernel page.
 When CR0.WP is off, read-only permissions are overridden by kernel processes (user processes always could not access
