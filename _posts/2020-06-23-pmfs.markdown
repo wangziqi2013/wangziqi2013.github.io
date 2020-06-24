@@ -92,3 +92,9 @@ updates of metadata, since metadata updates are often small and sparse on a page
 redirection if the log has not been replayed on its home address, but the dirty data is read by the same transaction. 
 In this case, the read request must search the read log to avoid accessing the stale version on the home address. 
 Data page updates are made atomic using shadow paging.
+
+Three extra lightweight techniques are used to perform atomic updates in-place without logging or shadow paging. The first
+is 64 byte store primitives, which are always atomic as long as they are not crossing cache line boundaries. The 
+second is the stronger double-word compare and swap instruction, LOCK CMPXCHG16B, which atomically swaps two consecutive
+words in the same cache line. This locked version of this instruction guarantees that the cache line will not be evicted 
+halfway between the first and the second swap.
