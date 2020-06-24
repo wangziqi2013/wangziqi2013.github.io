@@ -160,4 +160,5 @@ be approximated using simulation. The paper introduce Persistent Memory Emulatio
 both latency and bandwidth limit of NVM using special firmware and microcode. To emulate latency, PMEM monitos the 
 number of stall cycles on LLC misses in a execution window. At the end of the window, extra stall cycles are injected 
 by special microcode based on the number of stall cycles due to LLC misses and the ratio of NVM miss and DRAM miss.
-To emulate bandwidth
+To emulate bandwidth, PMEM programs the DRAM controller to upper bound the number of transactions per second, throttling
+maximum bandwidth to around 9.5 GB/s.
