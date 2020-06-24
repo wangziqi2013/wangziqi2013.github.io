@@ -58,3 +58,9 @@ The second consideration is based on the fact that the NVM device can be directl
 If not protected properly, a stray write within the kernel or device driver can permanently alter data or metadata on 
 PMFS, leading to data corruption. The design of PMFS should therefore take address space protection into consideration,
 reducing the possibility that unintended writes be made to the mapped address to a minimum.
+
+The layout of PMFS is relatively simple. In the mapped address space, the first two chunks of storage are standard file 
+system super blocks that store global metadata of the file system. inodes are structured as B+Trees, as opposed to in
+conventional file systems where they are organized as a fixed size table after the super block. B+Tree nodes are allocated
+from the NVM as pages. inodes also use B+Trees to organize blocks. The root block offset is stored within the inode.
+The rest of the 
