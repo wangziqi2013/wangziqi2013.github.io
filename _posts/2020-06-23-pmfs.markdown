@@ -85,4 +85,10 @@ The paper then discusses techniques for performing atomic updates. Three common 
 undo logging, and redo logging. Shadow paging is assumed to be performed on page granularity. It features low write 
 amplification when the majority of the page is updated, but suffers from high write amplification when only a few 
 bytes are updated. Undo and redo logging, on the contrary, has a static write amplification of two. Undo logging
-requires the pre-image to be persisted to the NVM before data items are updated, thus requiring one 
+requires the pre-image to be persisted to the NVM before data items are updated, thus requiring one persistent barrier
+per update. Redo logging, on the other hand, only requires two barriers, one between log write and commit record, the 
+other between data update and truncate record. PMFS selects cache line granularity undo logging as the method for atomic 
+updates of metadata, since metadata updates are often small and sparse on a page. In addition, redo logging requires read 
+redirection if the log has not been replayed on its home address, but the dirty data is read by the same transaction. 
+In this case, the read request must search the read log to avoid accessing the stale version on the home address. 
+Data page updates are made atomic using shadow paging.
