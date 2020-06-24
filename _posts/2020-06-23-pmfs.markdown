@@ -28,3 +28,8 @@ block layer, PMFS does not suffer from abstraction and data movement overhead, s
 between the application and NVM storage. The last reason is that applications can also benefit from more powerful interface
 such as mmap(), which directly maps a range of virtual addresses to the NVM physical address, enabling the application 
 to directly read from and write into NVM.
+
+The paper then proceeds to discuss three different techniques for forcing write ordering on the current architecture.
+The first uses non-cachable pages, which are set via page table attribute bits. Loads and stores to these pages will
+bypass the cache. The problem, however, is that non-cacheable accesses incurs performance overheads for all memory
+operations, while only a subset of them needs to see a certain memory ordering. 
