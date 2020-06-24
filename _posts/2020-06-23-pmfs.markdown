@@ -124,3 +124,10 @@ During recovery, the log entries are scanned and replayed. An invalid log entry 
 next entry is smaller than the current entry, which must be because the next entry is either: (1) Incomplete because a 
 crash happens before the barrier persists the entry, or (2) The next entry is merely a truncated entry written before 
 the wrap around.
+
+PMFS metadata logging works as follows. First, some number of log entries are reserved by atomically incrementing the log
+tail pointer. For each metadata operation, this number could be known in advance, and should not be too large. 
+Before each update, the old value of the metadata field is copied to an log entry, and then persisted to the NVM using a 
+barrier. The data is them updated in-place. After all updates are completed, PMFS issues a persistence barrier for all 
+dirty metadata fields to commit the transaction. After the transaction commits, PMFS writes a commit record to the log 
+buffer to indicate that all previous entries are truncated.
