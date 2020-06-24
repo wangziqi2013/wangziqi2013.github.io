@@ -81,4 +81,8 @@ copy-on-write technique for ensuring atomic data updates, as we will see below).
 The paper suggests that the page size is either given at mount time, or inferred from file system calls that reveal
 possible future use pattern.
 
-
+The paper then discusses techniques for performing atomic updates. Three common techniques are discussed: shadow paging,
+undo logging, and redo logging. Shadow paging is assumed to be performed on page granularity. It features low write 
+amplification when the majority of the page is updated, but suffers from high write amplification when only a few 
+bytes are updated. Undo and redo logging, on the contrary, has a static write amplification of two. Undo logging
+requires the pre-image to be persisted to the NVM before data items are updated, thus requiring one 
