@@ -146,7 +146,7 @@ increases the risk of a rougue device driver or a faulty OS module permanently c
 Similarly, when the application maps a chunk of data using mmap(), there is also the risk that this chunk of memory
 may be corrupted by the OS.
 Changing page permission from read-write to read-only when the NVM pages are not intended to be written is theoratically
-possible, but in practice, it incurs excessive TLB shootdown traffic, which degrades performance.
+possible, but in practice, it incurs excessive TLB shootdown traffic, which severely degrades performance.
 The paper proposes that the virtual memory control bit CR0.WP be used to prevent kernel process from unintended writes
 to the NVM space. When CR0.WP is on, the kernel process does not have permission to write a read-only kernel page.
 When CR0.WP is off, read-only permissions are overridden by kernel processes (user processes always could not access
@@ -155,4 +155,9 @@ The PMFS driver always map NVM pages to kernel address space as read-only. Durin
 to "1" to block writes. When the metadata field is to be updated, CR0.WP is set to "0" to enable write.
 Since CR0.WP is not saved on context switch, PMFS also blocks interrupts when metadata fields are updated.
 
-
+Before physical NVM devices are available as commercial products, the performance characteristics of PMFS can only
+be approximated using simulation. The paper introduce Persistent Memory Emulation Platform, PMEP, which emulates 
+both latency and bandwidth limit of NVM using special firmware and microcode. To emulate latency, PMEM monitos the 
+number of stall cycles on LLC misses in a execution window. At the end of the window, extra stall cycles are injected 
+by special microcode based on the number of stall cycles due to LLC misses and the ratio of NVM miss and DRAM miss.
+To emulate bandwidth
