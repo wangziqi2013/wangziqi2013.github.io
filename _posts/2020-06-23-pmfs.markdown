@@ -149,4 +149,8 @@ The paper proposes that the virtual memory control bit CR0.WP be used to prevent
 to the NVM space. When CR0.WP is on, the kernel process does not have permission to write a read-only kernel page.
 When CR0.WP is off, read-only permissions are overridden by kernel processes (user processes always could not access
 kernel memory, so this problem is trivial).
+The PMFS driver always map NVM pages to kernel address space as read-only. During normal operations, CR0.WP value is set 
+to "1" to block writes. When the metadata field is to be updated, CR0.WP is set to "0" to enable write.
+Since CR0.WP is not saved on context switch, PMFS also blocks interrupts when metadata fields are updated.
+
 
