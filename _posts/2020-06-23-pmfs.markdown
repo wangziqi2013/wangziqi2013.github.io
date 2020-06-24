@@ -120,3 +120,7 @@ Recall that log entries are cache line aligned, this does not require any extra 
 field is written back together with all other fields of the entry, making the writes atomic, or the cache line is evicted 
 before gen_id field is written, in which case it is still invalid until the final persistence barrier.
 Either case, when the new value of gen_id reaches NVM, the content of the log entry is guaranteed to be valid.
+During recovery, the log entries are scanned and replayed. An invalid log entry is identified when the gen_id of the 
+next entry is smaller than the current entry, which must be because the next entry is either: (1) Incomplete because a 
+crash happens before the barrier persists the entry, or (2) The next entry is merely a truncated entry written before 
+the wrap around.
