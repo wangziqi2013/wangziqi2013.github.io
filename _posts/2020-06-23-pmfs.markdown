@@ -12,3 +12,14 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper introduces PMFS, a file system designed and optimized for NVM. Unlike previous NVM file system papers in which
+a concrete problem with other designs are identified and then solved, this paper is closer to a design document covering
+the high-level designs while explaining design motivations. The paper begins by identifying three different ways of extending
+existing file system paradigm to work with NVM. The first is to abandon file system totally, and shift the responsibility
+of resource management to the OS's virtual memory manager. The second way is to only change the block layer interface and
+use the NVM as conventional block device with lower latency and higher throughput. The last is to partially abandon the 
+block layer abstraction and the disk buffer cache, reducing software stack and data movement overhead, but maintain the
+conventional file system interface and semantics.
+
+The paper chose the last for three reasons.
