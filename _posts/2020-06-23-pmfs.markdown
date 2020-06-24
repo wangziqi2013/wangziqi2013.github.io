@@ -131,3 +131,7 @@ Before each update, the old value of the metadata field is copied to an log entr
 barrier. The data is them updated in-place. After all updates are completed, PMFS issues a persistence barrier for all 
 dirty metadata fields to commit the transaction. After the transaction commits, PMFS writes a commit record to the log 
 buffer to indicate that all previous entries are truncated.
+
+On crash recovery, the recovery handler scans the log buffer from the log head pointer. It first tries to locate the
+last uncommitted transaction by finding a suffix of the log without the commit record. The uncommitted transaction
+is then rolled back by copying the pre-image in the log entries to their corresponding locations.
