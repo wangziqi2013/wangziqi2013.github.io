@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Using a data-less sector cache organization to store zero blocks. This avoids one of the biggest problem of sector
    cache: low space utilization if spatial locality is low.
-
+2. Identifies that VA value locality makes little sense in PA if the page boundary is crossed.
 
 **Lowlight:**
 
