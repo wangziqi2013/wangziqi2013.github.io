@@ -48,6 +48,12 @@ tags that share the same data slot using a doubly linked list. Two more pointers
 added to each tag for finding the successor and predecessor of nodes in the linked list. 
 Conventional per-line metadata, such as coherence states and status bits, are not changed.
 
+Although the paper does not mention over-provisioning of the tag array, it is necessary to provide more tags than
+data slots in order to exhibit a larger effective cache size. The paper suggests later in evaluation section that 
+doubling the number of ways or the number of sets both work. In the prior case, more tags are accessed in parallel
+which can increase latency and energy consumption. In the latter case, the indexing function must be changed to
+use one more bits from the input address, while one less bit is stored in the tag.
+
 The data array is entirely decoupled from the tag array, and becomes fully associative, enabling any tag in the tag array 
 to address any data slot in the data array. This is mandatory in deduplicated cache, since duplicated cache lines are likely
 not in the same set. Data slots are extended with three extra fields. The first field is a reference counter tracking the
@@ -78,5 +84,6 @@ have reference counter larger than one, the insertion is aborted, but the cache 
 that although this strategy loses some chances of deduplication, the overall impact would be minimum, since hash
 collisions only occur infrequently.
 
-
-
+Read operations on the deduplicated LLC is almost the same as a conventional LLC. The only difference is that tag read
+and data read are serialized, since the controller should first find a matching tag, and then access the data array
+with the data pointer (some caches already implement this to reduce energy consumption). On a cache miss
