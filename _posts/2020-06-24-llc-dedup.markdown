@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes deduplicated last-level cache for increasing effective cache size. Previously, researchers have been 
+proposing techniques such as cache compression on block basis to reduce the size of a cache line, increasing effective
+cache size. This paper adopts a different approach by identifying the potential of cache deduplication, a technique for
+detecting iddentical cache lines and avoiding storing multiple physical line with the same content.
+
