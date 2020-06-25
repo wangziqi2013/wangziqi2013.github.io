@@ -13,9 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
-**Highlight:**
+
 
 This paper proposes zero-content augmented caches (ZCA cache), a simple cache compression scheme that only compresses
 zero-filled 64 byte blocks. The paper begins by identifying three important properties of zero-filled blocks in 
 common workloads. First, a non-trivial number of cache blocks are filled with zero for reasons such as zero initialization
-or using zeros to represent a common state (e.g. NULL pointers, default values). 
+or using zeros to represent a common state (e.g. NULL pointers, default values). Such regularities in application's data
+value pattern enable the cache controller to perform zero compression by eliminating the need to store these easily
+compressable blocks. In addition, some applications even demonstrate high percentage of zero blocks throughout the entire
+execution, indicating the effectiveness of zero compression on these workloads.
