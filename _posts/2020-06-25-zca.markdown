@@ -28,6 +28,8 @@ version_mgmt:
    that block will be immediately written back to the L2. This will cause problem if the L2 is not inclusive, since no
    slot in the L2 could hold such a write back. The same applies with coherence, e.g. what if a peer L1 writes the address
    buffered as a zero block in another core? Does L2 have a directory entry for that zero block it does not cache?
+3. When a zero block in the sector cache is written by a zero store, do we acquire exclusive permission via coherence or 
+   not?
 
 This paper proposes zero-content augmented caches (ZCA cache), a simple cache compression scheme that only compresses
 zero-filled 64 byte blocks. The paper begins by identifying three important properties of zero-filled blocks in 
@@ -66,7 +68,9 @@ If the request misses both caches, the controller forwards the request to the lo
 response comes back, the controller checks whether the block is a zero block by OR'ing all bits in the block together.
 In the case of a zero block, the block is inserted into the sector cache by setting the corresponding valid bit, if the 
 sector tag exists, or, if the sector tag does not exist, an existing entry is evicted silently and the new entry is 
-inserted.
+inserted. The paper argues that the zero detection circuit is not on the critical path, since the refill request can
+bypass the current level of the cache and directly forwarded to upper levels, while zero detection and insertion are
+performed in the background.
 
 Cache write requests are handled differently than in a normal cache. There are two forms of writes depending on where the
 the sector cache is in the hierarchy. If the sector cache is deployed at L1 level, the writes are mostly single word
@@ -77,6 +81,8 @@ the sector cache only holds clean zero blocks. In the second case, the zero bloc
 clearing the valid bit in the sector, and then evicted to the lower level. Note that we also does not try to insert
 the non-zero block back to the regular part of the cache, since most likely this insertion will cause another non-zero 
 block to be evicted. In the last case, the block status will not change, since the zero block still qualifies.
+Theoratically speaking, the coherence state of the block should be dirty, but in practice, it will never be explicitly
+written back when evicted, since the value of the line never changed.
 In order to detect zero writes, an extra zero detector is added to the data path from the upper level.
 
 If the sector cache is deployed at any level except L1, writes from the upper level will be in the form of 64 byte
