@@ -18,6 +18,7 @@ version_mgmt:
 1. Using a data-less sector cache organization to store zero blocks. This avoids one of the biggest problem of sector
    cache: low space utilization if spatial locality is low.
 
+
 **Lowlight:**
 
 1. Writing to zero blocks may incur unnecessary coherence messages for requesting exclusive permission. This is 
@@ -93,3 +94,6 @@ Although dirty blocks in the regular cache will not be transferred to the sector
 as discussed earlier, the paper proposes that another zero detection circuit can be added to the eviction data path,
 such that if the block is detected as zero block, it will be inserted into the sector cache on eviction. In this case,
 the block remains in clean status in the sector cache, which reduces cache misses if it is referenced again shortly.
+
+If the zero cache design does not bring much performance benefit, which is evaluated periodically by the cache controller, 
+the paper suggests that the sector cache can be entirely disabled to save the energy of quering the sector cache at all.
