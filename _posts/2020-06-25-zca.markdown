@@ -88,3 +88,8 @@ In order to detect zero writes, an extra zero detector is added to the data path
 If the sector cache is deployed at any level except L1, writes from the upper level will be in the form of 64 byte
 full cache lines, rather than 8 byte words. Most of the handling in the previous section is still correct. It is just that
 the zero write detector should correspondingly be able to detect 64 byte zero writes, instead of 8 bytes.
+
+Although dirty blocks in the regular cache will not be transferred to the sector cache when it becomes a zero block,
+as discussed earlier, the paper proposes that another zero detection circuit can be added to the eviction data path,
+such that if the block is detected as zero block, it will be inserted into the sector cache on eviction. In this case,
+the block remains in clean status in the sector cache, which reduces cache misses if it is referenced again shortly.
