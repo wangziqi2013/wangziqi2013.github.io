@@ -22,6 +22,12 @@ version_mgmt:
 
 1. Writing to zero blocks may incur unnecessary coherence messages for requesting exclusive permission. This is 
    because the sector cache has not way of distinguishing a S state block from an E state block.
+2. Did not talk about how inclusiveness property can be maintained. If the sector cache is only deployed at L1 level,
+   then L2 level cache must have larger effective capacity to include all blocks mapped by L1 cache, which is not 
+   always possible. When a zero block is made dirty by writes in the sector cache, according to the paper's description,
+   that block will be immediately written back to the L2. This will cause problem if the L2 is not inclusive, since no
+   slot in the L2 could hold such a write back. The same applies with coherence, e.g. what if a peer L1 writes the address
+   buffered as a zero block in another core? Does L2 have a directory entry for that zero block it does not cache?
 
 This paper proposes zero-content augmented caches (ZCA cache), a simple cache compression scheme that only compresses
 zero-filled 64 byte blocks. The paper begins by identifying three important properties of zero-filled blocks in 
@@ -67,4 +73,7 @@ the sector cache is in the hierarchy. If the sector cache is deployed at L1 leve
 update, which can turn a non-zero block into zero, or turn a zero block into non-zero, or hits a all zero block, but 
 the content is still all-zero (i.e. a zero write). In the first case, the non-zero block must be found in the regular
 cache, and it turns into dirty due to the write. In this case, we do not transfer the block to the sector cache, since
-the sector cache only holds clean zero blocks. 
+the sector cache only holds clean zero blocks. In the second case, the zero block is removed from the sector cache by
+clearing the valid bit in the sector, and then evicted to the lower level. Note that we also does not try to insert
+the non-zero block back to the regular part of the cache, since most likely this insertion will cause another block to 
+be evicted.
