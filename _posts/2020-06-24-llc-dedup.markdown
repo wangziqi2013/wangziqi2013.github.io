@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Hardware assisted hash table is efficient for dedup or searching since multiple buckets could be read at the same time.
+   It is essentially just a reduced form of set-associative cache.
+
 This paper proposes deduplicated last-level cache for increasing effective cache size. Previously, researchers have been 
 proposing techniques such as cache compression on block basis to reduce the size of a cache line, increasing effective
 cache size. This paper adopts a different approach by identifying the potential of cache deduplication, a technique for
@@ -27,4 +32,8 @@ cache consumption.
 The paper also noted that most of these duplicated lines are not pure zeros. Simply detecting zero lines will not work
 well in the majority of the cases.
 
-
+The paper then identifies a few challenges of designing a cache deduplication scheme. First, the deduplication hardware 
+should be carefully designed, such that duplications can be detected efficiently, without incurring high cycle penalty, 
+power consumption, or area overhead. Second, The deduplication granularity should be carefully selected to reach a balance
+between the probablity that duplications are detected, and the hardware overhead of fine-grained deduplication.
+The 
