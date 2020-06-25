@@ -17,4 +17,8 @@ This paper proposes deduplicated last-level cache for increasing effective cache
 proposing techniques such as cache compression on block basis to reduce the size of a cache line, increasing effective
 cache size. This paper adopts a different approach by identifying the potential of cache deduplication, a technique for
 detecting iddentical cache lines and avoiding storing multiple physical line with the same content.
+The paper begins by making the claim that in scientific computation workloads, cache lines are likely to contain duplicated
+data for several reasons. First, some workloads tend to copy the same piece of data around for the purpose of initialization
+or interfacing with libraries requiring input/output buffer (e.g. network protocol or file system operation).
+Applications that extensively use memcpy() also creates duplicated lines on different physical locations.
 
