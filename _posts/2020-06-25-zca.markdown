@@ -78,3 +78,7 @@ clearing the valid bit in the sector, and then evicted to the lower level. Note 
 the non-zero block back to the regular part of the cache, since most likely this insertion will cause another non-zero 
 block to be evicted. In the last case, the block status will not change, since the zero block still qualifies.
 In order to detect zero writes, an extra zero detector is added to the data path from the upper level.
+
+If the sector cache is deployed at any level except L1, writes from the upper level will be in the form of 64 byte
+full cache lines, rather than 8 byte words. Most of the handling in the previous section is still correct. It is just that
+the zero write detector should correspondingly be able to detect 64 byte zero writes, instead of 8 bytes.
