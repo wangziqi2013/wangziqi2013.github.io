@@ -36,4 +36,6 @@ The paper then identifies a few challenges of designing a cache deduplication sc
 should be carefully designed, such that duplications can be detected efficiently, without incurring high cycle penalty, 
 power consumption, or area overhead. Second, The deduplication granularity should be carefully selected to reach a balance
 between the probablity that duplications are detected, and the hardware overhead of fine-grained deduplication.
-The 
+The last challenge is that the cache layout should be modified to allow many-to-one mapping between tags and data slots.
+In addition, there shold be more tags than data slots in order to support a large effective cache size.
+
