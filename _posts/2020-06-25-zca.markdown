@@ -25,3 +25,10 @@ or using zeros to represent a common state (e.g. NULL pointers, default values).
 value pattern enable the cache controller to perform zero compression by eliminating the need to store these easily
 compressable blocks. In addition, some applications even demonstrate high percentage of zero blocks throughout the entire
 execution, indicating the effectiveness of zero compression on these workloads.
+Second, zero blocks themselves exhibit spacial locality. If one cache block is filled with zeros, the adjacent blocks are
+also likely to be filled with zero, suggesting a design using larger block size per tag to handle zero blocks. 
+The last observation is that writes to zero blocks also tend to be zeros sometimes, which further proves the effectiveness
+of zero compression. The compression should also be performed on a per-write basis to detect zero writes for maximim
+chances of compression.
+
+
