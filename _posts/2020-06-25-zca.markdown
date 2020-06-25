@@ -45,10 +45,15 @@ the sector. The paper also notes that although there is no hard limit of how lar
 to have sectors larger than a physical page, since locality on virtual addresses is only meaningful within a page. Addresses
 that are close to each other on different virtual pages may be mapped to different physical pages by the underlying OS,
 which undermines the effectiveness of sectors.
+
 To minimize design complexity, the paper also suggests that only clean zero blocks be stored in the sector cache. This
 design has three benefits. First, no data path is needed to evict a dirty block from the sector cache, as all blocks in
 all sectors are clean. Second, there is no need to add a dirty bit vector to indicate whether a block has more recent
 content than its lower level counterparts. Third, in the case of external coherence events, these zero lines are always 
 assumed to be in a clean and potentially shared state. Similarly, when the cache controller intends to write a 
 zero block in the sector cache, exclusive permission must always be obtained from all peer caches.
+
+On a cache read request, both the normal cache and the sector cache are probed in parallel. At most one of these two
+can signal a hit, since they maintain mutually exclusive data. If the hit is on the sector cache, then no actual
+data is returned, and the cache controller simply sets the MSHR for the request to all-zero. 
 
