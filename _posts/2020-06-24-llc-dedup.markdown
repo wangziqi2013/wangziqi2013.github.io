@@ -86,4 +86,8 @@ collisions only occur infrequently.
 
 Read operations on the deduplicated LLC is almost the same as a conventional LLC. The only difference is that tag read
 and data read are serialized, since the controller should first find a matching tag, and then access the data array
-with the data pointer (some caches already implement this to reduce energy consumption). On a cache miss
+with the data pointer (some caches already implement this to reduce energy consumption). On a cache miss, the controller
+either evicts a tag or a data slot to make space for the fill request. Note that since tag and data storage are decoupled,
+their evictions also use different strategies. A tag is evicted if there is no free tag in the current set. When evicting
+a tag, the LLC controller needs to unlink it from the doubly linked list, and decrement the reference counter of the 
+data slot it addresses. If the reference counter drops to zero, the data slot is also evicted. 
