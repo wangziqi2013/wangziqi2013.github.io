@@ -31,4 +31,10 @@ The last observation is that writes to zero blocks also tend to be zeros sometim
 of zero compression. The compression should also be performed on a per-write basis to detect zero writes for maximim
 chances of compression.
 
+The ZCA design can be deployed on any of the levels in the hierarchy. It is expected to retain the original lookup latency
+of the cache, and therefore will not affect cache lookup performance.
+ZCA extends the existing cache object with a small data-less sector cache. Each tag in the the sector cache represents the 
+zero status of a large range of memory. Since zero blocks do not need any physical storage, the sector cache does not 
+need a data array. Instead, a vector of valid bits suffices for describing zero status of all standard sized blocks in 
+the sector. 
 
