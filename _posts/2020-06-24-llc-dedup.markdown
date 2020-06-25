@@ -90,4 +90,12 @@ with the data pointer (some caches already implement this to reduce energy consu
 either evicts a tag or a data slot to make space for the fill request. Note that since tag and data storage are decoupled,
 their evictions also use different strategies. A tag is evicted if there is no free tag in the current set. When evicting
 a tag, the LLC controller needs to unlink it from the doubly linked list, and decrement the reference counter of the 
-data slot it addresses. If the reference counter drops to zero, the data slot is also evicted. 
+data slot it addresses. If the reference counter drops to zero, the data slot is also evicted. If there is empty tag, but
+no free data slot exists, which is possible since there are more tags than data slots, one data slot is found and evicted.
+All tags associated with that data slot are also found and evicted by following the tag pointer and linked list pointer.
+
+While tag eviction uses the conventional algorithm, data eviction could not use the same per-set eviction algorithm,
+since the data array is fully associative. The paper proposes that the LLC controller selects four random locations
+in the data array when it is full, and evicts the one with only a single reference count. If all four are referenced by
+multiple tags, then the one with the minimum count is evicted. The paper noted that for most the time, one random probe 
+is sufficient for finding the eviction candidate. 
