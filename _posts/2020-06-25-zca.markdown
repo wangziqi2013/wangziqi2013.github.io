@@ -13,7 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
 
+1. Using a data-less sector cache organization to store zero blocks. This avoids one of the biggest problem of sector
+   cache: low space utilization if spatial locality is low.
 
 This paper proposes zero-content augmented caches (ZCA cache), a simple cache compression scheme that only compresses
 zero-filled 64 byte blocks. The paper begins by identifying three important properties of zero-filled blocks in 
