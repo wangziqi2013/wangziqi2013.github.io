@@ -63,8 +63,12 @@ deduplication. Otherwise, the check has not been performed, and the LLC controll
 is idle.
 
 A hash table is also added to help identify duplicated blocks. The hash table is organized as a 16-way set-associative
-cache with unknown number of sets (it is configurable). Each way consists of two fields: full hash value and pointer to the 
-data slot. Each set in the hash table is used as a bucket for resolving conflicts. All ways within a set is checked
-in parallel when the hash table is queried. A hit is signaled if the full hash value match with the input value.
-A hash matching itself, however, is not sufficient. To determine whether the hit really indicates a duplicated line, the
-data pointer is used to find the content and a full cache line comparison is performed.
+cache with unknown number of sets (it is configurable), and it functions as a content-addressable memory (CAM). 
+Each way consists of two fields: full hash value and pointer to the data slot. Each set in the hash table is used as a 
+bucket for resolving conflicts. All ways within a set is checked in parallel when the hash table is queried. 
+The hash table query uses the content of the line to be deduplicated. The line is first hashed into a 15 bit value with
+XOR gates. Then a bucket is selected using partial bits in the hash value, after which all bucket entries are checked
+against the full hash value. A hit is signaled if any of the full hash values stored in the bucket matches with the input 
+value. A hash matching itself, however, is not sufficient. To determine whether the hit really indicates a duplicated 
+line, the data pointer is used to find the content and a full cache line comparison is performed.
+
