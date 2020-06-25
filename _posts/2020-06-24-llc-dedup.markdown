@@ -101,3 +101,11 @@ multiple tags, then the one with the minimum count is evicted. The paper noted t
 is sufficient for finding the eviction candidate. In the rare case where multiple probes are needed, the paper argues
 that it must be because only few cache lines are deduplicated, implying high chance of fining a candidate in the first
 few probes, since most of the blocks are not reused.
+
+Write operations are handled differently from reads, since write could change the content of the line. Write misses are
+handled just like read misses, except that the new line is acquired from lower level with write permission. Write hits,
+however, could not directly change the content of the line. Instead, the reference counter is checked. If the value
+of the counter is larger than one, indicating a deduplicated line, the LLC controller should treat this as a line fill,
+potentially evicting a data block, and duplicate the line before it is updated.
+
+
