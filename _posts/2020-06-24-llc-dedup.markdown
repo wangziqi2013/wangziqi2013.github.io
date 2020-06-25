@@ -43,4 +43,8 @@ We next introduce the cache organization as follows. As discussed above. the ded
 and data array from the one-to-one static mapping scheme, adding one extra level of indirection in tag address to
 allow more than one tags being mapped to one data slot. To achieve this, each tag array is extended with an extra 
 "data pointer" (dptr) field, which points to the data slot that stores the content implied by the address tag.
-To help bulk invalidation of tags when the shared data slot is invalidated, 
+To help bulk invalidation of tags when the shared data slot is invalidated, tags are also linked together with other 
+tags that share the same data slot using a doubly linked list. Two more pointers, called "tag pointers" (tptr), are 
+added to each tag for finding the successor and predecessor of nodes in the linked list. 
+Conventional per-line metadata, such as coherence states and status bits, are not changed.
+
