@@ -18,6 +18,11 @@ version_mgmt:
 1. Using a data-less sector cache organization to store zero blocks. This avoids one of the biggest problem of sector
    cache: low space utilization if spatial locality is low.
 
+**Lowlight:**
+
+1. Writing to zero blocks may incur unnecessary coherence messages for requesting exclusive permission. This is 
+   because the sector cache has not way of distinguishing a S state block from an E state block.
+
 This paper proposes zero-content augmented caches (ZCA cache), a simple cache compression scheme that only compresses
 zero-filled 64 byte blocks. The paper begins by identifying three important properties of zero-filled blocks in 
 common workloads. First, a non-trivial number of cache blocks are filled with zero for reasons such as zero initialization
