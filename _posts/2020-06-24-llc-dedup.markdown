@@ -98,4 +98,6 @@ While tag eviction uses the conventional algorithm, data eviction could not use 
 since the data array is fully associative. The paper proposes that the LLC controller selects four random locations
 in the data array when it is full, and evicts the one with only a single reference count. If all four are referenced by
 multiple tags, then the one with the minimum count is evicted. The paper noted that for most the time, one random probe 
-is sufficient for finding the eviction candidate. 
+is sufficient for finding the eviction candidate. In the rare case where multiple probes are needed, the paper argues
+that it must be because only few cache lines are deduplicated, implying high chance of fining a candidate in the first
+few probes, since most of the blocks are not reused.
