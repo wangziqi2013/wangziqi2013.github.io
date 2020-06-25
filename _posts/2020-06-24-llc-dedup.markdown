@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Last-Level Cache Deduplication"
+date:   2020-06-24 20:58:00 -0500
+categories: paper
+paper_title: "Last-Level Cache Deduplication"
+paper_link: https://dl.acm.org/doi/10.1145/2597652.2597655
+paper_keyword: Cache; LLC; Deduplication
+paper_year: ICS 2014
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
