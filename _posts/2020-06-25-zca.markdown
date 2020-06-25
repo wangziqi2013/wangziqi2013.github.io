@@ -61,3 +61,10 @@ response comes back, the controller checks whether the block is a zero block by 
 In the case of a zero block, the block is inserted into the sector cache by setting the corresponding valid bit, if the 
 sector tag exists, or, if the sector tag does not exist, an existing entry is evicted silently and the new entry is 
 inserted.
+
+Cache write requests are handled differently than in a normal cache. There are two forms of writes depending on where the
+the sector cache is in the hierarchy. If the sector cache is deployed at L1 level, the writes are mostly single word
+update, which can turn a non-zero block into zero, or turn a zero block into non-zero, or hits a all zero block, but 
+the content is still all-zero (i.e. a zero write). In the first case, the non-zero block must be found in the regular
+cache, and it turns into dirty due to the write. In this case, we do not transfer the block to the sector cache, since
+the sector cache only holds clean zero blocks. 
