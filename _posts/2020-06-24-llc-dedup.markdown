@@ -21,4 +21,10 @@ The paper begins by making the claim that in scientific computation workloads, c
 data for several reasons. First, some workloads tend to copy the same piece of data around for the purpose of initialization
 or interfacing with libraries requiring input/output buffer (e.g. network protocol or file system operation).
 Applications that extensively use memcpy() also creates duplicated lines on different physical locations.
+The second cause for duplication is symmetry of the program input. More than often, scientific applications begin their
+computation with highly regular data consisting of duplicated patterns. Such pattern can also be exploited to reduce 
+cache consumption.
+The paper also noted that most of these duplicated lines are not pure zeros. Simply detecting zero lines will not work
+well in the majority of the cases.
+
 
