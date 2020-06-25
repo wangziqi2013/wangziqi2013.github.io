@@ -56,3 +56,8 @@ The second field is a "tag pointer" (tptr) field. This field is used differently
 If the data slot is free, indicated by a value zero in the reference counter, the tptr field points to the next free data
 slot, forming a free list, the head of which is stored in a special register in the LLC controller. When an empry data 
 slot is needed, one is acquired from the free list, if it is not empty. 
+If the data slot is not free, then the tptr field points to the head of the tag doubly linked list that shares the data
+slot. When the data slot is to be invalidated, the LLC controller follows this link to find all tags that should be invalidated.
+The last new field is a one bit deduplication status field. If this field is set, the slot has already been checked for
+deduplication. Otherwise, the check has not been performed, and the LLC controller should deduplicate the block when it
+is idle.
