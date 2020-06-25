@@ -75,5 +75,6 @@ the content is still all-zero (i.e. a zero write). In the first case, the non-ze
 cache, and it turns into dirty due to the write. In this case, we do not transfer the block to the sector cache, since
 the sector cache only holds clean zero blocks. In the second case, the zero block is removed from the sector cache by
 clearing the valid bit in the sector, and then evicted to the lower level. Note that we also does not try to insert
-the non-zero block back to the regular part of the cache, since most likely this insertion will cause another block to 
-be evicted.
+the non-zero block back to the regular part of the cache, since most likely this insertion will cause another non-zero 
+block to be evicted. In the last case, the block status will not change, since the zero block still qualifies.
+In order to detect zero writes, an extra zero detector is added to the data path from the upper level.
