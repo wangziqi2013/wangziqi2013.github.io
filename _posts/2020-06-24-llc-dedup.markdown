@@ -39,3 +39,8 @@ between the probablity that duplications are detected, and the hardware overhead
 The last challenge is that the cache layout should be modified to allow many-to-one mapping between tags and data slots.
 In addition, there shold be more tags than data slots in order to support a large effective cache size.
 
+We next introduce the cache organization as follows. As discussed above. the deduplicated cache decouples tag array
+and data array from the one-to-one static mapping scheme, adding one extra level of indirection in tag address to
+allow more than one tags being mapped to one data slot. To achieve this, each tag array is extended with an extra 
+"data pointer" (dptr) field, which points to the data slot that stores the content implied by the address tag.
+To help bulk invalidation of tags when the shared data slot is invalidated, 
