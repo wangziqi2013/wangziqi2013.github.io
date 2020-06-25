@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Zero-Content Augmented Caches"
+date:   2020-06-25 10:47:00 -0500
+categories: paper
+paper_title: "Zero-Content Augmented Caches"
+paper_link: https://dl.acm.org/doi/10.1145/1542275.1542288
+paper_keyword: Cache; ZCA; Zero Compression
+paper_year: ICS 2009
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
