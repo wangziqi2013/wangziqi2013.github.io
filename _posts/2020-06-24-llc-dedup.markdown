@@ -48,3 +48,11 @@ tags that share the same data slot using a doubly linked list. Two more pointers
 added to each tag for finding the successor and predecessor of nodes in the linked list. 
 Conventional per-line metadata, such as coherence states and status bits, are not changed.
 
+The data array is entirely decoupled from the tag array, and becomes fully associative, enabling any tag in the tag array 
+to address any data slot in the data array. This is mandatory in deduplicated cache, since duplicated cache lines are likely
+not in the same set. Data slots are extended with three extra fields. The first field is a reference counter tracking the
+number of tags pointing to the data slot. 
+The second field is a "tag pointer" (tptr) field. This field is used differently based on the status of the data slot. 
+If the data slot is free, indicated by a value zero in the reference counter, the tptr field points to the next free data
+slot, forming a free list, the head of which is stored in a special register in the LLC controller. When an empry data 
+slot is needed, one is acquired from the free list, if it is not empty. 
