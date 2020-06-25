@@ -71,4 +71,12 @@ XOR gates. Then a bucket is selected using partial bits in the hash value, after
 against the full hash value. A hit is signaled if any of the full hash values stored in the bucket matches with the input 
 value. A hash matching itself, however, is not sufficient. To determine whether the hit really indicates a duplicated 
 line, the data pointer is used to find the content and a full cache line comparison is performed.
+Otherwise, if the cache line misses in the hash table, it will be inserted into the table. 
+In rare cases, all buckets will be full on such insertions. The paper suggests that one of the entries in the bucket
+with data slot reference counter being one could be evicted (and so do the tag and data). If, however, all data slots 
+have reference counter larger than one, the insertion is aborted, but the cache line is not evicted. The paper claims
+that although this strategy loses some chances of deduplication, the overall impact would be minimum, since hash
+collisions only occur infrequently.
+
+
 
