@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes frequent value cache (FVC), a cache compression design aiming at reducing energy consumption. The
+paper identifies in the beginning that cache systems constitute a significant part of process's energy consumption.
+In a conventional cache design, each cache access must read, potentially in parallel, both the tag array and the data array.
+FVC seeks to reduce the amount of storage that needs to be activated per access by taking advantage of value locality
+that is frequently observed in some workloads. 
