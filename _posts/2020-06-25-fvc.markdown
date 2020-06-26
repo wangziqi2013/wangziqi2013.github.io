@@ -17,4 +17,9 @@ This paper proposes frequent value cache (FVC), a cache compression design aimin
 paper identifies in the beginning that cache systems constitute a significant part of process's energy consumption.
 In a conventional cache design, each cache access must read, potentially in parallel, both the tag array and the data array.
 FVC seeks to reduce the amount of storage that needs to be activated per access by taking advantage of value locality
-that is frequently observed in some workloads. 
+that is frequently observed in some workloads. The paper points out that many cache and memory accesses actually only read
+a small subset of frequently occurring values, rather than reading random values evenly distributed on the address space.
+Several factors may contribute to this observation, such as data initialization, small counter values, or pointers to
+commonly used data structures. 
+
+
