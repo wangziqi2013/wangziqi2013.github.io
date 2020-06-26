@@ -55,5 +55,8 @@ Two optimizations can be applied. The first optimization is that since at the en
 comparison is already known. If a cache miss is signaled, the second bank no longer needs to be accessed. If a cache hit
 is signaled, then only the sub-banks for the cache line on the hit location is accessed, further reducing power consumption.
 The second optimization is based on the observation that it is likely that some words in the cache line is compressed,
-and some not. In such case, it always takes two cycles to fully decode the line, which degrades performance, since this
-is likely the majority of the case. 
+and some not. In such cases, it always takes two cycles to fully decode the line, which degrades performance, since this
+is likely the majority of the case. As an optimization, the critical word can be returned to the load unit first, if the 
+critical word is compressed, which is available at the end of the first cycle.
+
+
