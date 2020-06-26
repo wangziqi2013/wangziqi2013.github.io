@@ -76,4 +76,7 @@ with an extra bit to indicate whether the value is compressed or not. On receivi
 the cache controller simply activates the first sub-bank, writes the compressed code word, and sets the compressed flag,
 if the access signals a hit. Misses are handled similarly to read misses as described above.
 
-
+We next introduce how the dictionary and CAM module are initialized. The paper proposes that the CAM module be trained
+in a small window at the beginning of the application, with FVC turned off (i.e. always access all banks and ignore
+the compression flag). Frequently used values are ranked as they are read and written. At the end of the window, the 
+CAM module sends the ranked values to the dictionary, after which training stops, and FVC is enabled. 
