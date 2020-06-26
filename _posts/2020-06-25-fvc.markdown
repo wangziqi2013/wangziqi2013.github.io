@@ -80,3 +80,8 @@ We next introduce how the dictionary and CAM module are initialized. The paper p
 in a small window at the beginning of the application, with FVC turned off (i.e. always access all banks and ignore
 the compression flag). Frequently used values are ranked as they are read and written. At the end of the window, the 
 CAM module sends the ranked values to the dictionary, after which training stops, and FVC is enabled. 
+Given a CAM size and dictionary size of N, the training phase takes a CAM of size 2N (which could share the first N
+entries with the encoder CAM). Each entry in the training CAM consists of the value and a 2 bit saturating counter. When
+a value is read or written, the value is looked up in the training CAM. On a hit, the saturating counter is incremented,
+and if the incrementation causes the counter is saturate, the entry is swapped with the next higher entry, and the counter
+is cleared. 
