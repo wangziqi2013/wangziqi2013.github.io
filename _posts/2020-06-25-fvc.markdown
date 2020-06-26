@@ -38,4 +38,6 @@ by an extra one cycle.
 To decode a compressed value represented as n bit code word, the cache controller is equipped with a hardware dictionary
 for mapping n bit code words in the first sub-bank to frequently used values. The hardware dictionary is implemented as 
 a multiported register file indexed by the code word. The uncompressed value is stored as an entry in the dictionary, 
-which will be output when its index appears on one of the input ports. 
+which will be output when its index appears on one of the input ports. For simplicity of discussion, we assume that the
+dictionary is already initialized. After initialization, the contents of the dictionary remain static. No write port
+is needed to alter an individual entry, except a special input port for the bulk initialization.
