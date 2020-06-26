@@ -65,4 +65,6 @@ and some not. In such cases, it always takes two cycles to fully decode the line
 is likely the majority of the case. As an optimization, the critical word can be returned to the load unit first, if the 
 critical word is compressed, which is available at the end of the first cycle.
 
-FVC handles writes differently than reads. Instead of 
+FVC handles writes differently than reads. Instead of letting the cache controller querying the dictionary at write time,
+which adds one cycle penalty to the write critical path, FVC adds a CAM module to the backend of the pipieline to encode
+the 32 bit word to be written while the instruction traverses through the pipeline. 
