@@ -44,6 +44,11 @@ is needed to alter an individual entry, except a special input port for the bulk
 
 We next describe the operation of the cache. On a read operation, the cache set is selected as usual. After selecting
 the set, the controller reads the tag array and data array in parallel. Instead of reading a full 32 bit word for 
-each cache line in the set, only (n + 1) bits from the first sub-bank is read. Note that the paper assumes that tag
-access is slower than accessing the (n + 1) bit sub-bank, probably because the tags are longer than (n + 1) bits. 
-
+each cache line in the set, only (n + 1) bits from the first sub-bank is read. 
+The cache controller then, in the rest of the same cycle, checks the one bit "compression" flag to see whether
+the value is compressed, and decodes the value by querying the dictionary if the bit is set.
+Note that the paper assumes that tag access is slower than accessing both the (n + 1) bit sub-bank and the dictionary serially (probably 
+because the tags are longer than (n + 1) bits), allowing the controller to overlap tag access and value decoding.
+If, however, the word is not compressed, then in the next cycle, the second sub-bank is accessed to fetch the rest of the 
+uncompressed bits.
+Two optimizations can be applied
