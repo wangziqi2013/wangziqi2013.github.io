@@ -25,12 +25,17 @@ commonly used data structures.
 To leverage such a highly localized data usage pattern, FVC adds a dictionary storing high frequency values trained from
 a window of execution of the current application. The data bank of the cache is assumed to be stored in 32-bit sub-banks. 
 Frequently value detection happens on a 32 bit word boundary. Each 32 bit bank is further divided into two smaller sub-banks,
-each being able to be activated independently. Given N frequently used values in the directory, the bits to represent a 
-directory entry takes log2(N) bits, denoted as n. The first sub-bank of the 32-bit word consists of n bits of directory 
-code, plus an extra bit indicating whether the 32-bit word is compressed as a directory entry or not. The second sub-bank 
+each being able to be activated independently. Given N frequently used values in the dictionary, the bits to represent a 
+dictionary entry takes log2(N) bits, denoted as n. The first sub-bank of the 32-bit word consists of n bits of dictionary 
+code, plus an extra bit indicating whether the 32-bit word is compressed as a dictionary entry or not. The second sub-bank 
 of the word has (32 - n) bits, which represent the rest of the word if it is not compressed as a frequent value.
 Each of the 32-bit words can have two states in the runtime. If the "compressed" bit in the first sub-bank is on, then
 the word is considered as compressed, and only the first sub-bank is accessed, reducing the number of bits activated
 for each cache access. If, on the other hand, the "compressed" bit is off, meaning all 32 bits are used to represent an
 uncompressed value, the second sub-bank will then be accessed one cycle later after the bit check, increasing access latency
 by an extra one cycle.
+
+To decode a compressed value represented as n bit code word, the cache controller is equipped with a hardware dictionary
+for mapping n bit code words in the first sub-bank to frequently used values. The hardware dictionary is implemented as 
+a multiported register file indexed by the code word. The uncompressed value is stored as an entry in the dictionary, 
+which will be output when its index appears on one of the input ports. 
