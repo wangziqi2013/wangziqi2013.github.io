@@ -25,4 +25,7 @@ commonly used data structures.
 To leverage such a highly localized data usage pattern, FVC adds a dictionary storing high frequency values trained from
 a window of execution of the current application. The data bank of the cache is assumed to be stored in 32-bit sub-banks. 
 Frequently value detection happens on a 32 bit word boundary. Each 32 bit bank is further divided into two smaller sub-banks,
-each being able to be activated independently. 
+each being able to be activated independently. Given N frequently used values in the directory, the bits to represent a 
+directory entry takes log2(N) bits, denoted as n. The first sub-bank of the 32-bit word consists of n bits of directory 
+code, plus an extra bit indicating whether the 32-bit word is compressed as a directory entry or not. The second sub-bank 
+of the word has (32 - n) bits, which represent the rest of the word if it is not compressed as a frequent value.
