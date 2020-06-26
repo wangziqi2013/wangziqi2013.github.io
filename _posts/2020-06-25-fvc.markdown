@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Energy-Efficient Frequent Value Data Cache Design"
+date:   2020-06-25 23:53:00 -0500
+categories: paper
+paper_title: "Energy-Efficient Frequent Value Data Cache Design"
+paper_link: https://dl.acm.org/doi/10.5555/774861.774883
+paper_keyword: Cache; Compression; FVC
+paper_year: MICRO 2002
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
