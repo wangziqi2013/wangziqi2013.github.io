@@ -22,4 +22,7 @@ a small subset of frequently occurring values, rather than reading random values
 Several factors may contribute to this observation, such as data initialization, small counter values, or pointers to
 commonly used data structures. 
 
-
+To leverage such a highly localized data usage pattern, FVC adds a dictionary storing high frequency values trained from
+a window of execution of the current application. The data bank of the cache is assumed to be stored in 32-bit sub-banks. 
+Frequently value detection happens on a 32 bit word boundary. Each 32 bit bank is further divided into two smaller sub-banks,
+each being able to be activated independently. 
