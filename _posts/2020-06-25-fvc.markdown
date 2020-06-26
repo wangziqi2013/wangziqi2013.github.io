@@ -84,4 +84,8 @@ Given a CAM size and dictionary size of N, the training phase takes a CAM of siz
 entries with the encoder CAM). Each entry in the training CAM consists of the value and a 2 bit saturating counter. When
 a value is read or written, the value is looked up in the training CAM. On a hit, the saturating counter is incremented,
 and if the incrementation causes the counter is saturate, the entry is swapped with the next higher entry, and the counter
-is cleared. 
+is cleared. On a miss, an entry with the minimum counter value from the lower half (the lower N entries in the 2N CAM 
+module) is evicted, and the new value is inserted. At the end of the training phase, the upper half of the 2N training
+CAM is copied to the encoder CAM (unnecessary if these two are the same structure) and the dictionary. The contents
+of both remain static during the rest of the execution.
+
