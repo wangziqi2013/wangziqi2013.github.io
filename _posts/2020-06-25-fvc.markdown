@@ -19,6 +19,13 @@ version_mgmt:
 
 2. Some tasks can be moved from the controller side to one of the pipeline stages to avoid adding extra cycle penalty
 
+**Lowlight:**
+
+1. Did not mention how training is started per-application. Does not ISA provides a way of starting training?
+
+2. It seems difficult to abandon all entries in the dictionary and encoder CAM and start over when they are no longer
+   accurate. How would you deal with a dictionary flush? Do you iterate over all entries of the cache and decompress them?
+
 This paper proposes frequent value cache (FVC), a cache compression design aiming at reducing energy consumption. The
 paper identifies in the beginning that cache systems constitute a significant part of process's energy consumption.
 In a conventional cache design, each cache access must read, potentially in parallel, both the tag array and the data array.
