@@ -71,6 +71,9 @@ the 32 bit word to be written while the instruction traverses through the pipeli
 The content CAM module is kept consistent with the cache controller's dictionary for decoding (see below). When a store
 instruction has its data operand ready from the ROB, the data operand is then encoded by querying the CAM module to see
 if the 32 bit data operand is a frequently used value.
-
+The store buffer is also extended
+with an extra bit to indicate whether the value is compressed or not. On receiving a write request with a compressed value,
+the cache controller simply activates the first sub-bank, writes the compressed code word, and sets the compressed flag,
+if the access signals a hit. Misses are handled similarly to read misses as described above.
 
 
