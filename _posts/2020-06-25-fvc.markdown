@@ -68,3 +68,9 @@ critical word is compressed, which is available at the end of the first cycle.
 FVC handles writes differently than reads. Instead of letting the cache controller querying the dictionary at write time,
 which adds one cycle penalty to the write critical path, FVC adds a CAM module to the backend of the pipieline to encode
 the 32 bit word to be written while the instruction traverses through the pipeline. 
+The content CAM module is kept consistent with the cache controller's dictionary for decoding (see below). When a store
+instruction has its data operand ready from the ROB, the data operand is then encoded by querying the CAM module to see
+if the 32 bit data operand is a frequently used value.
+
+
+
