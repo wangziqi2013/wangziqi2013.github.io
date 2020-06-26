@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Probalistic sub-banking is a good way of reducing power consumption
+
+2. Some tasks can be moved from the controller side to one of the pipeline stages to avoid adding extra cycle penalty
+
 This paper proposes frequent value cache (FVC), a cache compression design aiming at reducing energy consumption. The
 paper identifies in the beginning that cache systems constitute a significant part of process's energy consumption.
 In a conventional cache design, each cache access must read, potentially in parallel, both the tag array and the data array.
@@ -59,4 +65,4 @@ and some not. In such cases, it always takes two cycles to fully decode the line
 is likely the majority of the case. As an optimization, the critical word can be returned to the load unit first, if the 
 critical word is compressed, which is available at the end of the first cycle.
 
-
+FVC handles writes differently than reads. Instead of 
