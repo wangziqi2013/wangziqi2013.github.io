@@ -62,4 +62,11 @@ elaborate on this part.
 
 Two types of ZVC misses may happen on a load access. The first type is data miss, which occurs when the tag matches,
 but data is non-zero. In this case, a conventional cache access is initiated to the L1, which may possibly also 
-access the L2 and the rest of the memory hierarchy. 
+access the L2 and the rest of the memory hierarchy. The second type is entry miss, which happens when no tag is matched.
+In this case, the request is also forwarded to the cache hierarchy to resolve. The difference between entry miss
+and data miss is that, if an entry miss is handled by the L2 or memory, the corresponding entry is also inserted into
+the ZVC, with zero bit vector and CIB initialized correspondingly. The reason that CIB is not updated on L1 hits is 
+that the duplicated tag array, which serves as the coherence filter as we described above, resides at the L2 level.
+The duplicated tag array must be updated in consistent with the ZVC tag array, which only occurs when the L2 processes
+the request, but not L1.
+
