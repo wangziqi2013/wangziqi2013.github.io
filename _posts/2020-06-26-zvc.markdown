@@ -1,0 +1,16 @@
+---
+layout: paper-summary
+title:  "Zero-Value Cache: Cancelling Load That Returns Zero"
+date:   2020-06-26 20:54:00 -0500
+categories: paper
+paper_title: "Zero-Value Cache: Cancelling Load That Returns Zero"
+paper_link: https://ieeexplore.ieee.org/document/5260542
+paper_keyword: Cache; Compression; ZVC; Zero Compression
+paper_year: PACT 2009
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+
