@@ -13,8 +13,17 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. In a partially inclusive hierarchy as described in this paper, whether or not to probe or bypass the next level
+   can be indicated by a bit vector showing whether the block is cached by the next level
+
+
+
 This paper proposes Zero-Value Cache (ZVC), an L1 cache extension optimized to accelerate access for zero load values. 
 The paper begins by claim that latency of loads are part of the biggest factor that contribute to processor slow down
 in some workloads. The paper then points out that a non-trivial portion of loads actually only read value zero, which can
 easily be optimized out if these loads could be identified. Cancelling out these critical loads that are supposed to
 return zero before they reach the memory hierarchy helps improve instruction throughput and overall performance.
+
+
