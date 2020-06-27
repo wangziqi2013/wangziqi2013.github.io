@@ -21,7 +21,7 @@ version_mgmt:
 **Lowlight:**
 
 1. The architecture in this paper seems fragile and prone to commplicated corner cases and/or coherence anomalies.
-   For example, what about the cohrence of the CIB vector?
+   For example, what about the cohrence of the CIB vector when L2 loads a new block?
 2. Many important details are missing, i.e. in the vertical ZVC-L1d design, what if only part of the word is zero-filled, 
    but the rest are non-zero? The cache controller must perform a second read to fetch the non-zero values.
 
@@ -34,5 +34,9 @@ return zero before they reach the memory hierarchy helps improve instruction thr
 We next describe the organization of the ZVC. ZVC is organized as a set-associative cache, with only tag arrays but no
 data. Each tag consists of an address tag, a valid bit, a zero bit vector, and a cache indcator bit (CIB) vector.
 The address tag stores the block address for which the entry covers. ZVC does not necessarily use the same block
-granularity as L1d and the underlying L2 cache. In fact, larger blocks are preferred to reduce the tag overhead relative 
-to effective ZVC size. The valid bit serves the same prupose as in a conventional cache.
+granularity as L1d and the underlying L2 cache. In fact, larger blocks are preferred, in order to reduce the tag overhead 
+relative to effective ZVC size. The valid bit serves the same prupose as in a conventional cache. The zero bit vector 
+indicates whether the corresponding location contains zero. The granularity of the zero bit can either be byte-level
+or word-level, which is a trade-off between space overhead and detection accuracy. The CIB vector is an optimization
+that helps to bypass the L2 cache, if the block is known to be not cached by L2, as we will see below.
+
