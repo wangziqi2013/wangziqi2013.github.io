@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Evicting small blocks should be discouraged, since more small blocks need to be evicted to accommodate for a larger block.
+   In practice, we combine the original replacement algorithm's priority ranking with block size by using the ratio: pi / si.
+
+2. The block size class that should be given priority can be selected using set-dualing, i.e. sample a few sets from the 
+   cache, and dry-run the algorithm under consideration. If the results are better, then the algorithm is proven better.
+
 This paper proposes Compression Aware Management Policies (CAMP), which is a set of cache management policy specifically
 tuned for compressed caches. Cache compression has been proposed by prior publications to reduce memory traffic as well
 as to increase effective cache size. Its effectiveness, however, also depends on the cache management policy. Conventional
