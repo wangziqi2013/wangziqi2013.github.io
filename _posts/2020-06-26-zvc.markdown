@@ -69,4 +69,8 @@ the ZVC, with zero bit vector and CIB initialized correspondingly. The reason th
 that the duplicated tag array, which serves as the coherence filter as we described above, resides at the L2 level.
 The duplicated tag array must be updated in consistent with the ZVC tag array, which only occurs when the L2 processes
 the request, but not L1.
-
+When an entry miss is handled by the L2 or memory, a special zero detection logic is activated to derive the zero bit 
+vector. The paper did not mention how the CIB is updated if the request hits the L2. But if the request hits memory,
+then in addition to fetching the target block to fulfill the L1/L2 fill request, the memory controller is also supposed 
+to stream out the larger block cached by ZVC, and runs zero detection logic on the whole block, which is then
+cached by the ZVC. In this case, only the target block is set in the CIB.
