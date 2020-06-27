@@ -18,7 +18,10 @@ version_mgmt:
 1. In a partially inclusive hierarchy as described in this paper, whether or not to probe or bypass the next level
    can be indicated by a bit vector showing whether the block is cached by the next level
 
+**Lowlight:**
 
+1. The architecture in this paper seems fragile and prone to commplicated corner cases and/or coherence anomalies.
+   For example, what about the cohrence of the CIB vector?
 
 This paper proposes Zero-Value Cache (ZVC), an L1 cache extension optimized to accelerate access for zero load values. 
 The paper begins by claim that latency of loads are part of the biggest factor that contribute to processor slow down
