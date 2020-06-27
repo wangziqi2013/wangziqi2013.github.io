@@ -76,3 +76,9 @@ to stream out the larger block cached by ZVC, and runs zero detection logic on t
 cached by the ZVC. In this case, only the target block is set in the CIB vector.
 Although this might increase memory bandwidth, since more data is streamed on the system bus, the paper claims that the
 impact would be minimum, which is outweighed by the benefit of zero cancellation.
+
+The second type of configuration is to use ZVC as a peer cache of the L1d, which is probed in parallel as the L1d cache.
+In this configuration, the benefit of early cancellation is no longer valid. Instead, the effective size of the L1d
+increases to hold zeros, which saves bandwidth from L1d to L2 if these zeros incur cache misses if ZVC is not present.
+More power is also consumed by this configuration, since both caches are activated in the same cycle. There is no panalty,
+however, if the access misses the ZVC.
