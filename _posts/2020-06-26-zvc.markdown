@@ -52,3 +52,14 @@ tag array is updated whenever a fetch request from the ZVC is received. The prot
 that the duplicated tag array will remain consistent with the actual ZVC by not inserting the entry on L1 misses. Besides, 
 the VIB vector described above also serves as an optmization to the non-inclusive architecture, since it is possible that 
 only a subset of the blocks in a ZVC block are stored by lower level caches.
+
+The paper proposes two possible configurations of the ZVC cache. In the first configuration, the cache is added between
+the L1d cache and the load-store queue (LSQ), which serves as a zero-value filter to load instructions. The paper 
+suggests that, under this configuration, the timing of ZVC accesses is critical, which should be completed in the same 
+cycle that the load instruction is dispatched. In this case, the load instruction takes no time to execute, if it hits
+the ZVC. Instructions that miss the ZVC may suffer from extra latency for unknown reasons, since the paper does not
+elaborate on this part. 
+
+Two types of ZVC misses may happen on a load access. The first type is data miss, which occurs when the tag matches,
+but data is non-zero. In this case, a conventional cache access is initiated to the L1, which may possibly also 
+access the L2 and the rest of the memory hierarchy. 
