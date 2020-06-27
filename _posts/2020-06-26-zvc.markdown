@@ -81,7 +81,10 @@ impact would be minimum, which is outweighed by the benefit of zero cancellation
 When a new entry is inserted, an existing entry is evicted, if all entries in the set are valid. The paper suggests that
 LRU be used for selecting the victim.
 
-
+Store instructions that write value zero directly update the L1 cache, which does not affect correctness, since on a data 
+miss, the L1 is always accessed. Store instructions writing non-zero values, however, must clear the bit if an entry
+exists in the ZVC, since otherwise, later accesses will not be able to read the correct value. This operation does not 
+affect the tag array; Only the bit vector is updated.
 
 The second type of configuration is to use ZVC as a peer cache of the L1d, which is probed in parallel as the L1d cache.
 In this configuration, the benefit of early cancellation is no longer valid. Instead, the effective size of the L1d
