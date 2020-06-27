@@ -24,7 +24,7 @@ version_mgmt:
 
 **Lowlight:**
 
-1. The architecture in this paper seems fragile and prone to commplicated corner cases and/or coherence anomalies.
+1. The architecture in this paper seems fragile AF and prone to commplicated corner cases and/or coherence anomalies.
    For example, what about the cohrence of the CIB vector when L2 loads a new block?
 2. Many important details are missing, i.e. in the vertical ZVC-L1d design, what if only part of the word is zero-filled, 
    but the rest are non-zero? The cache controller must perform a second read to fetch the non-zero values.
@@ -88,6 +88,14 @@ Store instructions that write value zero directly update the L1 cache, which doe
 miss, the L1 is always accessed. Store instructions writing non-zero values, however, must clear the bit if an entry
 exists in the ZVC, since otherwise, later accesses will not be able to read the correct value. This operation does not 
 affect the tag array; Only the bit vector is updated.
+
+The paper also proposes allowing speculative zero values from a store to be entered into the ZVC before the store commits.
+In the previous discussion, we assume that store instructions are retained in the LSQ, and only issued to the ZVC and
+L1d as soon they commit. A more aggressive scheme would be to allow uncommitted LSQ stores to allocate an entry in the 
+ZVC, allowing more loads to bypass zero stores with no cycle penalty, if such store-load forwarding is frequent.
+On a speculation failure, however, the hardware must roll back these stores by setting the bit vector back to its original
+value. Note that simply flipping these bits to 1 may not be correct, since the original bit value may as well be zero.
+The hardware should keep a undo log structure along with the ZVC for speculation roll back.
 
 The second type of configuration is to use ZVC as a peer cache of the L1d, which is probed in parallel as the L1d cache.
 In this configuration, the benefit of early cancellation is no longer valid. Instead, the effective size of the L1d
