@@ -16,7 +16,9 @@ version_mgmt:
 **Highlight:**
 
 1. In a partially inclusive hierarchy as described in this paper, whether or not to probe or bypass the next level
-   can be indicated by a bit vector showing whether the block is cached by the next level
+   can be indicated by a bit vector showing whether the block is cached by the next level.
+
+2. 
 
 **Lowlight:**
 
@@ -40,6 +42,13 @@ indicates whether the corresponding location contains zero. The granularity of t
 or word-level, which is a trade-off between space overhead and detection accuracy. The CIB vector is an optimization
 that helps to bypass the L2 cache, if the block is known to be not cached by L2, as we will see below.
 
-ZVC is not necessarily inclusive regarding the rest part of the hierarchy. In an inclusive cache design, adding ZVC to
-the L1 level or above may incur some significant change on coherence handling, since the L2 no longer serves as a coherence
-filter for ZVC, resulting in a design where all coherence messages are forwarded to the ZVC.
+ZVC is not necessarily inclusive regarding the rest part of the hierarchy, since ZVC can potentially use a larger block
+size, which will force lower level cache to use the sector cache design, if inclusion is enforced. 
+In an inclusive cache design, adding ZVC to the L1 level or above may incur some significant change on coherence handling, 
+since the L2 no longer serves as a coherence filter for ZVC, resulting in a design where all coherence messages are 
+forwarded to the ZVC. 
+To solve this problem, the paper proposes that a duplicated tag is added to the L2 coherence controller. The duplicated 
+tag array is updated whenever a fetch request from the ZVC is received. The protocol that we describe below guarantees 
+that the duplicated tag array will remain consistent with the actual ZVC by not inserting the entry on L1 misses. Besides, 
+the VIB vector described above also serves as an optmization to the non-inclusive architecture, since it is possible that 
+only a subset of the blocks in a ZVC block are stored by lower level caches.
