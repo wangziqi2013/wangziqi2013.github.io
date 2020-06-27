@@ -31,4 +31,8 @@ in some workloads. The paper then points out that a non-trivial portion of loads
 easily be optimized out if these loads could be identified. Cancelling out these critical loads that are supposed to
 return zero before they reach the memory hierarchy helps improve instruction throughput and overall performance.
 
-We next describe the organization of the ZVC.
+We next describe the organization of the ZVC. ZVC is organized as a set-associative cache, with only tag arrays but no
+data. Each tag consists of an address tag, a valid bit, a zero bit vector, and a cache indcator bit (CIB) vector.
+The address tag stores the block address for which the entry covers. ZVC does not necessarily use the same block
+granularity as L1d and the underlying L2 cache. In fact, larger blocks are preferred to reduce the tag overhead relative 
+to effective ZVC size. The valid bit serves the same prupose as in a conventional cache.
