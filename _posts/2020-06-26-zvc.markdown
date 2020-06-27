@@ -25,7 +25,7 @@ version_mgmt:
 **Lowlight:**
 
 1. The architecture in this paper seems fragile AF and prone to commplicated corner cases and/or coherence anomalies.
-   For example, what about the cohrence of the CIB vector when L2 loads a new block?
+   For example, what about the cohrence of the CIB vector when L2 loads a new block that was marked as "not cached by L2"?
 2. Many important details are missing, i.e. in the vertical ZVC-L1d design, what if only part of the word is zero-filled, 
    but the rest are non-zero? The cache controller must perform a second read to fetch the non-zero values.
 3. The paper does not mention how store instructions are handled.
@@ -102,3 +102,7 @@ In this configuration, the benefit of early cancellation is no longer valid. Ins
 increases to hold zeros, which saves bandwidth from L1d to L2 if these zeros incur cache misses if ZVC is not present.
 More power is also consumed by this configuration, since both caches are activated in the same cycle. There is no panalty,
 however, if the access misses the ZVC.
+Store instructions update both the ZVC and L1d, since these two are not mutually exclusive according to the paper.
+When both L1d and ZVC miss, if the entry in ZVC exists, and the block is indicated as not cached by the L2 (i.e. the 
+block is streamed from DRAM which is not fetched into the L2), then a request is directly sent to the DRAM to avoid 
+traversing the cache hierarchy. Otherwise, the block is likely cached by L2, in which case a request is issued to the L2.
