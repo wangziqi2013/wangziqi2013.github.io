@@ -18,7 +18,9 @@ version_mgmt:
 1. In a partially inclusive hierarchy as described in this paper, whether or not to probe or bypass the next level
    can be indicated by a bit vector showing whether the block is cached by the next level.
 
-2. 
+2. Not updating the ZVC on entry miss but L1 hit helps L2 keep a consistent duplication of the tag array, since the L2
+   could see every operation that affects the data array, and it only needs to replicate the same logic that the ZVC
+   uses to update its data array (e.g. replacement policy).
 
 **Lowlight:**
 
