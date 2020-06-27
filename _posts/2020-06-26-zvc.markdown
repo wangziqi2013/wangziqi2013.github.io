@@ -73,4 +73,6 @@ When an entry miss is handled by the L2 or memory, a special zero detection logi
 vector. The paper did not mention how the CIB is updated if the request hits the L2. But if the request hits memory,
 then in addition to fetching the target block to fulfill the L1/L2 fill request, the memory controller is also supposed 
 to stream out the larger block cached by ZVC, and runs zero detection logic on the whole block, which is then
-cached by the ZVC. In this case, only the target block is set in the CIB.
+cached by the ZVC. In this case, only the target block is set in the CIB vector.
+Although this might increase memory bandwidth, since more data is streamed on the system bus, the paper claims that the
+impact would be minimum, which is outweighed by the benefit of zero cancellation.
