@@ -21,6 +21,10 @@ version_mgmt:
 2. The block size class that should be given priority can be selected using set-dualing, i.e. sample a few sets from the 
    cache, and dry-run the algorithm under consideration. If the results are better, then the algorithm is proven better.
 
+3. Block sizes sometimes can serve as reuse indicator, because blocks of regular content such as array elements or pointer
+   values tend to be accessed in loops, which exhibit high spatial and temporal locality. When this is detected, eviction
+   of the same size block should be discouraged.
+
 This paper proposes Compression Aware Management Policies (CAMP), which is a set of cache management policy specifically
 tuned for compressed caches. Cache compression has been proposed by prior publications to reduce memory traffic as well
 as to increase effective cache size. Its effectiveness, however, also depends on the cache management policy. Conventional
