@@ -22,6 +22,8 @@ version_mgmt:
 
 1. The architecture in this paper seems fragile and prone to commplicated corner cases and/or coherence anomalies.
    For example, what about the cohrence of the CIB vector?
+2. Many important details are missing, i.e. in the vertical ZVC-L1d design, what if only part of the word is zero-filled, 
+   but the rest are non-zero? The cache controller must perform a second read to fetch the non-zero values.
 
 This paper proposes Zero-Value Cache (ZVC), an L1 cache extension optimized to accelerate access for zero load values. 
 The paper begins by claim that latency of loads are part of the biggest factor that contribute to processor slow down
@@ -29,4 +31,4 @@ in some workloads. The paper then points out that a non-trivial portion of loads
 easily be optimized out if these loads could be identified. Cancelling out these critical loads that are supposed to
 return zero before they reach the memory hierarchy helps improve instruction throughput and overall performance.
 
-
+We next describe the organization of the ZVC.
