@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Many-Core Oriented Compressed Cache"
+date:   2020-06-28 04:46:00 -0500
+categories: paper
+paper_title: "A Many-Core Oriented Compressed Cache"
+paper_link: https://dl.acm.org/doi/10.1145/2830772.2830828
+paper_keyword: Cache; Compression; Log-structured Cache
+paper_year: MICRO 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
