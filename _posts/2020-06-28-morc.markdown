@@ -122,4 +122,7 @@ log object with all invalid entries should be selected with the highest priority
 This is similar to garbage collection in a log-structured file system, where stale data blocks can be reused without
 any data movement.
 
-The paper also suggests that multiple active logs be maintained for append, each
+The paper also suggests that multiple active logs be maintained for append, each responsible for one or a few data
+types. This optimization is based on the observation that data of the same type can be compressed better due to their
+encoding and/or dynamic value range. This, however, requires software hints or heuristics for determining the type
+of data to be written.
