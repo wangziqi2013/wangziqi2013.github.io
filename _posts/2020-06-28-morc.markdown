@@ -107,6 +107,10 @@ The status of the LMT entry is changed to M state. In addition, if the LMT entry
 entry is also evicted by first invalidating the tag entry in the log, and then writing back the decompressed block
 on the corresponding location. (**I don't get how they can find the log block mapped by LMT entry, since LMT does not 
 track address tags**).
+Line refill responses are handled similarly as writes, except that the status of the line is not set to M.
 
-Line refill requests
+One optimization to the log-structured append process is that, when a victim is to be selected for eviction, the
+log object with all invalid entries should be selected with the highest priority, and no actual eviction is needed.
+This is similar to garbage collection in a log-structured file system, where stale data blocks can be reused without
+any data movement.
 
