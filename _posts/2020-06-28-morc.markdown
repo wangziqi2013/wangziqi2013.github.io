@@ -100,5 +100,7 @@ Misses are also possible, since the paper assumes a non-inclusive LLC which is s
 systems. In both cases, a new log object is selected (can be the same object as the one pointed to by LMT, but there
 is not hard restriction), and the new block is appended to the log by first decompressing the log, then appending the log,
 and finally recompressing it.
-The compression circuit also monitors the status of the 
+The compression circuit also monitors the status of the compressed log. If it is large than the physical slot size, then
+the compression process is immediately aborted, and a victim log is selected and then evicted back to the DRAM. The 
+new block is then compressed and written into the slot just released by the eviction.
 
