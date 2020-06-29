@@ -23,4 +23,6 @@ The paper identifies two major challenges of using Huffman encoding with hardwar
 based encoding where the dictionary is derived from data that has already been decompressed, Huffman encoding requires 
 a codebook be used as the reference during both encoding and decoding. The generation, maintenance and switching of the 
 codebook pose a challenge, since the complexity of these operations just grows as the number of symbols become large.
-
+Second, Huffman encoding, if not generally carefully, may require traversing a Huffman encoding tree for decoding a code 
+word, since code words are variable sized. Tree traversal operations are resource hungry because they involve random walks
+on a Huffman tree structure. 
