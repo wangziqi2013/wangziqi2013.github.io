@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Software concept of multi-probing hash table can be directly applied to direct-mapped caches, treating the 
+   direct mapped tag array as the data array of a hash table.
+2. It is common practice to swap the more recently accessed element to the head of the hash chain, as in robin hash
+
 This paper proposes column associative cache, a simple enhancement over direct-mapped cache design for better hit
 rate and performance. The paper observes that, at the time of writing, direct-mapped caches are majorly used as 
 first level caches which require low hit latency and fast access. More complicated set-associative caches often could
