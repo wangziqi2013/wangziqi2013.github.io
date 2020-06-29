@@ -18,4 +18,8 @@ access latency. The paper identifies that on modern multicore architectures, the
 important than the overall system throughput. As in previous works, MORC takes advantage of cache compression to increase
 overall system throughput by providing a larger effective cache, allowing more accesses to be fulfilled by the LLC,
 rather than the more power-hungey and lower latency DRAM.
+The paper then proceeds to identify three critical problems that are common with existing cache compression schemes.
+First, most existing algorithms have very limited compression ratio, ranging between 2:1 and 8:1. The compression ratio
+depends not only on the effectiveness of the algorithm itself, but also on the over-priovisioned tags. In practice, it is 
+difficult to achieve maximum compression ratio due to the size of the block and/or the number of over-privisioned tags.
 
