@@ -44,4 +44,8 @@ blocks are always appended to the end of the log, eliminating the need of compac
 Furthermore, MORC allocates tag storage at the end of the log. Tags are also compressed to reduce the number of physical
 over-provisioning storage for storing tags of compressed blocks.
 
-We next describe the overall organization as follows.
+We next describe the overall organization as follows. Compressed blocks are stored as logs, which are allocated to distinct
+physical slots. The paper suggests that 512 byte logs be used. All blocks in a log are compressed together, and blocks 
+can onlyy be inserted into the log by first decompressing the log, append the block data, and then recompress it. 
+The data array is implemented as an indexable array of logs.
+
