@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Large block compression optimization, which is often only used for DRAM, can also be deployed with LLC using large 
+   log objects.
+
 **Lowlight:**
 
 1. If two addresses are mapped to the same log, and uses the same LMT entry, how do you know which address the status
@@ -21,6 +26,10 @@ version_mgmt:
 
 2. The paper does not mention how conventional per-line status bits are stored. Are they compressed with tags using BDI
    (which I suspect is, but BDI will be less effective since there are not only address tags but also status bits).
+
+3. I did not get the benefit of using log-structure updates besides the compression ratio benefit. By not overwriting 
+   cache lines they are stale, you basically create external fragmentation which is hard to get rid of without compaction.
+   I do get the benefit of fully-associative mapping between LMT and log entry, and the large log object, though.
 
 This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
 access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
@@ -74,3 +83,5 @@ the LMT entry is not in-use by other addresses.
 Second, the LMT entry lookup is performed as a column-associative cache with an effective associativity of two. Two different
 hash functions are used to map an address to two possible locations. The LMT lookup logic should check both for possible 
 hits, which potentially doubles cache lookup latency.
+Note that the actual "associativity" of the MORC is significantly larger than two, since each LMT entry points to a log,
+and the cache block could be stored in essentially every offset of the log.
