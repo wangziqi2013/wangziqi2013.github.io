@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. If two addresses are mapped to the same log, and uses the same LMT entry, how do you know which address the status
+   bits represent? A conservative approach is to always check tags as long as the LMT entry is valid, but in this case,
+   storing MESI states is an overkill, as a single valid bit suffices.
+
+2. The paper 
+
 This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
 access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
 important than the overall system throughput. As in previous works, MORC takes advantage of cache compression to increase
