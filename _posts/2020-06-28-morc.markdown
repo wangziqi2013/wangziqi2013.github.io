@@ -34,4 +34,9 @@ incurs major overhead for circuit area and power consumption, which is not advis
 Both internal and external fragmentation reduce effective cache size, but can be allievated by reducing the granularity 
 of tracking at the cost of more on-chip metadata.
 
+MORC avoids all above three problems using log-structured approach to organize compressed cache lines. By compressing
+multiple cache lines together (512KB as suggested in the paper), dictionary information can be better utilized to 
+encode duplicated entries. An average of 24x and a maximum of 64x compression ratio are reported by the paper. 
+
+
 
