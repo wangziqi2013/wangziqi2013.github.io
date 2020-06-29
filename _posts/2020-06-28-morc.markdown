@@ -46,6 +46,9 @@ over-provisioning storage for storing tags of compressed blocks.
 
 We next describe the overall organization as follows. Compressed blocks are stored as logs, which are allocated to distinct
 physical slots. The paper suggests that 512 byte logs be used. All blocks in a log are compressed together, and blocks 
-can onlyy be inserted into the log by first decompressing the log, append the block data, and then recompress it. 
+can only be inserted into the log by first decompressing the log, append the block data, and then recompress it. 
 The data array is implemented as an indexable array of logs.
-
+Each log also has an associated tag array, which is stored in another physical bank. Tags in each individual tag slot
+are compressed to leverage locality of tag addresses. Tags are stored in the same order as log data. 
+Depending on the compression algorithm, appending a tag entry to the end of the tag store may or may not require 
+decompression (in the latter case, some extra state data may be required to be associated with the tag array).
