@@ -105,9 +105,8 @@ circuit can be aborted after that block is fully decompressed.
 Writes are handled differently than the baseline read. After the tag array is decompressed, if a hit is signaled, the 
 tag is invalidated by setting its per-line status to invalid. Invalid tags are ignored in future tag comparisons. 
 Misses are also possible, since the paper assumes a non-inclusive LLC which is sometimes the case for large multicore 
-systems. In both cases, a new log object is selected (can be the same object as the one pointed to by LMT, but there
-is not hard restriction), and the new block is appended to the log by first decompressing the log, then appending the log,
-and finally recompressing it.
+systems. In both cases, a new log object is selected from a few currently active logs, and the new block is appended to 
+the log by first decompressing the log, then appending the log, and finally recompressing it.
 The compression circuit also monitors the status of the compressed log. If it is large than the physical slot size, then
 the compression process is immediately aborted, and a victim log is selected and then evicted back to the DRAM. The 
 new block is then compressed and written into the slot just released by the eviction. 
@@ -115,10 +114,9 @@ The status of the LMT entry is changed to M state. In addition, if the LMT entry
 entry is also evicted by first invalidating the tag entry in the log, and then writing back the decompressed block
 on the corresponding location. (**I don't get how they can find the log block mapped by LMT entry, since LMT does not 
 track address tags**).
+In all cases, the LMT entry is updated to point to the log object that has just been written.
 Line refill responses are handled similarly as writes, except that the status of the line is not set to M.
 
-One optimization to the log-structured append process is that, when a victim is to be selected for eviction, the
-log object with all invalid entries should be selected with the highest priority, and no actual eviction is needed.
-This is similar to garbage collection in a log-structured file system, where stale data blocks can be reused without
-any data movement.
 
+
+The paper also suggests that multiple active logs be maintained for append, each
