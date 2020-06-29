@@ -39,6 +39,9 @@ version_mgmt:
 5. If LMT does not store address tags, how could LMT eviction logic know which tag to invalidate? Do you ensure that
    at most one tags in the log can be mapped by the LMT entry? How?
 
+6. In general, many important details are missing, and cannot be inferred from existing information. Can't believe it is 
+   on MICRO.
+
 This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
 access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
 important than the overall system throughput. As in previous works, MORC takes advantage of cache compression to increase
