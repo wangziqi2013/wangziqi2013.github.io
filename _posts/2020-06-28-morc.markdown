@@ -26,5 +26,10 @@ Second, most compression schemes adopt the segmented cache approach, in which da
 a whole chunk, which is then divided into fixed size segments. Each segment can only be mapped by one tag and store 
 part of all of its compressed data. If the size of the compressed block is not a multiple of segment size, the last segment
 cannot be fully utilized, due to internal fragmentation. 
-Lastly,
+Lastly, to reduce circult complexity, most compressed cache designs only allocate segments using minimum algorithm, such
+as random or FIFO. In addition, there are often other constraints on the placement of segments, e.g. all segments mapped
+by a tag must store compressed data in ascending order. These constriants will prevent a free segment from being used,
+which can only be resolved by compaction. The paper claims that cache compaction operation incurs major overhead for
+circuit area and power consumption, which is not advised.
+
 
