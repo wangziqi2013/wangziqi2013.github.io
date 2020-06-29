@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SC2, a cache compression design taking advantage of Huffman encoding to achieve both high compression
+ratio and low decompression latency. The paper observes that most conventional cache compression schemes suffer from low
+compression ratio, since they typically trade-off decompression latency with the efficiency of the compression algorithm.
+This paper, however, proposes that Huffman encoding be used as the compression and decompression algorithm, despite
+the common knowledge that decompression with Huffman encoding is slow and therefore unsiutable for hardware compression.
