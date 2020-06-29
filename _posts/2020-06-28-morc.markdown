@@ -31,6 +31,14 @@ version_mgmt:
    cache lines they are stale, you basically create external fragmentation which is hard to get rid of without compaction.
    I do get the benefit of fully-associative mapping between LMT and log entry, and the large log object, though.
 
+4. The paper seems to suggest that by appending a block, we can individually encode the block and then append it
+   (Sec. 3.1: The data is then compressed and appended to the log (as shown in Figure 5)).
+   In earlier and later sections of the paper it is suggested otherwise by saying that all blocks are compressed
+   as a stream.
+
+5. If LMT does not store address tags, how could LMT eviction logic know which tag to invalidate? Do you ensure that
+   at most one tags in the log can be mapped by the LMT entry? How?
+
 This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
 access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
 important than the overall system throughput. As in previous works, MORC takes advantage of cache compression to increase
