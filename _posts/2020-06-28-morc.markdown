@@ -19,7 +19,8 @@ version_mgmt:
    bits represent? A conservative approach is to always check tags as long as the LMT entry is valid, but in this case,
    storing MESI states is an overkill, as a single valid bit suffices.
 
-2. The paper 
+2. The paper does not mention how conventional per-line status bits are stored. Are they compressed with tags using BDI
+   (which I suspect is, but BDI will be less effective since there are not only address tags but also status bits).
 
 This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
 access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
