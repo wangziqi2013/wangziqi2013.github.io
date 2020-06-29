@@ -137,3 +137,7 @@ LBE is specifically tuned for encoding large blocks by using multiple dictionari
 The hardware implementation still keeps a physical 32 bit block dictionary, but three extra logical dictionaries for 
 encoding 64, 128 and 256 bit blocks are also added. These dictionaries index into the 32 bit dictionary to provide 
 short encoding of combinations of aligned 32 bit words in the input stream.
+To adapt to this change, the LBE algorithm processes the input stream in 256 bit blocks. Each block is hashed into the
+four dictionaries, and matches with the largest size are selected for encoding. Unmatched blocks are inserted into
+dictionaries of the corresponding sizes. The paper does not provide pseudocode for detailed description of the LBE
+algorithm (and I am not an expert in compression algorithm), details cannot be further recovered from the description.
