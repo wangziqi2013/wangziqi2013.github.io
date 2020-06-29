@@ -22,4 +22,9 @@ The paper then proceeds to identify three critical problems that are common with
 First, most existing algorithms have very limited compression ratio, ranging between 2:1 and 8:1. The compression ratio
 depends not only on the effectiveness of the algorithm itself, but also on the over-priovisioned tags. In practice, it is 
 difficult to achieve maximum compression ratio due to the size of the block and/or the number of over-privisioned tags.
+Second, most compression schemes adopt the segmented cache approach, in which data slots within a set are unified into 
+a whole chunk, which is then divided into fixed size segments. Each segment can only be mapped by one tag and store 
+part of all of its compressed data. If the size of the compressed block is not a multiple of segment size, the last segment
+cannot be fully utilized, due to internal fragmentation. 
+Lastly,
 
