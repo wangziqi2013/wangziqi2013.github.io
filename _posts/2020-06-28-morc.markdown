@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes MORC, a novel log-structured last-level cache (LLC) design optimized for high throughput but longer
+access latency. The paper identifies that on modern multicore architectures, the performance of a single core is less
+important than the overall system throughput. As in previous works, MORC takes advantage of cache compression to increase
+overall system throughput by providing a larger effective cache, allowing more accesses to be fulfilled by the LLC,
+rather than the more power-hungey and lower latency DRAM.
+
