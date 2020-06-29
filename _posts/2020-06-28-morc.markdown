@@ -52,8 +52,16 @@ Each log also has an associated tag array, which is stored in another physical b
 are compressed to leverage locality of tag addresses. Tags are stored in the same order as log data. 
 Depending on the compression algorithm, appending a tag entry to the end of the tag store may or may not require 
 decompression (in the latter case, some extra state data may be required to be associated with the tag array).
+Status bits and coherence bits are also compressed with tags, although not mentioned by the paper.
 To help locate the log object given a requested address, an extra Log Mapping Table (LMT) is used to map requested 
 addresses to log objects. The LMT is implemented as a coventional direct-mapped tag array, except that the address
 tag is not stored with the LMT entry. Address tags are verified after the compressed tag of the log object is located, 
 decompressed, and checked in parallel. Due to the absence of address tags in LMT entries, it is possible that the LMT 
 entry points to a log object, but tag check fails, which we call an "aliased miss". 
+Two extra designs help optimize the lookup access. First, to allow fast detection of non-aliased misses, in which case
+decompression of tag arrays are not needed, each LMT entry also stores the status bits of the cache line it maps. The 
+LMT lookup logic could then determine the status of the requested cache line if it is not mapped at all and 
+the LMT entry is not in-use by other addresses.
+Second, the LMT entry lookup is performed as a column-associative cache with an effective associativity of two. Two different
+hash functions are used to map an address to two possible locations. The LMT lookup logic should check both for possible 
+hits, which potentially doubles cache lookup latency.
