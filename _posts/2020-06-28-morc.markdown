@@ -131,4 +131,9 @@ The proposed compression algorithm, called Large Block Encoding (LBE), is based 
 based encoding and dictionary based encoding. The input data stream is divided into 32 bit words. For each word, the 
 hardware checks whether it can be encoded with fewer bits with a known pattern, or whether it is the prefix of an
 entry in the 32 bit word dictionary. Output is encoded such that both the compression type and data for recoverying the 
-original value are included.
+original value are included. The issue, however, with C-Pack is that blocks are encoded in fixed 32 bit granularity,
+which causes space inefficiency since each dictionary index will take 4 bits per 32 bit data, a 12.5% overhead.
+LBE is specifically tuned for encoding large blocks by using multiple dictionaries.
+The hardware implementation still keeps a physical 32 bit block dictionary, but three extra logical dictionaries for 
+encoding 64, 128 and 256 bit blocks are also added. These dictionaries index into the 32 bit dictionary to provide 
+short encoding of combinations of aligned 32 bit words in the input stream.
