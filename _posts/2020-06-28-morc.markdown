@@ -93,3 +93,12 @@ tag check fails, a miss is signaled, in which case a refill request is sent to t
 is signaled, and the compressed block is decompressed as well, after which the corresponding block on the same offset
 as the tag is returned. Note that decompressed only needs to restore the entire block being accessed. The decompression
 circuit can be aborted after that block is fully decompressed.
+
+Writes are handled differently than the baseline read. After the tag array is decompressed, if a hit is signaled, the 
+tag is invalidated by setting its per-line status to invalid. Invalid tags are ignored in future tag comparisons. 
+Misses are also possible, since the paper assumes a non-inclusive LLC which is sometimes the case for large multicore 
+systems. In both cases, a new log object is selected (can be the same object as the one pointed to by LMT, but there
+is not hard restriction), and the new block is appended to the log by first decompressing the log, then appending the log,
+and finally recompressing it.
+The compression circuit also monitors the status of the 
+
