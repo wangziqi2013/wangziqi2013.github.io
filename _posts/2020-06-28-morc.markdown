@@ -85,3 +85,11 @@ hash functions are used to map an address to two possible locations. The LMT loo
 hits, which potentially doubles cache lookup latency.
 Note that the actual "associativity" of the MORC is significantly larger than two, since each LMT entry points to a log,
 and the cache block could be stored in essentially every offset of the log.
+
+We discuss the operation of MORC as follows. On a read access, the address is first hashed to the LMT using the 
+column-associative algorithm described above. The LMT status bits are first checked to ensure that the entry is valid
+and is possibly mapping an address. Then the tag array of the log object is decompressed to perform a tag check. If 
+tag check fails, a miss is signaled, in which case a refill request is sent to the lower level DRAM. Otherwise, a hit 
+is signaled, and the compressed block is decompressed as well, after which the corresponding block on the same offset
+as the tag is returned. Note that decompressed only needs to restore the entire block being accessed. The decompression
+circuit can be aborted after that block is fully decompressed.
