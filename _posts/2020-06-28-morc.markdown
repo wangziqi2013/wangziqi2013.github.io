@@ -117,6 +117,9 @@ track address tags**).
 In all cases, the LMT entry is updated to point to the log object that has just been written.
 Line refill responses are handled similarly as writes, except that the status of the line is not set to M.
 
-
+One optimization to the log-structured append process is that, when a victim is to be selected for eviction, the
+log object with all invalid entries should be selected with the highest priority, and no actual eviction is needed.
+This is similar to garbage collection in a log-structured file system, where stale data blocks can be reused without
+any data movement.
 
 The paper also suggests that multiple active logs be maintained for append, each
