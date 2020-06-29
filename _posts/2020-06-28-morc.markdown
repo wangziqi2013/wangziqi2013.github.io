@@ -108,8 +108,8 @@ Misses are also possible, since the paper assumes a non-inclusive LLC which is s
 systems. In both cases, a new log object is selected from a few currently active logs, and the new block is appended to 
 the log by first decompressing the log, then appending the log, and finally recompressing it.
 The compression circuit also monitors the status of the compressed log. If it is large than the physical slot size, then
-the compression process is immediately aborted, and a victim log is selected and then evicted back to the DRAM. The 
-new block is then compressed and written into the slot just released by the eviction. 
+the compression process is immediately aborted, and a victim log is selected using FIFO and then evicted back to the DRAM. 
+The new block is then compressed and written into the slot just released by the eviction. 
 The status of the LMT entry is changed to M state. In addition, if the LMT entry does not map the current block, the 
 entry is also evicted by first invalidating the tag entry in the log, and then writing back the decompressed block
 on the corresponding location. (**I don't get how they can find the log block mapped by LMT entry, since LMT does not 
@@ -126,3 +126,9 @@ The paper also suggests that multiple active logs be maintained for append, each
 types. This optimization is based on the observation that data of the same type can be compressed better due to their
 encoding and/or dynamic value range. This, however, requires software hints or heuristics for determining the type
 of data to be written.
+
+The proposed compression algorithm, called Large Block Encoding (LBE), is based on C-Pack, which is a hybrid of pattern 
+based encoding and dictionary based encoding. The input data stream is divided into 32 bit words. For each word, the 
+hardware checks whether it can be encoded with fewer bits with a known pattern, or whether it is the prefix of an
+entry in the 32 bit word dictionary. Output is encoded such that both the compression type and data for recoverying the 
+original value are included.
