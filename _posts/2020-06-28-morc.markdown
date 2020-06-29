@@ -41,8 +41,7 @@ the paper. Second, a compressed log is stored compactly, with blocks within the 
 internal fragmentation to a minimum.
 Lastly, no entries in the log will be overwritten by a line fill response or write back request. Entries of individual
 blocks are always appended to the end of the log, eliminating the need of compaction. 
-Furthermore, MORC
+Furthermore, MORC allocates tag storage at the end of the log. Tags are also compressed to reduce the number of physical
+over-provisioning storage for storing tags of compressed blocks.
 
-
-
-
+We next describe the overall organization as follows.
