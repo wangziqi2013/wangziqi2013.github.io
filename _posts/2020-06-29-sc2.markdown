@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SC2: A Statistical Cache Compression Scheme"
+date:   2020-06-29 13:49:00 -0500
+categories: paper
+paper_title: "SC2: A Statistical Cache Compression Scheme"
+paper_link: https://dl.acm.org/doi/10.5555/2665671.2665696
+paper_keyword: Cache; Compression; Huffman Encoding
+paper_year: ISCA 2014
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
