@@ -28,7 +28,7 @@ version_mgmt:
    (which I suspect is, but BDI will be less effective since there are not only address tags but also status bits).
 
 3. I did not get the benefit of using log-structure updates besides the compression ratio benefit. By not overwriting 
-   cache lines they are stale, you basically create external fragmentation which is hard to get rid of without compaction.
+   cache lines that are stale, you basically create external fragmentation which is hard to get rid of without compaction.
    I do get the benefit of fully-associative mapping between LMT and log entry, and the large log object, though.
 
 4. The paper seems to suggest that by appending a block, we can individually encode the block and then append it
