@@ -102,5 +102,11 @@ is not hard restriction), and the new block is appended to the log by first deco
 and finally recompressing it.
 The compression circuit also monitors the status of the compressed log. If it is large than the physical slot size, then
 the compression process is immediately aborted, and a victim log is selected and then evicted back to the DRAM. The 
-new block is then compressed and written into the slot just released by the eviction.
+new block is then compressed and written into the slot just released by the eviction. 
+The status of the LMT entry is changed to M state. In addition, if the LMT entry does not map the current block, the 
+entry is also evicted by first invalidating the tag entry in the log, and then writing back the decompressed block
+on the corresponding location. (**I don't get how they can find the log block mapped by LMT entry, since LMT does not 
+track address tags**).
+
+Line refill requests
 
