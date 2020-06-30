@@ -77,10 +77,18 @@ data. To cap the compressed size, the cache line is stored in an uncompressed fo
 The decoder uses two lookup tables to map a selected codeword from the input bit stream. The first table, as we have
 already described, DeLUT, stores the symbols in the same order as they were used for codeword generation. 
 The second table maps a codeword length k to the offset of the subset of symbols in DeLUT, as well as the numeric value 
-of the codeword of the first element in that set (the starting value of length k). The numeric value is subtracted from the codeword, which is then used as an in-set index to fetch the symbol from DeLUT.
+of the codeword of the first element in that set (the starting value of length k). The numeric value is subtracted from the codeword, 
+which is then used as an in-set index to fetch the symbol from DeLUT.
 Codewords are also selected from the stream by comparing the first k bits in the stream to the starting value of length k.
 For all possible codeword lengths, there is a hardwired comparator configured with the starting value of the corresponding
 length. If the first k bits of the input stream fall into the range, a k-bit codeword has been detected, which is then
 clipped from the input stream for further decoding.
 
+Although the paper claims that code genetation only needs to be performed rarely during the execution, there are cases 
+when a single code book will not cover the entire execution, which can be allievated by changing the code book. The 
+paper proposes that two instances of the decoding logic be used in parallel, one for the old code book and the other 
+for new. One extra bit is added to the tag to indicate which decompressor to use. After a new code book is generated while
+the existing one is still in-use, the new DeLUT and mapping tables are copied to the idle instance of the decompressor,
+and compressed blocks will be routed to that decompressor if the bit indicates so.
 
+The cache is organized 
