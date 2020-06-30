@@ -37,7 +37,9 @@ The first set of symbols, which contains the shortest of the codewords, are assi
 in which the number of bits are identical to the size of their non-canonical codewords. 
 For later subsets, their canonical Huffman codewords are generated in the same manner, except that the first codeword
 in the subset is not all-zero, but the last (largest) codeword in the previous subset plus one and left shifted to the 
-current codeword length, padding lower bits with zeros.
+current codeword length, padding lower bits with zeros. The "plus one and shift" operation is to ensure that the codewords
+of the current subset do not have any prefix overlapping with codewords in the previous subset. This relation can be 
+recursively passed down to the first subset, resulting in an encoding that no codeword is the prefix of another.
 
 The numerical sequence property (i.e. each codeword in the subset is simply the previous codeword plus 1, and they occupy 
 a consecutive range in the integer value domain) of canonical Huffman encoding codewords simplifies decoding. 
