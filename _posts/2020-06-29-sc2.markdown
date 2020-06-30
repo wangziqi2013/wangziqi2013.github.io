@@ -68,5 +68,9 @@ and generating the codeword, as we will see below.
 Due to the complexity of the codeword generation process, the the paper proposes that the code generation work should 
 be delegated to software. A background thread dumps the freqnency values from the VFT to a memory region.
 For each symbol tracked by the VFT, a Huffman codeword is generated based on its frequency using the algorithm described 
-above. Symbols that are not in the VFT represent low frequency
+above. Symbols that are not in the VFT represent low frequency values, for which a special codeword is generated, which
+is used as a prefix to encode uncompressed values. When the special codeword is seen, the decompressor interprets the
+32 bit value after it as a uncompressed symbol. This may result in compressed data being longer than the original
+data. To cap the compressed size, the cache line is stored in an uncompressed form if the compressed size is larger than
+64 bytes.
 
