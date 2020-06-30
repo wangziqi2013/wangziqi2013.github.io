@@ -38,6 +38,8 @@ in which the number of bits are identical to the size of their non-canonical cod
 
 The numerical sequence property (i.e. each codeword in the subset is simply the previous codeword plus 1, and they occupy 
 a consecutive range in the integer value domain) of canonical Huffman encoding codewords simplifies decoding. 
-As long as the length of the codeword is known, its symbol can be obtained by a table lookup consisting the symbols in 
-the subset sorted in the same order as when the codeword is generated, and the numeric value of the first codeword in 
-the 
+As long as the length of the codeword is known, its symbol can be obtained by a table lookup consisting of the symbols in 
+the subset sorted in the same order as when the codeword is generated, and the numeric value of the first symbol's codeword.
+Decoding is peformed by subtracting the first symbol's value from the current codeword, and then use the result
+to index the table of symbols in the subset. Only two table accesses are required for decoding, instead of jumping 
+nodes on the Huffman decoding tree.
