@@ -35,6 +35,9 @@ to the leaf of the symbol, and then sorted based on the codeword bit length. The
 After sorting codewords, a transform is applied to each subset of symbols of the same codeword length as follows.
 The first set of symbols, which contains the shortest of the codewords, are assigned codewords 00..00, 00..01, 00..10
 in which the number of bits are identical to the size of their non-canonical codewords. 
+For later subsets, their canonical Huffman codewords are generated in the same manner, except that the first codeword
+in the subset is not all-zero, but the last (largest) codeword in the previous subset plus one and left shifted to the 
+current codeword length, padding lower bits with zeros.
 
 The numerical sequence property (i.e. each codeword in the subset is simply the previous codeword plus 1, and they occupy 
 a consecutive range in the integer value domain) of canonical Huffman encoding codewords simplifies decoding. 
