@@ -48,3 +48,10 @@ the subset sorted in the same order as when the codeword is generated, and the n
 Decoding is peformed by subtracting the first symbol's value from the current codeword, and then use the result
 to index the table of symbols in the subset. Only two table accesses are required for decoding, instead of jumping 
 nodes on the Huffman decoding tree.
+
+The implementation of the Huffman encoding logic consists of three compnents. The first component is Value Frequency Table (VFT),
+which samples inputs of the LLC as an approximation of symbol frequencies. The second component is software algorithm
+for building the Huffman tree and generating canonical Huffman encoding as described above. The last component is hardware
+Huffman decoder and decoder lookup tables (DeLUT). We next introduce these component in details.
+
+
