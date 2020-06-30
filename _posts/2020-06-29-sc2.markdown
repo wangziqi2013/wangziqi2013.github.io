@@ -91,4 +91,9 @@ for new. One extra bit is added to the tag to indicate which decompressor to use
 the existing one is still in-use, the new DeLUT and mapping tables are copied to the idle instance of the decompressor,
 and compressed blocks will be routed to that decompressor if the bit indicates so.
 
-The cache is organized 
+The cache is organized similar to a segmented cache in conventional compressed cache designs. Tags are extended with an
+extra pointer to the unified data slot. The only difference is that SC2 uses byte-level alignment to reduce internal
+fragmentation. Cache lines brought from the DRAM or written back from the upper level are compressed before they are 
+placed to the data slot. The paper seems to suggest that blocks must be stored without gap between each other, 
+indicating frequent compaction. In practice, if this is not the case, then each tag should also contain a length field,
+since the compressed block size could not be determined from the compressed block size.
