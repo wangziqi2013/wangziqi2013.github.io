@@ -74,3 +74,8 @@ is used as a prefix to encode uncompressed values. When the special codeword is 
 data. To cap the compressed size, the cache line is stored in an uncompressed form if the compressed size is larger than
 64 bytes.
 
+The decoder uses two lookup tables to map a selected codeword from the input bit stream. The first table, as we have
+already described, DeLUT, stores the symbols in the same order as they were used for codeword generation. 
+The second table maps codeword lengths to offsets of the subset of symbols in DeLUT, as well as the numeric value of the 
+first element in that set. The numeric value is subtracted from the codeword, which is then used as a in-set index to
+fetch the symbol from DeLUT.
