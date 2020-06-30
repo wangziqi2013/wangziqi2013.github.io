@@ -52,6 +52,13 @@ nodes on the Huffman decoding tree.
 The implementation of the Huffman encoding logic consists of three compnents. The first component is Value Frequency Table (VFT),
 which samples inputs of the LLC as an approximation of symbol frequencies. The second component is software algorithm
 for building the Huffman tree and generating canonical Huffman encoding as described above. The last component is hardware
-Huffman decoder and decoder lookup tables (DeLUT). We next introduce these component in details.
+Huffman decoder and decoder lookup tables (DeLUT). We next introduce these components in details.
 
+The VFT is a set-associative structure mapping symbol values to their freqnencies. Each slot is a frequency counter
+for the number of times a particular value is entered into the LLC. The VFT is accessed and maintained exactly like 
+a cache, indexing using the lower bits of the value. Values are aligned to 32 bit boundaries. 
+New values are entered into the VFT when they are: (1) Fetched from DRAM, and (2) Written back from the upper level 
+cache (only dirty words are entered). 
 
+Due to the complexity of the encoding logic (building Huffman tree and codeword sorting), the paper proposes that the 
+code generation work should be delegated to software. A background thread periodically
