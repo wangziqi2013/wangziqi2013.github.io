@@ -58,7 +58,15 @@ The VFT is a set-associative structure mapping symbol values to their freqnencie
 for the number of times a particular value is entered into the LLC. The VFT is accessed and maintained exactly like 
 a cache, indexing using the lower bits of the value. Values are aligned to 32 bit boundaries. 
 New values are entered into the VFT when they are: (1) Fetched from DRAM, and (2) Written back from the upper level 
-cache (only dirty words are entered). 
+cache (only dirty words are entered). Existing values are incremented by one in either case.
+Set and capacity conflicts during insertion are resolved by evicting the entry with the minimum counter value in the set.
+When a block is evicted, all values in the block are decremented, if they exist in the VFT.
+The system enters a training phase when an application starts. After certain number of instructions, training is finished, 
+and the content of the VFT is frozen. The table is then accessible to software threads for building the Huffman tree
+and generating the codeword, as we will see below.
 
-Due to the complexity of the encoding logic (building Huffman tree and codeword sorting), the paper proposes that the 
-code generation work should be delegated to software. A background thread periodically
+Due to the complexity of the codeword generation process, the the paper proposes that the code generation work should 
+be delegated to software. A background thread dumps the freqnency values from the VFT to a memory region.
+For each symbol tracked by the VFT, a Huffman codeword is generated based on its frequency using the algorithm described 
+above. Symbols that are not in the VFT represent low frequency
+
