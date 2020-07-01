@@ -57,7 +57,13 @@ The interleaving pattern may also change based on the address to avoid biasing a
 (**Note: The paper does not explicitly have this, but I do think it is critical in the design**).
 The second part is the residual cache, which stores the remaining 32 bytes of a partial cache line, if it cannot be 
 compressed to less than 32 bytes. The residual cache is significantly smaller than the conventional cache to avoid the 
-same power and area overhead. The residual cache is also organized as a set-associative cache. Instead of being addressed
-by the address of the requested block, the residual cache is addressed by the location of a block in the conventional LLC,
-which consists of a set number and way number. 
+same power and area overhead. The residual cache is also organized as a set-associative cache. Instead of being accessed
+using the address of the requested block, the residual cache is addressed by the location of a block in the conventional 
+LLC, which consists of a set number and way number. The paper suggests that the lower bits of the conventional LLC index
+be used as the index to the residual cache (since the size of the residual cache is smaller), and the rest be used as the 
+tag. Both caches run independent eviction algorithms, but when the conventional LLC evicts a block, the residual block,
+if any, should also be evicted from the residual cache. Residual cache evictions do not require the conventional LLC
+to also evict the block, though.
+
+
 
