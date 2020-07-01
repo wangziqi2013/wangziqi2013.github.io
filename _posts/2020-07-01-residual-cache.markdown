@@ -51,3 +51,9 @@ a full cache line, or 32 bytes of a compressed cache line. Note that in the last
 "interleaved" manner, instead of sequentially, to avoid artificially biasing against the last 32 bytes of a block.
 The interleaving pattern may also change based on the address to avoid biasing against odd and even numbered words.
 (**Note: The paper does not explicitly have this, but I do think it is critical in the design**).
+The second part is the residual cache, which stores the remaining 32 bytes of a partial cache line, if it cannot be 
+compressed to less than 32 bytes. The residual cache is significantly smaller than the conventional cache to avoid the 
+same power and area overhead. The residual cache is also organized as a set-associative cache. Instead of being addressed
+by the address of the requested block, the residual cache is addressed by the location of a block in the conventional LLC,
+which consists of a set number and way number. The paper 
+
