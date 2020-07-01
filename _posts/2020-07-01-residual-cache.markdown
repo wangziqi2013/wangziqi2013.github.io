@@ -33,4 +33,8 @@ This paper seeks a method to reduce the physical size of LLC without sacrificing
 the paper is that cache compression is effective in reducing the size of cache blocks, achieving a 2:1 or higher 
 compression ratio in most cases. Based on this observation, the paper proposes that each physical line in the conventional
 LLC be only half of the logical size, cutting the size of data banks, and the resulting power and area overhead, by half.
-
+Cache lines that can be compressed to half of their original size are stored only within the conventional LLC, which 
+is the majority of the case. In a rare case where the line is not easily compressible, an extra, smaller residual cache 
+will buffer the rest of the cache line in its own data array, which is also organized into 32 byte blocks. In this 
+extended architecture, access requests from the upper level may only partially hit the block stored in the conventional
+part of the LLC, which qualifies for cache hits as long as the requested bytes are in the conventional cache.
