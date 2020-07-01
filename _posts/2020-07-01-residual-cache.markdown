@@ -28,6 +28,10 @@ version_mgmt:
    be misses. One of the solutions is to interleave words from the two halves based on the address of the block
    to "randomize" offset of words that are always present.
 
+3. The paper does not seem to give a correct description of the tagging scheme of the residual cache. If the location
+   in the LLC is used, the tagging should consist of higher bits of the index plus the way number in the LLC set.
+   The paper also mentions higher index bits.
+
 This paper proposes residual cache, a LLC design that features lower area and power overhead compared with conventional
 set-associative caches. This paper points out that as the size of the LLC increases, the resulting higher power consumption
 and area overhead can be problematic for mobile platforms. Reducing the cache size, on the other hand, may allievate 
@@ -55,5 +59,5 @@ The second part is the residual cache, which stores the remaining 32 bytes of a 
 compressed to less than 32 bytes. The residual cache is significantly smaller than the conventional cache to avoid the 
 same power and area overhead. The residual cache is also organized as a set-associative cache. Instead of being addressed
 by the address of the requested block, the residual cache is addressed by the location of a block in the conventional LLC,
-which consists of a set number and way number. The paper 
+which consists of a set number and way number. 
 
