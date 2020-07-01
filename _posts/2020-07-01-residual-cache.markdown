@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Highlight:**
+
+1. Provides a new perspective that 2:1 compressed lines can be treated as a norm such that the cache only provides
+   storage to these lines, and that those above 2:1 are exceptions and relative rare such that they can be treated
+   differently by having a small residue cache
+
