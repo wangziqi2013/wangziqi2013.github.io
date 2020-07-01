@@ -22,3 +22,11 @@ version_mgmt:
 **Lowlight:**
 
 1. Writing quality and presentation of ideas are extremely low
+
+This paper proposes residual cache, a LLC design that features lower area and power overhead compared with conventional
+set-associative caches. This paper points out that as the size of the LLC increases, the resulting higher power consumption
+and area overhead can be problematic for mobile platforms. Reducing the cache size, on the other hand, may allievate 
+these issues, but they increase execution time due to a less effective cache hierarchy, which also negatively impacts
+power and performance.
+
+
