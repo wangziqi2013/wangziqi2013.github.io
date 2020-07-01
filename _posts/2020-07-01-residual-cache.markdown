@@ -38,3 +38,9 @@ is the majority of the case. In a rare case where the line is not easily compres
 will buffer the rest of the cache line in its own data array, which is also organized into 32 byte blocks. In this 
 extended architecture, access requests from the upper level may only partially hit the block stored in the conventional
 part of the LLC, which qualifies for cache hits as long as the requested bytes are in the conventional cache.
+
+We next describe the design in details. The LLC data store is divided into two parts. The first part is the conventional
+part of the LLC, which still functions as a regular LLC, except that the data slot is only 32 byte per tag. Data stored
+in the conventional part of the LLC can be either a compressed line whose size is smaller than 32 bytes, 32 bytes from 
+a full cache line, or 32 bytes of a compressed cache line. Note that in the last two cases, values are stored in an
+"interleaved" manner, instead of sequentially, to avoid artificially biasing against the last 32 bytes of a block.
