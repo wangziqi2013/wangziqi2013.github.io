@@ -29,4 +29,8 @@ and area overhead can be problematic for mobile platforms. Reducing the cache si
 these issues, but they increase execution time due to a less effective cache hierarchy, which also negatively impacts
 power and performance.
 
+This paper seeks a method to reduce the physical size of LLC without sacrificing performance. The observation made by 
+the paper is that cache compression is effective in reducing the size of cache blocks, achieving a 2:1 or higher 
+compression ratio in most cases. Based on this observation, the paper proposes that each physical line in the conventional
+LLC be only half of the logical size, cutting the size of data banks, and the resulting power and area overhead, by half.
 
