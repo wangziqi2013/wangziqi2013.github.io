@@ -21,7 +21,12 @@ version_mgmt:
 
 **Lowlight:**
 
-1. Writing quality and presentation of ideas are extremely low
+1. Writing quality and presentation of ideas are extremely low.
+
+2. The original paper seems to suggest that the first 32 bytes of a full line be stored in the conventional LLC.
+   This, however, artificially biases against the higher 32 bytes, since accesses to these 32 bytes will always 
+   be misses. One of the solutions is to interleave words from the two halves based on the address of the block
+   to "randomize" offset of words that are always present.
 
 This paper proposes residual cache, a LLC design that features lower area and power overhead compared with conventional
 set-associative caches. This paper points out that as the size of the LLC increases, the resulting higher power consumption
@@ -44,3 +49,5 @@ part of the LLC, which still functions as a regular LLC, except that the data sl
 in the conventional part of the LLC can be either a compressed line whose size is smaller than 32 bytes, 32 bytes from 
 a full cache line, or 32 bytes of a compressed cache line. Note that in the last two cases, values are stored in an
 "interleaved" manner, instead of sequentially, to avoid artificially biasing against the last 32 bytes of a block.
+The interleaving pattern may also change based on the address to avoid biasing against odd and even numbered words.
+(**Note: The paper does not explicitly have this, but I do think it is critical in the design**).
