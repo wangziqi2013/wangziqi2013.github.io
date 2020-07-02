@@ -84,5 +84,8 @@ signals a hit, and the metadata indicates that the line is compressed to less th
 accessed, after which the line content is decompressed. If metadata bits suggest that the line is uncompressed, then 
 the residual cache is probed with the location of the slot that gets hit. If the residual cache also signals a hit,
 then the two halves of the uncompressed cache line are recovered by reading the data array of the residual cache
-and then weaving the interleaved words back the original order.
+and then weaving the interleaved words back the original order. A miss from the redicual cache in this case does not
+necessarily indicate an access miss. The cache hierarchy can still return the critical word to the pipeline if
+the word exists in the conventional LLC. Whether or not the full cache line is installed into the L1 is implementation
+dependent, though.
 
