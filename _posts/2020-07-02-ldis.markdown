@@ -18,3 +18,9 @@ This paper identifies that in most workloads, not all words in a cache block are
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
 that are likely to be reused in the near future be cached by a small word level store. Since only partial data is stored
 per line, more lines can be "squeezed" into a physical slot, increasing effective associativity.
+In addition, the paper also points out that the chances that unused words in a cache line be accessed later is highly
+related to the position of the line in the LRU stack. For lines that are closer to the LRU position within a set,
+it is less likely that unused words will be accessed later. This further justifies the design that only previously accessed
+words in evicted lines are stored by the word level cache, while other words are simply discarded.
+
+
