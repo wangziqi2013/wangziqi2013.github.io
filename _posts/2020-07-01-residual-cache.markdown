@@ -88,4 +88,9 @@ and then weaving the interleaved words back the original order. A miss from the 
 necessarily indicate an access miss. The cache hierarchy can still return the critical word to the pipeline if
 the word exists in the conventional LLC. Whether or not the full cache line is installed into the L1 is implementation
 dependent, though.
+If the conventional LLC signals a miss, then the full cache line is read from the DRAM. A compression will first be 
+attempted once the DRAM access completes. If the compression is successful, i.e. the line can be compressed to less 
+than 32 bytes, then it is installed to the conventional LLC after evicting an existing block. If compression fails,
+then the line will be stored uncompressed in both conventional LLC and the residual cache. An eviction is also made
+from the residual cache to make space for the new half.
 
