@@ -32,6 +32,11 @@ version_mgmt:
    in the LLC is used, the tagging should consist of higher bits of the index plus the way number in the LLC set.
    The paper also mentions higher index bits.
 
+4. The paper mentions that critical words can be delivered first, but L1 will almost always request a full cache line
+   rather than a certain word. I understand you can extend the MSHR with the word offset of the request, but eventually
+   the full line must be sent to the L1. Do you do that in the background and deliver the line to L1 later (which 
+   involves complicated corner cases), or partial hits are simply uncachable?
+
 This paper proposes residual cache, a LLC design that features lower area and power overhead compared with conventional
 set-associative caches. This paper points out that as the size of the LLC increases, the resulting higher power consumption
 and area overhead can be problematic for mobile platforms. Reducing the cache size, on the other hand, may allievate 
@@ -71,4 +76,6 @@ compression metadata is stored in an extra hardware structure called the encodin
 cover the details of the encoding cache, it can be inferred from the text that each 32 bit words require 2 bits of 
 metadata for representing its compression status. The encoding cache is only accessed when compression and decompression
 is involved.
+
+On a cache access, the conventional cache is first probed. In the case of a hit, 
 
