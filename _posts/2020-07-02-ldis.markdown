@@ -124,3 +124,10 @@ To collect statistics of the median, the L2 controller maintains eight counters,
 cache lines with i accessed words when evicted. An extra counter tracks the total number of lines evicted from the LOC.
 Only lines whose spatial locality represented by the number of bits in the footprint vector is lower than the median are
 installed into the WOC.
+
+The paper also recognizes that not all workloads benefit from LDIS. For those workloads that tend to access unused bytes
+in LRU blocks, they demonstrate higher cache miss rates, since most accesses will be case (4), which triggers a miss 
+anyway in the L2 cache, which actually reduces dynamic L2 associativity.
+The paper proposes turning off the WOC and returning the cache way used by it back to the LOC which then functions as 
+a conventional L2 cache. 
+The policy decision is made
