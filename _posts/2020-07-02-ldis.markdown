@@ -94,6 +94,10 @@ The L2 controller will combine this footprint vector to the vector of the same a
 On L1 misses, the MSHR should communicate the word offset of the access to L2, which will then set the corresponding 
 bit in L2 entry's footprint vector before serving the line.
 
+Since partial line data might be returned from L2 accesses, the paper also proposes extending each entry of the L1 data 
+cache with a bit vector indicating the presence of words on the corresponding offset. Accesses to non-existing words
+are treated as misses, which are then forwarded to the L2. 
+
 On a lookup operation, both LOC and WOC are probed in parallel. The paper lists four possible outcomes of the lookup
 operation: (1) The access hits LOC; (2) The access hits a partial word in WOC; (3) The access misses both; (4) The access
 hits an address tag in WOC, but misses the offset check.
