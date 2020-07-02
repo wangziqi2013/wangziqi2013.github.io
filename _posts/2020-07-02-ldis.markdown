@@ -40,6 +40,10 @@ version_mgmt:
 3. What if more than one 8 byte words are accessed by L1? How does the circuit compare more than one words in the tag
    array? One way is to flush the WOC and perform a line fill.
 
+4. I can't see how head bit helps storage allocation. The lookup circuit can always just read out all tags in parallel
+   and then find the range based on addresses, unless you want to save energy by not comparing address tag per lookup
+   (which is nonsense because you have to do it anyway for tag matching).
+
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
