@@ -109,3 +109,7 @@ will be unchanged. In the last stage, the compressed words are gathered, and the
 larger than 32 bytes, then compression fails, and the original block is output. If the final size is smaller 
 than 32 bytes, compression succeeds, and the compressed line is stored in the conventional LLC's data slot only. 
 The encoding cache is also updated with the compression metadata of each individual word.
+Decompression works the same, except that the pipeline stages are reversed. The compressed words and encoding metadata
+are first read out, then the shift amount is generated, and finally shifted by shifter array. The paper suggests that
+the circuit that generates shift amount and the shift array can be shared between the encoder and decoder, since they
+function identically in both directions.
