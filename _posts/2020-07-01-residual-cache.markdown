@@ -94,3 +94,9 @@ than 32 bytes, then it is installed to the conventional LLC after evicting an ex
 then the line will be stored uncompressed in both conventional LLC and the residual cache. An eviction is also made
 from the residual cache to make space for the new half.
 
+On a write request from the upper level, the block is also compressed. This process is similar to the line fill as 
+described above, except that it is possible that an older version of the line already exists. In this case, the 
+size of the old version and the size of the new block after compression is compared. If both are uncompressed or smaller
+than 32 bytes, the new version can be directly installed. Otherwise, one block needs to be evicted from the residual 
+cache or simply freed, to accommodate for the size change.
+
