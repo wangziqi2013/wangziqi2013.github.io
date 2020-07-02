@@ -113,3 +113,10 @@ fill request is sent to the lower level to fetch the full line. If any of the WO
 are also applied to the full line just fetched from the lower level. The full line is then installed into the LOC.
 Write accesses are handled similarly. The paper, however, does not give any description on how partial writes from L1
 is handled.
+
+On an LOC eviction, the dirty words are collected, and then installed into the WOC. The WOC may need to evict a few 
+logical lines to accommodate for the newly evicted block. The paper suggests that eviction decisions are made randomly
+to minimize the overhead.
+Furthermore, not all cache lines will be installed into the WOC when they are evicted. The paper proposes that only
+cache lines whose spatial locality is lower than the median of all lines are entered, while the rest are simply discarded 
+to avoid polluting the WOC and hence decreasing the dynamic associativity.
