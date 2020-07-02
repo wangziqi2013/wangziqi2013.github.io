@@ -101,4 +101,8 @@ are treated as misses, which are then forwarded to the L2.
 On a lookup operation, both LOC and WOC are probed in parallel. The paper lists four possible outcomes of the lookup
 operation: (1) The access hits LOC; (2) The access hits a partial word in WOC; (3) The access misses both; (4) The access
 hits an address tag in WOC, but misses the offset check.
-In the first two cases
+In the first two cases, the full or partial cache line are returned to the L1 respectively. The L2 controller initializes 
+the valid bit vector for the partial line such that only valid words are marked. In the third case, a cache miss is signaled,
+which initiates a cache fill request to the lower level. The fetched line is always installed into the LOC with 
+footprint bit vector cleared.
+
