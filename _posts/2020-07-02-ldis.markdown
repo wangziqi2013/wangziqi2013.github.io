@@ -44,6 +44,9 @@ version_mgmt:
    and then find the range based on addresses, unless you want to save energy by not comparing address tag per lookup
    (which is nonsense because you have to do it anyway for tag matching).
 
+5. Changing L1 to the sector cache design is somewhat an overkill. I would say it is better to just not cache the 
+   partially hit line of WOC in L1.
+
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
@@ -91,4 +94,7 @@ The L2 controller will combine this footprint vector to the vector of the same a
 On L1 misses, the MSHR should communicate the word offset of the access to L2, which will then set the corresponding 
 bit in L2 entry's footprint vector before serving the line.
 
-On a lookup operation, 
+On a lookup operation, both LOC and WOC are probed in parallel. The paper lists four possible outcomes of the lookup
+operation: (1) The access hits LOC; (2) The access hits a partial word in WOC; (3) The access misses both; (4) The access
+hits an address tag in WOC, but misses the offset check.
+In the first two cases
