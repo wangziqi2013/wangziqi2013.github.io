@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Line Distillation: Increasing Cache Capacity by Filtering Unused Words in Cache Lines"
+date:   2020-07-02 09:44:00 -0500
+categories: paper
+paper_title: "Line Distillation: Increasing Cache Capacity by Filtering Unused Words in Cache Lines"
+paper_link: https://dl.acm.org/doi/10.1109/HPCA.2007.346202
+paper_keyword: Cache; LDIS; Line Distillation
+paper_year: HPCA 2007
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
