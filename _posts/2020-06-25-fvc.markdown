@@ -19,6 +19,8 @@ version_mgmt:
 
 2. Some tasks can be moved from the controller side to one of the pipeline stages to avoid adding extra cycle penalty
 
+3. This design only saves energy, but does not conserve cache area. 
+
 **Lowlight:**
 
 1. Did not mention how training is started per-application. Does not ISA provides a way of starting training?
