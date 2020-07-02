@@ -65,5 +65,10 @@ tag. Both caches run independent eviction algorithms, but when the conventional 
 if any, should also be evicted from the residual cache. Residual cache evictions do not require the conventional LLC
 to also evict the block, though.
 
-
+A logical cache block can be stored in one of the three states: (1) Compressed and only stored in conventional LLC; 
+(2) Compressed and are stored in both caches; (3) Uncompressed and stored in both caches. In the first two cases, the 
+compression metadata is stored in an extra hardware structure called the encoding cache. Although the paper does not
+cover the details of the encoding cache, it can be inferred from the text that each 32 bit words require 2 bits of 
+metadata for representing its compression status. The encoding cache is only accessed when compression and decompression
+is involved.
 
