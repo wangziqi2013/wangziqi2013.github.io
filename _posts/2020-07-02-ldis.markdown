@@ -30,7 +30,10 @@ version_mgmt:
    that the footprint is updated when L1d write back happens. 
    And in practice it is unnecessary to do that on L1 fetch, unless the L2 is non-inclusive.
 
-2. 
+2. Handling dirty eviction might be more complicated than it seems to be. If you retain dirty words in the WOC, then
+   DRAM should do a read-modify-write to only write back partial dirty words., which may incur coherence problem if
+   another device, e.g. DMA or another core, accesses the address.
+   If you always wb full cache line before sending it to WOC, then WOC only reduces read/write misses in L2.
 
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
