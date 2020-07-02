@@ -64,4 +64,10 @@ to the same set in the LOC.
 
 In order to accommodate eight logical lines in the WOC, seven more tags are added to each WOC entry. These tags 
 contain not only the conventional address tags, which identifie the line address, but also contain the word offset within
-the cache line. The lookup circuit should compare the word to be accessed
+the cache line. The WOC lookup circuit should compare the word to be accessed, which is passed down from the L1 cache,
+with the word offset in the tag array. A hit is signaled only if both the address tag and the word offset match.
+
+To simplify storage management of the physical slot, data cannot be laid out arbitrarily. Several constraints are made
+to avoid fragmentation and compaction of data. First, single word data can be placed anywhere in the physical slot, as
+long as it is aligned to the word boundary. Tags are statically associated with words in the data slot, which means the 
+tag is also updated to the address and offset of the single word. Second, 
