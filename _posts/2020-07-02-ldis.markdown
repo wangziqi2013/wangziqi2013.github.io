@@ -130,4 +130,11 @@ in LRU blocks, they demonstrate higher cache miss rates, since most accesses wil
 anyway in the L2 cache, which actually reduces dynamic L2 associativity.
 The paper proposes turning off the WOC and returning the cache way used by it back to the LOC which then functions as 
 a conventional L2 cache. 
-The policy decision is made
+The policy decision is made using set dueling: A few random sets (called "leader sets") are selected from the L2 with 
+their address tags duplicated (called "Auxiliary Tag Directory", ATD), 
+which conducts "dry runs" of the conventional L2 policy without LDIS. Statistics are collected from the dry run to 
+determine whether switching policy would benefit performance by having a better statistics, or worsen it.
+In our case, a single counter is used to track the difference in the number of cache misses between the two policies.
+Each miss that occurs only in the leader set will increment the counter, while misses only occurring in the ATD
+decrement the counter. At the end of a sampling window, policy will be switched if the counter value is larger than
+or smaller than a certain threshold.
