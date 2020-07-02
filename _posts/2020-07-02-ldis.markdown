@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Improves associativity by partial caching
+
+**Lowlight:**
+
+1. 
+
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
