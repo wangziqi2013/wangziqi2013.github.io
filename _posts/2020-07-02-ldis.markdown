@@ -86,7 +86,9 @@ in the tag array. The head bit is set if the tag maps the first word of a segmen
 In order to track words that are accessed by the processor after a cache line is fetched into the L2, the paper proposes
 adding a bit vector, called the "footprint", to each entry in the LOC and the L1 data cache. The footprint vector
 is flash-cleared when a slot is filled with a cache line fetched from the lower level. On every L1 access, the corresponding
-bit in the L1 footprint vector is set. On L1 write backs, the footprint vector is also sent back to L2 by the eviction request.
+bit in L1 footprint vector is set. On L1 write backs, the footprint vector is also sent back to L2 by the eviction request.
 The L2 controller will combine this footprint vector to the vector of the same address using bitwise OR.
+On L1 misses, the MSHR should communicate the word offset of the access to L2, which will then set the corresponding 
+bit in L2 entry's footprint vector before serving the line.
 
 On a lookup operation, 
