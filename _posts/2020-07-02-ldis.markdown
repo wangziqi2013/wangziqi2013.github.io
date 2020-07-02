@@ -37,6 +37,9 @@ version_mgmt:
    The paper seems to suggest the former, i.e. dirty lines are partially retained. In this case DRAM contains partial
    dirty line, which complicates coherence.
 
+3. What if more than one 8 byte words are accessed by L1? How does the circuit compare more than one words in the tag
+   array? One way is to flush the WOC and perform a line fill.
+
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
@@ -56,3 +59,9 @@ The actual runtime associativity of a particular way of the WOC is dependent on 
 In practice, the L2 cache is divided to implement both LOC and WOC. For example, for a 4-way set associative L2, the first
 three ways are dedicated to LOC, whose operation is unchanged. The last way can be dedicated to the WOC for storing 
 at most eight logical lines, achieving a maximum dynamic associativity of eleven.
+The indexing scheme of WOC is the same as LOC. Each set of the WOC is only used to store cache lines that are mapped 
+to the same set in the LOC.
+
+In order to accommodate eight logical lines in the WOC, seven more tags are added to each WOC entry. These tags 
+contain not only the conventional address tags, which identifie the line address, but also contain the word offset within
+the cache line. The lookup circuit should compare the word to be accessed
