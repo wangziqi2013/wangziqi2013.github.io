@@ -50,4 +50,8 @@ words in evicted lines are stored by the word level cache, while other words are
 The LDIS design consists of two independently operating caches. The first cache, called the Line Organized Cache (LOC),
 functions as a conventional set-associative cache. Note that although the paper uses LRU and LRU stack location to 
 illutrate the relationship between spatial locality and access frequency of cache lines, the conventional cache can use
-any replacement algorithm. The 
+any replacement algorithm. The second cache, called the Word Organized Cache (WOC), is a logical cache of a maximum associativity 
+of 8, but share the data slot among all eight tags to store only frequently used words in the logical cache lines. 
+The actual runtime associativity of a particular way of the WOC is dependent on the layout of data in the physical storage.
+
+In practice,
