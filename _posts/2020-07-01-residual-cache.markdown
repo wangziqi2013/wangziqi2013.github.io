@@ -75,7 +75,9 @@ A logical cache block can be stored in one of the three states: (1) Compressed a
 compression metadata is stored in an extra hardware structure called the encoding cache. Although the paper does not
 cover the details of the encoding cache, it can be inferred from the text that each 32 bit words require 2 bits of 
 metadata for representing its compression status. The encoding cache is only accessed when compression and decompression
-is involved.
+is involved. The encoding cache has the same organization of the conventional LLC, such that entries in the LLC can be
+statically one-to-one mapped to the encoding cache. (**Note: It would be more natural to just say that the LLC tags
+are extended with an extra 2-byte field.**)
 
-On a cache access, the conventional cache is first probed. In the case of a hit, 
+On a cache access, the conventional cache is first probed. In the case of a hit, the metadata cache is read
 
