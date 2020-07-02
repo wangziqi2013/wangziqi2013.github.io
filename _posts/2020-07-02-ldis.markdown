@@ -53,5 +53,6 @@ illutrate the relationship between spatial locality and access frequency of cach
 any replacement algorithm. The second cache, called the Word Organized Cache (WOC), is a logical cache of a maximum associativity 
 of 8, but share the data slot among all eight tags to store only frequently used words in the logical cache lines. 
 The actual runtime associativity of a particular way of the WOC is dependent on the layout of data in the physical storage.
-
-In practice,
+In practice, the L2 cache is divided to implement both LOC and WOC. For example, for a 4-way set associative L2, the first
+three ways are dedicated to LOC, whose operation is unchanged. The last way can be dedicated to the WOC for storing 
+at most eight logical lines, achieving a maximum dynamic associativity of eleven.
