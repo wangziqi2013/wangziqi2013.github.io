@@ -76,5 +76,6 @@ range in the original line. This is to prevent external fragmentation, since two
 always be combined to form a larger entry of the next size class. The last constriant is that a segment of size K must
 also align to K words boundaries in the physical slot. This is also to avoid external fragmentation, since segments are
 stored compactly for most of the time if they are properly aligned.
-
+To track the starting word of a segment, the paper also proposes adding a bit, called the "head-bit" bit, to each tag
+in the tag array. The head bit is set if the tag maps the first word of a segment from a logical line in the physical slot.
 
