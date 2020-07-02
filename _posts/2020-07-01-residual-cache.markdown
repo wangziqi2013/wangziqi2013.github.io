@@ -113,3 +113,9 @@ Decompression works the same, except that the pipeline stages are reversed. The 
 are first read out, then the shift amount is generated, and finally shifted by shifter array. The paper suggests that
 the circuit that generates shift amount and the shift array can be shared between the encoder and decoder, since they
 function identically in both directions.
+
+It should also be noted that the compression algorithm is made really simple to reduce compression and decompression 
+latency, as only small integers are compressed to a shorter form. In addition, no further attempt will be made if the 
+compression algorithm could reduce the size of a block by half, since there is no direct benefit of storing a smaller
+cache line while it is already less than 32 bytes. The algorithm also does not seek a compression ratio lower than 2:1,
+since it is simply a compression failure which does not contribute to runtime energy reduction.
