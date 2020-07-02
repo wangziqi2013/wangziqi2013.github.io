@@ -25,7 +25,12 @@ version_mgmt:
 
 **Lowlight:**
 
-1. Some statements are self-conflicting. For example, in 
+1. Some statements are self-conflicting. For example, in Sec. 5.2 it is said that when there is a fetch request from L1, 
+   the L2 controller should mark the footprint bit. This, however, conflicts with the previous statement in Sec. 4.1 saying
+   that the footprint is updated when L1d write back happens. 
+   And in practice it is unnecessary to do that on L1 fetch, unless the L2 is non-inclusive.
+
+2. 
 
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
