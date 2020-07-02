@@ -55,8 +55,8 @@ part of the LLC, which qualifies for cache hits as long as the requested bytes a
 
 We next describe the design in details. The LLC data store is divided into two parts. The first part is the conventional
 part of the LLC, which still functions as a regular LLC, except that the data slot is only 32 byte per tag. Data stored
-in the conventional part of the LLC can be either a compressed line whose size is smaller than 32 bytes, 32 bytes from 
-a full cache line, or 32 bytes of a compressed cache line. Note that in the last two cases, values are stored in an
+in the conventional part of the LLC can be either a compressed line whose size is smaller than 32 bytes or 32 bytes from 
+a full cache line. Note that in the latter cases, values are stored in an
 "interleaved" manner, instead of sequentially, to avoid artificially biasing against the last 32 bytes of a block.
 The interleaving pattern may also change based on the address to avoid biasing against odd and even numbered words.
 (**Note: The paper does not explicitly have this, but I do think it is critical in the design**).
@@ -70,8 +70,8 @@ tag. Both caches run independent eviction algorithms, but when the conventional 
 if any, should also be evicted from the residual cache. Residual cache evictions do not require the conventional LLC
 to also evict the block, though.
 
-A logical cache block can be stored in one of the three states: (1) Compressed and only stored in conventional LLC; 
-(2) Compressed and are stored in both caches; (3) Uncompressed and stored in both caches. In the first two cases, the 
+A logical cache block can be stored in one of the two states: (1) Compressed and only stored in conventional LLC; 
+(2) Uncompressed and stored in both caches. In the former case, the 
 compression metadata is stored in an extra hardware structure called the encoding cache. Although the paper does not
 cover the details of the encoding cache, it can be inferred from the text that each 32 bit words require 2 bits of 
 metadata for representing its compression status. The encoding cache is only accessed when compression and decompression
@@ -79,5 +79,5 @@ is involved. The encoding cache has the same organization of the conventional LL
 statically one-to-one mapped to the encoding cache. (**Note: It would be more natural to just say that the LLC tags
 are extended with an extra 2-byte field.**)
 
-On a cache access, the conventional cache is first probed. In the case of a hit, the metadata cache is read
+
 
