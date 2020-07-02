@@ -34,6 +34,8 @@ version_mgmt:
    DRAM should do a read-modify-write to only write back partial dirty words., which may incur coherence problem if
    another device, e.g. DMA or another core, accesses the address.
    If you always wb full cache line before sending it to WOC, then WOC only reduces read/write misses in L2.
+   The paper seems to suggest the former, i.e. dirty lines are partially retained. In this case DRAM contains partial
+   dirty line, which complicates coherence.
 
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
@@ -45,4 +47,7 @@ related to the position of the line in the LRU stack. For lines that are closer 
 it is less likely that unused words will be accessed later. This further justifies the design that only previously accessed
 words in evicted lines are stored by the word level cache, while other words are simply discarded.
 
-
+The LDIS design consists of two independently operating caches. The first cache, called the Line Organized Cache (LOC),
+functions as a conventional set-associative cache. Note that although the paper uses LRU and LRU stack location to 
+illutrate the relationship between spatial locality and access frequency of cache lines, the conventional cache can use
+any replacement algorithm. The 
