@@ -105,4 +105,7 @@ of three stages, which can be pipelined to further improve throughput. In the fi
 the 32 bit words in the cache line for high bit 1's or 0's. These patterns indicate small positive or negative values,
 which can be stored with less bits. The outcome of the comparison is carried to the next stage. In the next stage, the 
 words are shifted by shifters in parallel to remove high bit 1's or 0's, if the comparator indicates so. Otherwise they
-will be unchanged. In the last stage, the 
+will be unchanged. In the last stage, the compressed words are gathered, and the final size is measured. If the size is
+larger than 32 bytes, then compression fails, and the original block is output. If the final size is smaller 
+than 32 bytes, compression succeeds, and the compressed line is stored in the conventional LLC's data slot only. 
+The encoding cache is also updated with the compression metadata of each individual word.
