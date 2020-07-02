@@ -100,3 +100,9 @@ size of the old version and the size of the new block after compression is compa
 than 32 bytes, the new version can be directly installed. Otherwise, one block needs to be evicted from the residual 
 cache or simply freed, to accommodate for the size change.
 
+The paper also proposes a low latency compression and decompression circuit prototype. The prototype algorithm consists
+of three stages, which can be pipelined to further improve throughput. In the first stage, comparators check each of 
+the 32 bit words in the cache line for high bit 1's or 0's. These patterns indicate small positive or negative values,
+which can be stored with less bits. The outcome of the comparison is carried to the next stage. In the next stage, the 
+words are shifted by shifters in parallel to remove high bit 1's or 0's, if the comparator indicates so. Otherwise they
+will be unchanged. In the last stage, the 
