@@ -79,5 +79,10 @@ is involved. The encoding cache has the same organization of the conventional LL
 statically one-to-one mapped to the encoding cache. (**Note: It would be more natural to just say that the LLC tags
 are extended with an extra 2-byte field.**)
 
-
+On a read request, the conventional cache and the encoding cache are accessed in parallel. If the conventional LLC
+signals a hit, and the metadata indicates that the line is compressed to less than 32 bytes, then the data array is 
+accessed, after which the line content is decompressed. If metadata bits suggest that the line is uncompressed, then 
+the residual cache is probed with the location of the slot that gets hit. If the residual cache also signals a hit,
+then the two halves of the uncompressed cache line are recovered by reading the data array of the residual cache
+and then weaving the interleaved words back the original order.
 
