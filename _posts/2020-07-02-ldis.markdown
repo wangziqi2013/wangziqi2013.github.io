@@ -70,4 +70,6 @@ with the word offset in the tag array. A hit is signaled only if both the addres
 To simplify storage management of the physical slot, data cannot be laid out arbitrarily. Several constraints are made
 to avoid fragmentation and compaction of data. First, single word data can be placed anywhere in the physical slot, as
 long as it is aligned to the word boundary. Tags are statically associated with words in the data slot, which means the 
-tag is also updated to the address and offset of the single word. Second, 
+tag is also updated to the address and offset of the single word. Second, multi-word data from an evicted line can only
+be stored in a power-of-two size granularity, i.e. 2, 4, or 8 words. This is to prevent external fragmentation, since two
+empty entries of the same class can always be combined to form a larger entry of the next size class. The last constriant
