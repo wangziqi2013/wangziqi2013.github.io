@@ -108,5 +108,8 @@ In the first two cases, the full or partial cache line are returned to the L1 re
 the valid bit vector for the partial line such that only valid words are marked. In the third case, a cache miss is signaled,
 which initiates a cache fill request to the lower level. The fetched line is always installed into the LOC with 
 footprint bit vector cleared.
+In the last case, all entries in the WOC that correspond to the requested address are invalidated. In addition, a line 
+fill request is sent to the lower level to fetch the full line. If any of the WOC entries is dirty, these dirty words
+are also applied to the full line just fetched from the lower level. The full line is then installed into the LOC.
 Write accesses are handled similarly. The paper, however, does not give any description on how partial writes from L1
 is handled.
