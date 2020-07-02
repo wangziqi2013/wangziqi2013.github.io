@@ -15,7 +15,7 @@ version_mgmt:
 
 **Highlight:**
 
-1. Improves associativity by partial caching
+1. Improves dynamic associativity by partial caching. We can treat the partial lines as logical cache lines.
 
 2. Use set dueling to make policy decisions on whether word level caching should be used. Although set dualing is not 
    specialized to LDIS, it is impressive how this mechanism can help.
@@ -31,23 +31,23 @@ version_mgmt:
    And in practice it is unnecessary to do that on L1 fetch, unless the L2 is non-inclusive.
 
 2. Handling dirty eviction might be more complicated than it seems to be. If you retain dirty words in the WOC, then
-   DRAM should do a read-modify-write to only write back partial dirty words., which may incur coherence problem if
-   another device, e.g. DMA or another core, accesses the address.
+   DRAM should do a read-modify-write to only write back partial dirty words, which may incur coherence problem if
+   another device, e.g. DMA or another core, accesses the DRAM.
    If you always wb full cache line before sending it to WOC, then WOC only reduces read/write misses in L2.
    The paper seems to suggest the former, i.e. dirty lines are partially retained. In this case DRAM contains partial
    dirty line, which complicates coherence.
 
 3. What if more than one 8 byte words are accessed by L1? How does the circuit compare more than one words in the tag
-   array? One way is to flush the WOC and perform a line fill.
+   array? One way is to always flush the WOC and perform a line fill, even if all accesses hit WOC.
 
 4. I can't see how head bit helps storage allocation. The lookup circuit can always just read out all tags in parallel
    and then find the range based on addresses, unless you want to save energy by not comparing address tag per lookup
    (which is nonsense because you have to do it anyway for tag matching).
 
 5. Changing L1 to the sector cache design is somewhat an overkill. I would say it is better to just not cache the 
-   partially hit line of WOC in L1.
+   partially hit line of WOC in L1. This also solves problem (6) below.
 
-6. How write backs of partial lines are handled? Are they entered into the WOC? Do they trigger a write back? Not
+6. How are write backs of partial lines handled? Are they entered into the WOC? Do they trigger a write back? Not
    mentioned at all.
 
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
