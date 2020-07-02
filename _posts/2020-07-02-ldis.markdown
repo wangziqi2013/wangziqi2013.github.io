@@ -83,3 +83,10 @@ stored compactly for most of the time if they are properly aligned.
 To track the starting word of a segment, the paper also proposes adding a bit, called the "head-bit" bit, to each tag
 in the tag array. The head bit is set if the tag maps the first word of a segment from a logical line in the physical slot.
 
+In order to track words that are accessed by the processor after a cache line is fetched into the L2, the paper proposes
+adding a bit vector, called the "footprint", to each entry in the LOC and the L1 data cache. The footprint vector
+is flash-cleared when a slot is filled with a cache line fetched from the lower level. On every L1 access, the corresponding
+bit in the L1 footprint vector is set. On L1 write backs, the footprint vector is also sent back to L2 by the eviction request.
+The L2 controller will combine this footprint vector to the vector of the same address using bitwise OR.
+
+On a lookup operation, 
