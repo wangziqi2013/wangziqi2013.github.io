@@ -120,3 +120,7 @@ to minimize the overhead.
 Furthermore, not all cache lines will be installed into the WOC when they are evicted. The paper proposes that only
 cache lines whose spatial locality is lower than the median of all lines are entered, while the rest are simply discarded 
 to avoid polluting the WOC and hence decreasing the dynamic associativity.
+To collect statistics of the median, the L2 controller maintains eight counters, with counter i tracking the number of 
+cache lines with i accessed words when evicted. An extra counter tracks the total number of lines evicted from the LOC.
+Only lines whose spatial locality represented by the number of bits in the footprint vector is lower than the median are
+installed into the WOC.
