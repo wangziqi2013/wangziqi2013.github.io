@@ -47,6 +47,9 @@ version_mgmt:
 5. Changing L1 to the sector cache design is somewhat an overkill. I would say it is better to just not cache the 
    partially hit line of WOC in L1.
 
+6. How write backs of partial lines are handled? Are they entered into the WOC? Do they trigger a write back? Not
+   mentioned at all.
+
 This paper proposes line distillation (LDIS), a technique for dynamically increasing cache associativity. 
 This paper identifies that in most workloads, not all words in a cache block are accessed equally by the processor before 
 the line is evicted from the cache. This motivates the design that cache lines are only partially evicted, and words 
@@ -105,4 +108,5 @@ In the first two cases, the full or partial cache line are returned to the L1 re
 the valid bit vector for the partial line such that only valid words are marked. In the third case, a cache miss is signaled,
 which initiates a cache fill request to the lower level. The fetched line is always installed into the LOC with 
 footprint bit vector cleared.
-
+Write accesses are handled similarly. The paper, however, does not give any description on how partial writes from L1
+is handled.
