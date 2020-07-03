@@ -38,7 +38,7 @@ For example, this paper assumes that a unified compression algorithm, LZSS, is u
 The memory hierarchy also assumes unified block size, which is 128 bytes or even larger. The larger block size not only 
 improves the effctiveness of compression, but also reduces metadata cost in the DRAM, as metadata is allocated per-block.
 Compressed blocks are not decompressed before 
-they are placed on the bus. Instead, compressed blocks are directly transferred on the bus, which are stored in compressed
+they are placed on the bus. Instead, compressed blocks are directly transferred over the bus, which are stored in compressed
 form in both the LLC and the DRAM. Caches above the LLC still store uncompressed data for minimum access latency, though.
 
 The paper is focused on the compressed cache architecture. The cache organization is based on Indirect Indexed Cache (IIC).
@@ -67,6 +67,8 @@ bits are not set. Otherwise they are promoted. The per-block reference bit is se
 the block, and cleared in a movement. The evicted block is always selected from the lowest priority pool.
 
 We next describe the changes to IIC proposed by this paper for supporting compression. First, the data array is divided into
-segments, which are finer grained than blocks. The paper suggests that each regular block be divided into four segments,
-such that a compressed block, in the best case, only uses as little as one fourth of the original size.
+segments, which are finer grained storage units than blocks. The paper suggests that each regular block be divided into 
+four segments, such that a compressed block, in the best case, only uses as little as one fourth of the original size.
+The second change is that each tag now has four, instead of one, indirect pointers. At most four segments can be addressed
+to form the logical data slot for the compressed line, although not all four pointers are always used. 
 
