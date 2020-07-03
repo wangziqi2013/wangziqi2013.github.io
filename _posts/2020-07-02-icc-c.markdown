@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Unified Compressed Memory Hierarchy"
+date:   2020-07-02 21:17:00 -0500
+categories: paper
+paper_title: "A Unified Compressed Memory Hierarchy"
+paper_link: https://ieeexplore.ieee.org/document/1385941
+paper_keyword: Cache; Cache Compression; ICC; ICC-C
+paper_year: HPCA 2005
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
