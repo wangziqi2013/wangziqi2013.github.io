@@ -55,4 +55,8 @@ associative in terms of tag mapping.
 
 The IIC also features a customized eviction algorithm called generational replacement. The replacement algorithm features
 two distinctive design decisions. First, replacement decisions are made globally among all data slots, rather than within
-a single set. Global access information must be considered in order to make optimal decision. Second, 
+a single set. Global access information must be considered in order to make optimal decision. Second, locality information 
+is only a filtered access trace at LLC level. Frequently accessed blocks may seem less recently used at LLC level, rendering 
+LRU unhelpful. The genetation algorithm, therefore, tracks access frequency rather than recency using four priority pools.
+Each pool is organized as a FIFO stack. Blocks can be promoted or demoted into higher or lower priority queues only when they
+are at the head of the FIFO stack. A block inserted into the pool is always at the tail of the stack.
