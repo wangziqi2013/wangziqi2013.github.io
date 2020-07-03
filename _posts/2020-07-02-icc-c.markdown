@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. There is no description on memory and bus compression. Even the cache compression scheme is an low effort one that
+   is based on a previous design. What is the novelty of this paper?
+
 This paper proposes ICC-C, a unified cache, bus and memory compression scheme. The paper summarizes previous works on 
 cache, bus and memory compression as follows. First, cache compression helps in reducing SRAM access overhead for less
 power consumption, or increasing effective cache size for better performance. Second, data transferred on the system bus
