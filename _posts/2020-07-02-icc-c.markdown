@@ -80,5 +80,6 @@ misses as indicators. In the modified algorithm, a block is always stored in unc
 The block is only re-compressed when it is moved out of the current pool. Recall that pool promotions and demotions are
 driven by cache misses. Frequent cache misses, meaning that the current working set size is larger than the cache,
 will cause more blocks be stored in the compressed form, increasing overall compression ratio at the cost of longer
-access latency. 
+access latency. On the other hand, if cache misses are relatively infrequent, then most lines will be stored uncompressed,
+reducing performance impact to a minimum.
 
