@@ -35,7 +35,9 @@ This paper claims that a unified cache, bus and memory compression scheme can he
 of the individual scheme. The unified scheme is designed to take all aspects of the memory hierarchy into consideration
 without costly interfacing between component boundaries, such as the cache-bus boundary and bus-memory boundary.
 For example, this paper assumes that a unified compression algorithm, LZSS, is used for all compressed components. 
-The memory hierarchy also assumes unified block size, which is 128 bytes. Compressed blocks are not decompressed before 
+The memory hierarchy also assumes unified block size, which is 128 bytes or even larger. The larger block size not only 
+improves the effctiveness of compression, but also reduces metadata cost in the DRAM, as metadata is allocated per-block.
+Compressed blocks are not decompressed before 
 they are placed on the bus. Instead, compressed blocks are directly transferred on the bus, which are stored in compressed
 form in both the LLC and the DRAM. Caches above the LLC still store uncompressed data for minimum access latency, though.
 
@@ -63,3 +65,8 @@ are at the head of the FIFO stack. A block inserted into the pool is always at t
 and demotion are driven by cache misses. Every time a miss occurs, the head block in each pool is demoted if their reference
 bits are not set. Otherwise they are promoted. The per-block reference bit is set when a request from upper level hits 
 the block, and cleared in a movement. The evicted block is always selected from the lowest priority pool.
+
+We next describe the changes to IIC proposed by this paper for supporting compression. First, the data array is divided into
+segments, which are finer grained than blocks. The paper suggests that each regular block be divided into four segments,
+such that a compressed block, in the best case, only uses as little as one fourth of the original size.
+
