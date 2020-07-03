@@ -76,5 +76,9 @@ if the working set size is already smaller than the cache, compression actually 
 the decompression latency which is on the critical path of upper level reads. On the other hand, when the working set
 size is larger than the cache, compression can allievate or eliminate the extra cache misses by utilizing resources
 more efficiently. The selective compression policy seeks to attain balance between these two scenatios using cache 
-misses as indicators. In the modified algorithm, 
+misses as indicators. In the modified algorithm, a block is always stored in uncompressed form when it is accessed.
+The block is only re-compressed when it is moved out of the current pool. Recall that pool promotions and demotions are
+driven by cache misses. Frequent cache misses, meaning that the current working set size is larger than the cache,
+will cause more blocks be stored in the compressed form, increasing overall compression ratio at the cost of longer
+access latency. 
 
