@@ -34,4 +34,7 @@ which are then decompressed by the cache controller at the receiving end.
 This paper claims that a unified cache, bus and memory compression scheme can help further improve performance than any
 of the individual scheme. The unified scheme is designed to take all aspects of the memory hierarchy into consideration
 without costly interfacing between component boundaries, such as the cache-bus boundary and bus-memory boundary.
-
+For example, this paper assumes that a unified compression algorithm, LZSS, is used for all compressed components. 
+The memory hierarchy also assumes unified block size, which is 128 bytes. Compressed blocks are not decompressed before 
+they are placed on the bus. Instead, compressed blocks are directly transferred on the bus, which are stored in compressed
+form in both the LLC and the DRAM. Caches above the LLC still store uncompressed data for minimum access latency, though.
