@@ -30,3 +30,8 @@ compression can be enabled for only a specific range or type of pages, or enable
 transparently. Although not mentioned by this paper, memory compression schemes can also serve the purpose of saving 
 bandwidth without having any capacity benefit. In this scheme, compressed lines are fetched and transferred on the bus,
 which are then decompressed by the cache controller at the receiving end.
+
+This paper claims that a unified cache, bus and memory compression scheme can help further improve performance than any
+of the individual scheme. The unified scheme is designed to take all aspects of the memory hierarchy into consideration
+without costly interfacing between component boundaries, such as the cache-bus boundary and bus-memory boundary.
+
