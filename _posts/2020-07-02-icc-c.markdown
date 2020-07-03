@@ -40,8 +40,15 @@ they are placed on the bus. Instead, compressed blocks are directly transferred 
 form in both the LLC and the DRAM. Caches above the LLC still store uncompressed data for minimum access latency, though.
 
 The paper is focused on the compressed cache architecture. The cache organization is based on Indirect Indexed Cache (IIC).
+All tags in IIC are mapped to data slots via an indirect link, implying sequencial accesses between tag and data.
 IIC is a dynamic associativity design based on tag chaining. IIC consists of two parts. The first part is a conventional 
 LLC instance where cache lines are statically mapped to sets based on addresses, and cache lines can be mapped to any of 
 the ways in a set. The second part is comprised with "free" tags and data slots. When a set needs extra data slots, instead
 of evicting an existing block as in the conventional cache design, the cache controller will allocate a free tag and the 
-associated data slot to dynamically increase the associativity of the set. 
+associated data slot to dynamically increase the associativity of the set. The tag is added to the set via a link pointer
+of the set. Tags may also form a linked list via pointers stored in each tag. An IIC lookup, therefore, must probe not only
+the conventional part of the tags, but also chained tags by following the link.
+The baseline IIC design may also over-provision more tags than the number of dara arrays. When a tag is allocated 
+to a certain set, but no data slot is available, an existing data slot from another set can be evicted. Such eviction
+decisions can be made given global usage information, and therefore in an optimal manner, since the data array is fully 
+associative in terms of tag mapping.
