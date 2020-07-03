@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. The trade-off between decompression latency and overall compression ratio can be dynamically adjusted based on the 
+   current miss ratio. Cache miss frequency serves as an indicator on whether or not more blocks should be compressed.
+
+
+
 **Lowlight:**
 
 1. There is no description on memory and bus compression. Even the cache compression scheme is an low effort one that
@@ -83,3 +90,4 @@ will cause more blocks be stored in the compressed form, increasing overall comp
 access latency. On the other hand, if cache misses are relatively infrequent, then most lines will be stored uncompressed,
 reducing performance impact to a minimum.
 
+The paper did not 
