@@ -24,4 +24,9 @@ power consumption, or increasing effective cache size for better performance. Se
 can also be encoded with frequent patterns. The sending end and receiving end both keep a dictionary whose contents are 
 pre-synchronized to be consistent. Frequent patterns such as all-ones or all-zeros are encoded using dictionary codewords
 to reduce the number of bits on the bus. Since these are common patterns for both address and data, bus compression also 
-helps increasing effective bandwidth and reducing latency. Memory compression
+helps increasing effective bandwidth and reducing latency. Memory compression, as pointed out by the paper, also increases
+effective memory bandwidth by remapping memory blocks to alternative addresses for more compact storage. Memory
+compression can be enabled for only a specific range or type of pages, or enabled globally for all physical pages 
+transparently. Although not mentioned by this paper, memory compression schemes can also serve the purpose of saving 
+bandwidth without having any capacity benefit. In this scheme, compressed lines are fetched and transferred on the bus,
+which are then decompressed by the cache controller at the receiving end.
