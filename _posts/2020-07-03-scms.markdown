@@ -13,4 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Letting OS decide which blocks should be compressed and hardware only follows is a illusrtration of good division of 
+   responsibility (The OS initialize the page table and compressed data layout, and hardware follows this layout unless
+   a fat write occurs).
+
+2. The seamless integration between page-based memory compression and super-block based cache compression saves metadata
+   overhead. Compressed blocks are not decompressed before and after transferred over the system bus, maintaining a uniform
+   layout between memory and LLC.
+   
 
