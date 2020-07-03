@@ -52,3 +52,7 @@ The baseline IIC design may also over-provision more tags than the number of dar
 to a certain set, but no data slot is available, an existing data slot from another set can be evicted. Such eviction
 decisions can be made given global usage information, and therefore in an optimal manner, since the data array is fully 
 associative in terms of tag mapping.
+
+The IIC also features a customized eviction algorithm called generational replacement. The replacement algorithm features
+two distinctive design decisions. First, replacement decisions are made globally among all data slots, rather than within
+a single set. Global access information must be considered in order to make optimal decision. Second, 
