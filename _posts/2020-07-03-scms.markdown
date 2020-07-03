@@ -28,3 +28,11 @@ version_mgmt:
 4. Using page table to store the small compression vector for describing page layout to achieve minimum DRAM metadata overhead.
 
 5. Using adjacent sets to store compressed blocks in the LLC to minimize LLC metadata overhead
+
+**Lowlight:**
+
+1. Writing is really poor. I do suggest whoever that wrote Section 1 and 2 perform a basic proof read on later sections.
+   In addition, whoever wrote later sections should first make sure correct terminologies are used, and don't write like
+   spagetti. 
+   Overall, the paper looks like a product of pipelined writing, which is fine, but before submission can you please
+   at least unify the writing style across sections.
