@@ -18,7 +18,10 @@ version_mgmt:
 1. The trade-off between decompression latency and overall compression ratio can be dynamically adjusted based on the 
    current miss ratio. Cache miss frequency serves as an indicator on whether or not more blocks should be compressed.
 
+2. From another perspective: Not all blocks are necessarily stored compressed. They can be uncompressed to support fast
+   read especially if the block's compressibility is not good.
 
+3. Using the same block and segment layout can help unifying cache and memory compression
 
 **Lowlight:**
 
