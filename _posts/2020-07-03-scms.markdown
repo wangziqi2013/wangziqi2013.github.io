@@ -23,4 +23,8 @@ version_mgmt:
    overhead. Compressed blocks are not decompressed before and after transferred over the system bus, maintaining a uniform
    layout between memory and LLC.
    
+3. It is a good balancing point between efficiency and simplicity to only compress adjacent even-odd blocks.
 
+4. Using page table to store the small compression vector for describing page layout to achieve minimum DRAM metadata overhead.
+
+5. Using adjacent sets to store compressed blocks in the LLC to minimize LLC metadata overhead
