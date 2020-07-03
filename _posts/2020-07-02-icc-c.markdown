@@ -59,4 +59,7 @@ a single set. Global access information must be considered in order to make opti
 is only a filtered access trace at LLC level. Frequently accessed blocks may seem less recently used at LLC level, rendering 
 LRU unhelpful. The genetation algorithm, therefore, tracks access frequency rather than recency using four priority pools.
 Each pool is organized as a FIFO stack. Blocks can be promoted or demoted into higher or lower priority queues only when they
-are at the head of the FIFO stack. A block inserted into the pool is always at the tail of the stack.
+are at the head of the FIFO stack. A block inserted into the pool is always at the tail of the stack. Block promotion
+and demotion are driven by cache misses. Every time a miss occurs, the head block in each pool is demoted if their reference
+bits are not set. Otherwise they are promoted. The per-block reference bit is set when a request from upper level hits 
+the block, and cleared in a movement. The evicted block is always selected from the lowest priority pool.
