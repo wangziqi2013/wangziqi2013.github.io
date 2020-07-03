@@ -38,3 +38,10 @@ For example, this paper assumes that a unified compression algorithm, LZSS, is u
 The memory hierarchy also assumes unified block size, which is 128 bytes. Compressed blocks are not decompressed before 
 they are placed on the bus. Instead, compressed blocks are directly transferred on the bus, which are stored in compressed
 form in both the LLC and the DRAM. Caches above the LLC still store uncompressed data for minimum access latency, though.
+
+The paper is focused on the compressed cache architecture. The cache organization is based on Indirect Indexed Cache (IIC).
+IIC is a dynamic associativity design based on tag chaining. IIC consists of two parts. The first part is a conventional 
+LLC instance where cache lines are statically mapped to sets based on addresses, and cache lines can be mapped to any of 
+the ways in a set. The second part is comprised with "free" tags and data slots. When a set needs extra data slots, instead
+of evicting an existing block as in the conventional cache design, the cache controller will allocate a free tag and the 
+associated data slot to dynamically increase the associativity of the set. 
