@@ -37,7 +37,13 @@ We next describe the compression algorithm in details. As mentioned above, the c
 four byte words for full and partial matching with incoming words. The size of the dictionary is unspecified. A larger
 dictionary may result in better compression for data with distant locality (i.e. symbols tend to repeat on large 
 distances), at the cost of using more bits to encode dictionary index. The input word is compared with all dictionary
-entries, which may result in full match or partial matches. 
+entries, which may result in full match or partial matches. A full match is the case where all four bytes are identical, 
+while in a partial match, two or more bytes at different locations are identical, with the remaining bytes not matching 
+the entry. X-Match allows partial mapping to be also encoded using dictionary entries to attain better compression results.
+The codeword for a dictionary match is encoded as a "1" bit, followed by the index of the dictionary entry, followed
+by the match type, which is then followed by byte literals that are not matched, if any. 
+
+
 
 
 TODO: ADD RUN LENGTH OPTIMIZATION
