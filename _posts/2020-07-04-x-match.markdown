@@ -16,4 +16,8 @@ version_mgmt:
 This paper proposes X-Match and X-RL, a memory compression and decompression algorithm with harrware implementation.
 The paper identifies three major problems with previous software compression algorithms. First, traditional software
 compression algorithms tend to introduce large data blowup at the initial stage of compression, since these algorithms
-are designed for streams of large size, while memory compression works on smaller blocks. 
+are designed for streams of large size, while memory compression works on smaller blocks. The second problem is that 
+software encoding and decoding are designed to be asynchronous with input and output, meaning that they often consume 
+and output bits without a fixed bit rate. Hardware implementations of these algorithms require special interfacing or
+buffering with other components, since these hardware components most likely expects the same number of bits per cycle.
+The last issue is 
