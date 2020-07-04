@@ -78,7 +78,11 @@ tag of block i, and with C bit setting to one.
 On a cache lookup, both set i and set (i + 1) are probed in parallel. A cache hit is declared if the full tag matches. 
 The C bit is then checked to determine the layout of the physical slot. If C bit is cleared, then the slot contains 
 uncompressed data. Otherwise, the slot contains compressed blocks. The block addresses can be recovered by concatenating
-the tag with i and (i + 1).
+the tag with i and (i + 1). To support parallel tag checks on two adjacent sets, the paper proposes that the tag array be
+further partitioned into two sub-banks, one for even numbered sets, and the other for odd numbered sets.
+On a set lookup, the index bits are extracted with the lowest bit masked off as i. Then set i and i + 1 from the sub-bank
+are read in parallel. This design essentially doubles the associativity of compressed blocks, which helps reducing 
+unnecessaryy evictions when compressed blocks are inserted into the LLC.
 
 TODO: Adding three tradeoff, i.e. Only consider 2:1 compression; Only compression two blocks to the same slot; Only 
 use two size classes
