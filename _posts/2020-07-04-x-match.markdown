@@ -42,7 +42,9 @@ while in a partial match, two or more bytes at different locations are identical
 the entry. X-Match allows partial mapping to be also encoded using dictionary entries to attain better compression results.
 The codeword for a dictionary match is encoded as a "1" bit, followed by the index of the dictionary entry, followed
 by the match type, which is then followed by byte literals that are not matched, if any. 
-
+The index of the entry is encoded using log2(k) bits, where k is the current size of the dictionary (before inserting
+the current word). Such "phased binary" representation of dictionary indices reduce the number of bits required at early
+stages when the dictionary is not yet full. 
 
 
 
