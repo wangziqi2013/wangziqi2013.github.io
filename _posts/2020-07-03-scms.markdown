@@ -120,4 +120,11 @@ locates the PTE, the bit vector is also fetched for computing block offsets. A "
 blocks 2i and (2i + 1) are mapped to the same block offset. The block offsets are added to the base physical address 
 stored in the PTE to derive the physical block address.
 
+When the OS allocates a page and initializes its page table entry, the OS determines how the blocks in the page should 
+be laid out by setting the bit vector in the PTE. 
+Block layouts are also updated, if a dirty block is written back from the LLC, and the compressibility of the block changes. 
+If the block was not compressed, but the write back request contains a compressed block, then both the block and its adjacent 
+neighbor will be stored in compressed form in the page, after which the bit vector is also updated. Page shrinking may
+
+
 TODO: Adding compression algo at the end
