@@ -67,7 +67,12 @@ as it could, and only notifies the OS when necessary (e.g. a new page must be al
 This way, applications and the OS can identify pages that need compression based on program semantics. Uncompressed 
 pages are accessed like normal at unimpeded speed, while pages with bad compressibility can also be avoided.
 
-TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
+The compressed cache follows the conventional LLC design, with a static mapping between tag and data slots, without
+tag over-provisioning and indirection. Each tag is only extended with a "compressed" bit (C bit) to track whether it
+contains two adjacent blocks in compressed form, or a single uncompressed block. 
+The set mapping between block addresses and physical sets are slightly different from the conventional scheme, since
+in SCMS, block i and i + 1 (assuming i is an even block) are compressed to the same physical slot, while they will
+map to two adjacent sets in the cache. 
 
 TODO: Adding three tradeoff, i.e. Only consider 2:1 compression; Only compression two blocks to the same slot; Only 
 use two size classes
