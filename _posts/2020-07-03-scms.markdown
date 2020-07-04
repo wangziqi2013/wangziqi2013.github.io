@@ -103,4 +103,12 @@ Note that uncompressed blocks remain in the compressor buffer as a means of prov
 accessed data. The buffer is checked in parallel with an LLC lookup, and has the priority of providing uncompressed 
 contents to the upper level cache if it is hit.
 
+When blocks are evicted from the LLC, it is directly transferred on the bus without having to be decompressed first.
+Compressed blocks are still organized into pages, and are stored compactly on the physical page. SCMS conserves memory 
+by using two size class pages. Half-sized paged are used if compression of adjacent blocks can reduce the size of the 
+page to less than half of the conventional page size. Full-sized pages are used otherwise. The OS is still responsible
+for allocating pages. The paper suggests that both half and full pages should align to the corresponding size boundaries
+to ease hardware address translation.
+
+
 TODO: Adding compression algo at the end
