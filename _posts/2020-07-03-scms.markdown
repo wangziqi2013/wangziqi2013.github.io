@@ -55,12 +55,17 @@ in the compressed form over the system bus. No extra compression and decompressi
 DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks into one block,
 achieving a maximum compression ratio of 2:1. This design decision not only simplifies the decompression algorithm due
 to the lower requirement on compression ratio, but also allievates "fat write" problem, since it can tolerate slight
-size changes after writes, as long as the compression ratio is still above 2:1. Lastly, SCMS features simple layouts of 
+size changes after writes, as long as the compression ratio is still above 2:1. Third, SCMS features simple layouts of 
 compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the DRAM, just with two different size class
 pages, which can be addressed with simple offset arithmetics. In the LLC, two compressed blocks always occupy the same 
 physical slot, which can be in one of the two sets these two blocks' addresses map to. The simple layout reduces metadata
 overhead to a minimum, as neither extra tag in the cache nor extra metadata storage in DRAM is required to perform
-address mapping for compressed blocks.
+address mapping for compressed blocks. 
+Lastly, SCMS relies on the Operating System to make compression decisions. Compression decision are made when the 
+OS initializes a page's contents and its page table entry. Hardware solely follows the compression decision as best
+as it could, and only notifies the OS when necessary (e.g. a new page must be allocated due to layout changes).
+This way, applications and the OS can identify pages that need compression based on program semantics. Uncompressed 
+pages are accessed like normal at unimpeded speed, while pages with bad compressibility can also be avoided.
 
 TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
 
