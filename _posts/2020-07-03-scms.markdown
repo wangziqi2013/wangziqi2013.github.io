@@ -50,7 +50,12 @@ The last challenge is that the size of compressed blocks may change, requiring p
 are stored compactly. The article calls this as "fat write" problem. When fat writes occur, either the layout of compressed 
 blocks is changed, or the compression mechanism leaves some "slack" to absorb such changes in some degrees.
 
-
+SCMS solves the above issues using a unified DRAM and LLC compression architecture. First, compressed blocks are transferred
+in the compressed form over the system bus. No extra compression and decompression is performed on data exchange between
+DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks into one block,
+achieving a maximum compression ratio of 2:1. This design decision not only simplifies the decompression algorithm due
+to the lower requirement on compression ratio, but also allievates "fat write" problem, since it can tolerate slight
+size changes after writes, as long as the compression ratio is still above 2:1.
 
 TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
 
