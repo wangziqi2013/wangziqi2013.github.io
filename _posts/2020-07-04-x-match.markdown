@@ -20,4 +20,7 @@ are designed for streams of large size, while memory compression works on smalle
 software encoding and decoding are designed to be asynchronous with input and output, meaning that they often consume 
 and output bits without a fixed bit rate. Hardware implementations of these algorithms require special interfacing or
 buffering with other components, since these hardware components most likely expects the same number of bits per cycle.
-The last issue is 
+The last issue is that most software algorithms are not meant to be mapped to hardware. Their designs more or
+less include parts that are not easily transformed into hardware circuits.
+
+
