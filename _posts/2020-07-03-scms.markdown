@@ -55,7 +55,9 @@ in the compressed form over the system bus. No extra compression and decompressi
 DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks into one block,
 achieving a maximum compression ratio of 2:1. This design decision not only simplifies the decompression algorithm due
 to the lower requirement on compression ratio, but also allievates "fat write" problem, since it can tolerate slight
-size changes after writes, as long as the compression ratio is still above 2:1.
+size changes after writes, as long as the compression ratio is still above 2:1. Lastly, SCMS features simple layouts of 
+compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the DRAM, just with two different size class
+pages, which can be addressed with simple offset arithmetics. 
 
 TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
 
