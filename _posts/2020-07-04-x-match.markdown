@@ -23,4 +23,9 @@ buffering with other components, since these hardware components most likely exp
 The last issue is that most software algorithms are not meant to be mapped to hardware. Their designs more or
 less include parts that are not easily transformed into hardware circuits.
 
-
+From a high level, X-Match is a dictionary-based encoding and decoding scheme using fixed input and output granularity.
+The input stream is consumed by compressor in four byte granularity, and the decompressor also outputs data in four byte
+granularity. On the compressing side, a dictionary of four byte words are maintained. Words are compared with dictionary
+entries to determine whether they can be represented in a shorter form using a combination of dictionary entries and 
+raw literals. The results are packed as variably sized codewords consisting of a few fields for identifying the type,
+dictionary entry, and/or raw literals. On the decompression side, 
