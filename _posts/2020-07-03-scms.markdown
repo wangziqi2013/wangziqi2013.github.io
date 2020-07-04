@@ -57,7 +57,10 @@ achieving a maximum compression ratio of 2:1. This design decision not only simp
 to the lower requirement on compression ratio, but also allievates "fat write" problem, since it can tolerate slight
 size changes after writes, as long as the compression ratio is still above 2:1. Lastly, SCMS features simple layouts of 
 compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the DRAM, just with two different size class
-pages, which can be addressed with simple offset arithmetics. 
+pages, which can be addressed with simple offset arithmetics. In the LLC, two compressed blocks always occupy the same 
+physical slot, which can be in one of the two sets these two blocks' addresses map to. The simple layout reduces metadata
+overhead to a minimum, as neither extra tag in the cache nor extra metadata storage in DRAM is required to perform
+address mapping for compressed blocks.
 
 TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
 
