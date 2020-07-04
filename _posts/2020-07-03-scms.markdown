@@ -130,4 +130,8 @@ in an uncompressed form, the DRAM controller should first attempt to decompress 
 one of them with the write back. The rest of the blocks in the page should also be shifted to make space for the new slot.
 If the page is already full, which only happens for half-sized pages, then the OS should be interrupted for a larger page.
 
-TODO: Adding compression algo at the end
+The paper proposes using dictionary-based X-RL as the compression algorithm. The hardware compressor and decompressor 
+work on blocks twice of the size of a cache line in the LLC. The input stream is first divided into two equally
+sized sub-blocks, and then compressed independently using two compressors. The output streams are stored in an byte-interleaved
+manner, such that decompression for both streams could begin early after the first few leading bytes are received from
+bus transfer. 
