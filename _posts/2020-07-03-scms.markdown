@@ -125,6 +125,9 @@ be laid out by setting the bit vector in the PTE.
 Block layouts are also updated, if a dirty block is written back from the LLC, and the compressibility of the block changes. 
 If the block was not compressed, but the write back request contains a compressed block, then both the block and its adjacent 
 neighbor will be stored in compressed form in the page, after which the bit vector is also updated. Page shrinking may
-
+also be necessary, but is not on the critical path. On the other hand, if a block was stored compressed, but written back
+in an uncompressed form, the DRAM controller should first attempt to decompress the old compacted block, and then update 
+one of them with the write back. The rest of the blocks in the page should also be shifted to make space for the new slot.
+If the page is already full, which only happens for half-sized pages, then the OS should be interrupted for a larger page.
 
 TODO: Adding compression algo at the end
