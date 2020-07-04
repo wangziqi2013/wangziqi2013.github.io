@@ -94,6 +94,13 @@ the critical word of the request can be delivered as soon as it is output from t
 is processing a block read from the DRAM (which happens when an access also misses the LLC), the transfer of the block
 and the decompression process can be pipelined, i.e. decompression could start as soon as the leading bytes are received
 from the system bus. This reduces the latency of accesses since it essentally overlaps bus transfer with decompression.
-
+When dirty blocks are written back from the upper level, the cache controller should first check whether the block
+is currently stored in the LLC in compressed form. If true, then the compressed block is first read from the cache,
+decompressed, updated with the evicted dirty block, and then recompressed. If the block after compression still fits into
+a physical slot, then the physical slot is updated. Otherwise, only uncompressed blocks will be stored in the LLC. One
+of these two uncompressed blocks use the current slot, while the other one needs to find an empty slot in the other set.
+Note that uncompressed blocks remain in the compressor buffer as a means of providing fast access to the most recently
+accessed data. The buffer is checked in parallel with an LLC lookup, and has the priority of providing uncompressed 
+contents to the upper level cache if it is hit.
 
 TODO: Adding compression algo at the end
