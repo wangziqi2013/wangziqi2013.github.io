@@ -90,6 +90,10 @@ unnecessaryy evictions when compressed blocks are inserted into the LLC.
 On accesses to compressed blocks in the LLC from the upper level, the compressed block is sent to the decompressor 
 for decoding. The decompressor has a buffer, which lies between the LLC and upper level caches and serves as a small
 cache for the most recent decompressed blocks. The paper proposes two optimizations for the decompressor. First, 
-the critical word of the request can be delivered as soon as it is output from the decompressor. 
+the critical word of the request can be delivered as soon as it is output from the decompressor. Second, if the decompressor
+is processing a block read from the DRAM (which happens when an access also misses the LLC), the transfer of the block
+and the decompression process can be pipelined, i.e. decompression could start as soon as the leading bytes are received
+from the system bus. This reduces the latency of accesses since it essentally overlaps bus transfer with decompression.
+
 
 TODO: Adding compression algo at the end
