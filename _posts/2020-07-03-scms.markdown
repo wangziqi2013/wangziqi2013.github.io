@@ -43,7 +43,14 @@ The journal identifies three challenges of cache and memory compression designs.
 path of access operations. The decompression architecture must be able to deliver raw bytes with high throuhgput and low
 latency. For a unified LLC and DRAM compression scheme, the decompression bottleneck occurs on the datapath between the
 LLC and the upper level cache, which requires certain hardware structure to deal with.
-Second, 
+Second, compression algorithms, in the worst case, may produce blocks even larger than the uncompressed size due to extra
+metadata bits in the compressed stream. The compression scheme must be able to identify memory blocks that are not easily
+compressible, and disable compression on these blocks to minimize the negative impact. 
+The last challenge is that the size of compressed blocks may change, requiring potential layout changes if compressed blocks
+are stored compactly. The article calls this as "fat write" problem. When fat writes occur, either the layout of compressed 
+blocks is changed, or the compression mechanism leaves some "slack" to absorb such changes in some degrees.
+
+
 
 TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
 
