@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Design and Performance of a Main Memory Hardware Data Compressor"
+date:   2020-07-04 16:55:00 -0500
+categories: paper
+paper_title: "Design and Performance of a Main Memory Hardware Data Compressor"
+paper_link: 
+paper_keyword: Compression; X-Match
+paper_year: EUROMICRO 1996
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
