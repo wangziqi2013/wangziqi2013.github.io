@@ -33,4 +33,9 @@ The decompressor also maintains a dictionary the same way as the compressor, the
 words that have been compressed/decompressed. The decompressor outputs the original word by combining dictionary entries
 with raw literals (if any) in the codeword.
 
+We next describe the compression algorithm in details. As mentioned above, the compressor maintains a dictionary of
+four byte words for full and partial matching with incoming words. The size of the dictionary is unspecified. A larger
+dictionary may result in better compression for data with distant locality (i.e. symbols tend to repeat on large 
+distances), at the cost of using more bits to encode dictionary index. 
 
+TODO: ADD RUN LENGTH OPTIMIZATION
