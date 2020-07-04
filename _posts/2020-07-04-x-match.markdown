@@ -28,4 +28,9 @@ The input stream is consumed by compressor in four byte granularity, and the dec
 granularity. On the compressing side, a dictionary of four byte words are maintained. Words are compared with dictionary
 entries to determine whether they can be represented in a shorter form using a combination of dictionary entries and 
 raw literals. The results are packed as variably sized codewords consisting of a few fields for identifying the type,
-dictionary entry, and/or raw literals. On the decompression side, 
+dictionary entry, and/or raw literals. On the decompression side, encoded codewords are consumed field-by-field. 
+The decompressor also maintains a dictionary the same way as the compressor, the content of which is a function of 
+words that have been compressed/decompressed. The decompressor outputs the original word by combining dictionary entries
+with raw literals (if any) in the codeword.
+
+
