@@ -112,8 +112,12 @@ Compressed blocks are still organized into pages, and are stored compactly on th
 by using two size class pages. Half-sized paged are used if compression of adjacent blocks can reduce the size of the 
 page to less than half of the conventional page size. Full-sized pages are used otherwise. The OS is still responsible
 for allocating pages. The paper suggests that both half and full pages should align to the corresponding size boundaries
-to ease hardware address translation.
+to ease hardware address translation. One more bit is added to the physical page number in the PTE to support half-sized pages.
 The layout of compressed blocks are described by a small bit vector in the page table entry. Bit i in the vector 
 indicates whether block 2i and (2i + 1) are compressed together. 
+The mapping from virtual block address to physical block addresses happen during MMU page walk. Once the page walker
+locates the PTE, the bit vector is also fetched for computing block offsets. A "1" bit in offset i indicates that
+blocks 2i and (2i + 1) are mapped to the same block offset. The block offsets are added to the base physical address 
+stored in the PTE to derive the physical block address.
 
 TODO: Adding compression algo at the end
