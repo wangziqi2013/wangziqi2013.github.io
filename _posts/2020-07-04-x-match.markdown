@@ -48,8 +48,13 @@ stages when the dictionary is not yet full.
 The matching type is also encoded with static Huffman code, with the more common types of matches using less number of 
 bits. The Huffman code is hardwired into the algorithm, which is generated based on empirical data.
 Multiple partial matches may qualify for a single word. In this case, priority is given to the full match entry, and then
-a partial match entry with the least number of byte literals, and then partial match entries with the smallest index to
-minimize the codeword size (**Note: I can't see how smallest index helps in this case, but it is just a minor glitch**). 
+a partial match entry with the least number of byte literals, and then partial match types with the smallest number of bits 
+to minimize the codeword size. 
+If no match can be found, the codeword is encoded with a "0" bit at the beginning, followed by the word literal.
+This guarantees that in the worst case and in early stages of the algorithm, where no matching can ever be found, the 
+encoded stream will only be slightly larger (1 bit overhead for each 32 bit word) than the original.
+
+
 
 DICT UPDATE AND MAINTENANCE / EVICTION / ROTATION RULES
 
