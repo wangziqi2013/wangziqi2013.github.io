@@ -87,4 +87,9 @@ On a set lookup, the index bits are extracted with the lowest bit masked off as 
 are read in parallel. This design essentially doubles the associativity of compressed blocks, which helps reducing 
 unnecessaryy evictions when compressed blocks are inserted into the LLC.
 
+On accesses to compressed blocks in the LLC from the upper level, the compressed block is sent to the decompressor 
+for decoding. The decompressor has a buffer, which lies between the LLC and upper level caches and serves as a small
+cache for the most recent decompressed blocks. The paper proposes two optimizations for the decompressor. First, 
+the critical word of the request can be delivered as soon as it is output from the decompressor. 
+
 TODO: Adding compression algo at the end
