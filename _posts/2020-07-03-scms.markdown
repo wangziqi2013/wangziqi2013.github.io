@@ -29,6 +29,9 @@ version_mgmt:
 
 5. Using adjacent sets to store compressed blocks in the LLC to minimize LLC metadata overhead
 
+To summarize 3 - 5: There are two major trade-offs in the paper: (1) Trade-off between compression effectiveness and cache 
+management difficulties; (2) Trade-off between DRAM saving and page mapping metadata cost.
+
 **Lowlight:**
 
 1. Writing is really poor. I do suggest whoever that wrote Section 1 and 2 perform a basic proof read on later sections.
@@ -83,8 +86,5 @@ further partitioned into two sub-banks, one for even numbered sets, and the othe
 On a set lookup, the index bits are extracted with the lowest bit masked off as i. Then set i and i + 1 from the sub-bank
 are read in parallel. This design essentially doubles the associativity of compressed blocks, which helps reducing 
 unnecessaryy evictions when compressed blocks are inserted into the LLC.
-
-TODO: Adding three tradeoff, i.e. Only consider 2:1 compression; Only compression two blocks to the same slot; Only 
-use two size classes
 
 TODO: Adding compression algo at the end
