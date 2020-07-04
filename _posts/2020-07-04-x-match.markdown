@@ -4,11 +4,16 @@ title:  "Design and Performance of a Main Memory Hardware Data Compressor"
 date:   2020-07-04 16:55:00 -0500
 categories: paper
 paper_title: "Design and Performance of a Main Memory Hardware Data Compressor"
-paper_link: 
-paper_keyword: Compression; X-Match
+paper_link: https://ieeexplore.ieee.org/document/546466
+paper_keyword: Compression; X-Match; X-RL
 paper_year: EUROMICRO 1996
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes X-Match and X-RL, a memory compression and decompression algorithm with harrware implementation.
+The paper identifies three major problems with previous software compression algorithms. First, traditional software
+compression algorithms tend to introduce large data blowup at the initial stage of compression, since these algorithms
+are designed for streams of large size, while memory compression works on smaller blocks. 
