@@ -133,5 +133,9 @@ If the page is already full, which only happens for half-sized pages, then the O
 The paper proposes using dictionary-based X-RL as the compression algorithm. The hardware compressor and decompressor 
 work on blocks twice of the size of a cache line in the LLC. The input stream is first divided into two equally
 sized sub-blocks, and then compressed independently using two compressors. The output streams are stored in an byte-interleaved
-manner, such that decompression for both streams could begin early after the first few leading bytes are received from
-bus transfer. 
+manner (until one of them runs out of bytes, after which bytes from the other stream are just sequentially placed), such 
+that decompression for both streams could begin early after the first few leading bytes are received from bus transfer. 
+A special header is attached to the header of the resulting stream as metadata.
+To further accelerate decompression, the paper also suggests that the decompression buffer is flash cleared to all-zeros
+before decompression starts. If the algorithm recognizes a consecutive range of zero bytes, no actual data needs to be 
+written, and the circuit can just skip these zero bytes for better throughput.
