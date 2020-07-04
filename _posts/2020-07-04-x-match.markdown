@@ -45,7 +45,12 @@ by the match type, which is then followed by byte literals that are not matched,
 The index of the entry is encoded using log2(k) bits, where k is the current size of the dictionary (before inserting
 the current word). Such "phased binary" representation of dictionary indices reduce the number of bits required at early
 stages when the dictionary is not yet full. 
+The matching type is also encoded with static Huffman code, with the more common types of matches using less number of 
+bits. The Huffman code is hardwired into the algorithm, which is generated based on empirical data.
+Multiple partial matches may qualify for a single word. In this case, priority is given to the full match entry, and then
+a partial match entry with the least number of byte literals, and then partial match entries with the smallest index to
+minimize the codeword size (**Note: I can't see how smallest index helps in this case, but it is just a minor glitch**). 
 
-
+DICT UPDATE AND MAINTENANCE / EVICTION / ROTATION RULES
 
 TODO: ADD RUN LENGTH OPTIMIZATION
