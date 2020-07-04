@@ -36,6 +36,8 @@ with raw literals (if any) in the codeword.
 We next describe the compression algorithm in details. As mentioned above, the compressor maintains a dictionary of
 four byte words for full and partial matching with incoming words. The size of the dictionary is unspecified. A larger
 dictionary may result in better compression for data with distant locality (i.e. symbols tend to repeat on large 
-distances), at the cost of using more bits to encode dictionary index. 
+distances), at the cost of using more bits to encode dictionary index. The input word is compared with all dictionary
+entries, which may result in full match or partial matches. 
+
 
 TODO: ADD RUN LENGTH OPTIMIZATION
