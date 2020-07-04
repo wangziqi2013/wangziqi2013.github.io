@@ -36,3 +36,18 @@ version_mgmt:
    spagetti. 
    Overall, the paper looks like a product of pipelined writing, which is fine, but before submission can you please
    at least unify the writing style across sections.
+
+This journal article proposes Selective Compressed Memory System (SCMS), a unified cache and memory compression scheme
+for reducing storage overhead and increasing performance.
+The journal identifies three challenges of cache and memory compression designs. First, decompression is on the critical
+path of access operations. The decompression architecture must be able to deliver raw bytes with high throuhgput and low
+latency. For a unified LLC and DRAM compression scheme, the decompression bottleneck occurs on the datapath between the
+LLC and the upper level cache, which requires certain hardware structure to deal with.
+Second, 
+
+TODO: Adding overall arch, i.e. how selective works, how unified works, how adjacent blocks are compressed 
+
+TODO: Adding three tradeoff, i.e. Only consider 2:1 compression; Only compression two blocks to the same slot; Only 
+use two size classes
+
+TODO: Adding compression algo at the end
