@@ -54,8 +54,10 @@ If no match can be found, the codeword is encoded with a "0" bit at the beginnin
 This guarantees that in the worst case and in early stages of the algorithm, where no matching can ever be found, the 
 encoded stream will only be slightly larger (1 bit overhead for each 32 bit word) than the original.
 
-
-
-DICT UPDATE AND MAINTENANCE / EVICTION / ROTATION RULES
+As codewords are generated, the content of the directory is also constantly updated. For every word that is not a full
+match, the word is always inserted into the first place of the dictionary, moving all existing entried down by one.
+If the dictionary was full before insertion, then the last entry will be evicted. Even on a full word match, the entry
+being hit will also be promoted to the first location of the dictionary, which mimics the behavior of LRU replacement
+policy. 
 
 TODO: ADD RUN LENGTH OPTIMIZATION
