@@ -63,4 +63,8 @@ policy.
 The paper also proposes an optimization of X-Match based on the observation that runs of zeros are common pattern in
 the input data stream. The base dictionary algorithm is not really optimized in this case, since it only processes the
 stream word-by-word, and each zero will result in a codeword, which is unnecessary. As an optimization, a special entry
-that cannot be evicted is pre-initialized in the dictionary before compression and decompression. The 
+that cannot be evicted is pre-initialized in the dictionary before compression and decompression. 
+The compressor scans runs of zeros before starting to encode the current word. If a run of zero can be found, the 
+codeword with the special entry's index is generated, which is followed by the length of the zero run. During decompression,
+if this entry is seen, the decompressor will interpret the next value as the length of zero runs, and then simply output 
+zero. The optimized algorithm is called "X-RL", with "RL" standing for "Run Length".
