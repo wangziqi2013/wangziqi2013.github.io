@@ -68,3 +68,12 @@ The compressor scans runs of zeros before starting to encode the current word. I
 codeword with the special entry's index is generated, which is followed by the length of the zero run. During decompression,
 if this entry is seen, the decompressor will interpret the next value as the length of zero runs, and then simply output 
 zero. The optimized algorithm is called "X-RL", with "RL" standing for "Run Length".
+
+The X-Match algorithm can be easily translated to hardware circuit. The core of the compressor and decompressor is a
+CAM array serving as the dictionary. The CAM should support fully associative lookup, producing both full and partial
+match results. The CAM should also support shifting operation, which shifts all entries down by one. The shift operation
+can be implemented with virtual index: Instead of using the physical location as index, entries will not be physically
+moved unless they are evicted. Each entry maintains an "index" field, which is incremented by one on a shifting operation.
+The entry with the largest index will be replaced by the new entry, whose index is set to zero.
+
+
