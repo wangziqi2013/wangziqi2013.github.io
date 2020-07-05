@@ -22,6 +22,10 @@ version_mgmt:
 3. Using "phased binary" representation of dictionary index based on the current dictionary size avoids having fixed
    sized index field, which helps reducing bits before the dictionary fills up.
 
+**Lowlight:**
+
+1. There is no straightforward way of parallelization, although the paper is not meant to develop a fully scalable algo.
+
 This paper proposes X-Match and X-RL, a memory compression and decompression algorithm with harrware implementation.
 The paper identifies three major problems with previous software compression algorithms. First, traditional software
 compression algorithms tend to introduce large data blowup at the initial stage of compression, since these algorithms
