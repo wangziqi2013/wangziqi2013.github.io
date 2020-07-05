@@ -82,4 +82,5 @@ the first bit is variably sized, the length of which depends on previous fields.
 that the decompressor be implemented with pipelines. At each pipeline stage, the decompressor reads the next field
 and assembles the output word. The decompression latency from the arrival of the first codeword and the generation of 
 the first decompressed word is four cycles. One word can be decompressed per cycle after the initial four cycle latency.
-The 
+The paper suggests that X-Match performs better than previously proposed hardware based on LZ77, since X-Match generates
+decompressed words in 32 bit granularity, while LZ77 processes data in byte granularity.
