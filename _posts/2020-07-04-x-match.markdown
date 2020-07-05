@@ -76,4 +76,10 @@ can be implemented with virtual index: Instead of using the physical location as
 moved unless they are evicted. Each entry maintains an "index" field, which is incremented by one on a shifting operation.
 The entry with the largest index will be replaced by the new entry, whose index is set to zero.
 
-
+The decompressor is slightly more complicated than the compressor. The dictionary is maintained in the same manner as 
+the compressor. The difficulty with the decompressor is that bits must be read sequentially, since all fields except 
+the first bit is variably sized, the length of which depends on previous fields. To solve this issue, the paper proposes
+that the decompressor be implemented with pipelines. At each pipeline stage, the decompressor reads the next field
+and assembles the output word. The decompression latency from the arrival of the first codeword and the generation of 
+the first decompressed word is four cycles. One word can be decompressed per cycle after the initial four cycle latency.
+The 
