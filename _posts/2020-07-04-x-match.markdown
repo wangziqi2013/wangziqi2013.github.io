@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. LRU dictionary replacement with shifting CAM
+
+2. Runs of zeros can be encoded using a special dictionary entry followed by the length of the zero run
+
+3. Using "phased binary" representation of dictionary index based on the current dictionary size avoids having fixed
+   sized index field, which helps reducing bits before the dictionary fills up.
+
 This paper proposes X-Match and X-RL, a memory compression and decompression algorithm with harrware implementation.
 The paper identifies three major problems with previous software compression algorithms. First, traditional software
 compression algorithms tend to introduce large data blowup at the initial stage of compression, since these algorithms
