@@ -60,4 +60,7 @@ If the dictionary was full before insertion, then the last entry will be evicted
 being hit will also be promoted to the first location of the dictionary, which mimics the behavior of LRU replacement
 policy. 
 
-TODO: ADD RUN LENGTH OPTIMIZATION
+The paper also proposes an optimization of X-Match based on the observation that runs of zeros are common pattern in
+the input data stream. The base dictionary algorithm is not really optimized in this case, since it only processes the
+stream word-by-word, and each zero will result in a codeword, which is unnecessary. As an optimization, a special entry
+that cannot be evicted is pre-initialized in the dictionary before compression and decompression. The 
