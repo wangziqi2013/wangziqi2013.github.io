@@ -22,6 +22,8 @@ version_mgmt:
 3. Using "phased binary" representation of dictionary index based on the current dictionary size avoids having fixed
    sized index field, which helps reducing bits before the dictionary fills up.
 
+4. Using static Huffman code to encode match type
+
 **Lowlight:**
 
 1. There is no straightforward way of parallelization, although the paper is not meant to develop a fully scalable algo.
