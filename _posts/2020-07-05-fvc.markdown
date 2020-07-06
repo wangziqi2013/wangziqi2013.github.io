@@ -16,4 +16,12 @@ version_mgmt:
 This paper proposes Frequent Value Cache, a compressed victim cache design optimized for frequently accessed values.
 This paper observes that most workloads exhibit some degrees of frequent value locality, such that a majority of accesses
 and values that occur in the memory are within a narrow range of values. For example, the paper points out that the 
-most frequent ten values are responsible for roughly 50% of accesses and memory locations. 
+most frequent ten values are responsible for roughly 50% of accesses and memory locations, having great potential to be 
+optmized. The paper also presents three important observations with frequent value locality. First, value locality
+of accesses and value locality over the address space are surprisingly similar, not only on the values themselves, but
+also on the rankings of these values. The paper further discovered that frequently values are uniformly distributed 
+over the address space. No matter how accesses are localized for certain memory reagions, the frequent values accessed
+by instructions are usually consistent with the values that exist in active memory.
+
+
+TODO: DIFF BETWEEN FREQ VALUE LOCALITY (OVER ADDR SPACE) AND VALUE LOCALITY (ON INDIVIDUAL INST)
