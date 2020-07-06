@@ -72,4 +72,10 @@ words are treated the same as a cache miss.
 Miss handling of FVC differs from the one in conventional cache. When the fill request is completed, the block is inserted into the L1 cache, if the miss is caused by the accessing missing both L1 and FVC.
 If, however, the miss is caused by a infrequent value miss, the block is first merged with newer words in the FVC, if the 
 FVC indicates dirty state of the block, and then inserted into the L1. The block in FVC is invalidated.
+Evicted L1 blocks are inserted into FVC, after encoding the frequent values in the block using the dictionary. Since eviction
+is not on the critical path, the extra dictionary lookup will not increase access latency. 
+On eviction, FVC also writes back cache lines to the memory, potentially performing a read-modify-write if it only contains 
+partial data.
+
+
 
