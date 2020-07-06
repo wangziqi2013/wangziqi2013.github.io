@@ -62,3 +62,8 @@ small part of the execution, after which the dictionary can be generated. The di
 as a simple SRAM register file that can be accessed with low latency, due to the fact that dictionary lookup and 
 FVC lookup are serialized. The ISA should also be extended with instructions for starting the profiling and initialzing 
 the dictionary.
+
+We next describe the operation of FVC as follows. On a cache lookup, the L1 and the FVC are checked in parallel for the 
+requested address. Hits in L1 are handled as usual. If both cache misses, the request is handled as a miss, which is forwarded
+to the next level of the hierarchy. When the fill request is completed, the block is inserted into the L1 cache, and the 
+evicted L1 block is inserted into FVC. 
