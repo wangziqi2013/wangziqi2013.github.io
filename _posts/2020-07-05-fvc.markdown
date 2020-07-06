@@ -77,5 +77,8 @@ is not on the critical path, the extra dictionary lookup will not increase acces
 On eviction, FVC also writes back cache lines to the memory, potentially performing a read-modify-write if it only contains 
 partial data.
 
-
+Writes misses in FVC due to infrequent values can be optimized as follows. If the value to be written is in the dictionary,
+then the miss is unnecessary, since FVC allows partial value to be cached. The store operation simply updates the 
+infrequent value's code with the code of the frequent value. Next time this block is evicted or merged with a refill block, 
+this newer value will be preserved.
 
