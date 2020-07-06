@@ -43,3 +43,11 @@ access latency and power consumption, and hence could only support a few entries
 at the cost of higher miss rates; (2) Victim cache store evicted cache lines as-is, while FVC compresses these lines
 using a static dictionary. By adopting data compression, the FVC can be implemented with less space and power budget
 without significantly lowering the hit rate.
+
+An FVC entry is similar to a conventional victim cache entry, with a valid bit, dirty bit, and address flag. FVC data
+slots, however, do not store actual data values. Instead, only "partial" cache lines with frequent values are present.
+This enables FVC to use short encoding for each frequently occuring value, since the size of the dictionary is small. 
+As a result, FVC stores a cache line in the granularity of 32 bit words. Each 32 bit word, if it is in the dictionary, 
+is represented by three-bit field representing the index into the dictionary. In addition, one of the eight three-bit 
+values are dedicated to represent non-frequent values (the paper uses "111"). Non-frequent values cannot be recovered
+on-chip, must be treated as a cache miss.
