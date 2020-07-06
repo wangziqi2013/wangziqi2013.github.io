@@ -22,6 +22,12 @@ of accesses and value locality over the address space are surprisingly similar, 
 also on the rankings of these values. The paper further discovered that frequently values are uniformly distributed 
 over the address space. No matter how accesses are localized for certain memory reagions, the frequent values accessed
 by instructions are usually consistent with the values that exist in active memory.
-
+Second, the variety of individual values that may exist in the memory is less than expected, especially consider that
+loop variables and temporary variables will introduce a large range of distinct values. The explanation given by the 
+paper is that most loop variables and temporary variables or intermediate results are optimized out by compilers, 
+which only exist in registers without being ever written back to memory. Meanwhile, those variables that cannot be easily
+optimized out by compilers tend to be of less volatile types, such as permanent data structures, in-memory data sets, etc.
+whose lifetime is much longer than a single function or loop. Depending on the scenario, these values may happen to 
+enjoy more regularity than temporary values.
 
 TODO: DIFF BETWEEN FREQ VALUE LOCALITY (OVER ADDR SPACE) AND VALUE LOCALITY (ON INDIVIDUAL INST)
