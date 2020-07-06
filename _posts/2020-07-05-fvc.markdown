@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Partial caching and dictionary encoding can be combined, with non-existing values using a special dictionary entry.
+   
+
+
 This paper proposes Frequent Value Cache, a compressed victim cache design optimized for frequently accessed values.
 This paper observes that most workloads exhibit some degrees of frequent value locality, such that a majority of accesses
 and values that occur in the memory are within a narrow range of values. For example, the paper points out that the 
