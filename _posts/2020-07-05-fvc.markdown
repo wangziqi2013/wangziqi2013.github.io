@@ -29,5 +29,9 @@ which only exist in registers without being ever written back to memory. Meanwhi
 optimized out by compilers tend to be of less volatile types, such as permanent data structures, in-memory data sets, etc.
 whose lifetime is much longer than a single function or loop. Depending on the scenario, these values may happen to 
 enjoy more regularity than temporary values.
+Lastly, the paper also points out that although processor value locality and memory value locality are two different 
+concepts, they often share similar traits in terms of values and their frequencies. Processor's value locality focuses 
+more on the distribution of values of certain instructions, while the value locality in this paper aims at the overall
+value distribution in the memory hierarchy.
 
-TODO: DIFF BETWEEN FREQ VALUE LOCALITY (OVER ADDR SPACE) AND VALUE LOCALITY (ON INDIVIDUAL INST)
+
