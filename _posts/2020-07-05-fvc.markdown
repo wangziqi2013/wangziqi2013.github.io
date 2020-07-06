@@ -34,4 +34,7 @@ concepts, they often share similar traits in terms of values and their frequenci
 more on the distribution of values of certain instructions, while the value locality in this paper aims at the overall
 value distribution in the memory hierarchy.
 
-
+Based on the above observations, the paper proposes Frequent Value Cache (FVC). The paper assumes a direct-mapped L1
+cache design for low-power mobile or embedded platform. The FVC is also organized as a direct-mapped cache to minimize
+access time, such that access latency of the main cache is unchanged. The FVC acts as a victim cache for reducing cache
+misses by buffering evicted blocks from the L1 for future reuse. 
