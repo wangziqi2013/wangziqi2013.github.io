@@ -51,3 +51,8 @@ As a result, FVC stores a cache line in the granularity of 32 bit words. Each 32
 is represented by three-bit field representing the index into the dictionary. In addition, one of the eight three-bit 
 values are dedicated to represent non-frequent values (the paper uses "111"). Non-frequent values cannot be recovered
 on-chip, must be treated as a cache miss.
+FVC maintains the invariant that a cache block can exist in at most one of the L1 cache and the FVC. Dirty blocks are 
+also allowed, which must be written back on eviction.
+Note that eviction on FVC is trivial, since it is direct-mapped.
+
+
