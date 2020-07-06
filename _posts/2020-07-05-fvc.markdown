@@ -58,4 +58,7 @@ Note that eviction on FVC is trivial, since it is direct-mapped.
 The paper does not mention how dictionary is maintained and generated, although it is claimed that frequent values are
 rather stable throughout the execution, and therefore can be pre-initialized via profiling. The paper also observes that
 both values and ranks become stable at early stages of the execution. As a result, the profiling process only needs a 
-small part of the execution, after which the dictionary can be generated.
+small part of the execution, after which the dictionary can be generated. The dictionary is expected to be implemented
+as a simple SRAM register file that can be accessed with low latency, due to the fact that dictionary lookup and 
+FVC lookup are serialized. The ISA should also be extended with instructions for starting the profiling and initialzing 
+the dictionary.
