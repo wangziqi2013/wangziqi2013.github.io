@@ -55,4 +55,7 @@ FVC maintains the invariant that a cache block can exist in at most one of the L
 also allowed, which must be written back on eviction.
 Note that eviction on FVC is trivial, since it is direct-mapped.
 
-
+The paper does not mention how dictionary is maintained and generated, although it is claimed that frequent values are
+rather stable throughout the execution, and therefore can be pre-initialized via profiling. The paper also observes that
+both values and ranks become stable at early stages of the execution. As a result, the profiling process only needs a 
+small part of the execution, after which the dictionary can be generated.
