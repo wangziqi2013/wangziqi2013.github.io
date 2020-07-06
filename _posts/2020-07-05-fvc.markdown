@@ -37,4 +37,9 @@ value distribution in the memory hierarchy.
 Based on the above observations, the paper proposes Frequent Value Cache (FVC). The paper assumes a direct-mapped L1
 cache design for low-power mobile or embedded platform. The FVC is also organized as a direct-mapped cache to minimize
 access time, such that access latency of the main cache is unchanged. The FVC acts as a victim cache for reducing cache
-misses by buffering evicted blocks from the L1 for future reuse. 
+misses by buffering evicted blocks from the L1 for future reuse. The difference between a conventional victim cache 
+and FVC, however, is that: (1) A conventional victim cache is organized as fully-associative cache, which is limited by
+access latency and power consumption, and hence could only support a few entries. FVC, on the contrary, is direct-mapped
+at the cost of higher miss rates; (2) Victim cache store evicted cache lines as-is, while FVC compresses these lines
+using a static dictionary. By adopting data compression, the FVC can be implemented with less space and power budget
+without significantly lowering the hit rate.
