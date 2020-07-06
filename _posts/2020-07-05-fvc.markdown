@@ -65,5 +65,11 @@ the dictionary.
 
 We next describe the operation of FVC as follows. On a cache lookup, the L1 and the FVC are checked in parallel for the 
 requested address. Hits in L1 are handled as usual. If both cache misses, the request is handled as a miss, which is forwarded
-to the next level of the hierarchy. When the fill request is completed, the block is inserted into the L1 cache, and the 
-evicted L1 block is inserted into FVC. 
+to the next level of the hierarchy. If the request hits the FVC, and the word contains a frequent value, the dictionary
+is read in the same cycle to decode the compressed value, after which it is returned to the pipeline. Hits on non-frequent
+words are treated the same as a cache miss. 
+
+Miss handling of FVC differs from the one in conventional cache. When the fill request is completed, the block is inserted into the L1 cache, if the miss is caused by the accessing missing both L1 and FVC.
+If, however, the miss is caused by a infrequent value miss, the block is first merged with newer words in the FVC, if the 
+FVC indicates dirty state of the block, and then inserted into the L1. The block in FVC is invalidated.
+
