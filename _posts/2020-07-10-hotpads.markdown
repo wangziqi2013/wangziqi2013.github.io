@@ -152,4 +152,9 @@ access uses non-canonical pointers pointing to lower level pads, which happens o
 using that pointer before the object is evicted. The L1 pad must check, like in conventional caches, whether 
 the canonical pointer's object has already been cached in the pad by performing a tag comparison. If the comparison 
 indicates a miss, the canonical address is forwarded to lower level pads, which also perform similar checks until the 
-canonical level is reached, in which case the pointer is directly used to address.
+canonical level is reached, in which case the pointer is directly used to address the storage.
+Objects not in the L1 pad, no matter canonical or not, will be copied to the L1 pad for access. The copied object is 
+non-canonical. After copying the object, the non-L1 canonical pointer used to access the pointer should be rewritten with 
+the non-canonical pointer in the L1 pad. The next time this pointer is used for access, no tag lookup is performed, and
+the L1 data array can be directly addressed.
+
