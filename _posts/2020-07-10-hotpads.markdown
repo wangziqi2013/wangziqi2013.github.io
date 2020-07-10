@@ -84,6 +84,12 @@ As time passes, if the object is "dead", indicating that no other object contain
 be GC'ed from the L1 pad. If, on the other hand, the object survives long enough to be evicted to lower level
 pads, it will be allocated a new hardware address in the lower level and then copied there.
 When an object in the lower level is to be accessed via a pointer, it must be brought into the L1 pad by copying its content
+to the L1 pad, and rewriting the pointer used for the access to directly point to the L1 copy. Note that such pointer
+rewriting is not really necessary for the correctness of operation, but merely as a critical performance optimization.
+Without pointer writing, the identify of the object needs to be translated into the hardware address of the L1 pad
+on each access, which requires associative lookups of the tag array. The paper eliminates such lookup by directly using 
+hareware addresses in pointer values, and rewriting the pointer to directly address the L1 pad when the object it
+points to has been copied to the L1.
 
 Each object are allowed to have only one canonical copy, which is the copy in the lowest level
 One of the most important features of Hotpads is pointer rewriting, which happens when an object
