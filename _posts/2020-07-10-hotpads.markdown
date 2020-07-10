@@ -24,26 +24,36 @@ version_mgmt:
 
 **Lowlight:**
 
-1. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
-   I understand that the author
-   may obtained the initial idea from software generational GC and felt motivated to port it to hardware. But really, GC
+0. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
+   I understand that the author may have obtained the initial idea from software generational GC and felt motivated 
+   to port it to hardware, treating the memory hierarchy as heaps of different generations. But really, GC
    and memory allocation is not a thing that you should perform purely on hardware. 
    Although the authors tried their best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
    logic and implicit assumptions make me uncomfortable when reading the paper.
+   Also the design is full of loopholes and bugs (see below). There are numerous corner cases that cannot be handled 
+   efficiently. This is "innovation just because you want to be different" without any meaningful controbution.
 
-2. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
+1. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
    in hardware-only pads, how can you achieve that for main memory GC? Or objects shall not be moved for main memory GC?
 
-3. If sub-objects are allowed, canonical addresses are no longer unique (i.e. a byte can be represented by multiple 
+2. If sub-objects are allowed, canonical addresses are no longer unique (i.e. a byte can be represented by multiple 
    canonical addresses) How does this work? What if different pads cache different sub-objects that overlap with
-   each other? Does hardware perform segment intersection?
+   each other? Does hardware compute segment intersection?
 
-4. By lazily rewriting upper level pointers when a canonical object is evicted to lower level, the object has two
+3. By lazily rewriting upper level pointers when a canonical object is evicted to lower level, the object has two
    de-facto identities, one in the old location, another in the new location. How Hotpads prevent this from happening?
    i.e. what if two canonical pointers, to the two locations respectively, are compared?
 
-5. The canonical pointer in the header of object copies serve as backward pointers. Are these pointers updated when a
+4. The canonical pointer in the header of object copies serve as backward pointers. Are these pointers updated when a
    canonical object moves? Are they modified during GC?
+
+5. Non-canonical pointers rewriting that are the results of L1 access should not be written back to lower levels. What
+   if such a pointer is written from a register into the pointer field of the object? If the rewrite is to be executed as 
+   data array update, how would L1 restore the previous value? What if the pointer update is truly a pointer update?
+   One way is to discard pointer rewriting results and let it be rolled back naturally in lower levels. 
+   But, what if a canonical pointer is first written to a pointer field as a normal update, and then rewritten due to
+   refill from lower levels? How do we recover the dirty pointer value (its original value is never stored in any
+   lower level)? 
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
@@ -131,6 +141,10 @@ or not, in lower levels of the hierarchy addressed by a canonical pointer is cop
 object's "stub" is GC'ed in lower levels. In the first case, the pointer that is used to address the canonical copy of 
 the object is written with the L1 pad's address for reducing tag lookups. In the second case, the canonical pointers are
 written with the new canonical address of the object after it has moved down.
+Note that pointer rewrite is merely a measure for optimizing L1 pad accesses. It does not modify the object.  
+Pointer fields and register file values that are written due to refills from lower levels will not be written back to 
+lower levels when the object is written back. The hardware simply will not mark these pointer fields as dirty, and
+
 
 To help finding the copy of an object using its canonical address as identity, each pad is also equipped with a tag
 array just like regular cache. The tag array maps canonical addresses of objects to their hardware addresses,
@@ -166,4 +180,5 @@ the non-canonical pointer in the L1 pad. The next time this pointer is used for 
 the L1 data array can be directly addressed. All objects are stored with runtime type information, conventional coherence 
 bits, as well as dirty and valid bits. In addition, non-canonical objects are always stored with a header indicating its 
 canonical address. This canonical address serves as the identity of the copy.
+
 
