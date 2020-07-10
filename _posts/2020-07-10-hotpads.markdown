@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Creating objects directly in the cache rather than alloc it first in VA space can help reducing compulsory cache misses.
+   This is also leveraged in page overlays.
+
+2. It is good thinking to treat caches as independent devices that have their own address spaces, rather than transparent
+   faster storage for the PA space. This brings more interesting use cases and more algorithms that are originally designed
+   for distributed systems.
+
 **Lowlight:**
 
 1. This design is really just a mixture of over-thinking and ad-hoc algorithms. I understand that the author
