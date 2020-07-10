@@ -12,3 +12,15 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Lowlight:**
+
+1. This design is really just a mixture of over-thinking and ad-hoc algorithms. I understand that the author
+   may obtained the initial idea from software generational GC and felt motivated to port it to hardware. But really, GC
+   and memory allocation is not a thing that you should perform purely on hardware. 
+   Although the authors tried his best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
+   logic and implicit assumptions make at least me uncomfortable when reading the paper.
+
+This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
+garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
+hierarchy. 
