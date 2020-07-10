@@ -66,4 +66,9 @@ collection algorithm using pointer values in the register file as root pointers.
 are also evicted. The remaining blocks are then moved to form a compacted chunk, which frees storage in the data array
 for future allocation.
 
-
+The data flow of Hotpads is more similar to the one in a tiered distributed system than in the conventional cache.
+The system is still divided into different levels as the conventional cache, with higher levels featuring smaller
+but faster storage, and lower levels with larger but slower storage. Each level of the pads, including the main memory,
+has a private address space that can be directly addressed by upper level requests without address translation. Pointers
+may store addresses to any of these levels as long as the object to be pointed to fulfills certain properties (discussed 
+later).
