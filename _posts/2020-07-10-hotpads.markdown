@@ -62,10 +62,15 @@ Lastly, Hotpads implement memory allocation and garbage collection in hardware. 
 heap which always allocates from the head. Object allocation is as simple as incrementing the head pointer of the pad.
 In case of storage exhaustion, pads at each level will perform per-object hardware controlled garbage collection and 
 object eviction automatically independently without software intervention. Objects allocated by software therefore do not 
-need to be freed explicitly. In order to identify blocks to be freed, the hardware periodically runs a scan-and-mark garbage 
+need to be freed explicitly. In order to identify blocks to be freed, the hardware periodically runs a mark-and-sweep garbage 
 collection algorithm using pointer values in the register file as root pointers. Live blocks that are not frequently used 
 are also evicted. The remaining blocks are then moved to form a compacted chunk, which frees storage in the data array
 for future allocation.
+To aid hardware GC, Hotpads are type-aware, and marks pointer fields in an object explicitly. Type checks for
+pointers are performed when they are accessed with special instructions. Furthermore, the GC process leverages pointer 
+fields to traverse between live objects. The language compiler should cooperate to identify pointer field while compiling 
+or initializing an object.
+
 
 The data flow of Hotpads is more similar to the one in a tiered distributed system than in the conventional cache.
 The system is still divided into different levels as the conventional cache, with higher levels featuring smaller
