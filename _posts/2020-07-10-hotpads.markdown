@@ -55,6 +55,8 @@ version_mgmt:
    refill from lower levels? How do we recover the dirty pointer value (its original value is never stored in any
    lower level)? 
 
+6. When a canonical object is GC'ed at lower level, how are copies of the object invalidated? 
+
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
 hierarchy. The paper is motived by three important observations on modern programming languages. First, modern languages
@@ -178,8 +180,9 @@ Objects not in the L1 pad, no matter canonical or not, will be copied to the L1 
 non-canonical. After copying the object, the non-L1 canonical pointer used to access the pointer should be rewritten with 
 the non-canonical pointer in the L1 pad. The next time this pointer is used for access, no tag lookup is performed, and
 the L1 data array can be directly addressed. All objects are stored with runtime type information, conventional coherence 
-bits, as well as dirty and valid bits. In addition, non-canonical objects are always stored with a header indicating its 
-canonical address. This canonical address serves as the identity of the copy.
+bits, as well as a "canonical bit" denoting whether the object is canonical or just a copy. In addition, non-canonical 
+objects are always stored with a header indicating its canonical address. This canonical address serves as the identity 
+of the copy.
 
 Hotpads maintains the data array as a heap and allocates object from all levels of pads by incrementing the heap top pointer.  
 Garbage collection is therefore necessary to reclaim dead objects that are not referenced by any other live objects.
@@ -188,4 +191,10 @@ for all objects that hold a pointer to the canonical object to be moved.
 To localize GC and avoid such massive pointer updates, Hotpads enforces the invariant that no lower level objects may 
 contain canonical pointers to upper levels (non-canonical pointers to upper levels are impossible, too, since they can 
 only be a result of pointer rewriting and later eviction of the pointer-holding object. But the rewritten pointer field 
-will be discarded when the object is evicted).
+will be discarded when the object is evicted). Canonical pointers from upper to lower levels are allowed, though.
+When an upper level canonical object is moved in a certain pad for GC, only pointers from upper levels pads and from the 
+register file need to be rewritten, upper bounding the total number of rewrites to the total number of bytes in the 
+upper level storage. 
+We do not describe the GC process in details in this summary. 
+Overall, the GC algorithm moves around objects that are still alive using mark-and-sweep, and stores them compactly as 
+a single chunk in the dara array. 
