@@ -27,7 +27,7 @@ version_mgmt:
 1. This design is really just a mixture of over-thinking and ad-hoc algorithms. I understand that the author
    may obtained the initial idea from software generational GC and felt motivated to port it to hardware. But really, GC
    and memory allocation is not a thing that you should perform purely on hardware. 
-   Although the authors tried his best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
+   Although the authors tried their best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
    logic and implicit assumptions make at least me uncomfortable when reading the paper.
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
@@ -36,4 +36,9 @@ hierarchy. The paper is motived by three important observations on modern progra
 are mostly memory safe with object abstraction. The memory layout of objects are opaque to application code, which cannot
 be directly addressed using pointer cast or pointer arithmetic, but only accessed with pre-defined methods. This reduces 
 chances that unintended wild pointers, buffer overflows or malicious attacks from corrupting the state of objects.
-
+The architecture, however, failed to provide such protection on ISA level, forcing language runtimes to implement their 
+own memory protection mechanism.
+Second, most modern languages rely on background automatic garbage collection to recycle dead objects, which takes a 
+software thread to periodically scan objects in the background, which also potentially moves objects around for
+compaction. The usage of GC algorithms is already a feature in these languages that is already so common to justify a hardware 
+implemented version be embedded in the cache system.
