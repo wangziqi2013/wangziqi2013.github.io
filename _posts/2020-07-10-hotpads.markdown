@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Rethinking the Memory Hierarchy for Modern Languages"
+date:   2020-07-010 03:46:00 -0500
+categories: paper
+paper_title: "Rethinking the Memory Hierarchy for Modern Languages"
+paper_link: Rethinking the Memory Hierarchy for Modern Languages
+paper_keyword: Cache; Hotpads
+paper_year: MICRO 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
