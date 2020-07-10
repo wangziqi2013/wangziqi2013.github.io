@@ -38,6 +38,10 @@ version_mgmt:
    canonical addresses) How does this work? What if different pads cache different sub-objects that overlap with
    each other? Does hardware perform segment intersection?
 
+4. By lazily rewriting upper level pointers when a canonical object is evicted to lower level, the object has two
+   de-facto identities, one in the old location, another in the new location. How Hotpads prevent this from happening?
+   i.e. what if two canonical pointers, to the two locations respectively, are compared?
+
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
 hierarchy. The paper is motived by three important observations on modern programming languages. First, modern languages
@@ -156,5 +160,7 @@ canonical level is reached, in which case the pointer is directly used to addres
 Objects not in the L1 pad, no matter canonical or not, will be copied to the L1 pad for access. The copied object is 
 non-canonical. After copying the object, the non-L1 canonical pointer used to access the pointer should be rewritten with 
 the non-canonical pointer in the L1 pad. The next time this pointer is used for access, no tag lookup is performed, and
-the L1 data array can be directly addressed.
+the L1 data array can be directly addressed. All objects are stored with runtime type information, conventional coherence 
+bits, as well as dirty and valid bits. In addition, non-canonical objects are always stored with a header indicating its 
+canonical address. This canonical address serves as the identityy
 
