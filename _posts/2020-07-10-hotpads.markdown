@@ -198,3 +198,7 @@ upper level storage.
 We do not describe the GC process in details in this summary. 
 Overall, the GC algorithm moves around objects that are still alive using mark-and-sweep, and stores them compactly as 
 a single chunk in the dara array. 
+To help identify pointer fields in objects, Hotpads adds one metadata field per two words (each object must be at least
+two words in size, one for the header, the other for data). The metadata field tracks dirty and valid bits as in
+a conventional cache at finer granularity. Furthermore, one bit is added to indicate whether the word stores a pointer
+value. The replacement policy also requires several bits for coarse grained LRU.
