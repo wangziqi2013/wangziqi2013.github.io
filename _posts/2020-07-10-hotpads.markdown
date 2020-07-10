@@ -24,11 +24,12 @@ version_mgmt:
 
 **Lowlight:**
 
-1. This design is really just a mixture of over-thinking and ad-hoc algorithms. I understand that the author
+1. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
+   I understand that the author
    may obtained the initial idea from software generational GC and felt motivated to port it to hardware. But really, GC
    and memory allocation is not a thing that you should perform purely on hardware. 
    Although the authors tried their best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
-   logic and implicit assumptions make at least me uncomfortable when reading the paper.
+   logic and implicit assumptions make me uncomfortable when reading the paper.
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
@@ -75,4 +76,14 @@ later).
 In Hotpads, objects start their life cycle in the L1 pad when the application allocates a chunk of memory using alloc
 instruction. This instruction simply increments the head pointer of the pad by the specified amount, and returns the 
 internal hardware address (i.e. offset in the data array) of the allocated chunk in the destination register. 
-At this moment, the object has not yet been allocated any storage in any lower level pads and the main memory. 
+At this moment, the object has not yet been allocated any storage in any lower level pads and the main memory. This 
+is the biggest difference between Hotpads and a conventional memory hierarchy, in which objects are always allocated 
+in the virtual address space as its "home address" serving as the unique identifier of the object, reserving storage in 
+the main memory before they are brought into the cache hierarchy.
+As time passes, if the object is "dead", indicating that no other object contains any reference to it, the object will
+be GC'ed from the L1 pad. If, on the other hand, the object survives long enough to be evicted to lower level
+pads, it will be allocated a new hardware address in the lower level and then copied there.
+When an object in the lower level is to be accessed via a pointer, it must be brought into the L1 pad by copying its content
+
+Each object are allowed to have only one canonical copy, which is the copy in the lowest level
+One of the most important features of Hotpads is pointer rewriting, which happens when an object
