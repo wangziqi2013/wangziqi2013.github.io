@@ -117,3 +117,8 @@ or not, in lower levels of the hierarchy addressed by a canonical pointer is cop
 object's "stub" is GC'ed in lower levels. In the first case, the pointer that is used to address the canonical copy of 
 the object is written with the L1 pad's address for reducing tag lookups. In the second case, the canonical pointers are
 written with the new canonical address of the object after it has moved down.
+
+To help finding the copy of an object using its canonical address as identity, each pad is also equipped with a tag
+array just like regular cache. The tag array maps canonical addresses of objects to their hardware addresses,
+if these objects' copy exist in the current pad (excluding canonical copies, which can be directly addressed in the 
+corresponding level). 
