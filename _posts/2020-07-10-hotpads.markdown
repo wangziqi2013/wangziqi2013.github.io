@@ -181,4 +181,11 @@ the L1 data array can be directly addressed. All objects are stored with runtime
 bits, as well as dirty and valid bits. In addition, non-canonical objects are always stored with a header indicating its 
 canonical address. This canonical address serves as the identity of the copy.
 
-
+Hotpads maintains the data array as a heap and allocates object from all levels of pads by incrementing the heap top pointer.  
+Garbage collection is therefore necessary to reclaim dead objects that are not referenced by any other live objects.
+The GC process, however, involves moving canonical objects around in the pad address space, causing massive pointer updates 
+for all objects that hold a pointer to the canonical object to be moved. 
+To localize GC and avoid such massive pointer updates, Hotpads enforces the invariant that no lower level objects may 
+contain canonical pointers to upper levels (non-canonical pointers to upper levels are impossible, too, since they can 
+only be a result of pointer rewriting and later eviction of the pointer-holding object. But the rewritten pointer field 
+will be discarded when the object is evicted).
