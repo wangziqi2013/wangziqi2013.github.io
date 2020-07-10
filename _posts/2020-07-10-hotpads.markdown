@@ -71,7 +71,6 @@ pointers are performed when they are accessed with special instructions. Further
 fields to traverse between live objects. The language compiler should cooperate to identify pointer field while compiling 
 or initializing an object.
 
-
 The data flow of Hotpads is more similar to the one in a tiered distributed system than in the conventional cache.
 The system is still divided into different levels as the conventional cache, with higher levels featuring smaller
 but faster storage, and lower levels with larger but slower storage. Each level of the pads, including the main memory,
@@ -113,4 +112,8 @@ canonical address. During a later GC, this "stub" object will be identified and 
 pointers that still use the old canonical address of the object in upper levels will be rewritten with the 
 new canonical address of the object during GC.
 
-One of the most important features of Hotpads is pointer rewriting, which happens when an object
+One of the most important features of Hotpads is pointer rewriting, which happens when: (1) an object, no matter canonical 
+or not, in lower levels of the hierarchy addressed by a canonical pointer is copied to the L1 pad; and (2) when a canonical
+object's "stub" is GC'ed in lower levels. In the first case, the pointer that is used to address the canonical copy of 
+the object is written with the L1 pad's address for reducing tag lookups. In the second case, the canonical pointers are
+written with the new canonical address of the object after it has moved down.
