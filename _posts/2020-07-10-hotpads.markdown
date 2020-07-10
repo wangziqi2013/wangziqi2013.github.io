@@ -49,11 +49,12 @@ just to follow the pointer to the data array and access its content without an a
 
 The paper describes a complicated memory hierarchy that operates at object granularity. The most prominent feature of 
 Hotpads is that pointers do not store linear addresses in the virtual memory space, assuming a uniform address space
-between DRAM and cache. Instead, caches are no longer transparent and faster abstractions of the main memory, being more
-similar to an independent storage device called "pads", which must be explicitly addressed. In addition, objects are no 
-longer backed by the main memory, i.e. all objects must have a main memory address in order to be uniquely identified 
-across the system. In Hotpads, each cache device has its own address space. Objects can be backed by any of the storage 
-device in the hierarchy without explicitly allocating storage in other components of the hierarchy. Objects are accessed 
-by creating copies from their backing store to the L1 pad. Active pointers referring to the objects are also rewritten to
-point to the L1 copy of the object for fast, direct access, without any associative lookup.
+between DRAM and cache. Instead, caches are more similar to independent storage devices called "pads", which must be 
+explicitly addressed. This is different from the conventional transparent abstraction of a faster main memory, in
+which each access to the cache must involve translation between the pointer address and the cache's internal address. 
+In addition, objects are no longer backed by the main memory, i.e. all objects must have a main memory address in order 
+to be uniquely identified across the system. In Hotpads, each cache device has its own address space. Objects can be 
+backed by any of the storage device in the hierarchy without explicitly allocating storage in other components of the 
+hierarchy. Objects are accessed by creating copies from their backing store to the L1 pad. Active pointers referring to 
+the objects are also rewritten to point to the L1 copy of the object for fast, direct access, without any associative lookup.
 
