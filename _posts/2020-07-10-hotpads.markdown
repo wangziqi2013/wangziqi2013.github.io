@@ -42,6 +42,9 @@ version_mgmt:
    de-facto identities, one in the old location, another in the new location. How Hotpads prevent this from happening?
    i.e. what if two canonical pointers, to the two locations respectively, are compared?
 
+5. The canonical pointer in the header of object copies serve as backward pointers. Are these pointers updated when a
+   canonical object moves? Are they modified during GC?
+
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
 hierarchy. The paper is motived by three important observations on modern programming languages. First, modern languages
@@ -162,5 +165,5 @@ non-canonical. After copying the object, the non-L1 canonical pointer used to ac
 the non-canonical pointer in the L1 pad. The next time this pointer is used for access, no tag lookup is performed, and
 the L1 data array can be directly addressed. All objects are stored with runtime type information, conventional coherence 
 bits, as well as dirty and valid bits. In addition, non-canonical objects are always stored with a header indicating its 
-canonical address. This canonical address serves as the identityy
+canonical address. This canonical address serves as the identity of the copy.
 
