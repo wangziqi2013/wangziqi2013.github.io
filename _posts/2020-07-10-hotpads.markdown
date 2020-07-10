@@ -34,6 +34,10 @@ version_mgmt:
 2. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
    in hardware-only pads, how can you achieve that for main memory GC? Or objects shall not be moved for main memory GC?
 
+3. If sub-objects are allowed, canonical addresses are no longer unique (i.e. a byte can be represented by multiple 
+   canonical addresses) How does this work? What if different pads cache different sub-objects that overlap with
+   each other? Does hardware perform segment intersection?
+
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
 hierarchy. The paper is motived by three important observations on modern programming languages. First, modern languages
@@ -136,6 +140,7 @@ always using the flat address which is also the backing store of all objects in 
 pointers in Hotpad store hardware addresses of objects. Only L1 addresses (both canonical and non-canonical) and 
 canonical addresses below L1 are allowed to be used as a pointer value. Non-canonical copies of objects can only 
 serve pad access misses from upper levels, but not be pointed to and addressed directly. 
+The higher 14 bits of the pointer stores the object sizeOne bit in the pointer is dedicated to whether the pointer is canonical. 
 
 Two kinds of pointers can be used for L1 pad access, one for fast path access and the other for slow path. The slow path
 access uses non-canonical pointers pointing to lower level pads, which happens only for the first access of the object
