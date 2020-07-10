@@ -58,4 +58,12 @@ backed by any of the storage device in the hierarchy without explicitly allocati
 hierarchy. Objects are accessed by creating copies from their backing store to the L1 pad. Active pointers referring to 
 the objects are also rewritten to point to the L1 copy of the object for fast, direct access, without any associative lookup.
 Lastly, Hotpads implement memory allocation and garbage collection in hardware. The data array of a pad is maintained as a 
-heap which always allocates from the head. 
+heap which always allocates from the head. Object allocation is as simple as incrementing the head pointer of the pad.
+In case of storage exhaustion, pads at each level will perform per-object hardware controlled garbage collection and 
+object eviction automatically independently without software intervention. Objects allocated by software therefore do not 
+need to be freed explicitly. In order to identify blocks to be freed, the hardware periodically runs a scan-and-mark garbage 
+collection algorithm using pointer values in the register file as root pointers. Live blocks that are not frequently used 
+are also evicted. The remaining blocks are then moved to form a compacted chunk, which frees storage in the data array
+for future allocation.
+
+
