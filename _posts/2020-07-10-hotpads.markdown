@@ -127,3 +127,11 @@ fact it is just a hash table). Evictions may also happen in the tag array, in wh
 tag entry is also evicted. As already stated above, if the object to be evicted is a canonical copy, the storage it
 used to occupy must be preserved, and the new canonical address after the eviction is stored there for lazy pointer
 rewriting.
+
+Hotpads also changes the pointer format to enable more efficient addressing within the cache hierarchy. Instead of 
+always using the flat address which is also the backing store of all objects in a conventional memory hierarchy,
+pointers in Hotpad store hardware addresses of objects. Only L1 addresses (both canonical and non-canonical) and 
+canonical addresses below L1 are allowed to be used as a pointer value. Non-canonical copies of objects can only 
+serve pad access misses from upper levels, but not be pointed to and addressed directly. 
+
+
