@@ -31,6 +31,9 @@ version_mgmt:
    Although the authors tried their best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
    logic and implicit assumptions make me uncomfortable when reading the paper.
 
+2. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
+   in hardware-only pads, how can you achieve that for main memory GC? Or objects shall not be moved for main memory GC?
+
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
 hierarchy. The paper is motived by three important observations on modern programming languages. First, modern languages
@@ -134,4 +137,9 @@ pointers in Hotpad store hardware addresses of objects. Only L1 addresses (both 
 canonical addresses below L1 are allowed to be used as a pointer value. Non-canonical copies of objects can only 
 serve pad access misses from upper levels, but not be pointed to and addressed directly. 
 
-
+Two kinds of pointers can be used for L1 pad access, one for fast path access and the other for slow path. The slow path
+access uses non-canonical pointers pointing to lower level pads, which happens only for the first access of the object
+using that pointer before the object is evicted. The L1 pad must check, like in conventional caches, whether 
+the canonical pointer's object has already been cached in the pad by performing a tag comparison. If the comparison indicates a miss, the canonical
+address is forwarded to lower level pads, which also perform similar checks until the canonical level is 
+reached, in which case the pointer is directly used to address.
