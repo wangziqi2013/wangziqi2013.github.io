@@ -122,3 +122,8 @@ To help finding the copy of an object using its canonical address as identity, e
 array just like regular cache. The tag array maps canonical addresses of objects to their hardware addresses,
 if these objects' copy exist in the current pad (excluding canonical copies, which can be directly addressed in the 
 corresponding level). 
+The tag array is implemented as a hardware hash table (the paper claimed it to be like the one in V-Way cache, but in 
+fact it is just a hash table). Evictions may also happen in the tag array, in which case the object mapped by the 
+tag entry is also evicted. As already stated above, if the object to be evicted is a canonical copy, the storage it
+used to occupy must be preserved, and the new canonical address after the eviction is stored there for lazy pointer
+rewriting.
