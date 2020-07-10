@@ -104,6 +104,13 @@ pointer aliasing which complicates pointer comparison, and to ensure that the mo
 The most up-to-date copy is always the one in the L1, or in the highest levels of the hierarchy.
 To help locate the canonical copy for objects, each non-canonical copy of an object is accompanied by the canonical pointer 
 of the object in its header as its identity. 
-
+When a canonical copy of the object moves down the hierarchy, all upper level pointers to that canonical copy must be 
+invalidated, and then updated to the new location of the canonical copy in the lower level. The paper proposes that this 
+be done lazily, and in a delayed manner: When the canonical copy is transferred to a lower level, the old address of the 
+object in the current level is still preserved, but the valid bit is set to zero. The new canonical pointer of the object
+is stored in the old location, indicating that the object has been moved, and the search process should use the new 
+canonical address. During a later GC, this "stub" object will be identified and reclaimed as garbage. All canonical
+pointers that still use the old canonical address of the object in upper levels will be rewritten with the 
+new canonical address of the object during GC.
 
 One of the most important features of Hotpads is pointer rewriting, which happens when an object
