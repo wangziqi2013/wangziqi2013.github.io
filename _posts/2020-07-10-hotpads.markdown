@@ -96,5 +96,14 @@ on each access, which requires associative lookups of the tag array. The paper e
 hareware addresses in pointer values, and rewriting the pointer to directly address the L1 pad when the object it
 points to has been copied to the L1.
 
-Each object are allowed to have only one canonical copy, which is the copy in the lowest level
+Each object are allowed to have only one canonical copy, which is the copy of the object in the lowest level.
+The hardware address of an object's canonical copy serves as a globally unique identifier to that object.
+All copies of the object in upper levels of the hierarchy, expect the L1, are non-canonical objects, which may not be 
+pointed to by any of the pointers in the runtime data structure or register file. This restriction is to avoid unnecessary 
+pointer aliasing which complicates pointer comparison, and to ensure that the most up-to-date version of the copy is accessed.
+The most up-to-date copy is always the one in the L1, or in the highest levels of the hierarchy.
+To help locate the canonical copy for objects, each non-canonical copy of an object is accompanied by the canonical pointer 
+of the object in its header as its identity. 
+
+
 One of the most important features of Hotpads is pointer rewriting, which happens when an object
