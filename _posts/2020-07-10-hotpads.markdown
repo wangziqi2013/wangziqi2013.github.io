@@ -40,5 +40,9 @@ The architecture, however, failed to provide such protection on ISA level, forci
 own memory protection mechanism.
 Second, most modern languages rely on background automatic garbage collection to recycle dead objects, which takes a 
 software thread to periodically scan objects in the background, which also potentially moves objects around for
-compaction. The usage of GC algorithms is already a feature in these languages that is already so common to justify a hardware 
+compaction. The usage of GC algorithms is already a feature in these languages that is so common to justify a hardware 
 implemented version be embedded in the cache system.
+Lastly, the paper also points out that conventional cache systems require an associative lookup of the tag array for 
+each cache access, which has large power overhead. The paper seeks to reduce such overhead by using pointers that directly
+point to cache locations, rather than to the underlying physical address space. Cache accesses, in most cases, are 
+just to follow the pointer to the data array and access its content without an associative address tag lookup.
