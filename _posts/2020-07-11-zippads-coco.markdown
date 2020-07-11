@@ -31,4 +31,6 @@ efficiently, since a compressed block cannot be placed arbitrarily in the addres
 Lastly, conventional compressed cache designs employ the combination of an over-provisioned tag array and segmented data
 array for mapping variably sized compressed blocks in the cache. This organization creates two problems. The first
 problem is that blocks are most likely only stored at segment boundaries, at a certain order, with the possibility of 
-both internal and external fragmentation.
+both internal and external fragmentation. The second problem is that on each cache lookup, more tag addresses and metadata 
+have to be read and compared in parallel, consuming more power with a potentially large access latency, which can negatively
+impact performance as well.
