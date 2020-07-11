@@ -137,3 +137,9 @@ the object size in the object header.
 All pointers to the original object should now point to the proxy object. Compressed sub-objects are moved around as 
 described above, without causing any massive pointer rewrite during GC and copying large amount of data around. 
 
+The paper did not specify any compression algorithm, although a combination of FPC and BDI is suggested. Both algorithms
+require a few metadata bits for the decompressor to recognize the layout. These per-object bits cannot be stored as 
+tag array entries since not all objects in Hotpads have a tag array entry. They are also better not stored in a dedicated
+metadata area in the main memory, since this will increase the memory footprint and impact performance. The paper proposes
+that the per-object bits be added to pointers. Three bits from the 48 bit physical address value are dedicated to compression
+metadata (although for L1 non-canonical objects, these three bits are never used)
