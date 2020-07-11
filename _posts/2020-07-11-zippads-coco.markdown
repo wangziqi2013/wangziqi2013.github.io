@@ -46,3 +46,9 @@ The second technique is cross-object compression, which aligns objects of the sa
 independently using delta encoding. Since the same field of different object instances tend to store data of similar
 dynamic ranges, this can significantly increase compression ratio than trying to exploiting redundancy between different
 fields, which are often of different types and feature different dynamic value ranges. 
+The last technique is tagless data addressing in the cache hierarchy, which is achieved by leveraging existing cache 
+addressing schemes of Hotpads. Pointers to objects in Hotpads store the hardware address of the tag array that the object
+is stored, rather than the backing storage in the flat address space (there is no unified address space, and each cache
+level is treated as an independent storage device that maintains its own address space). 
+When an object moves in the hierarchy, its hardware address also changes, which necessitates pointer updates in all fields
+that hold a pointer to the object. 
