@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Fully associative data placement enabled by Hotpads is convenient for implementing data compression, since compressed
+   objects can be placed anywhere without gaps in-between. This reduces both internal and external fragmentation.
+
+
+
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
 compression optimization. The paper begins by identifying a few problems with conventional memory and cache compression 
 architectures when applied to object-oriented language programs.
@@ -64,3 +71,4 @@ Objects need not be decompressed and recompressed between levels in the compress
 One of the biggest advantage of Hotpads architecture is that objects are not statically mapped to a few possible locations 
 in the data array using bits from its address. Instead, object storage is allocated from the end of the data array, which
 is maintained as a hardware heap, enabling fully associative data placement. 
+When an object is evicted from the 
