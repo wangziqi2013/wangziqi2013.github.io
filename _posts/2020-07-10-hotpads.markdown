@@ -39,10 +39,8 @@ version_mgmt:
    I understand that the author may have obtained the initial idea from software generational GC and felt motivated 
    to port it to hardware, treating the memory hierarchy as heaps of different generations. But really, GC
    and memory allocation is not a thing that you should perform purely on hardware. 
-   Although the authors tried their best to make the design as flawless as possible, the inelegant ad-hoc and hardwired 
-   logic and implicit assumptions make me uncomfortable when reading the paper.
    Also the design is full of loopholes and bugs (see below). There are numerous corner cases that cannot be handled 
-   efficiently. This is "innovation just because you want to be different" without any meaningful controbution.
+   efficiently. This is "innovation just because you want to be different" without any meaningful contribution.
 
 2. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
    in hardware-only pads, how can you achieve that for main memory GC? Or objects shall not be moved for main memory GC?
@@ -68,7 +66,8 @@ version_mgmt:
 
 7. When a canonical object is GC'ed at lower level, how are copies of the object invalidated? 
 
-8. Overall
+8. Overall, the non-atomic nature of pointer rewriting when a canonical object moves (during GC) will introduce
+   really obsecure data and control races in practice in a multicore environment when mixed with coherence.
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
