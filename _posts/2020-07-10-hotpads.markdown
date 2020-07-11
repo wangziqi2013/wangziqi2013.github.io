@@ -218,7 +218,7 @@ one of the old locations of objects being moved during GC.
 Along with GC, objects are also evicted out of the pad if they are not recently used. This mimics generational GC
 in which infrequently accessed objects are evicted to larger, older heaps, while short-lived objects are always 
 allocated from the smaller and younger heap. Generational GC accelerates the GC process since most objects die young,
-and most storage can be reclaimed by only performing GC on the younger heap (higher level pads in our case).
+and therefore, most storage can be reclaimed by only performing GC on the younger heap (higher level pads in our case).
 Recall that no canonical pointer is allowed from lower level pads to higher level pads to avoid massive pointer updates, 
 when an object is evicted, the hardware must check its pointer fields (using the per-double word metadata bits), and evict 
 canonical objects that are still in the L1 pad.
@@ -226,3 +226,7 @@ Canonical pointers are also rewritten when the canonical object is evicted durin
 is evicted, the pointer MUST NOT be rewritten to the new non-canonical address (non-canonical objects to non-L1 pads are 
 forbidden to avoid complicated aliasing problems). Instead, the canonical address from the object to be moved is fetched,
 and the pointer value is stored to the canonical value.
+
+GC in the main memory are delegated to software threads due to its complexity. The paper, however, does not give detailed 
+description on how main memory GC is performed, and how address is rewritten for moved in-memory objects.
+
