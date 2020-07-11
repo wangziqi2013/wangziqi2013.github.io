@@ -126,6 +126,10 @@ The hardware address of an object's canonical copy serves as a globally unique i
 All copies of the object in upper levels of the hierarchy, expect the L1, are non-canonical objects, which may not be 
 pointed to by any of the pointers in the runtime data structure or register file. This restriction is to avoid unnecessary 
 pointer aliasing which complicates pointer comparison, and to ensure that the most up-to-date version of the copy is accessed.
+Non-canonical objects in non-L1 pads can only be accessed via an associative tag lookup (see below), and must not be 
+pointed to by any pointers. As already discussed above, this isolates canonical object copies from being accidentally
+accessed, and localizes the effect of moving these canonical pointers, since the only access path to these objects are
+via the tag array lookup.
 The most up-to-date copy is always the one in the L1, or in the highest levels of the hierarchy.
 To help locate the canonical copy for objects, each non-canonical copy of an object is accompanied by the canonical pointer 
 of the object in its header as its identity. 
