@@ -146,3 +146,7 @@ metadata. For compressed canonical objects, since they are always accessed with 
 circuit should always know such information, and therefore is able to decompress without any problem. For non-canonical
 objects in the compressed domain, since no pointer shall be generated for them, their compression metadata must still be
 stored in the tag array, which, as pointed out by above discussion, are the only access path for these non-canonical objects.
+
+The paper later proposes COCO, an object-aware compression algorithm leveraging delta encoding between the same field.
+It works by comparing objects to be compressed with certain "base objects", computing the delta from the base object,
+and storing only delta and a "diff" bit vector as compressed object.
