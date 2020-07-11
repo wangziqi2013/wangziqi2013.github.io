@@ -34,3 +34,8 @@ problem is that blocks are most likely only stored at segment boundaries, at a c
 both internal and external fragmentation. The second problem is that on each cache lookup, more tag addresses and metadata 
 have to be read and compared in parallel, consuming more power with a potentially large access latency, which can negatively
 impact performance as well.
+
+The paper solves the above issues using three novel techniques. First, Zippads is based on Hotpads, an eccentric 
+memory architecture optimized for object semantics. Instead of fetching data in an object-agnostic, 64 byte block format,
+Hotpads maintains object boundary and type information directly on hardware, exposing object and pointer semantics
+to the memory hierarchy, such that the boundaries of objects can be easily identified. 
