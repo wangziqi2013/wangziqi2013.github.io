@@ -32,6 +32,12 @@ version_mgmt:
 2. The pointer array thing deserves better elaboration. Is the array treated part of the object body? Does it have 
    backing storage? What if the array needs expansion? 
 
+3. When overflow occurs (assuming small objects), it is not always necessary to set up to forwarding trunk. If the 
+   object is non-canonical in the compressed pad, you just need to change the tag mapping, and that will be all.
+   Forwarding trunks are only necessary when the object is canonical, since only pointers to canonical objects are 
+   allowed. Since non-canonical object copies in non-L1 pads are always accessed via the tag mapping, not via pointers,
+   changing the tag mapping is sufficient to update all paths of accessing the canonical object.
+
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
 compression optimization. The paper begins by identifying a few problems with conventional memory and cache compression 
 architectures when applied to object-oriented language programs.
@@ -88,4 +94,3 @@ is maintained as a hardware heap, enabling fully associative data placement.
 When an object is evicted from the last level of the uncompressed pad, two cases may occur. In the first, simpler case,
 the object has never reached the compressed level before, implying that the object is canonical. The object is then
 compressed by the compression engine, after which storage is allocated at the end of the hardware heap.
-
