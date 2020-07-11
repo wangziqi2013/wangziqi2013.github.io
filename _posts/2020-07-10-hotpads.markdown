@@ -230,3 +230,6 @@ and the pointer value is stored to the canonical value.
 GC in the main memory are delegated to software threads due to its complexity. The paper, however, does not give detailed 
 description on how main memory GC is performed, and how address is rewritten for moved in-memory objects.
 
+The paper also discusses second-order issues such as coherence, partial order accesses, compatible mode to support old 
+block interface, etc. Unfortunately, the paper did not elaborate these aspects of Hotpads well, and some mechanisms seem
+broken and buggy.
