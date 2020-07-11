@@ -28,3 +28,7 @@ of a compressed line, since such lines are not always stored in their uncompress
 extra storage and memory traffic of the mapping structure may just offset the benefits of main memory compression.
 In the latter case, the mapping rule must be statically determined, which tends to make use of memory storage less
 efficiently, since a compressed block cannot be placed arbitrarily in the address space.
+Lastly, conventional compressed cache designs employ the combination of an over-provisioned tag array and segmented data
+array for mapping variably sized compressed blocks in the cache. This organization creates two problems. The first
+problem is that blocks are most likely only stored at segment boundaries, at a certain order, with the possibility of 
+both internal and external fragmentation.
