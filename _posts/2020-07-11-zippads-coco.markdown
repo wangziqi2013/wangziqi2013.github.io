@@ -22,6 +22,14 @@ version_mgmt:
    can be leveraged conveniently for data compression as well, since object movement is common in compressed cache 
    architectures (called "compaction", which is usually done within the segmented data array of a cache set). 
 
+3. Using proxy objects whose size is statically determined at compilation time as an extra indirection to avoid massive
+   pointer rewrite and copy around.
+
+4. Sacrificing a few bits in the physical address space is fine for most applications since they will not be using
+   that many anyway. 
+   Also metadata can be stored with a few bits in the pointer value, although this has really narrow applicability 
+   since on conventional architectures pointers are not opaque.
+
 **Lowlight:**
 
 1. Although I do appreciate some design aspects (tagless lookup, applying distributed system concepts to cache, fully
@@ -119,4 +127,8 @@ Large objects, however, cannot be moved around easily in the data array. In addi
 (greater than 64 bytes) into 64 byte sub-objects to avoid over-fetching. Zippads follows this sub-object approach by adding
 a software-transparent, implicit proxy object to handle large compressed objects. The proxy object consists of a 
 pointer array (which is treated as pointers by Hotpads by setting the pointer bit in the metadata), with each pointer
-referencing a sub-object of 64 bytes, incurring a 12.5% storage overhead. 
+referencing a compressed sub-object of 64 bytes, incurring a 12.5% storage overhead. Note that since object sizes are 
+determined in the compilation time, the size of proxy objects is also static in the runtime, which can be computed from 
+the object size in the object header. 
+All pointers to the original object should now point to the proxy object. Compressed sub-objects are moved around as 
+described above, without causing any massive pointer rewrite during GC and copying large amount of data around. 
