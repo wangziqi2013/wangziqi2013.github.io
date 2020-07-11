@@ -1,7 +1,7 @@
 ---
 layout: paper-summary
 title:  "Rethinking the Memory Hierarchy for Modern Languages"
-date:   2020-07-010 03:46:00 -0500
+date:   2020-07-10 03:46:00 -0500
 categories: paper
 paper_title: "Rethinking the Memory Hierarchy for Modern Languages"
 paper_link: https://ieeexplore.ieee.org/document/8574542
