@@ -22,9 +22,13 @@ version_mgmt:
    faster storage for the PA space. This brings more interesting use cases and more algorithms that are originally designed
    for distributed systems.
 
+3. A good way to reduce backward references in the memory hierarchy is like what this paper did: Forbidding any pointer 
+   from lower level to higher level. This way when higher level objects move in the cache, there will not be any massive 
+   pointer change in the lower level which is also significantly larger and impractical to scan.
+
 **Lowlight:**
 
-0. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
+1. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
    I understand that the author may have obtained the initial idea from software generational GC and felt motivated 
    to port it to hardware, treating the memory hierarchy as heaps of different generations. But really, GC
    and memory allocation is not a thing that you should perform purely on hardware. 
@@ -33,21 +37,21 @@ version_mgmt:
    Also the design is full of loopholes and bugs (see below). There are numerous corner cases that cannot be handled 
    efficiently. This is "innovation just because you want to be different" without any meaningful controbution.
 
-1. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
+2. The paper solves backward pointer updating problems with a brute-force scan of the tag array. Even if this is doable
    in hardware-only pads, how can you achieve that for main memory GC? Or objects shall not be moved for main memory GC?
 
-2. If sub-objects are allowed, canonical addresses are no longer unique (i.e. a byte can be represented by multiple 
+3. If sub-objects are allowed, canonical addresses are no longer unique (i.e. a byte can be represented by multiple 
    canonical addresses) How does this work? What if different pads cache different sub-objects that overlap with
    each other? Does hardware compute segment intersection?
 
-3. By lazily rewriting upper level pointers when a canonical object is evicted to lower level, the object has two
+4. By lazily rewriting upper level pointers when a canonical object is evicted to lower level, the object has two
    de-facto identities, one in the old location, another in the new location. How Hotpads prevent this from happening?
    i.e. what if two canonical pointers, to the two locations respectively, are compared?
 
-4. The canonical pointer in the header of object copies serve as backward pointers. Are these pointers updated when a
+5. The canonical pointer in the header of object copies serve as backward pointers. Are these pointers updated when a
    canonical object moves? Are they modified during GC?
 
-5. Non-canonical pointers rewriting that are the results of L1 access should not be written back to lower levels. What
+6. Non-canonical pointers rewriting that are the results of L1 access should not be written back to lower levels. What
    if such a pointer is written from a register into the pointer field of the object? If the rewrite is to be executed as 
    data array update, how would L1 restore the previous value? What if the pointer update is truly a pointer update?
    One way is to discard pointer rewriting results and let it be rolled back naturally in lower levels. 
@@ -55,7 +59,7 @@ version_mgmt:
    refill from lower levels? How do we recover the dirty pointer value (its original value is never stored in any
    lower level)? 
 
-6. When a canonical object is GC'ed at lower level, how are copies of the object invalidated? 
+7. When a canonical object is GC'ed at lower level, how are copies of the object invalidated? 
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
