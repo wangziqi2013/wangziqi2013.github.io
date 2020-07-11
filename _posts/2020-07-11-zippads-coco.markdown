@@ -26,9 +26,11 @@ version_mgmt:
 
 1. Although I do appreciate some design aspects (tagless lookup, applying distributed system concepts to cache, fully
    associative data placement) of Hotpads, in general I dislike its design philosophy which is hardly more
-   than just over-design and ad-hoc addition of components. This paper just make it worse by adding even more ad-hoc
-   components, such as the pointer array for large objects.
+   than just over-design and brute-force, ad-hoc addition of components. This paper just make it worse by adding even 
+   more ad-hoc components, such as the pointer array for large objects.
 
+2. The pointer array thing deserves better elaboration. Is the array treated part of the object body? Does it have 
+   backing storage? What if the array needs expansion? 
 
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
 compression optimization. The paper begins by identifying a few problems with conventional memory and cache compression 
