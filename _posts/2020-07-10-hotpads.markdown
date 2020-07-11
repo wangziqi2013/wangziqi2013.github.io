@@ -233,3 +233,10 @@ description on how main memory GC is performed, and how address is rewritten for
 The paper also discusses second-order issues such as coherence, partial order accesses, compatible mode to support old 
 block interface, etc. Unfortunately, the paper did not elaborate these aspects of Hotpads well, and some mechanisms seem
 broken and buggy.
+
+Hotpads enhances the ISA by the addition of a few special instructions. To enforce data isolation between pointers and
+normal data, pointer fields must be accessed with ldptr and stptr for reads and writes respectively. The hardware checks
+the per double-word metadata field to determine whether the access is legal or not. Furthermore, before accessing an object
+via pointer, the object must be fetched to the L1 pad followed by a pointer rewriting. This semantics is conveyed to the 
+cache system using derefptr instruction, indicating that the program intends to access the object being pointed to.
+
