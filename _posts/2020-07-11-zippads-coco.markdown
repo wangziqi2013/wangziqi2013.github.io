@@ -38,4 +38,11 @@ impact performance as well.
 The paper solves the above issues using three novel techniques. First, Zippads is based on Hotpads, an eccentric 
 memory architecture optimized for object semantics. Instead of fetching data in an object-agnostic, 64 byte block format,
 Hotpads maintains object boundary and type information directly on hardware, exposing object and pointer semantics
-to the memory hierarchy, such that the boundaries of objects can be easily identified. 
+to the memory hierarchy, such that the boundaries of objects can be easily identified. In addition, instead of storing
+data in fixed sized blocks, Hotpads manages each level of the cache as a heap, which only grows by incrementing the bump
+pointer. Objects can be laied out in the data array compactly without any gap in-between, minimizing internal and external
+fragmentation. Compression, therefore, can be applied at object granularity for easy access and compact storage.
+The second technique is cross-object compression, which aligns objects of the same type and compresses each field 
+independently using delta encoding. Since the same field of different object instances tend to store data of similar
+dynamic ranges, this can significantly increase compression ratio than trying to exploiting redundancy between different
+fields, which are often of different types and feature different dynamic value ranges. 
