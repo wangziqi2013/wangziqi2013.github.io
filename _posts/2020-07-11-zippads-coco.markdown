@@ -77,10 +77,15 @@ level is also supported. Pointers in Zippads still use hardware address, which i
 tag lookups to access the object.
 
 We next describe the operation of Zippads. Zippads assume Hotpads architecture, with lower level of the hierarchy (e.g. 
-L3 pads and main memory) compressed while higher levels are not compressed. Objects are compressed when they are first evivted
-from the higher level into compressed domain, and decompressed for access when traversing in the opposite direction.
+L3 pads and main memory) compressed for effective size and bandwidth savings, while higher levels are not compressed for 
+latency benefits. 
+Objects are compressed when they are first evivted from the higher level into compressed domain, and decompressed for 
+access when traversing in the opposite direction.
 Objects need not be decompressed and recompressed between levels in the compressed domain to save power and bandwidth.
 One of the biggest advantage of Hotpads architecture is that objects are not statically mapped to a few possible locations 
 in the data array using bits from its address. Instead, object storage is allocated from the end of the data array, which
 is maintained as a hardware heap, enabling fully associative data placement. 
-When an object is evicted from the 
+When an object is evicted from the last level of the uncompressed pad, two cases may occur. In the first, simpler case,
+the object has never reached the compressed level before, implying that the object is canonical. The object is then
+compressed by the compression engine, after which storage is allocated at the end of the hardware heap.
+
