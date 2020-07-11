@@ -29,10 +29,7 @@ version_mgmt:
    than just over-design and brute-force, ad-hoc addition of components. This paper just make it worse by adding even 
    more ad-hoc components, such as the pointer array for large objects.
 
-2. The pointer array thing deserves better elaboration. Is the array treated part of the object body? Does it have 
-   backing storage? What if the array needs expansion? 
-
-3. When overflow occurs (assuming small objects), it is not always necessary to set up to forwarding trunk. If the 
+2. When overflow occurs (assuming small objects), it is not always necessary to set up to forwarding trunk. If the 
    object is non-canonical in the compressed pad, you just need to change the tag mapping, and that will be all.
    Forwarding trunks are only necessary when the object is canonical, since only pointers to canonical objects are 
    allowed. Since non-canonical object copies in non-L1 pads are always accessed via the tag mapping, not via pointers,
@@ -117,3 +114,9 @@ During GC, the forwarding trunk is treated as invalid object, which will be recl
 the trunk to the post-GC location of the canonical object should be inserted into the renaming table for pointer rewrites.
 After GC, all pointers referring to the compressed canonical object should have already been updated to use the new 
 location. No access redirection will ever happen until the next relocation.
+
+Large objects, however, cannot be moved around easily in the data array. In addition, Hotpads decompose large objects 
+(greater than 64 bytes) into 64 byte sub-objects to avoid over-fetching. Zippads follows this sub-object approach by adding
+a software-transparent, implicit proxy object to handle large compressed objects. The proxy object consists of a 
+pointer array (which is treated as pointers by Hotpads by setting the pointer bit in the metadata), with each pointer
+referencing a sub-object of 64 bytes, incurring a 12.5% storage overhead. 
