@@ -36,7 +36,7 @@ have to be read and compared in parallel, consuming more power with a potentiall
 impact performance as well.
 
 The paper solves the above issues using three novel techniques. First, Zippads is based on Hotpads, an eccentric 
-memory architecture optimized for object semantics. Instead of fetching data in an object-agnostic, 64 byte block format,
+memory architecture optimized for object semantics. Instead of fetching data in an object-agnostic, aligned 64 byte block format,
 Hotpads maintains object boundary and type information directly on hardware, exposing object and pointer semantics
 to the memory hierarchy, such that the boundaries of objects can be easily identified. In addition, instead of storing
 data in fixed sized blocks, Hotpads manages each level of the cache as a heap, which only grows by incrementing the bump
@@ -55,4 +55,12 @@ that hold a pointer to the object. This is achieved by explicitly requesting all
 array and update the pointer value if they contain pointers to the object just moved. Zippads leverage this existing 
 mechanism in support of object movement in the hierarchy, and extends it such that object movements within the same 
 level is also supported. Pointers in Zippads still use hardware address, which in most cases do not require associative
-tag lookups to access an object.
+tag lookups to access the object.
+
+We next describe the operation of Zippads. Zippads assume Hotpads architecture, with lower level of the hierarchy (e.g. 
+L3 pads and main memory) compressed while higher levels are not compressed. Objects are compressed when they are first evivted
+from the higher level into compressed domain, and decompressed for access when traversing in the opposite direction.
+Objects need not be decompressed and recompressed between levels in the compressed domain to save power and bandwidth.
+One of the biggest advantage of Hotpads architecture is that objects are not statically mapped to a few possible locations 
+in the data array using bits from its address. Instead, object storage is allocated from the end of the data array, which
+is maintained as a hardware heap, enabling fully associative data placement. 
