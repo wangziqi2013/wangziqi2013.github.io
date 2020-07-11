@@ -26,6 +26,13 @@ version_mgmt:
    from lower level to higher level. This way when higher level objects move in the cache, there will not be any massive 
    pointer change in the lower level which is also significantly larger and impractical to scan.
 
+4. I like the way data isolation is done in this paper. Locations of canonical objects are used as the identities of the 
+   object, which requires an update (or redirections) on all referencing pointers when canonical objects are moved
+   to a new location. Non-canonical objects, however, are fully isolated by not being able to pointed to by pointers.
+   Their locations are, in fact, abstracted away by the usage of the associative tag array on each level. Moving 
+   non-canonical object copies are therefore localized to only the current level, since the controller can change the 
+   mapping quickly by an atomic update to the array
+
 **Lowlight:**
 
 1. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
@@ -60,6 +67,8 @@ version_mgmt:
    lower level)? 
 
 7. When a canonical object is GC'ed at lower level, how are copies of the object invalidated? 
+
+8. Overall
 
 This paper proposes Hotpads, an eccentric memory hierarchy architecture that optimizes for small object allocation, 
 garbage collection in managed languages, memory safety, and reducing associative lookup costs in conventional cache
