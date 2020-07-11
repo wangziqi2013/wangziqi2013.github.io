@@ -104,4 +104,11 @@ updated object. If the former not smaller, the old object can simply overwrite t
 a gap between the current and the next object, causing external fragmentation. The paper claims that external fragmentation
 does not have noticable impact on performance, though. If the latter is larger, the old object copy is then invalidated
 by clearing the valid bit for the object, and place the new object at the end of the heap. 
-
+Due to the tagless object lookup protocol, if the object is canonical at the compressed pad, it may still be accessed
+via the old hardware location, since Hotpads pointers contain hardware addresses and are used to directly access the 
+data array. To avoid existing pointers from being invalidated, a redirection record is stored in the old storage
+location of the canonical object. Future references of this object using the old pointer, once seeing this special
+record (access circuit should check for the record), should continue to the new hardware location and fetch the object.
+Luckily, such redirection capability already exist in Hotpads design. In Hotpads, a redirection record will be written
+when a canonical object is evicted to the next level between GCs. This paper just slightly extends redirection
+by allowing a canonical object be redirected to another location in the same level.
