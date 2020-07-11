@@ -222,3 +222,7 @@ and most storage can be reclaimed by only performing GC on the younger heap (hig
 Recall that no canonical pointer is allowed from lower level pads to higher level pads to avoid massive pointer updates, 
 when an object is evicted, the hardware must check its pointer fields (using the per-double word metadata bits), and evict 
 canonical objects that are still in the L1 pad.
+Canonical pointers are also rewritten when the canonical object is evicted during GC. If a non-canonical object 
+is evicted, the pointer MUST NOT be rewritten to the new non-canonical address (non-canonical objects to non-L1 pads are 
+forbidden to avoid complicated aliasing problems). Instead, the canonical address from the object to be moved is fetched,
+and the pointer value is stored to the canonical value.
