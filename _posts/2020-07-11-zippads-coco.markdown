@@ -142,4 +142,7 @@ require a few metadata bits for the decompressor to recognize the layout. These 
 tag array entries since not all objects in Hotpads have a tag array entry. They are also better not stored in a dedicated
 metadata area in the main memory, since this will increase the memory footprint and impact performance. The paper proposes
 that the per-object bits be added to pointers. Three bits from the 48 bit physical address value are dedicated to compression
-metadata (although for L1 non-canonical objects, these three bits are never used)
+metadata. For compressed canonical objects, since they are always accessed with the canonical pointer, the accessing 
+circuit should always know such information, and therefore is able to decompress without any problem. For non-canonical
+objects in the compressed domain, since no pointer shall be generated for them, their compression metadata must still be
+stored in the tag array, which, as pointed out by above discussion, are the only access path for these non-canonical objects.
