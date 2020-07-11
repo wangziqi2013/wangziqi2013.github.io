@@ -4,7 +4,7 @@ title:  "Rethinking the Memory Hierarchy for Modern Languages"
 date:   2020-07-010 03:46:00 -0500
 categories: paper
 paper_title: "Rethinking the Memory Hierarchy for Modern Languages"
-paper_link: Rethinking the Memory Hierarchy for Modern Languages
+paper_link: https://ieeexplore.ieee.org/document/8574542
 paper_keyword: Cache; Hotpads
 paper_year: MICRO 2018
 rw_set:
