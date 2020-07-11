@@ -146,7 +146,7 @@ written with the new canonical address of the object after it has moved down.
 Note that pointer rewrite is merely a measure for optimizing L1 pad accesses. It does not modify the object.  
 Pointer fields and register file values that are written due to refills from lower levels will not be written back to 
 lower levels when the object is written back. The hardware simply will not mark these pointer fields as dirty, and
-
+let the fields be rolled back naturally to the old value as the write back occurs.
 
 To help finding the copy of an object using its canonical address as identity, each pad is also equipped with a tag
 array just like regular cache. The tag array maps canonical addresses of objects to their hardware addresses,
