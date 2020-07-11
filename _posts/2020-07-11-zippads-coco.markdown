@@ -94,3 +94,14 @@ is maintained as a hardware heap, enabling fully associative data placement.
 When an object is evicted from the last level of the uncompressed pad, two cases may occur. In the first, simpler case,
 the object has never reached the compressed level before, implying that the object is canonical. The object is then
 compressed by the compression engine, after which storage is allocated at the end of the hardware heap.
+In the second case, the object is non-canonical and dirty (otherwise it will just be discarded silently), with the 
+possibility that the compressed pad already contains an older, stale version of the same object. In this case, an
+associative tag lookup is performed using the non-canonical object's canonical address (stored in the object header)
+to determine whether a copy exists in the compressed pad. If negative, the object is compressed and stored just as the
+first case. If, however, an older copy already exists, the cache controller should compare the size of the older, compressed
+object (which is also stored in the object header, no matter it is canonical or not) with the compressed size of the 
+updated object. If the former not smaller, the old object can simply overwrite the previous one, potentially leaving
+a gap between the current and the next object, causing external fragmentation. The paper claims that external fragmentation
+does not have noticable impact on performance, though. If the latter is larger, the old object copy is then invalidated
+by clearing the valid bit for the object, and place the new object at the end of the heap. 
+
