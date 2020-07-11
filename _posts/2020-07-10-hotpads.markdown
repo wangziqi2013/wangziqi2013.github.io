@@ -202,7 +202,17 @@ To help identify pointer fields in objects, Hotpads adds one metadata field per 
 two words in size, one for the header, the other for data). The metadata field tracks dirty and valid bits as in
 a conventional cache at finer granularity. Furthermore, one bit is added to indicate whether the word stores a pointer
 value. The replacement policy also requires several bits for coarse grained LRU.
-The GC starts with pointer values in the register file as roots, and runs BFS accelerated by a small hardware FIFO buffer
+The GC starts with pointer values in the register file as roots (including the stack pointer, which implicitly marks the 
+entire execution stack for scanning as well), and runs BFS accelerated by a small hardware FIFO buffer
 to mark all canonical and non-canonical objects as "live". Note that GC only works for canonical objects, since they are
 allocated "permanently". Non-canonical objects, on the contrary, are just cached copies of some lower level canonical
 objects. These cached copies will be invalidated when their canonical objects are GC'ed.
+No pointer rewriting happens for GC'ed canonical objects, since these objects are not referenced anymore.
+
+Along with GC, objects are also evicted out of the pad if they are not recently used. This mimics generational GC
+in which infrequently accessed objects are evicted to larger, older heaps, while short-lived objects are always 
+allocated from the smaller and younger heap. Generational GC accelerates the GC process since most objects die young,
+and most storage can be reclaimed by only performing GC on the younger heap (higher level pads in our case).
+Recall that no canonical pointer is allowed from lower level pads to higher level pads to avoid massive pointer updates, 
+when an object is evicted, the hardware must check its pointer fields (using the per-double word metadata bits), and evict 
+canonical objects that are still in the L1 pad.
