@@ -112,3 +112,8 @@ record (access circuit should check for the record), should continue to the new 
 Luckily, such redirection capability already exist in Hotpads design. In Hotpads, a redirection record will be written
 when a canonical object is evicted to the next level between GCs. This paper just slightly extends redirection
 by allowing a canonical object be redirected to another location in the same level.
+
+During GC, the forwarding trunk is treated as invalid object, which will be reclaimed. An entry from the old location holding
+the trunk to the post-GC location of the canonical object should be inserted into the renaming table for pointer rewrites.
+After GC, all pointers referring to the compressed canonical object should have already been updated to use the new 
+location. No access redirection will ever happen until the next relocation.
