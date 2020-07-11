@@ -208,6 +208,12 @@ to mark all canonical and non-canonical objects as "live". Note that GC only wor
 allocated "permanently". Non-canonical objects, on the contrary, are just cached copies of some lower level canonical
 objects. These cached copies will be invalidated when their canonical objects are GC'ed.
 No pointer rewriting happens for GC'ed canonical objects, since these objects are not referenced anymore.
+Pointers are rewritten, however, for canonical and non-canonical objects that are moved for compaction. The pointer
+rewriting is performed using a temporary renaming table allocated in the data array. Afer the GC, all canonical and 
+non-canonical pointers will reference the newly moved objects rather than their old locations.
+If the GC is executed on lower level pads other than L1, the renaming process should also propagate to upper levels.
+The controller at upper levels scans the metadata array and rewrites the field if it is a pointer and its value matches
+one of the old locations of objects being moved during GC.
 
 Along with GC, objects are also evicted out of the pad if they are not recently used. This mimics generational GC
 in which infrequently accessed objects are evicted to larger, older heaps, while short-lived objects are always 
