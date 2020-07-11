@@ -18,6 +18,11 @@ version_mgmt:
 1. Fully associative data placement enabled by Hotpads is convenient for implementing data compression, since compressed
    objects can be placed anywhere without gaps in-between. This reduces both internal and external fragmentation.
 
+2. Tagless lookup, non-unified address space and pointer rewriting are all existing mechanisms in Hotpads. These techniques
+   can be leveraged conveniently for data compression as well, since object movement is common in compressed cache 
+   architectures (called "compaction", which is usually done within the segmented data array of a cache set). 
+
+
 
 
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
