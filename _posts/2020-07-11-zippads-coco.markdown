@@ -51,4 +51,8 @@ addressing schemes of Hotpads. Pointers to objects in Hotpads store the hardware
 is stored, rather than the backing storage in the flat address space (there is no unified address space, and each cache
 level is treated as an independent storage device that maintains its own address space). 
 When an object moves in the hierarchy, its hardware address also changes, which necessitates pointer updates in all fields
-that hold a pointer to the object. 
+that hold a pointer to the object. This is achieved by explicitly requesting all upper level caches to scan their data
+array and update the pointer value if they contain pointers to the object just moved. Zippads leverage this existing 
+mechanism in support of object movement in the hierarchy, and extends it such that object movements within the same 
+level is also supported. Pointers in Zippads still use hardware address, which in most cases do not require associative
+tag lookups to access an object.
