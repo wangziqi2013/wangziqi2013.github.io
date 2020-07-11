@@ -19,4 +19,7 @@ architectures when applied to object-oriented language programs.
 First, these algorithms are often designed and evaluated with SPEC benchmark, which mostly consists of scientific computation 
 workloads. These workloads constantly use large arrays of simple data types such as integers, floating point numbers, or 
 pointers. Classical compression algorithms work well on these data types, since they only consider redundancy in a small
-range in the address space, such as one or a few cache lines. 
+range in the address space, such as one or a few cache lines. With object oriented languages, most of the working sets
+consist of objects, which are laid out in the address space with fields of the same object stored in adjacent words. 
+Conventional algorithms perform less efficiently on objects, since distinct object fields are often not of the same type, 
+and have less dynamic value locality compared with arrays of homogeneous data.
