@@ -43,6 +43,10 @@ version_mgmt:
    allowed. Since non-canonical object copies in non-L1 pads are always accessed via the tag mapping, not via pointers,
    changing the tag mapping is sufficient to update all paths of accessing the canonical object.
 
+3. Non-canonical objects in the compressed domain cannot have pointers referencing them. The paper should mention that
+   these objects must have their metadata bits stored in the per-object tag. Canonical objects are fine since there 
+   must be at least one pointer from the upper level for it to be "alive" and not GC'ed.
+
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
 compression optimization. The paper begins by identifying a few problems with conventional memory and cache compression 
 architectures when applied to object-oriented language programs.
@@ -132,3 +136,4 @@ determined in the compilation time, the size of proxy objects is also static in 
 the object size in the object header. 
 All pointers to the original object should now point to the proxy object. Compressed sub-objects are moved around as 
 described above, without causing any massive pointer rewrite during GC and copying large amount of data around. 
+
