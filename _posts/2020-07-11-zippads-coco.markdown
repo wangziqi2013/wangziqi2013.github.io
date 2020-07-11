@@ -22,7 +22,12 @@ version_mgmt:
    can be leveraged conveniently for data compression as well, since object movement is common in compressed cache 
    architectures (called "compaction", which is usually done within the segmented data array of a cache set). 
 
+**Lowlight:**
 
+1. Although I do appreciate some design aspects (tagless lookup, applying distributed system concepts to cache, fully
+   associative data placement) of Hotpads, in general I dislike its design philosophy which is hardly more
+   than just over-design and ad-hoc addition of components. This paper just make it worse by adding even more ad-hoc
+   components, such as the pointer array for large objects.
 
 
 This paper proposes Zippads and COCO, a compression framework built on an object-based memory hierarchy with object-aware 
