@@ -239,4 +239,10 @@ normal data, pointer fields must be accessed with ldptr and stptr for reads and 
 the per double-word metadata field to determine whether the access is legal or not. Furthermore, before accessing an object
 via pointer, the object must be fetched to the L1 pad followed by a pointer rewriting. This semantics is conveyed to the 
 cache system using derefptr instruction, indicating that the program intends to access the object being pointed to.
-
+Normal data accesses still use ld and st instructions, with an optional displacement value as immediate value or register 
+offset. Accesses using ld and st to pointer fields are prohibited to protect pointer semantics.
+Pointer comparison is non-trivial in Hotpads due to pointer aliasing. Canonical addresses can be directly compared, since
+they represent the identity of objects. Non-canonical addresses, which must be in the L1, can also be numerically compared,
+since objects can only have at most one copy in the L1 cache. Canonical and non-canonical comparison is more tricky, since
+they might actually refer to the same object. In this case, the hardware fetches the canonical address from the non-canonical
+object's header, after which canonical addresses can be compared.
