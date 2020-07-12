@@ -23,4 +23,11 @@ typically contains addresses of user space data or stack segments. BDI, on the o
 introduced by dynamic value locality of nearby values. In most cases, value locality is demonstrated by small integers,
 or pointers of similar sized objects allocated from the heap. BDI, on the other hand, cannot process large integers, 
 hetrogeneous data types or floating point values very well, since these values differ by a large amount in their numeric
-literal. 
+literal. Huffman encoding, as used in SC2, only compresses values that frequently occur throughout the execution with 
+shorter codewords. It cannot handle value locality in the form of nearby values, which is common for pointers.
+Lastly, special optimization can be applied for zero blocks, i.e. a cache block with all-zero, which is common for 
+initialized data structure and sparse matrix. Although all schemes described above can achieve a relative high compression
+ratio for zero blocks, Zero Cache Augmentation (ZCA) compresses zero blocks at the highest compression ratio of one single
+bit per block, which is ideal to zero-dominant workloads.
+
+
