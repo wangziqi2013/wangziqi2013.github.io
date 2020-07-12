@@ -45,8 +45,8 @@ that decompression is on the critical path of upper level data fetching, which c
 is in the background, and it is unlikely that several more cycles added to the latency will negatively impact 
 performance. In order to hold several compression blocks per physical slot, each data slot is equipped with two tags
 which statically map addresses to the data slot. In addition to the conventional bits such as dirty, valid and coherence
-bits per tag, an offset field, metadata field and compression type field are also added for placement and decompression 
-of compressed blocks.
+bits per tag, an offset field, compressed size field, metadata field and compression type field are also added for placement 
+and decompression of compressed blocks.
 The offset field serves as an indirection pointer to locate the compressed block in the physical slot. The paper suggests
 that word-aligned pointers or byte-aligned pointers are both fine, making a trade-off between external fragmentation
 and static metadata cost.
@@ -54,4 +54,16 @@ The compression metadata is a three-bit field that stores algorithm-specific inf
 For BDI, it stores the three-bit compression type. For ZCA, it stores whether the block is a zero block (zero blocks
 do not use data slots). For SC2 and FP-H, it stores the version since two instances of the codebook can be active at the 
 same time.
-The two-bit algorithm selection field
+The two-bit algorithm selection field selects the decompression logic via a multiplexer. The compressed block is sent
+to the corresponding decompression circuit based on the value in this field.
+
+The cache access protocol does not change much except that tag lookup and data slot access are serialized due to the 
+extra level of indirection. When a dirty block is written back from high levels, the compression circuit first encodes
+the block into a shorter form, and then compares the size between the old block and the new block. If the new block fits 
+into the old block's storage (either smaller, or there is extra storage after the old block), the write back completes
+without any eviction. If, on the other hand, the new block cannot fit into the old block's store, or there is no
+free tag, at least one LRU tag, together with its data, must be evicted. 
+
+The heuristics works as follows. When an uncompressed block is to be processed, the cache controller first guesses the 
+data type of values in the block, and then selects the best compression algorithm based on type information.
+Data type 
