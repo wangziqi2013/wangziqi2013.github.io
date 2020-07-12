@@ -43,4 +43,7 @@ the main memory or evicted by upper level caches should be compressed before ins
 lines evicted or fetched by upper levels should be decompressed before they are sent over the network. The paper observes
 that decompression is on the critical path of upper level data fetching, which can affect performance, while compression
 is in the background, and it is unlikely that several more cycles added to the latency will negatively impact 
-performance.
+performance. In order to hold several compression blocks per physical slot, each data slot is equipped with two tags
+which statically map addresses to the data slot. In addition to the conventional bits such as dirty, valid and coherence
+bits per tag, one offset field and metadata field is added for placement and decompression of compressed blocks.
+The offset field serves as an indirection pointer
