@@ -28,6 +28,9 @@ shorter codewords. It cannot handle value locality in the form of nearby values,
 Lastly, special optimization can be applied for zero blocks, i.e. a cache block with all-zero, which is common for 
 initialized data structure and sparse matrix. Although all schemes described above can achieve a relative high compression
 ratio for zero blocks, Zero Cache Augmentation (ZCA) compresses zero blocks at the highest compression ratio of one single
-bit per block, which is ideal to zero-dominant workloads.
+bit per block, which is ideal to zero-dominant workloads. None of the above compression algorithms can handle floating
+point values well, since floating point values consists of three fields: sign, exponent, and mantissa, which satisfies
+none of the compression assumptions above.
+
 
 
