@@ -32,5 +32,9 @@ bit per block, which is ideal to zero-dominant workloads. None of the above comp
 point values well, since floating point values consists of three fields: sign, exponent, and mantissa, which satisfies
 none of the compression assumptions above.
 
-
+Instead of using one fixed compression algorithm for all kinds of possible data types that may occur, HyComp implements
+four different compression algorithms, namely, SC2, BDI, ZCA and a floating point compression algorithm called FP-H.
+Heuristics are employed to determine the data type within an uncompressed cache line. Once the data type is determined,
+HyComp will compress the block using the most suitable algorithm for that type, achieving higher compression ratio than
+any of the single algorithm for all workloads.
 
