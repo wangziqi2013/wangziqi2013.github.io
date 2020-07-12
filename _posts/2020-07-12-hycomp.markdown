@@ -22,6 +22,7 @@ version_mgmt:
 1. Some applications tend to use 64 bit integers while others use 32 bit integers. If the heuristic always checks bits
    for 64 bit integers, 32 bit integer arrays would be mis-classified into pointers. Although BDI also handles 32 bit 
    integers very well (BDI is designed for both sizes), the paper should clarify this part.
+   The same applies to 32 bit float vs 64 bit double.
 
 2. The hardware overhead is higher than any of the previous schemes, since it implements four different compression logic.
    In addition, both SC2 and FP-H needs two copies of the codebook, which increases the overhead more (they cannot share)
@@ -82,4 +83,8 @@ free tag, at least one LRU tag, together with its data, must be evicted. In the 
 free an entire physical slot. The paper also mentioned that zero block tags should be given less priority when determining
 the eviction victim, in addition to conventional LRU, without much elaboration on this. 
 
-
+The heuristics works as follows. When an uncompressed block is to be processed, the cache controller first guesses the 
+data type of values in the block, and then selects the best compression algorithm based on type information.
+Data type is determined by inspecting bits from each aligned 64 bit word (called "chunks") in the block.
+A word is classified as a small integer, if the high 32 bits is all-zero or all-one, which is compared with SC2.
+A word is classified as a pointer, if the high 16 bits are zero, but bits 32 - 47 are non-zero. 
