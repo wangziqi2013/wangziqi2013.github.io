@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Some applications tend to use 64 bit integers while others use 32 bit integers. If the heuristic always checks bits
+   for 64 bit integers, 32 bit integer arrays would be mis-classified into pointers. Although BDI also handles 32 bit 
+   integers very well (BDI is designed for both sizes), the paper should clarify this part.
+
 This paper proposes HyComp, a cache compression framework with high compression ratio for all data types using multiple
 compression algorithms. The paper is motivated by the observation that most compression algorithms are only capable of
 compressing a certain with high compression ratio, while leaving data of incompatible types less compressed, introducing
@@ -68,4 +74,4 @@ the eviction victim, in addition to conventional LRU, without much elaboration o
 
 The heuristics works as follows. When an uncompressed block is to be processed, the cache controller first guesses the 
 data type of values in the block, and then selects the best compression algorithm based on type information.
-Data type 
+Data type is determined by inspecting bits from each aligned 64 bit 
