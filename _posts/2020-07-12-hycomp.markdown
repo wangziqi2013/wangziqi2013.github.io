@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes HyComp, a cache compression framework with high compression ratio for all data types using multiple
+compression algorithms. The paper is motivated by the observation that most compression algorithms are only capable of
+compressing a certain with high compression ratio, while leaving data of incompatible types less compressed, introducing
+a huge bias depending on the application and the data types used. The difference between compression capabilities is 
+a consequence of different assumptions on sources of redundancy. For example, FPC 
