@@ -15,7 +15,7 @@ version_mgmt:
 
 **Highlight:**
 
-1. Using heuristics
+1. Using heuristics to determine data type and perform type-specific compression; Not using multiple circuits in parallel.
 
 **Lowlight:**
 
@@ -25,6 +25,9 @@ version_mgmt:
 
 2. The hardware overhead is higher than any of the previous schemes, since it implements four different compression logic.
    In addition, both SC2 and FP-H needs two copies of the codebook, which increases the overhead more (they cannot share)
+
+3. Stack pointers often have higher bits setting to 1 (canonical addresses in x86). This paper's classification 
+   algorithm would fail to recognize them
 
 This paper proposes HyComp, a cache compression framework with high compression ratio for all data types using multiple
 compression algorithms. The paper is motivated by the observation that most compression algorithms are only capable of
@@ -79,6 +82,4 @@ free tag, at least one LRU tag, together with its data, must be evicted. In the 
 free an entire physical slot. The paper also mentioned that zero block tags should be given less priority when determining
 the eviction victim, in addition to conventional LRU, without much elaboration on this. 
 
-The heuristics works as follows. When an uncompressed block is to be processed, the cache controller first guesses the 
-data type of values in the block, and then selects the best compression algorithm based on type information.
-Data type is determined by inspecting bits from each aligned 64 bit 
+
