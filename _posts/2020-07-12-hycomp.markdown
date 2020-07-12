@@ -17,4 +17,10 @@ This paper proposes HyComp, a cache compression framework with high compression 
 compression algorithms. The paper is motivated by the observation that most compression algorithms are only capable of
 compressing a certain with high compression ratio, while leaving data of incompatible types less compressed, introducing
 a huge bias depending on the application and the data types used. The difference between compression capabilities is 
-a consequence of different assumptions on sources of redundancy. For example, FPC 
+a consequence of different assumptions on sources of redundancy. For example, FPC is based on the assumption that most
+redundancies are caused by small integers whose upper bits are all ones or all zeros. It works badly for pointers, which
+typically contains addresses of user space data or stack segments. BDI, on the other hand, assumes that redundancies are
+introduced by dynamic value locality of nearby values. In most cases, value locality is demonstrated by small integers,
+or pointers of similar sized objects allocated from the heap. BDI, on the other hand, cannot process large integers, 
+hetrogeneous data types or floating point values very well, since these values differ by a large amount in their numeric
+literal. 
