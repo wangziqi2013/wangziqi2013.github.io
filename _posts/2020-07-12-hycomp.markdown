@@ -62,7 +62,9 @@ extra level of indirection. When a dirty block is written back from high levels,
 the block into a shorter form, and then compares the size between the old block and the new block. If the new block fits 
 into the old block's storage (either smaller, or there is extra storage after the old block), the write back completes
 without any eviction. If, on the other hand, the new block cannot fit into the old block's store, or there is no
-free tag, at least one LRU tag, together with its data, must be evicted. 
+free tag, at least one LRU tag, together with its data, must be evicted. In the worst case, two tags are evicted to
+free an entire physical slot. The paper also mentioned that zero block tags should be given less priority when determining
+the eviction victim, in addition to conventional LRU, without much elaboration on this. 
 
 The heuristics works as follows. When an uncompressed block is to be processed, the cache controller first guesses the 
 data type of values in the block, and then selects the best compression algorithm based on type information.
