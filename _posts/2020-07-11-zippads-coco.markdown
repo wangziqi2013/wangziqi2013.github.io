@@ -150,3 +150,9 @@ stored in the tag array, which, as pointed out by above discussion, are the only
 The paper later proposes COCO, an object-aware compression algorithm leveraging delta encoding between the same field.
 It works by comparing objects to be compressed with certain "base objects", computing the delta from the base object,
 and storing only delta and a "diff" bit vector as compressed object.
+The base object for a certain type is selected as the first object of that type that is evicted into the compressed domain.
+A small cache is added to store the base object in uncompressed form when the type ID (stored in the object header) is not 
+in the cache yet. For later objects evicted into the compressed domain with the same type ID, the compression circuit 
+compares both objects and outputs the compressed object. The compression circuit consists of an array of bytes comparators 
+and two shifting registers. The comparators determine which bytes in the incoming object differ from the base object.
+Both shifting registers then shift "diff" bits and bytes that do not match respectively.
