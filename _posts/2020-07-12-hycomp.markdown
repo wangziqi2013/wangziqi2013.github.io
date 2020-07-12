@@ -45,5 +45,13 @@ that decompression is on the critical path of upper level data fetching, which c
 is in the background, and it is unlikely that several more cycles added to the latency will negatively impact 
 performance. In order to hold several compression blocks per physical slot, each data slot is equipped with two tags
 which statically map addresses to the data slot. In addition to the conventional bits such as dirty, valid and coherence
-bits per tag, one offset field and metadata field is added for placement and decompression of compressed blocks.
-The offset field serves as an indirection pointer
+bits per tag, an offset field, metadata field and compression type field are also added for placement and decompression 
+of compressed blocks.
+The offset field serves as an indirection pointer to locate the compressed block in the physical slot. The paper suggests
+that word-aligned pointers or byte-aligned pointers are both fine, making a trade-off between external fragmentation
+and static metadata cost.
+The compression metadata is a three-bit field that stores algorithm-specific information for decoding the compressed block.
+For BDI, it stores the three-bit compression type. For ZCA, it stores whether the block is a zero block (zero blocks
+do not use data slots). For SC2 and FP-H, it stores the version since two instances of the codebook can be active at the 
+same time.
+The two-bit algorithm selection field
