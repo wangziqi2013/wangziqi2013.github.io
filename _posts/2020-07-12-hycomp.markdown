@@ -38,3 +38,9 @@ Heuristics are employed to determine the data type within an uncompressed cache 
 HyComp will compress the block using the most suitable algorithm for that type, achieving higher compression ratio than
 any of the single algorithm for all workloads.
 
+We next describe the operation of the cache architecture. HyComp is implemented for the LLC. Cache lines fetched from
+the main memory or evicted by upper level caches should be compressed before installed into the LLC. Similarly, cache 
+lines evicted or fetched by upper levels should be decompressed before they are sent over the network. The paper observes
+that decompression is on the critical path of upper level data fetching, which can affect performance, while compression
+is in the background, and it is unlikely that several more cycles added to the latency will negatively impact 
+performance.
