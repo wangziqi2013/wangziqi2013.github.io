@@ -160,3 +160,7 @@ consists of a shifting register and a demultiplexer. The shifting register accep
 the "diff" vector indicates a match, or from the compressed stream, if the diff indicates otherwise. Both compression
 and decompression circuits are significantly simpler than those in previous designs, since only comparators and 
 shifting registers are required.
+
+At the end of the paper, it is suggested that Zippads can be combined with COCO to yield much higher compression ratio,
+or be used as a standalone module with FPC + BDI. Even in the latter form, Zippads can still outperform conventional
+methods with the same algorithm, due to its compact storage and tagless access path of objects.
