@@ -95,3 +95,9 @@ the current word as a floating point value if the exponents match.
 The paper justifies this by arguing that value locality also applies to floating point numbers: The exponent fields of 
 adjacent values are often identical with each other.
 Unfortunately, the paper did not elaborate on the pattern that these exponents are compared.
+At last, if a block is all zeros or all ones, it is classified as a zero block, which does not get compressed, but 
+simply sets the compression type to zero block compression in the tag array.
+For each of the four types, a counter is incremented when a certain type word is recognized. The final decision is made
+by selecting the compression type with the biggest counter value.
+
+
