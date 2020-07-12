@@ -87,4 +87,11 @@ The heuristics works as follows. When an uncompressed block is to be processed, 
 data type of values in the block, and then selects the best compression algorithm based on type information.
 Data type is determined by inspecting bits from each aligned 64 bit word (called "chunks") in the block.
 A word is classified as a small integer, if the high 32 bits is all-zero or all-one, which is compared with SC2.
-A word is classified as a pointer, if the high 16 bits are zero, but bits 32 - 47 are non-zero. 
+A word is classified as a pointer, if the high 16 bits are zero, but bits 32 - 47 are non-zero. The paper 
+claims that this prevents small integers from being recognized as pointers.
+Floating point numbers are recognized by checking the next 7 bits after the MSB of the word, which consititute the exponent. 
+The circuit compares the exponent field of each word with its neighboring two (or one, if on the border) words, and classify
+the current word as a floating point value if the exponents match. 
+The paper justifies this by arguing that value locality also applies to floating point numbers: The exponent fields of 
+adjacent values are often identical with each other.
+Unfortunately, the paper did not elaborate on the pattern that these exponents are compared.
