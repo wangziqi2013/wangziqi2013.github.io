@@ -155,4 +155,8 @@ A small cache is added to store the base object in uncompressed form when the ty
 in the cache yet. For later objects evicted into the compressed domain with the same type ID, the compression circuit 
 compares both objects and outputs the compressed object. The compression circuit consists of an array of bytes comparators 
 and two shifting registers. The comparators determine which bytes in the incoming object differ from the base object.
-Both shifting registers then shift "diff" bits and bytes that do not match respectively.
+Both shifting registers then shift "diff" bits and bytes that do not match respectively. Decompression circult simply
+consists of a shifting register and a demultiplexer. The shifting register accepts input from either the base object, if
+the "diff" vector indicates a match, or from the compressed stream, if the diff indicates otherwise. Both compression
+and decompression circuits are significantly simpler than those in previous designs, since only comparators and 
+shifting registers are required.
