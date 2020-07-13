@@ -100,4 +100,11 @@ simply sets the compression type to zero block compression in the tag array.
 For each of the four types, a counter is incremented when a certain type word is recognized. The final decision is made
 by selecting the compression type with the biggest counter value.
 
+The paper also proposes a floating point number compression algorithm, called FP-H. The observation is that although 
+floating point values have significant variations on their raw bit patterns, due to IEEE 754 encoding standard, the
+exponent field as well as higher bits of the mantissa field still demonstrate high value locality.
+Instead of compressing floating point numbers as a whole, FP-H decomposes each floating point number as sign bit, 
+exponent, mantissa high, and mantissa low. The latter two are just a even cut on the mantissa field, where the higher
+parts are expected to have better locality, while lower parts have less. 
+
 
