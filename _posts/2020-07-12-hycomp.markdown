@@ -119,5 +119,6 @@ codebook. Fortunately, since the three partitions are compressed separately, the
 and one of the two mantissa partitions can be decompressed serially, since the offsets to these two partitions 
 are known. To achieve this, the mantissa partition that concludes the compressed block should be stored in a bit-reversed
 manner, i.e. the first bit in the compressed stream is stored as the last bit in the compressed block. The 
-decompressor then reads the stream from both ends of the block to start decompression
-
+decompressor then reads the stream from both ends of the block to start decompression.
+As an alternative, the paper also suggests that offsets to each of the two compressed mantissa partitions be explicitly 
+stored, enabling three way parallel decompression, at the cost of extra metadata and decompression hardware.
