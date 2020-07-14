@@ -78,4 +78,10 @@ The paper therefore proposes that cache lines be classified into a few size clas
 size class boundary of the previous line, if any. This way, the compressibility of a page is still relevant to the
 compressibility of cache lines, while slight size increases will not cause any data movement, as long as the cache line
 still fits in that size class.
-Regarding 
+Regarding page packing, the paper also points out that variable sized chunks will not work, since it complicates
+memory management for finding blocks of appropriate sizes, and may decrease compression efficiency by introducing internal
+and external fragmentation. The paper favors incremental allocation, in which memory blocks are given to pages
+incrementally in the unit of 512 byte chunks. Note that this is different from having multiple size classes for pages,
+in which data movement is necessary to copy old page data to the new page when the old page overflows.
+In incremental allocation scheme, the metadata for an OSPA page contains several pointers for each of the 512 byte chunks.
+Data only needs to be copied incrementally as the name suggests.
