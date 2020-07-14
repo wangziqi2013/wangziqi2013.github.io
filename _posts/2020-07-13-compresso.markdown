@@ -85,3 +85,13 @@ incrementally in the unit of 512 byte chunks. Note that this is different from h
 in which data movement is necessary to copy old page data to the new page when the old page overflows.
 In incremental allocation scheme, the metadata for an OSPA page contains several pointers for each of the 512 byte chunks.
 Data only needs to be copied incrementally as the name suggests.
+
+We next describe the operation of Compresso. Compresso does not change OS's page allocation, address mapping, and MMU's
+VA to OSPA address generation. When an OSPA address appears on the system bus, the memory controller performs OSPA to MPA
+address translation by consulting a metadata area at the beginning of the MPA. 
+The translated address is then used to access physical DRAM to fetch the compressed cache line. Note that since the 
+paper assumes a conventional DRAM interface, the granularity of DRAM access is still 64 bytes, in which case two 
+DRAM transactions might be needed in order to fetch a boundary crossing line. The line is then decompressed, before sending
+to the upper level.
+
+
