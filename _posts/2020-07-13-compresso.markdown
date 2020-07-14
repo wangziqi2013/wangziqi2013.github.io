@@ -109,4 +109,8 @@ MPA to the OS. On receiving a bus transaction containing a block address, the me
 frame number from the address, and then finds the metadata entry with exactly one aligned DRAM read. The memory controller
 then use the line offset from the address to locate the physical address of the compressed line, after which DRAM
 is accessed. 
-
+The metadata entry consists of four regions. The first region is a 2 byte control word, which contains valid bit, 
+zero bit (whether the page is all-zero), compressed bit (whether the page is compressed at all), and the free space
+that remains at the end of the page. The second region is 8 chunk pointers of 4 byte each. Chunks are incrementally
+allocated to a page by pushing them to the tail of the pointer array. The third region is an array of 2 bit size class
+indicates for describing the size of compressed lines, which amounts to 16 bytes. 
