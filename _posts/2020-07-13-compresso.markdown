@@ -101,3 +101,12 @@ lines, as we will see below. If the inflation room runs out, but there are still
 memory controller will incrementally allocate another 512 byte chunk, if the page is not already 4KB, in order to extend
 the inflation room. If no more inflation pointers can be used for overflow lines, and/or the page is already 4KB, the 
 memory controller will recompact the page. A new 512 byte chunk is also allocated if the page is not already 4KB.
+
+We next discuss Compresso's metadata management. Compresso reserves a metadata region at the beginning of the MPA at
+system initialization time. One 64 byte metadata entry is reserved for each 4KB OSPA mapping. The initialization routine 
+also reports more memory (e.g. twice the physical memory size, assuming an overall 2:1 compression ratio) than actual 
+MPA to the OS. On receiving a bus transaction containing a block address, the memory controller first extracts the page
+frame number from the address, and then finds the metadata entry with exactly one aligned DRAM read. The memory controller
+then use the line offset from the address to locate the physical address of the compressed line, after which DRAM
+is accessed. 
+
