@@ -94,4 +94,7 @@ paper assumes a conventional DRAM interface, the granularity of DRAM access is s
 DRAM transactions might be needed in order to fetch a boundary crossing line. The line is then decompressed, before sending
 to the upper level.
 
-
+In the case of dirty write backs, the compression engine first compresses the line, and compares it with the size class.
+If the compressed line can still fit into the slot, the line is just written into the slot. Otherwise, the line overflows
+to the end of the page, called an "inflation room". The matadata word has a few bytes dedicated for addressing overflowed
+lines, as we will see below.
