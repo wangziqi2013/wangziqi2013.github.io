@@ -46,5 +46,13 @@ compression ratio. BPC combines BDI, FPC and RLE by first transforming the input
 rotation, and bit-wise XOR to generate as many zeros as possible, and then compressing the resulting stream with low 
 entropy with either FPC or RLE. The paper slightly modifies BPC such that the transformation is not always applied. The
 compressor always compares BPC with directly applying FPC + RLE without the transformation to further avoid pessimistic
-cases with BPC. 
+cases with BPC. Compression is performed on 64 byte cache line boundaries to prevent over-fetching when multiple lines
+are compressed together.
+The second design choice is address translation boundaries. In a compression-aware OS, physical pages are allocated in
+different size classes to accommodate compression. When the size class of a page changes, for example, when the compressed
+size of lines are changed by processor updates, the OS should be notified, which then allocates a page of the next
+size class for storing compressed lines. In this case, the OS performs address translation first between the VA and the 
+uncompressed PA (called "OSPA" in the paper), and then an extra translation between OSPA and compressed PA (called "MPA") 
+is performed by hardware between the OSPA and MPA. The OS and MMU still treat OSPA pages as uniformly sized, and generates
+block addresses assuming linear block mapping. The paper, however, suggests that such design
 
