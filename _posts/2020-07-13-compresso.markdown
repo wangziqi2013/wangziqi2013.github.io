@@ -138,3 +138,10 @@ translation within uncompressed pages.
 The second half of the physical slot can then be used for caching another uncompressed page's translation.
 Although this also requires over-provisioning the number of tags in the metadata cache, the extra storage for tags
 is insignificant compared with metadata entry size.
+
+The paper proposes two extra optimizations for improving the efficiency of Compresso. The first is page overflow prediction,
+which directly expands a page to 4KB without having to go through the middle stages. The reasoning behind is that pages
+might be initialized with zero by the library before they are written by the application. In this case, the page will
+always begin its life cycle with the minimum possible configuration. In later stages of execution, as the application
+writes into the page, the page needs to be expended a few times before it reaches 4KB, if the page is hardly compressible,
+causing unnecessary bandwidth if this could be predicted. 
