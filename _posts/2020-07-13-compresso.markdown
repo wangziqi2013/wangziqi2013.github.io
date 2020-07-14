@@ -73,4 +73,9 @@ The third and fourth design choice is the packing of cache lines within a page, 
 In terms of cache line packing, the two extremes of aligning them to a pre-determined size boundary, as in LCP, and 
 packing them compactly, will not work well. The former reduces the efficiency of compression, since the compressibility
 of a page is irrelevant to the compressibility of cache lines in the page. The latter introduces unnecessary data movement,
-since any size increase of a dirty cache being written back will cause the page to be shifted.
+since any size increase of a dirty cache being written back will cause the page to be shifted. 
+The paper therefore proposes that cache lines be classified into a few size classes. Individual lines are aligned to the 
+size class boundary of the previous line, if any. This way, the compressibility of a page is still relevant to the
+compressibility of cache lines, while slight size increases will not cause any data movement, as long as the cache line
+still fits in that size class.
+Regarding 
