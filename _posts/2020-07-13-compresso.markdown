@@ -18,6 +18,12 @@ version_mgmt:
 1. Metadata mapping can be performed by direct mapping into a reserved address space of physical DRAM. The overall overhead
    is as low as 1/16 of the address space (assuming 64B to 4KB mapping).
 
+2. The "caching only lower half" strategy of metadata entry is a novel idea never seen anywhere before.
+   
+3. Identifying cold pages by cache eviction
+  
+4. By making each metadata entry 64 bytes, all metadata reads can be done with one DRAM access.
+
 **Lowlight:**
 
 1. Although the paper delivers its ideas without any missing parts, it can be more structured and organized. For example, 
