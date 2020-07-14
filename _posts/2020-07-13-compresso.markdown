@@ -97,4 +97,7 @@ to the upper level.
 In the case of dirty write backs, the compression engine first compresses the line, and compares it with the size class.
 If the compressed line can still fit into the slot, the line is just written into the slot. Otherwise, the line overflows
 to the end of the page, called an "inflation room". The matadata word has a few bytes dedicated for addressing overflowed
-lines, as we will see below.
+lines, as we will see below. If the inflation room runs out, but there are still free pointer slots in the metadata, the 
+memory controller will incrementally allocate another 512 byte chunk, if the page is not already 4KB, in order to extend
+the inflation room. If no more inflation pointers can be used for overflow lines, and/or the page is already 4KB, the 
+memory controller will recompact the page. A new 512 byte chunk is also allocated if the page is not already 4KB.
