@@ -26,6 +26,11 @@ version_mgmt:
    main memory compression, realizing the trade-offs, making the correct design decisions, and finally assembling
    all aspects together into a working memory compression scheme.
 
+2. It is not the size of the metadata cache must be larger than last level TLB, but the range of OSPA covered.
+   TLB entries are much smaller than metadata entries. Less storage is required for TLB than metadata cache if the 
+   same number of pages are to be covered.
+   Also with huge pages this is just impossible.
+
 This paper proposes Compresso, a main memory framework featuring low data movement cost, low metadata cost and ease of 
 deployment. The paper begins by identifying two issues with previous memory compression schemes. The first issue is 
 excessive data movement, which is not only a major source of negative performance impact in many cases, but also often ignored 
@@ -119,3 +124,8 @@ index array is a 6 bit field storing the ID of the overflow line in the correspo
 Note that cache lines stored in the inflation room are still classified into one of the four size classes, which is 
 stored in the third region. Cache lines, however, can be of different size classes while in the inflation room to
 maximize space efficiency.
+
+The paper also proposes a metadata cache on the memory controller to accelerate access to recently used lines. No
+detailed description of the metadata cache is given, but a conventional set-associative cache will suffice. The paper
+suggests that the range of OSPA covered by the metadata cache should not be smaller than the last-level unified TLB of 
+the system, such that the 
