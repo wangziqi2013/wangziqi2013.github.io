@@ -48,6 +48,7 @@ entropy with either FPC or RLE. The paper slightly modifies BPC such that the tr
 compressor always compares BPC with directly applying FPC + RLE without the transformation to further avoid pessimistic
 cases with BPC. Compression is performed on 64 byte cache line boundaries to prevent over-fetching when multiple lines
 are compressed together.
+
 The second design choice is address translation boundaries. In a compression-aware OS, address translation and page allocation
 should both accommodate variably sized pages and non-linear block mapping within a page resulting from memory compression. 
 The OS page allocator directly allocate from compressed address space (called "MPA") which is directly mapped into hardware.
@@ -56,5 +57,9 @@ size, the OS should also be notified of such event, and explicitly allocate a ne
 The MMU, in the meantime, maps linear addresses within a page to actual block addresses in MPA, after computing the 
 block offset using extra compression metadata. In this mode, hardware and software cooperate to maintain the compressed
 address space, communicating with each other via compression metadata and asynchronous exceptions.
+This paper, however, argues that compression-aware OS may prohibit the adoption of compression, since it not only
+requires significant changes to the OS page management policy, but also raises compatibility concerns for external
+devices (e.g. DMA) that also need to access memory via bus transactions. In this case, the DMA device will not be 
+able to direct access memory without significant hardware change, since the bus transaction now uses addresses from the
+compressed address space, which is no longer linear, and must be computed using compression metadata.
 
-(called "OSPA" in the paper) 
