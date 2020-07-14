@@ -62,4 +62,9 @@ requires significant changes to the OS page management policy, but also raises c
 devices (e.g. DMA) that also need to access memory via bus transactions. In this case, the DMA device will not be 
 able to direct access memory without significant hardware change, since the bus transaction now uses addresses from the
 compressed address space, which is no longer linear, and must be computed using compression metadata.
-
+Based on these reasons The paper proposes adding an intermediate address space, called "OSPA", between the VA and MPA.
+OSPA has the same mapping as uncompressed address space, in which all pages are of uniform size, and all blocks are linearly
+mapped within the page. The MMU generates bus transactions using OSPA addresses, which enables DMA and other bus 
+devices to access memory in the old fashion. The memory controller will perform the next stage translation from OSPA
+to MPA. This design isolations memory compression from higher level components of the memory hierarchy, which features
+fast and seamless adoption.
