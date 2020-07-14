@@ -128,4 +128,11 @@ maximize space efficiency.
 The paper also proposes a metadata cache on the memory controller to accelerate access to recently used lines. No
 detailed description of the metadata cache is given, but a conventional set-associative cache will suffice. The paper
 suggests that the range of OSPA covered by the metadata cache should not be smaller than the last-level unified TLB of 
-the system, such that the 
+the system, such that the normal access path without last-level TLB miss should also be unaffected by metadata cache 
+misses.
+To further improve metadata cache hit rate, the paper also suggests that for uncompressed pages, it is sufficient to
+only cache the first half of the metadata entry, since only status bits and chunk pointers are needed to perform linear
+translation within uncompressed pages. 
+The second half of the physical slot can then be used for caching another uncompressed page's translation.
+Although this also requires over-provisioning the number of tags in the metadata cache, the extra storage for tags
+is insignificant compared with metadata entry size.
