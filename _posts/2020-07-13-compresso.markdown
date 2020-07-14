@@ -34,4 +34,8 @@ back, if the compressed size is larger than the physical slot allocated for stor
 the rest lines after the dirty line has to be shifted towards the end of the page to make more space. In addition, if
 the sum of compressed line sizes exceed the total page capacity, a larger page should be allocated, and all compressed
 lines in the old page should be copied over to the new page.
-
+The second issue is OS adoption. The compressed main memory scheme may be abstracted away from the OS, which leaves
+the OS unmodified when deploying the scheme, suggesting easier adoption. It is, however, also possible that the OS 
+is aware of the underlying compression, and will accommodate by allocating different sized pages, manipulating extra mapping 
+information for compressed pages, and reallocating pages on hardware request. The paper argues that a transparent compression
+scheme is better, since it encourages adoption and minimizes OS migration cost.
