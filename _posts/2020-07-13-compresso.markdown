@@ -13,4 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
 
+1. Although the paper delivers its ideas , it can be more structured and organized. For example, there is no mentioning
+   of the metadata cache until Sec. IV.B.2, and neither after.
+   Rather than proposing and describing a research prototype, this paper is closer to evluating different ideas of 
+   main memory compression, realizing the trade-offs, making the correct design decisions, and finally assembling
+   all aspects together into a working memory compression scheme.
+
+This paper proposes Compresso, a main memory framework featuring low data movement cost, low metadata cost and ease of 
+deployment. The paper begins 
