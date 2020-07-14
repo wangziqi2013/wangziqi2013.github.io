@@ -113,4 +113,9 @@ The metadata entry consists of four regions. The first region is a 2 byte contro
 zero bit (whether the page is all-zero), compressed bit (whether the page is compressed at all), and the free space
 that remains at the end of the page. The second region is 8 chunk pointers of 4 byte each. Chunks are incrementally
 allocated to a page by pushing them to the tail of the pointer array. The third region is an array of 2 bit size class
-indicates for describing the size of compressed lines, which amounts to 16 bytes. 
+indicates for describing the size of compressed lines, which amounts to 16 bytes. The last region is an index array for
+overflow lines that are stored in the inflation room. 17 slots are provided for overflow lines. Each element of the 
+index array is a 6 bit field storing the ID of the overflow line in the corresponding location of the inflation room.
+Note that cache lines stored in the inflation room are still classified into one of the four size classes, which is 
+stored in the third region. Cache lines, however, can be of different size classes while in the inflation room to
+maximize space efficiency.
