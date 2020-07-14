@@ -96,8 +96,10 @@ VA to OSPA address generation. When an OSPA address appears on the system bus, t
 address translation by consulting a metadata area at the beginning of the MPA. 
 The translated address is then used to access physical DRAM to fetch the compressed cache line. Note that since the 
 paper assumes a conventional DRAM interface, the granularity of DRAM access is still 64 bytes, in which case two 
-DRAM transactions might be needed in order to fetch a boundary crossing line. The line is then decompressed, before sending
-to the upper level.
+DRAM transactions might be needed in order to fetch a boundary crossing line. To reduce cross-boundary cache lines,
+the paper suggests that the size classes be chosen such that most lines are properly aligned to DRAM access boundaries
+(the paper uses 0, 8, 32 and 64).
+The compressed line is decompressed before sending to the upper level.
 
 In the case of dirty write backs, the compression engine first compresses the line, and compares it with the size class.
 If the compressed line can still fit into the slot, the line is just written into the slot. Otherwise, the line overflows
