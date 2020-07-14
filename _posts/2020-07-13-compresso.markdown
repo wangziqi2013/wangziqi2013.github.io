@@ -20,11 +20,18 @@ version_mgmt:
 
 **Lowlight:**
 
-1. Although the paper delivers its ideas , it can be more structured and organized. For example, there is no mentioning
-   of the metadata cache until Sec. IV.B.2, and neither after.
+1. Although the paper delivers its ideas without any missing parts, it can be more structured and organized. For example, 
+   there is no mentioning of the metadata cache until Sec. IV.B.2, and neither after.
    Rather than proposing and describing a research prototype, this paper is closer to evluating different ideas of 
    main memory compression, realizing the trade-offs, making the correct design decisions, and finally assembling
    all aspects together into a working memory compression scheme.
 
 This paper proposes Compresso, a main memory framework featuring low data movement cost, low metadata cost and ease of 
-deployment. The paper begins 
+deployment. The paper begins by identifying two issues with previous memory compression schemes. The first issue is 
+excessive data movement, which is not only a major source of negative performance impact in many cases, but also often ignored 
+due to careless evaluation. Data movement is needed in several occasions. When a compressed cache line is written 
+back, if the compressed size is larger than the physical slot allocated for storing the old compressed line, then 
+the rest lines after the dirty line has to be shifted towards the end of the page to make more space. In addition, if
+the sum of compressed line sizes exceed the total page capacity, a larger page should be allocated, and all compressed
+lines in the old page should be copied over to the new page.
+
