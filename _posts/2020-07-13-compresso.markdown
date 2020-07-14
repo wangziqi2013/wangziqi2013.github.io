@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Metadata mapping can be performed by direct mapping into a reserved address space of physical DRAM. The overall overhead
+   is as low as 1/16 of the address space (assuming 64B to 4KB mapping).
+
 **Lowlight:**
 
 1. Although the paper delivers its ideas , it can be more structured and organized. For example, there is no mentioning
