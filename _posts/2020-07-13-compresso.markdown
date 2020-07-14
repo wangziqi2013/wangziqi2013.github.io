@@ -39,3 +39,12 @@ the OS unmodified when deploying the scheme, suggesting easier adoption. It is, 
 is aware of the underlying compression, and will accommodate by allocating different sized pages, manipulating extra mapping 
 information for compressed pages, and reallocating pages on hardware request. The paper argues that a transparent compression
 scheme is better, since it encourages adoption and minimizes OS migration cost.
+
+The paper then identifies four important design choices and trade-offs it makes. The first is the compression algorithm.
+The paper selects Bit-Plane Compression (BPC) as the cache line compression algorithm, due to its simplicity and higher
+compression ratio. BPC combines BDI, FPC and RLE by first transforming the input symbols with BDI-style delta, bit-plane 
+rotation, and bit-wise XOR to generate as many zeros as possible, and then compressing the resulting stream with low 
+entropy with either FPC or RLE. The paper slightly modifies BPC such that the transformation is not always applied. The
+compressor always compares BPC with directly applying FPC + RLE without the transformation to further avoid pessimistic
+cases with BPC. 
+
