@@ -68,3 +68,9 @@ mapped within the page. The MMU generates bus transactions using OSPA addresses,
 devices to access memory in the old fashion. The memory controller will perform the next stage translation from OSPA
 to MPA. This design isolations memory compression from higher level components of the memory hierarchy, which features
 fast and seamless adoption.
+
+The third and fourth design choice is the packing of cache lines within a page, and the packing of pages in the MPA. 
+In terms of cache line packing, the two extremes of aligning them to a pre-determined size boundary, as in LCP, and 
+packing them compactly, will not work well. The former reduces the efficiency of compression, since the compressibility
+of a page is irrelevant to the compressibility of cache lines in the page. The latter introduces unnecessary data movement,
+since any size increase of a dirty cache being written back will cause the page to be shifted.
