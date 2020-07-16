@@ -28,3 +28,9 @@ synchronized in all local TLBs. Second, since physical address is no longer line
 by MMU, bus devices that do not have an MMU, such as DMA devices, are unable to access compressed memory due to the 
 inability of translating uncompressed PA to compressed PA. Third, OS managed compressed pages conflict with other virtual
 memory techniques, such as huge pages, the compression overhead of which is infeasible.
+
+DMC is an OS-transparent, dual compression algorithm scheme for achieving both ease of deployment and high compression
+ratio with low latency. Instead of applying a single algorithm to each individual block, DMC classifies memory blocks into
+cold and hot blocks, based on access locality of the working set. Cold blocks are compressed with the slower but better
+compression algorithm, LZ77, while hot blocks are compressed with faster but "worse" algorithm, LCP, to enable fast access
+to individual cache blocks.
