@@ -85,4 +85,10 @@ upper level as in the previous case. Second, the memory controller also transfor
 in the same 32KB LCP range to LCP type by decompressing and recompressing them. More than one blocks are collected during 
 the second step, due to the difference of compression granularity between the two types. 
 
-One extra bit per translation entry is added to track recently accessed address ranges
+One extra bit per 512KB range is added to track recently accessed address ranges. Choosing 512KB as the access tracking
+granularity is a balance between metadata cost and recompression overhead. The execution is divided inti epochs consisting
+of hundreds of millions of instructions. Within an epoch, the tracking bit is set if the corresponding 512KB range is 
+accessed. At the end of an epoch, the memory controller scans the bit vector, and selects zero bit ranges for recompression.
+Recompression occurs by first gathering all LCP pages in the 512KB range. 
+
+
