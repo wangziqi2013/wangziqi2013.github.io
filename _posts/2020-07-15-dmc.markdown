@@ -33,4 +33,8 @@ DMC is an OS-transparent, dual compression algorithm scheme for achieving both e
 ratio with low latency. Instead of applying a single algorithm to each individual block, DMC classifies memory blocks into
 cold and hot blocks, based on access locality of the working set. Cold blocks are compressed with the slower but better
 compression algorithm, LZ77, while hot blocks are compressed with faster but "worse" algorithm, LCP, to enable fast access
-to individual cache blocks.
+to individual cache blocks. Bus transactions, including OS's memory accesses, assume an uncompressed physical address space.
+Translation between uncompressed and compressed physical address is performed by the memory controller and an in-memory
+mapping table. A translation cache is also added to filter out most accesses to the translation table.
+
+
