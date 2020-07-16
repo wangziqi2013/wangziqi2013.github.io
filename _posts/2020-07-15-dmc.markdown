@@ -89,6 +89,9 @@ One extra bit per 512KB range is added to track recently accessed address ranges
 granularity is a balance between metadata cost and recompression overhead. The execution is divided inti epochs consisting
 of hundreds of millions of instructions. Within an epoch, the tracking bit is set if the corresponding 512KB range is 
 accessed. At the end of an epoch, the memory controller scans the bit vector, and selects zero bit ranges for recompression.
-Recompression occurs by first gathering all LCP pages in the 512KB range. 
+Recompression occurs by first gathering all LCP pages in the 512KB range. This may involve accessing a few individual
+memory locations, since blocks in the same range are likely not stored together. Then these LCP pages are decompressed 
+into a 512KB buffer. In the last step, the 512KB buffer is recompressed with LZ77 for higher compression ratio. The 
+decompression and recompression can also be pipelined to increase the throughput of recompression.
 
 
