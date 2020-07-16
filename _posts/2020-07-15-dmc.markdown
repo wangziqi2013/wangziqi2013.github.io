@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Transparent Dual Memory Compression (DMC), a compression main memory design using two separate compression
+algorithms to optimize for space efficiency and access latency. The paper makes the observation that most cache and memory 
+compression algorithms are designed with low decompression latency, since decompression is often on the critical access path.
+These algorithms, however, produce compressed data with lower compression ratio when compared with classical streaming
+compression algorithms designed for large files, such as LZ. 
+These streaming compression algorithms, on the other hand, perform badly on small blocks. 
+
