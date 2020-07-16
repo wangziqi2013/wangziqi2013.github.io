@@ -78,7 +78,11 @@ To accelerate mapping table access, a metadata cache is added to the controller 
 cache. Extra bits are added per entry to store compression type and compression metadata.
 On a memory request, the cache is first checked. If a miss occurs, the entry is fetched from the mapping table
 after evicting an existing one, if necessary.
-If the entry being hit is an LCP entry, the cache line is directed from the particular offset, and decompressed before 
+If the entry being hit is an LCP entry, the cache line is directly read from the particular offset, and decompressed before 
 being sent to the upper level.
+If the entry is a LZ77 entry, the handling is a little bit more complicated. First, it is decompressed and sent to the 
+upper level as in the previous case. Second, the memory controller also transforms this block and its 31 neighboring blocks
+in the same 32KB LCP range to LCP type by decompressing and recompressing them. More than one blocks are collected during 
+the second step, due to the difference of compression granularity between the two types. 
 
 One extra bit per translation entry is added to track recently accessed address ranges
