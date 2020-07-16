@@ -29,6 +29,11 @@ version_mgmt:
 2. The design can apply to conventional DRAM without any problem. Why using a separate section to describe HMC? I know
    Samsung published many research papers on HMC, but this paper is really not a good place to advertise.
 
+3. The mapping table translates with 1KB pages, but DMC compresses with 32KB in LCP. The resulting table structure allows
+   multiple entries being mapped to the same base address. How do you cache these duplicated entries (might
+   waste space if they are all cached; or if only caching the first one, how do you know the size of the mapping
+   before looking into the compression metadata)? Or there are two caches for different sizes?
+
 This paper proposes Transparent Dual Memory Compression (DMC), a compression main memory design using two separate compression
 algorithms to optimize for space efficiency and access latency. The paper makes the observation that most cache and memory 
 compression algorithms are designed with low decompression latency, since decompression is often on the critical access path.
@@ -61,5 +66,8 @@ and then reported to the OS again. Modern OSs are equipped with corresponding mo
 For example, to deal with shirnking physical address space, the OS could install a balloon driver which requests for 
 physical memory on behalf of the process, causing inactive pages of the process to be paged out via normal virtual memory 
 management. The released physical pages are then eliminated from the allocatable page pool.
-On the other hand, if the address space is inflating, then the OS simply adds more usable address pages to the page 
-pool. 
+On the other hand, if the address space is inflating, then the OS simply adds more usable address pages to the page pool. 
+The mapping table translates physical addresses in 1KB granularity, although the physical address can be compressed in
+a larger, but still aligned granularity. For example, DMC compresses with LZ77 in 1KB blocks, while with LCP in 32KB
+continuous ranges, which is larger than the original LCP proposal (4KB).
+
