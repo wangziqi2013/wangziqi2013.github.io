@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Buri: Scaling Big-Memory Computing with Hardware-Based Memory Expansion"
+date:   2020-07-16 18:59:00 -0500
+categories: paper
+paper_title: "Buri: Scaling Big-Memory Computing with Hardware-Based Memory Expansion"
+paper_link: https://dl.acm.org/doi/10.1145/2808233
+paper_keyword: Compression; Memory Compression; Buri
+paper_year: TACO 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
