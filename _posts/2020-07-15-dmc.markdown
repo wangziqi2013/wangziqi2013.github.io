@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using two compression schemes to leverage access locality; Addresses with low access probablity are compressed with 
+   more heavy-weight algorithms
+
+2. Not using overflow space is an improvement to LCP. This optimization will result in lower compression ratio, but in
+   this paper it is fine, because it is only used for a small fraction of recently accessed data
+
+
+
 This paper proposes Transparent Dual Memory Compression (DMC), a compression main memory design using two separate compression
 algorithms to optimize for space efficiency and access latency. The paper makes the observation that most cache and memory 
 compression algorithms are designed with low decompression latency, since decompression is often on the critical access path.
@@ -37,4 +47,4 @@ to individual cache blocks. Bus transactions, including OS's memory accesses, as
 Translation between uncompressed and compressed physical address is performed by the memory controller and an in-memory
 mapping table. A translation cache is also added to filter out most accesses to the translation table.
 
-
+DMC works as follows. The mapping table resides in a static location (not specified, but preferably at address zero)
