@@ -24,7 +24,7 @@ version_mgmt:
 **Lowlight:**
 
 1. This paper is poorly written, both syntactically and grammartically. Terminologies are used before being introduced 
-   (e.g. "slice controller" in Fig. 5).
+   (e.g. "slice controller" in Fig. 5). Also I do suggest that authors use less "the" in the text.
 
 2. The design can apply to conventional DRAM without any problem. Why using a separate section to describe HMC? I know
    Samsung published many research papers on HMC, but this paper is really not a good place to advertise.
@@ -33,6 +33,10 @@ version_mgmt:
    multiple entries being mapped to the same base address. How do you cache these duplicated entries (might
    waste space if they are all cached; or if only caching the first one, how do you know the size of the mapping
    before looking into the compression metadata)? Or there are two caches for different sizes?
+
+4. The paper mentioned free list allocation, but does not talk about what if one free list has been depleted while
+   other lists still have free blocks. Do you split or merge chunks as in a buddy system? Or just declare failure
+   (which is highly infeasible since not all sizes are used equally, not even roughly)?
 
 This paper proposes Transparent Dual Memory Compression (DMC), a compression main memory design using two separate compression
 algorithms to optimize for space efficiency and access latency. The paper makes the observation that most cache and memory 
@@ -93,5 +97,13 @@ Recompression occurs by first gathering all LCP pages in the 512KB range. This m
 memory locations, since blocks in the same range are likely not stored together. Then these LCP pages are decompressed 
 into a 512KB buffer. In the last step, the 512KB buffer is recompressed with LZ77 for higher compression ratio. The 
 decompression and recompression can also be pipelined to increase the throughput of recompression.
+Transferration from LZ77 to LCP is performed when the LZ77 block is accessed, as discussed above. 32 LZ77 blocks are 
+gathered from the compressed memory, and decompressed into a buffer before recompression happens.
 
+The memory controller maintains free memory in free lists, which are initialized at system startup time. The paper suggests
+that blocks of size 64B to 1KB be used for LZ77, and blocks with size from 2KB to 32KB be used for LCP. No further details on
+free lists are mentioned in the paper.
 
+The paper also proposes three optimizations at the end. First, zero cache lines can be optmized out by storing a bit 
+vector in the translation entry. A set bit in the vector indicates that the corresponding block contains all-zero,
+which is not backed by actual storage. Second, 
