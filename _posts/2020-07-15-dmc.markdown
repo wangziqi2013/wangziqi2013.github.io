@@ -59,13 +59,14 @@ Translation between uncompressed and compressed physical address is performed by
 mapping table. A translation cache is also added to filter out most accesses to the translation table.
 
 DMC works as follows. The mapping table resides in a static location (not specified, but preferably at address zero) in
-physical DRAM, which is not mapped. The paper suggests that a compression ratio can be assumed at system startup time. 
-The amount of usable physical memory is then computed using the preliminary compression ratio and reported to the OS.
-During execution, if the monitored compression ratio deviates from the initial assumption, physical memory is recalculated,
-and then reported to the OS again. Modern OSs are equipped with corresponding modules for hot swap of DRAM modules.
-For example, to deal with shirnking physical address space, the OS could install a balloon driver which requests for 
-physical memory on behalf of the process, causing inactive pages of the process to be paged out via normal virtual memory 
-management. The released physical pages are then eliminated from the allocatable page pool.
+physical DRAM, which is not mapped by the memory controller to physical address space. The memory controller handles address
+mapping and OS initialization on the memory subsystem. The paper suggests that a compression ratio can be assumed at system 
+startup time. The amount of usable physical memory is then computed using the preliminary compression ratio and reported 
+to the OS. During execution, if the monitored compression ratio deviates from the initial assumption, physical memory is 
+recalculated, and then reported to the OS again. Modern OSs are equipped with corresponding modules for hot swap of DRAM 
+modules. For example, to deal with shirnking physical address space, the OS could install a balloon driver which requests 
+for physical memory on behalf of the process, causing inactive pages of the process to be paged out via normal virtual 
+memory management. The released physical pages are then eliminated from the allocatable page pool.
 On the other hand, if the address space is inflating, then the OS simply adds more usable address pages to the page pool. 
 The mapping table translates physical addresses in 1KB granularity, although the physical address can be compressed in
 a larger, but still aligned granularity. For example, DMC compresses with LZ77 in 1KB blocks, while with LCP it compresses 
@@ -73,4 +74,11 @@ in 32KB continuous ranges, which is larger than the original LCP proposal (4KB).
 The mapping table is directly addressed with a bit slice from the requested address, but the paper does not elaborate
 how the table supports two different translation granularities at the same time. 
 
+To accelerate mapping table access, a metadata cache is added to the controller which is organized as a TLB-like conventional
+cache. Extra bits are added per entry to store compression type and compression metadata.
+On a memory request, the cache is first checked. If a miss occurs, the entry is fetched from the mapping table
+after evicting an existing one, if necessary.
+If the entry being hit is an LCP entry, the cache line is directed from the particular offset, and decompressed before 
+being sent to the upper level.
 
+One extra bit per translation entry is added to track recently accessed address ranges
