@@ -68,6 +68,9 @@ physical memory on behalf of the process, causing inactive pages of the process 
 management. The released physical pages are then eliminated from the allocatable page pool.
 On the other hand, if the address space is inflating, then the OS simply adds more usable address pages to the page pool. 
 The mapping table translates physical addresses in 1KB granularity, although the physical address can be compressed in
-a larger, but still aligned granularity. For example, DMC compresses with LZ77 in 1KB blocks, while with LCP in 32KB
-continuous ranges, which is larger than the original LCP proposal (4KB).
+a larger, but still aligned granularity. For example, DMC compresses with LZ77 in 1KB blocks, while with LCP it compresses 
+in 32KB continuous ranges, which is larger than the original LCP proposal (4KB).
+The mapping table is directly addressed with a bit slice from the requested address, but the paper does not elaborate
+how the table supports two different translation granularities at the same time. 
+
 
