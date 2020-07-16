@@ -19,4 +19,9 @@ compression algorithms are designed with low decompression latency, since decomp
 These algorithms, however, produce compressed data with lower compression ratio when compared with classical streaming
 compression algorithms designed for large files, such as LZ. 
 These streaming compression algorithms, on the other hand, perform badly on small blocks. 
-
+In addition, the paper also observes that the transparency of the compression scheme affects system design. For example,
+in a system where the OS explicitly manages compressed address space, the address translation between VA and the compressed
+address space must be intsalled by the OS, and performed by the MMU. This design has a few disadvantages as follows.
+First, whenever the compression status of a page changes, e.g. when the page migrates to a different address, which is not
+entirely uncommon due to the possibility of recompression or compaction, TLB shootdown must be used to keep the entry 
+synchronized in all local TLBs.
