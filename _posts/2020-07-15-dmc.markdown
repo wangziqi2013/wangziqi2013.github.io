@@ -57,4 +57,9 @@ DMC works as follows. The mapping table resides in a static location (not specif
 physical DRAM, which is not mapped. The paper suggests that a compression ratio can be assumed at system startup time. 
 The amount of usable physical memory is then computed using the preliminary compression ratio and reported to the OS.
 During execution, if the monitored compression ratio deviates from the initial assumption, physical memory is recalculated,
-and then reported to the OS again. 
+and then reported to the OS again. Modern OSs are equipped with corresponding modules for hot swap of DRAM modules.
+For example, to deal with shirnking physical address space, the OS could install a balloon driver which requests for 
+physical memory on behalf of the process, causing inactive pages of the process to be paged out via normal virtual memory 
+management. The released physical pages are then eliminated from the allocatable page pool.
+On the other hand, if the address space is inflating, then the OS simply adds more usable address pages to the page 
+pool. 
