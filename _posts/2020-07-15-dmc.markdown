@@ -106,4 +106,9 @@ free lists are mentioned in the paper.
 
 The paper also proposes three optimizations at the end. First, zero cache lines can be optmized out by storing a bit 
 vector in the translation entry. A set bit in the vector indicates that the corresponding block contains all-zero,
-which is not backed by actual storage. Second, 
+which is not backed by actual storage. Second, DMC puts an upper limit on the number of recompressions allowed in
+a certain window to prevent system bandwidth being consumed by this process, which causes performance degradation.
+The last optimization is constant monitoring of performance and turning DMC off if it does not provide performance
+advantage. The memory controller tracks the number of translation cache misses, recompressions, hits on LCP and
+LZ77 pages respectively, and so on. It then calculates CPI with and without compression. If the latter is higher,
+DMC is turned off since it negatively impacts performance.
