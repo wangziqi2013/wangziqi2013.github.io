@@ -53,4 +53,8 @@ to individual cache blocks. Bus transactions, including OS's memory accesses, as
 Translation between uncompressed and compressed physical address is performed by the memory controller and an in-memory
 mapping table. A translation cache is also added to filter out most accesses to the translation table.
 
-DMC works as follows. The mapping table resides in a static location (not specified, but preferably at address zero)
+DMC works as follows. The mapping table resides in a static location (not specified, but preferably at address zero) in
+physical DRAM, which is not mapped. The paper suggests that a compression ratio can be assumed at system startup time. 
+The amount of usable physical memory is then computed using the preliminary compression ratio and reported to the OS.
+During execution, if the monitored compression ratio deviates from the initial assumption, physical memory is recalculated,
+and then reported to the OS again. 
