@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This journal article proposes Buri, a hardware main memory compression scheme designed for big-data workloads. 
+The paper observes that due to the high memory demand of big memory workloads, simple scaling up the number of 
+cores and memory modules is no longer possible or finacially feasible to extend the amount of memory in a system.
+Hardware memory compression, on the other hand, reduces the amount of physical storage required for these workloads 
+without installing more components. 
+
+
