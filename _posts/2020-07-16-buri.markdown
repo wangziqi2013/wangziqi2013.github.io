@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. This is the first paper/article I have read that mentions a new page should not be compressed on allocation; Instead
+   buffer should be used to at least accumulate some cache lines before the page is actually allocated from the storage
 
 **Lowlights:**
 
