@@ -138,4 +138,4 @@ The second optimization is prefetcing. Both page-level and line-level prefetchin
 a global predictor is used to generate the next page to be accessed, whose metadata entry is then prefetched into the buffer.
 For line-level prefetcing, when a compressed line is read in-place, the controller always prefetches data in the next slot 
 if it contains an indirection pointer. This reduces one extra memory access for the pointer if access locality is high.
-The 
+The last optimization is on memory request scheduling, which prioritizes blocks whose metadata is in the cache.
