@@ -23,6 +23,11 @@ The paper then identifies a few difficulties of designing a hardware memory comp
 one extra level of indirection on the address tralsnation path, namely from uncompressed address space to compressed 
 memory space. To accommodate the extra indirection level, there are two design options. The first is to perform both 
 translations via the MMU, and let the OS set up an explicit mapping from the uncompressed to compressed address space. 
-This option introduces considerable changes throughout the hardware and software stack, which is incompatible with. 
-The second 
+This option introduces considerable changes throughout the hardware and software stack, which is incompatible with
+existing hardware abstractions and may cause some to fail (e.g. DMA, huge pages). 
+The second option is to explicitly maintain the three-level translation scheme, and isolates address translation from
+uncompressed to compressed address space to memory components such as the memory controller or the DRAM module.
+This way, existing components can work correctly without any modification, which makes commercial adoption much easier.
+
+
 
