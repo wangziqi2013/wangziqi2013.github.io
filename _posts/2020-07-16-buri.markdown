@@ -29,5 +29,10 @@ The second option is to explicitly maintain the three-level translation scheme, 
 uncompressed to compressed address space to memory components such as the memory controller or the DRAM module.
 This way, existing components can work correctly without any modification, which makes commercial adoption much easier.
 
+The second difficulty is more complicated memory management with compressed blocks. In uncompressed address space,
+physical memory is managed by the OS in the unit of fixed sized pages, while in compressed address space, pages are 
+no longer uniformly sized after compression. In order to conserve memory, the memory allocation strategy should dynamically
+adjust the number of physical blocks allocated to a logical page according to the runtime compression ratio.
+The memory allocator should therefore be able to allocate free memory either incrementally, or in variably sized blocks.
 
 
