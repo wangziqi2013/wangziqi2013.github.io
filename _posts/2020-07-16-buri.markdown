@@ -13,7 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
-****
+
+**Lowlights:**
+
+1. Does the OS assume fixed sized shadow address space, or the shadow address space could change dynamically?
+   In the latter case, the mapping table size should also be dynamically adjusted, since that table uses shadow
+   space page ID as index
 
 This journal article proposes Buri, a hardware main memory compression scheme designed for big-data workloads. 
 The paper observes that due to the high memory demand of big memory workloads, simple scaling up the number of 
