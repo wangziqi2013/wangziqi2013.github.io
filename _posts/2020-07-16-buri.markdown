@@ -107,3 +107,13 @@ of the compressed page, and some control bits (dirty, valid, etc.). The four blo
 the compressed page, which are allocated incrementally. Per-line status information is a two-bit field indicating
 the type of the line (normal, zero, overflow, invalid). The physical address of a compressed line can thus be calculated
 using this header alone without consulting the body itself.
+
+Initially, all metadata entries are set as invalid, and none of them is backed by any physical storage. 
+When a page is first accessed from the shadow address space, perhaps because the OS just allocates a new page
+in the shadow address space, a page fault-like event is triggered on the memory controller. The controller first 
+activates a 4KB buffer to accumulate cache lines from the upper levels before sending them for compression. This 
+amortizes the overhead of page allocation and metadata update for the first few cache lines of a compressed page.
+The buffer is retired after a while or after another controller page fault happens. The compressor processes each
+line in the buffer, and also computes the compressed size. If all lines fit into their physical slots (recall that
+Buri assumes static 4:1 compression ratio), only one 1KB page will be allocated. Otherwise, two or more pages 
+are allocated, with overflowed pages stored after the regulat slots.
