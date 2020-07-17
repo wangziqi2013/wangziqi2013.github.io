@@ -54,3 +54,6 @@ of splitting and merging size classes to fulfill allocation requests. The physic
 then represented by four pointers to non-continuous blocks. Note that the page size of storage allocation is orthogonal 
 to the translation page size, which is defined by the page table structure. The memory controller always compress data
 in the shadow address space in the granularity of 4KB pages, regardless of the OS's paging policy.
+Lastly, Buri isolates hardware changes to the memory controller and extra components added to the controller. All upper
+level components use the abstraction of the shadow address space without any special customization, except that the OS
+should support memory module hot-plug to handle dynamic compression ratio changes.
