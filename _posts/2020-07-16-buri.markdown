@@ -134,4 +134,8 @@ The article also proposes a few optimizations that can be applied for better per
 not even physically stored. Once a zero line is detected on a write request, the per-line status field is set to reflect
 the presence of a zero line. On future accesses to that line, the page body is not even accessed if a zero line is seen,
 which reduces the number of memory accesses if many cache lines are all-zero.
+The second optimization is prefetcing. Both page-level and line-level prefetching is proposed. For page level pre-fetching,
+a global predictor is used to generate the next page to be accessed, whose metadata entry is then prefetched into the buffer.
+For line-level prefetcing, when a compressed line is read in-place, the controller always prefetches data in the next slot 
+if it contains an indirection pointer. This reduces one extra memory access for the pointer if access locality is high.
 The 
