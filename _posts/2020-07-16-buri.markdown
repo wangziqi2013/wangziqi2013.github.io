@@ -102,4 +102,8 @@ The next block pointer of the free list is stored in-place at the beginning of a
 As is the case for many previously proposed compression schemes, Buri uses a direct mapped translation table at the 
 beginning of the physical DRAM to perform shadow to physical translation in the granularity of 4KB logical pages. 
 Each 1KB block has an entry in the mapping table, which contains the allocation status, four block pointers, 
-compression metadata, and per-cache line status.
+compression metadata, and per-cache line status. As discussed above, the allocation status stores the current size
+of the compressed page, and some control bits (dirty, valid, etc.). The four block pointers consist of the body of 
+the compressed page, which are allocated incrementally. Per-line status information is a two-bit field indicating
+the type of the line (normal, zero, overflow, invalid). The physical address of a compressed line can thus be calculated
+using this header alone without consulting the body itself.
