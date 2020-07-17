@@ -49,3 +49,8 @@ mapping scheme, explicitly acknowledging an intermediate, uncompressed PA betwee
 management and address translation, as in a conventional system without compression. Translation is performed by
 memory controllers using a dedicated mapping table in the unmapped part of physical memory, the content of which is also
 entirely managed by the hardware.
+Second, Buri allocates memory in fixed sized chunks incrementally. Only one size class is maintained to avoid the complexity
+of splitting and merging size classes to fulfill allocation requests. The physical storage of a 4KB compressed page is 
+then represented by four pointers to non-continuous blocks. Note that the page size of storage allocation is orthogonal 
+to the translation page size, which is defined by the page table structure. The memory controller always compress data
+in the shadow address space in the granularity of 4KB pages, regardless of the OS's paging policy.
