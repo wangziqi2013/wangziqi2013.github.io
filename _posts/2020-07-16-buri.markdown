@@ -19,4 +19,10 @@ cores and memory modules is no longer possible or finacially feasible to extend 
 Hardware memory compression, on the other hand, reduces the amount of physical storage required for these workloads 
 without installing more components. 
 
+The paper then identifies a few difficulties of designing a hardware memory compression scheme. First, compression adds 
+one extra level of indirection on the address tralsnation path, namely from uncompressed address space to compressed 
+memory space. To accommodate the extra indirection level, there are two design options. The first is to perform both 
+translations via the MMU, and let the OS set up an explicit mapping from the uncompressed to compressed address space. 
+This option introduces considerable changes throughout the hardware and software stack, which is incompatible with. 
+The second 
 
