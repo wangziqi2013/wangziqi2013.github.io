@@ -57,3 +57,12 @@ in the shadow address space in the granularity of 4KB pages, regardless of the O
 Lastly, Buri isolates hardware changes to the memory controller and extra components added to the controller. All upper
 level components use the abstraction of the shadow address space without any special customization, except that the OS
 should support memory module hot-plug to handle dynamic compression ratio changes.
+
+We next describe Buri's data and metadata layout. From a high level, every aligned 4KB page is compressed with a variant 
+of LCP, and stored in the unit of 1KB blocks. In LCP, the compression ratio of a 4KB page is pre-determined before any
+cache line is written. Compressed lines are then mapped into the page linearlly, the offset of which is calculated using
+the compression ratio. If a compressed line could not fit into its regular slot, the line will be appended at the end of 
+the current page, with an extra level of indirection indicating the offset of the overflowed line.
+In the original LCP design, each page also contains a metadata header for storing pointers for
+
+
