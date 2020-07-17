@@ -39,4 +39,6 @@ The third difficulty is modification of existing hardware components, such as th
 the above discussion, if the design combines VA and uncompressed PA, both the cache tagging and TLB need to be changed.
 The cache tags no longer use uncompressed PA, since the address generation unit outputs PA in the compressed space.
 Meanwhile, the TLB should directly translate from VA to compressed PA, being burdurned with the extra responsibility of
-
+maintaining translation information for compression.
+The above discussion, in fact, further confims that separating uncompressed and compressed PA explicitly help isolating
+hardware changes and reducing both hardware and software migration cost.
