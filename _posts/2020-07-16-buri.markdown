@@ -88,7 +88,14 @@ Each logical 4KB page in the shadow address space can be backed by at most four 
 stored in the metadata area, together with cache line status of the page, such that the offset of a compressed line
 can be calculated with at most one DRAM read to the metadata entry. Physical storage is always allocated in 1KB block
 granularity. Buri divides usable memory into 16MB chunks, within which 1KB blocks form free lists for fast allocation.
-Chunk headers are stored in the metadata area 
+Chunk headers form a higher level free list, which are stored in the metadata area before the mapping table. On block
+allocation, the memory controller first scans the chunk free list, and selects a free block, if the allocation is 
+the initial block of a page. On an incremental allocation, i.e. if a page already has some blocks and more are requested,
+the memory controller first attempts to allocate from the same chunk to improve locality. If this is not possible, then
+blocks from other chunks are used instead. Block release is just the reverse of block allocation. The block is first returned
+to the chunk free list, if the chunk still has free blocks. Otherwise, the chunk header is updated in the metadata area
+to point to the released block. 
+The next block pointer of the free list is stored in-place at the beginning of a free block.
 
 As is the case for many previously proposed compression schemes, Buri
 uses a direct mapped translation table at the beginning of the physical DRAM to perform shadow to physical translation
