@@ -67,6 +67,11 @@ In the original LCP design, each page also contains a metadata header for storin
 A cache line lookup must first check this header to see if the line resides in the conventional slot or the overflow 
 area, necessitating an extra DRAM read. In this paper, the indirection pointers are stored in the metadata entry, which
 can fit into a 64 byte DRAM read unit, which further optimizes performance.
+This paper suggests that a static compression of 4:1 be used globally. Cache lines that are not compressibile to one 
+fourth of its original size should always be stored in the overflow area. 
+This design decision not only achieves a balance between design complexity and effectiveness of compression, but also 
+eliminates recompression, during which cache lines will be copied around.
+In future designs, this compression ratio may also be dynamically adjusted based on runtime profiling results.
 
 As is the case for many previously proposed compression schemes, Buri
 uses a direct mapped translation table at the beginning of the physical DRAM to perform shadow to physical translation
