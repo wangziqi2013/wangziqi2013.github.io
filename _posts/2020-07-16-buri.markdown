@@ -42,3 +42,10 @@ Meanwhile, the TLB should directly translate from VA to compressed PA, being bur
 maintaining translation information for compression.
 The above discussion, in fact, further confims that separating uncompressed and compressed PA explicitly help isolating
 hardware changes and reducing both hardware and software migration cost.
+
+Buri addresses the above challenges with the following high-level design ideas. First, Buri adopts the three-level address
+mapping scheme, explicitly acknowledging an intermediate, uncompressed PA between VA and compressed PA, called the 
+"shadow address space". Upper level components, such as OS, cache, and TLB, always use shadow address space for space
+management and address translation, as in a conventional system without compression. Translation is performed by
+memory controllers using a dedicated mapping table in the unmapped part of physical memory, the content of which is also
+entirely managed by the hardware.
