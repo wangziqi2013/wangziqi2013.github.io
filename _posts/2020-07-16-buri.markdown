@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+****
+
 This journal article proposes Buri, a hardware main memory compression scheme designed for big-data workloads. 
 The paper observes that due to the high memory demand of big memory workloads, simple scaling up the number of 
 cores and memory modules is no longer possible or finacially feasible to extend the amount of memory in a system.
@@ -73,7 +75,10 @@ This design decision not only achieves a balance between design complexity and e
 eliminates recompression, during which cache lines will be copied around.
 In future designs, this compression ratio may also be dynamically adjusted based on runtime profiling results.
 
-As is the case for many previously proposed compression schemes, Buri
-uses a direct mapped translation table at the beginning of the physical DRAM to perform shadow to physical translation
-in the granularity of 1KB blocks. Each 1KB block has an entry in the mapping table, which contains the allocation
-status, 
+Each logical 4KB page in the shadow address space can be backed by at most four 1KB blocks. These four blocks are 
+stored in the metadata area, together with cache line status of the page, such that the offset of a compressed line
+can be calculated with at most one DRAM read to the metadata entry. Physical storage is always allocated in 1KB block
+granularity. Buri divides usable memory into 16MB chunks, within which 1KB blocks form free lists for fast allocation.
+Chunk headers are stored in the metadata area 
+
+
