@@ -35,4 +35,8 @@ no longer uniformly sized after compression. In order to conserve memory, the me
 adjust the number of physical blocks allocated to a logical page according to the runtime compression ratio.
 The memory allocator should therefore be able to allocate free memory either incrementally, or in variably sized blocks.
 
+The third difficulty is modification of existing hardware components, such as the TLB and cache. As has been stated in 
+the above discussion, if the design combines VA and uncompressed PA, both the cache tagging and TLB need to be changed.
+The cache tags no longer use uncompressed PA, since the address generation unit outputs PA in the compressed space.
+Meanwhile, the TLB should directly translate from VA to compressed PA, being burdurned with the extra responsibility of
 
