@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Yet Another Compressed Cache: A Los-Cost Yet Effective Compressed Cache"
+date:   2020-07-17 20:09:00 -0500
+categories: paper
+paper_title: "Yet Another Compressed Cache: A Los-Cost Yet Effective Compressed Cache"
+paper_link: https://dl.acm.org/doi/10.1145/2976740
+paper_keyword: Compression; Cache Compression; YACC
+paper_year: TACO 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
