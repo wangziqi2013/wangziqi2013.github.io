@@ -39,5 +39,9 @@ may not be strictly identical, there are still large chances that the upper bits
 bits being more random. This is common in arrays, especially pointer arrays of the same type of objects, since 
 malloc() will most likely attempt to place these object in the same memory pool as close to each other as possible as 
 spatial locality optimization. 
-
+Other compression algorithms that perform delta encoding, such as BDI, also take advantage of this observation by subtracting 
+a selected base from such values and encoding the delta with less number of bits. DISH, on the contrary, only saves the 
+higher bits in the dictionary which could be indexed with shorter code words in the compressed data. The lower few bits 
+are just stored as-is together with the index array, which will be concatenated with dictionary entries to recovery the 
+original uncompressed value.
 
