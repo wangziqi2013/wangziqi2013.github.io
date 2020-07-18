@@ -135,3 +135,7 @@ Decompression is easier than compression, as it only involves parallel table loo
 bandwidth of the dictionary structure determines the decompression latency. In the best case, in which all 8 dictionary
 entries can be mux'ed to all 16 outputs independently, decompression only takes 1 cycle, minimizing the performance impact
 of performing decompression on the critical data access path.
+
+The paper also suggests that whether to use scheme I or scheme II should be determined by set dueling. 32 sets from the 
+LLC are configured to always use scheme I, and another 32 sets always use scheme II. The dynamic performance of each
+set is then checked to decide which policy will be followed for the rest of the sets.
