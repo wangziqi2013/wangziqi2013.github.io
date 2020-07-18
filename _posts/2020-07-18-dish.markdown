@@ -97,7 +97,10 @@ A scheme II dictionary only contains 4 entries, totalling to 112 bits or 14 byte
 16 2-bit indices and 16 4-bit lower parts, summing up to a total of 384 bits, or 48 bytes. Overall, 62 out of 64 bytes 
 in the physical storage will be used, leaving 2 bytes, or 16 bits to be used for other purposes.
 
-We next describe the metadata and data layout.
+We next describe the metadata and data layout. Each tag entry contains the super block tag as in previous designs,
+and per-line control information such as valid bits, dirty bits, and coherence states (they can also be placed or at least
+partially placed in the data slot, though). The compression type is represented using an extra 1-bit flag. 
+
 
 The access protocol of DISH cache is similar to the one of YACC. On a lookup request, the middle bits are used as set
 index to locate the set of the super block. The two lowest bits in the are not used for set indexing since they encode
