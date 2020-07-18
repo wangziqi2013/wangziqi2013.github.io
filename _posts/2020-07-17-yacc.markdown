@@ -25,7 +25,7 @@ version_mgmt:
 
 **Lowlight:**
 
-1. In understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
+1. I understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
    cache. But without these motivations YACC is just a really common super block compressed cache with little novelty involved.
 
 This article proposes Yet Another Compressed Cache (YACC), a compressed Last-Level Cache (LLC) design that improves over
@@ -49,4 +49,10 @@ a conventional cache, increasing design and verification cost. Besides, as with 
 replacement algorithms cannot be applied, since skewed caches do not honor the concept of sets, set-based replacement 
 algorithms such as LRU or RRIP will not work, further complicating the design since a new algorithm has to be implemented.
 
-
+YACC essentially de-skews SCC while still adopting the super block abstraction for its simplicity and low metadata cost, 
+as in DCC. What differs from DCC is that the tag array is still statically mapped to data slots to further reduce 
+metadatas overhead, since both forward and backward poiners can be got rid of.
+YACC tags physical slots with super block addresses, which consists of four aligned regular 64 byte cache lines. 
+Individual cache lines are still compressed individually for fast compression and decompression. Although the paparticle
+does not elaborate the compression algorithm it uses, it is suggested that a variant of CPACK optimized for zero words 
+are used. 
