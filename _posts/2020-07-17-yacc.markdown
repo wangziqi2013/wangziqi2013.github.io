@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Highlight:**
+
+**Lowlight:**
+
+1. In understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
+   cache. But without these motivations YACC is just a really common super block compressed cache with little novelty involved.
+
+This article proposes Yet Another Compressed Cache (YACC), a compressed Last-Level Cache (LLC) design that improves over
+the previous overly complicated DCC and SCC designs. The paper begins by pointing out that both DCC and SCC designs
