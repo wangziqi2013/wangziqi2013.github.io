@@ -61,3 +61,9 @@ compression ratio), 32 byte blocks (2:1) and 64 byte blocks (uncompressed). Bloc
 same super block must be stored separately in distinct physical slots. To this end, YACC allows multiple tag entries
 in the same set to have the same super block tag, each holding distinct cache lines in the super block. Individual
 cache lines, however, are only allowed to be stored in at most one location as in a conventional cache.
+
+Addresses in memory requests are mapped to cache sets and ways as follows. Since YACC maps all cache lines of a super block
+into the same set, the index bit field that consitute the set index must "move up" by two bits, leaving the lowest two bits
+of the cache line address as block offset. The remaining high bits are used as the super block tag for tag matching.
+Note that this address mapping scheme, although greatly simplifies cache line addressing under the notion of super blocks,
+map adjacent blocks in the super block into the same set. For workloads 
