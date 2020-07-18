@@ -80,3 +80,9 @@ controller.
 The second advantage is that no physical slot compaction is required when write back happens, since cache line sizes 
 after compression is always 16 bytes, unless compression fails. In the case of a failure, the block that failed to be 
 compressed must be invalidated in the current physical slot, and then allocated a new slot before compression is attempted.
+
+The access protocol of DISH cache is similar to the one of YACC. On a lookup request, the middle bits are used as set
+index to locate the set of the super block. The two lowest bits in the are not used for set indexing since they encode
+block ID within the super block. After locating the set, all tags are read out and expanded to cache line addresses in 
+parallel, based on the per-cache line valid bits. A read hit will always return the cache line after decompressing it.
+
