@@ -72,4 +72,8 @@ level, DISH attempts to compress at four block super block level by extracting c
 form the dictionary, and encoding 32-bit values in cache lines with shorter code words. In the best case, all four blocks
 can be compressed into the same physical slot. One of the biggest difference between DISH and presiously proposed super 
 block compression schemes, however, is that compressed cache lines are always of the same size, as a result of using 
-fixed length dictionary indices as code words. Two obvious advantages 
+fixed length dictionary indices as code words, essentially only attempting a 4:1 compression ratio. 
+This fixed length code word scheme has two obvious advantages. First, cache lines are statically mapped to only one possible
+offset in the data slot of the super block, since it is guaranteed that all four lines can be accommodated by a physical slot,
+as long as they can be compressed successfully. No dedicated storage management hardware is therefore needed in the cache 
+controller.
