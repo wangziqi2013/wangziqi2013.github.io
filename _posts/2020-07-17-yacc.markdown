@@ -33,4 +33,9 @@ the previous overly complicated DCC and SCC designs. The paper begins by pointin
 overly complicated and thus difficult to be adopted into commercial systems for several reasons. First, DCC decouples
 the static mapping between tag array and data array entries as in the conventional cache, relying on forward and backward
 pointers to read data associated with a tag entry and/or locate the tag for given compressed slot. This not only increases
-area and power consumption, but also incurrs extra latency on the critical access path. 
+area and power consumption, but also incurrs extra latency on the critical access path. Second, SCC takes advantage of 
+different compression ratio of blocks within the same supre block (SB). Ways in the LLC are further divided into smaller
+way-groups, with each way-group only eligible for storing compressed blocks in the SB of a certain size class,
+called Compression Factor (CF). By dispatching blocks with different CFs to different way groups, the data slot layout 
+within a way group for that SB is fixed, which eliminates complicated mechanism for placing compressed blocks in the 
+same physical slot, since all slots sharing a physical slot must be of the same CF. 
