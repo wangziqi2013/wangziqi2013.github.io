@@ -130,3 +130,8 @@ If the temporary dictionary becomes full before the block is fully processed, co
 will be allocated a new physical storage, after which compression on the new slot is attempted again. 
 In the case of failure, the temporary dictionary is diacarded, and no update is made to the physical slot. Otherwise, both
 the updated temporary dictionary and the compressed body is written.
+
+Decompression is easier than compression, as it only involves parallel table lookups of 16 index values. The lookup
+bandwidth of the dictionary structure determines the decompression latency. In the best case, in which all 8 dictionary
+entries can be mux'ed to all 16 outputs independently, decompression only takes 1 cycle, minimizing the performance impact
+of performing decompression on the critical data access path.
