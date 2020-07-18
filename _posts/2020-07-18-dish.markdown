@@ -77,3 +77,6 @@ This fixed length code word scheme has two obvious advantages. First, cache line
 offset in the data slot of the super block, since it is guaranteed that all four lines can be accommodated by a physical slot,
 as long as they can be compressed successfully. No dedicated storage management hardware is therefore needed in the cache 
 controller.
+The second advantage is that no physical slot compaction is required when write back happens, since cache line sizes 
+after compression is always 16 bytes, unless compression fails. In the case of a failure, the block that failed to be 
+compressed must be invalidated in the current physical slot, and then allocated a new slot before compression is attempted.
