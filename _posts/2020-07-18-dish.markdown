@@ -29,3 +29,9 @@ Lastly, despite the fact that these previous schemes perform tagging in super bl
 more regular cache lines, the compression itself is still performed on individual cache lines without any consideration 
 of inter-block redundancy or block compaction. In fact, inter-block redundancy within a super block is a good starting 
 point for further optimization, as we will see below.
+
+DISH leverages two important observations on value locality. First, value locality not only exists in the same cache
+line, but also across adjacent cache lines within the same super block. The number of distinct values is significantly
+smaller than the number of words in a super block, potentially enabling a compression method that uses these values
+as dictionary, and encodes individual words using dictionary index with shorter code words. 
+
