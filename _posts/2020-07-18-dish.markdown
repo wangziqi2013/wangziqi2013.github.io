@@ -81,6 +81,15 @@ The second advantage is that no physical slot compaction is required when write 
 after compression is always 16 bytes, unless compression fails. In the case of a failure, the block that failed to be 
 compressed must be invalidated in the current physical slot, and then allocated a new slot before compression is attempted.
 
+Two types of compression algorithms are proposed, scheme I and scheme II. Scheme I takes advantage of 32-bit data locality,
+while scheme II takes advantage of upper bits data locality, as discussed above. 
+In scheme I, eight values are selected for encoding one to four cache lines in the super block. The dictionary may even
+contain less than eight values, if the number of distinct values in the current physical slot is less than eight.
+Each dictionary entry is associated with a "valid" bit indicating whether the entry is valid or not.
+
+
+We next describe the metadata and data layout.
+
 The access protocol of DISH cache is similar to the one of YACC. On a lookup request, the middle bits are used as set
 index to locate the set of the super block. The two lowest bits in the are not used for set indexing since they encode
 block ID within the super block. After locating the set, all tags are read out and expanded to cache line addresses in 
