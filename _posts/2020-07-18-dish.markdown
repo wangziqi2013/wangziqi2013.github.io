@@ -61,3 +61,9 @@ higher bits in the dictionary which could be indexed with shorter code words in 
 are just stored as-is together with the index array, which will be concatenated with dictionary entries to recovery the 
 original uncompressed value.
 
+We describe the overall architecture of DISH before introducing its dictionary-based compression algorithm. From a high
+level, DISH attempts to compress at four block super block level by extracting common 32-bit words (or partial words) to 
+form the dictionary, and encoding 32-bit values in cache lines with shorter code words. In the best case, all four blocks
+can be compressed into the same physical slot. One of the biggest difference between DISH and presiously proposed super 
+block compression schemes, however, is that compressed cache lines are always of the same size, as a result of using 
+fixed length dictionary indices as code words. 
