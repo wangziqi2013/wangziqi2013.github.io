@@ -91,3 +91,11 @@ For the 16 byte line case, the next 12 bits store coherence information for four
 line. For 32 byte line case, the next 10 bits store the two bit block ID and three bit coherence information for each
 of the two lines, totalling to 12 bits. For 64 byte uncompressed lines, the next 5 bits store the block ID and 
 coherence information of the line, which uses only 7 bits out of the 13-bit field.
+
+YACC operates as follows. On a lookup request, the cache controller locates the set using middle bits from the requested
+address as described above, and "expands" each of the tag to a cache line address, by concatenating the super block
+tag with block ID. As discussed above, block IDs are either explicitly or implicitly stored, which can be easily derived.
+Address check is still performed on the cache line address level between the requested address and the expanded
+addresses. Read requests are satisfyied by decompressing the hit block first before sending it upwards. On a write back
+request, the controller first compresses the block. If the write back address hits the cache, indicating that a 
+slot has already been allocated to the cache line, 
