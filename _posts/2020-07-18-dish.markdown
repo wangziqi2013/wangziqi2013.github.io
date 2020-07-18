@@ -23,6 +23,12 @@ version_mgmt:
    generating a code word for existing dictionary entries, or inserting a new entry?
    Why dividing the dictionary into "B0's dictionary" and "B1's dictionary"?
 
+3. When a line is invalidated, how to invalidate dictionary entries that no longer contribute to the compression for the 
+   rest of lines?
+   One way is just to use brute-force and compute the reference count of each dictionary entry. Entries with ref count
+   being zero should be removed after invalidating the line. Dictionary entries do not need to be compacted since 
+   each entry has a valid/invalid bit.
+
 This paper proposes Dictionary Sharing (DISH), a novel dictionary-based cache line compression scheme with high compression
 ratio and low design cost. This paper identifies several issues with previous compressed cache proposals, such as DCC, 
 SCC and YACC. First, to simplify storage management within a physical slot, these designs mandate that all cache lines
