@@ -15,6 +15,11 @@ version_mgmt:
 
 **Highlight:**
 
+1. Using super blocks to implicitly generate addresses on lookups without adding more tags, since the address of cache lines
+   within a super block is easily derived from the base super block address.
+
+
+
 **Lowlight:**
 
 1. In understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
