@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using fixed length code words for compression, which results in a fixed compression ratio (4:1). This eliminates problems
+   such as space allocation and compaction, since all lines are statically mapped to only one possible location in the 
+   physical data slot.
+
 **Lowlight:**
 
 1. This paper is syntatically and grammaritically poor, and in general the delivery of ideas is also poor.
@@ -66,4 +72,4 @@ level, DISH attempts to compress at four block super block level by extracting c
 form the dictionary, and encoding 32-bit values in cache lines with shorter code words. In the best case, all four blocks
 can be compressed into the same physical slot. One of the biggest difference between DISH and presiously proposed super 
 block compression schemes, however, is that compressed cache lines are always of the same size, as a result of using 
-fixed length dictionary indices as code words. 
+fixed length dictionary indices as code words. Two obvious advantages 
