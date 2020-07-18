@@ -55,4 +55,9 @@ metadatas overhead, since both forward and backward poiners can be got rid of.
 YACC tags physical slots with super block addresses, which consists of four aligned regular 64 byte cache lines. 
 Individual cache lines are still compressed individually for fast compression and decompression. Although the paparticle
 does not elaborate the compression algorithm it uses, it is suggested that a variant of CPACK optimized for zero words 
-are used. 
+are used. To simplify address mapping within a physical slot, YACC mandates that blocks stored in the same physical 
+slot must be compressed into the same size class. Three size classes are considered in YACC, namely 16 byte blocks (4:1
+compression ratio), 32 byte blocks (2:1) and 64 byte blocks (uncompressed). Blocks of different size classes within the
+same super block must be stored separately in distinct physical slots. To this end, YACC allows multiple tag entries
+in the same set to have the same super block tag, each holding distinct cache lines in the super block. Individual
+cache lines, however, are only allowed to be stored in at most one location as in a conventional cache.
