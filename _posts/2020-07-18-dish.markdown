@@ -114,3 +114,10 @@ first attempt to compress the dirty write back cache line. If the line could not
 its old copy will be invalidated (with dictionary entries only referenced by that line invalidated as well), followed by
 allocation of a new tag and data slot for storing the new line. If the new line still cannot be compressed with an
 empty line, it will be stored uncompressed. Evictions are made using the same algorithm as in previous designs.
+
+The compression circult works as follows. If the physical slot that a line is compressed into is new, which contains no
+previous contents (or only invalidiated contents), the compression start anew with a new dictionary in which all
+entries are marked invalid. The compressor then starts processing the input line in the unit of 32-bit words (order
+of processing is insignificant). For each 32-bit word, if it is not already in the dictionary, then it will be inserted
+into the dictionary first. 
+
