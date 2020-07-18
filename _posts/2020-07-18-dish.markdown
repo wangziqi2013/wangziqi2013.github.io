@@ -123,4 +123,7 @@ into the dictionary first. In both cases, the code word will be output as the in
 If the dictionary is already full before all words are processed, then 4:1 compression fails, and the line should be 
 stored uncompressed. Otherwise, the compression succeeds with a dictionary and a fixed length compressed block, after
 which both are written into the physical slot at the corresponding offsets.
+If, however, the physical slot already contains some valid lines, the current dictionary will first be loaded into the
+compressor's temporary dictionary, and compression is attempted as if it were half way performing compression. The
+line can incrementally add new entries to the temporary dictionary in the compressor, and also reference existing entries.
 
