@@ -66,4 +66,7 @@ Addresses in memory requests are mapped to cache sets and ways as follows. Since
 into the same set, the index bit field that consitute the set index must "move up" by two bits, leaving the lowest two bits
 of the cache line address as block offset. The remaining high bits are used as the super block tag for tag matching.
 Note that this address mapping scheme, although greatly simplifies cache line addressing under the notion of super blocks,
-map adjacent blocks in the super block into the same set. For workloads 
+map adjacent blocks in the super block into the same set. For workloads with high spatial locality but low overall 
+compressibility, this address mapping scheme will negatively impact performance, since adjacent cache lines will be mapped
+to the same set, each occupying one data slot, causing excessive set conflict misses (in conventional address mapping
+schemes they will be mapped to adjacent sets since the low two bits are used). 
