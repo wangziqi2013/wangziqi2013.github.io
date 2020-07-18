@@ -41,4 +41,12 @@ within a way group for that SB is fixed, which eliminates complicated mechanism 
 same physical slot, since all slots sharing a physical slot must be of the same CF. In addition, to further eliminate 
 the overhead of having to identify blocks in an SB for a physical slot, SCC only maps adjacent blocks of the same CF
 to the same physical tag. Non-adjacent blocks, even with identical CFs, will be mapped to different sets in the way group.
-Finally, The way group design
+Finally, to offset the fact that way group design reduces effective associativity for a certain address, SCC also adopts
+the skewed cache design which uses different hash functions in different ways to scatter addresses that would have conflicted
+in a set to distinct sets. 
+The article argues that, with all three levels of skewness in SCC, the decoder array is much more complicated than in
+a conventional cache, increasing design and verification cost. Besides, as with all skewed cache designs, conventional
+replacement algorithms cannot be applied, since skewed caches do not honor the concept of sets, set-based replacement 
+algorithms such as LRU or RRIP will not work, further complicating the design since a new algorithm has to be implemented.
+
+
