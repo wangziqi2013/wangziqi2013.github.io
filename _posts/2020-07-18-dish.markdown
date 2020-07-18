@@ -91,6 +91,11 @@ A compressed line is therefore 3 * 16 = 48 bits or 6 bytes, and four compressed 
 dictionary entry takes another 32 bytes. An extra 8 bit vector is dedicated to the valid bit for dictionary entries.
 The total number of storage required for scheme I is hence 57 bytes, leaving 7 bytes for storing extra per-line 
 metadata, such as dirty bits, valid bits, and coherence states.
+Scheme II, on the contrary, stores only 28-bits values as high bits in a compressed word. The low 4 bits are stored as-is
+in the compressed data body, which will be concatenated with the high bits to form the original word. 
+A scheme II dictionary only contains 4 entries, totalling to 112 bits or 14 bytes. Each compressed cache line consists of
+16 2-bit indices and 16 4-bit lower parts, summing up to a total of 384 bits, or 48 bytes. Overall, 62 out of 64 bytes 
+in the physical storage will be used, leaving 2 bytes, or 16 bits to be used for other purposes.
 
 We next describe the metadata and data layout.
 
