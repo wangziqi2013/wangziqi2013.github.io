@@ -13,4 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
-
+This paper proposes Dictionary Sharing (DISH), a novel dictionary-based cache line compression scheme with high compression
+ratio and low design cost. This paper identifies several issues with previous compressed cache proposals, such as DCC, 
+SCC and YACC. First, to simplify storage management within a physical slot, these designs mandate that all cache lines
+that share a physical slot must be from the same super block, and must be of the same size class after compression. 
+Under such restriction, even if a physical slot still has storage for one compressed line, if the size class of the line
+does not match the size class of the slot, the line cannot be stored, casuing space wastage. In the worse case, N tags
+have to be allocated for lines in the same super block, if these 
