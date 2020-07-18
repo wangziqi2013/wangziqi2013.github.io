@@ -29,4 +29,8 @@ version_mgmt:
    cache. But without these motivations YACC is just a really common super block compressed cache with little novelty involved.
 
 This article proposes Yet Another Compressed Cache (YACC), a compressed Last-Level Cache (LLC) design that improves over
-the previous overly complicated DCC and SCC designs. The paper begins by pointing out that both DCC and SCC designs
+the previous overly complicated DCC and SCC designs. The paper begins by pointing out that both DCC and SCC designs are
+overly complicated and thus difficult to be adopted into commercial systems for several reasons. First, DCC decouples
+the static mapping between tag array and data array entries as in the conventional cache, relying on forward and backward
+pointers to read data associated with a tag entry and/or locate the tag for given compressed slot. This not only increases
+area and power consumption, but also incurrs extra latency on the critical access path. 
