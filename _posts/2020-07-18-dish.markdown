@@ -126,4 +126,7 @@ which both are written into the physical slot at the corresponding offsets.
 If, however, the physical slot already contains some valid lines, the current dictionary will first be loaded into the
 compressor's temporary dictionary, and compression is attempted as if it were half way performing compression. The
 line can incrementally add new entries to the temporary dictionary in the compressor, and also reference existing entries.
-
+If the temporary dictionary becomes full before the block is fully processed, compression fails, and the cache line
+will be allocated a new physical storage, after which compression on the new slot is attempted again. 
+In the case of failure, the temporary dictionary is diacarded, and no update is made to the physical slot. Otherwise, both
+the updated temporary dictionary and the compressed body is written.
