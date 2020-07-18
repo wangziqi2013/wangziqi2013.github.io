@@ -101,5 +101,6 @@ request, the controller first compresses the block. If the write back address hi
 in the same super block of the same size class, the compressed line is written into the slot if it still fits.
 If the compressed line no longer fits into the slot, or addresses do not match (a write miss), a new entry is allocated
 by evicting lines from an existing data slot. Note that at most four lines need to be uncompressed and written back to
-the lower level in the worse case. 
+the lower level in the worse case. To avoid eviction becomes the bottleneck, the paper proposes that each way have a 
+separate decompressor and compressor for handling evictions, write backs and read requests in parallel.
 
