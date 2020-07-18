@@ -23,6 +23,9 @@ version_mgmt:
    ID and physical slot offset since not all blocks in the SB can be allocated physical storage.
    Using different layouts for different SB cases saves some bits for the tag.
 
+3. Using flexible layout for metadata field rather than fixed location for each field, no matter whether it is used in the 
+   current configuration or not. 
+
 **Lowlight:**
 
 1. I understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
@@ -79,3 +82,5 @@ between block ID and physical slot offset is static and straightforward, since a
 For size class of 32 bytes, the block ID must also be stored in the tag, since only two out of four compressed 
 lines can be stored. The same is true for 64 byte uncompressed lines. The block ID field takes two bits per line,
 and four bits in total are needed in the worst case.
+
+To efficiently track block metadata under different conditions, YACC 
