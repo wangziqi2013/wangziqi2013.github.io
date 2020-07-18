@@ -19,4 +19,9 @@ SCC and YACC. First, to simplify storage management within a physical slot, thes
 that share a physical slot must be from the same super block, and must be of the same size class after compression. 
 Under such restriction, even if a physical slot still has storage for one compressed line, if the size class of the line
 does not match the size class of the slot, the line cannot be stored, casuing space wastage. In the worse case, N tags
-have to be allocated for lines in the same super block, if these 
+have to be allocated for lines in the same super block, if these blocks fall into N distinct size classes.
+Second, when a dirty cache line is written back from the upper level, chances are that the compressed size of the new 
+line no longer fits into its original physical slot. In this case, the old line's physical slot is invalidated, and 
+a new slot is allocated by either evicting existing lines, or performing compaction of existing lines to free some 
+storage that was unusable due to external fragmentation. This paper argues that compaction of existing lines is a heavy-weight
+task, since it reads out all compressed lines from the dara array, re-aligns them, and writs the compacted block back.
