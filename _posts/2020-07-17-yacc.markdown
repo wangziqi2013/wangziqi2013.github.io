@@ -70,3 +70,10 @@ map adjacent blocks in the super block into the same set. For workloads with hig
 compressibility, this address mapping scheme will negatively impact performance, since adjacent cache lines will be mapped
 to the same set, each occupying one data slot, causing excessive set conflict misses (in conventional address mapping
 schemes they will be mapped to adjacent sets since the low two bits are used). 
+
+We next describe the data and metadata layout. As discussed above, in addition to the super block tag in the 
+tag entry, the size class of compressed lines in the physical slot is also stored. Furthermore, the per-line coherence
+state (3 bits) are also needed for each compressed lines. For size class of 16 bytes, the 64 byte physical slot 
+is divided into four equal sized partitions, one for each compressed cache line in the supber block. The mapping
+between block ID and physical slot offset is static and straightforward, since all four blocks can be accommodated.
+
