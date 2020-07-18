@@ -83,4 +83,8 @@ For size class of 32 bytes, the block ID must also be stored in the tag, since o
 lines can be stored. The same is true for 64 byte uncompressed lines. The block ID field takes two bits per line,
 and four bits in total are needed in the worst case.
 
-To efficiently track block metadata under different conditions, YACC 
+To efficiently track block metadata under different conditions, YACC uses different layouts for each configuration.
+A total of 13 bits are prepared, with the intepretation of bits depending on the size class of the current slot.
+In the case of 16 byte compressed lines, the first bit stores the size class, which is set to "0". In the case of 
+32 and 64 byte lines, the first bit is set to "1", and the second bit distinguishes the former from the latter.
+
