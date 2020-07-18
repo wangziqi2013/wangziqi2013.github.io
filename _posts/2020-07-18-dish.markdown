@@ -119,5 +119,8 @@ The compression circult works as follows. If the physical slot that a line is co
 previous contents (or only invalidiated contents), the compression start anew with a new dictionary in which all
 entries are marked invalid. The compressor then starts processing the input line in the unit of 32-bit words (order
 of processing is insignificant). For each 32-bit word, if it is not already in the dictionary, then it will be inserted
-into the dictionary first. 
+into the dictionary first. In both cases, the code word will be output as the index of the word in the dictionary.
+If the dictionary is already full before all words are processed, then 4:1 compression fails, and the line should be 
+stored uncompressed. Otherwise, the compression succeeds with a dictionary and a fixed length compressed block, after
+which both are written into the physical slot at the corresponding offsets.
 
