@@ -87,4 +87,7 @@ To efficiently track block metadata under different conditions, YACC uses differ
 A total of 13 bits are prepared, with the intepretation of bits depending on the size class of the current slot.
 In the case of 16 byte compressed lines, the first bit stores the size class, which is set to "0". In the case of 
 32 and 64 byte lines, the first bit is set to "1", and the second bit distinguishes the former from the latter.
-
+For the 16 byte line case, the next 12 bits store coherence information for four compressed lines, with three bits per
+line. For 32 byte line case, the next 10 bits store the two bit block ID and three bit coherence information for each
+of the two lines, totalling to 12 bits. For 64 byte uncompressed lines, the next 5 bits store the block ID and 
+coherence information of the line, which uses only 7 bits out of the 13-bit field.
