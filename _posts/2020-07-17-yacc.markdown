@@ -18,7 +18,10 @@ version_mgmt:
 1. Using super blocks to implicitly generate addresses on lookups without adding more tags, since the address of cache lines
    within a super block is easily derived from the base super block address.
 
-
+2. Using different associativity for 4:1 case and 2:1 or uncompressed case. 4:1 blocks are statically mapped since each block
+   can be statically allocated a 16B slot. 2:1 and uncompressed case requires fully associative mapping between block
+   ID and physical slot offset since not all blocks in the SB can be allocated physical storage.
+   Using different layouts for different SB cases saves some bits for the tag.
 
 **Lowlight:**
 
