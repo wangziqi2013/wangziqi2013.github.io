@@ -86,7 +86,11 @@ while scheme II takes advantage of upper bits data locality, as discussed above.
 In scheme I, eight values are selected for encoding one to four cache lines in the super block. The dictionary may even
 contain less than eight values, if the number of distinct values in the current physical slot is less than eight.
 Each dictionary entry is associated with a "valid" bit indicating whether the entry is valid or not.
-
+Each 32-bit word from uncompressed line is represented by a 3-bit index which points to the full word in the dictionary.
+A compressed line is therefore 3 * 16 = 48 bits or 6 bytes, and four compressed lines will take 24 bytes. The 8 32-bit
+dictionary entry takes another 32 bytes. An extra 8 bit vector is dedicated to the valid bit for dictionary entries.
+The total number of storage required for scheme I is hence 57 bytes, leaving 7 bytes for storing extra per-line 
+metadata, such as dirty bits, valid bits, and coherence states.
 
 We next describe the metadata and data layout.
 
