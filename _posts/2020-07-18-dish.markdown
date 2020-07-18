@@ -34,4 +34,10 @@ DISH leverages two important observations on value locality. First, value locali
 line, but also across adjacent cache lines within the same super block. The number of distinct values is significantly
 smaller than the number of words in a super block, potentially enabling a compression method that uses these values
 as dictionary, and encodes individual words using dictionary index with shorter code words. 
+The second type of value locality, called upper data bits locality, suggests that even if values across cache lines
+may not be strictly identical, there are still large chances that the upper bits of these values are equal, while lower
+bits being more random. This is common in arrays, especially pointer arrays of the same type of objects, since 
+malloc() will most likely attempt to place these object in the same memory pool as close to each other as possible as 
+spatial locality optimization. 
+
 
