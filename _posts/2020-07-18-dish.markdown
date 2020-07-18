@@ -1,0 +1,16 @@
+---
+layout: paper-summary
+title:  "Dictionary Sharing: An Efficient Cache Compression Scheme for Compressed Caches"
+date:   2020-07-18 00:49:00 -0500
+categories: paper
+paper_title: "Dictionary Sharing: An Efficient Cache Compression Scheme for Compressed Caches"
+paper_link: https://ieeexplore.ieee.org/document/7783704
+paper_keyword: Compression; Cache Compression; DISH
+paper_year: MICRO 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+
