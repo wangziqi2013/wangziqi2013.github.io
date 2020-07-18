@@ -24,4 +24,8 @@ Second, when a dirty cache line is written back from the upper level, chances ar
 line no longer fits into its original physical slot. In this case, the old line's physical slot is invalidated, and 
 a new slot is allocated by either evicting existing lines, or performing compaction of existing lines to free some 
 storage that was unusable due to external fragmentation. This paper argues that compaction of existing lines is a heavy-weight
-task, since it reads out all compressed lines from the dara array, re-aligns them, and writs the compacted block back.
+task, since it reads out all compressed lines from the dara array, re-aligns them, and writes the compacted block back.
+Lastly, despite the fact that these previous schemes perform tagging in super block granularity, which consist of four or 
+more regular cache lines, the compression itself is still performed on individual cache lines without any consideration 
+of inter-block redundancy or block compaction. In fact, inter-block redundancy within a super block is a good starting 
+point for further optimization, as we will see below.
