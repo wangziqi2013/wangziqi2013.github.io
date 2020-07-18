@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. This paper is syntatically and grammaritically poor, and in general the delivery of ideas is also poor.
+   
+2. I don't get why adding another line for compression is that complicated (3 parallel comparisons for B1 and 4 parallel 
+   comparisons for B2). Shouldn't we just load the current 
+   dictionary, treat it as if we were half way done during compression, and compress the incoming line by either
+   generating a code word for existing dictionary entries, or inserting a new entry?
+   Why dividing the dictionary into "B0's dictionary" and "B1's dictionary"?
+
 This paper proposes Dictionary Sharing (DISH), a novel dictionary-based cache line compression scheme with high compression
 ratio and low design cost. This paper identifies several issues with previous compressed cache proposals, such as DCC, 
 SCC and YACC. First, to simplify storage management within a physical slot, these designs mandate that all cache lines
