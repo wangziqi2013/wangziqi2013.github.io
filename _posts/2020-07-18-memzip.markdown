@@ -65,5 +65,6 @@ scheme (BDI uses seven of them, and the last is left to FPC), while the rest 5 b
 later. If DBI is used as suggested by the DBI field in the metadata byte, the next one to three bytes store DBI bits, 
 which must be read before any data transfer since DBI optmizes data transfer via bit flipping.
 
-
+Dirty cache lines may find itself larger than the old version after compression, which requires no extra handling, unlike 
+previous proposals in which the line may "overflow" to a special region or compaction must be performed in the background.
 
