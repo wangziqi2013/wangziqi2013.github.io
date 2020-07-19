@@ -29,7 +29,9 @@ version_mgmt:
    one more activation. Furthermore, even if it is stored at the end of the row, you still have to burst at least 8 bytes 
    to fetch metadata, which has no obvious advantage.
 
-
+2. The metadata scheme creates "holes" in the physical address space. It is fine for OS to reserve pages in 4KB and 2MB
+   scheme, since the hole only occurs every 128 * 8KB = 1GB. But for 1GB super pages it does not work.
+   The controller should really just mask off these pages and perform address translation on them to avoid paging issues.
 
 This paper proposes MemZip, an application of memory compression technique that aims at improving performance and power 
 efficiency of the memory system. The paper points out at the beginning that most existing memory compression schemes aim
