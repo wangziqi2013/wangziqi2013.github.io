@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "MemZip: Exploring Unconventional Benefits from Memory Compression"
+date:   2020-07-18 21:42:00 -0500
+categories: paper
+paper_title: "MemZip: Exploring Unconventional Benefits from Memory Compression"
+paper_link: https://ieeexplore.ieee.org/document/6835972
+paper_keyword: Compression; Memory Compression; Subranking; Memzip
+paper_year: HPCA 2014
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
