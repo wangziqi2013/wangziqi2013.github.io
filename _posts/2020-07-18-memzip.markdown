@@ -43,4 +43,9 @@ The MemZip architecture is based on DRAM subranking, which is a technique for re
 access protocol. The paper assumes DDR3 interface, in which all DRAM accesses will involve eight consecutive bursts
 of 8 byte each, fetching an full 64 byte cache line in one access request. The number of bursts, however, is 
 not changable in DDR3 protocol, which is unfortunate, since a memory access must then always fetch 64 bytes as long as 
-the granularity of a single burst is eight bytes. 
+the granularity of a single burst is eight bytes. On the other hand, memory subranking reduces the access granularity 
+to one byte by selectively activating only a subset of all ranks in the memory. By adopting memory subranking, each
+DDR3 burst sequence only fetches 8 1-byte blocks, totalling to 8 byte per access. 
+Previous publications have pointed out that subranking is helpful in reducing power consumption and improving performance,
+at the cost of more access transactions and longer access latency.
+
