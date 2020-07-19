@@ -24,4 +24,8 @@ perform address remapping from uncompressed address space to compressed address 
 no longer stored on their home addresses, metadata access must be serialized with data access, which are both on the critical
 data access path. Although previous designs also propose metadata cache for hiding such extra cost in most cases, the 
 effectiveness of metadata caches are usually limited to smaller working sets, since metadata entries tend to be large
-(e.g. 64 bytes per 4KB page). The last, less
+(e.g. 64 bytes per 4KB page). The last, less mentioned reason is that memory compression does not work well with ECC, since
+most previous schemes do not store ECC data explicitly with compressed lines. As cache lines can be stored arbitrarily
+on any location, ECC bit accesses will likely not result in row buffer hits with compressed data. This both complicates 
+ECC memory design for ECC protected systems, and adds extra latency and power consumption on the critical path, which
+are hardly evaluated in previous works.
