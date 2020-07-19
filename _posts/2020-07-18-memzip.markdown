@@ -105,4 +105,10 @@ The paper proposes two extra optimizations based on the observation that compres
 aligned to the 8-byte burst boundary. In this case, the last 8-byte word read from the DRAM contains useless "padding" 
 bits at the end, which can be leveraged to store some extra information, such as ECC and/or DBI. Conventional ECC uses 
 a 9th chip per rank to provide an extra 8 bits for every 8 byte data. In a conventional scheme, the extra chip is activated
-together with the remaining 8 chips, such that ECC accesses will not incur extra latency. 
+together with the remaining 8 chips, such that ECC accesses will not incur extra latency. MemZip, on the contrary, does
+not activate all chips for reading compressed data, requiring an extra activation on the subrank that stores ECC if memory
+protection is enabled. The paper proposes using the extra padding bits at the end of compressed data body to store ECC bits
+as an optimization, since ECC is essentially read out free with no overhead at all. 
+if the number of bits is not sufficient for that purpose, the ECC bit is still stored in the original form and location.
+
+
