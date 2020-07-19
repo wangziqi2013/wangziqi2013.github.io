@@ -29,3 +29,10 @@ most previous schemes do not store ECC data explicitly with compressed lines. As
 on any location, ECC bit accesses will likely not result in row buffer hits with compressed data. This both complicates 
 ECC memory design for ECC protected systems, and adds extra latency and power consumption on the critical path, which
 are hardly evaluated in previous works.
+
+MemZip solves the above issues by not seeking to reduce memory footprint, but merely aiming at reducing bandwidth and 
+power consumption and staying compatible with existing ECC schemes. Compressed cache lines are always stored in their
+home locations, eliminating the need for address translation. In addition, only the compressed line body is transferred
+over the memory bus at 8-byte granularity instead of the original 64 byte granularity, which saves bandwidth and energy
+when the compressed size is significantly smaller than 64 bytes. 
+
