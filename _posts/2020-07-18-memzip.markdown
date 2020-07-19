@@ -98,3 +98,11 @@ The 128th line of each page is remapped to a deidcated overflow page. One overfl
 pages. To perform the address mapping, the memory controller simply divides the page number by 128, and uses the last 
 page in the page group to access the 128th cache line within the page.
 The OS should reserve the last two 4KB pages for every 256 4KB pages to avoid using the metadata page.
+A metadata cache is also added to the memory controller for fast accesses of recent pages. The metadata cache stores 
+metadata in 64 byte granularity, with each entry covering a full 8KB DRAM page.
+
+The paper proposes two extra optimizations based on the observation that compressed data body is not always 
+aligned to the 8-byte burst boundary. In this case, the last 8-byte word read from the DRAM contains useless "padding" 
+bits at the end, which can be leveraged to store some extra information, such as ECC and/or DBI. Conventional ECC uses 
+a 9th chip per rank to provide an extra 8 bits for every 8 byte data. In a conventional scheme, the extra chip is activated
+together with the remaining 8 chips, such that ECC accesses will not incur extra latency. 
