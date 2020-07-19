@@ -38,3 +38,9 @@ when the compressed size is significantly smaller than 64 bytes.
 The paper also proposes mechanisms for storing ECC bits and other special encoding bits in the "padding" space at the 
 end of the 8-byte word that are not used due to alignment.
 These extra bits can further reduce ECC access cost, or optimize bus data transfer.
+
+The MemZip architecture is based on DRAM subranking, which is a technique for reducing access graularity in the DRAM 
+access protocol. The paper assumes DDR3 interface, in which all DRAM accesses will involve eight consecutive bursts
+of 8 byte each, fetching an full 64 byte cache line in one access request. The number of bursts, however, is 
+not changable in DDR3 protocol, which is unfortunate, since a memory access must then always fetch 64 bytes as long as 
+the granularity of a single burst is eight bytes. 
