@@ -22,4 +22,6 @@ that over-fetching only makes sense if adjacent lines are also stored in compres
 is high. The second reason is that memory compression schemes often need to maintain large amount of metadata in order to
 perform address remapping from uncompressed address space to compressed address space. Since compressed cache lines are 
 no longer stored on their home addresses, metadata access must be serialized with data access, which are both on the critical
-data access path. 
+data access path. Although previous designs also propose metadata cache for hiding such extra cost in most cases, the 
+effectiveness of metadata caches are usually limited to smaller working sets, since metadata entries tend to be large
+(e.g. 64 bytes per 4KB page). The last, less
