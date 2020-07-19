@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. I don't get why you don't just store the burst length in the header of the compressed line. In this case you just burst
+   the first 8 bytes, check the number, and read the rest with more bursts (the cache is still needed, though). 
+   By placing metadata at the end of the current row, you have to activate the ranks that store metadata, which takes
+   one more activation. Furthermore, even if it is stored at the end of the row, you still have to burst at least 8 bytes 
+   to fetch metadata, which has no obvious advantage.
+
 This paper proposes MemZip, an application of memory compression technique that aims at improving performance and power 
 efficiency of the memory system. The paper points out at the beginning that most existing memory compression schemes aim
 at improving storage efficiency via flexible allocation of variable sized pages and clever placement of data. These
