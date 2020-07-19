@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes MemZip, an application of memory compression technique that aims at improving performance and power 
+efficiency of the memory system. The paper points out at the beginning that most existing memory compression schemes aim
+at improving storage efficiency via flexible allocation of variable sized pages and clever placement of data. These
+schemes are not always optimal for several reasons. First, although cache lines become shorter bacause of compression,
+the DRAM access protocol still bursts 64 bytes as in uncompressed memory, which over-fetches the line. The paper argues 
+that over-fetching only makes sense if adjacent lines are also stored in compressed together, and when access locality
+is high. 
