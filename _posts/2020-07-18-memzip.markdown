@@ -114,4 +114,11 @@ if the number of bits is not sufficient for that purpose, the ECC bit is still s
 The second optimization is DBI, a technique for avoiding bit flips on the data bus when tramsnitting byte-by-byte. The
 observation is that the dynamic energy of each bus transfer cycle is related to the number of bit flips from the previous 
 cycle to the current cycle. If the number of bit flips exceeds four, then instead of transmitting the original value,
-it is suggested that the value be bit flipped before transmission.
+it is suggested that the value be bit flipped before transmission. In practice, since the receiving end has no way to
+know whether the value is bit flipped or not, we store an extra bit together with data to be transmitted, indicating whether 
+the byte should be transmitted with bits flipped.
+This extra bit can also be stored in the padding area, but at the beginning of the compressed body, pushing the compressed
+body towards the 8-byte boundary. In addition, the bit does not need to stored for each byte, if space is a concern.
+Several configurations are allowed, such as stoing one bit per two bytes, four bytes, etc. The DBI configuration bits in
+the metadata header of each compressed line encodes the DBI configuration, which is used to interpret the DBI bit vector 
+that follows.
