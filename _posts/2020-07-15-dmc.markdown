@@ -4,9 +4,9 @@ title:  "Transparent Dual Memory Compression Architecture"
 date:   2020-07-15 21:36:00 -0500
 categories: paper
 paper_title: "Transparent Dual Memory Compression Architecture"
-paper_link: https://ieeexplore.ieee.org/document/8675200
+paper_link: https://ieeexplore.ieee.org/document/8091246
 paper_keyword: Compression; Memory Compression; DCM; Dual Memory Compression
-paper_year: 
+paper_year: PACT 2017
 rw_set:
 htm_cd:
 htm_cr:
