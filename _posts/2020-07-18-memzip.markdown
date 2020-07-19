@@ -18,7 +18,8 @@ version_mgmt:
 1. Taking advantage of shorter burst length with subranking to fetch partial block, which fits into the paradigm of memory
    compression very well
 
-
+2. Letting OS not allocating the page that stores metadata rather than letting memory controller performing complicated 
+   address mapping
 
 **Lowlight:**
 
