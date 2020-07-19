@@ -84,3 +84,10 @@ which must be read before any data transfer since DBI optmizes data transfer via
 Dirty cache lines may find itself larger than the old version after compression, which requires no extra handling, unlike 
 previous proposals in which the line may "overflow" to a special region or compaction must be performed in the background.
 
+Recall that MemZip reads compressed lines in a number of bursts. This number is stored in a seperate, per-row metadata 
+area. Assuming 8KB DRAM pages and 8 byte burst size, each compressed line needs four bits to represent the number of reads
+for accessing the line body. Zero reads means that the line is all-zero which requires no extra DRAM access. Eight reads
+means that the line is stored uncompressed in the raw format without the metadata header (otherwise the line would be longer
+than 64 bytes). Since there are 128 lines per page, consuming a total of 512 bits or 64 bytes to store the metadata for all of them,
+the paper proposes that the last 64 byte block in each DRAM page be used to store the burst length. 
+
