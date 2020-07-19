@@ -111,4 +111,7 @@ protection is enabled. The paper proposes using the extra padding bits at the en
 as an optimization, since ECC is essentially read out free with no overhead at all. 
 if the number of bits is not sufficient for that purpose, the ECC bit is still stored in the original form and location.
 
-
+The second optimization is DBI, a technique for avoiding bit flips on the data bus when tramsnitting byte-by-byte. The
+observation is that the dynamic energy of each bus transfer cycle is related to the number of bit flips from the previous 
+cycle to the current cycle. If the number of bit flips exceeds four, then instead of transmitting the original value,
+it is suggested that the value be bit flipped before transmission.
