@@ -35,4 +35,6 @@ power consumption and staying compatible with existing ECC schemes. Compressed c
 home locations, eliminating the need for address translation. In addition, only the compressed line body is transferred
 over the memory bus at 8-byte granularity instead of the original 64 byte granularity, which saves bandwidth and energy
 when the compressed size is significantly smaller than 64 bytes. 
-
+The paper also proposes mechanisms for storing ECC bits and other special encoding bits in the "padding" space at the 
+end of the 8-byte word that are not used due to alignment.
+These extra bits can further reduce ECC access cost, or optimize bus data transfer.
