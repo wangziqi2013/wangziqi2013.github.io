@@ -48,4 +48,6 @@ to one byte by selectively activating only a subset of all ranks in the memory. 
 DDR3 burst sequence only fetches 8 1-byte blocks, totalling to 8 byte per access. 
 Previous publications have pointed out that subranking is helpful in reducing power consumption and improving performance,
 at the cost of more access transactions and longer access latency.
-
+In this paper, memory subranking is leveraged to fetch compressed data, which may use significantly less storage than
+a full 64 byte cache line. In this case, subranking not only saves bus bandwidth by not over-fetching unused bits from
+the memory, but also improves performance, since shorter compressed lines only require a few burst cycles to read.
