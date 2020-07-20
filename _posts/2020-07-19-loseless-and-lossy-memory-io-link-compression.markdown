@@ -28,7 +28,9 @@ version_mgmt:
    be precise in bit unit. So even if some peculiar algorithm does need that number, having a number rounded to 16 bytes
    would help very little, I guess.
 
-2. Floating point truncation happens at CPU side or GPU side? 
+2. If lossy and loseless compression are both applied for floating point numbers, that memory region should store
+   compression metadata for both compression types, which requires more bits. How does the hardware map such a 
+   special area?
 
 This paper proposes adding memory compression to GPGPU memory architecture for improving performance with reduced bandwidth 
 consumption. Although many previous publications focus on saving storage and providing larger effective memory, this paper
