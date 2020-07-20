@@ -19,4 +19,14 @@ explores another aspect of memory compression: Saving memory bandwidth for memor
 out that GPU workloads often have better compressibility than CPU workloads for two reasons. First, GPGPUs are designed
 to process input data in a massively parallel manner, with the same "kernel". The input data, therefore, is usually 
 arrays of integers or floating point numbers of the same type, which can be easily compressed. In addition, real-world
-workloads observe high degrees of locality, further enabling highly efficient compression.
+workloads observe high degrees of locality, further enabling highly efficient compression. Second, GPGPU architectures
+execute a kernel in SIMT manner, spawning multiple hardware threads sharing the same set of control signals and SIMD data 
+path. Multiple memory access requests may be generated per memory operation in the kernel, since all threads in the SIMT 
+architecture execute the same instruction. As a result, GPGPU designers tend to use larger block sizes to amortize the 
+cost of block fetching with high access locality of the threads. For example, the simulated platform of this paper uses
+an architecture with 32 threads per warp. Assuming 4-byte access granularity per thread, and highly regular access pattern
+(e.g. all threads' accesses are in a consecutive chunk of memory), the memory controller will need to fetch a 128-byte
+block to satisfy all memory operations within one DRAM access. Larger blocks, as pointed out by previous papers also,
+are more prone to yield higher compressibility, which is ideal for memory compression.
+
+
