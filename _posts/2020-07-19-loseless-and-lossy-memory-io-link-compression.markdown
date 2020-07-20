@@ -13,7 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
 
+1. I don't get why decompression algorithm needs the size of a block? I think most compression algorithm has the size 
+   after compression implied in the compression header? Or at least you can always figure out that implicitly during
+   decompression?
+   I am asking this because even if you have the size, it is on 16 byte granularity. The actual compressed size should
+   be precise in bit unit. So even if some peculiar algorithm does need that number, having a number rounded to 16 bytes
+   would help very little, I guess.
 
 This paper proposes adding memory compression to GPGPU memory architecture for improving performance with reduced bandwidth 
 consumption. Although many previous publications focus on saving storage and providing larger effective memory, this paper
