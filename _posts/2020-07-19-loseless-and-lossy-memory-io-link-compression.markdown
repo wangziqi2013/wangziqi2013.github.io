@@ -34,6 +34,10 @@ first prepare the data structures needed for the computation in the main memory.
 GPU by calling CUDA routines with the size of the structure. The GPU will use its DMA controller to move data from the 
 main memory to its own memory (GDDR as suggested in the paper). After computation, the GPU moves the results back to the 
 CPU using DMA.
-
+The GPGPU has four distinct address spaces: Global, texture, constant, and local. The global address space acts similar
+to the main memory such that all GPGPU threads can access it. Texture and constant address spaces are optimized for
+special purposes such as textures and constant values. The local address space is only addressable to a subset of cores,
+and is used for register spilling and local computation. The paper's proposed optimization only applies to global
+and texture address space.
 
 leverages the above observations to build a memory compression
