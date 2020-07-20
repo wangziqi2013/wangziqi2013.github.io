@@ -46,4 +46,10 @@ as we will see below.
 Several memory controllers may be present on the GPGPU device, each responsible for a partition of the addressable memory. 
 Each memory controller implements an instance of compression and decompression hardware. Multiple instances per controller 
 provides very little improvement as compression and decompression is not the bottleneck. 
+The compression and decompression algorithms are not specified, though.
+
+Compression is performed when data is initially copied to the GPGPU memory, and when they are written back from GPU
+threads. Similarly, data is decompressed when read from the GPGPU memory, and when they are copied back to the CPU
+memory. The main purpose of this paper is to optimize bandwidth usage with compressed data, and therefore, data
+compression does not change the home location of blocks, but only their sizes. 
 
