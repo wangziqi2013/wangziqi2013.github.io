@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Speculatively fetching a block in full size when cache miss happens. In fact if the paper has statistics on average
+   size of compressed block on cache misses, it can only fetch the first few chunks, and decide whether to fetch the
+   rest if the actual number of higher.
+
 **Lowlight:**
 
 1. I don't get why decompression algorithm needs the size of a block? I think most compression algorithm has the size 
