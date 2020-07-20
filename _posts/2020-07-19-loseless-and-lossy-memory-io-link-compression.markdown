@@ -89,3 +89,9 @@ effect of cache misses, the paper also proposes that memory controllers may issu
 metadata cache misses. Since the read size is unknown, the controller always bahaves conservatively, and fetches the
 full 128 byte block. Decompression, however, is still stalled until metadata bits are retrieved, since the decompression
 algorithm may need the actual size of compressed block.
+
+The paper also proposes a lossy compression algorithm for floating pointer numbers, which is also widely used in GPGPU
+workloads. The observation is that some workloads do not require high precision, and the application is willing to
+trade-off precision with efficiency. In addition, modern GPGPUs are already equipped with a special "Non-IEEE 754 compliant" 
+mode which sacrifices precision for computation speed. 
+
