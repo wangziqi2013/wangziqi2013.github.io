@@ -43,5 +43,7 @@ The GPGPU memory is assumed to be GDDR3, with a data bus width of 4 bytes, and a
 of data can be transferred per burst. Note that since the burst length of GDDR3 is fixed, at least 16 bytes of data are
 read from the memory for each memory access, which is also used as the basic unit of transmitting compressed cache lines,
 as we will see below.
-
+Several memory controllers may be present on the GPGPU device, each responsible for a partition of the addressable memory. 
+Each memory controller implements an instance of compression and decompression hardware. Multiple instances per controller 
+provides very little improvement as compression and decompression is not the bottleneck. 
 
