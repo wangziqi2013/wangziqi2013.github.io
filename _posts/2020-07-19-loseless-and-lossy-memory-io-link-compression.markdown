@@ -29,4 +29,11 @@ an architecture with 32 threads per warp. Assuming 4-byte access granularity per
 block to satisfy all memory operations within one DRAM access. Larger blocks, as pointed out by previous papers also,
 are more prone to yield higher compressibility, which is ideal for memory compression.
 
+This paper assumes a basic GPGPU workflow as follows. First, before a kernel can be invoked on a GPU, the CPU should
+first prepare the data structures needed for the computation in the main memory. After that, data is transferred to the 
+GPU by calling CUDA routines with the size of the structure. The GPU will use its DMA controller to move data from the 
+main memory to its own memory (GDDR as suggested in the paper). After computation, the GPU moves the results back to the 
+CPU using DMA.
 
+
+leverages the above observations to build a memory compression
