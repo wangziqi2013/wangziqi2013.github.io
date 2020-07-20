@@ -63,4 +63,7 @@ number of read operations are performed to fetch the line.
 
 The baseline design above suffers from severe performance degradation, since (1) memory access latency becomes at least
 twice as large as before, since every memory access incurs another access to the metadata; (2) Extra traffic is dedicated
-to fetching the metadata block from the memory. 
+to fetching the metadata block from the memory. To solve this problem, the paper proposes adding a metadata cache which 
+stores a few most recently used translation entries in 256 byte metadata blocks. The cache can be implemented as a small, fully-associative structure, since most accesses have high locality. In addition, every four bits in the cache can cover 
+128 bytes of memory, resulting in a high coverage with even a small number of entries.
+The paper suggests that a 32 entry cache is sufficient in most cases.
