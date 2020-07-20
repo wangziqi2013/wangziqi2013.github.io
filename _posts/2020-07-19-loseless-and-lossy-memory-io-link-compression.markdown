@@ -52,4 +52,8 @@ Compression is performed when data is initially copied to the GPGPU memory, and 
 threads. Similarly, data is decompressed when read from the GPGPU memory, and when they are copied back to the CPU
 memory. The main purpose of this paper is to optimize bandwidth usage with compressed data, and therefore, data
 compression does not change the home location of blocks, but only their sizes. 
-
+To determine the number of reads required before actually generating memory read signals, the memory controller needs
+to know the compressed size of the 128-byte block to be accessed. To this end, the controller reserves 4 bits per block
+serving as block metadata, which stores the number of 16-bit transfers needed to fetch the compressed block.
+This number can range from zero (no data is actually transferred over the bus, and zero is returned) to eight (meaning
+uncompressed block). 
