@@ -28,6 +28,8 @@ version_mgmt:
    be precise in bit unit. So even if some peculiar algorithm does need that number, having a number rounded to 16 bytes
    would help very little, I guess.
 
+2. Floating point truncation happens at CPU side or GPU side? 
+
 This paper proposes adding memory compression to GPGPU memory architecture for improving performance with reduced bandwidth 
 consumption. Although many previous publications focus on saving storage and providing larger effective memory, this paper
 explores another aspect of memory compression: Saving memory bandwidth for memory-bound GPGPU workloads. The paper points
@@ -94,4 +96,14 @@ The paper also proposes a lossy compression algorithm for floating pointer numbe
 workloads. The observation is that some workloads do not require high precision, and the application is willing to
 trade-off precision with efficiency. In addition, modern GPGPUs are already equipped with a special "Non-IEEE 754 compliant" 
 mode which sacrifices precision for computation speed. 
-
+This paper leverages this mode, and proposes that the least significant bits of 32-bit floating point numbers be truncated
+when they are initially transferred and written back. 
+Recall that in IEEE 754 standard, the LSB of a floating point number are lower bits of the mantissa, which are of lower
+significance in determining the value of the number. 
+The programmer specifies the number of bits that are to be truncated from the number when they invoke the CPU-GPU data 
+transfer function, and GPGPU hardware performs the truncation and stores the after-truncation numbers in a compact form.
+In addition, loseless compression can still be applied to the number after they are truncated, further reducing 
+bandwidth consumption. For 32-bit floating point numbers, not transferring the lowest 8 bits can save 25% bandwidth.
+This number is even higher if extra compression is applied.
+The metadata bits for these area should use extra bits to indicate the number of bits truncated in order to restore
+the original value.
