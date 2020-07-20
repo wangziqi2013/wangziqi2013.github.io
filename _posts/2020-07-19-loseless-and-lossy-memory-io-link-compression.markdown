@@ -56,4 +56,11 @@ To determine the number of reads required before actually generating memory read
 to know the compressed size of the 128-byte block to be accessed. To this end, the controller reserves 4 bits per block
 serving as block metadata, which stores the number of 16-bit transfers needed to fetch the compressed block.
 This number can range from zero (no data is actually transferred over the bus, and zero is returned) to eight (meaning
-uncompressed block). 
+uncompressed block). If a block is larger than 128 bytes after compression, then it is simply stored as uncompressed
+to avoid overflowing to the next block. 
+Before a block can be read in compressed form, the metadata entry is first read from the memory, and then the specific
+number of read operations are performed to fetch the line.
+
+The baseline design above suffers from severe performance degradation, since (1) memory access latency becomes at least
+twice as large as before, since every memory access incurs another access to the metadata; (2) Extra traffic is dedicated
+to fetching the metadata block from the memory. 
