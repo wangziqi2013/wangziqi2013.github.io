@@ -39,5 +39,9 @@ to the main memory such that all GPGPU threads can access it. Texture and consta
 special purposes such as textures and constant values. The local address space is only addressable to a subset of cores,
 and is used for register spilling and local computation. The paper's proposed optimization only applies to global
 and texture address space.
+The GPGPU memory is assumed to be GDDR3, with a data bus width of 4 bytes, and a burst length of four, meaning 16 bytes
+of data can be transferred per burst. Note that since the burst length of GDDR3 is fixed, at least 16 bytes of data are
+read from the memory for each memory access, which is also used as the basic unit of transmitting compressed cache lines,
+as we will see below.
 
-leverages the above observations to build a memory compression
+
