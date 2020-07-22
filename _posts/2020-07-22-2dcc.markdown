@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "2DCC: Cache Compression in Two Dimensions"
+date:   2020-07-22 19:55:00 -0500
+categories: paper
+paper_title: "2DCC: Cache Compression in Two Dimensions"
+paper_link: https://past.date-conference.com/proceedings-archive/2020/html/0897.html
+paper_keyword: Compression; Cache Compression; 2DCC; Deduplication
+paper_year: DATE 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
