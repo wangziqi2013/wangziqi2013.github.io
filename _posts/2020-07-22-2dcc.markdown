@@ -24,7 +24,7 @@ proposes LLC deduplication using a hash table to perform fast detection of dupli
 benefit from intra-line redundancy, which is also suboptimal.
 
 2DCC combines conventional cache line compression and deduplication as follows. First, compression is still performed
-on individual cache lines, and stored in a decoupled data array. Tags are over-provisioned, and is organized such that
+on individual cache lines using BDI, and stored in a decoupled data array. Tags are over-provisioned, and is organized such that
 one tag can map to an arbitrary data slot in the data array. Second, hash values of the most recent few lines are maintained
 in a separate hash table, which is also organized as a set-associative lookup table. Cache lines written back from upper
 levels and fetched from lower levels are hashed and compared with table entries. On a value and data match, the incoming 
@@ -69,3 +69,11 @@ The criterion for selection is to minimize the number of invalidated tags, which
 and block compression.
 Note that the paper also points out that recency- or frequency-based replacement algorithms are not suitable for 
 data array replacement, since tag replacement has already taken either or both into consideration. 
+
+To help tracking potentially multiple tags of a single block, each segment is also associated with a status field indicating
+the state of the segment (free, occupied, head of block, etc.), and back pointer to the head of the linked list. 
+A reference count field is also maintained for the eviction algorithm to determine when segments can be freed and/or whether
+to invalidate the segment on data slot replacement.
+Although not mentioned in the paper, each segment should also track the size of compressed data, since data slot replacement
+requires this field to compute replacement. All additional metadata is only maintained for the head segment of a compressed 
+block to reduce update complexity. 
