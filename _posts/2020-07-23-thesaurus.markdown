@@ -57,6 +57,7 @@ segment in which the compressed block is stored. Tag and data accesses are thus 
 first before the location of data ia available.
 In addition, a format field is added to the tag entry to indicate the compression type of the entry. As we will
 discuss later, Thesaurus supports four different compression types.
+The fingerprint value is stored in the tag entry, if the compression type is base or base + delta.
 
 The data array, on the other hand, is a fully associative array, meaning any slot can be addressed by any tag entry.
 A bit vector is maintained for allocation of free data slots. 
@@ -95,4 +96,11 @@ Thesaurus maintains a fingerprint table in the main memory to perform clustering
 line cache, is added to the hierarchy as a fast supplement of base lines. When a new line is filled or written back,
 the cache controller first computes the fingerpring of the line, and searches the base cache for a matching value. If
 a match is found, then the byte-level delta between the incoming line and the base is calculated, and stored as the body 
-of the compressed block. 
+of the compressed block. A 64-bit vector is also attached to the body, with each bit indicating the presence of a delta
+value. If a match cannot be found, then the main memory base line table is searched using the fingreprint as the key.
+If there is still no matching, then an element in the main memory table is evicted, which is then replaced by the newly
+inserted line content and fingerpring. The base line is also inserted into the base line table, and a tag entry pointing 
+to the new base line is allocated by storing the fingerprint value in the tag.
+If an entry is found, then it will be loaded into the base line cache, before the lookup is re-attempted.
+
+
