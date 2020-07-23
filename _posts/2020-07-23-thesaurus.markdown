@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using content-aware fingerpring hashing to detect similar cache lines
+   
+
+
+**Lowlight:**
+
+1. The access latency of a base + delta line would involve in the worst case a main memory access and a data array access.
+   Even in the best case there are two parallel cache accesses, one of which has to be serialized with start map access,
+   and both are serialized with tag access.
+
 This paper proposes Thesaurus, a cache compression scheme with dynamic clustering. This paper points out at the beginning
 that two existing methods for increasing effective cache sizes, cache compression and deduplication, are both suboptimal
 in terms of compression ratio. Cache compression tries to exploit redundancy and dynamic value range in individual
