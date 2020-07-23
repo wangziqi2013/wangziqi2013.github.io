@@ -97,7 +97,9 @@ line cache, is added to the hierarchy as a fast supplement of base lines. When a
 the cache controller first computes the fingerpring of the line, and searches the base cache for a matching value. If
 a match is found, then the byte-level delta between the incoming line and the base is calculated, and stored as the body 
 of the compressed block. A 64-bit vector is also attached to the body, with each bit indicating the presence of a delta
-value. If a match cannot be found, then the main memory base line table is searched using the fingreprint as the key.
+value. As a special optmization, if the two lines are an exact match, no body of the line will be stored. Instead, the
+controller will simply allocate a tag, and point the tag to the base block.
+If a match cannot be found, then the main memory base line table is searched using the fingreprint as the key.
 If there is still no matching, then an element in the main memory table is evicted, which is then replaced by the newly
 inserted line content and fingerpring. The base line is also inserted into the base line table, and a tag entry pointing 
 to the new base line is allocated by storing the fingerprint value in the tag.
@@ -107,3 +109,7 @@ Although the paper does not mention the specific data layout and management of t
 it is suggested that each base line also has a reference count, which is incremented when a new tag entry points to the 
 base line or when it is used as the base line, and decrememted when an entry pointing to the line is evicted. When the 
 reference count drops to zero, the base line entry is invalidated.
+
+In the above discussion, we have covereds two of the four compression modes: If the block is not present in the base line
+table, then it is stored in the table, and the compression type is set as "base", indicating that the entry is to be 
+fetched from the base line table with no extra delta.
