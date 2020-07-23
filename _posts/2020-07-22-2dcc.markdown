@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Observed that the hash table can tolerate both false neg and false pos and therefore the update protocol for the hash
+   table can be relaxed. This simplifies design as the hash table can be updated by its own controller circuit.
+
+2. Combines deduplication with compression to further save storage
+
 This paper proposes Two-Dimentional Cache Compression, 2DCC, a cache compression design leveraging both intra-line and
 inter-line redundancy. This paper begins by pointing out that both intra-line and inter-line redundancy exist in the
 working set of typical workloads, as cache lines, as a whole, tend to contain similar to identical content in addition 
@@ -93,3 +100,4 @@ be conducted in a batch to amortize the cost.
 False positives can be ruled out by full block comparison, which is always required with hash tables and therefore
 does not pose an extra overhead. False negatives only cause duplicated blocks to be stored in the data array, resulting
 in slightly decreased effective size compared with the optimal case.
+The paper recommends using an 1024-entry hash table with 16 ways.
