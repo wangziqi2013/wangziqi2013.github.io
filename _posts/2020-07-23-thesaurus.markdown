@@ -68,3 +68,9 @@ divided into sets as in a conventional cache only for the convenience of evictio
 a free block for a fill or write back request, randomly selects four sets and checks free segments for all slots in these 
 sets. The one with sufficient number of free segments will be selected. If this is impossible, then segments from one of the 
 slots will be evicted until enough number of segments are freed. 
+Note that no tag back pointer exists per-segment as in 2DCC. This is because if most blocks use more than one segments,
+having a per-segment back pointer would be a waste of storage. To this end, the tag back pointer is always prepended
+at the beginning of a compressed or uncompressed block. On eviction, the tag entry can be located by reading the first
+few bits of the header segment.
+
+
