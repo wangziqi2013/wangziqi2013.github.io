@@ -113,3 +113,6 @@ reference count drops to zero, the base line entry is invalidated.
 In the above discussion, we have covereds two of the four compression modes: If the block is not present in the base line
 table, then it is stored in the table, and the compression type is set as "base", indicating that the entry is to be 
 fetched from the base line table with no extra delta.
+If, however, the line has a small delta compares witn the base line, then the compression type is "base + delta", indicating
+that the controller should access both the data array for delta, and the base line cache for the base at the same time, 
+before combining them together to restore the original line.
