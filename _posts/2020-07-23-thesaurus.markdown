@@ -33,3 +33,7 @@ From a high level, Thesaurus computes a "fingerprint hashing" value as the ident
 hashing function is content-aware, meaning that it has the property that if two cache lines are similar to each other, 
 then there is a higher chance that their fingerprint hashes will be identical. On the other hand, if two lines differ
 from each other by a large amount, then there is only slim chance that their hashes would coincide.
+
+Thesaurus computes the fingerprinting hash as follows. The cache line content is treated as a 64-element column vector.
+Given a fingerprint length of K, the transformation matrix is defined as a K * 64 matrix with elements randomly selected
+from {-1, 0, 1} with zero having probablity of 2/3 and the other two having a probablity of 1/6. The paper 
