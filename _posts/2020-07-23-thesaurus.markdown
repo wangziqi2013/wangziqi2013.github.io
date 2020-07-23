@@ -103,4 +103,7 @@ inserted line content and fingerpring. The base line is also inserted into the b
 to the new base line is allocated by storing the fingerprint value in the tag.
 If an entry is found, then it will be loaded into the base line cache, before the lookup is re-attempted.
 
-
+Although the paper does not mention the specific data layout and management of the main memory base line table,
+it is suggested that each base line also has a reference count, which is incremented when a new tag entry points to the 
+base line or when it is used as the base line, and decrememted when an entry pointing to the line is evicted. When the 
+reference count drops to zero, the base line entry is invalidated.
