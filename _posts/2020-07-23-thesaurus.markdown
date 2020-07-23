@@ -80,4 +80,9 @@ One particular difficulty of moving blocks around in the physical slot is that t
 modified accordingly to point to the correct segment as blocks are moved. To avoid this costly operation for each
 compaction operation, the paper proposes that an extra level of indirection, called the start map, be added to each 
 physical slot. The start map is a bit vector whose length equals the number of segments in the data slot. A "1" bit indicates
-that the segment has been occupied, while a "0" bit indicates that it is free. 
+that the segment has been occupied, while a "0" bit indicates that it is free. Tags use the offset in the start map
+to refer to blocks. The actual segment offset of a block is computed by counting the number of "1"s before the tag 
+pointer's indicated location in the start map. When a block is freed, instead of changing its tag pointer, the controller 
+simply sets all segments it uses to "0", and performs compaction. The blocks that are moved during the compaction will 
+be accessed correctly, since the zero bits in the start map will result in these blocks' segments being moved forward as 
+well.
