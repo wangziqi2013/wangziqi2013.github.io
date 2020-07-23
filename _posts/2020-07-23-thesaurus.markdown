@@ -57,9 +57,12 @@ segment in which the compressed block is stored. Tag and data accesses are thus 
 first before the location of data ia available.
 
 The data array, on the other hand, is a fully associative array, meaning any slot can be addressed by any tag entry.
-A bit vector is maintained for allocation free data slots. Eviction on the data array is more complicated since there is
-no concept of sets. The paper suggests that the same replacement algorithm in 2DCC be used: Data slots are divided into
-sets as in a conventional cache only for the convenience of eviction. The algorithm, after failing to allocate a 
-free block for a fill or write back request, randomly selects four sets and checks free segments for all slots in
-these sets. The one with sufficient number of free segments will be selected. If not possible, then segments from one 
-of the slots will be evicted until enough number of segments are freed. 
+A bit vector is maintained for allocation free data slots. 
+The data array is also segmented such that partial slot can be used to store a compressed line, with multiple compressed
+lines residing in the same physical slot.
+Eviction on the data array is more complicated since potentially the all entries in the data array can serve as the candidate. 
+To simplify candidate selection, the paper suggests that the same replacement algorithm in 2DCC be used: Data slots are 
+divided into sets as in a conventional cache only for the convenience of eviction. The algorithm, after failing to allocate 
+a free block for a fill or write back request, randomly selects four sets and checks free segments for all slots in these 
+sets. The one with sufficient number of free segments will be selected. If not possible, then segments from one of the 
+slots will be evicted until enough number of segments are freed. 
