@@ -77,3 +77,9 @@ to invalidate the segment on data slot replacement.
 Although not mentioned in the paper, each segment should also track the size of compressed data, since data slot replacement
 requires this field to compute replacement. All additional metadata is only maintained for the head segment of a compressed 
 block to reduce update complexity. 
+
+Deduplication is performed with a separate hash table which tracks the hash value of the most recent blocks. Note that
+the hash table can tolerage both false negative and false positive, allowing a more flexible update protocol. For example,
+when a dirty line is written back, the hash table need not be updated instantly, and multiple updates can be conducted
+in a batch to amortize the cost.
+
