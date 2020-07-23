@@ -54,6 +54,8 @@ a data slot is always acquired by either allocating a free block via a free bit 
 slot to make free space. In 2DCC, however, since one physical slot can store more than one compressed lines, the search
 for available slots are significantly more complicated, since the occupancy status of a block is no longer representable
 by a single free/used bit, but a bitmap showing the occupancy of each segment.
+Tags are replaced when a new address is to be inserted, but there is no free tag entry in the current set. Tag replacement
+policy follows whatever the conventional policy is without any change.
 
 To simplify searching for physical slots, 2DCC's replacement algorithm still observes the division of sets, only when a 
 new compressed line is brought in and seeking for a physical slot with enough segments to store it. The replacement
@@ -65,3 +67,5 @@ is selected as the slot for holding the compressed line.
 At the third level, one of the blocks in the four sets are selected as the victim, and compressed blocks are evicted.
 The criterion for selection is to minimize the number of invalidated tags, which needs to consider both block sharing
 and block compression.
+Note that the paper also points out that recency- or frequency-based replacement algorithms are not suitable for 
+data array replacement, since tag replacement has already taken either or both into consideration. 
