@@ -73,4 +73,11 @@ having a per-segment back pointer would be a waste of storage. To this end, the 
 at the beginning of a compressed or uncompressed block. On eviction, the tag entry can be located by reading the first
 few bits of the header segment.
 
-
+Thesaurus adopts an aggressive slot compaction strategy to simplify storage management. Compaction is always performed 
+on an eviction and insertion. When a block is evicted, all following blocks will be moved forward to fill the gap left 
+by the eviction. 
+One particular difficulty of moving blocks around in the physical slot is that the corresponding tag entries must be 
+modified accordingly to point to the correct segment as blocks are moved. To avoid this costly operation for each
+compaction operation, the paper proposes that an extra level of indirection, called the start map, be added to each 
+physical slot. The start map is a bit vector whose length equals the number of segments in the data slot. A "1" bit indicates
+that the segment has been occupied, while a "0" bit indicates that it is free. 
