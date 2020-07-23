@@ -86,3 +86,7 @@ pointer's indicated location in the start map. When a block is freed, instead of
 simply sets all segments it uses to "0", and performs compaction. The blocks that are moved during the compaction will 
 be accessed correctly, since the zero bits in the start map will result in these blocks' segments being moved forward as 
 well.
+When a new block is to be inserted, the controller first attempts to find a run of zeros which the block can fit into.
+If this can be found, then these bits will be set to "1" to indicate that the segments are being used. In the meantime, 
+all blocks after the range is shifted towards the end by the number of bits that are changed to "1".
+Otherwise the replacement algorithm is invoked to find eviction candidates as described above.
