@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Thesaurus, a cache compression scheme with dynamic clustering. This paper points out at the beginning
+that two existing methods for increasing effective cache sizes, cache compression and deduplication, are both suboptimal
+in terms of compression ratio. Cache compression tries to exploit redundancy and dynamic value range in individual
+blocks or limited number of blocks using certain compression algorithms. It failed to admit inter-line redundancy or
+only provides naive solutions such as compression multiple lines together as a larger block. 
