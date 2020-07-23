@@ -60,3 +60,8 @@ new compressed line is brought in and seeking for a physical slot with enough se
 algorithm has three levels, each corresponding two one stage of searching. In the first level, the V-Way cache stype
 bit mask is searched for a entirely vacant slot. If this could not be found, then four sets will be randomly selected.
 Sets are small partitions of the tag array as in the conventional cache (set size is not defined, though). 
+Then at the second level, each block in the four sets are examined, and the first block that contains sufficient segments 
+is selected as the slot for holding the compressed line. 
+At the third level, one of the blocks in the four sets are selected as the victim, and compressed blocks are evicted.
+The criterion for selection is to minimize the number of invalidated tags, which needs to consider both block sharing
+and block compression.
