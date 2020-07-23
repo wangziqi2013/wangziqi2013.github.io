@@ -90,3 +90,9 @@ When a new block is to be inserted, the controller first attempts to find a run 
 If this can be found, then these bits will be set to "1" to indicate that the segments are being used. In the meantime, 
 all blocks after the range is shifted towards the end by the number of bits that are changed to "1".
 Otherwise the replacement algorithm is invoked to find eviction candidates as described above.
+
+Thesaurus maintains a fingerprint table in the main memory to perform clustering. A TLB-like structure, called the base
+line cache, is added to the hierarchy as a fast supplement of base lines. When a new line is filled or written back,
+the cache controller first computes the fingerpring of the line, and searches the base cache for a matching value. If
+a match is found, then the byte-level delta between the incoming line and the base is calculated, and stored as the body 
+of the compressed block. 
