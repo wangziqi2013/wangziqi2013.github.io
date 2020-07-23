@@ -38,4 +38,9 @@ address. The tag array is over-provisioned, such that either more sets are prese
 (i.e. higher associativity) than before. In addition to the conventional information such as valid/dirty bit, coherence
 states and replacement status, each tag also contains a global data array pointer, and two global tag array pointers.
 The data array pointer indicates the associated data slot for the tag entry, which must be accessed in a serialized
-manner. 
+manner. The two tag arrays form a doubly linked list among tags that share the same data slot. When the data slot is
+evicted, all tag entries sharing that slot must be invalidated as well following the doubly linked list. When a
+single tag is evicted due to other reasons, the doubly linked list helps removing the tag entry from the list in constant 
+time with a few pointer updates.
+
+
