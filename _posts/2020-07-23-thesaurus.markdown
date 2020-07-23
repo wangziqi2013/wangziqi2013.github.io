@@ -45,3 +45,10 @@ combination of elements using 1, 0 and -1 also yields results with the same sign
 is just to control the probability that the above property holds. 
 Note that if two cache lines are identical, then their fingerprint will also be identical, making Thesaurus a superset
 of conventional cache deduplication.
+
+We next describe the cache organization as follows. Thesaurus adopts a decoupled tag and data array design as in 
+[V-Way cache](%post_url 2020-05-27-vway-cache%) and its predecessor, [2DCC](%post_url 2020-07-22-2dcc%). The tag
+array is over-provisioned to increase the maximum effective size of the cache, and still accessed as in a conventional
+cache, being indexed with lower bits of the block address. Replacement algorithm is run unmodified as in a conventional
+cache as well. The added tags can either be implemented as additional ways at the cost of parallel tags reads on each
+lookup, or as extra sets, which uses one or more bits in the block address to generate the index.
