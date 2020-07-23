@@ -29,4 +29,6 @@ one tag can map to an arbitrary data slot in the data array. Second, hash values
 in a separate hash table, which is also organized as a set-associative lookup table. Cache lines written back from upper
 levels and fetched from lower levels are hashed and compared with table entries. On a value and data match, the incoming 
 cache line will not be stored. Instead, only a tag entry is allocated, and the tag points to the data slot that has already
-been in the cache.
+been in the cache. Lastly, the paper also proposes a simple yet effective replacement policy for the fully associative data
+array. Cache lines are evicted not based on recency of usage, but simply based on random sampling and sharer count, as
+we will see below.
