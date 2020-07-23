@@ -78,8 +78,16 @@ Although not mentioned in the paper, each segment should also track the size of 
 requires this field to compute replacement. All additional metadata is only maintained for the head segment of a compressed 
 block to reduce update complexity. 
 
-Deduplication is performed with a separate hash table which tracks the hash value of the most recent blocks. Note that
-the hash table can tolerage both false negative and false positive, allowing a more flexible update protocol. For example,
-when a dirty line is written back, the hash table need not be updated instantly, and multiple updates can be conducted
-in a batch to amortize the cost.
+Deduplication is performed with a separate hash table which tracks the hash value of the most recent blocks. 
+The hash table is organized as a set-associative lookup table, using hash values as the lookup key. Each entry contains
+a hardware pointer to the corresponding data slot and the segment. On a hash table hit, the compressed block in the segments 
+is fetched and decompressed, and then compared with the incoming block. After a full block comparison, if the two blocks
+are entirely identical, then the incoming block is discarded, and a new tag entry is allocated which points to the 
+hash table entry. The reference count of the header segment is also incremented.
+When new hash values are inserted, an existing hash value is evicted if no free entry can be found. The replacement of 
+the hash table entries is entirely decoupled from cache replacement. In other words, the content of the hash table
+only needs to be kept roughly consistent with the cache, without affecting correctness. 
+In fact, the hash table can tolerage both false negative and false positive, allowing a more flexible update protocol. 
+For example, when a dirty line is written back, the hash table need not be updated instantly, and multiple updates can 
+be conducted in a batch to amortize the cost.
 
