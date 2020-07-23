@@ -29,6 +29,13 @@ one tag can map to an arbitrary data slot in the data array. Second, hash values
 in a separate hash table, which is also organized as a set-associative lookup table. Cache lines written back from upper
 levels and fetched from lower levels are hashed and compared with table entries. On a value and data match, the incoming 
 cache line will not be stored. Instead, only a tag entry is allocated, and the tag points to the data slot that has already
-been in the cache. Lastly, the paper also proposes a simple yet effective replacement policy for the fully associative data
-array. Cache lines are evicted not based on recency of usage, but simply based on random sampling and sharer count, as
-we will see below.
+been in the cache. Lastly, the paper also proposes a simple but yet effective replacement policy for the fully associative 
+data array. Cache lines are evicted not based on recency of usage, but simply based on random sampling and sharer count, 
+as we will see below.
+
+The tag array is still organized as a classical set-associative array indiced using lower bits of the requested block 
+address. The tag array is over-provisioned, such that either more sets are present, or each set has more entries
+(i.e. higher associativity) than before. In addition to the conventional information such as valid/dirty bit, coherence
+states and replacement status, each tag also contains a global data array pointer, and two global tag array pointers.
+The data array pointer indicates the associated data slot for the tag entry, which must be accessed in a serialized
+manner. 
