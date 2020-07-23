@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Two-Dimentional Cache Compression, 2DCC, a cache compression design leveraging both intra-line and
+inter-line redundancy. This paper begins by pointing out that both intra-line and inter-line redundancy exist in the
+working set of typical workloads, as cache lines, as a whole, tend to contain similar to identical content in addition 
+to the more classical redundancy between individual words within a line. Conventional cache compression schemes,
+however, only takes advantage of intra-line dependency, since it is most natural to process individual lines rather 
+than combing several lines together, as cache lines are the most fundamental unit of data communication between components
+in the memory hierarchy.
