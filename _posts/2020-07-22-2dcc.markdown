@@ -20,6 +20,12 @@ version_mgmt:
 
 2. Combines deduplication with compression to further save storage
 
+**Lowlights:**
+
+1. At the bottom of page 2 and beginning of page 3, it is said "Because the common case is that incoming lines are unique".
+   So that implies that deduplication actually only occur for a minority of the case. Does this also imply that
+   deduplication only has marginal improvement?
+
 This paper proposes Two-Dimentional Cache Compression, 2DCC, a cache compression design leveraging both intra-line and
 inter-line redundancy. This paper begins by pointing out that both intra-line and inter-line redundancy exist in the
 working set of typical workloads, as cache lines, as a whole, tend to contain similar to identical content in addition 
