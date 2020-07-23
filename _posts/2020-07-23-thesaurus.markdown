@@ -116,3 +116,6 @@ fetched from the base line table with no extra delta.
 If, however, the line has a small delta compares witn the base line, then the compression type is "base + delta", indicating
 that the controller should access both the data array for delta, and the base line cache for the base at the same time, 
 before combining them together to restore the original line.
+If the line has a large delta, which exceeds the uncompressed line size, the line will be stored in raw format, with the
+compression type set to "raw". Note that this should be extremely rare, since the probablity that the delta is small when
+two fingerprints match is high.
