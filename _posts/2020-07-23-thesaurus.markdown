@@ -25,3 +25,11 @@ On the other hand, cache deduplication removes duplicated lines using special ha
 Incoming lines are checked with the hash table first for hash matches, and full value comparisons are conducted
 later to verify if the two lines actually match. The paper argues that deduplication also failed to catch some redundencies,
 since many cache lines do have identical bytes despite the fact that they are not duplications.
+
+Thesaurus proposes dynamic cache line clustering for identifying cache lines with similar contents. Here we define "similar
+cache lines" as cache lines where most bytes on the same offset are identical, but a few bytes can differ from each other.
+This paper does not exploit value locality of bytes that differ, but rather just store diff bytes uncompressed. 
+From a high level, Thesaurus computes a "fingerprint hashing" value as the identity of the cache line. The fingerprint
+hashing function is content-aware, meaning that it has the property that if two cache lines are similar to each other, 
+then there is a higher chance that their fingerprint hashes will be identical. On the other hand, if two lines differ
+from each other by a large amount, then there is only slim chance that their hashes would coincide.
