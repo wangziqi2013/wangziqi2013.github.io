@@ -36,4 +36,8 @@ from each other by a large amount, then there is only slim chance that their has
 
 Thesaurus computes the fingerprinting hash as follows. The cache line content is treated as a 64-element column vector.
 Given a fingerprint length of K, the transformation matrix is defined as a K * 64 matrix with elements randomly selected
-from {-1, 0, 1} with zero having probablity of 2/3 and the other two having a probablity of 1/6. The paper 
+from {-1, 0, 1} with zero having probablity of 2/3 and the other two having a probablity of 1/6. After multiplying the 
+transformation matrix with the 64 * 1 vector, the resulting K * 1 column vector is then mapped to a simpler form by 
+quantifying all positive elements to 1, negative elements to 0, with zero elements remaining the same. The final result
+can be represented as a bit vector and compared with each other by hardware rather efficiently. 
+The intuition of the transformation is that if two cache lines are similar to each other
