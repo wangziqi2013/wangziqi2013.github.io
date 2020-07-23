@@ -15,9 +15,10 @@ version_mgmt:
 
 **Highlight:**
 
-1. Using content-aware fingerpring hashing to detect similar cache lines
+1. Using content-aware fingerpring hashing to detect similar cache lines, and then use base + delta encoding to compresse.
    
-
+2. Using start map to virtualize segment addresses. Always compacting + address virtualization enables the tag array
+   to only refer to the fixed virtualized segment address which will be translated by the start map
 
 **Lowlight:**
 
