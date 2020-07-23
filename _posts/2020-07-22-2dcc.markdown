@@ -25,4 +25,8 @@ benefit from intra-line redundancy, which is also suboptimal.
 
 2DCC combines conventional cache line compression and deduplication as follows. First, compression is still performed
 on individual cache lines, and stored in a decoupled data array. Tags are over-provisioned, and is organized such that
-one tag can map to an arbitrary data slot in the data array. 
+one tag can map to an arbitrary data slot in the data array. Second, hash values of the most recent few lines are maintained
+in a separate hash table, which is also organized as a set-associative lookup table. Cache lines written back from upper
+levels and fetched from lower levels are hashed and compared with table entries. On a value and data match, the incoming 
+cache line will not be stored. Instead, only a tag entry is allocated, and the tag points to the data slot that has already
+been in the cache.
