@@ -23,4 +23,6 @@ in the memory hierarchy. On the other hand, [prior LLC deduplication schemes]({%
 proposes LLC deduplication using a hash table to perform fast detection of duplicated blocks. This scheme does not 
 benefit from intra-line redundancy, which is also suboptimal.
 
-
+2DCC combines conventional cache line compression and deduplication as follows. First, compression is still performed
+on individual cache lines, and stored in a decoupled data array. Tags are over-provisioned, and is organized such that
+one tag can map to an arbitrary data slot in the data array. 
