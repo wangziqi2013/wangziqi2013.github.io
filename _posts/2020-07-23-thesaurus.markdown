@@ -17,4 +17,11 @@ This paper proposes Thesaurus, a cache compression scheme with dynamic clusterin
 that two existing methods for increasing effective cache sizes, cache compression and deduplication, are both suboptimal
 in terms of compression ratio. Cache compression tries to exploit redundancy and dynamic value range in individual
 blocks or limited number of blocks using certain compression algorithms. It failed to admit inter-line redundancy or
-only provides naive solutions such as compression multiple lines together as a larger block. 
+only provides naive solutions such as compression multiple lines together as a larger block. In fact, however, many
+workloads in this paper indicate that there is abundant amount of inter-line redundancy between two cache lines. These
+redundancies can be encoded more efficiently as byte deltas between the two lines, which is difficult to explore with
+conventional cache compression, since they only compress blocks sequentially.
+On the other hand, cache deduplication removes duplicated lines using special hardware structures such as hash tables.
+Incoming lines are checked with the hash table first for hash matches, and full value comparisons are conducted
+later to verify if the two lines actually match. The paper argues that deduplication also failed to catch some redundencies,
+since many cache lines do have identical bytes despite the fact that they are not duplications.
