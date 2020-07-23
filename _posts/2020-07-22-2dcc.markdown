@@ -90,4 +90,6 @@ only needs to be kept roughly consistent with the cache, without affecting corre
 In fact, the hash table can tolerage both false negative and false positive, allowing a more flexible update protocol. 
 For example, when a dirty line is written back, the hash table need not be updated instantly, and multiple updates can 
 be conducted in a batch to amortize the cost.
-
+False positives can be ruled out by full block comparison, which is always required with hash tables and therefore
+does not pose an extra overhead. False negatives only cause duplicated blocks to be stored in the data array, resulting
+in slightly decreased effective size compared with the optimal case.
