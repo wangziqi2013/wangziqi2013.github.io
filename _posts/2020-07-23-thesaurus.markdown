@@ -119,3 +119,5 @@ before combining them together to restore the original line.
 If the line has a large delta, which exceeds the uncompressed line size, the line will be stored in raw format, with the
 compression type set to "raw". Note that this should be extremely rare, since the probablity that the delta is small when
 two fingerprints match is high.
+At last, if the incoming line consists of all-zeros, then it will be marked as "zero" in the compression type field,
+and no data body is allocated from the data slot. 
