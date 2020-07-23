@@ -114,3 +114,10 @@ False positives can be ruled out by full block comparison, which is always requi
 does not pose an extra overhead. False negatives only cause duplicated blocks to be stored in the data array, resulting
 in slightly decreased effective size compared with the optimal case.
 The paper recommends using an 1024-entry hash table with 16 ways.
+
+The read and update protocol is similar to the one of V-Way cache and other segmented cache designs except for the 
+following case. If a line is updated by dirty value, and the header segment's reference count is greather than one,
+then a copy-on-write style update begins by first evicting segments using the data array replacement algorithm as 
+discussed above. The reference count is also decremented, and the tag is removed from the doubly linked list before
+inserted into the new block's linked list as the sole element. No tag entry is evicted in this case since the entry
+already exists and shared a block with some other tags.
