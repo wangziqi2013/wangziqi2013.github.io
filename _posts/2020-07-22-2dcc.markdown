@@ -54,3 +54,9 @@ a data slot is always acquired by either allocating a free block via a free bit 
 slot to make free space. In 2DCC, however, since one physical slot can store more than one compressed lines, the search
 for available slots are significantly more complicated, since the occupancy status of a block is no longer representable
 by a single free/used bit, but a bitmap showing the occupancy of each segment.
+
+To simplify searching for physical slots, 2DCC's replacement algorithm still observes the division of sets, only when a 
+new compressed line is brought in and seeking for a physical slot with enough segments to store it. The replacement
+algorithm has three levels, each corresponding two one stage of searching. In the first level, the V-Way cache stype
+bit mask is searched for a entirely vacant slot. If this could not be found, then four sets will be randomly selected.
+Sets are small partitions of the tag array as in the conventional cache (set size is not defined, though). 
