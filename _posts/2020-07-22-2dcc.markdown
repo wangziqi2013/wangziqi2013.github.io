@@ -26,6 +26,13 @@ version_mgmt:
    So that implies that deduplication actually only occur for a minority of the case. Does this also imply that
    deduplication only has marginal improvement?
 
+2. The hash table and full block comparison requires full data array compression, which may overload the data banks
+   and decompression circuit with excessive reads and decompression requests. If deduplication is common
+   (although implied the opposite - let's assume it is common)
+   then each cache read and fill request will require two, instead of one, accesses to data banks, doubling the 
+   effective bandwidth requirement. The same applies for decompression circuit.
+   One solution is to add extra ports and decompression logic at the cost of larger silicon and extra power consumption
+
 This paper proposes Two-Dimentional Cache Compression, 2DCC, a cache compression design leveraging both intra-line and
 inter-line redundancy. This paper begins by pointing out that both intra-line and inter-line redundancy exist in the
 working set of typical workloads, as cache lines, as a whole, tend to contain similar to identical content in addition 
