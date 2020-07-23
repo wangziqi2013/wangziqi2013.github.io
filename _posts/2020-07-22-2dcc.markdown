@@ -43,4 +43,8 @@ evicted, all tag entries sharing that slot must be invalidated as well following
 single tag is evicted due to other reasons, the doubly linked list helps removing the tag entry from the list in constant 
 time with a few pointer updates.
 
-
+The dara array, on the contrary, is a fully-associative array. Each entry in the array can be addressed by any tag entry.
+The tag array is also segmented, meaning a physical slot is divided into eight smaller 8-byte segments, each being able
+to store a full or partial compressed block. To simplify storage management, 2DCC mandates that a compressed block must
+only be stored in a consecutive range of segments in the same physical slot, and that segments are always made available
+by evicting existing segments (the paper does not mention compaction).
