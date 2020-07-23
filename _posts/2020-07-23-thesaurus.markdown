@@ -39,5 +39,9 @@ Given a fingerprint length of K, the transformation matrix is defined as a K * 6
 from {-1, 0, 1} with zero having probablity of 2/3 and the other two having a probablity of 1/6. After multiplying the 
 transformation matrix with the 64 * 1 vector, the resulting K * 1 column vector is then mapped to a simpler form by 
 quantifying all positive elements to 1, negative elements to 0, with zero elements remaining the same. The final result
-can be represented as a bit vector and compared with each other by hardware rather efficiently. 
-The intuition of the transformation is that if two cache lines are similar to each other
+can be represented as a bit vector which can be compared with each other by hardware rather efficiently. 
+The intuition of the transformation is that if two cache lines are similar to each other, then it is likely that the linear
+combination of elements using 1, 0 and -1 also yields results with the same sign. Using several different linear combinations
+is just to control the probability that the above property holds. 
+Note that if two cache lines are identical, then their fingerprint will also be identical, making Thesaurus a superset
+of conventional cache deduplication.
