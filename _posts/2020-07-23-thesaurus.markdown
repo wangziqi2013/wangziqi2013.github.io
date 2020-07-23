@@ -52,3 +52,8 @@ array is over-provisioned to increase the maximum effective size of the cache, a
 cache, being indexed with lower bits of the block address. Replacement algorithm is run unmodified as in a conventional
 cache as well. The added tags can either be implemented as additional ways at the cost of parallel tags reads on each
 lookup, or as extra sets, which uses one or more bits in the block address to generate the index.
+Each tag array contains a global data array pointer and a segment ID field to point to the physical slot and the 
+segment in which the compressed block is stored. Tag and data accesses are thus serialized since the tag must be read
+first before the location of data ia available.
+
+
