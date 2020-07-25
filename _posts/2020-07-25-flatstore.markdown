@@ -24,9 +24,14 @@ existing elements to maintain the sorted property; Similar overheads exist for h
 relocation is required when the load factor exceeds a certain threshold.
 Second, many designs are incorrectly optimized with techniques such log-structured storage. These optimizations may work
 well for conventional disks or SSDs, but are incompatible with NVDIMM. The paper points out two observations that heavily
-affected their design. The first observation is that the peak write bandwidth is achieved when the write size equals the
+affected their design. 
+First, repeated cache lines flushes on the same address will suffer extra delay, discouraging in-line updating of NVM
+data. This phenomenon becomes even more dire given that the access pattern is usually skewed towards a few frequently
+accessed keys.
+The second observation is that the peak write bandwidth is achieved when the write size equals the
 size of the internal buffer (256 bytes), and remains stable thereafter when multiple threads write into the same device 
-in parallel. One of the consequences is that writing logs in a larger granularity than 256 bytes will not result in
+in parallel. One of the implications is that writing logs in a larger granularity than 256 bytes will not result in
 higher performance, contradicting common beliefs that the larger the logging granularty is, the better performance it 
-will bring.
+will bring. 
+
 
