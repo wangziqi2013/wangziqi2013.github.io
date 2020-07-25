@@ -23,16 +23,16 @@ are not optimized specifically for NVM. For example, for B+Tree structures, a le
 existing elements to maintain the sorted property; Similar overheads exist for hash tables, where rehashing or element
 relocation is required when the load factor exceeds a certain threshold.
 Second, many designs are incorrectly optimized with techniques such log-structured storage. These optimizations may work
-well for conventional disks or SSDs, but are incompatible with NVDIMM. The paper points out two observations that heavily
-affected their design. 
-First, repeated cache lines flushes on the same address will suffer extra delay, discouraging in-line updating of NVM
+well for conventional disks or SSDs, but are incompatible with NVDIMM. The paper points out two empirical evidences that 
+may affect the design.
+First, repeated cache line flushes on the same address will suffer extra delay, discouraging in-line updating of NVM
 data. This phenomenon becomes even more dire given that the access pattern is usually skewed towards a few frequently
-accessed keys.
+accessed keys, further aggravating the latency problem.
 The second observation is that the peak write bandwidth is achieved when the write size equals the
 size of the internal buffer (256 bytes), and remains stable thereafter when multiple threads write into the same device 
 in parallel. One of the implications is that writing logs in a larger granularity than 256 bytes will not result in
 higher performance, contradicting common beliefs that the larger the logging granularty is, the better performance it 
-will bring. Larger logging granularities, however, negatively impacts the latency of operation, since an operation
+will bring. Larger logging granularities, however, negatively impact the latency of operation, since an operation
 is declared as committed only after its changes are persisted with the log entries.
 
 
