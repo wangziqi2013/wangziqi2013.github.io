@@ -116,5 +116,9 @@ thread, which preseves the ordering of requests on the same key. FlatStore threa
 On a read operation, the index is searched to locate the log entry. If none can be found, an NAK is responded to indicate
 that the key does not exist. On an insert or update request, the index is first searched. If the key is not found, then
 a new log entry with version number being zero is generated, and the key is also inserted into the index. 
+If the key is found, then the current log entry becomes obsolete, and a new log entry with a large version number is generated
+and persisted. The index is also updated to reflect the new value. A version number is stored with each index entry, and
+updated to the new log entry's version number when the entry pointer is updated. Version numbers help the GC process to
+identify stale entries, as we will see below. 
 
 TODO: INDEX UPDATE / VERSION NUMBER / GC
