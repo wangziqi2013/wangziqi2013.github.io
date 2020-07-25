@@ -58,3 +58,10 @@ the first and second authors of this paper. The WK algorithm reads the input str
 The algorithm maintains a dictionary of recently seen tokens, which is compared with incoming tokens for full or partial 
 matches. Two types of matches are supported: A full match, which occurs when all 32 bits are identical to one of the 
 dictionary entries; A partial match, which refers to the case where only higher 22 bits match. 
+Each token is encoded into a 2-bit type field, followed by one or two extra fields for restoring the original word. 
+If the type field is "00", the token is a full match, and the next field will be the index in the dictionary.
+If the type field is "01", the token is a partial match, and the next two fields will be the index and the remaining
+10 lower bits of the original token. 
+If the type field is "10", the token is zero, and there is no extra field. Optimizing for zero can help further 
+improving the compression ratio, since zero is one of the most frequently occurring values in almost all workloads,
+which is also widely used for initialization, padding, indicating invalid values, and so on.
