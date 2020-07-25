@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using a directory to capture the 16 most recent words and to recognize patterns in this short window. This is better
+   than only keeping the previous "base" value as in some compression algorithms.
+   This is also better than performing extensive searches for possible base values.
+
 **Lowlight:**
 
 1. The WK compression algorithm may result in larger compressed size than uncompressed size. This pessimistic case
