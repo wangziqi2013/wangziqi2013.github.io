@@ -106,4 +106,9 @@ in the 4MB chunk that have been allocated. The allocation bitmap in the header i
 allocation. Memory blocks that are not set are considered as uncommitted, whose allocations are naturally rolled back 
 by the crash.
 
+A volatile index is maintained as the non-clustered index mapping keys to log entries. The paper suggests that either 
+an in-memory hash table or Masstree can be employed as index. The index is concurrently accessed by all threads. 
+For hash tables, locking is performed on a per-bucket basis to eliminate most of the contentions. For Masstree,
+since the data structure is already concurrent, no extra locking is required.
+
 TODO: INDEX UPDATE / VERSION NUMBER / GC
