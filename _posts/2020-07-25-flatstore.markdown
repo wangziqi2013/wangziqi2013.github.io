@@ -19,4 +19,14 @@ The paper identifies a few issues with previously proposed designs. First, these
 the NVM, in addition to persisting keys and values, for various reasons. The paper points out that in a conventional
 key-value store where all metadata are kept on the NVM, on each key-value insertion or deletion, both the indexing structure 
 and the allocator should be updated to reflect the operation. Even worse, most existing indexing structure and allocators 
-are not optimized specifically for NVM. 
+are not optimized specifically for NVM. For example, for B+Tree structures, a leaf node insertion involves shifting 
+existing elements to maintain the sorted property; Similar overheads exist for hash tables, where rehashing or element
+relocation is required when the load factor exceeds a certain threshold.
+Second, many designs are incorrectly optimized with techniques such log-structured storage. These optimizations may work
+well for conventional disks or SSDs, but are incompatible with NVDIMM. The paper points out two observations that heavily
+affected their design. The first observation is that the peak write bandwidth is achieved when the write size equals the
+size of the internal buffer (256 bytes), and remains stable thereafter when multiple threads write into the same device 
+in parallel. One of the consequences is that writing logs in a larger granularity than 256 bytes will not result in
+higher performance, contradicting common beliefs that the larger the logging granularty is, the better performance it 
+will bring.
+
