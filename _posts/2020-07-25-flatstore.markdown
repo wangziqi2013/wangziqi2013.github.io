@@ -37,6 +37,7 @@ is declared as committed only after its changes are persisted with the log entri
 
 FlatStore overcomes the above issues with a combination of techniques as we discuss below. First, FlatStore adopts the
 log-structured update design to avoid inline updates of data, converting most data updates to sequential writes.
+Update operations are first aggregated in the DRAM buffer, before they are persisted to the NVM via group commit.
 In addition, log entries are flushed frequently in 256 byte granularity to minimize operation latency. To support
 small log entries, FlatStore uses two distinct log formats. If the key and value pair is sufficiently small to be contained
 in a log entry, then they will be written as inline data within the entry. Otherwise, the log entry contains pointers
@@ -45,3 +46,7 @@ Second, to reduce write amplification, neither allocator metadata nor the index 
 during normal operation. Instead, they are only maintained in the volatile DRAM, serving as a fast runtime cache.
 Both types of data can be recovered from the log during recovery, as FlatStore uses the persistent log as the ultimate
 reference for rebuilding the pre-crash image.
+Lastly, to further reduce operation latency, which may be affected by the group commit protocol, FlatStore proposes a 
+novel log stealing mechanism to allow uncommitted requests on less active cores being "stolen" by another core and
+then committed to the NVM. This mechanism is performed in a pipelined manner to avoid unnecessary blocking, as we will 
+see below.
