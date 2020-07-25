@@ -16,6 +16,7 @@ version_mgmt:
 This paper proposes compressed page cache for virtual memory systems. The paper appreciates the benefit of page compression
 for keeping more active pages in the main memory and thus reducing page fault costs, as oppose to previous works where
 page compression has been proved to be not useful unless the machine is equipped with slow or no disks. 
+
 The paper makes two contributions. First, it describes a fast and efficient dictionary-based compression algorithm for
 compression data on page granularity, which is tuned to fit into common scenarios of page data layout rather than text.
 The second contribution is an adaptive compression scheme that dynamically adjusts the compression ratio based on runtime
@@ -35,4 +36,7 @@ and served to the VMM as if it were read from the disk.
 Although the paper assumes LRU as the replacement algorithm, any algorithm is feasible as long as it ranks pages in the 
 main memory and selects the lowest score candidate as victim.
 
-
+The paper proposes a dictionary-based compression algorithm tuned for common page layouts. The paper identifies potential
+problems with classical compression algorithm such as LZ as incorrectly assuming in-memory data structires and arrays
+would tend to contain literal repetitions of previously seen tokens in the near future, which is usually the case with
+human readable text since only a subset of characters and words would occur within a small window of the text.
