@@ -53,3 +53,8 @@ In this case, the higher bits of the integers are not zero, but they may remain 
 the allocator. This is a result of both size-class list based allocation, and locality optimizations for cache performance. 
 For these pointers, their higher bits typically remain the same, which poses another perfect opportunity for compression.
 
+Based on the above observation, the paper proposes the WK compression algorithm, with the "WK" coming from initials of
+the first and second authors of this paper. The WK algorithm reads the input stream in the granularity of 32-bit tokens.
+The algorithm maintains a dictionary of recently seen tokens, which is compared with incoming tokens for full or partial 
+matches. Two types of matches are supported: A full match, which occurs when all 32 bits are identical to one of the 
+dictionary entries; A partial match, which refers to the case where only higher 22 bits match. 
