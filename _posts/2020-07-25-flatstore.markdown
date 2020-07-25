@@ -54,4 +54,7 @@ see below.
 The main data structure of FlatStore is the log object. Logs are allocated in the unit of large chunks, whose allocation
 and deallocation must also be logged in the metadata area located at the beginning of FlatStore storage. The log serves
 as the ultimate storage for objects, which contains all necessary information to rebuild other auxiliary data structures
-after a crash. 
+after a crash. To minimize log consumption and write amplification, FlatStore tracks operation using logical logging,
+meaning that only logical operations that mutate the state, such as PUT and DELETE, will be stored. Low level reads and 
+writes to the underlying data structure will not be logged, since FlatStore can always restore their states by
+reading the log on a recovery.
