@@ -38,4 +38,7 @@ is declared as committed only after its changes are persisted with the log entri
 FlatStore overcomes the above issues with a combination of techniques as we discuss below. First, FlatStore adopts the
 log-structured update design to avoid inline updates of data, converting most data updates to sequential writes.
 In addition, log entries are flushed frequently in 256 byte granularity to minimize operation latency. To support
-small log entries, FlatStore uses two distinct log formats. 
+small log entries, FlatStore uses two distinct log formats. If the key and value pair is sufficiently small to be contained
+in a log entry, then they will be written as inline data within the entry. Otherwise, the log entry contains pointers
+to the key and value, which are stored in memory blocks allocated from the persistent heap.
+Second,
