@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Making the memory allocation commit with the commit of the log entry can achieve atomicity naturally between allocation
+   and the update operation, since allocations that are not in a valid log entry will be automatically rolled back
+
+2. Synchronizing log commits using flat combining: Only one thread is delegated as the combiner at a time, which collects
+   requests from other cores and updates the shared data structure on behalf of othe cores.
+   Requests for the same key are serialized on a certain core.
+   This also solves the workload skew problem.
+
 This paper proposes FlatStore, a log-structured key-value store architecture running on byte-addressable NVDIMM, which
 features low write amplification. 
 The paper identifies a few issues with previously proposed designs. First, these designs often generate extra writes to
