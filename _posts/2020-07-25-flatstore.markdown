@@ -62,3 +62,10 @@ tail pointer is always updated with a global lock held, which protects the log a
 The usage of a global lock will not cause severe contention problem, as we will see later, since threads do not content
 for the lock for each update operation. Instead, FlatStore designates one of the threads as the leader thread, and performs
 group commit on behalf of all other threads with the assistance of log stealing.
+
+Two types log entries exists: a value-based entry stores both keys and values inline to allow fast access and less NVM 
+writes, while a pointer-based entry stores a pointer to the value object allocated from the heap. FlatStore assumes 8-byte
+key objects, which can themselves be pointers to heap-allocated key objects as well. 
+Both types of log entries contain an op field describing the operation, a type field, a version field, and a key field.
+For value-based entries, an extra size field and variables-sized inline value field also follow, which will be
+replaced by a value pointer for pointer-based entries.
