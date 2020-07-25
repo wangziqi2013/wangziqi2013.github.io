@@ -23,6 +23,8 @@ version_mgmt:
    Requests for the same key are serialized on a certain core.
    This also solves the workload skew problem.
 
+3. The data layout design allows finding the base block with the pointer value by aligning the value down to 4MB boundary
+
 This paper proposes FlatStore, a log-structured key-value store architecture running on byte-addressable NVDIMM, which
 features low write amplification. 
 The paper identifies a few issues with previously proposed designs. First, these designs often generate extra writes to
@@ -87,8 +89,8 @@ Value objects are allocated from the persistent heap, which is maintained by a c
 does not actively synchronize its metadata to the NVM to minimize bandwidth consumption and write amplification
 except during the shutdown process. 
 The allocator, which, according to the paper, uses an algorithm similar to the one in Hoard. Free memory is divided into
-4MB chunks, which are then further divided into individual blocks of different size classes. Each chunk can only serve
-one size class, which is persisted at the chunk header during initialization. The chunk header also maintains a bitmap
+aligned 4MB chunks, which are then further divided into individual blocks of different size classes. Each chunk can only 
+serve one size class, which is persisted at the chunk header during initialization. The chunk header also maintains a bitmap
 which tracks the allocation status of each block. The allocator maintains all other metadata in the volatile DRAM,
 which will be lost in a crash. On receiving an allocation request of size K, the allocator performs memory allocation of
 size (K + 8) as a conventional DRAM allocator, and then stores the allocation size in the first 8-byte word. The returned
@@ -97,3 +99,11 @@ committed only after the log entry that contains the pointer is committed. Other
 in the log will be rolled back automatically after a crash, which maintains the atomicity between memory allocation and 
 the update operation.
 
+On crash recovery, the allocator metadata is restored by first scanning the log, and for each valid pointer-based entry 
+in the log, the 4MB chunk header is located by rounding down the pointer value to the nearest 4MB boundary. The size field,
+which is stored in the 8-byte word right before the pointed-to memory, is used to determine the number of blocks
+in the 4MB chunk that have been allocated. The allocation bitmap in the header is updated accordingly to reflect the 
+allocation. Memory blocks that are not set are considered as uncommitted, whose allocations are naturally rolled back 
+by the crash.
+
+TODO: INDEX UPDATE / VERSION NUMBER / GC
