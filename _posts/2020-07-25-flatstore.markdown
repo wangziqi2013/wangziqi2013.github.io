@@ -41,4 +41,7 @@ In addition, log entries are flushed frequently in 256 byte granularity to minim
 small log entries, FlatStore uses two distinct log formats. If the key and value pair is sufficiently small to be contained
 in a log entry, then they will be written as inline data within the entry. Otherwise, the log entry contains pointers
 to the key and value, which are stored in memory blocks allocated from the persistent heap.
-Second,
+Second, to reduce write amplification, neither allocator metadata nor the index structure is synchronized to the NVM
+during normal operation. Instead, they are only maintained in the volatile DRAM, serving as a fast runtime cache.
+Both types of data can be recovered from the log during recovery, as FlatStore uses the persistent log as the ultimate
+reference for rebuilding the pre-crash image.
