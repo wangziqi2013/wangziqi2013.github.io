@@ -54,7 +54,11 @@ see below.
 The main data structure of FlatStore is the log object. Logs are allocated in the unit of large chunks, whose allocation
 and deallocation must also be logged in the metadata area located at the beginning of FlatStore storage. The log serves
 as the ultimate storage for objects, which contains all necessary information to rebuild other auxiliary data structures
-after a crash. To minimize log consumption and write amplification, FlatStore tracks operation using logical logging,
+after a crash. To minimize log size and write amplification, FlatStore tracks operations using logical logging,
 meaning that only logical operations that mutate the state, such as PUT and DELETE, will be stored. Low level reads and 
 writes to the underlying data structure will not be logged, since FlatStore can always restore their states by
-reading the log on a recovery.
+reading the log on a recovery. A global log tail pointer is maintained to indicate the next log write location. The 
+tail pointer is always updated with a global lock held, which protects the log and ensures atomicity of operations.
+The usage of a global lock will not cause severe contention problem, as we will see later, since threads do not content
+for the lock for each update operation. Instead, FlatStore designates one of the threads as the leader thread, and performs
+group commit on behalf of all other threads with the assistance of log stealing.
