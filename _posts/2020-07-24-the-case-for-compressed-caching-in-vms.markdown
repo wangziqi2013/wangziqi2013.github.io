@@ -101,3 +101,8 @@ In the second case, LRU is maintained for 200MB of virtual pages.
 The algorithm then evaluates the online cost of performing compression in order to achieve these goals. If a page that
 is currently swapped out but stored compressed in the main memory cache is hit by an access, the benefit of compression
 under that goal is incremented by the cost of a disk access minus the cost of compression (most likely cycles).
+On the other hand, if a page that is never accessed again in the page cache before it is evicted back to the disk under
+some goals, the benefit of compression would be decremented by the cost of compression and decompression, since 
+disk accesses is not avoided, but the system pays the extra cost of storing the page in the page cache.
+At the end of the training phase, the OS selects the best-performing compression goal, and compresses every evicted 
+pages until the compression goal is reached.
