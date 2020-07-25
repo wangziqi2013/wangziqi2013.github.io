@@ -32,6 +32,7 @@ The second observation is that the peak write bandwidth is achieved when the wri
 size of the internal buffer (256 bytes), and remains stable thereafter when multiple threads write into the same device 
 in parallel. One of the implications is that writing logs in a larger granularity than 256 bytes will not result in
 higher performance, contradicting common beliefs that the larger the logging granularty is, the better performance it 
-will bring. 
+will bring. Larger logging granularities, however, negatively impacts the latency of operation, since an operation
+is declared as committed only after its changes are persisted with the log entries.
 
 
