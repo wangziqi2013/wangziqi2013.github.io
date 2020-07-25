@@ -18,4 +18,9 @@ for keeping more active pages in the main memory and thus reducing page fault co
 page compression has been proved to be not useful unless the machine is equipped with slow or no disks. 
 The paper makes two contributions. First, it describes a fast and efficient dictionary-based compression algorithm for
 compression data on page granularity, which is tuned to fit into common scenarios of page data layout rather than text.
-The second contribution
+The second contribution is an adaptive compression scheme that dynamically adjusts the compression ratio based on runtime
+behavior of the program. The paper observes that when the working set can be fully included in the main memory, further
+increasing the compression ratio is detrimental to performance, since the processor wastes unnecessary cycles on compression
+and decompression of pages evicted from the main memory. 
+
+
