@@ -32,4 +32,7 @@ of writing these pages back to the disk, if they are dirty, the OS compresses th
 of the main memory, called the "page cache". When a page fault occurs, the page cache is first searched for the virtual
 page number that triggered the fault. If a match is found, then the compressed page in the page cache is decompressed
 and served to the VMM as if it were read from the disk.
+Although the paper assumes LRU as the replacement algorithm, any algorithm is feasible as long as it ranks pages in the 
+main memory and selects the lowest score candidate as victim.
+
 
