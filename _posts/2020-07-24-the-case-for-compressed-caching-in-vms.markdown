@@ -20,6 +20,9 @@ version_mgmt:
    The paper should mention that such pages are not stored in compressed form, and also should not be cached in
    the in-memory page cache.
 
+2. To be honest I did not quite follow the adaptive compression part. It might be just because this paper is from
+   a while ago, at which time the technical terminologies and system assumptions are different.
+
 This paper proposes compressed page cache for virtual memory systems. The paper appreciates the benefit of page compression
 for keeping more active pages in the main memory and thus reducing page fault costs, as oppose to previous works where
 page compression has been proved to be not useful unless the machine is equipped with slow or no disks. 
@@ -79,3 +82,9 @@ The dictionary is updated when a no-match is detected, which evicts an existing 
 The paper also suggests that in order to maximize compression and decompression throughput, different fields are written
 into separate buffers, which are then stored in consecutive chunks within the compressed page.
 
+The paper then proposes a mechanism for dynamically adjusting the compression policy for evicted pages. As discussed
+in previous sections, always compressing evicted pages is not a good choice, since it wastes cycles if the page
+will not be frequently accessed in the near future.
+The paper proposes that compression be turned off when the cost of compression exceeds the benefit of reduced disk accesses,
+and turned back on when the opposite happens. 
+The proposed mechanism maintains LRU information for all pages in the system, rather than only pages in the memory.
