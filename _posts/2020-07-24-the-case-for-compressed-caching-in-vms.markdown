@@ -73,3 +73,9 @@ If the type field is "10", the token is zero, and there is no extra field. Optim
 improving the compression ratio, since zero is one of the most frequently occurring values in almost all workloads,
 which is also widely used for initialization, padding, indicating invalid values, and so on.
 If the type field is "11", the token is uncompressed, and the next 32 bits are the uncompressed token.
+The paper suggests that the dictionary can be implemented either as a direct-mapped array of 16 entries, or as 4 * 4 
+set-associative software cache running LRU as replacement algorithm.
+The dictionary is updated when a no-match is detected, which evicts an existing entry if a conflict occurs.
+The paper also suggests that in order to maximize compression and decompression throughput, different fields are written
+into separate buffers, which are then stored in consecutive chunks within the compressed page.
+
