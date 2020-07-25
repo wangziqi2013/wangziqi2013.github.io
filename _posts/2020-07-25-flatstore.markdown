@@ -111,4 +111,10 @@ an in-memory hash table or Masstree can be employed as index. The index is concu
 For hash tables, locking is performed on a per-bucket basis to eliminate most of the contentions. For Masstree,
 since the data structure is already concurrent, no extra locking is required.
 
+Client requests are dispatched to threads based on the key hashes. The same key request will always be hashed to the same
+thread, which preseves the ordering of requests on the same key. FlatStore threads always process requests serially. 
+On a read operation, the index is searched to locate the log entry. If none can be found, an NAK is responded to indicate
+that the key does not exist. On an insert or update request, the index is first searched. If the key is not found, then
+a new log entry with version number being zero is generated, and the key is also inserted into the index. 
+
 TODO: INDEX UPDATE / VERSION NUMBER / GC
