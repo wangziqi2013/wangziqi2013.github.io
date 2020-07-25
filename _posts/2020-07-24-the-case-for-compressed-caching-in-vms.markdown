@@ -94,3 +94,10 @@ will not be frequently accessed in the near future.
 The paper proposes that compression be turned off when the cost of compression exceeds the benefit of reduced disk accesses,
 and turned back on when the opposite happens. 
 The proposed mechanism maintains LRU information for all pages in the system, rather than only pages in the memory.
+The algorithm sets several pre-determined "effective memory size" goals, and maintain instances of LRU dry runs for these
+goals. For example, given a machine with 100MB physical memory, two goals can be set: 1.5:1 and 2:1 compression ratio.
+In the first case, LRU is maintained for 150MB of virtual pages, even after some of them are evicted back to the disk.
+In the second case, LRU is maintained for 200MB of virtual pages.
+The algorithm then evaluates the online cost of performing compression in order to achieve these goals. If a page that
+is currently swapped out but stored compressed in the main memory cache is hit by an access, the benefit of compression
+under that goal is incremented by the cost of a disk access minus the cost of compression (most likely cycles).
