@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The WK compression algorithm may result in larger compressed size than uncompressed size. This pessimistic case
+   could happen if most of the tokens cannot find matches in the dictionary. 
+   The paper should mention that such pages are not stored in compressed form, and also should not be cached in
+   the in-memory page cache.
+
 This paper proposes compressed page cache for virtual memory systems. The paper appreciates the benefit of page compression
 for keeping more active pages in the main memory and thus reducing page fault costs, as oppose to previous works where
 page compression has been proved to be not useful unless the machine is equipped with slow or no disks. 
@@ -65,3 +72,4 @@ If the type field is "01", the token is a partial match, and the next two fields
 If the type field is "10", the token is zero, and there is no extra field. Optimizing for zero can help further 
 improving the compression ratio, since zero is one of the most frequently occurring values in almost all workloads,
 which is also widely used for initialization, padding, indicating invalid values, and so on.
+If the type field is "11", the token is uncompressed, and the next 32 bits are the uncompressed token.
