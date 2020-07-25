@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes compressed page cache for virtual memory systems. The paper appreciates the benefit of page compression
+for keeping more active pages in the main memory and thus reducing page fault costs, as oppose to previous works where
+page compression has been proved to be not useful unless the machine is equipped with slow or no disks. 
+The paper makes two contributions. First, it describes a fast and efficient dictionary-based compression algorithm for
+compression data on page granularity, which is tuned to fit into common scenarios of page data layout rather than text.
+The second contribution
