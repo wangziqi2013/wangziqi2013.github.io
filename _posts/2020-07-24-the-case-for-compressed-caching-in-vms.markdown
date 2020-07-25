@@ -27,4 +27,9 @@ page faults at the cost of more cycles dedicated to compression and decompressio
 different behavior at runtime, or even at different stages of execution, the balance must be found online and be able to
 self-adjust to adapt to program behavior changes.
 
+This paper assumes a page cache architecture. When a page is selected by LRU or other replacement algorithms, instead
+of writing these pages back to the disk, if they are dirty, the OS compresses the page, and stores them in a special area
+of the main memory, called the "page cache". When a page fault occurs, the page cache is first searched for the virtual
+page number that triggered the fault. If a match is found, then the compressed page in the page cache is decompressed
+and served to the VMM as if it were read from the disk.
 
