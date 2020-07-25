@@ -67,5 +67,14 @@ Two types log entries exists: a value-based entry stores both keys and values in
 writes, while a pointer-based entry stores a pointer to the value object allocated from the heap. FlatStore assumes 8-byte
 key objects, which can themselves be pointers to heap-allocated key objects as well. 
 Both types of log entries contain an op field describing the operation, a type field, a version field, and a key field.
-For value-based entries, an extra size field and variables-sized inline value field also follow, which will be
+For value-based entries, an extra size field and variable-sized inline value field also follow, which will be
 replaced by a value pointer for pointer-based entries.
+As already stated above, log entries are always grouped into 256-byte batches and then committed using the log stealing
+protocol after gaining exclusive access. If a batch cannot make 256 bytes, the entry will be padded with all-zeros until
+256 byte boundary is reached.
+
+Value objects are allocated from the persistent heap, which is maintained by a customized allocator. The allocator 
+does not actively synchronize its metadata to the NVM to minimize bandwidth consumption and write amplification
+except during the shutdown process. 
+
+
