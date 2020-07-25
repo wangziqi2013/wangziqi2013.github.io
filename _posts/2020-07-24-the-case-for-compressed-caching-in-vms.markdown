@@ -44,4 +44,10 @@ The paper argues that two types of data, integers and pointers, dominate the tok
 process. Both types demonstrate abundant degrees of redundancy on their higher bits, which hardly changes when a few of them
 are laid out in the address space. For integers, the source of redundancy is that their distribution is most likely not
 random over the value domain. In practice, applications tend to contain small integers, and/or integers that only use
-a small fraction of bits. 
+a small fraction of bits. This is because: (1) Human beings are accustomized to counting from zero, and hence are more 
+likely to use smaller integers to represent loop indices, offsets, real-world data points, etc. For these small integers,
+the higher bits are either all-zeros or all-ones depending on the sign; (2) Even larger integers may expose certain locality,
+especially if they are real-world data pointers, since physical objects are continuous and will hardly exhibit abrupt changes.
+In this case, the higher bits of the integers are not zero, but they may remain constant.
+
+
