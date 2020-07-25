@@ -25,6 +25,10 @@ version_mgmt:
 
 3. The data layout design allows finding the base block with the pointer value by aligning the value down to 4MB boundary
 
+**Lowlight:**
+
+1. How to keep atomicity of GC? How to make sure that log chunk allocation and free are always atomic?
+
 This paper proposes FlatStore, a log-structured key-value store architecture running on byte-addressable NVDIMM, which
 features low write amplification. 
 The paper identifies a few issues with previously proposed designs. First, these designs often generate extra writes to
@@ -120,5 +124,18 @@ If the key is found, then the current log entry becomes obsolete, and a new log 
 and persisted. The index is also updated to reflect the new value. A version number is stored with each index entry, and
 updated to the new log entry's version number when the entry pointer is updated. Version numbers help the GC process to
 identify stale entries, as we will see below. 
+
+As a log-structured engine, FlatStore requires regular garbage collection to remove stale entries. The background thread
+performs GC in log chunk granularity. For each log entry in the chunk, it searches the key in the index. If the key can 
+be found, and versions do not match, then the entry is stale, which can be ignored. Non-existing keys also indicate stale
+entries. A new chunk is then allocated, with all valid entries in the old chunk being copied to the new chunk. Pointers
+in the index are updated to point to addresses in the new chunk. The old chunk is freed after the GC. The log chunk
+allocation information is also updated in the metadata area.
+
+On a normal shutdown, a shutdown process flushes the DRAM index and allocator metadata back to the NVM to accelerate 
+normal startup. A flag is also set to indicate normal shutdown, which will be checked on startup.
+If the flag indicates a normal shutdown, then both the index and allocator metadata are loaded from the NVM. 
+Otherwise, a crash mush have happened, and FlatStore invokes the crash recovery process to rebuild the in-memory
+data structure and fix potential inconsistencies of the allocator metadata. 
 
 TODO: INDEX UPDATE / VERSION NUMBER / GC
