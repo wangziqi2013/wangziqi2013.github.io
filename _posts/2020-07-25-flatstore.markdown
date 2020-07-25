@@ -50,3 +50,8 @@ Lastly, to further reduce operation latency, which may be affected by the group 
 novel log stealing mechanism to allow uncommitted requests on less active cores being "stolen" by another core and
 then committed to the NVM. This mechanism is performed in a pipelined manner to avoid unnecessary blocking, as we will 
 see below.
+
+The main data structure of FlatStore is the log object. Logs are allocated in the unit of large chunks, whose allocation
+and deallocation must also be logged in the metadata area located at the beginning of FlatStore storage. The log serves
+as the ultimate storage for objects, which contains all necessary information to rebuild other auxiliary data structures
+after a crash. 
