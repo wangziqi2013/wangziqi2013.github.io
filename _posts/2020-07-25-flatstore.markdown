@@ -76,5 +76,14 @@ protocol after gaining exclusive access. If a batch cannot make 256 bytes, the e
 Value objects are allocated from the persistent heap, which is maintained by a customized allocator. The allocator 
 does not actively synchronize its metadata to the NVM to minimize bandwidth consumption and write amplification
 except during the shutdown process. 
-
+The allocator, which, according to the paper, uses an algorithm similar to the one in Hoard. Free memory is divided into
+4MB chunks, which are then further divided into individual blocks of different size classes. Each chunk can only serve
+one size class, which is persisted at the chunk header during initialization. The chunk header also maintains a bitmap
+which tracks the allocation status of each block. The allocator maintains all other metadata in the volatile DRAM,
+which will be lost in a crash. On receiving an allocation request of size K, the allocator performs memory allocation of
+size (K + 8) as a conventional DRAM allocator, and then stores the allocation size in the first 8-byte word. The returned
+address is also incremented by eight (and decremented by eight accordingly before it is freed). The memory allocation is 
+committed only after the log entry that contains the pointer is committed. Otherwise, the allocation as well as the operation 
+in the log will be rolled back automatically after a crash, which maintains the atomicity between memory allocation and 
+the update operation.
 
