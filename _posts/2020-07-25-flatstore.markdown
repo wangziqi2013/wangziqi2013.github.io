@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes FlatStore, a log-structured key-value store architecture running on byte-addressable NVDIMM, which
+features low write amplification. 
+The paper identifies a few issues with previously proposed designs. First, these designs often generate extra writes to
+the NVM, in addition to persisting keys and values, for various reasons. The paper points out that in a conventional
+key-value store where all metadata are kept on the NVM, on each key-value insertion or deletion, both the indexing structure 
+and the allocator should be updated to reflect the operation. Even worse, most existing indexing structure and allocators 
+are not optimized specifically for NVM. 
