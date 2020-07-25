@@ -40,3 +40,8 @@ The paper proposes a dictionary-based compression algorithm tuned for common pag
 problems with classical compression algorithm such as LZ as incorrectly assuming in-memory data structires and arrays
 would tend to contain literal repetitions of previously seen tokens in the near future, which is usually the case with
 human readable text since only a subset of characters and words would occur within a small window of the text.
+The paper argues that two types of data, integers and pointers, dominate the token that the compression algorithm has to
+process. Both types demonstrate abundant degrees of redundancy on their higher bits, which hardly changes when a few of them
+are laid out in the address space. For integers, the source of redundancy is that their distribution is most likely not
+random over the value domain. In practice, applications tend to contain small integers, and/or integers that only use
+a small fraction of bits. 
