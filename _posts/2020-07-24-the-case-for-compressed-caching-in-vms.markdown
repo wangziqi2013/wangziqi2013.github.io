@@ -21,6 +21,10 @@ compression data on page granularity, which is tuned to fit into common scenario
 The second contribution is an adaptive compression scheme that dynamically adjusts the compression ratio based on runtime
 behavior of the program. The paper observes that when the working set can be fully included in the main memory, further
 increasing the compression ratio is detrimental to performance, since the processor wastes unnecessary cycles on compression
-and decompression of pages evicted from the main memory. 
+and decompression of pages evicted from the main memory. On the other hand, when the system observes excessive page
+faults and high costs paging costs, an increase in the overall compression ratio could help reducing the frequency of 
+page faults at the cost of more cycles dedicated to compression and decompression. Since each application may demonstrate
+different behavior at runtime, or even at different stages of execution, the balance must be found online and be able to
+self-adjust to adapt to program behavior changes.
 
 
