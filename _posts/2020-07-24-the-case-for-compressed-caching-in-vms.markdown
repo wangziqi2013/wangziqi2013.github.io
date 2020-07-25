@@ -49,5 +49,7 @@ likely to use smaller integers to represent loop indices, offsets, real-world da
 the higher bits are either all-zeros or all-ones depending on the sign; (2) Even larger integers may expose certain locality,
 especially if they are real-world data pointers, since physical objects are continuous and will hardly exhibit abrupt changes.
 In this case, the higher bits of the integers are not zero, but they may remain constant.
-
+(3) Pointer values are often clustered, in a sense that similar sized objects tend to be placed close to each other by 
+the allocator. This is a result of both size-class list based allocation, and locality optimizations for cache performance. 
+For these pointers, their higher bits typically remain the same, which poses another perfect opportunity for compression.
 
