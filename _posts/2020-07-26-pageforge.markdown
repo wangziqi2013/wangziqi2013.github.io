@@ -39,4 +39,9 @@ deduplicated. Each node of the binary tree contains the physical number of the p
 as in a binary search tree. The comparison function is just simple binary comparison on the page content. 
 On each iteration of the background thread, the candidate pages in the specified ranges (except those that are already
 in the stable tree) are checked against the stable tree one by one, and deduplicated if a match is found. 
+If no match can be found, the thread then checks whether the page has been modified since the last time it checks the 
+page. To track the modification status, the OS maintains a hash value for each page in the range, which is computed
+with the page content, and updated on each iteration of the KSM thread. The old hash value, which is computed in the 
+last iteration, will be compared against the new hash value computed in the current iteration, and if they mismatch,
+the page is deemed as "volatile", which will be excluded from deduplication for the current iteration. 
 
