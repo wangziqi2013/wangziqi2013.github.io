@@ -34,3 +34,9 @@ ranges. Once duplications are found, the pages will be merged by changing the pa
 physical pages, and releasing all other identical pages. The page table entries will also be marked as read-only regardless
 of the original permission. A copy-on-write will be performed if one of the virtual addresses sharing the same physical
 page is written into.
+The background thread maintains a sorted binary tree, called the stable tree, for tracking physical pages that have been 
+deduplicated. Each node of the binary tree contains the physical number of the page, and sorted property is maintained 
+as in a binary search tree. The comparison function is just simple binary comparison on the page content. 
+On each iteration of the background thread, the candidate pages in the specified ranges (except those that are already
+in the stable tree) are checked against the stable tree one by one, and deduplicated if a match is found. 
+
