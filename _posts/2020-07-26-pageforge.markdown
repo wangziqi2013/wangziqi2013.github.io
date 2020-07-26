@@ -15,7 +15,8 @@ version_mgmt:
 
 **Highlight:**
 
-1. Implementing binary tree traversal with hardware state machines
+1. Implementing binary tree traversal with hardware state machines. Recognizing that tree traversal is recursive and highly
+   localized, so we could always only use a partial tree to perform traversal.
 
 2. Repurposing per-cache line ECC and combining them together as the hash code of a page
 
@@ -124,4 +125,9 @@ The paper suggests that the KSM algorithm will re-check whether the two pages ar
 them for write protection. If they are not, then a write must have occurred on one of the pages after the comparison, 
 which aborts the deduplication attempt.
 
-
+The paper also proposes a mechanism which enables fast hash value computation leveraging the ECC bits. In a normal ECC-enables
+system, each 64-byte cache line has an 8-byte ECC word stored in a seperate memory chip. The ECC bits are computed when 
+data is updated, and read out when data is accessed.
+The paper observes that there are similarities between ECC bits and hash values: If two cache lines are identical, they
+must generate the same ECC bits; If two lines are not indentical, then their ECC bits are likely also not identical, although
+false posititives maay occur at a small but non-zero probablity.
