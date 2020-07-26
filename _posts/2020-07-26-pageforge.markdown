@@ -44,4 +44,9 @@ page. To track the modification status, the OS maintains a hash value for each p
 with the page content, and updated on each iteration of the KSM thread. The old hash value, which is computed in the 
 last iteration, will be compared against the new hash value computed in the current iteration, and if they mismatch,
 the page is deemed as "volatile", which will be excluded from deduplication for the current iteration. 
-
+For those pages who have not changed since the last iteration, and cannot be matched against an existing deduplicated page,
+they will be inserted into an "unstable tree", which is the same type of binary tree as the stable tree, but just tracks
+pages that may potentially match other non-duplicated pages. Each candidate page, if they have not been excluded, will 
+be checked against the unstable tree as the last step. If a match can be found, then deduplication is performed,
+and the underlying physical page is inserted into the stable tree. Otherwise, the candidate page is simply inserted
+into the unstable tree for future comparisons.
