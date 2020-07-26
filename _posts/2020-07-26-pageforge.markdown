@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes PageForge, a hardware assisted page deduplication design which reduces cycle wastage and cache pollution.
+Page deduplication has shown its potential in virtualized environments where different virtual machines, though strongly
+isolated from each other, may use the same OS image and/or load the same shared library, exhibiting suffcient redundancy
+for a deduplication scheme to significantly reduce storage consumption. 
+
+
