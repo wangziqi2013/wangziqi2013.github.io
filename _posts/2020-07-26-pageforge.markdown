@@ -82,4 +82,7 @@ is initialized to the first element of the scan table. After both pages are read
 the state machine either reads the left child pointer of the current node, if the candidate page is smaller, or 
 reads the right child if larger, or terminates the traversal if a match is found. Traversal also terminates when 
 a NULL pointer is found. The results are stored in the candidate node's register in the form of status bits and indices
-(e.g. the index of the last node of the traversal). 
+(e.g. the index of the last node of the traversal). The OS should periodically probe the candidate node's register for
+the traversal status. If the current traversal has finished, and there are still partial trees, the OS will load
+the next few levels from the current node where traversal terminates. Otherwise, a new candidate will be loaded as 
+well as the tree, which could be stable or unstable tree, before the next traversal begins.
