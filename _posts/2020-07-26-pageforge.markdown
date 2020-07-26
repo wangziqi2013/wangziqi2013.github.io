@@ -54,4 +54,7 @@ into the unstable tree for future comparisons.
 The paper observes that three important and most resource consuming abstractions of the KSM core algorithm can be implemented 
 in hardware. The first is page comparison, which requires nothing more than a parallel comparator for computing the difference
 of two pages in binary form, similar to the hardware version of memcmp(). 
-
+The second is tree traversal, which requires a hardware state machine to perform page comparison, and then selects the 
+left or right child as the next comparison target based on the result of comparison. The design, however, does not 
+implement tree construction for two reasons. First, the complexity of updating red-black trees, which are used for both
+stable and unstable trees in KSM, in hardware is too high to be realistic. 
