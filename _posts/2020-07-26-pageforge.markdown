@@ -57,4 +57,8 @@ of two pages in binary form, similar to the hardware version of memcmp().
 The second is tree traversal, which requires a hardware state machine to perform page comparison, and then selects the 
 left or right child as the next comparison target based on the result of comparison. The design, however, does not 
 implement tree construction for two reasons. First, the complexity of updating red-black trees, which are used for both
-stable and unstable trees in KSM, in hardware is too high to be realistic. 
+stable and unstable trees in KSM, in hardware is too high to be realistic. Second, hardware can only provide a finite
+number of node slots, and is difficult to change, while in practice there can be as many pages for deduplication as the 
+system administrator wants as long as the overhead is not an issue. Based on the above reasons, the OS still maintains
+software copies of the two trees and hash values for individual pages, and only relies on the hardware to perform
+read-only operations such as tree traversal and page comparison.
