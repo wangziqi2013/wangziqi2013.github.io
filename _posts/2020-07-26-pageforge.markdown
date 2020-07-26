@@ -75,3 +75,11 @@ the physical page number, the index of the left child, and the index of the righ
 table is implicitly used as the root of the traversal. Left and right child pointers store the index of the 
 left and child node, respectively, in the table. If the node is leaf, or if the child nodes are not in the 
 current partial tree due to capacity limit, the pointers will be set to NULL.
+Besides, the information of the candidate page is stored in a separate register which includes the candidate
+page's physical page number, the hash value, and a few control bits for storing the result of the traversal. 
+On invoking the traversal, the hardware state machine reads both the candidate page and the page under comparison, which
+is initialized to the first element of the scan table. After both pages are read and comparison results are available, 
+the state machine either reads the left child pointer of the current node, if the candidate page is smaller, or 
+reads the right child if larger, or terminates the traversal if a match is found. Traversal also terminates when 
+a NULL pointer is found. The results are stored in the candidate node's register in the form of status bits and indices
+(e.g. the index of the last node of the traversal). 
