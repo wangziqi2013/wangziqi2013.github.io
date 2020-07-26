@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Implementing binary tree traversal with hardware state machines
+
+2. Repurposing per-cache line ECC and combining them together as the hash code of a page
+
 **Lowlight:**
 
 1. The paper mentions that the OS should check back for traversal termination, but did not mention how or when. High frequency
