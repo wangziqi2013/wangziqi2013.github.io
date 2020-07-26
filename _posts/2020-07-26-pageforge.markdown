@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The paper mentions that the OS should check back for traversal termination, but did not mention how or when. High frequency
+   polling is definitely not advisable. But if the interval is too high, we actually impose a latency overhead of the traversal
+   operation.
+
+2. 
+
 This paper proposes PageForge, a hardware assisted page deduplication design which reduces cycle wastage and cache pollution.
 Page deduplication has shown its potential in virtualized environments where different virtual machines, though strongly
 isolated from each other, may use the same OS image and/or load the same shared library, exhibiting suffcient redundancy
@@ -86,3 +94,6 @@ a NULL pointer is found. The results are stored in the candidate node's register
 the traversal status. If the current traversal has finished, and there are still partial trees, the OS will load
 the next few levels from the current node where traversal terminates. Otherwise, a new candidate will be loaded as 
 well as the tree, which could be stable or unstable tree, before the next traversal begins.
+
+One of the most important differences is that PageForge is implemented on the memory controller, instead of the on-chip
+hierarchy. As a result, when a page is fetched from the main memory, 
