@@ -27,3 +27,10 @@ cache pollution and bandwidth overhead may also negatively impact performance wh
 Although non-temporal memory accesses or non-cachable memory type can be employed to minimize the effect of cache
 pollution, resource contention, such as convention on MSHRs, and the extra bandwidth imposed on the on-chip network,
 still pose challenges for software solutions to solve.
+
+This paper assumes KSM as the baseline software page deduplication scheme. KSM relies on the operation system to specify
+one or more memory address ranges, and uses a periodically invoked software thread to identify duplicated pages in these
+ranges. Once duplications are found, the pages will be merged by changing the page table entry to point to one of the 
+physical pages, and releasing all other identical pages. The page table entries will also be marked as read-only regardless
+of the original permission. A copy-on-write will be performed if one of the virtual addresses sharing the same physical
+page is written into.
