@@ -29,6 +29,11 @@ version_mgmt:
    two pages are identical after setting read-only protection. Should this be performed by hardware? Or the OS invokes the
    memory controller to perform the check?
 
+3. Since the memory controller is able to issue read-shared requests, dirty cache lines will be sent over the bus to the
+   memory controller onr receiving such as request. The problem is since the controller does not maintain any cached
+   copy, the dirty cache line must always be written back to the DRAM. This introduces non-negligible write back cost,
+   which is not evaluated by the paper.
+
 This paper proposes PageForge, a hardware assisted page deduplication design which reduces cycle wastage and cache pollution.
 Page deduplication has shown its potential in virtualized environments where different virtual machines, though strongly
 isolated from each other, may use the same OS image and/or load the same shared library, exhibiting suffcient redundancy
