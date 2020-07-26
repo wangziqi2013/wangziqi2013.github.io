@@ -136,5 +136,11 @@ ECC bits of each cache line is read from the 9-th chip, or the ECC can be calcul
 the same ECC circuit that calculates ECC on the normal data path.
 The memory controller generates a 32-bit hash value by selecting four pre-determined cache lines in the page, and concatenates 
 the lower 8 bits of their ECC.
-
+The hash value will then be stored in the candidate cache register, which can be accessed by the OS.
+The OS should still maintain, using software, two versions of hash values from the previous and current iteration.
+This hardware assisted hash generation, however, saves the cycles and memory bandwidth that were dedicated to computing a
+software hashes. Moreover, software hashes often require reading all or part of the cache lines (e.g. 1KB as in software-based 
+KMS). These requests can hardly be reordered for better performance, since these algorithms are implemented with strong 
+data dependency. Hardware ECC hashes do not suffer similar problems, since ECC bits are always read or computed by
+the memory controller, which can be collected cost-free as the controller reads the page.
 
