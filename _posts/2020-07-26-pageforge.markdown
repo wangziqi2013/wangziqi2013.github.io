@@ -18,4 +18,7 @@ Page deduplication has shown its potential in virtualized environments where dif
 isolated from each other, may use the same OS image and/or load the same shared library, exhibiting suffcient redundancy
 for a deduplication scheme to significantly reduce storage consumption. 
 
-
+The paper identifies that existing software-based page deduplication schemes have two problems: cycle wastage and cache
+pollution. In order to find pages that contain duplicated contents, a background thread needs to continuously monitor 
+pages and compare them to find chances for deduplication if they occur. This is a heavy-weight task, which is usually delegated
+to a seperate thread on a dedicated core, and has non-negligible cycle overhead. 
