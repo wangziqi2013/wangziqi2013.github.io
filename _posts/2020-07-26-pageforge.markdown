@@ -106,4 +106,8 @@ well as the tree, which could be stable or unstable tree, before the next traver
 One of the most important differences is that PageForge is implemented on the memory controller, instead of the on-chip
 hierarchy. As a result, if a page is only fetched from the main memory, its content may no longer be up-to-date if
 a more recent version exists in the cache hierarchy. Note that in general, both false positives and false negatives are
-acceptable and will not affect correctness in the original KSM design. 
+acceptable and will not affect correctness in the original KSM design. False negatives will simply waste an opportunity
+for deduplication. False positives, however, requires special care, since they are always possible if the page is
+updated after a comparison. The paper suggests that the KSM algorithm will re-check whether the two pages are still
+identical after setting both of them for write protection. If they are not, then a write must have occurred on one of the 
+pages after the comparison, which aborts the deduplication attempt.
