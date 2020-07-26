@@ -22,3 +22,8 @@ The paper identifies that existing software-based page deduplication schemes hav
 pollution. In order to find pages that contain duplicated contents, a background thread needs to continuously monitor 
 pages and compare them to find chances for deduplication if they occur. This is a heavy-weight task, which is usually delegated
 to a seperate thread on a dedicated core, and has non-negligible cycle overhead. 
+In addition, since the background thread must read pages into the cache first before performing comparison. The resulting
+cache pollution and bandwidth overhead may also negatively impact performance when the system load is high.
+Although non-temporal memory accesses or non-cachable memory type can be employed to minimize the effect of cache
+pollution, resource contention, such as convention on MSHRs, and the extra bandwidth imposed on the on-chip network,
+still pose challenges for software solutions to solve.
