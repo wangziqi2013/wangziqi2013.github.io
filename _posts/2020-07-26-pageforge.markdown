@@ -5,7 +5,7 @@ date:   2020-07-26 00:46:00 -0500
 categories: paper
 paper_title: "PageForge: A Near-Memory Content-Aware Page-Merging Architecture"
 paper_link: https://dl.acm.org/doi/10.1145/3123939.3124540
-paper_keyword: Page Deduplication; Page Forge
+paper_keyword: Page Deduplication; PageForge
 paper_year: MICRO 2017
 rw_set:
 htm_cd:
@@ -50,3 +50,8 @@ pages that may potentially match other non-duplicated pages. Each candidate page
 be checked against the unstable tree as the last step. If a match can be found, then deduplication is performed,
 and the underlying physical page is inserted into the stable tree. Otherwise, the candidate page is simply inserted
 into the unstable tree for future comparisons.
+
+The paper observes that three important and most resource consuming abstractions of the KSM core algorithm can be implemented 
+in hardware. The first is page comparison, which requires nothing more than a parallel comparator for computing the difference
+of two pages in binary form, similar to the hardware version of memcmp(). 
+
