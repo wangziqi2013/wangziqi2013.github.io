@@ -25,7 +25,9 @@ version_mgmt:
    polling is definitely not advisable. But if the interval is too high, we actually impose a latency overhead of the traversal
    operation.
 
-2. 
+2. The paper mentions that to avoid the selected page being modified after comparison, the OS should double check whether the
+   two pages are identical after setting read-only protection. Should this be performed by hardware? Or the OS invokes the
+   memory controller to perform the check?
 
 This paper proposes PageForge, a hardware assisted page deduplication design which reduces cycle wastage and cache pollution.
 Page deduplication has shown its potential in virtualized environments where different virtual machines, though strongly
@@ -102,4 +104,6 @@ the next few levels from the current node where traversal terminates. Otherwise,
 well as the tree, which could be stable or unstable tree, before the next traversal begins.
 
 One of the most important differences is that PageForge is implemented on the memory controller, instead of the on-chip
-hierarchy. As a result, when a page is fetched from the main memory, 
+hierarchy. As a result, if a page is only fetched from the main memory, its content may no longer be up-to-date if
+a more recent version exists in the cache hierarchy. Note that in general, both false positives and false negatives are
+acceptable and will not affect correctness in the original KSM design. 
