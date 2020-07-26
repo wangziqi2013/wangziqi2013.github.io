@@ -62,3 +62,12 @@ number of node slots, and is difficult to change, while in practice there can be
 system administrator wants as long as the overhead is not an issue. Based on the above reasons, the OS still maintains
 software copies of the two trees and hash values for individual pages, and only relies on the hardware to perform
 read-only operations such as tree traversal and page comparison.
+
+We next introduce the hardware implementation of tree traversal and hash generation as follows. Tree traversal is 
+implemented with a state machine as described above, plus a tree representation in hardware, which can represent
+a full or a partial binary search tree. Only having partial trees is perfectly fine, since the OS may start from
+a root node, only loads the first few levels of the binary search tree, invoke the hardware, and repeat the above
+process using the intermediate node the traversal reaches as the new root node. Since binary tree traversal is recursive,
+the hardware does not care whether the root node is the real root, or just some intermediate node resulting from
+the previous traversal. 
+
