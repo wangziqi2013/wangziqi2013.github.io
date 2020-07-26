@@ -131,3 +131,10 @@ data is updated, and read out when data is accessed.
 The paper observes that there are similarities between ECC bits and hash values: If two cache lines are identical, they
 must generate the same ECC bits; If two lines are not indentical, then their ECC bits are likely also not identical, although
 false posititives maay occur at a small but non-zero probablity.
+PageForge generates the hash value using ECC bits as follows. When a page is accessed by the memory controller, either the
+ECC bits of each cache line is read from the 9-th chip, or the ECC can be calculated from the coherence response using
+the same ECC circuit that calculates ECC on the normal data path.
+The memory controller generates a 32-bit hash value by selecting four pre-determined cache lines in the page, and concatenates 
+the lower 8 bits of their ECC.
+
+
