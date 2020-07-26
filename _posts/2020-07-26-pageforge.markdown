@@ -105,9 +105,18 @@ well as the tree, which could be stable or unstable tree, before the next traver
 
 One of the most important differences is that PageForge is implemented on the memory controller, instead of the on-chip
 hierarchy. As a result, if a page is only fetched from the main memory, its content may no longer be up-to-date if
-a more recent version exists in the cache hierarchy. Note that in general, both false positives and false negatives are
-acceptable and will not affect correctness in the original KSM design. False negatives will simply waste an opportunity
-for deduplication. False positives, however, requires special care, since they are always possible if the page is
-updated after a comparison. The paper suggests that the KSM algorithm will re-check whether the two pages are still
-identical after setting both of them for write protection. If they are not, then a write must have occurred on one of the 
-pages after the comparison, which aborts the deduplication attempt.
+a more recent version exists in the cache hierarchy. To always access up-to-date data, the paper proposes that the memory
+controller should also implement a inferior version of the coherence protocol, which, for simplifity, does not maintain 
+any cached copy or add extra state to the directory (if there is one), but is able to issue coherence requests for shared
+reads. Cache lines in modified state should degrade the state to shared, and send the dirty copy to the memory controller.
+On receiving the dirty copy, the controller should first write it back, since the controller itself does not act as 
+a cache, and in the meantime use the write back copy to perform comparison.
+
+Note that in general, both false positives and false negatives are acceptable and will not affect correctness in the 
+original KSM design. False negatives will simply waste an opportunity for deduplication. False positives, however, 
+requires special care, since they are always possible if the page is updated after a comparison. 
+The paper suggests that the KSM algorithm will re-check whether the two pages are still identical after setting both of 
+them for write protection. If they are not, then a write must have occurred on one of the pages after the comparison, 
+which aborts the deduplication attempt.
+
+
