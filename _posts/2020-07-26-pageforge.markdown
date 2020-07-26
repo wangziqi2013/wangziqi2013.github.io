@@ -70,4 +70,8 @@ a root node, only loads the first few levels of the binary search tree, invoke t
 process using the intermediate node the traversal reaches as the new root node. Since binary tree traversal is recursive,
 the hardware does not care whether the root node is the real root, or just some intermediate node resulting from
 the previous traversal. 
-
+The tree is stored in a randomly accessible table called the scan table. Each entry of the scan table consists of 
+the physical page number, the index of the left child, and the index of the right child. The first element of the
+table is implicitly used as the root of the traversal. Left and right child pointers store the index of the 
+left and child node, respectively, in the table. If the node is leaf, or if the child nodes are not in the 
+current partial tree due to capacity limit, the pointers will be set to NULL.
