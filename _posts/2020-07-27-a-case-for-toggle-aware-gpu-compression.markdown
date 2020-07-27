@@ -61,3 +61,6 @@ all factors into consideration, and selects the scheme that minimizes the formul
 The second mechanism proposes that the layout of compressed data should be adjusted such that even compressed words
 should be property aligned. We next discuss each of them in details.
 
+The energy-performance trade-off formula needs to take the following three factors into consideration: (1) Compression
+reduces the size of data to be transmitted on the memory bus, which reduces latency of memory read and cache write back 
+operations; 
