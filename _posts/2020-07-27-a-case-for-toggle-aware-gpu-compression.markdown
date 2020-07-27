@@ -27,4 +27,10 @@ per bit. First, most compression algorithms eliminate redundant zeros or ones at
 These integers will be compressed into a smaller field whose length is sufficient to hold the numeric value in the 
 uncompressed form. In programs where small integers are frequently used, this will make bits more random after compression,
 since the higher bits used to be really predicable before compression, but are no longer present in the compressed form.
+Second, most compression algorithms insert metadata inline with compressed data to form a stream of compressed bits, without
+any distinc boundary between compressed data and metadata that helps the decompressor to recognize the next code word. 
+During decompression, the unstructured stream is intepreted by a hardware state machine which extracts bits from the head
+of the stream to recognize the type and layout of the next code word.
+As a result, compressed code words are usually misaligned, which further increases the randomness of bits during transmission,
+since the transmission protocol still reads in data to be transmitted in regular 8-bit or larger words. 
 
