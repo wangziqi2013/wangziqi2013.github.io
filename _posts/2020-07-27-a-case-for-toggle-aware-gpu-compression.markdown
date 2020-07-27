@@ -22,4 +22,9 @@ This paper points out, however, that transmitting compressed data may consume mo
 same amount of uncompressed data, constituting a new trade-off in the compression paradigm. The extra power consumption 
 is a result of higher per-bit entropy, meaning that each bit carries more information than in the uncompressed case.
 This is totally natural and unaviodable with compression, since the goal of compression is to reduce the number of bits
-required for storing the same amount of information.
+required for storing the same amount of information. The paper also identifies two major reasons for increased entropy
+per bit. First, most compression algorithms eliminate redundant zeros or ones at the higher bits of a small integer. 
+These integers will be compressed into a smaller field whose length is sufficient to hold the numeric value in the 
+uncompressed form. In programs where small integers are frequently used, this will make bits more random after compression,
+since the higher bits used to be really predicable before compression, but are no longer present in the compressed form.
+
