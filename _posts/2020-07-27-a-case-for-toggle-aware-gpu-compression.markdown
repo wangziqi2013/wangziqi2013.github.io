@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a compression-based bus transmission scheme for reducing the energy and power consumption while 
+retaining the benefits of bandwidth reduction with compression. The paper points out that compression can reduce the 
+bandwidth of data transmission over the system bus and inter-component links, which is especially effective for GPGPU,
+since GPGPUs are more likely to be memory bound.
+
+
