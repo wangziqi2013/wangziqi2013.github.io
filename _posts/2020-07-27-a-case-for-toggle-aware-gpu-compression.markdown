@@ -79,3 +79,9 @@ array between flits and an adder tree, as indicated by the paper), and then deci
 whether the line is transmitted compressed or uncompressed. An extra bit is prepended to the data to indicate the
 compression status. Although not mentioned by the paper, the bus controller should also monitor bus bandwidth usage,
 and make recent bandwidth usage available for the EC unit in order to derive the value of BU.
+
+The second mechanism is metadata consolidation, which states that the compression metadata should be stored in a separate
+part of compressed data, instead of being mixed with encoded words to form a stream. This requires some simple modification
+to the compression and decompression hardware, and probably more pipeline stages for scattering or gathering if the 
+hardware is pipelined. In addition, extra information should be added to help decompressor recognize the metadata and
+data region.
