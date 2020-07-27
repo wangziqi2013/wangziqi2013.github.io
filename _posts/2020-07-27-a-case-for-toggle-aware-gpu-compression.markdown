@@ -63,4 +63,8 @@ should be property aligned. We next discuss each of them in details.
 
 The energy-performance trade-off formula needs to take the following three factors into consideration: (1) Compression
 reduces the size of data to be transmitted on the memory bus, which reduces latency of memory read and cache write back 
-operations; 
+operations; (2) Compression also reduces effective bandwidth consumption of the bus, since less bits are transmitted
+and the bus is held for transmission for shorter time, improving the latency for other transactions contending for the bus. 
+The bandwidth benefit, however, is non-linear, with less or zero marginal gain near the low bandwidth consumption side. 
+In other words, the busier the bus is, the more benefit compression can bring us. When the bus is mostly idle, data 
+transmission will not affect the latency of other operations as the level of contention is low.
