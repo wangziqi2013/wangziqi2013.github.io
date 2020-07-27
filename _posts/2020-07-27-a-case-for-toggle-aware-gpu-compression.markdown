@@ -18,6 +18,9 @@ version_mgmt:
 1. Using simple formula: (energy * latency) and optional bandwidth utilization (1 / (1 - BU)) to evaluate overall merit 
    of compression
    
+2. Recognizes the problem of misaligned compressed words can also cause extra bit flips. This is actually related to value
+   locality, which is addressed by BDI. 
+
 
 
 This paper proposes a compression-based bus transmission scheme for reducing the energy and power consumption while 
