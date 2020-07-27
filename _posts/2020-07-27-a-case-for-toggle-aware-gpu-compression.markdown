@@ -21,6 +21,12 @@ version_mgmt:
 2. Recognizes the problem of misaligned compressed words can also cause extra bit flips. This is actually related to value
    locality, which is addressed by BDI. 
 
+3. Redundancy exists in three forms: Literal repetitions of tokens, easily compressible patterns (ones, zeros, repeated 
+   patterns, etc.), and value locality. The first can be recognized by dictionary-based algorithm; The second can be recognized
+   by FPC; The last can be recognized by locality aware algorithms such as BDI. 
+   The paper's metadata consolidation addresses the last form of locality, which may exists in compressed data.
+   On the presence of value locality, even compressed words will have bits in common that can be further compressed.
+
 
 
 This paper proposes a compression-based bus transmission scheme for reducing the energy and power consumption while 
