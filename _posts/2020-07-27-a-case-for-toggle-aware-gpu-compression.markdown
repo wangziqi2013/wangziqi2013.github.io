@@ -54,3 +54,10 @@ workloads uses more floating point numbers, which are already random due to thei
 The second observation is that the degree of randomness is highly related to the compression ratio. The more compressed
 a cache line is, roughly more bit flips it will take to transmis compressed data over the line. This is also consistent 
 with the previous argument that compression increases the entropy and hence the randomness of bits.
+
+This paper proposes two mechanisms for evaluating the cost of performing compression and the cost of extra power 
+consumption. The first mechanism evaluates the trade-off between performance and power using a formula which takes
+all factors into consideration, and selects the scheme that minimizes the formula for each transmission.
+The second mechanism proposes that the layout of compressed data should be adjusted such that even compressed words
+should be property aligned. We next discuss each of them in details.
+
