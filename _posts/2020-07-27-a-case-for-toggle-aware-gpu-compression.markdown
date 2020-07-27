@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using simple formula: (energy * latency) and optional bandwidth utilization (1 / (1 - BU)) to evaluate overall merit 
+   of compression
+   
+
+
 This paper proposes a compression-based bus transmission scheme for reducing the energy and power consumption while 
 retaining the benefits of bandwidth reduction with compression. The recognizes that compressing data before they are
 transmitted can reduce the bandwidth of data transmission over the system bus and inter-component links, which is especially 
