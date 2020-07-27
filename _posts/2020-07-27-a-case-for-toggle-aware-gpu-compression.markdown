@@ -72,3 +72,8 @@ flips. The formula, which is proposed as (Latency * Energy), fulfills (1) and (3
 The paper suggests that in order to take bandwidth utilization (BU) into consideration, the value of the formula
 is further multiplied by (1 / (1 - BU)), giving more weights to compression ratio over energy consumption. 
 
+One hardware component, called the Energy Control (EC) unit, is added to the data path for eviction and line fetch.
+The paper assumes that compressor and decompressor also exist on the data path. When a line is to be transmitted, the
+EC unit first compresses the line, obtaining both the compression ratio and the energy consumption (using an XOR
+array between flits and an adder tree, as indicated by the paper), and then decides using the above formula
+whether the line is transmitted compressed or uncompressed. 
