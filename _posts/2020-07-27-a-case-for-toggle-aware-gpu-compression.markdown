@@ -34,6 +34,10 @@ of the stream to recognize the type and layout of the next code word.
 As a result, compressed code words are usually misaligned, which further increases the randomness of bits during transmission,
 since the transmission protocol still reads in data to be transmitted in regular 8-bit or larger words. 
 For example, even with FPC compressed data, small values that are close to each other still preseve their original lower
-bit pattern, and are written as the output. If these values are properly aligned, such that the transmission logic 
-can send them one at a time, then only a subset of bits need to be flipped across transmission packets, since most bits 
-in these compressed words are still the same.
+bit pattern, and are written as the output. If these values are properly aligned, such that these close by values bits
+align on the transmitter hardware's pins, then only a subset of pins need to be flipped across transmission packets, since most bits 
+in these compressed words are still the same, consuming less energy.
+On the contrary, in practice, FPC will insert metadata bits between the compressed words to indicate the type of the 
+pattern. This will significantly reduce the chance that bits at the same offset in the encoded words use the same pin,
+thus increasing the randomness of bits transmitted on transmitter pins.
+This value locality property
