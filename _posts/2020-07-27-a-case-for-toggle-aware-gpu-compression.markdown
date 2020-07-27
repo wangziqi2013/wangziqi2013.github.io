@@ -51,4 +51,6 @@ The paper also observes two trends from dedicated, mobile and open-source GPU wo
 the effect of compression on the randomness of bits is more prominent on mobile workloads than on dedicated GPU workloads.
 This is because mobile workloads tend to use more integers in its computation, which are more regular, while dedicated 
 workloads uses more floating point numbers, which are already random due to their mantissa bits.
-The 
+The second observation is that the degree of randomness is highly related to the compression ratio. The more compressed
+a cache line is, roughly more bit flips it will take to transmis compressed data over the line. This is also consistent 
+with the previous argument that compression increases the entropy and hence the randomness of bits.
