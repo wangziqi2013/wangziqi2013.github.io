@@ -67,4 +67,8 @@ operations; (2) Compression also reduces effective bandwidth consumption of the 
 and the bus is held for transmission for shorter time, improving the latency for other transactions contending for the bus. 
 The bandwidth benefit, however, is non-linear, with less or zero marginal gain near the low bandwidth consumption side. 
 In other words, the busier the bus is, the more benefit compression can bring us. When the bus is mostly idle, data 
-transmission will not affect the latency of other operations as the level of contention is low.
+transmission will not affect the latency of other operations as the level of contention is low; (3) The number of bit 
+flips. The formula, which is proposed as (Latency * Energy), fulfills (1) and (3), but not (2), since (2) is non-linear. 
+The paper suggests that in order to take bandwidth utilization (BU) into consideration, the value of the formula
+is further multiplied by (1 / (1 - BU)), giving more weights to compression ratio over energy consumption. 
+
