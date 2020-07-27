@@ -33,4 +33,7 @@ During decompression, the unstructured stream is intepreted by a hardware state 
 of the stream to recognize the type and layout of the next code word.
 As a result, compressed code words are usually misaligned, which further increases the randomness of bits during transmission,
 since the transmission protocol still reads in data to be transmitted in regular 8-bit or larger words. 
-
+For example, even with FPC compressed data, small values that are close to each other still preseve their original lower
+bit pattern, and are written as the output. If these values are properly aligned, such that the transmission logic 
+can send them one at a time, then only a subset of bits need to be flipped across transmission packets, since most bits 
+in these compressed words are still the same.
