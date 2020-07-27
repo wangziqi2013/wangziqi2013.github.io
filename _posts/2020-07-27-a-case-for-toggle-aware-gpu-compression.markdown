@@ -76,4 +76,6 @@ One hardware component, called the Energy Control (EC) unit, is added to the dat
 The paper assumes that compressor and decompressor also exist on the data path. When a line is to be transmitted, the
 EC unit first compresses the line, obtaining both the compression ratio and the energy consumption (using an XOR
 array between flits and an adder tree, as indicated by the paper), and then decides using the above formula
-whether the line is transmitted compressed or uncompressed. 
+whether the line is transmitted compressed or uncompressed. An extra bit is prepended to the data to indicate the
+compression status. Although not mentioned by the paper, the bus controller should also monitor bus bandwidth usage,
+and make recent bandwidth usage available for the EC unit in order to derive the value of BU.
