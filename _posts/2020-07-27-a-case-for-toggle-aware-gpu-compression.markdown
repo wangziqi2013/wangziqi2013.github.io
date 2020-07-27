@@ -30,11 +30,11 @@ reduce the number of bits required for storing the same amount of information.
 
 The paper also identifies two major reasons for increased entropy per bit. First, most compression algorithms eliminate 
 redundant zeros or ones at the higher bits of a small integer. 
-These integers will be compressed into a smaller field whose length is sufficient to hold the numeric value in the 
+These integers will be compressed into smaller fields whose length is sufficient to hold the numeric value in the 
 uncompressed form. In programs where small integers are frequently used, this will make bits more random after compression,
 since the higher bits used to be really predicable before compression, but are no longer present in the compressed form.
 Second, most compression algorithms insert metadata inline with compressed data to form a stream of compressed bits, without
-any distinc boundary between compressed data and metadata that helps the decompressor to recognize the next code word. 
+any distinct boundary between compressed data and metadata that helps the decompressor to recognize the next code word. 
 During decompression, the unstructured stream is intepreted by a hardware state machine which extracts bits from the head
 of the stream to recognize the type and layout of the next code word.
 As a result, compressed code words are usually misaligned, which further increases the randomness of bits during transmission,
@@ -47,4 +47,8 @@ On the contrary, in practice, FPC will insert metadata bits between the compress
 pattern. This will significantly reduce the chance that bits at the same offset in the encoded words use the same pin,
 thus increasing the randomness of bits transmitted on transmitter pins.
 
-
+The paper also observes two trends from dedicated, mobile and open-source GPU workloads. The first observation is that
+the effect of compression on the randomness of bits is more prominent on mobile workloads than on dedicated GPU workloads.
+This is because mobile workloads tend to use more integers in its computation, which are more regular, while dedicated 
+workloads uses more floating point numbers, which are already random due to their mantissa bits.
+The 
