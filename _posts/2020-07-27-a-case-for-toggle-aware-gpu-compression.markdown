@@ -27,7 +27,12 @@ version_mgmt:
    The paper's metadata consolidation addresses the last form of locality, which may exists in compressed data.
    On the presence of value locality, even compressed words will have bits in common that can be further compressed.
 
+**Lowlight:**
 
+1. How does the EC notifies the receiving end of a compressed/uncompressed line? Does it prepend a special status bit?
+
+2. How does decompression hardware know the boundary between metadata and compressed words? Does the compressor use
+   a short field to indicate this?
 
 This paper proposes a compression-based bus transmission scheme for reducing the energy and power consumption while 
 retaining the benefits of bandwidth reduction with compression. The recognizes that compressing data before they are
