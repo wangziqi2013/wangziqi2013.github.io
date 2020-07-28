@@ -56,6 +56,12 @@ as the main kernel. Assist Warps are not executed, until some predefined conditi
 are scheduled on the processing unit.
 The paper proposes three extra hardware components added to the GPGPU for tracking, scheduling, and maintaining states
 for these warps. The first component is the Assist Warp Store (AWS) that stores the program body of the helper routines.
-More than one routine can be stored at the same time, which are indexed using a globally unique source ID (SR.ID) and 
+More than one routines can be stored at the same time, which are indexed using a globally unique source ID (SR.ID) and 
 instruction ID (Inst.ID) for accessing individual instructions. 
+
+The second componeng is Assist Warp Buffer (AWB), which is a buffer for decoded Assist Wrap instructions. The paper suggests
+that this buffer may share the same storage with the existing Instruction Buffer (IB), while providing a few extra slots
+for low priority tasks which can be issued concurrently with the main warp in the background, without contending for
+resources with the latter.
+
 
