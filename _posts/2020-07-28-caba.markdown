@@ -71,6 +71,12 @@ switch. The paper suggests that the Assist Warp executes under the same context 
 be aware of this, and reserve dedicated registers for the Assict Warp to use to avoid corrupting main kernel's state
 unexpectedly.
 
+One of the most important features of CABA is the priority level of Assist Warps. High priority warps will override the
+current kernel, causing normal execution to stop, and be scheduled on the execution unit. Such warps are often tasks
+that must be performed in order to achieve correct execution, such as data decompression on a memory load.
+Low priority warps, in contrast, can be executed in the background concurrently with the main kernel, such as 
+opportunistic prefetching. Their completion is not even guaranteed, since these warps are considered as optional.
+
 The paper then discusses the possibility of using CABA to perform compression on GPGPU's L2 cache and main memory.
 The peper gives three reasons why compression should better be implemented with CABA rather than with specialized
 control and data path. First, CABA leverages existing buffering and execution units on the GPGPU, while adding 
@@ -82,3 +88,6 @@ difficult or impossible. Lastly, some workloads are uncompressable, in which cas
 CABA can easily turn on or off compression via software intervention. It also enables application programmer to
 select the best performing compression scheme by writing their own assist kernel, taking semantic level information
 into consideration.
+
+
+
