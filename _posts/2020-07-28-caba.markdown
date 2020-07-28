@@ -50,4 +50,7 @@ routine should be explicitly allocated by the compiler statically, which is adde
 of each thread block. The GPGPU hardware is unaware of the extra resources that are dedicated to the execution of 
 these helper routines.
 
-
+On the hardware side, when GPGPU is programmed with the kernel, the helper routine is also transferred to GPGPU's instruction
+memory, and buffered on an on-chip instruction cache. The helper routine is executed as Assist Warps in a similar way
+as the main kernel. Assist Warps are not executed, until some predefined conditions or events occur, in which case they
+are scheduled on the processing unit.
