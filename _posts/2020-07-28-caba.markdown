@@ -17,6 +17,13 @@ version_mgmt:
 paper summary may be inaccurate and/or incorrect when it involves GPGPU internals. I will strive to clarify as much as I can,
 and put the focus on compression rather than GPGPU.**
 
+**Highlight:**
+
+1. Using an execution model similar to hyoer-threading on CPU to leverage idle cycles and resources more efficiently
+
+2. Proposes a GPU implementation of BDI. BDI is friendlier to GPGPUs, since all compressed words are of the same size,
+   which fits into GPU's regular computation model.
+
 **Lowlight:**
 
 1. The paper mentions that CABA can help addressing the idle cycle problem. But when it comes to compression, since decompression
@@ -98,4 +105,5 @@ To avoid doubling the number of accesses, an on-chip metadata cache is added to 
 before data arrives.
 
 On a read instruction, the AWC checks whether the bit fetched from the metadata cache indicates a compressed block. 
-If true, the high priority Assist Warp is scheduled for decompression
+If true, the high priority Assist Warp is scheduled for decompression when data arrives. Similarly, on a store instruction,
+the low priority compressor Assist Warp is scheduled to be executed in the background.
