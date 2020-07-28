@@ -23,4 +23,8 @@ The paper points out that resources on modern GPGPUs are not fully utilized in m
 First, the memory bandwidth and inter-component link bandwidth are often underutilized, due to the speed discrepancy between
 execution units and memory modules. As a result, if most threads are stalled on memory instructions, cycles will be 
 wasted since no progress can be made during the stalled cycles.
-Second, 
+Second, on-chip resources, such as registers and local memory storage, which are allocated statically by compilers
+and scheduled dynamically by hardware, are often under utilized as well. This is caused by the hardware scheduler not
+being able schedule an entire thread block, which is the unit of scheduling, with partial resources on the current
+processing unit. These registers and local storage will be wasted, which can be leveraged to perform background tasks
+as prposed in this paper.
