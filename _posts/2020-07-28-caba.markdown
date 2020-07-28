@@ -59,9 +59,14 @@ for these warps. The first component is the Assist Warp Store (AWS) that stores 
 More than one routines can be stored at the same time, which are indexed using a globally unique source ID (SR.ID) and 
 instruction ID (Inst.ID) for accessing individual instructions. 
 
-The second componeng is Assist Warp Buffer (AWB), which is a buffer for decoded Assist Wrap instructions. The paper suggests
+The second component is Assist Warp Buffer (AWB), which is a buffer for decoded Assist Wrap instructions. The paper suggests
 that this buffer may share the same storage with the existing Instruction Buffer (IB), while providing a few extra slots
 for low priority tasks which can be issued concurrently with the main warp in the background, without contending for
 resources with the latter.
 
-
+The last component is Assist Warp Controller (AWC), which schedules Assist Warps on the processing unit. During normal
+execution, the AWC monitors trigger events or conditions. When any of the triggers occur, it schedules out the main kernel
+and brings in Assist Warp's instruction. Note that GPGPUs are typically not equipped with proper hardware for context
+switch. The paper suggests that the Assist Warp executes under the same context as the main kernel. The compiler should
+be aware of this, and reserve dedicated registers for the Assict Warp to use to avoid corrupting main kernel's state
+unexpectedly.
