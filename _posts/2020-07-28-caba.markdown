@@ -78,4 +78,7 @@ dedicated components for compression would change the hardware significantly wit
 different workloads exhibit different data regularity. No universal compression algorithm is better than any other.
 To make compression widely applicable to GPGPU, the compression scheme should be able to implement several common
 algorithms, such as FPC, BDI, C-PACK, which tackle different types of data. With dedicated hardware this would be 
-difficult or impossible. 
+difficult or impossible. Lastly, some workloads are uncompressable, in which case compression should be turned off.
+CABA can easily turn on or off compression via software intervention. It also enables application programmer to
+select the best performing compression scheme by writing their own assist kernel, taking semantic level information
+into consideration.
