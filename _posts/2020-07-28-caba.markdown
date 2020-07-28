@@ -34,4 +34,12 @@ a balance between efficiency, usability and hardware complexity. Pure hardware o
 to the level of new hardware components added to existing GPGPU, and the limitation of existing GPGPU programming models.
 On the software level, CABA customizes compilers to allow each kernel to be accompanied by one or more special helper 
 routines, which are executed in the background when the main kernel is stalled or when some events are triggered.
+These routines are largely transparent to the main kernel except some necessary data exchange at the beginning and the 
+end of the execution.
+The compiler is aware of the semantics of helper routines, and will compile them accordingly based on the architecture
+specification. One of the most notable features of the compiler is that the register and local storage of the helper 
+routine should be explicitly allocated by the compiler statically, which is added to the total resource requirement
+of each thread block. The GPGPU hardware is unaware of the extra resources that are dedicated to the execution of 
+these helper routines.
+
 
