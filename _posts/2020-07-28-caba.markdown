@@ -74,4 +74,8 @@ unexpectedly.
 The paper then discusses the possibility of using CABA to perform compression on GPGPU's L2 cache and main memory.
 The peper gives three reasons why compression should better be implemented with CABA rather than with specialized
 control and data path. First, CABA leverages existing buffering and execution units on the GPGPU, while adding 
-dedicated components for compression would change the hardware significantly. Second, 
+dedicated components for compression would change the hardware significantly with less generality achieved. Second, 
+different workloads exhibit different data regularity. No universal compression algorithm is better than any other.
+To make compression widely applicable to GPGPU, the compression scheme should be able to implement several common
+algorithms, such as FPC, BDI, C-PACK, which tackle different types of data. With dedicated hardware this would be 
+difficult or impossible. 
