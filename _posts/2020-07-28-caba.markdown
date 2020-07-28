@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Note: I am not an expert on GPGPU architecture, and have only read very basic GPGPU architecture literatures. The following
+paper summary may be inaccurate and/or incorrect when it involves GPGPU internals. I will strive to clarify as much as I can,
+and put the focus on compression rather than GPGPU.**
+
+
