@@ -28,3 +28,10 @@ and scheduled dynamically by hardware, are often under utilized as well. This is
 being able schedule an entire thread block, which is the unit of scheduling, with partial resources on the current
 processing unit. These registers and local storage will be wasted, which can be leveraged to perform background tasks
 as prposed in this paper.
+
+The CABA architecture in this paper is described as follows. CABA adopts a software-hardware co-design approach to achieve
+a balance between efficiency, usability and hardware complexity. Pure hardware or software schemes are sub-optimal, due
+to the level of new hardware components added to existing GPGPU, and the limitation of existing GPGPU programming models.
+On the software level, CABA customizes compilers to allow each kernel to be accompanied by one or more special helper 
+routines, which are executed in the background when the main kernel is stalled or when some events are triggered.
+
