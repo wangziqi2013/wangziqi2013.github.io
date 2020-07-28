@@ -17,4 +17,10 @@ version_mgmt:
 paper summary may be inaccurate and/or incorrect when it involves GPGPU internals. I will strive to clarify as much as I can,
 and put the focus on compression rather than GPGPU.**
 
-
+This paper proposes Core Assisted Bottleneck Acceleration (CABA), an architecture that leverages idle cycles and resources 
+on GPGPUs to perform out-of-band tasks for acceleration.
+The paper points out that resources on modern GPGPUs are not fully utilized in many cases due to several reasons. 
+First, the memory bandwidth and inter-component link bandwidth are often underutilized, due to the speed discrepancy between
+execution units and memory modules. As a result, if most threads are stalled on memory instructions, cycles will be 
+wasted since no progress can be made during the stalled cycles.
+Second, 
