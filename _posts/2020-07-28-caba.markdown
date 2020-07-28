@@ -17,14 +17,11 @@ version_mgmt:
 paper summary may be inaccurate and/or incorrect when it involves GPGPU internals. I will strive to clarify as much as I can,
 and put the focus on compression rather than GPGPU.**
 
-
-
 **Lowlight:**
 
-I am not really confident on my understanding of GPGPU, so I can't judge design and writing problems of this paper, but here
-is the issue I can find:
-
-1. 
+1. The paper mentions that CABA can help addressing the idle cycle problem. But when it comes to compression, since decompression
+   must occur after data has been fetched, the main kernel is still stalled until data arrival. As a result, decompression
+   cannot be overlapped with data stall, which contradicts the design goal in previous sections.
 
 This paper proposes Core Assisted Bottleneck Acceleration (CABA), an architecture that leverages idle cycles and resources 
 on GPGPUs to perform out-of-band tasks for acceleration.
@@ -100,4 +97,5 @@ in a separate, direct-mapped area of GPGPU's main memory.
 To avoid doubling the number of accesses, an on-chip metadata cache is added to allow fast access of both information
 before data arrives.
 
-
+On a read instruction, the AWC checks whether the bit fetched from the metadata cache indicates a compressed block. 
+If true, the high priority Assist Warp is scheduled for decompression
