@@ -21,9 +21,10 @@ and put the focus on compression rather than GPGPU.**
 
 **Lowlight:**
 
-I am not really confident on my understanding of GPGPU, so I can't judge design and writing problems of this paper
+I am not really confident on my understanding of GPGPU, so I can't judge design and writing problems of this paper, but here
+is the issue I can find:
 
-
+1. 
 
 This paper proposes Core Assisted Bottleneck Acceleration (CABA), an architecture that leverages idle cycles and resources 
 on GPGPUs to perform out-of-band tasks for acceleration.
@@ -89,5 +90,8 @@ CABA can easily turn on or off compression via software intervention. It also en
 select the best performing compression scheme by writing their own assist kernel, taking semantic level information
 into consideration.
 
-
+CABA-based memory compression only leverages the bandwidth saving proprty of compression, without exploiting 
+the cache and storage saving capability. This is because the cache and memory access protocol will have to be
+altered significantly to accommodate variably sized compressed chunks and an extra level of indirection for 
+mapping more logical data than physical capacity. 
 
