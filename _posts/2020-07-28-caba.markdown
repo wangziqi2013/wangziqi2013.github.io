@@ -107,3 +107,12 @@ before data arrives.
 On a read instruction, the AWC checks whether the bit fetched from the metadata cache indicates a compressed block. 
 If true, the high priority Assist Warp is scheduled for decompression when data arrives. Similarly, on a store instruction,
 the low priority compressor Assist Warp is scheduled to be executed in the background.
+
+The paper proposes an implementation of BDI on GPGPU. One of the most important properties of BDI is the regularity of
+compressed data, which makes parallel compression more feasible than other dictionary-based or pattern-based designs.
+The BDI algorithm searches an optimal base, delta size and the input code size to minimize the number of bits required
+to encode a cache block. All input code words (the size of which is part of the search argument) are encoded into shorter
+but still uniformed sized, compressed code words. Each input code word is therefore mapped to a lane in the Assist Warp,
+and attempts to either subtract the selected base or implicit zero base from the code word. The hardware then checks
+whether the delta can be encoded with the given number of bits, and uses a global predicate register to summarize the 
+result into a single bit predicate. This process is repeated for all combinations until a compression argument is found.
