@@ -94,4 +94,10 @@ CABA-based memory compression only leverages the bandwidth saving proprty of com
 the cache and storage saving capability. This is because the cache and memory access protocol will have to be
 altered significantly to accommodate variably sized compressed chunks and an extra level of indirection for 
 mapping more logical data than physical capacity. 
+Only minimum modification is needed to perform compression: one bit per cache line sized block is added to L2 cache and 
+the main memory to indicate whether the block is compressed. The burst length of compressed blocks are also stored
+in a separate, direct-mapped area of GPGPU's main memory.
+To avoid doubling the number of accesses, an on-chip metadata cache is added to allow fast access of both information
+before data arrives.
+
 
