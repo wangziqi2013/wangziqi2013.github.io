@@ -54,3 +54,8 @@ On the hardware side, when GPGPU is programmed with the kernel, the helper routi
 memory, and buffered on an on-chip instruction cache. The helper routine is executed as Assist Warps in a similar way
 as the main kernel. Assist Warps are not executed, until some predefined conditions or events occur, in which case they
 are scheduled on the processing unit.
+The paper proposes three extra hardware components added to the GPGPU for tracking, scheduling, and maintaining states
+for these warps. The first component is the Assist Warp Store (AWS) that stores the program body of the helper routines.
+More than one routine can be stored at the same time, which are indexed using a globally unique source ID (SR.ID) and 
+instruction ID (Inst.ID) for accessing individual instructions. 
+
