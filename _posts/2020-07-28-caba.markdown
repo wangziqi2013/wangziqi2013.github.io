@@ -19,7 +19,7 @@ and put the focus on compression rather than GPGPU.**
 
 **Highlight:**
 
-1. Using an execution model similar to hyoer-threading on CPU to leverage idle cycles and resources more efficiently
+1. Using an execution model similar to hyper-threading on CPU to leverage idle cycles and resources more efficiently
 
 2. Proposes a GPU implementation of BDI. BDI is friendlier to GPGPUs, since all compressed words are of the same size,
    which fits into GPU's regular computation model.
