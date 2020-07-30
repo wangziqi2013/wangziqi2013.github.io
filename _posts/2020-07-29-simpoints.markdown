@@ -48,5 +48,8 @@ Recall that the goal of SimPoints is to find one or more small code segments tha
 The paper argues that if the basic block instances included in the code segments are similar to the total basic blocks
 in the full execution, then these code segments can be used as an approximation of the simulated application.
 
-
-
+Based on the above observation, the problem of finding representative code segments is reduced to finding one or more 
+execution intervals in which the basic block instances that are executed are similar to those of the full execution.
+Instead of bookkeeping every basic block within an interval, and comparing them with each other to find similarities,
+which is both inefficient and unnecessary, the paper proposes that basic blocks within an interval be represented as 
+a basic block vector, discarding information such as the order of execution.
