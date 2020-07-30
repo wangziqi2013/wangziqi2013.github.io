@@ -84,3 +84,10 @@ is necessary, since according to the paper, both the time efficiency and cluster
 high dimentional vectors. Dimension reduction is therefore applied to reduce the high dimention vectors, the length of
 which is the total number of basic blocks. One of the most important properties of the dimention reduction algorithm
 is that the distances between vectors should be preserved, although minor distortions are fine and inevitable.
+The paper proposes that for basic block column vectors of size (N * 1), the dimention reduction is performed by left
+multiplying the column vector with a matrix of size (M * N), in which M is the target dimension and M << N. 
+Elements of the dimension reduction matrix are real numbers randomly selected from range [-1, 1]. Proof is also available
+showing that length distortion after dimension reduction is within a bound. The paper suggests that M equal 15, and that
+Euclidean distance be used for computing distance due to its better representation with lower dimensions.
+
+
