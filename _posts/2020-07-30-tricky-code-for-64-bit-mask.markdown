@@ -38,7 +38,7 @@ This finding, however, puzzled me even more: How could this be a failure?
 
 When the macro argument `num` equals 64, `1UL << num` should output zero, since this piece of code is compiled on a 
 64-bit x86-64 architectire, where the native register size is 64 bits, and the compiler will map this macro to 
-an `sll` (or `sla`, which results in an identical binary instruction, since left shifts do not deal with sign bits) 
+an `shl` (or `sal`, which is essentially the same, since left shifts do not deal with sign bits) 
 assembly instruction. Left shifting `0x1UL` by 64 bits will just result in the only bit being shifted out, which
 outputs zero.
 
@@ -53,4 +53,12 @@ void test_mask2() {
 {% endhighlight %}
 
 The output of this one line test is `0x0 0xFFFFFFFFFFFFFFFF` as expected. 
-So the question is, why 
+So the question is, why the original macro failed, but a manual expansion passed the test?
+
+After some investigation, here is the explanation: Intel x86-64 architecture specifies that, for a 64 bit shift instruction,
+the explicit or implicit second operand, which is the number of bits to be shifted, will be truncated before sending to 
+the ALU. In other words, due to the fact that the native word size is 64 bits, the ALU can handle a shift amount of as 
+many as 64, though any 8-bit value (stored in CL implicitly, or given as immediate number explicitly) can be supplied.
+Bit 6 and 7 will always be masked off before the ALU performs the shift.
+In our case, this translates to `0x1UL << num` outputting `0x1UL` unchanged when the value of `num` is 64, since the
+ALU will only see 0 after the 6th bit of value 64 is masked off.
