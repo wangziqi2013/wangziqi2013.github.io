@@ -23,7 +23,10 @@ the code repo (things might have changed, or the author did not give full clarif
    to a jump to the middle. Such jumps cannot be detected before they are actually executed, since SimPoints is 
    execution-driven. Even worse, for branches whose target address is dynamically generated during execution, even
    full static analysis cannot find the destination.
-   How does SimPoints handle such cases？
+   How does SimPoints handle such cases?
+
+2. If the size of simulated programs are reduced, the working set size may also be proportionally reduced, especially
+   if the code segment contains loops that allocate and write heap memory. How does SimPoints evaluate such effect?
 
 This paper introduces SimPoints, a simulation tool for accelerating architecture simulation using basic block vectors.
 SimPoints aims at solving the problem of architectural simulation, especially cycle-accurate simulation, taking too much 
