@@ -53,3 +53,11 @@ execution intervals in which the basic block instances that are executed are sim
 Instead of bookkeeping every basic block within an interval, and comparing them with each other to find similarities,
 which is both inefficient and unnecessary, the paper proposes that basic blocks within an interval be represented as 
 a basic block vector, discarding information such as the order of execution.
+Using vectors has two obvious advantages. First, similaries between vectors and clustering of vectors are both well-known
+problem, and there exists simple solutions for them. Second, vectors are easier to store and access, compared with the
+actual control flow graph of the interval.
+
+We next describe the details of SimPoints as follows. The first step of SimPoints is to collect basic block information
+and generate basic block vectors for each execution intervals. Overall speaking, SimPoints divides the full execution
+into intervals of 100M instructions, with one basic block vector associated with each interval. SimPoints then starts
+the application on its own execution-driven simulator. 
