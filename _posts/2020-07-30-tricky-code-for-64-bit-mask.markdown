@@ -156,3 +156,5 @@ In the disassembly, `DWORD PTR [rbp-0xc]` is the stack location of local variabl
 while `QWORD PTR [rbp-0x8]` is variable `x`. Before the `shl` instruction, gcc first moves the shift amount into `CL` register
 and the shift target into `RDX` (Although `EDX` is actually used, this is an optimization based on the specification that
 higher 32 bits of a x86-64 register will be cleared when the lower 32 bits are loaded with a new value).
+In this case, it is the hardware ALU, instead of gcc, that evaluates the expression. As expected, bit 6 and 7 of the 
+shift amount, which is 64, are masked off, resulting in the actual amount seen by the ALU being zero.
