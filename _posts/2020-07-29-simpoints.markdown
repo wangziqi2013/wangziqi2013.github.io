@@ -28,4 +28,7 @@ the code repo (things might have changed, or the author did not give full clarif
 This paper introduces SimPoints, a simulation tool for accelerating architecture simulation using basic block vectors.
 SimPoints aims at solving the problem of architectural simulation, especially cycle-accurate simulation, taking too much 
 time to finish on typical full-scale workloads. 
+Previous works attempting to achieve the same goal typically employ manual tailoring of source code or inputs, the usage
+of checkpoints and fast forwarding, and statistics methods with profiling. 
+
 
