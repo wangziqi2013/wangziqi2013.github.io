@@ -213,6 +213,8 @@ function onMouseClick(e) {
           <span class="post-meta">
             {% if post.layout == "paper-summary" %}
               <strong>[Paper Review]</strong>
+            {% elsif post.layout == "post" %}
+            <strong>[Post]</strong>
             {% endif %}
             {{ post.date | date: "%b %-d, %Y" }}
             {% if post.paper_year %}
