@@ -17,6 +17,14 @@ version_mgmt:
 source of reference. This paper summary is merely based on what was written on the published paper, not on what is in
 the code repo (things might have changed, or the author did not give full clarification to certain details)**
 
+**Lowlight:**
+
+1. Basic blocks that are dynamically recognized at early stages of execution may be split to smaller blocks later, due 
+   to a jump to the middle. Such jumps cannot be detected before they are actually executed, since SimPoints is 
+   execution-driven. Even worse, for branches whose target address is dynamically generated during execution, even
+   full static analysis cannot find the destination.
+   How does SimPoints handle such cases？
+
 This paper introduces SimPoints, a simulation tool for accelerating architecture simulation using basic block vectors.
 SimPoints aims at solving the problem of architectural simulation, especially cycle-accurate simulation, taking too much 
 time to finish on typical full-scale workloads. 
