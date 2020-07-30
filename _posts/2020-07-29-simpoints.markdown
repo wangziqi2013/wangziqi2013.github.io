@@ -31,4 +31,7 @@ time to finish on typical full-scale workloads.
 Previous works attempting to achieve the same goal typically employ manual tailoring of source code or inputs, the usage
 of checkpoints and fast forwarding, and statistics methods with profiling. 
 
-
+SimPoints leverages the fact that basic blocks are the basic unit of control flow, which must be executed from the beginning
+to the end. Given the same start system state (including non-deterministic states), the end state after executing the 
+basic block will always be the same regardless of the context of the basic block. 
+SimPoints then abstracts away the internals of basic blocks, and treats them as the fundamental unit of execution.
