@@ -27,17 +27,26 @@ the code repo (things might have changed, or the author did not give full clarif
 
 2. If the size of simulated programs are reduced, the working set size may also be proportionally reduced, especially
    if the code segment contains loops that allocate and write heap memory. How does SimPoints evaluate such effect?
+   Note that in the text it is indeed mentioned that by reducing the size of the program, the cache miss ratio 
+   changes significantly sometimes. But the paper's conclusion is that this does not affect IPC.
 
 This paper introduces SimPoints, a simulation tool for accelerating architecture simulation using basic block vectors.
 SimPoints aims at solving the problem of architectural simulation, especially cycle-accurate simulation, taking too much 
 time to finish on typical full-scale workloads. 
 Previous works attempting to achieve the same goal typically employ manual tailoring of source code or inputs, the usage
 of checkpoints and fast forwarding, and statistics methods with profiling. 
+These approcahes, however, either uses architectural metrics such as IPC and cache miss ratios, or heavily rely on the 
+simulated platform itself to provide feedback. One direct consequence of these methods is that they have to be re-run
+when the simulated platform changes, and when input changes. 
 
-SimPoints leverages the fact that basic blocks are the basic unit of control flow, which must be executed from the beginning
-to the end. Given the same start system state (including non-deterministic states), the end state after executing the 
-basic block will always be the same regardless of the context of the basic block. 
-SimPoints then abstracts away the internals of basic blocks, and treats them as the fundamental unit of execution.
+SimPoints, on the contrary, locates these code segments independent from architectural details by leveraging the fact 
+that basic blocks are the basic unit of control flow, which must be executed from the beginning to the end. 
+Given the same start system state (including non-deterministic states), the end state after executing the 
+basic block will always be the same regardless of the context of the basic block and the architectural details of the 
+simulation. SimPoints then abstracts away the internals of basic blocks, and treats them as the fundamental unit of execution.
 Recall that the goal of SimPoints is to find one or more small code segments that are representative of the full execution.
 The paper argues that if the basic block instances included in the code segments are similar to the total basic blocks
 in the full execution, then these code segments can be used as an approximation of the simulated application.
+
+
+
