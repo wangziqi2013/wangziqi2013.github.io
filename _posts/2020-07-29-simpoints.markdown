@@ -34,6 +34,9 @@ the code repo (things might have changed, or the author did not give full clarif
    Note that in the text it is indeed mentioned that by reducing the size of the program, the cache miss ratio 
    changes significantly sometimes. But the paper's conclusion is that this does not affect IPC.
 
+3. Input changes may change the control flow of an application (although likely not significant changes), and thus 
+   change the vectors. It may be necessary to recompute the vectors when the input changes.
+
 This paper introduces SimPoints, a simulation tool for accelerating architecture simulation using basic block vectors.
 SimPoints aims at solving the problem of architectural simulation, especially cycle-accurate simulation, taking too much 
 time to finish on typical full-scale workloads. 
@@ -73,4 +76,7 @@ Basic blocks are identified by the starting address of the first instruction, wi
 all known basic block addresses for fast check.
 New basic blocks are pushed to the end of the vector for all intervals when they are first discovered, such that at the
 end of the simulation, each interval has a basic block vector of the same length, with each element being the number of
-times the basic block is executed during that interval.
+times the basic block is executed during that interval. These vectors will then be processed, compared and clustered 
+in the following phases.
+
+
