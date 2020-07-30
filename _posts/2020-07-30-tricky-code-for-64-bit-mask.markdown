@@ -62,3 +62,9 @@ many as 64, though any 8-bit value (stored in CL implicitly, or given as immedia
 Bit 6 and 7 will always be masked off before the ALU performs the shift.
 In our case, this translates to `0x1UL << num` outputting `0x1UL` unchanged when the value of `num` is 64, since the
 ALU will only see 0 after the 6th bit of value 64 is masked off.
+
+Interesting enough, a side note in the architecture specification states that in the original 16-bit 8086 design, the
+shift amount is not masked, meaning that the hardware shifter bahaves more consistently when the shift amount exceeds
+the native word bit length. Starting from 80286, the feature is added to ALU, and is kept even when the hardware 
+executes in virtual-8086 mode, resulting in a major source of incompatibility, since any 8086 era software that 
+generates bit masks assuming the older ALU shifter behavior will fail to execute correctly in some cases.
