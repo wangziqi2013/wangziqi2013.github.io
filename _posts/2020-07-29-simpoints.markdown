@@ -79,4 +79,8 @@ end of the simulation, each interval has a basic block vector of the same length
 times the basic block is executed during that interval. These vectors will then be processed, compared and clustered 
 in the following phases.
 
-
+In the next phase, SimPoints reduces the dimention of basic block vectors before they are compared. Dimention reduction
+is necessary, since according to the paper, both the time efficiency and clustering quality of vectors are worse with
+high dimentional vectors. Dimension reduction is therefore applied to reduce the high dimention vectors, the length of
+which is the total number of basic blocks. One of the most important properties of the dimention reduction algorithm
+is that the distances between vectors should be preserved, although minor distortions are fine and inevitable.
