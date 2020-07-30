@@ -90,10 +90,12 @@ Elements of the dimension reduction matrix are real numbers randomly selected fr
 showing that length distortion after dimension reduction is within a bound. The paper suggests that M equal 15, and that
 Euclidean distance be used for computing distance due to its better representation with lower dimensions.
 
-After dimension reduction, the next step is to cluster the basic block vectors from all intervals. The number of clusters
+After dimension reduction, the next step is to cluster the basic block vectors for all intervals. The number of clusters
 can be external inputs given by the programmer, or be determined using BIC based on the "goodness". In the latter case,
 cluster count from 1 to 10 are experimented, and the one with the best BIC score is selected.
 The paper uses the well-known kmeans algorithm to compute clusters. Each cluster stands for one "representative" class
 of intervals that is supposed to demonstrate similar properties in terms of architectural effects.
 
-
+SimPoints offers two options for selecting the representative code segments. The first option is to only select a single
+interval. In this case, the global centeroid across all vectors are computed, and the one with the clostest distance
+to the centroid is selected. 
