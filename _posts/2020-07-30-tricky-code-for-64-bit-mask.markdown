@@ -114,4 +114,45 @@ The resulting disassembly code after compiling this with default arguments to gc
   400552:	c3                   	ret    
 {% endhighlight %}
 
+As you can see, the value of `0x1UL << 64` has been evaluated at compilation time, which is zero. `[rbp-0x8]` is just the
+stack location of local variable `x`. A different result would occur, if you change the above test code to the following:
 
+{% highlight C %}
+#include <stdio.h>
+
+int main() {
+  int y = 64;
+  unsigned long x = 0x1UL << y;
+  printf("%lX\n", x);
+  return 0;
+}
+{% endhighlight %}
+
+The output of this code snippet is `1` instead of `0`, with the disassembly being:
+
+{% highlight assembly %}
+0000000000400526 <main>:
+  400526:	55                   	push   rbp
+  400527:	48 89 e5             	mov    rbp,rsp
+  40052a:	48 83 ec 10          	sub    rsp,0x10
+  40052e:	c7 45 f4 40 00 00 00 	mov    DWORD PTR [rbp-0xc],0x40
+  400535:	8b 45 f4             	mov    eax,DWORD PTR [rbp-0xc]
+  400538:	ba 01 00 00 00       	mov    edx,0x1
+  40053d:	89 c1                	mov    ecx,eax
+  40053f:	48 d3 e2             	shl    rdx,cl
+  400542:	48 89 d0             	mov    rax,rdx
+  400545:	48 89 45 f8          	mov    QWORD PTR [rbp-0x8],rax
+  400549:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  40054d:	48 89 c6             	mov    rsi,rax
+  400550:	bf f4 05 40 00       	mov    edi,0x4005f4
+  400555:	b8 00 00 00 00       	mov    eax,0x0
+  40055a:	e8 a1 fe ff ff       	call   400400 <printf@plt>
+  40055f:	b8 01 00 00 00       	mov    eax,0x1
+  400564:	c9                   	leave  
+  400565:	c3                   	ret    
+{% endhighlight %}
+
+In the disassembly, `DWORD PTR [rbp-0xc]` is the stack location of local variable `y`, which is initialized to 64 (0x40),
+while `QWORD PTR [rbp-0x8]` is variable `x`. Before the `shl` instruction, gcc first moves the shift amount into `CL` register
+and the shift target into `RDX` (Although `EDX` is actually used, this is an optimization based on the specification that
+higher 32 bits of a x86-64 register will be cleared when the lower 32 bits are loaded with a new value).
