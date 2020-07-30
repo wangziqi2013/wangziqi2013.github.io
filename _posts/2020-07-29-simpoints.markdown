@@ -35,3 +35,6 @@ SimPoints leverages the fact that basic blocks are the basic unit of control flo
 to the end. Given the same start system state (including non-deterministic states), the end state after executing the 
 basic block will always be the same regardless of the context of the basic block. 
 SimPoints then abstracts away the internals of basic blocks, and treats them as the fundamental unit of execution.
+Recall that the goal of SimPoints is to find one or more small code segments that are representative of the full execution.
+The paper argues that if the basic block instances included in the code segments are similar to the total basic blocks
+in the full execution, then these code segments can be used as an approximation of the simulated application.
