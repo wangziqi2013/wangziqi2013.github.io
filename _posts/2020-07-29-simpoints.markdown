@@ -98,4 +98,6 @@ of intervals that is supposed to demonstrate similar properties in terms of arch
 
 SimPoints offers two options for selecting the representative code segments. The first option is to only select a single
 interval. In this case, the global centeroid across all vectors are computed, and the one with the clostest distance
-to the centroid is selected. 
+to the centroid is selected. The second option is to have several segments. SimPoints will first select one vector from 
+each cluster whose distance to the cluster's centroid is the smallest as candidate. Then SimPoints sorts these vectors
+by the size of their clusters, and selects the top K where K is the intended number of code segments.
