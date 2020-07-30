@@ -70,4 +70,48 @@ is kept even when the hardware executes in virtual-8086 mode, resulting in a maj
 Any 8086 era software that generates bit masks assuming the older ALU shifter behavior will fail to execute correctly in 
 some cases.
 
+As for why the second test case gives the correct answer: When constant numbers are used in an expression, the compiler
+will always evaluate the constant expression at compilation time. Unfortunately, gcc's constant evaluation is not properly
+programmed to match hardware behavior, although it does prints out a warning saying that the constant shift amount exceeds
+the bit length of the source operand:
+
+{% highlight C %}
+test.c:104:33: warning: left shift count >= width of type [-Wshift-count-overflow]
+   printf("0x%lX 0x%lX\n", 0x1UL << 64, (0x1UL << 64) - 1);
+                                 ^
+test.c:104:47: warning: left shift count >= width of type [-Wshift-count-overflow]
+   printf("0x%lX 0x%lX\n", 0x1UL << 64, (0x1UL << 64) - 1);
+{% endhighlight %}
+
+To confirm that gcc constant evaluation does not match hardware behavior, I wrote a test program as follows:
+
+{% highlight C %}
+#include <stdio.h>
+
+int main() {
+  unsigned long x = 0x1UL << 64;
+  printf("%lX\n", x);
+  return 0;
+}
+{% endhighlight %}
+
+The resulting disassembly code after compiling this with default arguments to gcc is as follows:
+
+{% highlight assembly %}
+0000000000400526 <main>:
+  400526:	55                   	push   rbp
+  400527:	48 89 e5             	mov    rbp,rsp
+  40052a:	48 83 ec 10          	sub    rsp,0x10
+  40052e:	48 c7 45 f8 00 00 00 	mov    QWORD PTR [rbp-0x8],0x0
+  400535:	00 
+  400536:	48 8b 45 f8          	mov    rax,QWORD PTR [rbp-0x8]
+  40053a:	48 89 c6             	mov    rsi,rax
+  40053d:	bf e4 05 40 00       	mov    edi,0x4005e4
+  400542:	b8 00 00 00 00       	mov    eax,0x0
+  400547:	e8 b4 fe ff ff       	call   400400 <printf@plt>
+  40054c:	b8 01 00 00 00       	mov    eax,0x1
+  400551:	c9                   	leave  
+  400552:	c3                   	ret    
+{% endhighlight %}
+
 
