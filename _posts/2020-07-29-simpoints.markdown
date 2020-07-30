@@ -24,6 +24,10 @@ the code repo (things might have changed, or the author did not give full clarif
    execution-driven. Even worse, for branches whose target address is dynamically generated during execution, even
    full static analysis cannot find the destination.
    How does SimPoints handle such cases?
+   One way is that when an known basic block is further divided into two by a jump instruction to the middle of the 
+   block, one more element (the one on higher address) is pushed into the basic block list for all previous vectors.
+   In addition, previous vectors are scanned. If they contain the old block (which now is also a new basic block),
+   then the old block count is decremented, and the new block count is incremented.
 
 2. If the size of simulated programs are reduced, the working set size may also be proportionally reduced, especially
    if the code segment contains loops that allocate and write heap memory. How does SimPoints evaluate such effect?
@@ -60,4 +64,5 @@ actual control flow graph of the interval.
 We next describe the details of SimPoints as follows. The first step of SimPoints is to collect basic block information
 and generate basic block vectors for each execution intervals. Overall speaking, SimPoints divides the full execution
 into intervals of 100M instructions, with one basic block vector associated with each interval. SimPoints then starts
-the application on its own execution-driven simulator. 
+the application on its own execution-driven simulator. The simulator of SimPoints do not simulate architectural details.
+Instead, it only divides the control flow into basic blocks, and count the number of block
