@@ -42,3 +42,15 @@ an `sll` (or `sla`, which results in an identical binary instruction, since left
 assembly instruction. Left shifting `0x1UL` by 64 bits will just result in the only bit being shifted out, which
 outputs zero.
 
+To confirm my reasoning, I wrote another one line test as follows:
+
+**Unit Test:**
+{% highlight C %}
+void test_mask2() {
+  printf("0x%lX 0x%lX\n", 0x1UL << 64, (0x1UL << 64) - 1);
+  return;
+}
+{% endhighlight %}
+
+The output of this one line test is `0x0 0xFFFFFFFFFFFFFFFF` as expected. 
+So the question is, why 
