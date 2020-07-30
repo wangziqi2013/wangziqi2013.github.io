@@ -62,7 +62,15 @@ problem, and there exists simple solutions for them. Second, vectors are easier 
 actual control flow graph of the interval.
 
 We next describe the details of SimPoints as follows. The first step of SimPoints is to collect basic block information
-and generate basic block vectors for each execution intervals. Overall speaking, SimPoints divides the full execution
-into intervals of 100M instructions, with one basic block vector associated with each interval. SimPoints then starts
-the application on its own execution-driven simulator. The simulator of SimPoints do not simulate architectural details.
-Instead, it only divides the control flow into basic blocks, and count the number of block
+and generate basic block vectors for each execution intervals. SimPoints divides the full execution into intervals of 
+100M instructions, with one basic block vector associated with each interval. SimPoints then starts the application on 
+its own execution-driven simulator. The simulator of SimPoints do not simulate architectural details. Instead, it only 
+divides the control flow into basic blocks, and count the number of times each block is executed within the interval.
+The initial run of SimPoints is, therefore, must faster than an architectural simulator, since for most the times the
+simulator is merely executed on bare metal hardware without state computation.
+As execution proceeds, new basic blocks are added, and existing basic blocks may also be splited into new ones.
+Basic blocks are identified by the starting address of the first instruction, with a global hash table maintaining
+all known basic block addresses for fast check.
+New basic blocks are pushed to the end of the vector for all intervals when they are first discovered, such that at the
+end of the simulation, each interval has a basic block vector of the same length, with each element being the number of
+times the basic block is executed during that interval.
