@@ -8,12 +8,17 @@ ontop: false
 
 Yesterday I was very confused when one of the unit tests in a paper's project failed. Both the unit test and the code to
 be tested are extremely simple such that no one would expect a failure to occur. 
-The code to be tested is a one-line macro for generating 64-bit masks (of type `uint64_t`)
+The code to be tested is a one-line macro for generating 64-bit masks (of type `uint64_t`) using bit shift and decrement,
+as shown below. The unit test simply enumerates all possible cases, and checks the output. `bit64_test()` is another
+macro that checks whether a bit is set or not on a given offset. If the bit is set, it returns one. Otherwise it returns 
+zero.
 
+**Mask Genetation:**
 {% highlight C %}
 #define MASK64_LOW_1(num)  ((1UL << num) - 1)
 {% endhighlight %}
 
+**Unit Test:**
 {% highlight C %}
 void test_mask() {
   for(int bits = 0;bits <= 64;bits++) {
@@ -26,3 +31,14 @@ void test_mask() {
   return;
 }
 {% endhighlight %}
+
+With the assistance of gdb, it took me another 20 seconds to figure out that the failed case occurred when the value of 
+test variable `bits` is 64, meaning that all bits in the output `uint64_t` should be set to one.
+This finding, however, puzzled me even more: How could this be a failure?
+
+When the macro argument `num` equals 64, `1UL << num` should output zero, since this piece of code is compiled on a 
+64-bit x86-64 architectire, where the native register size is 64 bits, and the compiler will map this macro to 
+an `sll` (or `sla`, which results in an identical binary instruction, since left shifts do not deal with sign bits) 
+assembly instruction. Left shifting `0x1UL` by 64 bits will just result in the only bit being shifted out, which
+outputs zero.
+
