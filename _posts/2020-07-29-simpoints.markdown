@@ -101,3 +101,9 @@ interval. In this case, the global centeroid across all vectors are computed, an
 to the centroid is selected. The second option is to have several segments. SimPoints will first select one vector from 
 each cluster whose distance to the cluster's centroid is the smallest as candidate. Then SimPoints sorts these vectors
 by the size of their clusters, and selects the top K where K is the intended number of code segments.
+
+The actual architectural simulation is executed with the selected code segments as input arguments. The simulation is
+fast forwarded to the first code segment by counting instructions (code segments are always 100M dynamic instruction in
+size). After that full simulation begins until the instruction count reaches another 100M. If multiple code segments
+are selected, the simulation is again fast forwarded to the next code segment, and performs full simulation. This process
+is repeated until all code segments are simulated, after which the simulation could terminate.
