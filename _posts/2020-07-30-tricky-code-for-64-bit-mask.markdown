@@ -58,7 +58,7 @@ So the question is, why the original macro failed, but a manual expansion passed
 After some investigation, here is the explanation: Intel x86-64 architecture specifies that, for a 64 bit shift instruction,
 the explicit or implicit second operand, which is the number of bits to be shifted, will be truncated before sending to 
 the ALU. In other words, due to the fact that the native word size is 64 bits, the ALU can handle a shift amount of as 
-many as 64, though any 8-bit value (stored in CL implicitly, or given as immediate number explicitly) can be supplied.
+many as 63, despite that any 8-bit value (stored in CL implicitly, or given as immediate number explicitly) can be supplied.
 Bit 6 and 7 will always be masked off before the ALU performs the shift.
 In our case, this translates to `0x1UL << num` outputting `0x1UL` unchanged when the value of `num` is 64, since the
 ALU will only see 0 after the 6th bit of value 64 is masked off.
@@ -158,3 +158,7 @@ and the shift target into `RDX` (Although `EDX` is actually used, this is an opt
 higher 32 bits of a x86-64 register will be cleared when the lower 32 bits are loaded with a new value).
 In this case, it is the hardware ALU, instead of gcc, that evaluates the expression. As expected, bit 6 and 7 of the 
 shift amount, which is 64, are masked off, resulting in the actual amount seen by the ALU being zero.
+
+The eccentric behavior of gcc is not necessarily a bug. In fact, in C language specification, it is cleared stated that
+undefined behavior would occur, when the second operand of a shift operation is negative or when it exceeds the length 
+of the type. The compiler is therefore given full priviledge of deciding the outcome of such an operation.
