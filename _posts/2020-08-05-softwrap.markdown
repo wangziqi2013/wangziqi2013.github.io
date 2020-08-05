@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper introduces SoftWaRP, a software framework that supports atomic transactions on NVM. The paper sets the goal
+of SoftWaRP as providing durability and atomicity to user applications in a system equipped with NVM. Without special
+support, neither durability and atomicity is supported by the naive memory interface of NVM devices. 
