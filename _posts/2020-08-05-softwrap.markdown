@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SoftWrAP: A Lightweight Framework for Transactional Support of Storage Class Memory"
+date:   2020-08-05 18:53:00 -0500
+categories: paper
+paper_title: "SoftWrAP: A Lightweight Framework for Transactional Support of Storage Class Memory"
+paper_link: MSST 2015
+paper_keyword: NVM; SoftWrap; Redo Logging
+paper_year: 
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
