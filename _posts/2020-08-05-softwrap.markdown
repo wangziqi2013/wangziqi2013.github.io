@@ -31,3 +31,8 @@ of such lines before transaction commit, or redirect them to an alternate, "shad
 pre-transaction image. Software approaches, on the other hand, will not update data in-place until transaction commit. 
 As a compensation, read operations to committed data must check the redo log in addition to the original location.
 Some background threads must also periodically checkpoint the redo log to the NVM image for ease of access. 
+
+SoftWrAP combines shadowing and redo logging to reduce the overhead of log traversal as in software approcahes described
+above. In addition to generating the redo log entry when data is written during a transaction, the software library also
+copies dirty data to a DRAM buffer. The DRAM buffer is indexed by a hash table which can be accessed in constant time. 
+
