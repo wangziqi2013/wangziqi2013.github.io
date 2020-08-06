@@ -24,4 +24,8 @@ SoftWaRP differs from previous designs by using a combination of redo logging an
 logging, two write ordering must be enforced. First, redo log entries must be persisted to the NVM before the commit
 record. Second, in-place updates of data must only be persisted to the NVM after the commit record is written. The
 first write ordering can be realized by simply executing a persist barrier before and after writing the commit record,
-which signals the logical commit of the transaction. 
+which signals the logical commit of the transaction. The second write ordering, however, is difficult to achieve on today's
+hardware, since if cache lines are updated in-place, they will be buffered by the cache hierarchy, the eviction of which
+cannot be controlled by software. Previous hardware approaches either force the cache controller to hold back evictions
+of such lines before transaction commit, or redirect them to an alternate, "shadow" location to avoid destroying the 
+pre-transaction image. 
