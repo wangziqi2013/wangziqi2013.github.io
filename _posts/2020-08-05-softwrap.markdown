@@ -28,4 +28,6 @@ which signals the logical commit of the transaction. The second write ordering, 
 hardware, since if cache lines are updated in-place, they will be buffered by the cache hierarchy, the eviction of which
 cannot be controlled by software. Previous hardware approaches either force the cache controller to hold back evictions
 of such lines before transaction commit, or redirect them to an alternate, "shadow" location to avoid destroying the 
-pre-transaction image. 
+pre-transaction image. Software approaches, on the other hand, will not update data in-place until transaction commit. 
+As a compensation, read operations to committed data must check the redo log in addition to the original location.
+Some background threads must also periodically checkpoint the redo log to the NVM image for ease of access. 
