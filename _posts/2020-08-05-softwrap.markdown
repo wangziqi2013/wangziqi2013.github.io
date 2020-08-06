@@ -19,3 +19,9 @@ support, neither durability and atomicity is supported by the naive memory inter
 dirty data written by store instructions will be buffered by the cache hierarchy, which may not reach the NVM before
 a crash. On the other hand, uncontrolled, arbitrary evictions can also happen during the execution of a transaction, breaking 
 atomicity if data is only partially updated when a crash happens.
+
+SoftWaRP differs from previous designs by using a combination of redo logging and shadowing. In conventional redo
+logging, two write ordering must be enforced. First, redo log entries must be persisted to the NVM before the commit
+record. Second, in-place updates of data must only be persisted to the NVM after the commit record is written. The
+first write ordering can be realized by simply executing a persist barrier before and after writing the commit record,
+which signals the logical commit of the transaction. 
