@@ -85,4 +85,8 @@ as the reference for dirty data. The dirty data is also written into the shadow 
 allocated if it does not exist. When the transaction commits, a commit record is appended to the log, and the transaction
 logically commits. The log is not replayed on commit.
 
+On a transactional load operation, the instrumented load first checks the hash table for dirty data. If the address is not
+shadowed, then NVM will be accessed directly. Both operations take constant time, making reads faster than most software
+redo logging approaches.
+
 
