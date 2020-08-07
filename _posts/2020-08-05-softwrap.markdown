@@ -110,8 +110,15 @@ as the current table, it transits to A state. When the table is switched out on 
 A C state table should still be searched before the NVM image, if a read operation misses the current table, since it
 may contain the most up-to-date copy of an address that has not yet been checkpointed and also whose entry has not been 
 created in the new table. The background checkpointing thread also starts writing table entries back to the NVM when
-the table enters C state. After checkpoints completes, the table transites to R state. The R state is only transient, which
+the table enters C state. After checkpoint completes, the table transites to R state. The R state is only transient, which
 is necessary to allow threads that started accessing the table before it leaves C state. 
 An R state table itself will not be searched on current table misses, since all its contents can also be found on the
 NVM. After all threads accessing the R state table completes, the R state table is recycled, which will put it into
 the clean E state for use again in the next epoch.
+
+On transaction begin, the macro takes a snapshot of the current states of the two hash tables. A hash table in A state
+can transit to C state, only when all threads that started when the table is in A state have completed. Similarly, a
+hash table in R state can only transit to the E state, only when all threads that started when the table is in C state
+have completed, since these threads may access the table in C state while the table is checkpointed and then transits to
+R state concurrently. After the table transits to the R state, no more threads can access the table, and therefore,
+no thread can ever hold a reference to the table if they all started after the table transits to the R state.
