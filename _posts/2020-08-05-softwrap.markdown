@@ -67,3 +67,10 @@ Two extra data structures are also maintained. The first is the log buffer on th
 log queue. Log entries are generated and persisted as transactional stores are executed. To maximize the efficiency of 
 log persistence, the paper suggests that SoftWrAP uses write combining, non-temproal stores to avoid polluting the 
 cache, while maximizing sequential write bandwidth.
+The second structure is the hash table for maintaining shadowed copies of dirty data. To simplify address computation,
+the hash table stores shadow pages in fixed 1KB granularity. Smaller granularities are also possible, at the cost
+of proportionally more table entries. Although not mentioned by the paper, the large shadowing granularity may not pose
+a major source of write amplification, since shadow pages are checkpointed to the NVM image only infrequently during execution,
+as we will see later, which amortizes the cost.
+
+
