@@ -55,4 +55,10 @@ As in other software redo logging approaches, the hash table is also periodicall
 unlimited growth of the buffering area. SoftWrAP copies the redo image from the DRAM to the NVM, and truncates the
 redo log thereafter to recycle the NVM log buffer.
 
-
+We next describe the design as follows. SoftWrAP features a transaction interface which defines the unit of atomicity
+with regard to failures.
+Data updates in a transaction are either all committed or not committed after a crash.
+SoftWrAP uses two macros, `wrapOpen()` and `wrapClose()` to begin and commit a transaction respectively. `wrapRead()`
+and `wrapWrite()` are provided to access transactional data. Note that SoftWrAP library does not provide data isolation
+support as in conventional transactional systems. Data stored by one transaction is always visible to other transactions
+or non-transactional code after it is written.
