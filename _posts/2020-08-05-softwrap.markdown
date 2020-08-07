@@ -52,4 +52,7 @@ before the image itself is accessed. This way, the linear log search can be avoi
 time operation. In addition, NVM bandwidth is no longer wasted on log traversal operations. Instead, DRAM is deployed 
 as the temporary buffer to be used by SoftWrAP, which absorbs read traffic. 
 As in other software redo logging approaches, the hash table is also periodically checkpointed to the NVM to avoid 
-unlimited growth of the buffering area. SoftWrAP copies the redo image to the 
+unlimited growth of the buffering area. SoftWrAP copies the redo image from the DRAM to the NVM, and truncates the
+redo log thereafter to recycle the NVM log buffer.
+
+
