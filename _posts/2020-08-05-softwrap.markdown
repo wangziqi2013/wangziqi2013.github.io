@@ -22,6 +22,12 @@ version_mgmt:
    So the biggest merit of this design is to distribute bandwidth requirement of NVM to the DRAM, which makes sense, since
    DRAM often has higher bandwidth than NVM.
 
+2. Redo log entries actually serve two purposes: (1) Reference for dirty data that has not yet been checkpointed to the 
+   NVM image; (2) Source of committed data for recovery. This paper decoupled the two usages of redo entries by only using
+   redo log entries for recovery, but storing a separate shadowed copy of dirty data for access. This allows more flexible
+   redo logging, such as logical logging (only logging operations that can be replayed deterministically) or variable 
+   sized logging.
+
 This paper introduces SoftWaRP, a software framework that supports atomic transactions on NVM. The paper sets the goal
 of SoftWaRP as providing durability and atomicity to user applications in a system equipped with NVM. Without special
 support, neither durability and atomicity is supported by the naive memory interface of NVM devices. On one hand, 
