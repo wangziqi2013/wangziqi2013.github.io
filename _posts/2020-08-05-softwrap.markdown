@@ -94,8 +94,13 @@ procedure iterates over pages in the hash table, and writes them back to their h
 transactions will be checkpointed back to the NVM, while the partially written working set of a transaction must be
 kept isolated from the NVM. 
 
-To make shadow page checkpointing truly non-blocking and a background process, the paper proposes that two hash tables
-be used in a double-buffering manner. A hash table can be in the following three states: A (Active), meaning the table
+To make shadow page checkpointing truly non-blocking and hence a background process, the paper proposes that two hash tables
+be used in a double-buffering manner. Execution is divided into epochs, with one epoch consisting of several transactions.
+Each epoch has an associated hash table for storing its shadowed pages, called the current hash table. When epoch advances, 
+the current hash table is "closed". A new hash table is allocated for the next epoch as the new current table, while the
+old table is checkpointed to the NVM in the background. 
+
+A hash table can be in the following three states: A (Active), meaning the table
 is the current one that all updates will be inserted; C (Closed), meaning the table has become inactive, but the
 contents of the table have not been checkpointed; E (Empty), meaning the table is empty and ready for use; R (Retiring),
 meaning that the table is not empty, but all contents have been checkpointed. 
