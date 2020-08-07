@@ -79,4 +79,10 @@ of proportionally more table entries. Although not mentioned by the paper, the l
 a major source of write amplification, since shadow pages are checkpointed to the NVM image only infrequently during execution,
 as we will see later, which amortizes the cost.
 
+On a transactional store operation, the instrumented store will first generate the log entry containing the address, 
+dirty data and the size of the update. Redo log entries do not need to have a fixed granularity, since they are not used
+as the reference for dirty data. The dirty data is also written into the shadow page in the hash table. An entry is 
+allocated if it does not exist. When the transaction commits, a commit record is appended to the log, and the transaction
+logically commits. The log is not replayed on commit.
+
 
