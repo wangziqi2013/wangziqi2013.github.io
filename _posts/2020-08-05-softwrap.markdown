@@ -61,4 +61,9 @@ Data updates in a transaction are either all committed or not committed after a 
 SoftWrAP uses two macros, `wrapOpen()` and `wrapClose()` to begin and commit a transaction respectively. `wrapRead()`
 and `wrapWrite()` are provided to access transactional data. Note that SoftWrAP library does not provide data isolation
 support as in conventional transactional systems. Data stored by one transaction is always visible to other transactions
-or non-transactional code after it is written.
+or non-transactional code after it is written. 
+
+Two extra data structures are also maintained. The first is the log buffer on the NVM, which is implemented as a circular
+log queue. Log entries are generated and persisted as transactional stores are executed. To maximize the efficiency of 
+log persistence, the paper suggests that SoftWrAP uses write combining, non-temproal stores to avoid polluting the 
+cache, while maximizing sequential write bandwidth.
