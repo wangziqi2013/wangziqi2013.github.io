@@ -89,4 +89,7 @@ On a transactional load operation, the instrumented load first checks the hash t
 shadowed, then NVM will be accessed directly. Both operations take constant time, making reads faster than most software
 redo logging approaches.
 
-
+The shadow pages in the hash table are periodically checkpointed to the NVM image in the background. The checkpointing 
+procedure iterates over pages in the hash table, and writes them back to their home locations. Note that only committed
+transactions will be checkpointed back to the NVM, while the partially written working set of a transaction must be
+kept isolated from the NVM. 
