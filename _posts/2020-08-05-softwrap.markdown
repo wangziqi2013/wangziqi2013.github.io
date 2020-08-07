@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Despite what the paper claims, this design is essentially a trade-off between increased total bus bandwidth and decreased
+   NVM bandwidth. By allocating space in the DRAM buffer, we increase the bandwidth of writing into DRAM in addition to
+   the bandwidth of writing NVM twice, which is intrinsic to redo logging. By not traversing the NVM log on both reads 
+   and log checkpointing, we reduced read bandwidth from the NVM, which now goes into DRAM.
+   So the biggest merit of this design is to distribute bandwidth requirement of NVM to the DRAM, which makes sense, since
+   DRAM often has higher bandwidth than NVM.
+
 This paper introduces SoftWaRP, a software framework that supports atomic transactions on NVM. The paper sets the goal
 of SoftWaRP as providing durability and atomicity to user applications in a system equipped with NVM. Without special
 support, neither durability and atomicity is supported by the naive memory interface of NVM devices. On one hand, 
@@ -33,11 +42,14 @@ As a compensation, read operations to committed data must check the redo log in 
 Some background threads must also periodically checkpoint the redo log to the NVM image for ease of access. 
 A major concern for the above software implementation is that reads must be redirected, which severely affects read 
 performance due to the linear log search. Furthermore, effective NVM bandwidth is reduced to at most half of the 
-device bandwidth, since log entries are frequently accessed for later reads.
+device bandwidth, due to the intrinsic write amplification of redo logging, as well as log traversal overhead.
 
 SoftWrAP combines shadowing and redo logging to reduce the overhead of log traversal as in software approcahes described
 above. In addition to generating the redo log entry when data is written during a transaction, the software library also
 copies dirty data to a DRAM buffer. The DRAM buffer is indexed by a hash table which can be accessed in constant time. 
 Data accesses will first search the hash table for more up-to-date data that has not been checkpointed to the NVM image,
-before the image itself is accessed. This way, the linear NVM log search can be avoided, which is replaced by a constant 
-time operation in the DRAM. The hash table is also periodically checkpointed to the NVM
+before the image itself is accessed. This way, the linear log search can be avoided, which is replaced by a constant 
+time operation. In addition, NVM bandwidth is no longer wasted on log traversal operations. Instead, DRAM is deployed 
+as the temporary buffer to be used by SoftWrAP, which absorbs read traffic. 
+As in other software redo logging approaches, the hash table is also periodically checkpointed to the NVM to avoid 
+unlimited growth of the buffering area. SoftWrAP copies the redo image to the 
