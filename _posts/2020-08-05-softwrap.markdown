@@ -100,8 +100,14 @@ Each epoch has an associated hash table for storing its shadowed pages, called t
 the current hash table is "closed". A new hash table is allocated for the next epoch as the new current table, while the
 old table is checkpointed to the NVM in the background. 
 
-A hash table can be in the following three states: A (Active), meaning the table
+A hash table can be in the following four states: A (Active), meaning the table
 is the current one that all updates will be inserted; C (Closed), meaning the table has become inactive, but the
 contents of the table have not been checkpointed; E (Empty), meaning the table is empty and ready for use; R (Retiring),
 meaning that the table is not empty, but all contents have been checkpointed. 
 
+A table begins its life cycle in the E state when it transits from R in the previous iteration. When the table is selected
+as the current table, it transits to A state. When the table is switched out on an epoch boundary, it transits to C state.
+A C state table should still be searched before the NVM image, if a read operation misses the current table, since it
+may contain the most up-to-date copy of an address that has not yet been checkpointed and also whose entry has not been 
+created in the new table. The background checkpointing thread also starts writing table entries back to the NVM when
+the table enters C state. 
