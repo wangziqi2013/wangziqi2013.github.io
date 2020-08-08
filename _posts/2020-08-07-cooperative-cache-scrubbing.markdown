@@ -38,3 +38,6 @@ the runtime library of the language maintains the allocation status of objects. 
 instructions be provided to hardware as a "hint" of object life cycles. In this model, software conveys the status of
 objects by marking the corresponding cache lines, and hardware cooperatively evicts or fills the line.
 
+Four special instructions are proposed in this paper: clinvalidate, clundirty, clclean, and clzeroX. All four instructions
+are implemented at the LLC level of a multi-processor, and are integrated with the widely used MESI coherence protocol
+with only minor modification. We next discuss each of the four instructions and their implementations.
