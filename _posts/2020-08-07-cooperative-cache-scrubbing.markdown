@@ -57,4 +57,7 @@ affected, though, since the language runtime guarantees that freed objects will 
 behavior would occur if this happens. clundirty is implemented by sending a message to the LLC, and then the LLC using
 a special downgrade message to revoke M states from all upper level caches as if an external downgrade were received.
 The special downgrade differs from conventional downgrades such that it only changes M state lines to E, and leaves
-E state lines unchanged. 
+E state lines unchanged. One optimization is that the downgrade can be performed on the way down the hierarchy from L1
+to the LLC, since a M state line in the L1 indicates that all caches on the path from the L1 to the LLC must have already
+acquired exclusive permission of the line, eliminating the need for the LLC to query its directory and sends downgrade
+requests to upper levels caches that are not on the path.
