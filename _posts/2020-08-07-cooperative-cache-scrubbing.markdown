@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+**Lowlight:**
+
 This paper proposes cooperative cache scrubbing, a technique for reducing cache-memory bandwidth. The paper points out
 at the beginning that as computing infrastructures keep scaling up, the energy conssumption of main memory has become
 a major part of total energy of the system. Each read and write operation will consume energy and increase heat dissipation. 
@@ -75,4 +79,9 @@ also reports that clclean is the most effective instruction among the three in b
 The next instruction type is clzeroX, which actually consists of three or more instructions, with X being 1, 2 and 3.
 The clzeroX instruction zero-fills a cache line on the given address without reading the backing main memory, even if
 the line does not exist in the cache hierarchy. The number X indicates the level of cache where the zero-initialized
-line will be brought into. 
+line will be brought into. This instruction is implemented on the LLC as well. It is treated by the LLC coherence controller
+as a write back operation from the upper level, which invalidates all shared or exclusive copies of the line in other 
+caches and levels, if any of them exists. Then a cache slot with the address tag is allocated in the LLC, whose content
+in the data array is filled with zero. No fetch request is sent to the DRAM to save bandwidth. The zero-initialized line
+is also propogated to upper levels based on the value of X. The memory allocator uses this instruction to zero-initialize
+objects before returning them to user application.
