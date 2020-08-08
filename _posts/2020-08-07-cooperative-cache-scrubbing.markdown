@@ -23,7 +23,9 @@ version_mgmt:
    These two, if combined together, imply that small objects can be entirely allocated within the cache hierarchy without
    being backed by the main memory, which saves the bandwidth to fetch and evict the object.
 
-
+3. Does the above reasoning mean that main memory can be thought of as a super large, direct-mapped last level cache?
+   What kine of design changes this will bring to the memory architecture? (i.e. objects can be created in the L1
+   and propagate down the hierarchy to the main memory, instead of always being backed by the main memory)
 
 **Lowlight:**
 
