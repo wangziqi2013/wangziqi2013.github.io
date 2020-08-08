@@ -19,3 +19,10 @@ a major part of total energy of the system. Each read and write operation will c
 The paper observes, however, that not all traffic to and from the main memory are necessary. Some of them can be entirely
 avoided given that software can convey extra information about the allocation status of cache lines to hardware. 
 
+The paper identifies two sources of unnecessary memory accesses. First, in object-oriented, garbage collected languages,
+small objects are created for common data structures, with many of them having short lifetime, meaning that these 
+objects will likely be still in the cache when their memory is garbage collected by the runtime. After garbage collection,
+the contents of these objects become irrelevant to the computation since most languages do not specify the behavior of
+accessing unallocated memory. These dead objects, if written back to the main memory via cache eviction, will consume
+bandwidth and energy, but never read again.
+
