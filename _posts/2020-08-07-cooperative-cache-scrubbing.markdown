@@ -15,6 +15,16 @@ version_mgmt:
 
 **Highlight:**
 
+1. Rely on language runtime to convey life cycle information of objects to the hardware
+
+2. Take advantage of the observation that dirty lines of dead objects need not be written back to the main memory since
+   they will never be accessed again for read. Also, zero-filled lines do not need to be read from the main memory, since
+   the old content will never be read before overwritten with zeros. 
+   These two, if combined together, imply that small objects can be entirely allocated within the cache hierarchy without
+   being backed by the main memory, which saves the bandwidth to fetch and evict the object.
+
+
+
 **Lowlight:**
 
 This paper proposes cooperative cache scrubbing, a technique for reducing cache-memory bandwidth. The paper points out
