@@ -27,6 +27,10 @@ accessing unallocated memory. These dead objects, if written back to the main me
 bandwidth and energy, but never read again.
 Second, some high-level programming languages guarantee that newly allocated objects are always zero-initialized.
 Conventional memory architecture requires that all cached contents be backed by main memory, meaning that when
-an object is allocated, its address is always in the physical address space, which must be loaded into the cache first
-before zero-initialization. The memory read traffic, however, is also unnecessary, since the pre-initialization
-content is never read before they are filled with zeros. 
+an object is allocated, its address is always in the physical address space, which must be loaded into the cache first,
+if not already, before zero-initialization. The memory read traffic, however, is also unnecessary, since the 
+pre-initialization content is never read before they are filled with zeros. 
+
+Ideally, if the cache hierarchy is aware of the life cycle of objects, i.e. which cache lines represent live objects
+and which represent dead objects, more flexible decisions can be made to minimize these unnecessary traffic by not
+writing back dirty lines of dead objects, and not loading the previous value before initializing a block. 
