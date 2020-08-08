@@ -33,4 +33,8 @@ pre-initialization content is never read before they are filled with zeros.
 
 Ideally, if the cache hierarchy is aware of the life cycle of objects, i.e. which cache lines represent live objects
 and which represent dead objects, more flexible decisions can be made to minimize these unnecessary traffic by not
-writing back dirty lines of dead objects, and not loading the previous value before initializing a block. 
+writing back dirty lines of dead objects, and not loading the previous value before initializing a block. In practice,
+the runtime library of the language maintains the allocation status of objects. The paper suggests that special
+instructions be provided to hardware as a "hint" of object life cycles. In this model, software conveys the status of
+objects by marking the corresponding cache lines, and hardware cooperatively evicts or fills the line.
+
