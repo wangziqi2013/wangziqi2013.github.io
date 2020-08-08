@@ -45,4 +45,7 @@ with only minor modifications. We next discuss each of the four instructions and
 clinvalidate, as its name suggests, invalidates a given address and eliminates all copies of the address, if they exist,
 from the cache hierarchy. This instruction should be executed by the memory manager when the cache line of a freed block
 is not expected to be reused in the near future, such that the content of the line is simply discarded without any write
-back regardless of its coherence state. 
+back regardless of its coherence state. When executed, the core should send a message to the LLC, and the LLC invalidates
+all copies of the line as if an external invalidation were received at the LLC level. This works equally for both inclusive
+and non-inclusive cache hierarchy, since the LLC has to deal with external coherence invalidates in both cases (with a 
+snoop filter if latter).
