@@ -68,4 +68,6 @@ have to fetch the line from the memory on next access in the near future.
 clclean instruction is somewhat in-between clinvalidate and clundirty. This instruction is implemented the same way as
 clundirty, and in addition to changing the line state from M to E, it also moves the cache line to the bottom of the 
 LRU stack on each level, indicating that the line is of low priority, and can be discarded immediately if the workload
-imposes pressure on the cache. 
+imposes pressure on the cache. This instruction is used when the reuse distance of the freed object's memory is longer than
+the one in clundirty, and shorter than the one in clinvalidate, which is more flexible than any of these two. The paper
+also reports that clclean is the most effective instruction among the three in bandwidth and energy saving.
