@@ -25,4 +25,8 @@ objects will likely be still in the cache when their memory is garbage collected
 the contents of these objects become irrelevant to the computation since most languages do not specify the behavior of
 accessing unallocated memory. These dead objects, if written back to the main memory via cache eviction, will consume
 bandwidth and energy, but never read again.
-
+Second, some high-level programming languages guarantee that newly allocated objects are always zero-initialized.
+Conventional memory architecture requires that all cached contents be backed by main memory, meaning that when
+an object is allocated, its address is always in the physical address space, which must be loaded into the cache first
+before zero-initialization. The memory read traffic, however, is also unnecessary, since the pre-initialization
+content is never read before they are filled with zeros. 
