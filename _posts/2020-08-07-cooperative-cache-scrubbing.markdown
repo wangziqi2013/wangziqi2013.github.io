@@ -40,4 +40,9 @@ objects by marking the corresponding cache lines, and hardware cooperatively evi
 
 Four special instructions are proposed in this paper: clinvalidate, clundirty, clclean, and clzeroX. All four instructions
 are implemented at the LLC level of a multi-processor, and are integrated with the widely used MESI coherence protocol
-with only minor modification. We next discuss each of the four instructions and their implementations.
+with only minor modifications. We next discuss each of the four instructions and their implementations.
+
+clinvalidate, as its name suggests, invalidates a given address and eliminates all copies of the address, if they exist,
+from the cache hierarchy. This instruction should be executed by the memory manager when the cache line of a freed block
+is not expected to be reused in the near future, such that the content of the line is simply discarded without any write
+back regardless of its coherence state. 
