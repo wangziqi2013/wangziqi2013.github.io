@@ -52,4 +52,9 @@ snoop filter if latter).
 
 clundirty instruction changes the state of a line from dirty (M state) to not dirty while retaining the exclusive write
 permission (E state). Note that this instruction breaks the ownership transfer rule of MESI, since ownership is
-implicitly transferred to the main memory from the M state block without an explicit write back. 
+implicitly transferred to the main memory from the M state block without an explicit write back. Correctness is not 
+affected, though, since the language runtime guarantees that freed objects will not be accessed, or undefined
+behavior would occur if this happens. clundirty is implemented by sending a message to the LLC, and then the LLC using
+a special downgrade message to revoke M states from all upper level caches as if an external downgrade were received.
+The special downgrade differs from conventional downgrades such that it only changes M state lines to E, and leaves
+E state lines unchanged. 
