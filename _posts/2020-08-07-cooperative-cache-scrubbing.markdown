@@ -49,3 +49,7 @@ back regardless of its coherence state. When executed, the core should send a me
 all copies of the line as if an external invalidation were received at the LLC level. This works equally for both inclusive
 and non-inclusive cache hierarchy, since the LLC has to deal with external coherence invalidates in both cases (with a 
 snoop filter if latter).
+
+clundirty instruction changes the state of a line from dirty (M state) to not dirty while retaining the exclusive write
+permission (E state). Note that this instruction breaks the ownership transfer rule of MESI, since ownership is
+implicitly transferred to the main memory from the M state block without an explicit write back. 
