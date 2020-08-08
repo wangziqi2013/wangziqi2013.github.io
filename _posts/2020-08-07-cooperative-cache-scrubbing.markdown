@@ -29,6 +29,10 @@ version_mgmt:
 
 **Lowlight:**
 
+1. The paper failed to mention that clzero instructions will prohibit main memory fetch if the line to be zero-initialized
+   is not in the cache hierarchy. Otherwise, the LLC controller will fetch the line since a miss will be signaled, which 
+   does not have any bandwidth benefit.
+
 This paper proposes cooperative cache scrubbing, a technique for reducing cache-memory bandwidth. The paper points out
 at the beginning that as computing infrastructures keep scaling up, the energy conssumption of main memory has become
 a major part of total energy of the system. Each read and write operation will consume energy and increase heat dissipation. 
