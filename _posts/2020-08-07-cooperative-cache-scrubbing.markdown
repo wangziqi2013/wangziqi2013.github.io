@@ -64,3 +64,8 @@ requests to upper levels caches that are not on the path.
 This instruction is used when the cache line of a freed object is expected to be reused shortly before the line is
 evicted from the cache hierarchy. In this case, not invalidating the line would be a merit, since otherwise we may
 have to fetch the line from the memory on next access in the near future.
+
+clclean instruction is somewhat in-between clinvalidate and clundirty. This instruction is implemented the same way as
+clundirty, and in addition to changing the line state from M to E, it also moves the cache line to the bottom of the 
+LRU stack on each level, indicating that the line is of low priority, and can be discarded immediately if the workload
+imposes pressure on the cache. 
