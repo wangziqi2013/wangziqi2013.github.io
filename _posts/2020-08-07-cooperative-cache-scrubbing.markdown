@@ -71,3 +71,8 @@ LRU stack on each level, indicating that the line is of low priority, and can be
 imposes pressure on the cache. This instruction is used when the reuse distance of the freed object's memory is longer than
 the one in clundirty, and shorter than the one in clinvalidate, which is more flexible than any of these two. The paper
 also reports that clclean is the most effective instruction among the three in bandwidth and energy saving.
+
+The next instruction type is clzeroX, which actually consists of three or more instructions, with X being 1, 2 and 3.
+The clzeroX instruction zero-fills a cache line on the given address without reading the backing main memory, even if
+the line does not exist in the cache hierarchy. The number X indicates the level of cache where the zero-initialized
+line will be brought into. 
