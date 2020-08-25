@@ -15,9 +15,9 @@ version_mgmt:
 
 **Highlight:**
 
-1. TimeStone is essentially redo log + group commit + operation logging. Group commit amortizes persistence cost by 
-   combining multiple object updates into one and let the traffic be absorbed by DRAM. Operation logging works with
-   group commit to allow transactions to commit immediately, since the txn can be recovered using the operation log.
+1. TimeStone is essentially redo log + DRAM Buffer + group commit + operation logging. Group commit amortizes persistence 
+   cost by combining multiple object updates into one and let the traffic be absorbed by DRAM. Operation logging works 
+   with group commit to allow transactions to commit immediately, since the txn can be recovered using the operation log.
 
 **Lowlight:**
 
@@ -138,4 +138,8 @@ on the same addresses are reclaimed after two grace periods.
 The OLog is GC'ed when the ckpt-ts is updated. All entries whose commit timestamps are before the ckpt-ts can be reclaimed,
 since the working set of these instances have been persisted to the NVM.
 
-
+On recovery, the handler first searches the OLog for valid entries, which will then be replayed serially based on their
+commit timestamp order, as the MVCC algorithm commits transactions in the logical commit order. After re-executing 
+transactions that have been logically committed but not yet persisted, the handler then copies all entries from the CLog
+to the master copy. Only the most recent ones are copied, with the rest discarded. No grace period is needed after copying
+an object, since there would be no parallel threads.
