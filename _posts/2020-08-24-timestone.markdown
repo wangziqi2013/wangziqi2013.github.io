@@ -43,8 +43,8 @@ A global timestamp counter maintains the current logical time as in other MVCC s
 On transaction begin, a begin timestamp is acquired, which is used to access object copies. The version access rule states
 that a timestamp T should access the least recent version whose commit timestamp, which is part of the per-object
 metadata, is smaller than or equal to T, essentially reading the snapshot established at logical begin time T.
-Each thread also maintains a local write set as volatile log (allocation is performed in log-structured manner, and reclaimed
-with GC), which we discuss later. 
+Each thread also maintains a local write set as volatile log, called the transient version log, or TLog. Allocation of 
+write set objects is performed on the TLog, which will be reclaimed by GC, which we discuss later. 
 The local write set consists of all objects that are modified during the transaction, which remains private to the 
 updating transaction before it commits.
 
@@ -72,3 +72,4 @@ be accessed by other threads after transaction commit. These objects remain vola
 on garbage collection to the NVM. Note that one of the unique features of TimeStone is that the transaction is 
 fully committed logically after the commit point, which does not depend on whether the second type objects are persisted 
 to the NVM. Those not persisted will be recovered by re-executing the transaction body, as we will see later.
+The third type object are those that have been persisted to the NVM into another log, called the Checkpoint Log (CLog),
