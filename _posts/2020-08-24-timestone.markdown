@@ -136,10 +136,14 @@ simply skipped. For the most up-to-date object, it is copied back to the master 
 on the same addresses are reclaimed after two grace periods. 
 
 The OLog is GC'ed when the ckpt-ts is updated. All entries whose commit timestamps are before the ckpt-ts can be reclaimed,
-since the working set of these instances have been persisted to the NVM.
+since the working sets of these instances have been persisted to the NVM.
 
 On recovery, the handler first searches the OLog for valid entries, which will then be replayed serially based on their
 commit timestamp order, as the MVCC algorithm commits transactions in the logical commit order. After re-executing 
 transactions that have been logically committed but not yet persisted, the handler then copies all entries from the CLog
 to the master copy. Only the most recent ones are copied, with the rest discarded. No grace period is needed after copying
 an object, since there would be no parallel threads.
+
+TimeStone also supports three isolation levels: Snapshot Isolation (SI), serializable, and linearizable. In SI mode, no
+read validation is performed, and write-write conflicts are detected with per-object locks. In serializable mode, transactions
+execute with version chain traversal, and performs read validation on commit. 
