@@ -126,6 +126,7 @@ can also be removed, since no thread could ever hold a reference to that object.
 In practice, the GC thread linearly scans the TLog of all threads. For each object in the log, the thread first checks
 whether it is the most up-to-date object. If true, the object is checkpointed to the TLog, and the thread waits for two
 grace periods since the current global timestamp value after the persistence operation. Non-up-to-date versions are 
-simply skipped, and reclaimed after the two grace periods.
+simply skipped, and reclaimed after the two grace periods. The ckpt-ts is updated to the minimum commit timestamp
+among all committed volatile objects after this process. 
 
-TLog 
+
