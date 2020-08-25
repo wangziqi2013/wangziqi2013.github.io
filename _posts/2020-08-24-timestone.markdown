@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+****
+
 This paper presents TimeStone, a software transactional memory (STM) framework running on NVM, featuring high scalability 
 and low write amplification. The paper points out that existing implementations of NVM data structures demonstrate various
 drawbacks.
@@ -33,8 +35,16 @@ Metadata such as locks are maintained in a per-object granularity without any ta
 Version numbers are also maintained with each instance of the object copy.
 Each logical object may have several copies of different versions stored in NVM and DRAM, forming a version chain from
 the most recent to the least recent version.
+
 A global timestamp counter maintains the current logical time as in other MVCC schemes.
 On transaction begin, a begin timestamp is acquired, which is used to access object copies. The version access rule states
 that a timestamp T should access the least recent version whose commit timestamp, which is part of the per-object
 metadata, is smaller than or equal to T, essentially reading the snapshot established at logical begin time T.
-At commit time, 
+Each thread also maintains a local write set as volatile log (allocation is performed in log-structured manner, and reclaimed
+with GC), which we discuss later. 
+The local write set consists of all objects that are modified during the transaction, which remains private to the 
+updating transaction before it commits.
+
+
+
+At commit time, the local write set 
