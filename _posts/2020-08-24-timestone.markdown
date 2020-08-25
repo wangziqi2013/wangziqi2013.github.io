@@ -129,4 +129,8 @@ grace periods since the current global timestamp value after the persistence ope
 simply skipped, and reclaimed after the two grace periods. The ckpt-ts is updated to the minimum commit timestamp
 among all committed volatile objects after this process. 
 
-
+The CLog, as a redo log, also needs to be periodically copied back to the master object. The GC process is similar to
+TLog GC. The background thread scans objects in the log. For each entry, if it is not the most up-to-date checkpoint
+object, which can be checked by comparing the pointer in the master's header with the log entry's address, it is 
+simply skipped. For the most up-to-date object, it is copied back to the master object, and all checkpoint objects 
+on the same addresses are reclaimed after two grace periods. 
