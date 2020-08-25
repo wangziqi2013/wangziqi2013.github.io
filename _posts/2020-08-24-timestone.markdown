@@ -67,4 +67,8 @@ The second design aspect of TimeStone is the persistency model, which determines
 As discussed previously, TimeStone maintains several copies of the same object for different purposes. There are four
 types of object copies, with two of them being volatile, and the other two being non-volatile. The first type is
 the private object in the local write set, which is allocated on the per-thread log, which will be linked into the 
-version chain on transaction commit, turning into the second type. 
+version chain on transaction commit, turning into the second type. The second type is the object that can
+be accessed by other threads after transaction commit. These objects remain volatile, which will be "checkpointed"
+on garbage collection to the NVM. Note that one of the unique features of TimeStone is that the transaction is 
+fully committed logically after the commit point, which does not depend on whether the second type objects are persisted 
+to the NVM. Those not persisted will be recovered by re-executing the transaction body, as we will see later.
