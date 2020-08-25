@@ -62,3 +62,9 @@ fetch-and-increment the global timestamp counter. The value after the increment 
 Objects in the local write set is linked into the version chain as the most up-to-date element, since the write set 
 objects are locked as the transaction executes, such that no other transaction could commit on them.
 Objects are unlocked after the commit process.
+
+The second design aspect of TimeStone is the persistency model, which determines when and where objects are stored. 
+As discussed previously, TimeStone maintains several copies of the same object for different purposes. There are four
+types of object copies, with two of them being volatile, and the other two being non-volatile. The first type is
+the private object in the local write set, which is allocated on the per-thread log, which will be linked into the 
+version chain on transaction commit, turning into the second type. 
