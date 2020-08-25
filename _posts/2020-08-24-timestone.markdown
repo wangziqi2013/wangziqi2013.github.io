@@ -21,4 +21,5 @@ is often restricted to only single operation being atomic. Composing multiple op
 likely not supported, and difficult to achieve as the internal implementation is hidden from the application developer.
 Second, for those implemented as transactional libraries, their implementations lack scalability due to centralized 
 mapping structure, metadata, or background algorithms. 
-
+Lastly, conventional logging approach, if adopted, incurs high write amplification, since both log entries and data 
+need to be persisted to the NVM.
