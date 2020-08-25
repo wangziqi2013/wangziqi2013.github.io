@@ -34,4 +34,7 @@ Version numbers are also maintained with each instance of the object copy.
 Each logical object may have several copies of different versions stored in NVM and DRAM, forming a version chain from
 the most recent to the least recent version.
 A global timestamp counter maintains the current logical time as in other MVCC schemes.
-On transaction begin, a begin timestamp is acquired, 
+On transaction begin, a begin timestamp is acquired, which is used to access object copies. The version access rule states
+that a timestamp T should access the least recent version whose commit timestamp, which is part of the per-object
+metadata, is smaller than or equal to T, essentially reading the snapshot established at logical begin time T.
+At commit time, 
