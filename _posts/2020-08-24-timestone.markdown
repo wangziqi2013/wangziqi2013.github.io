@@ -90,6 +90,13 @@ The last type of object is the master object, which is allocated from the non-vo
 least up-to-date data, which serve as the last resort of version lookup, if all TLog and CLog objects cannot satisfy
 a read access.
 
+Master objects are the handle for accessing all copies of the same object. Application programmers must use a wrapper
+to declare a master object type. The wrapper adds a few extra fields to the master object: A lock word, a pointer to
+the volatile version chain, and a pointer to the checkpointed object.
+To reduce NVM accesses, the master object header is allocated on the DRAM. If a header does not yet exist when the master
+object is accessed, indicating no extra copies exists, a headrer is allocated from the DRAM first, with all fields 
+initialized to NULL.
+
 A TLog object is copied to the NVM and becomes a CLog object during TLog garbage collection. The GC process is similar
 to group commit, in which dirty data from multiple transactions are persisted in a batch. Group commits are used to increase
 the chance of write combining and improve write locality for amortizing I/O over several transactions, at the cost
