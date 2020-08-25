@@ -146,4 +146,7 @@ an object, since there would be no parallel threads.
 
 TimeStone also supports three isolation levels: Snapshot Isolation (SI), serializable, and linearizable. In SI mode, no
 read validation is performed, and write-write conflicts are detected with per-object locks. In serializable mode, transactions
-execute with version chain traversal, and performs read validation on commit. 
+execute with version chain traversal, and performs read validation on commit. In linearizable mode, transactions not only
+perform read validation, but also must always access the most recent versions, i.e., the transaction must not time-travel
+to read a past version, since in this case the logical commit point of the transaction will not lie within the real-time
+execution period, which violates linearizability.
