@@ -134,3 +134,8 @@ TLog GC. The background thread scans objects in the log. For each entry, if it i
 object, which can be checked by comparing the pointer in the master's header with the log entry's address, it is 
 simply skipped. For the most up-to-date object, it is copied back to the master object, and all checkpoint objects 
 on the same addresses are reclaimed after two grace periods. 
+
+The OLog is GC'ed when the ckpt-ts is updated. All entries whose commit timestamps are before the ckpt-ts can be reclaimed,
+since the working set of these instances have been persisted to the NVM.
+
+
