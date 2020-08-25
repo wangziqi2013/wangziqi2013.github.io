@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. TimeStone is essentially redo log + group commit + operation logging. Group commit amortizes persistence cost by 
+   combining multiple object updates into one and let the traffic be absorbed by DRAM. Operation logging works with
+   group commit to allow transactions to commit immediately, since the txn can be recovered using the operation log.
+
 **Lowlight:**
 
 1. How does each transaction find the volatile object in the write set? Is there a per-thread mapping table that maps the 
