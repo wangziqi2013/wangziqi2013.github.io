@@ -45,6 +45,10 @@ with GC), which we discuss later.
 The local write set consists of all objects that are modified during the transaction, which remains private to the 
 updating transaction before it commits.
 
-
+Before an object could be updated, an volatile object copy is allocated in the local write set, the lock is acquired by 
+atomically CAS the NULL pointer (NULL means the lock is not acquired) to the volatile object in the write set. If the CAS 
+fails, the transaction is aborted, as write-write conflict is detected, which is the abort condition for all supported 
+isolation levels. Otherwise, the write wrapper function traverses the version chain, and copies the corresponding version 
+based on the version access rule to the volatile log. All updates are then performed in the write set.
 
 At commit time, the local write set 
