@@ -13,7 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
-****
+**Lowlight:**
+
+1. How does each transaction find the volatile object in the write set? Is there a per-thread mapping table that maps the 
+   object's master address to its local write set address?
 
 This paper presents TimeStone, a software transactional memory (STM) framework running on NVM, featuring high scalability 
 and low write amplification. The paper points out that existing implementations of NVM data structures demonstrate various
