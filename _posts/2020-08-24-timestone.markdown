@@ -113,5 +113,9 @@ transaction is considered as committed, which can be recovered by re-execution.
 TimeStone maintains a global timestamp, ckpt-ts, which represents the last commit timestamp of objects that have been
 group committed to the NVM. Transactions whose commit timestamps are from ckpt-ts to the current global counter are 
 considered as committed, but not persisted, and will be group committed to the NVM during GC.
-GC follows the two following rules. First, for a volatile version chain C, all versions except the most up-to-date
-version are discarded, since they have been overwritten by newer versions. 
+GC follows the two following rules. First, for a volatile version chain, all versions except the most up-to-date
+version are discarded, since they have been overwritten by newer versions. For those non-up-to-date versions, they
+are safe to be freed from the log after one grace period, in which all threads experience at least one transaction 
+termination since the commit timestamp of the up-to-date version, or are not executing any transaction. The grace 
+peroid ensures that no transaction can ever hold a reference to old versions after the new version has been committed.
+
