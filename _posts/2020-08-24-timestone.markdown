@@ -29,3 +29,9 @@ of two orthogonal aspects. The first aspect is the concurrency control model, wh
 (MVCC), in which multiple versions of the same logical object may exist to serve reads from different transactions.
 MVCC features higher scalability, since only writes will lock the object, while reads just traverse the version chain
 to access the consistent snapshot.
+Metadata such as locks are maintained in a per-object granularity without any table indirection.
+Version numbers are also maintained with each instance of the object copy.
+Each logical object may have several copies of different versions stored in NVM and DRAM, forming a version chain from
+the most recent to the least recent version.
+A global timestamp counter maintains the current logical time as in other MVCC schemes.
+On transaction begin, a begin timestamp is acquired, 
