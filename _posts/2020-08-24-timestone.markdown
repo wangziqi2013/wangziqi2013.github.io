@@ -110,4 +110,8 @@ On transaction commit, the function pointe of the transaction, together with arg
 which serves as the logical commit point of the transaction. As long as the OLog entry is fully persisted, the 
 transaction is considered as committed, which can be recovered by re-execution.
 
-
+TimeStone maintains a global timestamp, ckpt-ts, which represents the last commit timestamp of objects that have been
+group committed to the NVM. Transactions whose commit timestamps are from ckpt-ts to the current global counter are 
+considered as committed, but not persisted, and will be group committed to the NVM during GC.
+GC follows the two following rules. First, for a volatile version chain C, all versions except the most up-to-date
+version are discarded, since they have been overwritten by newer versions. 
