@@ -85,4 +85,10 @@ to group commit, in which dirty data from multiple transactions are persisted in
 the chance of write combining and improve write locality for amortizing I/O over several transactions, at the cost
 of larger transaction latency. TimeStone, however, leverages group commit to absort object writes with the volatile TLog.
 Recall that committed objects are always allocated on the TLog first, and linked into the version chain on transaction 
-commit. 
+commit. If an object is written multiple times between two GC invocations, only the most recent version needs to be 
+persisted, reducing write amplification. To avoid losing data after transaction commit, TimeStone also maintains an
+operation log, OLog, which contains the function pointer and arguments of the transaction instance. TimeStone assumes
+that transactions can be replayed by executing the function pointer with the given arguments on crash recovery.
+On transaction commit, the function pointe of the transaction, together with arguments, are persisted to the OLog,
+which serves as the logical commit point of the transaction. As long as the OLog entry is fully persisted, the 
+transaction is considered as committed, which can be recovered by re-execution.
