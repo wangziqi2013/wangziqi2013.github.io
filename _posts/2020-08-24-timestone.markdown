@@ -118,4 +118,7 @@ version are discarded, since they have been overwritten by newer versions. For t
 are safe to be freed from the log after one grace period, in which all threads experience at least one transaction 
 termination since the commit timestamp of the up-to-date version, or are not executing any transaction. The grace 
 peroid ensures that no transaction can ever hold a reference to old versions after the new version has been committed.
-
+For the most up-to-date version, it is copied to the non-volatile Tlog, and then the pointer in the object header
+is changed, such that the version chain pointer is set to NULL, and the checkpoint object pointer is updated to the 
+TLog entry. After one more grace period since the header update, the most up-to-date object in the version chain
+can also be removed, since no thread could ever hold a reference to that object.
