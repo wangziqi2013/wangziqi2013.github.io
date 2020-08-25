@@ -53,5 +53,12 @@ atomically CAS the NULL pointer (NULL means the lock is not acquired) to the vol
 fails, the transaction is aborted, as write-write conflict is detected, which is the abort condition for all supported 
 isolation levels. Otherwise, the write wrapper function traverses the version chain, and copies the corresponding version 
 based on the version access rule to the volatile log. All updates are then performed in the write set.
+Read sets are also maintained, if the isolation level is serializable or linearizable.
 
-At commit time, the local write set 
+At commit time, validation is performed if the read set is present. Read validation succeeds, if for all objects in the 
+read set, their accessed version is still the most up-to-date version. Otherwise, the transaction has observed a 
+WAR dependency, which violates commit order. After read validation, the transaction acquires its commit timestamp by atomically
+fetch-and-increment the global timestamp counter. The value after the increment is used as the commit timestamp.
+Objects in the local write set is linked into the version chain as the most up-to-date element, since the write set 
+objects are locked as the transaction executes, such that no other transaction could commit on them.
+Objects are unlocked after the commit process.
