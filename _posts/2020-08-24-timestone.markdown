@@ -13,3 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+This paper presents TimeStone, a software transactional memory (STM) framework running on NVM, featuring high scalability 
+and low write amplification. The paper points out that existing implementations of NVM data structures demonstrate various
+drawbacks.
+First, for those implemented as specialized, persistent data structures, their programming model and concurrency model
+is often restricted to only single operation being atomic. Composing multiple operations as one atomic unit is most
+likely not supported, and difficult to achieve as the internal implementation is hidden from the application developer.
+
