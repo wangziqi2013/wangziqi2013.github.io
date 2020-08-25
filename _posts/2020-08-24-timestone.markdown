@@ -23,3 +23,9 @@ Second, for those implemented as transactional libraries, their implementations 
 mapping structure, metadata, or background algorithms. 
 Lastly, conventional logging approach, if adopted, incurs high write amplification, since both log entries and data 
 need to be persisted to the NVM.
+
+TimeStone achieves efficiency, scalability, and low write amplification at the same time. TimeStone's design consists 
+of two orthogonal aspects. The first aspect is the concurrency control model, which uses Multiversion Concurrency Control 
+(MVCC), in which multiple versions of the same logical object may exist to serve reads from different transactions.
+MVCC features higher scalability, since only writes will lock the object, while reads just traverse the version chain
+to access the consistent snapshot.
