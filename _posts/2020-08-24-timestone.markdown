@@ -18,6 +18,10 @@ version_mgmt:
 1. How does each transaction find the volatile object in the write set? Is there a per-thread mapping table that maps the 
    object's master address to its local write set address?
 
+2. Operation logging only works if re-execution has exactly the same semantics as the original execution. This is difficult
+   to guarantee, especially if the arguments are also objects with pointers, or allocated on the stack, or library environments
+   cannot be recovered.
+
 This paper presents TimeStone, a software transactional memory (STM) framework running on NVM, featuring high scalability 
 and low write amplification. The paper points out that existing implementations of NVM data structures demonstrate various
 drawbacks.
@@ -92,3 +96,5 @@ that transactions can be replayed by executing the function pointer with the giv
 On transaction commit, the function pointe of the transaction, together with arguments, are persisted to the OLog,
 which serves as the logical commit point of the transaction. As long as the OLog entry is fully persisted, the 
 transaction is considered as committed, which can be recovered by re-execution.
+
+
