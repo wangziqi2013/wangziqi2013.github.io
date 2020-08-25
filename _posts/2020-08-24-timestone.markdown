@@ -19,4 +19,6 @@ drawbacks.
 First, for those implemented as specialized, persistent data structures, their programming model and concurrency model
 is often restricted to only single operation being atomic. Composing multiple operations as one atomic unit is most
 likely not supported, and difficult to achieve as the internal implementation is hidden from the application developer.
+Second, for those implemented as transactional libraries, their implementations lack scalability due to centralized 
+mapping structure, metadata, or background algorithms. 
 
