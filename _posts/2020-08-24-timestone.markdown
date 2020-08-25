@@ -122,3 +122,10 @@ For the most up-to-date version, it is copied to the non-volatile Tlog, and then
 is changed, such that the version chain pointer is set to NULL, and the checkpoint object pointer is updated to the 
 TLog entry. After one more grace period since the header update, the most up-to-date object in the version chain
 can also be removed, since no thread could ever hold a reference to that object.
+
+In practice, the GC thread linearly scans the TLog of all threads. For each object in the log, the thread first checks
+whether it is the most up-to-date object. If true, the object is checkpointed to the TLog, and the thread waits for two
+grace periods since the current global timestamp value after the persistence operation. Non-up-to-date versions are 
+simply skipped, and reclaimed after the two grace periods.
+
+TLog 
