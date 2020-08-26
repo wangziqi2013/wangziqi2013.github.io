@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Pronto: Easy and Fast Persistence for Volatile Data Structures"
+date:   2020-08-26 18:39:00 -0500
+categories: paper
+paper_title: "Pronto: Easy and Fast Persistence for Volatile Data Structures"
+paper_link: https://dl.acm.org/doi/10.1145/3373376.3378485
+paper_keyword: NVM; Pronto; Logical Logging
+paper_year: ASPLOS 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
