@@ -32,3 +32,7 @@ by the persisting thread and the executing thread is when the operation complete
 log entry is persisted. This enables the background thread to persist the log entry at any point during execution, unlike 
 undo or logging, where a per-store write ordering must be observed, blocking store operations until a log entry is 
 persisted. 
+Checkpointing is also employed to reduce recovery overhead and perform garbage collection on the semantic log. 
+Periodically, the background checkpointing thread saves the current consistent image of the working set to the NVM. 
+Recovery can simply start from the most recent checkpointed state, and only re-execute log entries generated after the 
+checkpoint.
