@@ -110,3 +110,11 @@ Log entries should be garbage collected regularly by writing checkpoints to the 
 A checkpoint consists of a consistent image of the data structure, with no active operations half way during execution.
 Pronton should be able to restore the checkpoint to the exact same virtual address when it was taken on recovery, as 
 all pointer values are saved as-is without relocation.
+
+We elaborate the checkpoint process as follows. When checkpoint starts, the background thread first avoids new operations
+from being started by blocking `op_begin()`. Then it waits for all existing operations to complete for the data structure
+to enter a consistent state. 
+It then changes the access permission of all pages used by the current working set to read-only, after which `op_begin()`
+is unblocked. 
+
+
