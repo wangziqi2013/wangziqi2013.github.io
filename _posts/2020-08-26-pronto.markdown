@@ -133,3 +133,7 @@ Note that each instance of the data structure must have a separate instance of t
 page range. 
 The paper also suggests that huge pages can be used to reduce TLB misses, if the working set is large.
 
+On recovery, the recovery handler first locates the checkpoint on the NVM, if any, and loads the memory image 
+back to the DRAM. The handler must ensure that the image can be loaded to the same virtual address as before the crash.
+The handler then scans the semantic log for the first entry whose commit number is larger than the commit number of 
+the checkpoint. Log entries are replayed by re-executing them in the logical serialization order.
