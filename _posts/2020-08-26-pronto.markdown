@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlights:**
+
+1. `op_commit()` should be the point that log entries are generated and persisted, rather than `op_begin()`, since log entries
+   must be written in one of the the valid serialization orders. The order can only be determined when the serialization
+   point is attained, e.g. after all locks are acquired in 2PL or after the write set is locked in OCC.
+   If persistence begins at `op_begin()`, it is still unknown the ordering of the log entry, since two concurrent operations
+   sharing at least one lock in the 2PL example will race on `op_begin()`, but not race on `op_commit()`.
+   Even in the example of concurrent `unordered_set` given in the paper, it is possible that operation A executes `op_begin()`
+   first, but acquires lock L later, while operation B executes `op_begin()` after A, but acquires the lock earlier.
+   In this example, the ordering of the two log entries (A > B) are, in fact, inconsistent with their logical ordering 
+   (B > A)
+
 This paper presents Pronto, a software library for transforming existing data structures implemented on volatile memory
 to their non-volatile counterparts. The paper points out that the current trend of implementing non-volatile data structures
 either use libraries to denote failure-atomic regions, or develop ad-hoc algorithms to support persistence.  In order to denote failure-atomic regions, the programmer needs to take an existing
