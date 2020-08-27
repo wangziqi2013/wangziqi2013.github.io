@@ -104,4 +104,9 @@ by the background thread while the foreground thread executes. A flag is set aft
 On `op_commit()`, the foreground thread repeatedly checks the flag until it is set. After `op_commit()` returns, the 
 operation is logically persisted, which is guaranteed to be recoverd after a crash.
 
-The semantic log is maintained as a fixed sized 
+The semantic log is maintained as a fixed sized circular buffer on the NVM address space. Log entries consist of the method
+pointer, method arguments, and a commit number (although not explained in the paper). 
+Log entries should be garbage collected regularly by writing checkpoints to the NVM.
+A checkpoint consists of a consistent image of the data structure, with no active operations half way during execution.
+Pronton should be able to restore the checkpoint to the exact same virtual address when it was taken on recovery, as 
+all pointer values are saved as-is without relocation.
