@@ -26,3 +26,9 @@ checkpointing. Instead of logging every data update within the failure-atomic re
 barriers for each update, Pronto only persists the logical operation and their parameters to the NVM. Recovery is performed
 by re-executing these invocations in the logical serialization order, bringing the memory state of the data structure to
 the pre-crash state.
+To avoid executing the persisting barrier for the per-invocation log entry, Pronto proposes that background threads be 
+used to overlap persistence with execution. Thanks to semantic logging, the only write ordering that must be observed
+by the persisting thread and the executing thread is when the operation completes, the function must return after the 
+log entry is persisted. This enables the background thread to persist the log entry at any point during execution, unlike 
+undo or logging, where a per-store write ordering must be observed, blocking store operations until a log entry is 
+persisted. 
