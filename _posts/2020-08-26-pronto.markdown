@@ -46,4 +46,9 @@ in wrapper function.
 In all cases, `op_begin()` is inserted at the beginning of the function, taking the function pointer and arguments
 to the wrapper as parameters. Internally, a semantic log entry with the value of the method pointer and its
 arguments are generated, and dispatched to the background thread for persistence.
-
+`op_commit()`, on the contrary, synchronizes the execution thread with the persisting thread, the effect of which is 
+similar to how write ordering is enforced using persistenct barriers. 
+Serial operations can just insert `op_commit()` at the end of the wrapper before it returns, while parallel data 
+structures should make sure that the order of entries in the semantic log is consistent with the logical ordering of 
+the real-time execution. For example, the paper suggests that, for data structures using 2PL, `op_commit()` should be 
+called right after all locks have been acquired, when 2PL attains the serialization point.
