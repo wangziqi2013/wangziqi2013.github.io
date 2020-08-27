@@ -23,7 +23,7 @@ version_mgmt:
    Even in the example of concurrent `unordered_set` given in the paper, it is possible that operation A executes `op_begin()`
    first, but acquires lock L later, while operation B executes `op_begin()` after A, but acquires the lock earlier.
    In this example, the ordering of the two log entries (A > B) are, in fact, inconsistent with their logical ordering 
-   (B > A)
+   (B > A).
 
 This paper presents Pronto, a software library for transforming existing data structures implemented on volatile memory
 to their non-volatile counterparts. The paper points out that the current trend of implementing non-volatile data structures
@@ -64,3 +64,10 @@ Serial operations can just insert `op_commit()` at the end of the wrapper before
 structures should make sure that the order of entries in the semantic log is consistent with the logical ordering of 
 the real-time execution. For example, the paper suggests that, for data structures using 2PL, `op_commit()` should be 
 called right after all locks have been acquired, when 2PL attains the serialization point.
+
+Furthermore, in the case of parallel data structures, Pronto also requires that all methods must be linerrizable, i.e.,
+in addition to being serializable, the logical serialization point of each method must also be within the real
+time execution of the method, not time-travel to the past, or be postponed into the future after the method returns.
+If this is not observed, it is difficult to guarantee that the log ordering is consistent with serialization order,
+since the log entry must be persisted before the method is invoked, which requires knowledge into the future, or 
+after the invocation returns, which requires non-trivial bookkeeping.
