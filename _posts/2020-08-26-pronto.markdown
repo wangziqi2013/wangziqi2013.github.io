@@ -41,5 +41,9 @@ Pronto is implemented as a C++ class, `PersistentObject`, serving as the base cl
 The two most important methods of the class are `op_begin()` and `op_commit()`, which generates a semantic log entry and 
 persists the entry to the NVM respectively. 
 Programmers can just take an existing data structure class, make it a subclass of `PersistentObject`, 
-override methods whose effects should be persistent with a wrapper function, and insert `op_begin()`, `op_commnt()` in
-the wrapper function. 
+override methods whose effects should be persistent with a wrapper function, and call `op_begin()`, `op_commnt()` in
+in wrapper function. 
+In all cases, `op_begin()` is inserted at the beginning of the function, taking the function pointer and arguments
+to the wrapper as parameters. Internally, a semantic log entry with the value of the method pointer and its
+arguments are generated, and dispatched to the background thread for persistence.
+
