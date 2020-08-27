@@ -36,3 +36,7 @@ Checkpointing is also employed to reduce recovery overhead and perform garbage c
 Periodically, the background checkpointing thread saves the current consistent image of the working set to the NVM. 
 Recovery can simply start from the most recent checkpointed state, and only re-execute log entries generated after the 
 checkpoint.
+
+Pronto is implemented as a C++ class, `PersistentObject`, serving as the base class of data structure types. 
+The two most important methods of the class are `op_begin()` and `op_commit()`, which generates a semantic log entry and 
+persists the entry to the NVM respectively. 
