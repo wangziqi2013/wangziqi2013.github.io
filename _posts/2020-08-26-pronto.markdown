@@ -116,5 +116,11 @@ from being started by blocking `op_begin()`. Then it waits for all existing oper
 to enter a consistent state. 
 It then changes the access permission of all pages used by the current working set to read-only, after which `op_begin()`
 is unblocked. 
-
+The checkpoint thread then streams all pages in the working set to the NVM in the background. The permission of a page
+is reverted back to read-write after its checkpoint has been taken.
+If a foreground thread updates a page before the permission is reverted, a page fault will be raied by the OS.
+The paper suggests that Pronton installs a user-level page fault handler, which gives priority to the faulting page by
+checkpointing it first, after which the permission of the page is reverted.
+Note that unlike an OS `fork()` system call, copy-on-write is unnecessary in this case, since the checkpoint process
+is read-only.
 
