@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Semantics logging, or logical logging, has the benefit of very little logging data overhead, and very weak write 
+   ordering. Only the method identifier and arguments are saved to the log, instead of every data update.
+   Persistence can also be moved to the background, since data updates will never have write ordering with logs 
+   (only control path is ordered with log persistence).
+
 **Lowlights:**
 
 1. `op_commit()` should be the point that log entries are generated and persisted, rather than `op_begin()`, since log entries
@@ -64,6 +71,8 @@ Serial operations can just insert `op_commit()` at the end of the wrapper before
 structures should make sure that the order of entries in the semantic log is consistent with the logical ordering of 
 the real-time execution. For example, the paper suggests that, for data structures using 2PL, `op_commit()` should be 
 called right after all locks have been acquired, when 2PL attains the serialization point.
+
+
 
 Furthermore, in the case of parallel data structures, Pronto also requires that all methods must be linerrizable, i.e.,
 in addition to being serializable, the logical serialization point of each method must also be within the real
