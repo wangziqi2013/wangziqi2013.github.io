@@ -90,4 +90,6 @@ after the invocation returns, which requires non-trivial bookkeeping.
 Pronton spawns one background persistence thread for each foreground thread. Foreground and background threads communicate
 via `op_begin()` and `op_commit()` calls. On `op_begin()`, the foreground thread passes the identify of the method being
 called as a function pointer, as well as the arguments, to the background thread. Persistence of the log entry is performed
-by the background thread while the foreground thread executes. 
+by the background thread while the foreground thread executes. A flag is set after persistence completes. 
+On `op_commit()`, the foreground thread repeatedly checks the flag until it is set. After `op_commit()` returns, the 
+operation is logically persisted, which is guaranteed to be recoverd after a crash.
