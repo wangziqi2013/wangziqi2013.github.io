@@ -76,7 +76,9 @@ structures should make sure that the order of entries in the semantic log is con
 the real-time execution. For example, the paper suggests that, for data structures using 2PL, `op_commit()` should be 
 called right after all locks have been acquired, when 2PL attains the serialization point.
 
-
+In order for re-execution to be feasible, Pronto requires that all observable states produced by methods from the volatile 
+data structure must be a function of their arguments. In other words, methods must not access any global state to ensure
+reliable re-execution.
 
 Furthermore, in the case of parallel data structures, Pronto also requires that all methods must be linerrizable, i.e.,
 in addition to being serializable, the logical serialization point of each method must also be within the real
