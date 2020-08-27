@@ -20,6 +20,10 @@ version_mgmt:
    Persistence can also be moved to the background, since data updates will never have write ordering with logs 
    (only control path is ordered with log persistence).
 
+2. The observation on linearizability is interesting, because log entries are stored linearlly. If a method requires
+   time travel in serialization order, then the method's log entry will have to be inserted into the stream of the log,
+   requiring shifting of existing entries. 
+
 **Lowlights:**
 
 1. `op_commit()` should be the point that log entries are generated and persisted, rather than `op_begin()`, since log entries
