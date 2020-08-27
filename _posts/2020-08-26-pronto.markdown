@@ -123,4 +123,13 @@ The paper suggests that Pronton installs a user-level page fault handler, which 
 checkpointing it first, after which the permission of the page is reverted.
 Note that unlike an OS `fork()` system call, copy-on-write is unnecessary in this case, since the checkpoint process
 is read-only.
+After a checkpoint is completed, all log entries generated before the checkpoint is taken can be safely recycled.
+
+To help tracking the working set at page granularity, the paper also proposes that a specialized DRAM allocator be used
+to replace the default allocator. Pronton's allocator reserves a range of consecutive virtual pages, and tracks the 
+current usage status of these pages for checkpointing purposes. The consecutive range can also be extended dynamically,
+if allowed by the OS.
+Note that each instance of the data structure must have a separate instance of the allocator of its own consecutive 
+page range. 
+The paper also suggests that huge pages can be used to reduce TLB misses, if the working set is large.
 
