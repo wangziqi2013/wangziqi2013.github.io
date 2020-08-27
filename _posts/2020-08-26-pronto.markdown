@@ -86,3 +86,8 @@ time execution of the method, not time-travel to the past, or be postponed into 
 If this is not observed, it is difficult to guarantee that the log ordering is consistent with serialization order,
 since the log entry must be persisted before the method is invoked, which requires knowledge into the future, or 
 after the invocation returns, which requires non-trivial bookkeeping.
+
+Pronton spawns one background persistence thread for each foreground thread. Foreground and background threads communicate
+via `op_begin()` and `op_commit()` calls. On `op_begin()`, the foreground thread passes the identify of the method being
+called as a function pointer, as well as the arguments, to the background thread. Persistence of the log entry is performed
+by the background thread while the foreground thread executes. 
