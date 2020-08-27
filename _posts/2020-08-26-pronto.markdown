@@ -40,6 +40,8 @@ version_mgmt:
    fetch-and-increment? Background threads may parallel append to the log, but the paper does not give any detail on
    how race condition is avoided in this case.
 
+3. The paper mentions "commit number" in section 4.1, without ever explaining it. Is it the global counter in the previous 
+   point? 
 
 This paper presents Pronto, a software library for transforming existing data structures implemented on volatile memory
 to their non-volatile counterparts. The paper points out that the current trend of implementing non-volatile data structures
