@@ -20,4 +20,8 @@ version_mgmt:
    nodes). I inferred most parts by guessing instead 
    of reading the actual text. Some terminologies are not used properly, such as "memorization", which is often used to
    refer to a programming technique that is used in top-down recursion.
-   
+   One example of bad grammar is on page 8, right below listing 6:
+   "With MEMCHAMP we will refer throughout the text to the
+    variant of CHAMP that adds memoized element hash codes,
+    but drops incremental collection hash codes."
+    Can you be more obsecure with this sentence structure?
