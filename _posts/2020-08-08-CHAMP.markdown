@@ -70,3 +70,9 @@ extend the path by allocation another new node at level (L + 2). This process is
 or until both elements can be stored at different locations of the newly allocated node.
 In a moderately sparse HAMT, this feature greatly reduces the number of steps in the traversal, as well as the number 
 of singleton nodes in the tree.
+
+Path compression, however, is not performed during deletes. In the above example, if the second key inserted into the 
+HAMT is deleted later, the structure of the tree will remain what it was before the deletion, instead of "shrinking"
+to the pre-insertion state. This not only introduces unnecessary levels, but also creates difficulties in equality
+checking, since two HAMTs having the same content may not have identical tree struct. In other words, the shape of the
+tree is a function of both the current content and the insert-delete sequence that has been applied.
