@@ -157,3 +157,7 @@ whenever the node content is updated by inserts and deletes. The hash must be or
 the XOR of individual key object's hashes. If hash check passes, we then check keys in the slot one by one with keys
 stored at the same offset. Chained key objects should all be compared. The equality checking passes if and only if 
 all these checks pass.
+
+The special node structure also optimizes iteration, since iteration now can first traverse over all values from the
+upper half of the array, and then recursively traverse child nodes. This way, cache is better utilized, since the 
+traversal function localizes accesses to the upper half of the array first, before it recurses down.
