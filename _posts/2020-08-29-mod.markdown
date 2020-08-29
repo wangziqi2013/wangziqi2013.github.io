@@ -107,4 +107,9 @@ pointers (rather than wrapper versions which updates the pointer atomically) on 
 essentially starts a software transaction (with conventional approach) to update these pointer addresses atomically,
 achieving operation composition, since the effect of these operations are only persisted after all pointer swings are
 completed.
-
+The second interface is `CommitParent()`, which is an optimization over `CommitUnrelated()`. While the latter operates
+on any arbitrary composition of objects, with objects connecting with each other in arbitrary topology, the former 
+commit function specifically optimizes the case where the objects to be updated all share a common parent node, which is
+also given in the argument list. In this case, in order to commit all updates atomically, a new instance of the parent
+object is created, with all fields that point to updated objects set to their new instances. 
+The parent object is then persisted atomically using a pointer swing and a persist barrier.
