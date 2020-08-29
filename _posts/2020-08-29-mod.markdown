@@ -53,9 +53,16 @@ the data structure will retain a previous version after being updated to a new v
 after the update, as if they are individually maintained.
 
 The persistent data structures, within its internal, are usually implemented with tree structures, such as radix trees.
-When part of the structure is updated, a new node N is allocated, with the updated applied. The upper level node M is
+When part of the structure is updated, a new node N is allocated, with the update applied. The upper level node M is
 also duplicated, with the pointer to the old N updated to point to the new N. Node M's parent should also be updated
 similarly. This process propagates up until we reach the root of the tree, after which a new root is allocated.
 To access the newly updated tree, a new instance of the data structure wrapper, which consists of a pointer to the 
 root node, the size, and other metadata, is allocated. The new instance points to the new root node, with metadata
 fields modified to reflect the update.
+
+To incorporate the above model into the persistence (durable) framework, extra cache line flushes and persistence
+barriers are inserted to ensure write ordering. Thanks to the write pattern where no in-place updates are conducted,
+the consistency of the pre-update state remains intact, while node duplication, updates to the duplication, wrapper 
+dunplication, and metadata updates are performed. Cache line flushes are inserted for new nodes and the new wrapper
+after updates completes, enabling parallel flushes. 
+
