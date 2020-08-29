@@ -55,4 +55,7 @@ first hashing the object, and then using the hash value to perform a tree lookup
 lookup. If an extra value object is stored with the key object, then the HAMT serves as a map, which returns the value
 object given the key object following the same lookup protocol.
 
+We next describe the baseline HAMT in details. The hash key is divided into 5 bit slices, from the LSB to the MSB, which 
+is used as search indices at each level. Given a fixed size of hash values, the maximum depth of the tree is also constant
+(upper\_bound(|H| / 5) where |H| is the number of bits in the hash value).
 
