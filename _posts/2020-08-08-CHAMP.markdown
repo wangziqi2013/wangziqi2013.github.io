@@ -91,5 +91,12 @@ a key and value object for maps. In the latter case, each logical slot in the `d
 slots, which are allocated as two adjacent slots in the array.
 The invariant is that at most one bit in `nodeMap` and `dataMap` is set.
 To avoid complicated offset computation, the array of slots in CHAMP nodes are allocated from both ends, one for 
-node pointers, and another for key or key-value pairs. 
+node pointers, and another for key or key-value pairs. Elememts in the array are compactly stored regardless of the 
+logical NULL pointers in-between.
+The offset of a logical element in `nodeMap` at logical index X is computed by masking off bits in `nodeMap` after 
+bit X, and performs a popcount of "1" bits in the resulting mask. 
+The offset of elements in `dataMap` is computed similarly, but the result of popcount is further subtracted from the 
+size of the current array, since the physical `dataMap` starts at the end of the array, and grows towards lower 
+indices.
+
 
