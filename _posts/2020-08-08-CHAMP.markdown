@@ -151,3 +151,9 @@ For non-overflowing nodes, which are all inner nodes, and leaf nodes that have n
 first compares `nodeMap` and `dataMap`. If one or both of these two differ, the two subtrees must be different.
 Next, all elements in the current node's array is compared using key object comparison. In the last step, all 
 child nodes are recursively compared recursively. Equality checking passes if and only if all these checks pass.
+
+For overflowing nodes at leaf level, equality checking first compares the per-node hash value. This value is updated
+whenever the node content is updated by inserts and deletes. The hash must be order agnostic, and reversible, such as 
+the XOR of individual key object's hashes. If hash check passes, we then check keys in the slot one by one with keys
+stored at the same offset. Chained key objects should all be compared. The equality checking passes if and only if 
+all these checks pass.
