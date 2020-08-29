@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Combining fine-grained shadow-paging with tree structures is a convenient optimization over shadow paging, since 
+   no special mapping table is needed, and an atomic pointer swing suffices to update the consistent image.
+
+
+
 **Lowlight:**
 
 1. Not really a low light, but I am just thinking, is it possible to compose logging-based operations by passing a flag
@@ -78,6 +85,6 @@ to the caller.
 
 Note that although the shadow update model essentially generates a new instance of the data structure under updates, the
 above description encapsulates this with a second barrier, which updates caller's pointer with an atomic store with the
-new instance. This useage model also slightly changes the programming paradigm: In addition to passing all arguments for
+new instance. This usage model also slightly changes the programming paradigm: In addition to passing all arguments for
 the update operation, the address of the pointer to the data structure instance should also be passed as an extra
 argument, which is updated with the address of the new instance on completion of the update.
