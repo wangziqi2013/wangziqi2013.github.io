@@ -64,4 +64,9 @@ HAMT supports eager termination of the traversal at level L (L < maximum depth),
 for disambiguation. In other words, element insertion can stop at level L, if the corresponding slot at level L
 is empty, and just store the object at level L without further extending the path to the leaf level.
 On future insertions, if a slot value is an element, instead of a node, we lazily expand the path by allocating a new
-node, and attempt to store both the new and the existing element on the new node. 
+node, and attempt to store both the new and the existing element on the new node. If this is impossible, indicated by
+the fact that their key slices for level (L + 1) have the same value, we further
+extend the path by allocation another new node at level (L + 2). This process is repeated, until leaf level is reached, 
+or until both elements can be stored at different locations of the newly allocated node.
+In a moderately sparse HAMT, this feature greatly reduces the number of steps in the traversal, as well as the number 
+of singleton nodes in the tree.
