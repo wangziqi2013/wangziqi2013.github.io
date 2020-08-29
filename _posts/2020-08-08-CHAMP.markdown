@@ -81,6 +81,9 @@ Hash collision of keys are rare, but possible. On hash collisions, multiple diff
 slot. The insertion function should always check whether the keys are identical, and if not, uses a conflict chain 
 of keys (and values, for maps) to resolve conflicts. We call a node that contains hash conflicts in its slots as an
 overflow node.
+Note that overflow nodes can only occur at leaf level, since at non-leaf level, conflicts are resolved by creating 
+a new level, and diffentiating the two conflicting key objects using the next key slice. A collision is inevitable
+only at the leaf level when all slices have been exhausted.
 
 CHAMP optimizes HAMT over node layout, deletion protocol, equality algorithm, and fast iteration. Many of these optimizations
 are not standalone, but will rely on each other or share the same infrastructure. We next describe these optimizations
@@ -140,4 +143,8 @@ In all other cases, the current node simply updates the child node pointer that 
 value, if the value is different from the current one, and returns `true` and itself to the upper level.
 
 The deletion protocol creates a canonical form of CHAMP: No matter how elements are inserted and deleted, as long as 
-the final contents of the tree are identical, the shape of trees must also be identical. 
+the final contents of the tree are identical, the shape of trees must also be identical. This enables structure-based
+equality equality checking, which is different from content-based ones where one tree is iterated while the other is 
+checked against the key.
+The paper proposes a hash based equality checking algorithm, which we describe as follows.
+First, the entire tree maintains a hash value
