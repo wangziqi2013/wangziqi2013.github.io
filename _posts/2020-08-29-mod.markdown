@@ -71,4 +71,8 @@ with only a word granularity store, which is always atomic given that the word i
 The second persistence barrier is then issued to ensure that the pointer change is persistent as well, before returning
 to the caller.
 
-Note that
+Note that although the shadow update model essentially generates a new instance of the data structure under updates, the
+above description encapsulates this with a second barrier, which updates caller's pointer with an atomic store with the
+new instance. This useage model also slightly changes the programming paradigm: In addition to passing all arguments for
+the update operation, the address of the pointer to the data structure instance should also be passed as an extra
+argument, which is updated with the address of the new instance on completion of the update.
