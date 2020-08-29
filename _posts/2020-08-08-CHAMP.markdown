@@ -48,4 +48,8 @@ the element against elements stored in another tree.
 Equality checking is inefficient without a canonical representation of trees with the same content, and with the poor 
 cache locality of iteration.
 
-
+The work of CHAMP is built on HAMT, a radix tree-based hash table implementation. Hash values of key objects are inserted 
+into the radix tree, with the object itself being the mapped value. HAMT can be used as both sets and maps. If only
+key objects are mapped, the HAMT instance essentially serves as a set. Membership of an object can be checked, by
+first hashing the object, and then using the hash value to perform a tree lookup. Set membership is indicated by a successful
+lookup.
