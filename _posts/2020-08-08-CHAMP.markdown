@@ -102,3 +102,7 @@ The size of both logical arrays are computed by counting the number of "1" bits 
 If, before an insertion, the physical array is full, indicated by the sum of bit counts from both masks equalling the 
 array size, then a reallocation will take place to extend the array before the insertion could be performed.
 
+The second improvement is the deletion protocol. HAMP deletions do not shirnk the path, resulting in unnecessary intermediate
+nodes that do not contribute to disambiguation using key slices, wasting both storage and cycle.
+This paper proposes n deletion protocol that "folds" singleton paths from the most recent non-singleton node to the 
+bottommost node, if the deletion results in such a singleton path. 
