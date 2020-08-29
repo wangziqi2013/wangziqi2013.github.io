@@ -105,4 +105,10 @@ array size, then a reallocation will take place to extend the array before the i
 The second improvement is the deletion protocol. HAMP deletions do not shirnk the path, resulting in unnecessary intermediate
 nodes that do not contribute to disambiguation using key slices, wasting both storage and cycle.
 This paper proposes n deletion protocol that "folds" singleton paths from the most recent non-singleton node to the 
-bottommost node, if the deletion results in such a singleton path. 
+bottommost node, if the deletion results in such a singleton path. To further help explanation, the paper defines the 
+`arity` and `branchSize` property of a node as follows: The `arity` of a node is the logical number of elements, either 
+data or next-level child pointers, stored on the node's array. The `branchSize` of the node is the number of logical 
+elements that can be reached transitively from the current node. Although `branchSize` is not a local property, since it
+requires recursively traverse the subtree to compute the number of elements, it can be computed approximatly by only
+counting the number of elements in the node and child pointers, assuming child nodes will also satisfy this property. 
+
