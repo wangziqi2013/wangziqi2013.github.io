@@ -85,5 +85,11 @@ HAMT node layout is a 32-slot static array, to which key slices are direct mappe
 slots in the array, which can be more than necessary, if the node is sparse. In addition, the locality of node traversal 
 is affected by NULL values. CHAMP improves over HAMT node layout with three techniques. First, NULL values are not 
 stored, which reduces the size of the array. Two 32-bit integers, used as bitmaps, encode the logical layout of the array 
-as follows. 
+as follows. A `nodeMap` encodes slots that store a next-level child node pointer. Each child node pointer only takes
+one slot. A `dataMap` encodes slots that store a terminal values, which can be either a single key object for sets, or 
+a key and value object for maps. In the latter case, each logical slot in the `dataMap` actually requires two physical 
+slots, which are allocated as two adjacent slots in the array.
+The invariant is that at most one bit in `nodeMap` and `dataMap` is set.
+To avoid complicated offset computation, the array of slots in CHAMP nodes are allocated from both ends, one for 
+node pointers, and another for key or key-value pairs. 
 
