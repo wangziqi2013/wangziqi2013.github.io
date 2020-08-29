@@ -58,4 +58,10 @@ object given the key object following the same lookup protocol.
 We next describe the baseline HAMT in details. The hash key is divided into 5 bit slices, from the LSB to the MSB, which 
 is used as search indices at each level. Given a fixed size of hash values, the maximum depth of the tree is also constant
 (upper\_bound(|H| / 5) where |H| is the number of bits in the hash value).
-
+Each node in the baseline is a 32-slot direct mapped array. The 5-bit key slice is used as an index into this array to
+fetch the element.
+HAMT supports eager termination of the traversal at level L (L < maximum depth), if the remaining slices are not needed 
+for disambiguation. In other words, element insertion can stop at level L, if the corresponding slot at level L
+is empty, and just store the object at level L without further extending the path to the leaf level.
+On future insertions, if a slot value is an element, instead of a node, we lazily expand the path by allocating a new
+node, and attempt to store both the new and the existing element on the new node. 
