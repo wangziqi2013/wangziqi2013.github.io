@@ -32,3 +32,9 @@ version_mgmt:
    dynamically, which is not mentioned at all in the paper.
    Cache locality is improved, though, since useful values are likely closer to each other in a sparse node.
 
+This paper introduces Compressed Hash-Array Mapped Prefix-Trees (CHAMP), which is an improvement over the existing Hash-Array 
+Mapped Tries (HAMT). The paper identifies four problems with a naive HAMT. The first problem is that tries (radix trees)
+consume too much memory by maintaining a full sized node when most of the slots are empty. This both causes, excessive 
+memory to be allocated for storing non-meaningful NULL values, and hurts cache performance, since the memory footprint 
+of nodes become larger. The chance that a node access will hit the hardware cached copy decreases compared with a 
+more compact representation.
