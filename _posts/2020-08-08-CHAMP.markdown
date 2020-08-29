@@ -114,3 +114,10 @@ counting the number of elements in the node and child pointers, assuming child n
 If there is at least one child node pointer, the `branchSize` must be more than one, since the assumption may apply
 recursively to the child node. If there is no child node pointer, but more than one elements, the `branchSize` is also more 
 than one. Otherwise, the `branchSize` is either one or zero, depending on the number of elements in the node. 
+
+The deletion protocol is described as follows. The process is naturally recursive. Recursion proceeds by checking whether
+the logical slot contains a next-level child pointer or an element. If it is a child pointer, the function recursively
+calls deletes on the child node. Otherwise, the key object of the element is compared against the deletion key. If keys
+match, the key is removed from the node, and recursion stops expanding. The return value consists of a boolean variable
+indicating whether the key is actually deleted, and the node, regardless of whether any deletion happens. 
+
