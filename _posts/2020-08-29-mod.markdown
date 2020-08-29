@@ -21,4 +21,7 @@ version_mgmt:
    at which time a commit record can be written. 
    Is there any difficulty implementing this, instead of shadow paging-based composition?
 
+This paper introduces Minimally Ordered Durable Data Structures (MOD), a software library of persistent data structures 
+that features fast persistence and composibility. The paper identifies that conventional logging-based persistence
+data structures that implement failure-atomicity have two issues. The first is excessive write orderings, which is caused
 
