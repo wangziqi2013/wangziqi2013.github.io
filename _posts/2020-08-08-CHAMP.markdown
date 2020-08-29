@@ -146,5 +146,8 @@ The deletion protocol creates a canonical form of CHAMP: No matter how elements 
 the final contents of the tree are identical, the shape of trees must also be identical. This enables structure-based
 equality equality checking, which is different from content-based ones where one tree is iterated while the other is 
 checked against the key.
-The paper proposes a hash based equality checking algorithm, which we describe as follows.
-First, the entire tree maintains a hash value
+The structure-based equality checking algorithm is describe as follows.
+For non-overflowing nodes, which are all inner nodes, and leaf nodes that have not seen hash conflicts, the algorithm
+first compares `nodeMap` and `dataMap`. If one or both of these two differ, the two subtrees must be different.
+Next, all elements in the current node's array is compared using key object comparison. In the last step, all 
+child nodes are recursively compared recursively. Equality checking passes if and only if all these checks pass.
