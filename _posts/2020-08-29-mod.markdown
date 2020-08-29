@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Lowlight:**
+
+1. Not really a low light, but I am just thinking, is it possible to compose logging-based operations by passing a flag
+   to disable log commit at the end of the operation (i.e. does not write undo commit record), and continue with the 
+   next operation which is supposed to be atomic with the first one. This can continue until we finished all operations,
+   at which time a commit record can be written. 
+   Is there any difficulty implementing this, instead of shadow paging-based composition?
+
+
