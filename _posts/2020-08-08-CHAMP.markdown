@@ -16,7 +16,7 @@ version_mgmt:
 **Lowlights:**
 
 1. This paper is written badly, with lots of jargons and concepts unexplained (what are "elements"? It took me a while to 
-   figure out that the authors are referring to terminal level values, which is to differentiate it from next-level inner
+   figure out that the authors are referring to terminal level values, which is to differentiate it from next-level child
    nodes). I inferred most parts by guessing instead 
    of reading the actual text. Some terminologies are not used properly, such as "memorization", which is often used to
    refer to a programming technique that is used in top-down recursion.
@@ -25,3 +25,10 @@ version_mgmt:
     variant of CHAMP that adds memoized element hash codes,
     but drops incremental collection hash codes."
     Can you be more obsecure with this sentence structure?
+
+2. I did not see how memory footprint is reduced. In the HAMT design, each node must contain 32 slots (actually, 64, since 
+   full keys are also stored). In CHAMP, although empty slots are removed using `nodeMap` and `dataMap`, in the worst
+   case where the node is full with all terminal values, 64 slots are still needed, unless the array can be extended
+   dynamically, which is not mentioned at all in the paper.
+   Cache locality is improved, though, since useful values are likely closer to each other in a sparse node.
+
