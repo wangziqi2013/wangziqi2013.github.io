@@ -46,3 +46,10 @@ Personally, I would believe that this is caused by random addresses hitting the 
 the NVM device, serializing accesses to these banks or buffers.
 Overall, these experiments confirm that the logging-based persistence approaches under-utilize cache line flush and NVM 
 parallelism, resulting in sub-optimal performance.
+
+Based on the above observations, the paper proposes that shadow paging be used instead of logging to implement failure-atomic
+persistent data structures. Shadow is made possible by using persistent data structures, which are naturally implemented with multi-versioning. Note that the word "persistent" here does not imply durability. Instead, it reflects the fact that
+the data structure will retain a previous version after being updated to a new version. Both versions can be accessed
+after the update, as if they are individually maintained.
+
+
