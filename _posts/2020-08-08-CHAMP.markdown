@@ -77,6 +77,11 @@ to the pre-insertion state. This not only introduces unnecessary levels, but als
 checking, since two HAMTs holding the same content may not have identical tree structure. In other words, the shape of the
 tree is a function of both the current content and the insert-delete sequence that has been applied.
 
+Hash collision of keys are rare, but possible. On hash collisions, multiple different keys will be mapped to the same 
+slot. The insertion function should always check whether the keys are identical, and if not, uses a conflict chain 
+of keys (and values, for maps) to resolve conflicts. We call a node that contains hash conflicts in its slots as an
+overflow node.
+
 CHAMP optimizes HAMT over node layout, deletion protocol, equality algorithm, and fast iteration. Many of these optimizations
 are not standalone, but will rely on each other or share the same infrastructure. We next describe these optimizations
 in details.
@@ -133,3 +138,6 @@ If a singleton path is to be folded, this is the last step of the folding step, 
 path and embeds it in the current node.
 In all other cases, the current node simply updates the child node pointer that it traverses down the tree with the returned
 value, if the value is different from the current one, and returns `true` and itself to the upper level.
+
+The deletion protocol creates a canonical form of CHAMP: No matter how elements are inserted and deleted, as long as 
+the final contents of the tree are identical, the shape of trees must also be identical. 
