@@ -18,6 +18,10 @@ version_mgmt:
 1. Combining fine-grained shadow-paging with tree structures is a convenient optimization over shadow paging, since 
    no special mapping table is needed, and an atomic pointer swing suffices to update the consistent image.
 
+2. Many common data structures, such as vectors, maps, sets, lists, can all be represented with a uniform persistent
+   data structure. This simplifies the implementation of algorithms for these data structures, since it is sufficient
+   just to implement the algorithm for the underlying tree structure.
+
 
 
 **Lowlight:**
