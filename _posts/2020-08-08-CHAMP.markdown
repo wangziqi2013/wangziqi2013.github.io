@@ -128,4 +128,8 @@ If the current node has `arity` being one, and the `branchSize` of the returned 
 a singleton path to a leaf node of length at least two, and the current node will be removed (and deallocated) from the 
 path by returning `true` and the returned node to the upper level. 
 If the current node's `arity` is larger than one, but the returned node's `branchSize` is one, then we copy the only element
-
+from the returned node to the current node, replacing the child node pointer with the element copied from the returned node.
+If a singleton path is to be folded, this is the last step of the folding step, as it takes the element from the singleton 
+path and embeds it in the current node.
+In all other cases, the current node simply updates the child node pointer that it traverses down the tree with the returned
+value, if the value is different from the current one, and returns `true` and itself to the upper level.
