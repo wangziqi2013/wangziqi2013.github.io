@@ -124,4 +124,8 @@ The return value consists of a boolean variable indicating whether the key is ac
 of whether any deletion happens. The flag will be checked first from the return value. If it is false, then the upper level
 recursion instances know the deletion did not happen, and will not modify the tree structure.
 Otherwise, the function checks the `arity` of the current node, and the `branshSize` of the returned node.
+If the current node has `arity` being one, and the `branchSize` of the returned node being one also, then we have identified
+a singleton path to a leaf node of length at least two, and the current node will be removed (and deallocated) from the 
+path by returning `true` and the returned node to the upper level. 
+If the current node's `arity` is larger than one, but the returned node's `branchSize` is one, then we copy the only element
 
