@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "MOD: Minimally Ordered Durable Datastructures for Persistent Memory"
+date:   2020-08-29 06:04:00 -0500
+categories: paper
+paper_title: "MOD: Minimally Ordered Durable Datastructures for Persistent Memory"
+paper_link: https://dl.acm.org/doi/10.1145/3373376.3378472
+paper_keyword: NVM; MOD; Data Structure; Shadow Paging
+paper_year: ASPLOS 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
