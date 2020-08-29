@@ -98,5 +98,7 @@ bit X, and performs a popcount of "1" bits in the resulting mask.
 The offset of elements in `dataMap` is computed similarly, but the result of popcount is further subtracted from the 
 size of the current array, since the physical `dataMap` starts at the end of the array, and grows towards lower 
 indices.
-
+The size of both logical arrays are computed by counting the number of "1" bits in the masks. 
+If, before an insertion, the physical array is full, indicated by the sum of bit counts from both masks equalling the 
+array size, then a reallocation will take place to extend the array before the insertion could be performed.
 
