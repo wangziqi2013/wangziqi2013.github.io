@@ -167,4 +167,7 @@ the hash code must be order agnostic and reversible to handle deletions. Storing
 First, comparison of a single node is faster, since different hash values must indicate different nodes. Second, key comparisons
 are also faster for finding non-equivalent keys, if the key comparison function is non-trivial. Lastly, when two key values
 collide on a non-leaf node, the hash value of the old key does not need to be computed. The hash value will be needed for
-expanding the tree.
+expanding the tree. Note that if value objects exist, insert function should also compute the hash value of value objects,
+and incremently update the per-node hash value, if applicable.
+The paper suggests that the hash value be stored in a separate array in the node, the size of which is also expandable
+as the array expands.
