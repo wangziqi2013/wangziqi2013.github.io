@@ -81,5 +81,9 @@ CHAMP optimizes HAMT over node layout, deletion protocol, equality algorithm, an
 are not standalone, but will rely on each other or share the same infrastructure. We next describe these optimizations
 in details.
 
-
+HAMT node layout is a 32-slot static array, to which key slices are direct mapped. This, however, always allocates 32 
+slots in the array, which can be more than necessary, if the node is sparse. In addition, the locality of node traversal 
+is affected by NULL values. CHAMP improves over HAMT node layout with three techniques. First, NULL values are not 
+stored, which reduces the size of the array. Two 32-bit integers, used as bitmaps, encode the logical layout of the array 
+as follows. 
 
