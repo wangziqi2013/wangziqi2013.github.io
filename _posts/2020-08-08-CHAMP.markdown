@@ -38,3 +38,10 @@ consume too much memory by maintaining a full sized node when most of the slots 
 memory to be allocated for storing non-meaningful NULL values, and hurts cache performance, since the memory footprint 
 of nodes become larger. The chance that a node access will hit the hardware cached copy decreases compared with a 
 more compact representation.
+The second problem is deletion. The original HAMT design lacks a proper deletion algorithm, such that the radix tree cannot
+be restored to the canonical shape, resulting in sparse nodes and singleton paths, wasting both memory and cycle.
+The third problem is bad cache locality of iteration, due to the fact that child node pointers and terminal values can be 
+stored in an interleaved manner in a direct mapped node. The iterator will have to traverse to childen nodes recursively 
+before returning to the current node and consinuing iterating on the current node, resulting in poor cache locality.
+
+
