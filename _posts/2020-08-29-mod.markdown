@@ -38,6 +38,12 @@ version_mgmt:
    on the private copy that has not yet been made public, which will be made public using an atomic pointer swing.
    This rings better for system people, as most people are unfamiliar with PL concepts.
 
+3. Although the total amount of extra storage for shadowing is small compared with total amount of data used, the
+   paper did not measure write amplification to the NVM. Given large nodes (32 slots, for example, if radix trees 
+   are used), a single word update will suffer from a write amplification of at least 32x, not counting upper 
+   level propagations. This is really bad even compared with logging, but the paper did not evaluate write amplification
+   to the NVM.
+
 This paper introduces Minimally Ordered Durable Data Structures (MOD), a software library of persistent data structures 
 that features fast persistence and composibility. The paper identifies that conventional logging-based persistence
 data structures that implement failure-atomicity have two issues. The first is excessive write orderings, which is caused
