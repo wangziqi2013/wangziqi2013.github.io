@@ -65,4 +65,10 @@ barriers are inserted to ensure write ordering. Thanks to the write pattern wher
 the consistency of the pre-update state remains intact, while node duplication, updates to the duplication, wrapper 
 dunplication, and metadata updates are performed. Cache line flushes are inserted for new nodes and the new wrapper
 after updates completes, enabling parallel flushes. 
+A persist barrier is then issued to ensure these updates are persisted before the next step.
+In the next step, the original data structure pointer is updated to the new wrapper object. This update can be performed
+with only a word granularity store, which is always atomic given that the word is properly aligned.
+The second persistence barrier is then issued to ensure that the pointer change is persistent as well, before returning
+to the caller.
 
+Note that
