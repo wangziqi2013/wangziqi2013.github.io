@@ -111,4 +111,6 @@ data or next-level child pointers, stored on the node's array. The `branchSize` 
 elements that can be reached transitively from the current node. Although `branchSize` is not a local property, since it
 requires recursively traverse the subtree to compute the number of elements, it can be computed approximatly by only
 counting the number of elements in the node and child pointers, assuming child nodes will also satisfy this property. 
-
+If there is at least one child node pointer, the `branchSize` must be more than one, since the assumption may apply
+recursively to the child node. If there is no child node pointer, but more than one elements, the `branchSize` is also more 
+than one. Otherwise, the `branchSize` is either one or zero, depending on the number of elements in the node. 
