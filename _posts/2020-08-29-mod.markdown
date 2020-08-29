@@ -31,3 +31,7 @@ the current one completes, while the actual hardware is capable of parallel evic
 The second issue is usability. Logging-based data structure operations are hard to compose, due to the fact that the undo 
 log must be committed by writing a end-of-transaction mark at the end of the operation, limiting the scope of the 
 failure-atomic region. 
+
+This paper also makes two important observations on the degree of parallelism on NVM flushing. The experiments involves
+issuing flush instructions to a certain number of randomly chosen dirty cache lines, and then issue a memory fence.
+Latency of the fence is measured as the overhead of write barriers of a certain write size.
