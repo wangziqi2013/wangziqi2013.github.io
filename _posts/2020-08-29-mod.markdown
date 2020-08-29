@@ -22,7 +22,8 @@ version_mgmt:
    data structure. This simplifies the implementation of algorithms for these data structures, since it is sufficient
    just to implement the algorithm for the underlying tree structure.
 
-
+3. Write cascading only incurs write traffic proportional to the tree depth. The tree depth is logarithm of the total
+   amount of data, indicating small extra memory usage (not write amplification!).
 
 **Lowlight:**
 
