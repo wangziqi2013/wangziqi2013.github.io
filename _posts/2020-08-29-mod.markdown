@@ -113,3 +113,9 @@ commit function specifically optimizes the case where the objects to be updated 
 also given in the argument list. In this case, in order to commit all updates atomically, a new instance of the parent
 object is created, with all fields that point to updated objects set to their new instances. 
 The parent object is then persisted atomically using a pointer swing and a persist barrier.
+
+MOD constantly abandons one instance of the data structure wrapper and a few nodes that are "shadowed", leaving them
+inaccessible. To prevent memory leak, the paper suggests that each node maintains a reference counter, which is incremented
+when a new reference is established on the node, and decremented when un-referenced.
+The node can be reclaimed when the counter drops to zero.
+The wrapper instances can be freed instantly, since they will not be shared.
