@@ -99,3 +99,12 @@ above description encapsulates this with a second barrier, which updates caller'
 new instance. This usage model also slightly changes the programming paradigm: In addition to passing all arguments for
 the update operation, the address of the pointer to the data structure instance should also be passed as an extra
 argument, which is updated with the address of the new instance on completion of the update.
+
+In addition to the single operation usage model, the paper also provides two extra interfaces for operation composition.
+The first, more general form is `CommitUnrelated()`. Users should directly call update functions which return new instance
+pointers (rather than wrapper versions which updates the pointer atomically) on objects. Then the user calls 
+`CommitUnrelated()` on multiple old instance pointer addresses, paired with the new instance pointers. This function 
+essentially starts a software transaction (with conventional approach) to update these pointer addresses atomically,
+achieving operation composition, since the effect of these operations are only persisted after all pointer swings are
+completed.
+
