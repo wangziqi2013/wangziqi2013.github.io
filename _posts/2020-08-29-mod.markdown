@@ -21,6 +21,11 @@ version_mgmt:
    at which time a commit record can be written. 
    Is there any difficulty implementing this, instead of shadow paging-based composition?
 
+2. The introduction of pure functions to explain pure data structures actually over-complicates things. Instead of 
+   using pure functions, you can just say shadow paging does not alter public states while all updates are performed
+   on the private copy that has not yet been made public, which will be made public using an atomic pointer swing.
+   This rings better for system people, as most people are unfamiliar with PL concepts.
+
 This paper introduces Minimally Ordered Durable Data Structures (MOD), a software library of persistent data structures 
 that features fast persistence and composibility. The paper identifies that conventional logging-based persistence
 data structures that implement failure-atomicity have two issues. The first is excessive write orderings, which is caused
