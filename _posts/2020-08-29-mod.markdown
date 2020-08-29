@@ -42,4 +42,7 @@ parallelism exceeds this value, the flush instruction will stall the pipeline un
 The second observation is that approximately 82% of all flushes can be parallel, while 18% of them are serial. This 
 ratio remains pretty much consistent as the parallelism of experiments change, indicating that the performance of 
 flushes are mainly determined by the 18% non-parallel writes to the NVM.
-
+Personally, I would believe that this is caused by random addresses hitting the same bank or persistent buffer within 
+the NVM device, serializing accesses to these banks or buffers.
+Overall, these experiments confirm that the logging-based persistence approaches under-utilize cache line flush and NVM 
+parallelism, resulting in sub-optimal performance.
