@@ -35,3 +35,8 @@ failure-atomic region.
 This paper also makes two important observations on the degree of parallelism on NVM flushing. The experiments involves
 issuing flush instructions to a certain number of randomly chosen dirty cache lines, and then issue a memory fence.
 Latency of the fence is measured as the overhead of write barriers of a certain write size.
+The first observation is that no matter how many flushes are issued in parallel, it seems that at most 16 of them can
+be overlapped without significantly increasing latency. This might be an indication that the internal eviction buffer
+or MSHR for flushes have a maximum capacity of 16. When parallelism exceeds this value, the flush instruction will stall
+the pipeline until one of them is released.
+
