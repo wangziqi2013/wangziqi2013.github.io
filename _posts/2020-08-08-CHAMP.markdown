@@ -161,3 +161,10 @@ all these checks pass.
 The special node structure also optimizes iteration, since iteration now can first traverse over all values from the
 upper half of the array, and then recursively traverse child nodes. This way, cache is better utilized, since the 
 traversal function localizes accesses to the upper half of the array first, before it recurses down.
+
+The paper also proposes storing hash values for the entire tree, each node, and each element in the node. As stated above,
+the hash code must be order agnostic and reversible to handle deletions. Storing hash values have at least three advantages.
+First, comparison of a single node is faster, since different hash values must indicate different nodes. Second, key comparisons
+are also faster for finding non-equivalent keys, if the key comparison function is non-trivial. Lastly, when two key values
+collide on a non-leaf node, the hash value of the old key does not need to be computed. The hash value will be needed for
+expanding the tree.
