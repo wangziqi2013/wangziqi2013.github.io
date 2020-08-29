@@ -24,4 +24,10 @@ version_mgmt:
 This paper introduces Minimally Ordered Durable Data Structures (MOD), a software library of persistent data structures 
 that features fast persistence and composibility. The paper identifies that conventional logging-based persistence
 data structures that implement failure-atomicity have two issues. The first is excessive write orderings, which is caused
-
+by logging. For example, in undo logging, each log entry write must be persisted before the cache line is updated
+in-place to avoid dirty data being accidentally evicted back, polluting the consistent image before the log entry does.
+This limits the parallelism of cache line eviction on a single core to one, since the next eviction cannot start before
+the current one completes, while the actual hardware is capable of parallel eviction. 
+The second issue is usability. Logging-based data structure operations are hard to compose, due to the fact that the undo 
+log must be committed by writing a end-of-transaction mark at the end of the operation, limiting the scope of the 
+failure-atomic region. 
