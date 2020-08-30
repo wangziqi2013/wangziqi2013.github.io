@@ -97,3 +97,9 @@ in a fine grained manner to the application. The OS may also return large blocks
 if the frontend has excessive number of empty blocks. 
 The backend maintains a bitmap to track allocation status of blocks. The actual allocation memory map, however, must
 be rebuilt by performing a pointer-based scanning after crash recovery.
+
+On recovery from a frontend crash, the frontend first locates both data and semantic log on the backend NVM.
+The image is restored to the pre-crash persistent state as follows. First, the recovery handler replays the 
+remaining redo data log entries that have a commit record, and remember the last completed transaction that is in the 
+redo entry, L. This step restores the image to a consistent state, but not necessarily the most up-to-date consistent
+state, since some transactions may have already been logically committed, but with a partial redo log. 
