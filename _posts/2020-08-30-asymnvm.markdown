@@ -76,4 +76,9 @@ workload, the root node and upper level nodes should be given higher priority to
 nodes are of lower priority.
 
 The backend also maintains the working set image as direct mapped NVM. The image is only updated by continuously replaying 
-the redo log. 
+the redo log. RDMA reads must wait for the redo log replay to complete to proceed, in order to access consistent
+and most up-to-date data. If there are still outstanding redo logs, the read should be blocked.
+Note that the original paper does not define how reads are serialized with writes. What I describe here is one of the 
+most conservative solutions, i.e., let reads always synchronize with all preceding writes, since it guarantees that
+a transaction can always access its own dirty data. More relaxed solutions, such as using optimistic reads and a global
+image version counter, is also possible. 
