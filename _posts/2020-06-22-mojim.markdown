@@ -31,11 +31,11 @@ version_mgmt:
    see how this affects recoverability. The mirror should be able to be rebuilt whether or not the master flushes the cache.
    Furthermore, flushing the cache will pollute the master's image (although it is always potentially polluted).
    As long as you do not dump register file, data on the master copy is always inconsistent and execution could not resume.
-   (I guess the application should cook its own transactional support?)
+   (I guess the application should make its own transactional support?)
    What's more, the paper claims that for system with N machines, Mojim could tolerate N - 1 failures. In a master-mirror
    configuration, we do not need to worry about the case where both master and mirror copy fails.
 
-3. I did not get how metadata log is used. Does mirrored copy always recovery to exact sync points?
+3. I did not get how metadata log is used. Does mirrored copy always recover to exact sync points?
    How does master copy know which data should be sent after the metadata log's tail (master copy does not keep a log
    and has no idea which data were sent after the log tail)
 
