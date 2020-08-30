@@ -19,4 +19,6 @@ from the computation node, conventional logging approaches are no longer feasibl
 latency. Write ordering, which is essential to logging-based persistence algorithms, requires flushing a cache line to 
 the backend NVM, and waiting for the response over the network, taking at least one round-trip delay to complete.
 
-
+We first describe the asymmetric NVM architecture before presenting details of AsymNVM. The baseline asymmetric NVM
+architecture consists of one or more NVM backend and computation frontend. Frontend accesses the NVM devices by 
+issuing RDMA commands to explicit retrieve and push data over some high-throughput network, such as Infiniband.
