@@ -19,7 +19,10 @@ version_mgmt:
    the address space, and also reduces the latency of logical commit (only writing one semantic log entry instead of 
    writing all redo logs).
 
+**Lowlights:**
 
+1. This paper is badly written, full of factual errors, grammartic errors, and peculiar expressions.
+   Lots of conceps are not even explained clearly (e.g., how does reads keep consistent with writes?).
 
 This paper introduces AsymNVM, a distributed shared NVM storage architecture. AsymNVM is motivated by asymmetric NVM architecture,
 where NVM storage backends are decoupled from the computation frontend. AsymNVM points out that by decoupling NVM storage node
