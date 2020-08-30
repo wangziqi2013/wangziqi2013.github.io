@@ -47,4 +47,7 @@ cache line data. The semantic log buffer, on the other hand, stores semantic log
 with the function name and arguments, if any. 
 The library provides instrumentation functions to insert transaction begin, end, load, and store operations.
 
-
+At transaction begin, an operation log entry is generated, and written to the backend via RDMA write. The write does
+not need to be synchronous, whose completion is only checked at the end of the transaction, which is also the logical
+commit point of the transaction. As the transaction executes, writes will generate per-word data log entries, which
+are buffered locally in the frontend. 
