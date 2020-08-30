@@ -62,3 +62,9 @@ AsymNVM uses a single NVM write operation to transfer local data log entries to 
 Although not mentioned by the paper, each transaction in AsymNVM should be assigned a mononically increasing transaction
 ID. Operation log entries and the data commit record should both contain the transaction ID, in order for the system to
 accurately replay both logs on crash recovery.
+
+AsymNVM also maintains a local DRAM cache for frequently accessed pages. On transactional read operations, the DRAM cache
+is first checked for the requested address. If found, data can be directly returned from the cache. Otherwise, the 
+RDMA issues a page fetch request to fill the buffer after a potential eviction. To maintain consistency of cached contents,
+transactional stores are also performed on the cached page, if it is present.
+
