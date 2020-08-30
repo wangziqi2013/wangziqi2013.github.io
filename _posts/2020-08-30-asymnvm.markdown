@@ -42,7 +42,9 @@ AsymNVM uses a combination of redo logging and semantic logging (operation loggi
 efficient, low-latency commit, and strong atomicity guarantees, i.e., a transaction is guaranteed to be committed, even 
 after crash recovery, after the commit function returns.
 The mechanism is described as follows. The backend NVM maintains two log buffers, one is data log buffer, and another 
-is semantic log buffer. The data log buffer stores per-line updates as redo entries consisting of the address tag and
+is semantic log buffer. The data log buffer stores per-word updates as redo entries consisting of the address tag and
 cache line data. The semantic log buffer, on the other hand, stores semantic log entries, which describe the operation
 with the function name and arguments, if any. 
-At transaction begin, 
+The library provides instrumentation functions to insert transaction begin, end, load, and store operations.
+
+
