@@ -105,4 +105,4 @@ redo entry, L. This step restores the image to a consistent state, but not neces
 state, since some transactions may have already been logically committed, but with a partial redo log. 
 Then, the handler scans the semantic log, and for all entries with a transaction ID larger than L, replays the log
 by re-executing these transactions with the exact function and arguments. 
-Lastly, 
+Lastly, allocation metadata and other metadata is restored, after which the system resumes execution.
