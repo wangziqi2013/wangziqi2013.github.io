@@ -70,3 +70,10 @@ transactional stores are also performed on the cached page, if it is present.
 The address mapping between the requested block and the address in the cache is managed by a frontend hash table. The
 hash table is updated when a page is filled. The read and write wrapper will also perform table lookups to translate
 the requested address to the cache address.
+Dirty pages do not need to be evicted, since the data redo log entry is sufficient to keep the backend up-to-date.
+The paper also suggests that the eviction algorithm be customized according to the workload. For example, on B+Tree
+workload, the root node and upper level nodes should be given higher priority to stay in the cache, while lower level 
+nodes are of lower priority.
+
+The backend also maintains the working set image as direct mapped NVM. The image is only updated by continuously replaying 
+the redo log. 
