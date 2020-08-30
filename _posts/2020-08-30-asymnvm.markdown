@@ -50,4 +50,10 @@ The library provides instrumentation functions to insert transaction begin, end,
 At transaction begin, an operation log entry is generated, and written to the backend via RDMA write. The write does
 not need to be synchronous, whose completion is only checked at the end of the transaction, which is also the logical
 commit point of the transaction. As the transaction executes, writes will generate per-word data log entries, which
-are buffered locally in the frontend. 
+are buffered locally in the frontend. Data log entries are not essential to commit the transaction, and therefore, they
+are not required to be synchronously committed. The local data log buffer is flushed, when certain number of 
+transactions have been committed, or when the buffer is full. 
+Local buffering is to avoid excessive RDMA operations being issued, which can easily overwhelm the I/O queue of the RDMA
+controller. Furthermore, batching data from multiple transactions together helps leveraging high throughput of RDMA
+despite high single operation latency.
+
