@@ -67,4 +67,6 @@ AsymNVM also maintains a local DRAM cache for frequently accessed pages. On tran
 is first checked for the requested address. If found, data can be directly returned from the cache. Otherwise, the 
 RDMA issues a page fetch request to fill the buffer after a potential eviction. To maintain consistency of cached contents,
 transactional stores are also performed on the cached page, if it is present.
-
+The address mapping between the requested block and the address in the cache is managed by a frontend hash table. The
+hash table is updated when a page is filled. The read and write wrapper will also perform table lookups to translate
+the requested address to the cache address.
