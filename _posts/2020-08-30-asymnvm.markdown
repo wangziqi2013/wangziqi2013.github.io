@@ -24,6 +24,13 @@ architecture consists of one or more NVM backend and computation frontend. Front
 issuing RDMA commands to explicit retrieve and push data over some high-throughput network, such as Infiniband.
 The mapping relation between the frontend and the backend can be arbitrary in order to maximize device utilization.
 Both frontend and backend can crash, after which crash recovery will be initiated.
+Frontend nodes do not have any NVM device installed. DRAM is available to run the OS and the application, and to
+serve as a buffer for data fetched from the backend NVM.
+The paper also assumes that the working set can be larger than DRAM capacity at any frontend node, but still within the
+capacity limit of the backend, because of higher storage density of NVM compared with DRAM.
+
+
 Note that one of the basic assumptions of the paper is that, although the throughput of RDMA is comparable to the 
 throughput of NVM devices, the latency of RDMA operations are significantly larger than NVM, which makes it necessary
 to design a persistence algorithm that requires less write ordering.
+
