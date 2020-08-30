@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Combines redo log and semantic log, to allow both fast persistence and precise state recording. This avoids checkpointing 
+   the address space, and also reduces the latency of logical commit (only writing one semantic log entry instead of 
+   writing all redo logs).
+
+
+
 This paper introduces AsymNVM, a distributed shared NVM storage architecture. AsymNVM is motivated by asymmetric NVM architecture,
 where NVM storage backends are decoupled from the computation frontend. AsymNVM points out that by decoupling NVM storage node
 from the computation node, conventional logging approaches are no longer feasible, due to increased communication
