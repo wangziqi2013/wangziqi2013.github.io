@@ -1,9 +1,9 @@
 ---
 layout: paper-summary
-title:  "A Reliable and Highly Available Non-Volatile Memory System"
+title:  "Mojim: A Reliable and Highly Available Non-Volatile Memory System"
 date:   2020-06-22 05:51:00 -0500
 categories: paper
-paper_title: "A Reliable and Highly Available Non-Volatile Memory System"
+paper_title: "Mojim: A Reliable and Highly Available Non-Volatile Memory System"
 paper_link: https://dl.acm.org/doi/10.1145/2786763.2694370
 paper_keyword: NVM; Mojim; Replication
 paper_year: SIGARCH 2015
@@ -80,7 +80,7 @@ Mojim employs redo logging to perform both atomic commit and data replication. R
 write ordering must be observed to ensure correctness. First, log entries should be persisted before the commit record.
 This suggests that all log entries must be transferred to the mirrored copy before the commit mark is written, only
 after which the system call could return. The second write ordering is between dirty data and the commit record. Dirty
-data can only be written back after the commit record is persisted. The second writr ordering conveys different messages
+data can only be written back after the commit record is persisted. The second write ordering conveys different messages
 to the master and the mirror. For master copies, there is no guarantee that the hardware cache will not write back dirty
 data before the commit record, and therefore, the master copy by itself is not atomic at all. On the other hand, however,
 if we think of the master copy as a large buffer, and the mirrored copy as actual data, both write orderings are observed,
@@ -122,7 +122,7 @@ implementational details.
 
 Log entries received from the master copy is written into dedicated log buffers by the RDMA receiving end on the mirror
 node. The mirror node periodically replays the log onto its NVM image, when the log buffer is full or when the number of 
-received packts exceeds a certain threshold, after which the log buffer is truncated and reclaimed. If tier-two backup
+received packets exceeds a certain threshold, after which the log buffer is truncated and reclaimed. If tier-two backup
 nodes are configured, the mirror copy also sends log entries to backup nodes in the background. These backup nodes
 are not strictly synchronized with the master and mirrored copy, which only guarantees recovery to one of the recent
 sync points, but not always the most recent one. As a result, msync() will not wait for backup nodes to complete their
