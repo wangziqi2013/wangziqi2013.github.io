@@ -81,4 +81,8 @@ and most up-to-date data. If there are still outstanding redo logs, the read sho
 Note that the original paper does not define how reads are serialized with writes. What I describe here is one of the 
 most conservative solutions, i.e., let reads always synchronize with all preceding writes, since it guarantees that
 a transaction can always access its own dirty data. More relaxed solutions, such as using optimistic reads and a global
-image version counter, is also possible. 
+image version counter, is also possible. In this solution, reads do not synchronize with log replay. Instead, log
+a global version counter is incremented both before and after the current batch of log replay.
+The RDMA read operation checks the global version counter before the read, and re-checks it after. If the first check
+reads an odd counter value, or if two checks read different values, the read risks accessing inconsistent image, which 
+must be retried.
