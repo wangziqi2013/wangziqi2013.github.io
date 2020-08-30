@@ -28,7 +28,9 @@ Frontend nodes do not have any NVM device installed. DRAM is available to run th
 serve as a buffer for data fetched from the backend NVM.
 The paper also assumes that the working set can be larger than DRAM capacity at any frontend node, but still within the
 capacity limit of the backend, because of higher storage density of NVM compared with DRAM.
-
+As a result, keeping the full volatile working set in the frontend DRAM is not an option, unlike some previous proposals. 
+A few mirror nodes are also present as the backup for backend storage. Data is synchronized between the backend nodes
+and mirror nodes periodically.
 
 Note that one of the basic assumptions of the paper is that, although the throughput of RDMA is comparable to the 
 throughput of NVM devices, the latency of RDMA operations are significantly larger than NVM, which makes it necessary
