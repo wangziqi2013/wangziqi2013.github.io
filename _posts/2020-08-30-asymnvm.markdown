@@ -34,5 +34,11 @@ and mirror nodes periodically.
 
 Note that one of the basic assumptions of the paper is that, although the throughput of RDMA is comparable to the 
 throughput of NVM devices, the latency of RDMA operations are significantly larger than NVM, which makes it necessary
-to design a persistence algorithm that requires less write ordering.
+to design a persistence algorithm that requires less write ordering, as we will see below.
+
+AsymNVM supports a transactional interface, where applications declare transaction boundaries, and the library ensures
+that all writes to the NVM are either committed as a unit, or none of them is committed. 
+AsymNVM uses a combination of redo logging and semantic logging (operation logging as in the paper) to support both
+efficient, low-latency commit, and strong atomicity guarantees, i.e., a transaction is guaranteed to be committed, even 
+after crash recovery, after the commit function returns.
 
