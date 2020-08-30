@@ -86,3 +86,10 @@ a global version counter is incremented both before and after the current batch 
 The RDMA read operation checks the global version counter before the read, and re-checks it after. If the first check
 reads an odd counter value, or if two checks read different values, the read risks accessing inconsistent image, which 
 must be retried.
+
+One most notable difference between regular and asymmetric NVM architectures is that NVM storage allocation. 
+In former configuration, the OS asserts full control over the NVM address space, which is managed exclusively by
+the OS. In the latter configuration, however, since the backend storage is shared among multiple frontends, resource
+cannot be monopolized by a certain frontend. 
+
+
