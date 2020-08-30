@@ -22,3 +22,8 @@ the backend NVM, and waiting for the response over the network, taking at least 
 We first describe the asymmetric NVM architecture before presenting details of AsymNVM. The baseline asymmetric NVM
 architecture consists of one or more NVM backend and computation frontend. Frontend accesses the NVM devices by 
 issuing RDMA commands to explicit retrieve and push data over some high-throughput network, such as Infiniband.
+The mapping relation between the frontend and the backend can be arbitrary in order to maximize device utilization.
+Both frontend and backend can crash, after which crash recovery will be initiated.
+Note that one of the basic assumptions of the paper is that, although the throughput of RDMA is comparable to the 
+throughput of NVM devices, the latency of RDMA operations are significantly larger than NVM, which makes it necessary
+to design a persistence algorithm that requires less write ordering.
