@@ -49,7 +49,11 @@ The NVM address space is divided into a shared part and a private part. The shar
 nodes, under the abstraction of a unified virtual address space per-process, while private NVM
 is used as both a cache for frequently accessed pages, and storage for inactive replications.
 
-DSPM nodes
+DSPM nodes maintains per-process metadata for the mapping between virtual pages and physical resources. The matadata
+tracks, at a potentially different granularity (the paper suggests 4MB chunks), the ownership and the sharing status
+of virtual addresses. A virtual address chunk can be mapped to either a local physical chunk, or a remote physical chunk.
+In the latter case, the remote node ID and the chunk ID must be stored in the metadata.
+
 
 We next describe details of DSPM implementation. We start with process initialization and object naming. When a process
 is started, it must register itself with a centralized service, called the "Central Dispatcher", which runs on a single
