@@ -73,7 +73,15 @@ service tracks allocation status of chunks on all nodes. When a request is recei
 manner to evenly distribute workload, and returns the node ID and chunk ID to the requestor. Chunk release simply
 marks the chunk as available in the resource map.
 
+Each chunk can have several replications in different states. The one indicated by node ID and chunk ID is regarded as 
+the "owner" chunk, which is responsible for replying to chunk fetch requests and handling chunk commits.
+A chunk is fetched when it is first accessed by the computation. A fetched chunk is stored in the private part of the 
+local NVM. A chunk can be in one of the three states when it is stored in the private NVM (i.e., when it is not the owner):
+redundant, committed, and dirty. A redundant chunk copy is clean, and it has not yet been mapped. Redundant chunks are
+"pushed" from the owner node to achieve a certain replication level (N copies, where N can be set by the user). 
 
+
+On page faults, redundant chunks can also satisfy the request locally with contacting the owner node.
 
 // Chunk ownership, states and state transition
 
