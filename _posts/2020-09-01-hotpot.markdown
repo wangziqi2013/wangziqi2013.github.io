@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Some important abstractions should be elaborated in more details. For example: How are directories of which
+   VA is mapped to which PA on which machine maintained? When a chunk migrates, how to update these directories?
+
 This paper presents Distributed Shared Persistent Memory (DSPM), an architecture and software stack for large-scale 
 distributed NVM deployment. Prior proposals already implement distributed shared DRAM and distributed storage array
 based on DRAM and disks. The paper points out, however, that the same technique cannot be directly ported to support 
@@ -38,3 +43,5 @@ to avoid both radical changes to the OS and over-complicating the commit protoco
 The NVM address space is divided into a shared part and a private part. The shared NVM is publicly accessible by all
 nodes, under the abstraction of a unified virtual address space per-process, while private NVM
 is used as both a cache for frequently accessed pages, and storage for inactive replications.
+
+We next describe details of DSPM implementation. We start with process initialization and object naming.
