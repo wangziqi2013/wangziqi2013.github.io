@@ -90,7 +90,10 @@ On page faults, redundant chunks can also satisfy the request locally with conta
 page fault handler changes its state to committed, marking the chunk with read-only permission.
 Read-only chunks must not be written into, and only fulfills read requests. On a write instruction, another page
 fault will be raised. The page fault handler, knowing that the chunk is in committed state, will duplicate the chunk
-in the private cache, and updates page table entry to point to the new chunk with full permission. 
+in the private cache, and updates page table entry to point to the new chunk with full permission. The new chunk will
+be in dirty state, and remain in that state for later memory operations, until the chunk is committed. In the meantime,
+the original committed or redundant state chunk is still stored in the local cache as the undo image, if a crash happens
+before the dirty chunk is committed.
 
 // Chunk ownership, states and state transition
 
