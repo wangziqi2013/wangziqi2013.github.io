@@ -35,3 +35,6 @@ DSPM nodes serve as both computation and storage nodes, which are equipped with 
 in order to run the OS and maintain volatile states. DSPM assumes that tasks can be started at any node in the system,
 and each task can consist of multiple threads. The same task, however, must only be executed on the same machine 
 to avoid both radical changes to the OS and over-complicating the commit protocol.
+The NVM address space is divided into a shared part and a private part. The shared NVM is publicly accessible by all
+nodes, under the abstraction of a unified virtual address space per-process, while private NVM
+is used as both a cache for frequently accessed pages, and storage for inactive replications.
