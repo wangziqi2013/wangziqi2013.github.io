@@ -31,4 +31,7 @@ We first describe the baseline distributed system as follows. DSPM is implemente
 manages virtual address translations, page faults, and runtime metadata.DSPM assumes a distributed system where computation
 nodes communicate via high-bandwidth low-latency network, such as Infiniband. The communication is abstracted
 by RDMA into RPC requests and responses, which is implemented as a customized networking stack. 
-
+DSPM nodes serve as both computation and storage nodes, which are equipped with NVM devices. DRAM is also installed
+in order to run the OS and maintain volatile states. DSPM assumes that tasks can be started at any node in the system,
+and each task can consist of multiple threads. The same task, however, must only be executed on the same machine 
+to avoid both radical changes to the OS and over-complicating the commit protocol.
