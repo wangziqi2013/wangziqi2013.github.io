@@ -86,7 +86,11 @@ chunk in its sharer list. When the redundancy level of a chunk drops belows the 
 proactively push chunks to other nodes to restore the number of redundant copies to N. The chunks pushed to other nodes
 will be initially in redundant state.
 
-On page faults, redundant chunks can also satisfy the request locally with contacting the owner node.
+On page faults, redundant chunks can also satisfy the request locally with contacting the owner node. In this case, the 
+page fault handler changes its state to committed, marking the chunk with read-only permission.
+Read-only chunks must not be written into, and only fulfills read requests. On a write instruction, another page
+fault will be raised. The page fault handler, knowing that the chunk is in committed state, will duplicate the chunk
+in the private cache, and updates page table entry to point to the new chunk with full permission. 
 
 // Chunk ownership, states and state transition
 
