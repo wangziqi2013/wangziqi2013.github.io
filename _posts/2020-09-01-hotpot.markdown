@@ -21,5 +21,10 @@ some critical features for NVM are still missing, such as distributed object nam
 distributed storage systems are mostly implemented as file system services or object-based stores. The software
 overhead for maintaining the abstraction is too large, given the relatively fast access speed of NVM.
 
+DSPM, on the contrary, combines features from both sides to make a design that is both fast and reliable. It borrows
+the object naming semantics, data replication and distributed commit from storage architectures to manage persistent
+data in a consistent and reliable manner. 
+Meanwhile, DSPM also borrows coherence and byte-granularity access from conventional DSM, enabling fast data accesses 
+via memory instructions over the network.
 
 
