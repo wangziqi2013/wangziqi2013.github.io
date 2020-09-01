@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+****
+
 **Lowlight:**
 
 1. Some important abstractions should be elaborated in more details. For example: 
@@ -152,6 +154,11 @@ Two types of crashes can happen. In the first type of crash, data stored NVM dev
 rest of the DSPM identifies chunks that become "ownerless" due to the crash, and migrates these chunks to one of the 
 replication nodes. In the second type of crash, the node loses all progress of the computation, including volatile
 states in the cache hierarchy and DRAM. In this case, the system state rolls back to the last consistent commit point
-on the crashed node as follows (other nodes are not affected). If the 
+on the crashed node as follows (other nodes are not affected). If the node is committing, then the commit process is 
+re-executed by replaying the redo log stored on the NVM. If the node is one of the owner nodes that participate in 
+a commit process, then the node replays its redo log, if it exists, and copies the redo image to the chunk to
+complete the redo process. 
+If, however, the node is neither committing nor participating in a commit process, recovery proceeds by dropping all
+dirty state chunks from the local cache, restoring the state to the consistent image at the last commit point.
 
 // Object naming, CD, address space and pointer semantics
