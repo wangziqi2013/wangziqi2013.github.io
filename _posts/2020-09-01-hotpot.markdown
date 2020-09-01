@@ -49,3 +49,8 @@ The NVM address space is divided into a shared part and a private part. The shar
 nodes, under the abstraction of a unified virtual address space per-process, while private NVM
 is used as both a cache for frequently accessed pages, and storage for inactive replications.
 
+DSPM nodes
+
+We next describe details of DSPM implementation. We start with process initialization and object naming. When a process
+is started, it must register itself with a centralized service, called the "Central Dispatcher", which runs on a single
+node. The new process 
