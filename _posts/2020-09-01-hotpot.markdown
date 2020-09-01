@@ -128,6 +128,11 @@ all owner nodes with the updated chunk image. In the second step, the owner node
 log entry in case the commit crashes, and then notifies all sharers to update their cached chunk with the committed
 dirty chunk. Sharers can directly update the chunk without redo logs (if a dirty chunk exists, the committed chunk
 should be written as a redundant chunk).
+After all sharers finished updating the chunk, the owner node then replays the redo log to the chunk image, but keeps
+the log after that. After the committing node receives replies from all owner nodes, the committing node deletes its
+redo log entry, and notifies all owners to remove their redo entries as well. Dirty chunks will transit into committed
+state on the committing node.
+Locks are also released to allow read and write access to committed data. 
 
 One of the most notable difference between DSPM and a single node memory system is that DSPM supports multiple concurrent
 writers to the same chunk. These writers will not contend with each other under Multiple-Writer, Multiple-Reader (MWMR) 
