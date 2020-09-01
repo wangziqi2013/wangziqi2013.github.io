@@ -117,7 +117,10 @@ Applications make their private updates publicly available by committing dirty d
 coherence actions on every write operation to keep all copies up-to-date. This is because: (1) Coherence is a relatively
 long latency process, which should only be performed sparsely; (2) Since DSPM uses shadow paging to buffer dirty data
 locally, it is unnecessary to propagate every write to remote nodes, since the clean copy is also present on the same 
-node. 
+node. In practice, most applications have clearly defined "commit points", at which time the image is in a consistent
+state, which can be made available to other processes. In addition, on crash recovery, the system state is only
+recovered to the most recent commit point. Application developers should define commit points based on the semantics
+of the application, and issue commit commands to DSPM via system calls.
 
 // Commit
 
