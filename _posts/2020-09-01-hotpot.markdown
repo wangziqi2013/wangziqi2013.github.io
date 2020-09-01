@@ -15,11 +15,13 @@ version_mgmt:
 
 **Lowlight:**
 
-1. Some important abstractions should be elaborated in more details. For example: (1) How are directories of which
-   VA is mapped to which PA on which machine maintained? When a chunk migrates, how to update these directories?
+1. Some important abstractions should be elaborated in more details. For example: 
+   (1) How are directories of which VA is mapped to which PA on which machine maintained? When a chunk migrates, 
+       how to update these directories?
    (2) Are chunks or pages allocated on initialization once and for all, or chunks can be allocated incrementally?
    (3) Is there a unified physical address space, or the resource manager always
    (4) Does DSPM assume that local NVM capacity must be larger than the dirty working set?
+   (5) How does NVM chunk allocation and deallocation work?
 
 This paper presents Distributed Shared Persistent Memory (DSPM), an architecture and software stack for large-scale 
 distributed NVM deployment. Prior proposals already implement distributed shared DRAM and distributed storage array
@@ -47,4 +49,3 @@ The NVM address space is divided into a shared part and a private part. The shar
 nodes, under the abstraction of a unified virtual address space per-process, while private NVM
 is used as both a cache for frequently accessed pages, and storage for inactive replications.
 
-We next describe details of DSPM implementation. We start with process initialization and object naming.
