@@ -113,7 +113,11 @@ accessed in the future. Although evictions will not write back data as all commi
 the owner should still be notified, and update its sharer bit vector. If the number of replicas drops below the 
 threshold N, the owner will also push a chunk to another node to maintain the level of replication.
 
-// Migration, eviction
+Applications make their private updates publicly available by committing dirty data. Note that DSPM does not perform
+coherence actions on every write operation to keep all copies up-to-date. This is because: (1) Coherence is a relatively
+long latency process, which should only be performed sparsely; (2) Since DSPM uses shadow paging to buffer dirty data
+locally, it is unnecessary to propagate every write to remote nodes, since the clean copy is also present on the same 
+node. 
 
 // Commit
 
