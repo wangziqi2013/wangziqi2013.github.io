@@ -103,6 +103,9 @@ and lower access latency.
 The paper suggests that chunk owners should keep statistics on commit and fetch requests from all sharers of the chunk.
 The chunk is migrated to the most frequent requestor, if the cost (measured in number of bytes copied)
 is outweighted by the benefits (less requests) of migration.
+Note that after migration, the owner address of the chunk has changed. All sharers of the chunk should be notified about
+the new address, and update their metadata. The old copy can only be freed after all sharers have acknowledged 
+the address change.
 
 Chunks can also be evicted, if the private NVM runs out of space. Only redundant and committed chunks can be evicted,
 while dirty chunks must remain in the cache. DSPM gives priority to redundant chunks, since it is expected not to be 
