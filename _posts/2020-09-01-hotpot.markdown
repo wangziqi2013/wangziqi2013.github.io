@@ -68,6 +68,12 @@ i.e., there is no unified physical address space, and memory allocation directly
 The paper does indicate, however, that each node maintains metadata for chunks in its public NVM. For each chunk, the
 node tracks the sharers with a bit vector, and the locking status of the chunk for commit operations. 
 
+Chunks are assigned to processes via the resource allocation service, which maintains a global resource map. The allocation
+service tracks allocation status of chunks on all nodes. When a request is received, it finds a chunk in round-robin
+manner to evenly distribute workload, and returns the node ID and chunk ID to the requestor. Chunk release simply
+marks the chunk as available in the resource map.
+
+
 
 // Chunk ownership, states and state transition
 
