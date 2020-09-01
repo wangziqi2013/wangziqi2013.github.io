@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Distributed Shared Persistent Memory"
+date:   2020-09-01 00:35:00 -0500
+categories: paper
+paper_title: "Distributed Shared Persistent Memory"
+paper_link: https://dl.acm.org/doi/10.1145/3127479.3128610
+paper_keyword: NVM; Redo Logging; Shadow Paging; Hotpot
+paper_year: SoCC 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
