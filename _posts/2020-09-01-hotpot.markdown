@@ -27,4 +27,8 @@ data in a consistent and reliable manner.
 Meanwhile, DSPM also borrows coherence and byte-granularity access from conventional DSM, enabling fast data accesses 
 via memory instructions over the network.
 
+We first describe the baseline distributed system as follows. DSPM is implemented as a kernel level software stack, which 
+manages virtual address translations, page faults, and runtime metadata.DSPM assumes a distributed system where computation
+nodes communicate via high-bandwidth low-latency network, such as Infiniband. The communication is abstracted
+by RDMA into RPC requests and responses, which is implemented as a customized networking stack. 
 
