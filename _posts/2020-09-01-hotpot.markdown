@@ -59,7 +59,14 @@ access. The page fault handler first queries the metadata table to locate the ch
 node, after which the chunk is installed in the private NVM. The page table entry is then updated to point to the 
 local page.
 
+The paper does not mention whether a unified physical address space for all processes are maintained, or virtual addresses 
+from processes are directly translated into node ID and chunk ID. The paper also does not mention who is responsible for 
+maintaining the global address mapping between processes' virtual chunks to node and chunk IDs. In either case, a remote 
+chunk fetch request must evetually be translated into a node ID and a chunk ID, and be sent to the corresponding node. 
 
+
+
+// Chunk ownership, states and state transition
 
 We next describe details of DSPM implementation. We start with process initialization and object naming. When a process
 is started, it must register itself with a centralized service, called the "Central Dispatcher", which runs on a single
