@@ -169,3 +169,9 @@ dirty state chunks from the local cache, restoring the state to the consistent i
 DSPM assumes that applications initialize their data structures as "datasets", with names assigned to them. 
 The name of a dataset acts as a handle for other processes that share the same dataset to open it. DSPM uses
 a persistent hash table to maintain the mapping between datasets and their names.
+DSPM also tracks the virtual address range that a dataset should be mapped into as one of its properties. 
+Since datasets can be opened at multiple different nodes, it is requires that pointer semantics be the same on these
+different nodes. DSPM ensures this by always mapping the same dataset to the same virtual address at all nodes.
+A centralized service, called the Central Dispatcher (CD), manages virtual address allocation for all nodes. A
+virtual address range is only usable after being granted by the CD to avoid two datasets being mapped to the 
+same virtual address.
