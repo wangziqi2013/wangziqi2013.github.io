@@ -97,8 +97,17 @@ be in dirty state, and remain in that state for later memory operations, until t
 the original committed or redundant state chunk is still stored in the local cache as the undo image, if a crash happens
 before the dirty chunk is committed.
 
-// Chunk ownership, states and state transition
+Chunk can also migrate from the current owner to another node, if the migration lowers the amount of remote requests.
+By placing a chunk close to or on the node that frequently accesses and commits it, the system observes less traffic
+and lower access latency.
+The paper suggests that chunk owners should keep statistics on commit and fetch requests from all sharers of the chunk.
+The chunk is migrated to the most frequent requestor, if the cost (measured in number of bytes copied)
+is outweighted by the benefits (less requests) of migration.
 
-We next describe details of DSPM implementation. We start with process initialization and object naming. When a process
-is started, it must register itself with a centralized service, called the "Central Dispatcher", which runs on a single
-node. The new process 
+// Migration, eviction
+
+// Commit
+
+// Recovery
+
+// Object naming, CD, address space and pointer semantics
