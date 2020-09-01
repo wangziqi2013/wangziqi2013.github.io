@@ -63,7 +63,10 @@ The paper does not mention whether a unified physical address space for all proc
 from processes are directly translated into node ID and chunk ID. The paper also does not mention who is responsible for 
 maintaining the global address mapping between processes' virtual chunks to node and chunk IDs. In either case, a remote 
 chunk fetch request must evetually be translated into a node ID and a chunk ID, and be sent to the corresponding node. 
-
+In the below discussion, we assume that process maintains its own virtual chunk to IDs mapping for better sclability,
+i.e., there is no unified physical address space, and memory allocation directly returns the two IDs.
+The paper does indicate, however, that each node maintains metadata for chunks in its public NVM. For each chunk, the
+node tracks the sharers with a bit vector, and the locking status of the chunk for commit operations. 
 
 
 // Chunk ownership, states and state transition
