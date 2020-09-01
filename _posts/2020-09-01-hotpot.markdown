@@ -122,6 +122,15 @@ state, which can be made available to other processes. In addition, on crash rec
 recovered to the most recent commit point. Application developers should define commit points based on the semantics
 of the application, and issue commit commands to DSPM via system calls.
 
+The commit process is triggered by a commit command, which consists of three steps. In the first step, the committing
+node persistently logs the dirty chunk addresses to be committed, after which it sends a commit prepare message to
+all owner nodes with the updated chunk image. On receiving the updated image, the 
+
+One of the most notable difference between DSPM and a single node memory system is that DSPM supports multiple concurrent
+writers to the same chunk. These writers will not contend with each other under MRMW mode. Instead, due to the shadow 
+paging update protocol, multiple nodes can hold dirty copies of the chunk which contain different values. At commit time, 
+these chunks will be sent to the owner node as discussed in the previous paragraph. 
+
 // Commit
 
 // Recovery
