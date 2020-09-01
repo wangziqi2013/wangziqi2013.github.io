@@ -104,6 +104,12 @@ The paper suggests that chunk owners should keep statistics on commit and fetch 
 The chunk is migrated to the most frequent requestor, if the cost (measured in number of bytes copied)
 is outweighted by the benefits (less requests) of migration.
 
+Chunks can also be evicted, if the private NVM runs out of space. Only redundant and committed chunks can be evicted,
+while dirty chunks must remain in the cache. DSPM gives priority to redundant chunks, since it is expected not to be 
+accessed in the future. Although evictions will not write back data as all committed and redundant chunks are clean,
+the owner should still be notified, and update its sharer bit vector. If the number of replicas drops below the 
+threshold N, the owner will also push a chunk to another node to maintain the level of replication.
+
 // Migration, eviction
 
 // Commit
