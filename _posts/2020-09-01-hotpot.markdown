@@ -79,7 +79,12 @@ A chunk is fetched when it is first accessed by the computation. A fetched chunk
 local NVM. A chunk can be in one of the three states when it is stored in the private NVM (i.e., when it is not the owner):
 redundant, committed, and dirty. A redundant chunk copy is clean, and it has not yet been mapped. Redundant chunks are
 "pushed" from the owner node to achieve a certain replication level (N copies, where N can be set by the user). 
-
+Committed chunks are mapped by the page table, and is still clean. Committed chunks are read-only, which is also
+considered as a valid replication. Both redundant and committed chunks are clean, and reflect the most up-to-date
+committed version of data. The owner node of the chunk also marks any other node that has a committed or redundant
+chunk in its sharer list. When the redundancy level of a chunk drops belows the threshold N, the owner node will also
+proactively push chunks to other nodes to restore the number of redundant copies to N. The chunks pushed to other nodes
+will be initially in redundant state.
 
 On page faults, redundant chunks can also satisfy the request locally with contacting the owner node.
 
