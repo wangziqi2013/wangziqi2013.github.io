@@ -127,14 +127,18 @@ node persistently logs the dirty chunk addresses to be committed, after which it
 all owner nodes with the updated chunk image. On receiving the updated image, the 
 
 One of the most notable difference between DSPM and a single node memory system is that DSPM supports multiple concurrent
-writers to the same chunk. These writers will not contend with each other under MRMW mode. Instead, due to the shadow 
-paging update protocol, multiple nodes can hold dirty copies of the chunk which contain different values. At commit time, 
-these chunks will be sent to the owner node as discussed in the previous paragraph. The protocol must be careful not to 
-create data dependency if two commits happen concurrently. For example, if both node A and B write X, Y, which are on
-different owners, but node A commits X after Y, while node B commits Y after X, then the final image is not serializable,
-since A and B's updates are partially visible. The three-phase commit protocol, therefore, requires that the commit process
-must not begin before a committing node acquires locks on all owner nodes. A concurrent and conflicting committing node
-must wait until the current process finishes before it can initiate the next round commit.
+writers to the same chunk. These writers will not contend with each other under Multiple-Writer, Multiple-Reader (MWMR) 
+mode. Instead, due to the shadow paging update protocol, multiple nodes can hold dirty copies of the chunk which contain 
+different values. At commit time, these chunks will be sent to the owner node as discussed in the previous paragraph. 
+The protocol must be careful not to create data dependency if two commits happen concurrently. For example, if both node 
+A and B write X, Y, which are on different owners, but node A commits X after Y, while node B commits Y after X, then the 
+final image is not serializable, since A and B's updates are partially visible. The three-phase commit protocol, therefore, 
+requires that the commit process must not begin before a committing node acquires locks on all owner nodes. A concurrent 
+and conflicting committing node must wait until the current process finishes before it can initiate the next round commit. 
+
+DSPM also supports Single-Writer, Multiple-Reader (SWMR) mode. Under this mode, the per-chunk lock is acquired when a 
+chunk is fetched for write. The lock is released only after commit. The first step of the commit process for SWMR can
+be skipped, as the lock has already been acquired. 
 
 // Commit
 
