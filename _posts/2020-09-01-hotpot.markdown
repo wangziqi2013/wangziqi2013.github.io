@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Distributed Shared Persistent Memory (DSPM), an architecture and software stack for large-scale 
+distributed NVM deployment. Prior proposals already implement distributed shared DRAM and distributed storage array
+based on DRAM and disks. The paper points out, however, that the same technique cannot be directly ported to support 
+distributed NVM for two reasons. First, although conventional DSM implements software-based coherence, caching, etc.,
+some critical features for NVM are still missing, such as distributed object naming and replication support. 
+
