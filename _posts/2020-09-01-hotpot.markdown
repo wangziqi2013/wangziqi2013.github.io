@@ -148,8 +148,10 @@ DSPM also supports Single-Writer, Multiple-Reader (SWMR) mode. Under this mode, 
 chunk is fetched for write. The lock is released only after commit. The first step of the commit process for SWMR can
 be skipped, as the lock has already been acquired. 
 
-// Commit
-
-// Recovery
+Two types of crashes can happen. In the first type of crash, data stored NVM devices are corrupted. In this case, the
+rest of the DSPM identifies chunks that become "ownerless" due to the crash, and migrates these chunks to one of the 
+replication nodes. In the second type of crash, the node loses all progress of the computation, including volatile
+states in the cache hierarchy and DRAM. In this case, the system state rolls back to the last consistent commit point
+on the crashed node as follows (other nodes are not affected). If the 
 
 // Object naming, CD, address space and pointer semantics
