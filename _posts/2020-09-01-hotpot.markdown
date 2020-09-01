@@ -124,7 +124,10 @@ of the application, and issue commit commands to DSPM via system calls.
 
 The commit process is triggered by a commit command, which consists of three steps. In the first step, the committing
 node persistently logs the dirty chunk addresses to be committed, after which it sends a commit prepare message to
-all owner nodes with the updated chunk image. On receiving the updated image, the 
+all owner nodes with the updated chunk image. In the second step, the owner node first writes a redo
+log entry in case the commit crashes, and then notifies all sharers to update their cached chunk with the committed
+dirty chunk. Sharers can directly update the chunk without redo logs (if a dirty chunk exists, the committed chunk
+should be written as a redundant chunk).
 
 One of the most notable difference between DSPM and a single node memory system is that DSPM supports multiple concurrent
 writers to the same chunk. These writers will not contend with each other under Multiple-Writer, Multiple-Reader (MWMR) 
