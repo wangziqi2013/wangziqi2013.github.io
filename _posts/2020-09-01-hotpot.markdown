@@ -53,6 +53,8 @@ DSPM nodes maintains per-process metadata for the mapping between virtual pages 
 tracks, at a potentially different granularity (the paper suggests 4MB chunks), the ownership and the sharing status
 of virtual addresses. A virtual address chunk can be mapped to either a local physical chunk, or a remote physical chunk.
 In the latter case, the remote node ID and the chunk ID must be stored in the metadata.
+These metadata is persistently stored on the local NVM, such that the recovery handler can infer the state of each chunk
+before the crash, and deal with chunks at different stages of modification.
 DSPM leverages existing paging mechanism to translate virtual address accesses.
 Those that are not cached locally are marked as invalid in the page table, which will raise a page fault on the first 
 access. The page fault handler first queries the metadata table to locate the chunk, and then fetchs it from the remote
