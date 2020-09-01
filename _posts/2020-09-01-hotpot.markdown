@@ -166,4 +166,6 @@ complete the redo process.
 If, however, the node is neither committing nor participating in a commit process, recovery proceeds by dropping all
 dirty state chunks from the local cache, restoring the state to the consistent image at the last commit point.
 
-// Object naming, CD, address space and pointer semantics
+DSPM assumes that applications initialize their data structures as "datasets", with names assigned to them. 
+The name of a dataset acts as a handle for other processes that share the same dataset to open it. DSPM uses
+a persistent hash table to maintain the mapping between datasets and their names.
