@@ -57,4 +57,8 @@ The next optimization is zero elimination. In a sparse matrix, where most of the
 the array can be compressed by eliminating large ranges of zeros and only storing them implicitly.
 Z-Rays performs zero elimination on arraylet granularity, meaning that an arraylet full of zeros will not be explicitly 
 maintained. In this case, the pointer value of that arraylet in the spine is set to NULL. Read operations, on reading
-a NULL value from the spine, should immediately return zero without dereferencing the pointer. 
+a NULL value from the spine, should immediately return zero without dereferencing the pointer. Write operations
+need to allocate an arraylet, if the ponter is NULL, which is initialized to all-zero except the element being written
+(zero writes can be eliminated as well).
+Note that zero elimination only applies to the middle part of the array. Nether the first N not the remainder can be 
+eliminated, since they are stored inline.
