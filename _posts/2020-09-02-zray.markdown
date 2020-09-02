@@ -25,4 +25,8 @@ multiple large chunks are present, lowering the utilization of allocator memory.
 for allocating small objects, not large chunks. Lastly, some big arrays are sparse, containing mostly zeros. In this
 case, storing all these zeros in a consecutive chunk both wastes memory, and unnecessarily increases the memory footprint.
 
-
+Z-Rays addresses the above problems by using uniformly sized, discontinuous and smaller chunks as the data store,
+which is organized into a two-dimensional array for fast access. The array itself is allocated as a wrapper object, 
+called the "spine", which contains the array of chunks and other metadata, such as the number of elements.
+Note that Z-Rays only implements static array, i.e., arrays whose sizes are statically known, and will not expand
+or shrink. 
