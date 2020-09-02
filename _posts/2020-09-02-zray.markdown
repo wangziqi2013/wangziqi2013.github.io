@@ -20,7 +20,11 @@ version_mgmt:
    continuous chunks). 
    Although this does not offset the benefits of Z-Ray, the paper should mention this as a limitation.
 
-
+2. It is not clear how GC is performed for CoW shared arraylets. If an arraylet shared by more than one spines, and 
+   one of the spines is GC'ed, how do we deal with the arraylet pointer in other spines?
+   If no special action is taken, on the next CoW, the arraylet will become unreferenced, since the write protocol
+   requires that a new arraylet be allocated.
+   Does GC thread scan arrarlets without any reference and GC them?
 
 This paper presents Z-Rays, a discontinuous array implementation featuring GC-friendliness and storage advantages.
 As one of the most commonly used data structures in computer programming, arrays have long been implemented as a large,
