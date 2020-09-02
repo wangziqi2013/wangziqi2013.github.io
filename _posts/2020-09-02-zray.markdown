@@ -37,4 +37,7 @@ We next describe the baseline Z-Ray. In the baseline, given an array size of N, 
 elements), the spine wrapper object is allocated as an array of lower\_bound(N / M) chunk pointers, with each pointer
 referencing an conventional array of size M. In addition, the remaining (N % M) elements are inlined at the end of the 
 spine, if N is not a multiple of M. Z-Ray chooses not to store them as a smaller arrarlet or a partially full arraylet
-in order to: 
+in order to: (1) Further simplify memory management, since only two size classes are needed (the spine and the arraylet);
+(2) Avoid wasting storage on a few elements using a full sized arraylet. An extra pointer is added at the end of the 
+pointer array to point to the first element of the inlined remainder. This way, addresses of elements in the remainder
+part can be computed the same as addresses of other elements.
