@@ -52,3 +52,9 @@ inlines the first N bytes of elements in the spine object, where N is set to 4KB
 elements, therefore, only involves one memory access, plus an index value comparison with N. The paper reports that
 the first-N optimization reduces the extra overhead of indirection by half. Addresses of elements beyond the first N
 are computed by first subtracting (N / obj\_size) from the index, and then following the same rule as in the base line design.
+
+The next optimization is zero elimination. In a sparse matrix, where most of the elements are of trivial value zero, 
+the array can be compressed by eliminating large ranges of zeros and only storing them implicitly.
+Z-Rays performs zero elimination on arraylet granularity, meaning that an arraylet full of zeros will not be explicitly 
+maintained. In this case, the pointer value of that arraylet in the spine is set to NULL. Read operations, on reading
+a NULL value from the spine, should immediately return zero without dereferencing the pointer. 
