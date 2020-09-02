@@ -16,9 +16,12 @@ version_mgmt:
 This paper presents Z-Rays, a discontinuous array implementation featuring GC-friendliness and storage advantages.
 As one of the most commonly used data structures in computer programming, arrays have long been implemented as a large,
 continuous chunk of memory, which can be linearly addressed given an index value. This simple design, however,
-has a few disadvantages when the array becomes large. First, large array objects require a big chunk of virtual addresses,
+has a few disadvantages when the array becomes large. First, large array objects require a big chunk of virtual address,
 which may become an issue for managed languages, where background garbage collection (GC) threads may need to copy
 object around during GC. Large objects will, therefore, affect GC performance by introducing huge object copy overhead.
 In real-time platforms, such unpredicable background activity will affect the timeliness of operations, making the 
-system less reliable.
+system less reliable. Second, allocating large chunks will introduce fragmentation on the address space, especially if 
+multiple large chunks are present, lowering the utilization of allocator memory. In addition, most allocators are tuned 
+for allocating small objects, not large chunks. 
+
 
