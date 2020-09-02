@@ -32,3 +32,9 @@ Note that Z-Rays only implements static array, i.e., arrays whose sizes are stat
 or shrink. As a result, the size of the array can also be known at compilation time, given a fixed chunk size.
 The chucks, called "arraylets", are smaller arrays whose size is a compilation time constant. Array elements are 
 still linearly mapped within a chunk, while at Z-Ray level, at most one indirection is required to access an element.
+
+We next describe the baseline Z-Ray. In the baseline, given an array size of N, and arraylet size of M (in the number of 
+elements), the spine wrapper object is allocated as an array of lower\_bound(N / M) chunk pointers, with each pointer
+referencing an conventional array of size M. In addition, the remaining (N % M) elements are inlined at the end of the 
+spine, if N is not a multiple of M. Z-Ray chooses not to store them as a smaller arrarlet or a partially full arraylet
+in order to: 
