@@ -31,13 +31,19 @@ called the "spine", which contains the array of chunks and other metadata, such 
 Note that Z-Rays only implements static array, i.e., arrays whose sizes are statically known, and will not expand
 or shrink. As a result, the size of the array can also be known at compilation time, given a fixed chunk size.
 The chucks, called "arraylets", are smaller arrays whose size is a compilation time constant. Array elements are 
-still linearly mapped within a chunk, while at Z-Ray level, at most one indirection is required to access an element.
+still linearly mapped within a chunk, while at Z-Ray level, at most one indirection is required to access an element,
+maintaining the constant access time expection.
 
-We next describe the baseline Z-Ray. In the baseline, given an array size of N, and arraylet size of M (in the number of 
-elements), the spine wrapper object is allocated as an array of lower\_bound(N / M) chunk pointers, with each pointer
-referencing an conventional array of size M. In addition, the remaining (N % M) elements are inlined at the end of the 
+We next describe the baseline Z-Ray. In the baseline, given an array size of S, and arraylet size of M (in the number of 
+elements), the spine wrapper object is allocated as an array of lower\_bound(S / M) chunk pointers, with each pointer
+referencing an conventional array of size M. In addition, the remaining (S % M) elements are inlined at the end of the 
 spine, if N is not a multiple of M. Z-Ray chooses not to store them as a smaller arrarlet or a partially full arraylet
 in order to: (1) Further simplify memory management, since only two size classes are needed (the spine and the arraylet);
 (2) Avoid wasting storage on a few elements using a full sized arraylet. An extra pointer is added at the end of the 
 pointer array to point to the first element of the inlined remainder. This way, addresses of elements in the remainder
-part can be computed the same as addresses of other elements.
+part can be computed the same as addresses of other elements. 
+The address of element on index j is computed by adding the arraylet base address stored in slot (i / M) of the spine with 
+(i % M) timed by the size of the object. Array bound check should also be performed before address computation to avoid
+using an invalid arraylet base address.
+
+
