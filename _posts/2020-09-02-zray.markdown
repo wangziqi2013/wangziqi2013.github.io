@@ -66,4 +66,7 @@ eliminated, since they are stored inline.
 The last optmization is Copy-on-Write, which reduces the number of element copies during array copy. When a Z-Ray is
 duplicated or copied to another, only the spine is copied, but not the arraylets, which will be shared between the two
 instances of spines. To indicate the fact that the arraylet is shared and cannot be directly written into, the paper
-proposing that one bit from the pointer value be dedicated as a "taint bit". 
+proposing that one bit from the pointer value be dedicated as a "taint bit". Given that pointer values have a few
+redundant bits due to address alignment and OS address mapping, the taint bit can be either a low bit or a high bit
+of the pointer. The taint bit is checked before an arraylet is written into. If set, the arraylet will be duplicated
+and linked to the current Z-Ray instance under modification, before the write is performed on the new arraylet.
