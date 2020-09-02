@@ -22,6 +22,7 @@ object around during GC. Large objects will, therefore, affect GC performance by
 In real-time platforms, such unpredicable background activity will affect the timeliness of operations, making the 
 system less reliable. Second, allocating large chunks will introduce fragmentation on the address space, especially if 
 multiple large chunks are present, lowering the utilization of allocator memory. In addition, most allocators are tuned 
-for allocating small objects, not large chunks. 
+for allocating small objects, not large chunks. Lastly, some big arrays are sparse, containing mostly zeros. In this
+case, storing all these zeros in a consecutive chunk both wastes memory, and unnecessarily increases the memory footprint.
 
 
