@@ -29,4 +29,6 @@ Z-Rays addresses the above problems by using uniformly sized, discontinuous and 
 which is organized into a two-dimensional array for fast access. The array itself is allocated as a wrapper object, 
 called the "spine", which contains the array of chunks and other metadata, such as the number of elements.
 Note that Z-Rays only implements static array, i.e., arrays whose sizes are statically known, and will not expand
-or shrink. 
+or shrink. As a result, the size of the array can also be known at compilation time, given a fixed chunk size.
+The chucks, called "arraylets", are smaller arrays whose size is a compilation time constant. Array elements are 
+still linearly mapped within a chunk, while at Z-Ray level, at most one indirection is required to access an element.
