@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Z-Rays, a discontinuous array implementation featuring GC-friendliness and storage advantages.
+As one of the most commonly used data structures in computer programming, arrays have long been implemented as a large,
+continuous chunk of memory, which can be linearly addressed given an index value. This simple design, however,
+has a few disadvantages when the array becomes large. 
+
