@@ -70,3 +70,9 @@ proposing that one bit from the pointer value be dedicated as a "taint bit". Giv
 redundant bits due to address alignment and OS address mapping, the taint bit can be either a low bit or a high bit
 of the pointer. The taint bit is checked before an arraylet is written into. If set, the arraylet will be duplicated
 and linked to the current Z-Ray instance under modification, before the write is performed on the new arraylet.
+
+The paper also discusses the interaction between Z-Ray and generational GC. In generational GC, objects are first allocated
+in a nursery heap, assuming that most objects die young. The GC process, therefore, scans the nursery heap at a higher
+frequency than the matured heap, which stores objects that have survived GC while it was in the nursery heap.
+Objects that are still alive after GC will be moved from the nursery heap to the matured heap, and they will be 
+scanned less frequently, since old objects are expected to have longer time span. 
