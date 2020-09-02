@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using non-continuous chunk design for arrays while only incur a constant number of indirection per access (at most one).
+   This is better than tree-based array implementation where the access time is not even constant.
+
+
+
 **Lowlight:**
 
 1. It is true that discontinuous arrays can reduce large chunk allocation, but when the array gets really large, the 
