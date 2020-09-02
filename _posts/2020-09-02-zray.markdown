@@ -76,3 +76,8 @@ in a nursery heap, assuming that most objects die young. The GC process, therefo
 frequency than the matured heap, which stores objects that have survived GC while it was in the nursery heap.
 Objects that are still alive after GC will be moved from the nursery heap to the matured heap, and they will be 
 scanned less frequently, since old objects are expected to have longer time span. 
+Z-Rays reduces object copy traffic when moving from the nursery heap to the matured heap, since arraylets are allocated
+at a separate heap using simple slab allocators, with only the spine being allocated on the nursery heap.
+Arraylets, therefore, will not be scanned at all by the GC thread, whose life span is solely dependent on the life span
+of the spine object. When the spine object is GC'ed, the arraylets contained in that spine is GC'ed as well, unless
+it is shared.
