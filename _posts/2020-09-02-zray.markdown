@@ -18,7 +18,9 @@ version_mgmt:
 1. Using non-continuous chunk design for arrays while only incur a constant number of indirection per access (at most one).
    This is better than tree-based array implementation where the access time is not even constant.
 
+2. Leveraging the observation that most accesses will be on the first 4KB range.
 
+3. With the extra indirection, zero elimination and CoW basically comes for free.
 
 **Lowlight:**
 
