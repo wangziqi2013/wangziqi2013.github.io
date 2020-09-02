@@ -50,4 +50,5 @@ The paper then proposes first-N optimization to avoid the extra indirection requ
 leverages the observation that 90% or more of array accesses lie within the first 4KB of elements. The first-N optimization
 inlines the first N bytes of elements in the spine object, where N is set to 4KB by default. Accessing to the first N
 elements, therefore, only involves one memory access, plus an index value comparison with N. The paper reports that
-the first-N optimization reduces the extra overhead of indirection by half.
+the first-N optimization reduces the extra overhead of indirection by half. Addresses of elements beyond the first N
+are computed by first subtracting (N / obj\_size) from the index, and then following the same rule as in the base line design.
