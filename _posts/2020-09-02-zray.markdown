@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. It is true that discontinuous arrays can reduce large chunk allocation, but when the array gets really large, the 
+   spine itself becomes a large array, which can cause the same problem (but at a lesser degree compared with 
+   continuous chunks). 
+   Although this does not offset the benefits of Z-Ray, the paper should mention this as a limitation.
+
+
+
 This paper presents Z-Rays, a discontinuous array implementation featuring GC-friendliness and storage advantages.
 As one of the most commonly used data structures in computer programming, arrays have long been implemented as a large,
 continuous chunk of memory, which can be linearly addressed given an index value. This simple design, however,
