@@ -62,3 +62,8 @@ need to allocate an arraylet, if the ponter is NULL, which is initialized to all
 (zero writes can be eliminated as well).
 Note that zero elimination only applies to the middle part of the array. Nether the first N not the remainder can be 
 eliminated, since they are stored inline.
+
+The last optmization is Copy-on-Write, which reduces the number of element copies during array copy. When a Z-Ray is
+duplicated or copied to another, only the spine is copied, but not the arraylets, which will be shared between the two
+instances of spines. To indicate the fact that the arraylet is shared and cannot be directly written into, the paper
+proposing that one bit from the pointer value be dedicated as a "taint bit". 
