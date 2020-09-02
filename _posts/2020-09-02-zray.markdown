@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Z-Rays: Divide Arrays and Conquer Speed and Flexibility"
+date:   2020-09-02 04:11:00 -0500
+categories: paper
+paper_title: "Z-Rays: Divide Arrays and Conquer Speed and Flexibility"
+paper_link: https://dl.acm.org/doi/10.1145/1806596.1806649
+paper_keyword: Array; ZRay; Data Structure
+paper_year: PLDI 2010
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
