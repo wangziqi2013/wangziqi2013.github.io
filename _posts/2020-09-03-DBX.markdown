@@ -75,4 +75,4 @@ will determine the bit width of compressed code word, making compression difficu
 Bit-Plane compression avoids the above issues by performing a bit-place transformation after computing deltas. The 
 transformation generates a new set of code words, where code word i is comprised of all bits at offset i from the 
 delta values. The generated code word will always be zero, if bit i from all delta values are zero, meaning that all
-high zero bits can be transformed into value zero, solving the first issue above.
+high zero bits can be transformed into value zero, solving the first issue above. 
