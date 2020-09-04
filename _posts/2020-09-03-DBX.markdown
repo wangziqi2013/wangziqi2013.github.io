@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. 
+
 **Lowlight:**
 
 1. The paper is poorly organized. There is neither overall picture of what the algorithm attempts to achieve, nor
@@ -24,6 +28,9 @@ version_mgmt:
    words to form 32-bit code words after bit-plane rotation.
    Although the paper did mention that this algorithm is targeted at GPGPU which may have larger cache blocks
    due to the regular access pattern.
+
+3. The paper also does not summarize what kind of inefficiencies in previous approaches it solves. At least give
+   a comparison with BDI like what I did in this paper summary.
 
 This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
 compression algorithms, such as Base-Delta-Immediate (BDI), may take advantage of value locality of adjacent words
