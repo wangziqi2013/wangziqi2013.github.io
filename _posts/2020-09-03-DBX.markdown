@@ -75,4 +75,9 @@ will determine the bit width of compressed code word, making compression difficu
 Bit-Plane compression avoids the above issues by performing a bit-place transformation after computing deltas. The 
 transformation generates a new set of code words, where code word i is comprised of all bits at offset i from the 
 delta values. The generated code word will always be zero, if bit i from all delta values are zero, meaning that all
-high zero bits can be transformed into value zero, solving the first issue above. 
+high zero bits can be transformed into value zero, solving the first issue above. In addition, an abnormal value will
+result in a few "1" bits in the generated code word. These sparse "1" bits can be encoded with frequent pattern
+compression, solving issue three. Issue two can be solved by XOR'ing the generated code words, since large delta values
+tend to have less alternation on higher bits, given that these deltas are close to each other (i.e., second-order value 
+locality), resulting in code words full of ones or zeros. The paper claims that the XOR will essentially transform all 
+of them into all-zeros, further improving compressibility.
