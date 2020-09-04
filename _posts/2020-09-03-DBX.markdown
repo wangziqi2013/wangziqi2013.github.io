@@ -15,7 +15,10 @@ version_mgmt:
 
 **Highlight:**
 
-1. 
+1. Good observation that preceding zeros in the delta-based compression can be utilized in a better way to
+  
+2. Also good observation that occasional "abnormal" values will result in two consecutive ones in the bit-plane words,
+   which is compressed using a special code.
 
 **Lowlight:**
 
