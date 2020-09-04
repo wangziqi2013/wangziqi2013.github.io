@@ -40,7 +40,10 @@ version_mgmt:
    Imagine four consecutive words before compression: 0000...001, 0000...001, 0001...001, 0000...001.
    (i.e., the third value is abnormal by having a "1" high bit). 
    After taking delta we will get the sequence:
-
+   0000...000, 0001...000, 1111...000.
+   In this case, the code word after flipping the bit-plane will be:
+   ...001..., ...001..., ...001..., ...011..., ..., ...000..., ...000..., ...000....
+   in which case, there is a mixture of single one and double ones.
 
 This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
 compression algorithms, such as Base-Delta-Immediate (BDI), may take advantage of value locality of adjacent words
