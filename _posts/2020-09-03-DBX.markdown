@@ -56,4 +56,7 @@ used to encode the same information.
 Although the paper did not point this out, conventional algorithms such as BDI have a few issues which limit their 
 compression ratio. First, BDI is not always optimal in terms of reducing the number of bits requires to store a 
 delta value. Theoretically speaking, BDI is able to compress delta values to the smallest bit length possible by
-allowing arbitrarily sized code words. 
+allowing arbitrarily sized code words. In practice, this is infeasible, because: (1) the bit width of the code words
+must also be encoded in the final result; (2) This also puts a heavy burden on compressor circuit to detect all possible
+bit lengths. As a result, BDI only supports a limited set of compressed code word lengths, e.g., 8 bits, 16 bits and 32 
+bits. 
