@@ -36,6 +36,10 @@ version_mgmt:
 3. The paper also does not summarize what kind of inefficiencies in previous approaches it solves. At least give
    a comparison with BDI like what I did in this paper summary.
 
+4. The claim that one abnormal value will result in two consecutive bits in the code words is over-simplified.
+   Imagine four consecutive words before compression: 0000...001, 0000...001, 0001...001, 0000...001.
+   (i.e., the third value is abnormal by having a "1" high bit). 
+   After taking delta we will get the sequence:
 
 
 This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
