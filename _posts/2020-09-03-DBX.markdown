@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Bit-Plane Compression: Transforming Data for Better Compression in Many-Core Architectures"
+date:   2020-09-03 22:19:00 -0500
+categories: paper
+paper_title: "Bit-Plane Compression: Transforming Data for Better Compression in Many-Core Architectures"
+paper_link: https://dl.acm.org/doi/10.1109/ISCA.2016.37
+paper_keyword: Bit-Plane Compression; Compression; GPGPU
+paper_year: ISCA 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
