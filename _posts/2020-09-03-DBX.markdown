@@ -91,4 +91,8 @@ words with non-zero value. To solve this, the paper proposes that all code words
 In the last step of the compression pipeline, the hardware further compresses each code word based on the pattern.
 Different from previous proposals, the hardward does not seek to compress large integers or irregular patterns, as their
 entropy has been reduced to a low level by the previous transformations. The most common values in the code word stream 
-is zero, which is compressed with run-length encoding. 
+is zero, which is compressed with run-length encoding. The compressor maintains a counter for the current number of 
+zero code words, which is incremented for every zero code word in the stream, and written to the output stream when 
+the non-zero is not seen. The hardware also has seperate encodings for all-ones, single "1" bit, adjacent double 
+"1" bit, and code word in non-XOR'ed form (if the value is zero before XOR'ing, then we only store zero, since it is 
+more efficient to store as many zeros as possible). 
