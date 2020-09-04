@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The paper is poorly organized. There is neither overall picture of what the algorithm attempts to achieve, nor
+   a detailed description of how compression is performed.
+   I read seven pages, and most of them are just related work (which I already know) and observations by running 
+   different workloads (not even interesting, all expected)
+
 This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
 compression algorithms, such as Base-Delta-Immediate (BDI), may take advantage of value locality of adjacent words
 by subtracting the value from its neighbor. Since values are expected to be close to each other, these deltas are 
