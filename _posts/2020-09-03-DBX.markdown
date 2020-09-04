@@ -15,7 +15,8 @@ version_mgmt:
 
 **Highlight:**
 
-1. Good observation that preceding zeros in the delta-based compression can be utilized in a better way to
+1. Good observation that preceding zeros in delta-based compression can be utilized in a better way by using bit-planes.
+   More zero bits can be extracted and placed together this way, resulting in higher compression ratio.
   
 2. Also good observation that occasional "abnormal" values will result in two consecutive ones in the bit-plane words,
    which is compressed using a special code.
@@ -34,6 +35,8 @@ version_mgmt:
 
 3. The paper also does not summarize what kind of inefficiencies in previous approaches it solves. At least give
    a comparison with BDI like what I did in this paper summary.
+
+
 
 This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
 compression algorithms, such as Base-Delta-Immediate (BDI), may take advantage of value locality of adjacent words
