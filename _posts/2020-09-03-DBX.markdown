@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Bit-Plane Compression, a data compression algorithm for better compression ratio. Conventional
+compression algorithms, such as Base-Delta-Immediate (BDI), may take advantage of value locality of adjacent words
+by subtracting the value from its neighbor. Since values are expected to be close to each other, these deltas are 
+small, such that only a few bits is sufficient to store them, achieving the goal of compression that fewer bits are 
+used to encode the same information.
+
+
