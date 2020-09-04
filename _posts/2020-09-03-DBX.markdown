@@ -53,4 +53,7 @@ by subtracting the value from its neighbor. Since values are expected to be clos
 small, such that only a few bits is sufficient to store them, achieving the goal of compression that fewer bits are 
 used to encode the same information.
 
-
+Although the paper did not point this out, conventional algorithms such as BDI have a few issues which limit their 
+compression ratio. First, BDI is not always optimal in terms of reducing the number of bits requires to store a 
+delta value. Theoretically speaking, BDI is able to compress delta values to the smallest bit length possible by
+allowing arbitrarily sized code words. 
