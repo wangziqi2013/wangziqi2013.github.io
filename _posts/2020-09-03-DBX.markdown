@@ -106,4 +106,7 @@ Overall, Bit-Plane Compression is supposed to be performed on GPGPUs, where the 
 CPU. This paper assumes 128 bytes cache blocks, which can be treated as 32 32-bit words. Delta is taken between a word
 and its previous word, resulting in 31 deltas (the first value is directly compressed with FPC as in the last step).
 Bit-plane compression is then applied by taking the bit from offset i of delta j to form bit j of code word i, and then
-XOR'ed with the previous value. 
+XOR'ed with the previous value. The first value is treated as the first value in delta compression. Note that after 
+bit-plane compression, the first value (formed by the LSB of all deltas) is likely uncompressible, and therefore, 
+storing it uncompressed will not affect compression ratio.
+In the last step, all code words are encoded with FPC as discussed above, and written to the output buffer.
