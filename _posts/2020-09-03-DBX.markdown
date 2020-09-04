@@ -88,4 +88,7 @@ number pattern, the generated code words by flipping the bit-plane will not be a
 words with non-zero value. To solve this, the paper proposes that all code words be XOR'ed with its previous value 
 (except the first one, which is stored as-is), resulting in a sequence of all-zeros, regardless of the alternating pattern.
 
-In the last step of the compression pipeline, the hardware further compresses
+In the last step of the compression pipeline, the hardware further compresses each code word based on the pattern.
+Different from previous proposals, the hardward does not seek to compress large integers or irregular patterns, as their
+entropy has been reduced to a low level by the previous transformations. The most common values in the code word stream 
+is zero, which is compressed with run-length encoding. 
