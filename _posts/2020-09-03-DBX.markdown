@@ -101,3 +101,9 @@ Note that single "1" bit and double "1" bits represent two special cases. In the
 mid-way through the delta transformation, resulting in significantly different deltas. In the second case, there is one
 abnormal value in the input stream, resulting in two significantly different delta. 
 Code words that cannot match any of these patterns are stored uncompressed.
+
+Overall, Bit-Plane Compression is supposed to be performed on GPGPUs, where the cache block is larger than those on the 
+CPU. This paper assumes 128 bytes cache blocks, which can be treated as 32 32-bit words. Delta is taken between a word
+and its previous word, resulting in 31 deltas (the first value is directly compressed with FPC as in the last step).
+Bit-plane compression is then applied by taking the bit from offset i of delta j to form bit j of code word i, and then
+XOR'ed with the previous value. 
