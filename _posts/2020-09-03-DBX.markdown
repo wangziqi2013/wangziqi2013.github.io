@@ -95,4 +95,9 @@ is zero, which is compressed with run-length encoding. The compressor maintains 
 zero code words, which is incremented for every zero code word in the stream, and written to the output stream when 
 the non-zero is not seen. The hardware also has seperate encodings for all-ones, single "1" bit, adjacent double 
 "1" bit, and code word in non-XOR'ed form (if the value is zero before XOR'ing, then we only store zero, since it is 
-more efficient to store as many zeros as possible). 
+more efficient to store as many zeros as possible). Each of these patterns has a unique prefix, which is optionally 
+followed by arguments. 
+Note that single "1" bit and double "1" bits represent two special cases. In the first case, the base value changes 
+mid-way through the delta transformation, resulting in significantly different deltas. In the second case, there is one
+abnormal value in the input stream, resulting in two significantly different delta. 
+Code words that cannot match any of these patterns are stored uncompressed.
