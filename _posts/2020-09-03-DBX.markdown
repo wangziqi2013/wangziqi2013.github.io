@@ -59,4 +59,12 @@ delta value. Theoretically speaking, BDI is able to compress delta values to the
 allowing arbitrarily sized code words. In practice, this is infeasible, because: (1) the bit width of the code words
 must also be encoded in the final result; (2) This also puts a heavy burden on compressor circuit to detect all possible
 bit lengths. As a result, BDI only supports a limited set of compressed code word lengths, e.g., 8 bits, 16 bits and 32 
-bits. 
+bits, which leaves some redundant zero bits in the output code words. In the worst case give the size possibilities above,
+if all code words can be encoded with 17 bits, BDI will choose the 32-bit compression scheme, resulting in 15 redundant 
+zero bits for each code word.
+
+The second issue with BDI is that it only selects the first value, not the best fitted one, as the base. This is another
+design compromise that was made to avoid exhaustively searching for the most appropriate base value. It will, however,
+significantly lower the compressibility of the entire cache line, if the first value is not a proper base, for example,
+when the array starts mid-line or it is an occasional abnormal value. In this case, all delta values will be too large
+to compress, while still being close to each other and having abundant redundancy.
