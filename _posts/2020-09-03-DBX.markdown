@@ -65,6 +65,11 @@ zero bits for each code word.
 
 The second issue with BDI is that it only selects the first value, not the best fitted one, as the base. This is another
 design compromise that was made to avoid exhaustively searching for the most appropriate base value. It will, however,
-significantly lower the compressibility of the entire cache line, if the first value is not a proper base, for example,
-when the array starts mid-line or it is an occasional abnormal value. In this case, all delta values will be too large
-to compress, while still being close to each other and having abundant redundancy.
+significantly lower the compressibility of the entire cache line, if the first value is not a proper base. This occurs, 
+for example, when the array starts mid-line or it is an occasional abnormal value. In this case, all delta values will 
+be too large to compress, while still being close to each other and having abundant redundancy.
+
+The last issue is that BDI cannot handle occasional abnormal values well. If such a value occurs, the abnormal delta
+will determine the bit width of compressed code word, making compression difficult or impossible. 
+
+
