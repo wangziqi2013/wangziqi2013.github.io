@@ -72,4 +72,7 @@ be too large to compress, while still being close to each other and having abund
 The last issue is that BDI cannot handle occasional abnormal values well. If such a value occurs, the abnormal delta
 will determine the bit width of compressed code word, making compression difficult or impossible. 
 
-
+Bit-Plane compression avoids the above issues by performing a bit-place transformation after computing deltas. The 
+transformation generates a new set of code words, where code word i is comprised of all bits at offset i from the 
+delta values. The generated code word will always be zero, if bit i from all delta values are zero, meaning that all
+high zero bits can be transformed into value zero, solving the first issue above.
