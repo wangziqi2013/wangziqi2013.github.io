@@ -101,5 +101,9 @@ The dictionary swap, however, cannot happen instantly, since existing compressed
 for decompression the next time they are fetched. To address this, the LLC controller allows both dictionaries be used
 at the same time, gradually retiring the old master as lines that rely on it are fetched and decompressed. All lines
 evicted from the LLC will be compressed with the new dictionary.
-
+To distinguish whether a line is compressed with the old or the new master, extra bit is added to each metadata
+entry. The bit is cleared right before a swap is about to happen. When a line is fetched, the bit is checked to decice
+which dictionary should be used to decompress the line. If the bit is zero, it is compressed with the old dictionary.
+When a line is evicted, it is always compressed using the new dictionary, and the bit is set to one. The old dictionary
+can be retired, after all metadata cache entries have the extra bit set to one.
 
