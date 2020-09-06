@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents an adpative memory compression scheme to reduce bandwidth usage. The paper points out that prior 
+compression schemes, at the point of writing, only uses a fixed dictionary, which is obtained from static profiling, for 
+compressing symbols between the LLC and the main memory. This scheme works well for embedded systems, as these systems
+typically only execute a limited set of programs for fixed functions. When it comes to general purpose processors,
+this will not work well, given a braoder range of programs that will be executed. 
+
+
