@@ -20,5 +20,13 @@ typically only execute a limited set of programs for fixed functions. When it co
 this will not work well, given a braoder range of programs that will be executed. 
 
 The paper, therefore, proposes a simple compression scheme with adaptive dictionary. The basic architecture is simple:
-A compression and decompression module sit between the LLC and the main memory. A metadata store maintains metadata
-fields such as compressed size, compressed store addresses, etc., as we will see later. 
+A compression and decompression module sit between the LLC and the main memory. The paper suggests that not
+all blocks in the main memory are compressed, since this will incur large metadata overhead, as the amount of metadata 
+grows linearly with the size of the main memory. Instead, only a subset of blocks will be stored in compressed form
+at a separate location, called the compressed memory store, in the main memory. The compressed memory store is organized
+in a fully-associative manner, meaning any address can be mapped to any slot in the compressed store.
+Slots in the compressed memory store are of fixed size K, which, as the paper suggests, is set to one fourth of a cache 
+line size, achieving 4x bandwidth reduction if the LLC fetchs a block from the compressed store.
+
+A metadata store maintains metadata
+fields such as compressed size, compressed store addresses, etc., as we will see later.
