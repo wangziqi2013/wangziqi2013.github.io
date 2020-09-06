@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using simple dictionary encoding (bit vector for symbol width and CAM for dictionary lookup) to compress cache lines
+
+
+
 **Lowlight:**
 
 1. What if master dictionary cannot retire due to cache lines never be accessed thereafter? I know the compressed slots
