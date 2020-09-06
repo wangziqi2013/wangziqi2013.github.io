@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. What if master dictionary cannot retire due to cache lines never be accessed thereafter? I know the compressed slots
+   only store recently accessed lines, which are expected to be accessed soon in the future. But in an adversary model,
+   or when the access pattern changes (e.g., when a new process starts), how do you guarantee that dictionary swap
+   can happen with a time bound?
+   A time bound is important, because at the time the slave dictionary is swapped in, its contents may not reflect the 
+   current access pattern, if the swap takes really long time.
+
 This paper presents an adpative memory compression scheme to reduce bandwidth usage. The paper points out that prior 
 compression schemes, at the point of writing, only uses a fixed dictionary, which is obtained from static profiling, for 
 compressing symbols between the LLC and the main memory. This scheme works well for embedded systems, as these systems
@@ -77,4 +86,5 @@ a lookup. A saturating counter is incremented, if the word exists in the diction
 entry is selected and evicted, after which the word is inserted. The paper proposes that eviction be performed in a random
 manner. After K number of increments have been made, the slave dictionary is considered to be "mature", which can be swapped 
 with the master.
+The dictionary swap, however, cannot happen instantly, since the 
 
