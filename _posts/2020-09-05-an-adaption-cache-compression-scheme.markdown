@@ -66,3 +66,9 @@ a "1" bit is written to the header, and the log2(N)-bit index is appended to the
 At decompression time, the header bit vector is used to guide interpreting the rest of the compressed line. For a "0"
 bit, the next 32-bit word is appended to the output buffer without processing. For a "1" bit, the next log2(N)-bit code
 word is read, and then used to index the dictionary. The output 32-bit symbol is then appended to the output stream.
+
+The content of the dictionary determines the quality of compression, since only symbols that are present in the dictionary
+can be compressed. The paper proposes that two dictionaries be used. At any point during execution, one of the dictionaries
+is used to perform compression and decompression, while the other is being trained. We call the current one being
+used as "master dictionary", and the other "slave dictionary".
+
