@@ -36,4 +36,10 @@ On a block fetch operation, the LLC controller first checks the metadata cache u
 is compressed, then the metadata cache returns the current physical address of the compressed block in the main memory,
 and the LLC issues a request for a block of size K to the memory. Otherwise, if a miss is signaled, the block is, by default,
 stored on its physical location. The LLC controller issues a request of the original block size to the main memory
-as in a regular memory read.
+as in a regular memory read. 
+
+Note that the compression scheme in the paper are not to reduce main memory consumption. Instead, the design is focused 
+on reducing bandwidth usage between the LLC and the main memory, at the cost of slightly more memory usage by adding a 
+compressed memory store. A compressed store with the most recently accessed addresses will suffice, since a majority of 
+requests to the main memory will be redirected to the compressed store, due to the locality of accesses. 
+
