@@ -30,8 +30,8 @@ version_mgmt:
    only store recently accessed lines, which are expected to be accessed soon in the future. But in an adversary model,
    or when the access pattern changes (e.g., when a new process starts), how do you guarantee that dictionary swap
    can happen with a time bound?
-   A time bound is important, because at the time the slave dictionary is swapped in, its contents may not reflect the 
-   current access pattern, if the swap takes really long time.
+   A time bound is important, because this may cause the next training to never happen, if the old dictionary
+   cannot be retired.
 
 This paper presents an adpative memory compression scheme to reduce bandwidth usage. The paper points out that prior 
 compression schemes, at the point of writing, only uses a fixed dictionary, which is obtained from static profiling, for 
@@ -97,5 +97,9 @@ a lookup. A saturating counter is incremented, if the word exists in the diction
 entry is selected and evicted, after which the word is inserted. The paper proposes that eviction be performed in a random
 manner. After K number of increments have been made, the slave dictionary is considered to be "mature", which can be swapped 
 with the master.
-The dictionary swap, however, cannot happen instantly, since the 
+The dictionary swap, however, cannot happen instantly, since existing compressed lines still rely on the second dictionary
+for decompression the next time they are fetched. To address this, the LLC controller allows both dictionaries be used
+at the same time, gradually retiring the old master as lines that rely on it are fetched and decompressed. All lines
+evicted from the LLC will be compressed with the new dictionary.
+
 
