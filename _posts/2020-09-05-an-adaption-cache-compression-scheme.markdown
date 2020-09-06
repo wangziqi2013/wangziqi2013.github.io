@@ -21,6 +21,9 @@ version_mgmt:
    unimportant) is an approximation of the most recently accessed addresses. From this perspective, cache is actually
    a "recency" device that can be leveraged for not only caching, but also capturing most recently occuring symbols.
 
+3. The second compression algorithm is an early attempt to solve value locality by counting identical bits at higher
+   positions. It is actually simpler, but may not capture all value locality.
+
 **Lowlight:**
 
 1. What if master dictionary cannot retire due to cache lines never be accessed thereafter? I know the compressed slots
