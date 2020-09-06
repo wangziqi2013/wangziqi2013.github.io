@@ -112,5 +112,9 @@ The paper also proposes a second compression algorithm that does not require any
 algorithm relies on the assumption of value locality, and compresses higher common bits of cache line words.
 The paper assumes 16-byte cache line with 32-bit words. A 5-bit field at the header stores the number of 
 common bits of all four words in the cache line, which is followed by line data without these common bits.
-
+The paper also proposes two alternatives. The first divides the cache line into two parts, which are compressed separately.
+Two 5-bit fields, instead of one, are stored at the header, each describing the first two and the last two words,
+respectively. The second algorithm uses the first word in the line as the "reference word", and counts the number of 
+identical bits with the reference word for the remaining three words. In this case, three 5-bit fields are stored in
+the header, but the overall compression ratio may be higher, since each word is compressed independently.
 
