@@ -108,6 +108,10 @@ When a line is evicted, it is always compressed using the new dictionary, and th
 can be retired, after all metadata cache entries have the extra bit set to one. 
 After retirement, the old master dictionary will become the slave, which is cleared, and the next training phase starts.
 
+The size of the dictionary also affects compression ratio. A large dictionary enables more words to be compressed, at the 
+cost of wider code word. A small dictionary generates smaller code words, at the cost of less compressed words. The paper
+suggests that the size of the dictionary be set to 128, requiring 7 bits to encode a 32-bit word.
+
 The paper also proposes a second compression algorithm that does not require any dictionary or training. The compression
 algorithm relies on the assumption of value locality, and compresses higher common bits of cache line words.
 The paper assumes 16-byte cache line with 32-bit words. A 5-bit field at the header stores the number of 
