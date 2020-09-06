@@ -57,4 +57,9 @@ We next describe the compression algorithms proposed by the paper. The first alg
 algorithm that uses online profiling. The compressor and decompressor share a N-entry dictionary structure, which
 is implemented as a CAM on the compressor side, and a SRAM on the decompressor side. The dictionary maps 32-bit symbols
 to log2(N) bits compressed code words. At compression time, each 32-bit word is used as the lookup key to obtain the 
-index of the entry, which is then written to the output stream. The compressed
+index of the entry, which is then written to the output stream. The compressed cache line consists of two parts, a bit 
+vector header, where each bit describes whether a field is compressed or not, and the body, which stores either
+compressed code words or uncompressed 32-bit words.
+At compression time, if the 32-bit input word is not found in the CAM, then the compressor outputs a "0" bit indicating
+an uncompressed word, and writes the 32-bit word without any processing. If the input word is found in the CAM, then
+a "1" bit is written to the header, and the log2(N)-bit index is appended to the body.
