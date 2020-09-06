@@ -52,3 +52,9 @@ one existing item will be evicted from the cache, after which the block's addres
 any replacement algorithm for fully-associative cache can be employed. 
 When evicting an entry from the cache, the LLC controller first fetches the compressed line, decompresses it,
 and writes it back to the home location.
+
+We next describe the compression algorithms proposed by the paper. The first algorithm is a dictionary-based, adpative
+algorithm that uses online profiling. The compressor and decompressor share a N-entry dictionary structure, which
+is implemented as a CAM on the compressor side, and a SRAM on the decompressor side. The dictionary maps 32-bit symbols
+to log2(N) bits compressed code words. At compression time, each 32-bit word is used as the lookup key to obtain the 
+index of the entry, which is then written to the output stream. The compressed
