@@ -19,4 +19,6 @@ compressing symbols between the LLC and the main memory. This scheme works well 
 typically only execute a limited set of programs for fixed functions. When it comes to general purpose processors,
 this will not work well, given a braoder range of programs that will be executed. 
 
-
+The paper, therefore, proposes a simple compression scheme with adaptive dictionary. The basic architecture is simple:
+A compression and decompression module sit between the LLC and the main memory. A metadata store maintains metadata
+fields such as compressed size, compressed store addresses, etc., as we will see later. 
