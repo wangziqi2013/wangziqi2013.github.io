@@ -47,4 +47,8 @@ On a dirty block write operation, the LLC controller first checks the metadata c
 for compression. If the address is currently in the compressed store, and the compressed size of the block is still
 less than or equal to K, then the block will be written back to the same address in the compressed store. If the block
 is currently in the compressed size, but the compressed size exceeds K, it will be removed from the cache, and stored
-back to its original location. 
+back to its original location. If, on the other hand, the compressed size is within K, but the cache signals a miss,
+one existing item will be evicted from the cache, after which the block's address is inserted. The paper suggests that
+any replacement algorithm for fully-associative cache can be employed. 
+When evicting an entry from the cache, the LLC controller first fetches the compressed line, decompresses it,
+and writes it back to the home location.
