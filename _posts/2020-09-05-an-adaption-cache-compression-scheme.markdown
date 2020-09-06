@@ -70,5 +70,11 @@ word is read, and then used to index the dictionary. The output 32-bit symbol is
 The content of the dictionary determines the quality of compression, since only symbols that are present in the dictionary
 can be compressed. The paper proposes that two dictionaries be used. At any point during execution, one of the dictionaries
 is used to perform compression and decompression, while the other is being trained. We call the current one being
-used as "master dictionary", and the other "slave dictionary".
+used as "master dictionary", and the other "slave dictionary". On initialization, the master is initialized to contain
+only two entries: all-ones and all-zeros, which only performs simple zero-elimination. The slave is set to training mode,
+which intercepts evicted cache lines on a side channel. For each symbol in the cache line, the slave dictionary performs 
+a lookup. A saturating counter is incremented, if the word exists in the dictionary. If the word does not exist, an existing
+entry is selected and evicted, after which the word is inserted. The paper proposes that eviction be performed in a random
+manner. After K number of increments have been made, the slave dictionary is considered to be "mature", which can be swapped 
+with the master.
 
