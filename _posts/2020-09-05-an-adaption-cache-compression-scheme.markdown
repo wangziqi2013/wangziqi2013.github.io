@@ -63,3 +63,6 @@ compressed code words or uncompressed 32-bit words.
 At compression time, if the 32-bit input word is not found in the CAM, then the compressor outputs a "0" bit indicating
 an uncompressed word, and writes the 32-bit word without any processing. If the input word is found in the CAM, then
 a "1" bit is written to the header, and the log2(N)-bit index is appended to the body.
+At decompression time, the header bit vector is used to guide interpreting the rest of the compressed line. For a "0"
+bit, the next 32-bit word is appended to the output buffer without processing. For a "1" bit, the next log2(N)-bit code
+word is read, and then used to index the dictionary. The output 32-bit symbol is then appended to the output stream.
