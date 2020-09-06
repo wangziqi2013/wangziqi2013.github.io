@@ -105,5 +105,12 @@ To distinguish whether a line is compressed with the old or the new master, extr
 entry. The bit is cleared right before a swap is about to happen. When a line is fetched, the bit is checked to decice
 which dictionary should be used to decompress the line. If the bit is zero, it is compressed with the old dictionary.
 When a line is evicted, it is always compressed using the new dictionary, and the bit is set to one. The old dictionary
-can be retired, after all metadata cache entries have the extra bit set to one.
+can be retired, after all metadata cache entries have the extra bit set to one. 
+After retirement, the old master dictionary will become the slave, which is cleared, and the next training phase starts.
+
+The paper also proposes a second compression algorithm that does not require any dictionary or training. The compression
+algorithm relies on the assumption of value locality, and compresses higher common bits of cache line words.
+The paper assumes 16-byte cache line with 32-bit words. A 5-bit field at the header stores the number of 
+common bits of all four words in the cache line, which is followed by line data without these common bits.
+
 
