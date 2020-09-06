@@ -31,3 +31,9 @@ A fully-associative metadata cache maintains compressed store addresses for bloc
 The metadata cache is implemented as a Content-Addressable Memory (CAM), which returns the compressed block address
 in the compressed store given the uncompressed physical address, if the block is truly compressed. Otherwise, it
 signals a miss, indicating that the block has not yet been compressed.
+
+On a block fetch operation, the LLC controller first checks the metadata cache using the physical address. If the block
+is compressed, then the metadata cache returns the current physical address of the compressed block in the main memory,
+and the LLC issues a request for a block of size K to the memory. Otherwise, if a miss is signaled, the block is, by default,
+stored on its physical location. The LLC controller issues a request of the original block size to the main memory
+as in a regular memory read.
