@@ -17,7 +17,9 @@ version_mgmt:
 
 1. Using simple dictionary encoding (bit vector for symbol width and CAM for dictionary lookup) to compress cache lines
 
-
+2. The training algorithm with saturating counters is straightforward. In fact, a cache structure (tag only, data is 
+   unimportant) is an approximation of the most recently accessed addresses. From this perspective, cache is actually
+   a "recency" device that can be leveraged for not only caching, but also capturing most recently occuring symbols.
 
 **Lowlight:**
 
