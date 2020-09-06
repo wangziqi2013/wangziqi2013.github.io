@@ -43,3 +43,8 @@ on reducing bandwidth usage between the LLC and the main memory, at the cost of 
 compressed memory store. A compressed store with the most recently accessed addresses will suffice, since a majority of 
 requests to the main memory will be redirected to the compressed store, due to the locality of accesses. 
 
+On a dirty block write operation, the LLC controller first checks the metadata cache, and meanwhile, sends the block
+for compression. If the address is currently in the compressed store, and the compressed size of the block is still
+less than or equal to K, then the block will be written back to the same address in the compressed store. If the block
+is currently in the compressed size, but the compressed size exceeds K, it will be removed from the cache, and stored
+back to its original location. 
