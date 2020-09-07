@@ -57,3 +57,8 @@ statistics on the number of accesses each physical page has observed. The access
 migration component, which decides micro pages that should be clustered together. The execution is divided into non-overlapping
 epochs. During an epoch, statistics information is collected. At the end of the epoch, migration decisions are made based
 on the statistics. Different migration policies can be implemented independent from data collection, granting better flexibility.
+
+The statistics tracking is implemented as an array of counters in the memory controller. The paper suggests that 512
+counters be used, each responsible for one 1KB micro page, which tracks 512KB of working set in total. The paper does
+not specify the organization of the counter array, but the best guess is that they are organized as a CAM array, with
+each entry associated with an address tag for lookup. 
