@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. This paper is not really doing clustering. Instead, it simply recognizes hot micro-pages from each page, and copies
+   them to a small, concentrated area. This does not guarantee that micro-pages that are accessed together are always
+   on the same row. In a worst case, frequent row buffer closing may still be required, if micro-pages are not placed
+   optimally. Data placement itself should be a topic of this paper, but there is none.
+
 This paper proposes micro pages, an optimization framework for increasing row buffer hits on DRAM. The paper points out 
 that DRAM row buffer hit rates are decreasing in the multicore era, because of the interleaved memory access pattern from
 all cores. This has two harmful effects performance-wise. First, modern DRAM reads a row of data from the DRAM cells into
