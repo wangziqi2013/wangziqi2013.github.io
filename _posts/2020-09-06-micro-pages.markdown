@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using a small counter array to track access statistics for large main memory, assuming that most computation will only
+   be conducted on a small range of pages.
+
+
+
 **Lowlight:**
 
 1. This paper is not really doing clustering. Instead, it simply recognizes hot micro-pages from each page, and copies
