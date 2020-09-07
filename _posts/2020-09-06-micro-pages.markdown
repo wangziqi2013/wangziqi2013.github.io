@@ -35,4 +35,7 @@ unit of access tracking and data migration.
 We first introduce the base line system. This paper assumes that the DRAM operates with open page policy, with the 
 row size being 8KB. Virtual memory page sizes for both virtual and physical address spaces are 4KB. Micro-pages
 are boundary-aligned, 1KB segments on the physical address space. The memory controller extracts bits 15 - 28 of a 32-bit 
-physical address as the row ID. 
+physical address as the row ID. The rest of the bits are used as DIMM ID, bank ID, and column ID, the order of which is
+unimportant. The paper assumes that the OS is aware of the underlying address mapping performed by the memory
+controller, such that the OS can purposely place a micro page on a certain DRAM row, bank, and DIMM by combining these
+components to form a physical address.
