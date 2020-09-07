@@ -61,4 +61,7 @@ on the statistics. Different migration policies can be implemented independent f
 The statistics tracking is implemented as an array of counters in the memory controller. The paper suggests that 512
 counters be used, each responsible for one 1KB micro page, which tracks 512KB of working set in total. The paper does
 not specify the organization of the counter array, but the best guess is that they are organized as a CAM array, with
-each entry associated with an address tag for lookup. 
+each entry associated with an address tag for lookup. When a request is served by the memory controller, the corresponding
+entry is updated by incrementing the counter. If the entry does not exist, then an new entry is inserted, after evicting
+an existing one (preferably the smallest one), if the array is full. The content of the array is also saved on context switch,
+since it is also observed that memory access pattern changes across processes.
