@@ -24,4 +24,7 @@ critical path, since closing a row requires writing the row buffer back to the D
 with request parsing and processing after the current request has been completed. Lower locality implies that more 
 page closing will be observed, incurring higher DRAM access latency.
 
-
+Micro-page solves the above issue by clustering segments from different OS pages that are frequently accessed to the same 
+DRAM row. This requires a finer granularity than OS pages in order to only partially map a portion of a page. The 
+paper proposes that the physical address page frames be further divided into smaller, 1KB "micro pages", which is the basic
+unit of access tracking and data migration.
