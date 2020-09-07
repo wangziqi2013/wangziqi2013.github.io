@@ -25,6 +25,9 @@ version_mgmt:
    does OS deal with data race with potential writes to the migrated page and data copy (you can set write permission
    for pages under migration, of course)?
 
+3. The paper does not mention how the reserved space is maintained, i.e., how evictions happen? How OS / memory controller
+   remembers which slot stores which micro page?
+
 This paper proposes micro pages, an optimization framework for increasing row buffer hits on DRAM. The paper points out 
 that DRAM row buffer hit rates are decreasing in the multicore era, because of the interleaved memory access pattern from
 all cores. This has two harmful effects performance-wise. First, modern DRAM reads a row of data from the DRAM cells into
