@@ -82,8 +82,9 @@ allowing at most 4MB of data to be clustered.
 OS physical address map should mark addresses mapped to these rows as unusable. 
 The OS then copies micro pages from their home location to a vacant slot in the reserved area, and updates page table
 mapping only for that 1KB micro page (TLB shootdown should also be performed). 
-If the reserved area is full, one of the existing entry is evicted back to its home location. The OS should therefore maintain
-a table for all micro pages in the reserved area. This table should contain pointers to their original PTEs to assist evictions.
+If the reserved area is full, one of the existing entry is evicted by copying the slot data back to its home location. 
+The OS should therefore maintain a table for all micro pages in the reserved area. This table should contain pointers 
+to their original PTEs to assist evictions.
 
 The second mechanism relieves the OS from the responsibility of maintaining multiple mappings for one 4KB page. In the 
 second approach, the OS still runs on an abstraction of flat, non-micro paged physical address space, while the memory
@@ -95,3 +96,6 @@ array. If a matching is found, the request address is rewritten to the address o
 slot size (1KB) and the index of the entry. 
 The paper claims that since requests are expected to stay in the queue for a while, the CAM lookup can be overlapped
 with queuing delay, and therefore will not increase latency of the critical path.
+At the end of an epoch, the memory controller scans its own counter array, and decides which micro pages to migrate. 
+The migration algorithm is identical to the one in the previous mechanism, except that the CAM array entries, instead of
+PTEs, are updated.
