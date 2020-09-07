@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes micro pages, an optimization framework for increasing row buffer hits on DRAM. The paper points out 
+that DRAM row buffer hit rates are decreasing in the multicore era, because of the interleaved memory access pattern from
+all cores. This has two harmful effects performance-wise. First, modern DRAM reads a row of data from the DRAM cells into
+the DRAM buffer, which is latched for later accesses. If only a small part of the buffer is accessed before the next row
+is read out, most of the energy spent pn row activation and write back is wasted, resulting in higher energy consumption.
+
