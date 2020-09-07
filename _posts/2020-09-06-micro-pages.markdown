@@ -65,3 +65,11 @@ each entry associated with an address tag for lookup. When a request is served b
 entry is updated by incrementing the counter. If the entry does not exist, then an new entry is inserted, after evicting
 an existing one (preferably the smallest one), if the array is full. The content of the array is also saved on context switch,
 since it is also observed that memory access pattern changes across processes.
+
+The paper proposes two mechanisms for data migration: One OS-based, and a memory controller-based. We first describe the 
+OS-based approach. This approach requires the hardware and the OS to support 1KB micro pages. The MMU is modified to read
+four base addresses, instead of one, from the page table entries. The paper does not elaborate on the page table organization,
+but the general idea is that each 4KB page now is allowed to have four independent base addresses, by setting a mode bit
+in the PTE. The old 4KB paging machanism is not changed, since it will still be used by most of the pages that do not
+require migration. The TLB is also extended to add a few bits per entry in the address tag to support 1KB entry. 
+
