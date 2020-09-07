@@ -18,6 +18,8 @@ version_mgmt:
 1. Using a small counter array to track access statistics for large main memory, assuming that most computation will only
    be conducted on a small range of pages.
 
+2. Using a 4096-entry CAM array in the memory controller to perform address remapping in a brute-force manner.
+
 
 
 **Lowlight:**
