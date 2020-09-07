@@ -72,4 +72,11 @@ four base addresses, instead of one, from the page table entries. The paper does
 but the general idea is that each 4KB page now is allowed to have four independent base addresses, by setting a mode bit
 in the PTE. The old 4KB paging machanism is not changed, since it will still be used by most of the pages that do not
 require migration. The TLB is also extended to add a few bits per entry in the address tag to support 1KB entry. 
-
+During epoch execution, memory allocation still happens at 4KB granularity. 
+At the end of the epoch, the OS scans the counter array on the memory controller, and decides which micro pages are 
+frequently accessed, and should hence be migrated. The OS reserves the first 16 rows from each bank for placing micro pages. 
+OS physical address map should mark addresses mapped to these rows as unusable. 
+The OS then copies micro pages from their home location to a vacant slot in the reserved area, and updates page table
+mapping only for that 1KB micro page (TLB shootdown should also be performed). 
+If the reserved area is full, one of the existing entry is evicted back to its home location. The OS should therefore maintain
+a table for all micro pages in the reserved area. This table should contain pointers to their original PTEs to assist evictions.
