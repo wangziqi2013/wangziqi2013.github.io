@@ -39,3 +39,9 @@ physical address as the row ID. The rest of the bits are used as DIMM ID, bank I
 unimportant. The paper assumes that the OS is aware of the underlying address mapping performed by the memory
 controller, such that the OS can purposely place a micro page on a certain DRAM row, bank, and DIMM by combining these
 components to form a physical address.
+
+The micro-page desing has two independent parts: Usage tracking and data migration. The usage track component maintains
+statistics on the number of accesses each physical page has observed. The access information is then passed to the data 
+migration component, which decides micro pages that should be clustered together. The execution is divided into non-overlapping
+epochs. During an epoch, statistics information is collected. At the end of the epoch, migration decisions are made based
+on the statistics. Different migration policies can be implemented independent from data collection, granting better flexibility.
