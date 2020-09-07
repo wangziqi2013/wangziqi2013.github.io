@@ -20,6 +20,11 @@ version_mgmt:
    on the same row. In a worst case, frequent row buffer closing may still be required, if micro-pages are not placed
    optimally. Data placement itself should be a topic of this paper, but there is none.
 
+2. The paper does not specify whether data migration happens in the background or foreground. If former, is the 
+   overhead of blocking system execution and performing data migration counted towards the overhead? If latter, how
+   does OS deal with data race with potential writes to the migrated page and data copy (you can set write permission
+   for pages under migration, of course)?
+
 This paper proposes micro pages, an optimization framework for increasing row buffer hits on DRAM. The paper points out 
 that DRAM row buffer hit rates are decreasing in the multicore era, because of the interleaved memory access pattern from
 all cores. This has two harmful effects performance-wise. First, modern DRAM reads a row of data from the DRAM cells into
