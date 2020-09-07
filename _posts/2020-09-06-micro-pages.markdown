@@ -32,4 +32,7 @@ DRAM row. This requires a finer granularity than OS pages in order to only parti
 paper proposes that the physical address page frames be further divided into smaller, 1KB "micro pages", which is the basic
 unit of access tracking and data migration.
 
-
+We first introduce the base line system. This paper assumes that the DRAM operates with open page policy, with the 
+row size being 8KB. Virtual memory page sizes for both virtual and physical address spaces are 4KB. Micro-pages
+are boundary-aligned, 1KB segments on the physical address space. The memory controller extracts bits 15 - 28 of a 32-bit 
+physical address as the row ID. 
