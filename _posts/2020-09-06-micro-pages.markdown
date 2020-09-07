@@ -20,7 +20,9 @@ version_mgmt:
 
 2. Using a 4096-entry CAM array in the memory controller to perform address remapping in a brute-force manner.
 
-
+3. Performing clustering of commonly accessed micro pages by simply placing them together in a small reservation storage
+   area. This is not actually clustering, but just selecting the most frequently accessed micro pages and put them
+   together, hoping that they will be accessed together.
 
 **Lowlight:**
 
