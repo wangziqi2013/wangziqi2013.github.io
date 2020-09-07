@@ -90,3 +90,8 @@ second approach, the OS still runs on an abstraction of flat, non-micro paged ph
 controller implements address remapping. The memory controller manages a 4096 entry CAM array, with each entry storing
 the home micro page address (aligned to 1KB boundaries) of data stored in the corresponding slot. Entries are mapped
 to slots linearlly, as there are excatly 4MB / 1KB = 4096 slots in the reserved rows.
+When a request is enqueued at the memory controller, the micro-page address of the request is used to query the CAM
+array. If a matching is found, the request address is rewritten to the address of the slot, which is computed using 
+slot size (1KB) and the index of the entry. 
+The paper claims that since requests are expected to stay in the queue for a while, the CAM lookup can be overlapped
+with queuing delay, and therefore will not increase latency of the critical path.
