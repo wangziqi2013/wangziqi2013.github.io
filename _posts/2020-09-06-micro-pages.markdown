@@ -77,9 +77,16 @@ in the PTE. The old 4KB paging machanism is not changed, since it will still be 
 require migration. The TLB is also extended to add a few bits per entry in the address tag to support 1KB entry. 
 During epoch execution, memory allocation still happens at 4KB granularity. 
 At the end of the epoch, the OS scans the counter array on the memory controller, and decides which micro pages are 
-frequently accessed, and should hence be migrated. The OS reserves the first 16 rows from each bank for placing micro pages. 
+frequently accessed, and should hence be migrated. The OS reserves the first 16 rows from each bank for placing micro pages,
+allowing at most 4MB of data to be clustered. 
 OS physical address map should mark addresses mapped to these rows as unusable. 
 The OS then copies micro pages from their home location to a vacant slot in the reserved area, and updates page table
 mapping only for that 1KB micro page (TLB shootdown should also be performed). 
 If the reserved area is full, one of the existing entry is evicted back to its home location. The OS should therefore maintain
 a table for all micro pages in the reserved area. This table should contain pointers to their original PTEs to assist evictions.
+
+The second mechanism relieves the OS from the responsibility of maintaining multiple mappings for one 4KB page. In the 
+second approach, the OS still runs on an abstraction of flat, non-micro paged physical address space, while the memory
+controller implements address remapping. The memory controller manages a 4096 entry CAM array, with each entry storing
+the home micro page address (aligned to 1KB boundaries) of data stored in the corresponding slot. Entries are mapped
+to slots linearlly, as there are excatly 4MB / 1KB = 4096 slots in the reserved rows.
