@@ -66,4 +66,9 @@ The data shuffling algorithm works as follows. For a cache line on column addres
 interpreted as the offset of the cache line stored in the rank), the W words are shuffled before they are stored according
 to the bit representation of C. The shuffling algorithm takes the lowest log2(W) bits (3 bits for 64-byte lines) as the 
 control key. The shuffling process consists of log2(W) steps, each involves swapping words in the cache line. 
-
+In step j, the j-th bit in the control key (counting from LSB) is checked. If this bit is zero, then no shuffling is 
+performed, and the line is sent to the next step. If the j-th bit is set, then the shuffling is performed as follows.
+First, the W words is divided into groups of (2 ^ j), i.e., with j = 2 and W = 8, this will divide the cache line into
+two groups, the first being word 0 - 3, the second being word 4 - 7. Then, each odd numbered group is swapped with the 
+next even numbered group. In the above example, word 0 - 3 will be swapped to offset 4 - 7, while word 4 - 7 will be 
+swapped to offset 0 - 3.
