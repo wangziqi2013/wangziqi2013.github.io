@@ -25,4 +25,11 @@ physical size of a tuple.
 The last example is SIMD, which supports data gathering and scattering with special instructions. These instructions,
 however, can be inefficient if multiple cache lines need to be fetched from the DRAM.
 
+The paper assumes the following DRAM architecture. The DRAM storage consists of potentially multiple channels,
+each supporting several DIMMs. Channels have their own control and data signals. Multiple ranks exist within a channel.
+All DRAM devices in a rank share the same command and data path, which operate as a basic unit of access.
+This paper assumes that cache lines are always mapped into one rank for the simplicity of discussion, but other address
+mappings can also be supported.
+
+
 
