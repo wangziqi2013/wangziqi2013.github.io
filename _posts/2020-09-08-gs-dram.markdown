@@ -116,4 +116,10 @@ DRAM controller should use offset (X + 1) to compute physical offset, but still 
 aligned offset X to compute per-chip offset. In general, in order to access the word on offset i, the DRAM controller
 should use offset (X + i) to compute physical offset, and add the offset to X for the physical offset on each chip.
 
-
+At the operating system level, if page is expected to be accessed in strided patterns, the OS should mark the page porperty
+in the page table, and include the pattern ID in the memory request. The returned cache line is stored in the cache 
+hierarchy as a physical line, which is tagged with the pattern ID. Cache coherence is handled by checking both
+conventional lines and patterned lines. The cache controller can expand the pattern ID and base address tag into word
+addresses, which is then checked against the coherence message. Since more than one copy of a word can exist in the same
+cache, the cache controller should also check whether an address is cached in multiple locations when performing writes
+to a non-dirty location.
