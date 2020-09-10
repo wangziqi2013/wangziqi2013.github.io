@@ -99,4 +99,7 @@ is the default mode.
 When the pattern ID is all-ones, the lower bits of the actual offset is XOR'ed with the chip ID. If these bits are zero, 
 meaning that the cache line is itself on a W-line boundary, the XOR essentially works as bitwise OR, and the words accessed 
 are: Word 0 of line X, word 1 of line (X + 1), word 2 of line (X + 2), ..., word 7 of line (X + 7). 
-In the shuffled 
+In the shuffled pattern, word 0 of physical line X is the first word of logical line X, word 1 of physical line (X + 1)
+is the first word of logical line (X + 1), ..., word (X + 7) of physical line (X + 7) is the first word of logical line (X + 7),
+meaning that pattern 3 will access the first word of the next 8 adjacent lines in one request.
+
