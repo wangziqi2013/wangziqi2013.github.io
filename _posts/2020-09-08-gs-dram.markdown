@@ -32,6 +32,10 @@ version_mgmt:
    2'b00 ^ 2'b01 = 2'b01, 2'b01 ^ 2'b01 = 2'b00, 2'b10 ^ 2'b01 = 2'b11, 2'b11 ^ 2'b01 = 2'b10,
    means seem to be not meaningful at all.
 
+5. Cache controller needs to know the actual data layout in the DRAM, since the cache controller must expand the 
+   pattern ID and address tag into word addresses, which requires it to decode the address tag into per-chip offset (
+   the column address in the paper).
+
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
@@ -107,3 +111,5 @@ Other words can also be accessed similarly: In order to access the second word f
 DRAM controller should use offset (X + 1) to compute physical offset, but still issue read command using W-line
 aligned offset X to compute per-chip offset. In general, in order to access the word on offset i, the DRAM controller
 should use offset (X + i) to compute physical offset, and add the offset to X for the physical offset on each chip.
+
+
