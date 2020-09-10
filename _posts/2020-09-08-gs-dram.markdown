@@ -34,6 +34,11 @@ Each rank consists of several DRAM chips, and each chip stores part of a cache l
 each chip provides 8 bytes of data on an access. The cache line width is determined by the number of chips on a single 
 rank. For 64-byte cache lines, eight chips are present, in which chip 0 provides byte 0 - 7, chip 1 provides byte 8 - 15,
 chip 7 provides byte 57 - 64, and so on. 
-
+Although the internal organization of chips is not important to this paper, it is still briefly described that each
+chip contains several arrays, where each array provides one bit to the 64-byte cache line.
+On a chip read operation, the read command fetches an entire row of bits from each array, and cache them in a structure
+called the row buffer. Although only one bit of the row is accessed per-array, the remaining bits from the row are latched
+in the row buffer to serve future reads without precharging and activation. The offset of the bit that is accessed is 
+called the column address, which represents the offset of the 64-bit cache line in the row buffer.
 
 
