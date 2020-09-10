@@ -61,3 +61,9 @@ This paper solves the above issue by mapping words into chips in a different man
 is always mapped to chip i. The paper proposes a novel data shuffling algorithm to ensure that, for cache line size 
 of W words, any W adjacent cache lines will have their words on offset i mapped to different chips, enabling parallel
 accesses to words on the same offset from adjacent cache lines, which is the most common strided access pattern.
+
+The data shuffling algorithm works as follows. For a cache line on column address C (column address here can simply be 
+interpreted as the offset of the cache line stored in the rank), the W words are shuffled before they are stored according
+to the bit representation of C. The shuffling algorithm takes the lowest log2(W) bits (3 bits for 64-byte lines) as the 
+control key. The shuffling process consists of log2(W) steps, each involves swapping words in the cache line. 
+
