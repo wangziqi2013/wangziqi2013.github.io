@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using a butterfly sorted network-based shuffling algorithm to distributes words on the same offset of cache lines,
+   such that words on the same offset from W consecutive cache lines are guaranteed to be mapped to different physical
+   locations, in order to avoid chip conflict.
+
+
+
 **Lowlight:**
 
 1. The paper should mention that the step size cannot be too large (although in typical use cases it will not be
