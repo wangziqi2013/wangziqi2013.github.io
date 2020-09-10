@@ -103,3 +103,7 @@ In the shuffled pattern, word 0 of physical line X is the first word of logical 
 is the first word of logical line (X + 1), ..., word (X + 7) of physical line (X + 7) is the first word of logical line (X + 7),
 meaning that pattern 3 will access the first word of the next 8 adjacent lines in one request.
 
+Other words can also be accessed similarly: In order to access the second word from the next 7 consecutive lines, the 
+DRAM controller should use offset (X + 1) to compute physical offset, but still issue read command using W-line
+aligned offset X to compute per-chip offset. In general, in order to access the word on offset i, the DRAM controller
+should use offset (X + i) to compute physical offset, and add the offset to X for the physical offset on each chip.
