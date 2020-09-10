@@ -36,6 +36,10 @@ version_mgmt:
    pattern ID and address tag into word addresses, which requires it to decode the address tag into per-chip offset (
    the column address in the paper).
 
+6. What is the coherence state of a gathered cache line?
+
+7. Generally speaking, I would say it is better not to cache the gathered cache lines.
+
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
