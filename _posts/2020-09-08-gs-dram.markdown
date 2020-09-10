@@ -19,7 +19,8 @@ version_mgmt:
    such that words on the same offset from W consecutive cache lines are guaranteed to be mapped to different physical
    locations, in order to avoid chip conflict.
 
-
+2. Different patterns can be accessed using simple bitwise operation to generate physical chip offsets using the 
+   logical offset of the line plus the pattern ID.
 
 **Lowlight:**
 
