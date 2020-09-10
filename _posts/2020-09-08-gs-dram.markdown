@@ -23,6 +23,9 @@ version_mgmt:
 2. The above problem is actually fatal, if some lines are at the end of one row, and some are at the next row. In this
    case, even if the step size is small, chips in a rank still have to activate different rows.
 
+3. If the access pattern of a physical address range changes, or it is deallocated and reallocated to a different process,
+   the DRAM content stored there must be rearranged, since the words in a cache line have been shuffled.
+
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
@@ -84,4 +87,6 @@ In order to access distinct cache lines on one request, the address computation 
 In the conventional scheme, when cache line at offset X is requested, all chips will activate the word stored at offset X,
 the output of which is then assembled into a cache line.
 With data shuffling, the paper proposes that, given a cache line offset of X, each chip will read word stored at offset
-((chip ID & Pattern ID) ^ X), in which the pattern ID is a log2(W) bit constant for a certain pattern. 
+((chip ID & Pattern ID) ^ X), in which the pattern ID is a log2(W) bit constant for a certain pattern. When pattern ID
+is set to zero, the DRAM rank runs in default mode, and always access the corresponding words on the same offset X, which
+is the default mode.
