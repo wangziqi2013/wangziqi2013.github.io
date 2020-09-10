@@ -30,6 +30,10 @@ each supporting several DIMMs. Channels have their own control and data signals.
 All DRAM devices in a rank share the same command and data path, which operate as a basic unit of access.
 This paper assumes that cache lines are always mapped into one rank for the simplicity of discussion, but other address
 mappings can also be supported.
+Each rank consists of several DRAM chips, and each chip stores part of a cache line. In this paper, it is assumed that
+each chip provides 8 bytes of data on an access. The cache line width is determined by the number of chips on a single 
+rank. For 64-byte cache lines, eight chips are present, in which chip 0 provides byte 0 - 7, chip 1 provides byte 8 - 15,
+chip 7 provides byte 57 - 64, and so on. 
 
 
 
