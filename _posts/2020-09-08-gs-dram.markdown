@@ -17,4 +17,12 @@ This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables 
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
 For example, in matrix manipulating code, accessing multiple matrix elements on the same column often requires strided 
-reads, if the matrix is stored in row-major order where elements in the same row are stored.
+reads where the stride length is the size of a row, if the matrix is stored in row-major order where elements in the 
+same row are stored. Second, in HTAP database applications, tuples can be accessed either transactionally,
+where only a few tuple is touched, or analytically, where certain fields of a large set of tuples are scanned. In a row 
+store data layout, scanning one field of all tuples also rerquires strided accesses to memory, with the stride being the 
+physical size of a tuple. 
+The last example is SIMD, which supports data gathering and scattering with special instructions. These instructions,
+however, can be inefficient if multiple cache lines need to be fetched from the DRAM.
+
+
