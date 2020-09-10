@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The paper should mention that the step size cannot be too large (although in typical use cases it will not be
+   very large), since the row buffer must hold DRAM rows from the same row ID. If the step size is too large,
+   then it is possible that the line resides in a different row, requiring the chips in the rank to activate different
+   rows (i.e., some lines are on row X, and some lines are on row X + 1), complicating the design of the row buffer.
+
+2. 
+
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
@@ -46,4 +55,5 @@ First, the same bit of all cache lines mapped to a rank is always provided by a 
 can only be accessed by one request at a time, since there is only one control and data path per rank. 
 These two properties prevent strided accesses from accessing words on the same offset from two different cache lines,
 since these two words will be mapped to the same chip.
+
 
