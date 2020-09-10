@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
+The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
+when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
+For example, in matrix manipulating code, accessing multiple matrix elements on the same column often requires strided 
+reads, if the matrix is stored in row-major order where elements in the same row are stored.
