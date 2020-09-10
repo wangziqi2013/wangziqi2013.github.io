@@ -20,7 +20,8 @@ version_mgmt:
    then it is possible that the line resides in a different row, requiring the chips in the rank to activate different
    rows (i.e., some lines are on row X, and some lines are on row X + 1), complicating the design of the row buffer.
 
-2. 
+2. The above problem is actually fatal, if some lines are at the end of one row, and some are at the next row. In this
+   case, even if the step size is small, chips in a rank still have to activate different rows.
 
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
