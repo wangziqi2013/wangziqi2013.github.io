@@ -79,3 +79,9 @@ Note that this property only holds for W or less cache lines. For more than W li
 on the same offset will be mapped to the same chip. This case, however, is not important, as the DRAM interface only
 allows accessing W words per operation. Even with strided access pattern, at most W distinct cache lines will be 
 accessed, eliminating any possibility of chip conflict.
+
+In order to access distinct cache lines on one request, the address computation within the chip should also be motified.
+In the conventional scheme, when cache line at offset X is requested, all chips will activate the word stored at offset X,
+the output of which is then assembled into a cache line.
+With data shuffling, the paper proposes that, given a cache line offset of X, each chip will read word stored at offset
+((chip ID & Pattern ID) ^ X), in which the pattern ID is a log2(W) bit constant for a certain pattern. 
