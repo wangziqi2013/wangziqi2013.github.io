@@ -57,4 +57,7 @@ can only be accessed by one request at a time, since there is only one control a
 These two properties prevent strided accesses from accessing words on the same offset from two different cache lines,
 since these two words will be mapped to the same chip.
 
-
+This paper solves the above issue by mapping words into chips in a different manner. Conventionally, words on offset i
+is always mapped to chip i. The paper proposes a novel data shuffling algorithm to ensure that, for cache line size 
+of W words, any W adjacent cache lines will have their words on offset i mapped to different chips, enabling parallel
+accesses to words on the same offset from adjacent cache lines, which is the most common strided access pattern.
