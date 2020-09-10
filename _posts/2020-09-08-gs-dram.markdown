@@ -26,6 +26,12 @@ version_mgmt:
 3. If the access pattern of a physical address range changes, or it is deallocated and reallocated to a different process,
    the DRAM content stored there must be rearranged, since the words in a cache line have been shuffled.
 
+4. Is it even a useful pattern, when the pattern ID = 3 but the column ID is not aligned on W-line boundary?
+   In the 32-byte line example, if the pattern ID = 2'b11, and the last two bits of column ID is 2'b01 
+   (not aligned to 4-line boundary), then the actual offset will be:
+   2'b00 ^ 2'b01 = 2'b01, 2'b01 ^ 2'b01 = 2'b00, 2'b10 ^ 2'b01 = 2'b11, 2'b11 ^ 2'b01 = 2'b10,
+   means seem to be not meaningful at all.
+
 This paper proposes Gather-Scatter DRAM, a novel DRAM architecture that enables fast gather and scatter semantics.
 The paper points out that current DRAM interface only supports cache line granularity access, which causes difficulties
 when accessing data in a strided pattern. This prevents several common patterns from being implemented efficiently.
@@ -90,3 +96,7 @@ With data shuffling, the paper proposes that, given a cache line offset of X, ea
 ((chip ID & Pattern ID) ^ X), in which the pattern ID is a log2(W) bit constant for a certain pattern. When pattern ID
 is set to zero, the DRAM rank runs in default mode, and always access the corresponding words on the same offset X, which
 is the default mode.
+When the pattern ID is all-ones, the lower bits of the actual offset is XOR'ed with the chip ID. If these bits are zero, 
+meaning that the cache line is itself on a W-line boundary, the XOR essentially works as bitwise OR, and the words accessed 
+are: Word 0 of line X, word 1 of line (X + 1), word 2 of line (X + 2), ..., word 7 of line (X + 7). 
+In the shuffled 
