@@ -41,4 +41,9 @@ called the row buffer. Although only one bit of the row is accessed per-array, t
 in the row buffer to serve future reads without precharging and activation. The offset of the bit that is accessed is 
 called the column address, which represents the offset of the 64-bit cache line in the row buffer.
 
+The above DRAM organization has two important properties that make strided accesses inefficient. 
+First, the same bit of all cache lines mapped to a rank is always provided by a single chip. Second, all chips in a rank 
+can only be accessed by one request at a time, since there is only one control and data path per rank. 
+These two properties prevent strided accesses from accessing words on the same offset from two different cache lines,
+since these two words will be mapped to the same chip.
 
