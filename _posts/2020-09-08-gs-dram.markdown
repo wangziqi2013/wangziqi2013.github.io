@@ -72,3 +72,6 @@ First, the W words is divided into groups of (2 ^ j), i.e., with j = 2 and W = 8
 two groups, the first being word 0 - 3, the second being word 4 - 7. Then, each odd numbered group is swapped with the 
 next even numbered group. In the above example, word 0 - 3 will be swapped to offset 4 - 7, while word 4 - 7 will be 
 swapped to offset 0 - 3.
+The data shuffling distributes words evenly for any W cache lines. In other words, for any consecutive W lines stored
+in the rank, no word at the same logical offset is stored on the same physical offset, enabling efficient strided accesses,
+since words from different cache lines that are on the same offset can be accessed by activating different chips.
