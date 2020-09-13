@@ -16,10 +16,13 @@ version_mgmt:
 **Lowlight:**
 
 1. How does the OS know that another thread has accessed the page for promotion? What kind of hardware is required to 
-   support this?
+   support this? Same question for detecting global access on process-local and thread-local pages.
 
 2. Why private cache copies are invalidiated on page reclassification? According to my understanding, this will only
    change the storage location at shared level, but not private level. 
+
+3. How does OS detect the working set size of a thread? And how does OS determine which size is the best fit? Obviously
+   you cannot simply use the working set size, as it may overwhelm the cache with useless contents.
 
 This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
 rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
@@ -102,4 +105,3 @@ In addition, the OS evicts all cache line copies of in the shared level for page
 changed, since change of policy may involve moving cache lines on one bank to migrate to another bank. Note that hardware
 does not support page reclassification, compared with cache line migration, since the paper suggests that page reclassifications
 are infrequent events.
- 
