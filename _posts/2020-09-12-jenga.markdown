@@ -72,4 +72,7 @@ not used as a set, but instead, it serves as a hash table. Each VHD also include
 addresses are hashed into one of the array elements on both arrays, which define the possible access path of the request.
 The L2 cache controller is responsible for computing the hash and the access path on a cache miss, after which the 
 information is stored into the request message, and then dispatched to the next level L3 bank indicated by the VHD.
+On receiving the request, both the L3 and potentially L4 controllers will perform a lookup on its local array, and forward
+the request to the next level if miss is indicated. For L3 caches, if L4 is not present in the request, the request should
+be forwarded directly to the main memory, bypassing the L4 level.
  
