@@ -61,6 +61,7 @@ and process-local should be cached in a bank as close to the executing core as p
 The placement of global data is less concerned, as it will be accessed by all threads running on different cores anyway.
 The page table should have a attribute field to store the caching policy type, which will be fetched by the MMU page table walker in the event of TLB misses. The TLB should also be extended with an entry to store the caching policy of pages. The caching policy
 will also be included in the fetch request sent to the L3 cache for address computation.
+
 To support per-thread virtual caching policy, Jenga also extends the processor context with a Virtual Hierarchy Table 
 (VHT), which stores the address mapping for requests going into the L3 cache. The VHT resides on the L2 cache controller,
 which should be swapped in and out on context switches. Each VHT consists of three entries, each being responsible for
@@ -70,9 +71,17 @@ Each VHD itself also consists of two arrays of N items in size. The first array 
 cache, and the second array contains bank IDs for the L4 cache. Note that bank IDs could duplicate, since the array is
 not used as a set, but instead, it serves as a hash table. Each VHD also includes a configurable hash function. Requested
 addresses are hashed into one of the array elements on both arrays, which define the possible access path of the request.
+
 The L2 cache controller is responsible for computing the hash and the access path on a cache miss, after which the 
 information is stored into the request message, and then dispatched to the next level L3 bank indicated by the VHD.
 On receiving the request, both the L3 and potentially L4 controllers will perform a lookup on its local array, and forward
 the request to the next level if miss is indicated. For L3 caches, if L4 is not present in the request, the request should
 be forwarded directly to the main memory, bypassing the L4 level.
+
+In order to change the configuration, system software first writes the updated configuration into the "shadow" VHD array,
+and then notifies the hardware that migration should be performed. The hardware, after receiving the notification, starts
+copying cache lines from the source SRAM bank to the destination bank. During migration, both banks are considered as valid
+to serve read requests. Write requests, however, must block to wait for migration to complete. To avoiding blocking 
+writers for too long, the paper also suggests that when a write operation hits a line that has not been migrated, the
+line will be given priority, and write could be performed after it has been migrated.
  
