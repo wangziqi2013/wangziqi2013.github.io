@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Jenga: Software-Defined Cache Hierarchy"
+date:   2020-09-12 20:13:00 -0500
+categories: paper
+paper_title: "Jenga: Software-Defined Cache Hierarchy"
+paper_link: https://dl.acm.org/doi/10.1145/3140659.3080214
+paper_keyword: Cache; Jenga; Software-Defined Cache
+paper_year: ISCA 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
