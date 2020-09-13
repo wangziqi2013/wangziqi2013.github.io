@@ -32,3 +32,8 @@ The same is also true for energy consumption.
 The last observation is that applications are pretty sensitive to configuration changes, especially the number of hierarchies. 
 The paper reports that applications can lose up to 20% of its optimal performance if the cache hierarchy is not ideally 
 configured. 
+
+We next describe the base line architecture of Jenga. Although Jenga does not dependent on the architecture being of a 
+particular topology, the paper, for ease of illustration, assumes that the system consists of a mesh of processors. Each
+node of the mesh consists of a processor core and its private L1 and L2 caches. Meshes communicate via an on-chip network.
+Each mesh is also equipped with a NoC router that supports inter-mesh packet routing in any route. 
