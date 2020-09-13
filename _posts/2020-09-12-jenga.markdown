@@ -66,4 +66,10 @@ To support per-thread virtual caching policy, Jenga also extends the processor c
 which should be swapped in and out on context switches. Each VHT consists of three entries, each being responsible for
 one of the three caching policies. Each entry consists of two Virtual Hierarchy Descriptors (VHD), where one is used for 
 the normal operation, and both are used during a configuration change, as we will see below. 
+Each VHD itself also consists of two arrays of N items in size. The first array contains bank IDs that constitute the L3
+cache, and the second array contains bank IDs for the L4 cache. Note that bank IDs could duplicate, since the array is
+not used as a set, but instead, it serves as a hash table. Each VHD also includes a configurable hash function. Requested
+addresses are hashed into one of the array elements on both arrays, which define the possible access path of the request.
+The L2 cache controller is responsible for computing the hash and the access path on a cache miss, after which the 
+information is stored into the request message, and then dispatched to the next level L3 bank indicated by the VHD.
  
