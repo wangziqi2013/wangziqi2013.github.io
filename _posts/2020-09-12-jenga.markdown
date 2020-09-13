@@ -45,3 +45,8 @@ The paper also noted that building the directory into SRAM data banks is not an 
 lines will not have any sharing status due to the fact the L3 is much larger than L1 and L2. 
 In addition to the L3, the paper also assumes that die-stack DRAM modules are available on-chip. These DRAM modules
 can be assigned the role of either L3 or L4, depending on application needs.
+
+Jenga allows system software to configure the cache hierarchy with a combination of hardware address mapping, performance
+monitor counters, and OS modules for deciding the optimal configuration. Jenga allows each thread to have their own
+hierarchy configuration, "virtualizing" the hardware by providing the illusion that different threads can use 
+different address mappings to cache banks, although the cache itself still remains invisible to applications. Jenga
