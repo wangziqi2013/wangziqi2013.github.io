@@ -15,7 +15,7 @@ version_mgmt:
 
 **Lowlight:**
 
-1. How does the OS know that another thread has accessed the page for promotion? What kind of hardware is required to 
+1. How does the OS know that another thread has accessed the page for reclassification? What kind of hardware is required to 
    support this? Same question for detecting global access on process-local and thread-local pages.
 
 2. Why private cache copies are invalidiated on page reclassification? According to my understanding, this will only
@@ -27,6 +27,9 @@ version_mgmt:
 4. The OS/software part is not described clearly. Discussions of Jenga and Jigsaw are mixed together without making 
    distinctions on which feature is on which design. The consequence is that the software modeling part is really
    complicated and difficult to understand.
+   For example, the paper used the term "most favorabke banks", but never gave any matric on how to evaluate banks.
+   Latency might be a simple metric, but latency along will not work, since you also need a target cache size, which is
+   again never discussed.
 
 This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
 rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
@@ -113,3 +116,9 @@ are infrequent events.
 Each node in the mesh is equipped with performance monitoring counters that measure the access latency, access frequency,
 and other statistics on its local SRAM bank. The system software will collect data from these counters to decide whether
 reconfigurations are necessary, and how. 
+Thw software part has three important components, which we discuss below.
+The first component reads the performance counter, and computes the access latency curve for all SRAM and DRAM banks.
+The curve reflects the run-time access latency of each bank under the current configuration.
+Banks are allocated to each core by greedily allocating the most favorable bank to a core in a round-robin manner,
+until all banks have been allocated.
+
