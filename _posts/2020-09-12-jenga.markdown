@@ -52,3 +52,11 @@ hierarchy configuration, "virtualizing" the hardware by providing the illusion t
 different address mappings to cache banks, although the cache itself still remains invisible to applications. Jenga 
 enables reconfiguration at L3 and an optionally L4 level. The L3 level can be built with both SRAM and DRAM banks, while
 the L4 can only be built with DRAM banks.
+
+We first introduce the address mapping hardware. Jenga supports three types of caching policies for each thread: Thread-local,
+process-local, and global. Each type reflects one possible user scenario of the cached data, which may affect the allocation
+policy. For example, cache lines denoted with thread-local type does not need coherence at all, for whom coherence entries
+need not be maintained in the low-level directory. Besides, the paper also suggests that cache lines denoted as thread-local 
+and process-local should be cached in a bank as close to the executing core as possible in order to reduce the access time.
+
+ 
