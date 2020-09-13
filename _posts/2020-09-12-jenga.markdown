@@ -61,5 +61,9 @@ and process-local should be cached in a bank as close to the executing core as p
 The placement of global data is less concerned, as it will be accessed by all threads running on different cores anyway.
 The page table should have a attribute field to store the caching policy type, which will be fetched by the MMU page table walker in the event of TLB misses. The TLB should also be extended with an entry to store the caching policy of pages. The caching policy
 will also be included in the fetch request sent to the L3 cache for address computation.
-
+To support per-thread virtual caching policy, Jenga also extends the processor context with a Virtual Hierarchy Table 
+(VHT), which stores the address mapping for requests going into the L3 cache. The VHT resides on the L2 cache controller,
+which should be swapped in and out on context switches. Each VHT consists of three entries, each being responsible for
+one of the three caching policies. Each entry consists of two Virtual Hierarchy Descriptors (VHD), where one is used for 
+the normal operation, and both are used during a configuration change, as we will see below. 
  
