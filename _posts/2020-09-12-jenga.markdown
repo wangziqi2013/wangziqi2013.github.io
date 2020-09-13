@@ -25,4 +25,6 @@ of the cache increases.
 The paper also made three observations on the performance of application and their preferred cache hierarchy. First, 
 applications require a broad range of configurations in order to achieve optimal performance. These configurations
 vary not only in the size, type of a single level, but also in the number of levels in the hierarchy. 
-
+Second, one single rigid hierarchy is not sufficient to achieve optimal performance for all applications. Some 
+applications perfer a large, monolithic single level hierarchy, while others prefer two-level hierarchy with different 
+LLC sizes. A rigid hierarchy would only benefit a few applications, while hurting performance for the rest.
