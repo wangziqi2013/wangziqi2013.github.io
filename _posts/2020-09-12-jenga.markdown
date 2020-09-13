@@ -18,7 +18,8 @@ version_mgmt:
 1. How does the OS know that another thread has accessed the page for promotion? What kind of hardware is required to 
    support this?
 
-
+2. Why private cache copies are invalidiated on page reclassification? According to my understanding, this will only
+   change the storage location at shared level, but not private level. 
 
 This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
 rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
