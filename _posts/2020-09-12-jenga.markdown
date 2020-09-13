@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Allows dynamic reconfiguration of distributed LLCs by changing the way addresses are mapped to slices. In conventional
+   designs, they are mapped using a static function, while in this paper, they are mapped based on two software-configurable
+   arrays.
+
+2. Adding different address classes and allowing different classes to be handled differently by the cache hierarchy.
+
 **Lowlight:**
 
 1. How does the OS know that another thread has accessed the page for reclassification? What kind of hardware is required to 
