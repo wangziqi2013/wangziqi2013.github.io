@@ -96,5 +96,10 @@ After hardware migration completes, the shadow array becomes the new normal arra
 into shadow array.
 
 Pages can also be reclassified. The paper suggests that all pages start as thread-local. When another thread accesses the
-page, it is promoted to process-local.
+page, it is promoted to process-local. When a process-local or thread-local page is accessed by another process, it is then
+promoted to global. On each page classification, the page table entry should be updated, followed by a TLB shoowdown.
+In addition, the OS evicts all cache line copies of in the shared level for pages whose caching policy has been
+changed, since change of policy may involve moving cache lines on one bank to migrate to another bank. Note that hardware
+does not support page reclassification, compared with cache line migration, since the paper suggests that page reclassifications
+are infrequent events.
  
