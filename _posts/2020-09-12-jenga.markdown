@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. How does the OS know that another thread has accessed the page for promotion? What kind of hardware is required to 
+   support this?
+
+
+
 This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
 rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
 can actually hinder performance, if most of the accesses will miss in the LLC. In this case, the request must perform a 
@@ -84,4 +91,9 @@ copying cache lines from the source SRAM bank to the destination bank. During mi
 to serve read requests. Write requests, however, must block to wait for migration to complete. To avoiding blocking 
 writers for too long, the paper also suggests that when a write operation hits a line that has not been migrated, the
 line will be given priority, and write could be performed after it has been migrated.
+After hardware migration completes, the shadow array becomes the new normal array, and the previous normal array now turns 
+into shadow array.
+
+Pages can also be reclassified. The paper suggests that all pages start as thread-local. When another thread accesses the
+page, it is promoted to process-local.
  
