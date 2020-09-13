@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
+rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
+can actually hinder performance, if most of the accesses will miss in the LLC. In this case, the request must perform a 
+lookup at LLC, which turns out to be a miss, and then access the main memory. The cycles spent on accessing the LLC, in
+the common case of a miss, are wasted, and could be avoided if the request bypasses the LLC. 
