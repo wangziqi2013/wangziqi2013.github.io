@@ -21,3 +21,8 @@ the common case of a miss, are wasted, and could be avoided if the request bypas
 consume energy without providing proportional benefits. Even if the latency of accessing these cache levels can be hidden
 or overlapped using vsrious techniques, the energy consumption cannot be hidden, and is only becoming worse as the size
 of the cache increases. 
+
+The paper also made three observations on the performance of application and their preferred cache hierarchy. First, 
+applications require a broad range of configurations in order to achieve optimal performance. These configurations
+vary not only in the size, type of a single level, but also in the number of levels in the hierarchy. 
+
