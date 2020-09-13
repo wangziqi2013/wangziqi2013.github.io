@@ -121,4 +121,10 @@ The first component reads the performance counter, and computes the access laten
 The curve reflects the run-time access latency of each bank under the current configuration.
 Banks are allocated to each core by greedily allocating the most favorable bank to a core in a round-robin manner,
 until all banks have been allocated.
+The second component then determines the optimal topology of the virtual cache. It evaluates expected latency of a few
+possible candidate configuration using the latency curve computed from the previous step. To reduce complexity of computation,
+the evaluation does not have to cover all possible cases, since small configuration changes from the current condition
+will unlikely bring any change. The paper, therefore, proposes that the evluation points selected are exponentially
+far away from the current configuration. Both one-level and two-level hierarchies are evaluated, and the best of them is 
+selected.
 
