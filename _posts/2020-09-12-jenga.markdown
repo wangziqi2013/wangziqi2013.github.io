@@ -49,4 +49,6 @@ can be assigned the role of either L3 or L4, depending on application needs.
 Jenga allows system software to configure the cache hierarchy with a combination of hardware address mapping, performance
 monitor counters, and OS modules for deciding the optimal configuration. Jenga allows each thread to have their own
 hierarchy configuration, "virtualizing" the hardware by providing the illusion that different threads can use 
-different address mappings to cache banks, although the cache itself still remains invisible to applications. Jenga
+different address mappings to cache banks, although the cache itself still remains invisible to applications. Jenga 
+enables reconfiguration at L3 and an optionally L4 level. The L3 level can be built with both SRAM and DRAM banks, while
+the L4 can only be built with DRAM banks.
