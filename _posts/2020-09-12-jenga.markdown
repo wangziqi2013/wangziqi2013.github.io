@@ -127,4 +127,10 @@ the evaluation does not have to cover all possible cases, since small configurat
 will unlikely bring any change. The paper, therefore, proposes that the evluation points selected are exponentially
 far away from the current configuration. Both one-level and two-level hierarchies are evaluated, and the best of them is 
 selected.
+The last component evaluates bandwidth effect using a queuing model. It attempts to migrate a bank incrementally to
+another, and evaluates bandwidth-induced latency before and after the migration. If latency decreases, the migration is
+actually performed. Bandwidth-induced latency is modeled using the access frequency and M/D/1 queuing model, where SRAM
+is considered to have infinite bandwidth (i.e., latency not affected by bandwidth), and DRAM banks have normal bandwidth
+as half of the peak bandwidth, due to scheduling, refreshing, power saving, etc. This component avoids creating access 
+hotspots at certain DRAM banks with large capacity. 
 
