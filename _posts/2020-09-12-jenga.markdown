@@ -24,6 +24,10 @@ version_mgmt:
 3. How does OS detect the working set size of a thread? And how does OS determine which size is the best fit? Obviously
    you cannot simply use the working set size, as it may overwhelm the cache with useless contents.
 
+4. The OS/software part is not described clearly. Discussions of Jenga and Jigsaw are mixed together without making 
+   distinctions on which feature is on which design. The consequence is that the software modeling part is really
+   complicated and difficult to understand.
+
 This paper proposes Jenga, a software-defined, configurable cache hierarchy. The paper points out that the conventional, 
 rigid cache hierarchy has two disadvantages. First, as the size of the working set is becoming larger, cache hierarchy
 can actually hinder performance, if most of the accesses will miss in the LLC. In this case, the request must perform a 
@@ -105,3 +109,7 @@ In addition, the OS evicts all cache line copies of in the shared level for page
 changed, since change of policy may involve moving cache lines on one bank to migrate to another bank. Note that hardware
 does not support page reclassification, compared with cache line migration, since the paper suggests that page reclassifications
 are infrequent events.
+
+Each node in the mesh is equipped with performance monitoring counters that measure the access latency, access frequency,
+and other statistics on its local SRAM bank. The system software will collect data from these counters to decide whether
+reconfigurations are necessary, and how. 
