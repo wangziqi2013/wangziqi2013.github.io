@@ -37,7 +37,11 @@ We next describe the base line architecture of Jenga. Although Jenga does not de
 particular topology, the paper, for ease of illustration, assumes that the system consists of a mesh of processors. Each
 node of the mesh consists of a processor core and its private L1 and L2 caches. Meshes communicate via an on-chip network.
 Each mesh is also equipped with a NoC router that supports inter-mesh packet routing in any route. 
-Each mesh also contains part of the distributed LLC, which is implemented as a set of SRAM banks. In conventional hierarchies,
-these banks would act as LLC slices, which serve requests for addresses that are mapped to the mesh by static hash functions.
+Each mesh also contains part of the distributed L3, which is implemented as a set of SRAM banks. In conventional hierarchies,
+these banks would act as L3 slices, which serve requests for addresses that are mapped to the mesh by static hash functions.
 Cache coherence between private L1 and L2 cache line copies are handled using separate directory banks alongside the 
 SRAM data bank. These directory banks track the sharing status for addresses that are stored in the data banks. 
+The paper also noted that building the directory into SRAM data banks is not an economical choice, given that most cache 
+lines will not have any sharing status due to the fact the L3 is much larger than L1 and L2. 
+In addition to the L3, the paper also assumes that die-stack DRAM modules are available on-chip. These DRAM modules
+can be assigned the role of either L3 or L4, depending on application needs.
