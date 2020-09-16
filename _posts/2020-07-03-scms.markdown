@@ -1,9 +1,9 @@
 ---
 layout: paper-summary
-title:  ""
+title:  "An on-chip cache compression technique to reduce decompression overhead and design complexity"
 date:   2020-07-03 19:38:00 -0500
 categories: paper
-paper_title: ""
+paper_title: "An on-chip cache compression technique to reduce decompression overhead and design complexity"
 paper_link: https://www.sciencedirect.com/science/article/pii/S1383762100000308
 paper_keyword: Cache; SCMS; Cache Compression
 paper_year: Journel of System Architecture 2000, Issue 46
