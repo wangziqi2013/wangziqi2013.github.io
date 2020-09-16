@@ -35,7 +35,7 @@ version_mgmt:
 4. The OS/software part is not described clearly. Discussions of Jenga and Jigsaw are mixed together without making 
    distinctions on which feature is on which design. The consequence is that the software modeling part is really
    complicated and difficult to understand.
-   For example, the paper used the term "most favorabke banks", but never gave any matric on how to evaluate banks.
+   For example, the paper used the term "most favorable banks", but never gave any matric on how to evaluate banks.
    Latency might be a simple metric, but latency along will not work, since you also need a target cache size, which is
    again never discussed.
 
@@ -59,10 +59,10 @@ The last observation is that applications are pretty sensitive to configuration 
 The paper reports that applications can lose up to 20% of its optimal performance if the cache hierarchy is not ideally 
 configured. 
 
-We next describe the base line architecture of Jenga. Although Jenga does not dependent on the architecture being of a 
+We next describe the base line architecture of Jenga. Although Jenga does not depend on the architecture being of a 
 particular topology, the paper, for ease of illustration, assumes that the system consists of a mesh of processors. Each
 node of the mesh consists of a processor core and its private L1 and L2 caches. Meshes communicate via an on-chip network.
-Each mesh is also equipped with a NoC router that supports inter-mesh packet routing in any route. 
+Mesh are also equipped with NoC routers that support inter-mesh packet routing in any direction. 
 Each mesh also contains part of the distributed L3, which is implemented as a set of SRAM banks. In conventional hierarchies,
 these banks would act as L3 slices, which serve requests for addresses that are mapped to the mesh by static hash functions.
 Cache coherence between private L1 and L2 cache line copies are handled using separate directory banks alongside the 
