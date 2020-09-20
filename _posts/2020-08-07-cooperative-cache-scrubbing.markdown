@@ -4,9 +4,9 @@ title:  "Cooperative Cache Scrubbing"
 date:   2020-08-07 21:13:00 -0500
 categories: paper
 paper_title: "Cooperative Cache Scrubbing"
-paper_link: PACT 2014
+paper_link: https://dl.acm.org/doi/10.1145/2628071.2628083
 paper_keyword: Cache; Cache Scrubbing
-paper_year: 
+paper_year: PACT 2014
 rw_set:
 htm_cd:
 htm_cr:
