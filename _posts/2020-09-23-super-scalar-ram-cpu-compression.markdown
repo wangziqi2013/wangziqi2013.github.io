@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a new database compression framework designed for new hardware platform. The paper identifies the 
+importance of database compression as reducing I/O cost. There are, however, three drawbacks that prevent previous approaches
+from fully taking advantage of the performance potential of hardware.
+First, 
