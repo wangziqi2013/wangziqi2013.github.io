@@ -92,5 +92,10 @@ maximum exception index smaller than or equal to the requested index. Then the o
 linked list, until an element whose index is larger than or equal to the requested index is reached. 
 If the ending point is excatly the requested index, then the exception value is read from the end of the chunk. The 
 access function should also maintain a variable tracking the number of exceptions values that are before the current
-reading point as entry point section and the linked list is being traversed.
+reading point as both entry point section and the linked list are being traversed.
+
+The paper also noted that, with delta-compressed link lists to represent exceptions, there is an artificial upper
+bound between two exceptions, since with b bits the next exception must be within 2^b slots. If not possible, the 
+compressor will insert a non-canonical exception regardless of whether the value is an exception as a "relay".
+
 
