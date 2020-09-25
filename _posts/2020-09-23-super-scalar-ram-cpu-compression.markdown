@@ -17,7 +17,11 @@ version_mgmt:
 
 1. Storing outliers as exceptions to encode common values with far less bits
    
-2. 
+2. Using two iterations, instead of one, to decode to avoid "if" statement and control hazards. In general, if neither does 
+   the "if" statement change for loop's control flow, nor is it dependent on by later iterations, the computation of 
+   the "if" branch can be delayed to a separate loop by remembering the iteration number.
+
+3. Dictionary-based and delta-based compression can be unified under the same framework and encoding scheme
 
 **Lowlights:**
 
