@@ -57,7 +57,9 @@ Overall, the paper assumes that the compression algorithm is applied to database
 ranges on the disk. Compression is performed in the unit of chunks, which consists of several disk pages for maximizing
 disk I/O throughput. Chunks can be compressed and decompressed independently, which is organized as follows. Each chunk
 begins with a chunk header, which stores compression metadata, such as compression type, dictionary, base value, and 
-various pointers to the rest parts. 
+various pointers to the rest parts. The second part is called an "entry point section", which stores an array of pointers
+to exception values. Note that for storage efficiency, not all exception values are tracked in this array. In fact, only
+at most one exception out of 128 compressed words is tracked, enabling fast random access as we will see below. 
 
 
 We next describe each of the above techniques in details. 
