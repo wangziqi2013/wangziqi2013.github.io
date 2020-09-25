@@ -35,7 +35,6 @@ This architecture has a few disadvantages. First, this causes significant write 
 is first read via I/O, and then decompressed in the memory. Second, this also damands higher storage since uncompressed
 pages are larger than compressed pages.
 
-
 The paper addresses the above challenges with the following techniques. First, the algorithm proposed in this paper
 mainly consists of small loops without branching. Compilers may easily recognize the pattern, and expand the loop
 using loop expansion or loop pipelining. The former technique simply expands several iterations of the loop into the 
@@ -53,3 +52,12 @@ deltas, reducing the compressed size.
 Lastly, the paper proposes a compressing format that allows fast random access within a compressed page. The page buffer,
 therefore, can store only compressed pages, which are decompressed only at query time, saving both memory bandwidth and 
 space.
+
+Overall, the paper assumes that the compression algorithm is applied to database columns, which are stored in pages
+ranges on the disk. Compression is performed in the unit of chunks, which consists of several disk pages for maximizing
+disk I/O throughput. Chunks can be compressed and decompressed independently, which is organized as follows. Each chunk
+begins with a chunk header, which stores compression metadata, such as compression type, dictionary, base value, and 
+various pointers to the rest parts. 
+
+
+We next describe each of the above techniques in details. 
