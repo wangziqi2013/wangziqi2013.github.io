@@ -79,5 +79,8 @@ The next step is to "patch" exception values by iterating over the exception lis
 the exception value to the corresponding index in the decoded array. The iteration begins by reading the first index
 position of the exception stored in the header, and then copies the last element of the exception array (recall that it 
 grows downwards) to the index. Each iteration just adds the current index value and the value stored in the current index
-of the encoded array, and decrement the exception array pointer. 
+of the encoded array, and decrement the exception array pointer. This process also incurs no control hazard due to lack
+of branch, but it may introduce data hazards because of the delta-compressed linked list structure. The paper argues, however,
+that since there are only a few exceptions expected, the number of elements in the list is supposed to be small,
+and hence data hazards will not significantly affect performance.
 
