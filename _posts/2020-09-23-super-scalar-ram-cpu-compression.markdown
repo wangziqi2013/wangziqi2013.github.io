@@ -70,5 +70,8 @@ address to low address, and each value in this section corresponds to one except
 In other words, exception values are always stored continuously and in the same order as they appear in the 
 compressed section.
 
-
-We next describe each of the above techniques in details. 
+The decompression algorithm consists of two loops. In the first loop, it simply iterates over every code word in the 
+compressed section, and adds the value stored there with the base value in the header. This process does not distinguish
+between normal code words and exception values, and therefore contains no branch. As a result, exceptions will be mistakenly
+decoded as a meaningless value as exception code words store the index offset from the current position to the next exception
+position.
