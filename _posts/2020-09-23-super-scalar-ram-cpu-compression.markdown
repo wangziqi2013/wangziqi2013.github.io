@@ -90,6 +90,7 @@ code word at the given offset, and then add it with the chunk's base value. To d
 leverages the entry point section at the beginning of the header. The entry point section is searched linearly for the 
 maximum exception index smaller than or equal to the requested index. Then the operation follows the delta-compressed 
 linked list, until an element whose index is larger than or equal to the requested index is reached. 
-If the ending point is excatly the requested index, then the exceotion value is read from the end of the chunk (the 
-access function should also maintain a variable tracking the number of )
+If the ending point is excatly the requested index, then the exception value is read from the end of the chunk. The 
+access function should also maintain a variable tracking the number of exceptions values that are before the current
+reading point as entry point section and the linked list is being traversed.
 
