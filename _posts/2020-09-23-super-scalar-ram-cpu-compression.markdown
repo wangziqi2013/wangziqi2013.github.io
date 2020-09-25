@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Storing outliers as exceptions to encode common values with far less bits
+   
+2. 
+
 **Lowlights:**
 
 1. The analysis of Disk-RAM v.s. RAM-Cache compression cannot convince me. I get the argument that Disk-RAM compression
