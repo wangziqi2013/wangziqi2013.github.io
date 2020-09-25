@@ -58,7 +58,8 @@ ranges on the disk. Compression is performed in the unit of chunks, which consis
 disk I/O throughput. Chunks can be compressed and decompressed independently, which is organized as follows. Each chunk
 begins with a chunk header, which stores compression metadata, such as compression type, dictionary, base value, and 
 various pointers to the rest parts. The second part is called an "entry point section", which stores an array of pointers
-to exception values. Note that for storage efficiency, not all exception values are tracked in this array. In fact, only
+to exception values as well as the number of exceptions that have been encoded at each point. 
+Note that for storage efficiency, not all exception values are tracked in this array. In fact, only
 at most one exception out of 128 compressed words is tracked, enabling fast random access as we will see below. 
 The third section is just an plain array of compressed words, which can be both encoded words, or exception slots.
 Encoded words can be decoded by consulting the dictionary, or adding them onto the base value. Exception slots, however,
@@ -89,4 +90,6 @@ code word at the given offset, and then add it with the chunk's base value. To d
 leverages the entry point section at the beginning of the header. The entry point section is searched linearly for the 
 maximum exception index smaller than or equal to the requested index. Then the operation follows the delta-compressed 
 linked list, until an element whose index is larger than or equal to the requested index is reached. 
+If the ending point is excatly the requested index, then the exceotion value is read from the end of the chunk (the 
+access function should also maintain a variable tracking the number of )
 
