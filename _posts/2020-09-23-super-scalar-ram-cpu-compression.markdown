@@ -40,4 +40,7 @@ The paper addresses the above challenges with the following techniques. First, t
 mainly consists of small loops without branching. Compilers may easily recognize the pattern, and expand the loop
 using loop expansion or loop pipelining. The former technique simply expands several iterations of the loop into the 
 loop body, while the latter further re-arranges operations from different iterations to overlap the execution of 
-multiple iterations to increase the number of parallel operations. 
+multiple iterations to increase the number of parallel operations. For example, if a single iteration consists of a few
+loads, some computation, and then stores, these loads and stores can be "pipelined", i.e., the load operations of the next
+few iterations can be promoted to be executed together with the loads in the current iteration, if the memory
+architecture can sustain the bandwidth parallelism.
