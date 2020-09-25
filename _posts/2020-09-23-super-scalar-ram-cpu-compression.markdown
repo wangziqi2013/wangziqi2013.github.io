@@ -117,4 +117,6 @@ The paper also noted that, with delta-compressed link lists to represent excepti
 bound between two exceptions, since with b bits the next exception must be within 2^b slots. If not possible, the 
 compressor will insert a non-canonical exception regardless of whether the value is an exception as a "relay".
 
-
+The paper then discusses how input values are compressed. As discussed earlier, input values are compressed in the unit
+of chunks. Each chunk has one base value or dictionary. For delta-based compression, the algorithm first sets a goal
+of compressing most values to b bits, supporting a maximum value range of (2^b). 
