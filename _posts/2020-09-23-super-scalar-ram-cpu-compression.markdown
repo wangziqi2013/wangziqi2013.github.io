@@ -50,3 +50,6 @@ Second, the paper proposes a unified format supporting both delta- and dictionar
 Common values or values in the short range are compressed using dictionary or delta. Outliers that occur infrequently
 are encoded in uncompressed form, and stored separately. As a result, fewer bits are required to encode common or small 
 deltas, reducing the compressed size.
+Lastly, the paper proposes a compressing format that allows fast random access within a compressed page. The page buffer,
+therefore, can store only compressed pages, which are decompressed only at query time, saving both memory bandwidth and 
+space.
