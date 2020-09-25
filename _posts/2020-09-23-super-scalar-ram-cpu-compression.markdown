@@ -43,4 +43,7 @@ loop body, while the latter further re-arranges operations from different iterat
 multiple iterations to increase the number of parallel operations. For example, if a single iteration consists of a few
 loads, some computation, and then stores, these loads and stores can be "pipelined", i.e., the load operations of the next
 few iterations can be promoted to be executed together with the loads in the current iteration, if the memory
-architecture can sustain the bandwidth parallelism.
+architecture can sustain the read bandwidth.
+In addition, by transforming "if" statements into other structures, such as predication, or multiple loops, unpredicable 
+control hazards are eliminated.
+Second, 
