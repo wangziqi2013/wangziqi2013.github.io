@@ -119,4 +119,8 @@ compressor will insert a non-canonical exception regardless of whether the value
 
 The paper then discusses how input values are compressed. As discussed earlier, input values are compressed in the unit
 of chunks. Each chunk has one base value or dictionary. For delta-based compression, the algorithm first sets a goal
-of compressing most values to b bits, supporting a maximum value range of (2^b). 
+of compressing most values to b bits, supporting a maximum value range of (2^b). Then it sorts the input array by
+value in O(nlog(n)) time, and selects all longest intervals whose first and last elements differ by at most (2^b).
+All values within the interval will be compressed by subtracting the values from the first element in the interval,
+which is also considered as the base. The rest are stored as exceptions and encoded into the compressed array
+using the delta-compressed linked list approach.
