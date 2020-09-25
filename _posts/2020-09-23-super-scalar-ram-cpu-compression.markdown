@@ -25,3 +25,7 @@ algorithm to take advantage of data and control indepenent parallel instructions
 In addition, on pipelined microarchitecture, when data or control hazards occur, the pipeline has to be stalled until
 the hazard is resolved, hurting performance. This implies that the algorithm should refrain from using branching structures,
 while performing as many parallel loads as possible.
+Second, conventional delta- or dictionary-based compression algorithms may not achieve optimal compression ratio in the
+presense of outliers. Outliers can increase the number bits required to encode a tuple, but contribute to only a 
+small fraction of total data storage. By not compressing outliers and always storing them in uncompressed form, 
+the value range of compressed value can be greatly reduced, resulting in less bits per tuple and higher compression ratio.
