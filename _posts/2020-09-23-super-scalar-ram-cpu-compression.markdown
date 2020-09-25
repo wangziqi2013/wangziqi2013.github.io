@@ -72,6 +72,12 @@ compressed section.
 
 The decompression algorithm consists of two loops. In the first loop, it simply iterates over every code word in the 
 compressed section, and adds the value stored there with the base value in the header. This process does not distinguish
-between normal code words and exception values, and therefore contains no branch. As a result, exceptions will be mistakenly
-decoded as a meaningless value as exception code words store the index offset from the current position to the next exception
-position.
+between normal code words and exception values, and therefore contains no branch. No control and data hazard is incurred
+in this process. As a result, exceptions will be mistakenly decoded as a meaningless value as exception code words store 
+the index offset from the current position to the next exception position. 
+The next step is to "patch" exception values by iterating over the exception list starting at the header, and then copy
+the exception value to the corresponding index in the decoded array. The iteration begins by reading the first index
+position of the exception stored in the header, and then copies the last element of the exception array (recall that it 
+grows downwards) to the index. Each iteration just adds the current index value and the value stored in the current index
+of the encoded array, and decrement the exception array pointer. 
+
