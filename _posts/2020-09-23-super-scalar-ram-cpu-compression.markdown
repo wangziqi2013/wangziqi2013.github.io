@@ -60,6 +60,11 @@ begins with a chunk header, which stores compression metadata, such as compressi
 various pointers to the rest parts. The second part is called an "entry point section", which stores an array of pointers
 to exception values. Note that for storage efficiency, not all exception values are tracked in this array. In fact, only
 at most one exception out of 128 compressed words is tracked, enabling fast random access as we will see below. 
+The third section is just an plain array of compressed words, which can be both encoded words, or exception slots.
+Encoded words can be decoded by consulting the dictionary, or adding them onto the base value. Exception slots, however,
+form a linked list of slot positions, i.e., an exception slot stores the index of the next exception slot in the array.
+Exception values are not stored in-line since they use more bits per value than the encoded wors.
+The pointer to the first and middle exception slots are maintained in the entry pointer section, as stated earlier.
 
 
 We next describe each of the above techniques in details. 
