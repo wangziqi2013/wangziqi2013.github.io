@@ -84,3 +84,9 @@ of branch, but it may introduce data hazards because of the delta-compressed lin
 that since there are only a few exceptions expected, the number of elements in the list is supposed to be small,
 and hence data hazards will not significantly affect performance.
 
+Random accesses on the compressed array does not require decoding the entire array. Instead, the access can just read the
+code word at the given offset, and then add it with the chunk's base value. To deal with exceptions, the operation also
+leverages the entry point section at the beginning of the header. The entry point section is searched linearly for the 
+maximum exception index smaller than or equal to the requested index. Then the operation follows the delta-compressed 
+linked list, until an element whose index is larger than or equal to the requested index is reached. 
+
