@@ -46,4 +46,7 @@ few iterations can be promoted to be executed together with the loads in the cur
 architecture can sustain the read bandwidth.
 In addition, by transforming "if" statements into other structures, such as predication, or multiple loops, unpredicable 
 control hazards are eliminated.
-Second, 
+Second, the paper proposes a unified format supporting both delta- and dictionary- based compression with exceptions. 
+Common values or values in the short range are compressed using dictionary or delta. Outliers that occur infrequently
+are encoded in uncompressed form, and stored separately. As a result, fewer bits are required to encode common or small 
+deltas, reducing the compressed size.
