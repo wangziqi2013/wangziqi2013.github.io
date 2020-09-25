@@ -65,6 +65,10 @@ Encoded words can be decoded by consulting the dictionary, or adding them onto t
 form a linked list of slot positions, i.e., an exception slot stores the index of the next exception slot in the array.
 Exception values are not stored in-line since they use more bits per value than the encoded wors.
 The pointer to the first and middle exception slots are maintained in the entry pointer section, as stated earlier.
+The last section stores exception values, which are uncompressed words. The last section grows backwards from high
+address to low address, and each value in this section corresponds to one exception slot in the previous section.
+In other words, exception values are always stored continuously and in the same order as they appear in the 
+compressed section.
 
 
 We next describe each of the above techniques in details. 
