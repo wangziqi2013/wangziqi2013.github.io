@@ -22,4 +22,6 @@ writing) CPUs often execute instruction in a super-scalar manner, issuing severa
 at once, achieving an IPC higher than one.
 Correspondingly, higher IPC on existing algorithms can be achieved, if the programmer and compiler can transform an 
 algorithm to take advantage of data and control indepenent parallel instructions.
-In addition, 
+In addition, on pipelined microarchitecture, when data or control hazards occur, the pipeline has to be stalled until
+the hazard is resolved, hurting performance. This implies that the algorithm should refrain from using branching structures,
+while performing as many parallel loads as possible.
