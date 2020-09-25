@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlights:**
+
+1. The analysis of Disk-RAM v.s. RAM-Cache compression cannot convince me. I get the argument that Disk-RAM compression
+   is worse because data is written twice and consumes more storage. I do not get why RAM-Cache compression can directly
+   write values into the hardware cache. This is impossible at all on modern architecture, because when you decode you
+   always have to write the values into memory. Maybe the authors want to say that compressed values could only be 
+   materialized when the Volcano-style query operators request tuple from the table, at which time these values are 
+   decompressed and sent to upper level operators.
+
 This paper proposes a new database compression framework designed for new hardware platform. The paper identifies the 
 importance of database compression as reducing I/O cost. There are, however, three drawbacks that prevent previous approaches
 from fully taking advantage of the performance potential of hardware.
