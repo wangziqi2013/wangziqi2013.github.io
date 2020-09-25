@@ -29,3 +29,8 @@ Second, conventional delta- or dictionary-based compression algorithms may not a
 presense of outliers. Outliers can increase the number bits required to encode a tuple, but contribute to only a 
 small fraction of total data storage. By not compressing outliers and always storing them in uncompressed form, 
 the value range of compressed value can be greatly reduced, resulting in less bits per tuple and higher compression ratio.
+Lastly, existing database compression schemes put the compression boundary between disk and memory page buffer, meaning 
+that pages are stored in decompressed form once brought into the memory, enabling fast random access. 
+This architecture has a few disadvantages. First, this causes significant write amplification, as the compressed page
+is first read via I/O, and then decompressed in the memory. Second, this also damands higher storage since uncompressed
+pages are larger than compressed pages.
