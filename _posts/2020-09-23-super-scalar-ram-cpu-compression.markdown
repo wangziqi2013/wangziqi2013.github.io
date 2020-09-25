@@ -34,3 +34,10 @@ that pages are stored in decompressed form once brought into the memory, enablin
 This architecture has a few disadvantages. First, this causes significant write amplification, as the compressed page
 is first read via I/O, and then decompressed in the memory. Second, this also damands higher storage since uncompressed
 pages are larger than compressed pages.
+
+
+The paper addresses the above challenges with the following techniques. First, the algorithm proposed in this paper
+mainly consists of small loops without branching. Compilers may easily recognize the pattern, and expand the loop
+using loop expansion or loop pipelining. The former technique simply expands several iterations of the loop into the 
+loop body, while the latter further re-arranges operations from different iterations to overlap the execution of 
+multiple iterations to increase the number of parallel operations. 
