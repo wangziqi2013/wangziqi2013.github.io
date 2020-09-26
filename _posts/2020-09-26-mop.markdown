@@ -101,3 +101,8 @@ plus the DIS section. To address this challenge, the paper proposes that range q
 iterations, one for each section. In each of the iterations, the range query is only executed for the code words 
 mapped by the corresponding section. Since code words never overlap, i.e., all valid code words are always mapped by 
 exactly one section, the result of each iteration can therefore be concatenated together as the final result.
+
+We next describe range query operations on individual sections. If the section is ordered, then range query is no more 
+than translating the bound of uncompressed values to encoded code words. Due to the ordered property, the translation
+can be done with two binary sorts on the array. The query bound is rewritten with the index of slots that the binary
+search terminates. 
