@@ -115,3 +115,9 @@ In the final case, there is a partial overlapping, or the former is a subset of 
 the table, and for each tuple mapped by the DIS section, indicated by a code word value larger than the first code word
 value of the DIS section, decode the tuple, and performs a range test on the original range. Only those that fall into
 the given range is selected.
+
+Sort operations cannot be executed directly on the code words with the DIS section. To solve this problem, the paper
+proposes that a temporary order preserving dictionary be built on-the-fly. The new dictionary only requires re-assigning
+code word values of inputs in the DIS section. This is done by using floating point numbers, the gap of 
+which can theoritically be infinitely sub-divided. All values in the non-DIS sections are assigned the same value in floating
+point numbers as the current value. 
