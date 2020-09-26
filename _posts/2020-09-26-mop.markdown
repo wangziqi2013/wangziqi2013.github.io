@@ -47,6 +47,10 @@ the dictionary generator starts a new section, and use it as well as all previou
 section. The last section is treated as an "overflow" section, where values are simply inserted in FIFO order, being
 assigned monotonically increasing code words.
 
+The dictionary is logically organized as an array, with values stored in a slot as the input value, and the index of
+the slot as the output code word for compression. Decompression is performed with an inversed dictionary, which is 
+maintained in parallel with the compression dictionary. The paper does not specify the decompression dictionary, though.
+
 The MOP dictionary is generated as follows. In the first stage, all worker threads cooperatively read a prefix of the 
 input stream, and estimates the cardinality of the input based on the sampled results. Cardinality is estimated by
 counting the number of distinct values in the samples. In the second stage, the cardinality estimation is reported 
@@ -61,3 +65,6 @@ the middle slot, assuming that the probablity that future values lying in the tw
 In fact, the paper suggests that worker threads should aggregate a batch of values before sending them to the dictionary
 generator. This way, the generator inserts the values that fall into the same gap evenly over the gap, which distributes
 values better than the single-value approach.
+
+When a gap can no longer be found, the dictionary generator must allocate a new section at the end of the current dictionary.
+
