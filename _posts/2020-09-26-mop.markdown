@@ -91,4 +91,8 @@ appended to the end of the array, forming the last DIS section, which is not ord
 the output code word of values in the DIS section is larger than all code word values in the previous sections. 
 Each section, no matter DIS or not, will also maintain a value range which is the tight bound of all input values stored
 in the section. Note that value ranges of different sections will likely overlap with each other, since code words in 
-different sections are not guaranteed to be order preserving.
+different sections are not guaranteed to be order preserving. 
+
+With MOP, point queries can still be executed by rewriting the point value using the code word translated by the compression
+table. If the value does not exist, the query returns empty. Otherwise, it just uses the code word without decompressing any
+of the tuples.
