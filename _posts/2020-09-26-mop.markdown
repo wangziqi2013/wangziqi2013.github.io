@@ -23,3 +23,9 @@ query execution. An order preserving dictionary delivers the guarantee that the 
 with the total ordering of unencoded values. This property optimizes range queries based on field values, since the query
 does not require decoding the compressed field in order to select the correct tuples. In this case, the query engine rewrites
 the condition using the encoded values whose range covers exactly what is requested by the original condition.
+
+Full order preseving dictionaries are not always practical. There are two real-world restrictions that can hinder its 
+adoption. The first is that order preserving dictionary requires knowing the entire data set, or at least the distribution
+of the field values, before generating the dictionary. This poses a challenge for real-time data analytical systems, as 
+they must digest information when they arrive, without too much buffering capability to gather information about the 
+full data set.
