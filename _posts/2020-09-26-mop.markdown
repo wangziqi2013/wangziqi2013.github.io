@@ -54,4 +54,7 @@ to the generator, and the generator allocates the first section based on the rep
 configurable value, the "pitch", as the number of extra slots that will be reserved in the first section in order to
 handle values not occuring in the samples. The actual size of the first section is the cardinality multiplied by the 
 pitch (which is always greater than one). Then worker threads start process the input stream in real-time, and send the 
-values to the dictionary. 
+values to the dictionary. On receiving the value, the dictionary performs a binary search, and locates the position
+that the value should be inserted. The value should be inserted to the position where the previous value is smaller 
+and the next value is larger. If there are more than one free slots between the two values, the generator picks
+the middle slot, assuming that the probablity that future values lying in the two resulting gaps are equal.
