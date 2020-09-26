@@ -35,3 +35,9 @@ MOP avoids the above two challenges by allowing unordered code word assignments 
 domain, partially violating the ordered property that the order of code words must match those of the input value.
 Such violation, however, only marginally affects query performance, as the query executor may run a several-pass scan
 on the queried table, each only selecting tuples using part of the dictionary, and combine results later.
+
+A MOP dictionary consists of multiple sections. Let the number be N, each the first (N - 1) sections contain order preserving 
+codes, but the ordering between sections are not guaranteed. In other words, in each of the first (N - 1) sections,
+the ordering of code words fully matches the ordering of the actual values they encode. 
+In the last section, called the DIS section, however, there is zero ordering guarantee, and the ordering between code
+words can be arbitrary.
