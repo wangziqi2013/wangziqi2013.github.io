@@ -42,4 +42,7 @@ the ordering of code words fully matches the ordering of the actual values they 
 In the last section, called the DIS section, however, there is zero ordering guarantee, and the ordering between code
 words can be arbitrary. The sectioned design is a result of incremental dictionary generation. Since the direction 
 generator can only see partial inputs at any stage of the execution, it can only make the best effort to assign code
-words to input values in the current working section, leaving gaps for future insertions. 
+words to input values in the current working section, leaving gaps for future insertions. When this becomes impossible,
+the dictionary generator starts a new section, and use it as well as all previous sections as the current working 
+section. The last section is treated as an "overflow" section, where values are simply inserted in FIFO order, being
+assigned monotonically increasing code words.
