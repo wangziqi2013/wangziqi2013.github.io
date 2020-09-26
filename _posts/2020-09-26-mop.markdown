@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Mostly Order Preserving Dictionaries"
+date:   2020-09-26 03:00:00 -0500
+categories: paper
+paper_title: "Mostly Order Preserving Dictionaries"
+paper_link: https://ieeexplore.ieee.org/document/8731521
+paper_keyword: Compression; Database Compression; MOP; Order-Preserving Dictionary
+paper_year: ICDE 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
