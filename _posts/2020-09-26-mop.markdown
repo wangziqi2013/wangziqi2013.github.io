@@ -111,4 +111,7 @@ Queries on the DIS section is more complicated. The executor first compares the 
 with the value range of the DIS section. If these two do not overlap, then the section can be skipped. If the 
 former is a superset of the latter, meaning that all values mapped by the DIS section is included, all tuples
 in the DIS section will be selected.
-
+In the final case, there is a partial overlapping, or the former is a subset of the latter. In this case, the executor scans
+the table, and for each tuple mapped by the DIS section, indicated by a code word value larger than the first code word
+value of the DIS section, decode the tuple, and performs a range test on the original range. Only those that fall into
+the given range is selected.
