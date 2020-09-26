@@ -96,3 +96,8 @@ different sections are not guaranteed to be order preserving.
 With MOP, point queries can still be executed by rewriting the point value using the code word translated by the compression
 table. If the value does not exist, the query returns empty. Otherwise, it just uses the code word without decompressing any
 of the tuples.
+For range queries, however, the bound of the range cannot be directly overwritten, since there are several sections
+plus the DIS section. To address this challenge, the paper proposes that range queries can be executed in a few 
+iterations, one for each section. In each of the iterations, the range query is only executed for the code words 
+mapped by the corresponding section. Since code words never overlap, i.e., all valid code words are always mapped by 
+exactly one section, the result of each iteration can therefore be concatenated together as the final result.
