@@ -40,4 +40,6 @@ A MOP dictionary consists of multiple sections. Let the number be N, each the fi
 codes, but the ordering between sections are not guaranteed. In other words, in each of the first (N - 1) sections,
 the ordering of code words fully matches the ordering of the actual values they encode. 
 In the last section, called the DIS section, however, there is zero ordering guarantee, and the ordering between code
-words can be arbitrary.
+words can be arbitrary. The sectioned design is a result of incremental dictionary generation. Since the direction 
+generator can only see partial inputs at any stage of the execution, it can only make the best effort to assign code
+words to input values in the current working section, leaving gaps for future insertions. 
