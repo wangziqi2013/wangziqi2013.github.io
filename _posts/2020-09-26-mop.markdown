@@ -106,3 +106,9 @@ We next describe range query operations on individual sections. If the section i
 than translating the bound of uncompressed values to encoded code words. Due to the ordered property, the translation
 can be done with two binary sorts on the array. The query bound is rewritten with the index of slots that the binary
 search terminates. 
+
+Queries on the DIS section is more complicated. The executor first compares the range of values in the original query
+with the value range of the DIS section. If these two do not overlap, then the section can be skipped. If the 
+former is a superset of the latter, meaning that all values mapped by the DIS section is included, all tuples
+in the DIS section will be selected.
+
