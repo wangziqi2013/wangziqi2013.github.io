@@ -85,3 +85,7 @@ the actual cardinality till this point. If the former is higher, meaning that we
 section need not be large, since not many distinct values are expected to appear. On the other hand, if the latter is
 bigger, indicating that the estimation severely under-estimates the cardinality, the next section should be larger than
 the previous one to absorb more values before it overflows.
+
+When the number of sections reach an upper bound, the dictionary stops growing, and will simply have all incoming values 
+appended to the end of the array, forming the last DIS section, which is not order preserving. One critical obsevation is that
+the output code word of values in the DIS section is larger than all code word values in the previous sections. 
