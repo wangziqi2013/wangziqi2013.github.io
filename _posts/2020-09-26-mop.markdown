@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using multiple independent order preserving small dictionaries and a on-ordered dictionary to approximate a full,
+   monolithic order preserving dictionary. The novolty lies in the design decision that a range query can be decomposed
+   into several smaller queries on a subset of the table, based on the value partition implied by the dictionaries. 
+   Order preserving dictionaries require very little work, while the last non-ordered dictionary requires decoding
+   values stored in the table.
+
 **Lowlight:**
 
 1. Although easy to infer, the paper should explicitly mention that a decompression dictionary should be maintained 
