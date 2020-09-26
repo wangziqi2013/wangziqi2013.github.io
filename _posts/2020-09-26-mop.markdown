@@ -28,4 +28,5 @@ Full order preseving dictionaries are not always practical. There are two real-w
 adoption. The first is that order preserving dictionary requires knowing the entire data set, or at least the distribution
 of the field values, before generating the dictionary. This poses a challenge for real-time data analytical systems, as 
 they must digest information when they arrive, without too much buffering capability to gather information about the 
-full data set.
+full data set. The second problem is that even if the full data set is available, buidling the dictionary involves 
+scanning and generating an ordered set of possible values, which is resource consuming. 
