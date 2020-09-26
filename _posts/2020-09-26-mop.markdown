@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes mostly order preserving dictionary (MOP), an encoding technique for fast dictionary encoding and 
+mostly decoding-free range query. MOP is motived by order preserving dictionaries, which is one of the order preserving 
+techniques that map large, repeated values to smaller code words, reducing the number of bits required to represent
+the value. The mapping relation is stored as a seperate dictionary for further encoding or decoding. 
+
+
