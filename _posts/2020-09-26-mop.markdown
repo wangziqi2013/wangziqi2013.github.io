@@ -46,3 +46,8 @@ words to input values in the current working section, leaving gaps for future in
 the dictionary generator starts a new section, and use it as well as all previous sections as the current working 
 section. The last section is treated as an "overflow" section, where values are simply inserted in FIFO order, being
 assigned monotonically increasing code words.
+
+The MOP dictionary is generated as follows. In the first stage, all worker threads cooperatively read a prefix of the 
+input stream, and estimates the cardinality of the input based on the sampled results. Cardinality is estimated by
+counting the number of distinct values in the samples. In the second stage, the cardinality estimation is reported 
+to the generator, and the generator allocates the first section based on the reported number. 
