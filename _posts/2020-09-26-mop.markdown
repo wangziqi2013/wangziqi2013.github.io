@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Although easy to infer, the paper should explicitly mention that a decompression dictionary should be maintained 
+   in parallel with the compression dictionary.
+
 This paper proposes mostly order preserving dictionary (MOP), a database compression technique for fast dictionary encoding 
 and mostly decoding-free range query. MOP is motived by order preserving dictionaries, which is one of the order preserving 
 techniques that map large, repeated values to smaller code words, reducing the number of bits required to represent
