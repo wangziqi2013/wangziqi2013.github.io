@@ -58,3 +58,6 @@ values to the dictionary. On receiving the value, the dictionary performs a bina
 that the value should be inserted. The value should be inserted to the position where the previous value is smaller 
 and the next value is larger. If there are more than one free slots between the two values, the generator picks
 the middle slot, assuming that the probablity that future values lying in the two resulting gaps are equal.
+In fact, the paper suggests that worker threads should aggregate a batch of values before sending them to the dictionary
+generator. This way, the generator inserts the values that fall into the same gap evenly over the gap, which distributes
+values better than the single-value approach.
