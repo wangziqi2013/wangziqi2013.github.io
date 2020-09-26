@@ -21,4 +21,5 @@ the value. The mapping relation is stored as a seperate dictionary for further e
 Before MOP, previous work has proposed order preserving dictionary designs to achieve both compression and decoding-free
 query execution. An order preserving dictionary delivers the guarantee that the numeric order of encoded values is consistent
 with the total ordering of unencoded values. This property optimizes range queries based on field values, since the query
-does not require decoding the compressed field in order to select the correct tuples. 
+does not require decoding the compressed field in order to select the correct tuples. In this case, the query engine rewrites
+the condition using the encoded values whose range covers exactly what is requested by the original condition.
