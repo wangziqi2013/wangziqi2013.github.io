@@ -30,3 +30,8 @@ of the field values, before generating the dictionary. This poses a challenge fo
 they must digest information when they arrive, without too much buffering capability to gather information about the 
 full data set. The second problem is that even if the full data set is available, buidling the dictionary involves 
 scanning and generating an ordered set of possible values, which is resource consuming. 
+
+MOP avoids the above two challenges by allowing unordered code word assignments to occur at the end of the code word value
+domain, partially violating the ordered property that the order of code words must match those of the input value.
+Such violation, however, only marginally affects query performance, as the query executor may run a several-pass scan
+on the queried table, each only selecting tuples using part of the dictionary, and combine results later.
