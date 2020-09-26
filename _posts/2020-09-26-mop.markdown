@@ -120,4 +120,8 @@ Sort operations cannot be executed directly on the code words with the DIS secti
 proposes that a temporary order preserving dictionary be built on-the-fly. The new dictionary only requires re-assigning
 code word values of inputs in the DIS section. This is done by using floating point numbers, the gap of 
 which can theoritically be infinitely sub-divided. All values in the non-DIS sections are assigned the same value in floating
-point numbers as the current value. 
+point numbers as the current value. Then DIS values are inserted into the order preserving gaps between these values,
+being assigned fraction values computed by taking the average of its two neighbors. Once this is completed, a mapping
+relation between the canonical dictionary and the temporary dictionary is generated. The sorting is performed on compressed
+code words, with the comparison operator using the floating point dictionary for value comparison. Since the floating point
+dictionary is order preserving, the results will be sorted properly.
