@@ -21,6 +21,11 @@ version_mgmt:
    Order preserving dictionaries require very little work, while the last non-ordered dictionary requires decoding
    values stored in the table.
 
+2. Using floating point dictionary for sorting. This works because dictionaries are expected to be much smaller
+   than the table (otherwise compression does not work). The time complexity of this is then only linear to
+   the size of the dictionary, rather than the size of the table, which is faster than decoding all values
+   and then sort them.
+
 **Lowlight:**
 
 1. Although easy to infer, the paper should explicitly mention that a decompression dictionary should be maintained 
