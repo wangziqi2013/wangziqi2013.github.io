@@ -64,4 +64,7 @@ first cache line of the same node to the cache line it updates. According to the
 does not affect NVM write performance, this essentially optimizes future write operations on the same node without incurring
 any NVM write overhead.
 
-The fifth technique is logless split operations. 
+The fifth technique is logless split operations. LB-Tree optimizes node split with shadowed copies of the sibling pointer
+and a special "sense" bit indicating which sibling pointer is currently in-use.
+Element copy and sibling pointer updates can hence be performed atomically with a single write to the node header as we
+will see later. 
