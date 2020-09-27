@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Generally speaking it is a really good design, with all factors balanced, and not much artifacts that requires special
+   treatment and/or limit its usage. 
+   Some techniques have already been proposed, such as HTM-driven read, in-DRAM inner nodes, unordered node + header 
+   bitmap for update, and fingerprint for fast, SIMD hit prediction.
+
+
 **Lowlight:**
 
 1. Reader threads should turn into writer threads, if HTM aborts for a few times, to guarantee progress. Current TSX
