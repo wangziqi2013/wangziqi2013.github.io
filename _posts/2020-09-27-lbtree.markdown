@@ -48,4 +48,8 @@ The tree itself, however, can always be rebuilt, since B+Tree leaf nodes always 
 of the tree. As long as leaf nodes are in a consistent state, inner nodes can be rebuilt in a reasonable amount of time.
 It does not matter whether inner nodes are sorted or not, since they do not have atomicity requirements.
 
-
+The third technique is read-only optimization using HTM support for thread synchronization. Reader threads do not acquire
+locks, and always proceed optimistically, assuming a consistent node image. Writers, however, acquire per-node lock as 
+it traverses down the B+Tree by setting a lock bit in the node header. Readers will be notified when read-write conflicts
+occur via HTM, as we will see below. This allows fast and synchronization-free reads, compensating for the loss of efficiency
+due to unordered leaf nodes.
