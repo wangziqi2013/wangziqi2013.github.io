@@ -127,3 +127,9 @@ An each node, it first checks the lock bit, and aborts the traversal if it is al
 updating the node. If the lock bit is not set, it proceeds to access the node. If, in the meantime, a writer thread
 attempts to acquire the lock, the reader will be notified by HTM, and automatically abort, since the reader has already
 subscribed to the "lock" bit.
+
+Leaf node splits are performed as follows. First, an empty node is allocated from the persistence heap. The upper half of
+the current node is copied to the empty node. To maximize the chance that future updates are performed on the first
+cache line of the new node, the elements will be copied to the upper half of the new node, rather than lower half
+as in a conventional B+Tree split scheme. Header bitmap and fingerprints are also initialized respectively.
+The next two steps must appear atomic with regard to failures. 
