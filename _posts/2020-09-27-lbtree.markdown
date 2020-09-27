@@ -17,6 +17,8 @@ version_mgmt:
 
 1. Generally speaking it is a really good design, with all factors balanced, and not much artifacts that requires special
    treatment and/or limit its usage. 
+   Another particularly nice thing is that there is no fatal bugs or unexplained details in the protocol. Everything is
+   as clear as crystal, unlike some data structure papers.
    Some techniques have already been proposed, such as HTM-driven read, in-DRAM inner nodes, unordered node + header 
    bitmap for update, and fingerprint for fast, SIMD hit prediction.
 
