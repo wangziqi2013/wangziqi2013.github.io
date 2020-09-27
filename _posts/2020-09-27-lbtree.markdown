@@ -93,3 +93,9 @@ by first evicting all modified cache lines, except the first line of the node, t
 and then updating the bitmap and then evicting the first line which contains the header field to the NVM.
 The second barrier serves as the commit point of the insert operation. If the line was persisted before the crash, then
 the insertion is committed after crash recovery. Otherwise, it will be rolled back silently.
+
+One special optimization can be applied if the element is inserted into the first cache line of the node. In this case,
+the element and header update can be flushed back atomically in a single persistence barrier. To increase the chance that
+this happens on an insert, other insert operations will proactively move elements in the first cache line to vacant slots
+of the line to be updated by the operation. Since the line to be updated is already brought into the cache, this does not
+incur extra NVM writes, but just a few more CPU cycles. 
