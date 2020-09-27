@@ -144,4 +144,7 @@ LB+Tree also supports larger nodes, the size of which must be a multiple of 256 
 the intuitive design where the header describes all elements in the node, since this will reduce the number of elements 
 in the first cache line. Instead, headers of large nodes are partitioned into smaller headers, each responsible for a
 256-byte chunk. Each 256-byte chunk will then have two instances of headers, one at the beginning, another at the end,
-just as if it were a separate node without sibling pointers. 
+just as if it were a separate node without sibling pointers. These headers, however, cannot be updated atomically
+with the master header, which sits at the first cache line of the node, and must be used for lock acquisition and 
+"sense" bit. The solution is to shadow write all slave headers in the node between the two instances, and use the 
+"sense" bit to atomically switch between shadow copies, which is performed atomically with master header update.
