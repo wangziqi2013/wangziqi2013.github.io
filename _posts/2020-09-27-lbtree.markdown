@@ -83,3 +83,8 @@ The next 14 16-byte key-value pairs are the body of the leaf node.
 The last 16-byte pair stores the two sibling pointers. The active pointer in-use is determined in the "sense" bit stored
 in the header.
 
+Leaf node updates on an existing key is trivial, since the update can always be carried out by atomically writing 
+the 8-byte value. Insert operations consist of several steps, but only the last step "commits" the updates in terms 
+of crash recovery. The first step is to read the header's bitmap, and find a vacant slot. Assuming the node is not empty,
+the next step is to fill in the slot with the key and value to be inserted. The fingerpring value is also updated.
+
