@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Reader threads should turn into writer threads, if HTM aborts for a few times, to guarantee progress. Current TSX
+   does not even guarantee the eventual commit of the transaction, so a software fall back is always required.
+   This is only a minor bug though, since this paper is mainly about NVM, not synchronization.
+
 This paper presents LB-Tree, or Line Write/Logless B+Tree, a NVM optimized B+Tree design for efficient updates.
 Although not explicitly stated, the paper identifies a few inefficiencies in conventional in-memory B+Tree designs
 when ported to the NVM, such as ordered nodes, the overhead of structural modifications, and maintaining consistent
@@ -100,7 +106,7 @@ this happens on an insert, other insert operations will proactively move element
 of the line to be updated by the operation. Since the line to be updated is already brought into the cache, this does not
 incur extra NVM writes, but just a few more CPU cycles. 
 
-Threads synchronize on the lock bit in the node's header. The paper assumes optimistic 2PL locking protocol where writer 
+Threads synchronize on the lock bit in the node's header. The paper assumes optimistic 2PL protocol where writer 
 thread acquires locks on its path down the tree, while readers optimistically assume that the node will remain consistent
 during the read. To keep the assumption valid, reader threads will start a new HTM transaction before it starts tree traversal.
 An each node, it first checks the lock bit, and aborts the traversal if it is already set, since a writer is currently 
