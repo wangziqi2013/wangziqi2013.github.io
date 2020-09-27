@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "LB+-Trees: Optimizing Persistent Index Performance on 3DXPoint Memory"
+date:   2020-09-27 03:50:00 -0500
+categories: paper
+paper_title: "LB+-Trees: Optimizing Persistent Index Performance on 3DXPoint Memory"
+paper_link: https://dl.acm.org/doi/10.14778/3384345.3384355
+paper_keyword: NVM; B+Tree; LB-Tree
+paper_year: VLDB 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
