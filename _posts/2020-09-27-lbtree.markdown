@@ -75,4 +75,7 @@ of NVM for maximum throughput. In the following discussion we assume 256 byte no
 The node consists of a header, an array of key-value pairts as elements, and two sibling pointers at the end. The header 
 is 16 bytes, which consists of a 14-bit bitmap for each of the 14 elements in the node (assuming 8-byte keys and values), 
 one "lock" bit for writer synchronization, one "sense" bit for shadowing the two sibling pointers (see below), and a 
-14-byte fingerprint array. 
+14-byte fingerprint array. The fingerprint array has one byte hash value for each valid element in the node. Read operations
+will first hash the key into a byte value, and then test whether it matches any of the 14 values in the fingerprint array
+using SIMD comparison. A match indicates a possible hit, which should be confirmed with a full key comparison, and a miss 
+indicates a definite miss.
