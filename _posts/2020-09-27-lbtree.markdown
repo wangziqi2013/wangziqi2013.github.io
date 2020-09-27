@@ -99,3 +99,8 @@ the element and header update can be flushed back atomically in a single persist
 this happens on an insert, other insert operations will proactively move elements in the first cache line to vacant slots
 of the line to be updated by the operation. Since the line to be updated is already brought into the cache, this does not
 incur extra NVM writes, but just a few more CPU cycles. 
+
+Threads synchronize on the lock bit in the node's header. The paper assumes optimistic 2PL locking protocol where writer 
+thread acquires locks on its path down the tree, while readers optimistically assume that the node will remain consistent
+during the read. To keep the assumption valid, reader threads will start a new HTM transaction before it starts tree traversal.
+
