@@ -18,4 +18,7 @@ Although not explicitly stated, the paper identifies a few inefficiencies in con
 when ported to the NVM, such as ordered nodes, the overhead of structural modifications, and maintaining consistent
 node states.
 
-
+The paper makes three critical observations that enable extra optimizations on NVM. First, it is observed that the 
+performance of NVM writes of a cache line does not depend on the number of dirty bits in the cache line. Theoretically
+speaking, NVM may adopt optimizations to minimize the number of flipping bits in each internal writes, to reduce the 
+number of physical state changes. 
