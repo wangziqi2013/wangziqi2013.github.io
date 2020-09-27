@@ -35,3 +35,8 @@ new device drops until the working set size grows exceed one eighth of the devic
 does not affect the design directly, it indicates that testing should use at least one eighth of device storage in order
 to be cover all cases.
 
+Overall, LB-Tree leverages the following techniques to make writes efficient. First, elements in leaf nodes are not sorted,
+since maintaining the ordering property of leaf nodes will involve shifting existing elements in the node, causing massive,
+multi-line updates. Instead, elements can be stored anywhere in the leaf node, even leaving gaps between two valid 
+elements. A bitmap in the node header tracks which slots are occupied and which are empty. 
+
