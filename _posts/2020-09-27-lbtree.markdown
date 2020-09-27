@@ -53,3 +53,11 @@ locks, and always proceed optimistically, assuming a consistent node image. Writ
 it traverses down the B+Tree by setting a lock bit in the node header. Readers will be notified when read-write conflicts
 occur via HTM, as we will see below. This allows fast and synchronization-free reads, compensating for the loss of efficiency
 due to unordered leaf nodes.
+
+The fourth technique is element moving for less persistent barriers. This technique leverages the observation that if 
+the element to be updated is in the same cache line as the header, which will always be updated on insert operations,
+the write operation that fills in the element does not need to be flushed and persisted before the header does, since
+it is guaranteed that a 64-byte line will be persisted atomically. In this case, the write operation simply fills in the 
+element slot, updates the bitmap, and then executes a persistence barrier, reducing the number of barriers to one,
+instead of two.
+
