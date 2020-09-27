@@ -68,3 +68,8 @@ The fifth technique is logless split operations. LB-Tree optimizes node split wi
 and a special "sense" bit indicating which sibling pointer is currently in-use.
 Element copy and sibling pointer updates can hence be performed atomically with a single write to the node header as we
 will see later. 
+
+We next describe leaf node layouts. Inner nodes can use arbitraty layout as long as it contains a lock bit for writers 
+to acquire. Leaf nodes are always aligned, whose size is a multiple of 256 bytes, which matches the internal buffer size 
+of NVM for maximum throughput. In the following discussion we assume 256 byte nodes. 
+
