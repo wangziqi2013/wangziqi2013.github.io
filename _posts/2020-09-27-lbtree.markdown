@@ -59,5 +59,9 @@ the element to be updated is in the same cache line as the header, which will al
 the write operation that fills in the element does not need to be flushed and persisted before the header does, since
 it is guaranteed that a 64-byte line will be persisted atomically. In this case, the write operation simply fills in the 
 element slot, updates the bitmap, and then executes a persistence barrier, reducing the number of barriers to one,
-instead of two.
+instead of two. In addition, write operations to the remaining part of the node may also proactively move elements in the
+first cache line of the same node to the cache line it updates. According to the observation that the number of dirty bits
+does not affect NVM write performance, this essentially optimizes future write operations on the same node without incurring
+any NVM write overhead.
 
+The fifth technique is logless split operations. 
