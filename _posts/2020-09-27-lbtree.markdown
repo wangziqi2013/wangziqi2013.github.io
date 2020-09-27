@@ -42,4 +42,9 @@ elements. A bitmap in the node header tracks which slots are occupied and which 
 can just select an empty slot using the bitmap, and fill key and value into the slot.
 Search operations on leaf nodes, as a result, must scan the node linearly, skipping invalid slots using the bitmap.
 
+The second technique is that inner nodes are maintained in the DRAM, and rebuilt at recovery time. This avoids complicated
+race conditions and corner cases when updating inner nodes on leaf splits, since inner nodes will be wiped out on crashes.
+The tree itself, however, can always be rebuilt, since B+Tree leaf nodes always maintain full knowledge of the state
+of the tree. As long as leaf nodes are in a consistent state, inner nodes can be rebuilt in a reasonable amount of time.
+
 
