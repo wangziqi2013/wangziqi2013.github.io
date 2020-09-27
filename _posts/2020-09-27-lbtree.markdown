@@ -87,4 +87,9 @@ Leaf node updates on an existing key is trivial, since the update can always be 
 the 8-byte value. Insert operations consist of several steps, but only the last step "commits" the updates in terms 
 of crash recovery. The first step is to read the header's bitmap, and find a vacant slot. Assuming the node is not empty,
 the next step is to fill in the slot with the key and value to be inserted. The fingerpring value is also updated.
-
+Till this point, none of these changes are logically visible, even if some dirty lines may have already been evicted back 
+to the NVM, since the content of the node is described by the header bitmap. In the last step, the insert is committed 
+by first evicting all modified cache lines, except the first line of the node, to the NVM using persist barriers,
+and then updating the bitmap and then evicting the first line which contains the header field to the NVM.
+The second barrier serves as the commit point of the insert operation. If the line was persisted before the crash, then
+the insertion is committed after crash recovery. Otherwise, it will be rolled back silently.
