@@ -132,4 +132,10 @@ Leaf node splits are performed as follows. First, an empty node is allocated fro
 the current node is copied to the empty node. To maximize the chance that future updates are performed on the first
 cache line of the new node, the elements will be copied to the upper half of the new node, rather than lower half
 as in a conventional B+Tree split scheme. Header bitmap and fingerprints are also initialized respectively.
-The next two steps must appear atomic with regard to failures. 
+The next two steps must appear atomic with regard to failures. The first is to update the old node's header bitmap
+to remove elements that have been copied to the new node. The second is to set the sibling pointer to the new node.
+Otherwise, if they are not atomic, the after-crash state may not contain both steps, and elements will either be 
+duplicated or be lost if one of the two steps is not persisted.
+To solve this, LB+Tree shadow-updates the sibling pointer using one of the two sibling pointers, and then switches
+the pointer by flipping the "sense" bit. Since the "sense" bit and the 14-bit bitmaps are on the same 8-byte word, these
+two can be updated atomically.
