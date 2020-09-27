@@ -21,4 +21,6 @@ node states.
 The paper makes three critical observations that enable extra optimizations on NVM. First, it is observed that the 
 performance of NVM writes of a cache line does not depend on the number of dirty bits in the cache line. Theoretically
 speaking, NVM may adopt optimizations to minimize the number of flipping bits in each internal writes, to reduce the 
-number of physical state changes. 
+number of physical state changes. This optimization is not present in the current commercial product, most likely because
+the NVM device encrypts data stored in the physical array, in which case a single bit change in the input line will
+propagate to the remaining bits, offsetting the benefits of the optimization.
