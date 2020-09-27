@@ -20,6 +20,10 @@ version_mgmt:
    Some techniques have already been proposed, such as HTM-driven read, in-DRAM inner nodes, unordered node + header 
    bitmap for update, and fingerprint for fast, SIMD hit prediction.
 
+2. The actual contribution of the paper is the two optimizations:
+   (1) Update threads proactivaly move elements from the first cache line to other lines to increase the opportunity
+   of atomic metadata + data flush; (2) Using shadowing + sense bit on node metadata fields to allow atomic update of 
+   several distinct metadata fields.
 
 **Lowlight:**
 
