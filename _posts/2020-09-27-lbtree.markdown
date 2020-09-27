@@ -79,3 +79,7 @@ one "lock" bit for writer synchronization, one "sense" bit for shadowing the two
 will first hash the key into a byte value, and then test whether it matches any of the 14 values in the fingerprint array
 using SIMD comparison. A match indicates a possible hit, which should be confirmed with a full key comparison, and a miss 
 indicates a definite miss.
+The next 14 16-byte key-value pairs are the body of the leaf node.
+The last 16-byte pair stores the two sibling pointers. The active pointer in-use is determined in the "sense" bit stored
+in the header.
+
