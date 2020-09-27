@@ -103,4 +103,7 @@ incur extra NVM writes, but just a few more CPU cycles.
 Threads synchronize on the lock bit in the node's header. The paper assumes optimistic 2PL locking protocol where writer 
 thread acquires locks on its path down the tree, while readers optimistically assume that the node will remain consistent
 during the read. To keep the assumption valid, reader threads will start a new HTM transaction before it starts tree traversal.
-
+An each node, it first checks the lock bit, and aborts the traversal if it is already set, since a writer is currently 
+updating the node. If the lock bit is not set, it proceeds to access the node. If, in the meantime, a writer thread
+attempts to acquire the lock, the reader will be notified by HTM, and automatically abort, since the reader has already
+subscribed to the "lock" bit.
