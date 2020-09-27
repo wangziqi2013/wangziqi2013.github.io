@@ -30,3 +30,8 @@ The second observation is that NVM internal units of reads and writes are 256 by
 are performed internally with 256-byte persistent buffers despite the 64-byte memory interface. 
 As a result, reads to aligned 256-byte data can achieve higher bandwidth, since the internal buffer can sustain higher
 bandwidth than accessing the physical array. Similarly, writes to aligned 256-byte data are also faster.
+The last observation is that the performance of NVM device also depends on storage utilization. The performance of a
+new device drops until the working set size grows exceed one eighth of the device capacity. Although this property
+does not affect the design directly, it indicates that testing should use at least one eighth of device storage in order
+to be cover all cases.
+
