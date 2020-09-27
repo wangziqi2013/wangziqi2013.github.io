@@ -72,4 +72,7 @@ will see later.
 We next describe leaf node layouts. Inner nodes can use arbitraty layout as long as it contains a lock bit for writers 
 to acquire. Leaf nodes are always aligned, whose size is a multiple of 256 bytes, which matches the internal buffer size 
 of NVM for maximum throughput. In the following discussion we assume 256 byte nodes. 
-
+The node consists of a header, an array of key-value pairts as elements, and two sibling pointers at the end. The header 
+is 16 bytes, which consists of a 14-bit bitmap for each of the 14 elements in the node (assuming 8-byte keys and values), 
+one "lock" bit for writer synchronization, one "sense" bit for shadowing the two sibling pointers (see below), and a 
+14-byte fingerprint array. 
