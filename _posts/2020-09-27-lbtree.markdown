@@ -139,3 +139,9 @@ duplicated or be lost if one of the two steps is not persisted.
 To solve this, LB+Tree shadow-updates the sibling pointer using one of the two sibling pointers, and then switches
 the pointer by flipping the "sense" bit. Since the "sense" bit and the 14-bit bitmaps are on the same 8-byte word, these
 two can be updated atomically.
+
+LB+Tree also supports larger nodes, the size of which must be a multiple of 256 bytes. The paper, however, discourages
+the intuitive design where the header describes all elements in the node, since this will reduce the number of elements 
+in the first cache line. Instead, headers of large nodes are partitioned into smaller headers, each responsible for a
+256-byte chunk. Each 256-byte chunk will then have two instances of headers, one at the beginning, another at the end,
+just as if it were a separate node without sibling pointers. 
