@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents LB-Tree, or Line Write/Logless B+Tree, a NVM optimized B+Tree design for efficient updates.
+Although not explicitly stated, the paper identifies a few inefficiencies in conventional in-memory B+Tree designs
+when ported to the NVM, such as ordered nodes, the overhead of structural modifications, and maintaining consistent
+node states.
+
+
