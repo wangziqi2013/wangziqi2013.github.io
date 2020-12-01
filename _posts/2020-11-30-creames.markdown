@@ -29,4 +29,9 @@ on embedded platforms, due to limited processing power and battery size.
 Third, the memory management module for compressed pages should utilize compressed memory region efficiently to reduce
 fragmentation, since compressed pages are variable sized. These pages should be stored as compactly as possible, while
 minimizing relocations when the compressed size changes.
-Fourth, 
+Fourth, the compressed memory region should be dynamically adjusted to fit dynamic program behavior, as different
+applications demonstrate different memory footprints.
+Lastly, the memory overhead for supporting compression should be minimized, since memory is a scarse resource on 
+embedded platform. 
+
+
