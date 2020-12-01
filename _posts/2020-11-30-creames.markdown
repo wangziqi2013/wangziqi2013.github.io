@@ -36,5 +36,7 @@ embedded platform.
 
 The paper assumes an embedded platform with virtual memory, but no disk for swapping out pages when physical memory
 is over-committed. The main memory size is tens of MBs, in which some of them is dedicated to storing program code 
-and the firmware image, which are copied to the main memory at startup time. 
-
+and the firmware image, which are copied from the embedded to embedded flash chips to the main memory at startup time. 
+Although this paper only discusses data compression, meaning that only working data in the main memory is considered
+for compression, code compression can also be applied to the flash image, which is orthogonal to CREAMES, and can
+be applied individually.
