@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. I do not quite get how the direct mapped table works. Usually, the MMU allows the OS to store the disk 
+   address (or compressed partition address, in our case) in the PTE, which does not require a separate 
+   mapping, since the physical address can be directly retrieved.
+   The paper suggests that a direct-mapped, small table be used, so I guess it is addressed using 
+   the physical frame number of the page where it was originally stored? This is incorrect, since multiple
+   page instances can be mapped to the same physical page frame.
+   On the other hand, if the mapping table is indexed with virtual addresses, the table would not be small,
+   since virtual address space (plus process ID) is typically much larger than the physical address space, 
+   unless it is not the case for XScale (Intel's ARM processor)?
+
 This paper proposes CREAMES, a main memory compression solution for embedded systems where memory is a scarce
 resource, while no disk is present as swap space. 
 This paper points out that conventional solutions for main memory compression will not work on embedded platform,
