@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Treats part of the main memory as a disk for storing compressed pages. This does not change virtual memory system
+   framework, but increases the effective size of memory.
+
+2. 
+
 **Lowlight:**
 
 1. I do not quite get how the direct mapped table works. Usually, the MMU allows the OS to store the disk 
