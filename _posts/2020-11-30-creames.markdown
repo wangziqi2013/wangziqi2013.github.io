@@ -25,6 +25,11 @@ version_mgmt:
    since virtual address space (plus process ID) is typically much larger than the physical address space, 
    unless it is not the case for XScale (Intel's ARM processor)?
 
+2. I also do not quite get the case where a physical page shared by two or more processes gets swapped out
+   to the compressed region, and then swapped in by one of them. In that case, shouldn't all references to that physical frames (i.e., PTEs) be reinstated? Why keeping track of the reference count?
+   One possibility is that this can be done lazily, in which case, it is true that the compressed page 
+   must reside in the compressed region until all PTEs are reinstated. This is a huge waste of resource, though.
+
 This paper proposes CREAMES, a main memory compression solution for embedded systems where memory is a scarce
 resource, while no disk is present as swap space. 
 This paper points out that conventional solutions for main memory compression will not work on embedded platform,
