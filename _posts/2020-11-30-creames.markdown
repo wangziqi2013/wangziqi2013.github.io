@@ -48,4 +48,9 @@ CREAMES works as follows. The main memory is divided into two partitions, one fo
 into application's address space, and can be accessed directly by program code. The other partition is dedicated to
 storing compressed pages, which are not accessed directly, and must be retrieved by the decompression routine on a 
 page fault.
+Compression and decompression are driven by page faults. The OS will over-commit the main memory by allowing more 
+physical pages than the size of the first partiution to be allocated to applications, and mark some of them as "not 
+present", which will trigger page faults when they are accessed. For example, the OS can choose to maintain all 
+available physical pages in the first partition as a linked list. 
+
 
