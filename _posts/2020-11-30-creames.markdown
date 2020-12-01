@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "On-Line Memory Compression for Embedded Systems"
+date:   2020-11-30 21:27:00 -0500
+categories: paper
+paper_title: "On-Line Memory Compression for Embedded Systems"
+paper_link: https://dl.acm.org/doi/10.1145/1698772.1698785
+paper_keyword: Compression; DRAM Compression; CREAMES; Embedded compression
+paper_year: ACM Transactions 2010
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
