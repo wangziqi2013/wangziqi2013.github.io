@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes CREAMES, a main memory compression solution for embedded systems where memory is a scarse
+resource, while no disk is present as swap space. 
+This paper points out that conventional solutions for main memory compression will not work on embedded platform,
+since these prior solutions usually assume disks as the backing store of the virtual memory system.
+The paper also lists five challenges for a main memory compression solution on embedded platforms. 
