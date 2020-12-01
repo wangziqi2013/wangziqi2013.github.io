@@ -18,7 +18,8 @@ version_mgmt:
 1. Treats part of the main memory as a disk for storing compressed pages. This does not change virtual memory system
    framework, but increases the effective size of memory.
 
-2. 
+2. Using the same design for both virtual memory compression and file system compression. Reads and writes are 
+   intercepted by the OS module to transparently compress and decompress file data.
 
 **Lowlight:**
 
