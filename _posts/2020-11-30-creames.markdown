@@ -49,12 +49,16 @@ into application's address space, and can be accessed directly by program code. 
 storing compressed pages, which are not accessed directly, and must be retrieved by the decompression routine on a 
 page fault.
 Compression and decompression are driven by page faults. The OS will over-commit the main memory by allowing more 
-physical pages than the size of the first partiution to be allocated to applications, and mark some of them as "not 
+physical pages than the size of the first partition to be allocated to applications, and mark some of them as "not 
 present", which will trigger page faults when they are accessed. For example, the OS can choose to maintain all 
-available physical pages in the first partition as a linked list. When the application requests memory, the OS will 
+available physical pages in the first partition as a linked list. When the application requests a new page, the OS will 
 select one from the list, and populate the page table using the physical address of the selected page. If, however,
 the linked list is currently empty, the OS must swap out an existing physical page (which is maintained by another
 list structure, possibly with LRU or other access information maintained) to the compressed region, and then 
 populate the page table entry for the requested address using the physical address of the swapped out page frame.
-
+The swapped out page is then compressed, in the background, by an OS thread, and then stored in the compressed 
+page partition. The page table entry of the virtual address whose physical page was just swapped out is also marked 
+as "not present", such that when the page is accessed later, the page fault handler will search the compressed area, 
+decompress the compressed page, and load it back to the main memory. During this process, another page might be 
+selected by the OS for swapping, and compressed before stored into the compressed page partition.
 
