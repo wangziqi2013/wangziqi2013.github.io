@@ -92,3 +92,8 @@ of the storage management policy, it is suggested that the compression engine wi
 the compressed partition has exhausted all pages, and combines and frees pages when compressed pages are freed. 
 A minimum size greater than zero must always be reserved, however, to avoid applications depleting all available 
 pages and causing compression to fail without even using it.
+
+File systems can also be compressed similarly. On embedded platforms, the file system storage is usually emulated 
+using main memory, with part of the main memory allocated as a ram disk. In this configuration, CREAMES can intercept
+read and write system calls to the file system, and serve the request from a third partition dedicated to the ram disk.
+The internal mapping and request handling is similar to compressed pages.
