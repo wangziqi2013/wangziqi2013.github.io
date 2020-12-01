@@ -26,4 +26,7 @@ insignificant, limiting the effectiveness of compression.
 Second, the compression algorithm must achieve a balance between compression ratio, compression latency, and energy 
 compsution. Although this is the general requirement for nearly all compression solutions, it is particularly important
 on embedded platforms, due to limited processing power and battery size.
-
+Third, the memory management module for compressed pages should utilize compressed memory region efficiently to reduce
+fragmentation, since compressed pages are variable sized. These pages should be stored as compactly as possible, while
+minimizing relocations when the compressed size changes.
+Fourth, 
