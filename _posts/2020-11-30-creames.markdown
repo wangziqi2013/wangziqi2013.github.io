@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes CREAMES, a main memory compression solution for embedded systems where memory is a scarse
+This paper proposes CREAMES, a main memory compression solution for embedded systems where memory is a scarce
 resource, while no disk is present as swap space. 
 This paper points out that conventional solutions for main memory compression will not work on embedded platform,
 since these prior solutions usually assume disks as the backing store of the virtual memory system.
@@ -31,7 +31,10 @@ fragmentation, since compressed pages are variable sized. These pages should be 
 minimizing relocations when the compressed size changes.
 Fourth, the compressed memory region should be dynamically adjusted to fit dynamic program behavior, as different
 applications demonstrate different memory footprints.
-Lastly, the memory overhead for supporting compression should be minimized, since memory is a scarse resource on 
+Lastly, the memory overhead for supporting compression should be minimized, since memory is a scarce resource on 
 embedded platform. 
 
+The paper assumes an embedded platform with virtual memory, but no disk for swapping out pages when physical memory
+is over-committed. The main memory size is tens of MBs, in which some of them is dedicated to storing program code 
+and the firmware image, which are copied to the main memory at startup time. 
 
