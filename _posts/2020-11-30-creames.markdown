@@ -62,3 +62,10 @@ as "not present", such that when the page is accessed later, the page fault hand
 decompress the compressed page, and load it back to the main memory. During this process, another page might be 
 selected by the OS for swapping, and compressed before stored into the compressed page partition.
 
+The compressed page partition is maintained differently than working data, since compressed pages are of different 
+sizes, and cannot be mapped to physical frames using one-to-one correspondence. To maximize the efficiency of the 
+compressed page partition, the paper suggests that a dedicated allocator be used to manage storage for the variably
+sized compressed pages. Compressed pages are searched using a 256KB, direct-mapped partition header. The header
+maps the identifier of the swapped out page (virtual address + process ID) to the physical address of the compressed
+page, which allows the page to be retrieved when a page fault is raised on the virtual address where the page used to
+be mapped.
