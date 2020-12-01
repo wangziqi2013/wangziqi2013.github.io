@@ -21,4 +21,7 @@ The paper also lists five challenges for a main memory compression solution on e
 First, compressed and uncompressed memory region must be carefully maintained, such that the application will not
 be terminted due to lack of usable memory. There is a trade-off: On one hand, if too much storage is dedicated
 to storing compressed pages, application's memory allocation requests might fail, while the compression region still
-has free space. On the other hand
+has free space. On the other hand, if the compression region is too small, the overall compression ratio would be 
+insignificant, limiting the effectiveness of compression.
+
+
