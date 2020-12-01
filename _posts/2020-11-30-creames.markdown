@@ -23,5 +23,7 @@ be terminted due to lack of usable memory. There is a trade-off: On one hand, if
 to storing compressed pages, application's memory allocation requests might fail, while the compression region still
 has free space. On the other hand, if the compression region is too small, the overall compression ratio would be 
 insignificant, limiting the effectiveness of compression.
-
+Second, the compression algorithm must achieve a balance between compression ratio, compression latency, and energy 
+compsution. Although this is the general requirement for nearly all compression solutions, it is particularly important
+on embedded platforms, due to limited processing power and battery size.
 
