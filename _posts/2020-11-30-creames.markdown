@@ -86,3 +86,9 @@ sized compressed pages. Compressed pages are searched using a 256KB, direct-mapp
 maps the identifier of the swapped out page (virtual address + process ID) to the physical address of the compressed
 page, which allows the page to be retrieved when a page fault is raised on the virtual address where the page used to
 be mapped.
+
+The size of the compressed area is also maintained dynamically. Although the paper does not give a full description
+of the storage management policy, it is suggested that the compression engine will request for more memory when 
+the compressed partition has exhausted all pages, and combines and frees pages when compressed pages are freed. 
+A minimum size greater than zero must always be reserved, however, to avoid applications depleting all available 
+pages and causing compression to fail without even using it.
