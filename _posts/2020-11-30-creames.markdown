@@ -43,3 +43,9 @@ be applied individually.
 The Operating System of the embedded platform handles page faults when a non-existing page is accessed by applications.
 In normal use cases, this will raises an insufficient memory error, resulting in the termination of the application.
 In a compressed platform, the page fault will be handled by the memory compression routine, as we discuss later.
+
+CREAMES works as follows. The main memory is divided into two partitions, one for storing working data, which are mapped
+into application's address space, and can be accessed directly by program code. The other partition is dedicated to
+storing compressed pages, which are not accessed directly, and must be retrieved by the decompression routine on a 
+page fault.
+
