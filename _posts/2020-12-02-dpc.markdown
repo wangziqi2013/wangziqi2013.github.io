@@ -37,4 +37,8 @@ pipeline, further reducing the length of the critical path.
 For data that is rarely accessed, they are further compressed using a second-stage algorithm, which results in
 both higher compression ratio, hence better bandwidth saving, and higher access delay. The increased access delay, 
 however, is not a concern either, since NVM accesses also takes more cycles.
-
+Third, DPC combines compression with both local and global wear-leveling techniques to reduce repeated writes 
+on the same NVM cells, achiving bandwidth saving and longer NVM lifetime at the same time.
+Lastly, DPC does not introduce extra levels of indirection, notably mapping tables, on the access critical path.
+Compression is performed not to reduce NVM storage, but to increase NVM endurance.
+This way, it is sufficient to delegate address remapping to the OS using the existing virtual memory system.
