@@ -47,3 +47,6 @@ DPC assumes a system architecture as follows. The system is assumed to be equipp
 device, and a L4 DRAM cache for fast access and less NVM write traffic. The DRAM cache might be implemented with
 on-chip DRAM modules for even better performance. The paper, however, also noted that the design works equally well
 for systems without a DRAM buffer with only minor changes.
+Frequently accessed cache lines are brought into the DRAM cache.
+Any DRAM cache design would work with DPC, but the paper assumes a simple design where DRAM rows are used as sets,
+and all tags are stored in the same row as data.
