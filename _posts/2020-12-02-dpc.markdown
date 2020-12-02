@@ -21,3 +21,5 @@ which brings compatibility and hardware cost challenges.
 Second, memory compression increases access latency, sometimes even significantly, to the main memory, which can become
 problematic when the compression algorithm is a general-purpose one. 
 Third, most previous proposals only optimize for either bandwidth or endurance of NVM device, but not both. 
+Lastly, these proposals may also introduce undisirable components, such as mapping tables for address translation,
+which can also potentially degrade performance, and complicate the design.
