@@ -28,3 +28,9 @@ DPC addresses the above issues with the following design features.
 First, DPC is purely a modularized design, with the only component addition being the DRAM controller and NVM 
 controller, which is transparent to the processor and cache hierarchy.
 In addition, it relies on general-purpose NVM architecture, without any specialized hardware.
+Second, DPC adopts the so-called "Dual-Phase Compression", which uses two different compression algorithms for 
+data of different characteristics. For frequently accessed data, DPC assumes they will be buffered by an L4 DRAM
+cache, and only uses a fast, lightweight compression algorithm, such that decompression latency is negligible
+compared with access latency.
+In addition, the algorithm itself is designed such that critical words can be delivered first to the processor
+pipeline, further reducing the length of the critical path.
