@@ -18,3 +18,6 @@ with lower access latency and better NVM lifetime.
 The paper points out that previous proposals using memory compression face a few issues. 
 First, these proposals usually radically modify existing cache hierarchy and memory hierarchy with specialized hardware,
 which brings compatibility and hardware cost challenges. 
+Second, memory compression increases access latency, sometimes even significantly, to the main memory, which can become
+problematic when the compression algorithm is a general-purpose one. 
+Third, most previous proposals only optimize for either bandwidth or endurance of NVM device, but not both. 
