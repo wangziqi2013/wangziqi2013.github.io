@@ -34,3 +34,7 @@ cache, and only uses a fast, lightweight compression algorithm, such that decomp
 compared with access latency.
 In addition, the algorithm itself is designed such that critical words can be delivered first to the processor
 pipeline, further reducing the length of the critical path.
+For data that is rarely accessed, they are further compressed using a second-stage algorithm, which results in
+both higher compression ratio, hence better bandwidth saving, and higher access delay. The increased access delay, 
+however, is not a concern either, since NVM accesses also takes more cycles.
+
