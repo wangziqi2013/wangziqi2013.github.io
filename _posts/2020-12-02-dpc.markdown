@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Dual-Phase Compression (DPC), a novel NVM-based memory architecture featuring memory compression
+with lower access latency and better NVM lifetime.
+The paper points out that previous proposals using memory compression face a few issues. 
+First, these proposals usually radically modify existing cache hierarchy and memory hierarchy with specialized hardware,
+which brings compatibility and hardware cost challenges. 
