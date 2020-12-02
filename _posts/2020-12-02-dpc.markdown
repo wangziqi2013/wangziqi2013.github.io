@@ -42,3 +42,8 @@ on the same NVM cells, achiving bandwidth saving and longer NVM lifetime at the 
 Lastly, DPC does not introduce extra levels of indirection, notably mapping tables, on the access critical path.
 Compression is performed not to reduce NVM storage, but to increase NVM endurance.
 This way, it is sufficient to delegate address remapping to the OS using the existing virtual memory system.
+
+DPC assumes a system architecture as follows. The system is assumed to be equipped with both NVM as the main memory
+device, and a L4 DRAM cache for fast access and less NVM write traffic. The DRAM cache might be implemented with
+on-chip DRAM modules for even better performance. The paper, however, also noted that the design works equally well
+for systems without a DRAM buffer with only minor changes.
