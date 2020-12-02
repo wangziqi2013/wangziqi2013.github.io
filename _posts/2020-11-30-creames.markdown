@@ -12,7 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
-
+ 
 **Highlight:**
 
 1. Treats part of the main memory as a disk for storing compressed pages. This does not change virtual memory system
