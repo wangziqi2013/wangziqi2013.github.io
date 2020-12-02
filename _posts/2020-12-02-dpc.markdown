@@ -23,3 +23,8 @@ problematic when the compression algorithm is a general-purpose one.
 Third, most previous proposals only optimize for either bandwidth or endurance of NVM device, but not both. 
 Lastly, these proposals may also introduce undisirable components, such as mapping tables for address translation,
 which can also potentially degrade performance, and complicate the design.
+
+DPC addresses the above issues with the following design features. 
+First, DPC is purely a modularized design, with the only component addition being the DRAM controller and NVM 
+controller, which is transparent to the processor and cache hierarchy.
+In addition, it relies on general-purpose NVM architecture, without any specialized hardware.
