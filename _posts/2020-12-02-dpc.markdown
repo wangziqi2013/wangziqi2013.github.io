@@ -124,4 +124,7 @@ reading it out from the slot and before sending it to the decompressor.
 Global compression is performed on page level. The goal of global wear-leveling is to bound the difference in write
 count between pages that are most frequently written, and pages that are least frequently written. DPC monitors page 
 write history by taking the sum of the LC for all lines within the page (which is also a better metric than using 
-a single counter per-page, as observed by the paper). 
+a single counter per-page, as observed by the paper). The OS is responsible for reading these values on a page write,
+and determine whether a page migration is needed. If the current page being written is deemed to have too many writes,
+the OS will first copy the content of the page to another less-written page, and then update the page table mapping.
+This way, no extra mapping structure is needed, since the OS itself performs address mapping explicitly.
