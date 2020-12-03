@@ -111,4 +111,11 @@ At the end, the paper proposes two wear-leveling techniques. The local wear-leve
 which aims at evenly wearing all bits within a cache line. The global wear-leveling is more irrelevent to compression,
 and is aimed at distributing writes evenly across 4B pages.
 
+The local wear-leveling works as follows. Each cache line in the NVM is associated with a Line Counter (LC), which 
+tracks the number of writes an entire line has been written. Compressed lines are still mapped to device addresses 
+as if they were uncompressed, but instead of always storing the line at bit zero, the paper proposes that the line be
+shifted around the line on each write. To elaborate: The internal FTL of the NVM should maintain an offset and size 
+field to track the offset and size of the compressed line. Lines are always stored on segment boundaries (four byte 
+boundary) within a line. Whenever a write is performed on a line slot, the compressed line is stored right next to
+the last segment of the previous line, hence evenly distributing wtites over all segments in the line slot.
 
