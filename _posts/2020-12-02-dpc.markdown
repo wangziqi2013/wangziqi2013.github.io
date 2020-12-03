@@ -85,3 +85,10 @@ Compressed lines are always stored compactly in the DRAM cache, which implies th
 write or eviction operation, the DRAM controller should also compact the row and rearrange valid lines, before the 
 row is closed.
 
+The paper also proposes eviction algorithms for the DRAM buffer. Due to the fact that cache lines of variably sized,
+the classical LRU may not work the best for a compressed cache. The paper, for example, discusses two extremes.
+In the first extreme, larger lines (uncompressed lines) is preferred over smaller lines. This favors effective
+size of the cache, since more lines can potentially fit into the empty slot after eviction, at the cost of extra 
+write traffic on the NVM, since evicted lines will be written back to the NVM.
+In the second extreme, smaller lines are favored more over larger lines. In this case, write traffic to the NVM can
+be reduced, but effective cache size might be impaired, since more than one smaller lines might be evicted.
