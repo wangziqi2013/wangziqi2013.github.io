@@ -100,3 +100,15 @@ Then in the second stage, cache lines are selected based on whether the line is 
 perferred over dirty lines, since they require no NVM write. 
 LRU information is still maintained as tie-breaker.
 
+The paper then proposes the second-stage compression algorithm, which is applied to lines that have already been
+compressed in the L4 DRAM cache. The second-stage compression algorithm is very similar to FPC, which recognizes
+common bit patterns in the 32-bit words from the first-stage compression, and encode then using three-bit
+type field followed by data that is necessary for decompression. 
+The second-stage compression algorithm takes more cycles to compress and decompress, but the latency is insignificant
+compared with NVM access latency.
+
+At the end, the paper proposes two wear-leveling techniques. The local wear-leveling technique is based on compression,
+which aims at evenly wearing all bits within a cache line. The global wear-leveling is more irrelevent to compression,
+and is aimed at distributing writes evenly across 4B pages.
+
+
