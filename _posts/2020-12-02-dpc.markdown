@@ -21,7 +21,8 @@ version_mgmt:
    more cycles. The argument is that NVM access latency is also larger, so larger decompression latency has
    minor effect on performance.
 
-
+2. The low-latency compression algorithm only compresses adjacent identical words, which allows delivery of 
+   the critical word, which is a nice feature to have since it further reduces read latency.
 
 **Lowlight:**
 
