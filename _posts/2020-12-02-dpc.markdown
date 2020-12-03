@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. What I cannot get is that, if smaller lines are favored for eviction, then multiple lines will be potentially
+   evicted for an insertion, which affects effective capacity, as claimed by the paper. This, however, also does 
+   no good to the NVM, since more data will be written back also. Why the paper claims that this is good for NVM?
+
 This paper proposes Dual-Phase Compression (DPC), a novel NVM-based memory architecture featuring memory compression
 with lower access latency and better NVM lifetime.
 The paper points out that previous proposals using memory compression face a few issues. 
@@ -78,5 +84,4 @@ segment pointer and a size field for locating compressed data.
 Compressed lines are always stored compactly in the DRAM cache, which implies that if fragmentation occurs after a
 write or eviction operation, the DRAM controller should also compact the row and rearrange valid lines, before the 
 row is closed.
-
 
