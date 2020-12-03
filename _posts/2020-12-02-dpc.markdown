@@ -70,4 +70,8 @@ The L4 DRAM cache benefits from compression by storing more lines compactly in e
 larger effective size. The uncompressed DRAM cache design includes four logical lines per DRAM row, with four tags and
 the corresponding status bits. On each access, the DRAM controller reads the entire row in one access into the row 
 buffer, after which the tags are checked.
-
+In the compressed design, however, since more logical lines are potentially stored, and the size of each line is 
+not static, the paper proposes that: (1) The number of tags is extended to 16, enabling a maximum compression ratio
+of 4; (2) Compressed lines stored in the data region is no longer statically bound to tags. Instead, the data region
+is divided into 16-bit segments. A compressed line can start from any segment boundary, and each tag also contains a 
+segment pointer and a size field for locating compressed data.
