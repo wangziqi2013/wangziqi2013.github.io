@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a compressed NVM architecture for better wear-leveling using frequent value compression.
+The paper identifies one of the most important issue with NVM is that its lifetime is not infinite, which actually
+has limited write-erase cycles. Without proper management, frequently written cells will wear out fast (in a matter
+of days), rendering the entire device unusable.
