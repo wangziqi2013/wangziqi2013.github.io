@@ -50,3 +50,13 @@ for systems without a DRAM buffer with only minor changes.
 Frequently accessed cache lines are brought into the DRAM cache.
 Any DRAM cache design would work with DPC, but the paper assumes a simple design where DRAM rows are used as sets,
 and all tags are stored in the same row as data.
+The DRAM cache can store up to 4 uncompressed lines per row.
+
+We next describe the first-stage compression algorithm as follows. First-stage compression is performed when a cache
+line is evicted from the LLC to the L4 DRAM cache. This algorithm, as discussed above, should have low decompression
+latency, and support critical word delivery. The algorithm uses simple word-level matching between adjacent 32-bit 
+words. During compression, a word on offset i is compared with word on offset (i - 1). If their values match, a mask
+bit "0" is output, and the word on offset i is removed from the output stream. Otherwise, a "1" bit appears in the bit
+mask, and word on offset i is copied to the output stream.
+
+
