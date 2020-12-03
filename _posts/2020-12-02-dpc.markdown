@@ -58,5 +58,11 @@ latency, and support critical word delivery. The algorithm uses simple word-leve
 words. During compression, a word on offset i is compared with word on offset (i - 1). If their values match, a mask
 bit "0" is output, and the word on offset i is removed from the output stream. Otherwise, a "1" bit appears in the bit
 mask, and word on offset i is copied to the output stream.
-
+The output of the algorithm consists of a 16-bit mask (where the first bit is always "1" since that word does not need
+comparison and is always stored), and 1 to 15 words. 
+If the cache line after compression is larger than or equal to the original line, the uncompressed line is used.
+Decompression is just the reverse of compression. In order to decompress the word on offset i, the decompressor 
+simply computes the prefix sum of the first i bits in the mask, and use that as the offset to access compressed
+words. This way, the critical word accessed by the load operation can be decompressed first, and bypass the cache
+hierarchy to the LSU. The rest is performed in the background, which will then be inserted into the LLC.
 
