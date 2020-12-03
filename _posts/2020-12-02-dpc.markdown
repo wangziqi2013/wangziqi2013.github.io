@@ -24,6 +24,15 @@ version_mgmt:
 2. The low-latency compression algorithm only compresses adjacent identical words, which allows delivery of 
    the critical word, which is a nice feature to have since it further reduces read latency.
 
+3. The eviction policy uses multi-stage decision process, using cache line size, dirtiness, and LRU position
+   respectively.
+
+4. The local wear-leveling scheme shifts data (less than 64 bytes) within a line to evenly distribute writes over
+   all cells. 
+
+5. The global wear-leveling scheme is based on page migration, and is built into the OS's virtual memory system,
+   which saves an extra hardware mapping structure.
+
 **Lowlight:**
 
 1. What I cannot get is that, if smaller lines are favored for eviction, then multiple lines will be potentially
