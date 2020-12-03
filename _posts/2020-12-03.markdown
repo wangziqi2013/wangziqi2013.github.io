@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Frequent-Value Based PRAM Memory Architecture"
+date:   2020-12-03 17:08:00 -0500
+categories: paper
+paper_title: "A Frequent-Value Based PRAM Memory Architecture"
+paper_link: https://ieeexplore.ieee.org/document/5722186/
+paper_keyword: Compression; NVM; Frequent Value Compression
+paper_year: ASP-DAC 2011
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
