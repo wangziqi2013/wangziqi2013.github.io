@@ -75,3 +75,8 @@ not static, the paper proposes that: (1) The number of tags is extended to 16, e
 of 4; (2) Compressed lines stored in the data region is no longer statically bound to tags. Instead, the data region
 is divided into 16-bit segments. A compressed line can start from any segment boundary, and each tag also contains a 
 segment pointer and a size field for locating compressed data.
+Compressed lines are always stored compactly in the DRAM cache, which implies that if fragmentation occurs after a
+write or eviction operation, the DRAM controller should also compact the row and rearrange valid lines, before the 
+row is closed.
+
+
