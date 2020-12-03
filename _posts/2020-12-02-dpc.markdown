@@ -96,5 +96,7 @@ be reduced, but effective cache size might be impaired, since more than one smal
 As a balance, the paper proposes two-stage eviction. In the first stage, cache lines are selected based on sizes.
 Depending on the characteristics of the workload, this stage may favor uncompressed lines (optmize for NVM write 
 traffic), or cache capacity (optimize for read-dominant workloads).
-
+Then in the second stage, cache lines are selected based on whether the line is dirty. Non-dirty lines are always 
+perferred over dirty lines, since they require no NVM write. 
+LRU information is still maintained as tie-breaker.
 
