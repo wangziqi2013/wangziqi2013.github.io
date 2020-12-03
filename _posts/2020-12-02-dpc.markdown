@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Use different compression algorithms for data of different access frequencies and latency. For frequently accessed
+   data stored in low latency devices, low latency algorithm is used for faster delivery.
+   For less frequently accessed data, more complicated algorithm is used for better compression ratio, at the cost of 
+   more cycles. The argument is that NVM access latency is also larger, so larger decompression latency has
+   minor effect on performance.
+
+
+
 **Lowlight:**
 
 1. What I cannot get is that, if smaller lines are favored for eviction, then multiple lines will be potentially
