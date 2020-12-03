@@ -66,3 +66,8 @@ simply computes the prefix sum of the first i bits in the mask, and use that as 
 words. This way, the critical word accessed by the load operation can be decompressed first, and bypass the cache
 hierarchy to the LSU. The rest is performed in the background, which will then be inserted into the LLC.
 
+The L4 DRAM cache benefits from compression by storing more lines compactly in each set, which results in potentially
+larger effective size. The uncompressed DRAM cache design includes four logical lines per DRAM row, with four tags and
+the corresponding status bits. On each access, the DRAM controller reads the entire row in one access into the row 
+buffer, after which the tags are checked.
+
