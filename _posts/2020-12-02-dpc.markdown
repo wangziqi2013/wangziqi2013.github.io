@@ -121,4 +121,7 @@ the last segment of the previous line, hence evenly distributing wtites over all
 Out-of-bound writes are wrapped around to the first bit of the slot. The NVM controller should shift the line after
 reading it out from the slot and before sending it to the decompressor.
 
-
+Global compression is performed on page level. The goal of global wear-leveling is to bound the difference in write
+count between pages that are most frequently written, and pages that are least frequently written. DPC monitors page 
+write history by taking the sum of the LC for all lines within the page (which is also a better metric than using 
+a single counter per-page, as observed by the paper). 
