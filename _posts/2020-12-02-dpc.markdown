@@ -92,3 +92,9 @@ size of the cache, since more lines can potentially fit into the empty slot afte
 write traffic on the NVM, since evicted lines will be written back to the NVM.
 In the second extreme, smaller lines are favored more over larger lines. In this case, write traffic to the NVM can
 be reduced, but effective cache size might be impaired, since more than one smaller lines might be evicted.
+
+As a balance, the paper proposes two-stage eviction. In the first stage, cache lines are selected based on sizes.
+Depending on the characteristics of the workload, this stage may favor uncompressed lines (optmize for NVM write 
+traffic), or cache capacity (optimize for read-dominant workloads).
+
+
