@@ -17,3 +17,5 @@ This paper proposes a compressed NVM architecture for better wear-leveling using
 The paper identifies one of the most important issue with NVM is that its lifetime is not infinite, which actually
 has limited write-erase cycles. Without proper management, frequently written cells will wear out fast (in a matter
 of days), rendering the entire device unusable.
+Another minor issue is that NVM write energy is much larger than DRAM. Reducing the number of bits written into
+the device, therefore, becomes critical for energy consumption.
