@@ -38,4 +38,5 @@ Each row also has one extra bit indicating whether it has been written into sinc
 This bit is used to identify whether decompression is needed while it is accessed. The bit is cleared when a row
 is populated with data just read from the backing store, and is set when a write back request with dirty
 data is received from the LLC.
-
+If the bit is clear, then a special data path will be activated to bypass the decompression circuit, which enables
+faster reads of uncompressed data, and saves energy by clock-gating the uncompression circuit in this case.
