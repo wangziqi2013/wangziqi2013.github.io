@@ -33,7 +33,8 @@ architecture. Each NVM row now has a different layout. Instead of being a non-st
 stores uncompressed words one next to another, the paper proposes that each row be divided into compressed words.
 Each compressed word consists of a data region, and a bit indicating whether it stores a compressed word or not.
 The data region takes the same number of bits as an uncompressed word.
-If the bit is "1", then the data region stores an uncompressed word, and otherwise, it stores a compressed word.
+If the bit is "1", then the data region stores an uncompressed word, and otherwise, it stores a compressed word 
+(the exact bit offset where the word starts is non-trivial, as we will see later).
 Each row also has one extra bit indicating whether it has been written into since brought into the NVM.
 This bit is used to identify whether decompression is needed while it is accessed. The bit is cleared when a row
 is populated with data just read from the backing store, and is set when a write back request with dirty
