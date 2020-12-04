@@ -85,4 +85,10 @@ when it reaches the end. This way, all writes are distributed evenly over bit ce
 for device lifetime. To this end, each slot also has two extra slots that track the starting bit offset. Size of the
 compressed word need not be tracked, since it is statically determined as one of the compression parameters.
 
+The paper also discusses the selection of compression parameters and the trade-offs. If the word size is too large,
+then frequent values are more difficult to classify, since there are more possible patterns with longer words.
+If, however, the word size is too small, the overhead would be larger, since this design adds one extra bit per word.
+In addition, the compression and decompression circuit would also be more complicated, since more words per 
+row are processed.
+
 
