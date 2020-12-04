@@ -23,6 +23,10 @@ the device, therefore, becomes critical for energy consumption.
 The paper assumes the following architecture. NVM is deployed as a fast, byte-addressable cache between the cache
 hierarchy and a backing store, such as hard disk. Cache lines can be brought into and written back from the NVM
 device as they are accessed and evicted respectively. 
+Compression is performed on a word-to-word basis, with the word size before and after compression being configurable 
+parameters. The word size after compression also limites the size of NVM's internal code word mapping table, 
+the size of which must not be larger than 2^K where K is the number of bits in compressed words. 
+The mapping table is necessary for both compression and decompression, as we will see below.
 
 This paper adopts frequent-value compression, which is commonly used in cache compression proposals, in NVM
 architecture. Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
