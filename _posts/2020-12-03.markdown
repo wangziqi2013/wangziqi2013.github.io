@@ -78,4 +78,8 @@ content of the data region is directly written to the output.
 Similarly, if a word to be compressed is not found in the CAM, i.e., it is not a frequent value, then the word will
 be written directly to the array, with the per-word bit set to zero.
 
-To further improve the lifetime of the device, the paper also proposes that, for a 
+To further improve the lifetime of the device, the paper also proposes that, for a compressed word, its storage location
+is not static in the data region of the slot. When a slot is being written, the starting bit of the compressed word
+will be the ending bit of the previous word. The compressed word will also wrap around to the beginning of the slot
+when it reaches the end. This way, all writes are distributed evenly over bit cells in the slot, which is beneficial
+for device lifetime.
