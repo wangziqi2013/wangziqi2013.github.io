@@ -58,3 +58,7 @@ stores uncompressed words identified as frequent values in different locations.
 During compression, the CAM is used with the uncompressed word being the data to be searched, and the index returned 
 is used as the compressed code word. During decompression, the SRAM is used with the compressed code word as index.
 The content of the slot is retrieved and written to the input as the uncompressed word. 
+If a word is uncompressed, i.e., the per-word bit is set to zero, then the decompression circuit is bypassed, and the
+content of the data region is directly written to the output.
+Similarly, if a word to be compressed is not found in the CAM, i.e., it is not a frequent value, then the word will
+be written directly to the array, with the per-word bit set to zero.
