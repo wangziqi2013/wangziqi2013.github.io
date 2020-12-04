@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using frequent value compression for NVM device to reduce the number of bits a code word occupies, saving write 
+   energy.
+
+2. If a word is smaller than the size of the slot in which it is stored, the best way of wear leveling is to shift the
+   word within the slot, such that writes will be distributed evenly regardless of the size of the compressed word.
+
 **Lowlight:**
 
 1. This paper assumes that NVM is used as a cache for disk. I think a more proper expresion would be that the 
@@ -66,4 +74,4 @@ content of the data region is directly written to the output.
 Similarly, if a word to be compressed is not found in the CAM, i.e., it is not a frequent value, then the word will
 be written directly to the array, with the per-word bit set to zero.
 
-To further improve the lifetime of the device, the 
+To further improve the lifetime of the device, the paper also proposes that, for a 
