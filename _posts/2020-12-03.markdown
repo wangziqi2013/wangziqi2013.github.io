@@ -24,4 +24,5 @@ This paper adopts frequent-value compression, which is commonly used in cache co
 architecture. Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
 stores uncompressed words one next to another, the paper proposes that each row be divided into compressed words.
 Each compressed word consists of a data region, and a bit indicating whether it stores a compressed word or not.
-
+The data region takes the same number of bits as an uncompressed word.
+If the bit is "1", then the data region stores an uncompressed word, and otherwise, it stores a compressed word.
