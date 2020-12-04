@@ -82,4 +82,7 @@ To further improve the lifetime of the device, the paper also proposes that, for
 is not static in the data region of the slot. When a slot is being written, the starting bit of the compressed word
 will be the ending bit of the previous word. The compressed word will also wrap around to the beginning of the slot
 when it reaches the end. This way, all writes are distributed evenly over bit cells in the slot, which is beneficial
-for device lifetime.
+for device lifetime. To this end, each slot also has two extra slots that track the starting bit offset. Size of the
+compressed word need not be tracked, since it is statically determined as one of the compression parameters.
+
+
