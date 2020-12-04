@@ -51,3 +51,7 @@ faster reads of uncompressed data, and saves energy by clock-gating the uncompre
 Data is compressed when being inserted into the row. This happens when dirty data is written back from the LLC, and when
 read from the disk. Data is decompressed when they are fetched by the LLC, and when they are written back to the disk, 
 if dirty.
+Compression works by replacing commonly occuring values with a translated code word, which uses less number of bits.
+Decompression works by performing the reverse of compression, i.e., replacing compressed code words with their original
+values. These two tasks utilize a hardware mapping table, which is implemented as a multi-ported SRAM and CAM, which 
+stores uncompressed words identified as frequent values in different locations.
