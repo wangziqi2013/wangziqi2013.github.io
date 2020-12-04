@@ -100,4 +100,13 @@ inputs, it is a good fit if the machine only executes with a small set of progra
 Dynamic table can also be generated at early stages of the execution, and then used during the restof it. 
 Once the dynamic table completes training, it cannot be updated further, since otherwise code words in the NVM device 
 should also be updated, which incurs extra writes, contradicting with the goal of reducing wearing and power 
-consumption. 
+consumption. In addition, it is also observed that frequently values rarely change during the execution.
+The dynamic table is generated as follows. Initially, the SRAM array is initialized with invalid entries, except
+that only one of them is zero. Each entry is associated with a counter that tracks the number of times the 
+value in this entry occurs since last time it was inserted or promoted.
+During the execution, for each value accessed by the processor, the value is inserted into the table, if it has 
+not been there, or the associated counter is incremented by one. When the counter value overflows, the 
+entry is swapped with the entry above it, if it is not yet the first entry, and the counter is reset.
+If an entry is to be inserted, and the table is full, the bottommost entry is evicted, and a new value is inserted.
+The training process completes after a pre-defined period of time, and the table becomes read-only, which is then
+used by the NVM controller for compression and decompression.
