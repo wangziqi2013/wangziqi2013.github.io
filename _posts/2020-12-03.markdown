@@ -55,3 +55,6 @@ Compression works by replacing commonly occuring values with a translated code w
 Decompression works by performing the reverse of compression, i.e., replacing compressed code words with their original
 values. These two tasks utilize a hardware mapping table, which is implemented as a multi-ported SRAM and CAM, which 
 stores uncompressed words identified as frequent values in different locations.
+During compression, the CAM is used with the uncompressed word being the data to be searched, and the index returned 
+is used as the compressed code word. During decompression, the SRAM is used with the compressed code word as index.
+The content of the slot is retrieved and written to the input as the uncompressed word. 
