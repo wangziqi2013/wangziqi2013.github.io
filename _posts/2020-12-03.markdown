@@ -102,8 +102,9 @@ Once the dynamic table completes training, it cannot be updated further, since o
 should also be updated, which incurs extra writes, contradicting with the goal of reducing wearing and power 
 consumption. In addition, it is also observed that frequently values rarely change during the execution.
 The dynamic table is generated as follows. Initially, the SRAM array is initialized with invalid entries, except
-that only one of them is zero. Each entry is associated with a counter that tracks the number of times the 
-value in this entry occurs since last time it was inserted or promoted.
+that only one of them is zero (the CAM part is disabled for training). 
+Each entry is associated with a counter that tracks the number of times the value in this entry occurs since last 
+time it was inserted or promoted.
 During the execution, for each value accessed by the processor, the value is inserted into the table, if it has 
 not been there, or the associated counter is incremented by one. When the counter value overflows, the 
 entry is swapped with the entry above it, if it is not yet the first entry, and the counter is reset.
