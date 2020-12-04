@@ -19,3 +19,9 @@ has limited write-erase cycles. Without proper management, frequently written ce
 of days), rendering the entire device unusable.
 Another minor issue is that NVM write energy is much larger than DRAM. Reducing the number of bits written into
 the device, therefore, becomes critical for energy consumption.
+
+This paper adopts frequent-value compression, which is commonly used in cache compression proposals, in NVM
+architecture. Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
+stores uncompressed words one next to another, the paper proposes that each row be divided into compressed words.
+Each compressed word consists of a data region, and a bit indicating whether it stores a compressed word or not.
+
