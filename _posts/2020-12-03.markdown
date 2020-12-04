@@ -21,6 +21,10 @@ version_mgmt:
 2. If a word is smaller than the size of the slot in which it is stored, the best way of wear leveling is to shift the
    word within the slot, such that writes will be distributed evenly regardless of the size of the compressed word.
 
+3. Use dynamic training with a ranking algorithm: Each entry in the frequent value table under training process has a 
+   counter, which is incremented by one when the value occurs. When the counter overflows, the entry is moved upward
+   by one. When new entry is to be inserted, the bottommost entry is evicted.
+
 **Lowlight:**
 
 1. This paper assumes that NVM is used as a cache for disk. I think a more proper expresion would be that the 
