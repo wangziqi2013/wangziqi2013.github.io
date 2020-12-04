@@ -34,7 +34,8 @@ the size of which must not be larger than 2^K where K is the number of bits in c
 The mapping table is necessary for both compression and decompression, as we will see below.
 
 This paper adopts frequent-value compression, which is commonly used in cache compression proposals, in NVM
-architecture. Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
+architecture to preserve energy and protwct device, rather than saving storage. 
+Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
 stores uncompressed words one next to another, the paper proposes that each row be divided into compressed words.
 Each compressed word consists of a data region, and a bit indicating whether it stores a compressed word or not.
 The data region takes the same number of bits as an uncompressed word.
@@ -46,3 +47,7 @@ is populated with data just read from the backing store, and is set when a write
 data is received from the LLC.
 If the bit is clear, then a special data path will be activated to bypass the decompression circuit, which enables
 faster reads of uncompressed data, and saves energy by clock-gating the uncompression circuit in this case.
+
+Data is compressed when being inserted into the row. This happens when dirty data is written back from the LLC, and when
+read from the disk. Data is decompressed when they are fetched by the LLC, and when they are written back to the disk, 
+if dirty.
