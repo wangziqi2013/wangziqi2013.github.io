@@ -25,6 +25,9 @@ version_mgmt:
    counter, which is incremented by one when the value occurs. When the counter overflows, the entry is moved upward
    by one. When new entry is to be inserted, the bottommost entry is evicted.
 
+4. Does not dynamically update the mapping table after it has been generated, based on the observation that these
+   tables tend not to change too much during the execution.
+
 **Lowlight:**
 
 1. This paper assumes that NVM is used as a cache for disk. I think a more proper expresion would be that the 
@@ -94,4 +97,4 @@ row are processed.
 At the end, the paper discusses two possible ways of training the mapping table. The static table can be generated
 by profiling the application with certain workloads. Although this will not work well for all applications and all
 inputs, it is a good fit if the machine only executes with a small set of programs and inputs.
-
+Dynamic table can also be generated when
