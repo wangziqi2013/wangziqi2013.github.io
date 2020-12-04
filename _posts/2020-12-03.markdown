@@ -91,4 +91,7 @@ If, however, the word size is too small, the overhead would be larger, since thi
 In addition, the compression and decompression circuit would also be more complicated, since more words per 
 row are processed.
 
+At the end, the paper discusses two possible ways of training the mapping table. The static table can be generated
+by profiling the application with certain workloads. Although this will not work well for all applications and all
+inputs, it is a good fit if the machine only executes with a small set of programs and inputs.
 
