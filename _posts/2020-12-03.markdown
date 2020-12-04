@@ -97,4 +97,7 @@ row are processed.
 At the end, the paper discusses two possible ways of training the mapping table. The static table can be generated
 by profiling the application with certain workloads. Although this will not work well for all applications and all
 inputs, it is a good fit if the machine only executes with a small set of programs and inputs.
-Dynamic table can also be generated when
+Dynamic table can also be generated at early stages of the execution, and then used during the restof it. 
+Once the dynamic table completes training, it cannot be updated further, since otherwise code words in the NVM device 
+should also be updated, which incurs extra writes, contradicting with the goal of reducing wearing and power 
+consumption. 
