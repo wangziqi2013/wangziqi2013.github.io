@@ -20,9 +20,14 @@ of days), rendering the entire device unusable.
 Another minor issue is that NVM write energy is much larger than DRAM. Reducing the number of bits written into
 the device, therefore, becomes critical for energy consumption.
 
+The paper assumes the following architecture. NVM is deployed as a fast, byte-addressable cache between the cache
+hierarchy and a backing store, such as hard disk. Cache lines can be brought into and written back from the NVM
+device as they are accessed and evicted respectively. 
+
 This paper adopts frequent-value compression, which is commonly used in cache compression proposals, in NVM
 architecture. Each NVM row now has a different layout. Instead of being a non-structured, flat bit array, which
 stores uncompressed words one next to another, the paper proposes that each row be divided into compressed words.
 Each compressed word consists of a data region, and a bit indicating whether it stores a compressed word or not.
 The data region takes the same number of bits as an uncompressed word.
 If the bit is "1", then the data region stores an uncompressed word, and otherwise, it stores a compressed word.
+Each row also has one extra bit indicating whether it has been written into since brought into the NVM.
