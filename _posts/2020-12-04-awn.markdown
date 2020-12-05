@@ -28,9 +28,9 @@ recovered with random access, such that they can be fed into the pipeline immedi
 is read out. The paper calls this property as "restrictive" as it narrows down the design space to only a few 
 possibilities.
 
-The L1 cache architecture is described as follows. Each physical cache line is over-provisioned with an extra tag,
+The L1 cache architecture is described as follows. Each physical cache line slot is over-provisioned with an extra tag,
 which supports up to 2x compression ratio. The extended tag contains at least an address tag, MESI state tag, and 
-LRU tag. Besides, each physical line also has one bit indicating whether compression is enabled for the slot. If
+LRU tag. Besides, each physical slot also has one bit indicating whether compression is enabled for the slot. If
 compression is enabled, the slot stores two lines compressed to half of the slot size, and each of the two tags 
 describes a compressed line. Otherwise, compression is disabled on the slot, meaning that the slot stores an 
 uncompressed line, and only one tag is active.
@@ -41,5 +41,9 @@ half of its original size by eliminating higher bits. Otherwise, the word is unc
 entire line uncompressable. 
 The compression circuit is extremely simple: On the insertion data path, we add an array of 
 comparators to check higher bits in parallel for all words, and then use a multiplexer to determine which version of 
-data is output. The per-line bit is also set, if the line is compressable, and the slot is currently empty (if the
+data is output. The per-slot bit is also set, if the line is compressable, and the slot is currently empty (if the
 slot already contains a compressed line, then just fill it in the slot).
+
+Decompression is exactly the reverse of compression. If the cache line to be accessed by LSU is from a compressed slot 
+(the per-slot bit is set to "1"), the byte offset into the uncompressed cache line is right shifted by one, which
+is translated to the byte offset of the corresponding word in the compressed line. 
