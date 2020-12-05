@@ -35,4 +35,8 @@ compression is enabled, the slot stores two lines compressed to half of the slot
 describes a compressed line. Otherwise, compression is disabled on the slot, meaning that the slot stores an 
 uncompressed line, and only one tag is active.
 
+Compression is performed as follows. On inserting into the L1 cache, the compression circuit checks whether all bits in
+the higher half of each word to be compressed equals the sign bit of the lower half. If true, the word is compressed to
+half of its original size by eliminating higher bits. Otherwise, the word is uncompressable, which also renders the 
+entire line uncompressable. 
 
