@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Restrictive Compression Techniques to Increase Level 1 Cache Capacity"
+date:   2020-12-04 19:45:00 -0500
+categories: paper
+paper_title: "Restrictive Compression Techniques to Increase Level 1 Cache Capacity"
+paper_link: https://ieeexplore.ieee.org/document/1524171/
+paper_keyword: Compression; L1 Compression
+paper_year: 
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
