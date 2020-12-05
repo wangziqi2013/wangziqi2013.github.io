@@ -39,4 +39,7 @@ Compression is performed as follows. On inserting into the L1 cache, the compres
 the higher half of each word to be compressed equals the sign bit of the lower half. If true, the word is compressed to
 half of its original size by eliminating higher bits. Otherwise, the word is uncompressable, which also renders the 
 entire line uncompressable. 
-
+The compression circuit is extremely simple: On the insertion data path, we add an array of 
+comparators to check higher bits in parallel for all words, and then use a multiplexer to determine which version of 
+data is output. The per-line bit is also set, if the line is compressable, and the slot is currently empty (if the
+slot already contains a compressed line, then just fill it in the slot).
