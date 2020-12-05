@@ -26,7 +26,8 @@ version_mgmt:
    per-logical line bit mask; Adding multiple data slots are also fine, but the bit mask should indicate which slot
    it is.
 
-
+4. Address tags can also be compressed based on the observation that most address tags share higher bits. Only storing
+   distinct lower bits, and using a common higher can also save SRAM storage.
 
 **Lowlight:**
 
