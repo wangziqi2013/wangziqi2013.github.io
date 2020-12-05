@@ -106,3 +106,9 @@ If a bit on position i is set, then word i is uncompressable in the original lin
 by bit-concatenating the extra half-word as the upper half, and the half-word in compressed location as lower half.
 This modification either adds one more cache read cycle to generate the upper half of the uncompressable word,
 or adds an extra level of multiplexers to select from two versions of the restored word for all words.
+
+The second enhancement allows more exceptions per logical line. This is achieved by adding even more half-words per
+physical slots. The paper proposes one scheme, in which four half-words are added, and word 0, 1, 2 can be used by
+the first compressed line, and word 1, 2, 3 can be used by the second compressed line. The bit mask should also be 
+extended to indicate which half-word slot a compressed word uses. The bit mask contains two bits per word, which is
+mapped to slot 0, 1, 2 and slot 1, 2, 3, respectively.
