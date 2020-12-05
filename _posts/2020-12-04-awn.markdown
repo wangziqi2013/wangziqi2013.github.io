@@ -44,6 +44,9 @@ version_mgmt:
    We definitely cannot choose an arbitrary two compressed lines and evict, since they may not be in the same
    slot. It is also unlikely that compaction will happen across slots.
 
+3. For address tag compression, it is required that the cache controller search for the most appropriate physical
+   to insert a line, or any slot is fine?
+
 This paper proposes a restrictive cache compression scheme for improving L1 cache effective capacity.
 Applying compression to L1 caches can help further improve performance and reduce energy consumption, since
 more data blocks are cached by the L1, and less requests are sent to lower levels L2.
