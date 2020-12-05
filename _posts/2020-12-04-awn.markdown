@@ -22,7 +22,11 @@ version_mgmt:
 2. When there are two compressed lines in a physical slot, and if the entire slot is to be invalidated, the LRU of the 
    slot should be the larger (more MRU) of the two.
 
-3. 
+3. Exceptions (occasional words that cannot be compressed) can be represented using an extra 16-bit data slot and a 
+   per-logical line bit mask; Adding multiple data slots are also fine, but the bit mask should indicate which slot
+   it is.
+
+
 
 **Lowlight:**
 
