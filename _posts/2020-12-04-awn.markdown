@@ -49,3 +49,6 @@ Decompression is exactly the reverse of compression. If the cache line to be acc
 is translated to the byte offset of the corresponding word in the compressed line. Then the half word at the byte offset
 is read, and the original value is recovered by duplicating the sign bit.
 Multi-word accesses can also be implemented similarly, except that the size to be is also right shifted by one.
+The decompression circuit is even simpler: Right shift and sign extension can be performed by combinational logic 
+without any shift register or states. The final result is delivered to the LSU using a mutiplexer, which selects from
+the uncompressed and the compressed version.
