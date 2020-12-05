@@ -46,4 +46,6 @@ slot already contains a compressed line, then just fill it in the slot).
 
 Decompression is exactly the reverse of compression. If the cache line to be accessed by LSU is from a compressed slot 
 (the per-slot bit is set to "1"), the byte offset into the uncompressed cache line is right shifted by one, which
-is translated to the byte offset of the corresponding word in the compressed line. 
+is translated to the byte offset of the corresponding word in the compressed line. Then the half word at the byte offset
+is read, and the original value is recovered by duplicating the sign bit.
+Multi-word accesses can also be implemented similarly, except that the size to be is also right shifted by one.
