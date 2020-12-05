@@ -101,3 +101,8 @@ The paper also proposes a few more enhancements to the base line algorithm. The 
 cache line to have at most one uncompressable word, totalling to two extra half-words per physical slot. 
 To achieve this, each physical slot's data bank is extended with two half-words, each potentially storing an upper 
 word of an uncompressable word in the logical line. To identify which word the extra half-word belongs to, each
+logical line also has a bit vector, in which at most one bit can be set. 
+If a bit on position i is set, then word i is uncompressable in the original line, and the word can be restored 
+by bit-concatenating the extra half-word as the upper half, and the half-word in compressed location as lower half.
+This modification either adds one more cache read cycle to generate the upper half of the uncompressable word,
+or adds an extra level of multiplexers to select from two versions of the restored word for all words.
