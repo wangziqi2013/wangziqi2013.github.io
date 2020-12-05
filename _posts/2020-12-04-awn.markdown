@@ -30,6 +30,9 @@ possibilities.
 
 The L1 cache architecture is described as follows. Each physical cache line is over-provisioned with an extra tag,
 which supports up to 2x compression ratio. The extended tag contains at least an address tag, MESI state tag, and 
-LRU tag. 
+LRU tag. Besides, each physical line also has one bit indicating whether compression is enabled for the slot. If
+compression is enabled, the slot stores two lines compressed to half of the slot size, and each of the two tags 
+describes a compressed line. Otherwise, compression is disabled on the slot, meaning that the slot stores an 
+uncompressed line, and only one tag is active.
 
 
