@@ -22,6 +22,12 @@ version_mgmt:
    One possible argument is that this is not on the critical path, so it does not directly affect access latency.
    It is still, however, likely that the excessive tag access will contend with normal access.
 
+2. The paper also does not discuss how eviction candidates are selected. For example, when both compressed and 
+   uncompressed slots exist in a set, and we are inserting a compressed line. Should we use the compressed line
+   eviction logic, or use the uncompressed line eviction logic?
+   We definitely cannot choose an arbitrary two compressed lines and evict, since they may not be in the same
+   slot. It is also unlikely that compaction will happen across slots.
+
 This paper proposes a restrictive cache compression scheme for improving L1 cache effective capacity.
 Applying compression to L1 caches can help further improve performance and reduce energy consumption, since
 more data blocks are cached by the L1, and less requests are sent to lower levels L2.
@@ -61,3 +67,5 @@ Multi-word accesses can also be implemented similarly, except that the size to b
 The decompression circuit is even simpler: Right shift and sign extension can be performed by combinational logic 
 without any shift register or states. The final result is delivered to the LSU using a mutiplexer, which selects from
 the uncompressed and the compressed version using the per-slot bit.
+
+
