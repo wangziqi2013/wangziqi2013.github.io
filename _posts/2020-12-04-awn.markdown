@@ -68,4 +68,6 @@ The decompression circuit is even simpler: Right shift and sign extension can be
 without any shift register or states. The final result is delivered to the LSU using a mutiplexer, which selects from
 the uncompressed and the compressed version using the per-slot bit.
 
-
+Eviction is more complicated, since now there are two possibilities: Either a physical slot is invalidated, evicting 
+all compressed or uncompressed lines, or only a compressed line is evicted, freeing a half-slot for another 
+compressed line.
