@@ -71,3 +71,9 @@ the uncompressed and the compressed version using the per-slot bit.
 Eviction is more complicated, since now there are two possibilities: Either a physical slot is invalidated, evicting 
 all compressed or uncompressed lines, or only a compressed line is evicted, freeing a half-slot for another 
 compressed line.
+The paper suggests that two different LRU schemes be used to select the eviction candidate. When a compressed line is
+to be evicted, the eviction algorithm uses per-logical line LRU, which is associated with each valid tag in the set.
+When a full slot is to be evicted, the algorithm uses per-slot LRU, which is not explicitly stored, but can be 
+easily computed by using the more "recent" LRU among the two, if two valid lines exist. This guarantees that non-LRU
+lines will not be evicted.
+The paper, however, does not define when a compressed / uncompressed line should be evicted.
