@@ -6,9 +6,15 @@ categories: paper
 paper_title: "Restrictive Compression Techniques to Increase Level 1 Cache Capacity"
 paper_link: https://ieeexplore.ieee.org/document/1524171/
 paper_keyword: Compression; L1 Compression
-paper_year: 
+paper_year: ICCD 2005
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a restrictive cache compression scheme for improving L1 cache effective capacity.
+The paper points out at the beginning that conventional compression algorithms are not feasible for L1
+cache compression, since they introduce a few cycle's latency during compression and decompression. Even though
+the absolute number of cycles can be small, they are still significant relative to L1 cache's access latency,
+which is typically only a few cycles.
