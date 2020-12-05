@@ -25,5 +25,11 @@ The paper observes that, all previous compression schemes change the bit offset 
 way such that they must be explicitly computed, incurring more cycles. 
 In order to design a compression algorithm for L1, individual words in the compressed line must be able to easily 
 recovered with random access, such that they can be fed into the pipeline immediately after the compressed line 
-is read out. The paper calls this property as "restrictive" as it restricts the design space.
+is read out. The paper calls this property as "restrictive" as it narrows down the design space to only a few 
+possibilities.
+
+The L1 cache architecture is described as follows. Each physical cache line is over-provisioned with an extra tag,
+which supports up to 2x compression ratio. The extended tag contains at least an address tag, MESI state tag, and 
+LRU tag. 
+
 
