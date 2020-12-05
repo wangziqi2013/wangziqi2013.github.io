@@ -14,7 +14,16 @@ version_mgmt:
 ---
 
 This paper proposes a restrictive cache compression scheme for improving L1 cache effective capacity.
-The paper points out at the beginning that conventional compression algorithms are not feasible for L1
+Applying compression to L1 caches can help further improve performance and reduce energy consumption, since
+more data blocks are cached by the L1, and less requests are sent to lower levels L2.
+The paper points out at the beginning, however, that conventional compression algorithms are not feasible for L1
 cache compression, since they introduce a few cycle's latency during compression and decompression. Even though
 the absolute number of cycles can be small, they are still significant relative to L1 cache's access latency,
 which is typically only a few cycles.
+
+The paper observes that, all previous compression schemes change the bit offset of words in the compressed line, in a 
+way such that they must be explicitly computed, incurring more cycles. 
+In order to design a compression algorithm for L1, individual words in the compressed line must be able to easily 
+recovered with random access, such that they can be fed into the pipeline immediately after the compressed line 
+is read out. The paper calls this property as "restrictive" as it restricts the design space.
+
