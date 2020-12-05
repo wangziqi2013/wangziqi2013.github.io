@@ -112,3 +112,9 @@ physical slots. The paper proposes one scheme, in which four half-words are adde
 the first compressed line, and word 1, 2, 3 can be used by the second compressed line. The bit mask should also be 
 extended to indicate which half-word slot a compressed word uses. The bit mask contains two bits per word, which is
 mapped to slot 0, 1, 2 and slot 1, 2, 3, respectively.
+
+The last enhancement is address tag compression. This technique is based on the observation that most address tags
+share common higher order bits. Storing both tags separetely, therefore, wastes tag storage, which is over-provisioned.
+The paper proposes that one higher order bit tag is maintained, which contains 20 bits. Two lower-order tags containing
+2 bits each are concatenated after the 20 bit shared tag to form the tag for address lookup. Cache lines can only be 
+stored in the same physical slot, if there tags share the highest 20 bits.
