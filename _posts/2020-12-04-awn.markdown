@@ -19,6 +19,11 @@ version_mgmt:
    Decompression on access is not acceptable, since only the requested word will be sent to the LSU, unlike lower
    level caches where the entire line is sent to the upper level.
 
+2. When there are two compressed lines in a physical slot, and if the entire slot is to be invalidated, the LRU of the 
+   slot should be the larger (more MRU) of the two.
+
+3. 
+
 **Lowlight:**
 
 1. Although the compression and decompression algorithm is indeed simple, the paper ignores the fact that
