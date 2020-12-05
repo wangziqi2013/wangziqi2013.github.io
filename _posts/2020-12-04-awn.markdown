@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Although the compression and decompression algorithm is indeed simple, the paper ignores the fact that
+   there are implicit complexities, such as finding a slot for insertion. In an uncompressed cache, this is
+   as simple as selecting the bottom of the LRU stack. In our case, we also need to evaluate whether to evict
+   a compressed line, or an uncompressed line. 
+   One possible argument is that this is not on the critical path, so it does not directly affect access latency.
+   It is still, however, likely that the excessive tag access will contend with normal access.
+
 This paper proposes a restrictive cache compression scheme for improving L1 cache effective capacity.
 Applying compression to L1 caches can help further improve performance and reduce energy consumption, since
 more data blocks are cached by the L1, and less requests are sent to lower levels L2.
@@ -51,4 +60,4 @@ is read, and the original value is recovered by duplicating the sign bit.
 Multi-word accesses can also be implemented similarly, except that the size to be is also right shifted by one.
 The decompression circuit is even simpler: Right shift and sign extension can be performed by combinational logic 
 without any shift register or states. The final result is delivered to the LSU using a mutiplexer, which selects from
-the uncompressed and the compressed version.
+the uncompressed and the compressed version using the per-slot bit.
