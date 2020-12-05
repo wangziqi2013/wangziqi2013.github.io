@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Explicitly pointing out that a feasible compression algorithm for L1 must support random access of code words;
+   Decompression on access is not acceptable, since only the requested word will be sent to the LSU, unlike lower
+   level caches where the entire line is sent to the upper level.
+
 **Lowlight:**
 
 1. Although the compression and decompression algorithm is indeed simple, the paper ignores the fact that
