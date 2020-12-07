@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Data Compression Transformations for Dynamically Allocated Data Structures"
+date:   2020-12-06 19:37:00 -0500
+categories: paper
+paper_title: "Data Compression Transformations for Dynamically Allocated Data Structures"
+paper_link: https://link.springer.com/chapter/10.1007/3-540-45937-5_4
+paper_keyword: Compression; 
+paper_year: LNCS 2002
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
