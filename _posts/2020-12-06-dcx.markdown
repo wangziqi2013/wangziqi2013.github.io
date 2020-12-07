@@ -98,4 +98,7 @@ shift R2 value into either lower or upper half word, and then OR the value into 
 Note that NULL pointer value requires special treatment, since NULL is an extremely common pointer value in nearly
 all real-world workloads, and yet it does not share a prefix with heap allocated pointers. To efficiently compress NULL
 pointers, the ``bneh17`` instruction always asserts success regardless of the value in R1, if R2 stores NULL
-pointer. 
+pointer. The resulting compressed word should also be all-zero. Storing all-zero as compressed NULL pointer, however,
+introduces aliasing problems, since a pointer whose lower 15 bits are also zero while sharing a 17-bit prefix with
+``R1`` is also compressed to an all-zero half-word. To solve this problem, the paper suggests that the memory allocator
+should avoid returning pointers whose lower 15 bits are all-zero.
