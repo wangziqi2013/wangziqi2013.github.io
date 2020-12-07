@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Only using simple compression algorithm, i.e., eliminating higher-order bits. This algorithm can be performed
+   independently from other compressed data, and is therefore super light-weight, which is applicable for 
+   compiler instrumentation / L1 compression.
+
+
+
 **Lowlight:**
 
 1. The paper proposes that pointer values can be compressed with a common prefix. But it never identified how the
