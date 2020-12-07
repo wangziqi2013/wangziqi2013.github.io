@@ -33,5 +33,5 @@ for better access locality. Besides, some systems have a hard constraint on high
 consolidating this observation.
 Second, most integers values used in real-world workloads do not exploit all bits in a 32-bit integer (the paper assumes
 32-bit integers and pointers). These integers can be compressed with less number of bits, as long as the higher-order
-bits are identical to the sign bit after compression, as the original value can be easily restored without any
-external information just by replicating the sign bit.
+bits are identical to the sign bit after compression. The original value can be easily compressed restored without any
+external information just by eliminating and replicating the sign bit respectively.
