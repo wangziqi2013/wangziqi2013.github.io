@@ -26,6 +26,11 @@ version_mgmt:
 3. Uncompressable data is treated as an exception in a heap-allocated block, and stored with an extra level of 
    indirection re-using the code word as a pointer to the overflow block.
 
+4. NULL pointer needs special treatment, since it it a very commonly seen pointer value, and yet does not share
+   a prefix with heap pointers. The special treatment directly compresses NULL pointer to zero, which introduces
+   aliases with all pointers with low 15 bits being zero. To avoid this problem, the allocator is prohibited to
+   return an address with low 15-bits being zero.
+
 **Lowlight:**
 
 1. The paper proposes that pointer values can be compressed with a common prefix. But it never identified how the
@@ -79,4 +84,9 @@ the overflow block, and then update the uncompressed value with the new value.
 Once the values are allocated with an extra level of indirection, any future update will not result in the deallocation
 of the overflow block. This is to avoid thrashing, which causes frequent allocation and deallocation.
 
-
+The DCX proposal adds six RISC-style instructions into the ISA, three of them for pointer values, and the other three
+for integer values. For each given type, one instruction performs compression, while the other two performs 
+decompression from upper and lower half-words of the compressed word, respectively.
+The pointer value compression instruction, ``bneh17 R1, R2, L1``, compares the highest 17 bits of R1 and R2, and jumps 
+to address label L1 if they are not equal. In practice, ``R2`` should hold the pointer value to be compressed, and 
+``R1`` holds the common prefix. ``L1`` should be a function that allocates 
