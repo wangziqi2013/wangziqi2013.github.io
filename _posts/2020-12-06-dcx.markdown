@@ -23,3 +23,7 @@ DCX is based on two observations. First, most pointer values to heap memory shar
 these memory blocks are typically created by an allocator that tend to group addresses that are close to each other
 for better access locality. Besides, some systems have a hard constraint on higher-order bits of pointers, further
 consolidating this observation.
+Second, most integers values used in real-world workloads do not exploit all bits in a 32-bit integer (the paper assumes
+32-bit integers and pointers). These integers can be compressed with less number of bits, as long as the higher-order
+bits are identical to the sign bit after compression, as the original value can be easily restored without any
+external information just by replicating the sign bit.
