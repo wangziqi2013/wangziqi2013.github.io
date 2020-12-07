@@ -107,3 +107,8 @@ The ineteger compression instruction, ``bneh18 R1, L1``, simply checks whether t
 identical, and jumps to ``L1`` if otherwise. Note that integer value compression involves the high 18 bits, rather than
 17 bits, unlike pointer compression, since integer compression uses the sign bit of the compressed half-word as the
 reference bit.
+
+The pointer value decompression instruction from lower word, ``xtrhl R1, R2, R3``, just copies the lower 15 bits in 
+``R3`` and higher 17 bits in ``R2`` into ``R1``, restoring the original pointer value. The compiler is responsible for
+loading ``R2`` with the prefix value before executing this instruction.
+Integer decompression and pointer decompression from the upper word works similarly.
