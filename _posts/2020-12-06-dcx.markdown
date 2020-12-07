@@ -39,4 +39,8 @@ external information just by eliminating and replicating the sign bit respective
 The compression algorithm proposed by this paper is simple, which aims at compressing pointer values and integers into
 15-bit words. If two adjacent fields are both compressed in an object, these two fields can be represented with one
 32-bit integer word, with each of the half words storing a compressed result. The highest bit of the compressed word
-indicate whether the word stores two compressed words (set to "1", if true). 
+indicate whether the word stores two compressed words (set to "1", if true). The object is always allocated with the 
+compressed word, hence consuming less memory. If, in the run-time, one or both of the compressed fields become 
+uncompressable, then both values will be decompressed, and stored in a extra block of memory consisting of only two 
+fields. This block of memory will be linked to the main object by using the compressed word as a pointer to the
+block. 
