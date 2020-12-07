@@ -35,3 +35,8 @@ Second, most integers values used in real-world workloads do not exploit all bit
 32-bit integers and pointers). These integers can be compressed with less number of bits, as long as the higher-order
 bits are identical to the sign bit after compression. The original value can be easily compressed restored without any
 external information just by eliminating and replicating the sign bit respectively.
+
+The compression algorithm proposed by this paper is simple, which aims at compressing pointer values and integers into
+15-bit words. If two adjacent fields are both compressed in an object, these two fields can be represented with one
+32-bit integer word, with each of the half words storing a compressed result. The highest bit of the compressed word
+indicate whether the word stores two compressed words (set to "1", if true). 
