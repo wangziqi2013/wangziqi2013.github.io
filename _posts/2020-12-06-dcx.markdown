@@ -37,6 +37,12 @@ version_mgmt:
 2. The overflow block should also be freed when the object is freed. This requires the compiler to insert
    instructions to check the highest bit and call free(). This, however, is totally ignored by the paper.
 
+3. The ``bneh17 R1, R2, L1`` instruction jumps to a function that allocates memory for the overflow block.
+   This, however, does not sound right to me: (1) How does the function return the address of the allocated
+   block to the caller? (2) How does the function know the address of the current compressed field (if the
+   function performs value copy from the word to the overflow block)? (3) How does the function return to the caller?
+   I guess you are not inserting one code chunk for each occurrance of the write operation?
+
 This paper proposes Data Compression Extension (DCX) instruction set extension for performing simple data compression
 on heap-allocated data. Compared with conventional data compression approaches, where all cache lines in a certain
 address range or all objects are compressed without distinction, the DCX proposal allows software to select certain 
@@ -73,6 +79,4 @@ the overflow block, and then update the uncompressed value with the new value.
 Once the values are allocated with an extra level of indirection, any future update will not result in the deallocation
 of the overflow block. This is to avoid thrashing, which causes frequent allocation and deallocation.
 
-The DCX proposal adds six RISC-style instructions into the ISA, three of them for pointer values, and the other three
-for integer values. For each given type, one instruction performs compression, while the other two performs 
-decompression from upper and lower half-words of the compressed word, respectively.
+
