@@ -21,6 +21,9 @@ version_mgmt:
    keeping the prefix, such that the compression/decompression instructions have a way of using them in the
    instructions.
 
+2. The overflow block should also be freed when the object is freed. This requires the compiler to insert
+   instructions to check the highest bit and call free(). This, however, is totally ignored by the paper.
+
 This paper proposes Data Compression Extension (DCX) instruction set extension for performing simple data compression
 on heap-allocated data. Compared with conventional data compression approaches, where all cache lines in a certain
 address range or all objects are compressed without distinction, the DCX proposal allows software to select certain 
