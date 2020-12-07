@@ -102,3 +102,8 @@ pointer. The resulting compressed word should also be all-zero. Storing all-zero
 introduces aliasing problems, since a pointer whose lower 15 bits are also zero while sharing a 17-bit prefix with
 ``R1`` is also compressed to an all-zero half-word. To solve this problem, the paper suggests that the memory allocator
 should avoid returning pointers whose lower 15 bits are all-zero.
+
+The ineteger compression instruction, ``bneh18 R1, L1``, simply checks whether the higher 18 bits of ``R1`` are all 
+identical, and jumps to ``L1`` if otherwise. Note that integer value compression involves the high 18 bits, rather than
+17 bits, unlike pointer compression, since integer compression uses the sign bit of the compressed half-word as the
+reference bit.
