@@ -90,3 +90,7 @@ decompression from upper and lower half-words of the compressed word, respective
 The pointer value compression instruction, ``bneh17 R1, R2, L1``, compares the highest 17 bits of R1 and R2, and jumps 
 to address label L1 if they are not equal. In practice, ``R2`` should hold the pointer value to be compressed, and 
 ``R1`` holds the common prefix. 
+``L1`` is supposed to be a function that allocates the overflow block, copy the existing values to the block, and 
+then update the uncompressed value with value of R2 in the block.
+If compression succeeds, this instruction naturally falls through, and the compiler should insert instructions to
+shift R2 value into either lower or upper half word, and then OR the value into the compressed word.
