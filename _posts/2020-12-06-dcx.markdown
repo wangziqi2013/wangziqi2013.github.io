@@ -54,4 +54,5 @@ If compression succeeds, the compressed value is written into the upper or lower
 bit-wise OR'ing. Otherwise, the control flow is redirected to a piece of code that allocates a block of memory
 from the heap for the two uncompressed fields, decompress the old values from the compressed field, copy them into
 the overflow block, and then update the uncompressed value with the new value.
-
+Once the values are allocated with an extra level of indirection, any future update will not result in the deallocation
+of the overflow block. This is to avoid thrashing, which causes frequent allocation and deallocation.
