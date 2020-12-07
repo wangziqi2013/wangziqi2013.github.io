@@ -94,3 +94,8 @@ to address label L1 if they are not equal. In practice, ``R2`` should hold the p
 then update the uncompressed value with value of R2 in the block.
 If compression succeeds, this instruction naturally falls through, and the compiler should insert instructions to
 shift R2 value into either lower or upper half word, and then OR the value into the compressed word.
+
+Note that NULL pointer value requires special treatment, since NULL is an extremely common pointer value in nearly
+all real-world workloads, and yet it does not share a prefix with heap allocated pointers. To efficiently compress NULL
+pointers, the ``bneh17`` instruction always asserts success regardless of the value in R1, if R2 stores NULL
+pointer. 
