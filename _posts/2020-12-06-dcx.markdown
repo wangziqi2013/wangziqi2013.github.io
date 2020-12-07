@@ -19,6 +19,10 @@ version_mgmt:
    independently from other compressed data, and is therefore super light-weight, which is applicable for 
    compiler instrumentation / L1 compression.
 
+2. Storage saving is achieved by merging two compressed words together into a 32-bit word. This is only performed 
+   selectingly on certain fields that are next to each other, which is different from block-oriented compression
+   schemes where either an entire block is compressed, or none of the word is compressed. 
+
 
 
 **Lowlight:**
