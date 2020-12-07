@@ -72,3 +72,7 @@ from the heap for the two uncompressed fields, decompress the old values from th
 the overflow block, and then update the uncompressed value with the new value.
 Once the values are allocated with an extra level of indirection, any future update will not result in the deallocation
 of the overflow block. This is to avoid thrashing, which causes frequent allocation and deallocation.
+
+The DCX proposal adds six RISC-style instructions into the ISA, three of them for pointer values, and the other three
+for integer values. For each given type, one instruction performs compression, while the other two performs 
+decompression from upper and lower half-words of the compressed word, respectively.
