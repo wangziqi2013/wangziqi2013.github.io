@@ -46,3 +46,8 @@ fields. This block of memory will be linked to the main object by using the comp
 block. In this case, the highest bit of the compressed word must be set to zero, indicating that the value should be
 used as a pointer to a block holding uncompressable words. The paper notes that on MIPS architecture, a pointer value
 always has its highest bit clear, therefore fulfilling this requirement automatically.
+
+Initially, the compressed field is allocated as a single word in the object, and the highest bit is set to indicate
+that it contains compressed values. 
+On write operations of any of the original value, compression will first be attempted on the value to be written using special instructions. 
+
