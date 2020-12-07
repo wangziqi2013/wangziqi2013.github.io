@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The paper proposes that pointer values can be compressed with a common prefix. But it never identified how the
+   common prefix is maintained and stored, and what if the common prefix changes. Do we keep only one such prefix
+   for all pointer values, or we can use multiple prefixes? Obviously the runtime should provide storage for
+   keeping the prefix, such that the compression/decompression instructions have a way of using them in the
+   instructions.
+
 This paper proposes Data Compression Extension (DCX) instruction set extension for performing simple data compression
 on heap-allocated data. Compared with conventional data compression approaches, where all cache lines in a certain
 address range or all objects are compressed without distinction, the DCX proposal allows software to select certain 
