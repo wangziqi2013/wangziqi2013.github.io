@@ -89,4 +89,4 @@ for integer values. For each given type, one instruction performs compression, w
 decompression from upper and lower half-words of the compressed word, respectively.
 The pointer value compression instruction, ``bneh17 R1, R2, L1``, compares the highest 17 bits of R1 and R2, and jumps 
 to address label L1 if they are not equal. In practice, ``R2`` should hold the pointer value to be compressed, and 
-``R1`` holds the common prefix. ``L1`` should be a function that allocates 
+``R1`` holds the common prefix. 
