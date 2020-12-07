@@ -23,7 +23,8 @@ version_mgmt:
    selectingly on certain fields that are next to each other, which is different from block-oriented compression
    schemes where either an entire block is compressed, or none of the word is compressed. 
 
-
+3. Uncompressable data is treated as an exception in a heap-allocated block, and stored with an extra level of 
+   indirection re-using the code word as a pointer to the overflow block.
 
 **Lowlight:**
 
