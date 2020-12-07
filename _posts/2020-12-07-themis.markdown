@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "(Almost) Fence-Less Persistent Ordering"
+date:   2020-12-07 18:12:00 -0500
+categories: paper
+paper_title: "(Almost) Fence-Less Persistent Ordering"
+paper_link: https://www.microarch.org/micro53/papers/738300a539.pdf
+paper_keyword: NVM; Persistent Barrier
+paper_year: MICRO 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
