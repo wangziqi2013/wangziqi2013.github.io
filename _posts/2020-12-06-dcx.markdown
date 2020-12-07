@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Data Compression Extension (DCX) instruction set extension for performing simple data compression
+on heap-allocated data. Compared with conventional data compression approaches, where all cache lines in a certain
+address range or all objects are compressed without distinction, the DCX proposal allows software to select certain 
+fields as compression candidates, and only compresses these fields in the run-time, avoiding unnecessary overhead
+of compression if applied to uncompressible data.
