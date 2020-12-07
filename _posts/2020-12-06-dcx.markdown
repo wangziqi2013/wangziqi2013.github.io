@@ -18,3 +18,8 @@ on heap-allocated data. Compared with conventional data compression approaches, 
 address range or all objects are compressed without distinction, the DCX proposal allows software to select certain 
 fields as compression candidates, and only compresses these fields in the run-time, avoiding unnecessary overhead
 of compression if applied to uncompressible data.
+
+DCX is based on two observations. First, most pointer values to heap memory share common higher-order bits, since 
+these memory blocks are typically created by an allocator that tend to group addresses that are close to each other
+for better access locality. Besides, some systems have a hard constraint on higher-order bits of pointers, further
+consolidating this observation.
