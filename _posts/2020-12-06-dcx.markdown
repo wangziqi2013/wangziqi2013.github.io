@@ -50,4 +50,8 @@ always has its highest bit clear, therefore fulfilling this requirement automati
 Initially, the compressed field is allocated as a single word in the object, and the highest bit is set to indicate
 that it contains compressed values. 
 On write operations of any of the original value, compression will first be attempted on the value to be written using special instructions. 
+If compression succeeds, the compressed value is written into the upper or lower half of the word by bit shifting and
+bit-wise OR'ing. Otherwise, the control flow is redirected to a piece of code that allocates a block of memory
+from the heap for the two uncompressed fields, decompress the old values from the compressed field, copy them into
+the overflow block, and then update the uncompressed value with the new value.
 
