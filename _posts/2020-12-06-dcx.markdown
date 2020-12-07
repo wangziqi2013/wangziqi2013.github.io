@@ -43,4 +43,6 @@ indicate whether the word stores two compressed words (set to "1", if true). The
 compressed word, hence consuming less memory. If, in the run-time, one or both of the compressed fields become 
 uncompressable, then both values will be decompressed, and stored in a extra block of memory consisting of only two 
 fields. This block of memory will be linked to the main object by using the compressed word as a pointer to the
-block. 
+block. In this case, the highest bit of the compressed word must be set to zero, indicating that the value should be
+used as a pointer to a block holding uncompressable words. The paper notes that on MIPS architecture, a pointer value
+always has its highest bit clear, therefore fulfilling this requirement automatically.
