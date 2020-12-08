@@ -48,3 +48,7 @@ Write requests in the WCB are coalesced (writes to the same cache line on differ
 single request), combined (writes to the same location in the same line are also combined) and reordered for better
 write performance. Once the arbitrator grants bus access, and the memory controller indicates that it could accept
 more requests, the WCB controller sends a request to the controller, and wait for the ACK.
+The WCB maintains three pointers, a tail pointer, where new requests are added; A head pointer, where existing requests 
+are removed and sent on the bus; An ACK head pointer, which lags behind the head pointer, and it points to the last
+request, in the queue order, that has not been ACK'ed by the memory controller. 
+
