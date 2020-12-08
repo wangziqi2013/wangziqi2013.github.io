@@ -54,3 +54,10 @@ request, in the queue order, that has not been ACK'ed by the memory controller.
 The paper notes that the ACK head pointer, in fact, indicates the current progress of persistence in the WCB, since any
 writes that have not been ACK'ed by the memory controller are either still in the queue, or are still being transferred
 by the on-chip network.
+
+Temporal stores are handled by the cache hierarchy and coherence protocol as usual. When a clflush instruction hits a 
+line, the line is scheduled for eviction, which is sent to a write back buffer (WBB). Each level of the cache has a WBB,
+but this paper focus on the WBB at L1 cache in particular. Lines in the WBB are queued until the next level cache is
+able to handle the eviction.
+
+
