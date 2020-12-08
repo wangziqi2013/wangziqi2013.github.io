@@ -24,7 +24,11 @@ cache line flush followed by memory fence, which prevents any possible coalescin
 (2) The sfence will prevent instructions after it from committing in the ROB, which stalls the pipeline given the
 relatively long latency of NVM writes. 
 
-The paper also makes a few observation on common usage patterns with persistence barriers. First, non-temporal stores
+The paper also makes a few observations on common usage patterns with persistence barriers. First, non-temporal stores
 (e.g., ``movnt``) bypasses the cache hierarchy, and can therefore be used to write log entries to the NVM. The advantage
 of using non-temporal stores is to avoid bringing the address used for logging into the cache, causing cache pollution,
 since the log buffer will never be read again during normal operation.
+Second, the persistence barrier works equally for both temporal stores (i.e., regular ``mov``) and non-temporal stores,
+except that the cache line flush is unnecessary for non-temporal stores.
+The ``sfence`` instruction can be employed to order non-temporal and temporal stores without distinction.
+
