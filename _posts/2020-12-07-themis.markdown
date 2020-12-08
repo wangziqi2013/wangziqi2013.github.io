@@ -64,4 +64,7 @@ The Themis design is based on the observation that, as long as a temporal write 
 non-temporal write is removed from the WCB after being ACK'ed, it is guaranteed that the former is ordered after 
 the latter. In the context of undo logging, this implies that, as long as the undo log entry is persisted using 
 non-temporal writes, and that data is persisted using temporal writes and clflush, the write ordering between this
-two can be enforced with litter performance overhead, 
+two can be enforced with litter performance overhead, since (1) At this time, both writes have been committed in the 
+pipeline, and therefore no pipeline stall would occur; (2) The temporal write naturally will traverse through a 
+longer data path than the non-temporal write, which overlaps the the time difference with persistence delay of the 
+non-temporal write.
