@@ -21,7 +21,9 @@ version_mgmt:
 2. Non-temporal stores have shorter data path compared with temporal store and clflush. This can be taken advantage of
    to partially overlap the data path latency difference and persistence latency
 
-
+3. Most importantly, write ordering enforcement should not stall the pipeline, i.e., it is fine to perform them on
+   the background, but preventing stores from being committed in the ROB is definitely not a good place to enforce
+   such ordering. 
 
 This paper proposes Themis, a lightweight persistent ordering architecture for NVM applications. The paper begins by
 observation that most NVM applications, if not all, uses persistence barrier to guarantee write ordering. Using undo
