@@ -60,4 +60,8 @@ line, the line is scheduled for eviction, which is sent to a write back buffer (
 but this paper focus on the WBB at L1 cache in particular. Lines in the WBB are queued until the next level cache is
 able to handle the eviction.
 
-
+The Themis design is based on the observation that, as long as a temporal write is evicted from the WBB after a 
+non-temporal write is removed from the WCB after being ACK'ed, it is guaranteed that the former is ordered after 
+the latter. In the context of undo logging, this implies that, as long as the undo log entry is persisted using 
+non-temporal writes, and that data is persisted using temporal writes and clflush, the write ordering between this
+two can be enforced with litter performance overhead, 
