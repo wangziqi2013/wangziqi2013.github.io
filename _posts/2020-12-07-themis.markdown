@@ -35,4 +35,7 @@ Third, non-temporal stores typically reach the memory controller faster, since t
 have shorter data paths. To elaborate: A non-temporal store will be directly sent to the memory controller after
 they are generated, while a temporal store followed by cache line flushes need to go through the entire cache hierarchy,
 which costs more cycles. 
-Lastly,
+Lastly, modern memory controllers are in the persistence domain, thanks to the Asynchronous DRAM Refresh (ADR) feature.
+Once a memory request reaches the memory controller's queue, they are guaranteed to be persistent even on power losses.
+It is, therefore, sufficient to declare that an NVM write has been persisted once the processor received the ACK
+packet from the memory controller.
