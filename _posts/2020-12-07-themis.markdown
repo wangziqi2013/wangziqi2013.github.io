@@ -39,3 +39,9 @@ Lastly, modern memory controllers are in the persistence domain, thanks to the A
 Once a memory request reaches the memory controller's queue, they are guaranteed to be persistent even on power losses.
 It is, therefore, sufficient to declare that an NVM write has been persisted once the processor received the ACK
 packet from the memory controller.
+
+The paper assumes the following architecture. The non-temporal stores are handled by a write-combining buffer (WCB)
+connected to the Load-Store Unit (LSU). The LSU directly puts the request into the WCB without invoking coherence
+(it is unclear, however, whether the L1 cache will be updated if the block to be written is already in L1 with
+sufficient permission. This does not affect the correctness of the design, though.).
+
