@@ -31,4 +31,8 @@ since the log buffer will never be read again during normal operation.
 Second, the persistence barrier works equally for both temporal stores (i.e., regular ``mov``) and non-temporal stores,
 except that the cache line flush is unnecessary for non-temporal stores.
 The ``sfence`` instruction can be employed to order non-temporal and temporal stores without distinction.
-
+Third, non-temporal stores typically reach the memory controller faster, since they are generated earlier, and they 
+have shorter data paths. To elaborate: A non-temporal store will be directly sent to the memory controller after
+they are generated, while a temporal store followed by cache line flushes need to go through the entire cache hierarchy,
+which costs more cycles. 
+Lastly,
