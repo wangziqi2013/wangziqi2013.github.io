@@ -49,9 +49,9 @@ single request), combined (writes to the same location in the same line are also
 write performance. Once the arbitrator grants bus access, and the memory controller indicates that it could accept
 more requests, the WCB controller sends a request to the controller, and wait for the ACK.
 The WCB maintains three pointers, a tail pointer, where new requests are added; A head pointer, where existing requests 
-are removed and sent on the bus; An ACK head pointer, which lags behind the head pointer, and it points to the last
+are removed and sent on the bus; An ACK-head pointer, which lags behind the head pointer, and it points to the last
 request, in the queue order, that has not been ACK'ed by the memory controller. 
-The paper notes that the ACK head pointer, in fact, indicates the current progress of persistence in the WCB, since any
+The paper notes that the ACK-head pointer, in fact, indicates the current progress of persistence in the WCB, since any
 writes that have not been ACK'ed by the memory controller are either still in the queue, or are still being transferred
 by the on-chip network.
 
@@ -68,3 +68,9 @@ two can be enforced with litter performance overhead, since (1) At this time, bo
 pipeline, and therefore no pipeline stall would occur; (2) The temporal write naturally will traverse through a 
 longer data path than the non-temporal write, which overlaps the the time difference with persistence delay of the 
 non-temporal write.
+
+The Themis design modifies cache hierarchy components as follows. The three pointers in WCB are all extended with two 
+extra high bits, with the extra bits tracking the number of wrap-arounds since the last reset. For example, for a 16
+entry WCB, the original pointers have four bits, and Themis adds two extra bits at the top. During execution, the 
+lowest four bits are still used to index into the WCB, but when a wrap-around of the pointer value occurs (i.e., when
+the pointer advance from entry 15 to entry 0), the bit is carried to the high two bits. 
