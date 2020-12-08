@@ -73,4 +73,9 @@ The Themis design modifies cache hierarchy components as follows. The three poin
 extra high bits, with the extra bits tracking the number of wrap-arounds since the last reset. For example, for a 16
 entry WCB, the original pointers have four bits, and Themis adds two extra bits at the top. During execution, the 
 lowest four bits are still used to index into the WCB, but when a wrap-around of the pointer value occurs (i.e., when
-the pointer advance from entry 15 to entry 0), the bit is carried to the high two bits. 
+the pointer advance from entry 15 to entry 0), the bit is carried to the high two bits. This way, the pointer value
+will not suffer from alisaing problems when it wraps around, since these pointers will be used as a "snapshot" to track 
+the progress of non-temporal writes. Imagine if a temporal store is inserted into the WBB when the WCB tail pointer is 
+10 and the ACK-head pointer is 6, and later on the WCB advances such that both the ACK-head and the WCB tails wrap
+around and become 1. In this case, the WBB entry can, in fact, be safely written into L2, since the write ordering 
+has already been solved. 
