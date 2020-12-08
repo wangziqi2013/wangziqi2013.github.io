@@ -102,3 +102,6 @@ to avoid any aliasing problem when the tail pointer is reset to zero. Otherwise,
 tail pointer being zero or a very small value, hence violating the write ordering, since the value is likely
 smaller than the current ACK-head, which immediately grants them the permission to be written back to the L1, but in 
 fact non-temporal writes ordered before them may have not been fully persisted.
+Once the WCB is drained, all pointers of WCB are set to zero. The L1 data cache is also notified of the wrap-around 
+event. The L1 cache controlle flash-clears all tail pointer tags when wrap-around happens, since all write orderings 
+have been resolved after this point. The WBB is not affected by wrap-around, since it keeps monitoring ACK-tail.
