@@ -19,7 +19,12 @@ logging as an example, the log entry must reach the NVM before dirty data does, 
 crashes before the two persistence operations, dirty data would not be able to recovery to the pre-image before
 the transaction, corrupting program data.
 
-The paper then claims that persistent barriers are detrimental to performance, mainly bnecause: (1) They require a 
+The paper then claims that persistent barriers are detrimental to performance, mainly because: (1) They require a 
 cache line flush followed by memory fence, which prevents any possible coalescing and reordering of NVM writes;
 (2) The sfence will prevent instructions after it from committing in the ROB, which stalls the pipeline given the
 relatively long latency of NVM writes. 
+
+The paper also makes a few observation on common usage patterns with persistence barriers. First, non-temporal stores
+(e.g., ``movnt``) bypasses the cache hierarchy, and can therefore be used to write log entries to the NVM. The advantage
+of using non-temporal stores is to avoid bringing the address used for logging into the cache, causing cache pollution,
+since the log buffer will never be read again during normal operation.
