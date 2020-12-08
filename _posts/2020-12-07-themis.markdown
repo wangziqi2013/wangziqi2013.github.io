@@ -51,4 +51,6 @@ more requests, the WCB controller sends a request to the controller, and wait fo
 The WCB maintains three pointers, a tail pointer, where new requests are added; A head pointer, where existing requests 
 are removed and sent on the bus; An ACK head pointer, which lags behind the head pointer, and it points to the last
 request, in the queue order, that has not been ACK'ed by the memory controller. 
-
+The paper notes that the ACK head pointer, in fact, indicates the current progress of persistence in the WCB, since any
+writes that have not been ACK'ed by the memory controller are either still in the queue, or are still being transferred
+by the on-chip network.
