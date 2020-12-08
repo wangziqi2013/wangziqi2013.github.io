@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using non-temporal store to write undo log entries to avoid cache pollution, and for shorter latency since only
+   one round-trip is required instead of two.
+
+
+
 This paper proposes Themis, a lightweight persistent ordering architecture for NVM applications. The paper begins by
 observation that most NVM applications, if not all, uses persistence barrier to guarantee write ordering. Using undo
 logging as an example, the log entry must reach the NVM before dirty data does, because otherwise, if the system
