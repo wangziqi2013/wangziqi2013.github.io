@@ -19,4 +19,7 @@ logging as an example, the log entry must reach the NVM before dirty data does, 
 crashes before the two persistence operations, dirty data would not be able to recovery to the pre-image before
 the transaction, corrupting program data.
 
-
+The paper then claims that persistent barriers are detrimental to performance, mainly bnecause: (1) They require a 
+cache line flush followed by memory fence, which prevents any possible coalescing and reordering of NVM writes;
+(2) The sfence will prevent instructions after it from committing in the ROB, which stalls the pipeline given the
+relatively long latency of NVM writes. 
