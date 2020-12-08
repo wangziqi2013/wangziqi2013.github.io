@@ -18,6 +18,9 @@ version_mgmt:
 1. Using non-temporal store to write undo log entries to avoid cache pollution, and for shorter latency since only
    one round-trip is required instead of two.
 
+2. Non-temporal stores have shorter data path compared with temporal store and clflush. This can be taken advantage of
+   to partially overlap the data path latency difference and persistence latency
+
 
 
 This paper proposes Themis, a lightweight persistent ordering architecture for NVM applications. The paper begins by
