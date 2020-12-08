@@ -5,10 +5,18 @@ date:   2020-12-07 18:12:00 -0500
 categories: paper
 paper_title: "(Almost) Fence-Less Persistent Ordering"
 paper_link: https://www.microarch.org/micro53/papers/738300a539.pdf
-paper_keyword: NVM; Persistent Barrier
+paper_keyword: NVM; Persistent Barrier; Themis
 paper_year: MICRO 2020
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Themis, a lightweight persistent ordering architecture for NVM applications. The paper begins by
+observation that most NVM applications, if not all, uses persistence barrier to guarantee write ordering. Using undo
+logging as an example, the log entry must reach the NVM before dirty data does, because otherwise, if the system
+crashes before the two persistence operations, dirty data would not be able to recovery to the pre-image before
+the transaction, corrupting program data.
+
+
