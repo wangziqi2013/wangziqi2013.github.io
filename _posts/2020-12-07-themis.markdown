@@ -82,3 +82,11 @@ has already been solved. It is, however, unknown to the hardware whether this is
 ACK-head pointer has not reached the tail location. With the two extra bits, the ACK-head pointer will be of value
 17, which is larger than the tail value snapshot, which is 10. The hardware then knows that all write orderings have 
 been resolved, and can safely write the WBB entry to the L2.
+
+The L1 data cache is extended with an extra small tag storing the value of tail pointer of the WCB. This pointer is 
+updated when the L1 cache line is written into, and it serves as a "snapshot" of the WCB, remembering the current latest
+writes in the buffer. In order to enforce a write ordering between the current cache line and all WCB entries, the 
+cache line must not be written back to the L2, before all entries older than the tail location are drained to the 
+memory controller and ACK'ed. The tag will also be sent to the WBB when the line is evicted either naturally or by a
+cache line flush instruction.
+
