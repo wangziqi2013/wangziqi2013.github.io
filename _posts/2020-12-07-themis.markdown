@@ -90,3 +90,9 @@ cache line must not be written back to the L2, before all entries older than the
 memory controller and ACK'ed. The tag will also be sent to the WBB when the line is evicted either naturally or by a
 cache line flush instruction.
 
+The WBB periodically reads values of the ACK-head pointer from the WCB. Each entry of the WBB is extended with a tag 
+field storing the tail pointer snapshot evicted from the L1 data cache together with cache line data.
+Cache lines that must follow the write ordering are not allowed to leave once they enter the WBB (which is marked by a 
+special bit), while normal cache lines are unaffected (the tag field for these lines can be ignored).
+When the value of ACK-head changes in the WCB, the new value is sent to the WBB, and the WBB controller scans all
+its entries, and mark those lines whose tail snapshot is smaller than or equal to the ACK-head as eligible for removal.
