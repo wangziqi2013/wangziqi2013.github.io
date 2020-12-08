@@ -96,3 +96,9 @@ Cache lines that must follow the write ordering are not allowed to leave once th
 special bit), while normal cache lines are unaffected (the tag field for these lines can be ignored).
 When the value of ACK-head changes in the WCB, the new value is sent to the WBB, and the WBB controller scans all
 its entries, and mark those lines whose tail snapshot is smaller than or equal to the ACK-head as eligible for removal.
+
+When WCB pointer wraps around (actually, the tail pointer will always wrap around first), the WCB is first fully drained
+to avoid any aliasing problem when the tail pointer is reset to zero. Otherwise, L1 cache entries may be tagged with
+tail pointer being zero or a very small value, hence violating the write ordering, since the value is likely
+smaller than the current ACK-head, which immediately grants them the permission to be written back to the L1, but in 
+fact non-temporal writes ordered before them may have not been fully persisted.
