@@ -44,4 +44,7 @@ The paper assumes the following architecture. The non-temporal stores are handle
 connected to the Load-Store Unit (LSU). The LSU directly puts the request into the WCB without invoking coherence
 (it is unclear, however, whether the L1 cache will be updated if the block to be written is already in L1 with
 sufficient permission. This does not affect the correctness of the design, though.).
-
+Write requests in the WCB are coalesced (writes to the same cache line on different locations are combined into a 
+single request), combined (writes to the same location in the same line are also combined) and reordered for better
+write performance. Once the arbitrator grants bus access, and the memory controller indicates that it could accept
+more requests, the WCB controller sends a request to the controller, and wait for the ACK.
