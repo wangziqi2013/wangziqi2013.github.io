@@ -78,4 +78,7 @@ will not suffer from alisaing problems when it wraps around, since these pointer
 the progress of non-temporal writes. Imagine if a temporal store is inserted into the WBB when the WCB tail pointer is 
 10 and the ACK-head pointer is 6, and later on the WCB advances such that both the ACK-head and the WCB tails wrap
 around and become 1. In this case, the WBB entry can, in fact, be safely written into L2, since the write ordering 
-has already been solved. 
+has already been solved. It is, however, unknown to the hardware whether this is a result of wrap-around, or that the 
+ACK-head pointer has not reached the tail location. With the two extra bits, the ACK-head pointer will be of value
+17, which is larger than the tail value snapshot, which is 10. The hardware then knows that all write orderings have 
+been resolved, and can safely write the WBB entry to the L2.
