@@ -23,6 +23,12 @@ version_mgmt:
    (3) In the above scenario, what if one of the sharers or the owner is currently switched out (so its
        bloom filter is not loaded)? Do we invoke OS and let OS find its bloom filter?
 
+2. This paper assumes inclusive LLC, such that cache lines not in the LLC will definitely not in upper level caches.
+   This is may not be true for large multicores.
+   And even if this assumption is valid, the author should explicitly put it in the text.
+
+
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
