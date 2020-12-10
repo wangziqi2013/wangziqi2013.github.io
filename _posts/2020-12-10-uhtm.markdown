@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The paper lacks many details that are necessary to judge its feasibility. For example:
+   (1) Where is the per-core bloom filter placed? LLC or L1? LLC would be a better place since a request only knows 
+       that it misses the hierarchy at LLC. Also, inserting into the filter is easier on LLC evictions.
+   
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
