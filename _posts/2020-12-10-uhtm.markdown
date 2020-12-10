@@ -45,4 +45,10 @@ such that future accesses are likely to hit the cache, saving both log traversal
 
 To deal with conflict detection overheads and false positives, the paper proposes a two-stage conflict detection 
 protocol, where both the directory and address signatures are used. When the address to be accessed is in the cache
-hierarchy, an access request is checked against the LLC's directory for conflicting accesses. 
+hierarchy, an access request is checked against the LLC's directory for conflicting accesses. This ensures that 
+conflicts of cache lines in the hierarchy can be detected with normal access latency, which covers the majority of 
+cases. The processor also maintains two per-core address signatures, one for read set and another for write set. 
+Cache lines evicted from the LLC are inserted into the signatures for all accessing transactions. 
+If the address to be accessed is not in the hierarchy, the requested address is then checked with all signatures,
+and conflicts are signaled if one of the signature indicates that the address is present.
+
