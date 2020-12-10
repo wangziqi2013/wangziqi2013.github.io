@@ -16,4 +16,9 @@ version_mgmt:
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
-
+First, due to the fact that NVM has higher storage density than DRAM, NVM devices can store much more data in the
+same area, and therefore, applications running NVM workloads tend to have significantly larger memory footprint
+than DRAM transactions. This puts a heavy burden on version management, which distinguishes speculative copies of
+data from the committed image. Prior researches either assume a bounded HTM model, in which transactions will be 
+aborted when speculative states overflow the last-level cache (LLC), or assumes unbounded model, and employ logging
+or other heavy-weight techniques to maintain speculative versions of data.
