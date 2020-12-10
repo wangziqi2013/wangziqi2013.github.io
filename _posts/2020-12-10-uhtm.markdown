@@ -30,3 +30,11 @@ latency, must be maintained in DRAM) would be huge compared with DRAM size. On t
 use bloom filters or other address signatures to track the approximate read and write set, and rely on simple
 bit operations between these signatures to detect conflict. These approaches suffer from very high false positive
 rates, which can also render the design unusable when the size of the working set is large.
+
+UHTM solves the above issues with a combination of different techniques. To deal with version management for both NVM 
+and DRAM, the paper proposes that logging be used when speculative lines overflow from the LLC. For addresses mapped to
+the DRAM, the DRAM controller performs undo logging before applying the update in-place, such that when a power loss
+occurs, the speculative content of the DRAM can be rolled back automatically. In addition, commit operations on the DRAM
+are fast, since the controller simply truncates the log.
+
+
