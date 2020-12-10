@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Unbounded Hardware Transactional Memory for a Hybrid DRAM/NVM Memory System"
+date:   2020-12-10 05:18:00 -0500
+categories: paper
+paper_title: "Unbounded Hardware Transactional Memory for a Hybrid DRAM/NVM Memory System"
+paper_link: https://www.microarch.org/micro53/papers/738300a525.pdf
+paper_keyword: NVM; HTM; UHTM
+paper_year: MICRO 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
