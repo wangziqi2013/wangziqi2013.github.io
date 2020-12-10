@@ -39,5 +39,7 @@ are fast, since the controller simply truncates the log.
 For addresses mapped to the NVM, the paper proposes that speculative states are written in the form of redo logs, which 
 are persisted to the NVM when dirty lines are evicted from the LLC.
 Using redo logs, however, suffers from long log search latency when the most up-to-date values are to be accessed later.
-
+To address this issue, the paper further proposes that an L4 DRAM cache be added between the LLC and the NVM.
+Speculative states evicted from the LLC are not only written to the NVM as redo logs, but also update the DRAM cache,
+such that future accesses are likely to hit the cache, saving both log traversal latency and NVM access bandwidth.
 
