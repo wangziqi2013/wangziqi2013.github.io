@@ -18,7 +18,10 @@ version_mgmt:
 1. The paper lacks many details that are necessary to judge its feasibility. For example:
    (1) Where is the per-core bloom filter placed? LLC or L1? LLC would be a better place since a request only knows 
        that it misses the hierarchy at LLC. Also, inserting into the filter is easier on LLC evictions.
-   
+   (2) When a block is evicted from the LLC, how are bloom filters updated? Do we insert into read set for those
+       that are in the sharers list, and insert into write set for the one that are in the owner list?
+   (3) In the above scenario, what if one of the sharers or the owner is currently switched out (so its
+       bloom filter is not loaded)? Do we invoke OS and let OS find its bloom filter?
 
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
