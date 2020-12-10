@@ -27,6 +27,9 @@ version_mgmt:
    This is may not be true for large multicores.
    And even if this assumption is valid, the author should explicitly put it in the text.
 
+3. What if an address is first evicted into the LLC / DRAM, and then read back again? Do we delete it from the overflow
+   list, or just let it stay in the list?
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
