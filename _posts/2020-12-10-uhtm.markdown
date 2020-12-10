@@ -43,3 +43,6 @@ To address this issue, the paper further proposes that an L4 DRAM cache be added
 Speculative states evicted from the LLC are not only written to the NVM as redo logs, but also update the DRAM cache,
 such that future accesses are likely to hit the cache, saving both log traversal latency and NVM access bandwidth.
 
+To deal with conflict detection overheads and false positives, the paper proposes a two-stage conflict detection 
+protocol, where both the directory and address signatures are used. When the address to be accessed is in the cache
+hierarchy, an access request is checked against the LLC's directory for conflicting accesses. 
