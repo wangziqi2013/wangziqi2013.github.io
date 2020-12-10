@@ -36,5 +36,8 @@ and DRAM, the paper proposes that logging be used when speculative lines overflo
 the DRAM, the DRAM controller performs undo logging before applying the update in-place, such that when a power loss
 occurs, the speculative content of the DRAM can be rolled back automatically. In addition, commit operations on the DRAM
 are fast, since the controller simply truncates the log.
+For addresses mapped to the NVM, the paper proposes that speculative states are written in the form of redo logs, which 
+are persisted to the NVM when dirty lines are evicted from the LLC.
+Using redo logs, however, suffers from long log search latency when the most up-to-date values are to be accessed later.
 
 
