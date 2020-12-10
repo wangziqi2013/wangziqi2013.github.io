@@ -26,4 +26,7 @@ Second, conflict detection between parallel transactions can severely hamper the
 Most proposals rely on cache coherence to provide read and write information. Some of them assume a fully-mapped
 directory, in which one entry is reserved for each cache line sized block in physical memory. This is not applicable,
 since NVM is typically much larger than DRAM, and the storage overhead of directory entries (whcih, for minimum 
-latency, must be maintained in DRAM) would be huge compared with DRAM size. 
+latency, must be maintained in DRAM) would be huge compared with DRAM size. On the other hand, some other designs
+use bloom filters or other address signatures to track the approximate read and write set, and rely on simple
+bit operations between these signatures to detect conflict. These approaches suffer from very high false positive
+rates, which can also render the design unusable when the size of the working set is large.
