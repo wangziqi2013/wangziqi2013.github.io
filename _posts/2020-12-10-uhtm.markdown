@@ -51,4 +51,5 @@ cases. The processor also maintains two per-core address signatures, one for rea
 Cache lines evicted from the LLC are inserted into the signatures for all accessing transactions. 
 If the address to be accessed is not in the hierarchy, the requested address is then checked with all signatures,
 and conflicts are signaled if one of the signature indicates that the address is present.
-
+Since most conflicts are already resolved in the hierarchy with the directory, and that only overflowing addresses
+are inserted into the signature, UHTM can achieve a lower false positive rates on the signature than prior proposals.
