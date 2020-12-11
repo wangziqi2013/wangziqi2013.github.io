@@ -136,4 +136,7 @@ addresses in the overflow list are never removed, hence making it possible to ha
 may still be in the L1, while it is also present in the list, due to the fact that an evicted address can be re-fetched.
 
 We next describe the operation of UHTM. In the cache hierarchy, all accessed lines are marked as speculative by setting
-the special bit. The L1 controller should notify
+the special bit. The L1 controller should notify the LLC controller that an access is about to occur before it marks
+a line that has not yet been marked. The LLC, on receiving the notifications, adds the transaction ID of the requesting
+transaction into the directory's corresponding list, in addition to performing the necessary coherence actions.
+
