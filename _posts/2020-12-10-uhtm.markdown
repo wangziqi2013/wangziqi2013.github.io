@@ -177,4 +177,6 @@ in the local L1 cache, and for each speculative line, it queries the LLC directo
 if the line is accessed by the committing transaction. In the second stage, it iterates over the overflow list, and
 for each line in the overflow list, it clears the speculative bit in a similar way in L2 and LLC. The reason that
 UHTM does not perform tag walks on L2 and LLC is that this may introduce tag array access contention, resulting in
-lower performance.
+lower performance. The DRAM controller truncates the log by writing a commit mark with the transaction ID that just
+committed. The NVM controller commits the transaction by atomically writing a commit mark. The redo log will be 
+reeplayed to the home address, in the background, to free log buffer space and avoid excessive log redirection.
