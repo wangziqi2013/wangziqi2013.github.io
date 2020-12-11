@@ -148,3 +148,8 @@ In-cache conflict detection is performed by the LLC controller. Since all specul
 conflict detection is performed eagerly when an upper level request is received. The LLC checks whether a conflicting
 access is already present in the list. The paper suggests that RAW, WAR and WAW should all incur conflicts, in which 
 case the requestor transaction wins, and the current holder of the line should abort. 
+Detection between on-chip lines and off-chip lines is also performed by checking the request with all bloom filters.
+If any of the filters indicate a positive, the requestor should abort. The difference between conflict resolution
+policies of on-chip and off-chip lines is motivated by the fact that: (1) If a transaction has already overflowed, i.e.,
+its bloom filter is non-empty, then the cycles wasted by this transaction is higher; and (2) Aborting
+an overflowed transaction requires more work.
