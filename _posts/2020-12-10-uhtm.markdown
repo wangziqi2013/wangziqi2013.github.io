@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Divide on-chip speculative states and off-chip states into two parts. The on-chip part is maintained with LLC     
+   directory and the off-chip part is maintained with bloom filters and overflow lists.
+   This makes it easier to maintain on-chip states with regular coherence protocols, and off-chip states with 
+   more advanced methods such as bloom filters and logs.
+   UHTM further allows both sets be approximate, i.e., the off-chip states need not be accurate, so the maintenance
+   cost is further lowered.
+
 **Lowlight:**
 
 1. The paper lacks many details that are necessary to judge its feasibility. For example:
@@ -36,7 +45,8 @@ version_mgmt:
    transaction commits at a different core?
 
 5. Speculative cache lines are not tagged with transaction ID to indicate the ownership. On commit or abort, how do you
-   know which line belongs to which transaction?
+   know which line belongs to which transaction? One way is to query the directory and overflow list, but this makes
+   commit very slow since you still have to perform extra LLC search and list iteration.
 
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
