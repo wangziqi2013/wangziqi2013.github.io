@@ -153,3 +153,8 @@ If any of the filters indicate a positive, the requestor should abort. The diffe
 policies of on-chip and off-chip lines is motivated by the fact that: (1) If a transaction has already overflowed, i.e.,
 its bloom filter is non-empty, then the cycles wasted by this transaction is higher; and (2) Aborting
 an overflowed transaction requires more work.
+
+When a line is evicted from the LLC, if the address is mapped to DRAM, then the DRAM controller performs undo logging
+by first copying the before image to the logging area, and then applying evicted data in-place. When the line is evicted
+to the NVM, it is first inserted into the L4 DRAM cache, and meanwhile, a redo log entry is generated and written into
+the NVM. 
