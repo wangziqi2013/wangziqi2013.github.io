@@ -58,6 +58,12 @@ version_mgmt:
    know which line belongs to which transaction? One way is to query the directory and overflow list, but this makes
    commit very slow since you still have to perform extra LLC search and list iteration.
 
+6. If the LLC directory maintains the list of speculative sharers and owner, the first access to a non-speculative 
+   cache line should always be sent to the LLC such that the access is registered. Otherwise, if the line already
+   exists in the private cache of the accessing core, then LLC will not be notified.
+   This design makes it very similar to the coherence protocol design of OverlayTM, which is written by me, but
+   the authors did not cite it.
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
@@ -128,3 +134,6 @@ context.
 When a speculative block is evicted from the L1, its address is inserted into the overflow list. On the other hand,
 addresses in the overflow list are never removed, hence making it possible to have false positives, i.e., an address 
 may still be in the L1, while it is also present in the list, due to the fact that an evicted address can be re-fetched.
+
+We next describe the operation of UHTM. In the cache hierarchy, all accessed lines are marked as speculative by setting
+the special bit. The L1 controller should notify
