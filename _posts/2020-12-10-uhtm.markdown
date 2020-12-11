@@ -180,3 +180,9 @@ UHTM does not perform tag walks on L2 and LLC is that this may introduce tag arr
 lower performance. The DRAM controller truncates the log by writing a commit mark with the transaction ID that just
 committed. The NVM controller commits the transaction by atomically writing a commit mark. The redo log will be 
 reeplayed to the home address, in the background, to free log buffer space and avoid excessive log redirection.
+
+On transaction abort, speculative lines are invalidated using the same two-stage process, except that the valid
+of the line is cleared.
+The DRAM controller should replay the undo log entries by copying the pre-image back to their home addresses. 
+The NVM controller simply truncates the redo log by writing an abort mark atomically. The logical point of abort is
+the persistence of the abort mark.
