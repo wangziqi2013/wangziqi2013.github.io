@@ -105,4 +105,6 @@ The last hardware change is an overflow list, which is merely a pair of pointers
 Part of the L4 cache is allocated to store a per-transaction list of addresses that are evicted from the L1, such that 
 they can be located quickly without having to scan lower level caches. The overflow list is also part of the thread 
 context.
-
+When a speculative block is evicted from the L1, its address is inserted into the overflow list. On the other hand,
+addresses in the overflow list are never removed, hence making it possible to have false positives, i.e., an address 
+may still be in the L1, while it is also present in the list, due to the fact that an evicted address can be re-fetched.
