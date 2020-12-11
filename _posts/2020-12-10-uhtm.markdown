@@ -195,4 +195,8 @@ the persistence of the abort mark.
 Bloom filters and overflow pointers are also cleared.
 
 
-
+The paper also discusses UHTM support of context switch and virtualized transactions. The architecture also maintains
+a transaction table, which tracks currently active transaction's ID, status, and other metadata.
+The challenges of allowing context switch are: (1) One transaction may be executed on more than one cores, leaving 
+its speculative states scattered in the cache hierarchy. This requires broadcasts of commits or invalidations to other
+cores during commit and abort operations; 
