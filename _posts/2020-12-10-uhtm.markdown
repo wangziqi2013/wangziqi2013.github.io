@@ -93,4 +93,8 @@ The third hardware change is that each LLC directory entry is extended with extr
 readers and writers. Each transaction is allocated a unique transaction ID at the beginning, and LLC's directory
 stores transaction IDs for transactions that have speculatively accessed the line. For each cache line, at most
 one speculative writers, or multiple speculative readers are allowed, but not both.
-
+The directory is updated when a speculative GETS or GETX is received by the LLC from an upper level cache, in which
+case the transaction ID of the issuing transaction is added to the list, and when a transaction commits or aborts,
+in which case the transaction's ID is removed from the corresponding list.
+In addition, the LLC directory also uses the directory information to update bloom filters when a line is evicted, 
+since a line may be in the read set of multiple transactions. 
