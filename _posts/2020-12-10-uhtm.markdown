@@ -88,9 +88,11 @@ filters of cores that have read or written the line during a transaction.
 Note that the bloom filters are not updated when a line is fetched from the DRAM or NVM, at which time these lines
 are treated as non-speculative lines. This does not affect correctness, since lines are logged for off-core commit
 or abort the moment they were evicted.
+The bloom filters are swapped in and out as part of the thread's context.
 
 The third hardware change is that each LLC directory entry is extended with extra fields for tracking speculative
-readers and writers. Each transaction is allocated a unique transaction ID at the beginning, and LLC's directory
+readers and writers. Each transaction is allocated a unique transaction ID at the beginning (and stored per-transaction
+as part of the context), and LLC's directory
 stores transaction IDs for transactions that have speculatively accessed the line. For each cache line, at most
 one speculative writers, or multiple speculative readers are allowed, but not both.
 The directory is updated when a speculative GETS or GETX is received by the LLC from an upper level cache, in which
@@ -98,3 +100,9 @@ case the transaction ID of the issuing transaction is added to the list, and whe
 in which case the transaction's ID is removed from the corresponding list.
 In addition, the LLC directory also uses the directory information to update bloom filters when a line is evicted, 
 since a line may be in the read set of multiple transactions. 
+
+The last hardware change is an overflow list, which is merely a pair of pointers (base, current) into the L4 DRAM cache.
+Part of the L4 cache is allocated to store a per-transaction list of addresses that are evicted from the L1, such that 
+they can be located quickly without having to scan lower level caches. The overflow list is also part of the thread 
+context.
+
