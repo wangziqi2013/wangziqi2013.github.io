@@ -34,6 +34,10 @@ version_mgmt:
 
 **Lowlight:**
 
+In general, the design is really complicated, and there are lots of corner cases and complicated race conditions
+left unexplained. Although I do appreciate some aspects of the design, one should expect such a design to be only of 
+theoretical interests, but very little practical value.
+
 1. The paper lacks many details that are necessary to judge its feasibility. For example:
    (1) Where is the per-core bloom filter placed? LLC or L1? LLC would be a better place since a request only knows 
        that it misses the hierarchy at LLC. Also, inserting into the filter is easier on LLC evictions.
@@ -56,13 +60,17 @@ version_mgmt:
 
 5. Speculative cache lines are not tagged with transaction ID to indicate the ownership. On commit or abort, how do you
    know which line belongs to which transaction? One way is to query the directory and overflow list, but this makes
-   commit very slow since you still have to perform extra LLC search and list iteration.
+   commit very slow since you still have to perform LLC search on L1 controller.
 
 6. If the LLC directory maintains the list of speculative sharers and owner, the first access to a non-speculative 
    cache line should always be sent to the LLC such that the access is registered. Otherwise, if the line already
    exists in the private cache of the accessing core, then LLC will not be notified.
    This design makes it very similar to the coherence protocol design of OverlayTM, which is written by me, but
    the authors did not cite it.
+
+7. How do you guarantee the atomicity of transaction commit and abort? What if another transaction wants to access a
+   cache line that is currently being rolled back during an abort? Do you just lock the bus and serialize all commits
+   and aborts?
 
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
@@ -160,3 +168,8 @@ to the NVM, it is first inserted into the L4 DRAM cache, and meanwhile, a redo l
 the NVM. As a result, fetch requests from the LLC that hit the DRAM cache can be fulfilled by the cache itself 
 without accessing the NVM, but those that misses the DRAM cache still needs to first read the log in case there is 
 a more up-to-date version in the log, after which the home address on the NVM is accessed.
+In addition, data evicted from the DRAM cache is always discarded, regardless of whether it is dirty, since the 
+NVM already has a copy.
+
+On transaction commit, the L1 controller first flash-clears all lines accessed by the committing transaction that have 
+the speculative bit set. This process consists of two stages. In the first stage
