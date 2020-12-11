@@ -85,3 +85,6 @@ belongs to a transaction, has not yet been logged, and that special actions must
 Second, for each core, two bloom filters are added to represent the working set currently not in the cache hierarchy,
 one for read set, and another for write set. The LLC controller inserts evicted lines into the corresponding bloom
 filters of cores that have read or written the line during a transaction. 
+Note that the bloom filters are not updated when a line is fetched from the DRAM or NVM, at which time these lines
+are treated as non-speculative lines. This does not affect correctness, since lines are logged the moment they were
+evicted.
