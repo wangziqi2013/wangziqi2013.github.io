@@ -22,6 +22,11 @@ version_mgmt:
    UHTM further allows both sets be approximate, i.e., the off-chip states need not be accurate, so the maintenance
    cost is further lowered.
 
+2. Use different logging methods for DRAM and NVM. For DRAM, the commit latency is the major concern, so we perform
+   undo logging such that commit is simply a log truncation (although there are other log operations).
+   For NVM, redo logging with DRAM buffer solves both the read indirection and log replay problem.
+   Commit latency is also lower since the log need not be played immediately on commit point.
+
 **Lowlight:**
 
 1. The paper lacks many details that are necessary to judge its feasibility. For example:
