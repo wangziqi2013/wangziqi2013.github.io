@@ -157,4 +157,6 @@ an overflowed transaction requires more work.
 When a line is evicted from the LLC, if the address is mapped to DRAM, then the DRAM controller performs undo logging
 by first copying the before image to the logging area, and then applying evicted data in-place. When the line is evicted
 to the NVM, it is first inserted into the L4 DRAM cache, and meanwhile, a redo log entry is generated and written into
-the NVM. 
+the NVM. As a result, fetch requests from the LLC that hit the DRAM cache can be fulfilled by the cache itself 
+without accessing the NVM, but those that misses the DRAM cache still needs to first read the log in case there is 
+a more up-to-date version in the log, after which the home address on the NVM is accessed.
