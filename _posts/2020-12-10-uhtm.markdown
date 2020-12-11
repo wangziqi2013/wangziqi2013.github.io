@@ -174,4 +174,7 @@ NVM already has a copy.
 On transaction commit, the L1 controller first flash-clears all lines accessed by the committing transaction that have 
 the speculative bit set. This process consists of two stages. In the first stage, the L1 controller performs a tag walk
 in the local L1 cache, and for each speculative line, it queries the LLC directory, and clears the speculative bit
-if the line is accessed by the committing transaction. 
+if the line is accessed by the committing transaction. In the second stage, it iterates over the overflow list, and
+for each line in the overflow list, it clears the speculative bit in a similar way in L2 and LLC. The reason that
+UHTM does not perform tag walks on L2 and LLC is that this may introduce tag array access contention, resulting in
+lower performance.
