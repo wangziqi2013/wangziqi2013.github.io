@@ -30,6 +30,11 @@ version_mgmt:
 3. What if an address is first evicted into the LLC / DRAM, and then read back again? Do we delete it from the overflow
    list, or just let it stay in the list?
 
+4. Are transactions required to be pinned on the same core until finish? It seems to me that this is not required
+   since on page 9, "Context Switch" section, it is suggested that transaction abort should broadcast the aborted
+   transaction ID to all cores. But in this case, how do you make speculative lines non-speculative, when a 
+   transaction commits at a different core?
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
@@ -70,3 +75,6 @@ If the address to be accessed is not in the hierarchy, the requested address is 
 and conflicts are signaled if one of the signature indicates that the address is present.
 Since most conflicts are already resolved in the hierarchy with the directory, and that only overflowing addresses
 are inserted into the signature, UHTM can achieve a lower false positive rates on the signature than prior proposals.
+
+UHTM extends the cache hierarchy as follows. For each cache line, one speculative bit tracks whether the line
+has been read or written by a transaction.
