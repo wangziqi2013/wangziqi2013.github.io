@@ -194,6 +194,10 @@ The NVM controller simply truncates the redo log by writing an abort mark atomic
 the persistence of the abort mark.
 Bloom filters and overflow pointers are also cleared.
 
+On recovery from a power loss, the NVM controller performs redo log replay based on commit and abort marks. 
+It first scans the log for commit and abort records, and generates a table of committed and aborted transactions.
+It then scans all log entries, and only replays these entries if the transaction status is committed.
+DRAM data need not be restored, since a power loss will reset the DRAM content.
 
 The paper also discusses UHTM support of context switch and virtualized transactions. The architecture also maintains
 a transaction table, which tracks currently active transaction's ID, status, and other metadata.
