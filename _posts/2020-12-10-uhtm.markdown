@@ -27,6 +27,11 @@ version_mgmt:
    For NVM, redo logging with DRAM buffer solves both the read indirection and log replay problem.
    Commit latency is also lower since the log need not be played immediately on commit point.
 
+3. Although not proposed by this paper, the combination of DRAM cache and redo logging solves all problems of redo
+   logging: (1) Read redirection is no longer needed as long as the access hits the DRAM cache; (2) Commit does not
+   require replay of the log; (3) The working set is not restricted (canonical redo logging, if implemented in the
+   cache, must lock dirty lines in the hierarchy to avoid polluting the consistent image).
+
 **Lowlight:**
 
 1. The paper lacks many details that are necessary to judge its feasibility. For example:
