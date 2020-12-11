@@ -80,4 +80,5 @@ Since most conflicts are already resolved in the hierarchy with the directory, a
 are inserted into the signature, UHTM can achieve a lower false positive rates on the signature than prior proposals.
 
 UHTM extends the cache hierarchy as follows. For each cache line, one speculative bit tracks whether the line
-has been read or written by a transaction.
+has been read or written by a transaction. This bit serves as an indicator to the LLC controller that the line
+belongs to a transaction, has not yet been logged, and that special actions must be taken when it is evicted.
