@@ -172,4 +172,6 @@ In addition, data evicted from the DRAM cache is always discarded, regardless of
 NVM already has a copy.
 
 On transaction commit, the L1 controller first flash-clears all lines accessed by the committing transaction that have 
-the speculative bit set. This process consists of two stages. In the first stage
+the speculative bit set. This process consists of two stages. In the first stage, the L1 controller performs a tag walk
+in the local L1 cache, and for each speculative line, it queries the LLC directory, and clears the speculative bit
+if the line is accessed by the committing transaction. 
