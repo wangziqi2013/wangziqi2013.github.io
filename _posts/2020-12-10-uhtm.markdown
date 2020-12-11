@@ -140,3 +140,8 @@ the special bit. The L1 controller should notify the LLC controller that an acce
 a line that has not yet been marked. The LLC, on receiving the notifications, adds the transaction ID of the requesting
 transaction into the directory's corresponding list, in addition to performing the necessary coherence actions.
 
+When a speculative cache line is evicted from the L1 cache, the speculative bit is also carried to lower level caches.
+In addition, the L1 controller adds the address into the per-transaction overflow list, by issuing write requests to the
+L4 DRAM cache and incrementing the overflow list pointer.
+
+
