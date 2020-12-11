@@ -72,6 +72,9 @@ theoretical interests, but very little practical value.
    cache line that is currently being rolled back during an abort? Do you just lock the bus and serialize all commits
    and aborts?
 
+8. Context switch support is a total mess. I personally will not recommend adding this support to a TM system.
+   It is better just let the OS know the HTM semantics, and not make scheduling decisions AT ALL.
+
 This paper proposes Unboundes HTM (UHTM), a HTM design for hybrid DRAM/NVM architecture.
 The paper points out that prior HTM prosals are unable to handle modern workloads on NVM-based architecture for 
 several reasons.
@@ -186,3 +189,6 @@ of the line is cleared.
 The DRAM controller should replay the undo log entries by copying the pre-image back to their home addresses. 
 The NVM controller simply truncates the redo log by writing an abort mark atomically. The logical point of abort is
 the persistence of the abort mark.
+Bloom filters and overflow pointers are also cleared.
+
+
