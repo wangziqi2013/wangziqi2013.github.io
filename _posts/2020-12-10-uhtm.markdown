@@ -199,4 +199,7 @@ The paper also discusses UHTM support of context switch and virtualized transact
 a transaction table, which tracks currently active transaction's ID, status, and other metadata.
 The challenges of allowing context switch are: (1) One transaction may be executed on more than one cores, leaving 
 its speculative states scattered in the cache hierarchy. This requires broadcasts of commits or invalidations to other
-cores during commit and abort operations; 
+cores during commit and abort operations; (2) When a conflict happens, the transaction to be aborted may be switched
+out, which makes it impossible to properly abort it. In this case, the transaction to be aborted is marked as aborted
+in the table. When the transaction is switched in, the hardware should first check the status in the table. If the 
+transaction is in aborted state, then it immediately begins the abort process.
