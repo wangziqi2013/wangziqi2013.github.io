@@ -82,3 +82,6 @@ are inserted into the signature, UHTM can achieve a lower false positive rates o
 UHTM extends the cache hierarchy as follows. For each cache line, one speculative bit tracks whether the line
 has been read or written by a transaction. This bit serves as an indicator to the LLC controller that the line
 belongs to a transaction, has not yet been logged, and that special actions must be taken when it is evicted.
+Second, for each core, two bloom filters are added to represent the working set currently not in the cache hierarchy,
+one for read set, and another for write set. The LLC controller inserts evicted lines into the corresponding bloom
+filters of cores that have read or written the line during a transaction. 
