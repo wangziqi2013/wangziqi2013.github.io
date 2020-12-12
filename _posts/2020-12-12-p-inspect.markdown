@@ -43,3 +43,8 @@ DRAM objects that are marked "Forward" will be GC'ed, after all references to th
 Note that the reachability-based framework has nothing to do with synchronization or atomic persistence. 
 Thread synchronization for shared objects should use locks or other techniques, and atomic persistence is achieved with
 logging, which are both orthogonal to reachability test. 
+
+The above software framework has two drawbacks that hinders its adoption. First, the extra instructions for checking 
+conditions and querying the mapping table add significant cycle overhead. Second, most condition checks on the Queued 
+and Forward bit will result in false, meaning that no special action is taken. 
+Based on the second observation, the paper proposes that 
