@@ -134,5 +134,10 @@ CheckLoad instruction works almost the same as CheckStoreH, except that it does 
 address translation is performed if the object is in DRAM and it is forwarded. The actual address after translation
 is used for fulfilling the load.
 
-The paper
+The paper also proposes an efficient form of NVM write, which is a compromise between non-temporal, streaming writes
+and regular cache coherent writes. With regular writes, a cache block should be first fetched from the NVM before
+it can be updated in-place in the cache hierarchy, and then evicted back to the NVM for persistence. This process
+requires two round-trips between the L1 and the NVM. On the other hand, a non-temporal write can push the request 
+directly to the memory controller, requiring only one round-trip latency, but it does not work well with coherence,
+since it bypasses the hierarchy entirely.
 
