@@ -74,3 +74,9 @@ This serializes all update operations in the form of ascending 2PL, which is fre
 total ordering.
 On context switches, the small filter buffer should be flushed, since they essentially act as a virtual address cache.
 Instructions for inserting into and clearing the entire filter are also added to the ISA.
+
+We next discuss the three condition check instructions. CheckStoreBoth instruction first tests whether the host object 
+in the DRAM, and has FWD bit set in the bloom filter using the base addresses.
+If true, software handler is invoked to perform address translation that returns a NVM address of the host
+object. Then, the instruction checks whether the value object is in DRAM, and has TRANS bit set using the base 
+address. 
