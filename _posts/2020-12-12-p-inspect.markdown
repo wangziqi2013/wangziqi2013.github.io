@@ -47,4 +47,7 @@ logging, which are both orthogonal to reachability test.
 The above software framework has two drawbacks that hinders its adoption. First, the extra instructions for checking 
 conditions and querying the mapping table add significant cycle overhead. Second, most condition checks on the Queued 
 and Forward bit will result in false, meaning that no special action is taken. 
-Based on the second observation, the paper proposes that 
+Based on the second observation, the paper proposes that conditions checks be delegated to hardware. There are 
+three types of condition checks: (1) When a host object's reference field is updated to point to a value object;
+(2) When a host object's primitive field is updated; and (3) When any field is read from a host object.
+
