@@ -144,4 +144,7 @@ This paper suggests that an ideal write operation should both work well with coh
 and minimizes the latency. To this end, a new write primitive is proposed, such that it does not fetch the block
 to be written into the L1, but instead, the request is pushed through the hierarchy, allowing each level to incorporate
 the changes, and then sent to the memory controller for NVM update.
+When the request arrives at the LLC, the directory is locked, such that only one outstanding request per address
+is supported.
+The consistency model, therefore, is defined by the order that the LLC directory entry is locked.
 
