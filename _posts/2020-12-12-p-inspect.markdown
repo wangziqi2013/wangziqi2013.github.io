@@ -53,4 +53,8 @@ three types of condition checks: (1) When a host object's reference field is upd
 These three checks are implemented by three different instructions: CheckStoreBoth, CheckStoreH, and CheckLoad.
 Field addresses are encoded in the form of base plus offset, such that both the field address and the object's base
 address can be obtained from the instruction encoding.
-In addition, in order to 
+
+In addition, two global bloom filters, "TRANS" and "FWD", are added for "Queued" and "Forward" mark bookkeeping, 
+respectively. These two bloom filters are mapped to the process's metadata page, which can be accessed by both
+system software and the cache controller.
+
