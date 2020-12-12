@@ -14,13 +14,17 @@ version_mgmt:
 ---
 
 This paper prposes P-Inspect, a hardware enhancement for supporting reachability-based programming on NVM applications.
-Conventional, software-based reachbility test either incurs too much run-time cycle overhead, or requires tagging 
+Conventional, software-based reachability test either incurs too much run-time cycle overhead, or requires tagging 
 the entire address space. P-Inspect, as a hardware solution, achieves both efficiency and flexibility by moving 
 high-frequency, easy-to-implement condition checks to hardware, while still having software implementing the majority
 of the functionality.
 
-P-Inspect assumes reachbility-based NVM programming model. In this model, data structures, which consist of individual 
+P-Inspect assumes reachability-based NVM programming model. In this model, data structures, which consist of individual 
 objects, can be allocated both on DRAM and NVM, but only those in NVM can be preserved after a system crash or power 
 loss. The goal of the programming model is that: (1) Initially, objects can be allocated on the DRAM for faster access,
 but cannot be pointed to by another object in persistent memory; and (2) If an object is to be referenced by a 
 persistent object, the object must be moved to the NVM for consistency.
+
+Prior researches propose that software instrumentations be used to check every load and store to ensure that the 
+transitive closure of any persistent objects is all persistent.
+These researches assume a managed language environment where reference fields (pointers) can be identified at run-time. 
