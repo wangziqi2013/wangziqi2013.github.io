@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "P-Inspect: Architectural Support for Programmable Non-Volatile Memory Frameworks"
+date:   2020-12-12 09:33:00 -0500
+categories: paper
+paper_title: "P-Inspect: Architectural Support for Programmable Non-Volatile Memory Frameworks"
+paper_link: https://www.microarch.org/micro53/papers/738300a509.pdf
+paper_keyword: NVM; P-Inspect
+paper_year: MICRO 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
