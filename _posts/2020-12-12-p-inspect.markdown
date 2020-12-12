@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper prposes P-Inspect, a hardware enhancement for supporting reachability-based programming on NVM applications.
+Conventional, software-based reachbility test either incurs too much run-time cycle overhead, or requires tagging 
+the entire address space. P-Inspect, as a hardware solution, achieves both efficiency and flexibility by moving 
+high-frequency, easy-to-implement condition checks to hardware, while still having software implementing the majority
+of the functionality.
+
+
