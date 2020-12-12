@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
+   (e.g., for storing filters, for determing NVM and DRAM address space, etc.), without explicitly pointing them out.
+
+
+
 This paper prposes P-Inspect, a hardware enhancement for supporting reachability-based programming on NVM applications.
 Conventional, software-based reachability test either incurs too much run-time cycle overhead, or requires tagging 
 the entire address space. P-Inspect, as a hardware solution, achieves both efficiency and flexibility by moving 
@@ -65,3 +72,4 @@ should first acquire all cache lines of the filters, lock them in the small buff
 This serializes all update operations in the form of ascending 2PL, which is free of deadlock, and has guaranteed
 total ordering.
 On context switches, the small filter buffer should be flushed, since they essentially act as a virtual address cache.
+Instructions for inserting into and clearing the entire filter are also added to the ISA.
