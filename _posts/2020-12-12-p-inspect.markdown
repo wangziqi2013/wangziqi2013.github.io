@@ -87,3 +87,12 @@ is performed similarly as with the host object.
 Lastly, the instruction checks whether a transaction is currently active, which is tracked by a bit in the control
 register. If a transaction is running, and the host object is in the NVM, the store instruction also generates an undo 
 log entry and flush it to the NVM using a persistence barrier, after which the field is also flushed.
+
+When the software handler moves the value object from DRAM to the NVM, it uses instructions InsertBFFWD and 
+InsertBFTRANS to add the base address of the object into the filters, before starting the recursive 
+process of computing the transitive closure. Every once for a while, a background GC thread starts, which scans all 
+non-forwarded objects, and update the references to forwarded objects with their NVM addresses. This bulk update
+operation amortizes the cost of object scanning for pointer updates when the address of an object changes.
+After the bulk update completes, the FWD filter is cleared.
+
+
