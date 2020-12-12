@@ -79,4 +79,9 @@ We next discuss the three condition check instructions. CheckStoreBoth instructi
 in the DRAM, and has FWD bit set in the bloom filter using the base addresses.
 If true, software handler is invoked to perform address translation that returns a NVM address of the host
 object. Then, the instruction checks whether the value object is in DRAM, and has TRANS bit set using the base 
-address. 
+address. If true, a software handler is invoked to wait for the bit to be cleared.
+Note that this can be skipped if the host object is not in the NVM, since a pointer from DRAM object to NVM
+object is allowed in all cases.
+Next, the instruction further checks whether the value object has FWD bit set, and if true, address translation
+is performed similarly as with the host object.
+
