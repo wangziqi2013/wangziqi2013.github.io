@@ -57,4 +57,7 @@ address can be obtained from the instruction encoding.
 In addition, two global bloom filters, "TRANS" and "FWD", are added for "Queued" and "Forward" mark bookkeeping, 
 respectively. These two bloom filters are mapped to the process's metadata page, which can be accessed by both
 system software and the cache controller.
+Each L1 cache also has a small buffer for both filters, which enables fast access. 
+Bloom filter accesses from different cores are coordinated by regular coherence protocol, and the small buffer also
+responds to coherence messages. 
 
