@@ -84,4 +84,6 @@ Note that this can be skipped if the host object is not in the NVM, since a poin
 object is allowed in all cases.
 Next, the instruction further checks whether the value object has FWD bit set, and if true, address translation
 is performed similarly as with the host object.
-
+Lastly, the instruction checks whether a transaction is currently active, which is tracked by a bit in the control
+register. If a transaction is running, and the host object is in the NVM, the store instruction also generates an undo 
+log entry and flush it to the NVM using a persistence barrier, after which the field is also flushed.
