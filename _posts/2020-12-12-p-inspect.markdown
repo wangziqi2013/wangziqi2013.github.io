@@ -34,6 +34,12 @@ NVM, and mark it as "Queued". Then the original DRAM object is marked as "Forwar
 original object should be redirected to the NVM copy. In the last step, the run-time recursively adds all objects 
 referred to by the value object also into NVM, such that the transitive closure is all persistent.
 The "Queued" mark indicates that the transitive closure of the object is currently being moved to NVM, which 
-blocks further attempts to reference the object from other host objects until the mark is cleared.
+blocks further attempts to reference the object from other host objects until the mark is cleared, since otherwise
+in a multi-threaded environment, other threads may still set a pointer to the value object, and observes inconsistent
+states after a crash.
 After the transitive closure has been moved, the Queued mark is cleared, and the invoking pointer update operation
 is performed.
+DRAM objects that are marked "Forward" will be GC'ed, after all references to them are dropped.
+Note that the reachability-based framework has nothing to do with synchronization or atomic persistence. 
+Thread synchronization for shared objects should use locks or other techniques, and atomic persistence is achieved with
+logging, which are both orthogonal to reachability test. 
