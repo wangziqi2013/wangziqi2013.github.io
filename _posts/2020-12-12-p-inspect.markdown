@@ -50,4 +50,7 @@ and Forward bit will result in false, meaning that no special action is taken.
 Based on the second observation, the paper proposes that conditions checks be delegated to hardware. There are 
 three types of condition checks: (1) When a host object's reference field is updated to point to a value object;
 (2) When a host object's primitive field is updated; and (3) When any field is read from a host object.
-
+These three checks are implemented by three different instructions: CheckStoreBoth, CheckStoreH, and CheckLoad.
+Field addresses are encoded in the form of base plus offset, such that both the field address and the object's base
+address can be obtained from the instruction encoding.
+In addition, in order to 
