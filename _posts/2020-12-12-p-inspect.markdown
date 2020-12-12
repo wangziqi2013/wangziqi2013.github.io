@@ -21,6 +21,14 @@ version_mgmt:
 2. Generally speaking, wouldn't the hardware change too much for a really narrow improvement that could have just been
    done by experienced programmers and robust testing processes?
 
+3. Are transitive closure computation serialized? The text (Page 8, bottom right corner) says
+   "the TRANS filter is
+    cleared by a thread executing the clearBFTRANS operation in
+    Table II when it has completed processing a transitive closure.
+    Finally, the Change Active FWD Filter operation is performed
+    by the PUT thread when it wakes up.",
+    indicating that at most only one such process is active at a time.
+
 This paper prposes P-Inspect, a hardware enhancement for supporting reachability-based programming on NVM applications.
 Conventional, software-based reachability test either incurs too much run-time cycle overhead, or requires tagging 
 the entire address space. P-Inspect, as a hardware solution, achieves both efficiency and flexibility by moving 
