@@ -88,6 +88,8 @@ Lastly, the instruction checks whether a transaction is currently active, which 
 register. If a transaction is running, and the host object is in the NVM, the store instruction also generates an undo 
 log entry and flush it to the NVM using a persistence barrier, after which the field is also flushed.
 
+Note that although bloom filters can generate false positives, this does not affect correctness since the software
+handler will verify whether an object is indeed Queued or Forwarded by reading their headers.
 When the software handler moves the value object from DRAM to the NVM, it uses instructions InsertBFFWD and 
 InsertBFTRANS to add the base address of the object into the filters, before starting the recursive 
 process of computing the transitive closure. Every once for a while, a background GC thread starts, which scans all 
