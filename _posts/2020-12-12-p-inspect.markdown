@@ -33,3 +33,7 @@ in DRAM and whether the host object is in NVM. If true, the run-time will first 
 NVM, and mark it as "Queued". Then the original DRAM object is marked as "Forward", meaning that all accesses to the
 original object should be redirected to the NVM copy. In the last step, the run-time recursively adds all objects 
 referred to by the value object also into NVM, such that the transitive closure is all persistent.
+The "Queued" mark indicates that the transitive closure of the object is currently being moved to NVM, which 
+blocks further attempts to reference the object from other host objects until the mark is cleared.
+After the transitive closure has been moved, the Queued mark is cleared, and the invoking pointer update operation
+is performed.
