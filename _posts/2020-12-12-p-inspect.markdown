@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using transitive closures to ensure that all objects are persistent and there is no invalid pointer after recovery.
+
+2. Using forwarded object as a stub to perform address translation. This is particularly useful if an object is
+   moved, but not all referenced can be updated. 
+   The combination of forwarded objects and bulk update amortizes the cost of object scanning.
+
 **Lowlight:**
 
 1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
@@ -109,3 +117,6 @@ The TRANS filter is cleared when a software handler completes the transitive clo
 does not mention whether object migration must be serialized, it seems so, since otherwise, different migration 
 processes can overlap, which inserts into the TRANS filter concurrently, making it difficult to clear the filter
 when objects are no longer blocked.
+
+CheckStoreH instruction, on the other hand, only checks the host object. It first checks if the host object is 
+forwarded, and if true, then the software handler is called for address translation.
