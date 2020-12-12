@@ -97,4 +97,7 @@ non-forwarded objects, and update the references to forwarded objects with their
 operation amortizes the cost of object scanning for pointer updates when the address of an object changes.
 After the bulk update completes, the FWD filter is cleared.
 
-
+The TRANS filter is cleared when a software handler completes the transitive closure for a migration. Althouth the paper
+does not mention whether object migration must be serialized, it seems so, since otherwise, different migration 
+processes can overlap, which inserts into the TRANS filter concurrently, making it difficult to clear the filter
+when objects are no longer blocked.
