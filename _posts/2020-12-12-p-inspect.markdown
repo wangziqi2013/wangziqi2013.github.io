@@ -21,4 +21,6 @@ of the functionality.
 
 P-Inspect assumes reachbility-based NVM programming model. In this model, data structures, which consist of individual 
 objects, can be allocated both on DRAM and NVM, but only those in NVM can be preserved after a system crash or power 
-loss. The goal of the programming model is that: 
+loss. The goal of the programming model is that: (1) Initially, objects can be allocated on the DRAM for faster access,
+but cannot be pointed to by another object in persistent memory; and (2) If an object is to be referenced by a 
+persistent object, the object must be moved to the NVM for consistency.
