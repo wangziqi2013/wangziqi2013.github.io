@@ -60,4 +60,8 @@ system software and the cache controller.
 Each L1 cache also has a small buffer for both filters, which enables fast access. 
 Bloom filter accesses from different cores are coordinated by regular coherence protocol, and the small buffer also
 responds to coherence messages. 
-
+To avoid race conditions on updating the multi-cache line filters, the paper suggests that the L1 controller 
+should first acquire all cache lines of the filters, lock them in the small buffer, before updates can be applied.
+This serializes all update operations in the form of ascending 2PL, which is free of deadlock, and has guaranteed
+total ordering.
+On context switches, the small filter buffer should be flushed, since they essentially act as a virtual address cache.
