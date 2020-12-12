@@ -18,7 +18,8 @@ version_mgmt:
 1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
    (e.g., for storing filters, for determing NVM and DRAM address space, etc.), without explicitly pointing them out.
 
-
+2. Generally speaking, wouldn't the hardware change too much for a really narrow improvement that could have just been
+   done by experienced programmers and robust testing processes?
 
 This paper prposes P-Inspect, a hardware enhancement for supporting reachability-based programming on NVM applications.
 Conventional, software-based reachability test either incurs too much run-time cycle overhead, or requires tagging 
