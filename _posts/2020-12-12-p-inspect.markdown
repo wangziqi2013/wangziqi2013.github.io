@@ -140,4 +140,8 @@ it can be updated in-place in the cache hierarchy, and then evicted back to the 
 requires two round-trips between the L1 and the NVM. On the other hand, a non-temporal write can push the request 
 directly to the memory controller, requiring only one round-trip latency, but it does not work well with coherence,
 since it bypasses the hierarchy entirely.
+This paper suggests that an ideal write operation should both work well with coherence for easier programming,
+and minimizes the latency. To this end, a new write primitive is proposed, such that it does not fetch the block
+to be written into the L1, but instead, the request is pushed through the hierarchy, allowing each level to incorporate
+the changes, and then sent to the memory controller for NVM update.
 
