@@ -24,6 +24,11 @@ version_mgmt:
 3. Using queued object to block future reference of an object until all of its transitive closure objects are
    migrated to the NVM. This is to avoid race conditions on the migration process.
 
+4. The proposed efficient log write approach is a comprimise between non-temporal writes write, which does not 
+   update the hierarchy, and regular cached write where data needs to be fetched first and evicted later.
+   It requires only one round-trip time, instead of two compared with regular write, but it works better with cache
+   coherence and memory consistency than non-temporal writes.
+
 **Lowlight:**
 
 1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
@@ -128,3 +133,6 @@ If transaction is on then logging is also performed. Otherwise, the update is ju
 CheckLoad instruction works almost the same as CheckStoreH, except that it does not check transactional mode. The
 address translation is performed if the object is in DRAM and it is forwarded. The actual address after translation
 is used for fulfilling the load.
+
+The paper
+
