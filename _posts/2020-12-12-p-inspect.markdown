@@ -21,6 +21,9 @@ version_mgmt:
    moved, but not all referenced can be updated. 
    The combination of forwarded objects and bulk update amortizes the cost of object scanning.
 
+3. Using queued object to block future reference of an object until all of its transitive closure objects are
+   migrated to the NVM. This is to avoid race conditions on the migration process.
+
 **Lowlight:**
 
 1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
