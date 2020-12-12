@@ -122,4 +122,5 @@ processes can overlap, which inserts into the TRANS filter concurrently, making 
 when objects are no longer blocked.
 
 CheckStoreH instruction, on the other hand, only checks the host object. It first checks if the host object is 
-forwarded, and if true, then the software handler is called for address translation.
+in DRAM, and forwarded, and if true, then the software handler is called for address translation. 
+If transaction is on then logging is also performed. Otherwise, the update is just applied in-place.
