@@ -112,4 +112,7 @@ To address this issue, the paper proposes that the commit of the second load sho
 inserted into the L1 cache. To achieve this, when a store-load forwarding happens locally, and the store uop
 has not been inserted into the L1 cache when the forwarded load commits, the pipeline control
 logic sets a special bit in the load queue, indicating that the next load (and all loads after, since loads are not
-reordered) should stall until the forwarding store is globally visible. 
+reordered) should stall until the forwarding store is globally visible. The current location of the store uop
+in the store buffer is also stored in an extra register of the load queue. Whenever a store uop is drained,
+the load queue checks whether the store uop matches the current value of the register. If true, then the load queue
+can be unblocked, and the head entry can commit in the ROB. Otherwise, the load queue keep being blocked.
