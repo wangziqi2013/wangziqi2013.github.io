@@ -109,4 +109,7 @@ the store has been globally visible, then the above two cases will never occur, 
 real-time order they invoke coherence.
 
 To address this issue, the paper proposes that the commit of the second load should be delayed until the store is
-inserted into the L1 cache. 
+inserted into the L1 cache. To achieve this, when a store-load forwarding happens locally, and the store uop
+has not been inserted into the L1 cache when the forwarded load commits, the pipeline control
+logic sets a special bit in the load queue, indicating that the next load (and all loads after, since loads are not
+reordered) should stall until the forwarding store is globally visible. 
