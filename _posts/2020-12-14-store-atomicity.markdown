@@ -26,4 +26,10 @@ system into one.
 The resulting system both enjoys the convenience of a more intuitive memory consistency model, and preserves short
 load latency.
 
+This paper assumes a x86-like memory consistency model and implementation, which we discuss below. The x86 implements 
+Total Store Ordering (TSO) without store atomicity. Memory accessing instructions are translated into load and store
+uops (and potentially other uops), and inserted into the ROB. In the meantime, these uops are also inserted into
+special stuctures called the load queue and the store queue. Load and store queues track the address (and other
+status bits) of the uops, which are used by later uops to enforce correct program order, as uops are issued
+out-of-order.
 
