@@ -70,3 +70,8 @@ On one hand, the since the remote load does not observe the local store, indicat
 the former. On the other hand, the second local load is ordered before the remote store, which is itself ordered
 before the remote load. Given local program orders, it indicates that the local store is ordered before the remote
 load, also a conflit.
+
+Alternative implementations of the store buffer and load forwarding mechanism may choose not to allow forwarding, or
+only commit the load operation once the store has been inserted into the L1 cache, after which the ordering
+of both the store and load can be established. 
+The paper later summarizes that the major cause of a 
