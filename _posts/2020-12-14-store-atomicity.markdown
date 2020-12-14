@@ -78,4 +78,9 @@ This approach, however, degrades performance, since it essentially
 requires the load to wait for cache coherence on an entirely unrelated address, which increases load latency. Since
 loads are often on the critical path, this can negatively impact performance.
 
-The paper later summarizes that the major cause of a 
+The paper later summarizes that the major cause of a non-atomic store is because the local core executes a second
+core after the first one, before the store has been inserted into the cache. If the second store is only executed after 
+the store has been globally visible, then the above two cases will never occur, since all operations are ordered by the
+real-time order they invoke coherence.
+
+
