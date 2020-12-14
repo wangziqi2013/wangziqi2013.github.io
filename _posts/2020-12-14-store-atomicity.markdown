@@ -66,4 +66,7 @@ local store is ordered before both of the the remote stores, a conflict.
 In the second example, the second local load did not obseve the remote store, and the remote core later execures
 a load to the local store's address, and also does not observe the local store, since the local store has not
 been inserted into the cache. In this case, the local store is ordered both before and after the remote load.
-
+On one hand, the since the remote load does not observe the local store, indicating that the latter is ordered after
+the former. On the other hand, the second local load is ordered before the remote store, which is itself ordered
+before the remote load. Given local program orders, it indicates that the local store is ordered before the remote
+load, also a conflit.
