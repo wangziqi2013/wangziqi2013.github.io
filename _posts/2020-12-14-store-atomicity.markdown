@@ -56,4 +56,9 @@ The paper gives two examples. In the first example, The second load does not obs
 variable as the second load, hence being ordered before the remote write. Then the remote core executes a second
 store, which is on the same address as the local core's store, and is inserted into the cache before the local
 store (which is totally possible, since store buffers on different cores are in no way synchronized). In this case,
-two conflicting orders occur. 
+two conflicting orders occur. On one hand, the store is ordered after the remote core's second store, since the
+final memory value on the address is the local core's store. On the other hand, the store is ordered after the 
+remote core's second store, since the first load observes the local core's value, the second load is order
+after the first load by program order, which is itself ordered before the first remote store, since it does
+not observe the value of the store. The remote stores are themselves ordered by program order, and therefore, the 
+local store is ordered before both of the the remote stores, a conflict.
