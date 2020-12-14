@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a microarchitectural improvement for enforcing store atomicity. Store atomicity, as the paper
+shows in later sections, if violated, can make the processor vulnerable to a class of memory consistency problems
+that leads to non-serializable global ordering.
+
