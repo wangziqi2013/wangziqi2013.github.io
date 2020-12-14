@@ -28,6 +28,13 @@ version_mgmt:
 2. By putting a mark in the load queue, and prevent load operations to commit, we can stall loads in the ROB
    until the store that forwards value to load commits.
 
+**Lowlight:**
+
+1. What if there are multiple forwarding store-load pairs on different addresses? Are later loads are treated as
+   speculative, or are forwarded loads start a new gate?
+
+
+
 This paper proposes a microarchitectural improvement for enforcing store atomicity. Store atomicity, as the paper
 shows in later sections, if violated, can make the processor vulnerable to a class of memory consistency problems
 that leads to non-serializable global ordering.
@@ -98,4 +105,5 @@ core after the first one, before the store has been inserted into the cache. If 
 the store has been globally visible, then the above two cases will never occur, since all operations are ordered by the
 real-time order they invoke coherence.
 
-
+To address this issue, the paper proposes that the commit of the second load should be delayed until the store is
+inserted into the L1 cache. 
