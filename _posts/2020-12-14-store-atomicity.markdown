@@ -33,7 +33,10 @@ version_mgmt:
 1. What if there are multiple forwarding store-load pairs on different addresses? Are later loads are treated as
    speculative, or are forwarded loads start a new gate?
 
-
+2. It seems that loads are still delayed, the ROB is still stalled. I might be wrong, but I cannot see any significant
+   performance improvement this can bring us compared with stalling the forwarding load. Maybe there are some 
+   overlapping between the draining of the store buffer, and the execution of the next load (as well as the gap between
+   the forwarded load and the second load).
 
 This paper proposes a microarchitectural improvement for enforcing store atomicity. Store atomicity, as the paper
 shows in later sections, if violated, can make the processor vulnerable to a class of memory consistency problems
