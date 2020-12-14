@@ -41,3 +41,9 @@ delimiting the boundary.
 When a load uop is executed, the load circuit should first check whether an older committed uop of the same address is 
 already in the store buffer (and also store queue, but this is not the focus). If so, the value should be forwarded
 from the store buffer directly, such that program order is observed.
+
+The paper, however, observes that simply forwarding a value from the store buffer to a load uop may cause memory 
+inconsistency problems, as the local core sees the value earlier than remote cores. This is because after store uops
+retire, and before they are inserted into the cache by invoking coherence, the store uop has not been inserted into
+the global ordering, which is impossible for remote cores to observe, naturally ordering it after all memory operations
+that are inserted into the cache on the remote core. 
