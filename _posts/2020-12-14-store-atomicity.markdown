@@ -48,9 +48,12 @@ retire, and before they are inserted into the cache by invoking coherence, the s
 the global ordering, which is impossible for remote cores to observe, naturally ordering it after all memory operations
 that are inserted into the cache on the remote core. On the other hand, with store forwarding, local load uops can
 conveniently read the value of the store, before a remote core issues its own reads and writes into the cache, which
-essentially orders the write uop before the remove operation, which is established via a second load that reads 
-forwarded value, since the second load cannot observe a remote core's write, but the first already sees the local 
-store. 
+essentially orders the write uop before the remove operation, which is established via a second load (to a different
+address) that reads forwarded value, since the second load cannot observe a remote core's write, but the first already sees the local store. 
 Conflict will be observed, if the store uop is ordered both before and after some remote operation.
 
-The paper gives two examples. In the first example, 
+The paper gives two examples. In the first example, The second load does not observe a remove write to the same 
+variable as the second load, hence being ordered before the remote write. Then the remote core executes a second
+store, which is on the same address as the local core's store, and is inserted into the cache before the local
+store (which is totally possible, since store buffers on different cores are in no way synchronized). In this case,
+two conflicting orders occur. 
