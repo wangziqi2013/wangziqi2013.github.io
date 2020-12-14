@@ -25,6 +25,9 @@ version_mgmt:
    remote operation is ordered after the combination as described above, then a circular
    ordering can occur (see examples for details).
 
+2. By putting a mark in the load queue, and prevent load operations to commit, we can stall loads in the ROB
+   until the store that forwards value to load commits.
+
 This paper proposes a microarchitectural improvement for enforcing store atomicity. Store atomicity, as the paper
 shows in later sections, if violated, can make the processor vulnerable to a class of memory consistency problems
 that leads to non-serializable global ordering.
