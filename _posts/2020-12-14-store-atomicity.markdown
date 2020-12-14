@@ -46,4 +46,8 @@ The paper, however, observes that simply forwarding a value from the store buffe
 inconsistency problems, as the local core sees the value earlier than remote cores. This is because after store uops
 retire, and before they are inserted into the cache by invoking coherence, the store uop has not been inserted into
 the global ordering, which is impossible for remote cores to observe, naturally ordering it after all memory operations
-that are inserted into the cache on the remote core. 
+that are inserted into the cache on the remote core. On the other hand, with store forwarding, local load uops can
+conveniently read the value of the store, before a remote core issues its own reads and writes into the cache, which
+essentially orders the write uop before the , which is established via the load that reads forwarded value, since the
+load cannot observe a remote core's write, but already sees the local store. Conflict will be observed, if the 
+store uop is ordered both before and after some remote operation.
