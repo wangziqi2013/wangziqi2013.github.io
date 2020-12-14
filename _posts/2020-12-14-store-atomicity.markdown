@@ -36,4 +36,8 @@ When store uops in the store queue are ready, i.e., both address and data are ge
 ROB, when it reaches the head of ROB, and then be moved to the store buffer (SB). Retired uops in the store buffer
 are then inserted into the L1 cache by invoking coherence, using the store buffer as a temporary buffering space to
 avoid stalling the pipeline when coherence is busy.
-
+In practice, the store queue and the store buffer are often implemented as a single physical structure, with a pointer
+delimiting the boundary.
+When a load uop is executed, the load circuit should first check whether an older committed uop of the same address is 
+already in the store buffer (and also store queue, but this is not the focus). If so, the value should be forwarded
+from the store buffer directly, such that program order is observed.
