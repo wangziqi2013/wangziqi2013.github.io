@@ -32,4 +32,8 @@ uops (and potentially other uops), and inserted into the ROB. In the meantime, t
 special stuctures called the load queue and the store queue. Load and store queues track the address (and other
 status bits) of the uops, which are used by later uops to enforce correct program order, as uops are issued
 out-of-order.
+When store uops in the store queue are ready, i.e., both address and data are generated, the uop will commit in the 
+ROB, when it reaches the head of ROB, and then be moved to the store buffer (SB). Retired uops in the store buffer
+are then inserted into the L1 cache by invoking coherence, using the store buffer as a temporary buffering space to
+avoid stalling the pipeline when coherence is busy.
 
