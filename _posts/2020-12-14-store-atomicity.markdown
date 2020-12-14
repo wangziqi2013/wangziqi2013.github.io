@@ -62,3 +62,8 @@ remote core's second store, since the first load observes the local core's value
 after the first load by program order, which is itself ordered before the first remote store, since it does
 not observe the value of the store. The remote stores are themselves ordered by program order, and therefore, the 
 local store is ordered before both of the the remote stores, a conflict.
+
+In the second example, the second local load did not obseve the remote store, and the remote core later execures
+a load to the local store's address, and also does not observe the local store, since the local store has not
+been inserted into the cache. In this case, the local store is ordered both before and after the remote load.
+
