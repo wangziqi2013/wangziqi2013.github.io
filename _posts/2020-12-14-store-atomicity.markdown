@@ -21,7 +21,9 @@ version_mgmt:
    Any local instructions, especially loads, executed after it are naturally ordered after the combination,
    but the combination can itself be ordered after remote operation, if the remote operation reaches the L1
    cache earlier than it.
-   
+   If the local load after the combination is itself ordered before a remote global operation, and the
+   remote operation is ordered after the combination as described above, then a circular
+   ordering can occur (see examples for details).
 
 This paper proposes a microarchitectural improvement for enforcing store atomicity. Store atomicity, as the paper
 shows in later sections, if violated, can make the processor vulnerable to a class of memory consistency problems
