@@ -18,7 +18,12 @@ shows in later sections, if violated, can make the processor vulnerable to a cla
 that leads to non-serializable global ordering.
 Modern processors, unfortunately, often implement the memory consistency model without store atomicity, or only a 
 weaker version of it, called "write atomicity", which can incur the same problem as non-store atomicity systems.
+Some systems may implement store atomicity, but do so at the cost of longer read latency and hence lower 
+overall performance.
 The paper, therefore, first identifies the source of non-serializable memory ordering of non-store atomic systems, 
 and then proposes a lightweight mechanism implemented in the load store unit (LSU) to turn a non-store atomic
 system into one.
+The resulting system both enjoys the convenience of a more intuitive memory consistency model, and preserves short
+load latency.
+
 
