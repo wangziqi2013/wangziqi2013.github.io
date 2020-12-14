@@ -74,4 +74,8 @@ load, also a conflit.
 Alternative implementations of the store buffer and load forwarding mechanism may choose not to allow forwarding, or
 only commit the load operation once the store has been inserted into the L1 cache, after which the ordering
 of both the store and load can be established. 
+This approach, however, degrades performance, since it essentially
+requires the load to wait for cache coherence on an entirely unrelated address, which increases load latency. Since
+loads are often on the critical path, this can negatively impact performance.
+
 The paper later summarizes that the major cause of a 
