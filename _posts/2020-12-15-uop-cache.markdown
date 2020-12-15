@@ -55,4 +55,7 @@ reached, or when the entry is already full.
 
 The uop cache is indexed using the physical address of the prediction window (PW), which is a consecutive range
 of instructions that the branch predictor has predicted to be executed next. A PW can be divided into multiple 
-uop entries, and stored in the uop cache individually. 
+uop entries, and stored in the uop cache individually. The paper makes an critical observations that, if two
+uop cache entries are from the same PW, representing a consecutive uop stream, but they are delimited by i-cache 
+line boundaries, these two entries must be mapped to adjacent sets in the uop cache (although the paper never
+elaborates the index generation scheme for uop caches).
