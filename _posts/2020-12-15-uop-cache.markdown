@@ -28,3 +28,6 @@ One uop cache entry consists of a stream of uops translated from consecutive ins
 One of the most important features of uop entries is that they are variably sized, i.e., entries do not always consist
 of a fixed number of uops, despite the fact that uops are of equal length for easier processing, just like RISC
 instructions.
+These entries are sub-sequences of actual dynamic uop streams that are executed. An uop cache entry starts when a
+branch instruction changes the control flow to a target instruction, or when a previous entry has been formed and
+a new entry starts naturally. A uop entry ends on several conditions: 
