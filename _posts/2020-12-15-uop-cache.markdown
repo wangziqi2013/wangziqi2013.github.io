@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Not really a low light, but the paper suggests that the uop cache is addressed using the base address of the PW.
+   But a PW can be stored in multiple entries due to limitations or i-cache line boundaries, how are these multiple
+   entries addressed individually even if they are in the same PW?
+   My best guess is that they still use the actual physical address of the instruction that corresponding to the 
+   first uop in the entry, but each entry also indicates the address of the next instruction.
+
 This paper proposes two techniques for optimizing the performance of micro-operation (uop) cache on x86 processors.
 The uop cache is an important component on the frontend pipeline, since it stores and feeds decoded uops to the 
 backend without involving the instruction cache and the decoder. This reduces both pipeline depth, instruction feed
@@ -38,3 +46,5 @@ all occurrances of uops that correspond to the cache line being invalidated; (2)
 The branch decision is an output from the branch predictor, and is used by the accumulation buffer to delimit
 uop cache entries; (3) When the maximum number of uops, certain fields (immediate values, offset values) are
 reached, or when the entry is already full.
+
+
