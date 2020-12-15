@@ -30,4 +30,8 @@ of a fixed number of uops, despite the fact that uops are of equal length for ea
 instructions.
 These entries are sub-sequences of actual dynamic uop streams that are executed. An uop cache entry starts when a
 branch instruction changes the control flow to a target instruction, or when a previous entry has been formed and
-a new entry starts naturally. A uop entry ends on several conditions: 
+a new entry starts naturally. A uop entry ends on several conditions: (1) When the uop stream of the entry come from
+instructions in a different i-cache slot, i.e., the decoder terminates the current entry when the current i-cache
+entry is exhausted. This is to avoid mapping more than one i-cache entries to the same uop cache slot, in which case,
+when the i-cache invalidates entries due to self-modifying code, the uop cache needs to be searched extensively for
+all occurrances of uops that correspond to the cache line being invalidated; 
