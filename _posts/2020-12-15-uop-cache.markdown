@@ -64,5 +64,6 @@ In the runtime, the uop cache is probed by the uop buffer connecting the fronten
 with the loop uop buffer and the decoder. If the uops to be executed next is found in the uop buffer or loop
 uop buffer, then decoder is not used, and uops are directly fed from one of the two buffers. On the other hand,
 if both buffers miss, the decoder will be activated and process instruction flows fetched from the i-cache.
-
+In the latter case, more pipeline stages are involved, which implies a larger branch misprediction latency.
+In addition, the decoder consumes more power than the two small buffers, making the frontend less energy efficient.
 
