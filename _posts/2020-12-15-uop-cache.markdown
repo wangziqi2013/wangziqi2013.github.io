@@ -53,3 +53,6 @@ The branch decision is an output from the branch predictor, and is used by the a
 uop cache entries; (3) When the maximum number of uops, certain fields (immediate values, offset values) are
 reached, or when the entry is already full.
 
+The uop cache is indexed using the physical address of the prediction window (PW), which is a consecutive range
+of instructions that the branch predictor has predicted to be executed next. A PW can be divided into multiple 
+uop entries, and stored in the uop cache individually. 
