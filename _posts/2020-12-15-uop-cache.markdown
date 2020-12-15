@@ -14,6 +14,9 @@ version_mgmt:
 ---
 
 This paper proposes two techniques for optimizing the performance of micro-operation (uop) cache on x86 processors.
+The uop cache is an important component on the frontend pipeline, since it stores and feeds decoded uops to the 
+backend without involving the instruction cache and the decoder. This reduces both pipeline depth, instruction feed
+latency, and energy consumption, which all help in performance improvement.
 Current implementation of the uop cache suffers from external fragmentation, which originates from the fact that uop
 cache entries are variably sized. A fragmented uop cache negatively affects performance, since it reduces the effective 
 size of the cache, which can further stall the backend pipeline due to insufficient instruction bandwidth.
