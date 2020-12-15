@@ -15,11 +15,17 @@ version_mgmt:
 
 **Lowlight:**
 
-1. Not really a low light, but the paper suggests that the uop cache is addressed using the base address of the PW.
-   But a PW can be stored in multiple entries due to limitations or i-cache line boundaries, how are these multiple
+1. The paper never gave a precise definition of a PW, while suggesting that the uop cache is addressed using the base 
+   address of the PW. This raises many questions:
+   (1) A PW can be stored in multiple entries due to limitations or i-cache line boundaries, how are these multiple
    entries addressed individually even if they are in the same PW?
+   Shouldn't they have address conflict, if all entries are tagged with the same PW base address?
    My best guess is that they still use the actual physical address of the instruction that corresponding to the 
    first uop in the entry, but each entry also indicates the address of the next instruction.
+   (2) How are indices generated from uop cache entry address to sets?
+   In order for CLASP to work, it must be guaranteed that entries in the same PW but delimited by cache line
+   boundaries be mapped to adjacent sets in tne uop cache.
+   This suggests a different addressing scheme than the paper states.
 
 This paper proposes two techniques for optimizing the performance of micro-operation (uop) cache on x86 processors.
 The uop cache is an important component on the frontend pipeline, since it stores and feeds decoded uops to the 
@@ -46,5 +52,4 @@ all occurrances of uops that correspond to the cache line being invalidated; (2)
 The branch decision is an output from the branch predictor, and is used by the accumulation buffer to delimit
 uop cache entries; (3) When the maximum number of uops, certain fields (immediate values, offset values) are
 reached, or when the entry is already full.
-
 
