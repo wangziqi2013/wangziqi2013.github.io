@@ -59,3 +59,10 @@ uop entries, and stored in the uop cache individually. The paper makes an critic
 uop cache entries are from the same PW, representing a consecutive uop stream, but they are delimited by i-cache 
 line boundaries, these two entries must be mapped to adjacent sets in the uop cache (although the paper never
 elaborates the index generation scheme for uop caches).
+
+In the runtime, the uop cache is probed by the uop buffer connecting the frontend nand the backend, in parallel
+with the loop uop buffer and the decoder. If the uops to be executed next is found in the uop buffer or loop
+uop buffer, then decoder is not used, and uops are directly fed from one of the two buffers. On the other hand,
+if both buffers miss, the decoder will be activated and process instruction flows fetched from the i-cache.
+
+
