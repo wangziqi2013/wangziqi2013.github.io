@@ -27,6 +27,10 @@ version_mgmt:
    This does not require any extra tag storage or special handling for invalidation, since the compressed entry can be 
    found in either set A or set (A - 1) where A is the set index of the entry, if inserted uncompressed.
 
+4. Compaction performs regular uop cache compression by fitting multiple entries into the same slot. The tag array
+   is duplicated per slot just like a regular cache compression scheme. The paper also proposes three different
+   insertion schemes for compression lines to maximize locality of a physical slot.
+
 **Lowlight:**
 
 1. The paper never gave a precise definition of a PW, while suggesting that the uop cache is addressed using the base 
