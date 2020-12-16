@@ -67,3 +67,11 @@ if both buffers miss, the decoder will be activated and process instruction flow
 In the latter case, more pipeline stages are involved, which implies a larger branch misprediction latency.
 In addition, the decoder consumes more power than the two small buffers, making the frontend less energy efficient.
 
+The paper points out, however, that existing uop cache architecture suffers from severe fragmentation problem due to
+the variably sized entries. These entries are often significantly smaller than the slot size because of the 
+entry termination conditions described above. Fragmentation lowers effective size of the uop cache since only a 
+small fraction of cache storage is actually utilized. In addition, it lowers power efficiency of the frontend,
+since the decoder will be replied on to provide uops to the backend more frequently.
+
+
+
