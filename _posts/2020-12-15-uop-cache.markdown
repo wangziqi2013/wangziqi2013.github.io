@@ -102,4 +102,8 @@ The paper then proposes three different insertion schemes that determine the ent
 prioritizes the entry that is closer to the MRU location, if multiple candidates are feasible. The reasoning behind is
 to group entries with similar expected reusage into the same slot, such that the invalidation of the slot will not 
 accidentally evict a recently used entry.
-The
+The second scheme prioritizes the slot with an entry in the same PW, since execution is highly localized in the 
+same PW (recall that PWs are consecutive range of instructions). To achieve this, each uop cache entry as well
+as uops in the accumulation buffer is tagged with the PW ID. The uop cache controller favors slots that store an entry
+of the same PW ID as the incoming one during the insertion.
+
