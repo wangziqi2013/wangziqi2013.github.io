@@ -25,7 +25,12 @@ version_mgmt:
    (2) How are indices generated from uop cache entry address to sets?
    In order for CLASP to work, it must be guaranteed that entries in the same PW but delimited by cache line
    boundaries be mapped to adjacent sets in tne uop cache.
-   This suggests a different addressing scheme than the paper states.
+   This suggests a different addressing scheme than the paper describes.
+
+2. The paper also did not give a full description of how metadata is encoded in the uop cache, causing much confusion
+   in understanding how uop entries are recognized and delivered to the backend. For example, CLASP requires the 
+   cache controller to recognize two entries that are consecutive but were divided due to i-cache line boundary.
+   How is this achieved? Is there any special encoding involved?
 
 This paper proposes two techniques for optimizing the performance of micro-operation (uop) cache on x86 processors.
 The uop cache is an important component on the frontend pipeline, since it stores and feeds decoded uops to the 
