@@ -90,6 +90,8 @@ set (A - 1) are searched to avoid missing the entry.
 In order to check both sets in the same cycle, which is critical for fast delivery of uop entries, the paper proposes 
 that the uop cache tag store be implemented as two interleaved banks.
 
-
+The second technique is similar to data cache compression, which stores multiple variably sized entries into the same
+slot. Address tags and other metadata bits are duplicated for each entry of the uop cache, which will be checked in
+parallel on a set lookup. Each tag also contains an addition field storing the offset of the entry in the physical slot.
 
 
