@@ -98,3 +98,8 @@ can accommodate the new entry without evicting an existing entry. If true, the e
 slot, with the tag initialized properly, and the extre field pointing to the bit offset of the entry.
 Otherwise, an existing entry is evicted as usual.
 
+The paper then proposes three different insertion schemes that determine the entry to be inserted into. The first scheme
+prioritizes the entry that is closer to the MRU location, if multiple candidates are feasible. The reasoning behind is
+to group entries with similar expected reusage into the same slot, such that the invalidation of the slot will not 
+accidentally evict a recently used entry.
+The
