@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Uop cache is an important component of the x86 frontend that stores translated uops. The uops are organized into
+   entries, which are highly related to Prediction Windows, but are smaller in size, due to various factors that
+   can cause a PW to be divided into several entries.
+
+
+
 **Lowlight:**
 
 1. The paper never gave a precise definition of a PW, while suggesting that the uop cache is addressed using the base 
