@@ -87,4 +87,9 @@ index A as usual, and then check both set A and (A - 1). If an entry that satisf
 and that the total size of two enties fit into the same slot, then the controller will put the second entry to 
 set (A - 1). To address invalidation problem, on invalidating the PW's second uop cache entry, both set A and
 set (A - 1) are searched to avoid missing the entry.
+In order to check both sets in the same cycle, which is critical for fast delivery of uop entries, the paper proposes 
+that the uop cache tag store be implemented as two interleaved banks.
+
+
+
 
