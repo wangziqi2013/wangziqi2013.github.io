@@ -106,4 +106,7 @@ The second scheme prioritizes the slot with an entry in the same PW, since execu
 same PW (recall that PWs are consecutive range of instructions). To achieve this, each uop cache entry as well
 as uops in the accumulation buffer is tagged with the PW ID. The uop cache controller favors slots that store an entry
 of the same PW ID as the incoming one during the insertion.
-
+The third scheme is even more aggressive. Instead of passively finding a slot candidate, the uop controller proactively
+moves existing around in the same set to force entries from the same PW to be stored in the same slot. This may incur
+extra write operations to the data bank during the insertion process, but the paper claims that this is infrequent due
+to increased locality.
