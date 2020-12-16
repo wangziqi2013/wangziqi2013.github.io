@@ -22,7 +22,10 @@ version_mgmt:
 2. uop is compressible, due to the fact that entries are variably sized, and are typically much smaller than the slot
    size. This resembles the case of cache compression, in which cache lines are also variably sized after compression.
 
-
+3. CLASP performs simple uop cache compression by storing consecutive entries in the same PW into the same slot,
+   based on the observation that 
+   This does not require any extra tag storage or special handling for invalidation, since the compressed entry can be 
+   found in either set A or set (A - 1) where A is the set index of the entry, if inserted uncompressed.
 
 **Lowlight:**
 
