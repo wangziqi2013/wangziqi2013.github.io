@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Recognize that the SB can be performance bottleneck since it it hard to scale as a CAM, especially when write
+   bursts occur.
+
+2. 
+
 **Lowlight:**
 
 1. Isn't the last store address always the newest entry in the store buffer? I know it might be added just to keep
