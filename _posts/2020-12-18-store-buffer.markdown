@@ -16,4 +16,7 @@ version_mgmt:
 This paper proposes a store buffer prefetching scheme for handling store bursts. The paper observes that, on data 
 intensive applications, the store buffer can incur a significant portion of pipeline stalls due to stores not being
 drained in a timely manner. Previous proposals suggest that issuing cache coherence requests for prefetching can
-reduce such effect on the pipeline, but still leaves much space for optimization. 
+reduce such effect on the pipeline, but still leaves much space for optimization. This paper, on the other hand,
+employs a simple state machine to recognize common burst-write patterns, and issues prefetching requests even before
+the store operation enters the store buffer. Compared with previous approcahes, this proposal requires less 
+stringent timing between the prefetching and the actual access.
