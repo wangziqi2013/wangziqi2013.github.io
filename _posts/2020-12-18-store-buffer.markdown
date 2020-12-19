@@ -48,3 +48,9 @@ but intensive store bursts can occur as a result of memory copy, memory initiali
 etc. These store bursts are easy to predict and prefetch, since: (1) They access addresses with a regular pattern;
 (2) They often occur in bursts within a short time window. The paper therefore utilizes this property, and proposes 
 a simple predictor architecture for performing store prefetches.
+
+The proposed architecture is as follows. Three more registers are added to the SB for prediction. The first register,
+the last store address register, tracks the address of the last store operation. The second register, the saturated
+counter register, is a 4-bit counter that tracks the status of the predictor. The last register, the store count
+register, tracks the number of stores in the current access stride, which triggers prefetching when it reaches
+a certain value.
