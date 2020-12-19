@@ -38,4 +38,6 @@ is only between exectution or commit and the cycle when the store operation reac
 
 The paper observes that the SB can often become the performance bottleneck on data-intensive applications, where short
 but intensive store bursts can occur as a result of memory copy, memory initialization, C++ standard template libraries,
-etc. These store bursts are easy to predict and prefetch, 
+etc. These store bursts are easy to predict and prefetch, since: (1) They access addresses with a regular pattern;
+(2) They often occur in bursts within a short time window. The paper therefore utilizes this property, and proposes 
+a simple predictor architecture for performing store prefetches.
