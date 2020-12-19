@@ -20,3 +20,8 @@ reduce such effect on the pipeline, but still leaves much space for optimization
 employs a simple state machine to recognize common burst-write patterns, and issues prefetching requests even before
 the store operation enters the store buffer. Compared with previous approcahes, this proposal requires less 
 stringent timing between the prefetching and the actual access.
+
+This paper assumes a common store-buffer based backend pipeline architecture. Store instructions (or uops) are issued
+into the execution unit for address and source operand computation. The store operation can also be added into a 
+dedicated structure, called the store queue, but this is irrelevant to the current topic.
+
