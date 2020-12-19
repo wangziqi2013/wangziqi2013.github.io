@@ -16,7 +16,7 @@ version_mgmt:
 **Lowlight:**
 
 1. Isn't the last store address always the newest entry in the store buffer? I know it might be added just to keep
-   the explanation easier, but I did not see why it can't be removed.
+   the explanation easier. Also this might be added to avoid extra accesses to the SB structure.
 
 This paper proposes a store buffer prefetching scheme for handling store bursts. The paper observes that, on data 
 intensive applications, the store buffer can incur a significant portion of pipeline stalls due to stores not being
@@ -64,3 +64,8 @@ When a store is inserted into the SB, the predictor checks the address as follow
 is to the next cache line or on the same line as recorded in the last store address register, then the saturating 
 counter is incremented by one, and so does the store count register. Otherwise, all three registers are reset.
 No matter what happened, the last store address register is always updated to the address of the store. 
+
+The prefetching logic regularly checks the saturating counter and the store count. If the value of the saturating 
+counter indicates saturation, and that the store counter register reaches a certain threshold, then prefetching
+starts by sending exclusive get requests to the L1 controller for all remaining cache lines in the page, which can
+be computed using the store base address.
