@@ -31,7 +31,10 @@ loads as well as non-memory instructions, observing the Total Store Ordering (TS
 
 The SB can become the performance bottleneck for various reasons. First, the SB size is hard to scale as the core
 frequency and other queue structures do, since the SB must be implemented as a fully-associative CAM to support 
-store-load forwarding, with a complexity of O(n^2) where n is the number of entries. 
+store-load forwarding, with a complexity of O(n^2) where n is the number of entries. Second, with hyperthreading
+enabled, the SB is evenly and statically divided between the two cores. This must be enforced, since otherwise
+write-atomicity (the property that a logical thread can read its own writes early, while the store is only visible
+to all other logical threads atomically at a future point) will be violated, causing consistency issues.
 
 Since SB tracks store operations that have been committed, exclusive requests can be issued early as soon as these
 operations enter the SB, without incurring cache pollution, since these addresses will definitely be written in the 
