@@ -29,6 +29,10 @@ store operations that have already committed and are potentially removed from th
 drained from the SB in the order they are inserted (i.e., program order), but not ordered with any previous or future 
 loads as well as non-memory instructions, observing the Total Store Ordering (TSO) model.
 
+The SB can become the performance bottleneck for various reasons. First, the SB size is hard to scale as the core
+frequency and other queue structures do, since the SB must be implemented as a fully-associative CAM to support 
+store-load forwarding, with a complexity of O(n^2) where n is the number of entries. 
+
 Since SB tracks store operations that have been committed, exclusive requests can be issued early as soon as these
 operations enter the SB, without incurring cache pollution, since these addresses will definitely be written in the 
 near future. Prior researches propose that the prefetching requests can be issued as soon as the store operation
