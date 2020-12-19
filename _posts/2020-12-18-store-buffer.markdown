@@ -33,5 +33,6 @@ Since SB tracks store operations that have been committed, exclusive requests ca
 operations enter the SB, without incurring cache pollution, since these addresses will definitely be written in the 
 near future. Prior researches propose that the prefetching requests can be issued as soon as the store operation
 finishes address generation (at-execute), or when the store operation commits (at-commit). 
-
+This, however, still limits the performance gain from prefetching, since the window that prefetching must be completed 
+is only between exectution or commit and the cycle when the store operation reaches SB head.
 
