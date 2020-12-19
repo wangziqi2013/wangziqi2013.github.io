@@ -30,9 +30,10 @@ version_mgmt:
 1. Isn't the last store address always the newest entry in the store buffer? I know it might be added just to keep
    the explanation easier. Also this might be added to avoid extra accesses to the SB structure.
 
-2. I actually doubt whether memcpy() or memset() (especially memset()) uses the cache or not. Most likely, these
-   two functions are implemented with streaming, non-temproal instructions, which bypass the cache hierarchy, since
-   performing large writes will pollute the cache.
+2. I actually doubt whether memcpy() or memset() (especially memset()) uses the store buffer or not. Most likely, these
+   two functions are implemented with streaming, non-temproal instructions, which bypass the cache hierarchy entirely
+   and use the store combining buffer, which is a differnt structure, since performing large writes will pollute the 
+   cache.
 
 This paper proposes a store buffer prefetching scheme for handling store bursts. The paper observes that, on data 
 intensive applications, the store buffer can incur a significant portion of pipeline stalls due to stores not being
