@@ -54,3 +54,8 @@ the last store address register, tracks the address of the last store operation.
 counter register, is a 4-bit counter that tracks the status of the predictor. The last register, the store count
 register, tracks the number of stores in the current access stride, which triggers prefetching when it reaches
 a certain value.
+
+When a store is inserted into the SB, the predictor checks the address as follows. If the address of the store
+is to the next cache line or on the same line as recorded in the last store address register, then the saturating 
+counter is incremented by one, and so does the store count register. Otherwise, all three registers are reset.
+No matter what happened, the last store address register is always updated to the address of the store. 
