@@ -24,4 +24,7 @@ stringent timing between the prefetching and the actual access.
 This paper assumes a common store-buffer based backend pipeline architecture. Store instructions (or uops) are issued
 into the execution unit for address and source operand computation. The store operation can also be added into a 
 dedicated structure, called the store queue, but this is irrelevant to the current topic.
-
+When the store operation commits, it is inserted into another structure, called the store buffer (SB), which holds
+store operations that have already committed and are potentially removed from the ROB (retired). Store operations are
+drained from the SB in the order they are inserted (i.e., program order), but not ordered with any previous or future 
+loads, observing the Total Store Ordering (TSO) model.
