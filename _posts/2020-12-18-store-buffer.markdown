@@ -65,7 +65,12 @@ is to the next cache line or on the same line as recorded in the last store addr
 counter is incremented by one, and so does the store count register. Otherwise, all three registers are reset.
 No matter what happened, the last store address register is always updated to the address of the store. 
 
-The prefetching logic regularly checks the saturating counter and the store count. If the value of the saturating 
+The prefetching logic periodically checks the saturating counter and the store count. If the value of the saturating 
 counter indicates saturation, and that the store counter register reaches a certain threshold, then prefetching
 starts by sending exclusive get requests to the L1 controller for all remaining cache lines in the page, which can
-be computed using the store base address.
+be computed using the store base address. Note that this architecture does not consider prefetching across page
+boundaries, since the SB only sees physical addresses, which are not necessarily consecutive even if the virtual
+addresses are consecutive.
+
+The paper also suggests that, although prefetching backwards seems helpful in cases where stack is accessed, it does
+not seem to improve performance, and is hence unnecessary to implement.
