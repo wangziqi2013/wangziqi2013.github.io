@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Isn't the last store address always the newest entry in the store buffer? I know it might be added just to keep
+   the explanation easier, but I did not see why it can't be removed.
+
 This paper proposes a store buffer prefetching scheme for handling store bursts. The paper observes that, on data 
 intensive applications, the store buffer can incur a significant portion of pipeline stalls due to stores not being
 drained in a timely manner. Previous proposals suggest that issuing cache coherence requests for prefetching can
