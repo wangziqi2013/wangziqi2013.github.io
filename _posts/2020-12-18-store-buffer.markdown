@@ -36,3 +36,6 @@ finishes address generation (at-execute), or when the store operation commits (a
 This, however, still limits the performance gain from prefetching, since the window that prefetching must be completed 
 is only between exectution or commit and the cycle when the store operation reaches SB head.
 
+The paper observes that the SB can often become the performance bottleneck on data-intensive applications, where short
+but intensive store bursts can occur as a result of memory copy, memory initialization, C++ standard template libraries,
+etc. These store bursts are easy to predict and prefetch, 
