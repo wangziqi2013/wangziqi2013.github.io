@@ -18,7 +18,12 @@ version_mgmt:
 1. Recognize that the SB can be performance bottleneck since it it hard to scale as a CAM, especially when write
    bursts occur.
 
-2. 
+2. Existing approaches only prefetch when at least the address of the store is known (at-execute), or even later 
+   (at-commit). The paper observes that this is still insufficient to handle store bursts, since the window of the
+   prefetching is still tight for the above two approaches.
+
+3. The paper uses a simple mechanism (saturating counter + base address register) to detect whether a stride
+   has occurred. The paper's proposal only applied to large chunk of memory movement or memset.
 
 **Lowlight:**
 
