@@ -27,4 +27,11 @@ dedicated structure, called the store queue, but this is irrelevant to the curre
 When the store operation commits, it is inserted into another structure, called the store buffer (SB), which holds
 store operations that have already committed and are potentially removed from the ROB (retired). Store operations are
 drained from the SB in the order they are inserted (i.e., program order), but not ordered with any previous or future 
-loads, observing the Total Store Ordering (TSO) model.
+loads as well as non-memory instructions, observing the Total Store Ordering (TSO) model.
+
+Since SB tracks store operations that have been committed, exclusive requests can be issued early as soon as these
+operations enter the SB, without incurring cache pollution, since these addresses will definitely be written in the 
+near future. Prior researches propose that the prefetching requests can be issued as soon as the store operation
+finishes address generation (at-execute), or when the store operation commits (at-commit). 
+
+
