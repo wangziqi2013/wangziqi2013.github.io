@@ -29,4 +29,7 @@ other processors, or bus agents)
 The speculation commits regularly if no ordering violation is observed by external viewers, which can be detected by
 monitoring the read and write set of the current speculation, or proactively sending the current write set to all other
 processors for invalidation.
-
+On commit, all speculatively accessed cache blocks are "released" by clearing the speculative bit.
+If, however, a speculation instance collides with another speculation, or it is violated by another processor's 
+memory request, one of the two speculations must abort, and roll back to the previous checkpionted state, to avoid
+any observable consistency model violation.
