@@ -37,4 +37,8 @@ In practice, the above mechanism requires large amount of hardware resources, in
 extra hardware structures for holding the speculative states, or significantly change the way a cache or an on-chip
 network functions.
 
+InvisiFence adopts the second approach. The dynamic execution flow is divided into speculative chunks in the runtime, 
+which can begin and end at arbitrary boundaries, except for instructions whose effect cannot be rolled back
+(e.g., I/O instructions, uncachable writes), in which case speculation must commit, and execute the instruction
+non-speculatively. 
 
