@@ -110,6 +110,7 @@ instructions in the store buffer are still part of the atomic speculative workin
 processors.
 Then the L1 controller flash-clears the speculative bits of all entries in the L1 cache, committing the working set
 atomically.
+Note that during the commit process, no instruction in the pipeline may bypass the current speculative chunk.
 
 On abort operation, the L1 controller flash-invalidates all speculatively written blocks, and flash-clears all 
 speculative bits. In the meantime, the pipeline is also flushed, and the register file snapshot is restored to the 
@@ -123,3 +124,9 @@ avoid obstrucing overall progress.
 Speculation is also forced to commit (or abort, if commit is not possible, e.g., when an atomic instruction cannot
 be included in a single speculation) if a speculative L1 cache line is about to be evicted, in order to avoid losing
 track of speculatively accessed lines. 
+
+The paper proposes two policies for invoking speculation. In the first policy, speculation is only invoked when the
+processor deduces that a violation might happen for the current consistency model. For example, for RMO, speculation
+begins when a memory fence is seen in the instruction flow, and instructions after the fence is speculatively executed,
+and only committed when the fence retires.
+
