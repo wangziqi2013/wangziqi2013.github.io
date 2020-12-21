@@ -62,3 +62,7 @@ starvation). Store-load forwarding is also performed in the store queue and stor
 semantics.
 Besides that, no ordering between memory operations are enforced, making the memory consistency model the most relaxed
 among all possible design choices.
+
+The paper then proposes the following hardware changes for InvisiFence. First, all cache blocks in the private hierarchy
+(L1 only, or L1 + L2) are extended with two bits, one for speculatively load, and another for speculative store. Second,
+Store buffer entries are also extended with a speculative bit for marking speculative stores. 
