@@ -88,4 +88,8 @@ non-speculative. If true, then the dirty block is written back before the store 
 pre-speculation copy of the block as recovery data just in case the speculation aborts.
 The speculative store will also set the speculative store bit on the block, if not already set.
 
-
+Speculation commits after the chunk size exceeds a threshold, or when a violating request is detected, and the processor
+decides to commit first before serving the request. In the latter case, the cache controller will deter the request
+for a limited number of cycles, and attempt the commit sequence. If commit succeeds, the request can be handled 
+normally. Otherwise, the current speculation have to abort, before the request is served using pre-speculation data, to 
+avoid obstrucing overall progress.
