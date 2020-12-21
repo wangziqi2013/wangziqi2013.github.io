@@ -133,3 +133,9 @@ For TSO, speculation begins when a store is about to bypass the previous store, 
 out-of-order. The speculation should ensure that either stores or loads are executed as a single atomic unit such
 that the reorder is not visible to external viewers.
 For SC, speculation begins whenever an reordering is about to occur.
+
+The second scheme requires that the processor continuously speculate, except when the instruction has side effects
+and must be executed in non-speculative mode. This mode may incur excessive overhead by frequently committing
+the chunk, which stalls the pipeline and drains the store buffer. To address this, the paper proposes that two
+copies of the register file snapshot be prepared. While the current speculation is being committed, the next speculation
+begins immediately, overlapping execution with speculation commit.
