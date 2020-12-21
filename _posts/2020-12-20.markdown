@@ -50,3 +50,9 @@ memory instructions in sequential consistency model, such that memory instructio
 real-time order the belonging chunks commit., and that instuctions to different addresses are unordered within the
 same chunk. The latter does not violate the consistency model, since no other processors may observe the internal
 states of a chunk.
+
+The paper assumes the following system architecture. The base system only implements the most relaxed memory consistency
+model. Loads and stores are issed when they are ready, and executed as soon as possible. No load queue is present for
+tracking load ordering, meaning that loads can reorder with each other. A store queue and store buffer, however, is 
+attached to the store unit for tracking store addresses and status. 
+
