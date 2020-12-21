@@ -41,4 +41,7 @@ InvisiFence adopts the second approach. The dynamic execution flow is divided in
 which can begin and end at arbitrary boundaries, except for instructions whose effect cannot be rolled back
 (e.g., I/O instructions, uncachable writes), in which case speculation must commit, and execute the instruction
 non-speculatively. 
-
+The hardware ensures that all loads and stores within a speculative chunk appear as a single, atomic unit to external
+viewers, such that these viewers cannot (1) observe any intermediate state in the middle of the chunk by reading dirty
+data generated in the chunk before speculation ends; (2) establish any dependency with an uncommitted chunk by writing
+to its working data. 
