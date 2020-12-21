@@ -72,3 +72,8 @@ clearing the speculative bits.
 Lastly, as in previous post-retire speculation designs, a register file snapshot is added to keep a copy of all 
 on-chip physical and special purpose registers. When speculation begins, the current non-speculative state is copied
 to this snapshot, and when a speculation aborts, the snapshot is copied back to the register file for recovery.
+
+We next describe InvisiFence's speculative operations. On a speculative load, the load instruction is executed by the
+load unit as soon as it is issued. The load unit will send a request to the L1 cache for accessing a cache block. When
+the cache block is brought into the L1 cache, the speculative load bit will be set (or just set it, if the block 
+already exists). 
