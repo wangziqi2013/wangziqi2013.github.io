@@ -69,4 +69,6 @@ Store buffer entries are also extended with a speculative bit for marking specul
 accessed by a memory operation under speculative mode, the corresponding bit is set for tracking the working set of the
 current speculation. These blocks and entries can be flash invalidated on an abort operation, or be committed by flash 
 clearing the speculative bits.
-Lastly, 
+Lastly, as in previous post-retire speculation designs, a register file snapshot is added to keep a copy of all 
+on-chip physical and special purpose registers. When speculation begins, the current non-speculative state is copied
+to this snapshot, and when a speculation aborts, the snapshot is copied back to the register file for recovery.
