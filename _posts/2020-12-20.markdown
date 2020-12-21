@@ -23,7 +23,10 @@ version_mgmt:
    accessing instruction by grouping them into chunks, and then sequentially execute each chunk. Note that in all
    such designs, the chunks must take effect just like memory operations in an SC model.
 
-
+3. The paper also proposes a policy, besides the continuous speculation one, where the processor only starts speculation
+   when local violation of the ordering is about to occur. The goal of the speculation is to commit the involved 
+   instruction as an atomic unit, such that external viewers cannot infer the order of these instructions by 
+   observing the intermediate state.
 
 **Lowlight:**
 
