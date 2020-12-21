@@ -20,6 +20,10 @@ version_mgmt:
    transaction to L2 or lower level caches (hopefully they are inclusive, which bounds the time of this request)
    to fetch the old image first, before handling the request.
 
+2. I think the store buffer should also be checked against external requests for violation detection (although
+   I am not very sure about that)? If this is true, then we need a CAM to let store buffer snoop the coherence,
+   adding extra complexity (although the store buffer is already more or less a CAM for store-load forwarding).
+
 This paper proposes InvisiFence, a cache and microarchitecture design for enforcing stronger memory ordering on weakly
 ordered architectures. 
 Previous proposals for implementing strong memory consistency models often suffer from performance overhead and/or 
@@ -94,6 +98,9 @@ When the store is issued to the L1, the cache controller first checks whether th
 non-speculative. If true, then the dirty block is written back before the store is applied. This is to retain a 
 pre-speculation copy of the block as recovery data just in case the speculation aborts.
 The speculative store will also set the speculative store bit on the block, if not already set.
+
+Consistency violations are detected by checking incoming coherence requests against speculative bits in the L1 cache
+and the store buffer.
 
 Speculation commits after the chunk size exceeds a threshold, or when a violating request is detected, and the processor
 decides to commit first before serving the request. In the latter case, the cache controller will deter the request
