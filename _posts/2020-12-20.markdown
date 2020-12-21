@@ -33,3 +33,8 @@ On commit, all speculatively accessed cache blocks are "released" by clearing th
 If, however, a speculation instance collides with another speculation, or it is violated by another processor's 
 memory request, one of the two speculations must abort, and roll back to the previous checkpionted state, to avoid
 any observable consistency model violation.
+In practice, the above mechanism requires large amount of hardware resources, including a new coherence protocol, 
+extra hardware structures for holding the speculative states, or significantly change the way a cache or an on-chip
+network functions.
+
+
