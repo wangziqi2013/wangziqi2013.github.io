@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. If a speculation aborts on receiving a request, and the requested block is invalidated, then in fact L1 cannot
+   handle the request by its own, since it no longer has the block. In this case, L1 should perform another bus
+   transaction to L2 or lower level caches (hopefully they are inclusive, which bounds the time of this request)
+   to fetch the old image first, before handling the request.
+
 This paper proposes InvisiFence, a cache and microarchitecture design for enforcing stronger memory ordering on weakly
 ordered architectures. 
 Previous proposals for implementing strong memory consistency models often suffer from performance overhead and/or 
