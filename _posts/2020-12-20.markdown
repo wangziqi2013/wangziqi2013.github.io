@@ -76,4 +76,7 @@ to this snapshot, and when a speculation aborts, the snapshot is copied back to 
 We next describe InvisiFence's speculative operations. On a speculative load, the load instruction is executed by the
 load unit as soon as it is issued. The load unit will send a request to the L1 cache for accessing a cache block. When
 the cache block is brought into the L1 cache, the speculative load bit will be set (or just set it, if the block 
-already exists). 
+already exists). The paper also suggests that, if the pipeline maintains a load queue (which is not required by the 
+baseline design, but still good to have), and snoops GETX requests received by the L1, the cache block's speculative
+load bit can be set only when the instruction commits in the ROB, in which case it ceases from being tracked by the ROB
+(nevertheless, always setting the bit on execute will ensure correctness).
