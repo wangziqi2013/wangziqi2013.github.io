@@ -105,6 +105,14 @@ A violation occurs, if a speculatively read block is requested for write, or a s
 for either read or write.
 A violation will casue an immediiate abort of the current speculation, or an attempted commit, as we describe below.
 
+On commit operation, the pipeline first stalls briefly waiting for the store buffer to drain, since commited 
+instructions in the store buffer are still part of the atomic speculative working set, but not yet visible to other 
+processors.
+Then the L1 controller flash-clears the speculative bits of all entries in the L1 cache, committing the working set
+atomically.
+
+
+
 Speculation commits after the chunk size exceeds a threshold, or when a violating request is detected, and the processor
 decides to commit first before serving the request. In the latter case, the cache controller will deter the request
 for a limited number of cycles, and attempt the commit sequence. If commit succeeds, the request can be handled 
