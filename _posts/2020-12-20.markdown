@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes InvisiFence, a cache and microarchitecture design for enforcing stronger memory ordering on weakly
+ordered architectures. 
+Previous proposals for implementing strong memory consistency models often suffer from performance overhead and/or 
+design complications.
+
+
