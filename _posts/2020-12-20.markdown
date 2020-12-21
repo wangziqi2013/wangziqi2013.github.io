@@ -17,5 +17,8 @@ This paper proposes InvisiFence, a cache and microarchitecture design for enforc
 ordered architectures. 
 Previous proposals for implementing strong memory consistency models often suffer from performance overhead and/or 
 design complications.
-
+The paper gives two examples. In the first example, special hardware structures such as load queue and store buffer 
+are added to the microarchitecture for tracking local memory ordering, and the pipeline is stalled when the commit of 
+certain memory operations may lead to a violation of the consistency model. This approach always assumes pessimistically
+that a violation will definitely occur, when the local ordering of loads and stores do not match the model's definition.
 
