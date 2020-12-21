@@ -111,7 +111,9 @@ processors.
 Then the L1 controller flash-clears the speculative bits of all entries in the L1 cache, committing the working set
 atomically.
 
-
+On abort operation, the L1 controller flash-invalidates all speculatively written blocks, and flash-clears all 
+speculative bits. In the meantime, the pipeline is also flushed, and the register file snapshot is restored to the 
+register file. The pipeline will start fetching instruction from the original point where speculation begins. 
 
 Speculation commits after the chunk size exceeds a threshold, or when a violating request is detected, and the processor
 decides to commit first before serving the request. In the latter case, the cache controller will deter the request
