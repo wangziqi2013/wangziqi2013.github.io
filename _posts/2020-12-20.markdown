@@ -19,6 +19,10 @@ version_mgmt:
    transactional memory and memory consistency model often rely on the same abstraction, that is, committing a 
    multi-loand and multi-store chunk as an atomic unit.
 
+2. From another perspective, HTM-like speculation just amortizes the cost of sequentially execution all memory
+   accessing instruction by grouping them into chunks, and then sequentially execute each chunk. Note that in all
+   such designs, the chunks must take effect just like memory operations in an SC model.
+
 
 
 **Lowlight:**
