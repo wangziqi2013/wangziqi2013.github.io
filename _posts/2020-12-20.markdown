@@ -80,3 +80,12 @@ already exists). The paper also suggests that, if the pipeline maintains a load 
 baseline design, but still good to have), and snoops GETX requests received by the L1, the cache block's speculative
 load bit can be set only when the instruction commits in the ROB, in which case it ceases from being tracked by the ROB
 (nevertheless, always setting the bit on execute will ensure correctness).
+
+On a speculative store, the store instruction is first entered into the ROB and the store queue, and later moved
+to the store buffer after it commits, waiting to be issued to the L1.
+When the store is issued to the L1, the cache controller first checks whether the current block in L1 is dirty, and
+non-speculative. If true, then the dirty block is written back before the store is applied. This is to retain a 
+pre-speculation copy of the block as recovery data just in case the speculation aborts.
+The speculative store will also set the speculative store bit on the block, if not already set.
+
+
