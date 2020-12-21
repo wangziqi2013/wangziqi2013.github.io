@@ -23,3 +23,10 @@ certain memory operations may lead to a violation of the consistency model. This
 that a violation will definitely occur, when the local ordering of loads and stores do not match the model's definition.
 In the second example, processors are allowed to execute out-of-order memory instructions, but they continuously perform
 after-retire speculation in the unit of consecutive instruction chunks. In continuous after-retire speculation, although instructions have been retired and removed from the ROB, the cache blocks accessed by these data are tracked in the private cache or by a signature, such that they are still speculative.
+A snapshot of the register file is also taken when the speculation begins.
+Memory instructions to different addresses can be executed in arbitrary order, as long as no external viewer (e.g.,
+other processors, or bus agents) 
+The speculation commits regularly if no ordering violation is observed by external viewers, which can be detected by
+monitoring the read and write set of the current speculation, or proactively sending the current write set to all other
+processors for invalidation.
+
