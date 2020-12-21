@@ -129,4 +129,7 @@ The paper proposes two policies for invoking speculation. In the first policy, s
 processor deduces that a violation might happen for the current consistency model. For example, for RMO, speculation
 begins when a memory fence is seen in the instruction flow, and instructions after the fence is speculatively executed,
 and only committed when the fence retires.
-
+For TSO, speculation begins when a store is about to bypass the previous store, or when two loads are issued 
+out-of-order. The speculation should ensure that either stores or loads are executed as a single atomic unit such
+that the reorder is not visible to external viewers.
+For SC, speculation begins whenever an reordering is about to occur.
