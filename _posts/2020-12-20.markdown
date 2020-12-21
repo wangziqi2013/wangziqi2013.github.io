@@ -45,3 +45,8 @@ The hardware ensures that all loads and stores within a speculative chunk appear
 viewers, such that these viewers cannot (1) observe any intermediate state in the middle of the chunk by reading dirty
 data generated in the chunk before speculation ends; (2) establish any dependency with an uncommitted chunk by writing
 to its working data. 
+If these two can be achieved, then speculative chunks are always committed with a global ordering, just like individual 
+memory instructions in sequential consistency model, such that memory instructions between chunks are ordered by the 
+real-time order the belonging chunks commit., and that instuctions to different addresses are unordered within the
+same chunk. The latter does not violate the consistency model, since no other processors may observe the internal
+states of a chunk.
