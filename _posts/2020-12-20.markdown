@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using a speculation mechanism that is very similar to Intel RTM for enforcing memory ordering. Broadly speaking,
+   transactional memory and memory consistency model often rely on the same abstraction, that is, committing a 
+   multi-loand and multi-store chunk as an atomic unit.
+
+
+
 **Lowlight:**
 
 1. If a speculation aborts on receiving a request, and the requested block is invalidated, then in fact L1 cannot
