@@ -120,3 +120,6 @@ decides to commit first before serving the request. In the latter case, the cach
 for a limited number of cycles, and attempt the commit sequence. If commit succeeds, the request can be handled 
 normally. Otherwise, the current speculation have to abort, before the request is served using pre-speculation data, to 
 avoid obstrucing overall progress.
+Speculation is also forced to commit (or abort, if commit is not possible, e.g., when an atomic instruction cannot
+be included in a single speculation) if a speculative L1 cache line is about to be evicted, in order to avoid losing
+track of speculatively accessed lines. 
