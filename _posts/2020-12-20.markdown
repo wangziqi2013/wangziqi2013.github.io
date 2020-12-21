@@ -100,7 +100,10 @@ pre-speculation copy of the block as recovery data just in case the speculation 
 The speculative store will also set the speculative store bit on the block, if not already set.
 
 Consistency violations are detected by checking incoming coherence requests against speculative bits in the L1 cache
-and the store buffer.
+and the store buffer (the load queue, if present, should also be checked). 
+A violation occurs, if a speculatively read block is requested for write, or a speculatively written block is requested 
+for either read or write.
+A violation will casue an immediiate abort of the current speculation, or an attempted commit, as we describe below.
 
 Speculation commits after the chunk size exceeds a threshold, or when a violating request is detected, and the processor
 decides to commit first before serving the request. In the latter case, the cache controller will deter the request
