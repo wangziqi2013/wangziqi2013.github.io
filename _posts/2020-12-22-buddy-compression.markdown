@@ -82,3 +82,8 @@ using the same address mapping scheme as in reads.
 The paper also proposes adding a metadata cache to avoid accessing the metadata bits for each request. The metadata 
 cache is organized as a set-associative sector cache, which prefetches a block of bits from the metadata area,
 if a cache miss occurs, which works pretty well when the access has high locality.
+
+To further improve compression ratio, the paper also observes that, although certain parts of the workloads can
+be compressed really well due to homogeneous data, the overall compression ratio is often inferior because of 
+uncompressable objects. The paper thus proposes that compression should be performed per-malloc, since data within
+a malled'ed chunk is usually of higher compression ratio. 
