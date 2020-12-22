@@ -16,4 +16,6 @@ version_mgmt:
 This paper proposes Buddy Compression, a GPGPU main memory compression scheme for simplicity and effectiveness.
 The paper is motived by the fact that modern GPU workload sizes often exceed the maximum possible memory size 
 of the GPU device, while the latter is difficult to scale due to physical constraints.
-
+Conventional GPU compression schemes, however, are typically only designed for bandwidth saving but not storage 
+reduction, since main memory compression most likely will produce variably sized pages, which are difficult to
+handle on GPGPUs due to lack of an OS and frequent page movement.
