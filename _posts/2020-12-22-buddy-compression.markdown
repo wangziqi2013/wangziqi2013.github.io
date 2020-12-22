@@ -48,4 +48,9 @@ the address translation scheme. In the baseline design, the compression ratio is
 compressed address space, and should be determined before system startup. In addition, there is no per-page offset
 to the overflow area, as the address mapping is just one-by-one and linear.
 
+At startup time, the GPU's firmware initializes parameters of the compression scheme. The most important compression
+parameter is the compression ratio. Given a compression ratio of R, the compressed address space has a total size
+of R * S, where S is the size of the uncompressed address space. In other words, Buddy Compression simply reduces
+the size of each physical slot by R times, and maps compressed lines to these slots as in the uncompressed design.
+
 
