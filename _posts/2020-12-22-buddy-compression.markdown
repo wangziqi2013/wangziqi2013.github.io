@@ -40,4 +40,8 @@ as they can be addressed and accessed by the GPU's MMU.
 Buddy Compression requires the following hardware changes. First, since cache lines are compressed, each cache line
 slot will be smaller, which changes the addressing scheme of GPGPU's main memory. Given a fixed slot size of X,
 the physical address for line ID i will be i * X, rather than i * 256. Second, the GPU's MMU contains a register 
-holding the address of the secondary storage's base address where the overflow area begins. 
+holding the address of the secondary storage's base address where the overflow area begins. The overflow area is an
+allocated, continuous chunk of memory in the secondary level storage for holding overflowed parts of the line, as we
+will see later. Lastly, the GPU device memory should reserve four bits per logical line in the compressed address space
+to remember the compressed size of the line. The memory controller needs to access the metadata first before deciding
+the address translation scheme.
