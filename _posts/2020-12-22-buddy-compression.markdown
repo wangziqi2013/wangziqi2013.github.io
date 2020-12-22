@@ -13,6 +13,17 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. First design ever for applying compression to achieve storage saving on GPGPU
+
+2. Most compressed lines can fit into the physical slot, while those rare overflows (and size changes
+   after a write) can be overflowed to a secondary, larger, but slower memory region.
+   Note that the overflow scheme is that only the overflow part is stored into the secondary storage,
+   so the secondary storage only needs to reserve space for the overflowed part.
+
+
+
 **Lowlight:**
 
 1. Storage is wasted on the overflow area, if most lines can be compressed to the target size. It is better to use
