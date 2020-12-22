@@ -53,8 +53,11 @@ to the overflow area, as the address mapping is just one-by-one and linear.
 
 At startup time, the GPU's firmware initializes parameters of the compression scheme. The most important compression
 parameter is the compression ratio. Given a compression ratio of R, the compressed address space has a total size
-of R * S, where S is the size of the uncompressed address space. In other words, Buddy Compression simply reduces
-the size of each physical slot by R times, and maps compressed lines to these slots as in the uncompressed design.
+of (256 / R) * S, where S is the size of the uncompressed address space. In other words, Buddy Compression simply 
+reduces the size of each physical slot by R times, and maps compressed lines to these slots as in the uncompressed 
+design.
+In the meantime, the overflow memory area is allocated in the secondary storage. The overflow area is an array of 
+slots of size (256 - 256 / R), which is linearly mapped to logical cache lines in the compressed address space.
 
 On each memory access, the MMU reads the metadata bits first, and compares the compressed size with slot size.
 If slot size is smaller, the access consists of two requests. The first request reads the entire slot, and the 
