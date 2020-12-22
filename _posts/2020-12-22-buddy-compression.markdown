@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. Storage is wasted on the overflow area, if most lines can be compressed to the target size. It is better to use
+   a more complicated address mapping scheme, i.e., per-page overflow page, which can be easily achieved without
+   any GPU side modification (the GPU should request such a page to the host CPU if it is not there yet).
+
+
+
 This paper proposes Buddy Compression, a GPGPU main memory compression scheme for simplicity and effectiveness.
 The paper is motived by the fact that modern GPU workload sizes often exceed the maximum possible memory size 
 of the GPU device, while the latter is difficult to scale due to physical constraints.
@@ -68,4 +76,5 @@ The MMU then waits for both request to finish, and invokes the decompressor to u
 For memory writes, the data is first compressed with hardware compressor, and then stored into the local slot.
 If the compressed size is larger than slot size, the rest of the line is written into the secondary storage
 using the same address mapping scheme as in reads.
+
 
