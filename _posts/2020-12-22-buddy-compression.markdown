@@ -32,4 +32,7 @@ compressed line can only be decompressed after both parts have been fetched.
 The paper assumes the following architectures. The GPGPU has a cache line size of 256 bytes, and page sizes varying from
 64KB to 2MB. The cache line and page size of the host CPU does not matter. 
 The GPU devide has its own local main memory, which has higher bandwidth, but is limited in size.
-
+The off-board memory, on the contrary, is large, but can only be accessed via an external high bandwidth link, which
+has higher latency and relatively lower bandwidth.
+The paper does not restrict the external memory to be CPU-managed host memory, or individual memory modules, as long
+as they can be addressed and accessed by the GPU's MMU.
