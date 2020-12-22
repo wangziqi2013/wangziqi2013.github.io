@@ -86,4 +86,8 @@ if a cache miss occurs, which works pretty well when the access has high localit
 To further improve compression ratio, the paper also observes that, although certain parts of the workloads can
 be compressed really well due to homogeneous data, the overall compression ratio is often inferior because of 
 uncompressable objects. The paper thus proposes that compression should be performed per-malloc, since data within
-a malled'ed chunk is usually of higher compression ratio. 
+a malled'ed chunk is usually of higher compression ratio. In this scheme, the compression ratio target should
+be set in a per-page granularity, and so does the overflow page address in the overflow storage.
+To this end, two extra field will be added to the PTE on the GPU side for tracking target compression ratio and
+page offset, respectively. The MMU should compute the memory access scheme based on the per-page information,
+rather than global settings.
