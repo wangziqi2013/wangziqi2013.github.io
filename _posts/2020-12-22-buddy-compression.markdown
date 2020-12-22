@@ -29,4 +29,7 @@ be stored in a secondary storage which is connected to the GPGPU via high bandwi
 A request to such cache lines will be fulfilled by both the GPGPU's main memory, and the secondary storage. The 
 compressed line can only be decompressed after both parts have been fetched.
 
+The paper assumes the following architectures. The GPGPU has a cache line size of 256 bytes, and page sizes varying from
+64KB to 2MB. The cache line and page size of the host CPU does not matter. 
+The GPU devide has its own local main memory, which has higher bandwidth, but is limited in size.
 
