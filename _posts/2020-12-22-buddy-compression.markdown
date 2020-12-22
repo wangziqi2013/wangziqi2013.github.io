@@ -24,4 +24,7 @@ Buddy compression, on the other hand, is the first ever GPGPU compression design
 saving. The design relies on a two-level storage hierarchy and an opportunistic storage policy. 
 On the first level, the GPU's main memory stores most of the compressed lines in fix sized slots, which fulfills most
 of the accesses to compressed data.
-
+On the second level, if a compressed line cannot be entirely stored by a fix sized slot, the rest of the line will then
+be stored in a secondary storage which is connected to the GPGPU via high bandwidth links.
+A request to such cache lines will be fulfilled by both the GPGPU's main memory, and the secondary storage. The 
+compressed line can only be decompressed after both parts have been fetched.
