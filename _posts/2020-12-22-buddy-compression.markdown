@@ -19,7 +19,9 @@ version_mgmt:
    a more complicated address mapping scheme, i.e., per-page overflow page, which can be easily achieved without
    any GPU side modification (the GPU should request such a page to the host CPU if it is not there yet).
 
-
+2. The paper suggests that the base design uses linearly mapped overflow area, while in the base design there is 
+   per-page compression ratio and per-page offset field. This is unnecessary for the base design, but required
+   for the per-allocation design.
 
 This paper proposes Buddy Compression, a GPGPU main memory compression scheme for simplicity and effectiveness.
 The paper is motived by the fact that modern GPU workload sizes often exceed the maximum possible memory size 
