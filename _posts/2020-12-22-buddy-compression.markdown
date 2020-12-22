@@ -79,4 +79,6 @@ For memory writes, the data is first compressed with hardware compressor, and th
 If the compressed size is larger than slot size, the rest of the line is written into the secondary storage
 using the same address mapping scheme as in reads.
 
-
+The paper also proposes adding a metadata cache to avoid accessing the metadata bits for each request. The metadata 
+cache is organized as a set-associative sector cache, which prefetches a block of bits from the metadata area,
+if a cache miss occurs, which works pretty well when the access has high locality.
