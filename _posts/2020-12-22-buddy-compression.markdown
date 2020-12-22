@@ -56,4 +56,8 @@ parameter is the compression ratio. Given a compression ratio of R, the compress
 of R * S, where S is the size of the uncompressed address space. In other words, Buddy Compression simply reduces
 the size of each physical slot by R times, and maps compressed lines to these slots as in the uncompressed design.
 
-
+On each memory access, the MMU reads the metadata bits first, and compares the compressed size with slot size.
+If slot size is smaller, the access consists of two requests. The first request reads the entire slot, and the 
+second request reads the rest of the data from the secondary storage. The second storage address can be computed
+by adding P * i to the base address of the overflow area, where i is the requested line ID, and P is the secondary 
+storage slot size.
