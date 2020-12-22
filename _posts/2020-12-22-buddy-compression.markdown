@@ -19,3 +19,9 @@ of the GPU device, while the latter is difficult to scale due to physical constr
 Conventional GPU compression schemes, however, are typically only designed for bandwidth saving but not storage 
 reduction, since main memory compression most likely will produce variably sized pages, which are difficult to
 handle on GPGPUs due to lack of an OS and frequent page movement.
+
+Buddy compression, on the other hand, is the first ever GPGPU compression design that explores the aspect of bandwidth
+saving. The design relies on a two-level storage hierarchy and an opportunistic storage policy. 
+On the first level, the GPU's main memory stores most of the compressed lines in fix sized slots, which fulfills most
+of the accesses to compressed data.
+
