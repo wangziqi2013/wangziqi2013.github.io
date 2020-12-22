@@ -59,8 +59,13 @@ design.
 In the meantime, the overflow memory area is allocated in the secondary storage. The overflow area is an array of 
 slots of size (256 - 256 / R), which is linearly mapped to logical cache lines in the compressed address space.
 
-On each memory access, the MMU reads the metadata bits first, and compares the compressed size with slot size.
+On each memory read, the MMU reads the metadata bits first, and compares the compressed size with slot size.
 If slot size is smaller, the access consists of two requests. The first request reads the entire slot, and the 
 second request reads the rest of the data from the secondary storage. The second storage address can be computed
 by adding P * i to the base address of the overflow area, where i is the requested line ID, and P is the secondary 
 storage slot size.
+The MMU then waits for both request to finish, and invokes the decompressor to unpack the bits.
+For memory writes, the data is first compressed with hardware compressor, and then stored into the local slot.
+If the compressed size is larger than slot size, the rest of the line is written into the secondary storage
+using the same address mapping scheme as in reads.
+
