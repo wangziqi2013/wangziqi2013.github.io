@@ -22,7 +22,11 @@ version_mgmt:
    Note that the overflow scheme is that only the overflow part is stored into the secondary storage,
    so the secondary storage only needs to reserve space for the overflowed part.
 
-
+3. The base design has a simple address mapping scheme, i.e., compressed lines are linearly mapped to
+   the overflow area.
+   The per-page design has to invoke the OS to allocate an overflow page, and then use the per-page 
+   offset to track the overflow area, which is more complicated, but the most complications arise at
+   CPU side, not GPU side, since only host memory is managed.
 
 **Lowlight:**
 
