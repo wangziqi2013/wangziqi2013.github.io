@@ -36,6 +36,9 @@ The off-board memory, on the contrary, is large, but can only be accessed via an
 has higher latency and relatively lower bandwidth.
 The paper does not restrict the external memory to be CPU-managed host memory, or individual memory modules, as long
 as they can be addressed and accessed by the GPU's MMU.
+The paper assumes bit-plane compression (BPC) as the compression algorithm, as it empirically works well on GPU 
+workloads. The paper, however, also indicates that other compression algorithms can also be used as long as 
+the hardware implementation has low latency.
 
 Buddy Compression requires the following hardware changes. First, since cache lines are compressed, each cache line
 slot will be smaller, which changes the addressing scheme of GPGPU's main memory. Given a fixed slot size of X,
