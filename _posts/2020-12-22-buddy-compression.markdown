@@ -44,4 +44,8 @@ holding the address of the secondary storage's base address where the overflow a
 allocated, continuous chunk of memory in the secondary level storage for holding overflowed parts of the line, as we
 will see later. Lastly, the GPU device memory should reserve four bits per logical line in the compressed address space
 to remember the compressed size of the line. The memory controller needs to access the metadata first before deciding
-the address translation scheme.
+the address translation scheme. In the baseline design, the compression ratio is a fixed value for all lines in the
+compressed address space, and should be determined before system startup. In addition, there is no per-page offset
+to the overflow area, as the address mapping is just one-by-one and linear.
+
+
