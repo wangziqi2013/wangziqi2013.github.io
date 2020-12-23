@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. This paper makes a fundamental mistake of claiming the algorithm is shadow paging, while it is actually redo logging
+   with an auxiliary index. I do appreciate this combination, which has not been fully explored. I also quite appreciate
+   the idea of amortizing multiple transactions' updates to one log replay, and byte-granularity logging, but at the
+   end of the day, this is really not shadow paging.
+   
+
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
@@ -26,3 +34,5 @@ other performance bottleneck such as TLB translation entries which brings TLB sh
 Furthermore, the paper points out that log-structured NVM is also infisible, despite good write performance and 
 locality, due to the high read indirection cost, which can be as bad as O(log(N)) where N is the number of log 
 entries on the device.
+
+This paper 
