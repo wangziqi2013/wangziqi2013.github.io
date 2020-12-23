@@ -23,4 +23,6 @@ and dirty data, which is on the critical path of the execution, degrading perfor
 Shadow paging, on the other hand, still incurs write amplification if implemented in page granularity. With cache
 line granularity shadowing, writes no longer require duplicating a page, but previous hardware proposals introduce
 other performance bottleneck such as TLB translation entries which brings TLB shootdown cost on each entry update. 
-
+Furthermore, the paper points out that log-structured NVM is also infisible, despite good write performance and 
+locality, due to the high read indirection cost, which can be as bad as O(log(N)) where N is the number of log 
+entries on the device.
