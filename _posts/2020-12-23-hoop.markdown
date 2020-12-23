@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory"
+date:   2020-12-23 15:48:00 -0500
+categories: paper
+paper_title: "HOOP: Efficient Hardware-Assisted Out-of-Place Update for Non-Volatile Memory"
+paper_link: https://dl.acm.org/doi/10.1109/ISCA45697.2020.00055
+paper_keyword: NVM; Redo Logging; HOOP
+paper_year: ISCA 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
