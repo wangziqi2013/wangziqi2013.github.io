@@ -16,5 +16,9 @@ version_mgmt:
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
-flaws. 
+flaws. Logging, for example, requiring writing the same piece of data twice, first to the log buffer, and then to
+the home location, which doubles the write bandwidth to the NVM device, harming device lifetime as well as available
+bandwidth on the bus. In addition, both undo and redo logging approaches enforce write ordering between log entry
+and dirty data, which is on the critical path of the execution, degrading performance as the pipeline gets frequently stalled.
+
 
