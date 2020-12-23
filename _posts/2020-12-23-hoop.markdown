@@ -20,5 +20,7 @@ flaws. Logging, for example, requiring writing the same piece of data twice, fir
 the home location, which doubles the write bandwidth to the NVM device, harming device lifetime as well as available
 bandwidth on the bus. In addition, both undo and redo logging approaches enforce write ordering between log entry
 and dirty data, which is on the critical path of the execution, degrading performance as the pipeline gets frequently stalled.
-
+Shadow paging, on the other hand, still incurs write amplification if implemented in page granularity. With cache
+line granularity shadowing, writes no longer require duplicating a page, but previous hardware proposals introduce
+other performance bottleneck such as TLB translation entries which brings TLB shootdown cost on each entry update. 
 
