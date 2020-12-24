@@ -59,8 +59,8 @@ version_mgmt:
    or are they treated like a normal write back? I would say the former is the correct answer, since in the latter
    case, the line will pollute the working image before the transaction commits or aborts. making it impossible to
    recover.
-   The former option, however, requires the hardware to track transactionally written lines using the bit
-   in point 4, which requires a tag walk on commit to clear the bit (but not performing data eviction).
+   The paper seems to suggest the former option, since there is actually a bit for tracking transactionally written
+   lines in the hierarchy.
 
 6. The paper is also inconsistent about how log entries are generated.
    On page 5 it is claimed that "Whenever a cache line is evicted from the LLC within a
@@ -131,4 +131,8 @@ also be accessed, since log entries do not always contain full cache line data.
 If the mapping table indicates a miss, then the eviction buffer is checked, since the eviction buffer is logically
 part of the NVM image. If eviction buffer also indicates a miss, the home address in the request is accessed.
 
+For load operations, once the access is completed, the memory controller assembles the full cache line using data from 
+multiple responses (if multiple requests were generated), and return it to the upper level cache.
+For store operations, the L1 cache controller immediately sends the updated data to the memory controller for log entry
+generation. The dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag entry.
 
