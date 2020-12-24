@@ -41,7 +41,7 @@ version_mgmt:
    but by the end of the day, this is really not shadow paging.
    In shadow paging design, there is no fixed home location for data items to be written back, which is also the 
    biggest difference between shadow paging and redo logging.
-   Also the paper separates shadow paging with log-structured design, but these two are in fact the same thing,
+   Also the paper distinguishes shadow paging from log-structured design, but these two are in fact the same thing,
    i.e., log-structured NVM is just an aggressive case of shadowing.
 
 2. If the on-controller mapping table is full, then GC must be invoked, and there is no way to avoid this.
@@ -156,7 +156,14 @@ buffer, GC is invoked to replay the log entries to their home addresses and clea
 The GC process reduces write bandwidth of sequential log replay by coalescing and combining writes to the same
 address by different transactions into one write. This is achieved by having the GC thread first scan the entire
 log buffer from most recently committed transactions to less recent ones, and building an offline index tracking the 
-most recent writes to each address. If an address is written multiple times, only the most recent write will be 
-preserved in the index. Then the GC thread scans the index, and writes back dirty lines to their home addresses.
-This process does not need to be atomic, since redo GC is idempotent, meaning that even after a crash, the entire
+most recent committed writes to each address. If an address is written multiple times, only the most recent write will 
+be preserved in the index. 
+Then the GC thread scans the index, and writes back dirty lines to their home addresses. This process does not need to 
+be atomic, since redo GC is idempotent, meaning that even after a crash, the entire
 process can be performed regardless of whether the previous one succeeds or not.
+
+For each address being replayed, the GC thread removes the corresponding mapping table entry from the memory 
+controller's mapping table, since the most up-to-date data can now be found on the home address. 
+If no committed transaction is present in the log buffer at the time of GC, however, then no GC is performed, and
+the memory controller's mapping table will remain full even after GC. In this case, the current transaction has
+to abort.
