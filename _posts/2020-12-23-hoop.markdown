@@ -67,6 +67,10 @@ version_mgmt:
     data and the physical address to the memory controller on each update. In this case dirty lines are in fact
     not needed.
 
+6. What if there are multiple memory controllers? Do they work together on the collective log buffer, or they have
+   private log buffer? How does GC work? Do you elect a master controller to perform GC, or you let them work
+   in parallel (which is difficult to do)?
+
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
