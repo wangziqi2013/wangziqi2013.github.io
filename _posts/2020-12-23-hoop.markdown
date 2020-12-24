@@ -120,4 +120,9 @@ with a pointer field in the address chunk.
 One extra benefit of this design is that the working set of a transaction can be scanned without reading the data,
 which reduces the complexity of recovery.
 
-
+On memory access operations, if the request does not hit a line in the hierarchy, then the request is forwarded to
+the memory controller. The memory controller first checks the mapping table for a potential log access. If the 
+mapping table indicates a hit, then the log entry is accessed. Note that even in this case, the home address may
+also be accessed, since log entries do not always contain full cache line data. 
+If the mapping table indicates a miss, then the eviction buffer is checked, since the eviction buffer is logically
+part of the NVM image. If eviction buffer also indicates a miss, the home address in the request is accessed.
