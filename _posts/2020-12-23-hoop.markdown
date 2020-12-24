@@ -135,6 +135,7 @@ For load operations, once the access is completed, the memory controller assembl
 from multiple responses (if multiple requests were generated), and return it to the upper level cache.
 For store operations, the L1 cache controller immediately sends the updated data to the memory controller for 
 log entry generation. 
+The memory controller's data buffer serves to coalesce and absorb repeated writes to the same cache line to avoid frequently writing into the NVM, which is also a problem with canonical redo logging.
 
 In the meantime, the dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag 
 entry, which is not cleared on transaction commit for low commit latency. 
@@ -149,3 +150,11 @@ status for each byte or word, requiring an extra bit map for each entry.
 
 On transaction commit, the memory controller flushes its data buffer to the NVM log buffer, stalling the 
 committing processor's pipeline. No other operation is needed.
+
+When the memory controller's mapping table is full, indicating that no more entries can be inserted into the log
+buffer, GC is invoked to replay the log entries to their home addresses and clean up the mapping table.
+The GC process reduces write bandwidth of sequential log replay by coalescing and combining writes to the same
+address by different transactions into one write. This is achieved by having the GC thread first scan the entire
+log buffer from most recently committed transactions to less recent ones, and building an offline index tracking the 
+most recent writes to each address. If an address is written multiple times, only the most recent write will be 
+preserved in the index. 
