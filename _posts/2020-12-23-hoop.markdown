@@ -78,6 +78,10 @@ version_mgmt:
 8. I do not get why eviction buffer is required? The paper seems to be suggesting that GC will lock out the entire
    NVM device to avoid race conditions. 
 
+9. Fine-grained logging may amplify the number of read accesses by generating multiple requests due to the fact
+   that a log entry may not contain the full cache line. This may affect bandwidth especially if both requests
+   access the NVM.
+
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
@@ -126,3 +130,5 @@ mapping table indicates a hit, then the log entry is accessed. Note that even in
 also be accessed, since log entries do not always contain full cache line data. 
 If the mapping table indicates a miss, then the eviction buffer is checked, since the eviction buffer is logically
 part of the NVM image. If eviction buffer also indicates a miss, the home address in the request is accessed.
+
+
