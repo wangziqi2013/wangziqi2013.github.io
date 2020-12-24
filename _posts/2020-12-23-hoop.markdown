@@ -131,10 +131,17 @@ also be accessed, since log entries do not always contain full cache line data.
 If the mapping table indicates a miss, then the eviction buffer is checked, since the eviction buffer is logically
 part of the NVM image. If eviction buffer also indicates a miss, the home address in the request is accessed.
 
-For load operations, once the access is completed, the memory controller assembles the full cache line using data from 
-multiple responses (if multiple requests were generated), and return it to the upper level cache.
-For store operations, the L1 cache controller immediately sends the updated data to the memory controller for log entry
-generation. The dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag entry.
-Such a block will be discarded by the memory controller when is evicted from the LLC to avoid polluting the 
+For load operations, once the access is completed, the memory controller assembles the full cache line using data 
+from multiple responses (if multiple requests were generated), and return it to the upper level cache.
+For store operations, the L1 cache controller immediately sends the updated data to the memory controller for 
+log entry generation. 
+
+In the meantime, the dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag 
+entry. Such a block will be discarded by the memory controller when is evicted from the LLC to avoid polluting the 
 current NVM image with uncommitted dirty data. Even for committed data this is a redundant write, since the updated 
 data already exist in the log buffer, which will be replayed later on the home address anyway.
+
+One of the most important features of HOOP is that log entries are fine-grained, meaning that only the modified bytes
+will be persisted. This reduces write traffic of redo logging since many lines are updated sparsely.
+To this end, both the data buffer on the memory controller and the log buffer on the NVM need to track fine-grained
+status for each byte or word, requiring an extra bit map for each entry.
