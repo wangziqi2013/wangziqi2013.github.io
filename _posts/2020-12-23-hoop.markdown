@@ -167,3 +167,7 @@ controller's mapping table, since the most up-to-date data can now be found on t
 If no committed transaction is present in the log buffer at the time of GC, however, then no GC is performed, and
 the memory controller's mapping table will remain full even after GC. In this case, the current transaction has
 to abort.
+
+To avoid race conditions of memory write backs, the entire address space is locked out during the GC, blocking any
+write back from the cache hierarchy. The memory controller's eviction buffer holds evicted lines from the LLC during 
+GC, which will be checked by access requests as the eviction buffer is logically part of the address space.
