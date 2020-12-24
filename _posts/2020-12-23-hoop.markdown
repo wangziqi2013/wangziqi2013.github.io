@@ -44,6 +44,11 @@ version_mgmt:
    table would overflow first, but no entry can be released, since no committed log entry is replayed.
    The paper failed even to mention this issue.
 
+3. The maximum size of the log buffer area is also upper bounded by the mapping table size, but the paper seems
+   to be suggesting that the log buffer can be arbitrarily large?
+
+4. 
+
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
