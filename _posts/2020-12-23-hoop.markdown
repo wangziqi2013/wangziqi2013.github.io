@@ -19,7 +19,7 @@ version_mgmt:
    which indices the redo log entries for both committed and uncommitted data.
    Log replay is performed in the background by applying log entries back to the home addresses, and then remove the
    mapping table entry.
-   Transactional dirty data
+   Transactional dirty data lines are discarded on eviction to avoid polluting the home address image.
 
 2. The cache hierarchy does not track the write set (read set is not tracked for failure atomicity) of a transaction.
    Instead, the write set is sent to the memory controller when they are first written. 
@@ -75,6 +75,9 @@ version_mgmt:
    private log buffer? How does GC work? Do you elect a master controller to perform GC, or you let them work
    in parallel (which is difficult to do)?
 
+8. I do not get why eviction buffer is required? The paper seems to be suggesting that GC will lock out the entire
+   NVM device to avoid race conditions. 
+
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
 The paper is motivated by the fact that most previous designs either use logging or shadow paging, which both have 
@@ -103,4 +106,4 @@ table indicates that a log entry exists, which contains the more up-to-date imag
 
 We describe the hardware changes as follows. The main function of HOOP is implemented on the memory controller.
 Two buffers are added to the controller: A data buffer for holding log entries that have not yet been written back
-to the NVM, and an eviction buffer storing evicted lines while GC
+to the NVM, and an eviction buffer storing evicted lines while GC is being performed. 
