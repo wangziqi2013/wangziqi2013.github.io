@@ -19,6 +19,7 @@ version_mgmt:
    which indices the redo log entries for both committed and uncommitted data.
    Log replay is performed in the background by applying log entries back to the home addresses, and then remove the
    mapping table entry.
+   Transactional dirty data
 
 2. The cache hierarchy does not track the write set (read set is not tracked for failure atomicity) of a transaction.
    Instead, the write set is sent to the memory controller when they are first written. 
@@ -58,7 +59,10 @@ version_mgmt:
    or are they treated like a normal write back? I would say the former is the correct answer, since in the latter
    case, the line will pollute the working image before the transaction commits or aborts. making it impossible to
    recover.
-   In fact, the paper is inconsistent in this aspect.
+   The former option, however, requires the hardware to track transactionally written lines using the bit
+   in point 4, which requires a tag walk on commit to clear the bit (but not performing data eviction).
+
+6. The paper is also inconsistent about how log entries are generated.
    On page 5 it is claimed that "Whenever a cache line is evicted from the LLC within a
    transaction, the cache line is written into the OOP region.", indicating that dirty lines are redirected to the
    log buffer, while on page 8 under "Store Operation" subsection, it is stated that 
@@ -67,7 +71,7 @@ version_mgmt:
     data and the physical address to the memory controller on each update. In this case dirty lines are in fact
     not needed.
 
-6. What if there are multiple memory controllers? Do they work together on the collective log buffer, or they have
+7. What if there are multiple memory controllers? Do they work together on the collective log buffer, or they have
    private log buffer? How does GC work? Do you elect a master controller to perform GC, or you let them work
    in parallel (which is difficult to do)?
 
@@ -97,4 +101,6 @@ Third, to avoid read redirection problem with redo logging, HOOP uses a mapping 
 as the index of redo log entries in the log buffer. Data requests are redirected to the log buffer, if the mapping
 table indicates that a log entry exists, which contains the more up-to-date image.
 
-
+We describe the hardware changes as follows. The main function of HOOP is implemented on the memory controller.
+Two buffers are added to the controller: A data buffer for holding log entries that have not yet been written back
+to the NVM, and an eviction buffer storing evicted lines while GC
