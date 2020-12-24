@@ -149,7 +149,8 @@ To this end, both the data buffer on the memory controller and the log buffer on
 status for each byte or word, requiring an extra bit map for each entry.
 
 On transaction commit, the memory controller flushes its data buffer to the NVM log buffer, stalling the 
-committing processor's pipeline. No other operation is needed.
+committing processor's pipeline, and then marks the transaction in the log buffer as committed. 
+No other operation is needed, featuring a fast commit sequence.
 
 When the memory controller's mapping table is full, indicating that no more entries can be inserted into the log
 buffer, GC is invoked to replay the log entries to their home addresses and clean up the mapping table.
@@ -171,3 +172,5 @@ to abort.
 To avoid race conditions of memory write backs, the entire address space is locked out during the GC, blocking any
 write back from the cache hierarchy. The memory controller's eviction buffer holds evicted lines from the LLC during 
 GC, which will be checked by access requests as the eviction buffer is logically part of the address space.
+
+
