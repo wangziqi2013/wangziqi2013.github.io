@@ -58,6 +58,14 @@ version_mgmt:
    or are they treated like a normal write back? I would say the former is the correct answer, since in the latter
    case, the line will pollute the working image before the transaction commits or aborts. making it impossible to
    recover.
+   In fact, the paper is inconsistent in this aspect.
+   On page 5 it is claimed that "Whenever a cache line is evicted from the LLC within a
+   transaction, the cache line is written into the OOP region.", indicating that dirty lines are redirected to the
+   log buffer, while on page 8 under "Store Operation" subsection, it is stated that 
+   "As a result, the cache controller will send the
+    modified data and its home-region address to HOOP", indicating that the cache controller directly send updated
+    data and the physical address to the memory controller on each update. In this case dirty lines are in fact
+    not needed.
 
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
