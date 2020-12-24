@@ -76,4 +76,7 @@ of logging, the paper proposes that log entries should be generated in byte gran
 many cache lines are only updated sparsely.
 In addition, the paper also proposes that writes in different transactions to the same data location can be coalesced 
 into a single write, saving log replay bandwidth.
+Second, redo log entries are not flushed in the foreground, stalling the processor as transaction commits. Instead,
+log entries are directly generated into the log buffer on the memory controller, which are then written back to the 
+NVM in the background without any cycle overhead.
 
