@@ -79,4 +79,8 @@ into a single write, saving log replay bandwidth.
 Second, redo log entries are not flushed in the foreground, stalling the processor as transaction commits. Instead,
 log entries are directly generated into the log buffer on the memory controller, which are then written back to the 
 NVM in the background without any cycle overhead.
+Third, to avoid read redirection problem with redo logging, HOOP uses a mapping table on the memory controller serving 
+as the index of redo log entries in the log buffer. Data requests are redirected to the log buffer, if the mapping
+table indicates that a log entry exists, which contains the more up-to-date image.
+
 
