@@ -114,6 +114,10 @@ At initialization time, a log buffer is reserved on the NVM to store redo log en
 by the memory controller. Redo log entries are organized as chunks of addresses and data. Chunks from the same 
 transaction are linked together as linked lists for scanning the working set of a single transaction. Transactional
 status are also maintained in the chunk header for recovery purposes.
-
+Note that log entries are not uniformly sized, since HOOP uses a finer granularity than cache line to generate 
+log entries. In this regard, HOOP stores addresses and data of log entries in distinct chunks, and link them together
+with a pointer field in the address chunk.
+One extra benefit of this design is that the working set of a transaction can be scanned without reading the data,
+which reduces the complexity of recovery.
 
 
