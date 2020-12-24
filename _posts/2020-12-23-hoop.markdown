@@ -107,3 +107,9 @@ table indicates that a log entry exists, which contains the more up-to-date imag
 We describe the hardware changes as follows. The main function of HOOP is implemented on the memory controller.
 Two buffers are added to the controller: A data buffer for holding log entries that have not yet been written back
 to the NVM, and an eviction buffer storing evicted lines while GC is being performed. 
+In addition, a hardware mapping table is added to the memory controller, which maps physical addresses to either
+a data buffer slot on the NVM, or a location in the NVM log buffer.
+
+
+
+
