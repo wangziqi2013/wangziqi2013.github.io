@@ -135,4 +135,6 @@ For load operations, once the access is completed, the memory controller assembl
 multiple responses (if multiple requests were generated), and return it to the upper level cache.
 For store operations, the L1 cache controller immediately sends the updated data to the memory controller for log entry
 generation. The dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag entry.
-
+Such a block will be discarded by the memory controller when is evicted from the LLC to avoid polluting the 
+current NVM image with uncommitted dirty data. Even for committed data this is a redundant write, since the updated 
+data already exist in the log buffer, which will be replayed later on the home address anyway.
