@@ -51,11 +51,13 @@ version_mgmt:
 3. The maximum size of the log buffer area is also upper bounded by the mapping table size, but the paper seems
    to be suggesting that the log buffer can be arbitrarily large?
 
-4. The paper seems to assume that transactions are committed asynchronously as execution continues after the 
-   commit point, since in canonical redo logging, the processor must wait for all log entries to be persisted
-   from controllerto NVM before it resumes execution.
-   Of course, it is also possible that the paper just assumes that the controller is in the persistent domain,
-   in which case controller data is always available after the crash.
+4. The paper indicates that a persistent bit is added to each line in the hierarchy, but does not clearify
+   how this bit is used. Is it used for tracking the write set?
+
+5. The paper does not tell what happens when a transactionally written dirty line is written back. Are they discarded,
+   or are they treated like a normal write back? I would say the former is the correct answer, since in the latter
+   case, the line will pollute the working image before the transaction commits or aborts. making it impossible to
+   recover.
 
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
