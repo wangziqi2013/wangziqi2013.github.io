@@ -137,7 +137,8 @@ For store operations, the L1 cache controller immediately sends the updated data
 log entry generation. 
 
 In the meantime, the dirty block in the L1 cache is also marked as transactionally written by setting a bit in the tag 
-entry. Such a block will be discarded by the memory controller when is evicted from the LLC to avoid polluting the 
+entry, which is not cleared on transaction commit for low commit latency. 
+Such a block will always be discarded by the memory controller when is evicted from the LLC to avoid polluting the 
 current NVM image with uncommitted dirty data. Even for committed data this is a redundant write, since the updated 
 data already exist in the log buffer, which will be replayed later on the home address anyway.
 
@@ -145,3 +146,6 @@ One of the most important features of HOOP is that log entries are fine-grained,
 will be persisted. This reduces write traffic of redo logging since many lines are updated sparsely.
 To this end, both the data buffer on the memory controller and the log buffer on the NVM need to track fine-grained
 status for each byte or word, requiring an extra bit map for each entry.
+
+On transaction commit, the memory controller flushes its data buffer to the NVM log buffer, stalling the 
+committing processor's pipeline. No other operation is needed.
