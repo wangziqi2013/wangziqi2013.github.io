@@ -32,7 +32,10 @@ version_mgmt:
    Also the paper separates shadow paging with log-structured design, but these two are in fact the same thing,
    i.e., log-structured NVM is just an aggressive case of shadowing.
 
-
+2. If the on-controller mapping table is full, then GC must be invoked, and there is no way to avoid this.
+   The problem is the size of a transaction is upper bounded by the mapping table size, since otherwise the
+   table would overflow first, but no entry can be released, since no committed log entry is replayed.
+   The paper failed even to mention this issue.
 
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
