@@ -110,6 +110,10 @@ to the NVM, and an eviction buffer storing evicted lines while GC is being perfo
 In addition, a hardware mapping table is added to the memory controller, which maps physical addresses to either
 a data buffer slot on the NVM, or a location in the NVM log buffer.
 
+At initialization time, a log buffer is reserved on the NVM to store redo log entries, the address of which is known
+by the memory controller. Redo log entries are organized as chunks of addresses and data. Chunks from the same 
+transaction are linked together as linked lists for scanning the working set of a single transaction. Transactional
+status are also maintained in the chunk header for recovery purposes.
 
 
 
