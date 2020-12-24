@@ -173,4 +173,7 @@ To avoid race conditions of memory write backs, the entire address space is lock
 write back from the cache hierarchy. The memory controller's eviction buffer holds evicted lines from the LLC during 
 GC, which will be checked by access requests as the eviction buffer is logically part of the address space.
 
-
+The recovery process after crash is similar to GC, except that multiple threads are employed to accelerate the
+process. The paper suggests that recovery threads should first collectively build an index of committed writes
+by scanning address chunks of committed transactions. Then these threads collaborate to replay the log entries
+back to the home address, after which execution could resume.
