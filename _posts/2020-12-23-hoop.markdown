@@ -71,4 +71,8 @@ Furthermore, the paper points out that log-structured NVM is also infisible, des
 locality, due to the high read indirection cost, which can be as bad as O(log(N)) where N is the number of log 
 entries on the device.
 
-This paper addresses the above challenges with a combination of techniques. First, 
+This paper addresses the above challenges with a combination of techniques. First, to reduce the write amplification
+of logging, the paper proposes that log entries should be generated in byte granularity, since it is observed that
+many cache lines are only updated sparsely.
+
+
