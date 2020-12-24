@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+2. The cache hierarchy does not track the write set (read set is not tracked for failure atomicity) of a transaction.
+   Instead, the write set is sent to the memory controller when they are first written. 
+   This is different from a design where a subset of writes are cached in the hierarchy, which is only flushed back
+   on transaction commit via tag walk.
+   HOOP avoids the tag walk at the cost of longer first-time write latency.
+
 **Lowlight:**
 
 1. This paper makes a fundamental mistake of claiming the algorithm is shadow paging, while it is actually redo logging
@@ -23,6 +31,8 @@ version_mgmt:
    biggest difference between shadow paging and redo logging.
    Also the paper separates shadow paging with log-structured design, but these two are in fact the same thing,
    i.e., log-structured NVM is just an aggressive case of shadowing.
+
+
 
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
