@@ -28,6 +28,10 @@ version_mgmt:
 
 3. GC interval is upper bounded by the controller's mapping table size
 
+4. The paper also attempts to reduce write amplification by (1) Coalescing writes from multiple committed txns by
+   a group replay and only selecting the most up-to-date wrote; (2) Byte-granularity logging instead of cache line
+   granularity.
+
 **Lowlight:**
 
 1. This paper makes a fundamental mistake of claiming that the algorithm is shadow paging, while it is actually redo 
@@ -67,4 +71,4 @@ Furthermore, the paper points out that log-structured NVM is also infisible, des
 locality, due to the high read indirection cost, which can be as bad as O(log(N)) where N is the number of log 
 entries on the device.
 
-This paper 
+This paper addresses the above challenges with a combination of techniques. First, 
