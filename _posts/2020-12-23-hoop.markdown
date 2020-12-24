@@ -47,7 +47,11 @@ version_mgmt:
 3. The maximum size of the log buffer area is also upper bounded by the mapping table size, but the paper seems
    to be suggesting that the log buffer can be arbitrarily large?
 
-4. 
+4. The paper seems to assume that transactions are committed asynchronously as execution continues after the 
+   commit point, since in canonical redo logging, the processor must wait for all log entries to be persisted
+   from controllerto NVM before it resumes execution.
+   Of course, it is also possible that the paper just assumes that the controller is in the persistent domain,
+   in which case controller data is always available after the crash.
 
 This paper proposes HOOP, a hardware redo logging design with low write amplification and performance overhead for
 achieving transactional failure atomicity.
