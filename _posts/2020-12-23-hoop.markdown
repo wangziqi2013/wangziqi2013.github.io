@@ -15,18 +15,25 @@ version_mgmt:
 
 **Highlight:**
 
+1. Using redo logging for failure atomicity. The read redirection problem is addressed by an on-memory mapping table,
+   which indices the redo log entries for both committed and uncommitted data.
+   Log replay is performed in the background by applying log entries back to the home addresses, and then remove the
+   mapping table entry.
+
 2. The cache hierarchy does not track the write set (read set is not tracked for failure atomicity) of a transaction.
    Instead, the write set is sent to the memory controller when they are first written. 
    This is different from a design where a subset of writes are cached in the hierarchy, which is only flushed back
    on transaction commit via tag walk.
    HOOP avoids the tag walk at the cost of longer first-time write latency.
 
+3. GC interval is upper bounded by the controller's mapping table size
+
 **Lowlight:**
 
-1. This paper makes a fundamental mistake of claiming the algorithm is shadow paging, while it is actually redo logging
-   with an auxiliary index. I do appreciate this combination, which has not been fully explored. I also quite appreciate
-   the idea of amortizing multiple transactions' updates to one log replay, and byte-granularity logging, but at the
-   end of the day, this is really not shadow paging.
+1. This paper makes a fundamental mistake of claiming that the algorithm is shadow paging, while it is actually redo 
+   logging with an auxiliary index. I do appreciate this combination, which has not been fully explored. I also quite 
+   appreciate the idea of amortizing multiple transactions' updates to one log replay, and byte-granularity logging, 
+   but by the end of the day, this is really not shadow paging.
    In shadow paging design, there is no fixed home location for data items to be written back, which is also the 
    biggest difference between shadow paging and redo logging.
    Also the paper separates shadow paging with log-structured design, but these two are in fact the same thing,
