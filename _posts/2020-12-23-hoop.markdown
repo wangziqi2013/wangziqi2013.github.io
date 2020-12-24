@@ -74,5 +74,6 @@ entries on the device.
 This paper addresses the above challenges with a combination of techniques. First, to reduce the write amplification
 of logging, the paper proposes that log entries should be generated in byte granularity, since it is observed that
 many cache lines are only updated sparsely.
-
+In addition, the paper also proposes that writes in different transactions to the same data location can be coalesced 
+into a single write, saving log replay bandwidth.
 
