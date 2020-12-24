@@ -157,4 +157,6 @@ The GC process reduces write bandwidth of sequential log replay by coalescing an
 address by different transactions into one write. This is achieved by having the GC thread first scan the entire
 log buffer from most recently committed transactions to less recent ones, and building an offline index tracking the 
 most recent writes to each address. If an address is written multiple times, only the most recent write will be 
-preserved in the index. 
+preserved in the index. Then the GC thread scans the index, and writes back dirty lines to their home addresses.
+This process does not need to be atomic, since redo GC is idempotent, meaning that even after a crash, the entire
+process can be performed regardless of whether the previous one succeeds or not.
