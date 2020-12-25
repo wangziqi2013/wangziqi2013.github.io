@@ -22,7 +22,10 @@ version_mgmt:
    page 7, left bottom, it is stated "three CoW commands in the memory controller: page copy, page phyc and
    page init.", while on the same page, right column, table 2, the three commands become page\_copy, page\_phyc
    and page\_free. Page\_init is in fact never discussed, which I believe should be a typo of page\_copy.
-   On
+   On page 7, section 4B, it should be "stale data" not "stall data".
+   On page 8, section 4C, it should be "traverse", not "transverse".
+   On page 9, second line of the left column, it should be "rely on", not "relay on".
+   
 
 This paper proposes Lelantus, a hardware virtual memory optimization for Copy-On-Write (COW) operations.
 The paper has observed that COW is a commonly used technique by the OS to delay the actual copy of physical pages
