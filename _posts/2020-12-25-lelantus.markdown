@@ -47,5 +47,8 @@ bandwidth, and, even worse, shortened device lifetime if on NVM.
 The paper proposes adding per-page and per-cache line metadata to help allieviating the overhead of COW. Fine-grained
 metadata is added to track two pieces of information for a destination COW page: (1) Whether each cache line in the 
 page has been copied, i.e., whether they still refer to the source page's read-only data; (2) The address of the 
-source page. 
-
+source page. Note that under Lelantus's model, the source and destination pages are no longer of equal status.
+Instead, after the logical duplication, one page is delegated as the source page, which is responsible for providing 
+read-only data to readers of both pages. The other page is the destination page, which has "holes" punched on it.
+Read operations to these holes will be forwarded to the associated source page, while write operations will invoke
+cache line granularity COW.
