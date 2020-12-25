@@ -41,5 +41,11 @@ performance fluctuation, which makes it harder to predict the performance of wri
 bad in time-sensitive applications with QoS guarantees or real-time systems where the predicatability of timing
 matters even more than the latency of operations.
 Second, if the page is only written sparsely, especially on systems with huge pages, the write amplification would
-be high, since most the lines copied during COW will not be written later, causing excessive but unnecessary write
+be high, since most of the lines copied during COW will not be written later, causing excessive but unnecessary write
 bandwidth, and, even worse, shortened device lifetime if on NVM.
+
+The paper proposes adding per-page and per-cache line metadata to help allieviating the overhead of COW. Fine-grained
+metadata is added to track two pieces of information for a destination COW page: (1) Whether each cache line in the 
+page has been copied, i.e., whether they still refer to the source page's read-only data; (2) The address of the 
+source page. 
+
