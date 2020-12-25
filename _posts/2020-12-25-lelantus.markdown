@@ -40,3 +40,6 @@ store operation into such a page will incur much larger performance overhead tha
 performance fluctuation, which makes it harder to predict the performance of write operations. This is particularly
 bad in time-sensitive applications with QoS guarantees or real-time systems where the predicatability of timing
 matters even more than the latency of operations.
+Second, if the page is only written sparsely, especially on systems with huge pages, the write amplification would
+be high, since most the lines copied during COW will not be written later, causing excessive but unnecessary write
+bandwidth, and, even worse, shortened device lifetime if on NVM.
