@@ -61,3 +61,8 @@ The paper specifically points out that similar metadata overhead already exists 
 line and per-page metadata are maintained. For example, under counter-mode encryption, each page has a 64-bit major 
 counter and each cache line has a 7-bit minor counter. For a 4KB page, this configuration allows all metadata for the
 page to be packed in a 64 byte block, which can be efficiently accessed with only one bus transaction.
+We do not cover counter-mode encryption here, since the operation of counter-mode encryption is unrelated to Lelantus.
+The paper suggests that Lelantus can borrow one bit from the 7-bit per-cache line counter to form the 64-bit source
+page address, resulting in zero metadata overhead, at the cost of higher overflow rate of minor counters (which may,
+as a consequence, incur more frequent re-encryption of page data). 
+
