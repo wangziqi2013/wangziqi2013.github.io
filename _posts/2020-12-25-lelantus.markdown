@@ -52,3 +52,8 @@ Instead, after the logical duplication, one page is delegated as the source page
 read-only data to readers of both pages. The other page is the destination page, which has "holes" punched on it.
 Read operations to these holes will be forwarded to the associated source page, while write operations will invoke
 cache line granularity COW.
+
+We next describe the metadata format as follows. Lelantus requires one bit per cache line to track the copy status of
+the line, which takes 64 bits (8 bytes) per 4KB page. In addition, it also needs one page level pointer to track the 
+source page, the size of which depends on address space size and actual memory size. In total, these two extra metadata
+fields take no more than 0.4% of total storage, which is negligible.
