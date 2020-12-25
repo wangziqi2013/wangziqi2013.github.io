@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. The design is not even remotely related to NVM and security. Essentially it just proposes adding extra per-page
+   metadata bits to track copy status for every COW'ed page.
+
 This paper proposes Lelantus, a hardware virtual memory optimization for Copy-On-Write (COW) operations.
 The paper has observed that COW is a commonly used technique by the OS to delay the actual copy of physical pages
 when forking a process. The page will remain in read-only mode until the first write by either of the two processes,
