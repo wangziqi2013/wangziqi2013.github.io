@@ -57,3 +57,7 @@ We next describe the metadata format as follows. Lelantus requires one bit per c
 the line, which takes 64 bits (8 bytes) per 4KB page. In addition, it also needs one page level pointer to track the 
 source page, the size of which depends on address space size and actual memory size. In total, these two extra metadata
 fields take no more than 0.4% of total storage, which is negligible.
+The paper specifically points out that similar metadata overhead already exists for secure NVM systems, where per-cache
+line and per-page metadata are maintained. For example, under counter-mode encryption, each page has a 64-bit major 
+counter and each cache line has a 7-bit minor counter. For a 4KB page, this configuration allows all metadata for the
+page to be packed in a 64 byte block, which can be efficiently accessed with only one bus transaction.
