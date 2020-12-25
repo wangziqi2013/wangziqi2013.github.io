@@ -25,10 +25,12 @@ version_mgmt:
    On page 7, section 4B, it should be "stale data" not "stall data".
    On page 8, section 4C, it should be "traverse", not "transverse".
    On page 9, second line of the left column, it should be "rely on", not "relay on".
-   
 
 This paper proposes Lelantus, a hardware virtual memory optimization for Copy-On-Write (COW) operations.
 The paper has observed that COW is a commonly used technique by the OS to delay the actual copy of physical pages
 when forking a process. The page will remain in read-only mode until the first write by either of the two processes,
 at which time the page is duplicated, and the write is performed on the new copy. The virtual address mapping 
 for the writing process is also updated to point to the newly copied page. 
+On application level, the paper also identifies several important use cases of COW feature of the OS, including 
+normal fork() system calls, memory allocation where newly allocated pages are mapped to a zero page and lazily
+populated on the first write, virtual machine deduplication, and application address space checkpointing.
