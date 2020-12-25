@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Lelantus: Fine-Granularity Copy-On-Write Operations for Secure Non-Volatile Memories"
+date:   2020-12-25 17:21:00 -0500
+categories: paper
+paper_title: "Lelantus: Fine-Granularity Copy-On-Write Operations for Secure Non-Volatile Memories"
+paper_link: https://ieeexplore.ieee.org/document/9138980
+paper_keyword: NVM; CoW; Virtual Memory
+paper_year: ISCA 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
