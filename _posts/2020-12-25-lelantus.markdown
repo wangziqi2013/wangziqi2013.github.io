@@ -37,4 +37,6 @@ populated on the first write, virtual machine deduplication, and application add
 
 The paper recognizes two performance related drawbacks of performing full COW on the first write. First, the first
 store operation into such a page will incur much larger performance overhead than the rest of writes, causing 
-performance fluctuation, which makes it harder to predict the performance of write operations.
+performance fluctuation, which makes it harder to predict the performance of write operations. This is particularly
+bad in time-sensitive applications with QoS guarantees or real-time systems where the predicatability of timing
+matters even more than the latency of operations.
