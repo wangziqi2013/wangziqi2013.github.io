@@ -18,6 +18,12 @@ version_mgmt:
 1. The design is not even remotely related to NVM and security. Essentially it just proposes adding extra per-page
    metadata bits to track copy status for every COW'ed page.
 
+2. There are lots of writing inconsistencies and typos in the second half of the paper. For example, on section 4
+   page 7, left bottom, it is stated "three CoW commands in the memory controller: page copy, page phyc and
+   page init.", while on the same page, right column, table 2, the three commands become page\_copy, page\_phyc
+   and page\_free. Page\_init is in fact never discussed, which I believe should be a typo of page\_copy.
+   On
+
 This paper proposes Lelantus, a hardware virtual memory optimization for Copy-On-Write (COW) operations.
 The paper has observed that COW is a commonly used technique by the OS to delay the actual copy of physical pages
 when forking a process. The page will remain in read-only mode until the first write by either of the two processes,
