@@ -90,4 +90,9 @@ necessarily increase access bandwidth. If the minor counter of the page is zero,
 the memory controller reads the source page pointer by concatenating bits from all minor counters, and redirect the 
 access to the source page. Note that since the metadata can be stored in an aligned 64-byte block, which is exactly the 
 size of a bus transaction, this operation is very efficient since it at most reads memory once.
-
+To further reduce metadata overhead, a metadata cache can also be added to the memory controller to absort most of the 
+matadata requests.
+For read operations, the data is just returned to the cache hierarchy. For writes, the memory controller needs to first
+issue bus read to the source page, return the data, and in the meantime write the data to the destination page
+as well as updating metadata to close the "hole". If all lines are closed, the page is fully copied, which will no 
+longer be affected by source page reclamation, as we will see later.
