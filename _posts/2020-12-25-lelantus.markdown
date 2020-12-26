@@ -75,4 +75,10 @@ to the user, which can be invoked by writing the command code and arguments to m
 The first command is page\_copy, which performs logical COW by providing both the source and destination page numbers
 as physical addresses. The memory controller, on receiving this request, will initialize the metadata fields of the
 destination page by setting all minor counters to zero, and setting the source page address to the one in the 
-parameter. The 
+parameter. The second command is page\_phyc, which performs physical copy of lines that are not yet in the destination
+page from the source page. This command is invoked when the source page is to be freed, in which case all "holes"
+in the destination page must be filled by physical data transfer from the source to destination. After this command,
+the destination page is entirely by its own, the content of which no longer depends on another page. The command
+is executed by first scanning the per-line metadata bits, copying those that are not yet present, setting the counter
+value to one, and then clearing the source address pointer.
+The
