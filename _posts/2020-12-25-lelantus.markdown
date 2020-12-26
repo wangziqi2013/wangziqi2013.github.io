@@ -115,4 +115,7 @@ rest (if any) such that they now use the former page as the source.
 This design may also incur recursive address translation, i.e., when a source page is located, the corresponding cache 
 line on the source page is still missing, suggesting that a second translation should occur. This happens when a 
 forked process itself forks another process, and the latter writes a COW page of its direct parent, creating a second
-COW page. 
+COW page. This phenomenon can recursively repeat itself, resulting in a chain of dependent pages. The memory controller
+handles this by recursively following the link upstream to the source page that contains the cache line to be read.
+This requires checking the minor counter's COW bit for every cache line to be accessed even after the address 
+translation.
