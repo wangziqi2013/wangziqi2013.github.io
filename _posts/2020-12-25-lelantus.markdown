@@ -102,3 +102,17 @@ issue bus read to the source page, return the data, and in the meantime write th
 as well as updating metadata to close the "hole". If all lines are closed, the page is fully copied, which will no 
 longer be affected by source page reclamation, as we will see later.
 
+The destination page can no longer depend on the source page, when the latter is freed by the OS. This happens, for
+example, when a COW page is created by a fork()'ed child process, and the parent process just terminates. In this case,
+the OS reclaims the source page as part of the cleanup procedure. The paper proposes that when this happens, the OS
+should check the sharer page list of the reclaimed page, which should be maintained in the kernel data structure
+as a linked list. The sharer page list is updated whenever a new COW destination page is created by a child 
+process using the COW page's physical address. When a physical page is reclaimed, the OS simply checks this sharer
+list. If the list is not empty, then some COW pages are still referring to this page. In this case, the OS
+should physically perform copy from the page being reclaimed to one of the COW pages, and update the metadata for the 
+rest (if any) such that they now use the former page as the source.
+
+This design may also incur recursive address translation, i.e., when a source page is located, the corresponding cache 
+line on the source page is still missing, suggesting that a second translation should occur. This happens when a 
+forked process itself forks another process, and the latter writes a COW page of its direct parent, creating a second
+COW page. 
