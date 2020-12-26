@@ -84,4 +84,10 @@ value to one, and then clearing the source address pointer.
 The last command is page\_free, which is invoked when a destination page is freed, which simply clears all metadata 
 fields.
 
+On a read access, if the request misses the cache, the memory controller will perform address translation by checking
+the minor counter. Note that on a secure NVM system, the counter read overhead is already present, which does not 
+necessarily increase access bandwidth. If the minor counter of the page is zero, no decryption will happen. Instead,
+the memory controller reads the source page pointer by concatenating bits from all minor counters, and redirect the 
+access to the source page. Note that since the metadata can be stored in an aligned 64-byte block, which is exactly the 
+size of a bus transaction, this operation is very efficient since it at most reads memory once.
 
