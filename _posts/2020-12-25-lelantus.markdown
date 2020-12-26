@@ -81,4 +81,7 @@ in the destination page must be filled by physical data transfer from the source
 the destination page is entirely by its own, the content of which no longer depends on another page. The command
 is executed by first scanning the per-line metadata bits, copying those that are not yet present, setting the counter
 value to one, and then clearing the source address pointer.
-The
+The last command is page\_free, which is invoked when a destination page is freed, which simply clears all metadata 
+fields.
+
+
