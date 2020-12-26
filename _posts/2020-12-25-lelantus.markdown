@@ -21,7 +21,9 @@ version_mgmt:
 2. The metadata per-page is just a source page pointer plus per-cache line bit indicating whether the line is a hole
    On secure NVM systems this can be colocated with encryption counters with very little overhead.
 
-
+3. This design creates dependencies between pages even after a seemingly full page copy (on OS perspective). The 
+   OS should therefore track such dependencies in order to correctly transfer data ownership between sharer pages
+   when the source page is freed.
 
 **Lowlight:**
 
