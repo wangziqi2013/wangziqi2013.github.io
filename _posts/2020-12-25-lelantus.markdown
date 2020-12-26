@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Allowing memory controller to punch cache line sized holes on a COW page to allow read direction to the source
+   page. This enables fine-grained COW, reducing write traffic.
+
+
+
 **Lowlight:**
 
 1. The design is not even remotely related to NVM and security. Essentially it just proposes adding extra per-page
