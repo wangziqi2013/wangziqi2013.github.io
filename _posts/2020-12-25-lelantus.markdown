@@ -18,6 +18,9 @@ version_mgmt:
 1. Allowing memory controller to punch cache line sized holes on a COW page to allow read direction to the source
    page. This enables fine-grained COW, reducing write traffic.
 
+2. The metadata per-page is just a source page pointer plus per-cache line bit indicating whether the line is a hole
+   On secure NVM systems this can be colocated with encryption counters with very little overhead.
+
 
 
 **Lowlight:**
