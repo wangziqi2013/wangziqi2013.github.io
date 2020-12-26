@@ -69,3 +69,10 @@ In addition, minor counter value zero is reserved in Lelantus to indicate that t
 in the page, i.e., there is a "hole", the access of which should fall through to the source page. 
 The counter-mode encryption controller is also modified such that on initialization and when an overflow occurs, all
 minor counters should be set to one, instead of zero.
+
+Lelantus is built into the memory controller as an accelerator of COW-related page copy. Three commands are provided
+to the user, which can be invoked by writing the command code and arguments to memory-mapped controller registers.
+The first command is page\_copy, which performs logical COW by providing both the source and destination page numbers
+as physical addresses. The memory controller, on receiving this request, will initialize the metadata fields of the
+destination page by setting all minor counters to zero, and setting the source page address to the one in the 
+parameter. The 
