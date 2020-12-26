@@ -26,6 +26,11 @@ version_mgmt:
    On page 8, section 4C, it should be "traverse", not "transverse".
    On page 9, second line of the left column, it should be "rely on", not "relay on".
 
+3. I do not get why the reference counter is used when a page is reclaimed? I thought the ref counter is decremented   
+   when COW happens? That means as long as there is no full sharing of the page as in conventional COW, the value of
+   the ref counter should always be one. We should actually use the sharer list for the source page to determine whether
+   there are outstanding references from other physical pages.
+
 This paper proposes Lelantus, a hardware virtual memory optimization for Copy-On-Write (COW) operations.
 The paper has observed that COW is a commonly used technique by the OS to delay the actual copy of physical pages
 when forking a process. The page will remain in read-only mode until the first write by either of the two processes,
@@ -96,3 +101,4 @@ For read operations, the data is just returned to the cache hierarchy. For write
 issue bus read to the source page, return the data, and in the meantime write the data to the destination page
 as well as updating metadata to close the "hole". If all lines are closed, the page is fully copied, which will no 
 longer be affected by source page reclamation, as we will see later.
+
