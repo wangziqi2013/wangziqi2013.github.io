@@ -28,4 +28,7 @@ fence (either explicit or implicit) instructions. clwbs are neither ordered with
 The paper points out that a persist barrier implementation in the above form has two performance drawbacks. First,
 persistence ordering is coupled with consistency ordering, meaning that the pipeline must be stalled before a dirty
 block is fully flushed back to the NVM, blocking the commit of the following store operations even though these stores 
-do not write into the NVM. 
+do not write into the NVM. Second, parallelism is severaly restricted, since only one or a few write operations can
+be persisted in parallel before the sfence instruction due to the property of most NVM-related workloads. 
+Current commercial NVM devices usually have a few persistence buffers internally, which supports multiple concurrent
+operations for better throughput.
