@@ -16,7 +16,8 @@ version_mgmt:
 **Highlight:**
 
 1. It is a very nice paper with a great explanation of strand persistency as well as detailed depiction and description
-   of the hardware structures and operations. In general this paper is of high value on how actual architects view 
+   of the hardware structures and operations. In general this paper is of high value on how actual architects
+   (from Xilinx and ARM!) view 
    the persistence ordering problem and how real hardware shall be implemented. 
 
 2. To increase parallelism and reduce stalls of store buffer because of sfence, the paper proposes strand persistency
@@ -39,6 +40,15 @@ version_mgmt:
    should be stalled until all strand buffers are drained. Since the store is always issued after the barrier
    enters strand buffer, this can guarantee that the store is released from the L1 after the barrier and hence
    everything before it are completed, which maintains the correct order.
+
+**Lowlight:**
+
+1. In fact strand buffers do not have to be drained in-order, which still sacrifices some degrees of parallelism, since
+   operations in a strand are also candidates for reordering without a persist barrier. 
+   The in-order issue of strand buffers might be a design simplification for evictions and coherence 
+   downgrade/invalidation. 
+
+
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
 barrier semantics and a more efficient implementation than current designs. Persist barriers are essential to NVM
