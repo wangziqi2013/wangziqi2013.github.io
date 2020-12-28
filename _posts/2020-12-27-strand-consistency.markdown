@@ -50,3 +50,9 @@ stalled in the store buffer even if a previous store divided by an intra-strand 
 persisted yet. This allows some degrees of overlapping between L1 coherence actions of the following store and 
 persistence of earlier stores, which both reduces the cycle overhead of NVM writes, and let store operations release
 the store buffer faster for higher write throughput and less resource hazards.
+
+The paper proposes three hardware primitives for applications to take advantage of strand consistency. The first 
+primitive, NewStrand, starts a new strand since its location in program order, dropping all previous ordering 
+dependencies. All store and barrier operations are considered as in the new strand unless another NewStrand primitive
+is seen. Note that for simplicity, strands must be a consecutive range of stores and other barrier primitives in the 
+dynamic instruction trace.
