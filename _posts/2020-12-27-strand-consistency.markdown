@@ -122,7 +122,6 @@ persisted after stores before the barrier. This paper recommends the second opti
 the store buffer for longer time.
 We discuss the handling of evictions and coherence later.
 
-
 Persist barriers are inserted into the persist queue always with can_issue bit set, since it does not have any 
 dependency with other instructions besides program order.
 
@@ -130,5 +129,10 @@ JoinStrand, serving as a global level barrier, stalls all following operations i
 until all preceding operations have completed. This is indicated by the completed bit in each entry before the 
 JoinStrand primitive. The JoinStrand primitive is not issued to the strand buffer (as we discuss below), and it will
 only be retired in the persist queue directly. The can_issue and issued bit are therefore not used.
+When JoinStrand retires, the can_issue bit after it are set, if they were stalled by this primitive.
 
-Instructions in the persist queue are 
+Instructions in the persist queue are issued in-order to the strand buffers, after the can_issue bit is set.
+Multiple starnd buffer exists, each being responsible for a strand created by the program. When NewStrand instruction
+is retired from the persist queue, the persist queue switches the issuing strand buffer to the next one in the array,
+if there is one available (otherwise the persist queue is just stalled as a resource hazard has occurred).
+
