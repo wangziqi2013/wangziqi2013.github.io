@@ -26,6 +26,10 @@ version_mgmt:
 3. Three simple primitives are introduced to create strand, control write ordering within a strand, and wait for
    all previous strands. These primitives are easy to use, implement and understand.
 
+4. The paper does not change existing store buffer architecture. Instead, it adds a persist queue to order clwbs and
+   committed store operations. When instructions are inserted into the store buffer or persist queue, the other one
+   must be checked to ensure that the correct ordering is followed.
+
 
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
