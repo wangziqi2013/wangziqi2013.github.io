@@ -19,4 +19,7 @@ programming as it orders store operations to the device, which is utilized for c
 designs. For example, in undo logging, log entries must reach the NVM before dirty data, and dirty data must be flushed
 back before the commit mark is written. Similarly, in redo logging, redo log entries must be ordered before the commit
 mark, which is then ordered before all dirty data.
+On today's commercial architectures, these write orderings are expressed as persist barriers consisting of cache line
+flush and memory fences. For example, on x86 ISA, a persist barrier consists of one or more clwb instructions for 
+writing back dirty cache lines, and a sfence instruction after all clwbs.
 
