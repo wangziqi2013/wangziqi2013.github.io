@@ -16,4 +16,7 @@ version_mgmt:
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
 barrier semantics and a more efficient implementation than current designs. Persist barriers are essential to NVM
 programming as it orders store operations to the device, which is utilized for correctness in many logging-based 
-designs. 
+designs. For example, in undo logging, log entries must reach the NVM before dirty data, and dirty data must be flushed
+back before the commit mark is written. Similarly, in redo logging, redo log entries must be ordered before the commit
+mark, which is then ordered before all dirty data.
+
