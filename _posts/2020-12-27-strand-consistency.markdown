@@ -150,3 +150,8 @@ after they notify the persist queue (which will also set the completed bit in th
 The strand buffer controls the ordering of clwbs with regard to persist barriers. clwbs after a barrier must not
 issue until the barrier retires. When the strand buffer is fully drained, it also notifies the persist queue such that
 JoinStrand, if any, can successfully retire.
+
+As we have previously discussed, the eviction and coherence downgrade/invalidation of cache lines will cause unexpected
+ordering violation, if the persist queue optimistically unblocks store operations right after the barrier before the
+store is issued. This may cause the issue, if the store being optimistically issued to the L1 is to be evicted or 
+downgraded/invalidated before all clwb instructions before the barrier complete.
