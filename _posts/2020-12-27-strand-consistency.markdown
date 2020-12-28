@@ -42,4 +42,6 @@ order, meaning that store operations must not proceed in the pipeline before all
 The above model is called "epoch persistency" in previous publications, which incurs large performance overhead on 
 current architectures.
 In strand persistency, two changes are made over epoch persistency for better performance and parallelism.
-
+First, applications can start and close "strands" of persistence regions, which are independent from other strands, 
+unlike in the epoch model where commit of stores in later epochs always depent on persistence of stores on earlier 
+epochs. Instead, stores in different strands do not depend on each other, and can therefore be persisted in parallel.
