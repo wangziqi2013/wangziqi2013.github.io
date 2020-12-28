@@ -205,3 +205,9 @@ before the barrier have completed.
 persist barrier has been issued. In our discussion, I made it a little bit more conservative by saying it is issued
 only after the barrier. These two are both correct with the latter being slightly more inefficient. I chose the latter
 for the ease of explanation.
+
+At the end, the paper also proposes a paradigm for utilizing these primitives for building more efficient NVM libraries.
+Using undo logging as an example, each log generation and dirty data write can be implemented as a strand, with a 
+persist barrier in-between for correct ordering. For each data item updated, the library first calls NewStrand to 
+allocate a new logical strand. When the transaction or failure-atomic section ends, the library puts a JoinStrand at
+the end to ensure that all changes have been persisted to the NVM.
