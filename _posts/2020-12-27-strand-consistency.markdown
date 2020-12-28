@@ -43,5 +43,10 @@ The above model is called "epoch persistency" in previous publications, which in
 current architectures.
 In strand persistency, two changes are made over epoch persistency for better performance and parallelism.
 First, applications can start and close "strands" of persistence regions, which are independent from other strands, 
-unlike in the epoch model where commit of stores in later epochs always depent on persistence of stores on earlier 
+unlike in the epoch model where completion of stores in later epochs always depent on persistence of stores on earlier 
 epochs. Instead, stores in different strands do not depend on each other, and can therefore be persisted in parallel.
+Second, strand persistency decouples persistency from memory consistency, meaning that store operations are no longer
+stalled in the store buffer even if a previous store divided by an intra-strand barrier in the same strand has not been 
+persisted yet. This allows some degrees of overlapping between L1 coherence actions of the following store and 
+persistence of earlier stores, which both reduces the cycle overhead of NVM writes, and let store operations release
+the store buffer faster for higher write throughput and less resource hazards.
