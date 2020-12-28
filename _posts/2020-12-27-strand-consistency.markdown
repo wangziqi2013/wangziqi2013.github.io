@@ -19,6 +19,10 @@ version_mgmt:
    of the hardware structures and operations. In general this paper is of high value on how actual architects view 
    the persistence ordering problem and how real hardware shall be implemented. 
 
+2. To increase parallelism and reduce stalls of store buffer because of sfence, the paper proposes strand persistency
+   which allows the creation of independent instruction pieces as "strands". Stores of different strands do not
+   dependent on each other, and could hence be drained into the NVM in parallel.
+
 
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
