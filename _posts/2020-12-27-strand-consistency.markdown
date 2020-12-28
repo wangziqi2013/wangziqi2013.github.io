@@ -155,3 +155,11 @@ As we have previously discussed, the eviction and coherence downgrade/invalidati
 ordering violation, if the persist queue optimistically unblocks store operations right after the barrier before the
 store is issued. This may cause the issue, if the store being optimistically issued to the L1 is to be evicted or 
 downgraded/invalidated before all clwb instructions before the barrier complete.
+To avoid this, the L1 cache is extended with an eviction/coherence buffer when a dirty block is to be evicted
+or acquired by another core via coherence. In these cases, the L1 controller takes a snapshot of the current head
+pointer of all strand buffers, and stall the eviction or coherence action until all instructions till that position
+are drained, ensuring that at least all instructions before the barrier are completed. Recall that we know
+when the store is issued to L1, at least the barrier, and hence all instructions before it, have been issued into the
+strand buffer. The head pointer, therefore, must be on or after the persist barrier when the eviction/coherence action
+happens, meaning that waiting the strand buffer to be drained till that position is sufficient to ensure all operations
+before the barrier have completed. 
