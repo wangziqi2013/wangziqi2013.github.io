@@ -99,4 +99,7 @@ The persist queue operates as follows. When a clwb instruction is inserted, it p
 the store buffer. If the store buffer contains a store of the same address, the clwb is stalled by not setting the
 can_issue bit. This is to avoid reordering between clwbs and a preceeding store of the same address. Otherwise, the
 can_issue bit is set.
-
+When a store operation retires from the store buffer, the address of the store is checked against the persist queue
+(recall that the persist queue is organized like a CAM). If there is a clwb of the same address, the can_issue bit
+of the clwb instruction is set, indicating that its depending store has been inserted into the L1, such that the clwb
+is guaranteed to be ordered after the store.
