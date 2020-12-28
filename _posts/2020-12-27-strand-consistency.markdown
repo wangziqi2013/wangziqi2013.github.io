@@ -67,6 +67,12 @@ until all previous stores in the program order have been persisted.
 
 The paper assumes the following baseline architecture. The instruction set is x86, with stores and clwb in the current
 form. The above three primitives are also added into the ISA. The memory consistency model is TSO, with a FIFO load 
-queue and store queue for enforcing load-load, store-store ordering, and store-load forwarding. The ordering properties
-between clwbs and stores are also identical to the current x86: clwbs are only ordered with stores on the same address,
-but clwbs are not ordered with other stores or clwbs.
+queue and store queue for enforcing load-load, store-store ordering, and store-load forwarding. 
+Store operations are inserted into the store queue when in also entered the ROB, until commit time after which the 
+address and source operand have been computed. Commited stores are moved to the store buffer, which essentially are
+part of the memory image, but have not been inserted into the cache hierarchy and hence remain invisible to all
+cores except the one generating them (this property is called "store atomicity").
+The ordering properties between clwbs and stores are also identical to the current x86: clwbs are only ordered with 
+stores on the same address, but clwbs are not ordered with other stores or clwbs.
+Although the paper did not clarify the ordering properties or the three primitives, it is most likely that they are 
+all strongly ordered with stores and clwbs to avoid complicated reordering scenarios.
