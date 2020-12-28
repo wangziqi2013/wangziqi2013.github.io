@@ -22,4 +22,5 @@ mark, which is then ordered before all dirty data.
 On today's commercial architectures, these write orderings are expressed as persist barriers consisting of cache line
 flush and memory fences. For example, on x86 ISA, a persist barrier consists of one or more clwb instructions for 
 writing back dirty cache lines, and a sfence instruction after all clwbs.
-
+clwb instructions are only strongly ordered with preceeding store instructions with the same target address, and memory
+fence (either explicit or implicit) instructions. clwbs are neither ordered with other stores nor with each other.
