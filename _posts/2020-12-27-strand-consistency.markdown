@@ -146,3 +146,7 @@ when the previous barrier instruction retires. The issued bit is set when the cl
 hierarchy. The completed bit is set, when the cache hierarchy acknowledges the clwb, indicating that the cache line
 has been flushed into the persistence domain. When the completed bit is set, the instruction could retire,
 after they notify the persist queue (which will also set the completed bit in the persist queue and retire).
+
+The strand buffer controls the ordering of clwbs with regard to persist barriers. clwbs after a barrier must not
+issue until the barrier retires. When the strand buffer is fully drained, it also notifies the persist queue such that
+JoinStrand, if any, can successfully retire.
