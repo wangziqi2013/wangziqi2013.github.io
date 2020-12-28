@@ -30,7 +30,15 @@ version_mgmt:
    committed store operations. When instructions are inserted into the store buffer or persist queue, the other one
    must be checked to ensure that the correct ordering is followed.
 
-
+5. The design also allows optimistic issuing of store operations into the cache hierarchy, bypassing a preceding 
+   barrier in the same strand. This design overlaps the completion of previous NVM writes (clwbs) and the coherence 
+   latency of the store after the barrier (which also decouples persistence ordering from consistency ordering,
+   since the store after the barrier is visible in consistency point of view, but still not persistent on NVM).
+   To address the potential problem of the store after the barrier being accidentally written back before all
+   instructions before the barrier complete, the paper then suggests that evictions or coherence downgrade/invalidations
+   should be stalled until all strand buffers are drained. Since the store is always issued after the barrier
+   enters strand buffer, this can guarantee that the store is released from the L1 after the barrier and hence
+   everything before it are completed, which maintains the correct order.
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
 barrier semantics and a more efficient implementation than current designs. Persist barriers are essential to NVM
