@@ -32,3 +32,9 @@ do not write into the NVM. Second, parallelism is severaly restricted, since onl
 be persisted in parallel before the sfence instruction due to the property of most NVM-related workloads. 
 Current commercial NVM devices usually have a few persistence buffers internally, which supports multiple concurrent
 operations for better throughput.
+
+To address the above issues, this paper proposes strand persistency model, which relaxes some overly restricted ordering
+requirements in today's persistence model, and enables a new programming model for writing NVM applications.
+In the conventional persistence model, the execution or stores and cache line write backs are divided into "epochs"
+by the store fence instructions. Store operations in the same epoch are unordered, but store operations on different 
+epochs are guaranteed to be in the program order. 
