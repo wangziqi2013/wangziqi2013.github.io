@@ -138,3 +138,11 @@ if there is one available (otherwise the persist queue is just stalled as a reso
 For simplicity, the persist queue manages strand buffers in a round-robin manner, using only one register to track
 the currently issuing strand buffer, and increment the register when NewStrand primitive is seen.
 The NewStrand instruction retires immediately without being issued.
+
+Strand buffers accept clwbs and barrier instructions from the persist queue, and retire instructions in-order. 
+It follows a similar structure as the persist queue, i.e., each entry has can_issue, issued, and completed control bit.
+can_issue is set for clwbs if there is no existing persist barrier in the buffer when it is inserted, and set
+when the previous barrier instruction retires. The issued bit is set when the clwb is actually issued to the cache
+hierarchy. The completed bit is set, when the cache hierarchy acknowledges the clwb, indicating that the cache line
+has been flushed into the persistence domain. When the completed bit is set, the instruction could retire,
+after they notify the persist queue (which will also set the completed bit in the persist queue and retire).
