@@ -65,4 +65,8 @@ The last primitive, JoinStrand, serves a similar purpose as the join() call in c
 libraries. When executed, this instruction stalls the execution of the following stores, clwbs and barriers
 until all previous stores in the program order have been persisted. 
 
-
+The paper assumes the following baseline architecture. The instruction set is x86, with stores and clwb in the current
+form. The above three primitives are also added into the ISA. The memory consistency model is TSO, with a FIFO load 
+queue and store queue for enforcing load-load, store-store ordering, and store-load forwarding. The ordering properties
+between clwbs and stores are also identical to the current x86: clwbs are only ordered with stores on the same address,
+but clwbs are not ordered with other stores or clwbs.
