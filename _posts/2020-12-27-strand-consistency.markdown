@@ -83,3 +83,10 @@ ordering of stores and write backs. In addition, it controls the creation and jo
 The second structure, called the strand buffer, is an array of individual buffers for enforcing ordering within a 
 single strand. Each logical strand is mapped to a strand buffer instance, and stores within the same strand are 
 controlled by write backs and persist barriers within the same strand.
+
+We next describe the operations of the persist queue. Cache line write backs and the three primitives are all inserted
+into the persist queue as they enter the ROB. Each entry of the persist queue contains three control bits: Valid,
+issued, and completed. An entry contains a valid instruction if the valid bit is set. The issue bit is set for clwbs
+and persist barriers, if they are ready to be issued into the strand buffer. After being issued, instructions remain
+in the persist queue until they are completed, after which the completed bit is set. The persist queue retires 
+instructions in-order after the completed bit is set.
