@@ -135,4 +135,6 @@ Instructions in the persist queue are issued in-order to the strand buffers, aft
 Multiple starnd buffer exists, each being responsible for a strand created by the program. When NewStrand instruction
 is retired from the persist queue, the persist queue switches the issuing strand buffer to the next one in the array,
 if there is one available (otherwise the persist queue is just stalled as a resource hazard has occurred).
-
+For simplicity, the persist queue manages strand buffers in a round-robin manner, using only one register to track
+the currently issuing strand buffer, and increment the register when NewStrand primitive is seen.
+The NewStrand instruction retires immediately without being issued.
