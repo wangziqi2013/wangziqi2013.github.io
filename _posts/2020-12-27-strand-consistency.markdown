@@ -103,3 +103,7 @@ When a store operation retires from the store buffer, the address of the store i
 (recall that the persist queue is organized like a CAM). If there is a clwb of the same address, the can_issue bit
 of the clwb instruction is set, indicating that its depending store has been inserted into the L1, such that the clwb
 is guaranteed to be ordered after the store.
+
+Persist barriers are inserted into the persist queue always with can_issue bit set, since it does not have any 
+dependency with other instructions besides program order.
+
