@@ -76,3 +76,10 @@ The ordering properties between clwbs and stores are also identical to the curre
 stores on the same address, but clwbs are not ordered with other stores or clwbs.
 Although the paper did not clarify the ordering properties or the three primitives, it is most likely that they are 
 all strongly ordered with stores and clwbs to avoid complicated reordering scenarios.
+
+The paper proposes adding two extra hardware structures in the core backend for implementing strand persistency.
+The first structure, called the persist queue, orders stores in the store buffer and clwbs to ensure proper 
+ordering of stores and write backs. In addition, it controls the creation and join of strands. 
+The second structure, called the strand buffer, is an array of individual buffers for enforcing ordering within a 
+single strand. Each logical strand is mapped to a strand buffer instance, and stores within the same strand are 
+controlled by write backs and persist barriers within the same strand.
