@@ -104,10 +104,18 @@ When a store operation retires from the store buffer, the address of the store i
 of the clwb instruction is set, indicating that its depending store has been inserted into the L1, such that the clwb
 is guaranteed to be ordered after the store.
 
+Similarly, when a store instruction is inserted into the persist queue, it checks whether there is any persist
+barrier already in the queue, but no younger NewStrand. If true, the store instruction is stalled to avoid being
+reordered with the persist barrier in the same strand. Otherwise, the store may be accidentally written back to the 
+NVM by a cache eviction before stores before the barrier does, which violates the persist ordering defined by the 
+barrier.
+
 Persist barriers are inserted into the persist queue always with can_issue bit set, since it does not have any 
 dependency with other instructions besides program order.
 
 JoinStrand, serving as a global level barrier, stalls all following operations in the persist queue by not committing
 until all preceding operations have completed. This is indicated by the completed bit in each entry before the 
-JoinStrand primitive. The JoinStrand primitive is not issued to the persist buffer (as we discuss below), and it will
+JoinStrand primitive. The JoinStrand primitive is not issued to the strand buffer (as we discuss below), and it will
 only be retired in the persist queue directly. The can_issue and issued bit are therefore not used.
+
+Instructions in the persist queue are 
