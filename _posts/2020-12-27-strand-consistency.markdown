@@ -201,3 +201,7 @@ when the store is issued to L1, at least the barrier, and hence all instructions
 strand buffer. The head pointer, therefore, must be on or after the persist barrier when the eviction/coherence action
 happens, meaning that waiting the strand buffer to be drained till that position is sufficient to ensure all operations
 before the barrier have completed. 
+**Note:** The paper, in fact, states that the store can be optimistically issued as long as the last clwb before the
+persist barrier has been issued. In our discussion, I made it a little bit more conservative by saying it is issued
+only after the barrier. These two are both correct with the latter being slightly more inefficient. I chose the latter
+for the ease of explanation.
