@@ -48,7 +48,8 @@ version_mgmt:
    The in-order issue of strand buffers might be a design simplification for evictions and coherence 
    downgrade/invalidation. 
 
-
+2. Stores can still be issued without depending on the barrier if there is a NewStrand in-between. The paper does not
+   clarify this point, which introduces more unnecessary dependencies.
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
 barrier semantics and a more efficient implementation than current designs. Persist barriers are essential to NVM
