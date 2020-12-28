@@ -61,5 +61,8 @@ strand must be properly ordered, such that writes after the barrier will not be 
 the barrier does. Note that the barrier does not define the memory consistency order of writes before and after. Write
 operations can be drained into the cache hierarchy regardless of the persistence order enforced by strands and barriers.
 Store operations in different strands are not affected by the barrier in any of the strand.
+The last primitive, JoinStrand, serves a similar purpose as the join() call in conventional process and thread 
+libraries. When executed, this instruction stalls the execution of the following stores, clwbs and barriers
+until all previous stores in the program order have been persisted. 
 
 
