@@ -37,4 +37,9 @@ To address the above issues, this paper proposes strand persistency model, which
 requirements in today's persistence model, and enables a new programming model for writing NVM applications.
 In the conventional persistence model, the execution or stores and cache line write backs are divided into "epochs"
 by the store fence instructions. Store operations in the same epoch are unordered, but store operations on different 
-epochs are guaranteed to be in the program order. 
+epochs are guaranteed to be in the program order. Besides, memory persistency order is fully coupled with consistency
+order, meaning that store operations must not proceed in the pipeline before all persistent stores are completed. 
+The above model is called "epoch persistency" in previous publications, which incurs large performance overhead on 
+current architectures.
+In strand persistency, two changes are made over epoch persistency for better performance and parallelism.
+
