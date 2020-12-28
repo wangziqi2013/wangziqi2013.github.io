@@ -90,3 +90,6 @@ issued, and completed. An entry contains a valid instruction if the valid bit is
 and persist barriers, if they are ready to be issued into the strand buffer. After being issued, instructions remain
 in the persist queue until they are completed, after which the completed bit is set. The persist queue retires 
 instructions in-order after the completed bit is set.
+For clwb instructions, an extra address field stores the cache line address. The persist queue can be used as a large
+CAM for address searching. A hit is signaled if the requested cache line address matches any of the entries, and 
+the index of the entry as well as the index in the ROB is returned.
