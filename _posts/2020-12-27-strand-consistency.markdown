@@ -55,4 +55,11 @@ The paper proposes three hardware primitives for applications to take advantage 
 primitive, NewStrand, starts a new strand since its location in program order, dropping all previous ordering 
 dependencies. All store and barrier operations are considered as in the new strand unless another NewStrand primitive
 is seen. Note that for simplicity, strands must be a consecutive range of stores and other barrier primitives in the 
-dynamic instruction trace.
+dynamic instruction trace. 
+The second primitive is persist barrier, which acts as an ordering barrier within a strand. Write operations within the 
+strand must be properly ordered, such that writes after the barrier will not be persisted earlier than writes before
+the barrier does. Note that the barrier does not define the memory consistency order of writes before and after. Write
+operations can be drained into the cache hierarchy regardless of the persistence order enforced by strands and barriers.
+Store operations in different strands are not affected by the barrier in any of the strand.
+
+
