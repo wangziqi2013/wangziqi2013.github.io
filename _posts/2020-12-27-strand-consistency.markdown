@@ -107,3 +107,7 @@ is guaranteed to be ordered after the store.
 Persist barriers are inserted into the persist queue always with can_issue bit set, since it does not have any 
 dependency with other instructions besides program order.
 
+JoinStrand, serving as a global level barrier, stalls all following operations in the persist queue by not committing
+until all preceding operations have completed. This is indicated by the completed bit in each entry before the 
+JoinStrand primitive. The JoinStrand primitive is not issued to the persist buffer (as we discuss below), and it will
+only be retired in the persist queue directly. The can_issue and issued bit are therefore not used.
