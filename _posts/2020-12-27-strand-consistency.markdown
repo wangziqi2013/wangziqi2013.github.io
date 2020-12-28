@@ -108,7 +108,10 @@ Similarly, when a store instruction is inserted into the persist queue, it check
 barrier already in the queue, but no younger NewStrand. If true, the store instruction is stalled to avoid being
 reordered with the persist barrier in the same strand. Otherwise, the store may be accidentally written back to the 
 NVM by a cache eviction before stores before the barrier does, which violates the persist ordering defined by the 
-barrier.
+barrier. The persist queue has two options here. First, it could stall the store until the 
+corresponding persist barrier has completed in the strand buffer, i.e., until all stores before the barrier have been
+fully persisted. In this case, the persist order must be correct, since when the store is inserted into the L1, all
+previous stores must have already been completed.
 
 Persist barriers are inserted into the persist queue always with can_issue bit set, since it does not have any 
 dependency with other instructions besides program order.
