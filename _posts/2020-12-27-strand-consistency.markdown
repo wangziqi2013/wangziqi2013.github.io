@@ -95,4 +95,8 @@ For clwb instructions, an extra address field stores the cache line address. The
 CAM for address searching. A hit is signaled if the requested cache line address matches any of the entries, and 
 the index of the entry as well as the index in the ROB is returned.
 
-The persist queue operates as follows. 
+The persist queue operates as follows. When a clwb instruction is inserted, it performs an associative lookup on
+the store buffer. If the store buffer contains a store of the same address, the clwb is stalled by not setting the
+can_issue bit. This is to avoid reordering between clwbs and a preceeding store of the same address. Otherwise, the
+can_issue bit is set.
+
