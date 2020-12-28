@@ -23,6 +23,9 @@ version_mgmt:
    which allows the creation of independent instruction pieces as "strands". Stores of different strands do not
    dependent on each other, and could hence be drained into the NVM in parallel.
 
+3. Three simple primitives are introduced to create strand, control write ordering within a strand, and wait for
+   all previous strands. These primitives are easy to use, implement and understand.
+
 
 
 This paper proposes strand consistency and a hardware implementation, StrandWeaver, to provide a better persist 
