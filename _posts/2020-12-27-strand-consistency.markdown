@@ -24,3 +24,8 @@ flush and memory fences. For example, on x86 ISA, a persist barrier consists of 
 writing back dirty cache lines, and a sfence instruction after all clwbs.
 clwb instructions are only strongly ordered with preceeding store instructions with the same target address, and memory
 fence (either explicit or implicit) instructions. clwbs are neither ordered with other stores nor with each other.
+
+The paper points out that a persist barrier implementation in the above form has two performance drawbacks. First,
+persistence ordering is coupled with consistency ordering, meaning that the pipeline must be stalled before a dirty
+block is fully flushed back to the NVM, blocking the commit of the following store operations even though these stores 
+do not write into the NVM. 
