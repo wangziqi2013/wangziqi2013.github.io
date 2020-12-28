@@ -112,12 +112,14 @@ barrier. The persist queue has two options here. First, it could stall the store
 corresponding persist barrier has completed in the strand buffer, i.e., until all stores before the barrier have been
 fully persisted. In this case, the persist order must be correct, since when the store is inserted into the L1, all
 previous stores must have already been completed.
-Second, the first option is overly conservative, since there is usually a time window between the store being inserted
-into the L1 cache, and the store being evicted from the hierarchy back to the NVM. The persist queue, on the other hand,
-can be optimistic, and issue the store to L1 as soon as the persist barrier is issued. In the event of an eviction or
-coherence downgrade/invalidation, the dirty cache block must be stalled, until all persist barriers currently in all
-strand buffers are completed, which, again, still guarantees that the store is persisted after stores before the 
-barrier. This paper recommends the second option as the first option stalls store in the store buffer for longer time.
+
+The second option is based on the observation that the first option is overly conservative, since there is usually a 
+time window between the store being inserted into the L1 cache, and the store being evicted from the hierarchy back to the NVM. 
+The persist queue, on the other hand, can be optimistic, and issue the store to L1 as soon as the persist barrier is 
+issued. In the event of an eviction or coherence downgrade/invalidation, the dirty cache block must be stalled, until 
+all persist barriers currently in all strand buffers are completed, which, again, still guarantees that the store is 
+persisted after stores before the barrier. This paper recommends the second option as the first option stalls store in 
+the store buffer for longer time.
 We discuss the handling of evictions and coherence later.
 
 
