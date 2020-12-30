@@ -48,5 +48,9 @@ functions. Function i maps a key into element array i. Conflicts on element arra
 by rehashing the original key into array (i + 1) (or array zero, if i equals N).
 When insertion failure occurs, if the table is not currently being resized (discussed later), then resize will
 be triggered immediately. Otherwise, existing elements in the table is rehashed using a different function, and
-insertion is tried again. 
+insertion is tried again. The table has two parameters: One is load factor, the other is multiplicative factor.
+The load factor is a ratio between zero and one. It serves as an upper bound for how populated an element array
+could be before a resizing takes place. In other words, during the operation, if the ratio between valid elements
+and total number of slots exceeds the load factor, then resizing is triggered.
+
 
