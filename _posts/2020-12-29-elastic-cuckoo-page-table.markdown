@@ -71,4 +71,6 @@ of the old table maintains a low-watermark pointer. The algorithm then maintains
 below the pointer in the array must have already been migrated to the new table. 
 Initially, all pointers are set to the beginning of the array. Table insertion still starts at the old table by
 randomly selecting an array as the starting point.
+Before the insertion actually takes place, the element pointed to by the corresponding pointer in the array being inserted into will be rehashed to the new table, and the pointer is incremented until the next valid element is reached
+or the array is completed.
 
