@@ -87,3 +87,7 @@ functions in parallel, and then compared with the corresponding low-watermark po
 the pointer, indicating that it falls into the completed part of the old array, then the new array is accessed due to
 the invariant. Otherwise, the old array is accessed.
 
+The paper then proposes a practical page table design using Cuckoo hash tables that supports multiple page sizes and 
+per-process tables. The page table consists of three individual Cuckoo hash tables, each for a size class. Per-process
+page table support is achieved by assigning an instance of the table to each process. 
+
