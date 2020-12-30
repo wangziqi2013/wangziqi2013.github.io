@@ -107,3 +107,10 @@ each Cuckoo hash table.
 If both conditions are met, the table walker issues a direct walk by only accessing one array of the specified 
 size class.
 If none of the condition is true, then by default, all arrays of all tables are accessed.
+These mapping metadata is stored in a per-size class table (except the 4KB class, where storage overhead is
+non-negligible) in the main memory, and maintained by the OS page fault handler. 
+Each size class's table tracks whether there are "holes" of smaller size classes on a per-page basis, and whether
+the translation entry exists in a parcular array of the Cuckoo hash table.
+Each page's descriptor are grouped together into 64 byte entries, which is accessed by the MMU before 
+page walk starts. 
+The MMU also has a small cache for the translation metadata for fast access of commonly used descriptors.
