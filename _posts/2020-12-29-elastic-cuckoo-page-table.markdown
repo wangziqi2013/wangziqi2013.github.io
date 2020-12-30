@@ -90,4 +90,8 @@ the invariant. Otherwise, the old array is accessed.
 The paper then proposes a practical page table design using Cuckoo hash tables that supports multiple page sizes and 
 per-process tables. The page table consists of three individual Cuckoo hash tables, each for a size class. Per-process
 page table support is achieved by assigning an instance of the table to each process. 
-
+Note that the paper allows "punching holes" in the address space when multiple page sizes are used, i.e., small pages
+can be mapped within a large page's virtual address. In this case, the access semantics of the virtual address is
+that the smallest mapping unit is used. For example, if a 4KB "hole" is mapped to a 4KB physical frame within a 1GB
+huge page, then when addresses within the 4KB range is accessed, address translation will use the 4KB mapping, not
+1GB huge page mapping.
