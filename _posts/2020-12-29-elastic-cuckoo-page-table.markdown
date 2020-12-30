@@ -28,4 +28,6 @@ for fast, low latency search. Hash tables, however, are also not perfect candida
 problems. First, hash conflicts can occur, especially when the table is densely populated. Common conflict resolution
 approaches, such as open addressing and chaining, will not work well for a hardware page walker, since they also
 incur extra levels of indirection or sequential memory access, which can even be slower than radix trees.
-
+Second, hash tables require constant resizing when being inserted into. The resizing operation either needs a long 
+latency full-table copy and rehashing, or can be done lazily by allowing both the old and new table to be present, 
+at the cost of increased number of memory accesses and storage consumption.
