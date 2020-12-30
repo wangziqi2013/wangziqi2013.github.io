@@ -104,4 +104,6 @@ In the first case, the walker simply performs a size walk by only accessing the 
 the number of elements to N.
 In the latter case, the page table walker issues a partial walk where only a subset of the arrays are checked for 
 each Cuckoo hash table.
-
+If both conditions are met, the table walker issues a direct walk by only accessing one array of the specified 
+size class.
+If none of the condition is true, then by default, all arrays of all tables are accessed.
