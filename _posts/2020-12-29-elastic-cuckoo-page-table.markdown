@@ -95,3 +95,9 @@ can be mapped within a large page's virtual address. In this case, the access se
 that the smallest mapping unit is used. For example, if a 4KB "hole" is mapped to a 4KB physical frame within a 1GB
 huge page, then when addresses within the 4KB range is accessed, address translation will use the 4KB mapping, not
 1GB huge page mapping.
+
+The paper also proposes an auxiliary data structure that prunes the number of parallel memory accesses during a table
+walk. With three size classes as in x86, 3N parallel memory accesses need to be issued to the DRAM on each
+table lookup. This can be optimized, if the page table walker knows that certain addresses are of a particular size
+class, and/or that the requested address exists in a certain element array.
+
