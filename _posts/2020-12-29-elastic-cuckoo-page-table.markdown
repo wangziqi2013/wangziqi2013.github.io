@@ -65,3 +65,10 @@ a transient state where both old and new tables are present, during which elemen
 rehashed into the new table. 
 This baseline resizing design, however, doubles the number of hash computation and memory requests during lookup, 
 since now the requested key can reside in all arrays of both tables.
+
+To reduce the overhead, the paper proposes a slightly different resizing algorithm we desscribe as follows. Each way
+of the old table maintains a low-watermark pointer. The algorithm then maintains the invariant that all elements 
+below the pointer in the array must have already been migrated to the new table. 
+Initially, all pointers are set to the beginning of the array. Table insertion still starts at the old table by
+randomly selecting an array as the starting point.
+
