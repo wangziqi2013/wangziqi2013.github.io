@@ -19,4 +19,6 @@ The paper begins by identifying a few limitations of current page table design a
 The current design, using radix tree as the table and bit slices of the address to index each level of the tree,
 suffers from squential read problem, since the next level in the radix tree can only be determined after the 
 previous level is read from the memory.
-
+In addition, many modern implementations add page walk caches to further accelerate page table walk. The intermediate 
+levels of the radix tree will consume cache storage while not contributing to translation, if lower level entries
+are also cached.
