@@ -52,5 +52,8 @@ insertion is tried again. The table has two parameters: One is load factor, the 
 The load factor is a ratio between zero and one. It serves as an upper bound for how populated an element array
 could be before a resizing takes place. In other words, during the operation, if the ratio between valid elements
 and total number of slots exceeds the load factor, then resizing is triggered.
-
+The resize operation, as we discuss in full details later, allocates a new table with the same number of 
+element arrays, with the size of each array being larger than the previous one. The ratio between new and old element
+array sizes is determined by the multiplicative factor. The paper suggests that both parameters be selected carefully
+based on the number of ways of the table.
 
