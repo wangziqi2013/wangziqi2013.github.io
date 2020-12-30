@@ -24,7 +24,8 @@ version_mgmt:
    part without having to check the old table, saving one memory access. Insertion should follow the same rule
    to maintain this invariant.
 
-
+3. Using an extra metadata table and per-page descriptors to track whether there are "holes" in each large page and
+   whether the translation info can be found in certain arrays. This reduces the number of memory accesses.
    
 
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
