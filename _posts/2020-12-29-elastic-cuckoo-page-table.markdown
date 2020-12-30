@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
+efficient page walks and translation caching.
+The paper begins by identifying a few limitations of current page table design and research proposals. 
+
