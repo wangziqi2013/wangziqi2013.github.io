@@ -16,4 +16,7 @@ version_mgmt:
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
 The paper begins by identifying a few limitations of current page table design and research proposals. 
+The current design, using radix tree as the table and bit slices of the address to index each level of the tree,
+suffers from squential read problem, since the next level in the radix tree can only be determined after the 
+previous level is read from the memory.
 
