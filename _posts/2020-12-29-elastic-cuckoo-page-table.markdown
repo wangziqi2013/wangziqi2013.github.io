@@ -46,6 +46,9 @@ threshold is reached, in which case the insertion fails.
 The paper assumes the following baseline Cuckoo design. The hash table consists of N element arrays and N hash 
 functions. Function i maps a key into element array i. Conflicts on element array i during insertion is resolved
 by rehashing the original key into a randomly selected array except the current one.
+Table lookup is performed in parallel by first hashing the requested key with all hash functions in parallel, and
+then probing each element array using the hash value as the index. A hit is signaled if one of the arrays indicate
+a key match.
 When insertion failure occurs, if the table is not currently being resized (discussed later), then resize will
 be triggered immediately. Otherwise, existing elements in the table is rehashed using a different function, and
 insertion is tried again. The table has two parameters: One is load factor, the other is multiplicative factor.
