@@ -42,3 +42,8 @@ element array. If a key conflict occurs, i.e., a different key already exists on
 rehashed using a different hash function than the most recent, and be inserted into the location indicated by the
 new hash function. This process can recursively rehash other keys if conflicts continue to occur, until a certain
 threshold is reached, in which case the insertion fails.
+
+The paper assumes the following baseline Cuckoo design. The hash table consists of N element arrays and N hash 
+functions. Function i maps a key into element array i. Conflicts on element array i during insertion is resolved
+by rehashing the original key into array (i + 1) (or array zero, if i equals N).
+
