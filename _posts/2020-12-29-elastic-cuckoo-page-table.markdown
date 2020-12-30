@@ -100,4 +100,8 @@ The paper also proposes an auxiliary data structure that prunes the number of pa
 walk. With three size classes as in x86, 3N parallel memory accesses need to be issued to the DRAM on each
 table lookup. This can be optimized, if the page table walker knows that certain addresses are of a particular size
 class, and/or that the requested address exists in a certain element array.
+In the first case, the walker simply performs a size walk by only accessing the table of the size class, reducing 
+the number of elements to N.
+In the latter case, the page table walker issues a partial walk where only a subset of the arrays are checked for 
+each Cuckoo hash table.
 
