@@ -73,4 +73,9 @@ Initially, all pointers are set to the beginning of the array. Table insertion s
 randomly selecting an array as the starting point.
 Before the insertion actually takes place, the element pointed to by the corresponding pointer in the array being inserted into will be rehashed to the new table, and the pointer is incremented until the next valid element is reached
 or the array is completed.
-
+Then insertion continues by hashing the requested key, and check whether the hash value falls into the "completed"
+part of the array, or otherwise. In the first case, since the invariant that all elements whose hash value
+fall into in that part have already been rehashed into the new table, the insertion will then be performed on the new
+table. Otherwise, the insertion is performed on the old table, with possible rehashing of an existing element
+in the element array. In this case, all recursive insertion must start at the old table, and follow the same algorithm 
+described above.
