@@ -18,6 +18,12 @@ version_mgmt:
 1. Parallelize page table lookup by using multi-bank Cuckoo hash table design, where all memory accesses can be issued
    in parallel
 
+2. Proposes a new Cuckoo hash resizing algorithm. Each element array is divided into two parts, where all keys that are 
+   mapped to the upper part is rehashed to the new table, and the lower part contains keys that have not been rehashed.
+   Using this simple partition, lookup will be redirected to the new table if the hash value falls into the upper
+   part without having to check the old table, saving one memory access. Insertion should follow the same rule
+   to maintain this invariant.
+
 
    
 
