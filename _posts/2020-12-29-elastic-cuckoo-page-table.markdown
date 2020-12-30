@@ -40,6 +40,14 @@ version_mgmt:
    responsible for rehashing? I guess it is not the OS, because rehashing is performed for each access. 
    Who is responsible for updating the metadata table?
 
+3. In the last paragraph of section 6, it is stated that "when the page walker
+   uses information found in CWCs to access a translation and
+   the accesses fail, the walker performs the walk again."
+   But, in this case, how do you know whether the failed lookup (key not found) is due to an inaccurate cached
+   entry, or due to a real page fault (address not inserted yet)?
+   So the second lookup must always be performed to obtain accurate translation information, before a page fault
+   is raised.
+
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
 The paper begins by identifying a few limitations of current page table design and research proposals. 
