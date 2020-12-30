@@ -36,7 +36,9 @@ version_mgmt:
 1. How does the OS page fault handler know which way a certain translation is stored? How to guarantee that when
    the way that an entry is stored changes, the OS can change the metadata table or at least invalidate the metadata?
 
-
+2. I hope the paper can discuss more on the division of responsibilities between MMU and the OS, e.g., who is
+   responsible for rehashing? I guess it is not the OS, because rehashing is performed for each access. 
+   Who is responsible for updating the metadata table?
 
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
