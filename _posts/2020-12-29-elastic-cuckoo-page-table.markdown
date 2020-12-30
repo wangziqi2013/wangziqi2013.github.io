@@ -22,3 +22,10 @@ previous level is read from the memory.
 In addition, many modern implementations add page walk caches to further accelerate page table walk. The intermediate 
 levels of the radix tree will consume cache storage while not contributing to translation, if lower level entries
 are also cached.
+
+To overcome the extra indirection levels of a radix tree, some prior proposals suggest that hash tables should be used 
+for fast, low latency search. Hash tables, however, are also not perfect candidates for this purpose, due to several
+problems. First, hash conflicts can occur, especially when the table is densely populated. Common conflict resolution
+approaches, such as open addressing and chaining, will not work well for a hardware page walker, since they also
+incur extra levels of indirection or sequential memory access, which can even be slower than radix trees.
+
