@@ -63,8 +63,8 @@ based on the number of ways of the table.
 We next describe the resizing operation. The paper uses lazy resizing, which has shorter latency, but must go through
 a transient state where both old and new tables are present, during which elements in the old table is gradually
 rehashed into the new table. 
-This baseline resizing design, however, doubles the number of hash computation and memory requests during lookup, 
-since now the requested key can reside in all arrays of both tables.
+This baseline resizing design, however, doubles the number of memory requests during lookup, since now the requested 
+key can reside in all arrays of both tables.
 
 To reduce the overhead, the paper proposes a slightly different resizing algorithm we desscribe as follows. Each way
 of the old table maintains a low-watermark pointer. The algorithm then maintains the invariant that all elements 
@@ -79,3 +79,11 @@ fall into in that part have already been rehashed into the new table, the insert
 table. Otherwise, the insertion is performed on the old table, with possible rehashing of an existing element
 in the element array. In this case, all recursive insertion must start at the old table, and follow the same algorithm 
 described above.
+Resizing completes when all pointers in the old table reach the end of the array, after which the old table is 
+reclaimed, and the new table is marked as the canonical copy.
+
+Lookup in the above design only requires N memory accesses instead of 2N. The lookup key is first hashed by all
+functions in parallel, and then compared with the corresponding low-watermark pointers. If the hash value is below
+the pointer, indicating that it falls into the completed part of the old array, then the new array is accessed due to
+the invariant. Otherwise, the old array is accessed.
+
