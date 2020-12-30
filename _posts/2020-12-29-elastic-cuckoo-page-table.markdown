@@ -31,6 +31,12 @@ version_mgmt:
    translation entries. Access to the hole will use the translation of the smaller size class.
    This is similar to what PageForge tries to achieve but with a better page table design.
 
+**Lowlight:**
+
+1. How does the OS page fault handler know which way a certain translation is stored? How to guarantee that when
+   the way that an entry is stored changes, the OS can change the metadata table or at least invalidate the metadata?
+
+
 
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
