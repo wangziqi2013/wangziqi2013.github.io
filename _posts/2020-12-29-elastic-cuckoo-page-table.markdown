@@ -38,4 +38,7 @@ certain process and huge pages.
 To address these challenges, the paper proposes adopting cuckoo hashing into page table designs. Cuckoo hashing is a 
 conflict resolution algorithm that allows the conflicting key to be rehashed to a different location when conflict 
 occurs. In Cuckoo hashing, multiple hash algorithms are implemented. The hash value is directly mapped to the table's
-element array. 
+element array. If a key conflict occurs, i.e., a different key already exists on the slot, the original key will be
+rehashed using a different hash function than the most recent, and be inserted into the location indicated by the
+new hash function. This process can recursively rehash other keys if conflicts continue to occur, until a certain
+threshold is reached, in which case the insertion fails.
