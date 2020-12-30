@@ -31,3 +31,6 @@ incur extra levels of indirection or sequential memory access, which can even be
 Second, hash tables require constant resizing when being inserted into. The resizing operation either needs a long 
 latency full-table copy and rehashing, or can be done lazily by allowing both the old and new table to be present, 
 at the cost of increased number of memory accesses and storage consumption.
+Third, the paper also claims that none of the prior hash table proposals support multiple page sizes in the same table,
+neither can they support process-private page tables, complicating common tasks such as address iteration for a 
+certain process and huge pages.
