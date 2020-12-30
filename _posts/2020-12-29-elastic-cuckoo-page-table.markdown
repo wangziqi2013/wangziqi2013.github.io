@@ -60,4 +60,5 @@ based on the number of ways of the table.
 We next describe the resizing operation. The paper uses lazy resizing, which has shorter latency, but must go through
 a transient state where both old and new tables are present, during which elements in the old table is gradually
 rehashed into the new table. 
-
+This baseline resizing design, however, doubles the number of hash computation and memory requests during lookup, 
+since now the requested key can reside in all arrays of both tables.
