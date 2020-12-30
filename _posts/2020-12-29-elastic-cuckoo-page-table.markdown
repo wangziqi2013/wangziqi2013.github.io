@@ -34,3 +34,8 @@ at the cost of increased number of memory accesses and storage consumption.
 Third, the paper also claims that none of the prior hash table proposals support multiple page sizes in the same table,
 neither can they support process-private page tables, complicating common tasks such as address iteration for a 
 certain process and huge pages.
+
+To address these challenges, the paper proposes adopting cuckoo hashing into page table designs. Cuckoo hashing is a 
+conflict resolution algorithm that allows the conflicting key to be rehashed to a different location when conflict 
+occurs. In Cuckoo hashing, multiple hash algorithms are implemented. The hash value is directly mapped to the table's
+element array. 
