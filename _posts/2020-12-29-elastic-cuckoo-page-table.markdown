@@ -45,7 +45,7 @@ threshold is reached, in which case the insertion fails.
 
 The paper assumes the following baseline Cuckoo design. The hash table consists of N element arrays and N hash 
 functions. Function i maps a key into element array i. Conflicts on element array i during insertion is resolved
-by rehashing the original key into array (i + 1) (or array zero, if i equals N).
+by rehashing the original key into a randomly selected array except the current one.
 When insertion failure occurs, if the table is not currently being resized (discussed later), then resize will
 be triggered immediately. Otherwise, existing elements in the table is rehashed using a different function, and
 insertion is tried again. The table has two parameters: One is load factor, the other is multiplicative factor.
@@ -56,4 +56,8 @@ The resize operation, as we discuss in full details later, allocates a new table
 element arrays, with the size of each array being larger than the previous one. The ratio between new and old element
 array sizes is determined by the multiplicative factor. The paper suggests that both parameters be selected carefully
 based on the number of ways of the table.
+
+We next describe the resizing operation. The paper uses lazy resizing, which has shorter latency, but must go through
+a transient state where both old and new tables are present, during which elements in the old table is gradually
+rehashed into the new table. 
 
