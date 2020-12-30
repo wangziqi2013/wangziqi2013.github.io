@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Parallelize page table lookup by using multi-bank Cuckoo hash table design, where all memory accesses can be issued
+   in parallel
+
+
+   
+
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
 The paper begins by identifying a few limitations of current page table design and research proposals. 
