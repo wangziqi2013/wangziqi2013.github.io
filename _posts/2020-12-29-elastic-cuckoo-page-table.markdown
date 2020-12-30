@@ -46,4 +46,7 @@ threshold is reached, in which case the insertion fails.
 The paper assumes the following baseline Cuckoo design. The hash table consists of N element arrays and N hash 
 functions. Function i maps a key into element array i. Conflicts on element array i during insertion is resolved
 by rehashing the original key into array (i + 1) (or array zero, if i equals N).
+When insertion failure occurs, if the table is not currently being resized (discussed later), then resize will
+be triggered immediately. Otherwise, existing elements in the table is rehashed using a different function, and
+insertion is tried again. 
 
