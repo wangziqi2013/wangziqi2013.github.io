@@ -26,7 +26,11 @@ version_mgmt:
 
 3. Using an extra metadata table and per-page descriptors to track whether there are "holes" in each large page and
    whether the translation info can be found in certain arrays. This reduces the number of memory accesses.
-   
+
+4. Although not mentioned in the paper, this design also allows punching holes in large pages by overlapping two
+   translation entries. Access to the hole will use the translation of the smaller size class.
+   This is similar to what PageForge tries to achieve but with a better page table design.
+
 
 This paper proposes Elastic Cuckoo Hashing Table (ECHT) and a new virtual memory address mapping framework for more
 efficient page walks and translation caching.
