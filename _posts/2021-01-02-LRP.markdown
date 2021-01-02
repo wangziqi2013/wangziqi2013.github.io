@@ -95,3 +95,5 @@ release, however, are not enforced, which is fatal for LFD's consistency guarant
 On the other hand, EP and BEP are sufficient in terms of correctness, but rather inefficient since they require issuing
 two full barriers, one before the release, the other after the release. The second full barrier is important for
 integrity of data flow after crash, since any other threads accessing the CAS'ed data item can potentially establish data dependencies with the CAS'ing thread. 
+If, after a crash, the CAS'ed value is not persisted, before the content it points to is used to conduct other mutations, it is possible that other mutations based on the pointer's value have been persisted, while the pointer
+itself and hence the contents it points to are not. This violates the integrity of data dependency, even if the LFD is in a consistent state, since some states in the LFD depends on states that no long exist after the crash.
