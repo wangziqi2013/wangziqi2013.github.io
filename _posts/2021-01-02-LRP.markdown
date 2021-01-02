@@ -118,4 +118,8 @@ identifying writes from different acquire-release pairs. Each pair represents an
 continuous in the dynamic trace), and all writes within the epoch are tagged with the epoch counter value.
 Whenever a release is issued to the cache, the epoch counter is incremented, and the release operation itself
 is tagged with the new epoch.
-
+The cache controller also has a register for counting the number of outstanding persistence requests.
+The counter is incremented for every persistence operation issued to the NVM, and decremented when the NVM controller
+acknowledges the completion of the request.
+To remember the minimum epoch a cache line is written, each cache line is extended with an extra epoch field which
+is updated when the line is first written in an epoch. Thie field is only updated once before it is cleared.
