@@ -41,4 +41,7 @@ persistence from consistency. Writes in the store buffer are no longer blocked b
 epoch. Instead, these writes are injected into the L1 cache as soon as they are ready, and the cache hierarchy relies
 on extra mechanism to track the epoch of writes, and persists them in the background while the epoch ordering is 
 still being honored.
-
+Although BEP moves the persistence operation off the critical path of stores, it is still sub-optimal, since writes 
+in later epochs cannot bypass writes in previous epochs, implying that when a write from a later epoch is to be 
+evicted out of the hierarchy (or, most likely, L1, since this is where the tracking mechanism is implemented), the 
+eviction must be blocked until all previous epochs have been completed.
