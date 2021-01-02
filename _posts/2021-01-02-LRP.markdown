@@ -20,7 +20,11 @@ version_mgmt:
    (2) it does not state why ARP is insufficient for LFD (because the CAS might be made persistent after writes
    to private nodes, i.e., the CAS should be treated as a single-direction barrier, but be enforced lazily).
 
-2. 
+2. Although not the fault of this paper, ARP should not really be called ARP, since it has nothing to do with
+   acquire-release consistency model. Conventionally speaking, acquire-release means that memory operations should
+   not be ordered before acquire and after release, meaning that critical sections will not "leak". The ARP
+   is simply enforcing ordering between data dependencies of different critical sections, and ARP is a very poor
+   choice of name.
 
 This paper proposes Lazy Release Persistency (LRP) to optimize specifically the case for log-free data structures (LFD).
 The paper starts by observing that current persistency models all face similar problems. First, most previous proposals
