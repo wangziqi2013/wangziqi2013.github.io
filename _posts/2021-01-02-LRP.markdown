@@ -18,7 +18,8 @@ version_mgmt:
 1. This paper is poorly motivated, because: (1) it does not state why LFDs do not need recovery (because state changes
    are made with CAS, maintaining the invariant that the data structure is in legal states on every CAS mutation);
    (2) it does not state why ARP is insufficient for LFD (because the CAS might be made persistent after writes
-   to private nodes, i.e., the CAS should be treated as a single-direction barrier, but be enforced lazily).
+   to private nodes, i.e., the CAS should be treated as a single-direction barrier, but be enforced lazily);
+   (3) it does not even state why the proposed RP is critical for LFD.
 
 2. Although not the fault of this paper, ARP should not really be called ARP, since it has nothing to do with
    acquire-release consistency model. Conventionally speaking, acquire-release means that memory operations should
@@ -73,14 +74,11 @@ In the hardware implementation, this is achieved by lazily inserting a full pers
 sycchronizes with a previous release. The release operation itself, as well as all writes before it, are written
 back to the NVM before the acquire operation takes place.
 
+The paper then indicates that Log-Free Data Structures (LFDs) can benefit from a well-designed persistency models.
+LFDs differ from conventional data structures in a way that LFDs do not require any explicit crash recovery, unlike
+the latter where logging or shadowing must be applied to roll back partial changes or redo committed updates.
+In LFDs, all state mutations are achieved by first performing private writes (e.g., allocate a node, and then initialize
+the node), and then publishing the state change using an atomic CAS or a release write operation. 
 
 
-
-In a conventional critical
-section, memory operations must not be reordered before the lock operation to avoid observing data races
-with a previous critical section, neither can they be reordered after the unlock operation to avoid data races
-with a later critical section. Similarly, as a generalization, memory operations tagged as an acquire will block
-all memory operations from being reordered before it, and release operations will block memory operations from being
-reordered after it. 
-On x86 platforms, both requirements are naturally acheived with TSO, which disallows load-store, store-load, store-store
-and load-load reordering.
+The paper points out that ARP is insufficient for implementing log
