@@ -23,3 +23,10 @@ which is still sub-optimal since not all legal reorderings are possible.
 Second, some proposals are overly relaxed, failing to enforce certain orderings, which makes it non-trivial for LFDs
 to perform crash recovery. These models, although still useful to other types of tasks, require extra software 
 support in order for LFDs to work properly.
+
+The paper gives detailed overviews of three possible persistence models. The first, epoch persistency, although not 
+directly mentioned in the paper, serves as the foundation of the other two, and is the only one currently implemented
+on mainstream x86 hardware. In epoch persistency, the dynamic instruction flow is divided into continuous pieces,
+called epochs. The persistency model enforces the rule that write operations must be persisted in the order of epochs,
+while allowing arbitrary ordering of writes within the same epoch.
+
