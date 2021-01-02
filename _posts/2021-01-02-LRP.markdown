@@ -36,4 +36,9 @@ As discussed above, epoch persistency couples persistence with consistency, mean
 become visible to other cores before previous stores in an earlier epoch becomes persistent, which limits the 
 parallelism of persistence despite the fact that both the device and application have abundant degree of parallelism. 
 
+The paper then discusses buffer epoch persistency (BEP), which is an improvement over epoch persistency by decoupling 
+persistence from consistency. Writes in the store buffer are no longer blocked by non-persistent stores in the previous
+epoch. Instead, these writes are injected into the L1 cache as soon as they are ready, and the cache hierarchy relies
+on extra mechanism to track the epoch of writes, and persists them in the background while the epoch ordering is 
+still being honored.
 
