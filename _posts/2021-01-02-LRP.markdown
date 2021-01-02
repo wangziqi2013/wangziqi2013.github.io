@@ -106,5 +106,10 @@ to fill the performance and semantics gap between EP, BEP and ARP.
 Overall, LRP consists of two rules, which correspond to the two important ordering constraints of LFDs we discuss above.
 The first rule is that all writes must be persisted before the release operation, such that if the release operation
 is persistent, all prior writes must also be persistent. 
-
+Second, data dependency must be honored, such that if one acquire operation and a prior release operation synchronize,
+writes before the release must also be ordered with writes after the acquire.
+Note that just like ARP, and unlike EP, BEP, the second rule only enforces write ordering between different
+acquire-release pairs when there is actual data dependency. In the case where data dependency is not present, writes
+from different acquire-release pairs can be persisted in arbitrary order, granting more freedom of reordering and hence
+higher degrees of parallelism.
 
