@@ -79,6 +79,8 @@ LFDs differ from conventional data structures in a way that LFDs do not require 
 the latter where logging or shadowing must be applied to roll back partial changes or redo committed updates.
 In LFDs, all state mutations are achieved by first performing private writes (e.g., allocate a node, and then initialize
 the node), and then publishing the state change using an atomic CAS or a release write operation. 
-
+Multi-step mutations are performed by always using CAS for state transition, and each intermediate state is well-defined
+as a legal state to the data structure. On crash recovery, since the data structure's state only transits between
+these legal states, no recovery is required, and the LFD is guaranteed to be consistent.
 
 The paper points out that ARP is insufficient for implementing log
