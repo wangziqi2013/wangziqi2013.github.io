@@ -113,3 +113,9 @@ acquire-release pairs when there is actual data dependency. In the case where da
 from different acquire-release pairs can be persisted in arbitrary order, granting more freedom of reordering and hence
 higher degrees of parallelism.
 
+The LRP hardware is implemented as follows. First, each L1 cache controller has a current epoch counter for 
+identifying writes from different acquire-release pairs. Each pair represents an epoch (that is not necessarily
+continuous in the dynamic trace), and all writes within the epoch are tagged with the epoch counter value.
+Whenever a release is issued to the cache, the epoch counter is incremented, and the release operation itself
+is tagged with the new epoch.
+
