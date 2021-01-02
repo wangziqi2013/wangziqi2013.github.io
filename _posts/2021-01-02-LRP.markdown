@@ -101,4 +101,10 @@ mutations, it is possible that other mutations based on the pointer's value have
 itself and hence the contents it points to are not. This violates the integrity of data dependency, even if the LFD is 
 in a consistent state, since some states in the LFD depends on states that no long exist after the crash.
 
+The paper therefore proposes Lazy Release Persistency (LRP), a persistency model and an architectural implementation
+to fill the performance and semantics gap between EP, BEP and ARP.
+Overall, LRP consists of two rules, which correspond to the two important ordering constraints of LFDs we discuss above.
+The first rule is that all writes must be persisted before the release operation, such that if the release operation
+is persistent, all prior writes must also be persistent. 
+
 
