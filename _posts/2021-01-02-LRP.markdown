@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. This paper is poorly motivated, because: (1) it does not state why LFDs do not need recovery (because state changes
+   are made with CAS, maintaining the invariant that the data structure is in legal states on every CAS mutation);
+   (2) it does not state why ARP is insufficient for LFD (because the CAS might be made persistent after writes
+   to private nodes, i.e., the CAS should be treated as a single-direction barrier, but be enforced lazily).
+
+2. 
+
 This paper proposes Lazy Release Persistency (LRP) to optimize specifically the case for log-free data structures (LFD).
 The paper starts by observing that current persistency models all face similar problems. First, most previous proposals
 are overly restrictive when it comes to persistence ordering barriers in the form of cache flushes and memory fences.
