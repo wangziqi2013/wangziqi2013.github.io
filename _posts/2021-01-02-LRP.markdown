@@ -86,3 +86,9 @@ Generally speaking, the most critical write ordering of LFD is that private writ
 CAS, meaning that the content of the mutation must be in a recoverable state, before publishing them to other threads.
 Otherwise, the mutation may only be partially persisted after the crash, rendering the LFD inconsistent.
 
+Although one may feel tempted to just tag the CAS operation as a release, and rely on hardware to control the persist
+ordering, the paper points out that ARP is insufficient for implementing LFDs.
+ARP, as discussed above, only controls write ordering between two acquire-release enclosed critical sections if the 
+acquire and release access the same data item. The ordering between the release operation itself and writes before the
+release, however, are not enforced, which is fatal for LFD's consistency guarantee.
+
