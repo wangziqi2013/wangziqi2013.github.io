@@ -16,5 +16,7 @@ version_mgmt:
 This paper proposes Lazy Release Persistency (LRP) to optimize specifically the case for log-free data structures (LFD).
 The paper starts by observing that current persistency models all face similar problems. First, most previous proposals
 are overly restrictive when it comes to persistence ordering barriers in the form of cache flushes and memory fences.
-
+These proposals either fail to exploit inherent parallelism in most NVM workloads by stalling the pipeline on a 
+persistence operation, which fully couples memory consistency with persistence, or they fail to enforce certain 
+orderings, which makes LFD recovery non-trivial. 
 
