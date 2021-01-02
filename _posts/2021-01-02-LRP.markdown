@@ -32,5 +32,8 @@ while allowing arbitrary ordering of writes within the same epoch.
 Application programs start a new epoch by issuing cache flushes to all dirty cache lines that are to be written into
 the NVM, followed by a store fence. The store fence operation will block the store buffer until all previous cache 
 line flush backs have been completed, after which time later stores can proceed to the L1 cache and become visible.
+As discussed above, epoch persistency couples persistence with consistency, meaning that a memory operations must not
+become visible to other cores before previous stores in an earlier epoch becomes persistent, which limits the 
+parallelism of persistence despite the fact that both the device and application have abundant degree of parallelism. 
 
 
