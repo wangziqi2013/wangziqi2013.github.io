@@ -48,4 +48,11 @@ eviction must be blocked until all previous epochs have been completed.
 
 The paper next introduces Acquire-Release Persistency (ARP), which relaxes the ordering guarantees of EP and BEP by
 allowing certain reorderings to occur. In ARP, memory operations are optionally tagged as acquire and release, which 
-roughly correspond to lock acquire and lock release in explicit synchronization code. 
+roughly correspond to lock acquire and lock release in explicit synchronization code. In a conventional critical
+section, memory operations must not be reordered before the lock operation to avoid observing data races
+with a previous critical section, neither can they be reordered after the unlock operation to avoid data races
+with a later critical section. Similarly, as a generalization, memory operations tagged as an acquire will block
+all memory operations from being reordered before it, and release operations will block memory operations from being
+reordered after it. 
+On x86 platform, acquire semantics is natually achieved with TSO, in which neither loads nor stores may reorder with
+a load.
