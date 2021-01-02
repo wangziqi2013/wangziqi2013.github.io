@@ -92,3 +92,6 @@ ARP, as discussed above, only controls write ordering between two acquire-releas
 acquire and release access the same data item. The ordering between the release operation itself and writes before the
 release, however, are not enforced, which is fatal for LFD's consistency guarantee.
 
+On the other hand, EP and BEP are sufficient in terms of correctness, but rather inefficient since they require issuing
+two full barriers, one before the release, the other after the release. The second full barrier is important for
+integrity of data flow after crash, since any other threads accessing the CAS'ed data item can potentially establish data dependencies with the CAS'ing thread. 
