@@ -46,13 +46,27 @@ in later epochs cannot bypass writes in previous epochs, implying that when a wr
 evicted out of the hierarchy (or, most likely, L1, since this is where the tracking mechanism is implemented), the 
 eviction must be blocked until all previous epochs have been completed.
 
-The paper next introduces Acquire-Release Persistency (ARP), which relaxes the ordering guarantees of EP and BEP by
-allowing certain reorderings to occur. In ARP, memory operations are optionally tagged as acquire and release, which 
-roughly correspond to lock acquire and lock release in explicit synchronization code. In a conventional critical
+The paper next introduces Acquire-Release Persistency (ARP), which relaxes the epoch property of EP and BEP by
+allowing epochs to be discontinuous in the dynamic trace, and hence can be persisted lazily. ARP delays the insertion
+of a persistence barrier to the beginning of the next epoch, instead of right after the end of the current epoch, 
+overlapping execution with persistence. 
+In ARP, memory operations are optionally tagged as acquire and release, which roughly correspond to lock acquire and 
+lock release in explicit synchronization code. 
+ARP mandates that if an acquire operation synchronizes with a release by operating on the same 
+data item (typically an unlock-lock), then all writes performed before the release must be persisted before all writes 
+after the acquire. 
+In the hardware implementation, this is achieved by lazily inserting a full persistence barrier when an acquire
+sycchronizes with a previous release. The release operation itself, as well as all writes before it, are written
+back to the NVM before the acquire operation takes place.
+
+
+
+
+In a conventional critical
 section, memory operations must not be reordered before the lock operation to avoid observing data races
 with a previous critical section, neither can they be reordered after the unlock operation to avoid data races
 with a later critical section. Similarly, as a generalization, memory operations tagged as an acquire will block
 all memory operations from being reordered before it, and release operations will block memory operations from being
 reordered after it. 
-On x86 platform, acquire semantics is natually achieved with TSO, in which neither loads nor stores may reorder with
-a load.
+On x86 platforms, both requirements are naturally acheived with TSO, which disallows load-store, store-load, store-store
+and load-load reordering.
