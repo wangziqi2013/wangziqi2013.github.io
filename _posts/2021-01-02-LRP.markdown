@@ -24,11 +24,11 @@ Second, some proposals are overly relaxed, failing to enforce certain orderings,
 to perform crash recovery. These models, although still useful to other types of tasks, require extra software 
 support in order for LFDs to work properly.
 
-The paper gives detailed overviews of three possible persistence models. The first, epoch persistency, although not 
-directly mentioned in the paper, serves as the foundation of the other two, and is the only one currently implemented
-on mainstream x86 hardware. In epoch persistency, the dynamic instruction flow is divided into continuous pieces,
-called epochs. The persistency model enforces the rule that write operations must be persisted in the order of epochs,
-while allowing arbitrary ordering of writes within the same epoch.
+The paper gives detailed overviews of three possible persistence models. The first, Epoch Persistency (EP), although 
+not directly mentioned in the paper, serves as the foundation of the other two, and is the only one currently 
+implemented on mainstream x86 hardware. In epoch persistency, the dynamic instruction flow is divided into continuous 
+pieces, called epochs. The persistency model enforces the rule that write operations must be persisted in the order of 
+epochs, while allowing arbitrary ordering of writes within the same epoch.
 Application programs start a new epoch by issuing cache flushes to all dirty cache lines that are to be written into
 the NVM, followed by a store fence. The store fence operation will block the store buffer until all previous cache 
 line flush backs have been completed, after which time later stores can proceed to the L1 cache and become visible.
@@ -36,7 +36,7 @@ As discussed above, epoch persistency couples persistence with consistency, mean
 become visible to other cores before previous stores in an earlier epoch becomes persistent, which limits the 
 parallelism of persistence despite the fact that both the device and application have abundant degree of parallelism. 
 
-The paper then discusses buffer epoch persistency (BEP), which is an improvement over epoch persistency by decoupling 
+The paper then discusses Buffer Epoch Persistency (BEP), which is an improvement over epoch persistency by decoupling 
 persistence from consistency. Writes in the store buffer are no longer blocked by non-persistent stores in the previous
 epoch. Instead, these writes are injected into the L1 cache as soon as they are ready, and the cache hierarchy relies
 on extra mechanism to track the epoch of writes, and persists them in the background while the epoch ordering is 
@@ -45,3 +45,7 @@ Although BEP moves the persistence operation off the critical path of stores, it
 in later epochs cannot bypass writes in previous epochs, implying that when a write from a later epoch is to be 
 evicted out of the hierarchy (or, most likely, L1, since this is where the tracking mechanism is implemented), the 
 eviction must be blocked until all previous epochs have been completed.
+
+The paper next introduces Acquire-Release Persistency (ARP), which relaxes the ordering guarantees of EP and BEP by
+allowing certain reorderings to occur. In ARP, memory operations are optionally tagged as acquire and release, which 
+roughly correspond to lock acquire and lock release in explicit synchronization code. 
