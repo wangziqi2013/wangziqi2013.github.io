@@ -20,3 +20,6 @@ These proposals either fail to exploit inherent parallelism in most NVM workload
 persistence operation, which fully couples memory consistency with persistence, or they only insert full barriers 
 regardless of the actual semantics level requirments, even though persistence is conducted in the background,
 which is still sub-optimal since not all legal reorderings are possible.
+Second, some proposals are overly relaxed, failing to enforce certain orderings, which makes it non-trivial for LFDs
+to perform crash recovery. These models, although still useful to other types of tasks, require extra software 
+support in order for LFDs to work properly.
