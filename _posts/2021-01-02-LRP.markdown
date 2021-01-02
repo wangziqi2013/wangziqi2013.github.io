@@ -29,4 +29,8 @@ directly mentioned in the paper, serves as the foundation of the other two, and 
 on mainstream x86 hardware. In epoch persistency, the dynamic instruction flow is divided into continuous pieces,
 called epochs. The persistency model enforces the rule that write operations must be persisted in the order of epochs,
 while allowing arbitrary ordering of writes within the same epoch.
+Application programs start a new epoch by issuing cache flushes to all dirty cache lines that are to be written into
+the NVM, followed by a store fence. The store fence operation will block the store buffer until all previous cache 
+line flush backs have been completed, after which time later stores can proceed to the L1 cache and become visible.
+
 
