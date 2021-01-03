@@ -28,6 +28,11 @@ version_mgmt:
    is simply enforcing ordering between data dependencies of different critical sections, and ARP is a very poor
    choice of name since reordering with release operation is actually allowed.
 
+3. Writing to an already dirty line from a different epoch should be undefined behavior, since in LFDs, such writes
+   are expected to take place via an acquire operation first (e.g., acquire a lock, or read a pointer).
+   If no acquire operation is used, and a dirty line from an older epoch is read or written, then data dependency can
+   still happen, which leads to incorrect recovery.
+
 This paper proposes Lazy Release Persistency (LRP) to optimize specifically the case for log-free data structures (LFD).
 The paper starts by observing that current persistency models all face similar problems. First, most previous proposals
 are overly restrictive when it comes to persistence ordering barriers in the form of cache flushes and memory fences.
@@ -128,6 +133,7 @@ To track cache lines written by a release operation in the current cache, the L1
 epoch table (RET), which is a CAM array storing cache line addresses and the epoch they are released (the release epoch
 is the new epoch after the epoch counter is incremented). The RET is queried when a cache line with the released bit
 set is evicted or coherence downgraded, in order to acquire the release epoch of the cache line.
+
 
 We next describe the operation of LRP as follows. Similar to ARP, LRP also lazily persists dirty cache lines written
 in previous epochs, when a data dependency is about to form when a released line is acquired. This translates to the
