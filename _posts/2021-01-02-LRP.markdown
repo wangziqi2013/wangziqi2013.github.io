@@ -19,6 +19,9 @@ version_mgmt:
    state of the data structure from one legal state to another. As long as the contents are always persisted
    before the CAS, LFDs are always in consistent states
 
+2. Multiple LFD state mutations can be persisted in parallel as long as they do not form data dependency, i.e., as
+   long as they do not have release-acquire relation
+
 
 
 **Lowlight:**
