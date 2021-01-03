@@ -22,6 +22,12 @@ version_mgmt:
 2. Multiple LFD state mutations can be persisted in parallel as long as they do not form data dependency, i.e., as
    long as they do not have release-acquire relation
 
+3. Using release-acquire tags to indicate data dependendy. For example, if you CAS a delta node onto a B+Tree,
+   then the CAS is tagged as release, meaning the delta node content should be persisted before the CAS is persisted.
+   If other threads want to read this delta node, it must access it via the pointer (just CAS'ed) using acquire
+   semantics, such that before the read can take place, all writes in the delta node and the CAS itself
+   must be persisted, in case the read operation feeds another mutation.
+
 
 
 **Lowlight:**
