@@ -154,4 +154,7 @@ When a non-released dirty line is evicted out of the L1, it will be immediately 
 controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
 be persisted before an older epoch, as long as these two epochs do not form data dependencies via 
 release-acquire. 
-
+Similarly, when a younger epoch writes a line that has already been dirty from an older epoch,
+the operation is performed normally except that the per-line min epoch tag is not updated.
+This is also allowed as long as these two epochs do not form data dependencies, which must be true, since otherwise
+the acquire operation would have triggered the persistence of all lines in the older epoch.
