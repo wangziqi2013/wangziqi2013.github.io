@@ -196,3 +196,10 @@ the operation is performed normally except that the per-line min epoch tag is no
 This is also allowed as long as these two epochs do not form data dependencies, which must be true, since otherwise
 the acquire operation would have triggered the persistence of all lines in the older epoch.
 **Note: In the paper this issue is called "conflicts", and is discussed in Sec. 4.2 rather than Sec. 5**
+
+There is a slight difference between coherence downgrade/invalidate and evictions. In former cases, the persist of the
+released line must stall the response of the coherence request, since otherwise data dependency would still violate 
+persistence order (the value is visible before it is persisted). On the contrary, in the latter case, since the evicted
+line is likely not immediately acquired by a remote line. The cache controller, therefore, need not put the presist
+operation on the critical path of eviction. Instead, the lower level controller temporarily blocks all coherence
+requests to the evicted line, until the persistence has been completed.
