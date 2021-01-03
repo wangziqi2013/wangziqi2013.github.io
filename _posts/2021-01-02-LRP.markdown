@@ -179,7 +179,13 @@ is smaller than the given epoch. The tag walker is invoked when a released cache
 evicted, using the release epoch as the given value. Note that LRP requires that released cache lines should be
 persisted after all dirty data. Also note that when a tag walk happens, there can be several epochs to be persisted
 in the L1, indicating that there can be multiple released lines besides the one that triggered the tag walk. 
-The paper proposes that the controller performs a two-pass walk. 
+The paper proposes that the controller performs a two-pass walk. In the first pass, only ordinary cache lines 
+with smaller epochs are evicted. This can be achieved by checking the per-line released bit.
+In the second pass, the remaining lines with a smaller epoch and release bit set are persisted.
+To monitor the persistence progress, The cache controller increments the request counter for each persistence request
+sent to the NVM. For every ACK received, the controller decrements the counter. The second pass is only started when
+the request counter drops to zero after the first pass.
+The walk completes only after the counter drops to zero after the second pass.
 
 When a non-released dirty line is evicted out of the L1, it will be immediately persisted by the lower level 
 controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
