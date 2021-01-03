@@ -174,7 +174,12 @@ be evicted, the L1 controller must treat this as a potential data dependency as 
 L1 controller loses track of the status of the line, and has no way of knowing whether the line is acquired).
 The same tag walk is also initiated in this case.
 
-The L1 tag walker is a state machine that 
+The L1 tag walker is a state machine that scans the tags of all L1 cache lines, and evict those whose write epoch
+is smaller than the given epoch. The tag walker is invoked when a released cache line is about to be acquired or
+evicted, using the release epoch as the given value. Note that LRP requires that released cache lines should be
+persisted after all dirty data. Also note that when a tag walk happens, there can be several epochs to be persisted
+in the L1, indicating that there can be multiple released lines besides the one that triggered the tag walk. 
+The paper proposes that the controller performs a two-pass walk. 
 
 When a non-released dirty line is evicted out of the L1, it will be immediately persisted by the lower level 
 controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
