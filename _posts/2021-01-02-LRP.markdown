@@ -116,10 +116,17 @@ higher degrees of parallelism.
 The LRP hardware is implemented as follows. First, each L1 cache controller has a current epoch counter for 
 identifying writes from different acquire-release pairs. Each pair represents an epoch (that is not necessarily
 continuous in the dynamic trace), and all writes within the epoch are tagged with the epoch counter value.
-Whenever a release is issued to the cache, the epoch counter is incremented, and the release operation itself
-is tagged with the new epoch.
+The epoch counter is incremented whenever a release is issued to the cache.
 The cache controller also has a register for counting the number of outstanding persistence requests.
 The counter is incremented for every persistence operation issued to the NVM, and decremented when the NVM controller
 acknowledges the completion of the request.
+
 To remember the minimum epoch a cache line is written, each cache line is extended with an extra epoch field which
-is updated when the line is first written in an epoch. Thie field is only updated once before it is cleared.
+is updated when the line is first written in an epoch. This field is only updated once before it is cleared.
+In addition, each line also has a bit indicating whether it is written by a release operation.
+To track cache lines written by a release operation in the current cache, the L1 controller also maintains a release
+epoch table (RET), which is a CAM array storing cache line addresses and the epoch they are released (the release epoch
+is the new epoch after the epoch counter is incremented). The RET is queried when a cache line with the released bit
+set is evicted or coherence downgraded, in order to acquire the release epoch of the cache line.
+
+
