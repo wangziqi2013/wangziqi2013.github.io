@@ -134,4 +134,8 @@ in previous epochs, when a data dependency is about to form when a released line
 rule that when a released cache line is invalidated or downgraded by a coherence request, the L1 controller should
 delay the response to this coherence request, and immediately start an L1 cache tag walk to persist all lines written
 before the epoch in which the release operation is performed. The release epoch can be obtained by a RET lookup.
+In addition, since release and epoch information is only tracked at L1 level, when a released cache line is about to
+be evicted, the L1 controller must treat this as a potential data dependency as well (since after being evicted,
+L1 controller loses track of the status of the line, and has no way of knowing whether the line is acquired).
+The same tag walk is also initiated in this case.
 
