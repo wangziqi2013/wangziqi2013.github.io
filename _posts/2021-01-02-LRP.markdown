@@ -28,7 +28,9 @@ version_mgmt:
    semantics, such that before the read can take place, all writes in the delta node and the CAS itself
    must be persisted, in case the read operation feeds another mutation.
 
-
+4. LRP honors two rules: (1) When a release operation is synchronized with an acquire, all dirty lines before the 
+   release must be persisted; (2) When the L1 is about to lose track of a released line, the L1 controller should
+   treat it as a synchronization, but the persistence of the released line itself can be in the background.
 
 **Lowlight:**
 
