@@ -133,7 +133,10 @@ To track cache lines written by a release operation in the current cache, the L1
 epoch table (RET), which is a CAM array storing cache line addresses and the epoch they are released (the release epoch
 is the new epoch after the epoch counter is incremented). The RET is queried when a cache line with the released bit
 set is evicted or coherence downgraded, in order to acquire the release epoch of the cache line.
-
+The paper suggests that 16 entries are sufficient for RETs, indicating that the system can support at most 16 
+outstanding mutation operations that have not been fully persisted. This grants far more parallelism than in EP
+and BEP, since dirty lines from these outstanding mutations can be written back at any moment in parallel without
+any write ordering enforcement.
 
 We next describe the operation of LRP as follows. Similar to ARP, LRP also lazily persists dirty cache lines written
 in previous epochs, when a data dependency is about to form when a released line is acquired. This translates to the
