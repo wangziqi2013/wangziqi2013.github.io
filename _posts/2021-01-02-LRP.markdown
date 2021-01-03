@@ -139,7 +139,7 @@ and BEP, since dirty lines from these outstanding mutations can be written back 
 any write ordering enforcement.
 
 We next describe the operation of LRP as follows. Similar to ARP, LRP also lazily persists dirty cache lines written
-in previous epochs, when a data dependency is about to form when a released line is acquired. This translates to the
+in previous epochs, when a data dependency is about to form as a released line is acquired. This translates to the
 rule that when a released cache line is invalidated or downgraded by a coherence request, the L1 controller should
 delay the response to this coherence request, and immediately start an L1 cache tag walk to persist all lines written
 before the epoch in which the release operation is performed. The release epoch can be obtained by a RET lookup.
@@ -147,4 +147,11 @@ In addition, since release and epoch information is only tracked at L1 level, wh
 be evicted, the L1 controller must treat this as a potential data dependency as well (since after being evicted,
 L1 controller loses track of the status of the line, and has no way of knowing whether the line is acquired).
 The same tag walk is also initiated in this case.
+
+The L1 tag walker is a state machine that 
+
+When a non-released dirty line is evicted out of the L1, it will be immediately persisted by the lower level 
+controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
+be persisted before an older epoch, as long as these two epochs do not form data dependencies via 
+release-acquire. 
 
