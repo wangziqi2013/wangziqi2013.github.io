@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Log-Free Data Structures do not need full barrier as they perform mutation via CAS, which always transits the 
+   state of the data structure from one legal state to another. As long as the contents are always persisted
+   before the CAS, LFDs are always in consistent states
+
+
+
 **Lowlight:**
 
 1. This paper is poorly motivated, because: (1) it does not state why LFDs do not need recovery (because state changes
@@ -34,7 +42,9 @@ version_mgmt:
    still happen, which leads to incorrect recovery.
 
 4. Despite all the above issues, the biggest problem I can see from this paper is that, do you treat the epoch counter
-   and ACK counter as part of the thread context? How do you deal with context swicthes between threads on the same core (all using LRP)? In that case, if an ACK comes, how do you know which thread's ACK counter should be decremented, if the counter is part of the context?
+   and ACK counter as part of the thread context? How do you deal with context swicthes between threads on the same 
+   core (all using LRP)? In that case, if an ACK comes, how do you know which thread's ACK counter should be 
+   decremented, if the counter is part of the context?
    If the counter is not part of the context, then context switch may cause problem since epochs will no longer
    be monotonically increasing, and there are lots of corner cases.
 
@@ -153,3 +163,14 @@ be evicted, the L1 controller must treat this as a potential data dependency as 
 L1 controller loses track of the status of the line, and has no way of knowing whether the line is acquired).
 The same tag walk is also initiated in this case.
 
+The L1 tag walker is a state machine that 
+
+When a non-released dirty line is evicted out of the L1, it will be immediately persisted by the lower level 
+controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
+be persisted before an older epoch, as long as these two epochs do not form data dependencies via 
+release-acquire. 
+Similarly, when a younger epoch writes a line that has already been dirty from an older epoch,
+the operation is performed normally except that the per-line min epoch tag is not updated.
+This is also allowed as long as these two epochs do not form data dependencies, which must be true, since otherwise
+the acquire operation would have triggered the persistence of all lines in the older epoch.
+**Note: In the paper this issue is called "conflicts", and is discussed in Sec. 4.2 rather than Sec. 5**
