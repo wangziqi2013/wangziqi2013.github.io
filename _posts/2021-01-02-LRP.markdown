@@ -28,10 +28,15 @@ version_mgmt:
    is simply enforcing ordering between data dependencies of different critical sections, and ARP is a very poor
    choice of name since reordering with release operation is actually allowed.
 
-3. Writing to an already dirty line from a different epoch should be undefined behavior, since in LFDs, such writes
+3. Writing to an already dirty line from a larger epoch should be undefined behavior, since in LFDs, such writes
    are expected to take place via an acquire operation first (e.g., acquire a lock, or read a pointer).
    If no acquire operation is used, and a dirty line from an older epoch is read or written, then data dependency can
    still happen, which leads to incorrect recovery.
+
+4. Despite all the above issues, the biggest problem I can see from this paper is that, do you treat the epoch counter
+   and ACK counter as part of the thread context? How do you deal with context swicthes between threads on the same core (all using LRP)? In that case, if an ACK comes, how do you know which thread's ACK counter should be decremented, if the counter is part of the context?
+   If the counter is not part of the context, then context switch may cause problem since epochs will no longer
+   be monotonically increasing, and there are lots of corner cases.
 
 This paper proposes Lazy Release Persistency (LRP) to optimize specifically the case for log-free data structures (LFD).
 The paper starts by observing that current persistency models all face similar problems. First, most previous proposals
@@ -148,13 +153,3 @@ be evicted, the L1 controller must treat this as a potential data dependency as 
 L1 controller loses track of the status of the line, and has no way of knowing whether the line is acquired).
 The same tag walk is also initiated in this case.
 
-The L1 tag walker is a state machine that 
-
-When a non-released dirty line is evicted out of the L1, it will be immediately persisted by the lower level 
-controller. Such persistence will not trigger any tag walk, since LRP allows a younger epoch's dirty line to
-be persisted before an older epoch, as long as these two epochs do not form data dependencies via 
-release-acquire. 
-Similarly, when a younger epoch writes a line that has already been dirty from an older epoch,
-the operation is performed normally except that the per-line min epoch tag is not updated.
-This is also allowed as long as these two epochs do not form data dependencies, which must be true, since otherwise
-the acquire operation would have triggered the persistence of all lines in the older epoch.
