@@ -129,4 +129,9 @@ epoch table (RET), which is a CAM array storing cache line addresses and the epo
 is the new epoch after the epoch counter is incremented). The RET is queried when a cache line with the released bit
 set is evicted or coherence downgraded, in order to acquire the release epoch of the cache line.
 
+We next describe the operation of LRP as follows. Similar to ARP, LRP also lazily persists dirty cache lines written
+in previous epochs, when a data dependency is about to form when a released line is acquired. This translates to the
+rule that when a released cache line is invalidated or downgraded by a coherence request, the L1 controller should
+delay the response to this coherence request, and immediately start an L1 cache tag walk to persist all lines written
+before the epoch in which the release operation is performed. The release epoch can be obtained by a RET lookup.
 
