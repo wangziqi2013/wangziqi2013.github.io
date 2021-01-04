@@ -45,3 +45,7 @@ The tree traversal function, called "crawlers", will return immediately once thi
 is found at leaf level. Note that subtree trimming is only a physical level optimization that does not affect the 
 logical content of the tree. The size of the file represented by that tree is independent from how the tree structure
 is, and the crawler functions always treat missing levels or nodes as if they store NULL pointers at leaf.
+
+Files in BPFS are referred to using pointers to the root address of the B+Tree. In addition, the height of the tree is
+encoded into lower bits of the pointer (tree pointers are 4KB aligned, so there should be 12 redundant bits which is
+more than sufficient). 
