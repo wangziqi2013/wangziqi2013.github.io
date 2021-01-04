@@ -35,3 +35,7 @@ consistent state.
 Compared with conventional file systems, which usually only guarantees the consistency of metadata via journaling,
 but not data, in order to reduce write amplification of writing the same data twice, BPFS's consistency model is
 a rather strong one since both metadata and data are protected from crashes.
+
+BPFS is implemented as a collection of B+Tree trees, which represent the inode file, directory files, and user files. 
+Just like regular B+Trees, each file in BPFS is stored as an on-NVM tree with inner nodes storing pointers to next-level
+nodes, and leaf nodes stroing pointers to data blocks. 
