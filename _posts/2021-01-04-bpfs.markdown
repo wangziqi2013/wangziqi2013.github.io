@@ -21,4 +21,7 @@ BPFS still outperforms them using a unique form of shadow paging that reduces wr
 Third, the byte-addressability of NVM makes small writes and certain meatdata operations fast, since only a few writes
 are sufficient instead of copying and writing back entire blocks. Lastly, although not mentioned by the paper, BPFS
 is capable of operating without an OS intermediate buffering level on the critical path, since the address space of the 
-NVM can be directly mapped to the protected virtual addresses of the file system driver. 
+NVM can be directly mapped to the protected virtual addresses of the file system driver. Most notably, no data movement
+between NVM and DRAM is required and hence DRAM buffer is only optional, unlike previous designs.
+Besides all these, BPFS also provides a stronger semantics guarantee without incurring any overhead other than those
+already exist in shadow paging.
