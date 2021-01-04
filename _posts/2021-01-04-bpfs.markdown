@@ -48,4 +48,7 @@ is, and the crawler functions always treat missing levels or nodes as if they st
 
 Files in BPFS are referred to using pointers to the root address of the B+Tree. In addition, the height of the tree is
 encoded into lower bits of the pointer (tree pointers are 4KB aligned, so there should be 12 redundant bits which is
-more than sufficient). 
+more than sufficient). Encoding tree heights, although unnecessary at the first glance, helps crawler functions to
+identify trimmed subtrees, in which case NULL pointers will be observed at a non-leaf level.
+The height field and tree pointer can be updated atomically using a 64-bit write, in the case of creating new root 
+nodes, such that the tree reference should always be consistent.
