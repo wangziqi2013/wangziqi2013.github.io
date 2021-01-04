@@ -25,3 +25,8 @@ NVM can be directly mapped to the protected virtual addresses of the file system
 between NVM and DRAM is required and hence DRAM buffer is only optional, unlike previous designs.
 Besides all these, BPFS also provides a stronger semantics guarantee without incurring any overhead other than those
 already exist in shadow paging.
+
+BPFS is implemented as a block-based file system on top of NVM using shadow paging as one of the the main updating
+algorithm. BPFS is compatible with the conventional file system interface, and provides a rather strong semantics
+guarantee: All operations should complete (almost) atomically in the order that they are issued by the application. 
+
