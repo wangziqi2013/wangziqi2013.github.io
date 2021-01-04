@@ -41,4 +41,7 @@ Just like regular B+Trees, each file in BPFS is stored as an on-NVM tree with in
 nodes, and leaf nodes stroing pointers to data blocks. One particular optimization of the BPFS B+Tree is that some
 subtrees can be trimmed if the subtree contains nothing else but just NULL pointers at the leaf level to save
 some storage and reduce tree traversal latency. 
-
+The tree traversal function, called "crawlers", will return immediately once this is encountered, as if a NULL pointer 
+is found at leaf level. Note that subtree trimming is only a physical level optimization that does not affect the 
+logical content of the tree. The size of the file represented by that tree is independent from how the tree structure
+is, and the crawler functions always treat missing levels or nodes as if they store NULL pointers at leaf.
