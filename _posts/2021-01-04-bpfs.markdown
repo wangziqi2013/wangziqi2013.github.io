@@ -29,4 +29,7 @@ already exist in shadow paging.
 BPFS is implemented as a block-based file system on top of NVM using shadow paging as one of the the main updating
 algorithm. BPFS is compatible with the conventional file system interface, and provides a rather strong semantics
 guarantee: All operations should complete (almost) atomically in the order that they are issued by the application. 
+Here "atomicity" refers to failure atomicity of data and metadata, meaning that an update operation on either or both
+will either be fully committed, or rolled back, after a crash, leaving the system itself as well as data always in a
+consistent state. 
 
