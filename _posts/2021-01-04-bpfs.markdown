@@ -32,4 +32,6 @@ guarantee: All operations should complete (almost) atomically in the order that 
 Here "atomicity" refers to failure atomicity of data and metadata, meaning that an update operation on either or both
 will either be fully committed, or rolled back, after a crash, leaving the system itself as well as data always in a
 consistent state. 
-
+Compared with conventional file systems, which usually only guarantees the consistency of metadata via journaling,
+but not data, in order to reduce write amplification of writing the same data twice, BPFS's consistency model is
+a rather strong one since both metadata and data are protected from crashes.
