@@ -15,4 +15,6 @@ version_mgmt:
 
 This paper introduces BPFS, a file system built on top of byte-addressable NVM. The paper recognizes that NVM is a 
 promising storage medium for future file storage platforms due to its byte-addressability and low latency accesses. 
-
+Compared to a conventional file system, BPFS has several advantages. First, its low read and write latency makes BPFS 
+signifantly faster than conventional file systems. Second, even compared with block-based file system ported to NVM, 
+BPFS still outperforms them using a unique form of shadow paging that reduces write amplification and data copy.
