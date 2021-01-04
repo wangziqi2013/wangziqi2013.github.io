@@ -38,4 +38,7 @@ a rather strong one since both metadata and data are protected from crashes.
 
 BPFS is implemented as a collection of B+Tree trees, which represent the inode file, directory files, and user files. 
 Just like regular B+Trees, each file in BPFS is stored as an on-NVM tree with inner nodes storing pointers to next-level
-nodes, and leaf nodes stroing pointers to data blocks. 
+nodes, and leaf nodes stroing pointers to data blocks. One particular optimization of the BPFS B+Tree is that some
+subtrees can be trimmed if the subtree contains nothing else but just NULL pointers at the leaf level to save
+some storage and reduce tree traversal latency. 
+
