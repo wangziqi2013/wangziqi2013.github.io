@@ -18,3 +18,7 @@ promising storage medium for future file storage platforms due to its byte-addre
 Compared to a conventional file system, BPFS has several advantages. First, its low read and write latency makes BPFS 
 signifantly faster than conventional file systems. Second, even compared with block-based file system ported to NVM, 
 BPFS still outperforms them using a unique form of shadow paging that reduces write amplification and data copy.
+Third, the byte-addressability of NVM makes small writes and certain meatdata operations fast, since only a few writes
+are sufficient instead of copying and writing back entire blocks. Lastly, although not mentioned by the paper, BPFS
+is capable of operating without an OS intermediate buffering level on the critical path, since the address space of the 
+NVM can be directly mapped to the protected virtual addresses of the file system driver. 
