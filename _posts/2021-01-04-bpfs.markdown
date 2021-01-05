@@ -111,3 +111,7 @@ write orderings are enforced for this block, which is set if the block's address
 Store instructions will mark a cache line with the current epoch by copying the value of the epoch register to the 
 epoch tag field, if it is not set yet. If the epoch field is already set, and is smaller than the current epoch, the 
 current line has to be written back first, before the write can proceed.
+
+The cache replacement algorithm prioritizes blocks with smaller epoch tags. If a block has to be evicted, but its epoch
+tag is not the smallest in the L1, the cache controller has to perform a full tag walk, and writes back all lines with
+smaller epoch tags for the correct write ordering. This may also happen on a store eviction, as discussed above.
