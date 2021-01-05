@@ -67,4 +67,6 @@ File system updates are performed using two techniques. The first technique reli
 be written, then no special construct is needed, and BPFS will directly write the field and flush it to the NVM for
 persistence. One of the most typical use cases is when application appends data to the file, and the append operation 
 allocates a new data page. 
-
+In this case, BPFS first allocates a data page from the free page pool, populates the page with data, and then installs
+the page to the B+Tree leaf node by simply overwriting the leaf pointer with the address of the data page.
+Metadata updates, such as access date/time, can also be performed with this technique.
