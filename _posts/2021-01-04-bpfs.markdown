@@ -88,4 +88,7 @@ potentially be far away from each other in the inode B+Tree.
 Despite non-volatile NVM data structures, BPFS also maintains auxiliary volatile data structure in the DRAM for faster
 access of certain metadata. The paper indicates that BPFS caches directories in hash tables to reduce directory file
 traversal time. In addition, free block list, free inode list, etc., are also cached in the DRAM.
-
+On initialization, BPFS scans free blocks and free inodes, and builds these structures. BPFS defines a free blocks as
+not being referred to in any of the B+Tree, and defines free inode as not being referred to in the form of inode numbers
+by any of the valid directory entry. Since NVM access latency is much shorter than regular disks, this process will
+only take a matter of seconds on a reasonably large file system.
