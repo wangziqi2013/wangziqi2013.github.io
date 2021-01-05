@@ -18,7 +18,15 @@ version_mgmt:
 1. Using B+Tree as a universal construct for representing all objects in the file system, i.e., inode files, 
    directory files, user files.
 
+2. B+Trees are be updated with either atomic, single-word update, or shadow-copy. The latter works by duplicating the   
+   page, applying updates, and then atomically updating the pointer. If multiple pages are updated, they will propagate 
+   to the common ancestor, where the ancestor is also shadow copied, and its parent is atomically updated.
+   BPFS uses the atomic update property to update a page atomically for swinging pointer to the shadow copy.
 
+3. Write ordering can be enforced by tagging each block in the cache hierarchy with a epoch ID. A global epoch counter
+   is used to represent the current epoch, and all blocks written in the epoch are tagged with the counter value.
+   The cache controller performs tag walk when a epoch tagged block is evicted. The tag walk finds all smaller epoch
+   blocks and evict them first to enforce write ordering.
 
 This paper introduces BPFS, a file system built on top of byte-addressable NVM. The paper recognizes that NVM is a 
 promising storage medium for future file storage platforms due to its byte-addressability and low latency accesses. 
