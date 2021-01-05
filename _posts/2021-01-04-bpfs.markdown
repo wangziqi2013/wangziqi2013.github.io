@@ -76,4 +76,7 @@ performing the actual updates on the copied page, and then updating the referenc
 the parent. Note that in a conventional file system, this update will cause an so-called "avalanche effect", 
 since the update to the parent page itself requires the duplication of the parent page, which recursively propagates 
 to the root of the tree, causing huge write amplification. 
+Recall that the entire structure of BPFS is a B+Tree collection, this issue can only become worse, since 
+In BPFS, since pointer updates are always atomic, the paper figures out that the recursion can stop as long as the
+parent page update can be conducted by a single pointer update.
 
