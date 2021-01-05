@@ -55,7 +55,9 @@ nodes, such that the tree reference should always be consistent.
 
 The entry point of BPFS is the inode file, which stores inode objects indexed by inode numbers. There is only one global
 inode B+Tree in the file system, the root pointer of which is stored in a known location in the super block.
-The inode serves the same purposes as in conventional file systems, storing data block pointers, meatdata such as file
+The inode serves the same purposes as in conventional file systems, storing metadata such as the file pointer, file
 size, date, time, and permission bits. Inode zero is by default the root directory of the file system, and the starting
 point of file system traversal.
-
+Directory is represented as a special type of file, whose content is just an array of directory entries. Each entry 
+stores the file name, inode number, entry type, etc. 
+Directory files and user files are also represented with B+Trees.
