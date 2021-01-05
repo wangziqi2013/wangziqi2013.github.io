@@ -84,3 +84,8 @@ Although, in the rare occurrance, this approach may still propagate updates to t
 avoid most full path shadow paging since most updates are highly localized. One example of large scale shadowing 
 is when files are moved around. In this case, both the source and destination directories are updated, which may
 potentially be far away from each other in the inode B+Tree.
+
+Despite non-volatile NVM data structures, BPFS also maintains auxiliary volatile data structure in the DRAM for faster
+access of certain metadata. The paper indicates that BPFS caches directories in hash tables to reduce directory file
+traversal time. In addition, free block list, free inode list, etc., are also cached in the DRAM.
+
