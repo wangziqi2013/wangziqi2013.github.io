@@ -104,3 +104,10 @@ The write ordering enforced by epoch persistency is that writes in later epochs 
 earlier epochs do. 
 Applications issue special primitives which increment the epoch counter, creating new epochs and hence new write 
 orderings for all writes after the point.
+
+The hardware modifications are discussed as follows. All blocks in the cache hierarchy is extended with an extra 64-bit 
+epoch tag indicating the epoch in which the cache block is written. A "persist" bit is also added to indicate whether
+write orderings are enforced for this block, which is set if the block's address lies in the mapped NVM address space.
+Store instructions will mark a cache line with the current epoch by copying the value of the epoch register to the 
+epoch tag field, if it is not set yet. If the epoch field is already set, and is smaller than the current epoch, the 
+current line has to be written back first, before the write can proceed.
