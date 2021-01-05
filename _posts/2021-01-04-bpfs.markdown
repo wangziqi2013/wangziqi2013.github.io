@@ -92,3 +92,9 @@ On initialization, BPFS scans free blocks and free inodes, and builds these stru
 not being referred to in any of the B+Tree, and defines free inode as not being referred to in the form of inode numbers
 by any of the valid directory entry. Since NVM access latency is much shorter than regular disks, this process will
 only take a matter of seconds on a reasonably large file system.
+
+The paper also points out that BPFS relies on hardware primitives to order writes to the NVM. This is critical for
+the correctness of recovery, since writes to shadow copied pages must be persisted before the pointer that links these
+pages to the tree hierarchy does. Otherwise, on a system crash, some page contents will be corrupted due to the
+writes not being persisted.
+
