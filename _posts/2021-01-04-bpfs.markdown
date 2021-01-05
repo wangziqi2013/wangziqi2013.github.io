@@ -97,4 +97,8 @@ The paper also points out that BPFS relies on hardware primitives to order write
 the correctness of recovery, since writes to shadow copied pages must be persisted before the pointer that links these
 pages to the tree hierarchy does. Otherwise, on a system crash, some page contents will be corrupted due to the
 writes not being persisted.
-
+The paper therefore proposes a hardware change, called epoch persistency, that enforces write ordering.
+In epoch persistency, the execution is divided into continuous segments, called epochs. Each epoch has an epoch number,
+which is dispensed by a current epoch counter on the cache controller. 
+The write ordering enforced by epoch persistency is that writes in later epochs must not be persisted before writes in
+earlier epochs do. 
