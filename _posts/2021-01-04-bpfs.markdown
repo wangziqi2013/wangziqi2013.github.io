@@ -102,3 +102,5 @@ In epoch persistency, the execution is divided into continuous segments, called 
 which is dispensed by a current epoch counter on the cache controller. 
 The write ordering enforced by epoch persistency is that writes in later epochs must not be persisted before writes in
 earlier epochs do. 
+Applications issue special primitives which increment the epoch counter, creating new epochs and hence new write 
+orderings for all writes after the point.
