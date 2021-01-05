@@ -115,3 +115,8 @@ current line has to be written back first, before the write can proceed.
 The cache replacement algorithm prioritizes blocks with smaller epoch tags. If a block has to be evicted, but its epoch
 tag is not the smallest in the L1, the cache controller has to perform a full tag walk, and writes back all lines with
 smaller epoch tags for the correct write ordering. This may also happen on a store eviction, as discussed above.
+
+The paper also proposes that the memory controller should be able to drain the request queue in the event of power
+failures, since the processor and cache hierarchy treats a cache line as persisted after it is admitted into the 
+memory controller's queue. This is achieved by having a few capacitors on-board, such that they can provide
+power for the controlle to keep running until the queue drains out.
