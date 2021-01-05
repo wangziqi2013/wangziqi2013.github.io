@@ -70,3 +70,10 @@ allocates a new data page.
 In this case, BPFS first allocates a data page from the free page pool, populates the page with data, and then installs
 the page to the B+Tree leaf node by simply overwriting the leaf pointer with the address of the data page.
 Metadata updates, such as access date/time, can also be performed with this technique.
+
+The second update technique is called short-circuit shadow paging, which involves copying the page to be updated, 
+performing the actual updates on the copied page, and then updating the reference of the old page to the new page in 
+the parent. Note that in a conventional file system, this update will cause an so-called "avalanche effect", 
+since the update to the parent page itself requires the duplication of the parent page, which recursively propagates 
+to the root of the tree, causing huge write amplification. 
+
