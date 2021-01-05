@@ -79,4 +79,8 @@ to the root of the tree, causing huge write amplification.
 Recall that the entire structure of BPFS is a B+Tree collection, this issue can only become worse, since 
 In BPFS, since pointer updates are always atomic, the paper figures out that the recursion can stop as long as the
 parent page update can be conducted by a single pointer update.
-
+If multiple paths are being updated this way, the parent node must be a common ancester of both paths. 
+Although, in the rare occurrance, this approach may still propagate updates to the root of the file system, BPFS can 
+avoid most full path shadow paging since most updates are highly localized. One example of large scale shadowing 
+is when files are moved around. In this case, both the source and destination directories are updated, which may
+potentially be far away from each other in the inode B+Tree.
