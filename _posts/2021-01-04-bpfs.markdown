@@ -52,3 +52,10 @@ more than sufficient). Encoding tree heights, although unnecessary at the first 
 identify trimmed subtrees, in which case NULL pointers will be observed at a non-leaf level.
 The height field and tree pointer can be updated atomically using a 64-bit write, in the case of creating new root 
 nodes, such that the tree reference should always be consistent.
+
+The entry point of BPFS is the inode file, which stores inode objects indexed by inode numbers. There is only one global
+inode B+Tree in the file system, the root pointer of which is stored in a known location in the super block.
+The inode serves the same purposes as in conventional file systems, storing data block pointers, meatdata such as file
+size, date, time, and permission bits. Inode zero is by default the root directory of the file system, and the starting
+point of file system traversal.
+
