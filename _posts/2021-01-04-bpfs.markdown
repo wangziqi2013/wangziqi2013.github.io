@@ -61,3 +61,10 @@ point of file system traversal.
 Directory is represented as a special type of file, whose content is just an array of directory entries. Each entry 
 stores the file name, inode number, entry type, etc. 
 Directory files and user files are also represented with B+Trees.
+
+File system updates are performed using two techniques. The first technique relies on the hardware guarantee that 
+64-bit writes are always atomic with regard to failures. If the update operation only causes a single 64-bit field to
+be written, then no special construct is needed, and BPFS will directly write the field and flush it to the NVM for
+persistence. One of the most typical use cases is when application appends data to the file, and the append operation 
+allocates a new data page. 
+
