@@ -23,7 +23,8 @@ version_mgmt:
    to the output buffer as continuous bits. Is this process purely combinational, or there is a state machine
    driving the multi-stage shffling? From the paper the best I can guess is that the MUXs can operate in parallel
    and hence a single cycle is sufficient for dispatching all segments. But them the problem arises as how do you
-   write the values fron the MUX to the output buffer?
+   write the values fron the MUX to the output buffer? In particular, why there is a global counter register,
+   if all MUX operate in one single cycle?
 
 This paper proposes compaction-free cache design, which optimizes over the conventional compressed cache by allowing
 compressed lines to be stored non-continuously in the data slot.
