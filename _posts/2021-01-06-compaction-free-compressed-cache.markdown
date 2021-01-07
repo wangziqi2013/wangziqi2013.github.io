@@ -32,5 +32,6 @@ significantly different compression ratios at different stages of execution.
 This paper assumes the following compressed cache architecture. The base line cache has four physical ways, providing
 256 bytes of storage each set. The compressed design adds 3x more tags per set, allowing a maximum of 4x compression
 ratio and a logical 16-way per set. 
-
+Each tag, as in a conventional design, contains its own address tag, coherence bits, control bits, and 
+other metadata. There is no per-tag pointer or pointers, and hence access indirection is not required.
 
