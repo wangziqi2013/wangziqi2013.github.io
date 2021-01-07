@@ -18,7 +18,8 @@ version_mgmt:
 1. Assign each segment a tag ID such that the data slot read logic can access all segments in parallel, and select those
    that belong to the tag that gets hit.
 
-
+2. Use a crossbar consisting of an array of MUXs for selecting the wanted segments and outputting them to the 
+   next stage buffer using per-segment information as control signals.
 
 **Lowlight:**
 
