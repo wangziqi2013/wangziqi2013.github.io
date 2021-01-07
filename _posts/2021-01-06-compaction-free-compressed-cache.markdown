@@ -89,4 +89,8 @@ the cache controller first evicts one or more compressed lines, if necessary, an
 Insertion also works in a two-stage manner. In the first stage, the filter logic takes the inverse per-segment valid bit
 as the output bit vector indictaing which segments can be used for storing the incoming compressed line.
 Then in the second stage, the incoming line is unshuffled into a buffer using a similar crossbar architecture as 
-
+discussed in the previous section and the bit mask from the last stage as control signals. 
+Note that not all segments are necessarily used for storing the line, and hence only those that are selected
+are set, and the rest will be cleared.
+The unshuffled data is then written back to the data bank, and both valid bits and tag IDs for affected segments
+are updated.
