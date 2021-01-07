@@ -65,4 +65,6 @@ banks for faster parallel access). The segment size is 4 bytes, while the size o
 8 bytes to 64 bytes, which translates to 2 to 16 segments.
 Although the compression algorithm is orthogonal to the proposal, the paper indicates that FPC is used.
 
-To enable the compaction-less feature, each segment in the data storage
+To enable the compaction-less feature, each segment in the data storage is associated with a tag ID register 
+tracking the tag whose data is stored. Segments also have valid bits to indicate whether the segment stores 
+data for any of the tags, or it is just inactive.
