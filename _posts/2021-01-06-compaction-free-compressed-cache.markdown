@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes compaction-free cache design, which optimizes over the conventional compressed cache by allowing
+compressed lines to be stored non-continuously in the data slot.
+
+
+
