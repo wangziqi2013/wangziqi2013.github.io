@@ -19,6 +19,12 @@ version_mgmt:
    using the ID of the hit signal, i.e., just use 0 - 16 for physical tag 0 - 16 as the ID. No explicit storage
    is needed.
 
+2. I think I understood how the crossbar works, but the paper should shed more light on how segments are dispatched
+   to the output buffer as continuous bits. Is this process purely combinational, or there is a state machine
+   driving the multi-stage shffling? From the paper the best I can guess is that the MUXs can operate in parallel
+   and hence a single cycle is sufficient for dispatching all segments. But them the problem arises as how do you
+   write the values fron the MUX to the output buffer?
+
 This paper proposes compaction-free cache design, which optimizes over the conventional compressed cache by allowing
 compressed lines to be stored non-continuously in the data slot.
 The paper points out that conventional compressed caches often suffer from external fragmentation caused by not
