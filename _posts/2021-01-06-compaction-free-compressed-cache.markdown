@@ -15,6 +15,11 @@ version_mgmt:
 
 This paper proposes compaction-free cache design, which optimizes over the conventional compressed cache by allowing
 compressed lines to be stored non-continuously in the data slot.
+The paper points out that conventional compressed caches often suffer from external fragmentation caused by not
+being able to store compressed lines in a non-continuous manner. In these designs, even if the current set has suffcient
+storage for a compressed line, if none of the individual vacant segments is large enough for the new line, insertion 
+operation would still require compacting the physical storage by moving existing lines around and updating their tag 
+pointers, such that vacant segments will be merged and the insertion becomes feasible. 
 
 
 
