@@ -20,6 +20,7 @@ being able to store compressed lines in a non-continuous manner. In these design
 storage for a compressed line, if none of the individual vacant segments is large enough for the new line, insertion 
 operation would still require compacting the physical storage by moving existing lines around and updating their tag 
 pointers, such that vacant segments will be merged and the insertion becomes feasible. 
-
+The compaction operation incurrs extra cycles on the insertion data path, requires dedicated circuit, increases
+energy consumption of the cache, and complicates design of the compression engine.
 
 
