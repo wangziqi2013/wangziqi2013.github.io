@@ -28,3 +28,9 @@ implicitly assumes a fixed offset in the data slot. This approach may work if th
 stable and matches the granularity of partition. This paper, however, points out that different workloads 
 demonstrate radically different compression ratios. To make things worse, even the same workload may demonstrate
 significantly different compression ratios at different stages of execution.
+
+This paper assumes the following compressed cache architecture. The base line cache has four physical ways, providing
+256 bytes of storage each set. The compressed design adds 3x more tags per set, allowing a maximum of 4x compression
+ratio and a logical 16-way per set. 
+
+
