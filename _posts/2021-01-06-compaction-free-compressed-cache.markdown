@@ -25,4 +25,6 @@ energy consumption of the cache, and complicates design of the compression engin
 
 One workaround is to statically partition the combined physical slot into equal-sized parts, and each tag 
 implicitly assumes a fixed offset in the data slot. This approach may work if the compression ratio is rather
-stable and matches the granularity of partition. 
+stable and matches the granularity of partition. This paper, however, points out that different workloads 
+demonstrate radically different compression ratios. To make things worse, even the same workload may demonstrate
+significantly different compression ratios at different stages of execution.
