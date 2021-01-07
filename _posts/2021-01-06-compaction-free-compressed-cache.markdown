@@ -34,6 +34,10 @@ version_mgmt:
    write the values fron the MUX to the output buffer? In particular, why there is a global counter register,
    if all MUX operate in one single cycle?
 
+3. This design may not be power-friendly since on a cache hit, all 256 byte segments in the bank are read out. 
+   Compared with the conventional design only a few segments are accessed, this can consume more power than the
+   base line design. Also the MUX-based crossbar is power-hungry.
+   
 This paper proposes compaction-free cache design, which optimizes over the conventional compressed cache by allowing
 compressed lines to be stored non-continuously in the data slot.
 The paper points out that conventional compressed caches often suffer from external fragmentation caused by not
@@ -60,3 +64,5 @@ monolithic piece of storage that can be addressed by all tags (physically they a
 banks for faster parallel access). The segment size is 4 bytes, while the size of a compressed line can vary from
 8 bytes to 64 bytes, which translates to 2 to 16 segments.
 Although the compression algorithm is orthogonal to the proposal, the paper indicates that FPC is used.
+
+To enable the compaction-less feature, each segment in the data storage
