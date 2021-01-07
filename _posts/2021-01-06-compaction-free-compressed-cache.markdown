@@ -34,4 +34,8 @@ This paper assumes the following compressed cache architecture. The base line ca
 ratio and a logical 16-way per set. 
 Each tag, as in a conventional design, contains its own address tag, coherence bits, control bits, and 
 other metadata. There is no per-tag pointer or pointers, and hence access indirection is not required.
-
+The proposed design also honors the segmented cache paradigm. Data slots of all physical ways are merged into a single
+monolithic piece of storage that can be addressed by all tags (physically they are still implemented by several smaller
+banks for faster parallel access). The segment size is 4 bytes, while the size of a compressed line can vary from
+8 bytes to 64 bytes, which translates to 2 to 16 segments.
+Although the compression algorithm is orthogonal to the proposal, the paper indicates that FPC is used.
