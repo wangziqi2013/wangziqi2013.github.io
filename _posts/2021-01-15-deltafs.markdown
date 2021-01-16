@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Per-thread, log-structured metadata for high scalability on PB-class storage.
+
+
+
+3. 
+
 **Lowlight:**
 
 1. How does the delta registry (section 2.2) maps files to their corresponding deltas? Are they per-file mapping?
