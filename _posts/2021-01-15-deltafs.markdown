@@ -49,5 +49,8 @@ The paper assumes the following architecture. The HPC cluster consists of comput
 nodes are capable of performing certain file operations locally using the native file system. Storage nodes run the 
 DeltaFS server (registry server), and the native file system is only used as a key-value object store, where objects
 can be data segments or file metadata.
+A central file registry maintains a global image of file metadata. The central registry, as discussed above, does not 
+necessarily reflect the most up-to-date state of the current file system, since local deltas may exist which overrides
+the global registry's entries.
 
 
