@@ -23,7 +23,9 @@ version_mgmt:
    This reduces metadata traffic and consistency overhead, since metadata requests are evenly distributed to all
    nodes that may store delta records. 
 
-3. 
+3. Delta objects are represented using LevelDB's SSTable (implemented as LSM-Trees). These objects are propagated
+   to a registry service such that other threads can locate one of the most up-to-date metadata updates when
+   attempting file accesses.
 
 **Lowlight:**
 
