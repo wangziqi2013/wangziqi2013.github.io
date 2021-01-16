@@ -67,6 +67,7 @@ in the delta objects, the application chooses its own conflict resolution protoc
 without having to synchronize with other processes or the central registry. When file metadata is to be updated,
 the DeltaFS client code will redirect the changes to a local delta object which stores uncommitted metadata updates.
 The local delta object, as suggested by the paper, is implemented with LevelDB's Sorted String Table (SSTable).
+Each SSTable instance stores the local metadata changes on a node, and multiple SSTables may have conflicting keys.
 When the application closes, all delta updates are committed by publishing the existence of the delta table object
 to the delta registry. Note that during this process, the delta object itself is not transferred to a remote node,
 but is maintained locally as part of the file system's committed metadata image. 
