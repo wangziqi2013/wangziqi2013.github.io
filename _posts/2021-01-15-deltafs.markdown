@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "DeltaFS: Exascale File Systems Scale Better Without Dedicated Servers"
+date:   2021-01-15 20:35:00 -0500
+categories: paper
+paper_title: "DeltaFS: Exascale File Systems Scale Better Without Dedicated Servers"
+paper_link: https://dl.acm.org/doi/10.1145/2834976.2834984
+paper_keyword: File System; DeltaFS
+paper_year: PDSW 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
