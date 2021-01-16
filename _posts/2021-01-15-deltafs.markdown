@@ -54,5 +54,12 @@ necessarily reflect the most up-to-date state of the current file system, since 
 the global registry's entries.
 An extra "delta registry" tracks the distributed deltas and their contents. The delta registry is updated to point to
 the local delta object, when a file system object is first requested from the central file registry.
+The delta registry can be implemented using any distributed key-value stores.
 
-
+We next present details as follows. The DeltaFS client code is implemented as a linkable library which overrides
+standard file system calls. On opening a file, if the metadata is not yet on the local node, it is first fetched
+from either the central registry, from the delta registry, or from a given delta object location potentially on
+a different node (the last is configurable by command line arguments while the previous ones are default behavior). 
+When conflicts occur, i.e., when the requested file object is mapped by more than one entries in the registries or 
+in the delta objects, the application chooses its own conflict resolution protocol such as "first writer wins",
+without having to synchronize with other processes or the central registry. 
