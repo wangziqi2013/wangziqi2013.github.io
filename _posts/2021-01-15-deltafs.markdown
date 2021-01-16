@@ -17,7 +17,11 @@ version_mgmt:
 
 1. Per-thread, log-structured metadata for high scalability on PB-class storage.
 
-
+2. Conventional distributed file systems use centralized metadata servers which require lots of corrdination between
+   nodes for proper updates. DeltaFS allows each thread on each node to generate their own delta records, which are
+   metadata changes, and stores them locally as the first-class citizen that can be accessed by other threads.
+   This reduces metadata traffic and consistency overhead, since metadata requests are evenly distributed to all
+   nodes that may store delta records. 
 
 3. 
 
