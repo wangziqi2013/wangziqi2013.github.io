@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. How does the delta registry (section 2.2) maps files to their corresponding deltas? Are they per-file mapping?
+   If so, the registry itself would be another metadata repo that will be updated on application commit point,
+   and I did not see how this is not a scalability bottleneck, if a normal metadata registry would be.
+
 This workshop paper introduces DeltaFS, a distributed file system design for extremely high scalability without
 dedicated metadata servers. The paper observes in the beginning that existing distribuyted systems for HPC workloads
 often lack scalability due to dedicated metadata servers, which must be contacted on file system operations. The
@@ -38,3 +44,5 @@ other designs, such as BatchFS, where metadata updates are always asynchronously
 in batches after the application terminates, DeltaFS saves even more bandwidth by maintaining metadata updates as 
 local "deltas", and letting other application to directly fetch metadata from these local delta, rather than forcing
 all file operations to serialize on the central registry, further reducing contention and improving performance.
+
+
