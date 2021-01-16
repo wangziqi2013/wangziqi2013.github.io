@@ -30,4 +30,7 @@ on a per-access basis, incurring extra bandwidth and protocol overheasd on these
 
 DeltaFS solves the above challenge by not maintaining a globally consistent metadata registry, and not contacting the
 remote metadata server on most file accesses. Instead of updating the global metadata when file operations are being
-performed, DeltaFS stores local changes to the metadata as local metadata objects. 
+performed, DeltaFS stores local changes to the metadata as local metadata objects. Depending on the file sharing mode,
+this local metadata object is either only made visible to other processes, or shared across a small number of processes
+using only local metadata servers. In other words, DeltaFS reduces communication between the application and metadata
+registry by performing local writes and amortizing updates to metadata until application terminates. 
