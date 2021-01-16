@@ -96,4 +96,7 @@ system, since DeltaFS essentially is just BatchFS locally, which commits its met
 only at certain points. These metadata updates are invisible to another node before the commit point unless explicitly
 specified.
 
-The paper proposes two common scenarios of utilizing DeltaFS. In the first scenario, 
+The paper proposes two common scenarios of utilizing DeltaFS. In the first scenario, each node of the application
+accesses a distinct set of files. In this case, since keys in the SSTable instances do not conflict, it is unnecessary
+to support inter-node file sharing support, and hence each node can run at native speed to generate their own delta
+records. 
