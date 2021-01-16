@@ -24,4 +24,8 @@ seems to be an overly strong semantics, as it will not be needed for most of the
 
 The paper uses two examples. The first example, Lustre, relies on a centralized, dedicated metadata server node to 
 provide registry information. All file accesses must contact the single metadata server, which could easily become
-a performance bottleneck. The 
+a performance bottleneck. The second example, IndexFS, partitions metadata and distributes them to several
+independent metadata servers, inproving scalability. The metadata retrieval and update cost, however, still exist
+on a per-access basis, incurring extra bandwidth and protocol overheasd on these servers.
+
+
