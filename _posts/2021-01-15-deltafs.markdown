@@ -45,4 +45,9 @@ in batches after the application terminates, DeltaFS saves even more bandwidth b
 local "deltas", and letting other application to directly fetch metadata from these local delta, rather than forcing
 all file operations to serialize on the central registry, further reducing contention and improving performance.
 
+The paper assumes the following architecture. The HPC cluster consists of computing nodes and storage nodes. Computing
+nodes are capable of performing certain file operations locally using the native file system. Storage nodes run the 
+DeltaFS server (registry server), and the native file system is only used as a key-value object store, where objects
+can be data segments or file metadata.
+
 
