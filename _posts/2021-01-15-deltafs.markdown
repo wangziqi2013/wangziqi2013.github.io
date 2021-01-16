@@ -21,3 +21,7 @@ since most workloads running on HPC clusters either do not communicate with each
 as a large, persistent store of data, or only communicate with other processes using a small portion of the file system.
 In either case, maintaining a globally consistent image of file system metadata and sharing them among all processes
 seems to be an overly strong semantics, as it will not be needed for most of the time.
+
+The paper uses two examples. The first example, Lustre, relies on a centralized, dedicated metadata server node to 
+provide registry information. All file accesses must contact the single metadata server, which could easily become
+a performance bottleneck. The 
