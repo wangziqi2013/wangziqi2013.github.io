@@ -28,4 +28,6 @@ a performance bottleneck. The second example, IndexFS, partitions metadata and d
 independent metadata servers, inproving scalability. The metadata retrieval and update cost, however, still exist
 on a per-access basis, incurring extra bandwidth and protocol overheasd on these servers.
 
-
+DeltaFS solves the above challenge by not maintaining a globally consistent metadata registry, and not contacting the
+remote metadata server on most file accesses. Instead of updating the global metadata when file operations are being
+performed, DeltaFS stores local changes to the metadata as local metadata objects. 
