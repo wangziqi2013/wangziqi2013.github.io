@@ -52,5 +52,7 @@ can be data segments or file metadata.
 A central file registry maintains a global image of file metadata. The central registry, as discussed above, does not 
 necessarily reflect the most up-to-date state of the current file system, since local deltas may exist which overrides
 the global registry's entries.
+An extra "delta registry" tracks the distributed deltas and their contents. The delta registry is updated to point to
+the local delta object, when a file system object is first requested from the central file registry.
 
 
