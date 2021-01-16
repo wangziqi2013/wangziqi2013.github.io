@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This workshop paper introduces DeltaFS, a distributed file system design for extremely high scalability without
+dedicated metadata servers. The paper observes in the beginning that existing distribuyted systems for HPC workloads
+often lack scalability due to dedicated metadata servers, which must be contacted on file system operations. 
