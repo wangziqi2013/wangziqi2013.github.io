@@ -55,6 +55,8 @@ the global registry's entries.
 An extra "delta registry" tracks the distributed deltas and their contents. The delta registry is updated to point to
 the local delta object, when a file system object is first requested from the central file registry.
 The delta registry can be implemented using any distributed key-value stores.
+Applications on the HPC cluster are executed on multiple nodes which can span a significant part of the cluster.
+Each node may access its own set of files, and some nodes may share file accesses.
 
 We next present details as follows. The DeltaFS client code is implemented as a linkable library which overrides
 standard file system calls. On opening a file, if the metadata is not yet on the local node, it is first fetched
@@ -70,3 +72,8 @@ to the delta registry. Note that during this process, the delta object itself is
 but is maintained locally as part of the file system's committed metadata image. 
 No conflict resolution is performed by the registry as well, since applications can choose which version to access when 
 conflicts occur as we discussed above.
+
+The author also noted that DeltaFS is not suitable for scenarios where applications interact frequently using the file
+system, since DeltaFS essentially is just BatchFS locally, which commits its metadata updates to the registry
+only at certain points. These metadata updates are invisible to another node before the commit point unless explicitly
+specified.
