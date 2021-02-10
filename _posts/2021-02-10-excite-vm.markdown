@@ -70,3 +70,17 @@ obtained by traversing the commit log for entries between the two mentioned time
 the set intersection test can be optimized using two bloom filters, with each containing hashed addresses from one 
 write set. If the bloom filter tests negative by AND'ing all addresses together, which should be the majority of cases,
 conflict detection succeeds and the transaction commits. The commit process fails otherwise.
+In either case, the transaction discards all data pages in its local page table. The invalidation of page table entries
+can be further delayed to the next transaction begin. 
+Note that when the page table entries are invalidiated, TLB should also be flushed for the sake of coherence. If the 
+transaction has been scheduled on another core, a TLB shootdown should also be invoked to globally clear the 
+translation entries.
+
+To prevent the global write log from growing indefinitely, and also to upper bound the number of log entries to be 
+replayed for every access, EXCITE-VM also has background "checkpointing" threads that 
+keep replaying log entries before truncating the log. The checkpointing thread reads the global write log in old-to-new
+order, and apply the delta to the shared base image which is mapped by the process's page table. Replay should stop
+at the earliest visible commit timestamp (i.e., there exists no log entry with a larger timestamp between the log 
+entry's commit timestamp and some uncommitted transaction's begin timestamp).
+
+
