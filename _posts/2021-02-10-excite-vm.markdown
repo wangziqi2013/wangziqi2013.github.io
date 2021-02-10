@@ -18,4 +18,6 @@ for individual threads.
 The paper is motivated by two observations. First, multicore programming for non-regular data structures, such as 
 graphs, are non-trivial as frequent thread synchronization is required to avoid data corruption. Besides, reliability
 may also be a concern in a multi-threaded environment if threads may fail due to invalid operations or accesses.
-
+Second, although Software Transactional Memory (STM) is a suitable programming paradigm for multicore synchronization,
+they often require a software indirection layer for multiversioning semantics. The indirection layer needs to be 
+invoked on every load and store instructions, which adds extra cycle and data overhead to the original application.
