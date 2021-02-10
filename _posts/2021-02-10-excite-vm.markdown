@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
+for individual threads.
+The paper is motivated by two observations. First, multicore programming for non-regular data structures, such as 
+graphs, are non-trivial as frequent thread synchronization is required to avoid data corruption. Besides, reliability
+may also be a concern in a multi-threaded environment if threads may fail due to invalid operations or accesses.
+
