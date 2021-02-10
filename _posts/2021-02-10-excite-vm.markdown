@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "EXCITE-VM: Extending the Virtual Memory System to Support Snapshot Isolation Transactions"
+date:   2021-02-10 20:35:00 -0500
+categories: paper
+paper_title: "EXCITE-VM: Extending the Virtual Memory System to Support Snapshot Isolation Transactions"
+paper_link: https://dl.acm.org/doi/10.1145/2967938.2967955
+paper_keyword: Virtual Memory; STM; SI-TM; EXCITE-VM
+paper_year: PACT 2016
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
