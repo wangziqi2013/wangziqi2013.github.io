@@ -33,7 +33,6 @@ version_mgmt:
    both replay and roll back. But in reality, SI only requires replay but not roll back, since on transaction aborts, 
    dirty pages can be directly discarded from the thread's address space without affecting the global base image.
 
-2. 
 
 This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
 for individual threads.
