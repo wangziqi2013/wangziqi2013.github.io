@@ -21,3 +21,8 @@ may also be a concern in a multi-threaded environment if threads may fail due to
 Second, although Software Transactional Memory (STM) is a suitable programming paradigm for multicore synchronization,
 they often require a software indirection layer for multiversioning semantics. The indirection layer needs to be 
 invoked on every load and store instructions, which adds extra cycle and data overhead to the original application.
+
+EXCITE-VM addresses the above two issues using Snapshot Isolation (SI) abstraction provided by virtual memory systems. 
+To simplify thread synchronization, each thread in EXCITE-VM reads from a consistent snapshot that is only determined 
+by the begin timestamp of the thread's transaction, which remains unaffected by concurrent threads that commit onto
+the actual memory image. 
