@@ -37,3 +37,10 @@ Besides, SI also requires that the committing transaction must not have write-wr
 transaction, meaning that the write set should either be constantly monitored against concurrent commits, or the 
 write set should be validated against the write set of committed transactions before the commit point. EXCITE-VM
 adopts the latter approach for less inter-thread communication.
+
+In a conventional Linux process, threads are maintained just like regular processes, with each thread having a 
+standalone control block. In a normal application, all threads share the same page table (the pointer of which
+is stored in CR3 register), enabling them to have the same view of memory. EXCITE-VM breaks this invariant by
+assigning each thread an individual page table, such that different threads may see different values at the same
+memory address, depending on the snapshot these threads are accessing. 
+
