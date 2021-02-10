@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using per-thread page mapping (rather than the default shared page table paradigm of Linux threads) to allow each
+   thread to access its own snapshot of the address space. In this case, the thread must use an empty page table
+   at the start of a transaction, and demand-paging all data it accesses by invoking the page fault handler and
+   letting the handler construct the proper memory image.
+
+
+
 This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
 for individual threads.
 The paper is motivated by two observations. First, multicore programming for non-regular data structures, such as 
