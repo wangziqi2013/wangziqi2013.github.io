@@ -89,4 +89,7 @@ log replay instead of the process's current base image. When a transaction succe
 all its accessed pages, it stores them in the page cache with the version of these pages (if the page is dirty, then
 the version of the page is the commit timestamp of the transaction). The page table may also stay valid, optimistically
 assuming that no transaction will ever commit on the page before the next time the same page is requested.
-
+The page fault handler is then modified as follows. First, when a page fault occurs, instead of constructing the page 
+from the process's base image, the handler first checks the page cache. If the address hits the cache, then the handler
+compares the page version against the requested version, and constructs the requested page by replaying log entries
+that are needed to bring the cached version to the requested version.
