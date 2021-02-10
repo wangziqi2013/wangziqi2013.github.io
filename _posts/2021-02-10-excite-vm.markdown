@@ -64,3 +64,9 @@ The commit timestamp is used to tag all write log entries of the committed trans
 in the memory image of all transactions whose begin timestamp is larger than the commit timestamp.
 EXCITE-VM runtime tracks the write set of the transaction, and appends them to the end of the global write log
 if commit succeeds. 
+Validation is also performed by comparing the current write set with write sets of committed transactions whose commit
+timestamp is between the begin and commit timestamp of the current transaction. These committed write sets can be 
+obtained by traversing the commit log for entries between the two mentioned time stamps. The paper also suggests that 
+the set intersection test can be optimized using two bloom filters, with each containing hashed addresses from one 
+write set. If the bloom filter tests negative by AND'ing all addresses together, which should be the majority of cases,
+conflict detection succeeds and the transaction commits. The commit process fails otherwise.
