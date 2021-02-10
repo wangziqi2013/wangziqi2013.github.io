@@ -20,6 +20,9 @@ version_mgmt:
    at the start of a transaction, and demand-paging all data it accesses by invoking the page fault handler and
    letting the handler construct the proper memory image.
 
+2. A multiversioning address space can be built without special hardware by maintaining a global write log and 
+   replaying log entries on each demand-paging page faults.
+
 
 
 This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
