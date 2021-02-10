@@ -28,3 +28,8 @@ by the begin timestamp of the thread's transaction, which remains unaffected by 
 the actual memory image. In addition, the virtual memory system, which is a built-in address translation mechanism,
 is taken advantage of to provide a per-thread execution context in which data pages would reflect the memory image 
 of a certain time point, rather than the most up-to-date per-process image.
+
+EXCITE-VM relies on the SI semantics between threads. SI semantics mandates that threads read a consistent image of 
+memory which is fixed at some time during the execution. Here "consistency" means that the memory image should be
+the result of some legal execution order of committed transactions at the time of transaction begin. After transaction
+begin, the consistent image will not be affected by concurrent committing transactions writing into the global image.
