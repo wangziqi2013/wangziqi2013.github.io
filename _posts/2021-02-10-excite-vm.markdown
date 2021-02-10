@@ -33,3 +33,7 @@ EXCITE-VM relies on the SI semantics between threads. SI semantics mandates that
 memory which is fixed at some time during the execution. Here "consistency" means that the memory image should be
 the result of some legal execution order of committed transactions at the time of transaction begin. After transaction
 begin, the consistent image will not be affected by concurrent committing transactions writing into the global image.
+Besides, SI also requires that the committing transaction must not have write-write conflicts with an interleaving
+transaction, meaning that the write set should either be constantly monitored against concurrent commits, or the 
+write set should be validated against the write set of committed transactions before the commit point. EXCITE-VM
+adopts the latter approach for less inter-thread communication.
