@@ -50,3 +50,6 @@ During thread execution, when a page is accessed for the first time, a page faul
 accessing an address with invalid page table entry. The EXCITE-VM page fault handler then constructs the proper
 view of memory using the timestamps of the requesting transaction and the committed values by earlier transactions 
 that the current transaction is supposed to see.
+At commit time, the write set of the current transaction is appended to a global write log, and all pages
+in the transaction's view of memory will be discarded (certain optimizations exist to cache these pages across
+transaction boundaries, as we will see later).
