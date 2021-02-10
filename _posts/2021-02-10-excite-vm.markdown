@@ -53,3 +53,9 @@ that the current transaction is supposed to see.
 At commit time, the write set of the current transaction is appended to a global write log, and all pages
 in the transaction's view of memory will be discarded (certain optimizations exist to cache these pages across
 transaction boundaries, as we will see later).
+
+The operation details are presented as follows. 
+At transaction begin, EXCITE-VM assigns the transaction a unique begin timestamp using a global counter. 
+The begin timestamp indicates the version of memory image the transaction will access, and EXCITE-VM satisfies the 
+access requests by "synthesizing" a data page from a base image and the modification logs of transactions that have 
+committed the begin timestamp. 
