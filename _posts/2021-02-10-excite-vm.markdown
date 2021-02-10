@@ -43,4 +43,6 @@ standalone control block. In a normal application, all threads share the same pa
 is stored in CR3 register), enabling them to have the same view of memory. EXCITE-VM breaks this invariant by
 assigning each thread an individual page table, such that different threads may see different values at the same
 memory address, depending on the snapshot these threads are accessing. 
-
+All threads in an application starts from a common base image serving as the starting point of execution. The 
+image each thread accesses deviates from each other as transactions commit and new transactions begin. Before a
+transaction begins on a thread, the thread's page table is re-initialized such that all entries are invalid.
