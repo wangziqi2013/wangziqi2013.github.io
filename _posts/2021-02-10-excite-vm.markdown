@@ -59,3 +59,8 @@ At transaction begin, EXCITE-VM assigns the transaction a unique begin timestamp
 The begin timestamp indicates the version of memory image the transaction will access, and EXCITE-VM satisfies the 
 access requests by "synthesizing" a data page from a base image and the modification logs of transactions that have 
 committed the begin timestamp. 
+Each committed transaction is also assigned a commit timestamp from the same global counter as begin timestamps.
+The commit timestamp is used to tag all write log entries of the committed transaction, such that they will appear
+in the memory image of all transactions whose begin timestamp is larger than the commit timestamp.
+EXCITE-VM runtime tracks the write set of the transaction, and appends them to the end of the global write log
+if commit succeeds. 
