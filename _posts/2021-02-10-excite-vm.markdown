@@ -46,3 +46,7 @@ memory address, depending on the snapshot these threads are accessing.
 All threads in an application starts from a common base image serving as the starting point of execution. The 
 image each thread accesses deviates from each other as transactions commit and new transactions begin. Before a
 transaction begins on a thread, the thread's page table is re-initialized such that all entries are invalid.
+During thread execution, when a page is accessed for the first time, a page fault would occur as a result of 
+accessing an address with invalid page table entry. The EXCITE-VM page fault handler then constructs the proper
+view of memory using the timestamps of the requesting transaction and the committed values by earlier transactions 
+that the current transaction is supposed to see.
