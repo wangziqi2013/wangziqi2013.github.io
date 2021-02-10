@@ -27,6 +27,14 @@ version_mgmt:
    commit. Also, the page cache can help reducing log replay when the requested version is larger than the cached
    version by just replaying the log entries between the current and the request versions.
 
+**Lowlight:**
+
+1. Why do log entries store the numerical delta rather than binary after-value? The paper claims that it is good for 
+   both replay and roll back. But in reality, SI only requires replay but not roll back, since on transaction aborts, 
+   dirty pages can be directly discarded from the thread's address space without affecting the global base image.
+
+2. 
+
 This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
 for individual threads.
 The paper is motivated by two observations. First, multicore programming for non-regular data structures, such as 
