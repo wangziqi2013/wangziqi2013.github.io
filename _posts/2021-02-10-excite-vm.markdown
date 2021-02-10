@@ -83,4 +83,10 @@ order, and apply the delta to the shared base image which is mapped by the proce
 at the earliest visible commit timestamp (i.e., there exists no log entry with a larger timestamp between the log 
 entry's commit timestamp and some uncommitted transaction's begin timestamp).
 
+The paper also proposes maintaining a page cache that stores the most recently accessed pages and their versions. The 
+page cache can be considered as a cache of partially materialized pages, which can serve as the starting point of 
+log replay instead of the process's current base image. When a transaction successfully commits, instead of discarding
+all its accessed pages, it stores them in the page cache with the version of these pages (if the page is dirty, then
+the version of the page is the commit timestamp of the transaction). The page table may also stay valid, optimistically
+assuming that no transaction will ever commit on the page before the next time the same page is requested.
 
