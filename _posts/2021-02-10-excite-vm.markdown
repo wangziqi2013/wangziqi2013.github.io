@@ -25,4 +25,6 @@ invoked on every load and store instructions, which adds extra cycle and data ov
 EXCITE-VM addresses the above two issues using Snapshot Isolation (SI) abstraction provided by virtual memory systems. 
 To simplify thread synchronization, each thread in EXCITE-VM reads from a consistent snapshot that is only determined 
 by the begin timestamp of the thread's transaction, which remains unaffected by concurrent threads that commit onto
-the actual memory image. 
+the actual memory image. In addition, the virtual memory system, which is a built-in address translation mechanism,
+is taken advantage of to provide a per-thread execution context in which data pages would reflect the memory image 
+of a certain time point, rather than the most up-to-date per-process image.
