@@ -93,3 +93,9 @@ The page fault handler is then modified as follows. First, when a page fault occ
 from the process's base image, the handler first checks the page cache. If the address hits the cache, then the handler
 compares the page version against the requested version, and constructs the requested page by replaying log entries
 that are needed to bring the cached version to the requested version.
+Additionally, if the TLB optimization is also adopted, when a transaction commits, it should also perform page table 
+invalidation for threads whose page table entries are still valid for the page, and issue TLB shootdown for these pages.
+The paper claims that such lazy invalidation of TLB entries can save some TLB shootdown overhead if overwrites are 
+relatively rare.
+The page cache is maintained by EXCITE-VM software runtime as a software cache, which follows a simple rule for 
+eviction. On eviction, the page table and TLB entries should also be invalidated to avoid accessing invalid pages.
