@@ -23,7 +23,9 @@ version_mgmt:
 2. A multiversioning address space can be built without special hardware by maintaining a global write log and 
    replaying log entries on each demand-paging page faults.
 
-
+3. A page cache can be added to save pages that have been constructed and to avoid invalidating entries on transaction 
+   commit. Also, the page cache can help reducing log replay when the requested version is larger than the cached
+   version by just replaying the log entries between the current and the request versions.
 
 This paper presents EXCITE-VM, a software-based virtual memory extension that enables snapshot isolation semantics
 for individual threads.
