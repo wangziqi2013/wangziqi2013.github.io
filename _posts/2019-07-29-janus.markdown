@@ -1,6 +1,6 @@
 ---
 layout: paper-summary
-title:  "Efficient Persist Barriers for Multicores"
+title:  "Janus: optimizing memory and storage support for non-volatile memory systems"
 date:   2019-07-29 21:44:00 -0500
 categories: paper
 paper_title: "Janus: Optimizing Memory and Storage Support for Non-Volatile Memory Systems"
@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
-This paper presents Janus, an framework for efficient handling of Backend Memory Operations (BMO) on Non-Volatile Memory 
+This paper presents Janus, a framework for efficient handling of Backend Memory Operations (BMO) on Non-Volatile Memory 
 (NVM) controllers. In the introduction section, the paper identifies a major bottleneck of NVM operations in addition to loads: 
 stores and the correspoinding BMOs. Two factors contribute to this conclusition. First, in order to achieve crash 
 persistency and recovery, most NVM applications use some form of logging or shadowing. These techniques enforce write ordering
@@ -26,7 +26,7 @@ device. These features require that the NVM device perform computations such as 
 on the backend (i.e. BMOs) when a cache line is evicted or flushed from the processor, which can further add to the latency 
 of store operations, aggravating the store bottleneck.  
 
-This paper employs two techniques to reduce the latency of BMO: parallization and pre-computation. With parallelization,
+Janus employs two techniques to reduce the latency of BMO: parallization and pre-computation. With parallelization,
 some operations from different tasks can be performed at the same time, as long as they are independent from each other.
 This paper identifies four types of dependence: inter-operation dependence, intra-operation dependence, address dependence,
 and data dependence. The first two types of dependence dictates which operation within each task can be overlapped without 
