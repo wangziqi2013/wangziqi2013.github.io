@@ -9,8 +9,8 @@ Resume
 
 <embed width="100%" height="1000px" navpanes="0" src="{{site.url}}/static/resume.pdf" type="application/pdf" /> 
 
-Research
---------
+Research Statement
+------------------
 
 I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") since 2017 Fall. 
 My research area is computer architecture and memory architecture, especially [Hardware Transaction Memory (HTM)](https://en.wikipedia.org/wiki/Transactional_memory "Transactional Memory"), Non-Volatime Memory, Memory and Cache
@@ -27,24 +27,23 @@ acceleration capabilities for common cases without sacrificing general purpose p
 adaptively takes advantage of hardware, and falls back to alternative, slower paths whenever hardware accelaration is 
 not achievable.
 
-Projects
---------
+Research Projects
+-----------------
 
-**(2016.04 - 2017.03)** As a Master student at CMU Master of Science in Computer Science program, I contributed to 
-[Peloton](https://github.com/cmu-db/peloton "Peloton Github"), an 
-open-source self-driving in-memory database system optimized for HTAP workloads. My main contribution is the lock-free B+Tree index, the 
-BwTree. I implemented the BwTree based on a [Microsoft Reaearch paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf "BwTree Paper"), and measured its performance under YCSB benchmark.
+**(2020.12 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos (CMU) and Professor Gennady Pekhimenko (U of T) on memory compression on multi-dimentional address space.
+
+**(2019.05 - 2020.11)** I was working with Professor Todd Mowry on NVM full system persistence.
+
+**(2017.09 - 2019.04)** I was working with Professor Todd Mowry on hardware transactional memory.
 
 **(2017.03 - 2017.07)** As a research associative intern at CMU Institute of Software Research (ISR), I contributed to the 
 [Usable Privacy Policy Project (UPPP)](https://www.usableprivacy.org/ "UPPP") under the supervision of Professor Norman Sadeh. 
 I implemented a static analysis framework using call graph analysis for Android apps. 
 
-**(2017.09 - 2019.04)** I am working with Professor Todd Mowry on page overlays and hardware transactional memory.
-
-**(2019.05 - 2020.11)** I am working with Professor Todd Mowry on page overlays and NVM full system persistence.
-
-**(2020.12 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko on 
-memory compression on multi-dimentional address space.
+**(2016.04 - 2017.03)** As a Master student at CMU Master of Science in Computer Science program, I contributed to 
+[Peloton](https://github.com/cmu-db/peloton "Peloton Github"), an 
+open-source self-driving in-memory database system optimized for HTAP workloads. My main contribution is the lock-free B+Tree index, the 
+BwTree. I implemented the BwTree based on a [Microsoft Reaearch paper](https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/bw-tree-icde2013-final.pdf "BwTree Paper"), and measured its performance under YCSB benchmark.
 
 Publications
 ------------
