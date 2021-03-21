@@ -21,7 +21,7 @@ My research interest also covers concurrent data structure design and parallel c
 I used to work closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
 Masters education at CMU, and my research project was efficient indexing for in-memory databases. 
 
-The goal of my research is to provide efficient data manipulation capabilities based on modern general purpose 
+The goal of my research is to accelerate data access and manipulation on modern general purpose 
 multicore architecture. I believe in a hardware-software co-design methodology. The hardware provides specialized 
 acceleration capabilities for common cases without sacrificing general purpose processing performance, while the software 
 adaptively takes advantage of hardware, and falls back to alternative, slower paths whenever hardware accelaration is 
@@ -48,19 +48,22 @@ memory compression on multi-dimentional address space.
 
 Publications
 ------------
-Pavlo, A., Angulo, G., Arulraj, J., Lin, H., Lin, J., Ma, L., Menon, P., Mowry, T.C., Perron, M., Quah, I. and Santurkar, S., 2017. Self-Driving Database Management Systems. In CIDR.
+**2021**
 
-Zimmeck, S., Wang, Z., Zou, L., Iyengar, R., Liu, B., Schaub, F., Wilson, S., Sadeh, N., Bellovin, S.M. and Reidenberg, J., 2017. Automated analysis of privacy requirements for mobile apps. In Proceedings of the Network and Distributed System Security (NDSS) Symposium (Vol. 2017).
+Wang, Ziqi, Michael A. Kozuch, Todd C. Mowry, Vivek Seshadri, Gennady Pekhimenko, Chulhwan Choo,
+Dimitrios Skarlatos. "NVOverlay: Enabling Efficient and Scalable High Frequency Snapshotting to NVM. "
+Proceedings of the 48th Intl. Symposium on Computer Architecture (ISCA), Virtual, June 2021.
 
-Ziqi Wang, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. 2018. Building a Bw-Tree Takes More Than Just Buzz Words. In Proceedings of 2018 International Conference on Management of Data (SIGMOD18). ACM, New York, NY, USA, 16 pages. [https://doi.org/10.1145/3183713.3196895](https://doi.org/10.1145/3183713.3196895)
+**2019**
 
-Peter Story, Sebastian Zimmeck, Abhilasha Ravichander, Daniel Smullen, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "Natural Language Processing for Mobile App Privacy Compliance", AAAI Spring Symposium on Privacy Enhancing AI and Language Technologies (PAL 2019), Mar 2019
+Wang, Ziqi, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. "Multiversioned Page Overlays: Enabling
+Faster Serializable Hardware Transactional Memory." In 2019 28th International Conference on Parallel
+Architectures and Compilation Techniques (PACT). IEEE, 2019. 
 
-Sebastian Zimmeck, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh, "MAPS: Scaling Privacy Compliance Analysis to a Million Apps", Privacy Enhancing Technologies Symposium (PETS 2019), 3, Jul 2019
+Zimmeck, Sebastian, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang  Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "MAPS: Scaling privacy compliance analysis to a million apps." Proceedings on Privacy Enhancing Technologies 2019, no. 3 (2019): 66--86.
 
-Ziqi Wang, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. ”Multiversioned Page Overlays: Enabling Faster
-Serializable Hardware Transactional Memory.” In 2019 28th International Conference on Parallel Architectures and
-Compilation Techniques (PACT). IEEE, 2019.
+**2018**
+Wang, Ziqi, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, H, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. "Building a bw-tree takes more than just buzz words." In Proceedings of the 2018 International Conference on Management of Data, pp. 473-488. ACM, 2018.
 
 Fun Stuff
 ---------
