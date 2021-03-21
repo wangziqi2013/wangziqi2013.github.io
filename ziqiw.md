@@ -49,21 +49,23 @@ memory compression on multi-dimentional address space.
 Publications
 ------------
 **2021**
-
-Wang, Ziqi, Michael A. Kozuch, Todd C. Mowry, Vivek Seshadri, Gennady Pekhimenko, Chulhwan Choo,
-Dimitrios Skarlatos. "NVOverlay: Enabling Efficient and Scalable High Frequency Snapshotting to NVM. "
-Proceedings of the 48th Intl. Symposium on Computer Architecture (ISCA), Virtual, June 2021.
+Wang, Ziqi, Michael A. Kozuch, Todd C. Mowry, Vivek Seshadri, Gennady Pekhimenko, Chulhwan Choo, Dimitrios Skarlatos. "NVOverlay: Enabling Efficient and Scalable High-Frequency Snapshotting to NVM. " Proceedings of the 48th Intl. Symposium on Computer Architecture (ISCA), Virtual, June 2021.
 
 **2019**
+Wang, Ziqi, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. ”Multiversioned Page Overlays: Enabling Faster Serializable Hardware Transactional Memory.” In 2019 28th International Conference on Parallel Architectures and Compilation Techniques (PACT). IEEE, 2019.
 
-Wang, Ziqi, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. "Multiversioned Page Overlays: Enabling
-Faster Serializable Hardware Transactional Memory." In 2019 28th International Conference on Parallel
-Architectures and Compilation Techniques (PACT). IEEE, 2019. 
-
-Zimmeck, Sebastian, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang  Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "MAPS: Scaling privacy compliance analysis to a million apps." Proceedings on Privacy Enhancing Technologies 2019, no. 3 (2019): 66--86.
+Zimmeck, Sebastian, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. ”MAPS: Scaling privacy compliance analysis to a million apps.” Proceedings on Privacy Enhancing Technologies 2019, no. 3 (2019): 66-86. 
 
 **2018**
-Wang, Ziqi, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, H, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. "Building a bw-tree takes more than just buzz words." In Proceedings of the 2018 International Conference on Management of Data, pp. 473-488. ACM, 2018.
+Wang, Ziqi, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. ”Building a bw-tree takes more than just buzz words.” In Proceedings of the 2018 International Conference on Management of Data, pp. 473-488. ACM, 2018. 
+
+**2017**
+Pavlo, Andrew, Gustavo Angulo, Joy Arulraj, Haibin Lin, Jiexi Lin, Lin Ma, Prashanth Menon, Todd Mowry, Matthew Perron, Ian Quah, Siddharth Santurkar, Anthony Tomasic, Skye Toor, Dana Van Aken, Ziqi Wang, Yingjun Wu, Ran Xian, and Tieying Zhang. ”Self-Driving Database Management Systems.” In CIDR, vol. 4, p. 1. 2017.
+
+Zimmeck, Sebastian, Ziqi Wang, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman M. Sadeh, Steven M. Bellovin, and Joel R. Reidenberg. "Automated Analysis of Privacy Requirements for Mobile Apps." In NDSS. 2017.
+
+**2016**
+Zimmeck, Sebastian, Ziqi Wang, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman Sadeh, Steven Bellovin, and Joel Reidenberg. ”Automated analysis of privacy requirements for mobile apps.” In 2016 AAAI Fall Symposium Series. 2016.
 
 Fun Stuff
 ---------
