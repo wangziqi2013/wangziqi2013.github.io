@@ -13,11 +13,12 @@ Research
 --------
 
 I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") since 2017 Fall. 
-My research area is computer architecture and memory architecture, especially [Hardware Transaction Memory (HTM)](https://en.wikipedia.org/wiki/Transactional_memory "Transactional Memory"), and
+My research area is computer architecture and memory architecture, especially [Hardware Transaction Memory (HTM)](https://en.wikipedia.org/wiki/Transactional_memory "Transactional Memory"), Non-Volatime Memory, Memory and Cache
+Compression, and
 [Page Overlays](http://users.ece.cmu.edu/~omutlu/pub/page-overlays-for-fine-grained-memory-management_isca15.pdf "Page Overlays").
 My research interest also covers concurrent data structure design and parallel computation.
 
-I was working closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
+I used to work closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
 Masters education at CMU, and my research project was efficient indexing for in-memory databases. 
 
 The goal of my research is to provide efficient data manipulation capabilities based on modern general purpose 
@@ -40,7 +41,10 @@ I implemented a static analysis framework using call graph analysis for Android 
 
 **(2017.09 - 2019.04)** I am working with Professor Todd Mowry on page overlays and hardware transactional memory.
 
-**(2019.05 - Present)** I am working with Professor Todd Mowry on page overlays and NVM full system persistence.
+**(2019.05 - 2020.11)** I am working with Professor Todd Mowry on page overlays and NVM full system persistence.
+
+**(2020.12 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko on 
+memory compression on multi-dimentional address space.
 
 Publications
 ------------
