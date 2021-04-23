@@ -13,6 +13,90 @@ htm_cr:
 version_mgmt:
 ---
 
+**Author's Feedback About This Review (email copy-paste):**
+ 
+From: Jungi Jeong
+Date: 2020-12-29 14:16
+To: ziqiw@cs.cmu.edu
+Subject: Thanks for reading UHTM.
+Hi, Ziqi
+
+I am Jungi, the author of UHTM presented MICRO 2020. I ran into your blog post accidentally and found out you did not enjoy reading it. Sorry about that. It always is difficult to write a good paper :).
+
+I really appreciate you reading my paper and suspect you spent some of your time on it since your concerns are actually better than some reviewers of prior submissions. I hope you find satisfying answers below.
+
+If you have other concerns, please let me know without hesitation.
+
+Best wishes,
+
+Jungi
+
+\=\=\=\=\=\=\=\=\=\=\=\=\=\=\=
+
+The paper lacks many details that are necessary to judge its feasibility. For example: (1) Where is the per-core bloom filter placed? LLC or L1? LLC would be a better place since a request only knows that it misses the hierarchy at LLC. Also, inserting into the filter is easier on LLC evictions. (2) When a block is evicted from the LLC, how are bloom filters updated? Do we insert into read set for those that are in the sharers list, and insert into write set for the one that are in the owner list? (3) In the above scenario, what if one of the sharers or the owner is currently switched out (so its bloom filter is not loaded)? Do we invoke OS and let OS find its bloom filter?
+
+==> (1) Bloom filters are located in the memory controller. But they can locate in LLC as well. It is a matter of implementation.
+(2) Correct. If the evicted block has multiple sharers, all corresponding read-set BFs (could be multiple) must be updated. Similarly, the write-set BF (must be one) of the owner also must be updated.
+(3) Context switch does not have anything to do with BF updates. No OS intervention required.
+
+
+This paper assumes inclusive LLC, such that cache lines not in the LLC will definitely not in upper level caches. This is may not be true for large multicores. And even if this assumption is valid, the author should explicitly put it in the text.
+
+==> Yes, my implementation assumes inclusive LLC. But, I do not see any fundamental difficulty to extend it to exclusive LLC as well. If you know limitations, please let me know. There could be something that I missed :)
+
+
+What if an address is first evicted into the LLC / DRAM, and then read back again? Do we delete it from the overflow list, or just let it stay in the list?
+
+==> The addresses are deleted from the overflow list if re-read.
+
+
+Are transactions required to be pinned on the same core until finish? It seems to me that this is not required since on page 9, “Context Switch” section, it is suggested that transaction abort should broadcast the aborted transaction ID to all cores. But in this case, how do you make speculative lines non-speculative, when a transaction commits at a different core?
+
+==> If a transaction is pinned on the same core, things become much simpler as you know. But, to make real "unbounded" transactions, they must survive across context switches as well. I personally agree with your opinion (regarding excluding context switches in the design).
+
+To answer your question, UHTM flushes and invalidates the write-set in the private cache before scheduling out so that the directory can maintain speculative lines correctly. When the transaction schedules in and commits in a different core, it only contacts the directory.
+
+
+Speculative cache lines are not tagged with transaction ID to indicate the ownership. On commit or abort, how do you know which line belongs to which transaction? One way is to query the directory and overflow list, but this makes commit very slow since you still have to perform LLC search on L1 controller.
+
+==> cache lines in the private caches are tagged with write-bit, indicating whether they are in the write-set or not. The directory maintains the ownership of cache lines in the shared cache. The commit can be potentially very slow as you pointed out. It must contact the directory and the overflow list if overflowed. But, this must be done to guarantee correctness in "unbounded" transactions.
+
+
+If the LLC directory maintains the list of speculative sharers and owner, the first access to a non-speculative cache line should always be sent to the LLC such that the access is registered. Otherwise, if the line already exists in the private cache of the accessing core, then LLC will not be notified. This design makes it very similar to the coherence protocol design of OverlayTM, which is written by me, but the authors did not cite it.
+
+==> My apologies. I was not aware of your work when I started working on this project (late 2018). Let me read your work once I get a chance.
+
+
+How do you guarantee the atomicity of transaction commit and abort? What if another transaction wants to access a cache line that is currently being rolled back during an abort? Do you just lock the bus and serialize all commits and aborts?
+
+==> When another transaction accesses a line that once modified and currently being aborted, the transaction also aborts. Since transaction abort must be atomic, such false abortion may happen. This applies to the commit scenario as well.
+
+
+Context switch support is a total mess, which introduces even more corner cases and race conditions. For example, if a transaction is aborted while swiched out, but the conflicting transaction needs to access one of the cache lines it has written back to the DRAM, how should that transaction obtain the pre-image? I personally will not recommend adding this support to a TM system. It is better just let the OS know the HTM semantics, and not make scheduling decisions AT ALL.
+
+==> Suppose transaction A is scheduled out and transaction B conflicts with the cache line C that modified by A and written back to DRAM. In this scenario, UHTM selects B to a victim and aborts B instead of A (See Table II in the paper). Since A is an overflowed transaction (cache line C is written back to DRAM), UHTM aborts B. If B is not overflowed, B has a higher priority to be aborted. If B is also an overflowed Tx, UHTM aborts the requester, which is B in this case. If a transaction is scheduled out and picked for abort, it must be a non-overflowed transaction.
+
+As noted in question 4, I really did not want to include context switch supports in UHTM. But, it is "research". I had to include this for completeness (not for practicality). If someone attempts to realize UHTM, I will suggest them to reconsider this feature :)
+
+**My Response, and Updates to the Lowlight Section:**
+
+On Tue, Dec 29, 2020 at 2:49 PM ziqiw@andrew.cmu.edu <ziqiw@andrew.cmu.edu> wrote:
+
+Hello Jungi,
+
+I am really surprised that the blog post is actually read by the paper author! Please do not misinterpret my confusion to some aspects of the design as not enjoying reading the paper. All papers I chose to write a review on are really nice papers, and represent at least some significant contribution (as I indicate in the "highlight" part). In fact, I discussed your paper with my advisor in a team meeting, because I found similarities between this one and one of my past HTM papers, mainly the LLC ownership directory and the associated coherence protocol, and we were thinking whether we could do something similar to extend our design. 
+
+The reason I stated in the beginning of the review that HTM designs are generally not good is due to usability concerns, which is common to all HTMs, not particularly yours or mine or other people's. From my experimence of running simulation as well as building the software runtime interface for these HTM designs, one of my major concern is that all existing HTMs cannot handle complicated system level tasks well, such as I/O, system call, process migration, context switch, etc. The lack of support for system level tasks makes HTMs less useful, since programmers still have to implement the software fall-back handler which is often non-trivial. 
+
+On the other hand, I do believe HTM on NVM or other non-volatile technologies are more promising than pure DRAM HTM, because existing ISAs (most notably x86's clwb/sfence) are not optimized for efficiency when NVM is deployed, while HTM can pose as a low-cost alternate solution, because most NVM critical sections (e.g., metadata update in a B+Tree) are small and non-complicated anyway.
+
+Your answers to these detailed design-level concerns are also well-written and very informative. I will merge them into the post in case someone else read this post in the future, and hope this can help them better appreciate the paper.
+
+It is also my pleasure to be answered directly by the paper's author. I really appreciate your time and effort spent on writing the paper. Please do not aplogize, as every research paper represent years of hard work, and as a PhD student myself I also understand how difficuit it is to design hardware. I wish you more high quality publications as this one in your academia career.
+
+Thanks,
+Ziqi
+
 **Highlight:**
 
 1. Divide on-chip speculative states and off-chip states into two parts. The on-chip part is maintained with LLC     
