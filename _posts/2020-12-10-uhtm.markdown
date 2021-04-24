@@ -16,9 +16,13 @@ version_mgmt:
 **Author's Feedback About This Review (email copy-paste):**
  
 From: Jungi Jeong
+
 Date: 2020-12-29 14:16
+
 To: ziqiw@cs.cmu.edu
+
 Subject: Thanks for reading UHTM.
+
 Hi, Ziqi
 
 I am Jungi, the author of UHTM presented MICRO 2020. I ran into your blog post accidentally and found out you did not enjoy reading it. Sorry about that. It always is difficult to write a good paper :).
@@ -36,7 +40,9 @@ Jungi
 The paper lacks many details that are necessary to judge its feasibility. For example: (1) Where is the per-core bloom filter placed? LLC or L1? LLC would be a better place since a request only knows that it misses the hierarchy at LLC. Also, inserting into the filter is easier on LLC evictions. (2) When a block is evicted from the LLC, how are bloom filters updated? Do we insert into read set for those that are in the sharers list, and insert into write set for the one that are in the owner list? (3) In the above scenario, what if one of the sharers or the owner is currently switched out (so its bloom filter is not loaded)? Do we invoke OS and let OS find its bloom filter?
 
 ==> (1) Bloom filters are located in the memory controller. But they can locate in LLC as well. It is a matter of implementation.
+
 (2) Correct. If the evicted block has multiple sharers, all corresponding read-set BFs (could be multiple) must be updated. Similarly, the write-set BF (must be one) of the owner also must be updated.
+
 (3) Context switch does not have anything to do with BF updates. No OS intervention required.
 
 
@@ -95,6 +101,7 @@ Your answers to these detailed design-level concerns are also well-written and v
 It is also my pleasure to be answered directly by the paper's author. I really appreciate your time and effort spent on writing the paper. Please do not aplogize, as every research paper represent years of hard work, and as a PhD student myself I also understand how difficuit it is to design hardware. I wish you more high quality publications as this one in your academia career.
 
 Thanks,
+
 Ziqi
 
 **Highlight:**
