@@ -26,3 +26,7 @@ and BPC, or rely on a dictionary to encode frequent words using less number of b
 compression ratio is sub-optimal, despite low compression and decompression latency, since the algorithm only
 exploits redundancy in a cache block without considering inter-block redundancy. In the latter case, statistics must
 be generated in advance, and not changed frequently thereafter, such that correctness is guaranteed.
+
+BCD deduplication, on the other hand, combines inter-block delta compression with deduplication. Its compression
+algorithm consists of two steps. In the first step, cache blocks that are likely to contain similar contents are
+clustered together into the same hash table bucket, and compared with each other. 
