@@ -5,10 +5,16 @@ date:   2021-04-23 21:08:00 -0500
 categories: paper
 paper_title: "BCD Deduplication: Effective Memory Compression Using Partial Cache-Line Deduplication"
 paper_link: https://dl.acm.org/doi/10.1145/3445814.3446722
-paper_keyword: Compression; Memory Compression; Deduplication
+paper_keyword: Compression; Memory Compression; Deduplication; Inter-Block Compression
 paper_year: ASPLOS 2021
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents BCD deduplication, a memory compression technique using block clustering inter-block compression.
+The paper points out the limitations of previous deduplication and compression proposals as follows.
+First, many previous schemes rely on in-memory mapping table for address remapping, due to blocks being 
+variable sized after compression. These mapping tables inevitably incur more memory accesses during both reads
+and writes, which will affect performance. 
