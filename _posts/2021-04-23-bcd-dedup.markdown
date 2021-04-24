@@ -18,3 +18,6 @@ The paper points out the limitations of previous deduplication and compression p
 First, many previous schemes rely on in-memory mapping table for address remapping, due to blocks being 
 variable sized after compression. These mapping tables inevitably incur more memory accesses during both reads
 and writes, which will affect performance. 
+Second, previous deduplication schemes, despite the fact that they can catch a wider range of block duplications
+by running on the entire address space rather than a cached subset, still underperforms stat-of-the-art compression 
+due to the granularity of deduplication being too coarse, which is on cache block level.
