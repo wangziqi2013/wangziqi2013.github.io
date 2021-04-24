@@ -29,4 +29,6 @@ be generated in advance, and not changed frequently thereafter, such that correc
 
 BCD deduplication, on the other hand, combines inter-block delta compression with deduplication. Its compression
 algorithm consists of two steps. In the first step, cache blocks that are likely to contain similar contents are
-clustered together into the same hash table bucket, and compared with each other. 
+clustered together into the same hash table bucket, and compared with each other. The bit-level delta is taken
+in a specific form such that the delta is only three-fourth of the size of an uncompressed block.
+In the second step, the bit-level delta is then compressed, and hashed into another hash table to perform deduplication. 
