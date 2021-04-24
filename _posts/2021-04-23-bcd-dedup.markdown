@@ -21,3 +21,8 @@ and writes, which will affect performance.
 Second, previous deduplication schemes, despite the fact that they can catch a wider range of block duplications
 by running on the entire address space rather than a cached subset, still underperforms stat-of-the-art compression 
 due to the granularity of deduplication being too coarse, which is on cache block level.
+Lastly, most current compression algorithms either seek special word patterns within a block, such as BDI, FPC, 
+and BPC, or rely on a dictionary to encode frequent words using less number of bits. In the former case, 
+compression ratio is sub-optimal, despite low compression and decompression latency, since the algorithm only
+exploits redundancy in a cache block without considering inter-block redundancy. In the latter case, statistics must
+be generated in advance, and not changed frequently thereafter, such that correctness is guaranteed.
