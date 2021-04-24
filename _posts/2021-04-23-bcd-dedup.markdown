@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "BCD Deduplication: Effective Memory Compression Using Partial Cache-Line Deduplication"
+date:   2021-04-23 21:08:00 -0500
+categories: paper
+paper_title: "BCD Deduplication: Effective Memory Compression Using Partial Cache-Line Deduplication"
+paper_link: https://dl.acm.org/doi/10.1145/3445814.3446722
+paper_keyword: Compression; Memory Compression; Deduplication
+paper_year: ASPLOS 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
