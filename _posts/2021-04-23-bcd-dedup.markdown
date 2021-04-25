@@ -51,5 +51,11 @@ On a read operation, both pointers are used to fetch base data and compressed de
 is decompressed and combined with the base to generate the original block content. 
 Read operations therefore require at most three DRAM accesses, upper bounding the worst case scenario.
 
+The size of a translation table entry is 64 bits, in which each pointer uses 31 bits. Since base blocks are always 
+stored in block-aligned addresses, 31-bit pointer can address as much as 128GB memory. Diff blocks are stored 
+on 16-byte boundaries (reasons discussed below), and hence 31-bit diff pointer can address at most 32GB diff.
+Overall, the translation table occupies a constant 1/8 of total storage, since every memory block address has a 
+direct-mapped entry in the table.
+
 
 
