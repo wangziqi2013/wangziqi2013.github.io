@@ -66,4 +66,10 @@ cache block is also hashed into a full signature. Both values will be used durin
 The 16-byte higher bits are then used to generate the hash index into the base hash table. The paper did not disclose
 how the hash index is generated, but the effect of hashing higher bits is that blocks with the same higher bits
 will be clustered into the same hash bucket. 
+Each hash bucket consists of N ways, which can support at most N different base blocks hashed to the same index. 
+Each way consists of a one-byte partial signature, a one-byte full signature, and a 64-byte base block.
+Physically, these signatures and base blocks are stored consecutively, such that signatures can be accessed with
+one or more DRAM burst. In fact, in this paper, it is suggested that the hash table be 32-ways, such that one 64-byte 
+burst is sufficient to access all signatures.
+
 
