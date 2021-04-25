@@ -13,21 +13,28 @@ htm_cr:
 version_mgmt:
 ---
 
-**Lowlight:**
+**Highlight:**
+
+
+
+**Questions:**
 
 1. How to guarantee that all these complicated DRAM operations during a write are performed atomically?
-   Using hardware 2PL is an option for correctness, but that would: (1) Lock an entire bucket; 
+   Using hardware 2PL is an option for correctness, but that would: (1) Lock an entire bucket (which is mostly
+   fine, because lines are mapped to the same bucket by their contents, not address, so locality is not an issue); 
    (2) incur more synchronization traffic, especially if there are multiple controllers. Note that this
    problem cannot be solved by address partitioning, since any two or more blocks can share the same
-   base and diff. 
+   base and diff. One way is to have a fast buffer for all buckets currently under-work. Controllers communicate
+   via this shared "lock buffer" to avoid seeing an unfinished operation.
+   Or you just serialize all operations, which I suppose would be the actual solution.
 
 2. How do you perform inverse address lookup during diff hash table compaction (from diff to translation table entry
    in order to rewrite the entry's pointer)? The diff table does not store 
    the original address, as in my understanding?
 
-3. The hardware heap maintained in the overflowed region is not as simple as it seems to be like in this paper.
+3. The hardware heap maintained in the overflow region is not as simple as it seems to be.
    The heap allocator should support fine-grained allocation and free, not only page-sized allocation.
-   MXT can do that because they compress pages in really large units, such that both alloc and free are also
+   MXT can do that because it compresses pages in really large units, such that both alloc and free are also
    potentially large. This paper's proposal requires 16-byte level alloc and free, which is significantly more 
    difficult (e.g., requires more metadata).
 
@@ -35,8 +42,8 @@ version_mgmt:
    BCD deduplication just makes the problem worse since there are two more hash tables, whose parameters should
    also be determined. Are they determined statically? By the BIOS according to memory size? By OS configuration?
 
-5. Dynamically disabling BCD deduplication is not always possible, since the physical address may still be in-use by 
-   some other data or metadata,
+5. Dynamically disabling BCD deduplication is not always possible, since the home physical address may still be 
+   in-use by some other data or metadata,
    incurring very complicated reverse lookup and recursive decompression.
    Although, it is not a big problem, because you can just restart the machine.
 
