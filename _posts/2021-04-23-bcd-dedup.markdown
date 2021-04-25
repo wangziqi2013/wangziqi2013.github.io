@@ -30,6 +30,10 @@ version_mgmt:
    potentially large. This paper's proposal requires 16-byte level alloc and free, which is significantly more 
    difficult (e.g., requires more metadata).
 
+4. OS needs to determine compressed size at startup time. Although many other designs also share this problem, 
+   BCD deduplication just makes the problem worse since there are two more hash tables, whose parameters should
+   also be determined. Are they determined statically? By the BIOS according to memory size? By OS configuration?
+
 This paper presents BCD deduplication, a memory compression technique using block clustering inter-block compression.
 The paper points out the limitations of previous deduplication and compression proposals as follows.
 First, many previous schemes rely on in-memory mapping table for address remapping, due to blocks being 
