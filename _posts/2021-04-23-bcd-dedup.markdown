@@ -21,6 +21,9 @@ version_mgmt:
    problem cannot be solved by address partitioning, since any two or more blocks can share the same
    base and diff. 
 
+2. How do you perform inverse address lookup during diff hash table compaction? The diff table does not store 
+   the original address, as in my understanding?
+
 This paper presents BCD deduplication, a memory compression technique using block clustering inter-block compression.
 The paper points out the limitations of previous deduplication and compression proposals as follows.
 First, many previous schemes rely on in-memory mapping table for address remapping, due to blocks being 
@@ -89,8 +92,3 @@ the base block's address is written into the translation table entry, and both d
 The reference counter of the base block is also incremented by one.
 If, however, the full signatures match, but lines do not match, then partial signature is compared, as we see below.
  
-
-
-In all cases, if the address contains a valid block previously, and the block uses shared base or diff, the reference
-counts of these bases and diffs should be decremented. If a reference count drops to zero, the block or diff will be
-freed.
