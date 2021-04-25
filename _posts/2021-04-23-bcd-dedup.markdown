@@ -124,3 +124,10 @@ allocation sizes: 64 bytes, 48 bytes, 32 bytes, and 16 bytes, in which the last 
 diff. Blocks and diff in the overflowed region cannot serve as the base of deduplication, as they will not be searched
 during the write operation. These blocks are freed, if the block is written again, and the new block or diff can 
 either be deduplicated, or be allocated an entry in the hash tables.
+
+The paper proposes a few optimizations. The first optimization is that both the translation table and reference 
+counts can be cached by a hardware structure. These caches do not need to be standalone entities. In fact, the
+paper proposes that the BCD deduplication entine be put between the L2 and the LLC, such that the engine uses 
+LLC as a metadata and base/diff cache, and the LLC actually "sees" the translated memory address, rather than
+physical address. It is claimed by the paper that this also benefits the LLC since the LLC
+also potentially stores more data in compressed form without changing the LLC's data layout.
