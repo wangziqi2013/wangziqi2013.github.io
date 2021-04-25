@@ -37,17 +37,17 @@ This two-level scheme exploits both inter-line redundancy by only storing line d
 by compressing the diff bits and performing deduplication of these diff, which are expected to yield higher
 compression ratio than a single-level scheme that only takes advantage of one of the two types of redundancy. 
 
-We next describe the two steps as follows. The first step uses a hash table to cluster cache lines that have the
-same upper bits. The clustering algorithm takes higher 16 bits in each 64-bit word, combines them into 16-bytes 
-segment called the "higher bits", and then hashes it to a one-byte partial signature value. In the meantime, the full
-cache block is also hashed into a full signature. Both values will be used during the first step as we will see later.
-
-Address translation is performed by mapping the physical address, which is used by the cache hierarchy,
-to a direct-mapped translation table. Each translation table entry consists of two address pointers and two bits.
+We next describe the operations of BCD deduplication as follows. 
+Blocks in BCD deduplication are no longer stored on their physical addresses. Instead, blocks are stored as
+two parts: A base block, which can serve the common base for many similar blocks on different addresses, and a 
+diff block, which can also be shared among different blocks. 
+Address translation needs to be performed on each access, by mapping the physical address, which is used by the 
+cache hierarchy, to a direct-mapped translation table. Each translation table entry consists of two address pointers 
+and two bits.
 The address pointers are base pointer and diff pointer, which points to the base data and compressed diff, if
 exists. The two status bits indicate whether a diff exists, and whether the diff is compressed.
 Reads do not access any in-memory data structures other than the translation table. 
-On a read operation, both pointers are used to fetch base data and compressed delta, if any, and then the delta
+On a read operation, both pointers are used to fetch base data and compressed diff, if any, and then the diff
 is decompressed and combined with the base to generate the original block content. 
 Read operations therefore require at most three DRAM accesses, upper bounding the worst case scenario.
 
