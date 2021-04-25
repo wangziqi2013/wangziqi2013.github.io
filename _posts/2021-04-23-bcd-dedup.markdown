@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Lowlight:**
+
+1. How to guarantee that all these complicated DRAM operations during a write are performed atomically?
+   Using hardware 2PL is an option for correctness, but that would: (1) Lock an entire bucket; 
+   (2) incur more synchronization traffic, especially if there are multiple controllers. Note that this
+   problem cannot be solved by address partitioning, since any two or more blocks can share the same
+   base and diff. 
+
 This paper presents BCD deduplication, a memory compression technique using block clustering inter-block compression.
 The paper points out the limitations of previous deduplication and compression proposals as follows.
 First, many previous schemes rely on in-memory mapping table for address remapping, due to blocks being 
@@ -67,10 +75,11 @@ The 16-byte higher bits are then used to generate the hash index into the base h
 how the hash index is generated, but the effect of hashing higher bits is that blocks with the same higher bits
 will be clustered into the same hash bucket. 
 Each hash bucket consists of N ways, which can support at most N different base blocks hashed to the same index. 
-Each way consists of a one-byte partial signature, a one-byte full signature, and a 64-byte base block.
+Each way consists of a one-byte partial signature, a one-byte full signature, a 2-byte reference count, and a 64-byte 
+base block.
 Physically, these signatures and base blocks are stored consecutively, such that signatures can be accessed with
 one or more DRAM burst. In fact, in this paper, it is suggested that the hash table be 32-ways, such that one 64-byte 
-burst is sufficient to access all signatures.
+burst is sufficient to access all signatures, and another burst can access all reference counts.
 
 After generating the hash value, the deduplication logic then compares the partial and full hash with all hash
 values stored in the bucket respectively. On a full hash value match, a possible duplication is found, and the 
