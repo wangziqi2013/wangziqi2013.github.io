@@ -33,7 +33,7 @@ version_mgmt:
    non-canonical object copies are therefore localized to only the current level, since the controller can change the 
    mapping quickly by an atomic update to the array
 
-**Lowlight:**
+**Questions**
 
 1. This design is really just a mixture of over-thinking and ad-hoc bricklaying without any elegant philosophy. 
    I understand that the author may have obtained the initial idea from software generational GC and felt motivated 

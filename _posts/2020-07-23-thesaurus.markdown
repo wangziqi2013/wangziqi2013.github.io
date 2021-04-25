@@ -20,7 +20,7 @@ version_mgmt:
 2. Using start map to virtualize segment addresses. Always compacting + address virtualization enables the tag array
    to only refer to the fixed virtualized segment address which will be translated by the start map
 
-**Lowlight:**
+**Questions**
 
 1. The access latency of a base + delta line would involve in the worst case a main memory access and a data array access.
    Even in the best case there are two parallel cache accesses, one of which has to be serialized with start map access,

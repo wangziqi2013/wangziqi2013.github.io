@@ -26,7 +26,7 @@ version_mgmt:
 3. Using flexible layout for metadata field rather than fixed location for each field, no matter whether it is used in the 
    current configuration or not. 
 
-**Lowlight:**
+**Questions**
 
 1. I understand the motivation of this article as being a compromised design between complicated SCC/DCC and uncompressed
    cache. But without these motivations YACC is just a really common super block compressed cache with little novelty involved.

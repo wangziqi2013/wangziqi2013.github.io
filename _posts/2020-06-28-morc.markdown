@@ -18,7 +18,7 @@ version_mgmt:
 1. Large block compression optimization, which is often only used for DRAM, can also be deployed with LLC using large 
    log objects.
 
-**Lowlight:**
+**Questions**
 
 1. If two addresses are mapped to the same log, and uses the same LMT entry, how do you know which address the status
    bits represent? A conservative approach is to always check tags as long as the LMT entry is valid, but in this case,

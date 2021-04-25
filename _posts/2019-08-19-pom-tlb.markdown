@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Simple and intuitive design, especially the 4-way set-associative cache-like structure.
 
-**Lowlights:**
+**Questions**
 
 1. The paper did not explain how dirty/accessed bits are maintained in different hierarchies, including L2/LLC
    and the in-memoty POM-TLB. For example, if a write access bypasses the cache, and goes directly into the POM-TLB,

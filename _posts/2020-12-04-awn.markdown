@@ -29,7 +29,7 @@ version_mgmt:
 4. Address tags can also be compressed based on the observation that most address tags share higher bits. Only storing
    distinct lower bits, and using a common higher can also save SRAM storage.
 
-**Lowlight:**
+**Questions**
 
 1. Although the compression and decompression algorithm is indeed simple, the paper ignores the fact that
    there are implicit complexities, such as finding a slot for insertion. In an uncompressed cache, this is

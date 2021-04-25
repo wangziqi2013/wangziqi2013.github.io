@@ -21,7 +21,7 @@ version_mgmt:
 2. The paper makes an interesting observation that by using a CAM for register renaming, only two of the three control
    bits need to be saved.
 
-**Lowlights:**
+**Questions**
 
 1. The paper failed to mention why register renaming at the end of checkpoint i needs to be delayed to the end of 
    checkpoint i + 1.

@@ -21,7 +21,7 @@ version_mgmt:
    Page faults can be handled by the OS in the address space of the GPU driver without modifying the memory
    manegement part of the OS.
 
-**Lowlight:**
+**Questions**
 
 1. This paper does not mention how the CR3 is obtained by the GPU. For example, on a context switch, the content of
    CR3 is overwritten, and GPU cannot perform address translation if it does not have a cached copy. 

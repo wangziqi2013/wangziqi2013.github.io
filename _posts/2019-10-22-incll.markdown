@@ -21,7 +21,7 @@ version_mgmt:
    the fact that inserts/deletes (but not the mixture) can be undone rather efficiently just by restoring the permutation 
    field.
 
-**Lowlights::**
+**Questionss::**
 
 1. wbinvd is a previleged instruction. On epoch boundaries a system call must be performed to flush the entire cache.
 

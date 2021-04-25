@@ -27,7 +27,7 @@ version_mgmt:
    commit. Also, the page cache can help reducing log replay when the requested version is larger than the cached
    version by just replaying the log entries between the current and the request versions.
 
-**Lowlight:**
+**Questions**
 
 1. Why do log entries store the numerical delta rather than binary after-value? The paper claims that it is good for 
    both replay and roll back. But in reality, SI only requires replay but not roll back, since on transaction aborts, 

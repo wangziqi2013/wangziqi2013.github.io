@@ -24,7 +24,7 @@ version_mgmt:
 3. The second compression algorithm is an early attempt to solve value locality by counting identical bits at higher
    positions. It is actually simpler, but may not capture all value locality.
 
-**Lowlight:**
+**Questions**
 
 1. What if master dictionary cannot retire due to cache lines never be accessed thereafter? I know the compressed slots
    only store recently accessed lines, which are expected to be accessed soon in the future. But in an adversary model,

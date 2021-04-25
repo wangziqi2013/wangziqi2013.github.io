@@ -18,7 +18,7 @@ version_mgmt:
 1. Atomic transformation between consistent states associates volatile consistency with non-volatile consistency, which is
    the big innovation about this paper.
 
-**Lowlights:**
+**Questions**
 
 1. What if values are duplicated at leaf level (e.g. if we store integers)? You cannot simply assume that a copy is going 
    on even if duplicated values are seen. Although the paper proposes using read locks at leaf level to solve the value 

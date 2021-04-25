@@ -22,7 +22,7 @@ version_mgmt:
 2. Different patterns can be accessed using simple bitwise operation to generate physical chip offsets using the 
    logical offset of the line plus the pattern ID.
 
-**Lowlight:**
+**Questions**
 
 1. The paper should mention that the step size cannot be too large (although in typical use cases it will not be
    very large), since the row buffer must hold DRAM rows from the same row ID. If the step size is too large,

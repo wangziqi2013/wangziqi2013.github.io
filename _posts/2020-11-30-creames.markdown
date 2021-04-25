@@ -21,7 +21,7 @@ version_mgmt:
 2. Using the same design for both virtual memory compression and file system compression. Reads and writes are 
    intercepted by the OS module to transparently compress and decompress file data.
 
-**Lowlight:**
+**Questions**
 
 1. I do not quite get how the direct mapped table works. Usually, the MMU allows the OS to store the disk 
    address (or compressed partition address, in our case) in the PTE, which does not require a separate 

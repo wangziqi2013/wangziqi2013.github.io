@@ -19,7 +19,7 @@ version_mgmt:
    than only keeping the previous "base" value as in some compression algorithms.
    This is also better than performing extensive searches for possible base values.
 
-**Lowlight:**
+**Questions**
 
 1. The WK compression algorithm may result in larger compressed size than uncompressed size. This pessimistic case
    could happen if most of the tokens cannot find matches in the dictionary. 

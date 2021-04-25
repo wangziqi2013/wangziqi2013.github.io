@@ -24,7 +24,7 @@ version_mgmt:
    area. This is not actually clustering, but just selecting the most frequently accessed micro pages and put them
    together, hoping that they will be accessed together.
 
-**Lowlight:**
+**Questions**
 
 1. This paper is not really doing clustering. Instead, it simply recognizes hot micro-pages from each page, and copies
    them to a small, concentrated area. This does not guarantee that micro-pages that are accessed together are always

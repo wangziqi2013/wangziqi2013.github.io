@@ -19,7 +19,7 @@ version_mgmt:
    storage to these lines, and that those above 2:1 are exceptions and relative rare such that they can be treated
    differently by having a small residue cache
 
-**Lowlight:**
+**Questions**
 
 1. Writing quality and presentation of ideas are extremely low.
 

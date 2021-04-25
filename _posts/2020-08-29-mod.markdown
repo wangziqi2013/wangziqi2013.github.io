@@ -25,7 +25,7 @@ version_mgmt:
 3. Write cascading only incurs write traffic proportional to the tree depth. The tree depth is logarithm of the total
    amount of data, indicating small extra memory usage (not write amplification!).
 
-**Lowlight:**
+**Questions**
 
 1. Not really a low light, but I am just thinking, is it possible to compose logging-based operations by passing a flag
    to disable log commit at the end of the operation (i.e. does not write undo commit record), and continue with the 

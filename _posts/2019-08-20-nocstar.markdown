@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Very detailed description of the interconnection network based on MUX'ed inputs and outputs
 
-**Lowlight:**
+**Questions**
 
 1. I don't quite get the calculation of arbitration signal lines
    

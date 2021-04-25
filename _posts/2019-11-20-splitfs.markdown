@@ -23,7 +23,7 @@ version_mgmt:
    for handling writes). This has the advantage of both in-place update (optimized for read) and per-object journaling
    (optimized for write, less I/O).
 
-**Lowlights:**
+**Questions**
 1. Despite promising results, I do not quite buy the paper's argument that Split file system can reduce
 software overhead. I understand that using block swap instead of write-ahead logging can save you some I/O (writing
 only once vs writing twice), but I cannot see how this reduce software overhead, or the paper uses the term "software

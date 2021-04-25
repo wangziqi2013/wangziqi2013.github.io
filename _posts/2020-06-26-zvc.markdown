@@ -22,7 +22,7 @@ version_mgmt:
    could see every operation that affects the data array, and it only needs to replicate the same logic that the ZVC
    uses to update its data array (e.g. replacement policy).
 
-**Lowlight:**
+**Questions**
 
 1. The architecture in this paper seems fragile AF and prone to commplicated corner cases and/or coherence anomalies.
    For example, what about the cohrence of the CIB vector when L2 loads a new block that was marked as "not cached by L2"?

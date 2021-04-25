@@ -27,7 +27,7 @@ version_mgmt:
    The paper's metadata consolidation addresses the last form of locality, which may exists in compressed data.
    On the presence of value locality, even compressed words will have bits in common that can be further compressed.
 
-**Lowlight:**
+**Questions**
 
 1. How does the EC notifies the receiving end of a compressed/uncompressed line? Does it prepend a special status bit?
 

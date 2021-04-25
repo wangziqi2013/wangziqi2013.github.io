@@ -20,7 +20,7 @@ version_mgmt:
 
 2. Combines deduplication with compression to further save storage
 
-**Lowlights:**
+**Questions**
 
 1. At the bottom of page 2 and beginning of page 3, it is said "Because the common case is that incoming lines are unique".
    So that implies that deduplication actually only occur for a minority of the case. Does this also imply that

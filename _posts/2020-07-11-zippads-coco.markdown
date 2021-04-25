@@ -30,7 +30,7 @@ version_mgmt:
    Also metadata can be stored with a few bits in the pointer value, although this has really narrow applicability 
    since on conventional architectures pointers are not opaque.
 
-**Lowlight:**
+**Questions**
 
 1. Although I do appreciate some design aspects (tagless lookup, applying distributed system concepts to cache, fully
    associative data placement) of Hotpads, in general I dislike its design philosophy which is hardly more

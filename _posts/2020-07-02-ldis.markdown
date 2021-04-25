@@ -23,7 +23,7 @@ version_mgmt:
    runs" of the workload, and then compare the performance of different schemes based on the stats collected from each 
    tag set.)
 
-**Lowlight:**
+**Questions**
 
 1. Some statements are self-conflicting. For example, in Sec. 5.2 it is said that when there is a fetch request from L1, 
    the L2 controller should mark the footprint bit. This, however, conflicts with the previous statement in Sec. 4.1 saying

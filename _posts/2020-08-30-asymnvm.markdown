@@ -19,7 +19,7 @@ version_mgmt:
    the address space, and also reduces the latency of logical commit (only writing one semantic log entry instead of 
    writing all redo logs).
 
-**Lowlights:**
+**Questions**
 
 1. This paper is badly written, full of factual errors, grammartic errors, and peculiar expressions.
    Lots of conceps are not even explained clearly (e.g., how does reads keep consistent with writes?).

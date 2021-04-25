@@ -26,7 +26,7 @@ version_mgmt:
    the size of the dictionary, rather than the size of the table, which is faster than decoding all values
    and then sort them.
 
-**Lowlight:**
+**Questions**
 
 1. Although easy to infer, the paper should explicitly mention that a decompression dictionary should be maintained 
    in parallel with the compression dictionary.

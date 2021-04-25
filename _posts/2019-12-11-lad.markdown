@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Elegant application of 2PC protocol to performing multi-agent atomic commit. 
 
-**Lowlights:**
+**Questions**
 
 1. L2 and below are basically write-through, which incurs very high latency for coherence messages and write backs
 

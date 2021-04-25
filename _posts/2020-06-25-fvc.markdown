@@ -21,7 +21,7 @@ version_mgmt:
 
 3. This design only saves energy, but does not conserve cache area. 
 
-**Lowlight:**
+**Questions**
 
 1. Did not mention how training is started per-application. Does not ISA provides a way of starting training?
 

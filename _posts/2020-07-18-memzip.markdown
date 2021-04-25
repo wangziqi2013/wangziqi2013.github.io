@@ -21,7 +21,7 @@ version_mgmt:
 2. Letting OS not allocating the page that stores metadata rather than letting memory controller performing complicated 
    address mapping
 
-**Lowlight:**
+**Questions**
 
 1. I don't get why you don't just store the burst length in the header of the compressed line. In this case you just burst
    the first 8 bytes, check the number, and read the rest with more bursts (the cache is still needed, though). 

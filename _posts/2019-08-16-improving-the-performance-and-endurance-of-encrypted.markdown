@@ -25,7 +25,7 @@ version_mgmt:
    mapping table uses real addresses rather than abstracted address
    
 
-**Lowlight:**
+**Questions**
 
 1. I personally don't buy the argument that using dedup will reduce traffic and put writes out of the critical path,
    because the dedup data structure should be persisted as well, which constitutes an NVM write to the hash table entry 

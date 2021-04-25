@@ -25,7 +25,7 @@ version_mgmt:
    OS should therefore track such dependencies in order to correctly transfer data ownership between sharer pages
    when the source page is freed.
 
-**Lowlight:**
+**Questions**
 
 1. The design is not even remotely related to NVM and security. Essentially it just proposes adding extra per-page
    metadata bits to track copy status for every COW'ed page.

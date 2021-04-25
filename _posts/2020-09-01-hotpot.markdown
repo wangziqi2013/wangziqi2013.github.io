@@ -20,7 +20,7 @@ version_mgmt:
 2. Using shadow paging to update a remote chunk that is cached in the current node. This way, all partial updates
    can be rolled back to the last commit checkpoint.
 
-**Lowlight:**
+**Questions**
 
 1. Some important abstractions should be elaborated in more details. For example: 
    (1) How are directories of which VA is mapped to which PA on which machine maintained? When a chunk migrates, 

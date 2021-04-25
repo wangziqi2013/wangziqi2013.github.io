@@ -21,7 +21,7 @@ version_mgmt:
    that many NVM malloc uses -- storing size information in the block header, and walk the block headers in the recovery
    process.
 
-**Lowlight**
+**Questions**
 
 1. This paper is extremely badly written. Grammar and explanations are bad. Examples are difficult to understand. The auhthors
    may want to improve the explanation of segment split a little as well as the recovery process. Also the paper should 

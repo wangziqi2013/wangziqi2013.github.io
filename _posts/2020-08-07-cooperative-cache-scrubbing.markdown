@@ -27,7 +27,7 @@ version_mgmt:
    What kine of design changes this will bring to the memory architecture? (i.e. objects can be created in the L1
    and propagate down the hierarchy to the main memory, instead of always being backed by the main memory)
 
-**Lowlight:**
+**Questions**
 
 1. The paper failed to mention that clzero instructions will prohibit main memory fetch if the line to be zero-initialized
    is not in the cache hierarchy. Otherwise, the LLC controller will fetch the line since a miss will be signaled, which 

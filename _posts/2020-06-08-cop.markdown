@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-**Lowlight:**
+**Questions**
 
 1. I can't see how this scheme provides SECDED. If two errors occur on the same compressed line and are on  
    different segments, the number of valid code words will drop to two, which causes the line to be mistakenly recognized

@@ -28,7 +28,7 @@ version_mgmt:
 2. By putting a mark in the load queue, and prevent load operations to commit, we can stall loads in the ROB
    until the store that forwards value to load commits.
 
-**Lowlight:**
+**Questions**
 
 1. What if there are multiple forwarding store-load pairs on different addresses? Are later loads treated as
    speculative, or are forwarded loads start a new gate?

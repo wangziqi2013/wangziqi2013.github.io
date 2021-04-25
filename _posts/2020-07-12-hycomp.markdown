@@ -19,7 +19,7 @@ version_mgmt:
 
 2. Using simple algorithm to compress high bits of floating point number's mantissa field
 
-**Lowlight:**
+**Questions**
 
 1. Some applications tend to use 64 bit integers while others use 32 bit integers. If the heuristic always checks bits
    for 64 bit integers, 32 bit integer arrays would be mis-classified into pointers. Although BDI also handles 32 bit 

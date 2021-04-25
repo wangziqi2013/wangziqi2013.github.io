@@ -31,7 +31,7 @@ version_mgmt:
    aliases with all pointers with low 15 bits being zero. To avoid this problem, the allocator is prohibited to
    return an address with low 15-bits being zero.
 
-**Lowlight:**
+**Questions**
 
 1. The paper proposes that pointer values can be compressed with a common prefix. But it never identified how the
    common prefix is maintained and stored, and what if the common prefix changes. Do we keep only one such prefix

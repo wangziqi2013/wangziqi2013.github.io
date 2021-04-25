@@ -20,7 +20,7 @@ version_mgmt:
 2. The "reserve bit in a pointer" thing is not invented by this paper, but the paper did give a strong argument on why
    this is applicable for both pointers and numerical valued variables.
 
-**Lowlights: **
+**Questionss: **
 
 1. Correctness proof is somehow overcomplicated. I prefer the one I used in this summary which reduces the paper's 
    algorithm to 2PL. 

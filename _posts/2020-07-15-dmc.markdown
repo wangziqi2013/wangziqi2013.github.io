@@ -21,7 +21,7 @@ version_mgmt:
 2. Not using overflow space is an improvement to LCP. This optimization will result in lower compression ratio, but in
    this paper it is fine, because it is only used for a small fraction of recently accessed data
 
-**Lowlight:**
+**Questions**
 
 1. This paper is poorly written, both syntactically and grammartically. Terminologies are used before being introduced 
    (e.g. "slice controller" in Fig. 5). Also I do suggest that authors use less "the" in the text.

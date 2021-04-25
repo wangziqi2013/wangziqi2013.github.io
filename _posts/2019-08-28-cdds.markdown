@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Novel adoption of versioning and multiversioned data structure to the realm of persistent data structures.
 
-**Lowlights**
+**Questions**
 
 1. The assumption that flush() can only ensure the atomicity of 8 byte stores are overly restrictive and yet incorrect.
    It is overly restrictive because on x86 and most other architectures, cache lines are flushed back to the NVM in
@@ -105,7 +105,7 @@ lies in the [*bts*, *ets*) interval.
 Objects can be reused if they have been made invisible by a previous increment of the current timestamp (so it must be 
 a deleted object). The deleted object is reclaimed when an operation needs to create a new object (e.g. when inserting 
 into a full B+Tree node but this insertion will trigger a node split). We overwrite fields of the deleted object,
-setting its *bts* and *ets* as described above, and then flush the object, making it live again. **Please see the "lowlight"
+setting its *bts* and *ets* as described above, and then flush the object, making it live again. **Please see the "Questions"
 comments at the beginning for a discussion of problems with this scheme.**
 
 After a crash, the crash recovery routine scans all objects in a CDDS and checks their timestamps. Some objects need 

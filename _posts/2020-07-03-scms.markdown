@@ -32,7 +32,7 @@ version_mgmt:
 To summarize 3 - 5: There are two major trade-offs in the paper: (1) Trade-off between compression effectiveness and cache 
 management difficulties; (2) Trade-off between DRAM saving and page mapping metadata cost.
 
-**Lowlight:**
+**Questions**
 
 1. Writing is really poor. I do suggest whoever that wrote Section 1 and 2 perform a basic proof read on later sections.
    In addition, whoever wrote later sections should first make sure correct terminologies are used, and don't write like

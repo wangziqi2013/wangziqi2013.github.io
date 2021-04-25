@@ -24,7 +24,7 @@ version_mgmt:
    time travel in serialization order, then the method's log entry will have to be inserted into the stream of the log,
    requiring shifting of existing entries. 
 
-**Lowlights:**
+**Questions**
 
 1. `op_commit()` should be the point that log entries are generated and persisted, rather than `op_begin()`, since log entries
    must be written in one of the the valid serialization orders. The order can only be determined when the serialization

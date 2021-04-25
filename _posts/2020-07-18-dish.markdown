@@ -19,7 +19,7 @@ version_mgmt:
    such as space allocation and compaction, since all lines are statically mapped to only one possible location in the 
    physical data slot.
 
-**Lowlight:**
+**Questions**
 
 1. This paper is syntatically and grammaritically poor, and in general the delivery of ideas is also poor.
    

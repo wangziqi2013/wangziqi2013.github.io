@@ -84,7 +84,7 @@ Context switch support is a total mess, which introduces even more corner cases 
 
 As noted in question 4, I really did not want to include context switch supports in UHTM. But, it is "research". I had to include this for completeness (not for practicality). If someone attempts to realize UHTM, I will suggest them to reconsider this feature :)
 
-**My Response, and Updates to the Lowlight Section:**
+**My Response, and Updates to the Questions Section:**
 
 On Tue, Dec 29, 2020 at 2:49 PM ziqiw@andrew.cmu.edu <ziqiw@andrew.cmu.edu> wrote:
 
@@ -123,7 +123,7 @@ Ziqi
    require replay of the log; (3) The working set is not restricted (canonical redo logging, if implemented in the
    cache, must lock dirty lines in the hierarchy to avoid polluting the consistent image).
 
-**Lowlight:**
+**Questions**
 
 In general, the design is really complicated, and there are lots of corner cases and complicated race conditions
 left unexplained. Although I do appreciate some aspects of the design, one should expect such a design to be only of 

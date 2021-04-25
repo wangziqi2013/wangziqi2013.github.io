@@ -21,7 +21,7 @@ version_mgmt:
 
 2. Adding different address classes and allowing different classes to be handled differently by the cache hierarchy.
 
-**Lowlight:**
+**Questions**
 
 1. How does the OS know that another thread has accessed the page for reclassification? What kind of hardware is required to 
    support this? Same question for detecting global access on process-local and thread-local pages.

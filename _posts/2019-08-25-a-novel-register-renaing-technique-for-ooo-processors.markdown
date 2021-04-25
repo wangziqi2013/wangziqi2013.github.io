@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt: 
 ---
 
-**Lowlights:**
+**Questions**
 
 1. The authors never bothered to make distinction between logical registers and physical registers which is confusing to read.
 

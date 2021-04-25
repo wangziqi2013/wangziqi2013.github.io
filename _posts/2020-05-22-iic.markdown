@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-**Lowlights:** 
+**Questions** 
 
 1. This paper uses a different definition of full associativity. It mostly means that an address can be stored anywhere 
    on the entire address space in other publications, and even in earlier part

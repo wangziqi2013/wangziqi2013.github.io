@@ -24,7 +24,7 @@ and put the focus on compression rather than GPGPU.**
 2. Proposes a GPU implementation of BDI. BDI is friendlier to GPGPUs, since all compressed words are of the same size,
    which fits into GPU's regular computation model.
 
-**Lowlight:**
+**Questions**
 
 1. The paper mentions that CABA can help addressing the idle cycle problem. But when it comes to compression, since decompression
    must occur after data has been fetched, the main kernel is still stalled until data arrival. As a result, decompression

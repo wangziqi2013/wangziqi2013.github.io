@@ -23,7 +23,7 @@ version_mgmt:
 
 3. Using the same block and segment layout can help unifying cache and memory compression
 
-**Lowlight:**
+**Questions**
 
 1. There is no description on memory and bus compression. Even the cache compression scheme is an low effort one that
    is based on a previous design. What is the novelty of this paper?

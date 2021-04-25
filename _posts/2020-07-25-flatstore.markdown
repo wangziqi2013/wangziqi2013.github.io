@@ -25,7 +25,7 @@ version_mgmt:
 
 3. The data layout design allows finding the base block with the pointer value by aligning the value down to 4MB boundary
 
-**Lowlight:**
+**Questions**
 
 1. How to keep atomicity of GC? How to make sure that log chunk allocation and free are always atomic?
 

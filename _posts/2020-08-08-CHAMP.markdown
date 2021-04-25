@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-**Lowlights:**
+**Questions**
 
 1. This paper is written badly, with lots of jargons and concepts unexplained (what are "elements"? It took me a while to 
    figure out that the authors are referring to terminal level values, which is to differentiate it from next-level child

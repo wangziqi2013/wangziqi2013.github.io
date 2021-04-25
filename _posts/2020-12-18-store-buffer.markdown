@@ -25,7 +25,7 @@ version_mgmt:
 3. The paper uses a simple mechanism (saturating counter + base address register) to detect whether a stride
    has occurred. The paper's proposal only applied to large chunk of memory movement or memset.
 
-**Lowlight:**
+**Questions**
 
 1. Isn't the last store address always the newest entry in the store buffer? I know it might be added just to keep
    the explanation easier. Also this might be added to avoid extra accesses to the SB structure.

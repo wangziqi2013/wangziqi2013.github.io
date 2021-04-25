@@ -20,7 +20,7 @@ version_mgmt:
 
 2. Repurposing per-cache line ECC and combining them together as the hash code of a page
 
-**Lowlight:**
+**Questions**
 
 1. The paper mentions that the OS should check back for traversal termination, but did not mention how or when. High frequency
    polling is definitely not advisable. But if the interval is too high, we actually impose a latency overhead of the traversal

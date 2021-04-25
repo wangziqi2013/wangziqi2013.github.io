@@ -28,7 +28,7 @@ version_mgmt:
    offset to track the overflow area, which is more complicated, but the most complications arise at
    CPU side, not GPU side, since only host memory is managed.
 
-**Lowlight:**
+**Questions**
 
 1. Storage is wasted on the overflow area, if most lines can be compressed to the target size. It is better to use
    a more complicated address mapping scheme, i.e., per-page overflow page, which can be easily achieved without

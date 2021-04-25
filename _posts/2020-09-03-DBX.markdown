@@ -23,7 +23,7 @@ version_mgmt:
 
 3. I like the discussion of Fixed Width Compression and Variable Width Compression
 
-**Lowlight:**
+**Questions**
 
 1. The paper is poorly organized. There is neither overall picture of what the algorithm attempts to achieve, nor
    a detailed description of how compression is performed.

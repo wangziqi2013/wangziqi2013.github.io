@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-**Lowlight:**
+**Questions**
 
 1. I don't get why bit 21 - 23 are used to generage the hash function, since bit 21 is the highest offset bit of a 4MB
    page (22 bit offsets, from bit 0 to bit 21). In this case, the upper and lower half of the page will have different

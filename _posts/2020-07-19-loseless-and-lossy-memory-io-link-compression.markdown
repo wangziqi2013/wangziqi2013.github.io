@@ -19,7 +19,7 @@ version_mgmt:
    size of compressed block on cache misses, it can only fetch the first few chunks, and decide whether to fetch the
    rest if the actual number of higher.
 
-**Lowlight:**
+**Questions**
 
 1. I don't get why decompression algorithm needs the size of a block? I think most compression algorithm has the size 
    after compression implied in the compression header? Or at least you can always figure out that implicitly during

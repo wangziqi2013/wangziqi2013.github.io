@@ -28,7 +28,7 @@ version_mgmt:
    instruction as an atomic unit, such that external viewers cannot infer the order of these instructions by 
    observing the intermediate state.
 
-**Lowlight:**
+**Questions**
 
 1. If a speculation aborts on receiving a request, and the requested block is invalidated, then in fact L1 cannot
    handle the request by its own, since it no longer has the block. In this case, L1 should perform another bus

@@ -17,7 +17,7 @@ version_mgmt:
 
 1. Delegating tasks that are complicated or impossible to do to idle software threads.
    
-**Lowlight:**
+**Questions**
 
 1. The paper is inconsistent on whether blocks should be stored compactly in the data slot. It is suggested that the 
    compressed size could be determined by taking the difference between the two adjacent tags. It is, however, also

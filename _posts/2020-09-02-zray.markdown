@@ -22,7 +22,7 @@ version_mgmt:
 
 3. With the extra indirection, zero elimination and CoW basically comes for free.
 
-**Lowlight:**
+**Questions**
 
 1. It is true that discontinuous arrays can reduce large chunk allocation, but when the array gets really large, the 
    spine itself becomes a large array, which can cause the same problem (but at a lesser degree compared with 

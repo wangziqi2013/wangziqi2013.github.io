@@ -17,7 +17,7 @@ version_mgmt:
 source of reference. This paper summary is merely based on what was written on the published paper, not on what is in
 the code repo (things might have changed, or the author did not give full clarification to certain details)**
 
-**Lowlight:**
+**Questions**
 
 1. Basic blocks that are dynamically recognized at early stages of execution may be split to smaller blocks later, due 
    to a jump to the middle. Such jumps cannot be detected before they are actually executed, since SimPoints is 

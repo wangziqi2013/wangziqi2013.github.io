@@ -29,7 +29,7 @@ version_mgmt:
    It requires only one round-trip time, instead of two compared with regular write, but it works better with cache
    coherence and memory consistency than non-temporal writes.
 
-**Lowlight:**
+**Questions**
 
 1. The design assumes a managed language runtime, a certain instruction encoding, a specific address space layout
    (e.g., for storing filters, for determing NVM and DRAM address space, etc.), without explicitly pointing them out.

@@ -33,7 +33,7 @@ version_mgmt:
    a group replay and only selecting the most up-to-date wrote; (2) Byte-granularity logging instead of cache line
    granularity.
 
-**Lowlight:**
+**Questions**
 
 1. This paper makes a fundamental mistake of claiming that the algorithm is shadow paging, while it is actually redo 
    logging with an auxiliary index. I do appreciate this combination, which has not been fully explored. I also quite 

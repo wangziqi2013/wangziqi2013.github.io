@@ -28,7 +28,7 @@ version_mgmt:
 4. Does not dynamically update the mapping table after it has been generated, based on the observation that these
    tables tend not to change too much during the execution.
 
-**Lowlight:**
+**Questions**
 
 1. This paper assumes that NVM is used as a cache for disk. I think a more proper expresion would be that the 
    NVM device is used as main memory and that disk is used as swap storage. 

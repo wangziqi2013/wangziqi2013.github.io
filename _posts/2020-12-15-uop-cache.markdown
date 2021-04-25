@@ -31,7 +31,7 @@ version_mgmt:
    is duplicated per slot just like a regular cache compression scheme. The paper also proposes three different
    insertion schemes for compression lines to maximize locality of a physical slot.
 
-**Lowlight:**
+**Questions**
 
 1. The paper never gave a precise definition of a PW, while suggesting that the uop cache is addressed using the base 
    address of the PW. This raises many questions:

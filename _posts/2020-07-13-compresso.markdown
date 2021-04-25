@@ -24,7 +24,7 @@ version_mgmt:
   
 4. By making each metadata entry 64 bytes, all metadata reads can be done with one DRAM access.
 
-**Lowlight:**
+**Questions**
 
 1. Although the paper delivers its ideas without any missing parts, it can be more structured and organized. For example, 
    there is no mentioning of the metadata cache until Sec. IV.B.2, and neither after.

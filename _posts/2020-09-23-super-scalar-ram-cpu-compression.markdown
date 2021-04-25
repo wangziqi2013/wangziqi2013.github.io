@@ -23,7 +23,7 @@ version_mgmt:
 
 3. Dictionary-based and delta-based compression can be unified under the same framework and encoding scheme
 
-**Lowlights:**
+**Questions**
 
 1. The analysis of Disk-RAM v.s. RAM-Cache compression cannot convince me. I get the argument that Disk-RAM compression
    is worse because data is written twice and consumes more storage. I do not get why RAM-Cache compression can directly

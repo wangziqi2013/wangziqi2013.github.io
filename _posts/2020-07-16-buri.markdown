@@ -18,7 +18,7 @@ version_mgmt:
 1. This is the first paper/article I have read that mentions a new page should not be compressed on allocation; Instead
    buffer should be used to at least accumulate some cache lines before the page is actually allocated from the storage
 
-**Lowlights:**
+**Questions**
 
 1. Does the OS assume fixed sized shadow address space, or the shadow address space could change dynamically?
    In the latter case, the mapping table size should also be dynamically adjusted, since that table uses shadow

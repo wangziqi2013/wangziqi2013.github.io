@@ -24,7 +24,7 @@ version_mgmt:
 
 4. Using static Huffman code to encode match type
 
-**Lowlight:**
+**Questions**
 
 1. There is no straightforward way of parallelization, although the paper is not meant to develop a fully scalable algo.
 

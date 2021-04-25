@@ -41,7 +41,7 @@ version_mgmt:
    enters strand buffer, this can guarantee that the store is released from the L1 after the barrier and hence
    everything before it are completed, which maintains the correct order.
 
-**Lowlight:**
+**Questions**
 
 1. In fact strand buffers do not have to be drained in-order, which still sacrifices some degrees of parallelism, since
    operations in a strand are also candidates for reordering without a persist barrier. 

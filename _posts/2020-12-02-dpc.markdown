@@ -33,7 +33,7 @@ version_mgmt:
 5. The global wear-leveling scheme is based on page migration, and is built into the OS's virtual memory system,
    which saves an extra hardware mapping structure.
 
-**Lowlight:**
+**Questions**
 
 1. What I cannot get is that, if smaller lines are favored for eviction, then multiple lines will be potentially
    evicted for an insertion, which affects effective capacity, as claimed by the paper. This, however, also does 

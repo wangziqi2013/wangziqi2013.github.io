@@ -32,7 +32,7 @@ version_mgmt:
    release must be persisted; (2) When the L1 is about to lose track of a released line, the L1 controller should
    treat it as a synchronization, but the persistence of the released line itself can be in the background.
 
-**Lowlight:**
+**Questions**
 
 1. This paper is poorly motivated, because: (1) it does not state why LFDs do not need recovery (because state changes
    are made with CAS, maintaining the invariant that the data structure is in legal states on every CAS mutation);

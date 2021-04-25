@@ -27,7 +27,7 @@ version_mgmt:
    of atomic metadata + data flush; (2) Using shadowing + sense bit on node metadata fields to allow atomic update of 
    several distinct metadata fields.
 
-**Lowlight:**
+**Questions**
 
 1. Reader threads should turn into writer threads, if HTM aborts for a few times, to guarantee progress. Current TSX
    does not even guarantee the eventual commit of the transaction, so a software fall back is always required.

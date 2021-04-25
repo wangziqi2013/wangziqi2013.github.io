@@ -27,7 +27,7 @@ version_mgmt:
    to a registry service such that other threads can locate one of the most up-to-date metadata updates when
    attempting file accesses.
 
-**Lowlight:**
+**Questions**
 
 1. How does the delta registry (section 2.2) maps files to their corresponding deltas? Are they per-file mapping?
    If so, the registry itself would be another metadata repo that will be updated on application commit point,

@@ -19,7 +19,7 @@ version_mgmt:
    cache: low space utilization if spatial locality is low.
 2. Identifies that VA value locality makes little sense in PA if the page boundary is crossed.
 
-**Lowlight:**
+**Questions**
 
 1. Writing to zero blocks may incur unnecessary coherence messages for requesting exclusive permission. This is 
    because the sector cache has not way of distinguishing a S state block from an E state block.

@@ -23,7 +23,7 @@ version_mgmt:
 3. Redo logging is also a good way of performing checkpointing at arbitrary boundaries selected by software. This is 
    similar to what we try to achieve in NVOverlay
 
-**Lowlight:**
+**Questions**
 
 1. Write amplification of logging reduces the life time of NVM device by half
 
