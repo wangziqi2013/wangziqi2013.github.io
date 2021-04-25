@@ -27,18 +27,24 @@ compression ratio is sub-optimal, despite low compression and decompression late
 exploits redundancy in a cache block without considering inter-block redundancy. In the latter case, statistics must
 be generated in advance, and not changed frequently thereafter, such that correctness is guaranteed.
 
-BCD deduplication, on the other hand, combines inter-block delta compression with deduplication. Its compression
+BCD deduplication, on the other hand, combines inter-block diff compression with deduplication. Its compression
 algorithm consists of two steps. In the first step, cache blocks that are likely to contain similar contents are
-clustered together into the same hash table bucket, and compared with each other. The bit-level delta is taken
-in a specific form such that the delta is only three-fourth of the size of an uncompressed block.
-In the second step, the bit-level delta is then compressed, and hashed into another hash table to perform deduplication. 
-This two-level scheme exploits both inter-line redundancy by only storing line delta, and intra-line redundancy
-by compressing the delta value and performing deduplication of these deltas, which are expected to yield higher
+clustered together into the same hash table bucket, and compared with each other. The bit-level diff is taken
+in a specific form such that the diff is only three-fourth of the size of an uncompressed block.
+
+In the second step, the bit-level diff is then compressed, and hashed into another hash table to perform deduplication. 
+This two-level scheme exploits both inter-line redundancy by only storing line diff, and intra-line redundancy
+by compressing the diff bits and performing deduplication of these diff, which are expected to yield higher
 compression ratio than a single-level scheme that only takes advantage of one of the two types of redundancy. 
 
 We next describe the two steps as follows. The first step uses a hash table to cluster cache lines that have the
 same upper bits. The clustering algorithm takes higher 16 bits in each 64-bit word, combines them into 16-bytes 
 segment called the "higher bits", and then hashes it to a one-byte partial signature value. In the meantime, the full
 cache block is also hashed into a full signature. Both values will be used during the first step as we will see later.
+
+Address translation is performed by mapping the physical address, which is used by the cache hierarchy,
+to a direct-mapped translation table. Each translation table entry consists of two address pointers and two bits.
+The address pointers are base pointer and diff pointer, which points to the base data and compressed diff, if
+exists. The two status bits indicate whether a diff exists, and whether the diff is compressed.
 
 
