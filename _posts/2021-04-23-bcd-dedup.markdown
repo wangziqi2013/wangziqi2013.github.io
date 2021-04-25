@@ -57,5 +57,10 @@ on 16-byte boundaries (reasons discussed below), and hence 31-bit diff pointer c
 Overall, the translation table occupies a constant 1/8 of total storage, since every memory block address has a 
 direct-mapped entry in the table.
 
+Write operations require detecting similar blocks and performing full or partial deduplication on these blocks.
+BCD deduplication uses a hash table to cluster cache blocks that have similar contents. 
+The clustering algorithm takes higher 16 bits in each 64-bit word, combines them into 16-bytes 
+segment called the "higher bits", and then hashes it to a one-byte partial signature value. In the meantime, the full
+cache block is also hashed into a full signature. Both values will be used during the write operation.
 
 
