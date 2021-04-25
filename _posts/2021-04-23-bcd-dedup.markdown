@@ -21,7 +21,8 @@ version_mgmt:
    problem cannot be solved by address partitioning, since any two or more blocks can share the same
    base and diff. 
 
-2. How do you perform inverse address lookup during diff hash table compaction? The diff table does not store 
+2. How do you perform inverse address lookup during diff hash table compaction (from diff to translation table entry
+   in order to rewrite the entry's pointer)? The diff table does not store 
    the original address, as in my understanding?
 
 3. The hardware heap maintained in the overflowed region is not as simple as it seems to be like in this paper.
@@ -33,6 +34,11 @@ version_mgmt:
 4. OS needs to determine compressed size at startup time. Although many other designs also share this problem, 
    BCD deduplication just makes the problem worse since there are two more hash tables, whose parameters should
    also be determined. Are they determined statically? By the BIOS according to memory size? By OS configuration?
+
+5. Dynamically disabling BCD deduplication is not always possible, since the physical address may still be in-use by 
+   some other data or metadata,
+   incurring very complicated reverse lookup and recursive decompression.
+   Although, it is not a big problem, because you can just restart the machine.
 
 This paper presents BCD deduplication, a memory compression technique using block clustering inter-block compression.
 The paper points out the limitations of previous deduplication and compression proposals as follows.
@@ -136,8 +142,13 @@ LLC as a metadata and base/diff cache, and the LLC actually "sees" the translate
 physical address. It is claimed by the paper that this also benefits the LLC since the LLC
 also potentially stores more data in compressed form without changing the LLC's data layout.
 
-The second optimizatio is to add a "lite" mode such that diff deduplication is disabled, but base partial deduplication
+The second optimization is to add a "lite" mode such that diff deduplication is disabled, but base partial deduplication
 is still performed. This is to reduce the extra overhead of deduplicating diffs when the diff is actually not 
 compressable by deduplication. Under the lite mode, diff cache lines are not stored in the hash table. Instead,
 they are just written into the overflow region, as if the hash table is always full. Both read and write logic
 does not change for this mode, which simplifies hardware design as well.
+
+Alternatively, BCD deduplication can be completely turned off during normal operation. This requires more intensive
+collaboration from the OS, since turning off BCD deduplication will disable the address translation function, meaning
+that all memory addresses currently active in the table should be decompressed and stored back to their physical 
+address. 
