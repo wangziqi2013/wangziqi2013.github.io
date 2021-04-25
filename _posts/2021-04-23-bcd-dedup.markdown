@@ -21,6 +21,9 @@ version_mgmt:
 2. Using higher bits and regular hash as the signature of data. This is a simple "content-sensitive hashing"
    which can effectively and efficiently cluster data with common higher bits.
 
+3. Using a single-level global translation table to perform address mapping for reads. This reduces critical
+   path length to at most three accesses.
+
 
 
 **Questions:**
