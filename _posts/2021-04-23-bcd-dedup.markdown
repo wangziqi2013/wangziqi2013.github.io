@@ -15,7 +15,10 @@ version_mgmt:
 
 **Highlight:**
 
-1. 
+1. Use two-stage data compression. First stage is simple data clustering by hashing higher bits and taking the 
+   diff. Second stage is normal deduplication of the diff.
+
+
 
 **Questions:**
 
