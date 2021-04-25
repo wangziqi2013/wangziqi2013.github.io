@@ -46,5 +46,10 @@ Address translation is performed by mapping the physical address, which is used 
 to a direct-mapped translation table. Each translation table entry consists of two address pointers and two bits.
 The address pointers are base pointer and diff pointer, which points to the base data and compressed diff, if
 exists. The two status bits indicate whether a diff exists, and whether the diff is compressed.
+Reads do not access any in-memory data structures other than the translation table. 
+On a read operation, both pointers are used to fetch base data and compressed delta, if any, and then the delta
+is decompressed and combined with the base to generate the original block content. 
+Read operations therefore require at most three DRAM accesses, upper bounding the worst case scenario.
+
 
 
