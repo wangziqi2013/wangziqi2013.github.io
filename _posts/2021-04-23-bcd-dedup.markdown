@@ -107,3 +107,6 @@ boundaries. A hash table bucket may require compaction, if the remaining storage
 new diff, but segments cannot be allocated due to fragmentation. In this case, all segments are read out and written
 back in a continuous manner. Translation table entries are also updated to reflect the change.
 
+In all cases, if the address refers to a valid block or diff previously, and the block or diff is shared, the reference
+counts of the old bases and diffs should be decremented. If a reference count drops to zero, the block or diff will be
+freed.
