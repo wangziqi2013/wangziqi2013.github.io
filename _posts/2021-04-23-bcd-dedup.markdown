@@ -117,3 +117,10 @@ In all cases, if the address refers to a valid block or diff previously, and the
 counts of the old bases and diffs should be decremented. If a reference count drops to zero, the block or diff will be
 freed.
 
+If new entries cannot be allocated from either the base block table or the diff table (note that the hash table
+will not evict valid entries; The only way an entry becomes invalid is the the reference count dropping to zero), 
+these data will be stored in an overflow region. The overflow region is maintained as a hardware heap, with several
+allocation sizes: 64 bytes, 48 bytes, 32 bytes, and 16 bytes, in which the last three are used for storing compressed
+diff. Blocks and diff in the overflowed region cannot serve as the base of deduplication, as they will not be searched
+during the write operation. These blocks are freed, if the block is written again, and the new block or diff can 
+either be deduplicated, or be allocated an entry in the hash tables.
