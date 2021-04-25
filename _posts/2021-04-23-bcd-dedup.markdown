@@ -63,4 +63,7 @@ The clustering algorithm takes higher 16 bits in each 64-bit word, combines them
 segment called the "higher bits", and then hashes it to a one-byte partial signature value. In the meantime, the full
 cache block is also hashed into a full signature. Both values will be used during the write operation.
 
+The 16-byte higher bits are then used to generate the hash index into the base hash table. The paper did not disclose
+how the hash index is generated, but the effect of hashing higher bits is that blocks with the same higher bits
+will be clustered into the same hash bucket. 
 
