@@ -35,3 +35,10 @@ In the second step, the bit-level delta is then compressed, and hashed into anot
 This two-level scheme exploits both inter-line redundancy by only storing line delta, and intra-line redundancy
 by compressing the delta value and performing deduplication of these deltas, which are expected to yield higher
 compression ratio than a single-level scheme that only takes advantage of one of the two types of redundancy. 
+
+We next describe the two steps as follows. The first step uses a hash table to cluster cache lines that have the
+same upper bits. The clustering algorithm takes higher 16 bits in each 64-bit word, combines them into 16-bytes 
+segment called the "higher bits", and then hashes it to a one-byte partial signature value. In the meantime, the full
+cache block is also hashed into a full signature. Both values will be used during the first step as we will see later.
+
+
