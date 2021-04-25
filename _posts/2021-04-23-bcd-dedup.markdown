@@ -103,4 +103,7 @@ The secondary diff hash table is organized similarly. Each entry of this table a
 diff value field. The difference is that, since LZC will compress the diff into three possible sizes: 48 bytes 
 (uncompressable), 32 bytes, and 16 bytes, the diff hash table should be able to store all three kinds in the 
 same data store. As a result, the diff hash table is segmented, and the compressed diff is always stored on 16-byte 
-boundaries. 
+boundaries. A hash table bucket may require compaction, if the remaining storage in a way is sufficient for a
+new diff, but segments cannot be allocated due to fragmentation. In this case, all segments are read out and written
+back in a continuous manner. Translation table entries are also updated to reflect the change.
+
