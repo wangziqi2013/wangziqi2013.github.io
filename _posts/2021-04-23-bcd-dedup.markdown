@@ -72,4 +72,8 @@ Physically, these signatures and base blocks are stored consecutively, such that
 one or more DRAM burst. In fact, in this paper, it is suggested that the hash table be 32-ways, such that one 64-byte 
 burst is sufficient to access all signatures.
 
-
+After generating the hash value, the deduplication logic then compares the partial and full hash with all hash
+values stored in the bucket respectively. On a full hash value match, a possible duplication is found, and the 
+base block is read and compared with the incoming block. If it is indeed a full match, then we perform deduplication
+by not storing the incoming line anywhere (since there is an exact same line already in the bucket), but rather,
+the base block's address is written into the translation table entry, and both diff bits are set off.
