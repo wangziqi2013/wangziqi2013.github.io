@@ -131,3 +131,9 @@ paper proposes that the BCD deduplication entine be put between the L2 and the L
 LLC as a metadata and base/diff cache, and the LLC actually "sees" the translated memory address, rather than
 physical address. It is claimed by the paper that this also benefits the LLC since the LLC
 also potentially stores more data in compressed form without changing the LLC's data layout.
+
+The second optimizatio is to add a "lite" mode such that diff deduplication is disabled, but base partial deduplication
+is still performed. This is to reduce the extra overhead of deduplicating diffs when the diff is actually not 
+compressable by deduplication. Under the lite mode, diff cache lines are not stored in the hash table. Instead,
+they are just written into the overflow region, as if the hash table is always full. Both read and write logic
+does not change for this mode, which simplifies hardware design as well.
