@@ -18,6 +18,9 @@ version_mgmt:
 1. Use two-stage data compression. First stage is simple data clustering by hashing higher bits and taking the 
    diff. Second stage is normal deduplication of the diff.
 
+2. Using higher bits and regular hash as the signature of data. This is a simple "content-sensitive hashing"
+   which can effectively and efficiently cluster data with common higher bits.
+
 
 
 **Questions:**
