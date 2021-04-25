@@ -92,3 +92,10 @@ the base block's address is written into the translation table entry, and both d
 The reference counter of the base block is also incremented by one.
 If, however, the full signatures match, but lines do not match, then partial signature is compared, as we see below.
  
+If the full signature does not match, but the partial signature matches, then BCD deduplication attempts a partial
+deduplication by comparing the higher bits of the incoming block and the base block. In the case where they do match,
+the lower bits are gathered as the diff, which form a 48-byte segment. The lower bits will then be compressed with
+Leading Zero Compression (LZC) to get rid of even more redundant bits by removing higher bit zeros from the lower
+bits. The resulting diff is then deduplicated again, using a standard deduplication hash table. This secondary hash
+table is indexed with the hash of the LZC-compressed lower bits, and operates by deteching exact duplicates. 
+
