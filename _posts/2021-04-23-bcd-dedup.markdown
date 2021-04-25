@@ -86,3 +86,11 @@ values stored in the bucket respectively. On a full hash value match, a possible
 base block is read and compared with the incoming block. If it is indeed a full match, then we perform deduplication
 by not storing the incoming line anywhere (since there is an exact same line already in the bucket), but rather,
 the base block's address is written into the translation table entry, and both diff bits are set off.
+The reference counter of the base block is also incremented by one.
+If, however, the full signatures match, but lines do not match, then partial signature is compared, as we see below.
+ 
+
+
+In all cases, if the address contains a valid block previously, and the block uses shared base or diff, the reference
+counts of these bases and diffs should be decremented. If a reference count drops to zero, the block or diff will be
+freed.
