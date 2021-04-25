@@ -24,7 +24,8 @@ version_mgmt:
 3. Using a single-level global translation table to perform address mapping for reads. This reduces critical
    path length to at most three accesses.
 
-
+4. Putting the engine in LLC, such that the LLC is also part of compressed address space, and that the LLC can
+   serve as a unified cache for metadata and compressed data. This also helps increasing LLC size.
 
 **Questions:**
 
