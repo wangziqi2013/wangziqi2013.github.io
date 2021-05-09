@@ -24,3 +24,10 @@ commercialized in the future. It only saves the address, data and program counte
 operation in a FASE, without having to maintain a full log. On crash recovery, the machine state is immediately
 restored to the point where the last store happens, and the execution of the FAST continues from that point.
 It is essentially just an optimization for persistent cache architecture.
+iDO logging, on the other hand, divides the FAST into consecutive "idempotent" regions with compiler assistance. 
+Each idempotent region is guaranteed to produce the same result given the same inputs (i.e., they do not modify the inputs only the computation is deterministic with regard to the inputs). 
+Semantics logging is then performed at a per-idempotent level by persisting the inputs (which are usually outputs
+from the previous region, and can be on either register or stack) and program counter of a region when it is about 
+to be executed. 
+Recovery can hence be performed by loading the the most recently logged region input argument back to the register
+and stack, and resuming execution from that idempotent region. 
