@@ -37,3 +37,8 @@ Clobber NVM adopts the idea of iDO logging, and optimizes it by writing semantic
 transactions, rather than only idempotent parts of a transaction.
 Compared with iDO logging, it does not require logging each individual idempotent regions, but rather, it makes 
 the entire transaction idempotent by undo-logging input values that will be modified in the transaction.
+Recovery is therefore preformed in two stages. In the first stage, the undo log is replayed on the input value
+such that they are restored to the states before the transaction began. 
+In the second stage, iDO-style recovery is performed by loading the input values of the transaction to 
+register file and the stack, after which the transaction is re-executed from the beginning by jumping to the 
+logged program counter.
