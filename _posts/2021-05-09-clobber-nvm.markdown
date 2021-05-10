@@ -30,6 +30,11 @@ version_mgmt:
    such that the transaction can always be re-executed without affecting the argument value, as these values
    will be restored by replaying the undo log first.
 
+4. Use compiler's data flow and aliasing analysis to statically identify persistent object fields that are to be
+   modified during the transaction, and insert undo instrumentations accordingly.
+   This avoids maintaining a dynamic hash table at run time for the write set.
+   But, if compiler analysis is not available,  using a run time hash table is still an option.
+
 **Questions:**
 
 1. Does register-passed arguments count as volatile inputs? How do programmers issue commands to persist these
@@ -117,3 +122,5 @@ No other data logging is performed in the transaction body.
 At the end of the transaction, all dirty data items that belong to the NVM are flushed back. This 
 physically commits the transaction, and after the commit point, the log entry can be invalidated by clearing the 
 `active` bit mentioned earlier.
+
+The paper then 
