@@ -123,4 +123,9 @@ At the end of the transaction, all dirty data items that belong to the NVM are f
 physically commits the transaction, and after the commit point, the log entry can be invalidated by clearing the 
 `active` bit mentioned earlier.
 
-The paper then 
+The paper then proposes a compiler analysis mechanism for statically detecting modifications on persistent input  
+values.
+The compiler analysis detects the pattern where an input object (or more likely, a field of it) is written after
+it is first read. It then inserts call back functions to generate undo-log entry with the pre-value, followed by 
+a persist barrier.
+
