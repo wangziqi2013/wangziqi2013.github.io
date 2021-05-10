@@ -42,3 +42,8 @@ such that they are restored to the states before the transaction began.
 In the second stage, iDO-style recovery is performed by loading the input values of the transaction to 
 register file and the stack, after which the transaction is re-executed from the beginning by jumping to the 
 logged program counter.
+Compared with previous semantics logging approaches, where the input arguments are logged before the transaction begin,
+and a transaction is replayed by always re-executing it with the logged input parameters, Clobber NVM
+does not need to save all input values at transaction begin. In fact, only those that will be modified will be
+undo logged. This can sometimes greatly reduce the amount of input parameters to be logged, especially if they are
+pointer-based structures ("demand logging").
