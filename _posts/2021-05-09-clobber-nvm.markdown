@@ -25,6 +25,10 @@ version_mgmt:
    just a function of function name and arguments).
    This allows us to restore the original value of the arguments before re-executing the transaction body.
 
+3. It is essentially an optimization over iDO logging by transforming the entire transaction body to an
+   idempotent region. The transformation undo-logs persistent arguments that will be modified in the body,
+   such that the transaction can always be re-executed without affecting the argument value, as these values
+   will be restored by replaying the undo log first.
 
 **Questions:**
 
