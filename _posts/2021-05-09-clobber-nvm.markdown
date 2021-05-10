@@ -18,6 +18,12 @@ version_mgmt:
 1. Using semantics logging to record function name and arguments before transaction begin such that the transaction
    can be re-executed on a crash.
 
+2. The semantics logging is optimized such that: (1) Read-only objects (or object fields) on the NVM are not 
+   logged since their values are still accessible after crash; 
+   (2) Only non-volatile object fields that are actually modified by the transaction are undo-logged with the
+   assistance of compilers, i.e., demand undo-logging on function arguments rather than write set (which is 
+   just a function of function name and arguments).
+   This allows us to restore the original value of the arguments before re-executing the transaction body.
 
 
 **Questions:**
