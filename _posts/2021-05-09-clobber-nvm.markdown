@@ -24,6 +24,15 @@ version_mgmt:
    to the NVM, so the stack is not on the NVM. In this case, the compiler should also recognize it and
    automatically persists these inputs.
 
+3. The paper lacks a mechanism for log trimming. The log can only be trimmed after all persistent states of 
+   a transaction is written back to the NVM.
+   It seems hard to track this.
+   One simple way is to flush all dirty data back to the NVM at transaction commit, and trims the log immediately.
+   The paper seems to suggest this, since it says that the undo logs are managed by PMDK and that PMDK will
+   flush dirty data at transaction commit as per undo logging protocol.
+   Also the paper implies that there is only one log object per-thread, meaning that the log has to be trimmed
+   at every transaction commit.
+
 This paper presents Clobber-NVM, a transactional framework for Non-Volatile Memory using recovery-via-resumption.
 The paper noted that previous undo or redo logging-based schemes are inefficient, since they need to persist all 
 memory writes performed on persistent data. This essentially doubles the amount of traffic to the NVM device.
@@ -75,10 +84,10 @@ At transaction begin, in addition to locking all data items to be accessed in th
 programmer is also responsible for persisting volatile inputs (arguments to the transaction body function) that 
 will be accessed during the transaction using the `vlog_preserve()` macro. This is necessary, since otherwise 
 these volatile inputs would be lost after a crash, making re-execution impossible. 
-Besides, the name of the function and other information for locating it are also persisted.
+Besides, the name of the function and the argument mapping (where to find arguments and how many of them) are also
+persisted.
 After all the above steps complete (followed using a persist barrier), the transaction is considered as
 already committed despite the fact that it has not started execution, as all information for re-execution has been
 stored on the NVM.
 A bit in the per-thread log is set to indicate this, such that the recovery handler will treat the transaction
 as committed, and replay it on crash recovery.
-
