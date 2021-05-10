@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Questions:**
+
+1. Does register-passed arguments count as volatile inputs? How do programmers issue commands to persist these
+   inputs? I suppose the compiler should detect register-passed arguments, and logs them automatically at 
+   transaction begin.
+
 This paper presents Clobber-NVM, a transactional framework for Non-Volatile Memory using recovery-via-resumption.
 The paper noted that previous undo or redo logging-based schemes are inefficient, since they need to persist all 
 memory writes performed on persistent data. This essentially doubles the amount of traffic to the NVM device.
@@ -59,4 +65,5 @@ the framework guarantees that all memory operations within the transaction are e
 is performed.
 Isolation is implemented with conventional 2PL in the transactions: Programmers are responsible for locking 
 data items before they are accessed, and locks are only released after the commit of the transaction. 
+
 
