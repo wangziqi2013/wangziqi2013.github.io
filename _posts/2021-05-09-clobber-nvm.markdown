@@ -71,3 +71,9 @@ is performed.
 Isolation is implemented with conventional 2PL in the transactions: Programmers are responsible for locking 
 data items before they are accessed, and locks are only released after the commit of the transaction. 
 
+At transaction begin, in addition to locking all data items to be accessed in the transaction body, the 
+programmer is also responsible for persisting volatile inputs (arguments to the transaction body function) that 
+will be accessed during the transaction using the `vlog_preserve()` macro. This is necessary, since otherwise 
+these volatile inputs would be lost after a crash, making re-execution impossible. 
+Besides, the name of the function and other information for locating it are also persisted.
+
