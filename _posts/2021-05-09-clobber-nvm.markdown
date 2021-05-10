@@ -57,5 +57,6 @@ We next elaborate the operations of Clobber NVM in more details. As have stated 
 a transactional interface, where the programmer specifies the begin and commit point of a transaction, and
 the framework guarantees that all memory operations within the transaction are either performed, or none of them
 is performed.
-
+Isolation is implemented with conventional 2PL in the transactions: Programmers are responsible for locking 
+data items before they are accessed, and locks are only released after the commit of the transaction. 
 
