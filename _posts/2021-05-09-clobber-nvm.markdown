@@ -52,3 +52,10 @@ is used for background replay of the logs to keep the NVM image consistent with 
 (which is usually held in a DRAM buffer), while the latter is used for quick commits, since a transaction is 
 considered as commit once its semantics log is persisted.
 This combination prioritizes commit latency over write amplification, while Clobber NVM reduces both.
+
+We next elaborate the operations of Clobber NVM in more details. As have stated earlier, Clobber NVM assumes
+a transactional interface, where the programmer specifies the begin and commit point of a transaction, and
+the framework guarantees that all memory operations within the transaction are either performed, or none of them
+is performed.
+
+
