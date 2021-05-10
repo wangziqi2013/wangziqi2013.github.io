@@ -32,6 +32,7 @@ version_mgmt:
    flush dirty data at transaction commit as per undo logging protocol.
    Also the paper implies that there is only one log object per-thread, meaning that the log has to be trimmed
    at every transaction commit.
+   But the authors should really have said that explicitly.
 
 This paper presents Clobber-NVM, a transactional framework for Non-Volatile Memory using recovery-via-resumption.
 The paper noted that previous undo or redo logging-based schemes are inefficient, since they need to persist all 
@@ -89,5 +90,13 @@ persisted.
 After all the above steps complete (followed using a persist barrier), the transaction is considered as
 already committed despite the fact that it has not started execution, as all information for re-execution has been
 stored on the NVM.
-A bit in the per-thread log is set to indicate this, such that the recovery handler will treat the transaction
-as committed, and replay it on crash recovery.
+An `active` bit in the per-thread log is set to indicate this, such that the recovery handler will treat the 
+transaction as committed, and replay it on crash recovery.
+
+During transaction execution, whenever an input object allocated on the NVM is to be modified by the 
+transaction body (via a pointer), an undo log entry is first generated and persisted to a per-thread log buffer area.
+The modification of NVM objects are detected by compiler passes, as we will see below. 
+No other data logging is performed in the transaction body.
+At the end of the transaction, all dirty data items that belong to the NVM are flushed back. This 
+physically commits the transaction, and after the commit point, the log entry can be invalidated by clearing the 
+`active` bit mentioned earlier.
