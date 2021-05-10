@@ -25,9 +25,15 @@ operation in a FASE, without having to maintain a full log. On crash recovery, t
 restored to the point where the last store happens, and the execution of the FAST continues from that point.
 It is essentially just an optimization for persistent cache architecture.
 iDO logging, on the other hand, divides the FAST into consecutive "idempotent" regions with compiler assistance. 
-Each idempotent region is guaranteed to produce the same result given the same inputs (i.e., they do not modify the inputs only the computation is deterministic with regard to the inputs). 
+Each idempotent region is guaranteed to produce the same result given the same inputs (i.e., they do not modify the 
+inputs). 
 Semantics logging is then performed at a per-idempotent level by persisting the inputs (which are usually outputs
 from the previous region, and can be on either register or stack) and program counter of a region when it is about 
 to be executed. 
 Recovery can hence be performed by loading the the most recently logged region input argument back to the register
 and stack, and resuming execution from that idempotent region. 
+
+Clobber NVM adopts the idea of iDO logging, and optimizes it by writing semantics logs at the granularity of whole 
+transactions, rather than only idempotent parts of a transaction.
+Compared with iDO logging, it does not require logging each individual idempotent regions, but rather, it makes 
+the entire transaction idempotent by undo-logging input values that will be modified in the transaction.
