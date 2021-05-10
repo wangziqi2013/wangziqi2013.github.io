@@ -19,6 +19,11 @@ version_mgmt:
    inputs? I suppose the compiler should detect register-passed arguments, and logs them automatically at 
    transaction begin.
 
+2. Does stack variable count as volatile inputs? I guess that depends on whether the stack is allocated on the   
+   NVM or DRAM, but it seems that Clobber NVM uses DAX mode for NVM rather than mapping the whole address space
+   to the NVM, so the stack is not on the NVM. In this case, the compiler should also recognize it and
+   automatically persists these inputs.
+
 This paper presents Clobber-NVM, a transactional framework for Non-Volatile Memory using recovery-via-resumption.
 The paper noted that previous undo or redo logging-based schemes are inefficient, since they need to persist all 
 memory writes performed on persistent data. This essentially doubles the amount of traffic to the NVM device.
@@ -65,5 +70,4 @@ the framework guarantees that all memory operations within the transaction are e
 is performed.
 Isolation is implemented with conventional 2PL in the transactions: Programmers are responsible for locking 
 data items before they are accessed, and locks are only released after the commit of the transaction. 
-
 
