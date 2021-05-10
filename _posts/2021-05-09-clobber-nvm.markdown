@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Using semantics logging to record function name and arguments before transaction begin such that the transaction
+   can be re-executed on a crash.
+
+
+
 **Questions:**
 
 1. Does register-passed arguments count as volatile inputs? How do programmers issue commands to persist these
