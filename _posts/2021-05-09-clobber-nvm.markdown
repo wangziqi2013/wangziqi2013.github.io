@@ -47,3 +47,8 @@ and a transaction is replayed by always re-executing it with the logged input pa
 does not need to save all input values at transaction begin. In fact, only those that will be modified will be
 undo logged. This can sometimes greatly reduce the amount of input parameters to be logged, especially if they are
 pointer-based structures ("demand logging").
+In addition, previous semantics logging designs combine word-level redo-logging with semantics logging. The former
+is used for background replay of the logs to keep the NVM image consistent with the current logical image 
+(which is usually held in a DRAM buffer), while the latter is used for quick commits, since a transaction is 
+considered as commit once its semantics log is persisted.
+This combination prioritizes commit latency over write amplification, while Clobber NVM reduces both.
