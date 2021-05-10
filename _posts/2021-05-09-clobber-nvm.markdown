@@ -76,4 +76,9 @@ programmer is also responsible for persisting volatile inputs (arguments to the 
 will be accessed during the transaction using the `vlog_preserve()` macro. This is necessary, since otherwise 
 these volatile inputs would be lost after a crash, making re-execution impossible. 
 Besides, the name of the function and other information for locating it are also persisted.
+After all the above steps complete (followed using a persist barrier), the transaction is considered as
+already committed despite the fact that it has not started execution, as all information for re-execution has been
+stored on the NVM.
+A bit in the per-thread log is set to indicate this, such that the recovery handler will treat the transaction
+as committed, and replay it on crash recovery.
 
