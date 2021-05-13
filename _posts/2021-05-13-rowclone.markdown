@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "RowClone: Fast and Energy-Efficient In-DRAM Bulk Data Copy and Initialization"
+date:   2021-05-13 05:05:00 -0500
+categories: paper
+paper_title: "RowClone: Fast and Energy-Efficient In-DRAM Bulk Data Copy and Initialization"
+paper_link: https://dl.acm.org/doi/10.1145/2540708.2540725
+paper_keyword: RowClone; DRAM
+paper_year: MICRO 2013
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
