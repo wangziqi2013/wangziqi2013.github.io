@@ -110,3 +110,5 @@ to existing implementation, since CoW always copies a page, and therefore is alw
 The DRAM chip should expose its internal address translation scheme as well as row size to the OS via a register
 on the memory controller. The OS should then use these information to allocate physical pages during CoW
 such that copies are performed on the same subarray whenever possible.
+Other applications, such as memset()/memcpy()/memmove() library calls, page migration, application snapshotting,
+CPU-GPU communication, virtual machine cloning, etc., can also leverage the two primitives.
