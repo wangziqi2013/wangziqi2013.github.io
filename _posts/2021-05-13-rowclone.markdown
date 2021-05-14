@@ -81,4 +81,8 @@ with its contents read into the row buffer. Then the source row is closed and pr
 the destination row in a different bank is activated. In the last step, the source bank's row buffer is copied to
 the destination bank in the granularity of 64 bytes blocks, overwriting the destination row's contents. 
 
+The PSM mode is a general mode that supports data copy between any two arbitrary banks (but not within the same
+bank). The granularity of copying is also more flexible, since it utilizes the internal bus of the DRAM device
+between banks, which can transfer up to 64 bytes of data, at the cost of lower throughput per cycle (one block
+versus one row). 
 
