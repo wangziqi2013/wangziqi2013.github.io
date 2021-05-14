@@ -19,3 +19,7 @@ a block) are two of the most commonly performed tasks, but yet very little optim
 On most platforms, these two tasks are performed by having the processor issuing instructions to fetch data into
 the hierarchy, and then write it back to a different location. Some implementations optimize this using special
 instructions provided by the ISA for this exact purposes. 
+Two possible optimizations exist on today's x86. The first one is SIMD instructions, with which more than 64 bit
+data can be read from the an address into an SIMD register, and written to another address. 
+In addition, with non-temporal loads and stores, these instructions may bypass the cache hierarchy, and 
+directly access DRAM to avoid cache pollution and the extra overhead of cache flushing. 
