@@ -85,4 +85,6 @@ The PSM mode is a general mode that supports data copy between any two arbitrary
 bank). The granularity of copying is also more flexible, since it utilizes the internal bus of the DRAM device
 between banks, which can transfer up to 64 bytes of data, at the cost of lower throughput per cycle (one block
 versus one row). 
-
+Inter-subarray copy within the same bank is also performed via PSM mode. The memory controller should over-provision
+an extra row buffer per bank. Inter-subarray copy is implemented by first copying the source blocks to the 
+extra buffer via PSM mode, and then copying the blocks to the destination row buffer. 
