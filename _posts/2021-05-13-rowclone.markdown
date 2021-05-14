@@ -71,4 +71,8 @@ activation command to the source row, which reads its contents into the row buff
 at the same time. Then the memory controller activates the destination row without any precharge, overwriting the
 destination row with the content of the row buffer.
 
+The limitation of FPM is also obvious: It only supports transferring a line within the same subarray. 
+If the source and destination rows are not in the same subarray, the command cannot be executed, which will be dropped
+by the memory controller.
+
 
