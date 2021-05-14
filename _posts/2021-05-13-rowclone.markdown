@@ -96,4 +96,9 @@ The paper then proposes an microarchitectural level extension to utilize the har
 First, two new instructions are added to the ISA: memcpy and meminit. These two instructions accepts the range to
 be copied/zeroed-out and the size as operands, and translates them to one or more FPM/PSM commands issued to the 
 memory controller. 
-
+Second, at cache coherence level, since the copy or initialization operation bypasses the cache hierarchy, affected 
+cache lines in the destination addresses need to be invalidated, and dirty blocks in the source ranges need to be 
+flushed back to the DRAM to ensure a consistent view between DRAM and the cache, both before and after the copy.
+One optimization can reduce the number of flushes, though, by creating in-cache copies of the destination blocks
+after invalidating the original blocks. The contents of these blocks are source blocks on the corresponding offset
+(for memcpy), or simply zeros (for meminit). 
