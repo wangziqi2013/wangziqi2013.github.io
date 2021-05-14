@@ -92,3 +92,8 @@ For zero-initialization, the paper proposes that one row is reserved for each su
 to zero. Zero-ing out a block or a row is just copying the zero row to the destination. This incurs a small
 overhead, but overall it is quite acceptable since subarrays normally have hundreds of rows.
 
+The paper then proposes an microarchitectural level extension to utilize the hardware extension.
+First, two new instructions are added to the ISA: memcpy and meminit. These two instructions accepts the range to
+be copied/zeroed-out and the size as operands, and translates them to one or more FPM/PSM commands issued to the 
+memory controller. 
+
