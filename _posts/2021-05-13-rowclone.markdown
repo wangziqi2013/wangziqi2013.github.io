@@ -105,4 +105,8 @@ after invalidating the original blocks. The contents of these blocks are source 
 Lastly, since PSM operations are likely non-atomic, the memory controller should block accesses to the 
 destination address range during the copy or initialization operation.
 
-
+At application level, Operating Systems may use RowClone to perform copy-on-write. This brings a great advantage
+to existing implementation, since CoW always copies a page, and therefore is always row-aligned.
+The DRAM chip should expose its internal address translation scheme as well as row size to the OS via a register
+on the memory controller. The OS should then use these information to allocate physical pages during CoW
+such that copies are performed on the same subarray whenever possible.
