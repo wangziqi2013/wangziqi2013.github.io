@@ -61,4 +61,7 @@ last section: When a row is in activated state, its content will be overwritten 
 buffer. This is because the row buffer consists of SRAM cells which are driven by Vdd and ground lines to represent
 0 and 1 respectively. DRAM cells, on the other hand, are merely capacitors, which will be charged or discharged
 if the bit line is open and is connected to either Vdd or ground. 
-
+Activation without precharging will precisely achieve this effect: The DRAM cells are directly connected to the 
+SRAM output of the row buffer, hence overwriting the current content of the cell with the content in the row buffer.
+If the row buffer contains data previously read from another row, this essentially copies the content of a row
+to another in two back-to-back activations without any precharge in-between.
