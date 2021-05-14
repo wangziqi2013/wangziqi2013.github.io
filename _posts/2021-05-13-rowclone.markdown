@@ -51,3 +51,9 @@ them into the row buffer. Meanwhile, the values are also written back to the cap
 sense amplifiers. The latter is critical to the design of RowClone, as we will see later, this implies that 
 if we activate another row in the same subarray, the content of the current row will be written back by the sense
 amplifier as well, overwriting the existing content in the new row.
+Data read and write are performed within the row buffer, and therefore, reads and writes have the same
+sequence of commands.
+After each activation, the sense amplifiers are pre-charged for the next access to a different row. This step,
+however, is unrelated to RowClone's protocol, and we do not cover it in details.
+
+
