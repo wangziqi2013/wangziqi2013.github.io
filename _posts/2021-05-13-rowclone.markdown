@@ -65,3 +65,10 @@ Activation without precharging will precisely achieve this effect: The DRAM cell
 SRAM output of the row buffer, hence overwriting the current content of the cell with the content in the row buffer.
 If the row buffer contains data previously read from another row, this essentially copies the content of a row
 to another in two back-to-back activations without any precharge in-between.
+
+The design of FPM is hence trivial: When a row copy command is received, the memory controller issues one
+activation command to the source row, which reads its contents into the row buffer and restoring the DRAM cell
+at the same time. Then the memory controller activates the destination row without any precharge, overwriting the
+destination row with the content of the row buffer.
+
+
