@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
+The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
+a block) are two of the most commonly performed tasks, but yet very little optimizations exist.
+On most platforms, these two tasks are performed by having the processor issuing instructions to fetch data into
+the hierarchy, and then write it back to a different location. Some implementations optimize this using special
+instructions provided by the ISA for this exact purposes. 
