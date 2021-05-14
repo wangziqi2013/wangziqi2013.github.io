@@ -23,3 +23,11 @@ Two possible optimizations exist on today's x86. The first one is SIMD instructi
 data can be read from the an address into an SIMD register, and written to another address. 
 In addition, with non-temporal loads and stores, these instructions may bypass the cache hierarchy, and 
 directly access DRAM to avoid cache pollution and the extra overhead of cache flushing. 
+The second optimization is called Efficient MOVSB/STOSB (ERMSB), which takes advantage of existing 8086
+string instructions and its prefixed form (REP prefix) as a hint to the microarchitecture that a string
+operation is being performed, under which certain memory ordering constraints can be relaxed.
+
+Despite the best efforts, current microarchitectural solutions are sub-optimal, since they all inevitably incur the
+extra latency and bandwidth overhead of having to transfer data between the core pipeline and the main memory.
+The paper observes that these overheads are unnecessary, since data copy and initialization can be performed within
+the DRAM chip, with only minor modifications to the interval logic.
