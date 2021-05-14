@@ -31,3 +31,9 @@ Despite the best efforts, current microarchitectural solutions are sub-optimal, 
 extra latency and bandwidth overhead of having to transfer data between the core pipeline and the main memory.
 The paper observes that these overheads are unnecessary, since data copy and initialization can be performed within
 the DRAM chip, with only minor modifications to the interval logic.
+
+The paper assumes the following DRAM operation model. A DRAM device consists of banks and subarrays. Although
+the actual physical device may have higher level abstractions such as channels and ranks, they are nothing more
+than just a bunch of banks organized together for addressing and resource sharing purposes, and can be 
+decomposed into a set of banks. 
+
