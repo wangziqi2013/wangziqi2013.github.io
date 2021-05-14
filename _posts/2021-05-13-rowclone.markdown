@@ -53,7 +53,12 @@ if we activate another row in the same subarray, the content of the current row 
 amplifier as well, overwriting the existing content in the new row.
 Data read and write are performed within the row buffer, and therefore, reads and writes have the same
 sequence of commands.
-After each activation, the sense amplifiers are pre-charged for the next access to a different row. This step,
+After each activation, the sense amplifiers are precharged for the next access to a different row. This step,
 however, is unrelated to RowClone's protocol, and we do not cover it in details.
 
+The simplest form of RowClone, called Fast Parallel Mode (FPM), is built upon an important observation made in the 
+last section: When a row is in activated state, its content will be overwritten by what is currently stored in the row
+buffer. This is because the row buffer consists of SRAM cells which are driven by Vdd and ground lines to represent
+0 and 1 respectively. DRAM cells, on the other hand, are merely capacitors, which will be charged or discharged
+if the bit line is open and is connected to either Vdd or ground. 
 
