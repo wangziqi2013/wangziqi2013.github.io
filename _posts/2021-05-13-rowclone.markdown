@@ -41,3 +41,8 @@ that restricts the design space, as we will see below).
 Subarrays are accessed in the unit of rows, the typical size of which are several KBs (8KB in this paper).
 Each subarray has a row buffer, which stores the content of a row after activation. The row buffer is an important
 component on RowClone's design as it serves as a temporary data buffer between two activations.
+
+The access sequence of DRAM assumed by this paper is described as follows.
+Before each access, the row index is generated using the physical address, and a word line is raised to select the 
+row to be accessed. The bit lines of the row are opened by the word line signal enabling the access transistor 
+connecting the capacitor and the signal output to the sense amplifier.
