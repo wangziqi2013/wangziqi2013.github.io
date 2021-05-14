@@ -102,3 +102,7 @@ flushed back to the DRAM to ensure a consistent view between DRAM and the cache,
 One optimization can reduce the number of flushes, though, by creating in-cache copies of the destination blocks
 after invalidating the original blocks. The contents of these blocks are source blocks on the corresponding offset
 (for memcpy), or simply zeros (for meminit). 
+Lastly, since PSM operations are likely non-atomic, the memory controller should block accesses to the 
+destination address range during the copy or initialization operation.
+
+
