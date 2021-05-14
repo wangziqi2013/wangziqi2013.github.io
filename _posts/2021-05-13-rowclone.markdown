@@ -36,4 +36,8 @@ The paper assumes the following DRAM operation model. A DRAM device consists of 
 the actual physical device may have higher level abstractions such as channels and ranks, they are nothing more
 than just a bunch of banks organized together for addressing and resource sharing purposes, and can be 
 decomposed into a set of banks. 
-
+Each bank consists of several subarrays, in which only one of them can be activated (this is an important factor
+that restricts the design space, as we will see below). 
+Subarrays are accessed in the unit of rows, the typical size of which are several KBs (8KB in this paper).
+Each subarray has a row buffer, which stores the content of a row after activation. The row buffer is an important
+component on RowClone's design as it serves as a temporary data buffer between two activations.
