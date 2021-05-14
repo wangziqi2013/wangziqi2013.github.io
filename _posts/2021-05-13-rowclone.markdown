@@ -88,3 +88,7 @@ versus one row).
 Inter-subarray copy within the same bank is also performed via PSM mode. The memory controller should over-provision
 an extra row buffer per bank. Inter-subarray copy is implemented by first copying the source blocks to the 
 extra buffer via PSM mode, and then copying the blocks to the destination row buffer. 
+For zero-initialization, the paper proposes that one row is reserved for each subarray whose contents is hardwired
+to zero. Zero-ing out a block or a row is just copying the zero row to the destination. This incurs a small
+overhead, but overall it is quite acceptable since subarrays normally have hundreds of rows.
+
