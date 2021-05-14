@@ -46,3 +46,8 @@ The access sequence of DRAM assumed by this paper is described as follows.
 Before each access, the row index is generated using the physical address, and a word line is raised to select the 
 row to be accessed. The bit lines of the row are opened by the word line signal enabling the access transistor 
 connecting the capacitor and the signal output to the sense amplifier.
+The sense amplifier then detects the charge at each capacitor, amplifies them to the normal logic level, and latch
+them into the row buffer. Meanwhile, the values are also written back to the capacitors as they are latched by the
+sense amplifiers. The latter is critical to the design of RowClone, as we will see later, this implies that 
+if we activate another row in the same subarray, the content of the current row will be written back by the sense
+amplifier as well, overwriting the existing content in the new row.
