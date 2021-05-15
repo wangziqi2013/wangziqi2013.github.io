@@ -19,6 +19,10 @@ version_mgmt:
    bit lines of DRAM cells will overwrite cell content. This is part of the DRAM read protocol, but can also
    be utilized to duplicate a row.
 
+2. When two rows are not in the same bank, we just perform two back-to-back row activations, and copy from the source
+   row buffer to the destination row buffer. The destination row buffer will overwrite the destination row in
+   the same way as in the previous point.
+
 
 
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
