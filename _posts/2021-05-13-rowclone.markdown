@@ -26,6 +26,10 @@ version_mgmt:
 3. The copy granularity (DRAM row for FPM, 64 byte blocks for PSM) makes OS CoW easy since the copy granularity of
    this operation is also large.
 
+4. When copying or initializing data, the destination addresses in the hierarchy should be invalidated to ensure 
+   a coherent memory image.
+   One optimization is to duplicate source blocks and rewrite the address tag to be the destination block.
+
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
 The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
 a block) are two of the most commonly performed tasks, but yet very little optimizations exist.
