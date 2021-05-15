@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Very simple concept: When the SRAM row buffer contains meaningful data, connecting the SRAM output to the
+   bit lines of DRAM cells will overwrite cell content. This is part of the DRAM read protocol, but can also
+   be utilized to duplicate a row.
+
+
+
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
 The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
 a block) are two of the most commonly performed tasks, but yet very little optimizations exist.
