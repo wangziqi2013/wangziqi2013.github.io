@@ -39,6 +39,10 @@ version_mgmt:
    significantly more hardware resource than suggested in the paper (in fact, this mechanism itself deserves
    a separate research paper, e.g., cache scrubbing).
 
+2. Although not the fault of the author, I am really curious about the mechanism that the row buffer and 
+   sense amplifier can rewrite contents in DRAM cells. My best guess is that, the SRAM row buffer is driven by
+   CMOS's Vdd and ground line, so it can actually charge and discharge the capacitor, if connected to the bit line.
+
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
 The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
 a block) are two of the most commonly performed tasks, but yet very little optimizations exist.
