@@ -23,7 +23,8 @@ version_mgmt:
    row buffer to the destination row buffer. The destination row buffer will overwrite the destination row in
    the same way as in the previous point.
 
-
+3. The copy granularity (DRAM row for FPM, 64 byte blocks for PSM) makes OS CoW easy since the copy granularity of
+   this operation is also large.
 
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
 The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
