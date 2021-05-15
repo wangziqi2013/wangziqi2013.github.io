@@ -30,6 +30,15 @@ version_mgmt:
    a coherent memory image.
    One optimization is to duplicate source blocks and rewrite the address tag to be the destination block.
 
+**Comments:**
+
+1. The cache block duplication and rewrite may not be as easy as it seems to be. There are a few complexities.
+   First, in an inclusive hierarchy, how do you maintain inclusiveness? Second, if only part of the source range
+   is cached, how do you deal with those that are not cached? 
+   I am not saying this is impossible. Rather, I am just saying that this optimization might require 
+   significantly more hardware resource than suggested in the paper (in fact, this mechanism itself deserves
+   a separate research paper, e.g., cache scrubbing).
+
 This paper proposes RowClone, a fast data copy and initialization mechanism built into DRAM chips.
 The paper points out that, on current memory architecture, data copy and initialization (specifically, zeroing out
 a block) are two of the most commonly performed tasks, but yet very little optimizations exist.
