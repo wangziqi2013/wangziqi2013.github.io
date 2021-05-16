@@ -22,3 +22,9 @@ lifespan of blocks in the hierarchy.
 Current x86 platform provides two primitives, namely clflush for flushing a dirty block back to the backing memory,
 and sfence for ordering cache flushes. A software persist barrier is formed by using multiple clflush followed by 
 an sfence in order to establish write orderings for write operations before and after the barrier.
+
+Software barrier, however, is far from optimal, since it is implemented on software, and therefore, stalls the 
+processor with fence instructions while previous stores are being persisted. 
+This also restricts parallelism, since a thread can have at most one outstanding barriers, limiting hardware
+level parallelism of the NVM device that can be taken advantage of.
+
