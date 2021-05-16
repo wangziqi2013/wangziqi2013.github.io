@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. What if the data race free program is implemented not with critical sections, but with 2PL? Which version number
+   should we use? I understand not being able to support more complicated transactional or FASE model and only
+   supporting lock-based ones (many existing mechanism makes similar assumptions). But at least 2PL should be 
+   supported?
+
 This paper proposes PMEM-Spec, a hardware mechanism for enforcing strict write ordering between the memory consistency
 model and NVM device. 
 The paper points out that write ordering is critical for NVM-related programming, since the order of memory operations
@@ -100,4 +107,5 @@ order. The paper assumes that the application to be executed is always data race
 exclusive locks. Writes to the same data item must always be exclusive from each other, i.e., wrapped within
 the same lock. This way, the NVM controller can infer the ordering of writes received using the ordering of lock 
 acquisition.
-
+To this end, the paper proposes that the compiler maintains a version number for each critical section lock, which is 
+incremented every time it is acquired
