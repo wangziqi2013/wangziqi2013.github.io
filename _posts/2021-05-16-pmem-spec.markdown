@@ -52,10 +52,15 @@ PMEM-spec, on the contrary, demands that any write operation performed at L1 lev
 controller immediately, without using the ordinary data path. This can be done by sending write data to the 
 controller via the on-chip network when write instructions retires from the store buffer (i.e., when it is 
 drained into the L1 cache). 
+Dirty evictions from the LLC will then be ignored by the NVM controller (actually, only data will be discarded,
+and the eviction message itself serves an important purpose and must be sent by the LLC).
 There are two important things to note in this process. First, this essentially turns the hierarchy write-through
 since all writes are directly sent to the NVM controller. The dirty bit, on the other hand, must still be preserved,
 which is used for monitoring the lifespan of dirty blocks, as we will see later.
 Second, although stores are drained from the store buffer to the L1 cache and to NVM controller at the same time,
 this process is still not atomic, i.e., events from other cores may observe the short window of inconsistency when
 the updates have been applied to the L1, but not to the controller. 
-This opens the possibility of mis-speculation where the memory consistency differs from NVM consistency, which is the topic in the following paragraphs.
+This opens the possibility of mis-speculation where the memory consistency differs from NVM consistency, which is the 
+topic in the following paragraphs.
+
+
