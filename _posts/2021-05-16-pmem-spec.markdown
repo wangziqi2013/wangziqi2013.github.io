@@ -77,3 +77,7 @@ write-after-write data dependency, which is serialized by the coherence protocol
 on the same address), but their corresponding direct write messages sent to the NVM controller arrive at the 
 wrong order. In this case, memory consistency sees one order, but the NVM controller sees the other, resulting
 in lost writes since the earlier write in memory consistency order is performed after the later write on the NVM.
+
+The first type problem can be solved by monitoring dirty block evictions at the controller level, since in order
+for such a rare case to happen, it must be that an eviction occurs before a load to the same address misses the 
+hierarchy, after which the direct write message arrives, also on the same address. 
