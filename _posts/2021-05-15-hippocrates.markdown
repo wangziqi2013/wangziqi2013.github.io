@@ -33,7 +33,10 @@ Programmers need to "fortify" the persistence semantics by inserting special pri
 with which writes to the NVM device would be guaranteed to be ordered.
 Based on the write ordering abstractions, many mechanisms can be applied to further built higher level semantics
 such as transactional semantics.
-
+This paper assumes two primitives: cache line flush (clflush), and store fence (sfence).
+The former forces a cache block to be written back to its backing device, but are not strongly ordered with each other
+(i.e., different flushes may not be executed as the ordered suggested in the static code). The latter
+orders cache block flushes such that clflush after the fence will not take effect before previous ones have completed.
 
 Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
 missing flushes, which is caused by programmers forgetting to insert cache line flush primitives after data is
