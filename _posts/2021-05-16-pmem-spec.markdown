@@ -15,10 +15,14 @@ version_mgmt:
 
 **Comments:**
 
-1. What if the data race free program is implemented not with critical sections, but with 2PL? Which version number
-   should we use? I understand not being able to support more complicated transactional or FASE model and only
-   supporting lock-based ones (many existing mechanism makes similar assumptions). But at least 2PL should be 
-   supported?
+1. The paper did not say how to detect write-write ordering violation. Does the controller maintain per-block metadata
+   on last received speculation ID (unlikely)? Or there is one global speculation ID? 
+   
+2. If speculation ID is maintained per-process, what if a context switch happens? Should the NVM controller be 
+   aware of the switch, and load a new "last-seen" speculation ID for the new process just switched in?
+   On the other hand, if there is only one global speculation ID (hard to maintain by the compiler), then 
+   context switch can still be a problem, since the ID after switching back may not be the same as one
+   before the switch.
 
 This paper proposes PMEM-Spec, a hardware mechanism for enforcing strict write ordering between the memory consistency
 model and NVM device. 
@@ -102,10 +106,3 @@ of NoC between the store buffer and the controller. When an entry is created, th
 for the pattern for this amount of time, since after that the violation is impossible to occur. The entry will then 
 expire and be removed.
 
-The second type problem is solved by tagging writes using a version number that is consistent with the data dependency
-order. The paper assumes that the application to be executed is always data race free, implemented with
-exclusive locks. Writes to the same data item must always be exclusive from each other, i.e., wrapped within
-the same lock. This way, the NVM controller can infer the ordering of writes received using the ordering of lock 
-acquisition.
-To this end, the paper proposes that the compiler maintains a version number for each critical section lock, which is 
-incremented every time it is acquired
