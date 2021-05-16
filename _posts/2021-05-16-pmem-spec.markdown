@@ -89,3 +89,10 @@ This is implemented by a small buffer on the controller which remembers recent e
 buffer maintains a state variable, which recognizes the pattern of "eviction-read-write". An interruption is 
 fired when the pattern recognition succeeds.
 
+Entries in the controller buffer will not stay indefinitely to avoid false positives, since not all traces that match
+the pattern are violations. The design further takes advantage of the observation that there is a maximum latency
+between the store buffer and the controller. When an entry is created, the controller only needs to monitor for the 
+pattern for this amount of time, since after that the violation is impossible to occur. The entry will then expire and 
+be removed.
+
+
