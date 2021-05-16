@@ -25,7 +25,10 @@ version_mgmt:
    Special mechanism, meanwhile, is added to detect anomaly when these two disagree (i.e., memory consistency
    suggests one ordering, but NVM sees them in another order).
 
-
+3. During the window between the store buffer draining a write and the NVM controller receiving the write, 
+   both read-after-write and write-after-write violation may occur.
+   The former is solved by monitoring a special pattern, and the latter is solved by ordering writes using critical
+   section's serial numbers (speculation IDs).
 
 **Comments:**
 
