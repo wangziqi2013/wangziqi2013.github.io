@@ -23,6 +23,14 @@ correctness of the program, or may introduce new bugs.
 Hippocrates closes the gap by proposing a few template fixes for certain classes of bugs found in NVM applications,
 and a mechanism for applying these bug fixes automatically.
 
+This paper assumes a x86-like persistence model. NVM storage is mapped to application process's virtual address space
+such that they can be accessed with regular loads and stores just like DRAM.
+Data items in the persistent address range are cached by the hierarchy just like normal data, introducing the 
+consistency problem between the hierarchy and the NVM device on a system crash, at which time dirty data that 
+belong to the persistence range but not yet flushed back to the NVM will be lost, meaning that a subset of 
+stores will be lost, and it is unknown which store operations are lost. 
+
+
 Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
 missing flushes, which is caused by programmers forgetting to insert cache line flush primitives after data is
 modified, but before the memory fence primitive. 
