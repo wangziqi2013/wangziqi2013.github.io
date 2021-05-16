@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+
+
 This paper presents Hippocrates, a bug-fixing utility for NVM-based applications.
 The paper notices that persistence-related bugs (durability bugs) in NVM oriented applications are hard to find 
 but easy to fix.
@@ -57,6 +59,12 @@ unless a flush is explicitly issued, and the OoO core pipeline also makes zero g
 ordered unless an explicit ordering is given by the specification. 
 It is, therefore, always possible that some other events will cause the equivalence of flushes and store fences on 
 the hierarchy and the core pipeline, respectively, without actually using these primitives.
-The result dynamic execution trace, as a result, is always a subset of all possible dynamic traces of the original
+The resulting dynamic execution trace, as a result, is always a subset of all possible dynamic traces of the original
 program, implying that there will not be any program behavior that cannot be observed while executing the original
 program.
+
+The paper also recognizes two types of fixes that can be applied. The first type is intra-procedure fix, which is 
+applied right on the spot where the primitive is missing in the same function. This approach is simple, but may result
+in inefficient code, if the procedure is called for both persistent and non-persistent memory objects.
+For example, library functions cannot be fixed this way (and we often do not have access to their sources),
+such as memcpy() or memset(), since these functions are widely used for all types of objects.
