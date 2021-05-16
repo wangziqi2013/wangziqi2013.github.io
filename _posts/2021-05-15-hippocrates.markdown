@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Hippocrates, a bug-fixing utility for NVM-based applications.
+The paper notices that persistence-related bugs (durability bugs) in NVM oriented applications are hard to find 
+but easy to fix.
