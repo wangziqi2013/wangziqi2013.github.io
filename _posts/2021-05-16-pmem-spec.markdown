@@ -28,3 +28,7 @@ processor with fence instructions while previous stores are being persisted.
 This also restricts parallelism, since a thread can have at most one outstanding barriers, limiting hardware
 level parallelism of the NVM device that can be taken advantage of.
 
+Previous hardware proposals, on the other hand, solve this issue by allowing multiple "strands" of persist barriers
+to be active for a single thread at the same time, or decouples memory consistency (i.e., visibility of a modification
+from the perspective of other threads) from NVM consistency (i.e., when the NVM device sees a dirty block) such that 
+persistency is moved to the background without stalling the core pipeline.
