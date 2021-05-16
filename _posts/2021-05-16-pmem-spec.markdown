@@ -48,3 +48,7 @@ We next introduce the details of the design as follows.
 PMEM-spec adds one more data path from the processor to the NVM device. On conventional platform, cache blocks are
 brought into the L1 cache on write misses, which are then updated, and then evicted via either natural evictions,
 or clflush instructions. 
+PMEM-spec, on the contrary, demands that any write operation performed at L1 level must be sent to the NVM
+controller immediately, without using the ordinary data path. This can be done by sending write data to the 
+controller via the on-chip network when write instructions retires from the store buffer (i.e., when it is 
+drained into the L1 cache). 
