@@ -19,4 +19,6 @@ The paper points out that write ordering is critical for NVM-related programming
 performed on the hierarchy often differs from the order that NVM device sees them. This is caused by the fact that the
 cache hierarchy can arbitrarily evict blocks back to the NVM, while programmers have only very limited control over the
 lifespan of blocks in the hierarchy.
-
+Current x86 platform provides two primitives, namely clflush for flushing a dirty block back to the backing memory,
+and sfence for ordering cache flushes. A software persist barrier is formed by using multiple clflush followed by 
+an sfence in order to establish write orderings for write operations before and after the barrier.
