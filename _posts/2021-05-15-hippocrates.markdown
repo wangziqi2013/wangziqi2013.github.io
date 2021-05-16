@@ -20,3 +20,9 @@ Existing tools are often capable of finding write ordering violations in dynamic
 to fix them automatically. 
 Some other tools are targeted at fixing general bugs in application code, but they do not guarantee the eventual
 correctness of the program, or may introduce new bugs.
+Hippocrates closes the gap by proposing a few template fixes for certain classes of bugs found in NVM applications,
+and a mechanism for applying these bug fixes automatically.
+
+Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
+missing flushes, which is caused by programmers forgetting to insert cache line flush primitives after data is
+modified, but before the memory fence primitive. 
