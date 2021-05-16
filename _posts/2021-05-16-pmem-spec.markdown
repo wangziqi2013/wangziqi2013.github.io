@@ -56,3 +56,6 @@ There are two important things to note in this process. First, this essentially 
 since all writes are directly sent to the NVM controller. The dirty bit, on the other hand, must still be preserved,
 which is used for monitoring the lifespan of dirty blocks, as we will see later.
 Second, although stores are drained from the store buffer to the L1 cache and to NVM controller at the same time,
+this process is still not atomic, i.e., events from other cores may observe the short window of inconsistency when
+the updates have been applied to the L1, but not to the controller. 
+This opens the possibility of mis-speculation where the memory consistency differs from NVM consistency, which is the topic in the following paragraphs.
