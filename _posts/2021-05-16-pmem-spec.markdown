@@ -43,3 +43,8 @@ optimistically assuming that these two will be equivalent in the majority of cas
 under the assumption that these two orderings are always identical. In the rare case where they are not, the hardware
 detects a violation, and interrupts the offending process of the ordering issue. The process then rolls back 
 the current transaction or FASE, and restarts. 
+
+We next introduce the details of the design as follows. 
+PMEM-spec adds one more data path from the processor to the NVM device. On conventional platform, cache blocks are
+brought into the L1 cache on write misses, which are then updated, and then evicted via either natural evictions,
+or clflush instructions. 
