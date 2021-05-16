@@ -13,7 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comment:**
 
+1. When to apply inter-procedure fixes? Is there some clear criteria? The paper did not mention when to apply
+   this type of fix. The bug report from third party utilities only identifies missing primitives, as I understand.
+
+2. Not all problems can be attributed to missing primitives. Some might be complicated bugs involving non-persistent 
+   logic. Others might be due to control flows, etc. 
+   Is is possible for the tool to handle these cases?
 
 This paper presents Hippocrates, a bug-fixing utility for NVM-based applications.
 The paper notices that persistence-related bugs (durability bugs) in NVM oriented applications are hard to find 
@@ -68,3 +75,7 @@ applied right on the spot where the primitive is missing in the same function. T
 in inefficient code, if the procedure is called for both persistent and non-persistent memory objects.
 For example, library functions cannot be fixed this way (and we often do not have access to their sources),
 such as memcpy() or memset(), since these functions are widely used for all types of objects.
+If primitives are inserted into these functions, then unnecessary flushes and/or fences will be executed
+even when they are called on non-persistent objects, degrading performance.
+
+
