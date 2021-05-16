@@ -43,6 +43,10 @@ store operations after the barrier, and write backs before the barrier are guara
 after the barrier are executed.
 
 Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
-missing flushes, which is caused by programmers forgetting to insert cache line flush primitives after data is
-modified, but before the memory fence primitive. 
-The second class is missing fences, which is similar to the first class, i.e., a memory fence is missing
+missing flushes, which is caused by programmers forgetting to put cache line flush primitives after data modification
+operations, but before the memory fence primitive. 
+The second class is missing fences, which is similar to the first class, i.e., a memory fence, rather than flush, is 
+missing after flush primitives. 
+The third class is missing both, which happens when both the flush and the fence primitives are not present.
+
+
