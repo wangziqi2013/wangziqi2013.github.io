@@ -37,7 +37,12 @@ This paper assumes two primitives: cache line flush (clflush), and store fence (
 The former forces a cache block to be written back to its backing device, but are not strongly ordered with each other
 (i.e., different flushes may not be executed as the ordered suggested in the static code). The latter
 orders cache block flushes such that clflush after the fence will not take effect before previous ones have completed.
+The combination of one or more cache block flushes followed by a store fence is called a persistence barrier, which 
+achieves the overall effect that store operations before the barrier will be written back to the NVM before
+store operations after the barrier, and write backs before the barrier are guaranteed to complete before writes
+after the barrier are executed.
 
 Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
 missing flushes, which is caused by programmers forgetting to insert cache line flush primitives after data is
 modified, but before the memory fence primitive. 
+The second class is missing fences, which is similar to the first class, i.e., a memory fence is missing
