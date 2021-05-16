@@ -63,4 +63,7 @@ the updates have been applied to the L1, but not to the controller.
 This opens the possibility of mis-speculation where the memory consistency differs from NVM consistency, which is the 
 topic in the following paragraphs.
 
-
+The first type of consistency problem occurs when a load from another processor misses the hierarchy and accesses NVM.
+If the load happens after the store is issued to L1, but before the corresponding modification is received by the 
+NVM controller, the load operation will read a stale value from the NVM device, while the most up-to-date value
+is still on the way being sent to the NVM controller. 
