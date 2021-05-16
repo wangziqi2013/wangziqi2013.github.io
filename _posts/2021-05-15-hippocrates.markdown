@@ -82,4 +82,9 @@ The paper therefore proposes a second type fix, called inter-procedure fix, in w
 are inserted in one of the caller functions of the procedure. 
 Note that Hippocrates are not allowed to modify existing primitives, as the correctness proof assumes that no existing
 primitives are changed.
+It can, however, generate a "persistent" copy of these functions by duplicating the existing functions (called 
+a persistent subprogram, which includes all functions in the call chain), assigning them different names, and 
+then inserting a flush primitive after every persistent memory write within the subprogram. 
+Invocations to the original version of the subprogram using persistent objects and are identified as "buggy" 
+are then replaced with the 
 
