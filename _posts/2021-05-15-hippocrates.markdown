@@ -87,4 +87,12 @@ a persistent subprogram, which includes all functions in the call chain), assign
 then inserting a flush primitive after every persistent memory write within the subprogram. 
 Invocations to the original version of the subprogram using persistent objects and are identified as "buggy" 
 are then replaced with the 
+A single fence primitive is then inserted after the call site to the persistent subprogram.
+Recall that inserting new primitives will not introduce new bugs, this preserves the correctness of the program.
+Furthermore, calling the persistent subprogram will guarantee that all writes performed within the function have 
+been persisted, which will guarantee to fix any missing primitive issue.
+(**OK, I did not quite get how it works, so this is the best I can do**).
 
+Hippocrates takes the output of third party bug-finding tools, which contains a dynamic trace of persistent memory 
+accesses, the stack traces when these accesses happens, and the precise location of a buggy access.
+It relies on LLVM framework, and the fixes are implemented as an extra LLVM pass.
