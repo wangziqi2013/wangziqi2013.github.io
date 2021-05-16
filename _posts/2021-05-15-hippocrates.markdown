@@ -49,4 +49,10 @@ The second class is missing fences, which is similar to the first class, i.e., a
 missing after flush primitives. 
 The third class is missing both, which happens when both the flush and the fence primitives are not present.
 
+The paper first proves that by inserting the missing primitives into the source code, these bugs can be fixed 
+safely without introducing new bugs. 
+In fact, we can prove that arbitrarily inserting flushes and fences into the source code will not incur new bugs.
+Intuitively, this is true, since the cache hierarchy makes zero guarantee on whether a block will be evicted or not
+unless a flush is explicitly issued, and the OoO core pipeline also makes zero guarantee on how instructions are 
+ordered unless an explicit ordering is given by the specification. 
 
