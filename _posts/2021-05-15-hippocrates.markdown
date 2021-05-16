@@ -55,4 +55,8 @@ In fact, we can prove that arbitrarily inserting flushes and fences into the sou
 Intuitively, this is true, since the cache hierarchy makes zero guarantee on whether a block will be evicted or not
 unless a flush is explicitly issued, and the OoO core pipeline also makes zero guarantee on how instructions are 
 ordered unless an explicit ordering is given by the specification. 
-
+It is, therefore, always possible that some other events will cause the equivalence of flushes and store fences on 
+the hierarchy and the core pipeline, respectively, without actually using these primitives.
+The result dynamic execution trace, as a result, is always a subset of all possible dynamic traces of the original
+program, implying that there will not be any program behavior that cannot be observed while executing the original
+program.
