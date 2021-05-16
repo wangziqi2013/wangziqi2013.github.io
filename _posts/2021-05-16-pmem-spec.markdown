@@ -32,3 +32,6 @@ Previous hardware proposals, on the other hand, solve this issue by allowing mul
 to be active for a single thread at the same time, or decouples memory consistency (i.e., visibility of a modification
 from the perspective of other threads) from NVM consistency (i.e., when the NVM device sees a dirty block) such that 
 persistency is moved to the background without stalling the core pipeline.
+These proposals optimize towards efficiency, but the paper points out that they often bring excessively complicated
+hardware, and are intrusive to the existing hierarchy such that the coherence protocol is modified.
+
