@@ -113,8 +113,11 @@ order. The paper assumes that the application to be executed is always data race
 exclusive locks. Writes to the same data item must always be exclusive from each other, i.e., wrapped within
 the same lock. This way, the NVM controller can infer the ordering of writes received using the ordering of lock 
 acquisition.
-To this end, the paper proposes that the compiler maintains a per-process global version number for all 
-critical section locks within the application, which is incremented every time a critical section is entered.
+To this end, the paper proposes that the compiler maintains a per-process global version number (called 
+speculative ID) for all critical section locks within the application, which is incremented every time a critical 
+section is entered.
 The version number is also loaded into a special register by a new instruction after lock acquisition. Every store
 operation is tagged with the version number before sent to the NVM controller.
-The NVM controller always remembers the version of the last write 
+The NVM controller always remembers the version of the last write received, and if a newly received write message
+has a lower version number, an interruption is raised to the processor that sent the lower versioned write, since
+the write had arrived late and would otherwise overwrite a logically later write.
