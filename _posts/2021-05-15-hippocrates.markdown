@@ -29,6 +29,10 @@ Data items in the persistent address range are cached by the hierarchy just like
 consistency problem between the hierarchy and the NVM device on a system crash, at which time dirty data that 
 belong to the persistence range but not yet flushed back to the NVM will be lost, meaning that a subset of 
 stores will be lost, and it is unknown which store operations are lost. 
+Programmers need to "fortify" the persistence semantics by inserting special primitives to enforce write ordering,
+with which writes to the NVM device would be guaranteed to be ordered.
+Based on the write ordering abstractions, many mechanisms can be applied to further built higher level semantics
+such as transactional semantics.
 
 
 Hippocrates limits its scope to three classes of common bugs that are found in applications. The first class is 
