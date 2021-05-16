@@ -106,3 +106,9 @@ of NoC between the store buffer and the controller. When an entry is created, th
 for the pattern for this amount of time, since after that the violation is impossible to occur. The entry will then 
 expire and be removed.
 
+The second type problem is solved by tagging writes using a version number that is consistent with the data dependency
+order. The paper assumes that the application to be executed is always data race free, implemented with
+exclusive locks. Writes to the same data item must always be exclusive from each other, i.e., wrapped within
+the same lock. This way, the NVM controller can infer the ordering of writes received using the ordering of lock 
+acquisition.
+
