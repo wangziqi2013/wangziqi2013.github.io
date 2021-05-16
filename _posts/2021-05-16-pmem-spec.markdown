@@ -85,3 +85,7 @@ The NVM controller, therefore, monitors all eviction events from the LLC (recall
 controller only sends the message without data, since data should be written by the direct write message).
 If a load later accesses the same address, followed by a direct write, the NVM controller then decides that a 
 violation has occurred, and informs the processor by sending a hardware interruption.
+This is implemented by a small buffer on the controller which remembers recent eviction addresses. Each entry of the
+buffer maintains a state variable, which recognizes the pattern of "eviction-read-write". An interruption is 
+fired when the pattern recognition succeeds.
+
