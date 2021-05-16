@@ -20,6 +20,11 @@ version_mgmt:
    applied to the L1 cache.
    The LLC will drop eviction data to the NVM since they have already been sent.
 
+2. Since writes are write-though, in most cases consistency and persistency order would be identical without any
+   special enforcement. We can optimistically assume this since it is the majority of the cases.
+   Special mechanism, meanwhile, is added to detect anomaly when these two disagree (i.e., memory consistency
+   suggests one ordering, but NVM sees them in another order).
+
 
 
 **Comments:**
