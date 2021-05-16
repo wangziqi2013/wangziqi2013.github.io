@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes PMEM-Spec, a hardware mechanism for enforcing strict write ordering between the memory consistency
+model and NVM device. 
+The paper points out that write ordering is critical for NVM-related programming, since the order of memory operations
+performed on the hierarchy often differs from the order that NVM device sees them. This is caused by the fact that the
+cache hierarchy can arbitrarily evict blocks back to the NVM, while programmers have only very limited control over the
+lifespan of blocks in the hierarchy.
+
