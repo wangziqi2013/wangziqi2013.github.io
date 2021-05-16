@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Programming would be much easier if persistency order and consistency order agree. This can be done by making the 
+   hierarchy write-through, and always sending a copy of the write to the NVM controller when the write is also
+   applied to the L1 cache.
+   The LLC will drop eviction data to the NVM since they have already been sent.
+
+
+
 **Comments:**
 
 1. The paper did not say how to detect write-write ordering violation. Does the controller maintain per-block metadata
