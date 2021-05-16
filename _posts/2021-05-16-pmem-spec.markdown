@@ -67,3 +67,7 @@ The first type of consistency problem occurs when a load from another processor 
 If the load happens after the store is issued to L1, but before the corresponding modification is received by the 
 NVM controller, the load operation will read a stale value from the NVM device, while the most up-to-date value
 is still on the way being sent to the NVM controller. 
+Although this is extremely unlikely, since the block must be evicted by the entire hierarchy before the direct write
+arrives at the NVM controller, the chances is still not zero.
+In this case, the load operation from another core accesses a stale version of data, since according to memory
+consistency, the load happens after the store, but the NVM access ordering disagrees.
