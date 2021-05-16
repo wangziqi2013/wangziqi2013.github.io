@@ -71,3 +71,9 @@ Although this is extremely unlikely, since the block must be evicted by the enti
 arrives at the NVM controller, the chances is still not zero.
 In this case, the load operation from another core accesses a stale version of data, since according to memory
 consistency, the load happens after the store, but the NVM access ordering disagrees.
+
+The second type of inconsistency occurs when two writes are applied on different cores (and thus forming a
+write-after-write data dependency, which is serialized by the coherence protocol since the two writes happen
+on the same address), but their corresponding direct write messages sent to the NVM controller arrive at the 
+wrong order. In this case, memory consistency sees one order, but the NVM controller sees the other, resulting
+in lost writes since the earlier write in memory consistency order is performed after the later write on the NVM.
