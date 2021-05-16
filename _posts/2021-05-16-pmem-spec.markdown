@@ -97,9 +97,9 @@ hierarchy, after which the direct write message arrives, also on the same addres
 The NVM controller, therefore, monitors all eviction events from the LLC (recall that eviction to the NVM
 controller only sends the message without data, since data should be written by the direct write message).
 If a load later accesses the same address, followed by a direct write, the NVM controller then decides that a 
-violation has occurred, and informs the processor by sending a hardware interruption.
+violation has occurred, and informs the processor by sending a hardware interrupt.
 This is implemented by a small buffer on the controller which remembers recent eviction addresses. Each entry of the
-buffer maintains a state variable, which recognizes the pattern of "eviction-read-write". An interruption is 
+buffer maintains a state variable, which recognizes the pattern of "eviction-read-write". An interrupt is 
 fired when the pattern recognition succeeds.
 
 Entries in the controller buffer will not stay indefinitely to avoid false positives, since not all traces that match
@@ -119,5 +119,10 @@ section is entered.
 The version number is also loaded into a special register by a new instruction after lock acquisition. Every store
 operation is tagged with the version number before sent to the NVM controller.
 The NVM controller always remembers the version of the last write received, and if a newly received write message
-has a lower version number, an interruption is raised to the processor that sent the lower versioned write, since
+has a lower version number, an interrupt is raised to the processor that sent the lower versioned write, since
 the write had arrived late and would otherwise overwrite a logically later write.
+
+On receiving the interrupt indicating an ordering violation, the OS forwards a signal to the violating process
+based on the physical address mapping (multiple processes if they share physical pages and the violation happens
+on the shared address).
+
