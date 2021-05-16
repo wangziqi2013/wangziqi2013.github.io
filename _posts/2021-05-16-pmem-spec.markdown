@@ -129,4 +129,7 @@ The paper assumes that the threads within the violating process has a way of coo
 violation occurs. For example, the thread that handles the signal may just set a flag that will be checked by
 all other threads at commit time (lazy resolution) to indicate the violation. Threads roll back the transaction
 or FASE with runtime support (most runtimes already provide such support for recovery or transactional abort).
-
+Alternatively, the signal handling thread may just broadcast the signal to all other threads, forcing the entire
+application to stop and recover, which fully utilizes existing recovery mechanism at the cost of higher overhead.
+This approach is called a "virtual crash", in which case the application just behaves like a real crash had happened,
+and performs crash recovery with existing runtime support.
