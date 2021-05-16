@@ -78,4 +78,8 @@ such as memcpy() or memset(), since these functions are widely used for all type
 If primitives are inserted into these functions, then unnecessary flushes and/or fences will be executed
 even when they are called on non-persistent objects, degrading performance.
 
+The paper therefore proposes a second type fix, called inter-procedure fix, in which the fence primitives
+are inserted in one of the caller functions of the procedure. 
+Note that Hippocrates are not allowed to modify existing primitives, as the correctness proof assumes that no existing
+primitives are changed.
 
