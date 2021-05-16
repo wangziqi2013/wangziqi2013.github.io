@@ -37,3 +37,9 @@ hardware, and are intrusive to the existing hierarchy such that the coherence pr
 Besides, the paper also points out that more complicated persistence models need programmers to annotate the
 source code, which requires programmers to learn these models first as well as to understand the subtlety of 
 different models.
+
+PMEM-Spec adopts a different approach by not proactively enforcing memory consistency and NVM consistency, but 
+optimistically assuming that these two will be equivalent in the majority of cases. In other words, it speculates
+under the assumption that these two orderings are always identical. In the rare case where they are not, the hardware
+detects a violation, and interrupts the offending process of the ordering issue. The process then rolls back 
+the current transaction or FASE, and restarts. 
