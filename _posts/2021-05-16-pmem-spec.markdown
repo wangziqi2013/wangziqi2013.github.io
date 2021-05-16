@@ -34,4 +34,6 @@ from the perspective of other threads) from NVM consistency (i.e., when the NVM 
 persistency is moved to the background without stalling the core pipeline.
 These proposals optimize towards efficiency, but the paper points out that they often bring excessively complicated
 hardware, and are intrusive to the existing hierarchy such that the coherence protocol is modified.
-
+Besides, the paper also points out that more complicated persistence models need programmers to annotate the
+source code, which requires programmers to learn these models first as well as to understand the subtlety of 
+different models.
