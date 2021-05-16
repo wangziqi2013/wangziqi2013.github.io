@@ -81,3 +81,7 @@ in lost writes since the earlier write in memory consistency order is performed 
 The first type problem can be solved by monitoring dirty block evictions at the controller level, since in order
 for such a rare case to happen, it must be that an eviction occurs before a load to the same address misses the 
 hierarchy, after which the direct write message arrives, also on the same address. 
+The NVM controller, therefore, monitors all eviction events from the LLC (recall that eviction to the NVM
+controller only sends the message without data, since data should be written by the direct write message).
+If a load later accesses the same address, followed by a direct write, the NVM controller then decides that a 
+violation has occurred, and informs the processor by sending a hardware interruption.
