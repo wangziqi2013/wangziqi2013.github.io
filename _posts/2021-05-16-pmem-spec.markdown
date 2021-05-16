@@ -17,6 +17,8 @@ version_mgmt:
 
 1. The paper did not say how to detect write-write ordering violation. Does the controller maintain per-block metadata
    on last received speculation ID (unlikely)? Or there is one global speculation ID? 
+   If it is tracked as one single ID, then the change of false positive would be huge, since it essentially
+   assumes data dependency between all writes in different critical sections.
    
 2. If speculation ID is maintained per-process, what if a context switch happens? Should the NVM controller be 
    aware of the switch, and load a new "last-seen" speculation ID for the new process just switched in?
@@ -111,4 +113,8 @@ order. The paper assumes that the application to be executed is always data race
 exclusive locks. Writes to the same data item must always be exclusive from each other, i.e., wrapped within
 the same lock. This way, the NVM controller can infer the ordering of writes received using the ordering of lock 
 acquisition.
-
+To this end, the paper proposes that the compiler maintains a per-process global version number for all 
+critical section locks within the application, which is incremented every time a critical section is entered.
+The version number is also loaded into a special register by a new instruction after lock acquisition. Every store
+operation is tagged with the version number before sent to the NVM controller.
+The NVM controller always remembers the version of the last write 
