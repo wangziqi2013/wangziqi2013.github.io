@@ -125,4 +125,8 @@ the write had arrived late and would otherwise overwrite a logically later write
 On receiving the interrupt indicating an ordering violation, the OS forwards a signal to the violating process
 based on the physical address mapping (multiple processes if they share physical pages and the violation happens
 on the shared address).
+The paper assumes that the threads within the violating process has a way of coordinating with each other when 
+violation occurs. For example, the thread that handles the signal may just set a flag that will be checked by
+all other threads at commit time (lazy resolution) to indicate the violation. Threads roll back the transaction
+or FASE with runtime support (most runtimes already provide such support for recovery or transactional abort).
 
