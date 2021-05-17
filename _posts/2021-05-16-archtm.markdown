@@ -46,4 +46,7 @@ to the per-object annotation that we discuss later.
 Similarly, memory allocator metadata is also maintained in the DRAM. Allocated and free blocks are recognized
 during the after-crash scan by reading the annotation on the block header.
 
-
+Lastly, ArchTM optimizes memory allocation such that small objects are allocated from a single free list,
+rather than from several size classes. Despite increased fragmentation when these objects are freed, 
+this is justified by the observation that objects allocated together tend to be written together, increasing
+the write locality, making it easier for the device to combine writes.
