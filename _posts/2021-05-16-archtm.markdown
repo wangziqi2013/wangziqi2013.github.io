@@ -68,3 +68,9 @@ object for shadowing purposes.
 The framework spawns worker threads to execute given transactional functions. Each worker thread maintains pre-thread
 metadata such as object allocation list and free list (on DRAM). 
 The framework also spawns background threads for garbage collection and defragmentation.
+
+We next describe data structures. Each thread has a thread-local transaction descriptor that stores the current status
+(not active, active, committed) of the transaction, the begin timestamp and the commit timestamp. The two timestamps
+are distributed by a global hardware counter (e.g., x86's RDTSC), which serve as logical timestamps for transaction
+begin and commit. When a transaction is not active, these two timestamps are considered as invalid regardless of the 
+actual value. 
