@@ -105,4 +105,8 @@ Memory allocators also maintain volatile metadata in the DRAM. The paper propose
 For large objects, the usual jemalloc is used, and objects are allocated from a thread-local size-specific free list.
 Smaller objects, however, are allocated from a simple per-thread memory segment like a log. Objects are stored 
 compactly within the segment for better write locality. 
+Per-thread memory segments are allocated from a global pool of segments.
+In the segment-based allocator, free objects are not returned to the segment since the allocator will not be able to
+recycle them anyway. Instead, they are inserted into a per-thread free list, which is responsible for recycling
+freed blocks (the simple allocator searches the free list before allocating a new object on the segment).
 
