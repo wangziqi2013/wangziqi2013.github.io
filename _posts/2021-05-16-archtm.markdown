@@ -43,6 +43,7 @@ Second, ArchTM reduces non-essential and small, random NVM writes by maintaining
 since metadata update may happen far more frequently than data updates, and they usually only write a few words.
 The object mapping will be lost during a crash, and rebuilt during recovery by scanning allocated segments, thanks
 to the per-object annotation that we discuss later.
-
+Similarly, memory allocator metadata is also maintained in the DRAM. Allocated and free blocks are recognized
+during the after-crash scan by reading the annotation on the block header.
 
 
