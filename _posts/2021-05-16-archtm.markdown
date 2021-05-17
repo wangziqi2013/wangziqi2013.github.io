@@ -29,4 +29,9 @@ be combined in the buffer, without accessing the physical storage medium.
 This implies that application should refrain from writing small data items to randomly addresses; In other words,
 NVM devices prefer large and consecutive writes in order to achieve optimal performance.
 
+ArchTM leverages the above observations to achieve better transactional performance.
+First, ArchTM adopts shadowing as the persistence protocol for atomic durability. Conventional logging-based
+schemes at least doubles the write traffic to the NVM since the same data item must be written twice, once for 
+the log, and second time for committed data. Besides, logging requires excessive persist barriers consisting of 
+cache line flushes and store fences, which can also degrade performance.
 
