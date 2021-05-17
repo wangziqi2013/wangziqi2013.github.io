@@ -22,6 +22,12 @@ version_mgmt:
    Objects can be identified by linearly scanning the segment. This is made possible by maintaining the header for 
    both allocated and free objects (free space is treated as free objects).
 
+3. Two memory allocators. Large objects are allocated with jemalloc. Smaller ones are allocated just using a simple
+   segment allocator (e.g., like a stack). Objects are freed into a free list that is checked before using the 
+   segment allocator.
+
+
+
 **Comments:**
 
 1. The paper did not mention how to expand the table when new object IDs are larger than table size. The simplest
