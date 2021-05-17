@@ -26,7 +26,10 @@ version_mgmt:
    segment allocator (e.g., like a stack). Objects are freed into a free list that is checked before using the 
    segment allocator.
 
-
+4. Object pointers are abstracted away with object IDs, which are mapped by a volatile direct-mapped array.
+   This allows object versions to be selected dynamically. It also simplifies defragmentation since 
+   moving objects only involves changing the mapping entry.
+   This is similar to BwTree's mapping table.
 
 **Comments:**
 
