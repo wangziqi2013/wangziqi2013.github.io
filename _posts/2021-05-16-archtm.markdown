@@ -164,4 +164,8 @@ changing the pointer to the new location. All later references to the object wil
 
 At transaction begin, the transaction obtains the begin timestamp and atomically stores it into the thread-local 
 descriptor, together with the new status (active). 
-
+On transactional reads, the object mapping table is queried with the begin timestamp and object ID. If the object's 
+entry is currently owned by another transaction, and the owner is committed, then the new version is accessed if 
+the begin timestamp is larger than the commit timestamp of the owner. This is to maintain the logical ordering that
+objects committed before the transaction begin is part of the snapshot read by the transaction.
+Otherwise, the old version is accessed.
