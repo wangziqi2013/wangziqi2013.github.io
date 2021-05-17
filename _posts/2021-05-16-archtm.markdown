@@ -34,4 +34,8 @@ First, ArchTM adopts shadowing as the persistence protocol for atomic durability
 schemes at least doubles the write traffic to the NVM since the same data item must be written twice, once for 
 the log, and second time for committed data. Besides, logging requires excessive persist barriers consisting of 
 cache line flushes and store fences, which can also degrade performance.
+ArchTM, on the contrary, copies an object when it is to be modified within a transaction for the first time, such that
+both the old and new version are present. The consistent memory image is still valid as the old object is preserved.
+This requires less write traffic and less persist barrier, since only objects modified during a transaction
+are flushed at transactioncommit point.
 
