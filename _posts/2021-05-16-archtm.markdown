@@ -17,7 +17,10 @@ version_mgmt:
 
 1. Object-level shadowing for atomic durability, and two version MVCC w/ locking for transactional synchronization.
 
-
+2. Do not maintain memory allocator metadata in the NVM. Use object's annotated headers to recover objects after a 
+   crash. 
+   Objects can be identified by linearly scanning the segment. This is made possible by maintaining the header for 
+   both allocated and free objects (free space is treated as free objects).
 
 **Comments:**
 
