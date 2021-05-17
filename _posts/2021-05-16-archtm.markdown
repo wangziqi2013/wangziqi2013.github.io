@@ -5,10 +5,17 @@ date:   2021-05-16 21:26:00 -0500
 categories: paper
 paper_title: "ArchTM: Architecture-Aware, High Performance Transaction for Persistent Memory"
 paper_link: https://www.usenix.org/system/files/fast21-wu-kai.pdf
-paper_keyword: NVM; HTM; ArchTM
+paper_keyword: NVM; STM; ArchTM
 paper_year: FAST 2021
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents ArchTM, a durable software transactional memory design for byte-addressable non-volatile memory.
+The paper is motivated by the discrepancy between previous NVM transactional framework proposals that use emulated or 
+simulated NVM device and the actual hardware performance characteristics of commercial NVM device.
+Previous designs tend to overestimate write performance and underestimate the write granularity for NVM devices due
+to lack of precise information and using throttled DRAM device for emulation.
+
