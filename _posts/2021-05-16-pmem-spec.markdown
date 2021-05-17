@@ -12,7 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
-
+ 
 **Highlights:**
 
 1. Programming would be much easier if persistency order and consistency order agree. This can be done by making the 
