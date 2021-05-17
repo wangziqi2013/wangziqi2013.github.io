@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The paper did not mention how to expand the table when new object IDs are larger than table size. The simplest
+   way is to use mmap() to allocate a huge array without backing memory.
+
+2. 
+
 This paper presents ArchTM, a durable software transactional memory design for byte-addressable non-volatile memory.
 The paper is motivated by the discrepancy between previous NVM transactional framework proposals that use emulated or 
 simulated NVM device and the actual hardware performance characteristics of commercial NVM device.
@@ -81,4 +88,4 @@ The mapping table is a direct-mapped, linear array, and is indexed directly usin
 Although the paper did not mention the concrete implementation, the table could be allocated as a huge array on the
 virtual address space (which has 48 valid bits) without any backing physical page. Table entries are demand-paged 
 in as the table expands.
-
+Each entry of the table consists of the object
