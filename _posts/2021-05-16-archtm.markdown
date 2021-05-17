@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Object-level shadowing for atomic durability, and two version MVCC w/ locking for transactional synchronization.
+
+
+
 **Comments:**
 
 1. The paper did not mention how to expand the table when new object IDs are larger than table size. The simplest
