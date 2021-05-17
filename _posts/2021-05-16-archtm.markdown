@@ -193,9 +193,12 @@ the old version to the free block list.
 The transaction fully completes by unlocking the object and then transiting to not active state atomically.
 
 On crash recovery, the recovery handler first rebuilds the object mapping table by scanning allocated segments.
-Once a valid object is found, it is inserted into the table being rebuilt using the object ID in the header. 
+Once a valid object is found, it is inserted into the table being rebuilt using the object ID in the header,
+if the writing transaction's status field shows committed or not active in the persistent descriptor. 
 If an object already exists on the entry, the transaction ID (i.e., commit timestamp of the transaction
 who wrote it) at object header is compared, and the larger one wins. Note that this is possible if the system crashes
 before background GC invalidates the block, in which case two valid instances with the same object ID but different
 transaction ID can co-exist.
-
+The allocator metadata is also rebuilt in the meantime.
+The system is restored to a consistent state in which all logically committed transactions are applied,
+and those not completed are rolled back.
