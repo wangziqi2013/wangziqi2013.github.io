@@ -178,4 +178,10 @@ If locking succeeds, the wrapper duplicates the old object (with transaction ID 
 store the pointer as the new object, and apply the update. The object ID is also inserted into a per-transaction
 write set for the final commit.
 
+On transaction commit, no validation is performed, since we eagerly synchronize writing transaction using locks.
+The transaction persists all objects in its write set using persist barriers.
+The transaction is atomically committed by obtaining a new timestamp from the timestamp source as the commit timestamp, 
+and updating the status in the transaction descriptor to committed, making the new version of the object 
+readable to transactions that started after the commit timestamp.
+
 
