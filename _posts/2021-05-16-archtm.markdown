@@ -169,3 +169,13 @@ entry is currently owned by another transaction, and the owner is committed, the
 the begin timestamp is larger than the commit timestamp of the owner. This is to maintain the logical ordering that
 objects committed before the transaction begin is part of the snapshot read by the transaction.
 Otherwise, the old version is accessed.
+
+On a transactional write, the write wrapper attempts to lock the object by acquiring the lock word in the table entry.
+If the lock operation fails, indicating that a concurrent transaction is also updating the object, the current
+transaction aborts and retries, since SI requires that the write snapshot must not be overwritten by another
+concurrent transaction.
+If locking succeeds, the wrapper duplicates the old object (with transaction ID written to the object header), 
+store the pointer as the new object, and apply the update. The object ID is also inserted into a per-transaction
+write set for the final commit.
+
+
