@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ArchTM: Architecture-Aware, High Performance Transaction for Persistent Memory"
+date:   2021-05-16 21:26:00 -0500
+categories: paper
+paper_title: "ArchTM: Architecture-Aware, High Performance Transaction for Persistent Memory"
+paper_link: https://www.usenix.org/system/files/fast21-wu-kai.pdf
+paper_keyword: NVM; HTM; ArchTM
+paper_year: FAST 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
