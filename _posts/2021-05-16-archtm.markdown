@@ -90,4 +90,13 @@ The mapping table is a direct-mapped, linear array, and is indexed directly usin
 Although the paper did not mention the concrete implementation, the table could be allocated as a huge array on the
 virtual address space (which has 48 valid bits) without any backing physical page. Table entries are demand-paged 
 in as the table expands.
-Each entry of the table consists of the object
+Each entry of the table consists of two pointers to old and new versions of the object, an ownership record that 
+contains a pointer to the transaction descriptor, and a write lock. 
+The write lock is acquired before the object is accessed for writes, and not locked for reads.
+
+Object IDs are allocated as a new instance of any object is created. The ID allocator is just a global ID counter
+and a free list. Freed objects will return their IDs back to the free list for recycling.
+The object ID allocator is maintained by the memory allocator, such that when a new object is allocated, a new
+ID is also allocated. The memory allocator then registers the object to the table by writing the pointer 
+value to the table entry (the index of which is the object ID), and clearing all other fields. The allocator 
+returns the object ID as a handler. All object accesses must pass the handler to the corresponding access functions.
