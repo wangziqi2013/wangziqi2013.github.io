@@ -37,5 +37,12 @@ cache line flushes and store fences, which can also degrade performance.
 ArchTM, on the contrary, copies an object when it is to be modified within a transaction for the first time, such that
 both the old and new version are present. The consistent memory image is still valid as the old object is preserved.
 This requires less write traffic and less persist barrier, since only objects modified during a transaction
-are flushed at transactioncommit point.
+are flushed at transaction commit point.
+
+Second, ArchTM reduces non-essential and small, random NVM writes by maintaining object-mapping metadata in the DRAM, 
+since metadata update may happen far more frequently than data updates, and they usually only write a few words.
+The object mapping will be lost during a crash, and rebuilt during recovery by scanning allocated segments, thanks
+to the per-object annotation that we discuss later.
+
+
 
