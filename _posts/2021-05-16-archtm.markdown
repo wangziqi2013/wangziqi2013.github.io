@@ -122,4 +122,10 @@ Both allocated and free objects must possess this header, such that a memory seg
 linearly by adding the size in the current annotated header to the starting address of the object to compute the
 header address of the next annotated header. 
 
-
+Initially, a segment is treated as one monolithic free object with the size being the size of the segment minus
+the header size. When a new object is to be allocated on the free space (free space is treated as a free object), 
+if the allocation size matches the size of the free space, its header is updated with object info, persisted
+by a barrier, and allocation completes. Otherwise, the free space is split into two by first writing a new header
+at the split point with size being the size of the free space minus allocated size, persisting the new header with
+a barrier, and then updating the existing header with object info using a second barrier.
+(**The paper did not go through such details. I guess this is what is actually happening.**)
