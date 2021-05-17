@@ -74,3 +74,11 @@ We next describe data structures. Each thread has a thread-local transaction des
 are distributed by a global hardware counter (e.g., x86's RDTSC), which serve as logical timestamps for transaction
 begin and commit. When a transaction is not active, these two timestamps are considered as invalid regardless of the 
 actual value. 
+
+The object mapping table in the DRAM maps object ID to the pointer of the instance. The table must only be accessed
+within a transaction, using the object ID and the transaction's begin timestamp.
+The mapping table is a direct-mapped, linear array, and is indexed directly using the object ID. 
+Although the paper did not mention the concrete implementation, the table could be allocated as a huge array on the
+virtual address space (which has 48 valid bits) without any backing physical page. Table entries are demand-paged 
+in as the table expands.
+
