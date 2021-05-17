@@ -50,3 +50,10 @@ Lastly, ArchTM optimizes memory allocation such that small objects are allocated
 rather than from several size classes. Despite increased fragmentation when these objects are freed, 
 this is justified by the observation that objects allocated together tend to be written together, increasing
 the write locality, making it easier for the device to combine writes.
+
+Overall, ArchTM is a software transactional memory framework that follows the conventional transactional interface.
+Here, "transaction" means two independent semantic guarantees. First, reads and writes performed in different 
+transactions are synchronized with snapshot isolation (SI) semantics, meaning that each transaction observes a 
+consistent snapshot at transaction begin time, and successfully commits if no earlier transaction commits
+on its write set. 
+
