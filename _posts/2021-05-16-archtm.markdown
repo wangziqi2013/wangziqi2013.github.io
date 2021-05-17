@@ -206,4 +206,6 @@ and those not completed are rolled back.
 To accelerate the recovery process, the paper proposes that the volatile mapping table be periodically checkpoint
 by incrementally copying the DRAM pages into the NVM (using virtual memory tricks). After a checkpoint completes,
 the incremental object allocation since the checkpoint is tracked by storing a list of segmented allocated for 
-objects on the NVM. 
+objects on the NVM. On recovery, the checkpoint is first loaded into the volatile memory as a starting point,
+and segments in the aforementioned list are scanned to locate objects that are allocated after the checkpoint.
+These objects are recovered in the same way as in the base algorithm.
