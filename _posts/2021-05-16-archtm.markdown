@@ -128,4 +128,7 @@ if the allocation size matches the size of the free space, its header is updated
 by a barrier, and allocation completes. Otherwise, the free space is split into two by first writing a new header
 at the split point with size being the size of the free space minus allocated size, persisting the new header with
 a barrier, and then updating the existing header with object info using a second barrier.
+This way, object headers on the NVM image is always consistent with the actual allocation map, which guarantees 
+that all allocated objects can be found with one linear scan, and that no memory leak would occur, since objects 
+are allocated atomically with the persistence of the annotated header.
 (**The paper did not go through such details. I guess this is what is actually happening.**)
