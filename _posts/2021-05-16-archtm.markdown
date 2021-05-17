@@ -111,7 +111,15 @@ recycle them anyway. Instead, they are inserted into a per-thread free list, whi
 freed blocks (the simple allocator searches the free list before allocating a new object on the segment).
 The per-thread free list is also periodically merged into a global free list for balancing reasons, i.e., it 
 balances free blocks between threads that performs more allocation than deallocation and threads that does the opposite.
-(**I am not too sure about this. I just described what I though was the best strategy. The paper may actually
+(**I am not too sure about whether this paragraph precisely reflects what the paper intends to convey. 
+I just described what I though was the best strategy. The paper may actually
 say otherwise. In practice, this can be implemented in several different ways.**)
 
-In order for 
+Since all allocation metadata is in the volatile memory, the object layout in the NVM will be lost on a crash.
+To enable the recovery handler to recognize valid objects after a crash, the allocator always annotates objects
+with a special header that contains the object ID, the transaction ID that last writes it, and the object size.
+Both allocated and free objects must possess this header, such that a memory segment can be scanned by 
+linearly by adding the size in the current annotated header to the starting address of the object to compute the
+header address of the next annotated header. 
+
+
