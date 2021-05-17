@@ -155,3 +155,11 @@ This way, object headers on the NVM image is always consistent with the actual a
 that all allocated objects can be found with one linear scan, and that no memory leak would occur, since objects 
 are allocated atomically with the persistence of the annotated header.
 (**The paper did not go through such details. I guess this is what is actually happening.**)
+
+To reduce fragmentation, ArchTM spawns background thread that periodically scans per-thread segments, and compact 
+allocated objects by copying them to another vacant segment. 
+This can be done in parallel with transaction execution, since objects are accessed via object ID, not pointer.
+Moving an object is as simple as copying to another location, locking the mapping table entry, and 
+changing the pointer to the new location. All later references to the object will use the object on the new location.
+
+
