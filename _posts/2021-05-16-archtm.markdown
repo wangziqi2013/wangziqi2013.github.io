@@ -23,6 +23,10 @@ The actual NVM device, however, demonstrates different characteristics than DRAM
 First, NVM devices generally sustain much lower write throughput than read throughput. Writing large amount of 
 data into the device, therefore, will severely degrade performance.
 This discourages putting non-essential metadata on the NVM since metadata will be updated frequently.
-
+Second, NVM devices exhibit optimal performance on multiples of 256B writes. This is caused by its internal
+write combining buffer whose size is exactly 256 bytes. Writes belonging to the same 256 byte block will likely
+be combined in the buffer, without accessing the physical storage medium.
+This implies that application should refrain from writing small data items to randomly addresses; In other words,
+NVM devices prefer large and consecutive writes in order to achieve optimal performance.
 
 
