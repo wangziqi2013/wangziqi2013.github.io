@@ -40,6 +40,11 @@ version_mgmt:
    as write lock. NULL means unlocked, while any non-NULL value means locked, and the owner of the object is the
    record pointer which points to the persistent transaction descriptor.
 
+3. Shadowing does not necessarily reduce write traffic. If objects are large and modifications are small, the entire
+   object needs to be duplicated but only a small part of it is updated. In this case, logging is more economical
+   since logging only writes data that is actually written, while object shadowing needs to persist the entire 
+   object at commit time.
+
 This paper presents ArchTM, a durable software transactional memory design for byte-addressable non-volatile memory.
 The paper is motivated by the discrepancy between previous NVM transactional framework proposals that use emulated or 
 simulated NVM device and the actual hardware performance characteristics of commercial NVM device.
