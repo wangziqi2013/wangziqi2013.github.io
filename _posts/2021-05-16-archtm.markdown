@@ -109,4 +109,9 @@ Per-thread memory segments are allocated from a global pool of segments.
 In the segment-based allocator, free objects are not returned to the segment since the allocator will not be able to
 recycle them anyway. Instead, they are inserted into a per-thread free list, which is responsible for recycling
 freed blocks (the simple allocator searches the free list before allocating a new object on the segment).
+The per-thread free list is also periodically merged into a global free list for balancing reasons, i.e., it 
+balances free blocks between threads that performs more allocation than deallocation and threads that does the opposite.
+(**I am not too sure about this. I just described what I though was the best strategy. The paper may actually
+say otherwise. In practice, this can be implemented in several different ways.**)
 
+In order for 
