@@ -56,4 +56,7 @@ Here, "transaction" means two independent semantic guarantees. First, reads and 
 transactions are synchronized with snapshot isolation (SI) semantics, meaning that each transaction observes a 
 consistent snapshot at transaction begin time, and successfully commits if no earlier transaction commits
 on its write set. 
+Second, transactions are also basic units for atomic durability, meaning that the memory updates made by a  
+transaction are either all written to the NVM, or none of them is. This is important for data consistency, since
+writes that transit the system from one consistent state to another are most likely non-atomic to the NVM device.
 
