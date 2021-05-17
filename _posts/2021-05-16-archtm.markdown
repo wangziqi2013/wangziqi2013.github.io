@@ -162,4 +162,6 @@ This can be done in parallel with transaction execution, since objects are acces
 Moving an object is as simple as copying to another location, locking the mapping table entry, and 
 changing the pointer to the new location. All later references to the object will use the object on the new location.
 
+At transaction begin, the transaction obtains the begin timestamp and atomically stores it into the thread-local 
+descriptor, together with the new status (active). 
 
