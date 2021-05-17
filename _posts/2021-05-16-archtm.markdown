@@ -202,3 +202,8 @@ transaction ID can co-exist.
 The allocator metadata is also rebuilt in the meantime.
 The system is restored to a consistent state in which all logically committed transactions are applied,
 and those not completed are rolled back.
+
+To accelerate the recovery process, the paper proposes that the volatile mapping table be periodically checkpoint
+by incrementally copying the DRAM pages into the NVM (using virtual memory tricks). After a checkpoint completes,
+the incremental object allocation since the checkpoint is tracked by storing a list of segmented allocated for 
+objects on the NVM. 
