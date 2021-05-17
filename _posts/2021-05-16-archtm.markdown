@@ -19,3 +19,10 @@ simulated NVM device and the actual hardware performance characteristics of comm
 Previous designs tend to overestimate write performance and underestimate the write granularity for NVM devices due
 to lack of precise information and using throttled DRAM device for emulation.
 
+The actual NVM device, however, demonstrates different characteristics than DRAM in the following way.
+First, NVM devices generally sustain much lower write throughput than read throughput. Writing large amount of 
+data into the device, therefore, will severely degrade performance.
+This discourages putting non-essential metadata on the NVM since metadata will be updated frequently.
+
+
+
