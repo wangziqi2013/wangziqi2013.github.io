@@ -59,4 +59,9 @@ on its write set.
 Second, transactions are also basic units for atomic durability, meaning that the memory updates made by a  
 transaction are either all written to the NVM, or none of them is. This is important for data consistency, since
 writes that transit the system from one consistent state to another are most likely non-atomic to the NVM device.
+ArchTM is also object based, and objects must be "opened" before it is accessed for read or write.
+Objects in ArchTM are accessed using a special handler called the object ID, which is an abstract representation
+of the object instance pointer. 
+Object IDs are indices to an object mapping table, the entry of which stores pointers to old and new version of the 
+object for shadowing purposes. 
 
