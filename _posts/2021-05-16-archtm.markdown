@@ -100,3 +100,9 @@ The object ID allocator is maintained by the memory allocator, such that when a 
 ID is also allocated. The memory allocator then registers the object to the table by writing the pointer 
 value to the table entry (the index of which is the object ID), and clearing all other fields. The allocator 
 returns the object ID as a handler. All object accesses must pass the handler to the corresponding access functions.
+
+Memory allocators also maintain volatile metadata in the DRAM. The paper proposes two different allocation strategies.
+For large objects, the usual jemalloc is used, and objects are allocated from a thread-local size-specific free list.
+Smaller objects, however, are allocated from a simple per-thread memory segment like a log. Objects are stored 
+compactly within the segment for better write locality. 
+
