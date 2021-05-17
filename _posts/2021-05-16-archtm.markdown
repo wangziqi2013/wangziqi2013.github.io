@@ -18,7 +18,9 @@ version_mgmt:
 1. The paper did not mention how to expand the table when new object IDs are larger than table size. The simplest
    way is to use mmap() to allocate a huge array without backing memory.
 
-2. 
+2. Why do you need both ownership record in table entry and the write lock? The ownership record itself can be used
+   as write lock. NULL means unlocked, while any non-NULL value means locked, and the owner of the object is the
+   record pointer which points to the persistent transaction descriptor.
 
 This paper presents ArchTM, a durable software transactional memory design for byte-addressable non-volatile memory.
 The paper is motivated by the discrepancy between previous NVM transactional framework proposals that use emulated or 
