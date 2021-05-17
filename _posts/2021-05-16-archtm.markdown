@@ -184,4 +184,9 @@ The transaction is atomically committed by obtaining a new timestamp from the ti
 and updating the status in the transaction descriptor to committed, making the new version of the object 
 readable to transactions that started after the commit timestamp.
 
-
+The committed transaction, however, has not finished yet. It needs to wait for all transactions that started before
+its commit timestamp to complete or abort, and then reclaim the old objects it has shadowed. The committed transaction
+simply "spins" on the list of active transactions and wait for those whose begin timestamp is smaller than its commit
+timestamp to complete or abort. 
+It then assigns the new version to the old version in the table entry, and clearing the new version. 
+The transaction fully completes by unlocking the object and then transiting to not active state atomically.
