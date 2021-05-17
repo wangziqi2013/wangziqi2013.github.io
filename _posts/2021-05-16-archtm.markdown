@@ -65,3 +65,6 @@ of the object instance pointer.
 Object IDs are indices to an object mapping table, the entry of which stores pointers to old and new version of the 
 object for shadowing purposes. 
 
+The framework spawns worker threads to execute given transactional functions. Each worker thread maintains pre-thread
+metadata such as object allocation list and free list (on DRAM). 
+The framework also spawns background threads for garbage collection and defragmentation.
