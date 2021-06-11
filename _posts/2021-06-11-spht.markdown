@@ -91,4 +91,8 @@ lose committed states, causing incorrect recovery.
 SPHT achieves immediate durability as follows. When the transaction completes, the HTM is first committed using the
 hardware primitive. The logical timestamp is allocated to the transaction before the hardware commit using system-wide
 hardware counters. 
-
+After the hardware commit, the thread then starts to write back its redo log entries to the per-thread log buffer on
+the NVM. The log object consists of a header containing the logical timestamp, a body, and a end mark which is used to
+determine whether the log is fully written.
+The thread also publishes its commit timestamp and whether it has already fully persisted the redo log (using a bit 
+flag) in shared volatile memory. 
