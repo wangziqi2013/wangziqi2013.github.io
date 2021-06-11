@@ -64,4 +64,9 @@ image instead.
 The actual implementation uses mmap() to create shadow copies of the working set. SPHT assumes that NVM is used in
 the form of persistent heaps, which is mapped as a DAX file to the virtual address space of the process. The 
 manager thread then further performs an mmap() with options being `MAP_PRIVATE`, such that first-time writes to
-the DAX region will create a copy-on-write instance of the page on volatile memory. 
+the DAX region will create a copy-on-write instance of the page on volatile memory. All later modifications to 
+the same virtual address will then be conducted on a physical page backed by volatile memory as well, which do 
+not affect the consistency of the NVM image. The manager thread and log replay thread mentioned earlier, however,
+access the NVM image using DAX-mapped virtual addresses, such that these changes, when being flushed, will be 
+sent to the NVM device.
+(**OK, I am not an expert on mmap and DAX related system calls in general. Correct me if I am wrong.**).
