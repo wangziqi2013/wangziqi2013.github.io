@@ -132,3 +132,9 @@ transaction. The commit mark is read by recovery and log truncation threads to d
 should be replayed on the NVM image.
 The mark is updated by a committing transaction after it fully persists its own log and after the wait.
 The update operation is performed by Compare-and-Swap (CAS) to avoid data race between different threads.
+The paper also proposes an optimization: When a transaction is in the wait loop, and it observes that a larger numbered
+transaction exists (and must also be waiting), the current transaction will simply skip CAS, and expects the 
+other transaction with a larger commit timestamp to perform the update. 
+The current transaction, however, still needs to wait until the mark is actually changed, before it completes the
+commit sequence. This is to avoid the small window where the transaction has returned to the caller but 
+the global mark has not been properly updated from occurring.
