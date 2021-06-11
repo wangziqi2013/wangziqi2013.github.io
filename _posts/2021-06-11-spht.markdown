@@ -41,4 +41,8 @@ to replay will grow proportionally to the number of worker threads.
 SPHT addresses the above problems using a combination of techniques. First, SPHT relies on commercial HTM 
 (Intel TSX/RTM) for atomic transaction in volatile memory. Instead of writing directly to the NVM image, SPHT 
 transactions only perform writes on a shadowed working set allocated on volatile memory, which is shared by all
-transactions, and is treated as the runtime working set. 
+transactions, and is treated as the runtime working set. The NVM image, on the other hand, is not directly accessed
+by any of the transactions, but rather, transactions generate redo log entries and write these entries into the 
+NVM only after HTM transaction commit. 
+The SPHT log replay threads scan these redo log entries in the background, and apply writes in the log to the NVM
+image instead.
