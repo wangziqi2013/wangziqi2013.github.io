@@ -146,4 +146,10 @@ The current transaction, however, still needs to wait until the mark is actually
 commit sequence. This is to avoid the small window where the transaction has returned to the caller but 
 the global mark has not been properly updated from occurring.
 
-
+To solve the last difficulty, SPHT proposes to chain log objects together such that log replay threads can locate
+the next log object in constant time. Conventionally, with K log buffers, the replay thread must compute the minimum
+log object, which adds a constant factor of K to the complexity.
+In SPHT, each log object contains a pointer to the next log object in the total order enforced by the commit timestamp.
+Transactions, at commit time, should locate the previous log object by scanning the status of other transactions.
+If a transaction whose commit timestamp is exactly the current transaction's timestamp minus one has just committed, 
+the current transaction will update the previous transaction's log with the address of its own log object.
