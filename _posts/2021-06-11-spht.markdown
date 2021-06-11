@@ -127,4 +127,8 @@ If all transactions with a smaller timestamp has fully persisted, the current tr
 now guaranteed that the transaction can be fully restored with all its potential dependents (i.e., those with a smaller
 timestamp) also fully restored.
 
-
+To indicate global progress, SPHT also maintains a commit mark that stores the logical timestamp of the last committed
+transaction. The commit mark is read by recovery and log truncation threads to determine the range of logs that
+should be replayed on the NVM image.
+The mark is updated by a committing transaction after it fully persists its own log and after the wait.
+The update operation is performed by Compare-and-Swap (CAS) to avoid data race between different threads.
