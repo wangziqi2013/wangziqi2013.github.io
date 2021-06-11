@@ -70,3 +70,10 @@ not affect the consistency of the NVM image. The manager thread and log replay t
 access the NVM image using DAX-mapped virtual addresses, such that these changes, when being flushed, will be 
 sent to the NVM device.
 (**OK, I am not an expert on mmap and DAX related system calls in general. Correct me if I am wrong.**).
+
+The benefit of using shadow copies of the NVM working set is that no write ordering is required between data blocks
+and log entries. This is because dirty blocks, even when evicted, will only be written to the shadowed location in
+the volatile memory without polluting the NVM image. It is, therefore, only needed to just replicate what has happened
+on the shadowed working set to the NVM image in the form of redo logs.
+
+To address the second difficulty, 
