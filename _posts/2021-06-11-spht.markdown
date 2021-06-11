@@ -43,6 +43,14 @@ version_mgmt:
    This way, we do not even need a global pmark, and instead, each transaction just commits in a distributed manner.
    Also the paper did not mention how pmark is used during recovery.
 
+2. At the first sight, the "skip-CAS" path has two problems: (1) Starvation may occur, i.e., every thread sees a larger 
+   timestamped thread and skips CAS, causing no one to actually update the mark; (2) Between the gap when a transaction
+   skips CAS and the mark is updated by a larger transaction, crash might occur, and the transaction is not immediately
+   durable. With a closer look, neither will not happen. For (1), it is only a concern when there is an unlimited number
+   of threads. In practice the number of threads are finite, and the wait chain cannot expand indefinitely.
+   For (2), the paper did not mention that a transaction, if skipping CAS, need to wait for the marker to change before
+   it can return to the caller. This guarantees immediate durability.
+
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
@@ -118,3 +126,5 @@ The wait process is essentially a loop scanning the logical timestamp and commit
 If all transactions with a smaller timestamp has fully persisted, the current transaction also commits, since it is 
 now guaranteed that the transaction can be fully restored with all its potential dependents (i.e., those with a smaller
 timestamp) also fully restored.
+
+
