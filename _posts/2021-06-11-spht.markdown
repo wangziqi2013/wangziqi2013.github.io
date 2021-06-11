@@ -32,6 +32,9 @@ version_mgmt:
    before it returns. This ensures that is the current transaction is restored, then smaller numbered transactions
    must also be restored, preserving dependency (although conservatively).
 
+3. Use log chaining to avoid sorting the log from several log buffers. Although the overhead is constant, the 
+   extra constant factor is still non-negligible when the number of threads (i.e., number of log buffers) is large.
+
 **Comments:**
 
 1. I don't get why do you need a global commit mark (pmarker in the paper)? I understand that it represents current
