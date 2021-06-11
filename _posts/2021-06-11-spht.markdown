@@ -21,5 +21,8 @@ and metadata overhead, which harms overall performance especially when transacti
 HTM, on the other hand, is largely free of runtime overheads for ensuring atomicity. Their flexibility, however,
 is inferior compared with STM, as most commercial HTM implementations nowadays will not allow a cache line to be flushed
 out of the cache during transaction, which will result in an immediate abort. 
-
+This feature, unfortunately, makes it challenging to implement write-ahead logging (WAL) for durability at the same
+time, since WAL enforces write orderings between log entries and data blocks using cache line flush instructions.
+The paper mentions that prior designs either adopt shadow paging to avoid dirty transaction data from being written
+back to the NVM image, or perform complicated non-destructive logging to avoid enforcing any write ordering.
 
