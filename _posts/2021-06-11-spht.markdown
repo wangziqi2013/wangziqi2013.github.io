@@ -26,3 +26,9 @@ time, since WAL enforces write orderings between log entries and data blocks usi
 The paper mentions that prior designs either adopt shadow paging to avoid dirty transaction data from being written
 back to the NVM image, or perform complicated non-destructive logging to avoid enforcing any write ordering.
 
+The second difficulty is scalability of commit. The paper notices that durable transactions must guarantee that the
+durability order (i.e., the order of transactions that logically commit on the NVM) must be consistent with the 
+memory consistency order (i.e., the order of transactions that logically commit on volatile memory via load-store
+ordering). 
+
+
