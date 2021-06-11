@@ -80,4 +80,10 @@ To address the second difficulty, SPHT proposes that threads should determine th
 distributed manner to avoid centralized commit protocols where only one thread is allowed to perform at any time.
 The latter is particularly bad for NVM, since thread commit throughput is, in fact, bounded by the write throughput
 of a single thread to flush the log entries and to write the commit mark. 
-
+SPHT assigns each transaction a commit timestamp before commit point, and assumes that the logical ordering between
+transactions is consistent with the total ordering implied by the logical timestamp. 
+SPHT then forces transactions to complete their commit sequences in the order implied by the timestamp, which guarantees
+that a transaction will not acknowledge its commit back to the caller before it is logically persisted on the NVM.
+This property, called immediate durability in the paper, is of extreme importance to practical durable TM designs.
+Designs failing to observe this property will acknowledge a transaction as being committed to the user, but may still
+lose committed states, causing incorrect recovery.
