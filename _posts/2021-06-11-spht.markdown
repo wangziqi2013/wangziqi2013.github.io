@@ -96,3 +96,9 @@ the NVM. The log object consists of a header containing the logical timestamp, a
 determine whether the log is fully written.
 The thread also publishes its commit timestamp and whether it has already fully persisted the redo log (using a bit 
 flag) in shared volatile memory. 
+After the log is fully persisted, indicating that the transaction has been logically committed, it then waits 
+for all transactions with a smaller commit timestamp to also fully commit, before it returns control to the caller.
+The wait process is essentially a loop scanning the logical timestamp and commit status of other transactions.
+If all transactions with a smaller timestamp has fully persisted, the current transaction also commits, since it is 
+now guaranteed that the transaction can be fully restored with all its potential dependents (i.e., those with a smaller
+timestamp) also fully restored.
