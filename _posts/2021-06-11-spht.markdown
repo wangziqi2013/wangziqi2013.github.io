@@ -76,4 +76,8 @@ and log entries. This is because dirty blocks, even when evicted, will only be w
 the volatile memory without polluting the NVM image. It is, therefore, only needed to just replicate what has happened
 on the shadowed working set to the NVM image in the form of redo logs.
 
-To address the second difficulty, 
+To address the second difficulty, SPHT proposes that threads should determine the most recent persisted log in a 
+distributed manner to avoid centralized commit protocols where only one thread is allowed to perform at any time.
+The latter is particularly bad for NVM, since thread commit throughput is, in fact, bounded by the write throughput
+of a single thread to flush the log entries and to write the commit mark. 
+
