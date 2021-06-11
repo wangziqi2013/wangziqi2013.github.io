@@ -27,6 +27,11 @@ version_mgmt:
    This paper implements shadowing + redo using mmap's CoW option such that when an NVM page is first time written
    by a transaction, it will be CoW'ed to the volatile memory.
 
+2. Assign commit timestamps to transactions, establishing total ordering between transactions, and enforce the total
+   ordering during commit by letting transactions wait for smaller numbered transactions to complete writing its log
+   before it returns. This ensures that is the current transaction is restored, then smaller numbered transactions
+   must also be restored, preserving dependency (although conservatively).
+
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
