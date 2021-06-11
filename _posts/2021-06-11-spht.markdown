@@ -18,7 +18,8 @@ version_mgmt:
 1. Transactions only work on a shadowed working set on volatile memory, writing redo logs, while NVM image is 
    only updated by log replay threads. 
    This is a form of "shadowing + redo" where no write ordering is required since data evicted from the cache 
-   will not pollute the NVM image anyway.
+   will not pollute the NVM image anyway. This is particularly good for HTM execution, since no eviction is 
+   needed as a result of no write ordering.
    There are lots of variants of this. One is object-level shadow, meaning that an object is copied to the volatile
    DRAM when first time opened, and stayed in the DRAM even after transaction commit.
    Another variant is hardware extension where a DRAM buffer is put between NVM and LLC. Memory changes are 
@@ -59,3 +60,8 @@ by any of the transactions, but rather, transactions generate redo log entries a
 NVM only after HTM transaction commit. 
 The SPHT log replay threads scan these redo log entries in the background, and apply writes in the log to the NVM
 image instead.
+
+The actual implementation uses mmap() to create shadow copies of the working set. SPHT assumes that NVM is used in
+the form of persistent heaps, which is mapped as a DAX file to the virtual address space of the process. The 
+manager thread then further performs an mmap() with options being `MAP_PRIVATE`, such that first-time writes to
+the DAX region will create a copy-on-write instance of the page on volatile memory. 
