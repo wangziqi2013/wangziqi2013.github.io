@@ -153,3 +153,9 @@ In SPHT, each log object contains a pointer to the next log object in the total 
 Transactions, at commit time, should locate the previous log object by scanning the status of other transactions.
 If a transaction whose commit timestamp is exactly the current transaction's timestamp minus one has just committed, 
 the current transaction will update the previous transaction's log with the address of its own log object.
+
+To increase the throughput of log replay, multiple threads are used, and each thread must traverse the full set of log
+objects. Every replay thread is assigned an address range, and they only replay log entries whose addresses fall into
+the assigned range. The paper proposes that the address space be interleaved at 4KB granularity between the replay 
+threads. Certain optimizations are also applied, such as NUMA-based optimization in which a replay thread is placed 
+on the NUMA node that only writes local memory at the node.
