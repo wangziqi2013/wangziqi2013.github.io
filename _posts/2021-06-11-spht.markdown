@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Transactions only work on a shadowed working set on volatile memory, writing redo logs, while NVM image is 
+   only updated by log replay threads. 
+   This is a form of "shadowing + redo" where no write ordering is required since data evicted from the cache 
+   will not pollute the NVM image anyway.
+   There are lots of variants of this. One is object-level shadow, meaning that an object is copied to the volatile
+   DRAM when first time opened, and stayed in the DRAM even after transaction commit.
+   
+
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
