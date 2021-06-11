@@ -37,3 +37,8 @@ The last difficulty is the scalability of log replay during recovery and log tru
 commonly used, and is hence more performance-critical. The paper points out that prior proposals all use a single
 background thread for log replay, which does not scale with the number of worker threads, as the number of log entries
 to replay will grow proportionally to the number of worker threads.
+
+SPHT addresses the above problems using a combination of techniques. First, SPHT relies on commercial HTM 
+(Intel TSX/RTM) for atomic transaction in volatile memory. Instead of writing directly to the NVM image, SPHT 
+transactions only perform writes on a shadowed working set allocated on volatile memory, which is shared by all
+transactions, and is treated as the runtime working set. 
