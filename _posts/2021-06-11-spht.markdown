@@ -55,6 +55,9 @@ version_mgmt:
    log object from K log buffers (where K is the number of worker threads)?
    The paper may just refer to the overhead of selecting the max-K every time a log is replayed?
 
+4. The paper mentioned that WBINVD instruction is used to drain the cache after log replay. This instruction is 
+   privileged and require a mode switch. 
+
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
@@ -143,4 +146,4 @@ The current transaction, however, still needs to wait until the mark is actually
 commit sequence. This is to avoid the small window where the transaction has returned to the caller but 
 the global mark has not been properly updated from occurring.
 
-To solve the last difficulty, SPHT 
+
