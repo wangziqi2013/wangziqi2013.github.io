@@ -46,10 +46,14 @@ version_mgmt:
 2. At the first sight, the "skip-CAS" path has two problems: (1) Starvation may occur, i.e., every thread sees a larger 
    timestamped thread and skips CAS, causing no one to actually update the mark; (2) Between the gap when a transaction
    skips CAS and the mark is updated by a larger transaction, crash might occur, and the transaction is not immediately
-   durable. With a closer look, neither will not happen. For (1), it is only a concern when there is an unlimited number
+   durable. With a closer look, neither will happen. For (1), it is only a concern when there is an unlimited number
    of threads. In practice the number of threads are finite, and the wait chain cannot expand indefinitely.
-   For (2), the paper did not mention that a transaction, if skipping CAS, need to wait for the marker to change before
-   it can return to the caller. This guarantees immediate durability.
+   For (2), in the pseudocode it is shown that a transaction, if skipping CAS, need to wait for the marker to 
+   change before it can return to the caller. This guarantees immediate durability.
+
+3. I could not quite get why log sorting is an issue? Shouldn't it just be a merge sort that always picks the smallest
+   log object from K log buffers (where K is the number of worker threads)?
+   The paper may just refer to the overhead of selecting the max-K every time a log is replayed?
 
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
@@ -138,3 +142,5 @@ other transaction with a larger commit timestamp to perform the update.
 The current transaction, however, still needs to wait until the mark is actually changed, before it completes the
 commit sequence. This is to avoid the small window where the transaction has returned to the caller but 
 the global mark has not been properly updated from occurring.
+
+To solve the last difficulty, SPHT 
