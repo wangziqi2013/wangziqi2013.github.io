@@ -16,5 +16,10 @@ version_mgmt:
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
+Two options are available: STM and HTM. The issue, however, is that STM will incur non-negligible instrumentation
+and metadata overhead, which harms overall performance especially when transactions are short.
+HTM, on the other hand, is largely free of runtime overheads for ensuring atomicity. Their flexibility, however,
+is inferior compared with STM, as most commercial HTM implementations nowadays will not allow a cache line to be flushed
+out of the cache during transaction, which will result in an immediate abort. 
 
 
