@@ -32,6 +32,17 @@ version_mgmt:
    before it returns. This ensures that is the current transaction is restored, then smaller numbered transactions
    must also be restored, preserving dependency (although conservatively).
 
+**Comments:**
+
+1. I don't get why do you need a global commit mark (pmarker in the paper)? I understand that it represents current
+   global progress, i.e., at which point is recovery guaranteed, which can be used for recovery (everything within
+   this point is recoverable, and anything beyond is discarded).
+   But this is really just unnecessary. Just let each transaction write a commit mark at the end of its redo log,
+   after the loop-wait completes (i.e., after smaller numbered transactions have written their commit marks). 
+   Also let transactions only advertise themselves as fully committed after writing this mark. 
+   This way, we do not even need a global pmark, and instead, each transaction just commits in a distributed manner.
+   Also the paper did not mention how pmark is used during recovery.
+
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
 transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
