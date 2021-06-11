@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
+The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
+transactions in volatile memory, which must be enforced by some volatile TM subsystems. 
+
+
