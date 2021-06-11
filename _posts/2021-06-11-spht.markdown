@@ -21,7 +21,10 @@ version_mgmt:
    will not pollute the NVM image anyway.
    There are lots of variants of this. One is object-level shadow, meaning that an object is copied to the volatile
    DRAM when first time opened, and stayed in the DRAM even after transaction commit.
-   
+   Another variant is hardware extension where a DRAM buffer is put between NVM and LLC. Memory changes are 
+   absorbed by the DRAM buffer while logs are directly persisted to the NVM.
+   This paper implements shadowing + redo using mmap's CoW option such that when an NVM page is first time written
+   by a transaction, it will be CoW'ed to the volatile memory.
 
 This paper presents SPHT, a durable hardware transactional memory design that achieves high scalability.
 The paper recognizes three major difficulties in designing a durable TM. The first difficulty is atomicity of
