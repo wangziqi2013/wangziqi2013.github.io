@@ -30,7 +30,10 @@ The second difficulty is scalability of commit. The paper notices that durable t
 durability order (i.e., the order of transactions that logically commit on the NVM) must be consistent with the 
 memory consistency order (i.e., the order of transactions that logically commit on volatile memory via load-store
 ordering). Otherwise, during recovery, the effect of a transaction that had been acknowledged by the TM may not be 
-recovered, causing lost update anomaly, since the transaction whose updates are lost may have already incurred some
+recovered, causing the lost update anomaly, since the transaction whose updates are lost may have already incurred some
 external effect (e.g., a message sent to the user) that will not be undone by the crash.
 
-
+The last difficulty is the scalability of log replay during recovery and log truncation. The latter is far more
+commonly used, and is hence more performance-critical. The paper points out that prior proposals all use a single
+background thread for log replay, which does not scale with the number of worker threads, as the number of log entries
+to replay will grow proportionally to the number of worker threads.
