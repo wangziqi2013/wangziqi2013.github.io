@@ -21,7 +21,10 @@ For example, NVM's byte-addressability enables file systems to implement data st
 metadata and data accesses, such as hash tables, while conventional block-based file systems typically adopt designs
 that are optimized for block accesses, such as trees with high fan-outs. 
 
-File mapping is defined as an abstract function that translates a logical block offset in a file into a physical block
+File mapping is an abstract function that translates a logical block offset in a file into a physical block
 number on the device. This simplifies file system's logical view of files, as each file can be separately considered
 as a consecutive range of blocks starting from zero (sparse files are supported by not mapping certain blocks in the
 middle of the file, but the abstraction of a consecutive range persists to make sense).
+The file mapping function, therefore, is defined as a function that, given the file's identify (usually represented
+by its inode number, as this paper assumes) and the logical block number, output a physical block number where the 
+data that corresponds to the logical block can be found. 
