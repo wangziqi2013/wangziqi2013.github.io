@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
+fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
+paid to optimize this matter for file systems specifically designed for NVM.
+The performance characteristics of NVM also makes it worth thinking about redesigning the file mapping structure.
+
