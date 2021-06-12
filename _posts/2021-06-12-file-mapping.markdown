@@ -39,3 +39,9 @@ The disadvantage, however, is that local mapping may incur fragmentation and hen
 structure needs to be resized as the file size changes. Resizing operation typically requires relocating some 
 structures to a larger block, or the usage of multiple levels of indirection. 
 Both will decrease locality and increase fragmentation.
+
+The second type is global mapping, in which all files are mapped by the same global structure. The global mapping 
+takes both the inode number of the file as well as the logical block number, and outputs the physical block number.
+The biggest advantage of global mapping is that the structure can be statically allocated, and does not require 
+resizing, as the maximum number of mapping entries is known in advance: The maximum number of possible mappings
+will not exceed the number of available physical blocks.
