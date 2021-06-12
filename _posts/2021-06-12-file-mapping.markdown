@@ -67,5 +67,9 @@ for key comparison. An extent is just a consecutive range of blocks allocated to
 and physical block address spaces. Due to the fact that they are consecutive, extents can be encoded 
 efficiently using tuples of the form (start logical block, start physical block, size), rather than with 
 per-block mapping, reducing the number of mapping entries. 
-
+It is extremely helpful when the file is allocated mostly with large extents and is accessed sequentially, as block 
+mapping can easily be computed by just performing a few extent accesses.
+In addition, sequential accesses can also be accelerated with cursor, which is just a pointer to the leaf level of 
+extent trees that supports fast iteration over the file mapping without having to traverse down the tree from the root 
+level. The cursor is preserved across several file system calls as a token for representing the last accessed location.
 
