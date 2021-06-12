@@ -44,4 +44,9 @@ The second type is global mapping, in which all files are mapped by the same glo
 takes both the inode number of the file as well as the logical block number, and outputs the physical block number.
 The biggest advantage of global mapping is that the structure can be statically allocated, and does not require 
 resizing, as the maximum number of mapping entries is known in advance: The maximum number of possible mappings
-will not exceed the number of available physical blocks.
+will not exceed the number of available physical blocks. 
+This reduces fragmentation, since the entire structure can just be pre-allocated in a large continuous area at
+file system initialization time.
+The drawback of having a global mapping structure, however, is that locality of access can be lower, since the
+translation entries of a file is randomly distributed across the entire structure, unlike in local mappings where
+these entries will only reside in a much smaller structure.
