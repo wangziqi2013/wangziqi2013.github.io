@@ -28,3 +28,7 @@ middle of the file, but the abstraction of a consecutive range persists to make 
 The file mapping function, therefore, is defined as a function that, given the file's identify (usually represented
 by its inode number, as this paper assumes) and the logical block number, output a physical block number where the 
 data that corresponds to the logical block can be found. 
+
+The paper notices that, generally speaking, two types of file mapping have been implemented by previous proposals.
+The first type is local mapping, where each file has its own file mapping structure, and these structure instances
+are physically disjoint objects, which are typically found in the inodes. 
