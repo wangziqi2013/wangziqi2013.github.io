@@ -50,3 +50,9 @@ file system initialization time.
 The drawback of having a global mapping structure, however, is that locality of access can be lower, since the
 translation entries of a file is randomly distributed across the entire structure, unlike in local mappings where
 these entries will only reside in a much smaller structure.
+Besides, the degree of parallelism may also become a concern, since it is unclear how fine-grained 
+synchronization between processes are performed.
+The paper points out, however, that the synchronization overhead can be addressed with the following two observations.
+First, some data structures, such as hash tables, can be conveniently locked on a per-bucket basis, as operations in one
+bucket will not interfere with operations on another one.
+
