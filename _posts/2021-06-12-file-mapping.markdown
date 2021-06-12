@@ -35,4 +35,7 @@ are physically disjoint objects, which are typically found in the inodes.
 The benefit of local mapping is its locality of access and high degree of parallelism.
 The former is a result of having dedicated structure per-file, while the latter is because file mapping
 structures can be locked independently from each other without causing global bottlenecks.
-
+The disadvantage, however, is that local mapping may incur fragmentation and hence harm locality, as the mapping  
+structure needs to be resized as the file size changes. Resizing operation typically requires relocating some 
+structures to a larger block, or the usage of multiple levels of indirection. 
+Both will decrease locality and increase fragmentation.
