@@ -55,4 +55,8 @@ synchronization between processes are performed.
 The paper points out, however, that the synchronization overhead can be addressed with the following two observations.
 First, some data structures, such as hash tables, can be conveniently locked on a per-bucket basis, as operations in one
 bucket will not interfere with operations on another one.
-
+Second, the mapping structure will not be updated unless the size of the file is changed (e.g., appending, truncation or
+deletion). This indicates that file reads and writes that do not change the size will mostly only read the file mapping
+structure, and only a few of them may require exclusive access. These accesses, therefore, can be easily synchronized
+with reader-writer locks without having to sacrifice too much parallelism, as most operations will just be concurrent
+reads to the structure.
