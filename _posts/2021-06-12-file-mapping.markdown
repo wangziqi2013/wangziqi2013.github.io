@@ -32,3 +32,7 @@ data that corresponds to the logical block can be found.
 The paper notices that, generally speaking, two types of file mapping have been implemented by previous proposals.
 The first type is local mapping, where each file has its own file mapping structure, and these structure instances
 are physically disjoint objects, which are typically found in the inodes. 
+The benefit of local mapping is its locality of access and high degree of parallelism.
+The former is a result of having dedicated structure per-file, while the latter is because file mapping
+structures can be locked independently from each other without causing global bottlenecks.
+
