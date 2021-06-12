@@ -17,4 +17,6 @@ This paper presents two low-cost file mapping designs optimized for NVM. The pap
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
 paid to optimize this matter for file systems specifically designed for NVM.
 The performance characteristics of NVM also makes it worth thinking about redesigning the file mapping structure.
-
+For example, NVM's byte-addressability enables file systems to implement data structures that require fine-grained
+metadata and data accesses, such as hash tables, while conventional block-based file systems typically adopt designs
+that are optimized for block accesses, such as trees with high fan-outs. 
