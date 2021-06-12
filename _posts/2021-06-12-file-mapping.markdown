@@ -56,7 +56,16 @@ The paper points out, however, that the synchronization overhead can be addresse
 First, some data structures, such as hash tables, can be conveniently locked on a per-bucket basis, as operations in one
 bucket will not interfere with operations on another one.
 Second, the mapping structure will not be updated unless the size of the file is changed (e.g., appending, truncation or
-deletion). This indicates that file reads and writes that do not change the size will mostly only read the file mapping
-structure, and only a few of them may require exclusive access. These accesses, therefore, can be easily synchronized
+deletion). This indicates that file reads and writes will mostly only read the file mapping structure, while only a 
+few of them may require exclusive access. These operations, therefore, can be easily synchronized
 with reader-writer locks without having to sacrifice too much parallelism, as most operations will just be concurrent
 reads to the structure.
+
+The paper then gives a review of two existing local file mapping approaches: extend tree and radix tree. 
+Extend tree is a variant of B+Tree, in which inner and leaf nodes use extents, rather than exact key values, 
+for key comparison. An extent is just a consecutive range of blocks allocated to file data in both logical
+and physical block address spaces. Due to the fact that they are consecutive, extents can be encoded 
+efficiently using tuples of the form (start logical block, start physical block, size), rather than with 
+per-block mapping, reducing the number of mapping entries. 
+
+
