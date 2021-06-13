@@ -73,3 +73,9 @@ In addition, sequential accesses can also be accelerated with cursor, which is j
 extent trees that supports fast iteration over the file mapping without having to traverse down the tree from the root 
 level. The cursor is preserved across several file system calls as a token for representing the last accessed location.
 
+Radix tree is another form of tree indices. The difference between radix tree and extent tree is that the radix tree
+always performs per-block mapping, and therefore, is less space efficient. Besides, access locality can also be worse 
+for an unoptimized radix tree, as its height is only a function of key size (i.e., number of bits in logical block 
+number), which is most likely constant for a file system.
+
+
