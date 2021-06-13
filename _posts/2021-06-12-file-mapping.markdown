@@ -21,6 +21,12 @@ version_mgmt:
 2. Using a global array to function as both a linear probing hash table and as a block allocator. This is a simple
    and elegant design that works very well for NVM (but not for block devices, as the access locality is bad).
 
+3. TSX/RTM can be used for fast synchronization, even on addresses mapped to NVM devices.
+
+**Comments:**
+
+1. 
+
 This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
 paid to optimize this matter for file systems specifically designed for NVM.
