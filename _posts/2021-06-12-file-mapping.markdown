@@ -113,4 +113,6 @@ Concurrent accesses on the global mapping structure is inevitable especially whe
 Besides, crash consistency is also crucial for the integrity of the file system.
 The paper proposes that concurrent accessed by synchronized Intel TSX/RTM. Some common cases can even be optimized
 using the processor's native support for atomic 8-byte memory accesses. 
-
+As for crash consistency, the paper proposes to use undo logging to first preserve the before image of the structure,
+before any update operation is performed.
+How undo logging interacts with RTM, however, is not specified.
