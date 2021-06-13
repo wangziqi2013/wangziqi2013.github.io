@@ -95,3 +95,11 @@ a cursor across file operations that points to the last accessed mapping entry, 
 Extent information should also be updated when the extend changes (e.g., when it shrinks as a result of file 
 truncation). This is performed by iterating over all mapping entries for blocks in the extent, and updates 
 extent information in each of them.
+In the cuckoo hashing based design, a block allocator is still required to manage free blocks.
+
+The second proposal, HashFS, unifies free block manager with file mapping into one global hash table. 
+The hash table itself is just a standard non-chaining hash table using open-addressing with linear probing for 
+conflict resolution.
+Similar to the cuckoo hash table, the table itself is just a statically allocated array, the size of which equals 
+the number of physical blocks in the data area. 
+
