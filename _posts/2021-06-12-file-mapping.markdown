@@ -108,3 +108,9 @@ the data area. In other words, there is a one-to-one correspondence between hash
 allocating a hash entry to a file, the file system also implicitly allocates the physical block.
 The paper noted that, although hash entries are statically allocated, they only occupy negligible space. Assuming
 8-byte hash entry per 4KB block, the storage overhead is less than 0.2%.
+
+Concurrent accesses on the global mapping structure is inevitable especially when multiple files are being written.
+Besides, crash consistency is also crucial for the integrity of the file system.
+The paper proposes that concurrent accessed by synchronized Intel TSX/RTM. Some common cases can even be optimized
+using the processor's native support for atomic 8-byte memory accesses. 
+
