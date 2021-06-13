@@ -18,7 +18,8 @@ version_mgmt:
 1. Cuckoo hashing is optimized for read (always 2 accesses) and has pathological cases for writes (large number of
    relocations). This is a perfect fit for file mapping, since most read/write operations do not update the mapping.
 
-
+2. Using a global array to function as both a linear probing hash table and as a block allocator. This is a simple
+   and elegant design that works very well for NVM (but not for block devices, as the access locality is bad).
 
 This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
