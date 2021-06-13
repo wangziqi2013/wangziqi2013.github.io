@@ -90,3 +90,8 @@ any logical block number for table query. On the other hand, the file system sti
 in extents, and for each mapping entry, the size of the extent that the physical block lies in is maintained. 
 In other words, for extents with several blocks, each of the block will have a mapping entry, and in each of the entry,
 the information about the extent is stored.
+This feature enables fast sequential accesses and the implementation of cursors, as the file system can still maintain
+a cursor across file operations that points to the last accessed mapping entry, in which the extent is stored.
+Extent information should also be updated when the extend changes (e.g., when it shrinks as a result of file 
+truncation). This is performed by iterating over all mapping entries for blocks in the extent, and updates 
+extent information in each of them.
