@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Cuckoo hashing is optimized for read (always 2 accesses) and has pathological cases for writes (large number of
+   relocations). This is a perfect fit for file mapping, since most read/write operations do not update the mapping.
+
+
+
 This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
 paid to optimize this matter for file systems specifically designed for NVM.
