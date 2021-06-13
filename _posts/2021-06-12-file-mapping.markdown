@@ -116,3 +116,8 @@ using the processor's native support for atomic 8-byte memory accesses.
 As for crash consistency, the paper proposes to use undo logging to first preserve the before image of the structure,
 before any update operation is performed.
 How undo logging interacts with RTM, however, is not specified.
+
+The paper also suggests a few optimizations. For example, range accesses on the linear probing hash table can be
+accelerated using SIMD instruction for computing the hash value and reading hash entries.
+Besides, the file system may also maintain a small software cache for most recently accessed mapping entries.
+The cache is searched first before hash table accesses for possible hits.
