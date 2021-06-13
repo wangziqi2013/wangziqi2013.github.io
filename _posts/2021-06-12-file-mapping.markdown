@@ -25,7 +25,11 @@ version_mgmt:
 
 **Comments:**
 
-1. 
+1. The paper claims in 3.2.2 (right column) that the linear probing hash table never relocates entries. While it
+   can be made true by using "tombstones" when an entry is removed, this scheme will cause storage leak because 
+   physical blocks that correspond to tombstones will never be freed. 
+   In general, linear probing hash tables require  moving entries either eagerly or lazily (with background compaction)
+   to deal with deletions. Otherwise the table will just be filled up and become unusable.
 
 This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
