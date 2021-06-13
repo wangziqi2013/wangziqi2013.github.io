@@ -31,6 +31,13 @@ version_mgmt:
    In general, linear probing hash tables require  moving entries either eagerly or lazily (with background compaction)
    to deal with deletions. Otherwise the table will just be filled up and become unusable.
 
+2. Linear probing hash tables will observe radical performance degradation when the load factor is too high. In fact,
+   the paper acknowledges in the evaluation section about this property.
+   This implies that the file system can never be fully utilized, i.e., it can only be 95% full, and after that the
+   performance will become very random. And even before this point, the linear probing path may already be too long.
+   This may or may not be an issue depending on what is the performance expectation of the file system 
+   (e.g., it is OK for performance to degrade as the file system is being filled up?).
+
 This paper presents two low-cost file mapping designs optimized for NVM. The paper observes that, despite the 
 fact that file mapping accesses may constitute up to 70% of total I/Os in file accessing, little attention has been
 paid to optimize this matter for file systems specifically designed for NVM.
