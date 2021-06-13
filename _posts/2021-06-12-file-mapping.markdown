@@ -78,4 +78,11 @@ always performs per-block mapping, and therefore, is less space efficient. Besid
 for an unoptimized radix tree, as its height is only a function of key size (i.e., number of bits in logical block 
 number), which is most likely constant for a file system.
 
+The paper then proposes two global file mapping schemes. The first one is essentially a global cuckoo hash table
+which maps (inode number, logical block number) to an extent of the form (physical block number, size). 
+The cuckoo hash table is allocated statically as an array, the size of which can be determined at file system
+initialization time. Two unspecified hash functions are used, which bounds the number of memory accesses for
+read to two. Insert and read algorithms are just standard cuckoo hashing, and we do not cover them here.
+
+
 
