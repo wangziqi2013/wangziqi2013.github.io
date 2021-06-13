@@ -84,5 +84,9 @@ The cuckoo hash table is allocated statically as an array, the size of which can
 initialization time. Two unspecified hash functions are used, which bounds the number of memory accesses for
 read to two. Insert and read algorithms are just standard cuckoo hashing, and we do not cover them here.
 
-
-
+One of the most prominent features of the cuckoo hash table is that it uses hybrid extent and per-block mapping.
+On one hand, the cuckoo hash table has one mapping entry per block, allowing random access within the file using
+any logical block number for table query. On the other hand, the file system still attempts to allocate data blocks
+in extents, and for each mapping entry, the size of the extent that the physical block lies in is maintained. 
+In other words, for extents with several blocks, each of the block will have a mapping entry, and in each of the entry,
+the information about the extent is stored.
