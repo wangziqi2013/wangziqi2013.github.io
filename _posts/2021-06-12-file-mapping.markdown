@@ -102,4 +102,9 @@ The hash table itself is just a standard non-chaining hash table using open-addr
 conflict resolution.
 Similar to the cuckoo hash table, the table itself is just a statically allocated array, the size of which equals 
 the number of physical blocks in the data area. 
-
+The novelty of this scheme is that blocks are allocated to files implicitly when the (inode number, logical block 
+number) is first hashed to an unused entry, which allocates the physical block at the corresponding offset of
+the data area. In other words, there is a one-to-one correspondence between hash entries and data blocks, and by
+allocating a hash entry to a file, the file system also implicitly allocates the physical block.
+The paper noted that, although hash entries are statically allocated, they only occupy negligible space. Assuming
+8-byte hash entry per 4KB block, the storage overhead is less than 0.2%.
