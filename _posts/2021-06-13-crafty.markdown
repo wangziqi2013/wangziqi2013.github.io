@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
+by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
+The paper investigates into three typical mechanisms: undo logging, redo logging, and shadow paging.
+
+
