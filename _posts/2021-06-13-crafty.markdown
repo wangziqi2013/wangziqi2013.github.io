@@ -109,4 +109,6 @@ been written during the transaction. It also appends a COMMITTED mark at the end
 that the transaction has been successfully committed.
 Again, no sfence is required, since these writes will eventually be persisted on the next transaction's XBEGIN.
 
-
+Note that, since the second-stage execution adds the commit timestamp variable to its read set by reading its 
+value at the beginning, transaction that attempt to commit concurrently will abort due to conflicts on the 
+variable. This essentially serializes second-stage execution, as also noted by the paper.
