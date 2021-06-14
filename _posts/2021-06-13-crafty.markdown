@@ -15,7 +15,8 @@ version_mgmt:
 
 **Comments:**
 
-1. The paper misses a store fence after second-stage execution: The COMMITTED mark must only be generated and 
+1. The paper seems to miss a store fence after second-stage execution: The COMMITTED mark must only be  
+   generated and 
    persisted after all dirty blocks have been persisted. This write ordering requires a persist barrier to 
    enforce. Because otherwise, it is possible that the COMMITTED mark reaches the NVM before data blocks do, 
    and if the system crashes at this point, the persisted image is corrupted, but COMMITTED record will mislead
@@ -160,5 +161,11 @@ If re-execution fails, either because of address/data mismatch, or because the h
 to data conflict, the entire transaction fails. The runtime will simply re-attempt the first-stage execution.
 No state roll-back is needed, since the abort of the hardware transaction has automatically rolled back all
 second-stage memory updates.
+
+At crash recovery time, the handler scans the log buffer of all threads, and rolls back transactions that are
+possibly half-way committed.
+The handler checks the last mark (not necessarily the last entry - just scan forward) in the log buffer. 
+If the mark is COMMITTED, then no recovery is required, since either the entire transaction has committed,
+or the transaction is still running in the first stage, in which case no recovery is needed. 
 
 
