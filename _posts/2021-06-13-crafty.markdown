@@ -167,5 +167,9 @@ possibly half-way committed.
 The handler checks the last mark (not necessarily the last entry - just scan forward) in the log buffer. 
 If the mark is COMMITTED, then no recovery is required, since either the entire transaction has committed,
 or the transaction is still running in the first stage, in which case no recovery is needed. 
-
+If the mark is LOGGED, however, then the transaction may have completed the first and second stage, and
+is half-way writing back its dirty blocks. In this case, the undo entries between the LOGGED mark
+and the previous COMMITTED mark (or the log head, if there is no earlier log) are replayed, rolling back
+the transaction. At the system level, recovery must be performed in a reverse-chronological order: The
+handler always selects the largest LOGGED entry to replay, to avoid violating the logical execution order.
 
