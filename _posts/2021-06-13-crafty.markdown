@@ -135,4 +135,7 @@ Memory locations are also updated as in a normal transaction during the re-execu
 If re-execution succeeds, the runtime flushes all the dirty blocks as well as the COMMITTED log entry back
 to the NVM.
 
-
+If re-execution fails, either because of address/data mismatch, or because the hardware transaction aborts due 
+to data conflict, the entire transaction fails. The runtime will simply re-attempt the first-stage execution.
+No state roll-back is needed, since the abort of the hardware transaction has automatically rolled back all
+second-stage memory updates.
