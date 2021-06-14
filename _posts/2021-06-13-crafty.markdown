@@ -16,5 +16,10 @@ version_mgmt:
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
 The paper investigates into three typical mechanisms: undo logging, redo logging, and shadow paging.
-
+Undo logging requires write ordering between the log entry and the data block being written. As a result, each
+write operation must be preceded by log generation and persistence, which has a large overhead since the log 
+flush uses what is called a persist barrier. The barrier, which typically consists of several cache flush
+instructions followed by a store fence (clwb and sfence on x86), stalls the pipeline for at least the amount
+of time required for a round-trip between the cache hierarchy and the NVM controller, which is usually a few
+hundreds of cycles, causing performance degradation.
 
