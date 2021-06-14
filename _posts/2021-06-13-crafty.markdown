@@ -15,7 +15,13 @@ version_mgmt:
 
 **Comments:**
 
-1. 
+1. The paper misses a store fence after second-stage execution: The COMMITTED mark must only be generated and 
+   persisted after all dirty blocks have been persisted. This write ordering requires a persist barrier to 
+   enforce. Because otherwise, it is possible that the COMMITTED mark reaches the NVM before data blocks do, 
+   and if the system crashes at this point, the persisted image is corrupted, but COMMITTED record will mislead
+   the recovery handler to think that the transaction is fully committed.
+   Maybe the author assumes that clwbs will be persisted in the order that they are issued (they are not
+   in practice)?
 
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
@@ -133,7 +139,7 @@ that input values are always available at their initial state (i.e., transaction
 or if they do, there is some way of undoing it), such that re-execution is always viable.
 Memory locations are also updated as in a normal transaction during the re-execution. 
 If re-execution succeeds, the runtime flushes all the dirty blocks as well as the COMMITTED log entry back
-to the NVM.
+to the NVM. The commit timestamp variable is also updated to the current global timestamp.
 
 If re-execution fails, either because of address/data mismatch, or because the hardware transaction aborts due 
 to data conflict, the entire transaction fails. The runtime will simply re-attempt the first-stage execution.
