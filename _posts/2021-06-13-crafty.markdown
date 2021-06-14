@@ -70,5 +70,10 @@ memory locations to be updated and data to be written).
 
 We next describe Crafty's operations in details. During the first dry-run execution, store operations are 
 instrumented such that each store, before it takes effect on the address space, will first generate an undo
-log entry in a private log buffer. The log will only be written back to the NVM using clwb/clflush after
-the hardware transaction commits. 
+log entry and a volatile redo log entry in separate private log buffers. 
+Stores themselves are still executed such that later reads to the same address can
+access data written by an earlier store. The trick here is that write ordering between log entries and 
+dirty blocks need not be enforced, as the HTM will prevent dirty blocks from being evicted.
+
+
+
