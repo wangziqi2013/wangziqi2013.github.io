@@ -37,20 +37,28 @@ overall performance may still be affected (again, this can be avoided by shadowi
 
 Shadow paging differs from logging approaches by not maintaining fixed home locations for data items. Instead,
 a global mapping table remaps objects from their old locations to a new copy, preserving the consistency of the
-old snapshot, which can be recovered to if the transactions fails to commit due to a crash. 
+old snapshot, which can be restored to if the transactions fails to commit due to a crash. 
 Despite the fact that shadow paging eliminates explicit write ordering, the paper notes that shadow paging
 needs to enforce consistency between memory consistency ordering and the order of durability. In other words,
 the logical ordering of transactions in the memory consistency order must also be observed in persistence
 order (which, under the context of shadowing, is the order that the mapping table is updated), because 
 otherwise, the recovery may result in a state that cannot be achieved by any serial execution
 of committed transactions. This can result in non-scalable designs, since in shadow paging, transactions are 
-actually committed by atomically updating the centralized mapping table, and that in some designs, global 
-ordering must be established using a single timestamp counter.
+actually committed by atomically updating the centralized mapping table. 
+In addition, in some designs, global ordering must be established using a single timestamp counter, which
+is difficult to scale.
 
 The paper then notices that Hardware Transactional Memory is a potentially powerful mechanism for implementing
 durable transactions. Existing HTM implementations, however, disallow writing back cache lines from the 
 hierarchy to the NVM, which will cause an immediate transaction abort because of the way speculative states
 are maintained in the hierarchy.
-Such restriction makes it impossible to generate and persist log entries during hardware transactions.
+Such restriction makes it impossible to generate and persist log entries during hardware transactions, and
+as a result, naive logging will not work.
 
+Crafty, at a high level, adopts HTM for atomicity while avoiding the dilemma of logging with re-execution of 
+the transaction body. The first "dry-run" execution only generates undo log entries that will be persisted 
+after the transaction, while the actual memory updates are discarded. This eliminates the write ordering 
+requirement, since memory updates that correspond to the undo log entries have not been committed yet. 
+In the second execution, memory updates are performed, which will be committed at the end. 
+Both executions use HTM to ensure atomicity. 
 
