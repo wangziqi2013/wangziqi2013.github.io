@@ -57,7 +57,7 @@ Such restriction makes it impossible to generate and persist log entries during 
 as a result, naive logging will not work.
 
 Crafty, at a high level, adopts HTM for atomicity while avoiding the dilemma of logging with re-execution of 
-the transaction body. The first "dry-run" execution only generates undo log entries that will be persisted 
+the transaction body. The first "speculative" execution only generates undo log entries that will be persisted 
 after the transaction, while the actual memory updates are discarded. This eliminates the write ordering 
 requirement, since memory updates that correspond to the undo log entries have not been committed yet. 
 In the second execution, memory updates are performed, which will be committed at the end. 
@@ -68,7 +68,7 @@ and persisting the undo log entries using the before value of these memory updat
 the monolithic memory operation, assuming that its semantics remain consistent with the undo logs (i.e., 
 memory locations to be updated and data to be written).
 
-We next describe Crafty's operations in details. During the first dry-run execution, store operations are 
+We next describe Crafty's operations in details. During the first speculative execution, store operations are 
 instrumented such that each store, before it takes effect on the address space, will first generate an undo
 log entry and a volatile redo log entry in separate private log buffers. 
 Stores themselves are still executed such that later reads to the same address can
@@ -89,4 +89,12 @@ The undo log is flushed back to the NVM using clwb.
 The paper also noted that no store fence is needed after the flush, since the next-stage execution with
 hardware transactions will enforce fence semantics before the transaction could begin (i.e., XBEGIN on x86).
 
+In the next stage execution, we simply re-apply memory modifications from the transaction, which itself is 
+wrapped within another hardware transaction. Since the second stage execution can only begin after all undo log
+entries have been persisted, we have thus established a write ordering between all log entries and all memory
+updates. 
 
+The second stage execution can take two forms: Simple replay of the redo log generated in the previous stage,
+or re-execution with value validation. 
+The first form is used if no other transaction has committed between the commit of the first-stage and the begin
+of the second stage. 
