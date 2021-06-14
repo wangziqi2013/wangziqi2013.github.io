@@ -27,6 +27,11 @@ Redo logging, on the other hand, does not require per-operation write ordering. 
 in-place after the transaction commits (which can be implemented as write ordering between all dirty blocks
 and the commit mark, but in practice, it is usually implemented as shadowing the objects in volatile memory),
 no extra write ordering is enforced. The paper points out, however, that redo logging needs read operations 
-to also check the read log in order to access the most up-to-date value written by the transaction, 
+to also check the read log in order to access the most up-to-date value written by the current or 
+earlier committed transactions, 
 incurring a non-negligible overhead for reads. Since reads are more common than writes in most workloads, the
 overall performance may still be affected (again, this can be avoided by shadowing objects to volatile memory).
+
+Shadow paging differs from logging approaches by not maintaining fixed home locations for data items. Instead,
+a global mapping table remaps objects from their old locations to a new copy, preserving the consistency of the
+old snapshot, which can be recovered to if the transactions fails to commit due to a crash. 
