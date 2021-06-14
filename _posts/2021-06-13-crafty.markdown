@@ -23,6 +23,10 @@ version_mgmt:
    Maybe the author assumes that clwbs will be persisted in the order that they are issued (they are not
    in practice)?
 
+2. Re-execution requires that the transaction body be functional (output only depends on input but not
+   some hidden state variables) and that the arguments must not be altered (or can be restored to their
+   initial states as in the first-stage execution). Otherwise, second-stage re-execution will not be possible.
+
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
 The paper investigates into three typical mechanisms: undo logging, redo logging, and shadow paging.
