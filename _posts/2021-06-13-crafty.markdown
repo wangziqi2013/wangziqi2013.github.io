@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Crafty: Efficient, HTM-Compatible Persistent Transactions"
+date:   2021-06-13 20:10:00 -0500
+categories: paper
+paper_title: "Crafty: Efficient, HTM-Compatible Persistent Transactions"
+paper_link: https://dl.acm.org/doi/10.1145/3385412.3385991
+paper_keyword: NVM; HTM; Crafty; TSX/RTM
+paper_year: FAST 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
