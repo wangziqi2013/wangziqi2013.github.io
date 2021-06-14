@@ -97,4 +97,10 @@ updates.
 The second stage execution can take two forms: Simple replay of the redo log generated in the previous stage,
 or re-execution with value validation. 
 The first form is used if no other transaction has committed between the commit of the first-stage and the begin
-of the second stage. 
+of the second stage. This can be detected with a global commit timestamp variable that stores the timestamp of 
+the last successfully committed timestamp. At the beginning of the second-stage transaction, the value of this 
+variable is read and compared with the timestamp in the LOGGED entry. If the former is smaller, indicating that 
+no transaction have successfully committed before the first-stage and the second-stage execution, the 
+second-stage execution then just traverses the redo log entries in the order that they are created, and then 
+apply these logs. At the end, the commit timestamp variable is updated to the current timestamp counter's value,
+after which the second-stage execution commits.
