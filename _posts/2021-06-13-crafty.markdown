@@ -104,3 +104,9 @@ no transaction have successfully committed before the first-stage and the second
 second-stage execution then just traverses the redo log entries in the order that they are created, and then 
 apply these logs. At the end, the commit timestamp variable is updated to the current timestamp counter's value,
 after which the second-stage execution commits.
+After the execution commits, the runtime then issues clwb instructions to write back all dirty blocks that have 
+been written during the transaction. It also appends a COMMITTED mark at the end of the undo log to indicate 
+that the transaction has been successfully committed.
+Again, no sfence is required, since these writes will eventually be persisted on the next transaction's XBEGIN.
+
+
