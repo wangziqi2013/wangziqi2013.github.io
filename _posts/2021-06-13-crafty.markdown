@@ -35,3 +35,8 @@ overall performance may still be affected (again, this can be avoided by shadowi
 Shadow paging differs from logging approaches by not maintaining fixed home locations for data items. Instead,
 a global mapping table remaps objects from their old locations to a new copy, preserving the consistency of the
 old snapshot, which can be recovered to if the transactions fails to commit due to a crash. 
+Despite the fact that shadow paging eliminates explicit write ordering, the paper notes that shadow paging
+needs to enforce consistency between memory consistency ordering and the order of durability. In other words,
+the logical ordering of transactions in the memory consistency order must also be observed in persistence
+order, because otherwise, the recovery may result in a state that cannot be achieved by any serial execution
+of committed transactions.
