@@ -27,6 +27,17 @@ version_mgmt:
    some hidden state variables) and that the arguments must not be altered (or can be restored to their
    initial states as in the first-stage execution). Otherwise, second-stage re-execution will not be possible.
 
+3. I do not quite get how "Discarding entries and bounding rollback severity" works. From a high level 
+   perspective, shouldn't it just be maintaining a low-water mark, which is the timestamp of the earliest
+   COMMITTED mark (the paper uses "tsLowerBound") in the system.
+   Log truncation works by deleting logs whose timestamp is "tsLowerBound" and adjusting "tsLowerBound" to the 
+   one of the next earliest COMMITTED mark. It is like merge sort, which is also very similar to the log 
+   truncation algorithm of redo-based designs (truncating the log based on timestamps, earlier ones first).
+   Of course, we need to make sure that when we delete a log, all its dirty blocks must have already been
+   persisted (if the barrier between data flush and COMMITTED mark is inserted correctly, as in (1), then
+   this should be always true).
+   Is it my own problem, or the authors over-complicate things here?
+
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
 The paper investigates into three typical mechanisms: undo logging, redo logging, and shadow paging.
@@ -149,3 +160,5 @@ If re-execution fails, either because of address/data mismatch, or because the h
 to data conflict, the entire transaction fails. The runtime will simply re-attempt the first-stage execution.
 No state roll-back is needed, since the abort of the hardware transaction has automatically rolled back all
 second-stage memory updates.
+
+
