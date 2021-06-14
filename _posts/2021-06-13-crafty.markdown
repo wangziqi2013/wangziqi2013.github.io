@@ -13,6 +13,9 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
 The paper investigates into three typical mechanisms: undo logging, redo logging, and shadow paging.
@@ -38,5 +41,8 @@ old snapshot, which can be recovered to if the transactions fails to commit due 
 Despite the fact that shadow paging eliminates explicit write ordering, the paper notes that shadow paging
 needs to enforce consistency between memory consistency ordering and the order of durability. In other words,
 the logical ordering of transactions in the memory consistency order must also be observed in persistence
-order, because otherwise, the recovery may result in a state that cannot be achieved by any serial execution
-of committed transactions.
+order (which, under the context of shadowing, is the order that the mapping table is updated), because 
+otherwise, the recovery may result in a state that cannot be achieved by any serial execution
+of committed transactions. This can result in non-scalable designs, since in shadow paging, transactions are 
+actually committed by atomically updating the centralized mapping table, and that in some designs, global 
+ordering must be established using a single timestamp counter.
