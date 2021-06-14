@@ -46,3 +46,11 @@ otherwise, the recovery may result in a state that cannot be achieved by any ser
 of committed transactions. This can result in non-scalable designs, since in shadow paging, transactions are 
 actually committed by atomically updating the centralized mapping table, and that in some designs, global 
 ordering must be established using a single timestamp counter.
+
+The paper then notices that Hardware Transactional Memory is a potentially powerful mechanism for implementing
+durable transactions. Existing HTM implementations, however, disallow writing back cache lines from the 
+hierarchy to the NVM, which will cause an immediate transaction abort because of the way speculative states
+are maintained in the hierarchy.
+Such restriction makes it impossible to generate and persist log entries during hardware transactions.
+
+
