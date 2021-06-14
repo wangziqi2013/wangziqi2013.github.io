@@ -13,6 +13,20 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Using two executions to avoid in-transaction write ordering. The first speculative execution derives undo    
+   log entries,
+   and does not change the memory image (discarding all speculative changes to the shared state).
+   The second execution applies memory updates from the first speculative execution.
+   This way, write orderings only happen between the first and the second execution.
+   Think of it as having an Oracle that magically knows the memory location to be updated.
+   This is similar to deterministic database transaction where the conflicts are estimated by a speculative
+   "dry-run" of the transaction, which is then validated by an actual execution. If the two mismatch, the
+   speculative execution is considered as invalid, and the transaction will be reattempted.
+
+
+
 **Comments:**
 
 1. The paper seems to miss a store fence after second-stage execution: The COMMITTED mark must only be  
