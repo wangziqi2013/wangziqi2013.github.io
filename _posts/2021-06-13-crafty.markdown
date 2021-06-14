@@ -61,4 +61,9 @@ after the transaction, while the actual memory updates are discarded. This elimi
 requirement, since memory updates that correspond to the undo log entries have not been committed yet. 
 In the second execution, memory updates are performed, which will be committed at the end. 
 Both executions use HTM to ensure atomicity. 
+From a different perspective, the HTM transaction body can be considered as a monolithic memory operation that 
+completes atomically, whose updates and can be determined in priori. Durability is achieved by first generating 
+and persisting the undo log entries using the before value of these memory updates, and then actually executing
+the monolithic memory operation, assuming that its semantics remain consistent with the undo logs (i.e., 
+memory locations to be updated and data to be written).
 
