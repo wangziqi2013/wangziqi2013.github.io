@@ -15,6 +15,7 @@ version_mgmt:
 
 **Comments:**
 
+1. 
 
 This paper proposes Crafty, a novel software transaction memory design based on re-execution. The paper begins 
 by observing that all previous designs have non-negligible run-time costs that root deeply into the methodology.
@@ -62,8 +63,12 @@ requirement, since memory updates that correspond to the undo log entries have n
 In the second execution, memory updates are performed, which will be committed at the end. 
 Both executions use HTM to ensure atomicity. 
 From a different perspective, the HTM transaction body can be considered as a monolithic memory operation that 
-completes atomically, whose updates and can be determined in priori. Durability is achieved by first generating 
+completes atomically, whose updates can be determined in advance. Durability is achieved by first generating 
 and persisting the undo log entries using the before value of these memory updates, and then actually executing
 the monolithic memory operation, assuming that its semantics remain consistent with the undo logs (i.e., 
 memory locations to be updated and data to be written).
 
+We next describe Crafty's operations in details. During the first dry-run execution, store operations are 
+instrumented such that each store, before it takes effect on the address space, will first generate an undo
+log entry in a private log buffer. The log will only be written back to the NVM using clwb/clflush after
+the hardware transaction commits. 
