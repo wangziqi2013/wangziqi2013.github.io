@@ -74,10 +74,18 @@ log entry and a volatile redo log entry in separate private log buffers.
 Stores themselves are still executed such that later reads to the same address can
 access data written by an earlier store. The trick here is that write ordering between log entries and 
 dirty blocks need not be enforced, as the HTM will prevent dirty blocks from being evicted.
-Before the commit of hardware transaction, a timestamp is obtained from a global and monotonically
+After executing the transaction body, the runtime then reverts all memory locations modified by the transaction
+by applying all undo log entries in the reverse direction (new-to-old). 
+This is crucial, since Crafty does not enforce any write ordering between log entries and block data.
+An evicted dirty block updated by the transaction after the commit may pollute the memory image and cause
+data corruption that cannot be restored by undo logs.
+
+After reverting memory modifications, a timestamp is obtained from a global and monotonically
 increasing timestamp counter (e.g., globally synchronized RDTSC). 
-The timestamp, together with a LOGGED entry, is appended to the end of the undo log. 
-After the hardware transaction commits, the undo log is flushed back to the NVM using clwb.
+The timestamp, together with a LOGGED entry, is appended to the end of the undo log.
+The hardware transaction then commits, leaving the shared memory image unchanged, but with undo and redo
+log entries in their corresponding log buffers.
+The undo log is flushed back to the NVM using clwb.
 The paper also noted that no store fence is needed after the flush, since the next-stage execution with
 hardware transactions will enforce fence semantics before the transaction could begin (i.e., XBEGIN on x86).
 
