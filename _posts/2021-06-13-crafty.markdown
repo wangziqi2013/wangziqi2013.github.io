@@ -112,3 +112,10 @@ Again, no sfence is required, since these writes will eventually be persisted on
 Note that, since the second-stage execution adds the commit timestamp variable to its read set by reading its 
 value at the beginning, transaction that attempt to commit concurrently will abort due to conflicts on the 
 variable. This essentially serializes second-stage execution, as also noted by the paper.
+
+If the second stage execution aborts, either due to a conflict on shared data, on the commit timestamp 
+variable, or because the commit timestamp check fails, the runtime performs value validation to check whether 
+the speculative first-stage execution is still valid. Here, a "valid" speculative execution is defined as one
+that still generates the same value in the same order, and commits at the same position, if re-executed on
+the most up-to-date memory image. Note that Crafty does not care whether the control flow is actually identical
+between the first speculative run and the validation run. 
