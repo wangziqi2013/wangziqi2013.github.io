@@ -25,6 +25,10 @@ version_mgmt:
    "dry-run" of the transaction, which is then validated by an actual execution. If the two mismatch, the
    speculative execution is considered as invalid, and the transaction will be reattempted.
 
+2. Both executions are wrapped in TSX/RTM for atomicity. The atomicity between the two executions is enforced
+   using a commit timestamp, and if it fails, value validation.
+   This is similar to NORec (a minimalist STM design).
+
 
 
 **Comments:**
