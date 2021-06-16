@@ -21,6 +21,13 @@ version_mgmt:
    graph algorithms are being implemented, when it comes to something like a linked list or a hash table, could 
    SpZip handle them as well? My best guess is no, because there is no way to express conditions in the data flow
    architecture.
+   Imagine the following scenario: I have an array of keys, and I want to fetch the values stored in the hash table
+   for each key.
+   On the CPU side, I can compute the hash values of several keys using SIMD instructions. 
+   It would be great, if these hash values can be entered into the queues of the data flow machine, and let it
+   issue memory requests to traverse the linear probing hash table and grab the value.
+
+
 
 
 This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
