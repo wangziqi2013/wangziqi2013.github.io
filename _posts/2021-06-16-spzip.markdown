@@ -27,7 +27,9 @@ version_mgmt:
    It would be great, if these hash values can be entered into the queues of the data flow machine, and let it
    issue memory requests to traverse the linear probing hash table and grab the value.
 
-
+2. Figure 9 does not show L1 cache, which can be misleading because it may seem that SpZip entirely gets rid of L1
+   (which is not a good design choice as it cripples other applications not using it).
+   It turns out that L1 is still being used in the simulation, just not drawn in Figure 9.
 
 
 This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
