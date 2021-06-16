@@ -22,4 +22,7 @@ access patterns over the address space. Pure software solutions that use manuall
 these structure usually suffer from high cache miss rates due to software's inability to communicate the access pattern
 to hardware. The core pipeline is hence frequently stalled by data dependencies, which prevents it from issuing
 memory accesses on the critical path, causing under-utilization of memory bandwidth.
-
+Second, conventional compressed cache architecture is agnostic of the layouts of underlying data structures, and most
+of them just perform compression in a granularity that is consistent with cache hierarchy's block interface. 
+This does not work well for irregular accesses, since these accesses are typically scattered across the address space,
+making it difficult to group accesses that are nearby in the address space for compression or decompression.
