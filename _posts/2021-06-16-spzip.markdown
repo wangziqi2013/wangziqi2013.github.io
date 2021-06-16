@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SpZip: Architectural Support for Effective Data Compression in Irregular Applications"
+date:   2021-06-16 16:48:00 -0500
+categories: paper
+paper_title: "SpZip: Architectural Support for Effective Data Compression in Irregular Applications"
+paper_link: https://conferences.computer.org/iscapub/pdfs/ISCA2021-4ghucdBnCWYB7ES2Pe4YdT/333300b069/333300b069.pdf
+paper_keyword: SpZip; Compression; Data Flow Execution
+paper_year: ISCA 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
