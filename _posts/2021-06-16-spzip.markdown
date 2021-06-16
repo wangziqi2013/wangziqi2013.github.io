@@ -19,5 +19,7 @@ SpZip is motivated by two important observations.
 First, many real world applications use sparse data structures in which most of the elements are of value zero,
 and the data structure itself is stored in a compact format. As a result, these applications demonstrate irregular
 access patterns over the address space. Pure software solutions that use manually crafted, ad-hoc routines to traverse 
-these structure usually suffer from high cache misses due to software's inability to communicate the access pattern
-to hardware.
+these structure usually suffer from high cache miss rates due to software's inability to communicate the access pattern
+to hardware. The core pipeline is hence frequently stalled by data dependencies, which prevents it from issuing
+memory accesses on the critical path, causing under-utilization of memory bandwidth.
+
