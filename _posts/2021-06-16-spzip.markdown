@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
+efficiency on irregular data structures and algorithms.
+SpZip is motivated by two important observations.
+
