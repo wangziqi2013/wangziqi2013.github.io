@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. I can be wrong, but it is not obvious how the hardware accelerated data flow architecture can support other commonly
+   used data structures in addition to sparse matrix encoded in Compressed Sparse Row (CSR) format. 
+   While I agree that CSR is general enough to encode sparse graphs, and is hence very useful when
+   graph algorithms are being implemented, when it comes to something like a linked list or a hash table, could 
+   SpZip handle them as well? My best guess is no, because there is no way to express conditions in the data flow
+   architecture.
+
+
 This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
 efficiency on irregular data structures and algorithms.
 SpZip is motivated by two important observations.
@@ -24,5 +34,8 @@ to hardware. The core pipeline is hence frequently stalled by data dependencies,
 memory accesses on the critical path, causing under-utilization of memory bandwidth.
 Second, conventional compressed cache architecture is agnostic of the layouts of underlying data structures, and most
 of them just perform compression in a granularity that is consistent with cache hierarchy's block interface. 
-This does not work well for irregular accesses, since these accesses are typically scattered across the address space,
-making it difficult to group accesses that are nearby in the address space for compression or decompression.
+This does not work well for irregular accesses, since these accesses are typically scattered across the address space
+due to indirections, making it difficult to group accesses that are nearby in the address space for compression 
+or decompression.
+
+This paper seems to 
