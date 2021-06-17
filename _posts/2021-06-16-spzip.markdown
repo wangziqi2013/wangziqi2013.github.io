@@ -111,3 +111,8 @@ the end of a scan operation. The mark will be preserved by the next stage operat
 The CPU may need the mark in the final output in order to determine the progress of computation (e.g., use it
 as loop conditions).
 
+SpZip implements the above data flow model with two operators: range scan and indirection.
+Operators in SpZip take input values from an input queue, and produces output values to an output queue. 
+Both queues have configurable word size to handle different data types.
+Operators themselves do not transform or modify data. Instead, they are just programmed to follow certain access
+patterns, and fetch data from the hierarchy by generating addresses and then issuing memory access requests.
