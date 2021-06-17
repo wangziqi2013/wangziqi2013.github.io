@@ -76,6 +76,13 @@ the current offset value and the next value (or the size of the offset array, if
 offset array).
 The output of the second scan is then sent to the CPU core for value update.
 In the meantime, values in score array is also read out by scan operations in a similar manner.
-Values in contrib arrays, however, cannot be read by scans, since it is indexed by destination node ids.
+Values in contrib arrays, however, cannot be read by scans, since it is indexed by destination node ids,
+which itself are produced by the second range scan, and are not guaranteed to be a range.
 The paper shows that it can be accessed using a single indirection operation, the input of which is the column
 ids output from the second range scan operation that reads the matrix body.
+
+The second pattern differs from the first pattern in a way that not all nodes are traversed as the source.
+Instead, the algorithm maintains a list of "frontier nodes" which represents the current working set.
+On each iteration, the frontier node list is updated by enumerating the adjacent nodes for each node from the 
+current frontier list, and adding these nodes into the new frontier list. In the meantime, some properties of 
+the adjacent nodes (e.g., distance, or "dist") are also updated as by computing a function on the node.
