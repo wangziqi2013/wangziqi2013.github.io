@@ -31,7 +31,6 @@ version_mgmt:
    (which is not a good design choice as it cripples other applications not using it).
    It turns out that L1 is still being used in the simulation, just not drawn in Figure 9.
 
-
 This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
 efficiency on irregular data structures and algorithms.
 SpZip is motivated by two important observations.
@@ -47,4 +46,8 @@ This does not work well for irregular accesses, since these accesses are typical
 due to indirections, making it difficult to group accesses that are nearby in the address space for compression 
 or decompression.
 
-This paper seems to 
+The design of SpZip seems to primarily focus on a general encoding for sparse matrix, the Compressed Sparse Row (CSR) 
+format, which can be used to represent the adjacency matrix of a graph.
+CSR encodes a sparse matrix by only storing non-zero entries for each row using a (column id, value) tuple.
+The matrix is still stored in row-major format, meaning that non-zero values on the same row are stored adjacent
+to each other, and the column ids are sorted 
