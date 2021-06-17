@@ -22,6 +22,12 @@ version_mgmt:
    for range scan (bulk load) operations. 
    This is essentially a super flexible gather-scatter that does not consume processor cycles.
 
+2. Data compression can still be performed with irregular access patterns and with data flow machines. The essence
+   here is that, with proper transformation of the graph algorithms (e.g., buffering, clustering), we can still turn 
+   scattered writes into sequential writes. These sequential writes can be easily detected by the data flow
+   machine, who will then apply proper compression.
+   Decompression is performed similarly when previously compressed data is being read using a data flow operator.
+
 
 
 **Comments:**
