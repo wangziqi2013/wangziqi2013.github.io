@@ -60,3 +60,11 @@ there is exactly one element for each row.
 Random accesses on columns are not supported. In order to read the value of a column given a row, the entire row
 must be traversed, and if an entry with the column id exists, the value of the entry is read. Otherwise, the column
 contains value zero and is simply not stored.
+
+The paper then presents two of the most common access patterns that graph algorithms are likely to perform. The
+first pattern, most notably seen in PageRank (push model), enumerates all nodes in the graph as the source node, 
+and for each source node, enumerates its adjacent nodes as destination. The destination score is then updated 
+by computing a "contrib" function on the source node.
+Both the destination score and contrib of the source are stored in separate arrays for fast access.
+
+
