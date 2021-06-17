@@ -198,3 +198,9 @@ as a consecutive range of memory written by the application.
 In graph algorithms, however, it is not always possible to generate writes to consecutive addresses, despite the
 fact that the data structure it writes to is allocated as a consecutive array. Two examples are the scores array
 of PageRank, and the dist array of BFS.
+The paper proposes that special transformation can be applied to the algorithm such that scattered writes to 
+these arrays are first clustered and buffered as smaller groups, such that writes that are close to each other
+on the destination array are clustered together, and then for each group, the updates are
+applied to the destination array. Both clustering and the final updates can be made mostly sequential by this
+transformation, which greatly improves locality, making compression possible. 
+
