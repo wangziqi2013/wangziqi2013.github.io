@@ -28,7 +28,13 @@ version_mgmt:
    machine, who will then apply proper compression.
    Decompression is performed similarly when previously compressed data is being read using a data flow operator.
 
-
+3. Logical data flow operators can be physically implemented as multiplexed operators that only one single instance.
+   Similarly, queues between operators can be implemented as scratchpad memory and head/tail pointers.
+   To achieve multiplexing, the physical operators should be able to load/unload context objects which contain 
+   full information and internal states (e.g., MSHRs) in order for the physical operator to work as the logical
+   operator indicated by the context.
+   A central scheduler then controls the load and unload of context objects to multiplex the physical operator between
+   different logical operators.
 
 **Comments:**
 
