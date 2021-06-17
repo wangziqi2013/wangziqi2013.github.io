@@ -106,3 +106,8 @@ Similar to the first pattern, the operator on the dist array will not compute th
 Instead, it only issues memory requests to prefetch these blocks into the cache hierarchy, and let the processor
 determine how updates are performed.
 
+In both access patterns, scan operators will insert a special marker into the output stream. This mark indicates
+the end of a scan operation. The mark will be preserved by the next stage operators without any modification.
+The CPU may need the mark in the final output in order to determine the progress of computation (e.g., use it
+as loop conditions).
+
