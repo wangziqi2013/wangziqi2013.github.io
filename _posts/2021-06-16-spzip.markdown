@@ -67,22 +67,38 @@ and for each source node, enumerates its adjacent nodes as destination. The dest
 by computing a "contrib" function on the source node.
 Both the destination score and contrib of the source are stored in separate arrays for fast access.
 
-The data flow model of the above pattern is described as follows. First, a ranged scan operation reads out values
+The data flow model of the above pattern is described as follows. First, a ranged scan operator reads out values
 in the offset array. This can be done in parallel since there is no data dependency. Then, for each value read from 
-the offset array, an indirection operation is performed that uses the value as an index into the body of the CSR
+the offset array, an indirection operator is performed that uses the value as an index into the body of the CSR
 matrix. The value in the CSR matrix is also read out using another ranged scan, the starting address of which is 
-the address computed by the indirection operation, and the size of the scan is given by taking the diff between
+the address computed by the indirection operator, and the size of the scan is given by taking the diff between
 the current offset value and the next value (or the size of the offset array, if the value is the last one in
 offset array).
 The output of the second scan is then sent to the CPU core for value update.
-In the meantime, values in score array is also read out by scan operations in a similar manner.
+In the meantime, values in score array is also read out by a scan operator in a similar manner.
 Values in contrib arrays, however, cannot be read by scans, since it is indexed by destination node ids,
 which itself are produced by the second range scan, and are not guaranteed to be a range.
-The paper shows that it can be accessed using a single indirection operation, the input of which is the column
-ids output from the second range scan operation that reads the matrix body.
+The paper shows that it can be accessed using a single indirection operator, the input of which is the column
+ids output from the second range scan operator that reads the matrix body.
+Note that the data flow model itself does not know how the contrib array is updated, since the function required
+to compute the value is not programmed into the model. SpZip proposes that the model only prefetches these "terminal
+values" (i.e., values that are not used as sources to data flow operators) into the cache, and let the processor
+compute the functions and write the updated values.
 
 The second pattern differs from the first pattern in a way that not all nodes are traversed as the source.
 Instead, the algorithm maintains a list of "frontier nodes" which represents the current working set.
 On each iteration, the frontier node list is updated by enumerating the adjacent nodes for each node from the 
 current frontier list, and adding these nodes into the new frontier list. In the meantime, some properties of 
 the adjacent nodes (e.g., distance, or "dist") are also updated as by computing a function on the node.
+
+The data flow of the second pattern is then described as follows. First, we need a range scan operator on the 
+current frontier list to enumerate all nodes. Then, the offset array is accessed by indirection using the node ids
+from the frontier list as indices with an indirection operator.
+The next step is similar to the first pattern: We use another range scan operator on the body of the matrix,
+the base and size of which is given by results from the offset array. 
+Here note that since the offset array is not scanned, we actually need to read two values (the current index and 
+the next index) from the offset array to determine the base and size of the scan on the matrix body.
+This was not required in the first pattern, since the offset array is scanned, and the next index will guaranteed to
+be available.
+Meanwhile, the dist array is also accessed using an indirection operator whose source are the adjacent nodes from
+the second range scan operator that produces adjacent nodes given a frontier node.
