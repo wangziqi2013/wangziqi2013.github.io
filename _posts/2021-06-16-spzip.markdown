@@ -166,3 +166,10 @@ is multiplexed to emulate the existence of multiple logical operators.
 To achieve this, SpZip designs physical operators such that they can load or unload context objects. 
 Each context object just contains all operational arguments (e.g., base array address) and internal states (e.g., 
 internal counter values, MSHRs) that defines a logical operator. 
+The physical operator can thus emulate a logical operator by loading its context object, and temporarily
+swaps it out by unloading the context object.
+A central coordinator controls the load and unload of contexts similar to how an OS scheduler controls thread
+scheduling. A logical operator is loaded, if its input queue is not empty, and is swapped out if all its MSHRs
+are occupied, meaning that no more memory requests can be made, or when the output queue is full.
+The coordinator maintains context objects of logical operators, which can be initialized by the application program
+using memory-mapped I/O. 
