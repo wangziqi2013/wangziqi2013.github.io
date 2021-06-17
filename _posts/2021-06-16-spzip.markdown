@@ -215,4 +215,8 @@ Compressed data cannot be handled directly by other operators. To solve this, wh
 from memory (e.g., as the input of the next iteration after the previous iteration has completed), a decompression
 operator needs to be added before the first operator that handles uncompressed data. 
 
+In the overall architecture, SpZip resides between the core pipeline and the L2/LLC as a data flow accelerator.
+Application programs initialize logical operators and buffers, and kickstart the data flow machine by providing 
+the initial inputs using enqueue instructions to add elements to the input queue of the first operator (e.g.,
+an initial set of nodes for PageRank, or the root of the traversal in BFS).
 
