@@ -116,3 +116,9 @@ Operators in SpZip take input values from an input queue, and produces output va
 Both queues have configurable word size to handle different data types.
 Operators themselves do not transform or modify data. Instead, they are just programmed to follow certain access
 patterns, and fetch data from the hierarchy by generating addresses and then issuing memory access requests.
+
+The range scan operator requires a base array address and element size, which are pre-configured into the operator's 
+context. For every iteration, it takes a tuple (begin offset, size) from the input queue, and then issues memory
+requests to fetch all elements in this range. The fetched elements are then put into the output queue for consumption.
+The indirection operator similarly requires base address and element size, but it only takes a single index from the
+queue, and fetches the value on the address to the output queue.
