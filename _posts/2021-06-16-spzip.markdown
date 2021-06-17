@@ -74,4 +74,8 @@ matrix. The value in the CSR matrix is also read out using another ranged scan, 
 the address computed by the indirection operation, and the size of the scan is given by taking the diff between
 the current offset value and the next value (or the size of the offset array, if the value is the last one in
 offset array).
-
+The output of the second scan is then sent to the CPU core for value update.
+In the meantime, values in score array is also read out by scan operations in a similar manner.
+Values in contrib arrays, however, cannot be read by scans, since it is indexed by destination node ids.
+The paper shows that it can be accessed using a single indirection operation, the input of which is the column
+ids output from the second range scan operation that reads the matrix body.
