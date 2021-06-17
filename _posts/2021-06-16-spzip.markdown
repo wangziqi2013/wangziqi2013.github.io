@@ -20,21 +20,29 @@ version_mgmt:
    cache misses. This paper proposes a simple data flow model that runs ahead of the core pipeline's instruction 
    stream, and is programmed in a way that memory requests can be issued in parallel from different operators and/or 
    for range scan (bulk load) operations. 
-   This is essentially a super flexible gather-scatter that does not consume processor cycles.
+   This is essentially a super flexible (programmable) gather-scatter that does not consume processor cycles.
 
-2. Data compression can still be performed with irregular access patterns and with data flow machines. The essence
+2. The paper uses two examples (PageRank, BFS) to demonstrate that the underlying memory access pattern of many  
+   algorithms can be described with two logical operators: ranged scans, and indirections. 
+   These two types of operators can further be connected together via queue buffers to form a practical data flow 
+   model. 
+   These two logical operators are simple to implement, because they are essentially address generation units
+   plus MSHRs.
+
+3. Data compression can still be performed with irregular access patterns and with data flow machines. The essence
    here is that, with proper transformation of the graph algorithms (e.g., buffering, clustering), we can still turn 
    scattered writes into sequential writes. These sequential writes can be easily detected by the data flow
    machine, who will then apply proper compression.
    Decompression is performed similarly when previously compressed data is being read using a data flow operator.
 
-3. Logical data flow operators can be physically implemented as multiplexed operators that only one single instance.
+4. Logical data flow operators can be physically implemented as multiplexed operators that only one single instance.
    Similarly, queues between operators can be implemented as scratchpad memory and head/tail pointers.
    To achieve multiplexing, the physical operators should be able to load/unload context objects which contain 
    full information and internal states (e.g., MSHRs) in order for the physical operator to work as the logical
    operator indicated by the context.
    A central scheduler then controls the load and unload of context objects to multiplex the physical operator between
    different logical operators.
+   In one word: Programmability via multiplexing.
 
 **Comments:**
 
@@ -177,3 +185,4 @@ using memory-mapped I/O.
 Similarly, queues in SpZip are not physical entities. Instead, they are just allocated from a monolithic scratchpad
 space, and emulated as circular buffers by a pair of pointers representing the head and tail.
 Queue sizes and element sizes can also be configured from the application with memory-mapped I/O.
+
