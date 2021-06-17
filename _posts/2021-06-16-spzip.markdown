@@ -204,3 +204,13 @@ on the destination array are clustered together, and then for each group, the up
 applied to the destination array. Both clustering and the final updates can be made mostly sequential by this
 transformation, which greatly improves locality, making compression possible. 
 
+SpZip implements compression using a compression operator. The application code needs to direct data that is stored
+sequentially in the memory to the compression operator, and the operator runs compression algorithm over the
+given data, and then stores them into another pre-configured location. 
+In PageRank and BFS, this can be done as the last step of updating the scores and dist array, after the clustering
+step. SpZip supports two types of compression algorithm: Delta encoding and Bit-Plane Compression.
+More complicated algorithms are possible, but they may not always work well.
+
+
+
+
