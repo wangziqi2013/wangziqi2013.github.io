@@ -211,6 +211,8 @@ In PageRank and BFS, this can be done as the last step of updating the scores an
 step. SpZip supports two types of compression algorithm: Delta encoding and Bit-Plane Compression.
 More complicated algorithms are possible, but they may not always work well.
 
-
+Compressed data cannot be handled directly by other operators. To solve this, when compressed data is being read
+from memory (e.g., as the input of the next iteration after the previous iteration has completed), a decompression
+operator needs to be added before the first operator that handles uncompressed data. 
 
 
