@@ -13,6 +13,17 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Decouples memory accesses from data dependencies. Modern core pipelines can only support limited number of 
+   outstanding memory requests, and the pipeline often gets stalled when a data dependency cannot be fulfilled due to
+   cache misses. This paper proposes a simple data flow model that runs ahead of the core pipeline's instruction 
+   stream, and is programmed in a way that memory requests can be issued in parallel from different operators and/or 
+   for range scan (bulk load) operations. 
+   This is essentially a super flexible gather-scatter that does not consume processor cycles.
+
+
+
 **Comments:**
 
 1. I can be wrong, but it is not obvious how the hardware accelerated data flow architecture can support other commonly
