@@ -122,3 +122,7 @@ context. For every iteration, it takes a tuple (begin offset, size) from the inp
 requests to fetch all elements in this range. The fetched elements are then put into the output queue for consumption.
 The indirection operator similarly requires base address and element size, but it only takes a single index from the
 queue, and fetches the value on the address to the output queue.
+
+Since cache misses are common especially for irregular accesses, each operators have a few MSHRs that are also
+part of the operator's context. When a memory request is fulfilled by the lower level hierarchy, these MSHRs are 
+checked to direct the response to the correct operators that issued the request.
