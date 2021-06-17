@@ -54,3 +54,9 @@ to each other, and the column ids are sorted (at least in all the examples given
 as the paper also explicitly points out, sorting columns on the same row based on some other keys other than the 
 column id will not change the graph it encodes, but it may bring some locality benefit and result in performance 
 improvement). 
+Random access to individual rows of a CSR matrix is supported by adding another "offset" array which serves as 
+the index into the body of the matrix. The offset array contains the starting offset of each row in the body, and
+there is exactly one element for each row. 
+Random accesses on columns are not supported. In order to read the value of a column given a row, the entire row
+must be traversed, and if an entry with the column id exists, the value of the entry is read. Otherwise, the column
+contains value zero and is simply not stored.
