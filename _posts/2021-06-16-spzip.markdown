@@ -70,4 +70,8 @@ Both the destination score and contrib of the source are stored in separate arra
 The data flow model of the above pattern is described as follows. First, a ranged scan operation reads out values
 in the offset array. This can be done in parallel since there is no data dependency. Then, for each value read from 
 the offset array, an indirection operation is performed that uses the value as an index into the body of the CSR
-matrix.
+matrix. The value in the CSR matrix is also read out using another ranged scan, the starting address of which is 
+the address computed by the indirection operation, and the size of the scan is given by taking the diff between
+the current offset value and the next value (or the size of the offset array, if the value is the last one in
+offset array).
+
