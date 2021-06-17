@@ -102,3 +102,7 @@ This was not required in the first pattern, since the offset array is scanned, a
 be available.
 Meanwhile, the dist array is also accessed using an indirection operator whose source are the adjacent nodes from
 the second range scan operator that produces adjacent nodes given a frontier node.
+Similar to the first pattern, the operator on the dist array will not compute the function. 
+Instead, it only issues memory requests to prefetch these blocks into the cache hierarchy, and let the processor
+determine how updates are performed.
+
