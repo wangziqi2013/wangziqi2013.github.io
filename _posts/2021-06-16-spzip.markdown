@@ -65,6 +65,13 @@ version_mgmt:
 3. It seems that compression only works with certain algorithmic transformation (e.g., UB)? 
    What if I do not use them? 
 
+4. Who provides the stream for compression to the compression operator? They cannot be the output of some earlier
+   stage operators, because operators cannot compute (e.g., the scores in PageRank or dist in BFS).
+   The paper also did not mention whether it is the application code that should give the input to the compression
+   operator. If so, then how does it specify the location of the input? Using a memory address? 
+   If compression is done after data has been written into memory, then what is the purpose of that? You already
+   wrote the data and paid for the bandwidth cost.
+
 This paper proposes SpZip, a data-flow memory access architecture with compression for better cache and memory 
 efficiency on irregular data structures and algorithms.
 SpZip is motivated by two important observations.
