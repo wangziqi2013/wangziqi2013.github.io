@@ -173,3 +173,7 @@ scheduling. A logical operator is loaded, if its input queue is not empty, and i
 are occupied, meaning that no more memory requests can be made, or when the output queue is full.
 The coordinator maintains context objects of logical operators, which can be initialized by the application program
 using memory-mapped I/O. 
+
+Similarly, queues in SpZip are not physical entities. Instead, they are just allocated from a monolithic scratchpad
+space, and emulated as circular buffers by a pair of pointers representing the head and tail.
+Queue sizes and element sizes can also be configured from the application with memory-mapped I/O.
