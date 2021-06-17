@@ -219,4 +219,9 @@ In the overall architecture, SpZip resides between the core pipeline and the L2/
 Application programs initialize logical operators and buffers, and kickstart the data flow machine by providing 
 the initial inputs using enqueue instructions to add elements to the input queue of the first operator (e.g.,
 an initial set of nodes for PageRank, or the root of the traversal in BFS).
-
+The data flow machine then runs independently from the core pipeline, which issues memory requests following the
+data flow pattern programmed into it, and eventually produces data on its output queue. The core pipeline then
+uses dequeue instructions to extract data from the queue, and use them for the final step computation
+of the current iteration (e.g., compute scores in PageRank, or compute dist in BFS). 
+Memory requests of data flow operators are sent to the L2 cache to avoid polluting L1, and
+compressor operators write compressed data to the LLC, since these data are unlikely to be used in the near future.
