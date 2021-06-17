@@ -193,3 +193,8 @@ Similarly, queues in SpZip are not physical entities. Instead, they are just all
 space, and emulated as circular buffers by a pair of pointers representing the head and tail.
 Queue sizes and element sizes can also be configured from the application with memory-mapped I/O.
 
+To further optimize memory efficiency, SpZip supports compression at stream level. A stream is informally defined
+as a consecutive range of memory written by the application. 
+In graph algorithms, however, it is not always possible to generate writes to consecutive addresses, despite the
+fact that the data structure it writes to is allocated as a consecutive array. Two examples are the scores array
+of PageRank, and the dist array of BFS.
