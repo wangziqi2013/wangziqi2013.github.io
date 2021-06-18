@@ -5,7 +5,7 @@ date:   2021-06-18 01:00:00 -0500
 categories: paper
 paper_title: "Smaller and Faster: Parallel Processing of Compressed Graphs with Ligra++"
 paper_link: https://ieeexplore.ieee.org/document/7149297
-paper_keyword: Compression; Graph Compression; Ligra++
+paper_keyword: Compression; Graph Compression; Ligra+
 paper_year: DCC 2015
 rw_set:
 htm_cd:
@@ -13,7 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper presents Ligra++, a compressed graph library based on Ligra.
+This paper presents Ligra+, a compressed graph library based on Ligra.
 Despite the fact that graph compression has been attempted from multiple directions, the paper points out that it is
 still an interesting topic that is worth studying for two reasons. 
 First, as more and more computation tasks nowadays have been moved to the cloud, it becomes crucial to reduce the 
@@ -26,3 +26,11 @@ required to fetch the same amount of information from the memory to the cache hi
 As a result, more parallelism can be extracted. In addition, since for most of the time, the processor will be 
 waiting for cache misses rather than executing arithmetic instructions, the paper argues that the increased number 
 of instructions for runtime decoding will likely not become a significant factor to performance.
+
+Ligra+ is based on Ligra, a graph processing framework, which we describe below. Ligra is designed for the most general
+possible user scenario, i.e., directed graphs with real value edge weights. 
+Vertices are represented by integers from 0 to (|V| - 1), where |V| is the total number of vertices in the graph.
+Edges are represented by per-vertex adjacency lists. Each vertex has two adjacency lists for representing outbound and 
+inbound edges.
+
+
