@@ -32,5 +32,10 @@ possible user scenario, i.e., directed graphs with real value edge weights.
 Vertices are represented by integers from 0 to (|V| - 1), where |V| is the total number of vertices in the graph.
 Edges are represented by per-vertex adjacency lists. Each vertex has two adjacency lists for representing outbound and 
 inbound edges.
+In each adjacency list of node v, the other end of the edge u is stored, such that (v, u) or (u, v) (depending on whether it is outbound or inbound nodes) is a directed edge of the graph. 
+The order of storage does not matter, and is thus undefined in Ligra.
+The in-degree of a vertex is defined as the number of edges entering the vertex, which equals the size of the 
+inbound adjacency list. Similarly, the out-degree of a node is defined as the number of outgoing nodes, whose 
+value equals the size of the outbound adjacency list.
 
 
