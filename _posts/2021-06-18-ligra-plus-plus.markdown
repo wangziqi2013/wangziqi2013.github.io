@@ -77,3 +77,9 @@ the current block is the last one. This scheme is similar to how UTF-8 encodes a
 The decoder is straightforward: just read in k bits for each iteration, and combines the lower (k - 1) bits into
 the decoded value. If the highest bit of the block is 1, then the iteration continues to the next block.
 Otherwise, the value is fully decoded.
+
+The second scheme optimizes over k-bit code by encoding several values that use the same number of blocks together
+in the same group. Each group has a 1 byte group header, where 2 bits of them are used to indicate the number 
+of blocks in the encoding, and the rest 6 bits are used to represent group size. 
+The decoder can thus decode values in a group in parallel, since each code word starts at a known offset.
+This is called run-length encoded byte codes in the paper.
