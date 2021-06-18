@@ -92,3 +92,13 @@ The compressed code words of all vertices are stored in a single array compactly
 and outbound edges in a directed graph. To enable random accesses of the adjacency list of any node, an extra
 offset array is also added for each compressed code word array. Each element of the offset array stores the offset
 of the adjacency list for the corresponding vertex.
+The inbound and outbound degree of vertices as well as edge weights are also stored in separate arrays. 
+Weights may also be compressed using the same delta encoding scheme.
+
+The paper also notices that edges are not distributed evenly across vertices, and therefore, parallel processing
+at vertex level will likely not result in performance improvement, since a few vertices with high degrees may
+become the performance bottleneck. To deal with this, the paper proposes that more offset entries be inserted 
+for vertices whose inbound or outbound degree exceed a certain threshold (e.g., 1000), more than one entry
+will be added into the offset array for this node such that random accesses are also supported at the middle 
+of the node's adjacency list. This enables graph algorithms to process edges of vertices with large degrees in
+parallel, which distributes works more evenly.
