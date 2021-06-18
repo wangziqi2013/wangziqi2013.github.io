@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Ligra++, a compressed graph library based on Ligra.
+Despite the fact that graph compression has been attempted from multiple directions, the paper points out that it is
+still an interesting topic that is worth studying for two reasons. 
+
+
