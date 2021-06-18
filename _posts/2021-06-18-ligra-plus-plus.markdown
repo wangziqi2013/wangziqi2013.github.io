@@ -23,4 +23,6 @@ Second, previous proposals often only consider sequential graph algorithms, miss
 Ligra++, on the contrary, is designed for parallel computation on the compressed graph.
 The paper also noted that, since graph computation is memory bound, compression helps reducing the memory bandwidth
 required to fetch the same amount of information from the memory to the cache hierarchy. 
-As a result, more parallelism can be extracted. 
+As a result, more parallelism can be extracted. In addition, since for most of the time, the processor will be 
+waiting for cache misses rather than executing arithmetic instructions, the paper argues that the increased number 
+of instructions for runtime decoding will likely not become a significant factor to performance.
