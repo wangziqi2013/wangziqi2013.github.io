@@ -37,5 +37,8 @@ The order of storage does not matter, and is thus undefined in Ligra.
 The in-degree of a vertex is defined as the number of edges entering the vertex, which equals the size of the 
 inbound adjacency list. Similarly, the out-degree of a node is defined as the number of outgoing nodes, whose 
 value equals the size of the outbound adjacency list.
-
+Ligra assumes that there is no self edge and duplicated edges.
+Edge weights are mapped from an edge (which is specified using the vertex number, the list, and the index in the list)
+to a real value by a mapping function. The implementation of the function is unspecified, and is irrelevant to 
+this paper.
 
