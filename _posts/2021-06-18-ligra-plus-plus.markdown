@@ -74,4 +74,6 @@ The first one, called a k-bit code, encodes a value into a sequence of k-bit blo
 or more (k - 1) bit segments, and each of them is encoded by a k-bit block.
 Each k-bit block uses the highest bit as the continuation bit, which indicates whether there is a next block, or
 the current block is the last one. This scheme is similar to how UTF-8 encodes a 32-bit Unicode character.
-
+The decoder is straightforward: just read in k bits for each iteration, and combines the lower (k - 1) bits into
+the decoded value. If the highest bit of the block is 1, then the iteration continues to the next block.
+Otherwise, the value is fully decoded.
