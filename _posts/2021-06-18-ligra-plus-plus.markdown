@@ -16,5 +16,7 @@ version_mgmt:
 This paper presents Ligra++, a compressed graph library based on Ligra.
 Despite the fact that graph compression has been attempted from multiple directions, the paper points out that it is
 still an interesting topic that is worth studying for two reasons. 
-
+First, as more and more computation tasks nowadays have been moved to the cloud, it becomes crucial to reduce the 
+memory footprint of these tasks, as cloud platforms often charge customers by the amount of memory reserved on the 
+computing node. 
 
