@@ -88,4 +88,7 @@ The paper also noted that the first value in the list of deltas may be negative,
 positive since the list is sorted. The first delta value, therefore, is encoded with the sign bit, while the 
 remaining deltas are treated as unsigned values.
 
-
+The compressed code words of all vertices are stored in a single array compactly. Two arrays are needed for inbound
+and outbound edges in a directed graph. To enable random accesses of the adjacency list of any node, an extra
+offset array is also added for each compressed code word array. Each element of the offset array stores the offset
+of the adjacency list for the corresponding vertex.
