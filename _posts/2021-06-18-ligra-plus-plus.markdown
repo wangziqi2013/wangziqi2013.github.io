@@ -70,4 +70,8 @@ Ligra+ optimizes over Ligra by compressing the adjacency list. The list is first
 delta encoding. To elaborate: given a sorted adjacency list of node u v0, v1, v2, v3, ..., compression is performed by 
 first taking the deltas, which produces (v0 - u), (v1 - v0), (v2 - v1), ..., and then these deltas are encoded with 
 variably sized code. The paper proposes two coding schemes. 
+The first one, called a k-bit code, encodes a value into a sequence of k-bit blocks. The value is divided into one
+or more (k - 1) bit segments, and each of them is encoded by a k-bit block.
+Each k-bit block uses the highest bit as the continuation bit, which indicates whether there is a next block, or
+the current block is the last one. This scheme is similar to how UTF-8 encodes a 32-bit Unicode character.
 
