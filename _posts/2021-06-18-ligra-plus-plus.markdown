@@ -56,4 +56,9 @@ and v. The output of edge map is a vertex subset containing nodes for which F re
 The implementation of the vertex map operation is quite straightforward: The sequential version just iterate over
 the vertex subset and applies function F to each vertex in the set. The parallel version uses cilk plus to parallelize
 the iteration loop.
-
+The edge map has two implementations. If the sum of outbound degrees of nodes in the vertex set exceeds a certain
+threshold (by default, |E| / 20), the dense edge map is used. This implementation is similar to the "pull" model
+of many graph algorithms. It iterates over all nodes in the graph, and for each node v, C(v) is first called to test 
+the condition. 
+If the condition passes, all *inbound* edges (u, v) where u belongs to the given vertex set are tested with function F, 
+and node u is added to the output set.
