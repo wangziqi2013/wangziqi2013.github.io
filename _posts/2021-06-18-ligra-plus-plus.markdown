@@ -62,3 +62,6 @@ of many graph algorithms. It iterates over all nodes in the graph, and for each 
 the condition. 
 If the condition passes, all *inbound* edges (u, v) where u belongs to the given vertex set are tested with function F, 
 and node u is added to the output set.
+The sparse implementation, on the other hand, uses a "push" model. It simply iterates over the given vertex set,
+and for each node u, it enumerates all *outbound* edges (e, v), and tests v with function C. If the test passes,
+F(u, v) is called and output is generated accordingly.
