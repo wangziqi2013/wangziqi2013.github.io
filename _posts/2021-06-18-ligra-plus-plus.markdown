@@ -23,6 +23,9 @@ version_mgmt:
 3. Using group run-length byte code rather than individual byte codes. A header describes the number of k-bit blocks
    for a certain number of encoded words. This enables parallel decompression.
 
+4. All compressed values are stored in a single array.
+   An offset array that stores the offset of the adjacency list of all vertices is added to allow random accesses to 
+   compressed values.
 
 
 This paper presents Ligra+, a compressed graph library based on Ligra.
