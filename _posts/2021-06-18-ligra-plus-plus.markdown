@@ -65,3 +65,9 @@ and node u is added to the output set.
 The sparse implementation, on the other hand, uses a "push" model. It simply iterates over the given vertex set,
 and for each node u, it enumerates all *outbound* edges (e, v), and tests v with function C. If the test passes,
 F(u, v) is called and output is generated accordingly.
+
+Ligra+ optimizes over Ligra by compressing the adjacency list. The list is first sorted, and then compressed with
+delta encoding. To elaborate: given a sorted adjacency list of node u v0, v1, v2, v3, ..., compression is performed by 
+first taking the deltas, which produces (v0 - u), (v1 - v0), (v2 - v1), ..., and then these deltas are encoded with 
+variably sized code. The paper proposes two coding schemes. 
+
