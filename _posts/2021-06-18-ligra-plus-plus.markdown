@@ -83,3 +83,9 @@ in the same group. Each group has a 1 byte group header, where 2 bits of them ar
 of blocks in the encoding, and the rest 6 bits are used to represent group size. 
 The decoder can thus decode values in a group in parallel, since each code word starts at a known offset.
 This is called run-length encoded byte codes in the paper.
+
+The paper also noted that the first value in the list of deltas may be negative, while the rest is always 
+positive since the list is sorted. The first delta value, therefore, is encoded with the sign bit, while the 
+remaining deltas are treated as unsigned values.
+
+
