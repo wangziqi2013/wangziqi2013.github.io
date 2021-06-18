@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Using delta encoding to compress sorted adjacency list; The diffs are likely to be smaller than a full 
+   32-bit word if edges are clustered.
+
+2. k-bit blocks similar to UTF-8 can be used to encode a value in variably sized code words.
+
+3. Using group run-length byte code rather than individual byte codes. A header describes the number of k-bit blocks
+   for a certain number of encoded words. This enables parallel decompression.
+
+
+
 This paper presents Ligra+, a compressed graph library based on Ligra.
 Despite the fact that graph compression has been attempted from multiple directions, the paper points out that it is
 still an interesting topic that is worth studying for two reasons. 
@@ -41,6 +53,8 @@ Ligra assumes that there is no self edge and duplicated edges.
 Edge weights are mapped from an edge (which is specified using the vertex number, the list, and the index in the list)
 to a real value by a mapping function. The implementation of the function is unspecified, and is irrelevant to 
 this paper.
+Simpler graphs, such as uni-direction graphs or uniform weighted graphs can be encoded more efficiently by only
+storing one adjacency list per vertex and by not having a edge weight mapping function.
 
 Ligra supports vertex subset data structure. There are two different flavors. A dense vertex subset is represented 
 as a bitmap of |V| bits, in which each bit represents one vertex. A sparse vertex subset is simply an unordered list
