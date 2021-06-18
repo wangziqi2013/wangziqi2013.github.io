@@ -46,4 +46,6 @@ Ligra supports vertex subset data structure. There are two different flavors. A 
 as a bitmap of |V| bits, in which each bit represents one vertex. A sparse vertex subset is simply an unordered list
 of vertex numbers, the size of which is linearly proportional to the number of nodes in the set.
 
-
+Ligra supports two graph bulk operations. The first is vertex map, which applies a given function F to each vertex in
+a vertex subset, and returns another subset containing nodes for which the function F returns true. 
+The function F can potentially alter the vertices. 
