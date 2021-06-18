@@ -42,3 +42,8 @@ Edge weights are mapped from an edge (which is specified using the vertex number
 to a real value by a mapping function. The implementation of the function is unspecified, and is irrelevant to 
 this paper.
 
+Ligra supports vertex subset data structure. There are two different flavors. A dense vertex subset is represented 
+as a bitmap of |V| bits, in which each bit represents one vertex. A sparse vertex subset is simply an unordered list
+of vertex numbers, the size of which is linearly proportional to the number of nodes in the set.
+
+
