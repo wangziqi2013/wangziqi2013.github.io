@@ -49,3 +49,6 @@ of vertex numbers, the size of which is linearly proportional to the number of n
 Ligra supports two graph bulk operations. The first is vertex map, which applies a given function F to each vertex in
 a vertex subset, and returns another subset containing nodes for which the function F returns true. 
 The function F can potentially alter the vertices. 
+The second is edge map, which applies a function F to all edges (u, v), where u belongs to the given vertex 
+subset, v is adjacent to u, and C(v) is true for a given condition function C. Similarly, F may update both u
+and v.
