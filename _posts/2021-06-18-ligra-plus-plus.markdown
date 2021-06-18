@@ -27,6 +27,9 @@ version_mgmt:
    An offset array that stores the offset of the adjacency list of all vertices is added to allow random accesses to 
    compressed values.
 
+5. To enable parallelism within the processing of a vertex, the adjacency list of vertices with high degrees are broken
+   down into smaller lists, and each smaller list has an entry in the offset array. This allows us to further randomly
+   access the adjacency list of a vertex in a limited way.
 
 This paper presents Ligra+, a compressed graph library based on Ligra.
 Despite the fact that graph compression has been attempted from multiple directions, the paper points out that it is
