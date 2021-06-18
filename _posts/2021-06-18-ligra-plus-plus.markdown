@@ -51,4 +51,9 @@ a vertex subset, and returns another subset containing nodes for which the funct
 The function F can potentially alter the vertices. 
 The second is edge map, which applies a function F to all edges (u, v), where u belongs to the given vertex 
 subset, v is adjacent to u, and C(v) is true for a given condition function C. Similarly, F may update both u
-and v.
+and v. The output of edge map is a vertex subset containing nodes for which F returns true.
+
+The implementation of the vertex map operation is quite straightforward: The sequential version just iterate over
+the vertex subset and applies function F to each vertex in the set. The parallel version uses cilk plus to parallelize
+the iteration loop.
+
