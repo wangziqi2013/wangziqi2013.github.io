@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
+can be increased by performing compression, which improves overall system performance.
+Conventional compression approaches either exploit inter-line redundancy by compressing each line individually
+and storing them in a more compact layout, or exploit intra-line redundancy with block deduplication. In deduplication,
+blocks with identical contents on different addresses are recognized, and instead of storing a copy of the block
+for each address, only one instance of the block is maintained, which is then shared among multiple tag entries.
+
+
+
