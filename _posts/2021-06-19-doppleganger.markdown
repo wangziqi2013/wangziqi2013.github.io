@@ -24,3 +24,7 @@ Doppleganger, on the other hand, identifies a third type of redundancy: value si
 The design of Doppleganger is based on two important observations. First, many applications can tolerate value
 precision losses at certain degrees. For example, in some graph processing applications, pixels of similar values can 
 be sometimes considered as identical, as doing so will not affect the output of these algorithms.
+This is called approximate computing, which has inherent error-correcting features and is therefore less stringent
+on the exactness of data to certain degrees.
+The second observation is that many data blocks indeed contains similar data in many applications. 
+These blocks can be identified in the runtime using special hash functions, as we will see later.
