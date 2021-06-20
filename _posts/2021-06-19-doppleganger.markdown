@@ -43,6 +43,14 @@ version_mgmt:
    If the difference is greater than T, then the block is still inserted into the data array.
    Though, there needs to be some way of generating a different fingerprint to avoid aliasing.
 
+2. Writing back dirty blocks may corrupt the memory image, if the tag's data is discarded and an approximation
+   block is used when it was inserted.
+   This may seem fine, but would the error propagate via data dependency and eventually cause disaster?
+   Evaluation seems to suggest otherwise, but there is no mechanism to control how far a block can
+   eventually deviate from its original value.
+
+3. 
+
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
 Conventional compression approaches either exploit inter-line redundancy by compressing each line individually
