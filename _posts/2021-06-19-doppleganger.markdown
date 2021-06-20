@@ -61,3 +61,6 @@ multiple tag entries to share the same data entry, thus saving the storage.
 In addition to the address tag, coherence states, and other metadata (e.g., replacement states), tag entries
 also store the fingerprint value of the address, and two pointers to other tag entries. These two pointers form
 a doubly linked list between tag entries that share the same data entry.
+Doppleganger implements the data array as a set-associative hash table using fingerprint values as keys.
+Each data entry therefore consists of a fingerprint value tag (for key lookup), a data slot, and a back pointer
+to the head of the doubly linked list that share the entry.
