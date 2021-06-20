@@ -31,6 +31,18 @@ version_mgmt:
 4. Doppleganger can also implement conventional deduplication by always comparing block content after the 
    fingerprint hashing.
 
+**Comments:**
+
+1. The paper implies in the beginning of Section 2 that there is a knob T that can control the degree of 
+   maximum difference between blocks. It would be a really nice feature to have in Doppleganger, either as 
+   a way of controlling the trade-off between precision and storage saving, or just to allow setting T to zero
+   to implement LLC deduplication (which is useful in even more scenarios).
+   Unfortunately, Doppleganger does not support such a T.
+   In fact, implementing this feature is pretty easy: After finding a fingerprint match, just compare the
+   block to be inserted with the existing block and compute the difference.
+   If the difference is greater than T, then the block is still inserted into the data array.
+   Though, there needs to be some way of generating a different fingerprint to avoid aliasing.
+
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
 Conventional compression approaches either exploit inter-line redundancy by compressing each line individually
