@@ -80,4 +80,10 @@ Then a new data entry is allocated by using the new fingerprint to query the dat
 exists, then data is discarded, and we just use the existing block in the data array. This is exactly how Doppleganger
 saves data array storage. Otherwise, if new vacant entry exists, an existing entry is evicted using LRU from the set 
 that the fingerprint is mapped into, and the new entry is inserted. 
+Meanwhile, the tag should also be inserted into the tag array. This process is identical to that in a normal cache.
+An existing tag entry may also be evicted as a result of tag insertion.
+After the tag is inserted, the block's back pointer is set to point to the tag entry.
+If the block already has sharers, the new tag is also inserted to the head of the doubly linked list, by setting the 
+"next" pointer to the previous value of the back pointer, and setting the previous head's "prev" to itself.
+
 
