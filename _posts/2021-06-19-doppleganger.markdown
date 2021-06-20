@@ -59,7 +59,10 @@ version_mgmt:
    There are better content-sensitive hash functions, such as the one proposed in Thesaurus (does not even need
    the ALU for arithmetics, just binary operations).
 
-
+5. It seems that Doppleganger only works with blocks that are filled with elements of the same type? 
+   If they are of different types, how would the hash be computed?
+   Also, the hash unit requires complicated ALU to support floating point arithmetics, and it does not support
+   non-arithmetic or custom data types.
 
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
