@@ -70,4 +70,6 @@ address as in a normal cache. The lookup either finds the matching entry, or mis
 fetch request is generated and sent to the lower level, and when the response arrives, the new block is inserted
 into the cache, which we describe later. In the case of a hit, the fingerprint value of the block is obtained from
 the tag array, which is then used to query the data array hash table.
-
+The data array is queried similar to a set-associative cache, by using the lower bits of the fingerprint as a set 
+index, and the higher bits as the tag that is compared with the fingerprint tag in the data entry.
+Data array access is guaranteed to be a hit, after which the response message is generated and sent to the upper level.
