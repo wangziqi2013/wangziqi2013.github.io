@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Approximate computing allows imprecise data to be provided while still generating acceptable output. Examples are
+   certain graph processing applications. This can be utilized to design caches that deduplicate not only identical
+   blocks, but also blocks with similar contents.
+
+
+
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
 Conventional compression approaches either exploit inter-line redundancy by compressing each line individually
