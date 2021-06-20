@@ -23,6 +23,11 @@ version_mgmt:
    It is expected that blocks with similar contents will be hashed to the same fingerprint.
    And all blocks with the same hash value can be deduplicated regardless of the slight difference.
 
+3. Doppleganger uses a hash table as the data array, i.e., the tag array cannot directly address the
+   data array. Instead, tag array only maps addresses to fingerprint values (i.e., block identities), and 
+   then the fingerprint is used to probe the data array hash table. The latter is just a standard implementation
+   of a hardware hash table.
+
 
 
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
