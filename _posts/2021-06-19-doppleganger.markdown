@@ -28,7 +28,8 @@ version_mgmt:
    then the fingerprint is used to probe the data array hash table. The latter is just a standard implementation
    of a hardware hash table.
 
-
+4. Doppleganger can also implement conventional deduplication by always comparing block content after the 
+   fingerprint hashing.
 
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
