@@ -106,4 +106,7 @@ other block. This is a special case that will not occur on insertion from lower 
 Since approximate computing is not universally applicable to all addresses, and not tracking precise data will incur
 serious issues and data corruption on system software, Doppleganger only operates over a given range of addresses.
 The application programmer needs to initialize range registers in the cache controller before enabling Doppleganger.
-
+To support both approximate cache and non-approximate cache, one extra bit is added per tag entry to indicate
+whether the entry allows data sharing. If the bit is off, meaning that it has a precise block, the fingerprint
+field in the entry is treated as a direct pointer to the data array. 
+Data entries are also allocated based on whether the tag entry is approximate or not.
