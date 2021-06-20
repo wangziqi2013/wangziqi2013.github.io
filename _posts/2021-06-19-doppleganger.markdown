@@ -90,4 +90,7 @@ When a data block is evicted during data array insertion, all its sharer tag ent
 controller uses the back pointer and the "next" pointer of each tag entry to locate all sharers, and for each sharer,
 if the dirty bit is set, an eviction request will be queued to the eviction buffer. One than one write back request
 may be generated this way.
-
+When a tag is to be evicted, it is first unlinked from the doubly linked list by setting the next tag entry's "prev"
+pointer to empty, and setting the data entry's back pointer to the next entry.
+If the dirty bit is set, a write back request will also be queued to the eviction queue using the data block as 
+write back data.
