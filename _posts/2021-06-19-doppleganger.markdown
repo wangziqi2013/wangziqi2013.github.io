@@ -55,6 +55,12 @@ version_mgmt:
    reality the non-approximate content of the block in an imaginary normal system would have already deviated 
    from the existing block, i.e., errors will accumulate and propagate, and Doppleganger has no way of monitoring it.
 
+4. The content-sensitive hash function may work, but it is ad-hoc and lacks theoretical proof of the optimality. 
+   There are better content-sensitive hash functions, such as the one proposed in Thesaurus (does not even need
+   the ALU for arithmetics, just binary operations).
+
+
+
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
 Conventional compression approaches either exploit inter-line redundancy by compressing each line individually
