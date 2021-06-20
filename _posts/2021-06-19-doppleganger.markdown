@@ -49,7 +49,11 @@ version_mgmt:
    Evaluation seems to suggest otherwise, but there is no mechanism to control how far a block can
    eventually deviate from its original value.
 
-3. 
+3. Same problem with write backs. Doppleganger discards write backs if a fingerprint match can be found. 
+   If this only happens once, it seems fine. But what if a block is frequently updated by the core, and 
+   then evicted from upper levels? It is possible that the block will always match some fingerprints, but in 
+   reality the non-approximate content of the block in an imaginary normal system would have already deviated 
+   from the existing block, i.e., errors will accumulate and propagate, and Doppleganger has no way of monitoring it.
 
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
 can be increased by performing compression, which improves overall system performance.
