@@ -64,3 +64,10 @@ a doubly linked list between tag entries that share the same data entry.
 Doppleganger implements the data array as a set-associative hash table using fingerprint values as keys.
 Each data entry therefore consists of a fingerprint value tag (for key lookup), a data slot, and a back pointer
 to the head of the doubly linked list that share the entry.
+
+Cache lookup is performed as follows. First, a regular tag lookup on the tag array is performed using the requested
+address as in a normal cache. The lookup either finds the matching entry, or misses. In the case of a miss, a 
+fetch request is generated and sent to the lower level, and when the response arrives, the new block is inserted
+into the cache, which we describe later. In the case of a hit, the fingerprint value of the block is obtained from
+the tag array, which is then used to query the data array hash table.
+
