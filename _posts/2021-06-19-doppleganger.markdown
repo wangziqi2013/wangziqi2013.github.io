@@ -19,6 +19,10 @@ version_mgmt:
    certain graph processing applications. This can be utilized to design caches that deduplicate not only identical
    blocks, but also blocks with similar contents.
 
+2. Blocks with similar contents are identified using a content-sensitive hash value (the "fingerprint"). 
+   It is expected that blocks with similar contents will be hashed to the same fingerprint.
+   And all blocks with the same hash value can be deduplicated regardless of the slight difference.
+
 
 
 This paper proposes Doppleganger, an approximately compressed cache design. The paper noted that logical LLC capacity 
