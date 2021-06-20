@@ -86,4 +86,8 @@ After the tag is inserted, the block's back pointer is set to point to the tag e
 If the block already has sharers, the new tag is also inserted to the head of the doubly linked list, by setting the 
 "next" pointer to the previous value of the back pointer, and setting the previous head's "prev" to itself.
 
+When a data block is evicted during data array insertion, all its sharer tag entries must also be evicted. The cache
+controller uses the back pointer and the "next" pointer of each tag entry to locate all sharers, and for each sharer,
+if the dirty bit is set, an eviction request will be queued to the eviction buffer. One than one write back request
+may be generated this way.
 
