@@ -47,3 +47,6 @@ Given N-bit output from the previous step, the M-bit fingerprint is generated su
 value of the N-bit output is mapped to zero, and the largest possible is mapped to (2^M - 1). The intermediate values
 are mapped linearly, i.e., every consecutive range of size (2^N / 2^M) in the output value domain will be mapped to the 
 same fingerprint value.
+The paper also noted that it is possible that the output from the first step actually has smaller number of bits
+then M (i.e., N < M). In this case, no linear mapping is performed, and the N bit hash value is directly used as 
+the fingerprint.
