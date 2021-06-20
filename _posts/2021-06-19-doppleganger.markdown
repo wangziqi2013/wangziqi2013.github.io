@@ -57,3 +57,7 @@ be encoded, potentially increasing the logical size of the cache (although the p
 the same number of logical tags but a smaller data array for the purpose of resource and power saving).
 As in other deduplication designs, instead of enforcing a one-to-one correspondence between tag and data, it allows 
 multiple tag entries to share the same data entry, thus saving the storage.
+
+In addition to the address tag, coherence states, and other metadata (e.g., replacement states), tag entries
+also store the fingerprint value of the address, and two pointers to other tag entries. These two pointers form
+a doubly linked list between tag entries that share the same data entry.
