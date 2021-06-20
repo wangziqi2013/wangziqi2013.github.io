@@ -34,4 +34,7 @@ The hash function maps blocks with similar contents to the same hash value with 
 Doppleganger assumes that the block to be hashed must consists of values of the same type and possess the same
 semantics. It relies on application programmers to provide the type and the logical value domain of the variables
 stored in the block.
-
+The hash is performed in two steps. In the first step, all elements in the block (the type of size of which is known)
+are given to a hash unit, which computes two outputs: The average of these elements, and the range, defined as the 
+difference between the maximum and the minimum. These two outputs are concatenated together, with the average
+being the lower bits, and the range being the higher.
