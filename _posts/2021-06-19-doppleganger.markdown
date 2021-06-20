@@ -55,3 +55,5 @@ We next describe the overall cache architecture. Doppleganger, as other conventi
 decouples the tag array from the data array. The tag array is over-provisioned which allows more logical lines to
 be encoded, potentially increasing the logical size of the cache (although the paper evaluates a design that uses 
 the same number of logical tags but a smaller data array for the purpose of resource and power saving).
+As in other deduplication designs, instead of enforcing a one-to-one correspondence between tag and data, it allows 
+multiple tag entries to share the same data entry, thus saving the storage.
