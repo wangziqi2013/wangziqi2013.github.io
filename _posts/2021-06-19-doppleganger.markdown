@@ -43,13 +43,14 @@ version_mgmt:
    If the difference is greater than T, then the block is still inserted into the data array.
    Though, there needs to be some way of generating a different fingerprint to avoid aliasing.
 
-2. Writing back dirty blocks may corrupt the memory image, if the tag's data is discarded and an approximation
-   block is used when it was inserted.
+2. Writing back dirty blocks to the main memory may corrupt the memory image, if the tag's data is discarded 
+   and an approximation block is used when it was inserted.
    This may seem fine, but would the error propagate via data dependency and eventually cause disaster?
    Evaluation seems to suggest otherwise, but there is no mechanism to control how far a block can
    eventually deviate from its original value.
 
-3. Same problem with write backs. Doppleganger discards write backs if a fingerprint match can be found. 
+3. Same problem with write backs from upper levels. Doppleganger discards write backs if a fingerprint match 
+   can be found. 
    If this only happens once, it seems fine. But what if a block is frequently updated by the core, and 
    then evicted from upper levels? It is possible that the block will always match some fingerprints, but in 
    reality the non-approximate content of the block in an imaginary normal system would have already deviated 
