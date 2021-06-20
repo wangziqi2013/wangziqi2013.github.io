@@ -28,3 +28,10 @@ This is called approximate computing, which has inherent error-correcting featur
 on the exactness of data to certain degrees.
 The second observation is that many data blocks indeed contains similar data in many applications. 
 These blocks can be identified in the runtime using special hash functions, as we will see later.
+
+Doppleganger employs content-sensitive hash functions to recognize similar blocks. 
+The hash function maps blocks with similar contents to the same hash value with high probability. 
+Doppleganger assumes that the block to be hashed must consists of values of the same type and possess the same
+semantics. It relies on application programmers to provide the type and the logical value domain of the variables
+stored in the block.
+
