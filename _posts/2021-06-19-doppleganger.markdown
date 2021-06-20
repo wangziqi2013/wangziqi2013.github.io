@@ -102,3 +102,8 @@ Otherwise, a new data entry will be allocated.
 Note that during a write back, the tag may find an existing block with the same fingerprint, but it is not the current
 one. In this case, the tag needs to be unlinked from the doubly linked list, and inserted to the linked list of the
 other block. This is a special case that will not occur on insertion from lower levels.
+
+Since approximate computing is not universally applicable to all addresses, and not tracking precise data will incur
+serious issues and data corruption on system software, Doppleganger only operates over a given range of addresses.
+The application programmer needs to initialize range registers in the cache controller before enabling Doppleganger.
+
