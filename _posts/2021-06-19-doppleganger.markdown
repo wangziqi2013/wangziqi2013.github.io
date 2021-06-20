@@ -38,3 +38,7 @@ The hash is performed in two steps. In the first step, all elements in the block
 are given to a hash unit, which computes two outputs: The average of these elements, and the range, defined as the 
 difference between the maximum and the minimum. These two outputs are concatenated together, with the average
 being the lower bits, and the range being the higher.
+Note that the computations performed in this step are arithmetic operations on the logical value, rather than on
+the binary value. This is extremely important is the data type is floating point numbers, since their arithmetics
+must be performed by special floating point hardware, instead of regular binary ALUs.
+
