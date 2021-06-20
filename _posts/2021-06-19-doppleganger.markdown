@@ -42,3 +42,8 @@ Note that the computations performed in this step are arithmetic operations on t
 the binary value. This is extremely important is the data type is floating point numbers, since their arithmetics
 must be performed by special floating point hardware, instead of regular binary ALUs.
 
+In the next step, the value from the previous step is then mapped to an M-bit fingerprint value using linear mapping:
+Given N-bit output from the previous step, the M-bit fingerprint is generated such that the smallest possible 
+value of the N-bit output is mapped to zero, and the largest possible is mapped to (2^M - 1). The intermediate values
+are mapped linearly, i.e., every consecutive range of size (2^N / 2^M) in the output value domain will be mapped to the 
+same fingerprint value.
