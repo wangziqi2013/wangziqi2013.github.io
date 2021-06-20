@@ -50,3 +50,8 @@ same fingerprint value.
 The paper also noted that it is possible that the output from the first step actually has smaller number of bits
 then M (i.e., N < M). In this case, no linear mapping is performed, and the N bit hash value is directly used as 
 the fingerprint.
+
+We next describe the overall cache architecture. Doppleganger, as other conventional cache compression designs, 
+decouples the tag array from the data array. The tag array is over-provisioned which allows more logical lines to
+be encoded, potentially increasing the logical size of the cache (although the paper evaluates a design that uses 
+the same number of logical tags but a smaller data array for the purpose of resource and power saving).
