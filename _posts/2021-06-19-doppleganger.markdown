@@ -73,3 +73,11 @@ the tag array, which is then used to query the data array hash table.
 The data array is queried similar to a set-associative cache, by using the lower bits of the fingerprint as a set 
 index, and the higher bits as the tag that is compared with the fingerprint tag in the data entry.
 Data array access is guaranteed to be a hit, after which the response message is generated and sent to the upper level.
+
+On a lookup miss, the request is forwarded to the lower level. After the lower level responds, the data fetched will
+be inserted into the cache. The fingerprint will first be computed given block data. 
+Then a new data entry is allocated by using the new fingerprint to query the data array. If the fingerprint already
+exists, then data is discarded, and we just use the existing block in the data array. This is exactly how Doppleganger
+saves data array storage. Otherwise, if new vacant entry exists, an existing entry is evicted using LRU from the set 
+that the fingerprint is mapped into, and the new entry is inserted. 
+
