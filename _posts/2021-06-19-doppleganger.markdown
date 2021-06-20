@@ -94,3 +94,8 @@ When a tag is to be evicted, it is first unlinked from the doubly linked list by
 pointer to empty, and setting the data entry's back pointer to the next entry.
 If the dirty bit is set, a write back request will also be queued to the eviction queue using the data block as 
 write back data.
+
+Write back requests from upper levels are handled as insertions, except that the dirty bit of the tag needs to be set.
+If the fingerprint value of the block to be written back is identical to a current block (not necessarily the same
+one), then the write back block will be discarded, and the existing block will be used. 
+Otherwise, a new data entry will be allocated.
