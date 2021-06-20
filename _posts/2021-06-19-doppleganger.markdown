@@ -87,17 +87,19 @@ semantics. It relies on application programmers to provide the type and the logi
 stored in the block.
 The hash is performed in two steps. In the first step, all elements in the block (the type of size of which is known)
 are given to a hash unit, which computes two outputs: The average of these elements, and the range, defined as the 
-difference between the maximum and the minimum. These two outputs are concatenated together, with the average
-being the lower bits, and the range being the higher.
+difference between the maximum and the minimum. 
 Note that the computations performed in this step are arithmetic operations on the logical value, rather than on
 the binary value. This is extremely important is the data type is floating point numbers, since their arithmetics
 must be performed by special floating point hardware, instead of regular binary ALUs.
 
-In the next step, the value from the previous step is then mapped to an M-bit fingerprint value using linear mapping:
+Then in the next step, the two outputs are mapped to (M / 2)-bit fingerprints respectively using linear mapping:
 Given N-bit output from the previous step, the M-bit fingerprint is generated such that the smallest possible 
-value of the N-bit output is mapped to zero, and the largest possible is mapped to (2^M - 1). The intermediate values
-are mapped linearly, i.e., every consecutive range of size (2^N / 2^M) in the output value domain will be mapped to the 
-same fingerprint value.
+value of the N-bit output is mapped to zero, and the largest possible is mapped to (2^M - 1)  (smallest and largest
+possible values are given as the value domain, as mentioned earlier). 
+The intermediate values are mapped linearly, i.e., every consecutive range of size (2^N / 2^M) in the output 
+value domain will be mapped to the same fingerprint value.
+These two fingerprints are concatenated together to form the M-bit fingerprint, with the average being the lower bits, 
+and the range being the higher.
 The paper also noted that it is possible that the output from the first step actually has smaller number of bits
 then M (i.e., N < M). In this case, no linear mapping is performed, and the N bit hash value is directly used as 
 the fingerprint.
