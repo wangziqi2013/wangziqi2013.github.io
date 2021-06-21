@@ -20,6 +20,13 @@ version_mgmt:
 2. To save metadata and simply the design, one of the two lines in a slot is considered as a victim, which is
    logically not present in the cache, and therefore, it must not be dirty, and it does not have any metadata bits;
 
+3. Metadata usage can be reduced by treating co-located blocks as victim blocks, which do not need any
+   metadata bits except the tag (which is stored in the data slot);
+
+4. Compressed blocks can be stored from both ends of the data slot. The block at the higher end is stored
+   in reversed bit order, such that its size need not be encoded, as it is implicitly encoded in the compressed
+   format (can be computed using the compressed header);
+
 
 
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
