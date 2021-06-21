@@ -34,3 +34,9 @@ No associative lookup is performed on accesses, as the tag to be checked can be 
 with the requested address. 
 On either a read or write miss, the current entry is evicted, and written back if it is dirty. 
 The entry is then populated with the new address and data.
+
+This paper observes that, if two blocks can occupy the same 64-byte data slot after compression, then we can
+store two blocks in the same entry, essentially increasing the associativity of the set to two, without
+affecting the associativity of other sets.
+This approach differs from previous proposals in the following aspects. 
+
