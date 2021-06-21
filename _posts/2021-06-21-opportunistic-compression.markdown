@@ -82,3 +82,10 @@ When the upper level writes back a dirty block, if the dirty block hits the fill
 evicted, and the fill block is stored uncompressed, in order to avoid the complicated case of recompression.
 Writes will never hit the victim block, as victim blocks are logically not in the cache, in which case the victim
 block is just evicted, and the write is performed at the lower level.
+
+The paper also proposes a new compression algorithm called FPC-D. The algorithm processes input blocks in the
+unit of 32-bit words.
+It improves over the classical FPC by using 4-bit prefix instead of 3-bit prefix, supporting 16 different patterns. 
+In addition, it performs simple stateful encoding (as opposed to the original FPC which is always state-less) by 
+performing value matching between the current value, the previous value, and the second previous value.
+
