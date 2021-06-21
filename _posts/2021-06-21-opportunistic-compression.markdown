@@ -28,4 +28,8 @@ The paper is based on Alloy Cache, a DRAM cache design that features low-latency
 management. The Alloy Cache is direct-mapped, meaning that each address can only be stored at exactly one location
 in the cache. The logical entry index (assuming a flat space) is computed by taking the modular between the 
 block address and the total number of entries, which is then converted to physical row and column numbers. 
+Alloy Cache stores tag and data compactly in a 72-byte entry, in which data occupies 64 bytes, the address
+occupies 42 bits, and the remaining 22 bytes are be used for status bits, coherence states, and other metadata. 
+No associative lookup is performed on accesses, as the tag to be checked can be instantly determined and then compared 
+with the requested address. 
 
