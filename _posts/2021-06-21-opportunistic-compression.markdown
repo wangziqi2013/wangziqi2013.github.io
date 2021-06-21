@@ -41,7 +41,11 @@ affecting the associativity of other sets.
 This approach differs from previous proposals in the following aspects. 
 First, unlike previous designs, this proposal does not maintain two copies of the metadata, and hence will not incur
 extra metadata overhead, preserving the simplicity of the Alloy Cache.
-Secondly, this paper does not treat both compressed lines as first-class citizen; Instead, one of the two compressed   
-lines is treated as a clean and read-only victim line just like in a victim cache. The read-only victim line only 
-responds to read misses on the other line, the fill line, and thus neither coherence state nor other metadata bits
+Secondly, this paper does not treat both compressed blocks as first-class citizen; Instead, one of the two compressed   
+blocks is treated as a clean and read-only victim block just like in a victim cache. The read-only victim block only 
+responds to read misses on the other block, the fill block, and thus neither coherence state nor other metadata bits
 is maintained for it.
+
+We next describe the operations of opportunistic compression. One extra metadata is added per-entry to indicate whether
+the entry contains one single uncompressed block, or two compressed blocks, one being the fill block and the other 
+being the victim block.
