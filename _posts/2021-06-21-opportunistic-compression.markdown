@@ -30,6 +30,14 @@ version_mgmt:
 5. FPC can be extended with stateful encoding by comparing the current word against the previous and the second
    previous word.
 
+**Comments:**
+
+1. Is the baseline DRAM cache inclusive or non-inclusive? It seems to me that it is non-inclusive, since
+   otherwise, a write operation from upper level will not hit victim block (the victim block is logically not
+   in the cache, and for inclusive caches, this means that there will be no cached copy in upper levels);
+
+
+
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
 cache designs, such as the Alloy Cache, suffers from higher miss rate than conventional set-associative DRAM caches,
 due to its lower associativity and the resulting possibility of cache thrashing. 
