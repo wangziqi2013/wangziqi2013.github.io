@@ -21,4 +21,5 @@ Despite the simpler access protocol and less metadata overhead, this can still h
 Prior proposals already considered compression as a way of increasing logical associativity. This, however, introduces
 two issues. The first issue is that increased associativity requires more metadata bits and tags to be maintained.
 Besides, the index generation function is also changed, which incurs non-trivial design changes.
-
+Second, this somehow offsets the metadata and latency benefit of Alloy Cache, since the design goal of Alloy Cache 
+is simplicity and low-latency access.
