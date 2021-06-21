@@ -46,9 +46,10 @@ blocks is treated as a clean and read-only victim block just like in a victim ca
 responds to read misses on the other block, the fill block, and thus neither coherence state nor other metadata bits
 is maintained for it.
 
-We next describe the operations of opportunistic compression. One extra metadata is added per-entry to indicate whether
+We next describe the data and metadata layout. One extra metadata is added per-entry to indicate whether
 the entry contains one single uncompressed block, or two compressed blocks, one being the fill block and the other 
 being the victim block.
+This bit just takes an unused metadata bit from the 8-byte tag.
 In the latter case, the two compressed blocks are stored in the entry's 64-byte slot. The tag of the victim block
 is stored at the beginning of the slot, which is followed by compressed fill block. The offset of the tag and the
 fill block can be easily derived and therefore does not require pointers. The compressed victim block,
@@ -56,4 +57,12 @@ on the other hand, is stored in reverse bit order (i.e., the first bit of the bl
 from the last bit of the data slot, and grows towards the other end.
 The benefit of this special data layout is that no size field is needed to correctly decompress the victim block,
 since the algorithm can correctly derive the size of the compressed victim block by checking its header, as we 
-will see later.
+will see later. 
+Metadata is only maintained for the fill block.
+
+The operation of the cache is described as follows. 
+When there is only one block in the slot, it is always uncompressed, and read/write requests are fulfilled just like
+in Alloy Cache. When an access misses, the block is fetched from the lower level, and then compressed. If both the new
+block and the old block can fit into the 64-byte slot, they will be stored such that the new block is not the fill
+block, and the old block becomes the victim block. 
+
