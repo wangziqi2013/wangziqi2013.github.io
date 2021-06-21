@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+
+
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
 cache designs, such as the Alloy Cache, suffers from higher miss rate than conventional set-associative DRAM caches,
 due to its lower associativity and the resulting possibility of cache thrashing. 
@@ -45,6 +47,8 @@ Secondly, this paper does not treat both compressed blocks as first-class citize
 blocks is treated as a clean and read-only victim block just like in a victim cache. The read-only victim block only 
 responds to read misses on the other block, the fill block, and thus neither coherence state nor other metadata bits
 is maintained for it.
+Logically speaking, the victim block is not in the DRAM cache. It just co-locates with the fill block to reduce
+the latency of block fetch if some future accesses hit the victim block.
 
 We next describe the data and metadata layout. One extra metadata is added per-entry to indicate whether
 the entry contains one single uncompressed block, or two compressed blocks, one being the fill block and the other 
@@ -74,4 +78,7 @@ and the current block is logically evicted which will become the victim block. T
 the same as in a read miss: If it is dirty, then the block will be written back. In all cases, all cached copies in the
 upper level will be recalled for the current fill block.
 
-
+When the upper level writes back a dirty block, if the dirty block hits the fill block, then the victim is always
+evicted, and the fill block is stored uncompressed, in order to avoid the complicated case of recompression.
+Writes will never hit the victim block, as victim blocks are logically not in the cache, in which case the victim
+block is just evicted, and the write is performed at the lower level.
