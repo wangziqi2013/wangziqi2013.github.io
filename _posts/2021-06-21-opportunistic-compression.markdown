@@ -88,4 +88,9 @@ unit of 32-bit words.
 It improves over the classical FPC by using 4-bit prefix instead of 3-bit prefix, supporting 16 different patterns. 
 In addition, it performs simple stateful encoding (as opposed to the original FPC which is always state-less) by 
 performing value matching between the current value, the previous value, and the second previous value.
-
+This is essentially equivalent to a dictionary of size two.
+The output of compression consists of a header, which is just an array of 4-bit layouts for each compressed word.
+The payload for each word is stored after the header as a flat binary structure.
+The compression circuit can still encode each word independently, which takes roughly 4 cycles for a single block.
+The decompression circuit first computes the offset of compressed payloads using cascaded adders, and then 
+decompress each word independently.
