@@ -18,3 +18,7 @@ cache designs, such as the Alloy Cache, suffers from higher miss rate than conve
 due to its lower associativity and the resulting possibility of cache thrashing. 
 Despite the simpler access protocol and less metadata overhead, this can still hurt performance.
 
+Prior proposals already considered compression as a way of increasing logical associativity. This, however, introduces
+two issues. The first issue is that increased associativity requires more metadata bits and tags to be maintained.
+Besides, the index generation function is also changed, which incurs non-trivial design changes.
+
