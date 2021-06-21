@@ -68,3 +68,10 @@ block, and the old block becomes the victim block.
 If the old block is dirty, it is also written back to the lower level, and all upper level sharers are recalled, i.e.,
 it is equivalent to an eviction, except that the block is still stored as the victim.
 If the two compressed blocks do not fit into the slot, then the victim is just evicted as in a normal cache.
+
+When a read operation hits the victim block, the victim is logically brought into the cache and becomes the fill block, 
+and the current block is logically evicted which will become the victim block. The handling of dirty current block is 
+the same as in a read miss: If it is dirty, then the block will be written back. In all cases, all cached copies in the
+upper level will be recalled for the current fill block.
+
+
