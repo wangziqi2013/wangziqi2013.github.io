@@ -54,4 +54,6 @@ is stored at the beginning of the slot, which is followed by compressed fill blo
 fill block can be easily derived and therefore does not require pointers. The compressed victim block,
 on the other hand, is stored in reverse bit order (i.e., the first bit of the block is the last bit of the data slot)
 from the last bit of the data slot, and grows towards the other end.
-
+The benefit of this special data layout is that no size field is needed to correctly decompress the victim block,
+since the algorithm can correctly derive the size of the compressed victim block by checking its header, as we 
+will see later.
