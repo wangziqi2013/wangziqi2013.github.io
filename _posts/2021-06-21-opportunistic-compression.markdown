@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. We can store two blocks, instead of one, in a direct-mapped slot with compression;
+
+2. To save metadata and simply the design, one of the two lines in a slot is considered as a victim, which is
+   logically not present in the cache, and therefore, it must not be dirty, and it does not have any metadata bits;
+
 
 
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
