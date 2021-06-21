@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
+cache designs, such as the Alloy Cache, suffers from higher miss rate than conventional set-associative DRAM caches,
+due to its lower associativity and the resulting possibility of cache thrashing. 
+Despite the simpler access protocol and less metadata overhead, this can still hurt performance.
+
