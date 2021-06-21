@@ -39,4 +39,9 @@ This paper observes that, if two blocks can occupy the same 64-byte data slot af
 store two blocks in the same entry, essentially increasing the associativity of the set to two, without
 affecting the associativity of other sets.
 This approach differs from previous proposals in the following aspects. 
-
+First, unlike previous designs, this proposal does not maintain two copies of the metadata, and hence will not incur
+extra metadata overhead, preserving the simplicity of the Alloy Cache.
+Secondly, this paper does not treat both compressed lines as first-class citizen; Instead, one of the two compressed   
+lines is treated as a clean and read-only victim line just like in a victim cache. The read-only victim line only 
+responds to read misses on the other line, the fill line, and thus neither coherence state nor other metadata bits
+is maintained for it.
