@@ -23,3 +23,9 @@ two issues. The first issue is that increased associativity requires more metada
 Besides, the index generation function is also changed, which incurs non-trivial design changes.
 Second, this somehow offsets the metadata and latency benefit of Alloy Cache, since the design goal of Alloy Cache 
 is simplicity and low-latency access.
+
+The paper is based on Alloy Cache, a DRAM cache design that features low-latency access and simple metadata
+management. The Alloy Cache is direct-mapped, meaning that each address can only be stored at exactly one location
+in the cache. The logical entry index (assuming a flat space) is computed by taking the modular between the 
+block address and the total number of entries, which is then converted to physical row and column numbers. 
+
