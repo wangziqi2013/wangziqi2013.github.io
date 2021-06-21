@@ -65,4 +65,6 @@ When there is only one block in the slot, it is always uncompressed, and read/wr
 in Alloy Cache. When an access misses, the block is fetched from the lower level, and then compressed. If both the new
 block and the old block can fit into the 64-byte slot, they will be stored such that the new block is not the fill
 block, and the old block becomes the victim block. 
-
+If the old block is dirty, it is also written back to the lower level, and all upper level sharers are recalled, i.e.,
+it is equivalent to an eviction, except that the block is still stored as the victim.
+If the two compressed blocks do not fit into the slot, then the victim is just evicted as in a normal cache.
