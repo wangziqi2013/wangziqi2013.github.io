@@ -27,7 +27,8 @@ version_mgmt:
    in reversed bit order, such that its size need not be encoded, as it is implicitly encoded in the compressed
    format (can be computed using the compressed header);
 
-
+5. FPC can be extended with stateful encoding by comparing the current word against the previous and the second
+   previous word.
 
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
 cache designs, such as the Alloy Cache, suffers from higher miss rate than conventional set-associative DRAM caches,
