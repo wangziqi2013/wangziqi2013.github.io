@@ -49,3 +49,9 @@ is maintained for it.
 We next describe the operations of opportunistic compression. One extra metadata is added per-entry to indicate whether
 the entry contains one single uncompressed block, or two compressed blocks, one being the fill block and the other 
 being the victim block.
+In the latter case, the two compressed blocks are stored in the entry's 64-byte slot. The tag of the victim block
+is stored at the beginning of the slot, which is followed by compressed fill block. The offset of the tag and the
+fill block can be easily derived and therefore does not require pointers. The compressed victim block,
+on the other hand, is stored in reverse bit order (i.e., the first bit of the block is the last bit of the data slot)
+from the last bit of the data slot, and grows towards the other end.
+
