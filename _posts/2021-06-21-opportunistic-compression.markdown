@@ -36,7 +36,8 @@ version_mgmt:
    otherwise, a write operation from upper level will not hit victim block (the victim block is logically not
    in the cache, and for inclusive caches, this means that there will be no cached copy in upper levels);
 
-
+2. Related to (1): Do we need to also invalidate (recall) blocks cached in upper levels, when a block moves from
+   fill block to victim block? In inclusive caches, this is necessary (reasons are identical to the one above).
 
 This paper proposes an opportunistic compression scheme for DRAM caches. The paper observes that direct-mapped DRAM
 cache designs, such as the Alloy Cache, suffers from higher miss rate than conventional set-associative DRAM caches,
