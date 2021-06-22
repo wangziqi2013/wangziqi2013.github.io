@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights**
+
+1. Use super-block tag entry, but do not encode all blocks in the super-block. Instead, only three blocks out of
+   all 16 are encoded. As a result, the offset of the three blocks should also be stored in the tag entry.
+
+
+
+
+
 This paper proposes Fine-Grained Compressed Memory System (FCMS) as an improvement over a previous proposal SCMS.
 The authors noted that while SCMS reduces memory bandwidth and effective cache capacity, the maximum compression
 ratio is limited to two, due to the fact hat SCMS only compresses adjacent even-odd blocks into the same data slot.
