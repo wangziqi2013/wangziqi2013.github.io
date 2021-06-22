@@ -24,8 +24,8 @@ FCMS differs from SCMS by assigning multiple size classes to compressed blocks, 
 (i.e., uncompressed, and half-sized). Compressed block sizes are assigned with different "size buckets". The paper
 proposes using 16 buckets, meaning that for 64-byte cache blocks (the paper seems to suggest using 128-byte blocks,
 but it does not affect our discussion), compressed blocks between size 4i and (4i + 3) will be assigned to bucket i.
-Cache metadata is also organized such that compressed blocks can occupy a variable number of buckets in the data array,
-allowing a more flexible management of cached data. 
+Cache metadata is also organized such that compressed blocks can occupy a variable number of data buckets in the 
+data array, allowing a more flexible management of cached data. 
 
 FCMS is based on SCMS. SCMS is a unified compressed LLC and memory design, in which blocks are transferred between the
 LLC and the DRAM in compressed form on block fetch and eviction. SCMS only attempts to compress adjacent even-odd 
@@ -62,6 +62,9 @@ Both tag and offset are compared against the requested address on lookup operati
 Per-block metadata states are duplicated three times, such that each tag entry encodes at most three logical blocks.
 FCMS does not use skewed index generation.
 
-
+FCMS does not decouple data slots from tag entries, indicating that there is still one-to-one correspondence between 
+tag entries and the data store for addresses encoded by the entry.
+Data slots are segmented into buckets for storing variable sized compressed blocks. Blocks must be stored in
+consecutive buckets, and all blocks in the same tag entry are stored compactly, i.e., there must be no external 
 
 
