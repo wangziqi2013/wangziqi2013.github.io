@@ -53,24 +53,24 @@ The journal identifies three challenges of cache and memory compression designs.
 path of access operations. The decompression architecture must be able to deliver raw bytes with high throughput and low
 latency. For a unified LLC and DRAM compression scheme, the decompression bottleneck occurs on the datapath between the
 LLC and the upper level cache, which requires certain hardware structure to deal with.
-Second, compression algorithms, in the worst case, may produce blocks even larger than the uncompressed size due to extra
-metadata bits in the compressed stream. The compression scheme must be able to identify memory blocks that are not easily
-compressible, and disable compression on these blocks to minimize the negative impact. 
-The last challenge is that the size of compressed blocks may change, requiring potential layout changes if compressed blocks
-are stored compactly. The article calls this as "fat write" problem. When fat writes occur, either the layout of compressed 
-blocks is changed, or the compression mechanism leaves some "slack" to absorb such changes in some degrees.
+Second, compression algorithms, in the worst case, may produce blocks even larger than the uncompressed size due to 
+extra metadata bits in the compressed stream. The compression scheme must be able to identify memory blocks that are 
+not easily compressible, and disable compression on these blocks to minimize the negative impact. 
+The last challenge is that the size of compressed blocks may change, requiring potential layout changes if compressed 
+blocks are stored compactly. The article calls this as "fat write" problem. When fat writes occur, either the layout of 
+compressed blocks is changed, or the compression mechanism leaves some "slack" to absorb such changes in some degrees.
 
-SCMS solves the above issues using a unified DRAM and LLC compression architecture. First, compressed blocks are transferred
-in the compressed form over the system bus. No extra compression and decompression is performed on data exchange between
-DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks into one block,
-achieving a maximum compression ratio of 2:1. This design decision not only simplifies the decompression algorithm due
-to the lower requirement on compression ratio, but also alleviates "fat write" problem, since it can tolerate slight
-size changes after writes, as long as the compression ratio is still above 2:1. Third, SCMS features simple layouts of 
-compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the DRAM, just with two different size class
-pages, which can be addressed with simple offset arithmetics. In the LLC, two compressed blocks always occupy the same 
-physical slot, which can be in one of the two sets these two blocks' addresses map to. The simple layout reduces metadata
-overhead to a minimum, as neither extra tag in the cache nor extra metadata storage in DRAM is required to perform
-address mapping for compressed blocks. 
+SCMS solves the above issues using a unified DRAM and LLC compression architecture. First, compressed blocks are 
+transferred in the compressed form over the system bus. No extra compression and decompression is performed on data 
+exchange between DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks 
+into one block, achieving a maximum compression ratio of 2:1. This design decision not only simplifies the 
+decompression algorithm due to the lower requirement on compression ratio, but also alleviates "fat write" problem, 
+since it can tolerate slight size changes after writes, as long as the compression ratio is still above 2:1. 
+Third, SCMS features simple layouts of compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the 
+DRAM, just with two different size class pages, which can be addressed with simple offset arithmetics. 
+In the LLC, two compressed blocks always occupy the same physical slot, which can be in one of the two sets these 
+two blocks' addresses map to. The simple layout reduces metadata overhead to a minimum, as neither extra tag in 
+the cache nor extra metadata storage in DRAM is required to perform address mapping for compressed blocks. 
 Lastly, SCMS relies on the Operating System to make compression decisions. Compression decision are made when the 
 OS initializes a page's contents and its page table entry. Hardware solely follows the compression decision as best
 as it could, and only notifies the OS when necessary (e.g. a new page must be allocated due to layout changes).
@@ -111,11 +111,14 @@ accessed data. The buffer is checked in parallel with an LLC lookup, and has the
 contents to the upper level cache if it is hit.
 
 When blocks are evicted from the LLC, it is directly transferred on the bus without having to be decompressed first.
-Compressed blocks are still organized into pages, and are stored compactly on the physical page. SCMS conserves memory 
+Compressed blocks are still organized into pages, and are stored in an address aligned manner on the physical page
+(i.e., both uncompressed blocks and compressed pairs are stored at block boundaries). 
+SCMS conserves memory 
 by using two size class pages. Half-sized paged are used if compression of adjacent blocks can reduce the size of the 
 page to less than half of the conventional page size. Full-sized pages are used otherwise. The OS is still responsible
 for allocating pages. The paper suggests that both half and full pages should align to the corresponding size boundaries
-to ease hardware address translation. One more bit is added to the physical page number in the PTE to support half-sized pages.
+to ease hardware address translation. One more bit is added to the physical page number in the PTE to support 
+half-sized pages.
 The layout of compressed blocks are described by a small bit vector in the page table entry. Bit i in the vector 
 indicates whether block 2i and (2i + 1) are compressed together
 (note that we only need half the number of logical blocks per page as the number of bits). 
@@ -126,18 +129,24 @@ stored in the PTE to derive the physical block address.
 
 When the OS allocates a page and initializes its page table entry, the OS determines how the blocks in the page should 
 be laid out by setting the bit vector in the PTE. 
-Block layouts are also updated, if a dirty block is written back from the LLC, and the compressibility of the block changes. 
-If the block was not compressed, but the write back request contains a compressed block, then both the block and its adjacent 
+Block layouts are also updated, if a dirty block is written back from the LLC, and the compressibility of the block 
+changes. 
+If the block was not compressed, but the write back request contains a compressed block, then both the block and its 
+adjacent 
 neighbor will be stored in compressed form in the page, after which the bit vector is also updated. Page shrinking may
-also be necessary, but is not on the critical path. On the other hand, if a block was stored compressed, but written back
-in an uncompressed form, the DRAM controller should first attempt to decompress the old compacted block, and then update 
-one of them with the write back. The rest of the blocks in the page should also be shifted to make space for the new slot.
-If the page is already full, which only happens for half-sized pages, then the OS should be interrupted for a larger page.
+also be necessary, but is not on the critical path. On the other hand, if a block was stored compressed, but written 
+back in an uncompressed form, the DRAM controller should first decompress the compressed pair on the DRAM page, 
+and then unpack them as two uncompressed blocks, after which the write back is applied.
+The rest of the blocks in the page should also be shifted to make space for the new slot.
+If the page is already full, which only happens for half-sized pages, then the OS should be interrupted for
+allocating a larger page.
 
 The paper proposes using dictionary-based X-RL as the compression algorithm. The hardware compressor and decompressor 
 work on blocks twice of the size of a cache line in the LLC. The input stream is first divided into two equally
-sized sub-blocks, and then compressed independently using two compressors. The output streams are stored in an byte-interleaved
-manner (until one of them runs out of bytes, after which bytes from the other stream are just sequentially placed), such 
+sized sub-blocks, and then compressed independently using two compressors. The output streams are stored in an 
+byte-interleaved
+manner (until one of them runs out of bytes, after which bytes from the other stream are just sequentially placed), 
+such 
 that decompression for both streams could begin early after the first few leading bytes are received from bus transfer. 
 A special header is attached to the header of the resulting stream as metadata.
 To further accelerate decompression, the paper also suggests that the decompression buffer is flash cleared to all-zeros
