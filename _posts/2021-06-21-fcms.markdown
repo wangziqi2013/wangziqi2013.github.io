@@ -71,3 +71,9 @@ compressed block in the unit of buckets can be derived by subtracting the curren
 block in the pre-determined order.
 The tag entry contains offset fields that stores the starting bucket of each compressed block.
 
+On the main memory side, cache blocks are managed in page granularity. The paper does not mention whether there
+are different size classes and how many (this would be the same across different proposals, so I do not really
+mind it not being discussed). 
+To simplify address generation for blocks within the page, blocks are not stored compactly, in which case the 
+offset of each block would need to be maintained somewhere, and there would be frequent shifting and data compaction
+when the compressed size of a block changes.
