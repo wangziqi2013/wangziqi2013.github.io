@@ -66,5 +66,8 @@ FCMS does not decouple data slots from tag entries, indicating that there is sti
 tag entries and the data store for addresses encoded by the entry.
 Data slots are segmented into buckets for storing variable sized compressed blocks. Blocks must be stored in
 consecutive buckets, and all blocks in the same tag entry are stored compactly, i.e., there must be no external 
-
+fragmentation, and in a pre-determined order. The latter property simplifies size computation, since the size of a 
+compressed block in the unit of buckets can be derived by subtracting the current offset from the offset of the next 
+block in the pre-determined order.
+The tag entry contains offset fields that stores the starting bucket of each compressed block.
 
