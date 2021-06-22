@@ -16,6 +16,8 @@ version_mgmt:
 This paper proposes Fine-Grained Compressed Memory System (FCMS) as an improvement over a previous proposal SCMS.
 The authors noted that while SCMS reduces memory bandwidth and effective cache capacity, the maximum compression
 ratio is limited to two, due to the fact hat SCMS only compresses adjacent even-odd blocks into the same data slot.
-
+The paper observes that with a moderately good compression algorithm, many cache blocks can be compressed to less
+than 50% of the original size, which causes storage under-utilization, as blocks compressed to less than 50% 
+of the original size will leave unused storage in the data slot (which is called internal fragmentation by this paper).
 
 
