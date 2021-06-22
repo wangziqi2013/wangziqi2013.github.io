@@ -54,6 +54,9 @@ FCMS uses a different cache and DRAM page organization.
 On the cache side, FCMS adopts the super-block based index generation for less metadata bits dedicated to address tags.
 Each entry only has one address tag, but three super-block offsets tags that encode three arbitrary addresses
 within the super-block.
-
+The super-block size is 16, meaning that 16 aligned and consecutive blocks on the physical address space are mapped to 
+the same set.
+Given a block address, the index generation function selects the middle few bits as the set index, while outputting the 
+higher bits as the tag, and the lower four bits as the offset. 
 
 
