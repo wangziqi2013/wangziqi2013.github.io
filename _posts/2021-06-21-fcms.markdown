@@ -41,3 +41,7 @@ sets computed from address 2i and (2i + 1) (these two sets are adjacent if the i
 lowest few bits of the block address). On a cache lookup, both sets need to be probed. This essentially doubles the 
 associativity of SCMS cache.
 
+SCMS manages uncompressed and compressed blocks on DRAM in the granularity of pages. Two size classes are supported,
+namely full sized pages and half sized pages. In half sized pages, all even-odd pairs are stored in compressed form.
+In full sized pages, some blocks are stored in uncompressed form. Both uncompressed blocks and compressed pairs are
+aligned to 64-byte boundaries for easy index generation. 
