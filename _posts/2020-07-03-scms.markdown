@@ -97,13 +97,15 @@ unnecessary evictions when compressed blocks are inserted into the LLC.
 On accesses to compressed blocks in the LLC from the upper level, the compressed block is sent to the decompressor 
 for decoding. The decompressor has a buffer, which lies between the LLC and upper level caches and serves as a small
 cache for the most recent decompressed blocks. The paper proposes two optimizations for the decompressor. First, 
-the critical word of the request can be delivered as soon as it is output from the decompressor. Second, if the decompressor
+the critical word of the request can be delivered as soon as it is output from the decompressor. Second, if the 
+decompressor
 is processing a block read from the DRAM (which happens when an access also misses the LLC), the transfer of the block
 and the decompression process can be pipelined, i.e. decompression could start as soon as the leading bytes are received
 from the system bus. This reduces the latency of accesses since it essentially overlaps bus transfer with decompression.
 When dirty blocks are written back from the upper level, the cache controller should first check whether the block
 is currently stored in the LLC in compressed form. If true, then the compressed block is first read from the cache,
-decompressed, updated with the evicted dirty block, and then recompressed. If the block after compression still fits into
+decompressed, updated with the evicted dirty block, and then recompressed. If the block after compression still fits 
+into
 a physical slot, then the physical slot is updated. Otherwise, only uncompressed blocks will be stored in the LLC. One
 of these two uncompressed blocks use the current slot, while the other one needs to find an empty slot in the other set.
 Note that uncompressed blocks remain in the compressor buffer as a means of providing fast access to the most recently
@@ -137,7 +139,7 @@ neighbor will be stored in compressed form in the page, after which the bit vect
 also be necessary, but is not on the critical path. On the other hand, if a block was stored compressed, but written 
 back in an uncompressed form, the DRAM controller should first decompress the compressed pair on the DRAM page, 
 and then unpack them as two uncompressed blocks, after which the write back is applied.
-The rest of the blocks in the page should also be shifted to make space for the new slot.
+The rest of the blocks in the page should also be shifted to accommodate for the newly unpacked block.
 If the page is already full, which only happens for half-sized pages, then the OS should be interrupted for
 allocating a larger page.
 
