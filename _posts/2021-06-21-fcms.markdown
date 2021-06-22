@@ -49,3 +49,11 @@ A bit vector in the page table entries for full-sized pages describes the data l
 to compute block offsets on an access request.
 The OS maintains a pool of both size classes, and is responsible for allocating pages, performing data migration on 
 size class change, and maintaining page table entries.
+
+FCMS uses a different cache and DRAM page organization.
+On the cache side, FCMS adopts the super-block based index generation for less metadata bits dedicated to address tags.
+Each entry only has one address tag, but three super-block offsets tags that encode three arbitrary addresses
+within the super-block.
+
+
+
