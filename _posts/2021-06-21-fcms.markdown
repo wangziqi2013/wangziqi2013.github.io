@@ -27,4 +27,7 @@ but it does not affect our discussion), compressed blocks between size 4i and (4
 Cache metadata is also organized such that compressed blocks can occupy a variable number of buckets in the data array,
 allowing a more flexible management of cached data. 
 
+FCMS is based on SCMS. SCMS is a unified compressed LLC and memory design, in which blocks are transferred between the
+LLC and the DRAM in compressed form on block fetch and eviction. SCMS only attempts to compress adjacent even-odd 
+blocks individually, and store them in the same 64-byte data slot. 
 
