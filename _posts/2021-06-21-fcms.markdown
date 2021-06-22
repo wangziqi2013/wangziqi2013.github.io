@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Fine-Grained Compressed Memory System (FCMS) as an improvement over a previous proposal SCMS.
+The authors noted that while SCMS reduces memory bandwidth and effective cache capacity, the maximum compression
+ratio is limited to two, due to the fact hat SCMS only compresses adjacent even-odd blocks into the same data slot.
+
+
+
