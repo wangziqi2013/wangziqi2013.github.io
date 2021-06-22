@@ -20,34 +20,34 @@ version_mgmt:
    a fat write occurs).
 
 2. The seamless integration between page-based memory compression and super-block based cache compression saves metadata
-   overhead. Compressed blocks are not decompressed before and after transferred over the system bus, maintaining a uniform
-   layout between memory and LLC.
+   overhead. Compressed blocks are not decompressed before and after transferred over the system bus, maintaining a 
+   uniform layout between memory and LLC.
    
 3. It is a good balancing point between efficiency and simplicity to only compress adjacent even-odd blocks.
 
-4. Using page table to store the small compression vector for describing page layout to achieve minimum DRAM metadata overhead.
+4. Using page table to store the small compression vector for describing page layout to achieve minimum DRAM metadata 
+   overhead.
 
-5. Using adjacent sets to store compressed blocks in the LLC to minimize LLC metadata overhead
+5. Using adjacent sets to store compressed blocks in the LLC to minimize LLC metadata overhead. This is just a  
+   simple skewed design, in which the candidate sets are the set of block 2i and (2i + 1).
+   This essentially doubles associativity, since both blocks in the pair can be stored in both sets.
 
-To summarize 3 - 5: There are two major trade-offs in the paper: (1) Trade-off between compression effectiveness and cache 
-management difficulties; (2) Trade-off between DRAM saving and page mapping metadata cost.
+To summarize 3 - 5: There are two major trade-offs in the paper: (1) Trade-off between compression effectiveness and 
+cache management difficulties; (2) Trade-off between DRAM saving and page mapping metadata cost.
 
-**Questions**
+**Comments**
 
-1. Writing is really poor. I do suggest whoever that wrote Section 1 and 2 perform a basic proof read on later sections.
-   In addition, whoever wrote later sections should first make sure correct terminologies are used, and don't write like
-   spagetti. 
-   Overall, the paper looks like a product of pipelined writing, which is fine, but before submission can you please
-   at least unify the writing style across sections.
+1. It seems that a small page (half-sized page with compressed blocks) can only be achieved when all even-odd 
+   blocks are compressed together? As long as there is a block that cannot be compressed into an even-odd pair,
+   the page must be large page.
 
-2. The paper proposes a block level address mapping scheme, but current MMU only maps at page granularity and assumes
-   linear block layout in the page. How does hardware translate block address for each access? Do you extend the TLB to
-   track block offset of each block, or you change TLB granularity (which is extremely unrecommended)?
+2. Relevant to (1): For small pages there is no need to maintain the bit vector, because there is only one layout.
+   For large pages the bit vector is necessary, since some pairs may just be compressed together.
 
 This journal article proposes Selective Compressed Memory System (SCMS), a unified cache and memory compression scheme
 for reducing storage overhead and increasing performance.
 The journal identifies three challenges of cache and memory compression designs. First, decompression is on the critical
-path of access operations. The decompression architecture must be able to deliver raw bytes with high throuhgput and low
+path of access operations. The decompression architecture must be able to deliver raw bytes with high throughput and low
 latency. For a unified LLC and DRAM compression scheme, the decompression bottleneck occurs on the datapath between the
 LLC and the upper level cache, which requires certain hardware structure to deal with.
 Second, compression algorithms, in the worst case, may produce blocks even larger than the uncompressed size due to extra
@@ -61,7 +61,7 @@ SCMS solves the above issues using a unified DRAM and LLC compression architectu
 in the compressed form over the system bus. No extra compression and decompression is performed on data exchange between
 DRAM and the LLC. Second, SCMS only compresses two adjacent even-odd numbered cache line sized blocks into one block,
 achieving a maximum compression ratio of 2:1. This design decision not only simplifies the decompression algorithm due
-to the lower requirement on compression ratio, but also allievates "fat write" problem, since it can tolerate slight
+to the lower requirement on compression ratio, but also alleviates "fat write" problem, since it can tolerate slight
 size changes after writes, as long as the compression ratio is still above 2:1. Third, SCMS features simple layouts of 
 compressed blocks on both DRAM and LLC. Blocks are still stored as pages in the DRAM, just with two different size class
 pages, which can be addressed with simple offset arithmetics. In the LLC, two compressed blocks always occupy the same 
@@ -89,7 +89,7 @@ the tag with i and (i + 1). To support parallel tag checks on two adjacent sets,
 further partitioned into two sub-banks, one for even numbered sets, and the other for odd numbered sets.
 On a set lookup, the index bits are extracted with the lowest bit masked off as i. Then set i and i + 1 from the sub-bank
 are read in parallel. This design essentially doubles the associativity of compressed blocks, which helps reducing 
-unnecessaryy evictions when compressed blocks are inserted into the LLC.
+unnecessary evictions when compressed blocks are inserted into the LLC.
 
 On accesses to compressed blocks in the LLC from the upper level, the compressed block is sent to the decompressor 
 for decoding. The decompressor has a buffer, which lies between the LLC and upper level caches and serves as a small
