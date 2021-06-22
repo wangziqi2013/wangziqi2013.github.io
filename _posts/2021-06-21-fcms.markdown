@@ -30,4 +30,10 @@ allowing a more flexible management of cached data.
 FCMS is based on SCMS. SCMS is a unified compressed LLC and memory design, in which blocks are transferred between the
 LLC and the DRAM in compressed form on block fetch and eviction. SCMS only attempts to compress adjacent even-odd 
 blocks individually, and store them in the same 64-byte data slot. 
+On the LLC side, SCMS manages compressed entries as super-blocks of size two, meaning that a tag entry stores the
+tag of the even numbered block, plus an extra bit to indicate whether the odd numbered block is also present in
+compressed form. Metadata such as dirty bits, and coherence states are duplicated on each tag entry as if there were 
+two logical blocks per entry (replacement entries are not duplicated, though, as both blocks in the tag are always 
+evicted together). 
+
 
