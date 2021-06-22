@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Space-Efficient Compressed Cache Organization for High Performance Computing"
+date:   2021-06-21 23:48:00 -0500
+categories: paper
+paper_title: "A Space-Efficient Compressed Cache Organization for High Performance Computing"
+paper_link: https://link.springer.com/chapter/10.1007%2F978-3-540-30566-8_109
+paper_keyword: FCMS; Cache Compression; Memory Compression
+paper_year: ISPA 2004
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---

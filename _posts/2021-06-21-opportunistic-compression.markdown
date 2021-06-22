@@ -1,9 +1,9 @@
 ---
 layout: paper-summary
-title:  "Opportunistic Compression for  Direct-Mapped DRAM Caches"
+title:  "Opportunistic Compression for Direct-Mapped DRAM Caches"
 date:   2021-06-21 03:00:00 -0500
 categories: paper
-paper_title: "Opportunistic Compression for  Direct-Mapped DRAM Caches"
+paper_title: "Opportunistic Compression for Direct-Mapped DRAM Caches"
 paper_link: https://dl.acm.org/doi/10.1145/3240302.3240429
 paper_keyword: DRAM Cache; Opportunistic Compression; Alloy Cache
 paper_year: MEMSYS 2018
