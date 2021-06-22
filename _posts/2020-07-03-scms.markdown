@@ -44,6 +44,9 @@ cache management difficulties; (2) Trade-off between DRAM saving and page mappin
 2. Relevant to (1): For small pages there is no need to maintain the bit vector, because there is only one layout.
    For large pages the bit vector is necessary, since some pairs may just be compressed together.
 
+3. Although the LLC and DRAM are in the same compression domain, LLC still uses logical block address 
+   (uncompressed address) rather than the actual physical location. The paper should have made a better point of this.
+
 This journal article proposes Selective Compressed Memory System (SCMS), a unified cache and memory compression scheme
 for reducing storage overhead and increasing performance.
 The journal identifies three challenges of cache and memory compression designs. First, decompression is on the critical
@@ -97,7 +100,7 @@ cache for the most recent decompressed blocks. The paper proposes two optimizati
 the critical word of the request can be delivered as soon as it is output from the decompressor. Second, if the decompressor
 is processing a block read from the DRAM (which happens when an access also misses the LLC), the transfer of the block
 and the decompression process can be pipelined, i.e. decompression could start as soon as the leading bytes are received
-from the system bus. This reduces the latency of accesses since it essentally overlaps bus transfer with decompression.
+from the system bus. This reduces the latency of accesses since it essentially overlaps bus transfer with decompression.
 When dirty blocks are written back from the upper level, the cache controller should first check whether the block
 is currently stored in the LLC in compressed form. If true, then the compressed block is first read from the cache,
 decompressed, updated with the evicted dirty block, and then recompressed. If the block after compression still fits into
@@ -114,7 +117,8 @@ page to less than half of the conventional page size. Full-sized pages are used 
 for allocating pages. The paper suggests that both half and full pages should align to the corresponding size boundaries
 to ease hardware address translation. One more bit is added to the physical page number in the PTE to support half-sized pages.
 The layout of compressed blocks are described by a small bit vector in the page table entry. Bit i in the vector 
-indicates whether block 2i and (2i + 1) are compressed together. 
+indicates whether block 2i and (2i + 1) are compressed together
+(note that we only need half the number of logical blocks per page as the number of bits). 
 The mapping from virtual block address to physical block addresses happen during MMU page walk. Once the page walker
 locates the PTE, the bit vector is also fetched for computing block offsets. A "1" bit in offset i indicates that
 blocks 2i and (2i + 1) are mapped to the same block offset. The block offsets are added to the base physical address 
