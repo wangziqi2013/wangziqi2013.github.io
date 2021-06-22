@@ -58,5 +58,10 @@ The super-block size is 16, meaning that 16 aligned and consecutive blocks on th
 the same set.
 Given a block address, the index generation function selects the middle few bits as the set index, while outputting the 
 higher bits as the tag, and the lower four bits as the offset. 
+Both tag and offset are compared against the requested address on lookup operations. 
+Per-block metadata states are duplicated three times, such that each tag entry encodes at most three logical blocks.
+FCMS does not use skewed index generation.
+
+
 
 
