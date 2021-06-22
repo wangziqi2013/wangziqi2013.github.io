@@ -36,4 +36,8 @@ compressed form. Metadata such as dirty bits, and coherence states are duplicate
 two logical blocks per entry (replacement entries are not duplicated, though, as both blocks in the tag are always 
 evicted together). 
 
+SCMS also skews the index generation function of blocks, such that block 2i and (2i + 1) can be stored in both 
+sets computed from address 2i and (2i + 1) (these two sets are adjacent if the index generation function just uses
+lowest few bits of the block address). On a cache lookup, both sets need to be probed. This essentially doubles the 
+associativity of SCMS cache.
 
