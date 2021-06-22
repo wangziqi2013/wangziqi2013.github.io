@@ -45,3 +45,7 @@ SCMS manages uncompressed and compressed blocks on DRAM in the granularity of pa
 namely full sized pages and half sized pages. In half sized pages, all even-odd pairs are stored in compressed form.
 In full sized pages, some blocks are stored in uncompressed form. Both uncompressed blocks and compressed pairs are
 aligned to 64-byte boundaries for easy index generation. 
+A bit vector in the page table entries for full-sized pages describes the data layout of the page, which is used
+to compute block offsets on an access request.
+The OS maintains a pool of both size classes, and is responsible for allocating pages, performing data migration on 
+size class change, and maintaining page table entries.
