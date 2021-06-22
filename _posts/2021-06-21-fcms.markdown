@@ -18,7 +18,10 @@ version_mgmt:
 1. Use super-block tag entry, but do not encode all blocks in the super-block. Instead, only three blocks out of
    all 16 are encoded. As a result, the offset of the three blocks should also be stored in the tag entry.
 
+2. Do not need to store compressed size, if blocks are stored compactly and in a pre-determined order.
 
+3. I did not expect this paper to come up with what seems to be an early proposal of LCP. The actual LCP paper
+   was published 9 years after this paper.
 
 
 
