@@ -77,3 +77,12 @@ mind it not being discussed).
 To simplify address generation for blocks within the page, blocks are not stored compactly, in which case the 
 offset of each block would need to be maintained somewhere, and there would be frequent shifting and data compaction
 when the compressed size of a block changes.
+Instead, FCMS proposes what is similar to Linearly Compressed Pages (LCP, which was published in 2013, while this 
+paper was written in 2004): For each page, we only maintain one single slot size, which is stored in the page
+table, cached by the TLB, and used by the memory controller to address blocks. 
+The page-level slot size is chosen by the OS using an unknown criterion, and may subject to future changes if the 
+compressibility of blocks on the page change significantly. The paper justifies this design choice
+by arguing that blocks on most pages have similar compression ratio, due to data locality (this is also the 
+major motivation of LCP).
+As a result, block addresses on the page can be generated easily by adding the base address to block index within the
+page multiplied by the per-page slot size.
