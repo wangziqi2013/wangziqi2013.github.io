@@ -20,4 +20,11 @@ The paper observes that with a moderately good compression algorithm, many cache
 than 50% of the original size, which causes storage under-utilization, as blocks compressed to less than 50% 
 of the original size will leave unused storage in the data slot (which is called internal fragmentation by this paper).
 
+FCMS differs from SCMS by assigning multiple size classes to compressed blocks, rather than only having two 
+(i.e., uncompressed, and half-sized). Compressed block sizes are assigned with different "size buckets". The paper
+proposes using 16 buckets, meaning that for 64-byte cache blocks (the paper seems to suggest using 128-byte blocks,
+but it does not affect our discussion), compressed blocks between size 4i and (4i + 3) will be assigned to bucket i.
+Cache metadata is also organized such that compressed blocks can occupy a variable number of buckets in the data array,
+allowing a more flexible management of cached data. 
+
 
