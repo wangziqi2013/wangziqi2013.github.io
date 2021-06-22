@@ -23,7 +23,11 @@ version_mgmt:
 3. I did not expect this paper to come up with what seems to be an early proposal of LCP. The actual LCP paper
    was published 9 years after this paper.
 
+**Comments**
 
+1. The paper uses super-block of size 16. I am curious is there any justification for this design choice?
+   Large super-blocks may incur tag contention on the same set especially when spacial locality is strong, 
+   since a consecutive range of blocks are mapped to the same set.
 
 This paper proposes Fine-Grained Compressed Memory System (FCMS) as an improvement over a previous proposal SCMS.
 The authors noted that while SCMS reduces memory bandwidth and effective cache capacity, the maximum compression
