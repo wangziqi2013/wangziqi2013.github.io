@@ -91,4 +91,6 @@ Diff2 uses three length fields for word 2, 3 and 4. The first length field encod
 between the first and the second word. The second length field encodes the length of the common prefix
 between the second and the third word, and so on (i.e., each word use the previous one as the reference word,
 and has its own length field to encode the prefix length). 
-
+Diff3 is similar to diff2 in a sense that each word except the first one has its own length field. The difference
+is that in diff3, all words use the first word as the reference word to compute the prefix, rather than
+using the previous one.
