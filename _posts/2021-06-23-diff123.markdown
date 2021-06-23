@@ -28,3 +28,8 @@ of compression, as less bits are being transferred.
 Despite previous studies which show that the extra hardware added for compression will offset the energy benefit 
 of reduced data activity, the paper argues that compression can still be beneficial if the compression circuit
 is designed to be simple enough.
+
+We next describe the overall architecture. The compression scheme works for data transferred between the LLC and the
+main memory. The proposed logic is implemented as a Compression and Decompression Unit (CDU), which is inserted
+on the datapath between the LLC and the main memory. Data written back from the LLC is first compressed before it is
+sent to the memory bus. 
