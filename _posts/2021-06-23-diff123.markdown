@@ -55,3 +55,8 @@ slot size.
 The translation table can be implemented as a CAM structure where each entry stores a block address, which outputs the
 index that hits the CAM given the requested address. The index is then used to compute the offset in the compressed 
 region.
+
+Using CAM for address translation can still be too heavyweight, as CAMs are power hungry.
+To entirely get rid of the translation table, the paper further proposes to co-locate address tags with compressed
+block data in the compressed region, rather than using an on-chip CAM.
+
