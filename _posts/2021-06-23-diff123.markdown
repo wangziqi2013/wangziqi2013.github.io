@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Hardware-Assisted Data Compression for Energy Minimization in Systems with Embedded Processors"
+date:   2021-06-23 01:37:00 -0500
+categories: paper
+paper_title: "Hardware-Assisted Data Compression for Energy Minimization in Systems with Embedded Processors"
+paper_link: https://dl.acm.org/doi/10.5555/882452.874530
+paper_keyword: Memory Compression; Delta Encoding; diff123
+paper_year: DATE 2002
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
