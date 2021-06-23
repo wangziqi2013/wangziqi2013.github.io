@@ -72,3 +72,7 @@ The first type relies on offline value profiling to find the most frequent N val
 These values are then stored on a CAM structure for lookup during compression and decompression.
 During compression, 32-bit words that are in the CAM will be represented with only log2(N) bits, while 
 the rest are stored in uncompressed form. 
+A bit vector header is attached at the beginning to indicate which word is compressed and which is not.
+Decompression logic uses this bit vector to interpret the data code words that follow.
+The paper argues that while value profiling may not be practical for general purpose computing, for embedded
+systems it may actually work pretty well, since only a small number of programs are executed.
