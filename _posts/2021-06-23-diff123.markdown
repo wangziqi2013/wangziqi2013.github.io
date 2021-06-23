@@ -76,3 +76,8 @@ A bit vector header is attached at the beginning to indicate which word is compr
 Decompression logic uses this bit vector to interpret the data code words that follow.
 The paper argues that while value profiling may not be practical for general purpose computing, for embedded
 systems it may actually work pretty well, since only a small number of programs are executed.
+
+The paper further proposes three more compression algorithms using delta encoding. The paper observes that many values
+in the same cache block are close to each other in numeric values. As a result, those values are likely to share the
+same upper bits.
+
