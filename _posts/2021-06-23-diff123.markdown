@@ -63,3 +63,6 @@ In addition, blocks and tags in the compressed region can be organized as either
 Memory requests are then directly used to probe the tags in the compressed region just like how a SRAM cache is
 probed. If one of the tags hit, then the block is streamed out from the compressed region. 
 Otherwise, it is accessed from the home location. 
+This optimization, however, increases main memory activity, since all memory accesses need to check the 
+compressed region first, largely offsetting the first benefit discussed above.
+The bandwidth benefit is still valid, though.
