@@ -52,4 +52,6 @@ be stored in the compressed region, while others are just stored in their canoni
 The address translation table, therefore, only stores a list of the addresses of blocks in the region, without 
 maintaining the offsets for each block, as the offset can be computed by multiplying the position in the list with
 slot size.
-
+The translation table can be implemented as a CAM structure where each entry stores a block address, which outputs the
+index that hits the CAM given the requested address. The index is then used to compute the offset in the compressed 
+region.
