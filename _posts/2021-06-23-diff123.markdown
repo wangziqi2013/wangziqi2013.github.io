@@ -59,4 +59,7 @@ region.
 Using CAM for address translation can still be too heavyweight, as CAMs are power hungry.
 To entirely get rid of the translation table, the paper further proposes to co-locate address tags with compressed
 block data in the compressed region, rather than using an on-chip CAM.
-
+In addition, blocks and tags in the compressed region can be organized as either direct-mapped or ser-associative.
+Memory requests are then directly used to probe the tags in the compressed region just like how a SRAM cache is
+probed. If one of the tags hit, then the block is streamed out from the compressed region. 
+Otherwise, it is accessed from the home location. 
