@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a main memory compression technique for embedded systems. Embedded systems are often deployed in
+environments where energy supply is limited and hence should be utilized wisely.
+The paper is motived by previous proposals that perform instruction compression for reducing energy consumption,
+and it extends compression to data memory.
+
+
