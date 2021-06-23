@@ -22,6 +22,10 @@ version_mgmt:
    (3) Set-associative, which also does not require specific mapping structure, and it requires less replacement 
    than direct-mapped, at the cost of more metadata read on each access.
 
+2. Compression could be as easy as just cutting off higher bits of a word, if it shares common higher bits with
+   another reference word. There are a few variants of this, mostly on how the reference word is chosen and
+   the degree of value locality.
+   For example, the reference word can be the first word, the previous word, or some specific word (using an index).
 
 This paper proposes a main memory compression technique for embedded systems. Embedded systems are often deployed in
 environments where energy supply is limited and hence should be utilized wisely.
