@@ -85,3 +85,10 @@ The first algorithm, diff1, takes advantage of this by comparing the 2nd, 3rd an
 The length of the prefix is stored in a 5-bit field, and for the last three words, the prefix will not be stored
 (the first one is still stored as 32-bit word).
 On decompression, the prefix will be added back to the last three words.
+
+The paper also proposes two variants of diff1, namely diff2 and diff3.
+Diff2 uses three length fields for word 2, 3 and 4. The first length field encodes the length of the common prefix
+between the first and the second word. The second length field encodes the length of the common prefix
+between the second and the third word, and so on (i.e., each word use the previous one as the reference word,
+and has its own length field to encode the prefix length). 
+
