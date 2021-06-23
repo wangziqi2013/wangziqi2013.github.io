@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Compressed main memory (or a region) can be implemented as (1) fully-associative, which requires address translation
+   using either hardware CAM or other mapping structure, but does not need backing memory; 
+   (2) Direct-mapped, which must have another extra level of backing memory for replacement, but need no mapping 
+   table or CAM, just co-locate the tag with data;
+   (3) Set-associative, which also does not require specific mapping structure, and it requires less replacement 
+   than direct-mapped, at the cost of more metadata read on each access.
+
+
 This paper proposes a main memory compression technique for embedded systems. Embedded systems are often deployed in
 environments where energy supply is limited and hence should be utilized wisely.
 The paper is motived by previous proposals that perform instruction compression for reducing energy consumption,
