@@ -66,3 +66,9 @@ Otherwise, it is accessed from the home location.
 This optimization, however, increases main memory activity, since all memory accesses need to check the 
 compressed region first, largely offsetting the first benefit discussed above.
 The bandwidth benefit is still valid, though.
+
+The paper then proposes two types of compression algorithms.
+The first type relies on offline value profiling to find the most frequent N values (N = 128 in this paper).
+These values are then stored on a CAM structure for lookup during compression and decompression.
+During compression, 32-bit words that are in the CAM will be represented with only log2(N) bits, while 
+the rest are stored in uncompressed form. 
