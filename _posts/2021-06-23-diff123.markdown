@@ -21,3 +21,6 @@ The challenge, however, is that data memory must be optimized for both compressi
 be performed online and are performance critical. Instruction compression, on the other hand, only needs to be fast 
 on decompression, as instructions can be compressed off-line, and will unlikely be modified in the runtime.
 
+The paper identifies two reasons why data compression helps saving energy. First, less data bits are streamed from
+the main memory on accesses, which can reduce power related to row buffer activities.
+Second, since blocks are transferred over the memory bus in compressed form, the bus also enjoys the energy benefit
