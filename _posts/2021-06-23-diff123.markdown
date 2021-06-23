@@ -80,4 +80,8 @@ systems it may actually work pretty well, since only a small number of programs 
 The paper further proposes three more compression algorithms using delta encoding. The paper observes that many values
 in the same cache block are close to each other in numeric values. As a result, those values are likely to share the
 same upper bits.
-
+The first algorithm, diff1, takes advantage of this by comparing the 2nd, 3rd and 4th word in the block 
+(the paper assumes 4-word block) with the first word, and computes the number of bits in the longest common prefix.
+The length of the prefix is stored in a 5-bit field, and for the last three words, the prefix will not be stored
+(the first one is still stored as 32-bit word).
+On decompression, the prefix will be added back to the last three words.
