@@ -32,4 +32,7 @@ is designed to be simple enough.
 We next describe the overall architecture. The compression scheme works for data transferred between the LLC and the
 main memory. The proposed logic is implemented as a Compression and Decompression Unit (CDU), which is inserted
 on the datapath between the LLC and the main memory. Data written back from the LLC is first compressed before it is
-sent to the memory bus. 
+sent to the memory bus. Access requests to the main memory are also intercepted by the CDU, and the CDU fetches
+the requested block from the main memory in either compressed or uncompressed form. 
+The CDU is put on the LLC side such that data transfers between the LLC and the main memory use compressed blocks
+whenever possible.
