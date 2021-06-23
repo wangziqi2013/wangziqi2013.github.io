@@ -36,3 +36,9 @@ sent to the memory bus. Access requests to the main memory are also intercepted 
 the requested block from the main memory in either compressed or uncompressed form. 
 The CDU is put on the LLC side such that data transfers between the LLC and the main memory use compressed blocks
 whenever possible.
+
+Memory blocks are stored in the DRAM in compressed form. Not all blocks are compressed, though. The paper proposes
+that part of the main memory be dedicated to storing compressed blocks (called a compressed region), while the 
+rest still stores uncompressed data. The paper noted that this is equivalent to having a compressed DRAM buffer 
+between the LLC and the uncompressed main memory.
+
