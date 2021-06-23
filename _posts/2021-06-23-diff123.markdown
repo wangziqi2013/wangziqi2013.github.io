@@ -46,4 +46,10 @@ hierarchy only uses their canonical addresses in memory requests.
 The address translation can be a major bottleneck if not handled properly, since in the most straightforward
 implementation, we need a translation table in the CDU, which stores the addresses of all blocks in the 
 compressed region, and their offsets, which incurs considerable metadata overhead.
+The paper proposes a simple address translation scheme as follows: The compression region is divided into fixed size
+slots, the size of which is less than a full cache line. Only blocks that can be compressed to below this size will
+be stored in the compressed region, while others are just stored in their canonical addresses.
+The address translation table, therefore, only stores a list of the addresses of blocks in the region, without 
+maintaining the offsets for each block, as the offset can be computed by multiplying the position in the list with
+slot size.
 
