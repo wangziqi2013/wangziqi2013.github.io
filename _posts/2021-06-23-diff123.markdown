@@ -17,5 +17,7 @@ This paper proposes a main memory compression technique for embedded systems. Em
 environments where energy supply is limited and hence should be utilized wisely.
 The paper is motived by previous proposals that perform instruction compression for reducing energy consumption,
 and it extends compression to data memory.
-
+The challenge, however, is that data memory must be optimized for both compression and decompression, as both will
+be performed online and are performance critical. Instruction compression, on the other hand, only needs to be fast 
+on decompression, as instructions can be compressed off-line, and will unlikely be modified in the runtime.
 
