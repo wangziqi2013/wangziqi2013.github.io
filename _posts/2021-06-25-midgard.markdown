@@ -60,6 +60,17 @@ version_mgmt:
    Luckily, existing IOMMUs already implement the latter, and even better, Midgard's page table is designed to be
    on the memory controller side, meaning that it is closer to peripherals.
 
+3. I do not quite get what the "short-circuit translation between MA and PA" is. I understand that it can be performed
+   from the lowest level of the radix tree with the hope that the lowest level entries are already cached in the LLC
+   (it is already done on today's MMU, with a page walk cache).
+   What I could not get is that, if you perform this optimization, then we do you need to allocate all levels of 
+   the radix tree in a linear array? 
+   Yes, I know this is because the PA of the entry can be easily computed given the MA. But, with a linear array,
+   you do not even need upper level entries - just read the direct-mapped entry, and that's it.
+   Later sections (Sec. IV-B) also suggest that all page table entries are mapped into one consecutive MA segment, 
+   which is even more confusing.
+   I can be wrong, but I think the authors are mixing two different things here.
+
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
 platform, where several TBs of memory on a single node is not uncommon.
