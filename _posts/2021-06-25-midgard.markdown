@@ -132,3 +132,6 @@ and therefore, could only have one copy in the hierarchy, eliminating the possib
 Third, MA are translated to PA when a block is written back to the cache, or when a fetch request misses the LLC.
 The MA to PA translation is performed at traditional 4KB page granularity, and therefore still enjoys the benefit
 of fine-grained memory management and low fragmentation.
+Although this step still requires a heavyweight translation, as the number of translation entries is still linearly
+proportional to the working set size, the paper argues that most memory accesses would not need such translation,
+since the cache hierarchy has filtered out most memory accesses, which would simply use the faster VA to MA translation.
