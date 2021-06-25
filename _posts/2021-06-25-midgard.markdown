@@ -29,3 +29,9 @@ On modern architectures, as memory accesses become heterogeneous in terms of lat
 it is a common optimization to migrate pages between different memory modules. This process requires updating the 
 translation information both in the main memory and cached by the TLB, which frequently involves TLB shootdowns.
 Large TLBs can make the performance worse due to the shootdown overhead.
+
+The paper noted that previous proposals attempted to solve this issue from different directions. 
+Virtual hierarchy uses virtual addresses, instead of physical addresses, to avoid paying the cost of translation
+on the critical path. Addresses are only translated when accesses are bring made external to the virtual hierarchy.
+
+
