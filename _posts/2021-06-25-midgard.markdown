@@ -50,3 +50,9 @@ directly to PA, which is enforced to simplify physical page management, process 
 to the MA in a segmented manner. To elaborate: modern OSes organize the address space of a process into several 
 segments, i.e., the code segment, data segment, and shared libraries. Each segment is a logical entity in which every
 address shares the same access permission information, and each segment occupy a consecutive range of address in the VA.
+Segments from different processes are mapped to different segments in the MA space with one single mapping 
+(shared segments in different processes such as the OS image or libraries are mapped to the same MA segment).
+Since the number of segments remains relatively constant, which is typically not proportional to the number of pages in 
+the working set, and that segments can be large, the number of translation entries from VA to MA space remains low,
+e.g., several hundreds of entries can be sufficient.
+
