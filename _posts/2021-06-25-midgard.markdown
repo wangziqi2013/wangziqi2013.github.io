@@ -43,6 +43,16 @@ version_mgmt:
    hints from the application, etc.). As long as mapping from VA to this special address space and from this
    space to PA are easy to perform, this is always doable.
 
+**Comments:**
+
+1. How is CoW performed in Midgard? When you fork a process, you copy its Midgard mapping table, essentially
+   sharing code and data segments between the parent and child processes, and the permission of the child table
+   changes to read-only.
+   So what happens if a writes happens on the child?
+   Do you just copy the entire segment (expensive)? Or you break down the segment (nullifies Midgard) in the
+   child process such that one 4KB of them can be readable-writable?
+   
+
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
 platform, where several TBs of memory on a single node is not uncommon.
