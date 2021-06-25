@@ -138,11 +138,11 @@ since the cache hierarchy has filtered out most memory accesses, which would sim
 
 We next describe the implementational details of Midgard.
 The VA to MA mapping is implemented as a per-process table, which is accelerated by a per-core hardware cache
-similar to the TLB, called the Midgard Lookaside Buffer (MLB). 
+similar to the TLB, called the Virtual Lookaside Buffer (VLB). 
 The table stores range descriptors that encodes the base address, bound, mapped MA space address, and access permission 
 bits of each segment. Addresses in MA space has 64 bits, since it is global and must hold all  
 segments from all processes.
-The translation table is implemented as a B+Tree for ranged lookup, and the MLB is implemented as a CAM that supports
+The translation table is implemented as a B+Tree for ranged lookup, and the VLB is implemented as a CAM that supports
 ranged address lookup. The paper noted that a typical process will only use hundreds of segments, which can be stored
 within a single 4KB physical page.
 
@@ -151,3 +151,11 @@ All processes in the system share the same MA, and their segments must be alloca
 Segments can also dynamically grow in the MA space. Sometimes, segments fail to grow because of another nearby segment.
 In this case, the OS either breaks down the segment after growth into two, or remaps the segment into a different
 MA. In the latter case, the cache needs to be flushed, since blocks are cached with MA tags.
+
+The paper notices that the VLB can still become a bottleneck if not implemented properly, due to the longer latency
+of hardware range lookup. To deal with this, the paper proposes a two-level VLB architecture.
+The second-level VLB is fully associative, and it still performs ranged lookups. The first-level VLB, however,
+uses the classical page-based interface, and it can be set-associative for faster accesses.
+The entries of the first-level VLB are generated on-the-fly when the L2 VLB is accessed. The L1 VLB entry does not 
+correspond to any entry in the in-memory mapping table.
+
