@@ -54,7 +54,11 @@ version_mgmt:
    File-mapped I/O that requires fine-grained access control also needs to break down segments.
    Same for some mmap() based tricks (e.g., allocating a large array not backed by any physical storage).
 
-
+2. Cache coherent DMA (and in general, peripherals that access the memory) has to know the reverse translation
+   between PA and MA, if the DMA is configured with PA, or has a copy of the page table, if the DMA is configured
+   with MA (this might just be the right thing to do). 
+   Luckily, existing IOMMUs already implement the latter, and even better, Midgard's page table is designed to be
+   on the memory controller side, meaning that it is closer to peripherals.
 
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
