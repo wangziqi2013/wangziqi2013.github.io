@@ -166,4 +166,7 @@ correspond to any entry in the in-memory mapping table.
 On the memory controller side, a conventional page table translates MA to PA in 4KB granularity. Bigger granularities 
 can also be supported using the same technique as in today's page table and TLB. To accelerate translation, a
 Midgard Lookaside Buffer (MLB) is also added to serve the purpose of what is expected from a conventional TLB.
-
+The page table is also implemented as a radix tree. The paper noted that, however, since midgard addresses have
+64 bits, the radix tree, given a fan-out of 512, requires six levels, suggesting longer translation latency.
+To counter this, the paper proposes a few optimizations, such as short-circuit accesses, continuous radix tree
+nodes, etc.
