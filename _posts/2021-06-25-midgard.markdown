@@ -23,3 +23,9 @@ growth of working set size for various reasons. As a result, when the working se
 of the TLB, the MMU must frequently perform page walks to bring new translation entries into the TLB.
 This is likely on the critical path, since memory instructions will remain in the ROB and/or various queues until
 their addresses are resolved, which can potentially cause structural hazard to the following instructions. 
+The paper also points out that, since TLBs are essentially caches to main memory data (PTEs), large TLBs also complicate
+the coherence protocol, namely, the TLB shootdown protocol.
+On modern architectures, as memory accesses become heterogeneous in terms of latency and throughput, 
+it is a common optimization to migrate pages between different memory modules. This process requires updating the 
+translation information both in the main memory and cached by the TLB, which frequently involves TLB shootdowns.
+Large TLBs can make the performance worse due to the shootdown overhead.
