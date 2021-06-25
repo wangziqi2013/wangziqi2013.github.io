@@ -163,4 +163,7 @@ uses the classical page-based interface, and it can be set-associative for faste
 The entries of the first-level VLB are generated on-the-fly when the L2 VLB is accessed. The L1 VLB entry does not 
 correspond to any entry in the in-memory mapping table.
 
+On the memory controller side, a conventional page table translates MA to PA in 4KB granularity. Bigger granularities 
+can also be supported using the same technique as in today's page table and TLB. To accelerate translation, a
+Midgard Lookaside Buffer (MLB) is also added to serve the purpose of what is expected from a conventional TLB.
 
