@@ -33,5 +33,7 @@ Large TLBs can make the performance worse due to the shootdown overhead.
 The paper noted that previous proposals attempted to solve this issue from different directions. 
 Virtual hierarchy uses virtual addresses, instead of physical addresses, to avoid paying the cost of translation
 on the critical path. Addresses are only translated when accesses are bring made external to the virtual hierarchy.
-
+This approach, however, suffers from synonym and homonym, which are caused by one physical address (PA) being mapped
+by multiple virtual addresses (VA) (i.e., page sharing between address spaces), and one VA being mapped to different 
+PAs, respectively.
 
