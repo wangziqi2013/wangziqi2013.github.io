@@ -24,6 +24,14 @@ version_mgmt:
    (3) Physical pages are still managed in small granularity by mapping MA to PA when data is transferred between the
    cache hierarchy and the main memory.
 
+2. Decouples isolation from physical memory management. In conventional virtual memory systems, isolation is performed
+   in much larger granularity, e.g., code and data segments are typically either fully shared or not shared between 
+   processes. Similar argument is also true for access permissions. In one word: It is wasteful to maintain fine-grained
+   info at page granularity.
+   On the other hand, maintaining per-4KB page metadata is good for resource management, because it allows flexible 
+   address mapping and reduces segmentation.
+   This two goals should be decoupled in future virtual memory systems.
+
 
 
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
