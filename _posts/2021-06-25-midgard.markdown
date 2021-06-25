@@ -71,6 +71,14 @@ version_mgmt:
    which is even more confusing.
    I can be wrong, but I think the authors are mixing two different things here.
 
+4. I have one question on the argument that caches can "filter out" most translation activities. 
+   Although data looks good and it is consistent with the claim, my question is, if the working set is large,
+   then LLC misses should still be an issue, and on each LLC miss, we still perform translation between MA and PA,
+   which is still on the critical path.
+   If the working set is small, then TLBs will cover the working set, and TLB will not become the bottleneck.
+   In fact, TLB coverage is much bigger than LLC size in most systems, so why would the LLC "filter out" something
+   that is cached by a larger structure?
+
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
 platform, where several TBs of memory on a single node is not uncommon.
@@ -120,3 +128,4 @@ translated to MA, before they can be used to access the cache hierarchy. This is
 setup, but it gets rid of homonym and synonym, since (1) Process isolation is still enforced since non-sharing segments
 are still mapped to different MA segments; and (2) Pages/segments shared by different processes have the same MA,
 and therefore, could only have one copy in the hierarchy, eliminating the possibility of synonym.
+
