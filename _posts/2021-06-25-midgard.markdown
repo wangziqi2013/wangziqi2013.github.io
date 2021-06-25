@@ -32,7 +32,11 @@ version_mgmt:
    address mapping and reduces segmentation.
    This two goals should be decoupled in future virtual memory systems.
 
-
+3. Addresses make no sense in a cache hierarchy. They are simply symbols for distinguishing different blocks.
+   As long as these symbols do not collide (i.e., different blocks do not use the same tag), and that both upper
+   level (CPU / VA space) and lower level (main memory / PA space) understand the symbol (i.e., have a way of 
+   translating them from VA/to PA), the cache will work.
+   
 
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
