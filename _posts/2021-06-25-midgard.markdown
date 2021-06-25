@@ -146,3 +146,8 @@ The translation table is implemented as a B+Tree for ranged lookup, and the MLB 
 ranged address lookup. The paper noted that a typical process will only use hundreds of segments, which can be stored
 within a single 4KB physical page.
 
+The OS maintains the mapping between VA and MA. 
+All processes in the system share the same MA, and their segments must be allocated in non-overlapping address ranges.
+Segments can also dynamically grow in the MA space. Sometimes, segments fail to grow because of another nearby segment.
+In this case, the OS either breaks down the segment after growth into two, or remaps the segment into a different
+MA. In the latter case, the cache needs to be flushed, since blocks are cached with MA tags.
