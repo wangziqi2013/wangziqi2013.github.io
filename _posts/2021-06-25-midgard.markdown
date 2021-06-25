@@ -18,3 +18,8 @@ The paper is motived by the fact that memory translation has become a major perf
 platform, where several TBs of memory on a single node is not uncommon.
 Maintaining large working sets in the main memory requires proportionally more translation entries, as modern hardware 
 still performs address translation in a fixed granularity.
+Unfortunately, the hardware structure for caching these entries for fast access, i.e., TLBs, cannot scale with the 
+growth of working set size for various reasons. As a result, when the working set size exceeds the maximum coverage 
+of the TLB, the MMU must frequently perform page walks to bring new translation entries into the TLB.
+This is likely on the critical path, since memory instructions will remain in the ROB and/or various queues until
+their addresses are resolved, which can potentially cause structural hazard to the following instructions. 
