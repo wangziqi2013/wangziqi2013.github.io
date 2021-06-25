@@ -142,3 +142,7 @@ similar to the TLB, called the Midgard Lookaside Buffer (MLB).
 The table stores range descriptors that encodes the base address, bound, mapped MA space address, and access permission 
 bits of each segment. Addresses in MA space has 64 bits, since it is global and must hold all  
 segments from all processes.
+The translation table is implemented as a B+Tree for ranged lookup, and the MLB is implemented as a CAM that supports
+ranged address lookup. The paper noted that a typical process will only use hundreds of segments, which can be stored
+within a single 4KB physical page.
+
