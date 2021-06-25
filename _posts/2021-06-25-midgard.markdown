@@ -51,7 +51,8 @@ version_mgmt:
    So what happens if a writes happens on the child?
    Do you just copy the entire segment (expensive)? Or you break down the segment (nullifies Midgard) in the
    child process such that one 4KB of them can be readable-writable?
-   
+
+
 
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
