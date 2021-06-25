@@ -44,4 +44,9 @@ it is quite mature and has been already deployed, still causes issues such as fr
 Midgard, on the other hand, decouples semantics level process isolation with physical level resource management,
 which are two independent functionalities coupled together in today's existing virtual memory system. 
 There are several design highlights.
-
+First, it adds an extra Midgard address space (MA space) between the VA space and the PA space.
+Processes still have their own VA spaces. The difference is that, instead of performing page-level mapping from VA
+directly to PA, which is enforced to simplify physical page management, process structures are first mapped from VA
+to the MA in a segmented manner. To elaborate: modern OSes organize the address space of a process into several 
+segments, i.e., the code segment, data segment, and shared libraries. Each segment is a logical entity in which every
+address shares the same access permission information, and each segment occupy a consecutive range of address in the VA.
