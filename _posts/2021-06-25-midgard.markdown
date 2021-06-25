@@ -51,6 +51,8 @@ version_mgmt:
    So what happens if a writes happens on the child?
    Do you just copy the entire segment (expensive)? Or you break down the segment (nullifies Midgard) in the
    child process such that one 4KB of them can be readable-writable?
+   File-mapped I/O that requires fine-grained access control also needs to break down segments.
+   Same for some mmap() based tricks (e.g., allocating a large array not backed by any physical storage).
 
 
 
