@@ -40,3 +40,8 @@ PAs, respectively.
 Other attempts have also been made with single address space OS and huge pages. The former requires significant
 changes to today's programming paradigm and OS interface, which is unrealistic. The latter, despite the fact that
 it is quite mature and has been already deployed, still causes issues such as fragmentation and alignment problems.
+
+Midgard, on the other hand, decouples semantics level process isolation with physical level resource management,
+which are two independent functionalities coupled together in today's existing virtual memory system. 
+There are several design highlights.
+
