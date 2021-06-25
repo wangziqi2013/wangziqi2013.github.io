@@ -55,4 +55,10 @@ Segments from different processes are mapped to different segments in the MA spa
 Since the number of segments remains relatively constant, which is typically not proportional to the number of pages in 
 the working set, and that segments can be large, the number of translation entries from VA to MA space remains low,
 e.g., several hundreds of entries can be sufficient.
+Addresses within segments are mapped linearly from VA to MA space, and hence do not need any extra mapping entry.
 
+Second, the cache hierarchy uses translated MA as tags, such that VA in programs only need to be 
+translated to MA, before they can be used to access the cache hierarchy. This is similar to the virtual cache hierarchy
+setup, but it gets rid of homonym and synonym, since (1) Process isolation is still enforced since non-sharing segments
+are still mapped to different MA segments; and (2) Pages/segments shared by different processes have the same MA,
+and therefore, could only have one copy in the hierarchy, eliminating the possibility of synonym.
