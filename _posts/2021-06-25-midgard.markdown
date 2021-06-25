@@ -129,3 +129,6 @@ setup, but it gets rid of homonym and synonym, since (1) Process isolation is st
 are still mapped to different MA segments; and (2) Pages/segments shared by different processes have the same MA,
 and therefore, could only have one copy in the hierarchy, eliminating the possibility of synonym.
 
+Third, MA are translated to PA when a block is written back to the cache, or when a fetch request misses the LLC.
+The MA to PA translation is performed at traditional 4KB page granularity, and therefore still enjoys the benefit
+of fine-grained memory management and low fragmentation.
