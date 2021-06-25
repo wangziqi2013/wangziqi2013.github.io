@@ -13,6 +13,19 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. This paper absorbs several observations: (1) Large mapping granularity helps to reduce translation overhead;
+   (2) Smaller granularity is good for resource management; (3) Virtual address caches do not need translation,
+   but due to lack of inter-process isolation, they suffer from synonym and homonym problems.
+   The paper combines these three to only use their advantages while dodging the disadvantages: (1) Large granularity
+   mapping is done between VA and MA at processor side to reduce translation overhead; (2) The cache hierarchy uses
+   MA which is similar to VA caches, but processes are properly isolated; 
+   (3) Physical pages are still managed in small granularity by mapping MA to PA when data is transferred between the
+   cache hierarchy and the main memory.
+
+
+
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
 platform, where several TBs of memory on a single node is not uncommon.
