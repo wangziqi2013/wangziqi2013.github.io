@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
+The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
+platform, where several TBs of memory on a single node is not uncommon.
+Maintaining large working sets in the main memory requires proportionally more translation entries, as modern hardware 
+still performs address translation in a fixed granularity.
