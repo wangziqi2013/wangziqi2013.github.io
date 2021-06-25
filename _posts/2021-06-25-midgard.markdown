@@ -37,3 +37,6 @@ This approach, however, suffers from synonym and homonym, which are caused by on
 by multiple virtual addresses (VA) (i.e., page sharing between address spaces), and one VA being mapped to different 
 PAs, respectively.
 
+Other attempts have also been made with single address space OS and huge pages. The former requires significant
+changes to today's programming paradigm and OS interface, which is unrealistic. The latter, despite the fact that
+it is quite mature and has been already deployed, still causes issues such as fragmentation and alignment problems.
