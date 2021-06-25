@@ -135,3 +135,10 @@ of fine-grained memory management and low fragmentation.
 Although this step still requires a heavyweight translation, as the number of translation entries is still linearly
 proportional to the working set size, the paper argues that most memory accesses would not need such translation,
 since the cache hierarchy has filtered out most memory accesses, which would simply use the faster VA to MA translation.
+
+We next describe the implementational details of Midgard.
+The VA to MA mapping is implemented as a per-process table, which is accelerated by a per-core hardware cache
+similar to the TLB, called the Midgard Lookaside Buffer (MLB). 
+The table stores range descriptors that encodes the base address, bound, mapped MA space address, and access permission 
+bits of each segment. Addresses in MA space has 64 bits, since it is global and must hold all  
+segments from all processes.
