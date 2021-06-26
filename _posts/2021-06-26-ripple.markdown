@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Ripple: Profile-Guided Instruction Cache Replacement for Data Center Applications"
+date:   2021-06-26 04:51:00 -0500
+categories: paper
+paper_title: "Ripple: Profile-Guided Instruction Cache Replacement for Data Center Applications"
+paper_link: https://conferences.computer.org/iscapub/pdfs/ISCA2021-4ghucdBnCWYB7ES2Pe4YdT/333300a734/333300a734.pdf
+paper_keyword: Ripple; i-cache; Cache Replacement
+paper_year: ISCA 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
