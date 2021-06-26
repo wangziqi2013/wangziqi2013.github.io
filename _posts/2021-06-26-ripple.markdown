@@ -34,10 +34,18 @@ Results show that performance can be improved with the proper replacement algori
 using LRU.
 
 The paper makes two observations about a good replacement algorithm. 
-First, the replacement algorithm should evict cache lines that are prefetched, but not used in the future. In
+First, the replacement algorithm should evict cache blocks that are prefetched, but not used in the future. In
 MIN this can be inferred accurately from the execution history, which is assumed to be known.
 Second, the algorithm should not evict blocks that are "hard to prefetch", which is defined as cache blocks
 that cannot be prefetched with good accuracy, e.g., due to indirect branches (depending on the prefetcher).
 Unfortunately, existing algorithms could not easily fulfill the task in these two observations, as they are 
 most likely invoked on-the-fly, with information only on the current state of the system, and a limited execution 
 history.
+
+The paper then investigated a few popular eviction algorithms, and compared their performance implication with hardware 
+prefetchers. Sadly, none of the existing algorithms studied by this paper performs well.
+Among the many algorithms, GHRP predicts a cache block to be either dead or alive based on control flow information,
+and evicts blocks that are deemed dead. The paper points out that certain implementational issues prevent GHRP
+from outperforming the baseline LRU. But even after correcting the issue, GHRP only outperforms LRU by a negligible 
+amount.
+
