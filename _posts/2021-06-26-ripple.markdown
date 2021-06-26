@@ -33,4 +33,7 @@ and gives priority to prefetched blocks over regular blocks (i.e., the well-know
 Results show that performance can be improved with the proper replacement algorithm compared with the baseline
 using LRU.
 
+The paper makes two observations about a good replacement algorithm. 
+First, the replacement algorithm should evict cache lines that are prefetched, but not used in the future. In
+MIN this can be inferred accurately from the execution history, which is assumed to be known.
 
