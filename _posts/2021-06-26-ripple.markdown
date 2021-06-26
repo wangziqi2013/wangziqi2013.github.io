@@ -48,4 +48,8 @@ Among the many algorithms, GHRP predicts a cache block to be either dead or aliv
 and evicts blocks that are deemed dead. The paper points out that certain implementational issues prevent GHRP
 from outperforming the baseline LRU. But even after correcting the issue, GHRP only outperforms LRU by a negligible 
 amount.
+Hawkeye/Harmony is originally designed for data caches, and it predicts a block to be either "cache-friendly" or
+"cache-averse" using the PC of the memory instruction. This will not work for i-cache evictions, since the 
+i-cache is driven by changing PC values.
+The paper also experimented with RRIP family, and without surprise, results are also not good. The problem with 
 
