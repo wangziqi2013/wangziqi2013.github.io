@@ -76,5 +76,9 @@ basic blocks in the execution order is output.
 Second, Ripple runs an off-line i-cache simulator with basic blocks addresses and sizes. Note that since basic blocks
 are code regions that are always executed from the beginning to the end, the simulation can be as simple as inputting
 all addresses in all basic blocks in the execution order to the simulator. The processor core is not simulated.
+Then, for all cache block addresses that have been evicted at least once, Ripple identifies their eviction windows.
+An eviction window is defined as the set of basic blocks that are executed between the last usage of a block and its 
+eviction. Note that the same block could be evicted multiple times, and therefore have multiple eviction windows.
 
+The 
 
