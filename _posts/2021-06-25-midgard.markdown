@@ -79,6 +79,17 @@ version_mgmt:
    In fact, TLB coverage is much bigger than LLC size in most systems, so why would the LLC "filter out" something
    that is cached by a larger structure?
 
+5. If page walker issue memory operations to the LLC, wouldn't there be recursive misses?
+   Imagine if the page walker issues command to read the lowest level PTE using Midgard address, 
+   which misses the LLC, and the LLC controller needs to go to the physical address to fetch the entry, which will
+   trigger another translation request on the page table's Midgard address, and so on.
+   The page walker needs to be re-entrant (i.e., being able to serve multiple concurrent walk requests, and switch
+   between different instances of walks with a stack).
+   This is considerably more difficult than a state-less, non-entrant page walker.
+   One solution is to let the LLC know that Midgard page table always has identity mapping (i.e., Midgard
+   addresses always map to the same physical addresses), such that there is no need for address translation
+   when fetching page table entries.
+
 This paper proposes Midgard, a novel virtual memory framework for reduced translation overhead on the critical path.
 The paper is motived by the fact that memory translation has become a major performance bottleneck on today's multicore
 platform, where several TBs of memory on a single node is not uncommon.
