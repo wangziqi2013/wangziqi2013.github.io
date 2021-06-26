@@ -36,4 +36,6 @@ using LRU.
 The paper makes two observations about a good replacement algorithm. 
 First, the replacement algorithm should evict cache lines that are prefetched, but not used in the future. In
 MIN this can be inferred accurately from the execution history, which is assumed to be known.
+Second, the algorithm should not evict blocks that are "hard to prefetch", which is defined as cache blocks
+that cannot be prefetched with good accuracy, e.g., due to indirect branches (depending on the prefetcher).
 
