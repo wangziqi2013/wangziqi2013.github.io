@@ -38,4 +38,6 @@ First, the replacement algorithm should evict cache lines that are prefetched, b
 MIN this can be inferred accurately from the execution history, which is assumed to be known.
 Second, the algorithm should not evict blocks that are "hard to prefetch", which is defined as cache blocks
 that cannot be prefetched with good accuracy, e.g., due to indirect branches (depending on the prefetcher).
-
+Unfortunately, existing algorithms could not easily fulfill the task in these two observations, as they are 
+most likely invoked on-the-fly, with information only on the current state of the system, and a limited execution 
+history.
