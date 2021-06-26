@@ -6,7 +6,7 @@ categories: paper
 paper_title: "Rebooting Virtual Memory with Midgard"
 paper_link: http://cs.yale.edu/homes/abhishek/sidgupta-isca21.pdf
 paper_keyword: Virtual Memory; Segmentation; Midgard
-paper_year: 
+paper_year: ISCA 2021
 rw_set:
 htm_cd:
 htm_cr:
