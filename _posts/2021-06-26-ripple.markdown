@@ -63,3 +63,7 @@ behavior on the same address useless.
 The paper then presents Ripple. Ripple is a software implemented replacement algorithm that relies on special
 i-cache flush instructions to mimic the behavior of the ideal algorithm, which has already been shown to exhibit
 the best performance improvement.
+The biggest advantage of Ripple is that, instead of running the algorithm on-the-fly as the binary executes,
+which is limited by on-chip computing resources, decision response time (usually a few cycles), and knowledge of 
+future references, Ripple collects execution profile (mainly basic block information), and analyzes the profile
+off-line by simulating the ideal algorithm (i.e., MIN).
