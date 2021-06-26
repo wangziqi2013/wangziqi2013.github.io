@@ -16,4 +16,5 @@ version_mgmt:
 This paper presents Ripple, a novel instruction cache replacement algorithm using off-line optimality analysis.
 The paper is motivated by the fact that modern data center applications can incur a heavy burden on the instruction
 cache, which is caused by numerous software stacks and many modules for different purposes within each stack.
-
+The paper shows that a typical data application can execute up to several MBs of code in the working set.
+On current platforms with tens of KBs of L1 instruction cache, this will result in 23% to 80% vacant pipeline slots.
