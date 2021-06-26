@@ -37,7 +37,7 @@ version_mgmt:
 
 **Comments:**
 
-1. I am not expert in cache replacement, so I will not make comments on the technical soundness of the 
+1. I am no expert in cache replacement, so I will not make comments on the technical soundness of the 
    details of the algorithm.
    My only comment is that, maybe the authors can make it clear that the off-line simulation uses a i-cache
    simulator, and the replacement algorithm is the ideal algorithm. 
