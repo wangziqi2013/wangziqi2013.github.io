@@ -18,3 +18,7 @@ The paper is motivated by the fact that modern data center applications can incu
 cache, which is caused by numerous software stacks and many modules for different purposes within each stack.
 The paper shows that a typical data application can execute up to several MBs of code in the working set.
 On current platforms with tens of KBs of L1 instruction cache, this will result in 23% to 80% vacant pipeline slots.
+
+The paper also noted that, despite best efforts from previous proposals that attempt to address the i-cache problem,
+such as specialized prefetchers, these proposals often only give sub-optimal improvements, because of not being
+able to understand the essential problem of high i-cache miss rates.
