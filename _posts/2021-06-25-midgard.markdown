@@ -166,7 +166,16 @@ correspond to any entry in the in-memory mapping table.
 On the memory controller side, a conventional page table translates MA to PA in 4KB granularity. Bigger granularities 
 can also be supported using the same technique as in today's page table and TLB. To accelerate translation, a
 Midgard Lookaside Buffer (MLB) is also added to serve the purpose of what is expected from a conventional TLB.
-The page table is also implemented as a radix tree. The paper noted that, however, since midgard addresses have
-64 bits, the radix tree, given a fan-out of 512, requires six levels, suggesting longer translation latency.
+The page table is also implemented as a radix tree. The controller-side MMU performs page walks to fetch PTEs from
+the table similar to a conventional MMU. The paper suggests that, since the page table must be addressable
+in order for the OS to make updates, the global page table itself is also mapped by Midgard addresses.
+To achieve this, the OS reserves a chunk of memory at initialization time (with identity mapping maybe?)
+on both Midgard and physical address space with proper mappings.
+The page walker, as a result, injects memory operations to the LLC during page walks.
+The page walk access can be satisfied either by coherence, if a more recent block is cached in the hierarchy,
+or by the LLC controller issuing commands to read physical memory.
+
+The paper noted that, however, since midgard addresses have 64 bits, the radix tree, given a fan-out of 512, 
+requires six levels, suggesting longer translation latency.
 To counter this, the paper proposes a few optimizations, such as short-circuit accesses, continuous radix tree
 nodes, etc.
