@@ -26,3 +26,11 @@ As a result, these prefetchers can bring many unnecessary cache blocks into the 
 useful blocks, causing what we call "cache pollution". 
 In addition, specialized hardware prefetchers need extra hardware resource on the chip, which can be expensive 
 in some cases.
+
+Hardware prefetchers, however, may actually become helpful when combined with the correct replacement algorithm.
+The paper experimented with an ideal algorithm that always evicts blocks that will be used in the furthest future,
+and gives priority to prefetched blocks over regular blocks (i.e., the well-known MIN replacement algorithm). 
+Results show that performance can be improved with the proper replacement algorithm compared with the baseline
+using LRU.
+
+
