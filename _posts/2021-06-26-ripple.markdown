@@ -112,3 +112,9 @@ overall performance improvement.
 Unluckily, the paper does not give a detailed explanation on how the threshold is selected, but just mentions that the
 threshold should be chosen such that both accuracy and coverage are at acceptable values.
 The paper reports that empirical values of a good threshold are between 40% andd 60%.
+
+The paper also noted that Intel already proposes adding a new i-cache flush instructions in future server platforms.
+Ripple could be implemented with this new instruction without any hardware modification.
+The authors also propose their own instruction for better i-cache management, namely invalidate, which differs from
+existing cache flush instructions by only evicting a block from the i-cache, but still keeping it within the rest 
+of the hierarchy.
