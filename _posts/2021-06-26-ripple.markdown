@@ -104,4 +104,8 @@ To help finding the threshold, which is program-specific, the paper hence define
 Coverage is defined as the number of manual evictions made by Ripple divided by the number of evictions that would be
 made by an ideal algorithm. The higher the coverage is, the better the coverage is, meaning that Ripple can 
 mimic most of the evictions done by the ideal algorithm.
-
+Accuracy, on the other hand, is defined as the ratio between the evictions (by running the code with the current
+manual insertion of evictions) that will also be made by the ideal algorithm and total number of evictions made by
+manual evictions. Accuracy reflects how many evictions are actually useful.
+The paper shows that there is a clear trade-off between these two, and that the threshold should be given to maximize
+overall performance improvement.
