@@ -55,3 +55,7 @@ The paper also experimented with RRIP family, and without surprise, results are 
 RRIP is that RRIP is specifically designed to address the scan pattern which will incur pathological cases with LRU.
 RRIP avoids the problem by treating newly inserted blocks only as "friendly" after the first reference after insertion.
 This assumption, however, does not work for i-cache, since scan is a relatively rare pattern for execution.
+The paper summarizes at the end of this section that i-cache usage follows a different pattern than data caches.
+Most prominently, even the same i-cache blocks will demonstrate varying re-reference intervals during different
+stages of program execution. This renders conventional algorithms depending on the assumption of fixed re-use 
+behavior on the same address useless.
