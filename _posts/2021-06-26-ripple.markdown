@@ -35,6 +35,14 @@ version_mgmt:
 5. Some blocks could not be chosen as the "cue block" if the corelation between the basic block and the eviction
    is weak. This can be recognized using coverage and accuracy.
 
+**Comments:**
+
+1. I am not expert in cache replacement, so I will not make comments on the technical soundness of the 
+   details of the algorithm.
+   My only comment is that, maybe the authors can make it clear that the off-line simulation uses a i-cache
+   simulator, and the replacement algorithm is the ideal algorithm. 
+   Otherwise it is difficult to understand the second half of the paper.
+
 This paper presents Ripple, a novel instruction cache replacement algorithm using off-line optimality analysis.
 The paper is motivated by the fact that modern data center applications can incur a heavy burden on the instruction
 cache, which is caused by numerous software stacks and many modules for different purposes within each stack.
