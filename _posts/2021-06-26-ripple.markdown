@@ -22,3 +22,7 @@ On current platforms with tens of KBs of L1 instruction cache, this will result 
 The paper also noted that, despite best efforts from previous proposals that attempt to address the i-cache problem,
 such as specialized prefetchers, these proposals often only give sub-optimal improvements, because of not being
 able to understand the essential problem of high i-cache miss rates.
+As a result, these prefetchers can bring many unnecessary cache blocks into the i-cache, potentially evicting
+useful blocks, causing what we call "cache pollution". 
+In addition, specialized hardware prefetchers need extra hardware resource on the chip, which can be expensive 
+in some cases.
