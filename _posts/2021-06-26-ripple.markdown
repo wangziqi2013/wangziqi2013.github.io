@@ -94,3 +94,10 @@ cur block is executed, the eviction of the block under question would follow.
 Ripple then inserts a cache block flush instruction into the cur block using the address of the cache block.
 This process is repeated for all blocks that have at least one eviction window.
 
+The paper also noted that not all blocks with the maximum ratio can be chosen as the cue block.
+If the absolute value of the ratio is too low, indicating that there is not strong relationship between the basic block
+and the evicted cache block, the flush should not be inserted to avoid disrupting normal caching in a different context.
+In other words: A threshold should be given as the minimum ratio computed above. Cur blocks under the threshold
+will not be selected for inserting evictions.
+
+
