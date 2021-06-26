@@ -100,4 +100,8 @@ and the evicted cache block, the flush should not be inserted to avoid disruptin
 In other words: A threshold should be given as the minimum ratio computed above. Cur blocks under the threshold
 will not be selected for inserting evictions.
 
+To help finding the threshold, which is program-specific, the paper hence defines two metrics: Coverage and Accuracy.
+Coverage is defined as the number of manual evictions made by Ripple divided by the number of evictions that would be
+made by an ideal algorithm. The higher the coverage is, the better the coverage is, meaning that Ripple can 
+mimic most of the evictions done by the ideal algorithm.
 
