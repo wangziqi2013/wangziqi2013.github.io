@@ -70,3 +70,11 @@ off-line by simulating the ideal algorithm (i.e., MIN).
 Once the globally ideal trace has been known, Ripple then inserts cache block eviction instructions in certain basic 
 blocks to achieve the same effect of the ideal algorithm in the run time, i.e., blocks that should have been evicted
 will actually be evicted during the execution at roughly the same point.
+
+Ripple operates as follows. First, the application is profiled with a basic block profiling tool, and a list of 
+basic blocks in the execution order is output. 
+Second, Ripple runs an off-line i-cache simulator with basic blocks addresses and sizes. Note that since basic blocks
+are code regions that are always executed from the beginning to the end, the simulation can be as simple as inputting
+all addresses in all basic blocks in the execution order to the simulator. The processor core is not simulated.
+
+
