@@ -21,6 +21,17 @@ version_mgmt:
 2. The paper observes that the ideal replacement algorithm (MIN) works well with prefetching, but it is unable to
    be implemented as hardware component due to lack of future knowledge.
 
+3. To address the above limitation, the paper proposes Ripple which uses off-line basic block analysis.
+   Ripple runs simulation on basic block traces, and simulates the ideal replacement algorithm.
+   It then attempts to insert i-cache flush instructions at certain places in the program, such that the 
+   behavior of the instrumented binary mimics the behavior of the ideal algorithm.
+
+4. The locations of inserting eviction instructions are selected by finding basic blocks that are 
+   executed between the last usage of a block and its eviction in the ideal algorithm.
+   One of the blocks in this "eviction window" is selected as the "cue block" based on the corelation between 
+   the execution of the 
+   basic block and the eviction of the cache block (the higher the better).
+
 
 
 This paper presents Ripple, a novel instruction cache replacement algorithm using off-line optimality analysis.
