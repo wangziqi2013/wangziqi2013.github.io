@@ -87,4 +87,10 @@ eviction could happen by inserting an i-cache flush instruction in any of these 
 To decide which basic block is the best one, Ripple uses two types of per-basic block statistics.
 The first one is the absolute number of times the basic block occurs in the trace.
 The second one is the number of times that the basic block appears in the block's window.
+Ripple computes the ratio between the second and the first statistics number, and selects the block with the maximum
+ratio as the cue block.
+The heuristics here is that, by maximizing the ratio between the two numbers, we maximize the chance that whenever the
+cur block is executed, the eviction of the block under question would follow. 
+Ripple then inserts a cache block flush instruction into the cur block using the address of the cache block.
+This process is repeated for all blocks that have at least one eviction window.
 
