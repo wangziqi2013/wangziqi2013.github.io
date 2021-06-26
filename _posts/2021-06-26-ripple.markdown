@@ -109,3 +109,6 @@ manual insertion of evictions) that will also be made by the ideal algorithm and
 manual evictions. Accuracy reflects how many evictions are actually useful.
 The paper shows that there is a clear trade-off between these two, and that the threshold should be given to maximize
 overall performance improvement.
+Unluckily, the paper does not give a detailed explanation on how the threshold is selected, but just mentions that the
+threshold should be chosen such that both accuracy and coverage are at acceptable values.
+The paper reports that empirical values of a good threshold are between 40% andd 60%.
