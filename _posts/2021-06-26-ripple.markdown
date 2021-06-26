@@ -32,7 +32,8 @@ version_mgmt:
    the execution of the 
    basic block and the eviction of the cache block (the higher the better).
 
-
+5. Some blocks could not be chosen as the "cue block" if the corelation between the basic block and the eviction
+   is weak. This can be recognized using coverage and accuracy.
 
 This paper presents Ripple, a novel instruction cache replacement algorithm using off-line optimality analysis.
 The paper is motivated by the fact that modern data center applications can incur a heavy burden on the instruction
