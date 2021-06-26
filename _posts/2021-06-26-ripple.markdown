@@ -59,3 +59,7 @@ The paper summarizes at the end of this section that i-cache usage follows a dif
 Most prominently, even the same i-cache blocks will demonstrate varying re-reference intervals during different
 stages of program execution. This renders conventional algorithms depending on the assumption of fixed re-use 
 behavior on the same address useless.
+
+The paper then presents Ripple. Ripple is a software implemented replacement algorithm that relies on special
+i-cache flush instructions to mimic the behavior of the ideal algorithm, which has already been shown to exhibit
+the best performance improvement.
