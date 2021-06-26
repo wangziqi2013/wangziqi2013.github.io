@@ -52,4 +52,6 @@ Hawkeye/Harmony is originally designed for data caches, and it predicts a block 
 "cache-averse" using the PC of the memory instruction. This will not work for i-cache evictions, since the 
 i-cache is driven by changing PC values.
 The paper also experimented with RRIP family, and without surprise, results are also not good. The problem with 
-
+RRIP is that RRIP is specifically designed to address the scan pattern which will incur pathological cases with LRU.
+RRIP avoids the problem by treating newly inserted blocks only as "friendly" after the first reference after insertion.
+This assumption, however, does not work for i-cache, since scan is a relatively rare pattern for execution.
