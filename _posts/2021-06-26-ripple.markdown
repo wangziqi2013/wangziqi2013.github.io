@@ -67,3 +67,6 @@ The biggest advantage of Ripple is that, instead of running the algorithm on-the
 which is limited by on-chip computing resources, decision response time (usually a few cycles), and knowledge of 
 future references, Ripple collects execution profile (mainly basic block information), and analyzes the profile
 off-line by simulating the ideal algorithm (i.e., MIN).
+Once the globally ideal trace has been known, Ripple then inserts cache block eviction instructions in certain basic 
+blocks to achieve the same effect of the ideal algorithm in the run time, i.e., blocks that should have been evicted
+will actually be evicted during the execution at roughly the same point.
