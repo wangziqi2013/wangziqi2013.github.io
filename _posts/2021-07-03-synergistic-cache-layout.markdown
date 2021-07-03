@@ -20,4 +20,6 @@ Traditional replacement algorithms such as LRU assume that blocks will be re-ref
 and hence gives it low priority for replacement. In addition, the cache always defaults to an always-allocate policy,
 i.e., a cache block is always inserted into the cache when it misses the LLC, assuming that the block will be 
 referenced again in the future. 
+Both assumptions are not true, and they work particularly bad for certain benchmarks such as libquantum, where 
+streaming (scans) is the dominant access pattern.
 
