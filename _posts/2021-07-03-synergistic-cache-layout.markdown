@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
+block. The paper is motivated by the fact that, at LLC level, block re-usage is not as common as one may expect at 
+higher levels of the hierarchy, mainly because locality has already been filtered out by higher level caches.
+
