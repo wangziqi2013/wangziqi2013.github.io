@@ -23,3 +23,7 @@ referenced again in the future.
 Both assumptions are not true, and they work particularly bad for certain benchmarks such as libquantum, where 
 streaming (scans) is the dominant access pattern.
 
+Reuse cache, a prior proposal, attempts to address this issue by over-provisioning the logical tag associativity
+by 4x, and tracking blocks that are first-time referenced since the last eviction in those over-provisioned 
+tags. A block is only inserted into the data array (and evicts an existing block) when the block is referenced for
+the second time. 
