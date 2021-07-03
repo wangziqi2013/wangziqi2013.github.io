@@ -27,3 +27,5 @@ Reuse cache, a prior proposal, attempts to address this issue by over-provisioni
 by 4x, and tracking blocks that are first-time referenced since the last eviction in those over-provisioned 
 tags. A block is only inserted into the data array (and evicts an existing block) when the block is referenced for
 the second time. 
+Although the design successfully increases overall performance by reducing unnecessary insertions that will never
+be re-referenced, the paper noted that it also incurs a huge metadata overhead on the cache, making it impractical.
