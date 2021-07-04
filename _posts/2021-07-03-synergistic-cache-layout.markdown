@@ -68,5 +68,9 @@ the block is referenced, which implies that the block should actually be cached.
 The LLC will therefore allocate an entry for the block being written back, by evicting another block, and add the
 block into the replacement chain.
 
-instead of providing data from the LLC, the request is treated as a miss
-due to lack of cached data, 
+In the second case, there is no most up-to-date block being cached at the higher level. The LLC will be hit, since 
+the first-use tag is already present. Since no data is actually being cached, the LLC will forward the request to 
+the lower level, fetching the block, and insert it into the data slot.
+In both cases, the first-use bit is also cleared.
+
+
