@@ -73,4 +73,8 @@ the first-use tag is already present. Since no data is actually being cached, th
 the lower level, fetching the block, and insert it into the data slot.
 In both cases, the first-use bit is also cleared.
 
-
+When a dirty block is written back from the upper level as a result of eviction (rather than coherence write back),
+the LLC will check whether the first-use bit is set. If true, the block will bypass the LLC, and by directly written
+back to the main memory. The tag in the LLC need not be evicted as it can still track the status of the 
+first-use block. Otherwise, normal write back logic is performed, which can still bypass the LLC, if the LLC is
+not inclusive.
