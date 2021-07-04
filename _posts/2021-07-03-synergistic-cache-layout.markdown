@@ -35,3 +35,8 @@ cache, which can also be potentially compressed.
 In a super-block based cache, each tag encodes four (or even more) consecutive blocks in the address space, 
 4i, 4i + 1, 4i + 2, and 4i + 3. Each block has its own state bits, and they react independently to coherence events.
 Multiple tags can co-exist in the same set, as long as they encode disjoint set of blocks.
+The paper also assumes a static, one-to-one tag-data mapping, i.e., no matter whether the cache is compressed, 
+blocks encoded by a tag can only be stored in the data slot bound to the tag.
+In the compressed configuration, blocks are first compressed before being inserted, and decompressed before
+being written back and sent to upper levels. Depending on the compression ratio, one data slot can store up to
+four compressed blocks, which equals the number of blocks per super-block.
