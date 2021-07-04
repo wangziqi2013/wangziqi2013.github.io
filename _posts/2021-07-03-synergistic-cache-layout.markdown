@@ -26,7 +26,12 @@ version_mgmt:
    this first-use model, as it requires more tags than data slots in order to track blocks whose data is not 
    cached (this is the way a compressed cache works).
 
-
+4. I would say this is a simplified version of RRIP. RRIP treats a newly inserted block as a "far block" meaning
+   that it will be inserted to the bottom of the LRU stack.
+   The block will only be promoted to the head of the LRU stack on later accesses. 
+   This corresponds to the first-use policy of not inserting the block, and inserting it on the second access, just
+   that the latter is more aggressive (no existing block is evicted, so we do not risk evicting a 
+   high locality block by bringing in another low locality block).
 
 This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
 block. The paper is motivated by the fact that, at LLC level, block re-usage is not as common as one may expect at 
