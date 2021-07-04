@@ -86,3 +86,9 @@ operation will not incur any eviction, and the first-use bit will not be set.
 Otherwise, if the block is not compressible, or the insertion of a compressed block will incur an eviction, the 
 first-use bit is set as in the uncompressed case.
 Write backs are handled in the same manner as in the uncompressed case.
+
+The paper also noted that, in the case where multiple tags on the same super-block exist in the same set,
+the insertion of a first-use block should set the flag in all the tags, such that the first-use information can be
+tracked as long as the super-block is cached. 
+Similarly, the bit is cleared in all tags when the block is accessed for a second time.
+Since these super-block tags are in the same set, both operations only need one parallel tag access.
