@@ -58,3 +58,6 @@ for the block.
 Note that the block can still be dirty in upper level caches, which is also tracked by the
 coherence controller, but it is different from the LLC's coherence state which is tracked by the LLC's tag array.
 
+When a request hits a first-use block, there are two cases. 
+The first case happens if the block is in dirty state in the coherence controller, indicating that a peer cache of 
+the requesting cache must have already written to the block and hence have the most up-to-date data.
