@@ -61,3 +61,12 @@ coherence controller, but it is different from the LLC's coherence state which i
 When a request hits a first-use block, there are two cases. 
 The first case happens if the block is in dirty state in the coherence controller, indicating that a peer cache of 
 the requesting cache must have already written to the block and hence have the most up-to-date data.
+In this case, the LLC acts as a normal coherence controller, which forwards the request to the current owner of the 
+block, and downgrades the block to shared state. Note that in this process, the block will also be written back 
+to the LLC as part of the ownership transfer process. The LLC will not be bypassed, since it is the second time 
+the block is referenced, which implies that the block should actually be cached. 
+The LLC will therefore allocate an entry for the block being written back, by evicting another block, and add the
+block into the replacement chain.
+
+instead of providing data from the LLC, the request is treated as a miss
+due to lack of cached data, 
