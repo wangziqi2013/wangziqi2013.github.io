@@ -22,6 +22,10 @@ version_mgmt:
    and so on. This rule can be implemented with just the first-use bit: When a block hits the LLC but the bit is set,
    the block will be inserted. Otherwise, the missing block will not be inserted.
 
+3. In a compressed cache, the number of tags are more than the number of data slots. This naturally fits into 
+   this first-use model, as it requires more tags than data slots in order to track blocks whose data is not 
+   cached (this is the way a compressed cache works).
+
 
 
 This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
