@@ -58,6 +58,7 @@ for the block.
 Note that the block can still be dirty in upper level caches, which is also tracked by the
 coherence controller, but it is different from the LLC's coherence state which is tracked by the LLC's tag array.
 
+We first discuss the operation on uncompressed caches.
 When a request hits a first-use block, there are two cases. 
 The first case happens if the block is in dirty state in the coherence controller, indicating that a peer cache of 
 the requesting cache must have already written to the block and hence have the most up-to-date data.
@@ -78,3 +79,10 @@ the LLC will check whether the first-use bit is set. If true, the block will byp
 back to the main memory. The tag in the LLC need not be evicted as it can still track the status of the 
 first-use block. Otherwise, normal write back logic is performed, which can still bypass the LLC, if the LLC is
 not inclusive.
+
+If the cache is compressed, then whether the cache is bypassed is opportunistic: If the block to be inserted is 
+compressible, and it could fit into the slot after compression, then the block will always be inserted, since this
+operation will not incur any eviction, and the first-use bit will not be set.
+Otherwise, if the block is not compressible, or the insertion of a compressed block will incur an eviction, the 
+first-use bit is set as in the uncompressed case.
+Write backs are handled in the same manner as in the uncompressed case.
