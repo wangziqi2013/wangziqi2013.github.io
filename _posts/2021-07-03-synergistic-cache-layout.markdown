@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Use a special state, "first-use" state, to indicate that a block has been accessed for the first time. The state
+   can be represented using one bit, which will be cleared on the second access before eviction;
+
+
+
 This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
 block. The paper is motivated by the fact that, at LLC level, block re-usage is not as common as one may expect at 
 higher levels of the hierarchy, mainly because locality has already been filtered out by higher level caches.
