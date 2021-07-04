@@ -119,3 +119,10 @@ the insertion of a first-use block should set the flag in all the tags, such tha
 tracked as long as the super-block is cached. 
 Similarly, the bit is cleared in all tags when the block is accessed for a second time.
 Since these super-block tags are in the same set, both operations only need one parallel tag access.
+
+The paper assumes non-inclusive cache where the coherence protocol already expects the LLC to be bypassed on 
+data fetch and eviction, and therefore no extra modification is needed on the coherence side. 
+In the case of an inclusive LLC, the paper suggests that the coherence controller should treat a block that
+is first-use as a logical block that is currently in the LLC. The actual data, however, cannot be provided by the LLC.
+The solution is that either the LLC acquires data from one of the the upper level sharers or the block owner,
+or forwards the request to the lower level as a fetch request.
