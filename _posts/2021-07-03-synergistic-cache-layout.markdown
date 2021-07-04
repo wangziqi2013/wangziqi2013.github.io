@@ -18,6 +18,10 @@ version_mgmt:
 1. Use a special state, "first-use" state, to indicate that a block has been accessed for the first time. The state
    can be represented using one bit, which will be cleared on the second access before eviction;
 
+2. First-use blocks are not cached by the LLC, since they often have low locality. They are only cached on second use
+   and so on. This rule can be implemented with just the first-use bit: When a block hits the LLC but the bit is set,
+   the block will be inserted. Otherwise, the missing block will not be inserted.
+
 
 
 This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
