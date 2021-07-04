@@ -40,3 +40,11 @@ blocks encoded by a tag can only be stored in the data slot bound to the tag.
 In the compressed configuration, blocks are first compressed before being inserted, and decompressed before
 being written back and sent to upper levels. Depending on the compression ratio, one data slot can store up to
 four compressed blocks, which equals the number of blocks per super-block.
+
+The design implements the high -level idea that, when a block is first-time inserted into the cache since the 
+previous eviction, instead of inserting data into the set, which may potentially evict another block of higher
+locality, the cache always assumes that the block is of low locality, and bypasses the LLC. The actual block is
+only inserted into the cache when the block is accessed for the second time, which indicates that the block may
+potentially be accessed later, and caching the block will bring actual benefit. 
+
+
