@@ -28,4 +28,10 @@ by 4x, and tracking blocks that are first-time referenced since the last evictio
 tags. A block is only inserted into the data array (and evicts an existing block) when the block is referenced for
 the second time. 
 Although the design successfully increases overall performance by reducing unnecessary insertions that will never
-be re-referenced, the paper noted that it also incurs a huge metadata overhead on the cache, making it impractical.
+be re-referenced, the paper noted that it also incurs a huge metadata overhead on the cache, which makes it infeasible.
+
+Instead of adding extra tags, the paper observes that extra tags can be obtained "for free" from a super-block based 
+cache, which can also be potentially compressed. 
+In a super-block based cache, each tag encodes four (or even more) consecutive blocks in the address space, 
+4i, 4i + 1, 4i + 2, and 4i + 3. Each block has its own state bits, and they react independently to coherence events.
+Multiple tags can co-exist in the same set, as long as they encode disjoint set of blocks.
