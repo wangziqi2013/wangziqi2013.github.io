@@ -33,6 +33,13 @@ version_mgmt:
    that the latter is more aggressive (no existing block is evicted, so we do not risk evicting a 
    high locality block by bringing in another low locality block).
 
+**Comments:**
+
+1. The paper misses an important case: When a request hits the LLC in first-use state, but the block is in M state 
+   in another cache.
+   In this case, the bit should be cleared as it is the second access, and coherence should be used to acquire
+   ownership of the block, which also incurs a write back as well as an insert.
+
 This paper proposes a cache insertion policy that increases actual block reuse by delaying the insertion of the data
 block. The paper is motivated by the fact that, at LLC level, block re-usage is not as common as one may expect at 
 higher levels of the hierarchy, mainly because locality has already been filtered out by higher level caches.
