@@ -41,10 +41,20 @@ In the compressed configuration, blocks are first compressed before being insert
 being written back and sent to upper levels. Depending on the compression ratio, one data slot can store up to
 four compressed blocks, which equals the number of blocks per super-block.
 
-The design implements the high -level idea that, when a block is first-time inserted into the cache since the 
+The design implements the high-level idea that, when a block is first-time inserted into the cache since the 
 previous eviction, instead of inserting data into the set, which may potentially evict another block of higher
 locality, the cache always assumes that the block is of low locality, and bypasses the LLC. The actual block is
 only inserted into the cache when the block is accessed for the second time, which indicates that the block may
 potentially be accessed later, and caching the block will bring actual benefit. 
 
+This high-level idea can be implemented by adding an extra bit per logical block in the super-block cache.
+If the bit is set, the logical block is considered to be a "first-use" block, which is assumed to have low locality.
+Data of a first-use block will not be cached, and the response message (with data) is directly sent to the upper level.
+The first-use block is not inserted into the replacement chain (e.g., LRU stack), as the block cannot be evicted
+to free storage (it can still be evicted when the entire tag is evicted).
+Note that the directory still maintains the coherence state and the sharer vector of the first-use block, although
+the block can only be in shared or exclusive state (S or E in MESI) as a first-use block, as being dirty makes no sense
+for the block.
+Note that the block can still be dirty in upper level caches, which is also tracked by the
+coherence controller, but it is different from the LLC's coherence state which is tracked by the LLC's tag array.
 
