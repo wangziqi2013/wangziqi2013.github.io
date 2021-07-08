@@ -68,4 +68,7 @@ A phrase decoder begins from a node with no outgoing nodes. Initially, the node 
 since all copy phrases must refer to some sequence and therefore have at least one outgoing edge. 
 Then the decoder outputs the literal on the corresponding offset (indicated by the position of its tuple in the
 compressed stream). The node as well as edges pointing to it are then removed.
-
+Next the decoder repeats the loop: Select a node with no outgoing edge. If the node is a literal phrase, just decode
+it as a character. Otherwise, follow the pointer P to the output buffer, and copy L characters starting from the 
+pointer to the corresponding offset of the copy phrase. Both nodes and edges are removed once the node is processed.
+Decompression completes when all nodes are processed.
