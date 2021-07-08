@@ -123,4 +123,11 @@ Lastly, the paper proposes a parallel compression algorithm that generates chara
 a single passes to decompress.
 The algorithm partitions the block into M parts, and each part is processed by an independent compressor.
 Compressors do not need to work synchronously, i.e., they can be at different progress at any given time.
-
+Each compressor works similarly to the serial versions: It searches for the longest string match, this time in 
+all the parts that have already been encoded (i.e., strings must be before the local read head of the part),
+and then either outputs a copy phrase if a match is found, or outputs a literal phrase. 
+Decompression needs to perform topological sort from all output streams, and selects the earliest code word to
+decompress, which is guaranteed to have its sequence already decoded in the output stream, as decompression just
+mimics the process of compression.
+The paper also noted that the parallel version of the algorithm has an average dictionary size of around half size
+of the block, preserving much of the compression ratio of a non-parallel version.
