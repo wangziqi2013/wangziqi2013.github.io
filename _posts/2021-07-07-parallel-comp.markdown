@@ -40,3 +40,7 @@ in both sequences.
 From another perspective, a sequence may also overlap with more than one phrases that are encoded by the algorithm.
 Whether the encoding with a copy-phrase referring to a sequence that partially overlaps with the phrase itself is 
 able to be compressed is dependent on both the decompression algorithm, and the data dependency, as we will see below.
+
+One of the most important properties of the above formalism is that compressibility does not always imply decompressibility. In other words, a block may be successfully compressed by having copy phrases making circular 
+references, but this produces ill-formed results, which is definitely not decompressible due to not being to resolve
+the data dependency.
