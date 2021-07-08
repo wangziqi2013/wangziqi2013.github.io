@@ -51,4 +51,6 @@ The first is called "phrase decodable", in which a graph G is constructed using 
 between phrases as edges. In the graph G, if a phrase yi refers to a sequence that overlaps with one or more 
 phrases yj, yk, ..., then an edge is added from nodes that represent yi to yj, yk, ..., meaning that phrase yi
 must be decoded after yj, yk, ..., have been decoded. 
-
+Note that in this model, a sequence can overlap with multiple phrases, as sequences do not necessarily correspond 
+to phrases. If the sequence overlaps with the phrase yi, then there is a self-dependency, meaning that the 
+block could not be decompressed.
