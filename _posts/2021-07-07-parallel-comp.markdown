@@ -119,4 +119,8 @@ and all transitive relations are also set to true (note that this only requires 
 for all i' and j' that PointsTo\[i', i\] and PointsTo\[j, j'\] is true, set PointsTo\[i', j\] and PointTo\[i, j'\] to 
 true as well).
 
+Lastly, the paper proposes a parallel compression algorithm that generates character decodable outputs which require
+a single passes to decompress.
+The algorithm partitions the block into M parts, and each part is processed by an independent compressor.
+Compressors do not need to work synchronously, i.e., they can be at different progress at any given time.
 
