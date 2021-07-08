@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a parallel compression algorithm with an LZ-family block-referential dictionary searching.
+The paper is motived by the three general design goals of LZ-family compression algorithms: High throughput,
+good compression ratio, and small block size.
+Previous approaches often favor compression ratio more, at the cost of low compression and decompression throughput.
+while this paper suggests that by leveraging algorithmic level parallelism, all three goals can be achieved.
+
+
