@@ -21,4 +21,8 @@ while this paper suggests that by leveraging algorithmic level parallelism, all 
 
 The proposed algorithm is from a family of algorithms called the "block referential compression algorithms" that
 transforms a block of data B consisting of characters {x1, x2, ..., xn} into a smaller and compressed format. 
+In its most general form, the algorithm parses the block B into a series of "phrases" y1, y2, ..., ym.
+Each phrase can be either of the type literal phrase, which is only a single character, or of the type copy phrase
+of length greater than one, whose sequence of characters match another sequence (the "reference sequence") 
+elsewhere in the block.
 
