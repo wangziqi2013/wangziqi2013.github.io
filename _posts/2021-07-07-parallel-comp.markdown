@@ -86,4 +86,7 @@ character nodes in the copy phrase and the referred sequence.
 A general decoder as described above needs to randomly access the decoded stream and the output buffer. 
 In many scenarios, this is considered inefficient, and programmers want to implement an algorithm that can decode 
 the block in one pass and only performing streaming reads and writes.
-
+To achieve this, the paper proposes that the graph can be slightly modified by adding backward edges from a node to
+all nodes that are before it in the stream of phrases.
+This essentially restricts that decompression must process the stream from left to right, because otherwise, the 
+artificial dependencies will be violated.
