@@ -111,3 +111,12 @@ left of the copy phrase. This may potentially achieve even higher compression ra
 sequence is even larger.
 The algorithm does not restrict that the sequence must be to the left of the current read head (but it should not 
 fully overlap). In addition, it maintains an n by n boolean matrix PointsTo for recording character dependencies. 
+The matrix is initially set to all-false, except the diagonal which is set to all-true.
+When performing string matching, the algorithm checks not only whether character i and j are identical, but 
+also checks whether PointsTo\[i, j\] is false. The characters are considered as a match only if both conditions hold.
+When the sequence is found, then for all characters i and j on the same offset, PointsTo\[i, j\] is set to true,
+and all transitive relations are also set to true (note that this only requires one extra recursion, i.e., 
+for all i' and j' that PointsTo\[i', i\] and PointsTo\[j, j'\] is true, set PointsTo\[i', j\] and PointTo\[i, j'\] to 
+true as well).
+
+
