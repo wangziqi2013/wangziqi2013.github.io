@@ -54,3 +54,8 @@ must be decoded after yj, yk, ..., have been decoded.
 Note that in this model, a sequence can overlap with multiple phrases, as sequences do not necessarily correspond 
 to phrases. If the sequence overlaps with the phrase yi, then there is a self-dependency, meaning that the 
 block could not be decompressed.
+
+The second formalism is called "character decodable", which is similar to the first one, except that graph nodes 
+are characters in the uncompressed block, and edges are character dependencies. 
+Two characters ci and cj is connected by an edge, if and only if ci is in a phrase, and cj is in a sequence referred
+to by the phrase, and that they are on the same offset from the beginning of the phrase or sequence. 
