@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. LZ-family algorithms can be formalized using phrase graphs and character graphs, which reduce compression problem to
+   data dependency problem.
+
+2. 
+
+
+
 This paper proposes a parallel compression algorithm with an LZ-family block-referential dictionary searching.
 The paper is motived by the three general design goals of LZ-family compression algorithms: High throughput,
 good compression ratio, and small block size.
