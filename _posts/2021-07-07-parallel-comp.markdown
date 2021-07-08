@@ -18,7 +18,13 @@ version_mgmt:
 1. LZ-family algorithms can be formalized using phrase graphs and character graphs, which reduce compression problem to
    data dependency problem.
 
-2. 
+2. Character-decodable compression algorithms allow copy phrases to overlap with the referenced sequence, as long as 
+   there is no data dependency at character level.
+
+3. Algorithms can be built with explicit character dependency matrix to avoid creating dependencies.
+
+4. Parallel algorithms can be built by compressing in parallel, and only searching substrings in the prefix from 
+   all compressors that have already been encoded.
 
 **Comments:**
 
