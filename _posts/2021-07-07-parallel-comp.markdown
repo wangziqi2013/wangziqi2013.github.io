@@ -25,4 +25,13 @@ In its most general form, the algorithm parses the block B into a series of "phr
 Each phrase can be either of the type literal phrase, which is only a single character, or of the type copy phrase
 of length greater than one, whose sequence of characters match another sequence (the "reference sequence") 
 elsewhere in the block.
+The latter does not need to be stored explicitly in the compressed stream, as it can simply be encoded by storing a
+reference to the reference sequence within the block.
+The algorithm then encodes the two types of phrases as follows.
+Literal phrases are encoded with a pair (0, c), in which the first component is a single bit serving as the flag,
+and the second component is the character constituting the phrase, and is stored explicitly (the algorithm may
+further encode the character using Huffman encoding, but it is out of the scope of the block-referential algorithm).
+Copy phrases are encoded as a three-component tuple (1, P, L), in which P represents a pointer to the reference 
+sequence in the block, and L is the number of characters. 
+
 
