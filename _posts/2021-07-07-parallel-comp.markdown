@@ -19,4 +19,6 @@ good compression ratio, and small block size.
 Previous approaches often favor compression ratio more, at the cost of low compression and decompression throughput.
 while this paper suggests that by leveraging algorithmic level parallelism, all three goals can be achieved.
 
+The proposed algorithm is from a family of algorithms called the "block referential compression algorithms" that
+transforms a block of data B consisting of characters {x1, x2, ..., xn} into a smaller and compressed format. 
 
