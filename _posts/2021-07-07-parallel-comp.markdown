@@ -72,3 +72,8 @@ Next the decoder repeats the loop: Select a node with no outgoing edge. If the n
 it as a character. Otherwise, follow the pointer P to the output buffer, and copy L characters starting from the 
 pointer to the corresponding offset of the copy phrase. Both nodes and edges are removed once the node is processed.
 Decompression completes when all nodes are processed.
+
+The most important thing about the edge decoder is that it cannot process the case where a sequence overlaps with a
+copy phrase. In this case, the graph contains a self-cycle, as the node that represents the copy phrase will have
+an edge pointing to itself.
+
