@@ -77,3 +77,8 @@ The most important thing about the edge decoder is that it cannot process the ca
 copy phrase. In this case, the graph contains a self-cycle, as the node that represents the copy phrase will have
 an edge pointing to itself.
 
+A character decoder operates almost in an identical way as the phrase decoder, except that it always decodes 
+characters by either outputting it, if it is a literal phrase, or copy a single character from the node it points to,
+if the node belongs to a copy phrase.
+Nodes in character decodable graphs must have only one outgoing edges, if any, since edges are formed by connecting
+character nodes in the copy phrase and the referred sequence.
