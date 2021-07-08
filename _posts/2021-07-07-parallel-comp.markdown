@@ -20,7 +20,11 @@ version_mgmt:
 
 2. 
 
+**Comments:**
 
+1. The paper should differentiate more on "copy phrase" and "reference sequence" (I coined the latter term, which is not
+   in the paper). The former must be non-overlapping, but the latter is simply a substring, which can overlap with
+   multiple phrases
 
 This paper proposes a parallel compression algorithm with an LZ-family block-referential dictionary searching.
 The paper is motived by the three general design goals of LZ-family compression algorithms: High throughput,
