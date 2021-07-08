@@ -105,3 +105,9 @@ to by pi, and moves pi forward by 1.
 The paper notes that the compressed block is character decodable in one pass from left to right, as all 
 sequences are to the left of the copy phrase, meaning when the copy phrase is to be process, the sequence must have
 already been decoded.
+
+The paper also proposes a more relaxed version of the above algorithm, where the sequence does not have to be to the
+left of the copy phrase. This may potentially achieve even higher compression ratio, as the search space for the 
+sequence is even larger.
+The algorithm does not restrict that the sequence must be to the left of the current read head (but it should not 
+fully overlap). In addition, it maintains an n by n boolean matrix PointsTo for recording character dependencies. 
