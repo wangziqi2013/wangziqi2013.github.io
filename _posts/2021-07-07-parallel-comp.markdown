@@ -82,3 +82,8 @@ characters by either outputting it, if it is a literal phrase, or copy a single 
 if the node belongs to a copy phrase.
 Nodes in character decodable graphs must have only one outgoing edges, if any, since edges are formed by connecting
 character nodes in the copy phrase and the referred sequence.
+
+A general decoder as described above needs to randomly access the decoded stream and the output buffer. 
+In many scenarios, this is considered inefficient, and programmers want to implement an algorithm that can decode 
+the block in one pass and only performing streaming reads and writes.
+
