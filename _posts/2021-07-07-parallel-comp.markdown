@@ -41,6 +41,14 @@ From another perspective, a sequence may also overlap with more than one phrases
 Whether the encoding with a copy-phrase referring to a sequence that partially overlaps with the phrase itself is 
 able to be compressed is dependent on both the decompression algorithm, and the data dependency, as we will see below.
 
-One of the most important properties of the above formalism is that compressibility does not always imply decompressibility. In other words, a block may be successfully compressed by having copy phrases making circular 
+One of the most important properties of the above formalism is that compressibility does not always imply 
+decompressibility. In other words, a block may be successfully compressed by having copy phrases making circular 
 references, but this produces ill-formed results, which is definitely not decompressible due to not being to resolve
 the data dependency.
+
+The paper proposes two graph-based formalisms to determine decompressibility.
+The first is called "phrase decodable", in which a graph G is constructed using phrases as nodes, and references 
+between phrases as edges. In the graph G, if a phrase yi refers to a sequence that overlaps with one or more 
+phrases yj, yk, ..., then an edge is added from nodes that represent yi to yj, yk, ..., meaning that phrase yi
+must be decoded after yj, yk, ..., have been decoded. 
+
