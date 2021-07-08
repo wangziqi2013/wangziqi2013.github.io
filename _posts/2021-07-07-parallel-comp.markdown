@@ -90,3 +90,15 @@ To achieve this, the paper proposes that the graph can be slightly modified by a
 all nodes that are before it in the stream of phrases.
 This essentially restricts that decompression must process the stream from left to right, because otherwise, the 
 artificial dependencies will be violated.
+In a more general form, any ordering of decoding can be expressed by adding edges to nodes that should be decoded
+first, from nodes that should be decoded later.
+
+The paper also discusses a character decodable compression algorithm which can achieve potentially higher compression
+ratio than phrase decodable algorithms.
+The algorithm maintains a pointer pi as the current read head, which is initialized to the beginning of the block.
+On each iteration, a string matching is performed between the block starting from pi to the end, and all
+substrings of the block starting before pi. The one that has the longest match and whose starting point is closest to 
+pi is used as the sequence, which we assume starts at location P and the match size is L. The 
+algorithm then writes (1, P, L) to the output stream, and moves pi forward by L. 
+If the match could not be found, the algorithm simply writes (0, c) to the output, where c is the character pointed
+to by pi, and moves pi forward by 1.
