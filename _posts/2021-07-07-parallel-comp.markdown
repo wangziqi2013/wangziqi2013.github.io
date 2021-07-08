@@ -34,4 +34,7 @@ further encode the character using Huffman encoding, but it is out of the scope 
 Copy phrases are encoded as a three-component tuple (1, P, L), in which P represents a pointer to the reference 
 sequence in the block, and L is the number of characters. 
 
+One thing to note is that, although phrases are always non-overlapping and must cover the entire block, 
+a copy phrase may well overlap with the reference sequence (but not with itself), such that some characters are 
+in both sequences.
 
