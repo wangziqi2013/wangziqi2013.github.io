@@ -102,3 +102,6 @@ pi is used as the sequence, which we assume starts at location P and the match s
 algorithm then writes (1, P, L) to the output stream, and moves pi forward by L. 
 If the match could not be found, the algorithm simply writes (0, c) to the output, where c is the character pointed
 to by pi, and moves pi forward by 1.
+The paper notes that the compressed block is character decodable in one pass from left to right, as all 
+sequences are to the left of the copy phrase, meaning when the copy phrase is to be process, the sequence must have
+already been decoded.
