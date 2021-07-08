@@ -64,4 +64,8 @@ Decodability of a compressed block can be inferred from the graph with a simple 
 contains a cycle, then the block is not phrase decodable. Similarly, if the character decodable graph contains a cycle,
 then the block is not character decodable.
 
+A phrase decoder begins from a node with no outgoing nodes. Initially, the node must be a literal phrase, 
+since all copy phrases must refer to some sequence and therefore have at least one outgoing edge. 
+Then the decoder outputs the literal on the corresponding offset (indicated by the position of its tuple in the
+compressed stream). The node as well as edges pointing to it are then removed.
 
