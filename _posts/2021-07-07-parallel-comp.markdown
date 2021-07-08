@@ -59,3 +59,9 @@ The second formalism is called "character decodable", which is similar to the fi
 are characters in the uncompressed block, and edges are character dependencies. 
 Two characters ci and cj is connected by an edge, if and only if ci is in a phrase, and cj is in a sequence referred
 to by the phrase, and that they are on the same offset from the beginning of the phrase or sequence. 
+
+Decodability of a compressed block can be inferred from the graph with a simple rule: If the phrase decodable graph
+contains a cycle, then the block is not phrase decodable. Similarly, if the character decodable graph contains a cycle,
+then the block is not character decodable.
+
+
