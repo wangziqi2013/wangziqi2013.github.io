@@ -37,4 +37,6 @@ sequence in the block, and L is the number of characters.
 One thing to note is that, although phrases are always non-overlapping and must cover the entire block, 
 a copy phrase may well overlap with the reference sequence (but not with itself), such that some characters are 
 in both sequences.
-
+From another perspective, a sequence may also overlap with more than one phrases that are encoded by the algorithm.
+Whether the encoding with a copy-phrase referring to a sequence that partially overlaps with the phrase itself is 
+able to be compressed is dependent on both the decompression algorithm, and the data dependency, as we will see below.
