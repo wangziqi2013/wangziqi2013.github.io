@@ -16,7 +16,7 @@ version_mgmt:
 **Highlights:**
 
 1. Zero compression can be applied at 4-bit nibble level using FPC, and the actual pattern can be expressed using 
-   an 8-bit mask over 32-bit word. Only zeros nibbles are compressed, and non-zero nibbles are stored in the payload.
+   an 8-bit mask over 32-bit word. Only zero nibbles are compressed, and non-zero nibbles are stored in the payload.
 
 2. Different applications have different distribution of zero nibbles on 32-bit words, and the distribution is 
    pretty consistent across the execution. Unfortunately, this property cannot be leveraged with static patterns
@@ -37,10 +37,10 @@ version_mgmt:
 
 2. The author may need to polish and proof-read certain sections. Some terminologies are weird, e.g., a 4-bit unit
    is not a "character" which typically refers to 8-bit ASCII code or int8_t variables. 
-   "Nibble" might be a batter option.
+   "Nibble" might be a better option.
 
-3. I do not get why there is only 128 counters? The pattern mask has 8 bits, so if you are counting the occurrences
-   of different masks, I guess you need more than 128 counters?
+3. I do not get why there are only 128 counters? The pattern mask has 8 bits, so if you are counting the occurrences
+   of all possible masks, I guess you need more than 128 counters?
 
 This paper proposes Dynamic Frequent Pattern Compression (DFPC), a data compression scheme for reducing NVM wear.
 The paper is motivated by the fact that current NVM devices have limited number of write-erase cycles, and that 
