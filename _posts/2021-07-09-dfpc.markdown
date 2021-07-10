@@ -59,4 +59,9 @@ pattern matching table of size eight. Four of the patterns are statically determ
 are simply just pattern from the classical SFPC algorithm. The remaining four patterns are trained dynamically
 from the runtime, which will be entered during execution, and will never change once they are entered to avoid
 expensive re-encoding.
+The DPFC algorithm works the same as SFPC: Data to be compressed are divided into 32-bit words, and for each word,
+it is compared with the patterns in the pattern table, and if one or more matches are found, the word is compressed
+into a three-bit header indicating the patter and an payload stream for bytes that are not encoded by the pattern
+itself. Decompression is just the reverse of compression which reads the header and the payload, and reconstructs the
+word based on the pattern.
 
