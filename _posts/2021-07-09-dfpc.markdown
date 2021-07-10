@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Zero compression can be applied at 4-bit nibble level using FPC, and the actual pattern can be expressed using 
+   an 8-bit mask over 32-bit word. Only zeros nibbles are compressed, and non-zero nibbles are stored in the payload.
+
+
+
 **Comments:**
 
 1. The pattern table, especially the dynamic one, should be saved on a context switch to allow multiple processes
