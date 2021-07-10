@@ -76,4 +76,9 @@ constantly monitors the data stream and attempts to capture dynamic patterns.
 In the first phase, the training logic counts the occurrences of different patterns that are not compressible by
 the static pattern, and stores statistical data in an array of counters (the paper claims that 128 counters are 
 sufficient, but does not give any further explanation). 
-
+Then in the second phase, the training logic selects the top-four patterns that yield the highest compression
+benefit, and enters them into the pattern table. 
+The top-four patterns are selected based on both the frequency that they occur (indicated by the occurrence counts)
+and the number of zeros nibbles in the pattern. 
+(Some equations are derived in the paper for precisely computing the score, but I did not quite get those, and I
+just assume they are reasonable approximations of what I described above).
