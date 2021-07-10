@@ -18,6 +18,10 @@ version_mgmt:
 1. Zero compression can be applied at 4-bit nibble level using FPC, and the actual pattern can be expressed using 
    an 8-bit mask over 32-bit word. Only zeros nibbles are compressed, and non-zero nibbles are stored in the payload.
 
+2. Different applications have different distribution of zero nibbles on 32-bit words, and the distribution is 
+   pretty consistent across the execution. Unfortunately, this property cannot be leveraged with static patterns
+   as each application has its own signature distribution.
+
 
 
 **Comments:**
