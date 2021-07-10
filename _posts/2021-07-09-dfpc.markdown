@@ -21,6 +21,10 @@ version_mgmt:
    indicates in its PCB that it intends to use the pattern table. 
    This is similar to how the FPU states are saved in today's OS.
 
+2. The author may need to polish and proof-read certain sections. Some terminologies are weird, e.g., a 4-bit unit
+   is not a "character" which typically refers to 8-bit ASCII code or int8_t variables. 
+   "Nibble" might be a batter option.
+
 This paper proposes Dynamic Frequent Pattern Compression (DFPC), a data compression scheme for reducing NVM wear.
 The paper is motivated by the fact that current NVM devices have limited number of write-erase cycles, and that 
 excessive writes not only consume bandwidth, but also harm its lifespan.
