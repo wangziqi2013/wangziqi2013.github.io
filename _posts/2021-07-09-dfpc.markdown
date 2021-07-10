@@ -22,7 +22,10 @@ version_mgmt:
    pretty consistent across the execution. Unfortunately, this property cannot be leveraged with static patterns
    as each application has its own signature distribution.
 
+3. We can train dynamic patterns by simply counting the occurrences of each pattern and selecting the ones that
+   yield the most compression benefits.
 
+4. FPC can utilize dynamically generated patterns to better adapt to different workloads.
 
 **Comments:**
 
