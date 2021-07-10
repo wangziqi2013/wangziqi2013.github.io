@@ -25,6 +25,9 @@ version_mgmt:
    is not a "character" which typically refers to 8-bit ASCII code or int8_t variables. 
    "Nibble" might be a batter option.
 
+3. I do not get why there is only 128 counters? The pattern mask has 8 bits, so if you are counting the occurrences
+   of different masks, I guess you need more than 128 counters?
+
 This paper proposes Dynamic Frequent Pattern Compression (DFPC), a data compression scheme for reducing NVM wear.
 The paper is motivated by the fact that current NVM devices have limited number of write-erase cycles, and that 
 excessive writes not only consume bandwidth, but also harm its lifespan.
@@ -67,3 +70,5 @@ word based on the pattern.
 Note that DFPC patterns only compress zeros in the granularity of nibbles, and they are encoded as a 8-bit mask. 
 A "1" in the mask means that the corresponding nibble is zero, and need not be stored in the payload area, while a 
 "0" in the mask indicates that the nibble at that location is non-zero and will be stored in the payload.
+
+
