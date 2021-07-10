@@ -64,4 +64,6 @@ it is compared with the patterns in the pattern table, and if one or more matche
 into a three-bit header indicating the patter and an payload stream for bytes that are not encoded by the pattern
 itself. Decompression is just the reverse of compression which reads the header and the payload, and reconstructs the
 word based on the pattern.
-
+Note that DFPC patterns only compress zeros in the granularity of nibbles, and they are encoded as a 8-bit mask. 
+A "1" in the mask means that the corresponding nibble is zero, and need not be stored in the payload area, while a 
+"0" in the mask indicates that the nibble at that location is non-zero and will be stored in the payload.
