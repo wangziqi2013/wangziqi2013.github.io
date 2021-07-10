@@ -21,3 +21,9 @@ Cache blocks are first compressed to reduce the number of bits to be written int
 either as the original binary or as a bit complement of the original to minimize the number of bits flips.
 In such an architecture, each cache block sized data on the NVM is tagged with 2-bit metadata, one bit for 
 indicating whether the block is compressed, and the other bit to indicate whether the data is stored as flipped.
+
+This paper, however, points out that static Frequent Pattern Compression (SPFC), which is used by previous work,
+fails to compress certain patterns that occur frequently in the run time. 
+The classical SFPC algorithm divides the input stream into 32-bit words, and only compares these words with certain
+pattern masks (e.g., 00XX, where 0 means the byte has a literal value of zero, and X means do not care which will be
+encoded in the output code word).
