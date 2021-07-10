@@ -43,3 +43,8 @@ The paper observes that the static patterns used by SFPC do not capture many fre
 some of the workloads, despite that the latter is quite consistent and compressible.
 The fact that each application has its own set of frequent but "non-standard" patterns complicates the issue, since
 we cannot simply improve SFPC by adding new static patterns.
+
+To address this limitation, DFPC allows application-specific patterns to be trained dynamically using runtime data,
+and employed by the FPC algorithm for higher compression ratio.
+The training is based on the observation that the distribution of zero bits in 32-bit words is quite consistent 
+over the execution, which can be both easily identified and utilized.
