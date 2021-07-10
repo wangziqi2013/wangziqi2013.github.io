@@ -16,4 +16,8 @@ version_mgmt:
 This paper proposes Dynamic Frequent Pattern Compression (DFPC), a data compression scheme for reducing NVM wear.
 The paper is motivated by the fact that current NVM devices have limited number of write-erase cycles, and that 
 excessive writes not only consume bandwidth, but also harm its lifespan.
-
+Previous works attempt to address this issue with two techniques: Compression and Flip-and-Write (FNW).
+Cache blocks are first compressed to reduce the number of bits to be written into the device, and compressed data is 
+either as the original binary or as a bit complement of the original to minimize the number of bits flips.
+In such an architecture, each cache block sized data on the NVM is tagged with 2-bit metadata, one bit for 
+indicating whether the block is compressed, and the other bit to indicate whether the data is stored as flipped.
