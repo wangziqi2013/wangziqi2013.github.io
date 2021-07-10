@@ -82,3 +82,8 @@ The top-four patterns are selected based on both the frequency that they occur (
 and the number of zeros nibbles in the pattern. 
 (Some equations are derived in the paper for precisely computing the score, but I did not quite get those, and I
 just assume they are reasonable approximations of what I described above).
+The paper also noted that some patterns should be excluded, such as those already in the static table, and 
+the compressible pattern (none of the nibble is zero).
+In the last phase, the dynamically patterns are entered into the table, and the DFPC algorithm is switched to 
+utilize all entries of the pattern table. 
+Previously encoded blocks are unaffected, since the static patterns do not change.
