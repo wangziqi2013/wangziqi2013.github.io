@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The pattern table, especially the dynamic one, should be saved on a context switch to allow multiple processes
+   to use DFPC and each of them to have its own dynamic pattern. 
+   Since not all processes use DFPC, one optimization is to only lazily swap it out when the process to be swapped in
+   indicates in its PCB that it intends to use the pattern table. 
+   This is similar to how the FPU states are saved in today's OS.
+
 This paper proposes Dynamic Frequent Pattern Compression (DFPC), a data compression scheme for reducing NVM wear.
 The paper is motivated by the fact that current NVM devices have limited number of write-erase cycles, and that 
 excessive writes not only consume bandwidth, but also harm its lifespan.
