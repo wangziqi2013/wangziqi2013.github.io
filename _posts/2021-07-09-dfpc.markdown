@@ -48,3 +48,8 @@ To address this limitation, DFPC allows application-specific patterns to be trai
 and employed by the FPC algorithm for higher compression ratio.
 The training is based on the observation that the distribution of zero bits in 32-bit words is quite consistent 
 over the execution, which can be both easily identified and utilized.
+The paper, therefore, proposes that the patterns should be trained in the unit of 4-bit "nibbles", i.e., for any
+32-bit words, the training logic monitors the distribution of zeros across the eight 4-bit nibbles, and selects
+the ones that benefit from compression the most.
+The selected patterns are then entered into a dynamic pattern matching table, which functions just like static patterns,
+and are used to encode and decode data exchanged between the hierarchy and the NVM.
