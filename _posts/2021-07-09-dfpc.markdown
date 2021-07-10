@@ -53,3 +53,10 @@ The paper, therefore, proposes that the patterns should be trained in the unit o
 the ones that benefit from compression the most.
 The selected patterns are then entered into a dynamic pattern matching table, which functions just like static patterns,
 and are used to encode and decode data exchanged between the hierarchy and the NVM.
+
+We next describe the operation of DFPC as follows. The DFPC framework allows each individual process to have its own
+pattern matching table of size eight. Four of the patterns are statically determined and cannot be changed, which 
+are simply just pattern from the classical SFPC algorithm. The remaining four patterns are trained dynamically
+from the runtime, which will be entered during execution, and will never change once they are entered to avoid
+expensive re-encoding.
+
