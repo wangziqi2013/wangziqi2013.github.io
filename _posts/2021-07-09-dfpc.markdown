@@ -71,4 +71,9 @@ Note that DFPC patterns only compress zeros in the granularity of nibbles, and t
 A "1" in the mask means that the corresponding nibble is zero, and need not be stored in the payload area, while a 
 "0" in the mask indicates that the nibble at that location is non-zero and will be stored in the payload.
 
+Initially, only four hardwired static patterns are in the table. As the program executes, the training logic
+constantly monitors the data stream and attempts to capture dynamic patterns.
+In the first phase, the training logic counts the occurrences of different patterns that are not compressible by
+the static pattern, and stores statistical data in an array of counters (the paper claims that 128 counters are 
+sufficient, but does not give any further explanation). 
 
