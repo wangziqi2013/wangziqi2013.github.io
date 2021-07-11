@@ -46,5 +46,7 @@ Then the compressed size is used to determine the encoding scheme in the next st
 As discussed above, if the compressed size is less than half of the original size, FlipMin will be used for optimal
 results. Otherwise, if the compressed size is between half and two thirds of the original size, then FNW will
 be used, with one tag bit indicating bit-flipping for every two data bits.
-
+If the compressed size is larger than two thirds of the original size, the block will simply be stored uncompressed
+to avoid decompression overhead. No encoding scheme will be applied in this case.
+To indicate whether the block is compressed, one bit tag per block is added to the NVM device to serve as the flag bit.
 
