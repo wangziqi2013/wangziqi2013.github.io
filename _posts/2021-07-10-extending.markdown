@@ -19,7 +19,9 @@ version_mgmt:
    work. Based on this observation, we can selectively turn off encoding for certain blocks if their compression
    ratio is low.
 
-
+2. More than one encoding scheme can be applied. The trade-off here is between the metadata overhead and effectiveness
+   of the encoding scheme. 
+   In this paper, the compression ratio is used as the only factor for determining which scheme to use.
 
 This paper proposes a technique for reducing storage overhead of applying data encoding to reduce bit flips of 
 NVM writes. 
