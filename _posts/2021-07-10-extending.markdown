@@ -18,3 +18,5 @@ NVM writes.
 As NVM devices have limited write-erase cycles, and are generally more power-hungry for writes, previous works have 
 focused on reducing the number of bit flips per write by encoding the data block to be written.
 These schemes, however, generally require metadata tags for each block on the NVM, incurring storage overhead.
+For example, Flip-N-Write performs the best when every two bits of data is accompanied by one bit of metadata bit
+to indicate whether the two-bit unit is flipped, causing a 50% storage overhead.
