@@ -20,3 +20,8 @@ focused on reducing the number of bit flips per write by encoding the data block
 These schemes, however, generally require metadata tags for each block on the NVM, incurring storage overhead.
 For example, Flip-N-Write performs the best when every two bits of data is accompanied by one bit of metadata bit
 to indicate whether the two-bit unit is flipped, causing a 50% storage overhead.
+In FlipMin, the storage overhead can even be as high as 100%, meaning that the amount of storage doubles for storing 
+the same amount of logical bits. FlipMin re-encodes words in the input block to longer words, such that each raw 
+word has several different representations. The appropriate representation is then chosen to minimize the number of
+bit flips on the location to be written. 
+
