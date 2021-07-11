@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. FNW and FlipMin can be applied on a per-block basis, i.e., not all blocks need to be encoded in order for it to
+   work. Based on this observation, we can selectively turn off encoding for certain blocks if their compression
+   ratio is low.
+
+
+
 This paper proposes a technique for reducing storage overhead of applying data encoding to reduce bit flips of 
 NVM writes. 
 As NVM devices have limited write-erase cycles, and are generally more power-hungry for writes, previous works have 
