@@ -35,3 +35,10 @@ for the block can be employed to determine which bit-flip reduction scheme to us
 ratio is above 2, meaning that the block is compressed to less than half of its original size, the FlipMin method
 can be used. If the compression ratio is between 1.5 and 2, we can still use FNW. In all other cases, the block is 
 simply stored uncompressed.
+
+We next describe the operational details. When a block is to be written back to the NVM from the LLC, the controller
+first attempts to compress the block using the FPC algorithm. The paper proposes that the three-bit headers for each
+compressed words are stored consecutively as a separate section before the payload, such that the offsets of the 
+payloads can be determined in one cycle, and decompressed in the next cycle.
+
+
