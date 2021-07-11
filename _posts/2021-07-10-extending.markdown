@@ -30,3 +30,8 @@ First, data compression is effective in reducing the number of bytes a block nee
 compression techniques aim to increase the logical capacity of the storage by over-provisioning tags and remapping 
 blocks. Here, instead, we seek to reduce the metadata overhead of bit-flip reduction schemes, and as a result, 
 blocks are still stored on their home locations without being remapped.
+The second observation is that compressibility often varies for different parts of data. The number of bits saved
+for the block can be employed to determine which bit-flip reduction scheme to use. For example, if the compression
+ratio is above 2, meaning that the block is compressed to less than half of its original size, the FlipMin method
+can be used. If the compression ratio is between 1.5 and 2, we can still use FNW. In all other cases, the block is 
+simply stored uncompressed.
