@@ -57,3 +57,9 @@ To indicate whether the block is compressed, one bit tag per block is added to t
 On read accesses, the controller needs to first determine whether the block is compressed,
 and if true, decode the block, and then decompress it. 
 An uncompressed block is directly read out and sent back to the requestor.
+For compressed blocks, recall that the 24-bit header is stored unencoded, the decoder first uses the header to 
+compute the compressed size, and then chooses a decoding algorithm based on the size. The rule is identical to the one 
+during encoding: If the 
+compressed size is smaller than half of the slot size, then FlipMin is used for decoding; If the size is between half
+and two thirds, then FNW will be used.
+Finally, the block is then decompressed by 64-bit FPC before it is sent back.
