@@ -40,5 +40,11 @@ We next describe the operational details. When a block is to be written back to 
 first attempts to compress the block using the FPC algorithm. The paper proposes that the three-bit headers for each
 compressed words are stored consecutively as a separate section before the payload, such that the offsets of the 
 payloads can be determined in one cycle, and decompressed in the next cycle.
+Another feature of this arrangement is that the compressed size can also be computed easily without decompressing 
+the block first, as the three-bit headers can always be found at known locations.
+Then the compressed size is used to determine the encoding scheme in the next step.
+As discussed above, if the compressed size is less than half of the original size, FlipMin will be used for optimal
+results. Otherwise, if the compressed size is between half and two thirds of the original size, then FNW will
+be used, with one tag bit indicating bit-flipping for every two data bits.
 
 
