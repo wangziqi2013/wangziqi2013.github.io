@@ -23,6 +23,10 @@ version_mgmt:
    of the encoding scheme. 
    In this paper, the compression ratio is used as the only factor for determining which scheme to use.
 
+3. The FPC headers can be stored in a separate group to allow fast computation of the compressed block size. 
+   The scheme used for encoding need not be stored in this case, as we can infer it from the compressed size
+   during both encoding and decoding.
+
 This paper proposes a technique for reducing storage overhead of applying data encoding to reduce bit flips of 
 NVM writes. 
 As NVM devices have limited write-erase cycles, and are generally more power-hungry for writes, previous works have 
