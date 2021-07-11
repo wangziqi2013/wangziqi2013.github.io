@@ -54,4 +54,6 @@ Both encoding schemes will only be applied to the payload, and the header will r
 the compressed size can be easily computed for decoding, as we will see later.
 To indicate whether the block is compressed, one bit tag per block is added to the NVM device to serve as the flag bit.
 
-On read accesses, the controller needs to first decode the block, and then decompress it. 
+On read accesses, the controller needs to first determine whether the block is compressed,
+and if true, decode the block, and then decompress it. 
+An uncompressed block is directly read out and sent back to the requestor.
