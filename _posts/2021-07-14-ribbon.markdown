@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Ribbon, a software framework for optimizing cache line flush (CLF) operations on Non-Volatile 
+Memory. Cache line flush operations, or CLFs, are critical in NVM programming, as it controls the order of writes
+that are persisted on the NVM device. 
