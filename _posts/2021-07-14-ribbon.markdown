@@ -23,3 +23,8 @@ On x86 platform, CLF can take several forms, such as clflush, clflushopt, and cl
 ordered, meaning that CLF on x86 can be executed in arbitrary order.
 In typical usages of CLF, one or more store fence will also be inserted to enforce the ordering that CLFs after the
 fence will not be executed until all previous CLFs are completed.
+
+The paper is motivated by the fact that CLFs will significantly affect overall system performance, as enforcement
+of write orderings will likely to impose back-pressure to the pipeline, causing pipeline stalls, especially when 
+the Write Pending Queue (WPQ) at the memory controller side is full (as it takes longer for the WPQ to accept a 
+new write back block).
