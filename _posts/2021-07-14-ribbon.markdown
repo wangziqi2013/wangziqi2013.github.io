@@ -19,3 +19,7 @@ that are persisted on the NVM device.
 At a semantics level, the CLF instruction evicts a cache block on the given address from the memory hierarchy
 and it has global effect (i.e., this instruction is also cache-coherent).
 If the cache block is dirty, it will also be written back to the underlying backing store. 
+On x86 platform, CLF can take several forms, such as clflush, clflushopt, and clwb. All these three forms are weakly
+ordered, meaning that CLF on x86 can be executed in arbitrary order.
+In typical usages of CLF, one or more store fence will also be inserted to enforce the ordering that CLFs after the
+fence will not be executed until all previous CLFs are completed.
