@@ -32,4 +32,6 @@ Besides, the degree of write back parallelism can also negatively impact the thr
 threads contending for the WPQ may cause congestion on the memory controller as well as the NoC bus.
 On the other hand, if the degree of parallelism is low, the throughput of persistence will not match up with the 
 throughput of the device, which is also sub-optimal.
-
+Lastly, the paper also observes that the dirtiness of the block also plays an important role in NVM resource 
+utilization. If a cache block is only lightly modified, i.e., most of its contents are unchanged compared with the 
+NVM image, writing back an entire block will waste bandwidth as only a small portion of data needs to be updated.
