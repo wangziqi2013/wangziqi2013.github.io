@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Ribbon: High-Performance Cache Line Flush for Persistent Memory"
+date:   2021-07-14 16:05:00 -0500
+categories: paper
+paper_title: "Ribbon: High-Performance Cache Line Flush for Persistent Memory"
+paper_link: https://dl.acm.org/doi/pdf/10.1145/3410463.3414625
+paper_keyword: NVM; CLF; Ribbon
+paper_year: PACT 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
