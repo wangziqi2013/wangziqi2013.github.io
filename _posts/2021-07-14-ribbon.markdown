@@ -78,4 +78,10 @@ The optimal number of threads lie on the intersection point between the two line
 the thread count-bandwidth graph.
 This sampling process is performed for every one second to adapt to potentially changing workloads.
 
-
+One thing that is worth noting is that memory fences are not inserted into the FIFO buffer to maintain the  
+ordering between the fence and stores after the fence. Otherwise, stores after the fence will be executed immediately,
+but the fence may still be in the buffer waiting for the worker thread to drain the buffer. This not only violates the 
+semantics of memory fences, but also threatens the correctness of the program, since the dirty block updated by
+the store can be evicted earlier than blocks that are to be flushed by CLFs before the fence.
+To this end, store fences are emulated in the foreground on the CPU by blocking execution until the per-thread
+buffer has been fully drained.
