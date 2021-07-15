@@ -111,4 +111,7 @@ semantically updated and flushed together are not allocated together.
 To address the first issue, Ribbon modified the memory allocator to always align certain objects on cache line
 boundaries. For the second issue, Ribbon proposes that the programmers should use a special memory allocation
 interface to allocate semantically related objects together, such that both can be written back using fewer
-cache flushes. 
+cache flushes. The paper uses key and values objects in Redis as an example. If these two objects are allocated
+separately, each will occupy one or more blocks, which need separate CLFs to write them back. If, however, both 
+objects are allocated at aligned, consecutive addresses, then a few CLFs can be saved, as these objects are  
+stored compactly.
