@@ -35,3 +35,10 @@ throughput of the device, which is also sub-optimal.
 Lastly, the paper also observes that the dirtiness of the block also plays an important role in NVM resource 
 utilization. If a cache block is only lightly modified, i.e., most of its contents are unchanged compared with the 
 NVM image, writing back an entire block will waste bandwidth as only a small portion of data needs to be updated.
+
+The paper also noted that previous works tend to address these issues by proposing new persistence models and/or new
+hardware, which will change the usage model of NVM and is not backward compatible will existing binaries. 
+Ribbon, on the contrary, is implemented purely in software, and it is compiled with application source code as a 
+library. Ribbon also preserves backward compatibility by requiring only minimum changes to the source code.
+
+
