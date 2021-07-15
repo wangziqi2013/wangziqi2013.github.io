@@ -92,4 +92,9 @@ the store can be evicted earlier than blocks that are to be flushed by CLFs befo
 To this end, store fences are emulated in the foreground on the CPU by blocking execution until the per-thread
 buffer has been fully drained.
 
-The second feature
+The second feature of Ribbon is pro-active CLF, which is based on the observation that frequently modified cache
+blocks can be flushed to the NVM even before the CLF primitive to overlap execution with persistence even more.
+The paper proposes using the precise event counter on modern platforms to monitor frequently executed store
+instructions and their precise addresses. These addresses are read by Ribbon's helper thread, for which CLF
+instructions are issued. 
+
