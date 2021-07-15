@@ -23,6 +23,12 @@ version_mgmt:
    stores (i.e., if fences are also inserted into the buffer, stores after the fence are executed, but the corresponding fence is in the buffer and may not yet be executed, so stores are actually executed before
    the fence).
 
+**Comments:**
+
+1. Blocking the execution on store fences is relatively heavyweight compared with stalling the pipeline, as the 
+   latter only waits for the memory controllers to acknowledge CLFs, while the former waits for an asynchronous 
+   thread to drain the buffer.
+
 This paper presents Ribbon, a software framework for optimizing cache line flush (CLF) operations on Non-Volatile 
 Memory. Cache line flush operations, or CLFs, are critical in NVM programming, as it controls the order of writes
 that are persisted on the NVM device. 
@@ -85,3 +91,5 @@ semantics of memory fences, but also threatens the correctness of the program, s
 the store can be evicted earlier than blocks that are to be flushed by CLFs before the fence.
 To this end, store fences are emulated in the foreground on the CPU by blocking execution until the per-thread
 buffer has been fully drained.
+
+The second feature
