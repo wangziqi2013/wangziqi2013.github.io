@@ -105,4 +105,10 @@ these proactive CLFs, dirty cache blocks can potentially be evicted any time aft
 Though, if a block is updated frequently, evicting the block too early may incur extra cache misses and fetch/evict
 traffic on the memory bus. Ribbon may simply disable this feature if NVM throughput is harmed.
 
-The last feature is coalesced CLF.
+The last feature is coalesced CLF. The paper observes that the dirtiness of blocks being written back is generally low
+in some workloads, either due to objects not being aligned to cache block boundaries, or due to objects that are
+semantically updated and flushed together are not allocated together.
+To address the first issue, Ribbon modified the memory allocator to always align certain objects on cache line
+boundaries. For the second issue, Ribbon proposes that the programmers should use a special memory allocation
+interface to allocate semantically related objects together, such that both can be written back using fewer
+cache flushes. 
