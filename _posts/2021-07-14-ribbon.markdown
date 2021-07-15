@@ -41,4 +41,10 @@ hardware, which will change the usage model of NVM and is not backward compatibl
 Ribbon, on the contrary, is implemented purely in software, and it is compiled with application source code as a 
 library. Ribbon also preserves backward compatibility by requiring only minimum changes to the source code.
 
+From a high level, Ribbon is implemented as a software library that wraps the CLF 
+and memory fence primitives. Applications programmers should use these wrappers to invoke Ribbon's instrumentation.
+Ribbon also provides an initialization and cleanup function that should be called at the beginning of the application
+and at the end of the application, respectively. 
+These two functions are responsible for managing data structures and helper threads, as we will see below.
 
+We next discuss Ribbon's optional details.
