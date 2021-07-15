@@ -47,4 +47,7 @@ Ribbon also provides an initialization and cleanup function that should be calle
 and at the end of the application, respectively. 
 These two functions are responsible for managing data structures and helper threads, as we will see below.
 
-We next discuss Ribbon's optional details.
+We next discuss Ribbon's optional details. The first feature of Ribbon is CLF decoupling, which decouples CLF
+from program execution, allowing them to be completed in the background. 
+To achieve this, each user thread is allocated a FIFO CLF buffer for tracking the CLF operations issued from the
+thread. 
