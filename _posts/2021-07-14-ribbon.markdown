@@ -97,4 +97,7 @@ blocks can be flushed to the NVM even before the CLF primitive to overlap execut
 The paper proposes using the precise event counter on modern platforms to monitor frequently executed store
 instructions and their precise addresses. These addresses are read by Ribbon's helper thread, for which CLF
 instructions are issued. 
-
+The paper argues that issuing extra CLF instructions will not change the semantics of the program, as even without
+these proactive CLFs, dirty cache blocks can potentially be evicted any time after it is updated. 
+Though, if a block is updated frequently, evicting the block too early may incur extra cache misses and fetch/evict
+traffic on the memory bus. Ribbon may simply disable this feature if NVM throughput is harmed.
