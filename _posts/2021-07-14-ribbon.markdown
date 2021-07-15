@@ -26,6 +26,9 @@ version_mgmt:
 2. The overhead of CLFs can be reduced by proactively performing them before the actual CLF. This has no effect on
    correctness, since a dirty block is prone to eviction the moment it is made dirty.
 
+3. Objects that are semantically related to each other should be allocated together at aligned addresses to minimize
+   the number of flush instructions.
+
 **Comments:**
 
 1. Blocking the execution on store fences is relatively heavyweight compared with stalling the pipeline, as the 
