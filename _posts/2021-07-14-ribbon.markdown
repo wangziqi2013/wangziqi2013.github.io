@@ -61,3 +61,8 @@ value that can achieve the peak NVM bandwidth.
 Ribbon therefore determines the optimal number of threads by trial-and-error, which we describe as follows.
 Ribbon assumes that the number of helper threads must be between a lower bound (for example, 4) and the number of
 physical cores in the system. 
+The runtime measures the throughput in both cases, which we denote as P1 and P4 respectively.
+The runtime then measures throughput using one more thread than the lower bound, and one less thread than the upper 
+bound, which we denote as P2 and P3.
+The optimal number of threads lie on the intersection point between the two lines connecting (P1, P2) and (P3, P4) on
+the thread count-bandwidth graph.
