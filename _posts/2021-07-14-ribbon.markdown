@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Degree of parallelism will affect NVM throughput as too much contention on the WPQ is harmful (but the paper does
+   not explain why, maybe it harms locality? NoC traffic?).
+   The solution is to delegate CLFs to helper threads in the background, and adjust the number of helper threads
+   to throttle parallelism.
+   Note that this does not optimize out memory fences, as memory fences still blocks execution to avoid out-of-order
+   stores (i.e., if fences are also inserted into the buffer, stores after the fence are executed, but the corresponding fence is in the buffer and may not yet be executed, so stores are actually executed before
+   the fence).
+
 This paper presents Ribbon, a software framework for optimizing cache line flush (CLF) operations on Non-Volatile 
 Memory. Cache line flush operations, or CLFs, are critical in NVM programming, as it controls the order of writes
 that are persisted on the NVM device. 
@@ -66,3 +76,6 @@ The runtime then measures throughput using one more thread than the lower bound,
 bound, which we denote as P2 and P3.
 The optimal number of threads lie on the intersection point between the two lines connecting (P1, P2) and (P3, P4) on
 the thread count-bandwidth graph.
+This sampling process is performed for every one second to adapt to potentially changing workloads.
+
+
