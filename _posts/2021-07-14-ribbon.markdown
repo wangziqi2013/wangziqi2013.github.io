@@ -50,4 +50,8 @@ These two functions are responsible for managing data structures and helper thre
 We next discuss Ribbon's optional details. The first feature of Ribbon is CLF decoupling, which decouples CLF
 from program execution, allowing them to be completed in the background. 
 To achieve this, each user thread is allocated a FIFO CLF buffer for tracking the CLF operations issued from the
-thread. 
+thread. CLF operations are wrapped such that instead of executing the CLF primitive, it simply enqueues an entry
+into the per-thread CLF buffer that describes the CLF operation. 
+To perform background persistence, Ribbon spawns several background CLF helper threads that monitors these per-thread
+buffers, and execute the actual CLF primitives on behalf of the foreground user threads.
+
