@@ -55,3 +55,9 @@ into the per-thread CLF buffer that describes the CLF operation.
 To perform background persistence, Ribbon spawns several background CLF helper threads that monitors these per-thread
 buffers, and execute the actual CLF primitives on behalf of the foreground user threads.
 
+The number of helper threads determine the degree of parallelism for persistence. As discussed earlier, too many
+or too few concurrent flushing threads will both harm performance, but somewhere in between there is an optimal 
+value that can achieve the peak NVM bandwidth.
+Ribbon therefore determines the optimal number of threads by trial-and-error, which we describe as follows.
+Ribbon assumes that the number of helper threads must be between a lower bound (for example, 4) and the number of
+physical cores in the system. 
