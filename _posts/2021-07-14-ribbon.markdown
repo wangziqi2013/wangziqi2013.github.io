@@ -118,3 +118,4 @@ cache flushes. The paper uses key and values objects in Redis as an example. If 
 separately, each will occupy one or more blocks, which need separate CLFs to write them back. If, however, both 
 objects are allocated at aligned, consecutive addresses, then a few CLFs can be saved, as these objects are  
 stored compactly.
+  
