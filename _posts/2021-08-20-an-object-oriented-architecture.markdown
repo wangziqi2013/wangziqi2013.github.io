@@ -17,4 +17,5 @@ This paper proposes the Caltech Object Machine (COM) architecture, an object ori
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
 and type-less memory, these advanced features cause significant slowdowns because there is no intrinsic support
-from the hardware. 
+from the hardware. COM addresses these issues with instruction-level late binding, opcode overloading, and 
+type-aware memory hierarchy. 
