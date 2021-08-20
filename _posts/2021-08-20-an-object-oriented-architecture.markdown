@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes the Caltech Object Machine (COM) architecture, an object oriented execution model. 
+The architecture aims at improving performance for object-oriented languages, which are typically slower due
+to late binding, method resolution, and type safety. On a conventional architecture with flat address space
+and type-less memory, these advanced features cause significant slowdowns because there is no intrinsic support
+from the hardware. 
