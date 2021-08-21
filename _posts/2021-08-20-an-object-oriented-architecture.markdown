@@ -25,4 +25,8 @@ First, the COM architecture is capable of enforcing type safety at instruction l
 This will prevent wrong kind of operations being applied on data, such as trying to execute data
 or using the wrong arithmetic operation. On a type-less memory hierarchy, there is no way to check type safety, and 
 this must be implemented at software level.
-Second, 
+Second, COM supports late-binding, meaning that symbols in the program are resolved to the actual implementations
+only before execution based on the input data type. Late-binding can be useful for writing general purpose algorithms 
+such as sorting, as the data type handled by the algorithm need not be known at algorithm implementation time. 
+Programmes can thus write reusable code with abstracted types, rather than implementing a version of the algorithm for
+each data type.
