@@ -27,6 +27,12 @@ version_mgmt:
    such as base absolute address, object size and class ID. This is similar to a per-process page table,
    but with additional type information.
 
+3. Virtualize the register file and make them addressable in the absolute address space. Each function invocation
+   can therefore have one separate register context.
+   Register accesses are no different from memory accesses, but are accelerated with an on-chip context cache,
+   which is essentially just a register file.
+   Register spilling and restoration is not required.
+
 This paper proposes the Caltech Object Machine (COM) architecture with an object-oriented execution model. 
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
