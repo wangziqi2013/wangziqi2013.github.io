@@ -13,9 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes the Caltech Object Machine (COM) architecture, an object oriented execution model. 
+This paper proposes the Caltech Object Machine (COM) architecture with an object-oriented execution model. 
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
 and type-less memory, these advanced features cause significant slowdowns because there is no intrinsic support
-from the hardware. COM addresses these issues with instruction-level late binding, opcode overloading, and 
+from the hardware. COM addresses these issues with instruction-level late binding, abstract instructions, and 
 type-aware memory hierarchy. 
+
+The paper lists three advantages of COM compared with conventional architectures. 
+First, the COM architecture is capable of enforcing type safety at instruction level with runtime data types.
+This will prevent wrong kind of operations being applied on data, such as trying to execute data
+or using the wrong arithmetic operation. On a type-less memory hierarchy, there is no way to check type safety, and 
+this must be implemented at software level.
+Second, 
