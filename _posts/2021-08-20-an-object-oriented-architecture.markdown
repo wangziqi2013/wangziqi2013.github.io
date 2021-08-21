@@ -33,6 +33,11 @@ version_mgmt:
    which is essentially just a register file.
    Register spilling and restoration is not required.
 
+4. Virtualizes opcode such that the actual operation of the opcode is determined by the opcode itself and the 
+   type of its operands. This requires another level of translation which is done by a lookup table and 
+   cached by an instruction TLB (ITLB).
+   Virtualized opcodes execute as function calls that use the operands of the instruction as arguments.
+
 This paper proposes the Caltech Object Machine (COM) architecture with an object-oriented execution model. 
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
