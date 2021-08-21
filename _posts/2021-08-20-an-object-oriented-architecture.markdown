@@ -30,3 +30,7 @@ only before execution based on the input data type. Late-binding can be useful f
 such as sorting, as the data type handled by the algorithm need not be known at algorithm implementation time. 
 Programmes can thus write reusable code with abstracted types, rather than implementing a version of the algorithm for
 each data type.
+Lastly, COM demonstrates greater extensibility by incorporating programmability into the ISA. The COM ISA can be 
+extended at the software level by allowing instruction semantics to be redefined on new data types.
+Binaries compiled for COM are forward-compatible and can be reused on data types it was not designed for without 
+recompilation.
