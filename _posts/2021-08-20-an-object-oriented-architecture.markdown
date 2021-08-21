@@ -68,3 +68,10 @@ The paper suggests that in a 36-bit address space, COM dedicates 5 bits in the v
 and the remaining 31 bits are shared by segment ID and the offset.
 Virtual addresses are interpreted as having K bits of offset and (31 - K) bits of segment ID, given the exponent
 value as K.
+
+Virtual addresses are translated into global absolute addresses before being used. The translation is performed 
+by a segment descriptor table, which maps the exponent and segment ID into a base absolute segment address, segment 
+length (logical size of the object), and an object class ID.
+The translation can be accelerated by a hardware cache which is similar to the conventional TLB.
+
+
