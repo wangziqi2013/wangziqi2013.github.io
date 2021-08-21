@@ -105,3 +105,7 @@ This essentially makes the context cache as a de facto on-chip register file.
 Register spilling is done naturally as the context cache evicts context entries, and is transparent to the software,
 i.e., software does not need to explicitly spill registers to the memory due to register pressure, and can
 simply assume there is an unlimited number of contexts, one per function call instance.
+
+Contexts are managed by a few on-chip registers. Allocation is handled with a free list (which is allocated by the
+OS from the absolute address space). 
+The current and the previous contexts are also tracked by two on-chip registers respectively.
