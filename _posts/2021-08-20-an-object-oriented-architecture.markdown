@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Have a segmented virtual address space, but also also have a size class field in the pointer. Within each
+   size class, it is just like a normal segmented address space with same-size segments.
+   The size class field determines how the pointer should be interpreted (i.e., how segment ID and offset are
+   divided).
+   This addressing scheme supports both large and small objects since the segments are variable-sized.
+   The paper calls it a "floating-point address", but in fact it is just dividing the flat VA space into
+   equally-sized size classes, and adopt conventional segmentation within each size class.
+
 This paper proposes the Caltech Object Machine (COM) architecture with an object-oriented execution model. 
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
