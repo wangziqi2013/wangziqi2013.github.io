@@ -52,4 +52,9 @@ The COM architecture implements a variable-sized segmented virtual address space
 With fixed number of bits per pointer, the length of the offset field is determined by an extra "exponent"
 field which is also encoded in the pointer. By changing the value of the exponent field, the number of bits
 allocated to offset and segment ID will also change accordingly. 
-
+In other words, COM's address space consists of size classes, which are selected by the exponent field, and 
+the segments are uniformly sized within each size class just like a normal segmented address space.
+The paper suggests that in a 36-bit address space, COM dedicates 5 bits in the virtual address to exponent field,
+and the remaining 31 bits are shared by segment ID and the offset.
+Virtual addresses are interpreted as having K bits of offset and (31 - K) bits of segment ID, given the exponent
+value as K.
