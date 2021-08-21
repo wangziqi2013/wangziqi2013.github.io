@@ -80,3 +80,7 @@ The COM architecture uses absolute addresses uniformly in all levels of the hier
 main memory, and even the secondary storage.
 The mapping between absolute addresses and physical location at each device is handled by the device itself
 (e.g., for a cache it is performed by the tag array), which is not specified by the paper.
+
+COM uses tagged memory, and each word in the absolute address space is accompanied by a 5-bit tag. The per-word 
+tag indicates whether the content stored in the word is an integer, a floating point number, an object pointer, or 
+some other primitive types. The tag is always transferred across the hierarchy along with data. 
