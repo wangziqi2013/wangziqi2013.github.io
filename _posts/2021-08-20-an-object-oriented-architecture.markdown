@@ -38,7 +38,13 @@ recompilation.
 The COM architecture is designed for object addressing with a virtual address space. 
 The virtual address space is segmented, meaning that a virtual address consists of a segment ID and the offset into
 the segment. Segments are variable-sized chunks of memory, which can be accessed using the same segment ID and 
-different offsets. 
+different offsets. Each segment holds an individual object at the application level, and different segments are 
+not logically related to each other.
+One of the greatest challenges of segmented architecture is that the architecture must fulfill two conflicting 
+requirements:
+On one hand, large number of objects may exist at the same time, indicating a large segment ID field, since each 
+object must reside in its own segment. On the other hand, due to the existence of large objects, such as big arrays,
+the segment sizes must also be large enough to satisfy the majority of the cases, suggesting large offset fields.
 
 
 
