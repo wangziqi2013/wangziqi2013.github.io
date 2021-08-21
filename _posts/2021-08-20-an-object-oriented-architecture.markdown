@@ -48,5 +48,8 @@ the segment sizes must also be large enough to satisfy the majority of the cases
 Both goals cannot be easily achieved within a segmented architecture, especially with uniformly sized segments
 and fixed-length pointers, as the segment granularity needs to be both large and small.
 
-
+The COM architecture implements a variable-sized segmented virtual address space to address the above two issues.
+With fixed number of bits per pointer, the length of the offset field is determined by an extra "exponent"
+field which is also encoded in the pointer. By changing the value of the exponent field, the number of bits
+allocated to offset and segment ID will also change accordingly. 
 
