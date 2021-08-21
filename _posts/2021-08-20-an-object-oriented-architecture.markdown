@@ -45,6 +45,8 @@ requirements:
 On one hand, large number of objects may exist at the same time, indicating a large segment ID field, since each 
 object must reside in its own segment. On the other hand, due to the existence of large objects, such as big arrays,
 the segment sizes must also be large enough to satisfy the majority of the cases, suggesting large offset fields.
+Both goals cannot be easily achieved within a segmented architecture, especially with uniformly sized segments
+and fixed-length pointers, as the segment granularity needs to be both large and small.
 
 
 
