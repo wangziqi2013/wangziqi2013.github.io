@@ -101,3 +101,7 @@ number of windows, COM supports an infinite number of them due to the virtualiza
 With a virtualized register file, context access is not any different from ordinary memory accesses. Although, since
 register contexts are accessed frequently, and are supposed to be fast, COM is equipped with a context cache 
 that is specialized for caching context objects (e.g., the block size is the size of a context). 
+This essentially makes the context cache as a de facto on-chip register file.
+Register spilling is done naturally as the context cache evicts context entries, and is transparent to the software,
+i.e., software does not need to explicitly spill registers to the memory due to register pressure, and can
+simply assume there is an unlimited number of contexts, one per function call instance.
