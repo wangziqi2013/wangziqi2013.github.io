@@ -74,4 +74,9 @@ by a segment descriptor table, which maps the exponent and segment ID into a bas
 length (logical size of the object), and an object class ID.
 The translation can be accelerated by a hardware cache which is similar to the conventional TLB.
 
-
+The absolute address space is shared among all processes, while the virtual address space is per-process, implying
+that each process should have its own segment description table, which is similar to a conventional page table.
+The COM architecture uses absolute addresses uniformly in all levels of the hierarchy, including the cache, the 
+main memory, and even the secondary storage.
+The mapping between absolute addresses and physical location at each device is handled by the device itself
+(e.g., for a cache it is performed by the tag array), which is not specified by the paper.
