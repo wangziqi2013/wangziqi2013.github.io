@@ -93,5 +93,8 @@ COM's also virtualizes its register file, such that the machine state is also ad
 This design choice allows arbitrarily large number of register contexts, since a register context can simply
 be allocated by acquiring a 32-word chunk of memory from the absolute address space.
 COM assigns each function call instance with its own register context, with 
-
+Argument passing is performed by copying the arguments into the registers of the new context, and value return
+is performed by passing a pointer to the callee's register context that points to an object in caller's context.
+This design is similar to the concept of "register window" in SPARC, but instead of only supporting a limited 
+number of windows, COM supports an infinite number of them due to the virtualization of the contexts.
 
