@@ -130,3 +130,7 @@ When a register is used as an operand, the class ID or type ID of that register 
 operation of an instruction.
 COM also virtualizes the instruction's opcode, such that an opcode can behave differently for different operand types.
 For primitive types, the instructions work as in conventional architectures.
+For object types, the actual operation is obtained by a lookup table using the opcode and the class IDs of all operands
+as the key. The lookup table returns a function pointer that implements the operation. The instruction then essentially
+functions as a method call, with all of its operands being the arguments to the function. 
+An instruction TLB, the ITLB, is added to accelerate the instruction opcode lookup process.
