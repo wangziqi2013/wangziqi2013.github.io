@@ -109,3 +109,7 @@ simply assume there is an unlimited number of contexts, one per function call in
 Contexts are managed by a few on-chip registers. Allocation is handled with a free list (which is allocated by the
 OS from the absolute address space). 
 The current and the previous contexts are also tracked by two on-chip registers respectively.
+On function invocations, a new context is allocated, and the corresponding on-chip registers are updated to point to 
+the new and the previous context, respectively.
+Each function instance has a separate context object, meaning that functions can use the full set of architectural 
+registers without corrupting states in another instance.
