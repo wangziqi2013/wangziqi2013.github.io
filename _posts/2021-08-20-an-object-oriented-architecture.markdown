@@ -98,3 +98,6 @@ is performed by passing a pointer to the callee's register context that points t
 This design is similar to the concept of "register window" in SPARC, but instead of only supporting a limited 
 number of windows, COM supports an infinite number of them due to the virtualization of the contexts.
 
+With a virtualized register file, context access is not any different from ordinary memory accesses. Although, since
+register contexts are accessed frequently, and are supposed to be fast, COM is equipped with a context cache 
+that is specialized for caching context objects (e.g., the block size is the size of a context). 
