@@ -119,3 +119,14 @@ On function invocations, a new context is allocated, and the corresponding on-ch
 the new and the previous context, respectively.
 Each function instance has a separate context object, meaning that functions can use the full set of architectural 
 registers without corrupting states in another instance.
+
+The register context is also type-tagged, and the tag may contain one of the few supported primitive types, or 
+the object class ID, if the register stores an object pointer.
+When a word is loaded into the register context, the 5-bit tag indicating its type is also loaded. If the word stores
+an object pointer, then the class ID, which is obtained from the segment description table, is loaded into the 
+register context as well. 
+
+When a register is used as an operand, the class ID or type ID of that register is used to determine the actual 
+operation of an instruction.
+COM also virtualizes the instruction's opcode, such that an opcode can behave differently for different operand types.
+For primitive types, the instructions work as in conventional architectures.
