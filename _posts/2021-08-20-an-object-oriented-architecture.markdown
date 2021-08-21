@@ -23,6 +23,10 @@ version_mgmt:
    The paper calls it a "floating-point address", but in fact it is just dividing the flat VA space into
    equally-sized size classes, and adopt conventional segmentation within each size class.
 
+2. Uses a per-process segment descriptor table to translate VA to segment properties (i.e., object properties)
+   such as base absolute address, object size and class ID. This is similar to a per-process page table,
+   but with additional type information.
+
 This paper proposes the Caltech Object Machine (COM) architecture with an object-oriented execution model. 
 The architecture aims at improving performance for object-oriented languages, which are typically slower due
 to late binding, method resolution, and type safety. On a conventional architecture with flat address space
