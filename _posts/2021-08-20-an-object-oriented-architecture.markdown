@@ -34,3 +34,11 @@ Lastly, COM demonstrates greater extensibility by incorporating programmability 
 extended at the software level by allowing instruction semantics to be redefined on new data types.
 Binaries compiled for COM are forward-compatible and can be reused on data types it was not designed for without 
 recompilation.
+
+The COM architecture is designed for object addressing with a virtual address space. 
+The virtual address space is segmented, meaning that a virtual address consists of a segment ID and the offset into
+the segment. Segments are variable-sized chunks of memory, which can be accessed using the same segment ID and 
+different offsets. 
+
+
+
