@@ -38,6 +38,11 @@ Deallocation is also simpler, as the block is only inserted into the head of the
 The paper also noted that both allocation and deallocation of quick-fit can be inlined into the call site, and it
 only takes a few instructions in the majority of cases.
 
-This paper observes that, despite the fact that quick-fit is efficient and flexible enough in most of the scenarios, 
+This paper argues that, despite the fact that quick-fit is efficient and flexible enough in most of the scenarios, 
 it still requires individual objects to be deallocated, which is not only unnecessary in certain cases, but also 
 prone to memory leaks, if the programmers forget to free some of the allocated objects.
+
+To further optimizes quick-fit, the paper observes that in many scenarios, the lifetime of objects are often nested,
+and objects allocated at different points are deallocated together. For example, in a window system, all control objects
+will be deallocated when the window is destroyed; In a compiler implementation, all objects allocated for a scope will 
+be deallocated at the end of a scope. 
