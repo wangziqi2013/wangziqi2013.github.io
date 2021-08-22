@@ -35,3 +35,5 @@ On an allocation request, the requested size is first rounded up to one of the s
 block in the free list of that class is allocated (allocations larger than a threshold is satisfied
 by another large block allocator). 
 Deallocation is also simpler, as the block is only inserted into the head of the free list.
+The paper also noted that both allocation and deallocation of quick-fit can be inlined into the call site, and it
+only takes a few instructions in the majority of cases.
