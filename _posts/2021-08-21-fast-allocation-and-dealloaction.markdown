@@ -37,3 +37,7 @@ by another large block allocator).
 Deallocation is also simpler, as the block is only inserted into the head of the free list.
 The paper also noted that both allocation and deallocation of quick-fit can be inlined into the call site, and it
 only takes a few instructions in the majority of cases.
+
+This paper observes that, despite the fact that quick-fit is efficient and flexible enough in most of the scenarios, 
+it still requires individual objects to be deallocated, which is not only unnecessary in certain cases, but also 
+prone to memory leaks, if the programmers forget to free some of the allocated objects.
