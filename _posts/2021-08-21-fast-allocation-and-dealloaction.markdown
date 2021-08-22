@@ -23,7 +23,7 @@ version_mgmt:
 
 2. Areas within a single stack allocator need not be reset one by one when the stack allocator is deallocated.
    Instead, just reset the per-lifetime pointer, and consider everything after the pointer in the list
-   as free.
+   as free. This makes deallocation constant time.
 
 **Comments:**
 
@@ -99,3 +99,9 @@ Arenas that are already in the list will be considered as free, and reused on th
 requests with a minor addition to the allocator: The allocator should check whether there is a next arena in the 
 list during allocation, if a new arena needs to be allocated. If true, then the next arena in the list will be reused
 by resetting its per-arena top pointer, and no new arena is allocated.
+
+The paper also proposes an optimization to reduce the number of arenas: Instead of allocating new arena, when the 
+current arena cannot satisfy an allocation request, the current arena can be extended by attempting for an expansion
+(using mremap(), for example). If this succeeds, no new arena needs to be allocated, and the expanded arena
+can continue serving allocation requests.
+
