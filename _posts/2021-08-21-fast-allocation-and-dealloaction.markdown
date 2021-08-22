@@ -31,4 +31,7 @@ and therefore is expensive, as block locations also need to be tracked.
 Quick-fit, on the other hand, maintains a series of free lists based on block sizes. The allocator acquires free pages
 from the OS, and breaks these pages down into blocks of different size classes, which are then inserted into the 
 free list of the corresponding size class. 
-
+On an allocation request, the requested size is first rounded up to one of the size classes, and then the first
+block in the free list of that class is allocated (allocations larger than a threshold is satisfied
+by another large block allocator). 
+Deallocation is also simpler, as the block is only inserted into the head of the free list.
