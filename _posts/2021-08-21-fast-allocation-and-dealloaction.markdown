@@ -21,6 +21,10 @@ version_mgmt:
    different instances of the stack allocators, such that the object lifetime on a single stack allocator 
    are perfectly nested.
 
+2. Areas within a single stack allocator need not be reset one by one when the stack allocator is deallocated.
+   Instead, just reset the per-lifetime pointer, and consider everything after the pointer in the list
+   as free.
+
 **Comments:**
 
 1. The term "lifetime" may not be accurate. A better word is "deadline", i.e., the proposed algorithm clusters
