@@ -13,11 +13,19 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
 1. Combines stack allocation, which is difficult to free objects unless their lifetimes are perfected nested, with
    per-lifetime stack allocator, which clusters objects with the same deadline. 
    This way, stack allocation works better because we can dispatch allocations of different deadlines to 
    different instances of the stack allocators, such that the object lifetime on a single stack allocator 
    are perfectly nested.
+
+**Comments:**
+
+1. The term "lifetime" may not be accurate. A better word is "deadline", i.e., the proposed algorithm clusters
+   objects of the same deadline (not necessarily the same lifetime because they can be allocated at different
+   contexts) for batch deallocation and amortized deallocation cost.
 
 This paper presents the design and implementation of a simple memory allocator that outperforms previous designs by
 taking advantage of object lifetime.
