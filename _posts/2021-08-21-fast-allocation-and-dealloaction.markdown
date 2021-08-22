@@ -80,4 +80,10 @@ Allocation requests of size k with lifetime x is translated to an allocation req
 instance x. 
 Each stack allocator consists of a series of memory blocks called arenas. Each arena is just a continuous chunk of 
 memory that is allocated as a stack, the current allocation point of which is indicated by a "top" pointer. 
-On an allocation request, if the requested size can be 
+The allocator maintains a per-lifetime arena pointer that points to the current active arena for serving requests.
+On an allocation request, if the requested size can be satisfied within the current arena, the top pointer is 
+incremented by the requested size, before the pre-value of the pointer is returned.
+Otherwise, a new arena is allocated (the size of the arena needs to be at least the requested size), and the 
+allocation is reattempted on the new arena. This process is constant time, since at most two arena
+allocation and one allocation from the OS are performed.
+Arenas of the same lifetime are organized into linked lists for reuse, as we will see later.
