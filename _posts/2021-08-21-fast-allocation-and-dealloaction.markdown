@@ -76,4 +76,8 @@ We next describe the details of the design as follows. At allocation time, progr
 allocation size, and the lifetime information indicated by an integer. Different integers represent different
 lifetime, and the numeric values of these integers have nothing to do with the actual lifetime. 
 The allocator maintains a few stack allocators, one for each possible lifetime.
-
+Allocation requests of size k with lifetime x is translated to an allocation request of size k at stack allocator 
+instance x. 
+Each stack allocator consists of a series of memory blocks called arenas. Each arena is just a continuous chunk of 
+memory that is allocated as a stack, the current allocation point of which is indicated by a "top" pointer. 
+On an allocation request, if the requested size can be 
