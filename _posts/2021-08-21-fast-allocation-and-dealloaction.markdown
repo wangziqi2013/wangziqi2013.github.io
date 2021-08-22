@@ -72,3 +72,8 @@ This has two obvious advantages. First, stack allocators are as efficient as qui
 efficient. Second, stack allocators support constant time deallocation of all objects on the stack by just resetting
 the allocation pointer. This is a great advantage over quick-fit, which has linear-time deallocation.
 
+We next describe the details of the design as follows. At allocation time, programmers need to provide both the 
+allocation size, and the lifetime information indicated by an integer. Different integers represent different
+lifetime, and the numeric values of these integers have nothing to do with the actual lifetime. 
+The allocator maintains a few stack allocators, one for each possible lifetime.
+
