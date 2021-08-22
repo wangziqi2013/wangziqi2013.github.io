@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+1. Combines stack allocation, which is difficult to free objects unless their lifetimes are perfected nested, with
+   per-lifetime stack allocator, which clusters objects with the same deadline. 
+   This way, stack allocation works better because we can dispatch allocations of different deadlines to 
+   different instances of the stack allocators, such that the object lifetime on a single stack allocator 
+   are perfectly nested.
+
 This paper presents the design and implementation of a simple memory allocator that outperforms previous designs by
 taking advantage of object lifetime.
 The paper observes that object allocation can be as simple as incrementing a pointer on a stack allocator, while 
