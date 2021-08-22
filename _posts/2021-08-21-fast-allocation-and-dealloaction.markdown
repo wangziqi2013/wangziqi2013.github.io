@@ -91,4 +91,7 @@ Arenas of the same lifetime are organized into linked lists for reuse, as we wil
 Deallocation happens at a larger granularity of entire lifetimes. Programmers can only deallocate all objects in
 a per-lifetime allocator by indicating the integer identifier of the lifetime. 
 Deallocation works by simply resetting the per-lifetime pointer to the first arena in the list.
-
+Arenas that are already in the list will be considered as free, and reused on the future allocation
+requests with a minor addition to the allocator: The allocator should check whether there is a next arena in the 
+list during allocation, if a new arena needs to be allocated. If true, then the next arena in the list will be reused
+by resetting its per-arena top pointer, and no new arena is allocated.
