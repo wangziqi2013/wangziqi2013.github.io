@@ -87,3 +87,8 @@ Otherwise, a new arena is allocated (the size of the arena needs to be at least 
 allocation is reattempted on the new arena. This process is constant time, since at most two arena
 allocation and one allocation from the OS are performed.
 Arenas of the same lifetime are organized into linked lists for reuse, as we will see later.
+
+Deallocation happens at a larger granularity of entire lifetimes. Programmers can only deallocate all objects in
+a per-lifetime allocator by indicating the integer identifier of the lifetime. 
+Deallocation works by simply resetting the per-lifetime pointer to the first arena in the list.
+
