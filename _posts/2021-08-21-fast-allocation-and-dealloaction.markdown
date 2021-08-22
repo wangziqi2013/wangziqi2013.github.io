@@ -19,3 +19,9 @@ The paper observes that object allocation can be as simple as incrementing a poi
 object deallocation, while usually non-trivial on such allocators, can be optimized by leveraging bulk object 
 deallocation, which is not uncommon in many scenarios, and thus be amortized across objects with the 
 same lifetime.
+
+The paper discusses two previous storage management algorithms: First-fit and quick-fit. In first-fit, all free
+blocks that are part of the process's address space but not yet allocated for usage are maintained in a single
+linked list, called the free list. When an allocation of size k is requested, the allocator searches the free 
+list, and allocates the first block in the list whose size is larger than k. 
+
