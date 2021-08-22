@@ -28,3 +28,7 @@ broken down into smaller blocks before being allocated to reduce internal fragme
 Deallocation requires recursively combining the block being deallocated and its near-by blocks into larger blocks, 
 and therefore is expensive, as block locations also need to be tracked.
 
+Quick-fit, on the other hand, maintains a series of free lists based on block sizes. The allocator acquires free pages
+from the OS, and breaks these pages down into blocks of different size classes, which are then inserted into the 
+free list of the corresponding size class. 
+
