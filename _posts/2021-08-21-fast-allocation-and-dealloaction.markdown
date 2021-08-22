@@ -23,5 +23,8 @@ same lifetime.
 The paper discusses two previous storage management algorithms: First-fit and quick-fit. In first-fit, all free
 blocks that are part of the process's address space but not yet allocated for usage are maintained in a single
 linked list, called the free list. When an allocation of size k is requested, the allocator searches the free 
-list, and allocates the first block in the list whose size is larger than k. 
+list, and allocates the first block in the list whose size is larger than k. The block may also be optionally
+broken down into smaller blocks before being allocated to reduce internal fragmentation.
+Deallocation requires recursively combining the block being deallocated and its near-by blocks into larger blocks, 
+and therefore is expensive, as block locations also need to be tracked.
 
