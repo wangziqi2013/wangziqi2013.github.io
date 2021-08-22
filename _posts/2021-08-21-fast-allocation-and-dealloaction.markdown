@@ -27,6 +27,11 @@ version_mgmt:
    objects of the same deadline (not necessarily the same lifetime because they can be allocated at different
    contexts) for batch deallocation and amortized deallocation cost.
 
+2. There is a corner case where the allocation size exceeds the arena size. 
+   The next arena should be allocated as a bigger block than the requested size, rather than using the pre-determined 
+   size, because otherwise the allocation will never be satisfied.
+   The paper uses INCR*1024 as arena's allocation size, which is incorrect.
+
 This paper presents the design and implementation of a simple memory allocator that outperforms previous designs by
 taking advantage of object lifetime.
 The paper observes that object allocation can be as simple as incrementing a pointer on a stack allocator, while 
@@ -56,7 +61,14 @@ This paper argues that, despite the fact that quick-fit is efficient and flexibl
 it still requires individual objects to be deallocated, which is not only unnecessary in certain cases, but also 
 prone to memory leaks, if the programmers forget to free some of the allocated objects.
 
-To further optimizes quick-fit, the paper observes that in many scenarios, the lifetime of objects are often nested,
+To further optimize quick-fit, the paper observes that in many scenarios, the lifetime of objects are often clustered,
 and objects allocated at different points are deallocated together. For example, in a window system, all control objects
 will be deallocated when the window is destroyed; In a compiler implementation, all objects allocated for a scope will 
 be deallocated at the end of a scope. 
+This can be leveraged by having multiple stack allocators, and dispatch object allocation requests to one of the 
+stack allocators based on the object's lifetime, i.e., objects with the same deallocation point are allocated from
+the same stack allocator, and destroyed in batches. 
+This has two obvious advantages. First, stack allocators are as efficient as quick-first free lists, if not more 
+efficient. Second, stack allocators support constant time deallocation of all objects on the stack by just resetting
+the allocation pointer. This is a great advantage over quick-fit, which has linear-time deallocation.
+
