@@ -70,3 +70,11 @@ the L1 TLB, instead, caches the translation info as well as cache way numbers in
 The number of entries in L1 TLB can hence increase by 8x, meaning that in the worst case scenario, the TLB can
 still maintain block information for the entire cache (the paper uses 32KB cache with 512 entries, and a 64-entry
 baseline TLB).
+The micro-page L1 TLB works transparently as the baseline TLB. TLB entries are generated from the standard 4KB
+translation and injected into the L1 TLB on TLB misses. In-memory page table entries and L2 TLB are unmodified.
+
+Adopting micro-page TLB, however, increases L1 TLB misses, especially on streaming access patterns, since a single 
+4KB translation now takes 8 TLB misses to be fetched into the L1 TLB. 
+To deal with this, the paper proposes macro-page prefetching, which injects the missing entries for the same 4KB
+regular page into the L1 TLB, when one of the micro-pages are injected. The prefetched entries will be placed at
+the end of the LRU chain to avoid polluting the L1 TLB.
