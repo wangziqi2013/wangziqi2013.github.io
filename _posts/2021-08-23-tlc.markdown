@@ -53,3 +53,8 @@ On a cache miss, an existing entry needs to be evicted from the L1. The eviction
 pointer of the entry to be evicted to locate the TLB entry, and resetting its validity bit.
 When the new entry is fetched from the lower level, the corresponding TLB entry is also initialized by first
 setting the validity bit, and then storing the way number.
+
+On TLB misses, an existing TLB entry is evicted, and the new entry is brought in. When evicting the existing entry,
+all cache blocks mapped by that entry also should be evicted from the L1 cache. 
+The new TLB entry is initialized by setting all fields to zero, since the eviction protocol guarantees that addresses
+not mapped by the TLB will not be cached.
