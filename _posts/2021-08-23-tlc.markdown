@@ -30,3 +30,12 @@ The second technique, way prediction, attempts to predict the way that an access
 the predicted way. It avoids parallel lookup as well as associative set lookup by speculatively reading the data bank
 first, and checking the tag array only for confirmation. If speculation fails, a conventional lookup is still performed,
 which results in both increased latency and energy consumption.
+
+This paper, on the other hand, proposes that way information of addresses can be stored in the TLB, and that 
+the L1 cache can simply get rid of the tag array.
+To be more specific: For each TLB entry, we add 64 1-bit flag indicating the existence of the corresponding 
+block address in the L1 cache, and 64 log2(K)-bit way indicators, one for each block. 
+The L1 cache does not have a tag array. Instead, it only has one data array which can be accessed by giving the set
+and way number.
+
+
