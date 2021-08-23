@@ -90,5 +90,11 @@ physical address in the cache.
 To handle this, TLC makes a policy decision by not allowing synonym translation entries to co-exist in the 
 L1 TLB, which is justified by the fact that synonym is only rarely used, and therefore it is sufficient to
 just maintain correctness but not efficiency.
+The paper proposes adding a reverse translation table that translates PA back to VA that is coupled with the L1 
+TLB, meaning that the contents of the reverse table is always consistent with the L1 TLB. 
+When an entry is to be inserted into the L1 TLB, the table is first consulted, and if an entry with the same
+PA but a different PA exists, then insertion happens by updating the existing entry's VA field with the new VA to be 
+inserted. Validity bits and way numbers are unmodified in this case, since both entries describe the status of 
+the same physical page.
 
 
