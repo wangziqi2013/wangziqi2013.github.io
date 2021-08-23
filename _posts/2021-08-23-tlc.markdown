@@ -41,4 +41,8 @@ the TLB entry can be located quickly when the block is evicted.
 
 We next describe the operations in details. On a cache access, the virtual address is first used to probe the TLB.
 If the TLB hits, then the corresponding validity bit, which is indexed with bits of the address between the 
-page number and block offset, will first be checked. 
+page number and block offset, will first be checked. If the validity bit is zero, meaning that the block
+does not exist, then a cache miss can be signaled immediately, and the physical page number is read out to form
+the address to be fetched from the lower level.
+If the validity bit is one, then the access hits the cache, and the way number is retrieved, which, combined with the
+set index (generated in the same manner as in a conventional cache), is used to access the data array.
