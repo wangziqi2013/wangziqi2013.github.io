@@ -78,3 +78,10 @@ Adopting micro-page TLB, however, increases L1 TLB misses, especially on streami
 To deal with this, the paper proposes macro-page prefetching, which injects the missing entries for the same 4KB
 regular page into the L1 TLB, when one of the micro-pages are injected. The prefetched entries will be placed at
 the end of the LRU chain to avoid polluting the L1 TLB.
+
+By associating way indices with the TLB's translation entry, the TLC design essentially adds a virtual address
+tag array that is physically co-located with the TLB tags. The virtual tag, as with all virtual tag designs, will
+inevitably create two problems: synonym and homonym. 
+Homonym can be easily solved by adding an extra ASID per TLB entry, which has already been in many of the modern 
+implementations. 
+
