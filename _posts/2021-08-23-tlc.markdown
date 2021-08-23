@@ -20,7 +20,8 @@ version_mgmt:
    The novelty here is that super-blocks can be of page size (micro-page size, actually), which makes co-locating 
    these tags with TLB entries much easier.
 
-
+2. Synonym of virtual address caches can be solved by a reverse translation table, and by now allowing both
+   TLB entries to co-exist.
 
 This paper proposes the Tag-Less Cache (TLC) architecture to reduce energy consumption of conventional L1 caches.
 The paper is motivated by the fact that conventional caches are rather power hungry, which is caused by two 
