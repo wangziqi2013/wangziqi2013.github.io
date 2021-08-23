@@ -48,3 +48,8 @@ If the validity bit is one, then the access hits the cache, and the way number i
 set index (generated in the same manner as in a conventional cache), is used to access the data array.
 The paper noted that in the case of a cache hit (which should be the majority of cases), the physical page number
 does not need to be retrieved from the TLB, since the way number is sufficient to access the data bank.
+
+On a cache miss, an existing entry needs to be evicted from the L1. The eviction takes place by following the back 
+pointer of the entry to be evicted to locate the TLB entry, and resetting its validity bit.
+When the new entry is fetched from the lower level, the corresponding TLB entry is also initialized by first
+setting the validity bit, and then storing the way number.
