@@ -56,5 +56,11 @@ setting the validity bit, and then storing the way number.
 
 On TLB misses, an existing TLB entry is evicted, and the new entry is brought in. When evicting the existing entry,
 all cache blocks mapped by that entry also should be evicted from the L1 cache. 
-The new TLB entry is initialized by setting all fields to zero, since the eviction protocol guarantees that addresses
-not mapped by the TLB will not be cached.
+The new TLB entry is initialized by setting all validity and way number fields to zero, since the eviction 
+protocol guarantees that addresses not mapped by the TLB will not be cached.
+
+One issue of the above baseline design is that evicted TLB entries may also evict cache blocks, causing unnecessary 
+misses. Although this may not be a huge problem for programs with good locality, as the coverage of the TLB is much 
+larger than the coverage of the L1 cache, for programs with low locality, the worse case scenario is that each TLB entry
+only has one valid block, and the total number of valid blocks that can co-exist in the L1 cache is the number of 
+entries in the TLB, which is far less than the number of L1 data slots.
