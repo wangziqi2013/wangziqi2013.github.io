@@ -17,4 +17,7 @@ This paper proposes the Tag-Less Cache (TLC) architecture to reduce energy consu
 The paper is motivated by the fact that conventional caches are rather power hungry, which is caused by two 
 design choices. First, cache accesses always need tag comparisons in order to locate the data block in one of the 
 many ways, or declare a cache miss. 
-
+Second, to reduce access latency, both the tags and data blocks in the set are read in parallel after the set index is 
+computed, and only one of the blocks is selected in the case of a cache hit, which wastes the energy consumed by 
+accessing the rest of the set.
+The waste can be quite significant, since the entire set is accessed, while at most one of them will be actually useful.
