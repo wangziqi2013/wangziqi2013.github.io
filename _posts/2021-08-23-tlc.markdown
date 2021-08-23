@@ -36,6 +36,9 @@ the L1 cache can simply get rid of the tag array.
 To be more specific: For each TLB entry, we add 64 1-bit flag indicating the existence of the corresponding 
 block address in the L1 cache, and 64 log2(K)-bit way indicators, one for each block. 
 The L1 cache does not have a tag array. Instead, it only has one data array which can be accessed by giving the set
-and way number.
+and way number. For each data block, a back pointer storing the index of the TLB entry is maintained, such that
+the TLB entry can be located quickly when the block is evicted.
 
-
+We next describe the operations in details. On a cache access, the virtual address is first used to probe the TLB.
+If the TLB hits, then the corresponding validity bit, which is indexed with bits of the address between the 
+page number and block offset, will first be checked. 
