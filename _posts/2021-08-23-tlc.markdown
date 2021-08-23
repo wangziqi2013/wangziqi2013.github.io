@@ -61,6 +61,12 @@ protocol guarantees that addresses not mapped by the TLB will not be cached.
 
 One issue of the above baseline design is that evicted TLB entries may also evict cache blocks, causing unnecessary 
 misses. Although this may not be a huge problem for programs with good locality, as the coverage of the TLB is much 
-larger than the coverage of the L1 cache, for programs with low locality, the worse case scenario is that each TLB entry
+larger than the coverage of the L1 cache, for programs with low locality, the worst case scenario is that each TLB entry
 only has one valid block, and the total number of valid blocks that can co-exist in the L1 cache is the number of 
 entries in the TLB, which is far less than the number of L1 data slots.
+
+To address this issue, the paper proposes micro-page TLB: Instead of caching VA to PA translations in 4KB granularity,
+the L1 TLB, instead, caches the translation info as well as cache way numbers in 512 byte micro-pages.
+The number of entries in L1 TLB can hence increase by 8x, meaning that in the worst case scenario, the TLB can
+still maintain block information for the entire cache (the paper uses 32KB cache with 512 entries, and a 64-entry
+baseline TLB).
