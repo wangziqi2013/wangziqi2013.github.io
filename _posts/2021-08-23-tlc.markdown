@@ -28,6 +28,15 @@ version_mgmt:
    In addition, L1 TLB can operate with micro-pages by injecting entries from the L2, without changing how the
    rest of the MMU works.
 
+**Comments:**
+
+1. I do not get why the paper proposes an extra level of indirection for back pointers to solve synonym.
+   I understand that the authors want to say that it is necessary since the location of the newly inserted
+   synonym entry changes. This, however, is not even true, because the newly inserted entry can simply just
+   be the old synonym entry to be evicted, i.e., just update the VA, and it is done.
+   In this case, the validity bits and way numbers do not need to be copied, and there is no need for an
+   extra level of indirection.
+
 This paper proposes the Tag-Less Cache (TLC) architecture to reduce energy consumption of conventional L1 caches.
 The paper is motivated by the fact that conventional caches are rather power hungry, which is caused by two 
 design choices. First, cache accesses always need tag comparisons in order to locate the data block in one of the 
