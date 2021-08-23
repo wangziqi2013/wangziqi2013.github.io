@@ -46,3 +46,5 @@ does not exist, then a cache miss can be signaled immediately, and the physical 
 the address to be fetched from the lower level.
 If the validity bit is one, then the access hits the cache, and the way number is retrieved, which, combined with the
 set index (generated in the same manner as in a conventional cache), is used to access the data array.
+The paper noted that in the case of a cache hit (which should be the majority of cases), the physical page number
+does not need to be retrieved from the TLB, since the way number is sufficient to access the data bank.
