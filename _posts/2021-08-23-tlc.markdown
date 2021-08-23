@@ -84,4 +84,11 @@ tag array that is physically co-located with the TLB tags. The virtual tag, as w
 inevitably create two problems: synonym and homonym. 
 Homonym can be easily solved by adding an extra ASID per TLB entry, which has already been in many of the modern 
 implementations. 
+Synonym, on the other hand, is more tricky, since if two or more VAs are mapped to the same PA, then there
+would be multiple instances of TLB entries with the same PA, while there is only one copy of data per 
+physical address in the cache.
+To handle this, TLC makes a policy decision by not allowing synonym translation entries to co-exist in the 
+L1 TLB, which is justified by the fact that synonym is only rarely used, and therefore it is sufficient to
+just maintain correctness but not efficiency.
+
 
