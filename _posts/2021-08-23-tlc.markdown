@@ -21,3 +21,7 @@ Second, to reduce access latency, both the tags and data blocks in the set are r
 computed, and only one of the blocks is selected in the case of a cache hit, which wastes the energy consumed by 
 accessing the rest of the set.
 The waste can be quite significant, since the entire set is accessed, while at most one of them will be actually useful.
+
+Previous works attempt to reduce energy issues of cache accesses with two techniques. The first one, staged access, 
+serializes the tag access and data access into two phases. Only the way in the data bank that contains the requested 
+block will be accessed, if it is a hit, or the data bank is not accessed at all, if it is a miss.
