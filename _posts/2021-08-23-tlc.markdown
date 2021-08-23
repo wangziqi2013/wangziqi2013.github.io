@@ -25,3 +25,8 @@ The waste can be quite significant, since the entire set is accessed, while at m
 Previous works attempt to reduce energy issues of cache accesses with two techniques. The first one, staged access, 
 serializes the tag access and data access into two phases. Only the way in the data bank that contains the requested 
 block will be accessed, if it is a hit, or the data bank is not accessed at all, if it is a miss.
+This approach saves energy of data bank accesses, but increases the access latency by one cycle.
+The second technique, way prediction, attempts to predict the way that an access will likely to hit, and only checks 
+the predicted way. It avoids parallel lookup as well as associative set lookup by speculatively reading the data bank
+first, and checking the tag array only for confirmation. If speculation fails, a conventional lookup is still performed,
+which results in both increased latency and energy consumption.
