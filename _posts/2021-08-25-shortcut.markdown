@@ -28,3 +28,8 @@ The paper introduces two types of dispatch functions, i.e., the global dispatch 
 invocations at all access sites, and in-line dispatchers that only handle a single site.
 The responsibility of the global dispatch function is to map object types and access site to the corresponding function
 implementation (functions at the same access sites are polymorphic and have the same symbol name).
+The mapping is stored globally using a software mapping table, which is queried every time a function is called
+at an access site.
+To reduce the overhead, the JIT compiler may also generate in-line dispatch functions for each individual access sites 
+that cache the result of queries for the particular call site.
+The paper shows three possible implementations of in-line dispatch functions.
