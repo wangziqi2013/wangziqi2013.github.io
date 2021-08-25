@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ShortCut: Architectural Support for Fast Object Access in Scripting Languages"
+date:   2021-08-25 14:27:00 -0500
+categories: paper
+paper_title: "ShortCut: Architectural Support for Fast Object Access in Scripting Languages"
+paper_link: https://dl.acm.org/doi/10.1145/3140659.3080237
+paper_keyword: ShortCut; Virtual Function; BTB
+paper_year: ISCA 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
