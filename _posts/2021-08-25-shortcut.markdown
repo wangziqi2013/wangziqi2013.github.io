@@ -24,9 +24,7 @@ runtime based on the type of the object.
 According to the paper, the dispatch function is a major source of slowdowns, which account for around 22% of the 
 instructions being executed in applications.
 
-The responsibility of dispatch functions is to map object types and access site to the corresponding function
+The paper introduces two types of dispatch functions, i.e., the global dispatch function that handles all function
+invocations at all access sites, and in-line dispatchers that only handle a single site.
+The responsibility of the global dispatch function is to map object types and access site to the corresponding function
 implementation (functions at the same access sites are polymorphic and have the same symbol name).
-The mapping is stored globally using a software mapping table, which is queried every time a function is called
-at an access site.
-To reduce the overhead, the JIT compiler may also generate in-line dispatch functions for each individual call sites 
-that cache the result of queries for the particular call site.
