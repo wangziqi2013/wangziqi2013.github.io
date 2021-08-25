@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes ShortCut, a hardware mechanism for accelerating virtual function invocations for scripting 
+languages.
+The paper observes that scripting languages, which are often Just-In-Time (JIT) compiled, pay a huge overhead on
+virtual function invocations, since these languages support dynamic resolution of function invocation, meaning
+that the actual function being called on an object pointer is dependent on the runtime dynamic type of the 
+object, which could not be determined statically at compilation time. 
