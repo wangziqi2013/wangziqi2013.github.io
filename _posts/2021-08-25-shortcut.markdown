@@ -33,3 +33,7 @@ at an access site.
 To reduce the overhead, the JIT compiler may also generate in-line dispatch functions for each individual access sites 
 that cache the result of queries for the particular call site.
 The paper shows three possible implementations of in-line dispatch functions.
+The first type, inline dispatchers, is essentially a series of "if" statements where each of the clause handles one
+type. At the end of the "if" statements, a special function is called to inform the JIT compiler that the type cannot
+be matched with the current dispatcher, and the JIT compiler will invoke the global dispatcher to find the mapping, and 
+then re-generate the entire function together with the in-line dispatcher.
