@@ -19,3 +19,7 @@ The paper observes that scripting languages, which are often Just-In-Time (JIT) 
 virtual function invocations, since these languages support dynamic resolution of function invocation, meaning
 that the actual function being called on an object pointer is dependent on the runtime dynamic type of the 
 object, which could not be determined statically at compilation time. 
+As a solution, the JIT compiler needs to generate dispatch functions that call the corresponding implementation in the 
+runtime based on the type of the object.
+According to the paper, the dispatch function is a major source of slowdowns, which account for around 22% of the 
+instructions being executed in applications.
