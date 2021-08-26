@@ -23,6 +23,9 @@ version_mgmt:
    fast speculation validation. The ICTable maps PCs of the access sites and type ID to the actual function's 
    address.
 
+3. Allows software handlers to add recent function resolution results to the backend ICTable in order to provide
+   feedback to the frontend BTB prediction mechanism.
+
 **Comments:**
 
 1. I do not fully understand what does "BTB miss" mean. 
