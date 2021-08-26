@@ -46,6 +46,10 @@ version_mgmt:
    one for accessing ICTable, one for memory operation)? 
    What are the costs of these uops?
 
+4. IC_Load and IC_Store do not need to use the BTB, and do not need any feedback to the BTB. The paper over-complicates
+   the issue by saying that both instructions will use the BTB and give it feedback with the address of the next 
+   instruction
+
 This paper proposes ShortCut, a hardware mechanism for accelerating virtual function invocations for scripting 
 languages.
 The paper observes that scripting languages, which are often Just-In-Time (JIT) compiled, pay a huge overhead on
