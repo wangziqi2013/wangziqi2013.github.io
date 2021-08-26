@@ -138,4 +138,10 @@ The software dispatcher is responsible for initializing an entry as simple, if t
 a simple load or store operation, by setting the "simple" bit and updating the offset of the memory operation in 
 the ICTable.
 
-
+On execution of IC_Load and IC_Store, the BTB is not used for address prediction, and execution always continues
+at the next instruction. 
+The core pipeline treats both instruction as memory instructions, and the effective address for the memory operation
+is generated in later stages of the pipeline from the object's base address, which is one of the operands, 
+and the offset field of ICTable. 
+No speculation is needed, because both instructions effectively function as non-branching memory operations,
+whose address can be determined non-speculatively. 
