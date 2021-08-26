@@ -127,4 +127,8 @@ This is motivated by the fact that some virtual functions only perform simple ge
 read or write a single memory location. Performing address resolution and branching for these functions actually
 incur large overheads, and the amount of operations performed by these functions is minimum such that they can
 even be encoded by a single instruction.
-
+The paper, therefore, proposes that certain IC_Calls to simple get or set functions can be replaced by
+IC_Load and IC_Stores, which circumvent the function invocation, and just performs the read or write 
+in-place.
+To accommodate these two new instructions, the ICTable is extended with an extra "simple" field 
+indicating whether the entry represents a function invocation, or a simple operation.
