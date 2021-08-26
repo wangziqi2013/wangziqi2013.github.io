@@ -78,9 +78,7 @@ one of the tw operands are decoded, the speculation is validated by querying the
 instruction and the type ID in the operand. If the query indicates a hit, the correct address is retrieved from the
 ICTable entry, and compared with the BTB output. If these two addresses match, speculation is successfully validated,
 and the instructions in the speculation window can be committed. 
-Otherwise, if the two addresses mismatch, speculation fails, and the control flow is diverted to calling the 
-dispatching function (the address is one of the two operands), which resolves the virtual function invocation, 
-and adds the entry into the ICTable.
-After the dispatching function returns, execution is resumed from IC_Call using the correct address from the ICTable.
+Otherwise, if the two addresses mismatch, speculation fails, and execution is rolled back to the IC_Call 
+instruction, with the correct address from the ICTable.
 In both cases, the BTB is also updated with the correct address of the function to complete the feedback loop.
 
