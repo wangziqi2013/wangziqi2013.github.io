@@ -30,13 +30,21 @@ version_mgmt:
 **Comments:**
 
 1. I do not fully understand what does "BTB miss" mean. 
-Could the BTB even miss? I mean it is usually just a table indexed by the hashed PC address plus some extra statistics.
-If the BTB misses, do you simply assume that the branch is fall-through? Or you stall the pipeline until the 
-branch is resolved? Or the fetching unit uses whatever output the BTB gives it? The paper should clarify on this.
+   Could the BTB even miss? I mean it is usually just a table indexed by the hashed PC address plus some extra 
+   statistics.
+   If the BTB misses, do you simply assume that the branch is fall-through? Or you stall the pipeline until the 
+   branch is resolved? Or the fetching unit uses whatever output the BTB gives it? The paper should clarify on this.
 
 2. In fact, I don't think BTB miss should be a special case. The so-called BTB miss should just be a wrong prediction
-as the current PC aliases with another branch's PC and hence share the same BTB entry. It is just handled as an
-incorrect prediction.
+   as the current PC aliases with another branch's PC and hence share the same BTB entry. It is just handled as an
+   incorrect prediction.
+
+3. How many operands do IC_Load and IC_Store has (implicit + explicit)? I think you need dispatcher address, 
+   the object type, object base address, and the src/dst register. 
+   This is likely fine for most architectures, but I think it may also be implemented as a sequence of uops
+   rather than individual operations (one for addr gen of the dispatcher, one for addr gen of the object pointer,
+   one for accessing ICTable, one for memory operation)? 
+   What are the costs of these uops?
 
 This paper proposes ShortCut, a hardware mechanism for accelerating virtual function invocations for scripting 
 languages.
@@ -119,3 +127,4 @@ This is motivated by the fact that some virtual functions only perform simple ge
 read or write a single memory location. Performing address resolution and branching for these functions actually
 incur large overheads, and the amount of operations performed by these functions is minimum such that they can
 even be encoded by a single instruction.
+
