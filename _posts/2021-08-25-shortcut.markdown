@@ -19,7 +19,9 @@ version_mgmt:
    regular branch target predictions. Just provide the BTB with the address of the actual function to be called,
    rather than the address contained in the operand, and let the core pipeline's speculation mechanism handle the rest.
 
-
+2. In order to map virtual function calls to the function address, a hardware cache (the ICTable) is needed for
+   fast speculation validation. The ICTable maps PCs of the access sites and type ID to the actual function's 
+   address.
 
 **Comments:**
 
