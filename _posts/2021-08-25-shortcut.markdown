@@ -50,3 +50,9 @@ it queries the per-site table to find the match.
 If no match is found, the global dispatcher function is called, and the result of the query is inserted into the 
 per-site table for later uses.
 
+ShortCut accelerates inline dispatchers by leveraging the existing Branch Target Buffer (BTB) and speculative execution
+mechanism. In many architectures with a deep pipeline, the branch target address cannot be obtained at early stages of 
+execution, which is problematic for pipelined execution, as instruction fetching can only speculate "not taken".
+To alleviate the problem, a BTB is added to the frontend to map the PC of the branch instruction to the target address,
+which is trained from past execution with non-speculative results.
+
