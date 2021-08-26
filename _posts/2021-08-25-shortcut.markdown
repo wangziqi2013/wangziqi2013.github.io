@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. I do not fully understand what does "BTB miss" mean. 
+Could the BTB even miss? I mean it is usually just a table indexed by the hashed PC address plus some extra statistics.
+If the BTB misses, do you simply assume that the branch is fall-through, or you stall the pipeline until the 
+branch is resolved? The paper should clarify on this.
+
+
+
 This paper proposes ShortCut, a hardware mechanism for accelerating virtual function invocations for scripting 
 languages.
 The paper observes that scripting languages, which are often Just-In-Time (JIT) compiled, pay a huge overhead on
@@ -87,3 +96,5 @@ to calling the dispatcher function (the address is one of the two operands), whi
 invocation, and adds the entry into the ICTable.
 After the dispatcher function returns, the validation of the speculation is performed as described in the 
 previous paragraph.
+
+
