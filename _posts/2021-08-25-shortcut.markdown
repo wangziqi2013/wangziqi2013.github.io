@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Virtual function resolution can be accelerated using the same branch target address buffer (BTB) mechanism as 
+   regular branch target predictions. Just provide the BTB with the address of the actual function to be called,
+   rather than the address contained in the operand, and let the core pipeline's speculation mechanism handle the rest.
+
+
+
 **Comments:**
 
 1. I do not fully understand what does "BTB miss" mean. 
