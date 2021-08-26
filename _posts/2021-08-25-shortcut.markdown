@@ -132,3 +132,10 @@ IC_Load and IC_Stores, which circumvent the function invocation, and just perfor
 in-place.
 To accommodate these two new instructions, the ICTable is extended with an extra "simple" field 
 indicating whether the entry represents a function invocation, or a simple operation.
+The function address field of ICTable entries is also reused as the offset for the read and write operation
+relative the object's base address.
+The software dispatcher is responsible for initializing an entry as simple, if the function resolved just contains
+a simple load or store operation, by setting the "simple" bit and updating the offset of the memory operation in 
+the ICTable.
+
+
