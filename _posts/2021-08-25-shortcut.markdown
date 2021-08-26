@@ -145,3 +145,5 @@ is generated in later stages of the pipeline from the object's base address, whi
 and the offset field of ICTable. 
 No speculation is needed, because both instructions effectively function as non-branching memory operations,
 whose address can be determined non-speculatively. 
+If the ICTable misses, the dispatcher function, whose address is one of the operands, will be called, which 
+performs the actual resolution, and inserts the result into the ICTable before execution is resumed.
