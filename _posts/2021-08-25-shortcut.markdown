@@ -16,7 +16,8 @@ version_mgmt:
 **Highlights:**
 
 1. Virtual function resolution can be accelerated using the same branch target address buffer (BTB) mechanism as 
-   regular branch target predictions. Just provide the BTB with the address of the actual function to be called,
+   regular branch target predictions, as long as the type also demonstrates locality at an access site. 
+   Just provide the BTB with the address of the actual function to be called,
    rather than the address contained in the operand, and let the core pipeline's speculation mechanism handle the rest.
 
 2. In order to map virtual function calls to the function address, a hardware cache (the ICTable) is needed for
@@ -112,4 +113,9 @@ invocation, and adds the entry into the ICTable.
 After the dispatcher function returns, the validation of the speculation is performed as described in the 
 previous paragraph.
 
-
+The paper further proposes a more aggressive version of ShortCut that is capable of entirely removing the 
+virtual function invocation.
+This is motivated by the fact that some virtual functions only perform simple get or set operations that only
+read or write a single memory location. Performing address resolution and branching for these functions actually
+incur large overheads, and the amount of operations performed by these functions is minimum such that they can
+even be encoded by a single instruction.
