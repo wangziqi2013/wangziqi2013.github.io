@@ -82,3 +82,8 @@ Otherwise, if the two addresses mismatch, speculation fails, and execution is ro
 instruction, with the correct address from the ICTable.
 In both cases, the BTB is also updated with the correct address of the function to complete the feedback loop.
 
+If, however, validation fails because the entry cannot be found in the ICTable, then the control flow is diverted 
+to calling the dispatcher function (the address is one of the two operands), which resolves the virtual function 
+invocation, and adds the entry into the ICTable.
+After the dispatcher function returns, the validation of the speculation is performed as described in the 
+previous paragraph.
