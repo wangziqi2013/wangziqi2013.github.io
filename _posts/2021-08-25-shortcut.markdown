@@ -71,4 +71,9 @@ The ICTable entries consist of three fields: The PC of the IC_Call address, the 
 of the resolved virtual function. 
 Dispatcher functions should update the ICTable with the result of dispatching using the ShortCut ISA.
 
+We next describe the operational details of ShortCut. On execution of the IC_Call instruction, the target is predicted
+as a regular branch instruction using the BTB. The execution turns speculative after the prediction.
+At later stage of the pipeline when the instruction is fully decoded and the dispatcher function's address in 
+one of the tw operands are decoded, the speculation is validated by querying the ICTable using the PC of the IC_Call
+instruction and the type ID in the operand. 
 
