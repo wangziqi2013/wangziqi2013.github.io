@@ -65,4 +65,10 @@ object type ID as operands.
 The instruction functionally serves as a branch, which also predicts the target address from the BTB, but the target
 address it expects is the address of the actual function to be called after dispatching, rather than the dispatcher's
 address (which is in the operand).
+ShortCut also adds a small fully-associative cache, the ICTable, that stores the most recent dispatching results at 
+the later stage of the pipeline.
+The ICTable entries consist of three fields: The PC of the IC_Call address, the type of the object, and the address
+of the resolved virtual function. 
+Dispatcher functions should update the ICTable with the result of dispatching using the ShortCut ISA.
+
 
