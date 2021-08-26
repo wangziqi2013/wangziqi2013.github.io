@@ -55,4 +55,7 @@ mechanism. In many architectures with a deep pipeline, the branch target address
 execution, which is problematic for pipelined execution, as instruction fetching can only speculate "not taken".
 To alleviate the problem, a BTB is added to the frontend to map the PC of the branch instruction to the target address,
 which is trained from past execution with non-speculative results.
+The execution after the BTB prediction remains speculative until at later stages of the pipeline where the target
+address is resolved. The speculation, in this case, is either validated, if the actual address matches the predicted
+address, or is rolled back, if addresses mismatch.
 
