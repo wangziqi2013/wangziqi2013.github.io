@@ -59,3 +59,10 @@ The execution after the BTB prediction remains speculative until at later stages
 address is resolved. The speculation, in this case, is either validated, if the actual address matches the predicted
 address, or is rolled back, if addresses mismatch.
 
+ShortCut extends the BTB prediction mechanism by adding a special virtual function invocation instruction, IC_Call,
+which is semantically equivalent to a dispatched function call, but it takes the dispatcher function's address and the 
+object type ID as operands. 
+The instruction functionally serves as a branch, which also predicts the target address from the BTB, but the target
+address it expects is the address of the actual function to be called after dispatching, rather than the dispatcher's
+address (which is in the operand).
+
