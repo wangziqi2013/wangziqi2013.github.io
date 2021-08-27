@@ -44,3 +44,9 @@ loaded from the memory hierarchy.
 The design assumes that the type ID is stored in either the same word or an adjacent word of the value being loaded
 into the register via load instruction, and provides a general mechanism for loading the type. 
 In order to extract the bits for representing the type ID, three registers are used, namely offset, shift, and mask.
+The offset register is a two-bit field defining the location of the type ID relative to the value being loaded,
+which can be one word before, one word after, in the same word, or do not care. In the last case, the type ID will
+not be loaded, and the value is assumed to be untyped.
+The shift and mask register define the number of bits to be shifted out from the LSB, and masked out from the MSB, 
+respectively, after the word containing the type ID is loaded.
+
