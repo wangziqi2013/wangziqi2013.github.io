@@ -76,4 +76,7 @@ which will then be loaded into the destination register's type ID tag together w
 Similarly, tagged memory store operations (tst) will be executed as two stores, one to the word to be written to,
 and the other to the word containing the type ID, if the type ID is on a different word than the target word.
 
+Instruction opcodes are virtualized using a lookup table before the ALU stage of the pipeline. 
+The lookup table is a small content-addressable memory that uses the type of the two operands as well as the 
+opcode itself as the key, and the output is the concrete operation.
 
