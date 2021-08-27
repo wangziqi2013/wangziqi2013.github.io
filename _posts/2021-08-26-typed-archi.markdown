@@ -70,3 +70,5 @@ When a tagged memory load operation (tld) is being executed, the pipeline will i
 load operation using the address indicated by the offset register, if the type ID is not in the same word and is 
 not "do not care". Then a shift-and-mask is performed on the word containing the type ID to extract the 8-bit ID, 
 which will then be loaded into the destination register's type ID tag together with the value just loaded.
+Similarly, tagged memory store operations (tst) will be executed as two stores, one to the word to be written to,
+and the other to the word containing the type ID, if the type ID is on a different word than the target word.
