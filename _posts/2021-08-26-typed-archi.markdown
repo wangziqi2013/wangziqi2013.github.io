@@ -19,6 +19,12 @@ version_mgmt:
    common types. The former can be implemented by providing some sort of programmability using three registers
    (offset, shift, mask), and the latter can be implemented with a lookup table that virtualizes instruction opcode.
 
+2. A typed architecture does not necessarily imply a type tagged address space. In fact, it also works for explicitly
+   typed environments such as scripted language interpreters. Just tell the hardware where to find the type tags, and
+   it can be loaded/stored with the actual value.
+
+
+
 **Comments:**
 
 1. The design seems to assume that the type ID of an object pointer is adjacent to the pointer value itself,
