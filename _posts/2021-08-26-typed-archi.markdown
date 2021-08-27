@@ -83,4 +83,9 @@ The table lookup may produce three possible outcomes: Either both operands are i
 an integer operation, or both operands are floating pointer numbers, and the operation is an FP operation,
 or the types are composite or incompatible (int and float), which requires software involvement to perform
 a high-level operation and/or type casts.
-
+In the previous two cases, the operands are dispatched to the integer ALU or FP ALU, respectively, and the 
+instruction is executed as a native operation.
+In the last case, a software handler is invoked like a function call, which performs the high-level operation 
+as indicated by the types, and passes the result to the pipeline on function return.
+The addresses of the software handlers are outputs of the lookup table, which are initialized by the interpreter
+environment.
