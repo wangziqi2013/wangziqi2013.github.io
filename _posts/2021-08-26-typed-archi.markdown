@@ -30,4 +30,7 @@ Second, type checking is required for every operation between objects, even prim
 as every entity is an object in scripted languages. 
 Under an interpreted environment, the type check must be explicitly performed by the software interpreter, which 
 consumes hardware resources. 
-
+Lastly, operations between objects, including both arithmetics and function invocations, are virtual, meaning that
+the actual implementation to be called is not only dependent on the symbol name (or the operator), but also on
+the types of the operands. This feature enriches the semantics of function invocations, at the cost of extra table
+lookups for every operation.
