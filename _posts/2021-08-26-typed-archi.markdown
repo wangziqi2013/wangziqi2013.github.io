@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The design seems to assume that the type ID of an object pointer is adjacent to the pointer value itself,
+   rather than within the chunk of memory being pointed to (because the type ID address is generated relative to 
+   the address of the value to be loaded, not relative to the value itself).
+   I wonder to which extend this assumption is true, because, according to my limited understanding of how 
+   interpreters are actually implemented, isn't those type IDs typically embedded in the object itself?
+   
+
 This paper proposes Typed Architecture, an enhancement to low-power IoT and embedded processors that enables efficient
 type checking and operand dispatching on hardware.
 The paper is motivated by the fact that current commercial platforms for low-power applications run scripted languages
