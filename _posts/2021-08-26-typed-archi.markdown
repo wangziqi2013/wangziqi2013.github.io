@@ -30,6 +30,9 @@ version_mgmt:
    This is significantly more complicated than the paper suggests, because the pipeline controller needs to 
    issue an implicit load to read the value first, then perform shift-mask-OR, and then issue another implicit store.
 
+4. If the lookup table already virtualized opcodes such as xadd, xmul, why do you still need a F/I bit?
+   Just initialized the table to something like "I/I/xadd -> integer add", "F/F/xadd -> float add", and problem solved.
+
 This paper proposes Typed Architecture, an enhancement to low-power IoT and embedded processors that enables efficient
 type checking and operand dispatching on hardware.
 The paper is motivated by the fact that current commercial platforms for low-power applications run scripted languages
@@ -72,3 +75,5 @@ not "do not care". Then a shift-and-mask is performed on the word containing the
 which will then be loaded into the destination register's type ID tag together with the value just loaded.
 Similarly, tagged memory store operations (tst) will be executed as two stores, one to the word to be written to,
 and the other to the word containing the type ID, if the type ID is on a different word than the target word.
+
+
