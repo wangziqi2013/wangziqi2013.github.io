@@ -79,4 +79,8 @@ and the other to the word containing the type ID, if the type ID is on a differe
 Instruction opcodes are virtualized using a lookup table before the ALU stage of the pipeline. 
 The lookup table is a small content-addressable memory that uses the type of the two operands as well as the 
 opcode itself as the key, and the output is the concrete operation.
+The table lookup may produce three possible outcomes: Either both operands are integers, and the operation is 
+an integer operation, or both operands are floating pointer numbers, and the operation is an FP operation,
+or the types are composite or incompatible (int and float), which requires software involvement to perform
+a high-level operation and/or type casts.
 
