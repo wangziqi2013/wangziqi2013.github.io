@@ -23,7 +23,10 @@ version_mgmt:
    typed environments such as scripted language interpreters. Just tell the hardware where to find the type tags, and
    it can be loaded/stored with the actual value.
 
-
+3. It suffices to optimize the most commonly used operations such as arithmetics on primitive types which would 
+   still need type checks in interpreted languages, but can be accelerated with a fast path using the lookup table.
+   More complicated type combinations (composite types / type casts) are still implemented in software, and 
+   it can be incorporated into the paradigm to just let the hardware know the entry point to the handler function.
 
 **Comments:**
 
