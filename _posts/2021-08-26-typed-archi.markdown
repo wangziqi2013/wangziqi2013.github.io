@@ -39,3 +39,8 @@ To address the above issues, the paper proposes a type-aware architecture where 
 and instruction opcodes are virtualized such that the same opcode operates differently on different type combinations.
 Each register in the register file is extended with an 8-bit type field, supporting up to 256 possible dynamic types, 
 and a one bit F/I flag for indicating whether a floating pointer number or an integer is stored in the register.
+The type field of registers are initialized from the per-object type ID when a value or an object pointer is 
+loaded from the memory hierarchy.
+The design assumes that the type ID is stored in either the same word or an adjacent word of the value being loaded
+into the register via load instruction, and provides a general mechanism for loading the type. 
+In order to extract the bits for representing the type ID, three registers are used, namely offset, shift, and mask.
