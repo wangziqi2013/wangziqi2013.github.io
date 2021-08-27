@@ -17,3 +17,7 @@ This paper proposes Typed Architecture, an enhancement to low-power IoT and embe
 type checking and operand dispatching on hardware.
 The paper is motivated by the fact that current commercial platforms for low-power applications run scripted languages
 such as Lua, Python, or Javascript for their fast deployment capabilities and ease of development.
+These languages feature dynamic types and type-based virtual function calls, which require runtime support for type
+checking and operand dispatching.
+The paper observes that these operations incur huge cycle and power overhead on the platforms where Just-In-Time 
+compilation is not practical due to power and hardware resource reasons.
