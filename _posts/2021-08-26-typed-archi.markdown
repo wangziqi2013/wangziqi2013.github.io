@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Typed Architecture, an enhancement to low-power IoT and embedded processors that enables efficient
+type checking and operand dispatching on hardware.
+The paper is motivated by the fact that current commercial platforms for low-power applications run scripted languages
+such as Lua, Python, or Javascript for their fast deployment capabilities and ease of development.
