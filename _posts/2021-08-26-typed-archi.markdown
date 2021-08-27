@@ -21,3 +21,8 @@ These languages feature dynamic types and type-based virtual function calls, whi
 checking and operand dispatching.
 The paper observes that these operations incur huge cycle and power overhead on the platforms where Just-In-Time 
 compilation is not practical due to power and hardware resource reasons.
+
+The paper identifies three major sources of type-related overhead in scripting languages.
+First, the per-object type ID needs to be read for every object operation, and set in newly created objects. It
+takes at least one extra memory read and optionally a few bit level instructions to extract the ID, and these 
+instructions cannot be serialized due to data dependency.
