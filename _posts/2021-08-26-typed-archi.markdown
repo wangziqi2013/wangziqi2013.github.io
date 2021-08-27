@@ -32,5 +32,10 @@ Under an interpreted environment, the type check must be explicitly performed by
 consumes hardware resources. 
 Lastly, operations between objects, including both arithmetics and function invocations, are virtual, meaning that
 the actual implementation to be called is not only dependent on the symbol name (or the operator), but also on
-the types of the operands. This feature enriches the semantics of function invocations, at the cost of extra table
-lookups for every operation.
+the types of the operands. This feature enriches the semantics of operators and function invocations, at the 
+cost of extra table lookups for every operation.
+
+To address the above issues, the paper proposes a type-aware architecture where the register file is tagged with types,
+and instruction opcodes are virtualized such that the same opcode operates differently on different type combinations.
+Each register in the register file is extended with an 8-bit type field, supporting up to 256 possible dynamic types, 
+and a one bit F/I flag for indicating whether a floating pointer number or an integer is stored in the register.
