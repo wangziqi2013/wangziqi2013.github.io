@@ -26,3 +26,8 @@ The paper identifies three major sources of type-related overhead in scripting l
 First, the per-object type ID needs to be read for every object operation, and set in newly created objects. It
 takes at least one extra memory read and optionally a few bit level instructions to extract the ID, and these 
 instructions cannot be serialized due to data dependency.
+Second, type checking is required for every operation between objects, even primitive objects such as integers, 
+as every entity is an object in scripted languages. 
+Under an interpreted environment, the type check must be explicitly performed by the software interpreter, which 
+consumes hardware resources. 
+
