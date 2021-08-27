@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. This paper optimizes over the two most common operations: Type ID read/write, and function dispatching for 
+   common types. The former can be implemented by providing some sort of programmability using three registers
+   (offset, shift, mask), and the latter can be implemented with a lookup table that virtualizes instruction opcode.
+
 **Comments:**
 
 1. The design seems to assume that the type ID of an object pointer is adjacent to the pointer value itself,
@@ -89,3 +95,5 @@ In the last case, a software handler is invoked like a function call, which perf
 as indicated by the types, and passes the result to the pipeline on function return.
 The addresses of the software handlers are outputs of the lookup table, which are initialized by the interpreter
 environment.
+To aid software handlers for type checking, the design also provides instructions to access the per-register type ID
+field, such that they can also be read and updated by the software.
