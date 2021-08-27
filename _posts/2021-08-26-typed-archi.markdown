@@ -19,8 +19,11 @@ version_mgmt:
    rather than within the chunk of memory being pointed to (because the type ID address is generated relative to 
    the address of the value to be loaded, not relative to the value itself).
    I wonder to which extend this assumption is true, because, according to my limited understanding of how 
-   interpreters are actually implemented, isn't those type IDs typically embedded in the object itself?
-   
+   interpreters are actually implemented, isn't those type IDs typically embedded in the object itself?   
+
+2. The paper did not mention how F/I bits are initialized/spilled with tagged load/store instructions.
+   In "code transformation" section it is indeed mentioned that they are initialized from the type tag somehow.
+   But what is the generalized semantics of F/I bits and how are they initialized?
 
 This paper proposes Typed Architecture, an enhancement to low-power IoT and embedded processors that enables efficient
 type checking and operand dispatching on hardware.
