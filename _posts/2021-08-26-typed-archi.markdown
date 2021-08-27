@@ -25,6 +25,11 @@ version_mgmt:
    In "code transformation" section it is indeed mentioned that they are initialized from the type tag somehow.
    But what is the generalized semantics of F/I bits and how are they initialized?
 
+3. Tagged stores are more complicated, and it requires a read-modify-write of the word containing the type ID,
+   because the type ID should be shifted and OR'ed onto the word, rather than performing a blind write.
+   This is significantly more complicated than the paper suggests, because the pipeline controller needs to 
+   issue an implicit load to read the value first, then perform shift-mask-OR, and then issue another implicit store.
+
 This paper proposes Typed Architecture, an enhancement to low-power IoT and embedded processors that enables efficient
 type checking and operand dispatching on hardware.
 The paper is motivated by the fact that current commercial platforms for low-power applications run scripted languages
@@ -61,7 +66,7 @@ which can be one word before, one word after, in the same word, or do not care. 
 not be loaded, and the value is assumed to be untyped.
 The shift and mask register define the number of bits to be shifted out from the LSB, and masked out from the MSB, 
 respectively, after the word containing the type ID is loaded.
-When a memory load operation is being executed, the pipeline will inject another implicit memory load operation
-using the address indicated by the offset register, if the type ID is not in the same word and is not "do not care".
-Then a shift-and-mask is performed on the word containing the type ID to extract the 8-bit ID, which will then be 
-loaded into the destination register's type ID tag together with the value just loaded.
+When a tagged memory load operation (tld) is being executed, the pipeline will inject another implicit memory 
+load operation using the address indicated by the offset register, if the type ID is not in the same word and is 
+not "do not care". Then a shift-and-mask is performed on the word containing the type ID to extract the 8-bit ID, 
+which will then be loaded into the destination register's type ID tag together with the value just loaded.
