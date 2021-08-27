@@ -49,4 +49,7 @@ which can be one word before, one word after, in the same word, or do not care. 
 not be loaded, and the value is assumed to be untyped.
 The shift and mask register define the number of bits to be shifted out from the LSB, and masked out from the MSB, 
 respectively, after the word containing the type ID is loaded.
-
+When a memory load operation is being executed, the pipeline will inject another implicit memory load operation
+using the address indicated by the offset register, if the type ID is not in the same word and is not "do not care".
+Then a shift-and-mask is performed on the word containing the type ID to extract the 8-bit ID, which will then be 
+loaded into the destination register's type ID tag together with the value just loaded.
