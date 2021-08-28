@@ -58,3 +58,10 @@ application needs to first allocate a chunk of continuous storage from the scrat
 The application should also initialize the stash map with the access pattern, such that Stash hardware can generate
 the virtual addresses using the size arguments and base virtual address information, given an offset into the 
 scratchpad storage.
+The stash map entry is invalidated at the end of the kernel computation to free up resources used by the entry,
+such as scratchpad storage and TLB/RTLB entries (see below).
+Applications still need to explicitly manage the storage of the scratchpad, and use scratchpad-local pointers for 
+accessing scratchpad's private address space.
+The instructions for accessing Stash storage is extended with an extra operand that specifies the pattern of the 
+access by referring to a stash map entry.
+
