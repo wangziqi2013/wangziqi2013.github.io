@@ -123,6 +123,8 @@ invalidated as well because they are no longer useful.
 Since invalidations of stash map entries only happen at the end of a kernel computation, which is relatively
 infrequent, this can be performed by walking the TLB and RTLB and invalidating entries whose back pointer value
 matches the stash map entry to be invalidated.
+Dirty data belonging to the stash map entry should also be written back to the global memory when invalidation
+happens. This is just similar to how a normal cache memory writes back data except that the granularity is smaller.
 
 Stash supports lazy write backs of dirty data after a kernel computation completes. The invalidation of stash map
 entries (and TLB/RTLB entries) is not immediately performed. Instead, Stash only writes dirty data back on-demand 
