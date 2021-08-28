@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. This paper achieves a balancing point between cache memory (software transparent, coherent) and 
+   scratchpad memory (software managed, non-coherent) by proposing a scratchpad design that is still
+   fine-grained, software managed, but features on-demand load and eviction, and hardware coherence
+   support.
+   This retains the efficiency of scratchpad memory while getting rid of usability barriers such as 
+   software managed coherence and data loading/eviction.
+
 **Comments:**
 
 1. This paper essentially describes a tag-less, word-granularity VA cache memory design, where application explicitly 
