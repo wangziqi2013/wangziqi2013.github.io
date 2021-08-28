@@ -33,3 +33,8 @@ First, current implementations of scratchpad memory has its own isolated address
 explicitly move data into the scratchpad memory by issuing memory instructions. These explicit memory instructions 
 will pollute the cache with data that is unlikely to be reused, as most of the operations will take place on the
 scratchpad memory.
+Second, scratchpad memory is not cache coherent, which implies that software must issue extra load and write back
+instructions to ensure the correctness of data. For example, data updates in the scratchpad memory needs to be reflected
+back to the global memory by software issuing explicit data movement instructions. Similarly, if data
+items is updated by the CPU, software should also check whether the version stored in the scratchpad memory is
+still up-to-date. Both requirements incur extra software and runtime complexity.
