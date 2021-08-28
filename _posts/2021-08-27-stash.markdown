@@ -53,3 +53,8 @@ information, which is performed by the compiler.
 The Stash hardware stores these map entries in a table called the stash map, which can be referred to when the 
 application accesses the scratchpad memory.
 
+We now describe the operation of Stash as follows. As in current implementations of scratchpad memory, the 
+application needs to first allocate a chunk of continuous storage from the scratchpad before using it.
+The application should also initialize the stash map with the access pattern, such that Stash hardware can generate
+the virtual addresses using the size arguments and base virtual address information, given an offset into the 
+scratchpad storage.
