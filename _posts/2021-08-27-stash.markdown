@@ -15,7 +15,7 @@ version_mgmt:
 
 **Comments:**
 
-1. This paper essentially describes a tag-less word-granularity cache memory design, where application explicitly 
+1. This paper essentially describes a tag-less, word-granularity VA cache memory design, where application explicitly 
    manages the data storage and use private address pointers.
    While this is a good balancing point between pure cache and pure scratchpad memory designs, the descriptions
    in the paper is over-complicated since the author was basically just describing how a on-demand cache works 
@@ -24,6 +24,13 @@ version_mgmt:
 2. TLB/RTLB seems a heavyweight component that requires lots of attention that is missing from the paper. 
    How are TLB/RTLB loaded? Is there a page walker? Is there a dedicated page table? Does the application 
    initializes it (likely not)?
+
+3. The paper did not describe how the RTLB works except just saying that it provides reverse translation.
+   I understand that this is used to translate the PA address in coherence requests back to VA, since 
+   Stash is essentially just a tag-less VA cache (and RTLB is standard for VA caches), but since Stash does not
+   have a tag array, how do you locate the word even given the VA? Stash map stores info for address generation,
+   yes that's true, but this is only easy to compute on the forward direction (given offset, compute VA).
+   I did not see how to easily determine whether a word in Stash is on a given VA.
 
 This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
 The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
