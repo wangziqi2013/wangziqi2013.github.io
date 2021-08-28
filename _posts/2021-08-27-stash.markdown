@@ -44,5 +44,12 @@ Stash combines the advantage of both cache and scratchpad memory, while avoiding
 address translation layer between scratchpad memory address space and the global address space.
 Stash optimizes over the case where a field of a struct, the size of which is one or a few words, in an AoS is accessed,
 and the access takes place in a stride pattern within one rectangular block of a 2D tile.
-
+The pattern can therefore be described using a few size arguments, including the field size, the object size, the 2D
+tile size in total, the row size of a single block, and the number of strides per block, and offsets within the 2D
+tile can be generated given these size arguments and the base address of the 2D tile, assuming that all elements of 
+the 2D tile are stored compactly.
+Applications need to initialize the stash hardware using two interfaces, namely, AddMap and ChangeMap, with the above
+information, which is performed by the compiler.
+The Stash hardware stores these map entries in a table called the stash map, which can be referred to when the 
+application accesses the scratchpad memory.
 
