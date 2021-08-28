@@ -146,4 +146,9 @@ Although this may sound similar to how a regular cache controller handles cohere
 differences between regular coherence and Stash.
 First, Stash uses a smaller granularity than most caches, indicating that the underlying protocol must support 
 registering the coherence status of fine-grained words.
-
+Second, Stash writes back data in word granularity, meaning that the underlying protocol must be able to merge
+the word with a standard sized block used in other components.
+Lastly, the coherence protocol must also track the per-word stash map index that a word belongs to, which is sent
+to Stash in the coherence request. This information is useful for locating the stash map entry and the data word 
+when a coherence request is received, which is necessary, because otherwise it will be difficult to locate the
+target of the coherence request only using the virtual address from the RTLB. 
