@@ -80,3 +80,13 @@ stash map entry specified in the operand of the access instruction.
 The paper proposes adding a TLB for translating the virtual address to the physical address, such that Stash
 hardware can directly issue coherence requests using physical addresses to acquire requested data.
 This TLB can use the same physical hardware as core TLB, or it can be a separate entity. 
+The paper also proposes adding a reverse TLB (RTLB) to translate from physical to virtual addresses, such that
+coherence requests from the hierarchy can be translated to use virtual addresses, which is used by Stash for 
+its internal address generation.
+Each TLB and RTLB entry contains a back pointer to the stash map entry whose generated addresses are covered by 
+the entry. 
+When a stash map entry is invalidated at the end of the kernel computation, both the TLB and RTLB entries will be 
+invalidated as well because they are no longer useful.
+Since invalidations of stash map entries only happen at the end of a kernel computation, which is relatively
+infrequent, this can be performed by walking the TLB and RTLB and invalidating entries whose back pointer value
+matches the stash mao entry to be invalidated.
