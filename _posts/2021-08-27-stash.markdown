@@ -26,6 +26,7 @@ data access. Furthermore, cache memory has a fixed size block interface, meaning
 the cache and the main memory in the unit of blocks, which is sub-optimal in both storage and bandwidth if only
 a small potion of the block is used. Such striding pattern is common in certain GPGPU applications, if, for example, a 
 single field of an array of structs (AoS) is accessed in parallel.
+
 Scratchpad memory, on the other hand, overcomes the above limitations by allowing direct and fine-grained addressing 
 into its storage, entirely getting rid of the tag array and the block interface.
 It, however, suffers another two types of inefficiencies.
@@ -38,3 +39,10 @@ instructions to ensure the correctness of data. For example, data updates in the
 back to the global memory by software issuing explicit data movement instructions. Similarly, if data
 items is updated by the CPU, software should also check whether the version stored in the scratchpad memory is
 still up-to-date. Both requirements incur extra software and runtime complexity.
+
+Stash combines the advantage of both cache and scratchpad memory, while avoiding their shortcomings, by adding an extra
+address translation layer between scratchpad memory address space and the global address space.
+Stash optimizes over the case where a field of a struct, the size of which is one or a few words, in an AoS is accessed,
+and the access takes place in a stride pattern within one rectangular block of a 2D tile.
+
+
