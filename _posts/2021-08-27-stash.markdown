@@ -22,4 +22,7 @@ addressing and fine-grained access capabilities of existing scratchpad memory.
 
 The paper recognizes that both cache and scratchpad memory have limitations. Cache memory, on one hand, requires 
 expensive address translation and tag lookups for each operation, which implies extra energy consumption in addition to
-data access. 
+data access. Furthermore, cache memory has a fixed size block interface, meaning that data must be transferred between
+the cache and the main memory in the unit of blocks, which is sub-optimal in both storage and bandwidth if only
+a small potion of the block is used. Such striding pattern is common in certain GPGPU applications, if, for example, a 
+single field of an array of structs (AoS) is accessed in parallel.
