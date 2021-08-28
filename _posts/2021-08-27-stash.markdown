@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. This paper essentially describes a tag-less word-granularity cache memory design, where application explicitly 
+   manages the data storage and use private address pointers.
+   While this is a good balancing point between pure cache and pure scratchpad memory designs, the descriptions
+   in the paper is over-complicated since the author was basically just describing how a on-demand cache works 
+   without saying it just functions as a cache.
+
+
+
 This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
 The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
 and usability due to the private, non-cache coherent address space. Stash addresses these issues by allowing the
