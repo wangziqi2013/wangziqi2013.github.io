@@ -64,4 +64,14 @@ Applications still need to explicitly manage the storage of the scratchpad, and 
 accessing scratchpad's private address space.
 The instructions for accessing Stash storage is extended with an extra operand that specifies the pattern of the 
 access by referring to a stash map entry.
+Applications, however, do not need to load data from the global virtual address space to the scratchpad explicitly,
+nor do they need to explicitly evict dirty data to ensure coherence. 
+Instead, Stash operates similarly to a conventional on-demand cache, which loads data automatically from the 
+global address space when there is an access miss, and automatically responds to coherence requests combing from
+other components in the cache hierarchy. 
+To accomplish this, each word in Stash hardware has an extra valid and dirty bit. The valid bit is set when a word 
+is loaded from the global memory. If ths bit is not set on an access request, an access miss will be signaled, 
+which triggers global memory accesses. 
+The dirty bit is set if the word is written into, and is used to determine whether the word should be written back
+on evictions or coherence requests.
 
