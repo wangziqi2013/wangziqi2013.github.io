@@ -21,7 +21,9 @@ version_mgmt:
    in the paper is over-complicated since the author was basically just describing how a on-demand cache works 
    without saying it just functions as a cache.
 
-
+2. TLB/RTLB seems a heavyweight component that requires lots of attention that is missing from the paper. 
+   How are TLB/RTLB loaded? Is there a page walker? Is there a dedicated page table? Does the application 
+   initializes it (likely not)?
 
 This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
 The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
