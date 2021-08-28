@@ -75,3 +75,8 @@ which triggers global memory accesses.
 The dirty bit is set if the word is written into, and is used to determine whether the word should be written back
 on evictions or coherence requests.
 
+The stash hardware generates the virtual address of the access on an access miss using the information stored in the
+stash map entry specified in the operand of the access instruction.
+The paper proposes adding a TLB for translating the virtual address to the physical address, such that Stash
+hardware can directly issue coherence requests using physical addresses to acquire requested data.
+This TLB can use the same physical hardware as core TLB, or it can be a separate entity. 
