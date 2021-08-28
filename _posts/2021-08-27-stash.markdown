@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
+The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
+and usability due to the private, non-cache coherent address space. 
