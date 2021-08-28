@@ -133,3 +133,12 @@ more free entries but could not find any.
 To help Stash identify which stash map entry a data word belongs to, the paper proposes adding a per-word pointer to
 stash map entries just similar to the case of TLB/RTLB, which is walked when a stash map entry is evicted on-demand. 
 The pointer can also be added in a larger granularity such as per-64 byte chunks to save some metadata overhead.
+
+Another important feature of Stash is that it is cache coherent. 
+Values updated in Stash must be registered as dirty in the underlying directory, and external coherence requests 
+received by Stash must be responded properly.
+Both are made possible in Stash due to the existence of the TLB and RTLB for translating addresses between the global 
+address space and the private address space of scratchpad memory.
+Although this may sound similar to how a regular cache controller handles coherence, the paper points out a few 
+differences between regular coherence and Stash.
+
