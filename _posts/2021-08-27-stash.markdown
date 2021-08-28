@@ -17,7 +17,7 @@ This paper proposes Stash, a globally addressable, cache coherent scratchpad mem
 The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
 and usability due to the private, non-cache coherent address space. Stash addresses these issues by allowing the
 scratchpad memory to translate its private address to and from the global virtual address, such that the scratchpad
-memory can be loaded like a traditional cache om-demand, while maintaining easy access by retaining the direct 
+memory can be loaded like a traditional cache on-demand, while maintaining easy access by retaining the direct 
 addressing and fine-grained access capabilities of existing scratchpad memory.
 
 The paper recognizes that both cache and scratchpad memory have limitations. Cache memory, on one hand, requires 
@@ -26,3 +26,10 @@ data access. Furthermore, cache memory has a fixed size block interface, meaning
 the cache and the main memory in the unit of blocks, which is sub-optimal in both storage and bandwidth if only
 a small potion of the block is used. Such striding pattern is common in certain GPGPU applications, if, for example, a 
 single field of an array of structs (AoS) is accessed in parallel.
+Scratchpad memory, on the other hand, overcomes the above limitations by allowing direct and fine-grained addressing 
+into its storage, entirely getting rid of the tag array and the block interface.
+It, however, suffers another two types of inefficiencies.
+First, current implementations of scratchpad memory has its own isolated address space, meaning that applications must
+explicitly move data into the scratchpad memory by issuing memory instructions. These explicit memory instructions 
+will pollute the cache with data that is unlikely to be reused, as most of the operations will take place on the
+scratchpad memory.
