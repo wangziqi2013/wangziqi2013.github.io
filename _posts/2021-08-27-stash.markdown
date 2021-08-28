@@ -45,7 +45,9 @@ version_mgmt:
    have a tag array, how do you locate the word even given the VA? Stash map stores info for address generation,
    yes that's true, but this is only easy to compute on the forward direction (given offset, compute VA).
    I did not see how to easily determine whether a word in Stash is on a given VA.
-   **Nevermind, I get it - the info is stored in the coherence states and sent to Stash in the coherence request**
+   **Nevermind, I get it - the info is stored in the coherence states and sent to Stash in the coherence request.
+     But, I have another problem: Per-word (Per-chunk) stash map info is already tracked for lazy write backs,
+     why do you need it in the coherence request?**
 
 This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
 The paper is motivated by the fact that existing commercial implementations of scratchpad memory has limited efficiency
@@ -144,4 +146,4 @@ Although this may sound similar to how a regular cache controller handles cohere
 differences between regular coherence and Stash.
 First, Stash uses a smaller granularity than most caches, indicating that the underlying protocol must support 
 registering the coherence status of fine-grained words.
-Second, 
+
