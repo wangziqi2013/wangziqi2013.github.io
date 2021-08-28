@@ -19,3 +19,7 @@ and usability due to the private, non-cache coherent address space. Stash addres
 scratchpad memory to translate its private address to and from the global virtual address, such that the scratchpad
 memory can be loaded like a traditional cache om-demand, while maintaining easy access by retaining the direct 
 addressing and fine-grained access capabilities of existing scratchpad memory.
+
+The paper recognizes that both cache and scratchpad memory have limitations. Cache memory, on one hand, requires 
+expensive address translation and tag lookups for each operation, which implies extra energy consumption in addition to
+data access. 
