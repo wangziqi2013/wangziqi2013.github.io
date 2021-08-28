@@ -128,4 +128,6 @@ Stash supports lazy write backs of dirty data after a kernel computation complet
 entries (and TLB/RTLB entries) is not immediately performed. Instead, Stash only writes dirty data back on-demand 
 and frees up resources when the same scratchpad storage is allocated to another kernel, or when TLB/RTLB needs 
 more free entries but could not find any.
-
+To help Stash identify which stash map entry a data word belongs to, the paper proposes adding a per-word pointer to
+stash map entries just similar to the case of TLB/RTLB, which is walked when a stash map entry is evicted on-demand. 
+The pointer can also be added in a larger granularity such as per-64 byte chunks to save some metadata overhead.
