@@ -33,7 +33,7 @@ version_mgmt:
    manages the data storage and use private address pointers.
    While this is a good balancing point between pure cache and pure scratchpad memory designs, the descriptions
    in the paper is over-complicated since the author was basically just describing how a on-demand cache works 
-   without saying it just functions as a cache.
+   without saying it is a cache.
 
 2. TLB/RTLB seems a heavyweight component that requires lots of attention that is missing from the paper. 
    How are TLB/RTLB loaded? Is there a page walker? Is there a dedicated page table? Does the application 
@@ -122,4 +122,10 @@ When a stash map entry is invalidated at the end of the kernel computation, both
 invalidated as well because they are no longer useful.
 Since invalidations of stash map entries only happen at the end of a kernel computation, which is relatively
 infrequent, this can be performed by walking the TLB and RTLB and invalidating entries whose back pointer value
-matches the stash mao entry to be invalidated.
+matches the stash map entry to be invalidated.
+
+Stash supports lazy write backs of dirty data after a kernel computation completes. The invalidation of stash map
+entries (and TLB/RTLB entries) is not immediately performed. Instead, Stash only writes dirty data back on-demand 
+and frees up resources when the same scratchpad storage is allocated to another kernel, or when TLB/RTLB needs 
+more free entries but could not find any.
+
