@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "A Case for Richer Cross-Layer Abstractions: Bridging the Semantics Gap with Expressive Memory"
+date:   2021-08-29 19:48:00 -0500
+categories: paper
+paper_title: "A Case for Richer Cross-Layer Abstractions: Bridging the Semantics Gap with Expressive Memory"
+paper_link: https://ieeexplore.ieee.org/document/8416829
+paper_keyword: Tagged Architecture; XMEM
+paper_year: ISCA 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
