@@ -16,3 +16,8 @@ version_mgmt:
 This paper proposes Expressive Memory (XMem), a memory framework for tagging the address space with metadata.
 The paper is motivated by the fact that program metadata can be helpful in many scenarios, while in reality,
 they are difficult to obtain or infer from an untagged memory. 
+The paper uses two examples to justify the motivation. The first example, cache optimization, requires that programmers
+make assumptions about the cache configuration, and hard code the optimization for operations such as matrix 
+multiplication. If the actual hardware configuration differs from the assumption, the optimization will not work.
+It would hence be nice if software can provide locality information in the run time to aid cache controllers for 
+block eviction.
