@@ -30,4 +30,11 @@ if known by the OS and DRAM controller, would help them make better placement de
 The paper identifies three challenges in implementing XMem. First, the tagging granularity should be flexible, as 
 semantics metadata applies to both very large and very small data items. Neither per-address nor per-page granularity
 would work very well, as they do not achieve a good balance between metadata overhead and flexibility.
-
+Second, the design itself should not restrict which kind of information is conveyed from the software to the memory 
+hierarchy, since XMem is supposed to be a framework generally applicable to all scenarios where high-level semantics
+are needed, and not to be a specialized solution to a few pre-defined problems. 
+This implies that the design should be flexible enough to allow arbitrary information to be passed, which may also
+be extended in the future without changing the hardware.
+Lastly, the semantics of memory regions can be conveniently changed in the runtime, by either unmapping/remapping the 
+region, and/or enabling/disabling the semantics information. This is critical to the usability of XMem, as memory
+behavior will often change at different stages of application execution.
