@@ -45,9 +45,16 @@ Atoms are identified with an application-level atom ID, which is assigned static
 compiler can see the full set of atoms. 
 Atoms with identical contents that appear at different locations in the program will be deduplicated by the compiler,
 such that they have the same atom ID.
-Applications may define atoms anywhere in the application, and refer to them using a handler object, which is just the
-compiler-assigned ID of the atom.
+Applications may define atoms anywhere in the application, and refer to them using an 8-bit handler object, which 
+is just the compiler-assigned ID of the atom.
 At compilation time, atoms are stored in a special segment of the compiled binary, which will be recognized by the OS
 binary loader.
 The paper suggests that the OS dynamic loader should read atoms statically embedded in the binary, and use them to
 initialize a hardware table, as we will see below.
+
+The paper does not specify the contents of the atoms, as XMem is designed to be easily extendible.
+The paper, however, does recommends a few frequently used properties, such as data types, access patterns, 
+read-/write-only regions, frequency of accesses, working set size, and the reuse distances.
+All these semantics properties can be represented by either small integers or bit masks.
+Compilers should be able to identify all properties, and transform them to a binary format that can be 
+communicated to the hardware.
