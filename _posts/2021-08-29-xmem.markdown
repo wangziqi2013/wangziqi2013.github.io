@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. The main memory can be metadata-tagged with a direct-mapped array reserved from the physical address space plus
+   a tag cache (ALB in this paper) on the cache side.
+   The tagging overhead is negligible for an intermediate-sized granularity (512B) and reasonably small tags (1B).
+
+2. 
+
 This paper proposes Expressive Memory (XMem), a memory framework for passing high-level software semantics information
 to the underlying hardware by tagging the address space with metadata.
 The paper is motivated by the fact that program metadata can be helpful in many scenarios, while in reality,
