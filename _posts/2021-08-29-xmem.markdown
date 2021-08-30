@@ -58,3 +58,11 @@ read-/write-only regions, frequency of accesses, working set size, and the reuse
 All these semantics properties can be represented by either small integers or bit masks.
 Compilers should be able to identify all properties, and transform them to a binary format that can be 
 communicated to the hardware.
+
+Atoms are stored in a centralized fashion in the memory hierarchy by a Global Atom Table (GAT). 
+The GAT is context-sensitive and hence needs to be loaded and spilled at context switches. 
+As mentioned earlier, the GAT is initialized by the OS at binary loading time. The OS reads the atom segment of the 
+binary and transfers all atoms to the GAT in the order specified by the compiler. Applications can hence refer to
+atoms using the index as assigned by the compiler, which is also an index into the hardware GAT.
+
+
