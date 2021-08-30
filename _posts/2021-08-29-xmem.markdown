@@ -13,9 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes Expressive Memory (XMem), a memory framework for tagging the address space with metadata.
+This paper proposes Expressive Memory (XMem), a memory framework for passing high-level software semantics information
+to the underlying hardware by tagging the address space with metadata.
 The paper is motivated by the fact that program metadata can be helpful in many scenarios, while in reality,
-they are difficult to obtain or infer from an untagged memory. 
+they are difficult to obtain or infer from untagged memory. 
 The paper uses two examples to justify the motivation. The first example, cache optimization, requires that programmers
 make assumptions about the cache configuration, and hard code the optimization for operations such as matrix 
 multiplication. If the actual hardware configuration differs from the assumption, the optimization will not work.
@@ -25,3 +26,8 @@ The second example, DRAM page placement, requires the knowledge of access patter
 that are often accessed together can be allocated on different DRAM banks, which utilizes inter-bank parallelism
 for higher access throughput. The high-level semantics information is only obtainable from the software, which, 
 if known by the OS and DRAM controller, would help them make better placement decisions.
+
+The paper identifies three challenges in implementing XMem. First, the tagging granularity should be flexible, as 
+semantics metadata applies to both very large and very small data items. Neither per-address nor per-page granularity
+would work very well, as they do not achieve a good balance between metadata overhead and flexibility.
+
