@@ -21,3 +21,7 @@ make assumptions about the cache configuration, and hard code the optimization f
 multiplication. If the actual hardware configuration differs from the assumption, the optimization will not work.
 It would hence be nice if software can provide locality information in the run time to aid cache controllers for 
 block eviction.
+The second example, DRAM page placement, requires the knowledge of access patterns of mapped pages, such that pages
+that are often accessed together can be allocated on different DRAM banks, which utilizes inter-bank parallelism
+for higher access throughput. The high-level semantics information is only obtainable from the software, which, 
+if known by the OS and DRAM controller, would help them make better placement decisions.
