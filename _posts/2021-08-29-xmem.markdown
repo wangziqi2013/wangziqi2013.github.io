@@ -98,3 +98,7 @@ accessed in parallel (which likely will not lead to a second memory access due t
 to retrieve the atom ID associated with the address to be accessed. 
 The atom ID information is propagated to each level of the cache hierarchy, and can be utilized by various memory
 components in multiple ways. 
+The contents of atoms are initialized by the OS loader before execution, and each component may define their own 
+attributes in their PATs.
+The OS is assumed to be aware of all components in the hierarchy, and is responsible for initializing the GAT and all 
+PATs using static atom information stored in the compiled binary.
