@@ -73,3 +73,11 @@ and atoms are many-to-one, meaning that one address can be mapped to at most one
 semantics of many addresses.
 At application level, XMem provides two libraries calls, namely, MAP() and UNMAP(), to associate addresses to atoms,
 and remove the association, respectively. 
+At hardware level, these two function calls are implemented with special instructions that take the atom ID and 
+address range to be mapped as operands, which stores the mapping relation into a hardware table called the 
+Atom Address Map (AAM). 
+The AAM is a reserved region of physical memory for tracking the atom ID for the entire physical address space at
+512 byte granularity.
+The AAM is organized as a direct-mapped, flat array, where each 512 byte chunk of physical memory is mapped to an
+8-bit atom ID in a linear fashion.
+
