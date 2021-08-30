@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Expressive Memory (XMem), a memory framework for tagging the address space with metadata.
+The paper is motivated by the fact that program metadata can be helpful in many scenarios, while in reality,
+they are difficult to obtain or infer from an untagged memory. 
