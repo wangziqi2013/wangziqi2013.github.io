@@ -92,3 +92,9 @@ status of atoms.
 Since the atom ID only has 8 bits, the AST only needs to support 256 atoms, which can be implemented conveniently
 as a 256-bit mask. XMem provides instructions to set or clear a bit in the AST, which are encapsulated as 
 ACTIVATE() and DEACTIVATE() system calls. 
+
+The operations of XMem is very simple. When the main memory is accessed as a result of cache misses, the AAM is also
+accessed in parallel (which likely will not lead to a second memory access due to ALB filtering out most requests) 
+to retrieve the atom ID associated with the address to be accessed. 
+The atom ID information is propagated to each level of the cache hierarchy, and can be utilized by various memory
+components in multiple ways. 
