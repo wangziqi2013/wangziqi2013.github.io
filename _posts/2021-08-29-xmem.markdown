@@ -64,5 +64,7 @@ The GAT is context-sensitive and hence needs to be loaded and spilled at context
 As mentioned earlier, the GAT is initialized by the OS at binary loading time. The OS reads the atom segment of the 
 binary and transfers all atoms to the GAT in the order specified by the compiler. Applications can hence refer to
 atoms using the index as assigned by the compiler, which is also an index into the hardware GAT.
-
+Components in the memory hierarchy may leverage the GAT in two ways: They can either directly read information from the
+GAT, or use a Private Atom Table (PAT) to store component-specific information.
+The OS is also responsible for initializing the PAT with information that a certain component is interested in.
 
