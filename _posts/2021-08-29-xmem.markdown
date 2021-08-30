@@ -80,4 +80,8 @@ The AAM is a reserved region of physical memory for tracking the atom ID for the
 512 byte granularity.
 The AAM is organized as a direct-mapped, flat array, where each 512 byte chunk of physical memory is mapped to an
 8-bit atom ID in a linear fashion.
-
+The AAM is updated when MAP() and UNMAP() are called, and is accessed when the physical memory is accessed.
+To avoid accessing the AAM for each main memory access, the paper proposes adding an Atom Lookaside Buffer (ALB)
+at the cache hierarchy as a fast store of frequently used AAM entries. The ALB is organized similar to the TLB,
+which uses page granularity mapping, and each ALB entry just consists of an array of atom IDs, one bit for each
+512 byte chunk.
