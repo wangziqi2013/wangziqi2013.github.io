@@ -37,7 +37,8 @@ version_mgmt:
 
 2. TLB/RTLB seems a heavyweight component that requires lots of attention that is missing from the paper. 
    How are TLB/RTLB loaded? Is there a page walker? Is there a dedicated page table? Does the application 
-   initializes it (likely not)?
+   initializes it (likely not)? **On a second thought, the TLB can grab information from the GPU's TLB.
+   RTLB contains the same amount of information as in the TLB, and it does not need any page walk.**
 
 3. The paper did not describe how the RTLB works except just saying that it provides reverse translation.
    I understand that this is used to translate the PA address in coherence requests back to VA, since 
@@ -45,8 +46,8 @@ version_mgmt:
    have a tag array, how do you locate the word even given the VA? Stash map stores info for address generation,
    yes that's true, but this is only easy to compute on the forward direction (given offset, compute VA).
    I did not see how to easily determine whether a word in Stash is on a given VA.
-   **Nevermind, I get it - the info is stored in the coherence states and sent to Stash in the coherence request.
-     But, I have another problem: Per-word (Per-chunk) stash map info is already tracked for lazy write backs,
+   **Nevermind, I get it: the info is stored in the coherence states and sent to Stash in the coherence request.
+     But, I have another question: Per-word (Per-chunk) stash map info is already tracked for lazy write backs,
      why do you need it in the coherence request?**
 
 This paper proposes Stash, a globally addressable, cache coherent scratchpad memory architecture for GPGPU. 
