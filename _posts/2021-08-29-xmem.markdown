@@ -85,3 +85,10 @@ To avoid accessing the AAM for each main memory access, the paper proposes addin
 at the cache hierarchy as a fast store of frequently used AAM entries. The ALB is organized similar to the TLB,
 which uses page granularity mapping, and each ALB entry just consists of an array of atom IDs, one bit for each
 512 byte chunk.
+
+To support efficient enabling and disabling of individual atoms, which is a useful feature, because memory properties
+can dynamically change in the run time, the paper also proposes adding an Atom Status Table (AST) for tracking the 
+status of atoms. 
+Since the atom ID only has 8 bits, the AST only needs to support 256 atoms, which can be implemented conveniently
+as a 256-bit mask. XMem provides instructions to set or clear a bit in the AST, which are encapsulated as 
+ACTIVATE() and DEACTIVATE() system calls. 
