@@ -28,6 +28,12 @@ version_mgmt:
    This simplifies the creation and maintenance of attributes, since they are just created in advance, and 
    communicated to the hardware before execution.
 
+**Comments:**
+
+1. The paper says in the beginning that XMem should support flexible granularity, and then in the main design it 
+   turns out that the granularity is still fixed and quite inflexible (512B) chunks. What if I just need per-cache 
+   line metadata? Is is possible to be emulated in XMEM?
+
 This paper proposes Expressive Memory (XMem), a memory framework for passing high-level software semantics information
 to the underlying hardware by tagging the address space with metadata.
 The paper is motivated by the fact that program metadata can be helpful in many scenarios, while in reality,
