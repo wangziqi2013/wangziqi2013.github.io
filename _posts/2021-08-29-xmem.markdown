@@ -59,12 +59,17 @@ All these semantics properties can be represented by either small integers or bi
 Compilers should be able to identify all properties, and transform them to a binary format that can be 
 communicated to the hardware.
 
-Atoms are stored in a centralized fashion in the memory hierarchy by a Global Atom Table (GAT). 
+Atoms are stored in a centralized fashion in the memory hierarchy by a Global Attribute Table (GAT). 
 The GAT is context-sensitive and hence needs to be loaded and spilled at context switches. 
 As mentioned earlier, the GAT is initialized by the OS at binary loading time. The OS reads the atom segment of the 
 binary and transfers all atoms to the GAT in the order specified by the compiler. Applications can hence refer to
 atoms using the index as assigned by the compiler, which is also an index into the hardware GAT.
 Components in the memory hierarchy may leverage the GAT in two ways: They can either directly read information from the
-GAT, or use a Private Atom Table (PAT) to store component-specific information.
+GAT, or use a Private Attribute Table (PAT) to store component-specific information.
 The OS is also responsible for initializing the PAT with information that a certain component is interested in.
 
+Applications assign semantics to addresses by mapping these addresses to atoms. The mapping relation between addresses
+and atoms are many-to-one, meaning that one address can be mapped to at most one atom, while an atom can describe the 
+semantics of many addresses.
+At application level, XMem provides two libraries calls, namely, MAP() and UNMAP(), to associate addresses to atoms,
+and remove the association, respectively. 
