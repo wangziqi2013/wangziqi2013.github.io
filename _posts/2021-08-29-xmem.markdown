@@ -19,7 +19,10 @@ version_mgmt:
    a tag cache (ALB in this paper) on the cache side.
    The tagging overhead is negligible for an intermediate-sized granularity (512B) and reasonably small tags (1B).
 
-2. 
+2. The paper demonstrates a good division of responsibility between software and hardware. In order to make XMem     
+   extensible, the OS is responsible for knowing all attributes and initializing the per-component PAT.
+   This is better than hard coding the attributes in hardware, because updating the OS driver and loader for 
+   each new attribute added is definitely easier than updating the hardware components.
 
 This paper proposes Expressive Memory (XMem), a memory framework for passing high-level software semantics information
 to the underlying hardware by tagging the address space with metadata.
