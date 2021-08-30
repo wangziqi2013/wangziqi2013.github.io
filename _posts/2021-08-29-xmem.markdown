@@ -38,3 +38,10 @@ be extended in the future without changing the hardware.
 Lastly, the semantics of memory regions can be conveniently changed in the runtime, by either unmapping/remapping the 
 region, and/or enabling/disabling the semantics information. This is critical to the usability of XMem, as memory
 behavior will often change at different stages of application execution.
+
+At a high level, XMem represents a set of semantics information as an "atom". 
+The contents of an atom must be determined statically at compilation time, and remain immutable during execution.
+Atoms are identified with an application-level atom ID, which is assigned statically at compilation time, since the 
+compiler can see the full set of atoms. 
+Atoms with identical contents that appear at different locations in the program will be deduplicated by the compiler,
+such that they have the same atom ID.
