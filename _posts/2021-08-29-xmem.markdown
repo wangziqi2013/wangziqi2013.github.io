@@ -31,7 +31,7 @@ version_mgmt:
 **Comments:**
 
 1. The paper says in the beginning that XMem should support flexible granularity, and then in the main design it 
-   turns out that the granularity is still fixed and quite inflexible (512B) chunks. What if I just need per-cache 
+   turns out that the granularity is still fixed and quite inflexible (512B chunks). What if I just need per-cache 
    line metadata? Is is possible to be emulated in XMEM?
 
 This paper proposes Expressive Memory (XMem), a memory framework for passing high-level software semantics information
