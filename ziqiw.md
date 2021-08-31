@@ -12,9 +12,10 @@ Resume
 Research Statement
 ------------------
 
-I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") since 2017 Fall. 
+I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") 
+and [Dimitrios Skarlatos](http://www.cs.cmu.edu/~dskarlat/ "Dimitrios's homepage") since 2017 Fall. 
 My research area is computer architecture and memory architecture, especially [Hardware Transaction Memory (HTM)](https://en.wikipedia.org/wiki/Transactional_memory "Transactional Memory"), Non-Volatile Memory, Memory and Cache
-Compression, and
+Compression, Cache optimization for serverless & micro-services, and
 [Page Overlays](http://users.ece.cmu.edu/~omutlu/pub/page-overlays-for-fine-grained-memory-management_isca15.pdf "Page Overlays").
 My research interest also covers concurrent data structure design and parallel computation.
 
@@ -30,7 +31,8 @@ not achievable.
 Research Projects
 -----------------
 
-**(2020.12 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos (CMU) and Professor Gennady Pekhimenko (U of T) on memory compression on multi-dimentional address space.
+
+**(2020.12 - 2021.08)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on memory compression on multi-dimentional address space.
 
 **(2019.05 - 2020.11)** I was working with Professor Todd Mowry on NVM full system persistence.
 
