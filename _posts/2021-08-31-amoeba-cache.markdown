@@ -18,4 +18,6 @@ The paper is motivated by the fact that in conventional caches, it is often the 
 block is low, such that the block is underutilized during its lifecycle between fetch and eviction.
 This phenomenon wastes bus bandwidth, since most of the contents being transferred on the bus and stored in the data 
 array will be unused.
-
+Amoeba cache addresses this issue by enabling variable-sized blocks and variable associativity per set.
+Blocks having low utilization can thus only be partially cached to avoid paying the overhead of transfer and 
+storage for no performance benefit.
