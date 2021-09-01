@@ -141,3 +141,10 @@ Region blocks are mapped to table entries (with possible aliasing) using either 
 the offset of the access, or both. 
 The table is consulted when a miss is signaled, and it provides information about the access locality within the 
 region that causes the miss.
+
+Amoeba cache also poses challenges for the coherence protocol, as blocks can be requested in finer granularity than
+a conventional block (which equals the size of the region in this paper).
+The paper proposes that the coherence protocol should tracks data at fixed but smaller granularity. A partial
+block will hence be tracked by coherence states whose tracking addresses overlap with the partial block.
+The paper just acknowledges the possibility of false sharing between partial blocks if they are tracked by
+the same coherence state but they actually do not overlap.
