@@ -114,3 +114,12 @@ The lookup logic then performs tag check by comparing the region tag against the
 comparing the requested offset with offsets of the partial blocks. If the request can be satisfied, indicated by
 the fact that all requested words are currently cached by partial blocks, data is read out by combining the requested 
 words from potentially multiple partial blocks.
+
+On an access miss (could be a partial miss, if a request can only be partially fulfilled by the cached content),
+the cache controller performs a prediction of the range to be fetched using a locality predictor (discussed later),
+and sends the request to the lower level with the range to be fetched. 
+To simplify coherence, the requested range is a consecutive range of words that are predicted to be useful, with 
+possible overlapped with existing ranges of the same region (if the overlap happens at the boundaries, then 
+the requested range can be smaller by removing the overlapped range). 
+
+
