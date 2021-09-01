@@ -19,7 +19,9 @@ version_mgmt:
    Different applications demonstrate different locality traits, and therefore it helps to achieve optimal 
    performance by supporting different block sizes within the same cache.
 
-2. 
+2. Variable sized blocks can be supported by adding a range descriptor in addition to the conventional 
+   address tag which is essentially just a pair of 
+   delimiters describing the start and end offset of the block within a larger unit (a "region" in this paper).
 
 **Comments:**
 
