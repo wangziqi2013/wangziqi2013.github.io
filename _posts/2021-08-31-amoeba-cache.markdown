@@ -88,5 +88,7 @@ The prediction is performed per cache miss before the fetch request is sent to l
 The overall architecture of Amoeba cache is described as follows. 
 Amoeba cache stores partial blocks as a consecutive range of 64-bit words in a larger unit called a "region", which is
 aligned 64-byte blocks in this paper (i.e., identical to conventional cache blocks). 
-
+To simplify encoding, a partial block must be fully contained in a region, and must be a consecutive range.
+Each partial block is described by a tag entry, which consists of the address tag of the region that contains it
+(i.e., the conventional address tag), a start and end offset, and other metadata bits.
 
