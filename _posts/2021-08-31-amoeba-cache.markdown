@@ -84,3 +84,9 @@ A fix sized tag array will not work in this case for obvious reasons.
 Lastly, the cache should predict which words in which blocks are likely to be used, such that only these words are 
 fetched into the cache to save storage and bandwidth. 
 The prediction is performed per cache miss before the fetch request is sent to lower levels. 
+
+The overall architecture of Amoeba cache is described as follows. 
+Amoeba cache stores partial blocks as a consecutive range of 64-bit words in a larger unit called a "region", which is
+aligned 64-byte blocks in this paper (i.e., identical to conventional cache blocks). 
+
+
