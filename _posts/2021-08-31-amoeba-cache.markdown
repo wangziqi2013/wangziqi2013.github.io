@@ -102,3 +102,6 @@ The layout of the data store is described by a tag bitmap (T? bitmap), in which 
 data array, and a bit is set if the corresponding word contains the tag entry (the paper assumes that a tag
 entry can be stored in a 64-bit word, which is likely true for most implementations).
 Data immediately follows the tag entry, such that no extra pointer for data is needed.
+To aid block insertion, the paper also proposes adding an extra valid bitmap (V? bitmap), in which each bit represents
+whether a word is occupied for either tag or data. The cache controller should search for unused space by 
+consulting the valid bitmap on insertion, and update the bitmap accordingly after insertion or eviction.
