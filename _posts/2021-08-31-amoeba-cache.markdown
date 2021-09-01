@@ -31,3 +31,9 @@ If the access locality is low, however, then most of the contents fetched into t
 resulting in under-utilized blocks, which wastes cache storage as well as bus bandwidth.
 Small cache blocks, on the other hand, favors low locality access, as the storage and bandwidth overhead will be small
 per cache miss.
+
+The paper then concludes that it is difficult to determine a static block size that is optimal for all workloads,
+since different workloads have significantly different access patterns and performance traits.
+The paper defines the utilization of cache blocks as the percentage of 64-bit words that are actually used during
+the lifetime of the block (from fetch to eviction) in the L1 cache over the block size in the number of words.
+
