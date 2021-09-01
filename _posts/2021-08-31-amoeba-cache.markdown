@@ -23,6 +23,10 @@ version_mgmt:
    address tag which is essentially just a pair of 
    delimiters describing the start and end offset of the block within a larger unit (a "region" in this paper).
 
+3. Variable associativity can be supported by embedding tags in the data store and using a bit map to indicate
+   which words store tags. The separate tag array can be get rid of this way. The lookup circuit just reads all
+   of the data array of the set and recovers the tags according to the bitmap.
+
 **Comments:**
 
 1. I would say Sec 2.2 and Figure 3 have presentation issues, and both are misleading. 
