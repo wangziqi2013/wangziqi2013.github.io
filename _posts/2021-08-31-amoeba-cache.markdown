@@ -121,5 +121,9 @@ and sends the request to the lower level with the range to be fetched.
 To simplify coherence, the requested range is a consecutive range of words that are predicted to be useful, with 
 possible overlapped with existing ranges of the same region (if the overlap happens at the boundaries, then 
 the requested range can be smaller by removing the overlapped range). 
-
+After the fetch request is fulfilled by the lower level, the cache controller inserts the new partial block into 
+the data array by either merging the new block with an existing block, if they happen to be adjacent to each
+other in the region, or just insert it as a new block with a separate tag entry.
+In both cases, the controller needs to search for free space using the valid bitmap, and perform de-fragmentation
+to avoid excessive external fragmentation, if necessary.
 
