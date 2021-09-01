@@ -81,4 +81,6 @@ to the way number.
 Second, there is no longer a fixed number of tags per set, due to the fact that smaller blocks enable larger
 associativity as more blocks can be stored in each set, each needing a tag entry to describe data.
 A fix sized tag array will not work in this case for obvious reasons.
-
+Lastly, the cache should predict which words in which blocks are likely to be used, such that only these words are 
+fetched into the cache to save storage and bandwidth. 
+The prediction is performed per cache miss before the fetch request is sent to lower levels. 
