@@ -27,4 +27,7 @@ cache. The paper suggests that larger blocks favor high access locality, since d
 be accessed by future memory operations, which reduces average memory access latency. In addition, the bandwidth 
 overhead of transferring the block to the cache is also amortized across the many operations that hit the cache, which
 helps reducing overall bus contention.
-
+If the access locality is low, however, then most of the contents fetched into the cache will not be used,
+resulting in under-utilized blocks, which wastes cache storage as well as bus bandwidth.
+Small cache blocks, on the other hand, favors low locality access, as the storage and bandwidth overhead will be small
+per cache miss.
