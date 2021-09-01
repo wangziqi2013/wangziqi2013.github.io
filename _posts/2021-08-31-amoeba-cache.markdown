@@ -126,4 +126,10 @@ the data array by either merging the new block with an existing block, if they h
 other in the region, or just insert it as a new block with a separate tag entry.
 In both cases, the controller needs to search for free space using the valid bitmap, and perform de-fragmentation
 to avoid excessive external fragmentation, if necessary.
+Both the tag and valid bitmap are updated after the insertion to reflect the new tag store layout.
 
+Replacement in Amoeba cache is tricky, as many replacement algorithms (e.g., RRIP) assume a fixed number of ways.
+If this is the case, the paper suggests that the algorithm is still implemented as if there were a fixed number 
+of ways, and maintain metadata for replacement accordingly. The actual blocks are mapped to the "virtual ways"
+by their offset into the data array, e.g., on a cache with X virtual ways and data block at data bank offset Y is 
+accessed, then virtual way (Y / X) would be updated as if a block in the virtual way were accessed.
