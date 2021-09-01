@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Optimal block size of a cache depends on access locality of applications currently running on the cache. 
+   Different applications demonstrate different locality traits, and therefore it helps to achieve optimal 
+   performance by supporting different block sizes within the same cache.
+
+2. 
+
 **Comments:**
 
 1. I would say Sec 2.2 and Figure 3 have presentation issues, and both are misleading. 
@@ -61,3 +69,4 @@ First, the data store must be able to be addressed in a more fine-grained manner
 blocks can only start at fixed offsets given the way number. 
 In Amoeba cache, data blocks can potentially start at arbitrary offsets, which requires extra addressing in addition 
 to the way number.
+Second, the tag store is no longer 
