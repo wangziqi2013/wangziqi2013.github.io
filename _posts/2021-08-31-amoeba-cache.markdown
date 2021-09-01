@@ -110,4 +110,7 @@ On a lookup operation, the set index is computed using the address of the region
 This guarantees that all partial blocks belonging to the same regions are mapped to the same set, which simplifies
 lookup, since operations that span multiple partial blocks can be satisfied with one single set lookup.
 The entire set is read out by accessing the data bank, after which all tags are located using the tag bitmap.
-
+The lookup logic then performs tag check by comparing the region tag against the requested address, as well as
+comparing the requested offset with offsets of the partial blocks. If the request can be satisfied, indicated by
+the fact that all requested words are currently cached by partial blocks, data is read out by combining the requested 
+words from potentially multiple partial blocks.
