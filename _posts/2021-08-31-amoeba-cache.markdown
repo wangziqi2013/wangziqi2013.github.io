@@ -21,3 +21,10 @@ array will be unused.
 Amoeba cache addresses this issue by enabling variable-sized blocks and variable associativity per set.
 Blocks having low utilization can thus only be partially cached to avoid paying the overhead of transfer and 
 storage for no performance benefit.
+
+The paper begins by observing the relation between access locality and block size in a conventional, fixed block size
+cache. The paper suggests that larger blocks favor high access locality, since data fetched into the cache will likely 
+be accessed by future memory operations, which reduces average memory access latency. In addition, the bandwidth 
+overhead of transferring the block to the cache is also amortized across the many operations that hit the cache, which
+helps reducing overall bus contention.
+
