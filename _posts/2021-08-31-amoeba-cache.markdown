@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. I would say Sec 2.2 and Figure 3 have presentation issues, and both are misleading. 
+   The motivation of this paper is that access locality varies greatly among applications, and 
+   different access locality favors different block sizes, so it is important to be able to support
+   different block sizes.
+   In Sec 2.2 and Figure 3, however, the author seems to suggests that there is a trade-off between bandwidth and 
+   miss rate (i.e., access locality), which I think distorts the case and effect relation.
+   The problem is that miss rate (access locality) is intrinsic to the application, and bandwidth is simply just
+   a derived quantity based on the miss rate and the block size.
+   Why would you put miss rate and bandwidth as x and y axis, and use block size as the variable in Figure 3?
+
 This paper proposes Amoeba Cache, a tag-less cache architecture that supports multiple block sizes.
 The paper is motivated by the fact that in conventional caches, it is often the case that spatial locality within a 
 block is low, such that the block is underutilized during its lifecycle between fetch and eviction.
