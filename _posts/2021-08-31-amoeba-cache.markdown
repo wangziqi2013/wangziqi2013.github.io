@@ -133,3 +133,11 @@ If this is the case, the paper suggests that the algorithm is still implemented 
 of ways, and maintain metadata for replacement accordingly. The actual blocks are mapped to the "virtual ways"
 by their offset into the data array, e.g., on a cache with X virtual ways and data block at data bank offset Y is 
 accessed, then virtual way (Y / X) would be updated as if a block in the virtual way were accessed.
+Simpler algorithms such as LRU can be adapted to fit into Amoeba cache directly without any major change.
+
+The paper also proposes a design of the locality predictor. The predictor is essentially a table of bitmaps, with
+each bit represent whether a word within a region has been accessed.
+Region blocks are mapped to table entries (with possible aliasing) using either the region address, or the PC plus 
+the offset of the access, or both. 
+The table is consulted when a miss is signaled, and it provides information about the access locality within the 
+region that causes the miss.
