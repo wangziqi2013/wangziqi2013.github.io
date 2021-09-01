@@ -148,3 +148,7 @@ The paper proposes that the coherence protocol should tracks data at fixed but s
 block will hence be tracked by coherence states whose tracking addresses overlap with the partial block.
 The paper just acknowledges the possibility of false sharing between partial blocks if they are tracked by
 the same coherence state but they actually do not overlap.
+
+To accelerate tag access for tag-only operations, such as coherence query from the lower level, the paper proposes
+adding a small tag array for caching frequently used tags. The array can also serve as a filter to the data array
+in the case of cache hits in order to reduce energy consumption.
