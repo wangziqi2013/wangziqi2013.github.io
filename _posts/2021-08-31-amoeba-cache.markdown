@@ -72,10 +72,13 @@ bytes. Even within the same application, the access locality and hence optimal b
 stages of execution. It is therefore impossible to achieve optimal block size for all applications, which highlights
 the importance of supporting variable sized blocks.
 
-Amoeba cache addresses the above issue bu enabling variable sized blocks and variable associativity per cache set.
+Amoeba cache addresses the above issue by enabling variable sized blocks and variable associativity per cache set.
 There are a few challenges. 
 First, the data store must be able to be addressed in a more fine-grained manner, unlike a conventional cache where 
 blocks can only start at fixed offsets given the way number. 
 In Amoeba cache, data blocks can potentially start at arbitrary offsets, which requires extra addressing in addition 
 to the way number.
-Second, the tag store is no longer 
+Second, there is no longer a fixed number of tags per set, due to the fact that smaller blocks enable larger
+associativity as more blocks can be stored in each set, each needing a tag entry to describe data.
+A fix sized tag array will not work in this case for obvious reasons.
+
