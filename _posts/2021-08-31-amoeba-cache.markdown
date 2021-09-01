@@ -36,4 +36,7 @@ The paper then concludes that it is difficult to determine a static block size t
 since different workloads have significantly different access patterns and performance traits.
 The paper defines the utilization of cache blocks as the percentage of 64-bit words that are actually used during
 the lifetime of the block (from fetch to eviction) in the L1 cache over the block size in the number of words.
-
+Experiments show that, the optimal block size for different applications vary greatly, ranging from 32 bytes to 256
+bytes. Even within the same application, the access locality and hence optimal block size will change at different
+stages of execution. It is therefore impossible to achieve optimal block size for all applications, which highlights
+the importance of supporting variable sized blocks.
