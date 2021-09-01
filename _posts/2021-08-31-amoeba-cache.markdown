@@ -28,7 +28,13 @@ version_mgmt:
    of the data array of the set and recovers the tags according to the bitmap.
 
 4. Both 2 and 3 described above can also be used for compressed caches, which is just another form of variable 
-   block size and variable associativity.
+   block size and variable associativity. This paper is actually another form of cache compression: Instead of
+   using encoding methods to reduce the size of a full block, the Amoeba cache leverages the sparsity of data
+   and simply does not store words that are predicted not used.
+
+5. The same analogy in the above point also applies to LCP (Linearly Compressed Pages) and Page Overlays, 
+   in which the former relies on encoding of individual cache lines, while the latter relies on certain lines 
+   not being present in a page to reduce storage.
 
 **Comments:**
 
@@ -90,5 +96,5 @@ Amoeba cache stores partial blocks as a consecutive range of 64-bit words in a l
 aligned 64-byte blocks in this paper (i.e., identical to conventional cache blocks). 
 To simplify encoding, a partial block must be fully contained in a region, and must be a consecutive range.
 Each partial block is described by a tag entry, which consists of the address tag of the region that contains it
-(i.e., the conventional address tag), a start and end offset, and other metadata bits.
+(i.e., the conventional address tag), a start and end word offset, and other metadata bits.
 
