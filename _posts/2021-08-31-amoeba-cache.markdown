@@ -97,4 +97,8 @@ aligned 64-byte blocks in this paper (i.e., identical to conventional cache bloc
 To simplify encoding, a partial block must be fully contained in a region, and must be a consecutive range.
 Each partial block is described by a tag entry, which consists of the address tag of the region that contains it
 (i.e., the conventional address tag), a start and end word offset, and other metadata bits.
-
+Amoeba cache entirely gets rid of the tag array by storing tag entries inline with data in the data array.
+The layout of the data store is described by a tag bitmap (T? bitmap), in which a bit represents a word in the 
+data array, and a bit is set if the corresponding word contains the tag entry (the paper assumes that a tag
+entry can be stored in a 64-bit word, which is likely true for most implementations).
+Data immediately follows the tag entry, such that no extra pointer for data is needed.
