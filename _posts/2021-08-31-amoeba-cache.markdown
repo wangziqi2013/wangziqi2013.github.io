@@ -27,6 +27,9 @@ version_mgmt:
    which words store tags. The separate tag array can be get rid of this way. The lookup circuit just reads all
    of the data array of the set and recovers the tags according to the bitmap.
 
+4. Both 2 and 3 described above can also be used for compressed caches, which is just another form of variable 
+   block size and variable associativity.
+
 **Comments:**
 
 1. I would say Sec 2.2 and Figure 3 have presentation issues, and both are misleading. 
