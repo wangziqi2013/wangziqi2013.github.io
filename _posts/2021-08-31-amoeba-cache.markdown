@@ -54,3 +54,10 @@ Experiments show that, the optimal block size for different applications vary gr
 bytes. Even within the same application, the access locality and hence optimal block size will change at different
 stages of execution. It is therefore impossible to achieve optimal block size for all applications, which highlights
 the importance of supporting variable sized blocks.
+
+Amoeba cache addresses the above issue bu enabling variable sized blocks and variable associativity per cache set.
+There are a few challenges. 
+First, the data store must be able to be addressed in a more fine-grained manner, unlike a conventional cache where 
+blocks can only start at fixed offsets given the way number. 
+In Amoeba cache, data blocks can potentially start at arbitrary offsets, which requires extra addressing in addition 
+to the way number.
