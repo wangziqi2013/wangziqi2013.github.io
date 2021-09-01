@@ -105,3 +105,9 @@ Data immediately follows the tag entry, such that no extra pointer for data is n
 To aid block insertion, the paper also proposes adding an extra valid bitmap (V? bitmap), in which each bit represents
 whether a word is occupied for either tag or data. The cache controller should search for unused space by 
 consulting the valid bitmap on insertion, and update the bitmap accordingly after insertion or eviction.
+
+On a lookup operation, the set index is computed using the address of the region of the requested address.
+This guarantees that all partial blocks belonging to the same regions are mapped to the same set, which simplifies
+lookup, since operations that span multiple partial blocks can be satisfied with one single set lookup.
+The entire set is read out by accessing the data bank, after which all tags are located using the tag bitmap.
+
