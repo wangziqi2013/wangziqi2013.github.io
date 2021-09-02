@@ -51,4 +51,12 @@ in eTLB entries (the paper uses a two-level cache hierarchy with shared L2 as ex
 In addition, the D2D proposal adds a hardware directory called the Hub, at the L2 level, that serves 
 as a central repository for tracking cache line status in the entire hierarchy. The cache location portion of L1 
 eTLB is now treated as a smaller but faster "cache" for the Hub.
+The Hub is organized as a set-associative Content-Addressable Memory (CAM) using physical page address as keys.
+Each entry of the Hub tracks the location of the block addresses for all blocks within the page using three fields: 
+A "valid" bit field indicating whether the address is actually cached anywhere in the hierarchy; A way number 
+field indicating the way number of the block; A component ID field indicating the current cache component that
+holds a cached copy of the block. 
+Each Hub entry also has a pointer to eTLB entries, which stores the index of the entry if the same physical page 
+is also in the eTLB (and set to invalid if the page is not in the eTLB).
+
 
