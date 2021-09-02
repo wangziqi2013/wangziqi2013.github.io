@@ -16,3 +16,10 @@ version_mgmt:
 This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
 tag array and uses centralized repository for cache block location lookup. 
 This paper is based on a previous work on tag-less L1 cache, which can be found [here]({% post_url 2021-08-23-tlc%}).
+The D2D cache adopts the idea of tag-less L1 cache that extends the TLB as page-sized super-block tag array, and 
+applies the same design philosophy to the remaining levels of the cache hierarchy, seeking to remove the tag 
+array entirely for all cache components.
+To achieve this, the D2D cache adds a few extra hardware components that track not only the location of a block in the 
+L1, but also the location in the hierarchy and the sharing status.
+
+
