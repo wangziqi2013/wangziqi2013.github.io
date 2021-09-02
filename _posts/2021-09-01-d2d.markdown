@@ -59,4 +59,9 @@ holds a cached copy of the block.
 Each Hub entry also has a pointer to eTLB entries, which stores the index of the entry if the same physical page 
 is also in the eTLB (and set to invalid if the page is not in the eTLB).
 
+To simplify location tracking of cache blocks, the D2D hierarchy is strictly exclusive, meaning that a block can be
+cached in at most one components across the hierarchy, such that only one component ID needs to be tracked.
+The D2D design also enforces two invariants. First, all blocks in the hierarchy must have an entry in the Hub
+whose physical address covers the block's address. To help finding the Hub entry, a per-block pointer to Hub entries is
+also added to all blocks in the hierarchy.
 
