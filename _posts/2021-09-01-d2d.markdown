@@ -64,4 +64,9 @@ cached in at most one components across the hierarchy, such that only one compon
 The D2D design also enforces two invariants. First, all blocks in the hierarchy must have an entry in the Hub
 whose physical address covers the block's address. To help finding the Hub entry, a per-block pointer to Hub entries is
 also added to all blocks in the hierarchy.
-
+The second invariant is that the Hub is always inclusive to the eTLB, meaning that every entry of eTLB must also be
+present in the Hub. 
+In addition, if a physical page is both in the eTLB and the Hub, only information in the eTLB is considered as valid,
+while the Hub copy can be stale.
+This can be easily determined by checking whether the rTLB entry pointer in the Hub entry is valid or not, as a valid
+pointer indicates that the eTLB entry should be used.
