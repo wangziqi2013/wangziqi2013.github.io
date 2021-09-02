@@ -41,3 +41,7 @@ homonym and synonym issues. Homonym is resolved with the existing ASID field of 
 mapping the same virtual address to different physical addresses can still be distinguished by the TLB with the addition
 ASID field. Homonym is not handled by the TLB itself, and TLC paper proposes that a reverse translation table mapping
 physical page addresses to virtual page addresses be added for tracking homonyms. 
+When an entry is to be inserted into the eTLB, the reverse table is consulted to enforce the invariant 
+that none of the existing virtual addresses already map to the same physical address. 
+If synonym is detected, the invariant is enforced by copying the existing entry to the new entry, rewriting its
+address, and retaining the cache blocks covered by the entry.
