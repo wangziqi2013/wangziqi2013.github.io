@@ -6,9 +6,13 @@ categories: paper
 paper_title: "The Direct-to-Data (D2D) Cache: Navigating the Cache Hierarchy with a Single Lookup"
 paper_link: https://dl.acm.org/doi/10.1145/2678373.2665694
 paper_keyword: D2D Cache; TLB
-paper_year: 
+paper_year: Computer Architecture News, June 2014
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
+tag array and uses centralized repository for cache block location lookup. 
+This paper is based on a previous work on tag-less L1 cache, which can be found [here]({% post_url 2021-08-23-tlc%}).
