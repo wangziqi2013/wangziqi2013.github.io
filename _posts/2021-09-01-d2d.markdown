@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "The Direct-to-Data (D2D) Cache: Navigating the Cache Hierarchy with a Single Lookup"
+date:   2021-09-01 23:47:00 -0500
+categories: paper
+paper_title: "The Direct-to-Data (D2D) Cache: Navigating the Cache Hierarchy with a Single Lookup"
+paper_link: https://dl.acm.org/doi/10.1145/2678373.2665694
+paper_keyword: D2D Cache; TLB
+paper_year: 
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
