@@ -15,10 +15,10 @@ version_mgmt:
 
 **Highlights:**
 
-1. This paper is essentially a combination of (1) virtual address caches; (2) Super-block caches; (3) Co-locating
-   virtual super-block tags with TLB tags.
-   The novelty here is that super-blocks can be of page size (micro-page size, actually), which makes co-locating 
-   these tags with TLB entries much easier.
+1. This paper is essentially a combination of (1) virtual address caches; (2) Super-block caches; (3) Decoupled
+   tag and data caches (with indirection pointers for locating data).
+   The novelty here is that super-blocks can be of page size (micro-page size, actually), and co-locates the 
+   super-block tag array with the TLB, such that information of both can be read out with a single lookup.
 
 2. Synonym of virtual address caches can be solved by a reverse translation table, and by now allowing both
    TLB entries to co-exist.
