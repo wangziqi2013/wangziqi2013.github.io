@@ -36,3 +36,8 @@ covers the block address, such that the entry can be updated to reflect a status
 When an eTLB entry is evicted, as a result of TLB replacement, all blocks whose addresses lie within the page
 virtual address of the evicted entry must also be evicted, since every block in the cache should be covered
 by an eTLB entry.
+Due to the nature of TLB being a virtual address cache, the TLC is also virtually addressed, and hence is prone to 
+homonym and synonym issues. Homonym is resolved with the existing ASID field of TLB entries, meaning that entries
+mapping the same virtual address to different physical addresses can still be distinguished by the TLB with the addition
+ASID field. Homonym is not handled by the TLB itself, and TLC paper proposes that a reverse translation table mapping
+physical page addresses to virtual page addresses be added for tracking homonyms. 
