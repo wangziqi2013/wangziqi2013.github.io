@@ -22,4 +22,9 @@ array entirely for all cache components.
 To achieve this, the D2D cache adds a few extra hardware components that track not only the location of a block in the 
 L1, but also the location in the hierarchy and the sharing status.
 
+The D2D cache is developed based on Tag-Less Cache (TLC), which is motived by the fact that both tag array lookup 
+and parallel data array read consumes a significant portion of energy of an L1 cache. 
+This is, however, unavoidable in a tag-based cache, since the block can be stored in any of the ways within a set.
+The TLC design, on the other hand, proposes that the way number and validity status be tracked by the TLB, essentially
+decoupling the tag and data array, and treating the TLB as a page-sized super-block tag array.
 
