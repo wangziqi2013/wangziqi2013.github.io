@@ -27,4 +27,12 @@ and parallel data array read consumes a significant portion of energy of an L1 c
 This is, however, unavoidable in a tag-based cache, since the block can be stored in any of the ways within a set.
 The TLC design, on the other hand, proposes that the way number and validity status be tracked by the TLB, essentially
 decoupling the tag and data array, and treating the TLB as a page-sized super-block tag array.
-
+Each TLB entry (called an eTLB entry) in TLC hence contains a vector of valid bits and an array of way numbers, with
+each of them tracking the status of a block virtual address at the corresponding offset.
+Cache accesses will then use the information in the TLB to determine whether the requested address if cache, and if 
+it is, the way number within the set where it is stored. 
+Each cache block in the data array must also be extended with a back-pointer to the eTLB entry whose virtual address
+covers the block address, such that the entry can be updated to reflect a status change when the block is evicted.
+When an eTLB entry is evicted, as a result of TLB replacement, all blocks whose addresses lie within the page
+virtual address of the evicted entry must also be evicted, since every block in the cache should be covered
+by an eTLB entry.
