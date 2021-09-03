@@ -114,3 +114,9 @@ On cache block eviction from the L1 to L2 or from L2 to the main memory, the Hub
 be updated. This is achieved by following the Hub pointer in the evicted block to update the Hub entry first, and if
 the Hub entry's eTLB pointer is valid, the eTLB entry is also updated.
 
+Similar to TLC, D2D also prevents synonym from co-existing in the eTLB. Synonyms are detected when a new entry is
+to be inserted into the eTLB on an eTLB miss. 
+Since the Hub is physically tagged, if two virtual pages are mapped to the same physical page, and one of the 
+virtual pages is already in the eTLB, then the pointer of that entry will be already set, indicating a synonym.
+Synonyms are resolved in the same manner as in TLC, that is, the old eTLB entry is copied over to the new entry, 
+and the virtual page number is updated to be the new virtual page.
