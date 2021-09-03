@@ -105,4 +105,10 @@ and the valid bit as well as the way number are also set accordingly.
 On an eTLB eviction, the entry is just written back to the Hub, updating the Hub entry with potentially more up-to-date
 block status. The eTLB pointer in the Hub entry is also invalidated. No cache blocks need to be invalidated, since
 block status is tracked by the Hub, and eTLB is simply just serves as a fast cache.
-On
+On Hub eviction, however, all blocks belonging to the page that are currently in the hierarchy must be evicted.
+The blocks can be enumerated by walking the valid bit vector and following the way numbers stored in the Hub entry.
+Hub eviction can be optimized with similar techniques as described in the original TLC paper, such as micro-pages
+and micro-page prefetching.
+
+
+
