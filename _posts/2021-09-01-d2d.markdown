@@ -105,3 +105,4 @@ and the valid bit as well as the way number are also set accordingly.
 On an eTLB eviction, the entry is just written back to the Hub, updating the Hub entry with potentially more up-to-date
 block status. The eTLB pointer in the Hub entry is also invalidated. No cache blocks need to be invalidated, since
 block status is tracked by the Hub, and eTLB is simply just serves as a fast cache.
+On
