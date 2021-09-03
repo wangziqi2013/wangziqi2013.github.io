@@ -75,10 +75,14 @@ We next describe the operation of D2D caches as follows. In most cases, an acces
 bit in the entry is checked. If the valid bit is set, then the block is directly fetched from either the L1 or the L2
 (we deviate from what was described in the paper simplify it a bit by ignoring the L1 instruction cache) using the
 way number stored in the eTLB entry.
+Special care must be taken if the block is cached in the L2, as the L2 set index may be generated using bits from the 
+physical page number. If this is the case (depending on the L2 cache configuration), the physical page number must
+also be retrieved from the eTLB to compute the L2 index.
 If the valid bit is not set, the block is deemed to be not cached in any cache component, and a request is directly 
 sent to the main memory using the physical address derived from the conventional part of the eTLB. 
 The new block, once fetched from the main memory, will be inserted into the L1 cache, and
-the eTLB entry will be updated accordingly.
+the eTLB entry will be updated accordingly. 
+The Hub pointer of the newly inserted block will also be set to the Hub entry.
 
 If, however, that the eTLB misses, then the request is forwarded to the Hub, which stores the full set of information
 of cache block status. Note that the Hub uses physical address for lookup, address translation must therefore be 
@@ -90,3 +94,6 @@ The TLB entry is also fetched from the Hub to the eTLB.
 If the Hub also misses, then the block is not cached anywhere in the hierarchy, which triggers a cache miss. 
 The block is then fetched from the main memory as in eTLB cache miss. In addition, a new entry is inserted into the Hub,
 and the valid bit as well as the way number are also set accordingly.
+
+On an eTLB eviction, the entry is just written back to the Hub, updating the Hub entry with potentially more up-to-date
+block status.
