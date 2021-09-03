@@ -13,7 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
-****
+**Highlight:**
+
+1. The entire hierarchy can be made tag-less by using a central repo for tracking cache block locations and 
+   the component ID.
+
+2. The central repo can also form a hierarchy such that frequently used page-level entries are cached along with
+   TLB entries.
 
 **Comments:**
 
