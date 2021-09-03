@@ -83,3 +83,7 @@ the eTLB entry will be updated accordingly.
 If, however, that the eTLB misses, then the request is forwarded to the Hub, which stores the full set of information
 of cache block status. Note that the Hub uses physical address for lookup, address translation must therefore be 
 performed at L2 TLB first to retrieve the physical tag, which is then used for Hub lookup.
+If the page that covers the block is in the Hub, then the block is fetched directly from the cache component indicated
+by the Hub entry (the block can still be in L1 but eTLB may not have the entry for the block).
+The TLB entry is also fetched from the Hub to the eTLB.
+
