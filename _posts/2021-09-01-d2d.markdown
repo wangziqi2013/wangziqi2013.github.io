@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+****
+
 **Comments:**
 
 1. In the "eTLB hit but cache miss" case, the block is inserted into the L1, and its Hub pointer must be set.
@@ -128,3 +130,8 @@ directory needs to be added to the Hub, such that each Hub entry tracks the cohe
 physical page, and that the entry has one eTLB pointer for each private L1 in order to find all shared copies.
 Coherence actions need to be performed before an incompatible request is served (e.g., GET on M state 
 block, or GETX on S state block).
+The paper also noted that, for shared blocks, the latency of an accessing the shared L2 cache is equivalent to 
+the latency of a regular tag-based L2, since the Hub needs to be consulted for coherence. 
+One possible optimization is to classify blocks into shared and private, such that private blocks can still 
+be directly fetched from the L2 on aa L1 miss, but shared blocks use the slow path that always performs coherence 
+checks.
