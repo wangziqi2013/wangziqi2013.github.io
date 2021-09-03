@@ -17,7 +17,7 @@ version_mgmt:
 
 1. In the "eTLB hit but cache miss" case, the block is inserted into the L1, and its Hub pointer must be set.
    In this case, how do you know the Hub entry that maps the block?
-   Does this require a separate Hub lookup? I understand that this may not be on the critical path, but the Hub
+   Does this require a separate Hub lookup? I understand that this may not be on the critical path, because the Hub
    lookup can be overlapped with main memory fetch anyway.
 
 This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
@@ -120,3 +120,11 @@ Since the Hub is physically tagged, if two virtual pages are mapped to the same 
 virtual pages is already in the eTLB, then the pointer of that entry will be already set, indicating a synonym.
 Synonyms are resolved in the same manner as in TLC, that is, the old eTLB entry is copied over to the new entry, 
 and the virtual page number is updated to be the new virtual page.
+
+In prior discussion of the paper, it is assumed that the L2 cache is private, which simplifies certain issues such
+as tracking the status of block in multiple L1 eTLBs. 
+In a shared L2 configuration, where multiple private L1 caches may cache the same address in shared state, an extra
+directory needs to be added to the Hub, such that each Hub entry tracks the coherence states of all blocks in the 
+physical page, and that the entry has one eTLB pointer for each private L1 in order to find all shared copies.
+Coherence actions need to be performed before an incompatible request is served (e.g., GET on M state 
+block, or GETX on S state block).
