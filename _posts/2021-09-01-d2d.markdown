@@ -21,6 +21,9 @@ version_mgmt:
 2. The central repo can also form a hierarchy such that frequently used page-level entries are cached along with
    TLB entries.
 
+3. Cache block data and different levels of the repo can be chained together using pointers to each other, such
+   that the correct component can be found when a cache block is evicted / inserted.
+
 **Comments:**
 
 1. In the "eTLB hit but cache miss" case, the block is inserted into the L1, and its Hub pointer must be set.
