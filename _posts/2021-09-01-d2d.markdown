@@ -70,3 +70,10 @@ In addition, if a physical page is both in the eTLB and the Hub, only informatio
 while the Hub copy can be stale.
 This can be easily determined by checking whether the rTLB entry pointer in the Hub entry is valid or not, as a valid
 pointer indicates that the eTLB entry should be used.
+
+We next describe the operation of D2D caches as follows. In most cases, an access should hit the eTLB, and the valid
+bit in the entry is checked. If the valid bit is set, then the block is directly fetched from either the L1 or the L2
+(we deviate from what was described in the paper simplify it a bit by ignoring the L1 instruction cache) using the
+way number stored in the eTLB entry.
+If the valid bit is not set, the block is deemed to be not cached in any cache component, and a request is directly 
+sent to the main memory.
