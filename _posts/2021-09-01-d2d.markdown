@@ -110,5 +110,7 @@ The blocks can be enumerated by walking the valid bit vector and following the w
 Hub eviction can be optimized with similar techniques as described in the original TLC paper, such as micro-pages
 and micro-page prefetching.
 
-
+On cache block eviction from the L1 to L2 or from L2 to the main memory, the Hub and possibly the eTLB entry need to
+be updated. This is achieved by following the Hub pointer in the evicted block to update the Hub entry first, and if
+the Hub entry's eTLB pointer is valid, the eTLB entry is also updated.
 
