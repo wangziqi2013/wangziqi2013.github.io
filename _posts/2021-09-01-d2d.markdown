@@ -87,3 +87,6 @@ If the page that covers the block is in the Hub, then the block is fetched direc
 by the Hub entry (the block can still be in L1 but eTLB may not have the entry for the block).
 The TLB entry is also fetched from the Hub to the eTLB.
 
+If the Hub also misses, then the block is not cached anywhere in the hierarchy, which triggers a cache miss. 
+The block is then fetched from the main memory as in eTLB cache miss. In addition, a new entry is inserted into the Hub,
+and the valid bit as well as the way number are also set accordingly.
