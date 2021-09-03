@@ -24,6 +24,9 @@ version_mgmt:
 3. Cache block data and different levels of the repo can be chained together using pointers to each other, such
    that the correct component can be found when a cache block is evicted / inserted.
 
+4. Exclusive cache design is useful here, since only one copy of any address is allowed across the hierarchy.
+   The central repo only needs to track this single copy.
+
 **Comments:**
 
 1. In the "eTLB hit but cache miss" case, the block is inserted into the L1, and its Hub pointer must be set.
