@@ -76,4 +76,8 @@ bit in the entry is checked. If the valid bit is set, then the block is directly
 (we deviate from what was described in the paper simplify it a bit by ignoring the L1 instruction cache) using the
 way number stored in the eTLB entry.
 If the valid bit is not set, the block is deemed to be not cached in any cache component, and a request is directly 
-sent to the main memory.
+sent to the main memory using the physical address derived from the conventional part of the eTLB. 
+The new block, once fetched from the main memory, will be inserted into the L1 cache, and
+the eTLB entry will be updated accordingly.
+
+
