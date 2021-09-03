@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. In the "eTLB hit but cache miss" case, the block is inserted into the L1, and its Hub pointer must be set.
+   In this case, how do you know the Hub entry that maps the block?
+   Does this require a separate Hub lookup? I understand that this may not be on the critical path, but the Hub
+   lookup can be overlapped with main memory fetch anyway.
+
 This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
 tag array and uses centralized repository for cache block location lookup. 
 This paper is based on a previous work on tag-less L1 cache, which can be found [here]({% post_url 2021-08-23-tlc%}).
