@@ -80,4 +80,6 @@ sent to the main memory using the physical address derived from the conventional
 The new block, once fetched from the main memory, will be inserted into the L1 cache, and
 the eTLB entry will be updated accordingly.
 
-
+If, however, that the eTLB misses, then the request is forwarded to the Hub, which stores the full set of information
+of cache block status. Note that the Hub uses physical address for lookup, address translation must therefore be 
+performed at L2 TLB first to retrieve the physical tag, which is then used for Hub lookup.
