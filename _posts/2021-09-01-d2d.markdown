@@ -25,7 +25,9 @@ version_mgmt:
    that the correct component can be found when a cache block is evicted / inserted.
 
 4. Exclusive cache design is useful here, since only one copy of any address is allowed across the hierarchy.
-   The central repo only needs to track this single copy.
+   The central repo only needs to track this single copy. Inclusion is usually implemented to simplify coherence
+   since lower level caches can be used as coherence filters. In D2D design, since the cache location information
+   can be fully obtained from the Hub, inclusion does not give any sensible benefit but just wastes space in L2.
 
 **Comments:**
 
