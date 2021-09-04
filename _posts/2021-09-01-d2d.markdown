@@ -36,6 +36,10 @@ version_mgmt:
    Does this require a separate Hub lookup? I understand that this may not be on the critical path, because the Hub
    lookup can be overlapped with main memory fetch anyway.
 
+2. The paper claims that the D2D architecture can be extended to three level hierarchy with trivial effort. I did not
+   see how this is trivial. Do we extend the Hub such that both L2 and LLC have one? How do you maintain exclusiveness
+   (between LLC and private hierarchy, or private hierarchy is also exclusive)?
+
 This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
 tag array and uses centralized repository for cache block location lookup. 
 This paper is based on a previous work on tag-less L1 cache, which can be found [here]({% post_url 2021-08-23-tlc%}).
