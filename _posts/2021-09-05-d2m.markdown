@@ -52,3 +52,7 @@ to maintain the invariance.
 Since the eTLB uses virtual page numbers, both homonym and synonym are possible. Homonym is prevented by the 
 conventional TLB with the ASID field. Synonym is prevented by checking whether an eTLB entry with the same physical
 address in the Hub but a different virtual address than requested, using the Hub entry's eTLB pointer, 
+when a new entry is to be inserted into the eTLB. 
+The paper argues that since synonyms are relatively infrequent, the eTLB disallows entries that constitute synonyms 
+to co-exist. In practice, this is achieved by evicting the previous synonym entry and copying its block location
+information to the new entry when the new entry is to be inserted.
