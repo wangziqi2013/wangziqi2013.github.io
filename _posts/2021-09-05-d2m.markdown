@@ -85,4 +85,11 @@ Each region entry in MD3 is extended with a sharer bit vector to track line loca
 approximate manner (since the sharer vector is per-region). The MD3 is also inclusive such that all blocks 
 cached in the private hierarchies have an MD3 entry.
 
+The MD3's per-block location indicator only encodes whether a block is shared, exclusively owned, or invalid.
+A cache block can be in one of the following states in the D2M design.
+First, a block can be shared by two or more private hierarchies, in which case the MD3 only indicates the shared
+state of the block, and uses the bit vector to approximately track the private hierarchies that could possibly 
+cache the block (false negatives are impossible, while false positives are likely).
+Cache blocks in this state need to obtain write permission as in the standard protocol, if one of the private
+hierarchies intends to write to the block.
 
