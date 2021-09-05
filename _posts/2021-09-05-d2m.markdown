@@ -43,4 +43,6 @@ and the way number stored in the entry.
 
 To facilitate cache block eviction, each data block has a Hub pointer that points to the Hub entry covering the block's
 address. Similarly, each Hub entry has an eTLB pointer, which points to the eTLB entry, if one exists.
-
+On block eviction, the Hub and optionally the eTLB (if the eTLB pointer of te Hub entry is valid) will be notified, 
+and the location information of the block is updated. This is achieved by following the data block's Hub pointer to
+the Hub entry, and optionally also following the Hub entry's eTLB pointer to the eTLB entry.
