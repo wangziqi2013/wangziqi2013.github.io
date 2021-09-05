@@ -142,4 +142,6 @@ The coherence messages will update the location indicators of blocks in each pri
 indicators always point to the current owner of the block, if the hierarchy does not cache the block, or
 point to the local copy (with private bit cleared), if there is one.
 
+Block evictions are handled similarly within a private hierarchy. The paper somehow suggests adding a "replacement
+pointer (RP)" to aid metadata update in MD1/MD2 during replacement, but did not give any description on how this works.
 
