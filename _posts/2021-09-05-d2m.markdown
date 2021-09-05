@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Direct-to-Master (D2M) cache, a tag-less cache architecture in multicore environments.
+The D2M proposal is based on a previous Direct-to-Data (D2D) design, in which cache block locations in the private
+L1 and L2 caches are tracked with a two-level hierarchy of metadata stores, namely, the eTLB and the Hub.
+D2M further extends the architecture to a shared LLC cache with multicore coherence.
+
+
