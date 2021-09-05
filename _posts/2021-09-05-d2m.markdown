@@ -128,4 +128,11 @@ In addition, if the private hierarchy is the current owner of the block, a coher
 block by forcing a transfer of ownership back to the LLC with a write back, and updating the location information to
 also honor the LLC as an owner (the block can still be cached, and location indicator can still point to the local).
 
+To eliminate lookups for blocks that are known to be not shared by any other private hierarchies, each
+region entry in the private cache is also extended with a "private" bit. This bit is set by the MD3 response to a 
+previous miss if the region is not shared by any other private hierarchies, and can be revoked by MD3 if any
+block in the region transits to shared in the MD3. This is analogous with downgrading an E state block.
+A block in a region with the "private" bit set does not need any coherence, and can be safely retrieved into the 
+private hierarchy from the LLC.
+
 
