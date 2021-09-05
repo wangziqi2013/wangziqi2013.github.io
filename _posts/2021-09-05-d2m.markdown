@@ -81,3 +81,8 @@ bit prefix to indicate LLC), or in the memory (there are lots of code points for
 To extend metadata tracking to the LLC, the D2M design also adds another level of tag store, called the MD3.
 Just like MD1 and MD2, the MD3 also tracks block location in the unit of regions.
 The MD3 also serves as the global coherence controller and dispatcher for coherence messages.
+Each region entry in MD3 is extended with a sharer bit vector to track line location in shared state in an
+approximate manner (since the sharer vector is per-region). The MD3 is also inclusive such that all blocks 
+cached in the private hierarchies have an MD3 entry.
+
+
