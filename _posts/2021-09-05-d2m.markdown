@@ -22,6 +22,7 @@ In the original D2D work, which can be found [here]({% post_url 2021-09-01-d2d%}
 from the private hierarchy. Instead, a centralized repository for tracking cache line locations, including the cache
 component and the way number, which is called the Hub, is added to the private hierarchy.
 The Hub is essentially a set-associative sector cache tag array that uses super-blocks of 4KB page size.
+The Hub uses physical page numbers as tags, and is co-located with the L2 cache. 
 Each entry of the Hub stores the valid bit, the component that an address is currently cached in, and the way number
 in the cache. Set indices are not stored, as they can be directly generated from the virtual or physical address
 (depending on the cache size: for L1 it is fully virtual, while for L2 it also needs a few bits from the physical
@@ -29,3 +30,17 @@ page number).
 The D2D cache maintains an invariant that all blocks stored in the private hierarchy must have a corresponding 
 Hub entry that tracks the block status, and cache lookups must use information stored in the Hub to locate the 
 requested cache block.
+
+To accelerate cache lookup, and to avoid relatively expensive lookups per memory operation in the Hub, a smaller
+but faster cache for the Hub is added to the L1 cache for tracking frequently used Hub entries.
+The Hub cache is co-located with the L1 TLB, called the eTLB, which is essentially a virtually tagged super-block 
+tag array.
+Each entry of the eTLB tracks the same location information as the underlying entry (with the same physical address) 
+of the Hub.
+Memory operations issued from the pipeline will first perform lookups in the eTLB, and, if misses, in the Hub.
+Cache blocks can be accessed, after an entry from either the eTLB or the Hub is located, using the component ID
+and the way number stored in the entry.
+
+To facilitate cache block eviction, each data block has a Hub pointer that points to the Hub entry covering the block's
+address. Similarly, each Hub entry has an eTLB pointer, which points to the eTLB entry, if one exists.
+
