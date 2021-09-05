@@ -38,8 +38,8 @@ version_mgmt:
 
 **Comments:**
 
-1. I would say Sec 2.2 and Figure 3 have presentation issues, and both are misleading. 
-   In Sec 2.2 and Figure 3, however, the author seems to suggests that there is a trade-off between bandwidth and 
+1. I would say both Sec 2.2 and Figure 3 are misleading. 
+   The author seems to suggest that there is a trade-off between bandwidth and 
    miss rate, which is not the case. The problem is that both bandwidth and miss rate are
    simply just derived quantities of locality and the block size.
    The motivation of this paper is that access locality varies greatly among applications, and 
