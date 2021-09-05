@@ -73,3 +73,7 @@ L2 should be inclusive of all blocks in the L1.
 
 The last difference is that the location indicator for each block is extended to six bits (the number of bits dependes 
 on the system configuration. The paper assumes 8 private hierarchies, 32-way LLC, and 8-way L1 and L2).
+The indicator in the private hierarchy can thus address a block in the local hierarchy as in D2D (three bits are used
+for indicating ways, and the rest three for indicating L1/L2), or a block in another private hierarchy with only the 
+node ID (three bits for node ID, and three bits prefix), or a block in the LLC (five bits for indicate ways, and one
+bit prefix to indicate LLC), or in the memory (there are lots of code points for this purpose).
