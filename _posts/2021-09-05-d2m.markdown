@@ -132,11 +132,14 @@ To eliminate lookups for blocks that are known to be not shared by any other pri
 region entry in the private cache is also extended with a "private" bit. This bit is set by the MD3 response to a 
 previous miss if the region is not shared by any other private hierarchies, and can be revoked by MD3 if any
 block in the region transits to shared in the MD3. This is analogous with downgrading an E state block.
-A block in a region with the "private" bit set does not need any coherence, and can be safely retrieved into the 
-private hierarchy from the LLC.
+A block in a region with the "private" bit set does not need any coherence for writes, similar to the silent upgrade
+operation in MESI with a E state block.
 
-When a request misses the private hierarchy, the private bit is first checked. If the bit is on, then the block
-data is directly retrieved from the LLC data array without involving the MD3 at all.
-**OK, I am also quite confused on how D2M works at this stage and how it avoids MD3 lookups. It seems inevitable to
-update information in the MD3 for any request. The authors should probably write this paper 
-in a more well-organized manner.**
+When a request misses the private hierarchy (is not cached for reads, or not an owner for writes), the request is sent 
+to the MD3. The MD3 acts as a 
+coherence controller, and may issue coherence downgrades to other private hierarchies before responding block data. 
+The coherence messages will update the location indicators of blocks in each private hierarchy, such that these 
+indicators always point to the current owner of the block, if the hierarchy does not cache the block, or
+point to the local copy (with private bit cleared), if there is one.
+
+
