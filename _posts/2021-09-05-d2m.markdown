@@ -49,4 +49,6 @@ the Hub entry, and optionally also following the Hub entry's eTLB pointer to the
 On Hub entry eviction, all blocks that are currently valid in the private hierarchy will be evicted as well, in order
 to maintain the invariance.
 
-
+Since the eTLB uses virtual page numbers, both homonym and synonym are possible. Homonym is prevented by the 
+conventional TLB with the ASID field. Synonym is prevented by checking whether an eTLB entry with the same physical
+address in the Hub but a different virtual address than requested, using the Hub entry's eTLB pointer, 
