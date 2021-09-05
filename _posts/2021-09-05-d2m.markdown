@@ -18,6 +18,7 @@ The D2M proposal is based on a previous Direct-to-Data (D2D) design, in which ca
 L1 and L2 caches are tracked with a two-level hierarchy of metadata stores, namely, the eTLB and the Hub.
 D2M further extends the architecture to a shared LLC cache with multicore coherence.
 
+We first describe the operations of the baseline D2D design.
 In the original D2D work, which can be found [here]({% post_url 2021-09-01-d2d%}), per-block address tags are eliminated
 from the private hierarchy. Instead, a centralized repository for tracking cache line locations, including the cache
 component and the way number, which is called the Hub, is added to the private hierarchy.
@@ -30,6 +31,8 @@ page number).
 The D2D cache maintains an invariant that all blocks stored in the private hierarchy must have a corresponding 
 Hub entry that tracks the block status, and cache lookups must use information stored in the Hub to locate the 
 requested cache block.
+In addition, to avoid maintaining multiple copies of the same block in the private hierarchy, the D2D design
+mandates that L1 and L2 be exclusive, meaning that any block can only be cached by at most one component.
 
 To accelerate cache lookup, and to avoid relatively expensive lookups per memory operation in the Hub, a smaller
 but faster cache for the Hub is added to the L1 cache for tracking frequently used Hub entries.
