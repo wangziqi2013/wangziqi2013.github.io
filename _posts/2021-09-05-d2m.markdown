@@ -18,4 +18,4 @@ The D2M proposal is based on a previous Direct-to-Data (D2D) design, in which ca
 L1 and L2 caches are tracked with a two-level hierarchy of metadata stores, namely, the eTLB and the Hub.
 D2M further extends the architecture to a shared LLC cache with multicore coherence.
 
-
+In the original D2D work, which can be found [here]({% post_url 2021-09-01-d2d%})
