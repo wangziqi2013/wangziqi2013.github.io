@@ -18,7 +18,9 @@ version_mgmt:
 1. D2D can be extended to support the three-level multicore hierarchy by adding an extra tag store, the MD3, 
    as both a tag store and a coherence controller;
 
-
+2. Even with coherence, the explicit addressing scheme used by D2D still works by letting each private hierarchy work
+   unmodified as in D2D, and allowing them to point to a block in other nodes using only the node ID, but not storing
+   the exact location. 
 
 This paper proposes Direct-to-Master (D2M) cache, a tag-less cache architecture in multicore environments.
 The D2M proposal is based on a previous Direct-to-Data (D2D) design, in which cache block locations in the private
