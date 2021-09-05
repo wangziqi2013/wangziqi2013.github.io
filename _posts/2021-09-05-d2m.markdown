@@ -135,4 +135,8 @@ block in the region transits to shared in the MD3. This is analogous with downgr
 A block in a region with the "private" bit set does not need any coherence, and can be safely retrieved into the 
 private hierarchy from the LLC.
 
-
+When a request misses the private hierarchy, the private bit is first checked. If the bit is on, then the block
+data is directly retrieved from the LLC data array without involving the MD3 at all.
+**OK, I am also quite confused on how D2M works at this stage and how it avoids MD3 lookups. It seems inevitable to
+update information in the MD3 for any request. The authors should probably write this paper 
+in a more well-organized manner.**
