@@ -118,3 +118,12 @@ only copy of a clean block (E state in MESI) in the private hierarchy is conside
 block state is not tracked by any level of the hierarchy, we are talking about the MESI equivalence here).**
 Lastly, an invalid block is one that are not tracked by the MD3. This is indicated by setting the ownership record to 
 point to the main memory.
+
+We next describe the operational details of D2M cache. Within the private hierarchy, most operations are unmodified.
+The D2D part of the design is extended with the ability to react to coherence requests coming from the MD3. 
+A coherence request may change the location information of a block, which can be easily implemented by updating both
+MD2 and MD1 (MD2 entries contain pointers to MD1 entries), if the requested address exists (recall that the sharer
+vector in MD3 is only a coarse-grained approximation).
+
+
+
