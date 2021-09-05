@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. D2D can be extended to support the three-level multicore hierarchy by adding an extra tag store, the MD3, 
+   as both a tag store and a coherence controller;
+
+
+
 This paper proposes Direct-to-Master (D2M) cache, a tag-less cache architecture in multicore environments.
 The D2M proposal is based on a previous Direct-to-Data (D2D) design, in which cache block locations in the private
 L1 and L2 caches are tracked with a two-level hierarchy of metadata stores, namely, the eTLB and the Hub.
@@ -99,8 +106,8 @@ the MD3 stores the node ID of the owner in the ownership record, and indicates t
 In the latter case, the MD3 simply stores the way number of the block in the LLC data array.
 Note that certain protocols (e.g., MOESI, MESIF) support sharing an owned blocks across the private 
 hierarchy. In such cases, both the vectors and the node ID are needed to track the block state.
-***In this paper it seems that the authors assume a simple protocol where the dirty block (M state in MESI) or the 
+**In this paper it seems that the authors assume a simple protocol where the dirty block (M state in MESI) or the 
 only copy of a clean block (E state in MESI) in the private hierarchy is considered as the owner (although explicit
-block state is not tracked by any level of the hierarchy, we are talking about the MESI equivalence here).***
+block state is not tracked by any level of the hierarchy, we are talking about the MESI equivalence here).**
 Lastly, an invalid block is one that are not tracked by the MD3. This is indicated by setting the ownership record to 
 point to the main memory.
