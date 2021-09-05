@@ -124,6 +124,8 @@ The D2D part of the design is extended with the ability to react to coherence re
 A coherence request may change the location information of a block, which can be easily implemented by updating both
 MD2 and MD1 (MD2 entries contain pointers to MD1 entries), if the requested address exists (recall that the sharer
 vector in MD3 is only a coarse-grained approximation).
-
+In addition, if the private hierarchy is the current owner of the block, a coherence request may downgrade the 
+block by forcing a transfer of ownership back to the LLC with a write back, and updating the location information to
+also honor the LLC as an owner (the block can still be cached, and location indicator can still point to the local).
 
 
