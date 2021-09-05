@@ -26,3 +26,6 @@ Each entry of the Hub stores the valid bit, the component that an address is cur
 in the cache. Set indices are not stored, as they can be directly generated from the virtual or physical address
 (depending on the cache size: for L1 it is fully virtual, while for L2 it also needs a few bits from the physical
 page number).
+The D2D cache maintains an invariant that all blocks stored in the private hierarchy must have a corresponding 
+Hub entry that tracks the block status, and cache lookups must use information stored in the Hub to locate the 
+requested cache block.
