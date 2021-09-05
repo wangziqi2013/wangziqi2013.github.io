@@ -98,4 +98,9 @@ Second, a block can be exclusively owned by exactly one private hierarchy, or by
 the MD3 stores the node ID of the owner in the ownership record, and indicates that the block is exclusively owned. 
 In the latter case, the MD3 simply stores the way number of the block in the LLC data array.
 Note that certain protocols (e.g., MOESI, MESIF) support sharing an owned blocks across the private 
-hierarchy. 
+hierarchy. In such cases, both the vectors and the node ID are needed to track the block state.
+***In this paper it seems that the authors assume a simple protocol where the dirty block (M state in MESI) or the 
+only copy of a clean block (E state in MESI) in the private hierarchy is considered as the owner (although explicit
+block state is not tracked by any level of the hierarchy, we are talking about the MESI equivalence here).***
+Lastly, an invalid block is one that are not tracked by the MD3. This is indicated by setting the ownership record to 
+point to the main memory.
