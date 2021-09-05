@@ -39,6 +39,8 @@ version_mgmt:
 2. The paper claims that the D2D architecture can be extended to three level hierarchy with trivial effort. I did not
    see how this is trivial. Do we extend the Hub such that both L2 and LLC have one? How do you maintain exclusiveness
    (between LLC and private hierarchy, or private hierarchy is also exclusive)?
+   **They actually published a new paper on how to extend D2D to three-level hierarchy. As I said above, the
+   design is indeed non-trivial compared with D2D.**
 
 This paper proposes Direct-to-Data (D2D) cache, a cache hierarchy architecture that gets rid of the conventional
 tag array and uses centralized repository for cache block location lookup. 
