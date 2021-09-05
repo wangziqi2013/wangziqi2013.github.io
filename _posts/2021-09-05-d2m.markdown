@@ -49,6 +49,7 @@ address. Similarly, each Hub entry has an eTLB pointer, which points to the eTLB
 On block eviction, the Hub and optionally the eTLB (if the eTLB pointer of te Hub entry is valid) will be notified, 
 and the location information of the block is updated. This is achieved by following the data block's Hub pointer to
 the Hub entry, and optionally also following the Hub entry's eTLB pointer to the eTLB entry.
+
 On Hub entry eviction, all blocks that are currently valid in the private hierarchy will be evicted as well, in order
 to maintain the invariance.
 
@@ -59,3 +60,11 @@ when a new entry is to be inserted into the eTLB.
 The paper argues that since synonyms are relatively infrequent, the eTLB disallows entries that constitute synonyms 
 to co-exist. In practice, this is achieved by evicting the previous synonym entry and copying its block location
 information to the new entry when the new entry is to be inserted.
+
+We next describe the architecture of D2M.
+The D2M design extends D2D to the LLC with multicore cache coherence. The baseline D2D is largely the same in the 
+baseline design, except four minor differences.
+First, the Hub and the eTLB are renamed to MD2 and MD1 respectively. Second, page-sized super-block tags, now 
+called Location Information (LI) entries, are not necessarily of page sizes anymore. The paper uses the term 
+"region" to describe the size-aligned range of addresses covered by a single entry. This change only adds extra
+flexibility for making design decisions, which does not modify the way that D2D operates.
