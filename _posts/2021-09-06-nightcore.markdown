@@ -22,4 +22,8 @@ calls, message passing, network I/O, and thread concurrency.
 The microservice architecture improves over the conventional monolithic services by decomposing large and complicated 
 software implementation into smaller tasks, each being easy to solve by a simple module. These modules are only loosely
 coupled with each other, and only communicates with a set of external interfaces (rather than raw function calls at
-ISA level, as in a monolithic piece of software). 
+ISA level, as in a monolithic piece of software). This greatly improves the maintainability, availability, and 
+flexibility of the software, as each module can be separately implemented and tested with potentially different 
+languages and frameworks in the development phase. In addition, microservice modules can also be individually 
+maintained as runtime instances in the production environment, which simplifies resource management and isolates
+failures, since each individual instance can be managed by the OS independent from other instances.
