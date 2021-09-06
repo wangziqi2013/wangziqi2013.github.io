@@ -13,4 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
-
+This paper presents Nightcore, a serverless framework optimized for latency and throughput. Nightcore is motivated by 
+the two critical requirements of serverless architecture: Latency and throughput. Existing frameworks are incapable of
+achieving both at the same time, due to the isolation requirements of function containers.
+Nightcore improves over the existing solutions by optimizing certain common operations, such as internal function
+calls, message passing, network I/O, and thread concurrency.
