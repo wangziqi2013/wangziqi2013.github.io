@@ -48,3 +48,10 @@ one launching thread and at least one worker thread. The launching thread is par
 it is responsible for spawning and destroying function instances to maintain an optimal level of concurrency. 
 Worker threads are simply function instances that can be dynamically spawned or destroyed, and they all execute the 
 same function code in the same container.
+
+We next describe the additional components added by Nightcore. Nightcore runs an engine process in the background
+that serves as a central coordinator and message hub for all functions as well as for external requests. 
+The engine reads network I/O messages using a few threads listening on the socket file descriptor, and these threads
+are event-driven for processing throughput, meaning that they do not spawn new processes to handle client requests,
+but instead, they simply dispatch received messages to the corresponding message queue.
+
