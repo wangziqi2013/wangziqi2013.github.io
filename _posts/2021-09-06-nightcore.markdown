@@ -67,3 +67,8 @@ Messages are passed between the engine and worker threads using a combination of
 If the message (header and body) is smaller than 1KB, then they are only passed between the engine and worker threads
 using the named pipe. If, however, that the message payload is larger than 1KB, which is rare but still possible,
 then the payload will be passed via shared memory IPC, while the message is still passed through the named pipes.
+During execution, worker functions will block on named pipe reads when they are idle, and become invoked when a 
+message is received on the named pipe. The engine, on the other hand, simply writes the function invocation 
+request into the named pipe, and changes the status of the function to active.
+
+
