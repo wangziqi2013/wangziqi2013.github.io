@@ -43,3 +43,8 @@ parts, a frontend and a backend. The frontend is also called the API gateway, wh
 client requests, and dispatching them to the correct functions. The backend consists of function containers, where
 each container hosts one function type, and it is assumed that every physical server has all types of function
 containers, such that internal function calls can always be dispatched locally (see below).
+The function implementations are linked with Nightcore's runtime library, and each function container consists of 
+one launching thread and at least one worker thread. The launching thread is part of Nightcore's runtime library, and
+it is responsible for spawning and destroying function instances to maintain an optimal level of concurrency. 
+Worker threads are simply function instances that can be dynamically spawned or destroyed, and they all execute the 
+same function code in the same container.
