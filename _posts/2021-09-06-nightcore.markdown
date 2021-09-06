@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Internal function calls can be optimized by directly dispatching them to the internal message queue rather than
+   involving the frontend API gateway;
+
+2. 
+
 This paper presents Nightcore, a serverless framework optimized for latency and throughput. Nightcore is motivated by 
 the two critical requirements of serverless architecture: Latency and throughput. Existing frameworks are incapable of
 achieving both at the same time, due to the isolation requirements of function containers.
