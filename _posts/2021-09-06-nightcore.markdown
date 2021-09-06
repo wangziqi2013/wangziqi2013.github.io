@@ -92,4 +92,7 @@ The information is communicated to the launching thread in every container, whic
 and the launching thread dynamically adjusts the degree of parallelism by spawning or destroying worker threads.
 The spawning and destruction of worker threads are implemented with a thread pool, with threads being created 
 on spawn requests, and destroyed only when the number of thread contexts in the pool exceeds a certain threshold.
-
+Nightcore limits the maximum degree of concurrency to the product of average request throughout and average 
+request service time (which is the number of requests that would have been accumulated during the service time).
+Both the request throughput and the service time are monitored and updated by the engine in a regular basis 
+(the engine tracks function latency with timestamps). 
