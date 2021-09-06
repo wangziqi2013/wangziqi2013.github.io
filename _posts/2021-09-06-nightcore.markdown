@@ -33,3 +33,7 @@ details of individual modules, such as resource scheduling and management, leavi
 invocation. Serverless programmers only need to implement the core functionalities of a service in the form of 
 functions, register these functions with the platform, and expect all other mundane tasks, such as fault tolerance,
 resource scheduling, instance management, etc., to be automatically performed by the serverless framework.
+Serverless functions are typically small and only performs one single task, and does not maintain states across
+function invocations. The latter property ensures that the functions can be invoked at any locations given the same
+environmental configuration (which is achieved with containers).
+This paradigm is often called Function-as-a-service, or FaaS.
