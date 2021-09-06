@@ -75,3 +75,7 @@ The next contribution of Nightcore is optimization on internal function calls.
 Internal function calls are defined as function calls made by one of the serverless functions, 
 rather than being requested by clients. Theoretically speaking, internal function calls do not need to go through the frontend API gateway, since they can be
 satisfied locally by directly calling the function. Today's serverless framework, however, has no such optimization.
+Nightcore optimizes internal function calls by dispatching them directly to the engine without involving
+the frontend. Since the engine has a message queue for each function container, this would be no different from
+calling the function via the frontend, except the assumption that every physical server must have all types of 
+function containers, because otherwise, an internal call would not be able to locate the local instance.
