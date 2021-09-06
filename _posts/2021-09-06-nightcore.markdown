@@ -20,8 +20,11 @@ version_mgmt:
 
 2. The degree of concurrency needs to be limited to the product of request throughput and request service time.
    Too much parallelism would be unnecessary as there is no request to serve; Too little will be problematic as 
-   requests will begin to accumulate.
-   
+   requests will begin to accumulate;
+
+3. Generally speaking, serverless can be made more efficient by using event-driven I/O for handling network traffic,
+   and using named pipes / shared memory IPC for sending messages.
+
 
 This paper presents Nightcore, a serverless framework optimized for latency and throughput. Nightcore is motivated by 
 the two critical requirements of serverless architecture: Latency and throughput. Existing frameworks are incapable of
