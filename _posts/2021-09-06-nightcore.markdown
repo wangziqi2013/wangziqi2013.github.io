@@ -37,3 +37,9 @@ Serverless functions are typically small and only performs one single task, and 
 function invocations. The latter property ensures that the functions can be invoked at any locations given the same
 environmental configuration (which is achieved with containers).
 This paradigm is often called Function-as-a-service, or FaaS.
+
+This paper assumes the following baseline serverless architecture. The serverless platform is divided into two 
+parts, a frontend and a backend. The frontend is also called the API gateway, which is responsible for receiving 
+client requests, and dispatching them to the correct functions. The backend consists of function containers, where
+each container hosts one function type, and it is assumed that every physical server has all types of function
+containers, such that internal function calls can always be dispatched locally (see below).
