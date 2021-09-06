@@ -59,6 +59,9 @@ and it dispatches these messages to the functions by invoking the function on on
 The engine tracks the current number of worker threads in each function container, and tracks their activity status.
 Message dispatching is only performed when there is an idle thread available in the function container, which
 implies that the functions do not need any extra buffering for incoming messages.
+One thing that worth noting is that the message queue stores function invocation requests for both external 
+and internal requests. These requests are passed to the functions with different APIs, such that the response
+can be sent correctly.
 
 The first contribution of Nightcore is its special optimization to internal function calls. Internal function calls
 are defined as function calls made by one of the serverless functions, rather than being requested by clients.
