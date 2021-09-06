@@ -87,4 +87,9 @@ If functions are allowed to be spawned arbitrarily without limiting the maximum 
 surge in the workload may cause an exponential growth in the number of active function instances, especially if
 internal function calls are frequent. This will quickly saturate the system resource available, and eventually 
 harm performance with an over-subscribed system.
+Nightcore avoids this by limiting the number of concurrent instances each function container could host.
+The information is communicated to the launching thread in every container, which is part of Nightcore's runtime,
+and the launching thread dynamically adjusts the degree of parallelism by spawning or destroying worker threads.
+The spawning and destruction of worker threads are implemented with a thread pool, with threads being created 
+on spawn requests, and destroyed only when the number of thread contexts in the pool exceeds a certain threshold.
 
