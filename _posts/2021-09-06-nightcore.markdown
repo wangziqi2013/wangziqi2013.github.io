@@ -18,3 +18,8 @@ the two critical requirements of serverless architecture: Latency and throughput
 achieving both at the same time, due to the isolation requirements of function containers.
 Nightcore improves over the existing solutions by optimizing certain common operations, such as internal function
 calls, message passing, network I/O, and thread concurrency.
+
+The microservice architecture improves over the conventional monolithic services by decomposing large and complicated 
+software implementation into smaller tasks, each being easy to solve by a simple module. These modules are only loosely
+coupled with each other, and only communicates with a set of external interfaces (rather than raw function calls at
+ISA level, as in a monolithic piece of software). 
