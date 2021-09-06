@@ -63,8 +63,7 @@ One thing that worth noting is that the message queue stores function invocation
 and internal requests. These requests are passed to the functions with different APIs, such that the response
 can be sent correctly.
 
-The first contribution of Nightcore is its special optimization to internal function calls. Internal function calls
-are defined as function calls made by one of the serverless functions, rather than being requested by clients.
-Theoretically speaking, internal function calls do not need to go through the frontend API gateway, since they can be
-satisfied locally by directly calling the function. Today's serverless framework, however, has no such optimization.
-Nightcore optimizes internal function calls by allowing .
+Messages are passed between the engine and worker threads using a combination of named pipes and shared memory IPC.
+If the message (header and body) is smaller than 1KB, then they are only passed between the engine and worker threads
+using the named pipe. If, however, that the message payload is larger than 1KB, which is rare but still possible,
+then the payload will be passed via shared memory IPC, while the message is still passed through the named pipes.
