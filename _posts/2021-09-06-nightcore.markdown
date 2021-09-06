@@ -71,4 +71,7 @@ During execution, worker functions will block on named pipe reads when they are 
 message is received on the named pipe. The engine, on the other hand, simply writes the function invocation 
 request into the named pipe, and changes the status of the function to active.
 
-
+The next contribution of Nightcore is optimization on internal function calls.
+Internal function calls are defined as function calls made by one of the serverless functions, 
+rather than being requested by clients. Theoretically speaking, internal function calls do not need to go through the frontend API gateway, since they can be
+satisfied locally by directly calling the function. Today's serverless framework, however, has no such optimization.
