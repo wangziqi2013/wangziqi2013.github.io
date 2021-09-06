@@ -54,4 +54,14 @@ that serves as a central coordinator and message hub for all functions as well a
 The engine reads network I/O messages using a few threads listening on the socket file descriptor, and these threads
 are event-driven for processing throughput, meaning that they do not spawn new processes to handle client requests,
 but instead, they simply dispatch received messages to the corresponding message queue.
+For each function container, the engine allocates a message buffer holding the requests for function invocation,
+and it dispatches these messages to the functions by invoking the function on one of the idle worker threads.
+The engine tracks the current number of worker threads in each function container, and tracks their activity status.
+Message dispatching is only performed when there is an idle thread available in the function container, which
+implies that the functions do not need any extra buffering for incoming messages.
 
+The first contribution of Nightcore is its special optimization to internal function calls. Internal function calls
+are defined as function calls made by one of the serverless functions, rather than being requested by clients.
+Theoretically speaking, internal function calls do not need to go through the frontend API gateway, since they can be
+satisfied locally by directly calling the function. Today's serverless framework, however, has no such optimization.
+Nightcore optimizes internal function calls by allowing .
