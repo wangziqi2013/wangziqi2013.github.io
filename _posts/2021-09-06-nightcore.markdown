@@ -27,3 +27,9 @@ flexibility of the software, as each module can be separately implemented and te
 languages and frameworks in the development phase. In addition, microservice modules can also be individually 
 maintained as runtime instances in the production environment, which simplifies resource management and isolates
 failures, since each individual instance can be managed by the OS independent from other instances.
+
+The serverless architecture is another improvement over microservices by further abstracting away implementational 
+details of individual modules, such as resource scheduling and management, leaving only a function interface for 
+invocation. Serverless programmers only need to implement the core functionalities of a service in the form of 
+functions, register these functions with the platform, and expect all other mundane tasks, such as fault tolerance,
+resource scheduling, instance management, etc., to be automatically performed by the serverless framework.
