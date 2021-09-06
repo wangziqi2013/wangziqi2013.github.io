@@ -18,7 +18,10 @@ version_mgmt:
 1. Internal function calls can be optimized by directly dispatching them to the internal message queue rather than
    involving the frontend API gateway;
 
-2. 
+2. The degree of concurrency needs to be limited to the product of request throughput and request service time.
+   Too much parallelism would be unnecessary as there is no request to serve; Too little will be problematic as 
+   requests will begin to accumulate.
+   
 
 This paper presents Nightcore, a serverless framework optimized for latency and throughput. Nightcore is motivated by 
 the two critical requirements of serverless architecture: Latency and throughput. Existing frameworks are incapable of
