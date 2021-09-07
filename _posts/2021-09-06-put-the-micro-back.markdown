@@ -71,4 +71,7 @@ Second, since requests are processed one at a time on each worker process, a mal
 can monopolize the CPU resource by never completing. This scenario can essentially turn into a DoS and is fatal to
 the entire system.
 
+To address the first flaw, the paper proposes that type-safe and statically checked languages, such as Rust, be used
+to implement the microservice module. Rust performs compile-time pointer checks to ensure that all memory references
+are valid and will not cause system crash or access data that is not supposed to be accessed.
 
