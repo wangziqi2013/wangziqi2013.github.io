@@ -77,3 +77,10 @@ are valid and will not cause system crash or access data that is not supposed to
 In addition, to avoid the microservice invoking arbitrary system calls, such as exit(), the worker process will use
 seccomp() system call after initialization to block most system calls, only leaving the essential ones available for
 the microservice module to use.
+
+To address the second flaw, the paper proposes that microservice functions should be assigned an execution quantum
+(which is derived from the desired latency and the number of cores), and be preempted after its execution quantum has 
+been used up. To preempt the user-provided function, worker processes use high-precision system clocks (which is
+initialized before invoking the function) to send a SIGALARM signal to the function. The Rust implementation must 
+properly handle SIGALARM by jumping to the point of execution, and unwinding the stack to deallocate all heap objects,
+after which the function can elegantly exit.
