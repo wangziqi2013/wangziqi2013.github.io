@@ -24,4 +24,7 @@ interactive applications depend on the tail latency of the slowest of all the co
 Conventional microservice and serverless frameworks incur excessive overhead by encapsulating each microservice
 instance as a separate process (or container process), and invokes a new process every time a request is dispatched.
 This approach, despite having strong isolation between different instances as provided by the OS and the virtual memory
-system, suffers two types of inefficiencies. 
+system, suffers two types of inefficiencies. First, processes are rather heavyweight, and the spawning and destruction
+of processes will consume resources. As a result, for cold-start processes, they take significantly longer latency than,
+for example, loading a shared library into an existing process, making it a major overhead for process-based serverless 
+instances. 
