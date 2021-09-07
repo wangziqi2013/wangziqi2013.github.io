@@ -20,6 +20,11 @@ version_mgmt:
    Individual functions are loaded as dynamic libraries and control is directly transferred to the function code 
    on invocation of the function.
 
+2. Isolation can be enforced by the language compiler and system calls that blacklist sensitive system calls.
+   This is necessary since now the microservice and the worker process reside in the same address space.
+
+
+
 **Comments:**
 
 1. If processes are constantly running (including being scheduled out by the OS for being blocks on IPC 
