@@ -23,7 +23,8 @@ version_mgmt:
 2. Isolation can be enforced by the language compiler and system calls that blacklist sensitive system calls.
    This is necessary since now the microservice and the worker process reside in the same address space.
 
-
+3. Microservices can be preempted by sending SIGALARMs and handle SIGALARM by unwinding the stack followed by
+   an elegant exit. This is to avoid one single microservice that never exit from monopolizing the worker process.
 
 **Comments:**
 
