@@ -67,6 +67,8 @@ The worker process hence risk being corrupted, crashed, or maliciously attacked 
 with common mistakes such as NULL pointers, dangling references, etc.),
 since the former loads the latter as a dynamic library and both will execute on the same address space with the same 
 resource.
-
+Second, since requests are processed one at a time on each worker process, a malfunctioning or malicious function
+can monopolize the CPU resource by never completing. This scenario can essentially turn into a DoS and is fatal to
+the entire system.
 
 
