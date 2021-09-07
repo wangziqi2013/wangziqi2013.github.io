@@ -15,4 +15,6 @@ version_mgmt:
 
 This paper proposes a mechanism for optimizing microservice and serverless latency. The paper is motivated by the 
 fact that existing isolation mechanisms, while ensuring strong safety and fairness of scheduling, incurs long latency
-for their heavyweight, process-based resource management. 
+for their heavyweight, process-based resource management. This paper seeks to reduce the latency of microservices
+and serverless using a different service execution model with reduced isolation, with the safety of execution being 
+enforced by a combination of language type checks and special system configurations.
