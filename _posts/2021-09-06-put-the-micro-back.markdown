@@ -18,3 +18,10 @@ fact that existing isolation mechanisms, while ensuring strong safety and fairne
 for their heavyweight, process-based resource management. This paper seeks to reduce the latency of microservices
 and serverless using a different service execution model with reduced isolation, with the safety of execution being 
 enforced by a combination of language type checks and special system configurations.
+
+The paper observes that tail latency is a serious issue for serverless applications, because the user experience of 
+interactive applications depend on the tail latency of the slowest of all the components. 
+Conventional microservice and serverless frameworks incur excessive overhead by encapsulating each microservice
+instance as a separate process (or container process), and invokes a new process every time a request is dispatched.
+This approach, despite having strong isolation between different instances as provided by the OS and the virtual memory
+system, suffers two types of inefficiencies. 
