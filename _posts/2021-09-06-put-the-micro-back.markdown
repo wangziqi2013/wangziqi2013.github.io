@@ -47,3 +47,11 @@ requests and responses.
 Instead of spawning new processes or selecting from a thread pool when new instances are to be started, each core
 now has a worker process pinned on that core, which is capable of executing the microservice code (functions) for all 
 microservices.
+The worker process can dynamically load and unload microservice code as dynamically linked libraries using existing 
+OS mechanisms. Microservice modules can even be pre-loaded to avoid paying the cold-start overhead, at the cost of
+extra memory usage by the module. Application functions are registered to the worker process by their names, 
+which is also specified in the client request. A table of registered functions and their module paths are maintained
+by worker processes, such that the corresponding function implementation can be found in the run time.
+Worker processes do not spawn new processes of threads to execute the microservice code. Instead, they simply
+
+
