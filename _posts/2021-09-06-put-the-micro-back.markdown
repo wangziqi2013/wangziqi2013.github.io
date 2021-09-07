@@ -53,5 +53,11 @@ extra memory usage by the module. Application functions are registered to the wo
 which is also specified in the client request. A table of registered functions and their module paths are maintained
 by worker processes, such that the corresponding function implementation can be found in the run time.
 Worker processes do not spawn new processes of threads to execute the microservice code. Instead, they simply
-
+perform native function calls to the requested routine, and only process one request at a time (i.e., the next request
+can only be serviced after the current one returns).
+Microservice instances are invoked on receiving a request from the frontend API gateway. The gateway allocates a 
+message buffer for each of the worker process, and both components use the buffer as a channel for sending 
+requests and responses with shared memory IPC.
+When a worker process becomes idle, it will be blocked on the IPC call for attempting to read a new message from
+the channel, and then be scheduled out by the OS.
 
