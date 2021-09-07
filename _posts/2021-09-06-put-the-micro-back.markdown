@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a mechanism for optimizing microservice and serverless latency. The paper is motivated by the 
+fact that existing isolation mechanisms, while ensuring strong safety and fairness of scheduling, incurs long latency
+for their heavyweight, process-based resource management. 
