@@ -27,4 +27,6 @@ This approach, despite having strong isolation between different instances as pr
 system, suffers two types of inefficiencies. First, processes are rather heavyweight, and the spawning and destruction
 of processes will consume resources. As a result, for cold-start processes, they take significantly longer latency than,
 for example, loading a shared library into an existing process, making it a major overhead for process-based serverless 
-instances. 
+instances. The second type of inefficiency is the overhead of process themselves, including scheduling, state management, etc., (actually, the paper did not discuss in detail what are the source of inefficiencies, so I made a few
+educated guesses), which is type of overhead users need to pay for even if instances are spawned from a thread pool
+instead of with cold-start.
