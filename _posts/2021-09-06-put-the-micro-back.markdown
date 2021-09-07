@@ -74,4 +74,6 @@ the entire system.
 To address the first flaw, the paper proposes that type-safe and statically checked languages, such as Rust, be used
 to implement the microservice module. Rust performs compile-time pointer checks to ensure that all memory references
 are valid and will not cause system crash or access data that is not supposed to be accessed.
-
+In addition, to avoid the microservice invoking arbitrary system calls, such as exit(), the worker process will use
+seccomp() system call after initialization to block most system calls, only leaving the essential ones available for
+the microservice module to use.
