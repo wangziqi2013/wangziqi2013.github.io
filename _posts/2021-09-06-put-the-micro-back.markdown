@@ -61,3 +61,12 @@ requests and responses with shared memory IPC.
 When a worker process becomes idle, it will be blocked on the IPC call for attempting to read a new message from
 the channel, and then be scheduled out by the OS.
 
+The above arrangement, despite having better latency than the conventional approach, has two flaws regarding isolation.
+First, microservice instances are no longer isolated with the worker process.
+The worker process hence risk being corrupted, crashed, or maliciously attacked by the microservice module (e.g.,
+with common mistakes such as NULL pointers, dangling references, etc.),
+since the former loads the latter as a dynamic library and both will execute on the same address space with the same 
+resource.
+
+
+
