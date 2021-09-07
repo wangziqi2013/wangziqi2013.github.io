@@ -44,4 +44,6 @@ thread pool instead of with cold-start.
 The paper hence proposes a different way of managing microservice instances, which we describe as follows. 
 The paper assumes that an API gateway acting as the frontend handles all network I/O, and is responsible for managing
 requests and responses. 
-
+Instead of spawning new processes or selecting from a thread pool when new instances are to be started, each core
+now has a worker process pinned on that core, which is capable of executing the microservice code (functions) for all 
+microservices.
