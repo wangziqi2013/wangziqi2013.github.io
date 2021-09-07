@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. If processes are constantly running (including being scheduled out by the OS for being blocks on IPC 
+   calls), shouldn't this affect the billing of the serverless infrastructure? 
+   Because there is something that is always running which might be considered by the FaaS provider as consuming 
+   resources?
+   Or, this is actually part of the infrastructure used by FaaS provider, so billing is conducted based on how
+   the microservice modules execute, not based on the worker process? <--- I think this is the proper explanation
+
 This paper proposes a mechanism for optimizing microservice and serverless latency. The paper is motivated by the 
 fact that existing isolation mechanisms, while ensuring strong safety and fairness of scheduling, incurs long latency
 for their heavyweight, process-based resource management. This paper seeks to reduce the latency of microservices
@@ -33,5 +42,6 @@ educated guesses), which is the type of overhead for which users need to pay eve
 thread pool instead of with cold-start.
 
 The paper hence proposes a different way of managing microservice instances, which we describe as follows. 
-The paper assumes that an API gateway serving as the frontend handles all network I/O, and is responsible for managing
+The paper assumes that an API gateway acting as the frontend handles all network I/O, and is responsible for managing
 requests and responses. 
+
