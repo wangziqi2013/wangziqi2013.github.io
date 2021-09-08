@@ -46,4 +46,8 @@ number of services.
 SEUSS uses EbbRT as the underlying unikernel OS. The EbbRT is hosted by a QEMU-based virtual machine, allowing the 
 unikernel to run on the bare metal hardware with full system management capabilities (e.g., having its own page 
 tables) while providing isolation at the virtual machine layer.
-
+The EbbRT is linked with common scripting environments such as Python and Node.js. Essential device drivers such as
+the NIC driver, and software stacks such as user-space TCP-IP are also integrated into the unikernel image.
+The paper notes that, although unikernels encourage the usage of application-specific environments, rather 
+than the general purpose environment proposed in this paper, it helps to reduce the number of unikernel snapshot 
+images and the storage requirement for hosting these images by providing a common base image.
