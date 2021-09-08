@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. If you link the unikernel OS with only essential drivers, wouldn't that partially invalidate one of the purposes 
+   of microservices, i.e., ease of deployment? Because now you need to tailor the set of device drivers that are 
+   necessary for running on different machines.
+
+
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
 The paper is motivated by previous works that attempted to reduce cold-start latency of serverless processes 
@@ -34,5 +41,5 @@ Unikernels are perfect candidate for providing isolation to microservices and se
 small, and the time it takes for booting up a unikernel is usually within milliseconds due to its minimum
 number of services.
 
-
+SEUSS uses EbbRT as the underlying unikernel OS. 
 
