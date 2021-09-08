@@ -18,7 +18,9 @@ version_mgmt:
 1. If you link the unikernel OS with only essential drivers, wouldn't that partially invalidate one of the purposes 
    of microservices, i.e., ease of deployment? Because now you need to tailor the set of device drivers that are 
    necessary for running on different machines.
-
+   This may not be a serious issue for two reasons. First, most serverless performs application-level tasks,
+   and general purpose drivers are sufficient. Second, the unikernel is hosted by a QEMU VM, and the VM could
+   abstract away part of the hardware differences on different machines.
 
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
