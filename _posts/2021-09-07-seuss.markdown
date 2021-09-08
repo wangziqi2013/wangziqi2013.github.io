@@ -60,7 +60,8 @@ version_mgmt:
    The paper did not elaborate on this part, and just said a shallow copy of the page table is taken from the
    snapshot image to the VMM's private space.
 
-4. Is it possible to let QEMU resolve the snapshot-related page faults? 
+4. Does new VMM instances need to mark all pages as non-readable, non-writable? 
+   This seems necessary, since the derived snapshots are stored as deltas. 
 
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
