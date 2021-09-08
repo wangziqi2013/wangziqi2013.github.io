@@ -64,4 +64,7 @@ One particularly good thing about combining unikernels and virtual machine is th
 contextual states (e.g., register files and other internal processor states) can be easily captured and dumped 
 to persistent storage for later use. These snapshots can also be loaded into a fresh virtual machine together with
 the execution context to resume execution at the exact point where the snapshot was previously taken.
-SEUSS leverages this feature at three different levels. 
+SEUSS leverages this feature at three different levels. First, the base image snapshot is taken after the system
+completes initialization and the interpreter environment has been set up. This image is generally useful for 
+avoiding overall initialization and startup overhead, and there is one such base image per interpreter environment.
+
