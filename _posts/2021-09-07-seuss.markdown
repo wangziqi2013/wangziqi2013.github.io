@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
+memory snapshots of initialized processes as templates.
+The paper is motivated by previous works that attempted to reduce cold-start latency of serverless processes 
+by forking an existing process that has already been initialized. The paper argues that the applicability of these 
+approaches are limited, as the support for forking existing processes together with the interpreter with all libraries
+imported is heavily implementation dependent, and only a few interpreters can achieve that.
+
