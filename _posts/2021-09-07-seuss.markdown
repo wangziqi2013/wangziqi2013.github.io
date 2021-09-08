@@ -67,4 +67,6 @@ the execution context to resume execution at the exact point where the snapshot 
 SEUSS leverages this feature at three different levels. First, the base image snapshot is taken after the system
 completes initialization and the interpreter environment has been set up. This image is generally useful for 
 avoiding overall initialization and startup overhead, and there is one such base image per interpreter environment.
+At the second level, per-function images are generated after importing the libraries and modules required by the
+function, and compiling the function implementation into byte codes, at which stage the function is already ready for execution. Function arguments are provides via a script running on the host machine that communicates with the gest VMM.
 
