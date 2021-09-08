@@ -25,6 +25,14 @@ version_mgmt:
    execute within a separate virtualized environment, while preserving efficiency and minimizes VMM startup time,
    as the unikernel is super lightweight and is tightly coupled with the application.
 
+3. Snapshot of memory and execution states can be taken for unikernels running in VMMs and loaded back to the VMM
+   to resume execution. 
+   This enables use to take snapshots of serverless processes at different stages of execution to provide different
+   "short-cuts" to starting a new function instance.
+   The paper proposes three levels of snapshots: After system and interpreter initialization; After library import 
+   and compilation have completed; During the common path of execution for function instances that perform
+   similar tasks (and likely with similar arguments).
+
 **Comments:**
 
 1. If you link the unikernel OS with only essential drivers, wouldn't that partially invalidate one of the purposes 
