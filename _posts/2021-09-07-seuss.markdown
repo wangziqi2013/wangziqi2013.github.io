@@ -116,6 +116,15 @@ dirty bit. When the child snapshot is to be taken, the page table is walked by t
 pages are saved. 
 Saved snapshots are kept in the shared part of the main memory as binary blobs. New VMM instances can be started 
 on these snapshots by directly using the image as the physical address space and loading the execution context.
+The page table of the guest OS running in the VMM, however, needs to be copied to the VMM instance's private memory
+as the actual page table being used, and mark all pages as read-only (only a shallow copy is sufficient, as the 
+fine-grained access control can be postponed to the point when a fault actually happens).
+The guest unikernel OS needs to handle three types of page faults: Demand paging, native CoW, and snapshot-related CoW.
+The first two types of page faults are conventional faults that can be simply handled just as in regular cases.
+The third type, however, indicates that a page that belongs to the read-only snapshot is to be modified by the 
+VMM instance. In this case, the OS must react by allocating a new page from its process-private memory, and copying 
+the snapshot from the corresponding image (recall that snapshot images form a lineage and derived images are stored
+only as deltas) to the newly allocated page. 
 
 When a request is received by the dispatching process running in the host OS, the dispatching process first determines,
 using the function name and arguments, which snapshot to use. In the most general case, the dispatching process
