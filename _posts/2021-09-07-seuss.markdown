@@ -116,3 +116,10 @@ dirty bit. When the child snapshot is to be taken, the page table is walked by t
 pages are saved. 
 Saved snapshots are kept in the shared part of the main memory as binary blobs. New VMM instances can be started 
 on these snapshots by directly using the image as the physical address space and loading the execution context.
+
+When a request is received by the dispatching process running in the host OS, the dispatching process first determines,
+using the function name and arguments, which snapshot to use. In the most general case, the dispatching process
+will select the base snapshot image after system and interpreter initialization.
+If a function-specific snapshot, or even better, an argument-specific snapshot exists, the dispatching process will
+then start the VMM with one of the qualified snapshots as the main memory image.
+Inputs and outputs of functions are sent to and from the VMM with the help of a driver running within the VMM instance.
