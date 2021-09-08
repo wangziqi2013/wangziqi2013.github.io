@@ -30,5 +30,9 @@ In addition, unikernels only support a single address space, and therefore, it r
 From a different perspective other than the conventional OS-application division, unikernels are just applications
 linked with system software and device drivers that are able to execute both user-level and system-level tasks as 
 a self-contained unit.
+Unikernels are perfect candidate for providing isolation to microservices and serverless, as the kernel image is usually
+small, and the time it takes for booting up a unikernel is usually within milliseconds due to its minimum
+number of services.
+
 
 
