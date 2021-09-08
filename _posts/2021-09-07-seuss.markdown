@@ -40,6 +40,8 @@ version_mgmt:
    The paper did not elaborate on this part, and just said a shallow copy of the page table is taken from the
    snapshot image to the VMM's private space.
 
+4. Is it possible to let QEMU resolve the snapshot-related page faults? 
+
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
 The paper is motivated by previous works that attempted to reduce cold-start latency of serverless processes 
