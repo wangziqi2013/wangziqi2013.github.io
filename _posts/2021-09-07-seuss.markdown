@@ -21,7 +21,9 @@ version_mgmt:
    This enables an application to run like an OS on the bare metal machine, while also having millisecond level
    initialization time.
 
-2. 
+2. Virtual machines (VMMs) with unikernels allows strong isolation between applications, since each of them
+   execute within a separate virtualized environment, while preserving efficiency and minimizes VMM startup time,
+   as the unikernel is super lightweight and is tightly coupled with the application.
 
 **Comments:**
 
