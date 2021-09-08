@@ -22,3 +22,13 @@ imported is heavily implementation dependent, and only a few interpreters can ac
 The paper addresses the issue by using an unikernel OS as the execution environment of serverless functions.
 Process templates are hence saved by taking snapshots of the full memory and execution states of the OS without 
 involving the interpreter.
+
+Unikernels are operating system kernels that minimize the number of modules that is included in the runtime image.
+Unikernels are typically tailored to the applications that will run on them, and it only contains the system 
+services and stacks required by the application. 
+In addition, unikernels only support a single address space, and therefore, it runs the best with only one process.
+From a different perspective other than the conventional OS-application division, unikernels are just applications
+linked with system software and device drivers that are able to execute both user-level and system-level tasks as 
+a self-contained unit.
+
+
