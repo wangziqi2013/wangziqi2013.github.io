@@ -43,5 +43,7 @@ Unikernels are perfect candidate for providing isolation to microservices and se
 small, and the time it takes for booting up a unikernel is usually within milliseconds due to its minimum
 number of services.
 
-SEUSS uses EbbRT as the underlying unikernel OS. 
+SEUSS uses EbbRT as the underlying unikernel OS. The EbbRT is hosted by a QEMU-based virtual machine, allowing the 
+unikernel to run on the bare metal hardware with full system management capabilities (e.g., having its own page 
+tables) while providing isolation at the virtual machine layer.
 
