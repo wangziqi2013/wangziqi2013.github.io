@@ -22,6 +22,14 @@ version_mgmt:
    and general purpose drivers are sufficient. Second, the unikernel is hosted by a QEMU VM, and the VM could
    abstract away part of the hardware differences on different machines.
 
+2. Starting a new process and setting up the interpreter for every new serverless request requires lots of 
+   initialization work such as OS-related process initialization and interpreter import and environment setup.
+   This paper just proposes that we can start VMM with a pre-initialized image to reduce these overheads.
+   While I agree that the interpreter part is definitely not needed anymore, shouldn't the initialization and 
+   setup of VMMs, and probably loading these images from I/O devices (or you store them as memory objects?) 
+   also require some extra latency? What is the trade-off here? Do we simply assume that the interpreter part
+   is the major source of overhead?
+
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
 The paper is motivated by previous works that attempted to reduce cold-start latency of serverless processes 
@@ -51,3 +59,4 @@ the NIC driver, and software stacks such as user-space TCP-IP are also integrate
 The paper notes that, although unikernels encourage the usage of application-specific environments, rather 
 than the general purpose environment proposed in this paper, it helps to reduce the number of unikernel snapshot 
 images and the storage requirement for hosting these images by providing a common base image.
+
