@@ -60,3 +60,8 @@ The paper notes that, although unikernels encourage the usage of application-spe
 than the general purpose environment proposed in this paper, it helps to reduce the number of unikernel snapshot 
 images and the storage requirement for hosting these images by providing a common base image.
 
+One particularly good thing about combining unikernels and virtual machine is that the full-system image plus the 
+contextual states (e.g., register files and other internal processor states) can be easily captured and dumped 
+to persistent storage for later use. These snapshots can also be loaded into a fresh virtual machine together with
+the execution context to resume execution at the exact point where the snapshot was previously taken.
+
