@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Unikernels provide lightweight system management capabilities to applications, and can be conveniently linked 
+   into the application binary such that the application runs like a highly specialized OS with minimum modules
+   for supporting the application.
+   This enables an application to run like an OS on the bare metal machine, while also having millisecond level
+   initialization time.
+
+2. 
+
 **Comments:**
 
 1. If you link the unikernel OS with only essential drivers, wouldn't that partially invalidate one of the purposes 
