@@ -74,3 +74,10 @@ half-way through the execution. The execution path that has been covered in the 
 common for a set of argument values, such that computation need not be replicated for each instance of the function.
 In this case, only the arguments that will change the execution path following the snapshot need to be provided by the 
 external script.
+
+To avoid storing a full system image for each snapshot, SEUSS maintains a lineage of snapshot images like a tree
+structure, and only maintains the delta between the parent and the child snapshot. 
+This is achieved with a special driver in the unikernel, which marks the pages after taking the parent snapshot 
+as clean (page table dirty bits are largely useless in other scenarios because in serverless scenario the
+application never gets swapped out), and then let the MMU track pages that are modified since then using the per-page
+dirty bit. 
