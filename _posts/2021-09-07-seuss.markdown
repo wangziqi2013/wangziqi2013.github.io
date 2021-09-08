@@ -19,4 +19,6 @@ The paper is motivated by previous works that attempted to reduce cold-start lat
 by forking an existing process that has already been initialized. The paper argues that the applicability of these 
 approaches are limited, as the support for forking existing processes together with the interpreter with all libraries
 imported is heavily implementation dependent, and only a few interpreters can achieve that.
-
+The paper addresses the issue by using an unikernel OS as the execution environment of serverless functions.
+Process templates are hence saved by taking snapshots of the full memory and execution states of the OS without 
+involving the interpreter.
