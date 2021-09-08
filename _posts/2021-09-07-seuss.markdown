@@ -30,6 +30,16 @@ version_mgmt:
    also require some extra latency? What is the trade-off here? Do we simply assume that the interpreter part
    is the major source of overhead?
 
+3. According to the paper, there are three types of page faults. The first two types are demand-paging and 
+   CoW that is native to the unikernel OS, which are the conventional types of page faults.
+   The third type is writing to a page that is perfectly writable in the unikernel OS, but must trigger CoW
+   just because the page belongs to a snapshot image. 
+   I think the unikernel OS must maintain some extra metadata to distinguish the native CoW and the 
+   snapshot-related CoW.
+   Maybe this can be tracked within the unused bits of PTEs, or using a shadow page table. 
+   The paper did not elaborate on this part, and just said a shallow copy of the page table is taken from the
+   snapshot image to the VMM's private space.
+
 This paper proposes SEUSS, a serverless framework that optimizes the long cold-start latency of processes using 
 memory snapshots of initialized processes as templates.
 The paper is motivated by previous works that attempted to reduce cold-start latency of serverless processes 
