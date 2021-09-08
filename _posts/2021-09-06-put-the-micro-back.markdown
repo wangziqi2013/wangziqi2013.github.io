@@ -15,7 +15,7 @@ version_mgmt:
 
 **Highlight:**
 
-1. Microservice instances can be spawned as a process, which provides string isolation, but causes long latency.
+1. Microservice instances can be spawned as processes, which provides strong isolation, but causes long latency.
    This can be addressed by executing microservices in a worker process in an event-driven manner. 
    Individual functions are loaded as dynamic libraries and control is directly transferred to the function code 
    on invocation of the function.
