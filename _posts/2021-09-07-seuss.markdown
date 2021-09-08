@@ -80,4 +80,7 @@ structure, and only maintains the delta between the parent and the child snapsho
 This is achieved with a special driver in the unikernel, which marks the pages after taking the parent snapshot 
 as clean (page table dirty bits are largely useless in other scenarios because in serverless scenario the
 application never gets swapped out), and then let the MMU track pages that are modified since then using the per-page
-dirty bit. 
+dirty bit. When the child snapshot is to be taken, the page table is walked by the driver program, and only dirty
+pages are saved. 
+Saved snapshots are kept in the shared part of the main memory as binary blobs. New VMM instances can be started 
+on these snapshots by directly using the image as the physical address space and loading the execution context.
