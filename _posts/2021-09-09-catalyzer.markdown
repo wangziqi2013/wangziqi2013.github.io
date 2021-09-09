@@ -30,7 +30,12 @@ version_mgmt:
    Besides, many paragraphs lack an opening and conclusion. Why is the paragraph important? What is the conclusion of 
    the paragraph?
 
-
+2. The paper makes conflicting claims. 
+   Insight 1 says "most of the startup latency comes from application initialization", then in Sec. 2.2 it says 
+   "sandbox initialization is stable for different workloads and dominates the latency overhead for
+    simple functions like Python Hello."
+   I understand that these two might both be correct, because they have different assumptions. But in this case, why do
+   you even mention the "Python Hello" case that is neither representative, nor further explored in the paper?
 
 3. Some terminologies usages are confusing. For example, what is a "critical section" in Fig. 8(a)?
    Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?
