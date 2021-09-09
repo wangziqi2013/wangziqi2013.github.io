@@ -13,6 +13,7 @@ htm_cr:
 version_mgmt:
 ---
 
+<!--
 **Comments:**
 
 1. This paper is very loosely organized and hard to read. While I definitely acknowledge the contributions
@@ -46,3 +47,4 @@ version_mgmt:
    So what are the overall picture of these booting techniques?
    Similarly, sfork() is proposed in the beginning of Sec. 4, and never discussed again, e.g., how do you incorporate
    techniques discussed later in Sec. 4 into your sfork()?
+-->
