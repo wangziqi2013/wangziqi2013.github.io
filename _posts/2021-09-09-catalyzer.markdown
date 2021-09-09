@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Comments:**
+
+1. This paper is very loosely organized and hard to read. While I definitely acknowledge the contributions
+   made by the authors, and judging from the author list, it seems that the contributions in this paper have already 
+   been applied in industrial production systems, which is impressive and stronger than plain talking.
+   But, on the other hand, I do suggest the authors to further think on the motivation and the key insights of the 
+   approach, especially the high-level insights, or let's say, what could readers learn from this paper? What is
+   the take-away message? I could not find any in this paper.
+   
