@@ -62,3 +62,6 @@ more and more lightweight, application startup cost has become a dominating fact
 serverless functions. Here, application startup refers to the initialization of software runtimes, such as interpreters,
 and the import of libraries. This part is hard to avoid in serverless functions without significantly changing the 
 internal mechanism of the interpreter.
+Second, there is a clear division between the initialization stage (both OS and interpreter) and the function 
+execution stage on the memory states and OS handlers that they access. In other words, these two stages use a largely
+disjoint set of states and handlers. 
