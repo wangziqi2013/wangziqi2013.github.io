@@ -65,3 +65,8 @@ internal mechanism of the interpreter.
 Second, there is a clear division between the initialization stage (both OS and interpreter) and the function 
 execution stage on the memory states and OS handlers that they access. In other words, these two stages use a largely
 disjoint set of states and handlers. 
+Lastly, it is also observed that serverless functions using the same language have the same state to begin with
+before the function is executed, since they have the same initialization sequence. Different function instances may
+just be spawned from this initialized state, rather than repeating the same initialization sequence every time an
+instance is created.
+
