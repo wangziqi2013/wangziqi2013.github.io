@@ -52,4 +52,7 @@ version_mgmt:
 This paper proposes Catalyzer, a software framework for reduced serverless startup latency. The paper is motivated by
 the fact that most existing commercial platforms and proposals suffer either long VMM initialization time, or 
 long application environment setup time, which are, when combined, called the "cold boot latency". 
-
+Most previous approaches on optimizing the cold boot latency of serverless functions only optimize one of the two
+components of cold boot latency, leaving the other one as the new bottleneck.
+This paper, instead, addresses cold boot latency from both aspects with a unified caching approach and careful 
+engineering.
