@@ -25,3 +25,12 @@ version_mgmt:
    a series of techniques to reduce startup latency for serverless environment, but these ideas should be more
    organized, and be discussed under a few common topics (e.g., reducing VMM initialization latency, reducing language 
    environment latency, etc.).
+   The current paper just makes it look like these techniques are just ad-hoc patches that you randomly found 
+   working via trial-and-error, and do not have a common goal to optimize on.
+   Besides, many paragraphs lack an opening and conclusion. Why is the paragraph important? What is the conclusion of 
+   the paragraph?
+
+
+
+3. Some terminologies usages are incorrect (what is a "critical section" in Fig. 8(a)?;
+   Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?).
