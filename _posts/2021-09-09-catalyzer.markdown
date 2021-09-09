@@ -40,3 +40,9 @@ version_mgmt:
 3. Some terminologies usages are confusing. For example, what is a "critical section" in Fig. 8(a)?
    Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?
    Sec. 3.1, what is "two layered EPT"? 
+
+4. The paper proposes concepts but never discusses them.
+   Cold boot, warm boot, fork boot are proposed in Sec. 2.3, and then only mentioned at a few extra locations later.
+   So what are the overall picture of these booting techniques?
+   Similarly, sfork() is proposed in the beginning of Sec. 4, and never discussed again, e.g., how do you incorporate
+   techniques discussed later in Sec. 4 into your sfork()?
