@@ -21,4 +21,7 @@ version_mgmt:
    But, on the other hand, I do suggest the authors to further think on the motivation and the key insights of the 
    approach, especially the high-level insights, or let's say, what could readers learn from this paper? What is
    the take-away message? I could not find any in this paper.
-   
+   Also, I appreciate the individual ideas presented in this paper, and I understand that the authors just applied 
+   a series of techniques to reduce startup latency for serverless environment, but these ideas should be more
+   organized, and be discussed under a few common topics (e.g., reducing VMM initialization latency, reducing language 
+   environment latency, etc.).
