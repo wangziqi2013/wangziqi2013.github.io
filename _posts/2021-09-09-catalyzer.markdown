@@ -48,3 +48,8 @@ version_mgmt:
    Similarly, sfork() is proposed in the beginning of Sec. 4, and never discussed again, e.g., how do you incorporate
    techniques discussed later in Sec. 4 into your sfork()?
 -->
+
+This paper proposes Catalyzer, a software framework for reduced serverless startup latency. The paper is motivated by
+the fact that most existing commercial platforms and proposals suffer either long VMM initialization time, or 
+long application environment setup time, which are, when combined, called the "cold boot latency". 
+
