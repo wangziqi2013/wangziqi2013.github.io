@@ -32,5 +32,6 @@ version_mgmt:
 
 
 
-3. Some terminologies usages are incorrect (what is a "critical section" in Fig. 8(a)?;
-   Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?).
+3. Some terminologies usages are confusing. For example, what is a "critical section" in Fig. 8(a)?
+   Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?
+   Sec. 3.1, what is "two layered EPT"? 
