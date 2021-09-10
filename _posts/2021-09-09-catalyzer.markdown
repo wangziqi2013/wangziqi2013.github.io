@@ -76,4 +76,6 @@ While this reduces the latency of interpreter initialization, it has two flaws. 
 consume significant storage and increase the memory footprint of the serverless, as each language environment needs 
 one cached copy. The second flaw is that application-level caching is not capable of reducing the latency of 
 system startup.
-
+Second, previous work has also worked on reducing the initialization cost of the system and/or the container/VMM
+with lightweight virtualizations, special kernels, etc. These approaches, while effective in reducing the 
+system startup cost, cannot optimize application-level latency, which can become the dominating overhead.
