@@ -96,7 +96,7 @@ is based on a lightweight VMM, and adopts the snapshotting approach for saving a
 states of a serverless execution.
 As in previous snapshotting approaches, snapshots are generated and stored to persistent storage as file objects.
 Metadata such as OS internal states are stored separately as metadata, and needs to be restored after loading the 
-snapshot image (although the paper does not discuss why this is necessary).
+snapshot image (maybe because they are location dependent, and hence pointer values should not be taken literally).
 Later instances of the VMM can simply map the file into its own address space with mmap(), and then work on this
 snapshot as its main memory image.
 
@@ -107,3 +107,9 @@ applied to a newly allocated page belonging to the VMM instance that issues the 
 To this end, Catalyzer maintains a shadow page table in addition to the standard hardware page table. The 
 shadow table tracks pages that have been modified and hence allocated for CoW. The hardware page table for the 
 VMM is then updated accordingly using the shadow table, if there is an entry, or the base page table if otherwise.
+
+The second contribution optimizes state restoration of OS metadata. In conventional approaches, these metadata is 
+stored separately and serialized. Before restoration they need to be deserialized, and then reapplied to the 
+memory image (as discussed above, I guess this is because some states are location dependent, such as pointers,
+and hence their value must be relocated just like when you load a dynamic library). 
+
