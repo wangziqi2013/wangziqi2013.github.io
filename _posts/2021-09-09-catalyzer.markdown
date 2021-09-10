@@ -19,7 +19,11 @@ version_mgmt:
    time. This is not part of regular CoW (because these pages can be marked writable in the base snapshot's page table),
    and should be achieved with a shadow page table that tracks the status of private pages allocated for CoW.
 
-2. 
+2. Pointers need to be relocated when loading a snapshot into the virtual address space, because the underlying 
+   physical location may have changed from what is was when the snapshot was taken. 
+   This requires pointer relocation, and can be achieved with a relocation table just like in dynamic libraries.
+
+3. 
 
 <!--
 **Comments:**
