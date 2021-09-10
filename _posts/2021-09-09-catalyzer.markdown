@@ -123,5 +123,8 @@ step after restoring a snapshot image. I/O reconnect is necessary, as the intern
 entities such as files and TCP states on the other end. The paper observes that, however, that most of the I/O states
 will not be used by the serverless function after restoration. Reestablishing the I/O can be performed lazily only when
 the application actually uses I/O. To achieve this, the paper proposes adding a table tracking the shadowed I/O states.
-
+An I/O connection can in one of the three states: Active, closed, or active but not yet reconnected. After
+restoration, all active I/O connections are marked as "active but not yet reconnected". When the application requests
+for I/O using one of the I/O connections, their states will transit to "active", after I/O connection is performed 
+lazily.
 
