@@ -115,5 +115,13 @@ and hence their value must be relocated just like when you load a dynamic librar
 To avoid such overhead, the paper proposes that the states should be stored as-is in the snapshot image, 
 but in addition to that, an extra relocation table (called the relation table in the paper) should also be added
 which tracks the location and values of all the pointers. The original base of the snapshot is also stored somewhere.
-Pointer relocation then becomes as simple as scanning the relocation table, and for each entry, adjust the pointer
+Pointer relocation then becomes as simple as scanning the relocation table, and for each entry, adjusting the pointer
 value by adding the difference between load addresses onto the value.
+
+The next contribution is on-demand I/O reconnection, which aims at optimizing the resource-consuming I/O reconnect
+step after restoring a snapshot image. I/O reconnect is necessary, as the internal I/O states also depend on external
+entities such as files and TCP states on the other end. The paper observes that, however, that most of the I/O states
+will not be used by the serverless function after restoration. Reestablishing the I/O can be performed lazily only when
+the application actually uses I/O. To achieve this, the paper proposes adding a table tracking the shadowed I/O states.
+
+
