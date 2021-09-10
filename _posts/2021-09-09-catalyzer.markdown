@@ -79,3 +79,9 @@ system startup.
 Second, previous work has also worked on reducing the initialization cost of the system and/or the container/VMM
 with lightweight virtualizations, special kernels, etc. These approaches, while effective in reducing the 
 system startup cost, cannot optimize application-level latency, which can become the dominating overhead.
+Lastly, there are also previous works that optimize at both application and system level by taking snapshots of the
+entire system state after initialization, capturing the initialized state of both the system and application. 
+The paper points out, however, that this approach has engineering difficulties. For example, these snapshot images are
+typically compressed and serialized, which incurs extra overhead for restoration. In addition, certain operations,
+such as opened files, need to be "redone" after the snapshot is restored (dubbed "reestablish the I/O"), due to the 
+fact that I/O operations also depend on the state of external entities or devices that are not included in the snapshot.
