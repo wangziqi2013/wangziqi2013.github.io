@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Snapshot image must not write the original image, and needs to perform CoW when writing to the page for the first 
+   time. This is not part of regular CoW (because these pages can be marked writable in the base snapshot's page table),
+   and should be achieved with a shadow page table that tracks the status of private pages allocated for CoW.
+
+2. 
+
 <!--
 **Comments:**
 
