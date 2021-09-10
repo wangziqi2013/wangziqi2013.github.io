@@ -128,3 +128,10 @@ restoration, all active I/O connections are marked as "active but not yet reconn
 for I/O using one of the I/O connections, their states will transit to "active", after I/O connection is performed 
 lazily.
 
+The paper also proposes a new OS primitive, sfork() (which stands for "sandbox fork()"), which has the same 
+high-level behavior of fork(), i.e., creating a new process using an existing one as the template, sharing the 
+address space as well as file handlers, but differs significantly from fork() in certain semantics. 
+The paper argues that although fork() is generally useful for reducing the latency of serverless, as it can just 
+hot-copy an existing VMM instance and use it to fulfill an incoming request, the fact that fork() does not work
+for multi-threaded applications and that the process will still share opened files can defeat the purpose of 
+VMM (e.g., isolation). 
