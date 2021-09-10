@@ -38,7 +38,7 @@ version_mgmt:
    I understand that these two might both be correct, because they have different assumptions. But in this case, why do
    you even mention the "Python Hello" case that is neither representative, nor further explored in the paper?
 
-3. Some terminologies usages are confusing. For example, what is a "critical section" in Fig. 8(a)?
+3. Some terminology usages are confusing. For example, what is a "critical section" in Fig. 8(a)?
    Sec. 3.3, "I/O reconnection is performed asynchronously on the restore critical path" -- what does "asynchronously" mean? Why it is on the critical path if asynchronously?
    Sec. 3.1, what is "two layered EPT"? 
 
@@ -91,4 +91,17 @@ typically compressed and serialized, which incurs extra overhead for restoration
 such as opened files, need to be "redone" after the snapshot is restored (dubbed "reestablish the I/O"), due to the 
 fact that I/O operations also depend on the state of external entities or devices that are not included in the snapshot.
 
+Catalyzer consists of a set of patches that fix the issues with snapshotting discussed above. Catalyzer
+is based on a lightweight VMM, and adopts the snapshotting approach for saving and restoring the memory and contextual
+states of a serverless execution.
+As in previous snapshotting approaches, snapshots are generated and stored to persistent storage as file objects.
+Metadata such as OS internal states are stored separately as metadata, and needs to be restored after loading the 
+snapshot image (although the paper does not discuss why this is necessary).
+Later instances of the VMM can simply map the file into its own address space with mmap(), and then work on this
+snapshot as its main memory image.
+
+The first contribution of the paper, namely overlay memory, optimizes on image sharing when multiple VMM instances
+work on the same snapshot image. According to isolation rule, and also to protect the integrity of the snapshot
+image, all modifications to the snapshot image must not be reflected on the image itself, but instead, should be 
+applied to a newly allocated page belonging to the VMM instance that issues the access.
 
