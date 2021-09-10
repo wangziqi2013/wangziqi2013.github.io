@@ -34,7 +34,7 @@ version_mgmt:
    first and then canceling the threads, before fork() is called. Threads are restarted using the dumped states
    after fork().
 
-5. This paper reads like a parody of the [SOCK paper]({% post_url 2021-09-10-sock %}), from the way they conducted research and 
+5. This paper reads like the [SOCK paper]({% post_url 2021-09-10-sock %}), from the way they conducted research and 
    the motivation, to the set of proposed optimizations and the overall structure of the paper, only
    that this paper optimizes VMM while the SOCK paper is about thin containers.
 
