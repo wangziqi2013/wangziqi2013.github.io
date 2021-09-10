@@ -47,6 +47,11 @@ version_mgmt:
    So what are the overall picture of these booting techniques?
    Similarly, sfork() is proposed in the beginning of Sec. 4, and never discussed again, e.g., how do you incorporate
    techniques discussed later in Sec. 4 into your sfork()?
+
+5. Many important design decisions are unjustified. For example, why do you need to reconnect the I/O? 
+   Why does metadata need to be stored separately rather than just within the snapshot image?
+   Readers are not all experts in certain implementations of the VMM. At least give a few points on why previous
+   approaches do this and why they are hard to avoid (which also highlights your contribution).
 -->
 
 This paper proposes Catalyzer, a software framework for reduced serverless startup latency. The paper is motivated by
@@ -85,3 +90,5 @@ The paper points out, however, that this approach has engineering difficulties. 
 typically compressed and serialized, which incurs extra overhead for restoration. In addition, certain operations,
 such as opened files, need to be "redone" after the snapshot is restored (dubbed "reestablish the I/O"), due to the 
 fact that I/O operations also depend on the state of external entities or devices that are not included in the snapshot.
+
+
