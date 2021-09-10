@@ -52,13 +52,13 @@ version_mgmt:
 This paper proposes Catalyzer, a software framework for reduced serverless startup latency. The paper is motivated by
 the fact that most existing commercial platforms and proposals suffer either long VMM initialization time, or 
 long application environment setup time, which are, when combined, called the "cold boot latency". 
-Most previous approaches on optimizing the cold start latency of serverless functions only optimize one of the two
-components of cold start latency, leaving the other one as the new bottleneck.
-This paper, instead, addresses cold start latency from both aspects with a unified caching approach and careful 
+Most previous approaches on optimizing the cold boot latency of serverless functions only optimize one of the two
+components of cold boot latency, leaving the other one as the new bottleneck.
+This paper, instead, addresses cold boot latency from both aspects with a unified caching approach and careful 
 engineering.
 
-The paper identifies three key insights in optimizing cold start latency. First, as virtualization techniques become
-more and more lightweight, application startup cost has become a dominating factor in the cold start latency of
+The paper discusses three key insights in optimizing cold boot latency. First, as virtualization techniques become
+more and more lightweight, application startup cost has become a dominating factor in the cold boot latency of
 serverless functions. Here, application startup refers to the initialization of software runtimes, such as interpreters,
 and the import of libraries. This part is hard to avoid in serverless functions without significantly changing the 
 internal mechanism of the interpreter.
@@ -69,4 +69,11 @@ Lastly, it is also observed that serverless functions using the same language ha
 before the function is executed, since they have the same initialization sequence. Different function instances may
 just be spawned from this initialized state, rather than repeating the same initialization sequence every time an
 instance is created.
+
+The paper also identifies limitations of previous researches.
+First, previous works attempted to accelerate application startup by caching the initialized state of the interpreter.
+While this reduces the latency of interpreter initialization, it has two flaws. The first flaw is that caching will
+consume significant storage and increase the memory footprint of the serverless, as each language environment needs 
+one cached copy. The second flaw is that application-level caching is not capable of reducing the latency of 
+system startup.
 
