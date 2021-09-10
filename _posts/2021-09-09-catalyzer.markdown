@@ -112,4 +112,8 @@ The second contribution optimizes state restoration of OS metadata. In conventio
 stored separately and serialized. Before restoration they need to be deserialized, and then reapplied to the 
 memory image (as discussed above, I guess this is because some states are location dependent, such as pointers,
 and hence their value must be relocated just like when you load a dynamic library). 
-
+To avoid such overhead, the paper proposes that the states should be stored as-is in the snapshot image, 
+but in addition to that, an extra relocation table (called the relation table in the paper) should also be added
+which tracks the location and values of all the pointers. The original base of the snapshot is also stored somewhere.
+Pointer relocation then becomes as simple as scanning the relocation table, and for each entry, adjust the pointer
+value by adding the difference between load addresses onto the value.
