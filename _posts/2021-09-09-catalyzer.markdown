@@ -137,4 +137,7 @@ The paper argues that although fork() is generally useful for reducing the laten
 hot-copy an existing VMM instance and use it to fulfill an incoming request, the fact that fork() does not work
 for multi-threaded applications and that the process will still share opened files can defeat the purpose of 
 VMM (e.g., isolation). 
-The paper proposes two 
+The paper proposes two features of sfork() that overcome fork()'s problems.
+First, multi-threaded programs should first cancel their threads except the main thread, after dumping the 
+thread states that help recovering these threads after the fork(). After a conventional fork(), which is the system
+call that underlies sfork(), is executed, these threads are restarted using the thread states they have dumped earlier.
