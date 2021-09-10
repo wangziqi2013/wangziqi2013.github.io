@@ -28,6 +28,8 @@ version_mgmt:
    environment latency, etc.).
    The current paper just makes it look like these techniques are just ad-hoc patches that you randomly found 
    working via trial-and-error, and do not have a common goal to optimize on.
+   For example, how does sfork(), which is to optimize fork() based optimization, relate to the earlier discussion 
+   of the paper, which is mainly about snapshotting? 
    Besides, many paragraphs lack an opening and conclusion. Why is the paragraph important? What is the conclusion of 
    the paragraph?
 
@@ -135,3 +137,4 @@ The paper argues that although fork() is generally useful for reducing the laten
 hot-copy an existing VMM instance and use it to fulfill an incoming request, the fact that fork() does not work
 for multi-threaded applications and that the process will still share opened files can defeat the purpose of 
 VMM (e.g., isolation). 
+The paper proposes two 
