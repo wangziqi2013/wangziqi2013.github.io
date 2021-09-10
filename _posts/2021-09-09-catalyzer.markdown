@@ -104,4 +104,6 @@ The first contribution of the paper, namely overlay memory, optimizes on image s
 work on the same snapshot image. According to isolation rule, and also to protect the integrity of the snapshot
 image, all modifications to the snapshot image must not be reflected on the image itself, but instead, should be 
 applied to a newly allocated page belonging to the VMM instance that issues the access.
-
+To this end, Catalyzer maintains a shadow page table in addition to the standard hardware page table. The 
+shadow table tracks pages that have been modified and hence allocated for CoW. The hardware page table for the 
+VMM is then updated accordingly using the shadow table, if there is an entry, or the base page table if otherwise.
