@@ -141,3 +141,6 @@ The paper proposes two features of sfork() that overcome fork()'s problems.
 First, multi-threaded programs should first cancel their threads except the main thread, after dumping the 
 thread states that help recovering these threads after the fork(). After a conventional fork(), which is the system
 call that underlies sfork(), is executed, these threads are restarted using the thread states they have dumped earlier.
+Second, shared files are accessed via a file server, which only grants read-only access. After fork(), the file
+handler is still available, but it does not break isolation, because the file handler inherited from the parent
+process is read-only.
