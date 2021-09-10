@@ -27,7 +27,9 @@ version_mgmt:
    that are not part of the snapshot. This can be done lazily only on occasions when the I/O resource is 
    actually used by the application. The OS can use a table to track the reconnection status of I/O handlers.
 
-
+4. Classical fork() cannot handle multi-threaded language runtimes. This can be achieved by dumping thread states
+   first and then canceling the threads, before fork() is called. Threads are restarted using the dumped states
+   after fork().
 
 <!--
 **Comments:**
