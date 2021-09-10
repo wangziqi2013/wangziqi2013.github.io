@@ -23,6 +23,8 @@ version_mgmt:
 2. Pointers need to be relocated when mapping a snapshot into the virtual address space, because the underlying 
    physical location may have changed from what is was when the snapshot was taken. 
    This requires pointer relocation, and can be achieved with a relocation table just like in dynamic libraries.
+   (I am not 100% sure about the relocation part, and neither did the paper state it clearly which metadata must 
+   be updated after restoring a snapshot.)
 
 3. I/O needs to be reconnected after restoring a snapshot, because I/O states are dependent also on external states
    that are not part of the snapshot. This can be done lazily only on occasions when the I/O resource is 
