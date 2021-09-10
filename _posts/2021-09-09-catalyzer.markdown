@@ -23,7 +23,11 @@ version_mgmt:
    physical location may have changed from what is was when the snapshot was taken. 
    This requires pointer relocation, and can be achieved with a relocation table just like in dynamic libraries.
 
-3. 
+3. I/O needs to be reconnected after restoring a snapshot, because I/O states dependent also on external states
+   that are not part of the snapshot. This can be done lazily only on occasions when the I/O resource is 
+   actually used by the application. The OS can use a table to track the reconnection status of I/O handlers.
+
+
 
 <!--
 **Comments:**
