@@ -16,4 +16,8 @@ version_mgmt:
 This paper presents SOCK, a customized container framework for reducing cold start latency of serverless functions.
 The paper is motivated by the observation that both language runtime initialization, such as library import, and 
 container initialization will incur long startup latency, which are jointly called the "cold start latency".
-
+This paper addresses cold start latency using a series of techniques, including a customized "lean" container that
+avoids long latency system calls and relaxes certain isolation requirements not needed for serverless, 
+a local cache of commonly used Python libraries, and using fork() to clone already initialized Zygote containers.
+The paper also presents a series of performance evaluations of Linux systems calls related to container virtualization, 
+as well as various engineering details that have different performance trade-offs.
