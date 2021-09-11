@@ -21,3 +21,9 @@ avoids long latency system calls and relaxes certain isolation requirements not 
 a local cache of commonly used Python libraries, and using fork() to clone already initialized Zygote containers.
 The paper also presents a series of performance evaluations of Linux systems calls related to container virtualization, 
 as well as various engineering details that have different performance trade-offs.
+
+To reduce container startup time, the paper argues that container implementations for general purposes, such as 
+Docker, provides full and the strongest isolation. Serverless functions, however, do not always require all the 
+features provides by these containers, since serverless functions are typically small, only perform simple tasks, and
+do not use many of the OS features (e.g., static port assignment). 
+
