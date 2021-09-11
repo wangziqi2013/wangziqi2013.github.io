@@ -5,10 +5,15 @@ date:   2021-09-10 19:39:00 -0500
 categories: paper
 paper_title: "SOCK: Rapid Task Provisioning with Serverless-Optimized Containers"
 paper_link: https://dl.acm.org/doi/10.5555/3277355.3277362
-paper_keyword: Microservice; Serverless; OS; Process Template
+paper_keyword: Microservice; Serverless; OS; Process Template; SOCK
 paper_year: USENIX ATC 2018
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents SOCK, a customized container framework for reducing cold start latency of serverless functions.
+The paper is motivated by the observation that both language runtime initialization, such as library import, and 
+container initialization will incur long startup latency, which are jointly called the "cold start latency".
+
