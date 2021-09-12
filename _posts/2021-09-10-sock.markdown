@@ -97,3 +97,10 @@ Zygote processes are forked to create new instances of the containerized process
 is already initialized, reducing the overhead of initializing a container and the language runtime to the cost
 of a fork() system call (although in the actual implementation, two fork() calls are required due to the 
 "one peculiarity of setns()").
+The system always maintains a base Zygote with the initialized container and no imported library. The Zygote is the
+most generalized one, and can be forked to executed any function after importing the dependency of the function.
+In addition to the base Zygote, a lineage of Zygotes with different libraries being imported are also maintained.
+These cached Zygotes are created when a requested is received, and there is no existing Zygote in the cache that
+has the dependent libraries. In this case, a new Zygote is created by first forking the closest Zygote currently
+in the cache (i.e., has the most required libraries, but no library that is not required, to avoid malicious
+libraries), and then importing the missing libraries. 
