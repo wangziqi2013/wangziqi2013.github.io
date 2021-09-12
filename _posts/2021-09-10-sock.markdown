@@ -18,6 +18,13 @@ version_mgmt:
 1. Compared with general-purpose containers, lean containers for serverless functions can be specialized 
    based on the special requirements of serverless by using special file system arrangements, cgroup
    caches, and not using certain namespaces that are slow to create and destroy.
+   This will optimize the cold start performance of containers, but not language runtimes.
+
+2. To further optimize cold start performance of language runtimes, a cache of Zygote processes can be maintained,
+   such that a new instance of the containerized process can be created by forking from an existing cache
+   entry, which is already initialized and with (at least part of) the required libraries imported.
+   This is faster than initializing the container and importing the libraries every time a new instance 
+   is needed.
 
 This paper presents SOCK, a customized container framework for reducing cold start latency of serverless functions.
 The paper is motivated by the observation that both language runtime initialization, such as library import, and 
