@@ -45,4 +45,8 @@ New namespaces can be created by the unshare() system call, which accepts argume
 The paper observes that both namespace creation and cleanup incurs non-negligible overhead, and it is especially
 bad for a few particular resource types, such as IPC and network ports, mainly because of the global lock and RCU.
 
-
+Lastly, containerized processes also need to be allocated control groups, or cgroups, for managing CPU, memory, and I/O
+resources. The standard procedure using cgroups within containers would be to create a new cgroup for every process,
+add the process into the cgroup, and on program exit, remove the process from the cgroup, and destroy the cgroup itself.
+The paper observes, however, that the first and last step are unnecessary, as cgroups can be easily cached in a pool.
+It is also observed that caching cgroups is 2 times faster than creating and destroying cgroups.
