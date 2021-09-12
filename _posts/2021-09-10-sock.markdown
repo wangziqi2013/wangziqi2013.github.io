@@ -50,3 +50,8 @@ resources. The standard procedure using cgroups within containers would be to cr
 add the process into the cgroup, and on program exit, remove the process from the cgroup, and destroy the cgroup itself.
 The paper observes, however, that the first and last step are unnecessary, as cgroups can be easily cached in a pool.
 It is also observed that caching cgroups is 2 times faster than creating and destroying cgroups.
+
+In addition to studies of Linux system calls, the paper also observes that the majority of Python code crawled down 
+from Github only uses a small subset of all public libraries. Among these libraries, most of them only makes changes
+locally, and could co-exist under the same directory.
+This observation has two important implications.
