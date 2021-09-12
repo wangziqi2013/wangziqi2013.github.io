@@ -55,3 +55,10 @@ In addition to studies of Linux system calls, the paper also observes that the m
 from Github only uses a small subset of all public libraries. Among these libraries, most of them only makes changes
 locally, and could co-exist under the same directory.
 This observation has two important implications.
+First, Python library import could be accelerated by maintaining a local cache of commonly used libraries. Due to the
+skew on library usage, the local cache need not be very large and can still support most of the library installation
+requests without contacting an external server and downloading all the libraries across the Web.
+Second, it is also possible to pre-import Python libraries into the interpreter to reduce library import cost during 
+the cold start. 
+
+
