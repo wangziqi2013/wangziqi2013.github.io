@@ -72,3 +72,8 @@ Then the root of the process is switched to the aforementioned directory using t
 Compared with conventional container approaches of using a separate namespace and using AUFS, the lean container
 avoids the expensive operation of copying the mount point table as part of the namespace creation operation, as
 well as the AUFS and its CoW overhead.
+
+Second, the container's management process, which is spawned upon the container's creation, communicates with the 
+API gateway, which is OpenLambda, using an Unix domain socket. The domain socket is just like a regular socket that
+acts as a channel of communication in which data and file descriptors can be transferred (if it is a file descriptor, 
+then permission is also automatically granted from the sender to the receiver). 
