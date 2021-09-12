@@ -82,3 +82,8 @@ the PID, which is already unique at the system level, and hence do not need any 
 (which, if used, is often statically bound). 
 This way, the new namespace does not need to virtualize the file system and network resources, which have been shown
 to demonstrate bad performance and scalability.
+
+Lastly, as indicated earlier, control groups are not created and destroyed for each containerized process. 
+Instead, the OpenLambda process maintains a pool of initialized cgroups, and pass the cgroup via the domain socket
+to the container's management process. When the containerized process is about to exit, the cgroup is returned to the
+OpenLambda gateway, which is then returned to the pool waiting for the next allocation.
