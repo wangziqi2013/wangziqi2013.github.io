@@ -26,6 +26,10 @@ version_mgmt:
    This is faster than initializing the container and importing the libraries every time a new instance 
    is needed.
 
+3. Usages of Python libraries have a significant skew towards only a few popular libraries. These libraries
+   can be cached locally and bind mounted to the directory of the serverless instance, such that libraries
+   can be installed locally, rather than from the Web.
+
 This paper presents SOCK, a customized container framework for reducing cold start latency of serverless functions.
 The paper is motivated by the observation that both language runtime initialization, such as library import, and 
 container initialization will incur long startup latency, which are jointly called the "cold start latency".
