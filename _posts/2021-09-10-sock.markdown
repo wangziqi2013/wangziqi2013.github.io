@@ -77,3 +77,8 @@ Second, the container's management process, which is spawned upon the container'
 API gateway, which is OpenLambda, using an Unix domain socket. The domain socket is just like a regular socket that
 acts as a channel of communication in which data and file descriptors can be transferred (if it is a file descriptor, 
 then permission is also automatically granted from the sender to the receiver). 
+A big advantage of domain sockets is that they do not use port numbers for identifications. Instead, they simply use
+the PID, which is already unique at the system level, and hence do not need any virtualization on the port number
+(which, if used, is often statically bound). 
+This way, the new namespace does not need to virtualize the file system and network resources, which have been shown
+to demonstrate bad performance and scalability.
