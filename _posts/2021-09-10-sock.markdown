@@ -87,3 +87,8 @@ Lastly, as indicated earlier, control groups are not created and destroyed for e
 Instead, the OpenLambda process maintains a pool of initialized cgroups, and pass the cgroup via the domain socket
 to the container's management process. When the containerized process is about to exit, the cgroup is returned to the
 OpenLambda gateway, which is then returned to the pool waiting for the next allocation.
+
+Independently from the above lean container optimizations, which are mainly focused on reducing containerization costs 
+via more flexible usages of system calls and reduced isolation, the paper also proposes an addition approach for
+accelerating the runtime cold start cost using Zygote containers and caching.
+
