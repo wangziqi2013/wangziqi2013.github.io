@@ -32,3 +32,6 @@ First, it is sufficient to achieve file system virtualization with bind mounting
 special form of mount() system call that redirects the access to the destination path to the source path.
 It behaves like a mount(), because it still inserts an entry into the mount point table. 
 chroot() simply moves the root directory "/" to a given path given in the argument.
+On the contrary, file systems designed for sharing a static image across container instances while allowing each 
+instance to make its own private changes that are stored in "layers", such as AUFS, incur significant overhead
+due to the complexity and copy-on-write.
