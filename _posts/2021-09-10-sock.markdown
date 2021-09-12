@@ -68,3 +68,7 @@ the same directory using the fast bind mounting system call. The four directorie
 Python library packages, the function source code, and a scratch directory for temporary files. The first three
 directories are mapped as read-only to avoid mutating the shared files (recall that bind mounting will not perform
 CoW; Instead, all modifications are directly reflected on the files which can be seen by all processes).
+Then the root of the process is switched to the aforementioned directory using the cheap system call, chroot().
+Compared with conventional container approaches of using a separate namespace and using AUFS, the lean container
+avoids the expensive operation of copying the mount point table as part of the namespace creation operation, as
+well as the AUFS and its CoW overhead.
