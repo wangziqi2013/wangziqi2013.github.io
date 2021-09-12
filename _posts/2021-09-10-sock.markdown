@@ -26,4 +26,9 @@ To reduce container startup time, the paper argues that container implementation
 Docker, provides full and the strongest isolation. Serverless functions, however, do not always require all the 
 features provides by these containers, since serverless functions are typically small, only perform simple tasks, and
 do not use many of the OS features (e.g., static port assignment). 
+The paper makes three important observations on container-related system calls, which we discuss in details as follows.
 
+First, it is sufficient to achieve file system virtualization with bind mounting and chroot(). The former is just a 
+special form of mount() system call that redirects the access to the destination path to the source path.
+It behaves like a mount(), because it still inserts an entry into the mount point table. 
+chroot() simply moves the root directory "/" to a given path given in the argument.
