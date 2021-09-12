@@ -35,3 +35,10 @@ chroot() simply moves the root directory "/" to a given path given in the argume
 On the contrary, file systems designed for sharing a static image across container instances while allowing each 
 instance to make its own private changes that are stored in "layers", such as AUFS, incur significant overhead
 due to the complexity and copy-on-write.
+
+Second, containerized processes are typically allocated different namespaces, which are private (per-container) name
+spaces for various system resource handlers, including PIDs, file system paths, network port numbers, and so on.
+By separating the namespaces of containerized processes, each process can only observe its own resource usage, while
+different processes could not see each other's resource usage. In other words, it isolates processes in containers
+such that each of them would behave as if they were the only process running in the system.
+
