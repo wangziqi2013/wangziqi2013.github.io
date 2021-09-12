@@ -61,4 +61,10 @@ requests without contacting an external server and downloading all the libraries
 Second, it is also possible to pre-import Python libraries into the interpreter to reduce library import cost during 
 the cold start. 
 
-
+The paper then presents the overall design of the lean container that incorporates a few techniques for
+reducing the cold start latency and to increase container creation throughput. 
+First, when the container is being initialized, the path tree is prepared by stitching four different directories into
+the same directory using the fast bind mounting system call. The four directories are the base system image, the 
+Python library packages, the function source code, and a scratch directory for temporary files. The first three
+directories are mapped as read-only to avoid mutating the shared files (recall that bind mounting will not perform
+CoW; Instead, all modifications are directly reflected on the files which can be seen by all processes).
