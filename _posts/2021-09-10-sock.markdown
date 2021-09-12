@@ -91,4 +91,9 @@ OpenLambda gateway, which is then returned to the pool waiting for the next allo
 Independently from the above lean container optimizations, which are mainly focused on reducing containerization costs 
 via more flexible usages of system calls and reduced isolation, the paper also proposes an addition approach for
 accelerating the runtime cold start cost using Zygote containers and caching.
-
+A Zygote container is a process that has already performed library imports, and can either be immediately used for 
+executing a function, or further import more required libraries before executing a function. 
+Zygote processes are forked to create new instances of the containerized process, such that the new instance 
+is already initialized, reducing the overhead of initializing a container and the language runtime to the cost
+of a fork() system call (although in the actual implementation, two fork() calls are required due to the 
+"one peculiarity of setns()").
