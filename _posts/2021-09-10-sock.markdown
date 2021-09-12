@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Compared with general-purpose containers, lean containers for serverless functions can be specialized 
+   based on the special requirements of serverless by using special file system arrangements, cgroup
+   caches, and not using certain namespaces that are slow to create and destroy.
+
 This paper presents SOCK, a customized container framework for reducing cold start latency of serverless functions.
 The paper is motivated by the observation that both language runtime initialization, such as library import, and 
 container initialization will incur long startup latency, which are jointly called the "cold start latency".
