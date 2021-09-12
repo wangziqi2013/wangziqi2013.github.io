@@ -41,4 +41,8 @@ spaces for various system resource handlers, including PIDs, file system paths, 
 By separating the namespaces of containerized processes, each process can only observe its own resource usage, while
 different processes could not see each other's resource usage. In other words, it isolates processes in containers
 such that each of them would behave as if they were the only process running in the system.
+New namespaces can be created by the unshare() system call, which accepts arguments indicating the resource type.
+The paper observes that both namespace creation and cleanup incurs non-negligible overhead, and it is especially
+bad for a few particular resource types, such as IPC and network ports, mainly because of the global lock and RCU.
+
 
