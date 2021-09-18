@@ -25,7 +25,12 @@ version_mgmt:
 2. The above issue is even more prominent in the version with PC bit mask, because if a process shares the same 
    CCID with other processes, but it has a private entry, then the first lookup must be performed using CCID and the
    VA to generate the index, which will hit the entry, and the PC mask will be checked. Only at this moment can we
-   know that the VA has a private entry, and the second probe is performed using ASID and the VA. 
+   know that the VA has a private entry, and the second probe is performed using ASID and the VA
+   
+3. Where are the "O" bits stored? Are they stored in the page table entries and loaded by the page walker just
+   like other permission bits? 
+   Where are the CCID field stored? In the page table? What if there are not sufficient number of vacant bits
+   in the current Intel PTE?
 
 This paper proposes BabelFish, a virtual memory optimization that aims at reducing duplicated TLB entries and page 
 table entries. BabelFish is motived by the fact that containerized processes often share physical pages and the
