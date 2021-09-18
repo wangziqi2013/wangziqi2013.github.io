@@ -62,3 +62,8 @@ the lookup, the Ownership bit is examined. If the bit is set, then the ASID is c
 context (CR3 register value), indicating that the entry is exclusively used by a context. Otherwise, if the 
 ownership bit is clear, the CCID field of the entry is compared with the CCID value of the current context.
 In either case, a hit is indicated, if both the virtual addresses and the ASID / CCID field match.
+
+The paper also considers the case where a majority of the processes with the same CCID share the same translation
+entry, but a small set of processes, with the same CCID, may have their private entries for the same virtual address.
+This scenario will occur if a small subset of the processes write to the shared page, and create their own private 
+translations due to CoW.
