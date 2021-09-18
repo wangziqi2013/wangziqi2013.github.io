@@ -31,6 +31,10 @@ version_mgmt:
    like other permission bits? 
    Where are the CCID field stored? In the page table? What if there are not sufficient number of vacant bits
    in the current Intel PTE?
+   Obviously software has no way to intervene this, as the TLB lookup and page walk are fully controlled by the MMU.
+
+4. Is it a hard requirement that all processes sharing translation entries must use the same page table?
+   I guess it is positive, because otherwise, the TLB needs to identify redundant entries and merge them.
 
 This paper proposes BabelFish, a virtual memory optimization that aims at reducing duplicated TLB entries and page 
 table entries. BabelFish is motived by the fact that containerized processes often share physical pages and the
