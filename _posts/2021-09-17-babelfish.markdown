@@ -114,4 +114,8 @@ To avoid accessing the bit mask on every TLB lookup, and fetching the PC bit mas
 the paper also proposes adding an additional ORPC bit to both the TLB entry and the PTE. 
 The ORPC is simply a bitwise OR of all 32 bits in the PC mask, and it servers as a shortcut telling the TLB hardware
 that no exception exists on this address. 
-
+The ORPC bit is set by the OS in the PTE when the PC mask is updated, and fetched into the TLB with regular page walks.
+The lookup logic uses the ORPC bit to decide whether the PC mask field should be accessed on lookups to reduce 
+unnecessary read activity (e.g., the PC mask can be stored in a separate physical bank, and only accessed when 
+ORPC bit is one).
+Page walkers will also not walk the MaskPage structure, if the ORPC bit is found to be zero during a page walk.
