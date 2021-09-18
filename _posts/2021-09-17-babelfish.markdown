@@ -43,3 +43,7 @@ same virtual address for the mapping, all sharers will also observe the same VA 
 Lastly, cloud providers who is responsible for maintaining the containerized environments may also add their own
 middleware for container management and pricing. The code and data of the middleware can also be shared by all 
 processes.
+
+BabelFish assumes a two-level TLB architecture, in which each entry consists of at least the VA, which is used as the
+lookup key, the PA, a set of permission bits, and an ASID field to distinguish between the entries from different 
+processes. The organization of the TLB is orthogonal to the topic. 
