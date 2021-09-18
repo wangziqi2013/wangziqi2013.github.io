@@ -129,4 +129,6 @@ which is also mandatory without BabelFish.
 BabelFish also requires processes in the same CCID that share a translation entry to also share the page table.
 BabelFish allows multiple middle-level page table entries (must be of the same type) to point to the same lower-level
 part, essentially sharing these tables across the processes owning the upper-level tables.
-
+The shared PTEs should have their Ownership bit cleared, and ORPC bit maintained based on the value of the PC mask 
+of the page. Reference counters should also be maintained such that the shared entries can only be recollected
+after all the sharer processes have exited.
