@@ -110,3 +110,8 @@ In order to track the PC bit mask for each page, the OS maintains a separate met
 This structure contains of bit masks of all pages ever mapped by the CCID, and will be walked by the MMU on a TLB miss
 to fetch the bits into the TLB entry.
 
+To avoid accessing the bit mask on every TLB lookup, and fetching the PC bit mask from MaskPage on evert TLB miss,
+the paper also proposes adding an additional ORPC bit to both the TLB entry and the PTE. 
+The ORPC is simply a bitwise OR of all 32 bits in the PC mask, and it servers as a shortcut telling the TLB hardware
+that no exception exists on this address. 
+
