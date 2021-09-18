@@ -37,3 +37,6 @@ Second, the paper claims that container processes are created with the fork() sy
 process sharing the VA to PA mapping of the parent process in a Copy-on-Write (CoW) manner. Many pages will not
 be CoW'ed, and remains being shared and read-only between the two processes, which are also at the same virtual
 address and mapped to the same physical address.
+Third, these processes can map certain shared files to the address using mmap() and MAP_SHARED flag, meaning that the
+content of the file is mapped to the address space and is backed by the same physical pages. If mmap() picks the 
+same virtual address for the mapping, all sharers will also observe the same VA to PA translation entries.
