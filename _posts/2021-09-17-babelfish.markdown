@@ -40,3 +40,6 @@ address and mapped to the same physical address.
 Third, these processes can map certain shared files to the address using mmap() and MAP_SHARED flag, meaning that the
 content of the file is mapped to the address space and is backed by the same physical pages. If mmap() picks the 
 same virtual address for the mapping, all sharers will also observe the same VA to PA translation entries.
+Lastly, cloud providers who is responsible for maintaining the containerized environments may also add their own
+middleware for container management and pricing. The code and data of the middleware can also be shared by all 
+processes.
