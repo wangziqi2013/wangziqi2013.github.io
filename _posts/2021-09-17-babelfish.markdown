@@ -125,3 +125,8 @@ shared page, and updates (or creates, if the entry does not exist yet) the page 
 With BabelFish, one addition step is needed to assign the process an index into the PC mask, if not yet, and 
 then update the PC mask in MaskPage. A TLB shootdown is then conducted to invalidate the out-of-dated cached TLB entry,
 which is also mandatory without BabelFish.
+
+BabelFish also requires processes in the same CCID that share a translation entry to also share the page table.
+BabelFish allows multiple middle-level page table entries (must be of the same type) to point to the same lower-level
+part, essentially sharing these tables across the processes owning the upper-level tables.
+
