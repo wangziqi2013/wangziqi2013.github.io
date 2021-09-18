@@ -25,13 +25,14 @@ version_mgmt:
 2. The above issue is even more prominent in the version with PC bit mask, because if a process shares the same 
    CCID with other processes, but it has a private entry, then the first lookup must be performed using CCID and the
    VA to generate the index, which will hit the entry, and the PC mask will be checked. Only at this moment can we
-   know that the VA has a private entry, and the second probe is performed using ASID and the VA
-   
-3. Where are the "O" bits stored? Are they stored in the page table entries and loaded by the page walker just
-   like other permission bits? 
-   Where are the CCID field stored? In the page table? What if there are not sufficient number of vacant bits
+   know that the VA has a private entry, and the second probe is performed using ASID and the VA.
+   **OK, actually I am wrong here. The OS may just set the PC mask index register of the process to a special
+     value to indicate that it does not belong to any exception. In this case, we do not need a hit of the shared
+     entry to determine whether it is part of the exception.**
+
+3. Where are the CCID field stored? In the page table? What if there are not sufficient number of vacant bits
    in the current Intel PTE?
-   Obviously software has no way to set the O bit or the CCID field in the TLB, as the TLB lookup and page walk are 
+   Obviously software has no way to set the CCID field in the TLB, as the TLB lookup and page walk are 
    fully controlled by the MMU.
 
 4. Is it a hard requirement that all processes sharing translation entries must use the same page table?
@@ -99,5 +100,9 @@ are tracked by the process context, i.e., by a context register. The bit offset 
 lookups. During lookup, if a shared entry is hit (Ownership bit is clear), but the PC bit for the process is
 set, then the lookup logic still uses the ASID for comparison.
 
-In order to assign processes to PC bits, the OS maintains a separate metadata structure, called MaskPage. This
-structure 
+The OS is responsible for assigns processes in the same CCID to bit indices in the PC mask, and once the assignment
+is made, it is not to be changed in the remaining lifetime of the process (which are typically short-lived, as
+serverless functions are small). 
+At most 32 processes can have exceptions on any of the page they map.
+
+
