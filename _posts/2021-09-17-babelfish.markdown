@@ -21,4 +21,9 @@ BabelFish reduces the degree of redundancy in both TLB caching and page table en
 single TLB entries and single page table entries to be shared across processes, with probable exceptions tracked
 by additional metadata structures. 
 
+Container is a lightweight mechanism for isolating processes running in the same OS, which has drawn an increasing 
+amount of interest in microservice and serverless due to its faster loading time compared with virtual machines.
+Each containerized process may have its own namespaces and illusion of exclusive ownership to resources such as 
+CPU, memory, and the file system. Processes in containers are, in fact, still Linux processes, and have their own 
+address spaces with virtual-to-physical mapping. 
 
