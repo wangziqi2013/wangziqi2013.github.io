@@ -57,4 +57,8 @@ is set by the OS on every context switch.
 TLB entries are also extended with two extra fields: a CCID field that stores the CCID of the processes that may use
 this translation entry, and an Ownership bit indicating whether the page is privately owned by a process, if set, or
 shared among processes having the same CCID.
-
+In the base version, the TLB lookup logic is modified as follows. When an entry is under comparison in the middle of
+the lookup, the Ownership bit is examined. If the bit is set, then the ASID is compared with the ASID of the current
+context (CR3 register value), indicating that the entry is exclusively used by a context. Otherwise, if the 
+ownership bit is clear, the CCID field of the entry is compared with the CCID value of the current context.
+In either case, a hit is indicated, if both the virtual addresses and the ASID / CCID field match.
