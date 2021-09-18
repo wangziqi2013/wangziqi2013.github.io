@@ -119,3 +119,9 @@ The lookup logic uses the ORPC bit to decide whether the PC mask field should be
 unnecessary read activity (e.g., the PC mask can be stored in a separate physical bank, and only accessed when 
 ORPC bit is one).
 Page walkers will also not walk the MaskPage structure, if the ORPC bit is found to be zero during a page walk.
+
+On a page CoW, the normal procedure is followed, i.e., the OS allocates a new physical page, copies the content of the
+shared page, and updates (or creates, if the entry does not exist yet) the page table entries of both processes.
+With BabelFish, one addition step is needed to assign the process an index into the PC mask, if not yet, and 
+then update the PC mask in MaskPage. A TLB shootdown is then conducted to invalidate the out-of-dated cached TLB entry,
+which is also mandatory without BabelFish.
