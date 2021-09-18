@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 --- 
 
+**Highlights:**
+
+1. Containerized processes often share code and data due to using fork() and running on the same binaries, libraries,
+   and middleware. This causes redundant translation entries in the TLB, which can be removed by allowing sharing
+   lower levels of the page table, and correspondingly, the TLB entries, across processes.
+
+2. 
+
 **Comments:**
 
 1. In the base version (without the PC bit mask), do you assume that the TLB set index is generated solely with the
