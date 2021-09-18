@@ -104,5 +104,9 @@ The OS is responsible for assigns processes in the same CCID to bit indices in t
 is made, it is not to be changed in the remaining lifetime of the process (which are typically short-lived, as
 serverless functions are small). 
 At most 32 processes can have exceptions on any of the page they map.
-
+On context switches, the OS sets the context register storing the index into the PC mask of the process being scheduled 
+in (if there is none, then the process does not belong to the exceptions, in which case the bit index is not used).
+In order to track the PC bit mask for each page, the OS maintains a separate metadata structure, called MaskPage. 
+This structure contains of bit masks of all pages ever mapped by the CCID, and will be walked by the MMU on a TLB miss
+to fetch the bits into the TLB entry.
 
