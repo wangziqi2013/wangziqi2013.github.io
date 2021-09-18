@@ -132,3 +132,8 @@ part, essentially sharing these tables across the processes owning the upper-lev
 The shared PTEs should have their Ownership bit cleared, and ORPC bit maintained based on the value of the PC mask 
 of the page. Reference counters should also be maintained such that the shared entries can only be recollected
 after all the sharer processes have exited.
+
+The paper also noted that, by sharing lower-level page table entries, BabelFish also reduces the number of minor
+page misses, which are caused by the page table entries not being populated after a fork(). As long as one of the
+processes sharing the entries have populated it, no minor page faults on the same address will happen for future
+accesses from other processes.
