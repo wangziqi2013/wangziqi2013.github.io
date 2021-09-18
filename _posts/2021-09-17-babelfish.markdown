@@ -50,3 +50,11 @@ processes. The organization of the TLB is orthogonal to the topic.
 The paper also assumes Intel architecture's four-level, radix tree page table, and an MMU that could perform page walks.
 A Page Walk Cache (PWC) may also be present to reduce main memory accesses from the page walk by caching the in-memory
 translation entries from all levels.
+
+BabelFish works by assigning processes that are likely to share translation entries (e.g., processes fork()'ed from the
+same Zygote) with the same CCID (Container Context ID). The CCID of the process is stored in a context register that
+is set by the OS on every context switch.
+TLB entries are also extended with two extra fields: a CCID field that stores the CCID of the processes that may use
+this translation entry, and an Ownership bit indicating whether the page is privately owned by a process, if set, or
+shared among processes having the same CCID.
+
