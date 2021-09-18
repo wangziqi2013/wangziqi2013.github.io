@@ -26,4 +26,9 @@ amount of interest in microservice and serverless due to its faster loading time
 Each containerized process may have its own namespaces and illusion of exclusive ownership to resources such as 
 CPU, memory, and the file system. Processes in containers are, in fact, still Linux processes, and have their own 
 address spaces with virtual-to-physical mapping. 
-
+The paper observes that containerized processes typically have many identical VA to PA mappings and permission bits 
+despite that they are actually in different address spaces. The paper identifies several factors that contribute to 
+this observation.
+First, in microservice and serverless architectures, the number of service instances are adjusted based on the dynamic 
+load, and it is common that many instances of the same service are started to handle requests. All of the instances
+share the same underlying binary and the libraries.
