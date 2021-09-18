@@ -47,3 +47,6 @@ processes.
 BabelFish assumes a two-level TLB architecture, in which each entry consists of at least the VA, which is used as the
 lookup key, the PA, a set of permission bits, and an ASID field to distinguish between the entries from different 
 processes. The organization of the TLB is orthogonal to the topic. 
+The paper also assumes Intel architecture's four-level, radix tree page table, and an MMU that could perform page walks.
+A Page Walk Cache (PWC) may also be present to reduce main memory accesses from the page walk by caching the in-memory
+translation entries from all levels.
