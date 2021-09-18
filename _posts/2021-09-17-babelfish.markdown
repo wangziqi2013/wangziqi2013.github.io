@@ -31,10 +31,12 @@ version_mgmt:
    like other permission bits? 
    Where are the CCID field stored? In the page table? What if there are not sufficient number of vacant bits
    in the current Intel PTE?
-   Obviously software has no way to intervene this, as the TLB lookup and page walk are fully controlled by the MMU.
+   Obviously software has no way to set the O bit or the CCID field in the TLB, as the TLB lookup and page walk are 
+   fully controlled by the MMU.
 
 4. Is it a hard requirement that all processes sharing translation entries must use the same page table?
-   I guess it is positive, because otherwise, the TLB needs to identify redundant entries and merge them.
+   I guess it is positive, because otherwise, the TLB may fetch redundant entries with different ASIDs but
+   identical VAs, in which case it also needs to identify redundant entries and merge them.
 
 This paper proposes BabelFish, a virtual memory optimization that aims at reducing duplicated TLB entries and page 
 table entries. BabelFish is motived by the fact that containerized processes often share physical pages and the
@@ -96,3 +98,6 @@ and each bit represents whether a process has a private translation. Mapping fro
 are tracked by the process context, i.e., by a context register. The bit offset is sent to the TLB lookup logic on 
 lookups. During lookup, if a shared entry is hit (Ownership bit is clear), but the PC bit for the process is
 set, then the lookup logic still uses the ASID for comparison.
+
+In order to assign processes to PC bits, the OS maintains a separate metadata structure, called MaskPage. This
+structure 
