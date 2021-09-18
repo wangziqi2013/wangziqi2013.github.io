@@ -31,4 +31,9 @@ despite that they are actually in different address spaces. The paper identifies
 this observation.
 First, in microservice and serverless architectures, the number of service instances are adjusted based on the dynamic 
 load, and it is common that many instances of the same service are started to handle requests. All of the instances
-share the same underlying binary and the libraries.
+share the same underlying binary and the libraries, which are also usually mapped to the same virtual address at each
+process.
+Second, the paper claims that container processes are created with the fork() system call, which produces a child 
+process sharing the VA to PA mapping of the parent process in a Copy-on-Write (CoW) manner. Many pages will not
+be CoW'ed, and remains being shared and read-only between the two processes, which are also at the same virtual
+address and mapped to the same physical address.
