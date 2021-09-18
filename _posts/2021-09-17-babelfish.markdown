@@ -19,8 +19,9 @@ version_mgmt:
    and middleware. This causes redundant translation entries in the TLB, which can be removed by allowing sharing
    lower levels of the page table, and correspondingly, the TLB entries, across processes.
 
-2. 
+2. Assign each process a CCID to group them into the same domain for sharing translation entries.
    Lookup logic can use either the conventional ASID, or the CCID for tag comparison.
+   This still allows processes with different CCIDs to use distinct translation entries.
 
 3. Even for shared TLB entries, exceptions can be allowed using a bit mask tracking processes that do not actually 
    share the entry. This is useful for the common scenario where most processes share a translation entry, but a few
