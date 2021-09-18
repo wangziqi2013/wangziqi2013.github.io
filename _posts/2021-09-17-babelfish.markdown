@@ -22,6 +22,11 @@ version_mgmt:
    the lookup latency can potentially be doubled, because the set index using ASID and CCID can be different.
    Two probes must be made in this case, CCID first, and ASID later if the previous one misses.
 
+2. The above issue is even more prominent in the version with PC bit mask, because if a process shares the same 
+   CCID with other processes, but it has a private entry, then the first lookup must be performed using CCID and the
+   VA to generate the index, which will hit the entry, and the PC mask will be checked. Only at this moment can we
+   know that the VA has a private entry, and the second probe is performed using ASID and the VA. 
+
 This paper proposes BabelFish, a virtual memory optimization that aims at reducing duplicated TLB entries and page 
 table entries. BabelFish is motived by the fact that containerized processes often share physical pages and the
 corresponding address mappings. On current TLB architectures, these mappings will be cached by the TLB as distinct
