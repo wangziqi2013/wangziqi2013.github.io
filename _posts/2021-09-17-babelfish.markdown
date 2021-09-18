@@ -17,3 +17,8 @@ This paper proposes BabelFish, a virtual memory optimization that aims at reduci
 table entries. BabelFish is motived by the fact that containerized processes often share physical pages and the
 corresponding address mappings. On current TLB architectures, these mappings will be cached by the TLB as distinct
 entries, because of the ASID field for eliminating homonym or expensive TLB flushes on context switches.
+BabelFish reduces the degree of redundancy in both TLB caching and page table entries in the main memory by allowing 
+single TLB entries and single page table entries to be shared across processes, with probable exceptions tracked
+by additional metadata structures. 
+
+
