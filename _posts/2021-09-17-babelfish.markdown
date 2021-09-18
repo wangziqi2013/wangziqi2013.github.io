@@ -67,3 +67,9 @@ The paper also considers the case where a majority of the processes with the sam
 entry, but a small set of processes, with the same CCID, may have their private entries for the same virtual address.
 This scenario will occur if a small subset of the processes write to the shared page, and create their own private 
 translations due to CoW.
+To support this, BabelFish allows a few "exceptions" per entry such that those exceptions will use their private entry
+during address translation. The exceptions are marked using a 32-bit mask per TLB entry, and each bit represents 
+whether a process has a private translation. Mapping from processes to bit mask locations are tracked by the process
+context, i.e., by a context register. The bit offset is sent to the TLB lookup logic on lookups. 
+During lookup, if a shared entry is hit (Ownership bit is clear), but the exception bit for the process is set, then 
+the lookup logic still uses the ASID for comparison.
