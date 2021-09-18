@@ -19,7 +19,9 @@ version_mgmt:
    and middleware. This causes redundant translation entries in the TLB, which can be removed by allowing sharing
    lower levels of the page table, and correspondingly, the TLB entries, across processes.
 
-2. 
+2. Even for shared TLB entries, exceptions can be allowed using a bit mask tracking processes that do not actually 
+   share the entry. This is useful for the common scenario where most processes share a translation entry, but a few
+   of them actually makes private copies of the page due to CoW.
 
 **Comments:**
 
