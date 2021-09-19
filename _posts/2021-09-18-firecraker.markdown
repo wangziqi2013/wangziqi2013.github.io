@@ -17,4 +17,6 @@ This paper presents Firecracker, a lightweight VMM platform designed and optimiz
 This paper contains little technical discussion, especially on the implementations of the Firecracker VMM (it is 
 open-sourced, though), and it focuses more on the high-level ideas that motivate the design principals of 
 Firecrackers, and how it is deployed in a production system. 
-
+Nevertheless, being able to see an industrial system that has already been tested under production environments 
+is always beneficial, and the insights provided by this paper may server as a guideline for future system designers 
+working on serverless and other related topics.
