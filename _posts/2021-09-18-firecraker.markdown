@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 --- 
+
+This paper presents Firecracker, a lightweight VMM platform designed and optimized specifically for serverless. 
+This paper contains little technical discussion, especially on the implementations of the Firecracker VMM (it is 
+open-sourced, though), and it focuses more on the high-level ideas that motivate the design principals of 
+Firecrackers, and how it is deployed in a production system. 
+
