@@ -64,4 +64,10 @@ into this big picture. The Lambda infrastructure consists of a frontend worker f
 The former is deployed with the API gateway, the load balancer and interfaces that connect with other services,
 which receives user requests, queues them, and forwards them to the backend workers using what is called 
 "sticky routing" to maintain the number of workers that start instances of a certain type of function small. 
-
+Each of the worker fleet machine has a number of "slots", which are pre-loaded environments (containers, VMMs, etc.) 
+for executing functions. Firecracker instances can be started to be a slot, while other types of virtualization
+containers can also be used for other slots meanwhile.
+On each worker fleet machine, a Micro-manager, implemented a single process, manages all slots on the machine,
+and is responsible for scaling out function instances. 
+The Micro-manager maintains a pool of MicroVM instances that have already been booted up in order to support fast 
+scale-up.
