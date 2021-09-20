@@ -38,3 +38,9 @@ fulfill the requirements of serverless. First, deployment density of VMMs is low
 instance must maintain their own kernel image and a full set of system states for supporting an OS.
 Second, startup latency is also a concern, since the VMM needs to boot up a full kernel, which typically takes
 seconds.
+
+This paper presents Firecracker, a lightweight VMM implementation targeting running arbitrary binaries without
+recompilation on minimum Linux kernel, with an explicit simplicity and minimalism design goal.
+Firecracker is implemented in Rust as a middle layer between Linux KVM driver and Linux system calls. 
+
+
