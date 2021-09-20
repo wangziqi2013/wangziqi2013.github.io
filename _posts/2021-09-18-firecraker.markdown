@@ -20,3 +20,8 @@ Firecrackers, and how it is deployed in a production system.
 Nevertheless, being able to see an industrial system that has already been tested under production environments 
 is always beneficial, and the insights provided by this paper may server as a guideline for future system designers 
 working on serverless and other related topics.
+
+Firecracker is motivated by the intrinsic trade-off between isolation and efficiency for general-purpose virtualization
+solutions. On one side of the spectrum, containers leverages namespaces, control groups, secure computing 
+(seccomp-bpf), and special file systems to allow multiple processes to have their own view of the system, while 
+physically they are still sharing the same underlying kernel. 
