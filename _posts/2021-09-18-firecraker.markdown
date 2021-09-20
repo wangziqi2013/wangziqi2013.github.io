@@ -24,4 +24,9 @@ working on serverless and other related topics.
 Firecracker is motivated by the intrinsic trade-off between isolation and efficiency for general-purpose virtualization
 solutions. On one side of the spectrum, containers leverages namespaces, control groups, secure computing 
 (seccomp-bpf), and special file systems to allow multiple processes to have their own view of the system, while 
-physically they are still sharing the same underlying kernel. 
+physically they are still sharing the same underlying kernel. Containers have low latency and small memory footprint as
+only one kernel image is kept in the memory, but sacrifices isolation, since it entirely relies on the kernel to
+isolate processes properly, which may not be hundred percent reliable due to software bugs, side-channels, system
+call exploits, etc.
+
+
