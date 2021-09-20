@@ -59,5 +59,8 @@ between Micro-VM instances, Firecracker additionally implements a jailer layer t
 that each instance has its own view of the file system, uses a separate namespace, and to limit the available system
 calls to Firecracker middleware using seccomp-bpf.
 
-
+The rest of the paper discusses the big picture of Lambda function infrastructure, and how Firecracker incorporates 
+into this big picture. The Lambda infrastructure consists of a frontend worker fleet and a backend worker fleet.
+The former is deployed with the API gateway, the load balancer and interfaces that connect with other services,
+which receives user requests, queues them, and forwards them to the backend workers. 
 
