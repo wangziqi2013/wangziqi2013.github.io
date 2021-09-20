@@ -53,4 +53,11 @@ Only a limited set of devices are supported, such as block devices, the network 
 Both the disk and network devices have a rate limiter in the Firecracker implemented as token buckets, which regulates
 resource consumption of a single VM instance.
 
+Firecracker instances are individual Linux processes, and each process boots one Micro-VM. 
+The process communicates with the outside using a local socket and via the REST API. To further fortify the isolation
+between Micro-VM instances, Firecracker additionally implements a jailer layer that wraps the middleware, to ensure
+that each instance has its own view of the file system, uses a separate namespace, and to limit the available system
+calls to Firecracker middleware using seccomp-bpf.
+
+
 
