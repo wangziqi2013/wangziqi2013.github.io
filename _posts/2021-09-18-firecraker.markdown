@@ -32,3 +32,9 @@ call exploits, etc.
 At the other side of the spectrum, virtual machine managers (VMMs) provide hardware-enforced isolation leveraging 
 the special CPU mode to allow a full kernel to be executed directly on the hardware as a user process, with the 
 hypervisor emulating certain functionalities of privileged instructions and when resource sharing is needed.
+VMMs enjoy a higher degree of isolation, since different instances of virtual machines run on different kernel
+images. The paper points out, however, that existing fully-fledged VMM implementations face two challenges to 
+fulfill the requirements of serverless. First, deployment density of VMMs is lower than that of containers, as each
+instance must maintain their own kernel image and a full set of system states for supporting an OS.
+Second, startup latency is also a concern, since the VMM needs to boot up a full kernel, which typically takes
+seconds.
