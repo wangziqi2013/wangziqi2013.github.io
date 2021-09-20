@@ -29,4 +29,6 @@ only one kernel image is kept in the memory, but sacrifices isolation, since it 
 isolate processes properly, which may not be hundred percent reliable due to software bugs, side-channels, system
 call exploits, etc.
 
-
+At the other side of the spectrum, virtual machine managers (VMMs) provide hardware-enforced isolation leveraging 
+the special CPU mode to allow a full kernel to be executed directly on the hardware as a user process, with the 
+hypervisor emulating certain functionalities of privileged instructions and when resource sharing is needed.
