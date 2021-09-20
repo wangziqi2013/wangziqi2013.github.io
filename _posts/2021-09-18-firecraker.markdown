@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 --- 
 
+**Highlight:**
+
+1. Specialization is the key to improvement performance for containers on serverless. The VMM can also be made as thin
+   as possible without unnecessary features, only proving the most fundamental features that are required by a minimal
+   Linux.
+
+
+
 This paper presents Firecracker, a lightweight VMM platform designed and optimized specifically for serverless. 
 This paper contains little technical discussion, especially on the implementations of the Firecracker VMM (it is 
 open-sourced, though), and it focuses more on the high-level ideas that motivate the design principals of 
