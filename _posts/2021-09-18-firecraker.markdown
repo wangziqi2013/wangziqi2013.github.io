@@ -49,5 +49,8 @@ implementing its own device driver, reusing the code base of existing Linux.
 Firecracker could boot either a minimal Linux kernel, or unikernels designed for cloud applications such as OSv
 (despite an earlier claim in the paper that unikernels are unable to support unmodified Linux binaries, OSv actually
 supports unmodifed Linux binary, as can be confirmed [here](https://github.com/cloudius-systems/osv/wiki/Components-of-OSv)).
+Only a limited set of devices are supported, such as block devices, the network interface, and a few other devices.
+Both the disk and network devices have a rate limiter in the Firecracker implemented as token buckets, which regulates
+resource consumption of a single VM instance.
 
 
