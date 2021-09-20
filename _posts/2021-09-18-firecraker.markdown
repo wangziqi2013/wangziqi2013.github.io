@@ -53,14 +53,15 @@ Only a limited set of devices are supported, such as block devices, the network 
 Both the disk and network devices have a rate limiter in the Firecracker implemented as token buckets, which regulates
 resource consumption of a single VM instance.
 
-Firecracker instances are individual Linux processes, and each process boots one Micro-VM. 
+Firecracker instances are individual Linux processes, and each process boots one MicroVM. 
 The process communicates with the outside using a local socket and via the REST API. To further fortify the isolation
-between Micro-VM instances, Firecracker additionally implements a jailer layer that wraps the middleware, to ensure
+between MicroVM instances, Firecracker additionally implements a jailer layer that wraps the middleware, to ensure
 that each instance has its own view of the file system, uses a separate namespace, and to limit the available system
 calls to Firecracker middleware using seccomp-bpf.
 
 The rest of the paper discusses the big picture of Lambda function infrastructure, and how Firecracker incorporates 
 into this big picture. The Lambda infrastructure consists of a frontend worker fleet and a backend worker fleet.
 The former is deployed with the API gateway, the load balancer and interfaces that connect with other services,
-which receives user requests, queues them, and forwards them to the backend workers. 
+which receives user requests, queues them, and forwards them to the backend workers using what is called 
+"sticky routing" to maintain the number of workers that start instances of a certain type of function small. 
 
