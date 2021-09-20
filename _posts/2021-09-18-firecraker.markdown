@@ -42,5 +42,9 @@ seconds.
 This paper presents Firecracker, a lightweight VMM implementation targeting running arbitrary binaries without
 recompilation on minimum Linux kernel, with an explicit simplicity and minimalism design goal.
 Firecracker is implemented in Rust as a middle layer between Linux KVM driver and Linux system calls. 
+On the one hand, Firecracker relies KVM to escalate its own permission into that of a hypervisor, and to intercept 
+privileged instructions that access shared or system resource. On the other hand, Firecracker relays the access
+requests to the host Linux kernel to perform the requested operations, such as I/O and networking, rather than 
+implementing its own device driver, reusing the code base of existing Linux.
 
 
