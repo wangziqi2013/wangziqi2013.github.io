@@ -19,7 +19,11 @@ version_mgmt:
    as possible without unnecessary features, only proving the most fundamental features that are required by a minimal
    Linux.
 
-
+2. VMMs can be implemented as a middleware between KVM and the Linux system call layer. The KVM intercepts privileged 
+   instructions, which is passed to the VMM, and then the VMM performs these operations on behalf of the 
+   virtualized system by issuing system calls. 
+   This could make the VMM layer very simple, as most of the functions are already implemented in the host Linux 
+   kernel.
 
 This paper presents Firecracker, a lightweight VMM platform designed and optimized specifically for serverless. 
 This paper contains little technical discussion, especially on the implementations of the Firecracker VMM (it is 
