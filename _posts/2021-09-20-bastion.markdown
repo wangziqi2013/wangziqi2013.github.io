@@ -49,4 +49,10 @@ As mentioned above, Bastion relies on a trusted hypervisor to carry out all the 
 is verified at boot time. Protected applications can be co-hosted by the same hypervisor in the same untrusted OS.
 The hypervisor may perform its address translation from guest virtual to host physical using either shadow page
 tables, or nested page tables (the latter is adopted by later hardware virtualization features).
-
+No matter which address translation scheme is used, the paper also assumes that the hypervisor has ultimate control
+of the translation entries installed into the TLB. On an architecture that does not have a page walker and relies the
+OS to install the entry, this can be done naturally as control is transferred to the hypervisor for installing the entry
+on a TLB miss. On architectures with a page walker, the paper proposes that the MMU should raise an interrupt to the
+hypervisor after the page table entry has been fetched from the memory, such that the hypervisor always has a 
+chance to modify the entry to be inserted into the TLB (e.g., the entry to be installed is made available to the 
+hypervisor).
