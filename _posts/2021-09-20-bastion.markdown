@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 --- 
+
+This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
+of trusted hypervisors, software modules, and secure storage of data on external devices. 
+The paper is motivated by the fact existing mechanisms for secure computing are neither comprehensive, nor efficient,
+indicating that a single mechanism is not sufficient to protect all system components without incurring high
+overhead. 
