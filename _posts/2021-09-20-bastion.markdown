@@ -34,3 +34,10 @@ understand what does this mean in the paper**).
 Lastly, some proposals assume that the hardware will be physically intact, which are prone to hardware attacks,
 such as using malicious bus agents to tap on the memory bus or actively corrupt data, or accessing the external
 storage by physically mounting it on a non-secure host.
+
+Bastion surpasses previous proposals by having a rather comprehensive threat model. Bastion assumes that all system
+components, including the OS, the memory bus, the main memory modules, and the external devices, are all unreliable
+in a way that they are prone to software and/or hardware attacks. The only two trusted components in Bastion are the 
+hypervisor, which is from a trusted software distributor and is always integrity-verified before every boot, and 
+the CPU chip containing the core pipeline, the caches, and the Bastion hardware.
+
