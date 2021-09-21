@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Scalable Architectural Support for Trusted Software"
+date:   2021-09-20 18:04:00 -0500
+categories: paper
+paper_title: "Scalable Architectural Support for Trusted Software"
+paper_link: https://ieeexplore.ieee.org/document/5416657
+paper_keyword: Security; Enclave; Bastion
+paper_year: HPCA 2010
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+--- 
