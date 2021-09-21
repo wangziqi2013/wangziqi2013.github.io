@@ -56,3 +56,9 @@ on a TLB miss. On architectures with a page walker, the paper proposes that the 
 hypervisor after the page table entry has been fetched from the memory, such that the hypervisor always has a 
 chance to modify the entry to be inserted into the TLB (e.g., the entry to be installed is made available to the 
 hypervisor).
+
+The Bastion root of the trust starts with a boot-time validation of the hypervisor. The validation is performed by a 
+short code sequence stored in an on-chip secure memory (which is assumed to be safe from attacks). The 
+code sequence is triggered by an instruction, namely secure\_launch, which is invoked by the untrusted bootloader
+after it has loaded the hypervisor module into the main memory.
+
