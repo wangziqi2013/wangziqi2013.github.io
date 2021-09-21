@@ -61,4 +61,9 @@ The Bastion root of the trust starts with a boot-time validation of the hypervis
 short code sequence stored in an on-chip secure memory (which is assumed to be safe from attacks). The 
 code sequence is triggered by an instruction, namely secure\_launch, which is invoked by the untrusted bootloader
 after it has loaded the hypervisor module into the main memory.
-
+The secure\_launch instruction calls into the validation procedure, which computes the hash of the current hypervisor
+image, and stores it in a register "hypervisor_hash". This hash value is then compared with a non-volatile register,
+storage\_owner\_hash, which is the hash value of the hypervisor that created the secure storage.
+If both hashes match, then the other two non-volatile registers, namely secure\_storage\_key and secure\_storage\_hash,
+are exposed to the hypervisor as the cryptographic key for decoding the contents in the secure storage and for 
+validating the integrity, respectively.
