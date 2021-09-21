@@ -29,4 +29,8 @@ switching to the protected application involves a world switch into another VMM 
 The paper also lists limitations of other proposed designs. First, some of them lack scalability, since they 
 need dedicated hardware resource per protected region, meaning that the number of protected regions is upper bounded
 by the number of available hardware resources. 
-Second, 
+Second, these proposals lack flexibility since they do not take software context into consideration (**I did not 
+understand what does this mean in the paper**). 
+Lastly, some proposals assume that the hardware will be physically intact, which are prone to hardware attacks,
+such as using malicious bus agents to tap on the memory bus or actively corrupt data, or accessing the external
+storage by physically mounting it on a non-secure host.
