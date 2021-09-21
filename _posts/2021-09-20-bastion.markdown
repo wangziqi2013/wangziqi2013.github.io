@@ -21,3 +21,8 @@ overhead. Bastion, on the other hand, provides a set of simple hardware interfac
 control, and encryption/decryption, and relies on a trusted (and dynamically verified) hypervisor to protect 
 both dynamic execution, data access, and external I/O of applications.
 
+The paper begins with a discussion of the limitations of existing secure computing techniques. Virtual Machine Monitors
+(VMMs) are a popular option, because it offers hardware-assisted isolation between kernels. This provides a great 
+advantage over schemes that rely on the kernel to be not compromised, as the protected application can be 
+executed on a separate VMM instance using its own trusted OS. VMMs, however, incurs great overhead as well, since 
+switching to the protected application involves a world switch into another VMM instance.
