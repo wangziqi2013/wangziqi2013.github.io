@@ -26,3 +26,7 @@ The paper begins with a discussion of the limitations of existing secure computi
 advantage over schemes that rely on the kernel to be not compromised, as the protected application can be 
 executed on a separate VMM instance using its own trusted OS. VMMs, however, incurs great overhead as well, since 
 switching to the protected application involves a world switch into another VMM instance.
+The paper also lists limitations of other proposed designs. First, some of them lack scalability, since they 
+need dedicated hardware resource per protected region, meaning that the number of protected regions is upper bounded
+by the number of available hardware resources. 
+Second, 
