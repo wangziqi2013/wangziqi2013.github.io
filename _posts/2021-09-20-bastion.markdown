@@ -40,4 +40,13 @@ components, including the OS, the memory bus, the main memory modules, and the e
 in a way that they are prone to software and/or hardware attacks. The only two trusted components in Bastion are the 
 hypervisor, which is from a trusted software distributor and is always integrity-verified before every boot, and 
 the CPU chip containing the core pipeline, the caches, and the Bastion hardware.
+The paper argues that despite the fact that the CPU chip can also be physically tapped or even altered, the technical
+difficulty in doing so is astronomical as modern chips are manufactured into multiple layers of logical gates and 
+wires, making it almost impossible to attach a CPU chip.
+The paper also noted that Bastion does not intend to protect application from side-channel or covert channel attacks.
+
+As mentioned above, Bastion relies on a trusted hypervisor to carry out all the security related actions, which itself
+is verified at boot time. Protected applications can be co-hosted by the same hypervisor in the same untrusted OS.
+The hypervisor may perform its address translation from guest virtual to host physical using either shadow page
+tables, or nested page tables (the latter is adopted by later hardware virtualization features).
 
