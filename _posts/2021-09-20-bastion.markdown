@@ -124,4 +124,9 @@ loaded into the main memory.
 Each module also has a short form module ID, which is assigned internally by the hypervisor when a new module is seen,
 and is used at hardware level to identify a module. The hypervisor maintains a mapping table between the two forms
 of ID for translation.
-Modules declare the memory access rights to the hypervisor via a SECURE\_LAUNCH hypercall
+Modules not explicit declaring access rights are assumed to be on module zero, which is just the rest of the system
+and applications that do not use Bastion.
+Modules declare the memory access rights to the hypervisor via a SECURE\_LAUNCH hypercall, which accepts a pointer to
+a security segment structure consisting of those explicit access right declarations, and the necessary arguments for
+parsing the table. 
+
