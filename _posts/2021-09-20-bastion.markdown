@@ -40,6 +40,9 @@ version_mgmt:
    I mean this problem is easy to address (when guest is running in OS mode then do not raise exception), but the
    paper did not give any discussion on this issue.
 
+6. Is there any scenario where i\_bit and c\_bit are not both set or clear? The paper seems to suggest that they
+   are either both set of both clear for modules and non-modules, respectively.
+
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
 The paper is motivated by the fact existing mechanisms for secure computing are neither comprehensive, nor efficient,
@@ -185,6 +188,15 @@ attacks.
 
 Bastion also protects the physical memory to avoid physical attacks that attempt to obtain bus transferred data, and/or 
 to corrupt the memory blocks. 
-The former is achieved by encrypting the entire physical address space, using the one-time key generated during boot
+The former is achieved by encrypting part of the physical address space, using the one-time key generated during boot
 sequence, and only decrypting them when they are fetched into the cache hierarchy.
 The latter is achieved using a Merkle tree, which has become the de facto standard for memory integrity verification.
+The paper also suggests that only cache blocks belonging to modules are encrypted and verified, while blocks belonging
+to module zero are still used in the normal way.
+Two extra bits, namely the i\_bit and the c\_bit, are added to the cache for indicating these two status.
+
+Bastion provides protection on external storage in a way that is similar to physical memory, i.e., using both encryption
+and integrity verification. Bastion has its own secure storage area, which is protected by the key and hash values
+stored in non-volatile registers. As mentioned earlier, these two values are only exposed to the hypervisor, if the
+hypervisor's identity (the hash) is identical to the one that creates the secure storage. 
+
