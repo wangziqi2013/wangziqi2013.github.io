@@ -151,4 +151,11 @@ current module being executed. One process could have multiple modules, and this
 procedure call enters and leaves a module, respectively, as we will see later. 
 The TLB entries are also extended with an extra module\_id field, which stores the short form module ID that 
 could access the page. 
+When a TLB miss occurs, the hypervisor either sets this field by performing the page walk by itself and using 
+the page address to lookup the Module State Table, or wait for MMU's page walk to finish, and then updates the 
+module\_id of the entry to be inserted. 
+Note that for a shared page, multiple module\_ids may be used. The hypervisor selects the current context's module ID,
+if there is one in the Module State Table, or simply just signal an access right violation.
+During execution, the context module ID is checked against the module\_id field in the TLB entry on every memory access,
+and if mismatch occurs, the hypervisor is signaled by raising an exception.
 
