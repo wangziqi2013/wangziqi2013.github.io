@@ -93,3 +93,10 @@ privilege level. This may be generally fine for a normally behaving application,
 (e.g., being hijacked by a buffer overflow).
 Second, the OS always has the highest privilege, and therefore, is not bound by the access rules of virtual memory.
 If an OS is malicious, then user applications have no secret to hide.
+Bastion provides a finer-grained and stronger isolation primitive based on pages. It allows applications or 
+modules within an application to explicitly declare access rights to only a subset of the pages within the module's 
+own addressable memory, shared pages with other modules, and allowed entry points. 
+These set of rules will be strictly enforced both within the module and between the OS and the module, such that any
+non-declared access will result in either a fault (for application level accesses) or reading encrypted data.
+
+
