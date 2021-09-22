@@ -85,4 +85,10 @@ If the hypervisor validation fails, either because the hypervisor is corrupted, 
 because a malicious boot loader circumvents the secure\_launch instruction, the secure storage will not be 
 accessible, and the Bastion hardware will simply just destroy the secure storage by erasing the persistent registers.
 
-
+The first feature of Bastion is secure access to the memory. Despite already having per-process virtual address space
+as the means of isolation, this abstraction is way to coarse-grained, and faces several security challenges
+(**the following is not in the paper, and I summarized them myself.**). 
+First, the virtual memory does not enforce any constraint on an application to access its own data at the same 
+privilege level. This may be generally fine for a normally behaving application, but not acceptable if it goes rogue
+(e.g., being hijacked by a buffer overflow).
+Second
