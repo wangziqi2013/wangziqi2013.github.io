@@ -24,7 +24,10 @@ version_mgmt:
 2. Module stack pointer is introduced in Section 4.1 once, and never mentioned later. What is the purpose of it?
    Why do you need separate notions for the stack in addition to the module page list?
 
-
+3. Who computes the module hash? Definitely not the OS as a malicious OS could report any arbitrary number.
+   Does the hypervisor know when a binary is to be loaded? Or module hashes are just known a priori?
+   The last point may make sense as modules also need to declare shared accesses with the long form IDs of
+   other modules.
 
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
