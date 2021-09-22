@@ -24,6 +24,8 @@ version_mgmt:
 2. Module stack pointer is introduced in Section 4.1 once, and never mentioned later. What is the purpose of it?
    Why do you need separate notions for the stack in addition to the module page list?
 
+
+
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
 The paper is motivated by the fact existing mechanisms for secure computing are neither comprehensive, nor efficient,
@@ -84,6 +86,11 @@ Secure storage will be discussed later as one of the security features provided 
 If the hypervisor validation fails, either because the hypervisor is corrupted, resulting to a different hash, or
 because a malicious boot loader circumvents the secure\_launch instruction, the secure storage will not be 
 accessible, and the Bastion hardware will simply just destroy the secure storage by erasing the persistent registers.
+
+During the secure boot, a secret key is also generated from a reliable source of randomness to server as the key 
+for encryption and decryption of volatile data. The secret key is a one-time key that is not preserved across reboots.
+The last-level cache uses this key to encrypt outbound data before it is sent on the memory bus, and decrypt 
+inbound data before it is stored as clear text in the cache hierarchy. 
 
 The first feature of Bastion is secure access to the memory. Despite already having per-process virtual address space
 as the means of isolation, this abstraction is way to coarse-grained, and faces several security challenges
