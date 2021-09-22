@@ -20,6 +20,11 @@ version_mgmt:
 2. Enclaves can be enforced by adding an extra module ID field to the TLB and then comparing the current ID of the
    module being executed with the TLB entry;
 
+3. Control flow can be secured by letting the system to fault naturally on transfer of the control flow in or
+   out of a module's private code space, and then updating the current module ID;
+
+4. Main memory can be protected with both encryption and validation using a key and hash pair
+
 
 
 **Comments:**
