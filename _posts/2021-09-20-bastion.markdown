@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 --- 
 
+**Highlight:**
+
+1. Enclaves can be declared by the modules using a list of private and shared pages and the entry points;
+
+2. Enclaves can be enforced by adding an extra module ID field to the TLB and then comparing the current ID of the
+   module being executed with the TLB entry;
+
+
+
 **Comments:**
 
 1. If the three persistent registers are set by the hypervisor that creates the secure storage, and later boots
