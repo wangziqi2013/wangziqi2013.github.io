@@ -25,7 +25,9 @@ version_mgmt:
 
 4. Main memory can be protected with both encryption and validation using a key and hash pair
 
-
+5. External storage can be protected similarly to the main memory, just that you need to save the key and hash pair
+   in a secure storage. The root of the trust for secure storage can be built into the CPU core as a few 
+   non-volatile registers storing the metadata storage's key and hash and the credential.
 
 **Comments:**
 
