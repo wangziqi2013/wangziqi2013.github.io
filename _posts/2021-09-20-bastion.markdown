@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 --- 
 
+**Comments:**
+
+1. If the three persistent registers are set by the hypervisor that creates the secure storage, and later boots
+   only checks the hash of the current hypervisor against the stored hash of the first-time hypervisor, 
+   what if the hypervisor is corrupted from the beginning?
+   Of course, the paper can just assume that first-time boot of the hypervisor is conducted by a trusted party
+   using an already validated hypervisor.
+
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
 The paper is motivated by the fact existing mechanisms for secure computing are neither comprehensive, nor efficient,
