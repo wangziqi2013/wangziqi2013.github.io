@@ -132,3 +132,7 @@ parsing the table.
 The module has three types of access rights to declare. The first type is the private pages belonging to the module.
 They are declared with the virtual page address, and an access right mask indicating the read, write and execute 
 permission. These private pages must not alias with any pages in other modules.
+The second type is shared pages, which are declared with the long form module ID of the sharing module, the virtual
+address of pages, and the access permission. 
+The third type is entry points, meaning that control can only be transferred into the module at these specific sites.
+The entry points are simply just a list of virtual addresses where a function call could jump to.
