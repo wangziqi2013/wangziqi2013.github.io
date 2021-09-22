@@ -91,4 +91,5 @@ as the means of isolation, this abstraction is way to coarse-grained, and faces 
 First, the virtual memory does not enforce any constraint on an application to access its own data at the same 
 privilege level. This may be generally fine for a normally behaving application, but not acceptable if it goes rogue
 (e.g., being hijacked by a buffer overflow).
-Second
+Second, the OS always has the highest privilege, and therefore, is not bound by the access rules of virtual memory.
+If an OS is malicious, then user applications have no secret to hide.
