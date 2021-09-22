@@ -37,6 +37,8 @@ version_mgmt:
    exception, but the OS has to perform these operations nevertheless (with encrypted data of course).
    Otherwise, how would you solve the case where two modules sharing one page, and the TLB can only hold one 
    module\_id?
+   I mean this problem is easy to address (when guest is running in OS mode then do not raise exception), but the
+   paper did not give any discussion on this issue.
 
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
