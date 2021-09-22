@@ -59,11 +59,17 @@ hypervisor).
 
 The Bastion root of the trust starts with a boot-time validation of the hypervisor. The validation is performed by a 
 short code sequence stored in an on-chip secure memory (which is assumed to be safe from attacks). The 
-code sequence is triggered by an instruction, namely secure\_launch, which is invoked by the untrusted bootloader
+code sequence is triggered by an instruction, namely secure\_launch, which is invoked by the untrusted boot loader
 after it has loaded the hypervisor module into the main memory.
 The secure\_launch instruction calls into the validation procedure, which computes the hash of the current hypervisor
 image, and stores it in a register "hypervisor_hash". This hash value is then compared with a non-volatile register,
 storage\_owner\_hash, which is the hash value of the hypervisor that created the secure storage.
 If both hashes match, then the other two non-volatile registers, namely secure\_storage\_key and secure\_storage\_hash,
 are exposed to the hypervisor as the cryptographic key for decoding the contents in the secure storage and for 
-validating the integrity, respectively.
+validating the integrity of the secure storage, respectively.
+The three volatile registers are initialized when a hypervisor is booted on the machine for the first time, and 
+their values will persist across power cycles (it is not known how to implement them on real hardware, though).
+Secure storage will be discussed later as one of the security features provided by Bastion.
+If the hypervisor validation fails, either because the hypervisor is corrupted, resulting to a different hash, or
+because a malicious boot loader circumvents the secure\_launch instruction, the secure storage will not be 
+accessible, and the Bastion hardware will simply just destroy the secure storage by erasing the persistent registers.
