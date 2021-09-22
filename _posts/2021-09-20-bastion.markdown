@@ -129,4 +129,6 @@ and applications that do not use Bastion.
 Modules declare the memory access rights to the hypervisor via a SECURE\_LAUNCH hypercall, which accepts a pointer to
 a security segment structure consisting of those explicit access right declarations, and the necessary arguments for
 parsing the table. 
-
+The module has three types of access rights to declare. The first type is the private pages belonging to the module.
+They are declared with the virtual page address, and an access right mask indicating the read, write and execute 
+permission. These private pages must not alias with any pages in other modules.
