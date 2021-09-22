@@ -177,5 +177,9 @@ calls into the code space of a module, due to the fact that that module\_id of t
 be a mismatch with the current context ID, an exception will be raised to the hypervisor. 
 The hypervisor first uses the faulting address to find the module's state table entry, and then it checks whether the 
 call target address is a valid entry point. 
-
+If the check passes, the hypervisor updates the current module ID to be the destination module's ID.
+The return address is also saved in the hypervisor's private memory for later validation.
+Leaving a module by a return instruction changes the module\_id in a similar way, and additionally, the return address
+of the instruction is also checked against the earlier one saved by the hypervisor in order to avoid return address 
+attacks.
 
