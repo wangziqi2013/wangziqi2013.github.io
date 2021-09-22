@@ -158,4 +158,7 @@ Note that for a shared page, multiple module\_ids may be used. The hypervisor se
 if there is one in the Module State Table, or simply just signal an access right violation.
 During execution, the context module ID is checked against the module\_id field in the TLB entry on every memory access,
 and if mismatch occurs, the hypervisor is signaled by raising an exception.
-
+Note that an exception can sometimes be resolved, if the current context has a different module\_id than the TLB entry,
+but the page is legally shared between the current module and the module whose ID is in the TLB entry.
+In this case, the hypervisor resolves the exception by updating the TLB entry's module\_id field to the current 
+context value.
