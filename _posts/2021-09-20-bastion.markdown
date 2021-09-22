@@ -171,4 +171,11 @@ but the page is legally shared between the current module and the module whose I
 In this case, the hypervisor resolves the exception by updating the TLB entry's module\_id field to the current 
 context value.
 
+As discussed above, the context module ID is updated when the control flow enters and leaves a module's executable 
+code space. This is naturally triggered by the TLB access right violation: When an external module (can be module zero) 
+calls into the code space of a module, due to the fact that that module\_id of the instruction page TLB entry will
+be a mismatch with the current context ID, an exception will be raised to the hypervisor. 
+The hypervisor first uses the faulting address to find the module's state table entry, and then it checks whether the 
+call target address is a valid entry point. 
+
 
