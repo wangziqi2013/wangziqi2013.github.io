@@ -145,3 +145,10 @@ declare access rights on the page. The table is used for both rule validation an
 After passing the validation, the access right declarations are entered into a table, called the Module State Table,
 for later reference.
 
+The hardware extensions for enforcing the tightened memory access rights are discussed as follows. 
+First, the processor's execution context is extended with an extra module ID register for strong the ID of the
+current module being executed. One process could have multiple modules, and this register is updated when a 
+procedure call enters and leaves a module, respectively, as we will see later. 
+The TLB entries are also extended with an extra module\_id field, which stores the short form module ID that 
+could access the page. 
+
