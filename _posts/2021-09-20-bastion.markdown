@@ -199,4 +199,7 @@ Bastion provides protection on external storage in a way that is similar to phys
 and integrity verification. Bastion has its own secure storage area, which is protected by the key and hash values
 stored in non-volatile registers. As mentioned earlier, these two values are only exposed to the hypervisor, if the
 hypervisor's identity (the hash) is identical to the one that creates the secure storage. 
-
+Within the secure storage, Bastion stores the key and hash values for each individual modules, which may also create 
+their own secure storage. 
+After unlocking the hypervisor's own secure storage, these keys and hashes can be read by the hypervisor to 
+encrypt/decrypt and to verify each module's secure storage just like how it is done for the main memory.
