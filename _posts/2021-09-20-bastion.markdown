@@ -32,6 +32,12 @@ version_mgmt:
 4. I don't think it is the best practice to give the name "secure launch" to both the boot loader instruction
    for establishing the root of trust and to the hypercall that accepts memory access right declaration.
 
+5. When an access violation occurs, does the system raise an exception to the hypervisor?
+   If yes, then OS system calls that need to access memory will be really slow as each memory access will raise an
+   exception, but the OS has to perform these operations nevertheless (with encrypted data of course).
+   Otherwise, how would you solve the case where two modules sharing one page, and the TLB can only hold one 
+   module\_id?
+
 This paper proposes Bastion, a secure computing architecture built into the CPU core that allows secure execution
 of trusted hypervisors, software modules, and secure storage of data on external devices. 
 The paper is motivated by the fact existing mechanisms for secure computing are neither comprehensive, nor efficient,
@@ -162,3 +168,5 @@ Note that an exception can sometimes be resolved, if the current context has a d
 but the page is legally shared between the current module and the module whose ID is in the TLB entry.
 In this case, the hypervisor resolves the exception by updating the TLB entry's module\_id field to the current 
 context value.
+
+
