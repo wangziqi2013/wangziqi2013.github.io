@@ -113,3 +113,9 @@ a system call on behalf of the module (e.g., during a swap-in/-out the OS will c
 the OS can still be granted the access, but the content of memory it has read is encrypted, and therefore purely 
 transparent to the OS.
 
+We next describe the details of secure memory access. This feature works under the unit of modules, which is just a 
+collection of code and data in page granularity. Each module has a long form identifier, which is the hash value of 
+the module's initial code and data pages after being loaded into the main memory. 
+Each module also has a short form module ID, which is assigned internally by the hypervisor when a new module is seen,
+and is used at hardware level to identify a module. The hypervisor maintains a mapping table between the two forms
+of ID for translation.
