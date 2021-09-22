@@ -140,6 +140,8 @@ The entry points are simply just a list of virtual addresses where a function ca
 After receiving the security segment, the hypervisor first performs a validity check for the access rights based on 
 two rules. First, private pages must be truly private, i.e., they are not shared by any other modules.
 Second, all modules sharing a page must acknowledge each other. 
+To this end, the hypervisor maintains a mapping table from physical page numbers to short form module IDs that 
+declare access rights on the page. The table is used for both rule validation and context switch, as we see from below.
 After passing the validation, the access right declarations are entered into a table, called the Module State Table,
 for later reference.
 
