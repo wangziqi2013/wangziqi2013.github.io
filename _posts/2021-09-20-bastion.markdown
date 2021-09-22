@@ -183,3 +183,8 @@ Leaving a module by a return instruction changes the module\_id in a similar way
 of the instruction is also checked against the earlier one saved by the hypervisor in order to avoid return address 
 attacks.
 
+Bastion also protects the physical memory to avoid physical attacks that attempt to obtain bus transferred data, and/or 
+to corrupt the memory blocks. 
+The former is achieved by encrypting the entire physical address space, using the one-time key generated during boot
+sequence, and only decrypting them when they are fetched into the cache hierarchy.
+The latter is achieved using a Merkle tree, which has become the de facto standard for memory integrity verification.
