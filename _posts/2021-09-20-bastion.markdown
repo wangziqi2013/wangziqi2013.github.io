@@ -98,5 +98,8 @@ modules within an application to explicitly declare access rights to only a subs
 own addressable memory, shared pages with other modules, and allowed entry points. 
 These set of rules will be strictly enforced both within the module and between the OS and the module, such that any
 non-declared access will result in either a fault (for application level accesses) or reading encrypted data.
-
+The latter is necessary for the OS to function correctly, as the OS may sometimes need to access module data in
+a system call on behalf of the module (e.g., during a swap-in/-out the OS will copy user data around). In this case, 
+the OS can still be granted the access, but the content of memory it has read is encrypted, and therefore purely 
+transparent to the OS.
 
