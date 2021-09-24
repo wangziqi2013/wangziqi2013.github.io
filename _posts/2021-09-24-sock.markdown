@@ -67,4 +67,9 @@ be hosted by a single container without losing much benefits of serverless.
 
 SAND therefore co-locates grains from the same application within the same container as different processes. 
 Each grain function has a management process (i.e., Zygote) in the container, which has already performed 
-initialization, loaded all the libraries, and servers as the template process. 
+initialization, loaded all the libraries, and servers as the template process. When a request for the grain is 
+dispatched to the thread, the management process spawns new instances of the grain by performing a fork()
+with all the initialized states, which eliminates the container initialization and language runtime cost
+for all but the first function invocation in the function chain.
+The container does not need to be preserved, nor is a pool is maintained in SAND, after the function chain is 
+completed, as the cold start overhead of containers on the first invocation is amortized over all invocations.
