@@ -27,4 +27,10 @@ This naive approach often incurs huge cold start latency, mainly because of the 
 virtualization platforms, and the cost of setting up the language environment such as installing and importing
 libraries. It is suggested in the paper that the overhead can be as large as a few seconds, or even tens of seconds.
 
+To optimize the cold start latency, many service providers, on their worker nodes, maintain a pool of already 
+initialized instances. These instances are scheduled to serve incoming requests, and when the execution completes,
+they are returned to the pool instead of being destroyed. This way, the instance will be kept in a warm state,
+with all the system components and libraries already loaded, which eliminates the overhead of initializing them.
+The paper points out, however, that these idle instances will still consume system resource such as memory, and 
+therefore, the improved cold start latency still come at a cost.
 
