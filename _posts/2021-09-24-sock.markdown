@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SAND: Towards High-Performance Serverless Computing"
+date:   2021-09-24 01:53:00 -0500
+categories: paper
+paper_title: "SAND: Towards High-Performance Serverless Computing"
+paper_link: https://www.usenix.org/conference/atc18/presentation/akkus
+paper_keyword: Container; Serverless; SAND
+paper_year: USENIX ATC 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+--- 
