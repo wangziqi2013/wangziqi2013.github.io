@@ -48,7 +48,8 @@ This property, although not pointed out explicitly in the paper, is critical for
 paper focuses on.
 
 Existing solutions to function chaining is just to treat them as regular requests, and forward chained functions to
-the frontend API gate as if these requests came from the external world. This approach, obviously, is sub-optimal,
+the global message queue located at the frontend API gateway as if these requests came from the external world. 
+This approach, obviously, is sub-optimal,
 since it takes a full round-trip time from the worker node to the frontend node, plus the processing time of the 
 API gateway just to get a function invoked. In theory, the function could be invoked locally, if one is deployed on
 the same machine, saving all the above latencies except the minimum overhead of a few local IPC messages. 
@@ -71,5 +72,12 @@ initialization, loaded all the libraries, and servers as the template process. W
 dispatched to the thread, the management process spawns new instances of the grain by performing a fork()
 with all the initialized states, which eliminates the container initialization and language runtime cost
 for all but the first function invocation in the function chain.
-The container does not need to be preserved, nor is a pool is maintained in SAND, after the function chain is 
+The container does not need to be preserved, nor is a pool maintained in SAND, after the function chain is 
 completed, as the cold start overhead of containers on the first invocation is amortized over all invocations.
+
+To address the second issue, that is, to enable fast function chaining, SAND made two other improvements
+while providing an atomic interface abstraction for external callers. 
+First, function chaining is performed locally as much as possible, meaning that the next function on the invocation
+chain will be scheduled on the same worker node as the previous one, as long as the situation permits (e.g., the 
+function is actually deployed on the current worker node, and it does not significantly disrupt load balancing).
+
