@@ -90,3 +90,10 @@ the grain without going through the global queue.
 This reduces both the latency of chained functions, as well as the network bandwidth between worker and frontend nodes.
 Outputs and arguments of the grains can also be passed with cheaper IPC mechanisms, rather than being serialized
 and then sent in TCP packets.
+
+The hierarchical message queue architecture still does not address the atomicity challenge of chained functions.
+Imagine when a host crashed, losing all its states. The function chain being executed on that node will be
+unable to resume, as other nodes have no record of the chain being scheduled. User clients that originally made
+the request will have to wait until a timeout, which is against the design philosophy of serverless, and will hurt 
+user experience as well.
+
