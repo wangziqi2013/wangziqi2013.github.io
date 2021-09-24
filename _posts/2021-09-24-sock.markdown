@@ -19,6 +19,8 @@ version_mgmt:
    within applications are not strongly isolated as they need to collaborate anyway. These functions can therefore
    be run in the same container with process-level isolation.
 
+2. Second, chained functions can be called locally as long as the function is deployed on the same worker node.
+
 This paper proposes SAND, a serverless framework with reduces cold start latency, and is specifically optimized for 
 function chaining. The paper is motived by the fact that existing serverless
 platforms suffer from cold start latency, and existing solutions of using warm-up instances will significantly increase
