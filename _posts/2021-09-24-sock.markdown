@@ -80,4 +80,8 @@ while providing an atomic interface abstraction for external callers.
 First, function chaining is performed locally as much as possible, meaning that the next function on the invocation
 chain will be scheduled on the same worker node as the previous one, as long as the situation permits (e.g., the 
 function is actually deployed on the current worker node, and it does not significantly disrupt load balancing).
+To achieve this, SAND adds a local message queue in addition to the existing global message queue located at the 
+frontend gateway, forming a two-level hierarchy of message queues. 
+The local message queue is located at worker nodes, and it only handles function invocation requests
+originated internally from the worker node itself by dispatching it to another grain instance on the same worker node. 
 
