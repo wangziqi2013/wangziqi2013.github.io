@@ -102,4 +102,8 @@ adopted as the protocol of ensuring transaction atomicity in data application.
 With crash recovery support, a local function invocation request is cast to both the local and the global queue,
 with the latter being tagged as "not completed". The message to the global queue also contains the origin of the 
 request as well as all necessary information to complete the remaining chain. 
-
+When the grain finishes execution, the local message queue then updates the status of the request in the global
+queue to "completed", which causes the global queue to delete the request.
+If, however, the worker node crashes during execution, which can be detected in a fairly small timeout by the 
+infrastructure (e.g., using heartbeat messages), the global message queue will dispatch all messages marked as
+"not completed" from the crashed node to another worker node, allowing these function chains to be completed.
