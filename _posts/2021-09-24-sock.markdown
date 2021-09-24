@@ -21,6 +21,11 @@ version_mgmt:
 
 2. Second, chained functions can be called locally as long as the function is deployed on the same worker node.
 
+3. Locally called function chains may not preserve atomicity as the call information is solely within a single 
+   node, which will be lost on a crash. This can be solved by sending a message to both the local and the global
+   queue. When the content of the local queue is lost due to a crash, the global queue still contains the full
+   information on completing the call chain.
+
 This paper proposes SAND, a serverless framework with reduces cold start latency, and is specifically optimized for 
 function chaining. The paper is motived by the fact that existing serverless
 platforms suffer from cold start latency, and existing solutions of using warm-up instances will significantly increase
