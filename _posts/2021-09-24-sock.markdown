@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 --- 
 
+**Highlights:**
+
+1. Function chaining is an important use case of serverless, which can be optimized in two ways. First, functions 
+   within applications are not strongly isolated as they need to collaborate anyway. These functions can therefore
+   be run in the same container with process-level isolation.
+
 This paper proposes SAND, a serverless framework with reduces cold start latency, and is specifically optimized for 
 function chaining. The paper is motived by the fact that existing serverless
 platforms suffer from cold start latency, and existing solutions of using warm-up instances will significantly increase
