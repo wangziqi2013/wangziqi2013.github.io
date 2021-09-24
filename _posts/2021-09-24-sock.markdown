@@ -84,4 +84,9 @@ To achieve this, SAND adds a local message queue in addition to the existing glo
 frontend gateway, forming a two-level hierarchy of message queues. 
 The local message queue is located at worker nodes, and it only handles function invocation requests
 originated internally from the worker node itself by dispatching it to another grain instance on the same worker node. 
-
+Function chaining is then performed locally by sending the request to the local message queue, and if the 
+requested function is registered on the local node, the request will be dispatched locally to the container hosting
+the grain without going through the global queue. 
+This reduces both the latency of chained functions, as well as the network bandwidth between worker and frontend nodes.
+Outputs and arguments of the grains can also be passed with cheaper IPC mechanisms, rather than being serialized
+and then sent in TCP packets.
