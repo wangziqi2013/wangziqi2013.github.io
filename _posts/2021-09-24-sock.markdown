@@ -34,3 +34,7 @@ with all the system components and libraries already loaded, which eliminates th
 The paper points out, however, that these idle instances will still consume system resource such as memory, and 
 therefore, the improved cold start latency still come at a cost.
 
+SAND addresses this issue by lowering the degree of isolation within an application. In the model assumed by this 
+paper, an application consists of a few types of functions, each of them being called a "grain".
+Grains may serve a request solely by their own, or more generally, several grains may collaborate together to 
+finish a complex task.
