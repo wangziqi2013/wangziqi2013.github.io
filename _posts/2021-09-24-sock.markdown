@@ -23,5 +23,8 @@ This paper addresses these two issues in SAND by using application-level sandbox
 The paper observes that existing service providers use either containers or virtual machines to isolate function 
 instances. In the simplest case, each function instance is mapped to one instance of virtualized process, which executes
 to the end, and then the instance will be destroyed. 
+This naive approach often incurs huge cold start latency, mainly because of the initialization cost of the 
+virtualization platforms, and the cost of setting up the language environment such as installing and importing
+libraries. It is suggested in the paper that the overhead can be as large as a few seconds, or even tens of seconds.
 
 
