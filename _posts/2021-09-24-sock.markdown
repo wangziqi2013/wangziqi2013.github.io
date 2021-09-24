@@ -34,9 +34,9 @@ with all the system components and libraries already loaded, which eliminates th
 The paper points out, however, that these idle instances will still consume system resource such as memory, and 
 therefore, the improved cold start latency still come at a cost.
 
-SAND addresses this issue by lowering the degree of isolation within an application. In the model assumed by this 
-paper, an application consists of a few types of functions, each of them being called a "grain".
-Grains may serve a request solely by their own, or more generally, several grains may collaborate together to 
+The other issue faced by today's serverless framework is to support efficient function chaining. 
+In the model assumed by this paper, an application consists of a few types of functions, each of them being called a 
+"grain". Grains may serve a request solely by their own, or more generally, several grains may collaborate together to 
 finish a complex task, which is called "function chaining". 
 In function chaining, when a grain has finished execution, it will invoke one or more successor grains, and pass the 
 output of the current execution to them. 
@@ -45,3 +45,6 @@ it is assumed that the current grain always has full information about the execu
 resume and complete even if a host crashes, and the function invocation is scheduled elsewhere for re-execution.
 This property, although not pointed out explicitly in the paper, is critical for crash recovery, which is what the
 paper focuses on.
+
+SAND addresses the first issue, that is, the seemingly inevitable trade-off between cold start latency and resource 
+consumption of idle instances, by lowering the degree of isolation within an application.
