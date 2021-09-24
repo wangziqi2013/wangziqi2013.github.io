@@ -64,3 +64,7 @@ individually, and they do not expect to be co-located with another one.
 Grains within an application, on the other hand, often need to interact to complete a task collaboratively, 
 and hence they are aware of the existence of each other. In the latter case, the paper suggests that these grains can
 be hosted by a single container without losing much benefits of serverless. 
+
+SAND therefore co-locates grains from the same application within the same container as different processes. 
+Each grain function has a management process (i.e., Zygote) in the container, which has already performed 
+initialization, loaded all the libraries, and servers as the template process. 
