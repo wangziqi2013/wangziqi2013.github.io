@@ -96,4 +96,10 @@ Imagine when a host crashed, losing all its states. The function chain being exe
 unable to resume, as other nodes have no record of the chain being scheduled. User clients that originally made
 the request will have to wait until a timeout, which is against the design philosophy of serverless, and will hurt 
 user experience as well.
+The paper hence proposes a crash recovery protocol on the two-level hierarchy by replicating the function invocation
+message to both the local and the global queue, making an analogy with redo logging, which is already commonly 
+adopted as the protocol of ensuring transaction atomicity in data application.
+With crash recovery support, a local function invocation request is cast to both the local and the global queue,
+with the latter being tagged as "not completed". The message to the global queue also contains the origin of the 
+request as well as all necessary information to complete the remaining chain. 
 
