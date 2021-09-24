@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 --- 
+
+This paper proposes SAND, a serverless framework with reduces cold start latency, and is specifically optimized for 
+function chaining. The paper is motived by the fact that existing serverless
+platforms suffer from cold start latency, and existing solutions of using warm-up instances will significantly increase
+the resource consumption. Besides, function calls from the internals of an application, namely, chained function calls,
+are handled no different from external requests, which incurs unnecessary performance overhead.
+This paper addresses these two issues in SAND by using application-level sandboxes and local message bus, respectively.
+
