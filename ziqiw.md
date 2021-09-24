@@ -25,7 +25,7 @@ Masters education at CMU, and my research project was efficient indexing for in-
 The goal of my research is to accelerate data access and manipulation on modern general purpose 
 multicore architecture. I believe in a hardware-software co-design methodology. The hardware provides specialized 
 acceleration capabilities for common cases without sacrificing general purpose processing performance, while the software 
-adaptively takes advantage of hardware, and falls back to alternative, slower paths whenever hardware accelaration is 
+adaptively takes advantage of hardware, and falls back to alternative, slower paths whenever hardware acceleration is 
 not achievable.
 
 Research Projects

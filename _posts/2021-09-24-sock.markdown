@@ -59,3 +59,8 @@ end, even if one or more worker node crashes.
 
 SAND addresses the first issue, that is, the seemingly inevitable trade-off between cold start latency and resource 
 consumption of idle instances, by lowering the degree of isolation within an application.
+SAND recognizes that true isolation is only a hard requirement between applications, as these applications are developed
+individually, and they do not expect to be co-located with another one. 
+Grains within an application, on the other hand, often need to interact to complete a task collaboratively, 
+and hence they are aware of the existence of each other. In the latter case, the paper suggests that these grains can
+be hosted by a single container without losing much benefits of serverless. 
