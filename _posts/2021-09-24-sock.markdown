@@ -20,3 +20,8 @@ the resource consumption. Besides, function calls from the internals of an appli
 are handled no different from external requests, which incurs unnecessary performance overhead.
 This paper addresses these two issues in SAND by using application-level sandboxes and local message bus, respectively.
 
+The paper observes that existing service providers use either containers or virtual machines to isolate function 
+instances. In the simplest case, each function instance is mapped to one instance of virtualized process, which executes
+to the end, and then the instance will be destroyed. 
+
+
