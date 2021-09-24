@@ -35,6 +35,8 @@ Research Projects
 **(2021.08 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on malloc-less memory allocation for small, short-lived objects.
 -->
 
+**(2021.08 - Present)** I am working on the next research project.
+
 **(2020.12 - 2021.08)** I was working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on memory compression on multi-dimentional address space.
 
 **(2019.05 - 2020.11)** I was working with Professor Todd Mowry on NVM full system persistence.
