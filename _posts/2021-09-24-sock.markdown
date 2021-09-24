@@ -43,6 +43,7 @@ output of the current execution to them.
 The invocation relation between grains for a particular request may be static or dynamically generated. In either case, 
 it is assumed that the current grain always has full information about the execution path, such that execution could 
 resume and complete even if a host crashes, and the function invocation is scheduled elsewhere for re-execution.
+In other words, the arguments to a function must encode complete information of the rest of the function chain.
 This property, although not pointed out explicitly in the paper, is critical for crash recovery, which is what the
 paper focuses on.
 
@@ -51,6 +52,10 @@ the frontend API gate as if these requests came from the external world. This ap
 since it takes a full round-trip time from the worker node to the frontend node, plus the processing time of the 
 API gateway just to get a function invoked. In theory, the function could be invoked locally, if one is deployed on
 the same machine, saving all the above latencies except the minimum overhead of a few local IPC messages. 
+Besides, none of the existing frameworks handles the atomicity of chained functions, which is rather important,
+as the chained functions must eventually produce an output to avoid leaving the client side hanging.
+This requires some mechanism to ensure that a function chain, once started, can always be executed to the 
+end, even if one or more worker node crashes. 
 
 SAND addresses the first issue, that is, the seemingly inevitable trade-off between cold start latency and resource 
 consumption of idle instances, by lowering the degree of isolation within an application.
