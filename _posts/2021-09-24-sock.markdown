@@ -46,5 +46,11 @@ resume and complete even if a host crashes, and the function invocation is sched
 This property, although not pointed out explicitly in the paper, is critical for crash recovery, which is what the
 paper focuses on.
 
+Existing solutions to function chaining is just to treat them as regular requests, and forward chained functions to
+the frontend API gate as if these requests came from the external world. This approach, obviously, is sub-optimal,
+since it takes a full round-trip time from the worker node to the frontend node, plus the processing time of the 
+API gateway just to get a function invoked. In theory, the function could be invoked locally, if one is deployed on
+the same machine, saving all the above latencies except the minimum overhead of a few local IPC messages. 
+
 SAND addresses the first issue, that is, the seemingly inevitable trade-off between cold start latency and resource 
 consumption of idle instances, by lowering the degree of isolation within an application.
