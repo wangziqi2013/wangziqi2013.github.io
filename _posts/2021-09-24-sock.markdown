@@ -32,6 +32,10 @@ version_mgmt:
    a serialization point, or there is some versioning mechanism to ensure that each instance of a function
    chain is only called exactly once.
 
+2. The paper should explicitly point out that in order for the crash recovery mechanism to work, each instance should
+   be provided with enough information about the topology of the remaining function chain (which may be derived
+   implicitly from the argument itself, but this is not always true).
+
 This paper proposes SAND, a serverless framework with reduces cold start latency, and is specifically optimized for 
 function chaining. The paper is motived by the fact that existing serverless
 platforms suffer from cold start latency, and existing solutions of using warm-up instances will significantly increase
