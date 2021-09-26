@@ -101,3 +101,8 @@ automatically recognized and then deployed, essentially turning it into a "code-
 Second, serverless platforms should support heterogeneous hardware, and enable serverless functions to explicitly
 request for these hardware, and make scheduling decisions accordingly. Similar to the previous proposal, the
 requirement can also be implicitly derived from program behavior via analysis.
+Third, function instances should be made globally addressable, at least within the same application, such that 
+fine-grained communication can be realized without using the slower and low throughput storage as the only channel.
+Because of the nature of serverless functions, that is, they are prone to be re-deployed and migrated to different
+hosts at any moment, the global address must not be bound to a specific physical machines, making traditional addresses
+such as IP and ports not a viable option, but more abstracted naming schemes will work.
