@@ -90,3 +90,12 @@ In the second example, since there lacks a mechanism for addressing individual f
 function instances must be performed by writing to the data service to send a signal, and polling the data service 
 to receive a signal.
 Both examples prove that the limitations of serverless truly exists, and can become serious performance bottlenecks.
+
+At last, the paper proposes a few challenges for serverless platforms, which, if implemented, can greatly improve their
+usability, generality, cost-efficiency, and degree of innovation.
+First, serverless platforms should allow functions to be data-centric, and deployed next to high-throughput data store.
+This way, accessing data will not become a performance overhead.
+To aid this task, the framework may also allow applications to expose its internal data flow and data requirement
+using specialized languages or program analysis. Those that require large amount of data transfers could be 
+automatically recognized and then deployed, essentially turning it into a "code-shipping architecture".
+
