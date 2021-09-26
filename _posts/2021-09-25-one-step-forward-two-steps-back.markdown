@@ -58,3 +58,12 @@ the call chain. The actual states are contained in the outputs and function argu
 into the serverless platform with little effort.
 The paper noted that, however, this use case may incur huge runtime overhead due to the fact that functions are only 
 loosely coupled, without support for efficient state preservation.
+
+The paper then proceeds to point out the limitations of current serverless computing paradigm.
+First, serverless is seen by the authors as a "data shipping architecture", meaning that the code is executed on the 
+computing node, while data is only pulled from a separate data store to the computing node on demand through the 
+network, causing long latency and low data throughput. 
+As a contract, conventional data-centric applications typically build their data processing capabilities
+around or at least close to the data node, where data can be accessed in a more structured manner.
+
+
