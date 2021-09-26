@@ -40,3 +40,10 @@ Multiple serverless function instances from the same or even different applicati
 same physical machine, which are isolated from each other using VMMs or containers.
 Again, due to the nature of being stateless and event-driven, serverless functions do not restrict instance placement, 
 and can be started anywhere on the cloud.
+
+The paper then figures out three user scenarios that fit perfectly into the serverless paradigm.
+The first is embarrassingly parallel applications (here "embarrassingly" means abundantly), in which the functions are 
+entirely independent from each other, and each of them can be executed without any communication at all. 
+Function instances in this scenario can be easily scaled up and down based on the load, without having to reconsider
+synchronization.
+The
