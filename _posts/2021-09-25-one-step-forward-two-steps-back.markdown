@@ -31,4 +31,8 @@ by the function arguments. These stateless function often only perform a single 
 sending a message explicitly, or storing the result of computing leveraging some form of storage service.
 The blessing of being stateless also enables serverless functions to be scaled easily, as the management framework
 can just start more function instances when the load increases, and reduce it when the load falls.
-
+Function instances can be started at any physical machine, as they assume zero state being preserved across 
+invocations.
+Serverless management comes at no cost from application developer's perspective, as stateless functions only 
+communicate with each other and with other cloud services using well-defined interfaces and libraries, and are managed 
+by cloud's providers infrastructure.
