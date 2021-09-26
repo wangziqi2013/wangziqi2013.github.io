@@ -20,4 +20,9 @@ application developers must build their own project as a whole, deploy the proje
 be responsible for component interaction and application scaling. The price of cloud service is dependent on 
 the type of the platform as well as the start time and the amount of external resource used (disks, databases, network
 requests, etc.). 
+Serverless, on the other hand, provides a new programming paradigm. Serverless allows individual functions, rather
+than complete application logic, to be deployed, and functions are composed dynamically in the runtime to execute the
+application's business logic, which is driven by external and internal requests, instead of a pre-defined control flow. 
+This enables more flexible development, deployment, and management of the overall application logic, since functions
+can be developed, tested, deployed, and instanciated individually, and so does the pricing of functions. 
 
