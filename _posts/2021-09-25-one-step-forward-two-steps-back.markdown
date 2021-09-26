@@ -80,3 +80,10 @@ Lastly, the paper also observes that most open-source software cannot execute un
 software is developed for managed environment where human operators need to intervene. This may harm open-source 
 innovation as serverless users are less interested to try them.
 
+The paper validated the above points using two prototype applications. The first one trains a neural network and 
+then uses the trained model to classify texts. The second application simulates distributed leader election, which is a 
+common scenario in distributed systems. Both examples show that serverless incurs higher cost and has longer execution 
+time. In the first example, the major overhead is reading large chunks of data from the underlying storage for model 
+training, since serverless functions must pull data from the persistent storage before each iteration, and push them 
+back after the iteration.
+
