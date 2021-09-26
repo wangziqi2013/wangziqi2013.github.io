@@ -76,4 +76,7 @@ is free to schedule a function instance anywhere it finds reasonable. As a resul
 platforms support specialized hardware, such as GPU or other types of accelerators. 
 The paper argues that hardware specialization and acceleration is a future trend that must not be neglected, and hence
 it is critical for cloud providers to also provide hardware acceleration capabilities on their platforms.
+Lastly, the paper also observes that most open-source software cannot execute unmodified on serverless, since these 
+software is developed for managed environment where human operators need to intervene. This may harm open-source 
+innovation as serverless users are less interested to try them.
 
