@@ -25,4 +25,10 @@ than complete application logic, to be deployed, and functions are composed dyna
 application's business logic, which is driven by external and internal requests, instead of a pre-defined control flow. 
 This enables more flexible development, deployment, and management of the overall application logic, since functions
 can be developed, tested, deployed, and instanciated individually, and so does the pricing of functions. 
+In addition, serverless functions are supposed to be stateless, meaning that the function does not assume any 
+particular states being preserved across invocations, and all essential information for executing the function is passed
+by the function arguments. These stateless function often only perform a single task, and produces output by either
+sending a message explicitly, or storing the result of computing leveraging some form of storage service.
+The blessing of being stateless also enables serverless functions to be scaled easily, as the management framework
+can just start more function instances when the load increases, and reduce it when the load falls.
 
