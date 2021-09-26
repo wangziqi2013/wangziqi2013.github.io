@@ -71,4 +71,9 @@ are essential to many classical distributed system algorithms.
 Although one may argue that the underlying storage scratchpad may server as a proper communication channel, as the 
 storage can be globally addressed by all function instances, the paper indicated that it is also generally not feasible,
 due to the low I/O throughout and weak consistency model.
+Third, serverless functions are not explicitly managed by the service user, and the cloud provider's infrastructure
+is free to schedule a function instance anywhere it finds reasonable. As a result, none of the existing serverless
+platforms support specialized hardware, such as GPU or other types of accelerators. 
+The paper argues that hardware specialization and acceleration is a future trend that must not be neglected, and hence
+it is critical for cloud providers to also provide hardware acceleration capabilities on their platforms.
 
