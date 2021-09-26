@@ -15,4 +15,9 @@ version_mgmt:
 
 This paper performs a thorough study on serverless and highlights several drawbacks of serverless computing.
 The paper begins by observing that serverless has become a popular choice for cloud computing due to its 
-support for multitenancy and simplicity of management. 
+support for multitenancy and simplicity of management. To elaborate: On traditional cloud computing platforms,
+application developers must build their own project as a whole, deploy the project to the cloud service, and 
+be responsible for component interaction and application scaling. The price of cloud service is dependent on 
+the type of the platform as well as the start time and the amount of external resource used (disks, databases, network
+requests, etc.). 
+
