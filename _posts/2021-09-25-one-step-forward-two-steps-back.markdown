@@ -11,4 +11,8 @@ rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
---- 
+---
+
+This paper performs a thorough study on serverless and highlights several drawbacks of serverless computing.
+The paper begins by observing that serverless has become a popular choice for cloud computing due to its 
+support for multitenancy and simplicity of management. 
