@@ -106,3 +106,6 @@ fine-grained communication can be realized without using the slower and low thro
 Because of the nature of serverless functions, that is, they are prone to be re-deployed and migrated to different
 hosts at any moment, the global address must not be bound to a specific physical machines, making traditional addresses
 such as IP and ports not a viable option, but more abstracted naming schemes will work.
+The fourth and fifth proposals are supports for disorderly and flexible programming, which is about developing new 
+infrastructures that enables novel programming languages and techniques be used.
+The last two proposals are 
