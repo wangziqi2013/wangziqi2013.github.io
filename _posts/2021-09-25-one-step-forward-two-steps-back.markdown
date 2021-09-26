@@ -108,4 +108,5 @@ hosts at any moment, the global address must not be bound to a specific physical
 such as IP and ports not a viable option, but more abstracted naming schemes will work.
 The fourth and fifth proposals are supports for disorderly and flexible programming, which is about developing new 
 infrastructures that enables novel programming languages and techniques be used.
-The last two proposals are 
+The last two proposals are supporting service-level guarantees and addressing security concerns, which are always 
+what people want and are nice to have.
