@@ -65,5 +65,10 @@ computing node, while data is only pulled from a separate data store to the comp
 network, causing long latency and low data throughput. 
 As a contract, conventional data-centric applications typically build their data processing capabilities
 around or at least close to the data node, where data can be accessed in a more structured manner.
-
+Second, serverless function instances are not individually addressable, which is a design decision made for easy
+scaling and migration, and therefore, it is impossible to build efficient, fine-grained communication channels, which 
+are essential to many classical distributed system algorithms. 
+Although one may argue that the underlying storage scratchpad may server as a proper communication channel, as the 
+storage can be globally addressed by all function instances, the paper indicated that it is also generally not feasible,
+due to the low I/O throughout and weak consistency model.
 
