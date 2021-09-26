@@ -98,4 +98,6 @@ This way, accessing data will not become a performance overhead.
 To aid this task, the framework may also allow applications to expose its internal data flow and data requirement
 using specialized languages or program analysis. Those that require large amount of data transfers could be 
 automatically recognized and then deployed, essentially turning it into a "code-shipping architecture".
-
+Second, serverless platforms should support heterogeneous hardware, and enable serverless functions to explicitly
+request for these hardware, and make scheduling decisions accordingly. Similar to the previous proposal, the
+requirement can also be implicitly derived from program behavior via analysis.
