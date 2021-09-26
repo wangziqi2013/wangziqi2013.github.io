@@ -36,3 +36,7 @@ invocations.
 Serverless management comes at no cost from application developer's perspective, as stateless functions only 
 communicate with each other and with other cloud services using well-defined interfaces and libraries, and are managed 
 by cloud's providers infrastructure.
+Multiple serverless function instances from the same or even different applications can be co-located on the 
+same physical machine, which are isolated from each other using VMMs or containers.
+Again, due to the nature of being stateless and event-driven, serverless functions do not restrict instance placement, 
+and can be started anywhere on the cloud.
