@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Despite raising many valid points, I think this paper is mainly complaining about the slow storage / lacking
+   more "primitive" or "data-centric" interface for directly accessing high-throughput storage, and lack 
+   of communication capabilities between functions. 
+
 This paper performs a thorough study on serverless and highlights several drawbacks of serverless computing.
 The paper begins by observing that serverless has become a popular choice for cloud computing due to its 
 support for multitenancy and simplicity of management. To elaborate: On traditional cloud computing platforms,
