@@ -86,4 +86,7 @@ common scenario in distributed systems. Both examples show that serverless incur
 time. In the first example, the major overhead is reading large chunks of data from the underlying storage for model 
 training, since serverless functions must pull data from the persistent storage before each iteration, and push them 
 back after the iteration.
-
+In the second example, since there lacks a mechanism for addressing individual functions, the communication between
+function instances must be performed by writing to the data service to send a signal, and polling the data service 
+to receive a signal.
+Both examples prove that the limitations of serverless truly exists, and can become serious performance bottlenecks.
