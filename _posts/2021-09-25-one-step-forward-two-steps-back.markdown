@@ -50,3 +50,11 @@ The second scenario is to leverage serverless only as a load indicator, and use 
 the proprietary backend to adjust accordingly. The major body of computing is not performed on the serverless
 function, but instead, the backend handles them. Since serverless functions are charged per instance time, this option
 is cheaper than running a constant background monitor for auditing.
+The last scenario is to compose individual functions to implement the application logic, using functions as building 
+blocks or modules. Each function handles a small portion of the business logic, and functions communicate by passing
+outputs as the inputs of the next function in the chain.
+This use case, in strict terms, is no longer stateless, as states must be logically preserved between function calls in 
+the call chain. The actual states are contained in the outputs and function arguments, which can be incorporated 
+into the serverless platform with little effort.
+The paper noted that, however, this use case may incur huge runtime overhead due to the fact that functions are only 
+loosely coupled, without support for efficient state preservation.
