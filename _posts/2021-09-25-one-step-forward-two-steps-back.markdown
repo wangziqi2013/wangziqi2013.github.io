@@ -46,4 +46,7 @@ The first is embarrassingly parallel applications (here "embarrassingly" means a
 entirely independent from each other, and each of them can be executed without any communication at all. 
 Function instances in this scenario can be easily scaled up and down based on the load, without having to reconsider
 synchronization.
-The
+The second scenario is to leverage serverless only as a load indicator, and use serverless functions to notify 
+the proprietary backend to adjust accordingly. The major body of computing is not performed on the serverless
+function, but instead, the backend handles them. Since serverless functions are charged per instance time, this option
+is cheaper than running a constant background monitor for auditing.
