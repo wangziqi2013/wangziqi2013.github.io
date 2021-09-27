@@ -36,6 +36,8 @@ contradict causality, which might cause correctness issues as most programs are 
 model in mind.
 Second, function instances are assumed to be independent from each other, and therefore,
 there is no way to address individual function instances, preventing fine-grained communication between functions.
+On current platforms, this is different to achieve, as functions can be scheduled anywhere on the cloud, and may 
+even migrate across invocations, making the conventional naming scheme such as IP and port insufficient. 
 Lastly, function composition, the practice of calling other serverless functions within a function instance, is 
 slow. This is because all composition invocation requests must be routed to the frontend API gateway, and be dispatched 
 just like it is an external request, incurring the overhead of a round-trip time between the frontend and the backend.
