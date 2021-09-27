@@ -48,5 +48,7 @@ while, logically speaking, the storage layer is still decoupled from computing l
 large, unified, and global component providing services to functions via a set of well-defined interfaces, 
 the physical implementation of the storage layer is close to the computing layer, and can be often on the same 
 physical node.
-
+Cloudburst achieves LDPC with a two-level storage hierarchy. At the global level, a fast key-value store (KVS) is used 
+as the global storage for passing or preserving information between function invocations, while at each individual
+computing nodes, an extra cache layer maintains high-frequent keys, and enables low-latency access to these keys. 
 
