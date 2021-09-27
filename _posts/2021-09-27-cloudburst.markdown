@@ -54,4 +54,7 @@ computing nodes, an extra cache layer maintains high-frequent keys, and enables 
 Second, Cloudburst supports and specifically optimizes over function composition, which enables serverless 
 as a more general-purpose computing paradigm, as most general-purpose applications require function modules to
 call each other with explicit argument passing and value return.
-
+Cloudbursts model function composition as a DAG representing the control flow and data flow. Function instances 
+to be involved constitute the nodes of the DAG, while the invocation relation forms edges. 
+External requests can either invoke individual functions just like on conventional serverless platforms, or can 
+directly invoke a pre-registered DAG, and expect Cloudburst scheduler (discussed later) to handle function composition.
