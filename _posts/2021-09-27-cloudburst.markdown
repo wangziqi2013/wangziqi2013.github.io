@@ -28,4 +28,8 @@ computing nodes from the storage nodes and allowing the former to scale freely, 
 computation density of serverless functions by changing the number of instances according to the dynamic workload,
 and to charge cloud service users only based on function invocations, i.e., the actual amount of services provided, 
 rather than with a fixed rate over a period of time. 
+On the other hand, however, there are a few drawbacks of today's serverless paradigm.
+First, storage access latency is too high to be practical as a persistent medium for passing or preserving information 
+between function invocations. Second, function instances are assumed to be independent from each other, and therefore,
+there is no way to address individual function instances, preventing fine-grained communication between functions.
 
