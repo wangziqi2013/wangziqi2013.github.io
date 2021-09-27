@@ -58,3 +58,8 @@ Cloudbursts model function composition as a DAG representing the control flow an
 to be involved constitute the nodes of the DAG, while the invocation relation forms edges. 
 External requests can either invoke individual functions just like on conventional serverless platforms, or can 
 directly invoke a pre-registered DAG, and expect Cloudburst scheduler (discussed later) to handle function composition.
+Lastly, Cloudburst defines and implements two strong consistency models for concurrent accesses of the KVS. 
+These two consistency models, namely repeatable-reads and causal-consistency, expose a well-defined and 
+intuitive semantics to the functions executing concurrently, which greatly aids program design as most read-write
+interleaves can be handled correctly by the framework itself.
+
