@@ -30,6 +30,9 @@ and to charge cloud service users only based on function invocations, i.e., the 
 rather than with a fixed rate over a period of time. 
 On the other hand, however, there are a few drawbacks of today's serverless paradigm.
 First, storage access latency is too high to be practical as a persistent medium for passing or preserving information 
-between function invocations. Second, function instances are assumed to be independent from each other, and therefore,
+between function invocations. 
+Second, function instances are assumed to be independent from each other, and therefore,
 there is no way to address individual function instances, preventing fine-grained communication between functions.
-
+Lastly, function composition, the practice of calling other serverless functions within a function instance, is 
+slow. This is because all composition invocation requests must be routed to the frontend API gateway, and be dispatched 
+just like it is an external request, incurring the overhead of a round-trip time between the frontend and the backend.
