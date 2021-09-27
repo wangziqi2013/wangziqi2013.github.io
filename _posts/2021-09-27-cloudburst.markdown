@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Only static DAGs are supported, and it seems that the scheduler needs to plan ahead before the DAG starts execution.
+   This does not work in the scenario where the DAG is dynamic, i.e., which function to call next is dependent on the 
+   run time states of previous invocations.
+   In addition, this may cause a burst of new instances being created when new requests for large DAGs flood in, as
+   the scheduler initializes all instances at once, and simply let them wait for the output of its predecessors.
+   I understand that most programs can be transformed to use static DAGs, but still, support for dynamic DAGs 
+   would be a nice thing to have.
+
 This paper presents Cloudburst, a serverless framework that allows functions to preserve states between invocations
 by using a distributed key-value store with strong consistency guarantees.
 This paper is motivated by the fact that today's serverless frameworks only provide stateless functions, which disallows
