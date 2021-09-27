@@ -17,4 +17,7 @@ This paper presents Cloudburst, a serverless framework that allows functions to 
 by using a distributed key-value store with strong consistency guarantees.
 This paper is motivated by the fact that today's serverless frameworks only provide stateless functions, which disallows
 communication between functions for the ease of scaling and management. 
-
+Cloudburst addresses the limitation with a global key-value store serving as the persistent state storage across 
+function invocations, combined with a per-instance cache for low-latency access.
+Cloudburst also implements a distributed consistency model that enables concurrent accesses of shared states by 
+different functions, which also turns the key-value store into a fast communication channel.
