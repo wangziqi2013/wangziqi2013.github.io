@@ -41,3 +41,12 @@ even migrate across invocations, making the conventional naming scheme such as I
 Lastly, function composition, the practice of calling other serverless functions within a function instance, is 
 slow. This is because all composition invocation requests must be routed to the frontend API gateway, and be dispatched 
 just like it is an external request, incurring the overhead of a round-trip time between the frontend and the backend.
+
+Cloudburst addresses the above limitations with three innovative design choices.
+First, Cloudburst features what is called "logical disaggregation and physical co-location", or LDPC, meaning that
+while, logically speaking, the storage layer is still decoupled from computing layer, and can be regarded as a 
+large, unified, and global component providing services to functions via a set of well-defined interfaces, 
+the physical implementation of the storage layer is close to the computing layer, and can be often on the same 
+physical node.
+
+
