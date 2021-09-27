@@ -51,4 +51,7 @@ physical node.
 Cloudburst achieves LDPC with a two-level storage hierarchy. At the global level, a fast key-value store (KVS) is used 
 as the global storage for passing or preserving information between function invocations, while at each individual
 computing nodes, an extra cache layer maintains high-frequent keys, and enables low-latency access to these keys. 
+Second, Cloudburst supports and specifically optimizes over function composition, which enables serverless 
+as a more general-purpose computing paradigm, as most general-purpose applications require function modules to
+call each other with explicit argument passing and value return.
 
