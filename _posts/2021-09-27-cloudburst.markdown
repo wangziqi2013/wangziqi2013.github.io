@@ -30,7 +30,10 @@ and to charge cloud service users only based on function invocations, i.e., the 
 rather than with a fixed rate over a period of time. 
 On the other hand, however, there are a few drawbacks of today's serverless paradigm.
 First, storage access latency is too high to be practical as a persistent medium for passing or preserving information 
-between function invocations. 
+between function invocations. In addition, the consistency guarantees of the storage service on existing serverless
+platforms are pretty weak. For example, two functions on a call chain may read different versions of a value that
+contradict causality, which might cause correctness issues as most programs are written with a strong consistency 
+model in mind.
 Second, function instances are assumed to be independent from each other, and therefore,
 there is no way to address individual function instances, preventing fine-grained communication between functions.
 Lastly, function composition, the practice of calling other serverless functions within a function instance, is 
