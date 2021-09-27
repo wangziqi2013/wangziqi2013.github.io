@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Cloudburst, a serverless framework that allows functions to preserve states between invocations
+by using a distributed key-value store with strong consistency guarantees.
+This paper is motivated by the fact that today's serverless frameworks only provide stateless functions, which disallows
+communication between functions for the ease of scaling and management. 
+
