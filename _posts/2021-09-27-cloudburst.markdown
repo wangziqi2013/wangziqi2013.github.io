@@ -21,3 +21,11 @@ Cloudburst addresses the limitation with a global key-value store serving as the
 function invocations, combined with a per-instance cache for low-latency access.
 Cloudburst also implements a distributed consistency model that enables concurrent accesses of shared states by 
 different functions, which also turns the key-value store into a fast communication channel.
+
+The paper begins by pointing out that disaggregation, the practice of separating computing and storage components of 
+the cloud service, has limited the usability and efficiency of serverless functions. On the one hand, by decoupling 
+computing nodes from the storage nodes and allowing the former to scale freely, it is made possible to adjust the 
+computation density of serverless functions by changing the number of instances according to the dynamic workload,
+and to charge cloud service users only based on function invocations, i.e., the actual amount of services provided, 
+rather than with a fixed rate over a period of time. 
+
