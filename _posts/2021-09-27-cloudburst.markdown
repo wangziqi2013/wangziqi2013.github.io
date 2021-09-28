@@ -160,4 +160,6 @@ it has not been updated, or read the value written by the DAG itself after the w
 With local caches, this could be implemented conveniently by just caching the value that is first time read by a DAG
 (which is similar to a transaction in this context), and all later accesses to the same key will either read the cached
 copy, or update this copy. 
-
+Keys in the working set are published to downstream functions in the DAG, such that their first-time accesses 
+to the keys already in the DAG's working set will be redirected to the upstream function's caches to only access 
+the private copy, not a potentially different value in the local cache or the KVS.
