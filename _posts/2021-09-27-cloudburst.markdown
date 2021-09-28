@@ -127,3 +127,9 @@ talk directly (e.g., due to strict isolation): The sending function writes the m
 and the receiving function probes the key until a value is written.
 In either case, serverless developers may use simple library calls to send and/or receive message to peer functions in 
 the same DAG, enabling fine-grained communication between instances.
+
+To accelerate data access on the distributed KVS, which can itself be deployed far from the function worker nodes,
+Cloudburst implements LDPC and provides a KVS cache on a per worker node basis. The cache functions like a regular 
+key-value cache by fulfilling KVS access requests with much shorter latency and higher throughput, and keeping 
+the data it retrieved from the KVS for a while for future accesses. 
+
