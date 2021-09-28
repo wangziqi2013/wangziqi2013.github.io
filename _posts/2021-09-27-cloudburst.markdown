@@ -73,3 +73,8 @@ These two consistency models, namely repeatable-reads and causal-consistency, ex
 intuitive semantics to the functions executing concurrently, which greatly aids program design as most read-write
 interleaves can be handled correctly by the framework itself.
 
+We next discuss the operation of Cloudburst in details. The overall architecture of CloudBurst does not deviate far
+from conventional platforms: External requests are handled by a frontend API gateway, which are then dispatched 
+to worker nodes for execution. Results are returned to the external client after the functions have completed.
+There are, however, a few differences that are made to support LDPC and function chaining.
+First, 
