@@ -150,4 +150,9 @@ periodically report node statistics such as memory and CPU load to the scheduler
 KVS. The scheduler may decide to scale up or down a particular function instance and/or worker node, if the 
 workload is higher or lower than certain thresholds. 
 
+Cloudburst handles concurrent read/write or write/write accesses to the KVS on the same key with a few different 
+policies. Write/write conflicts are handled with what is called "lattice encapsulation", which the paper did not 
+elaborate on (I think it just defines some way of replaying updates, like integer addition/subtraction or set 
+insertion/deletion can be easily replayed ? I did not read the Anna paper, so do not count on me on this part).
+Read/write conflicts, on the other hand, are handled with two possible consistency models.
 
