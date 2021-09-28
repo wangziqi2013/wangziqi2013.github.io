@@ -28,7 +28,11 @@ version_mgmt:
    Any function in the cloud is able to contact any other function this way.
    A slightly better design would be to always authenticate function's identity on address translation, but this
    cannot fully block malicious functions scanning the IP/port combination. 
-   
+   While I do agree that fine-grained communication is critical, the TCP/KVS based communication channel is 
+   an overkill and poses great security issues, because it exposes the entire cloud to all instances running on it.
+   A better design would be to hard-limit the addressing scheme to only work within the DAG, by, for example,
+   software defined networks. But this would be difficult to be implemented in a distributed and autonomous manner,
+   which defeats the purpose of serverless and complicates lots of things.
 
 This paper presents Cloudburst, a serverless framework that allows functions to preserve states between invocations
 by using a distributed key-value store with strong consistency guarantees.
