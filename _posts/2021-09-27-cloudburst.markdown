@@ -80,4 +80,6 @@ There are, however, a few differences that are made to support LDPC and function
 First, since DAGs are executed as a whole, the serverless developers should register the DAG to the cloud infrastructure
 by specifying the DAG topology and function input/output. 
 User requests may be dispatched to a DAG if the request type is registered to be executed on the DAG.
-
+Cloudburst does not enforce atomicity of DAG execution, meaning that developers should be able to handle execution
+failures at any point of the DAG (e.g., make it fail-stop), and notify the infrastructure to restart execution from the 
+very beginning.
