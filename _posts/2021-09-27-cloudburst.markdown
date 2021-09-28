@@ -25,7 +25,10 @@ version_mgmt:
 3. Individual functions can be addressed by assigning them global IDs and instance IDs within the DAG. A translation
    service translates the global and instance ID combination into the IP/port, which is known by the scheduler.
 
-4. 
+4. Consistency model (concurrency control) becomes an issue when keys are shared between functions and can be 
+   accessed concurrently. 
+   The paper proposes two models, repeatable reads, which can be achieved with a cached snapshot, and 
+   causal consistency, which can be achieved with Lamport vector clocks.
 
 **Comments:**
 
