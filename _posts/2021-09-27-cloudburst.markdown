@@ -93,5 +93,12 @@ invocations. As a contrast, in current serverless platforms, function arguments 
 the previous function to its successors. The references will be resolved at function invocation time to retrieve values
 from the KVS.
 
+When a request is received, it is handled by a scheduler. The scheduler maintains the registrations of all DAGs and 
+all functions. If a single function is requested, it simply dispatches the request to the function VM.
+Otherwise, if it is a DAG, then the scheduler generates an execution plan according to the functions in the DAG,
+by assigning each node in a DAG to an instance on the worker nodes. 
+The plan is generated with preferences given to code and data locality. The scheduler tends to assign a DAG node to a 
+worker node, if the worker node contains a warm instance of the VM of the function type of the node, or if some 
+arguments are KVS references that the node is like to have a cached copy, or both.
 
 
