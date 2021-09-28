@@ -155,4 +155,9 @@ policies. Write/write conflicts are handled with what is called "lattice encapsu
 elaborate on (I think it just defines some way of replaying updates, like integer addition/subtraction or set 
 insertion/deletion can be easily replayed ? I did not read the Anna paper, so do not count on me on this part).
 Read/write conflicts, on the other hand, are handled with two possible consistency models.
+The first model, repeatable-read, dictates that all function in the DAG either read the same value, if
+it has not been updated, or read the value written by the DAG itself after the write is performed.
+With local caches, this could be implemented conveniently by just caching the value that is first time read by a DAG
+(which is similar to a transaction in this context), and all later accesses to the same key will either read the cached
+copy, or update this copy. 
 
