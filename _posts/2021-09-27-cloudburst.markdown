@@ -77,4 +77,7 @@ We next discuss the operation of Cloudburst in details. The overall architecture
 from conventional platforms: External requests are handled by a frontend API gateway, which are then dispatched 
 to worker nodes for execution. Results are returned to the external client after the functions have completed.
 There are, however, a few differences that are made to support LDPC and function chaining.
-First, 
+First, since DAGs are executed as a whole, the serverless developers should register the DAG to the cloud infrastructure
+by specifying the DAG topology and function input/output. 
+User requests may be dispatched to a DAG if the request type is registered to be executed on the DAG.
+
