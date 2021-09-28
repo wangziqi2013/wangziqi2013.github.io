@@ -88,4 +88,7 @@ gateway like on conventional platforms, or, they can be stored in the KVS and re
 Another option is to abstract away the KVS, and provide client side application with the future object. The future 
 object listens on the response message, and, when a read is attempted, will return the result if it is already 
 available, or block execution of client side application if results are not ready yet.
-
+Third, function arguments can be references to KVS, which preserves the values produces by previous function 
+invocations. As a contract, in current serverless platforms, function arguments must be passed via messages sent from
+the previous function to its successors. The references will be resolved at function invocation time to retrieve values
+from the KVS.
