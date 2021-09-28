@@ -117,7 +117,7 @@ before they start execution.
 During plan stage, every DAG invocation is assigned a unique global ID, and functions within the DAG are also 
 assigned instance numbers, which are also known by all of the participants of the execution plan.
 Functions can be addressed individually by other functions in the same DAG using the global and instance ID, which 
-will be translated to the physical address, which is an IP and port pair that can reach the VM instance hosting 
+will be translated to the physical address, i.e., an IP and port pair that can reach the VM instance hosting 
 the function.
 
 Functions communicate with each other by first requesting a translate of the ID, and then establishing TCP 
@@ -132,4 +132,6 @@ To accelerate data access on the distributed KVS, which can itself be deployed f
 Cloudburst implements LDPC and provides a KVS cache on a per worker node basis. The cache functions like a regular 
 key-value cache by fulfilling KVS access requests with much shorter latency and higher throughput, and keeping 
 the data it retrieved from the KVS for a while for future accesses. 
-
+The cache also regularly report its cached keys to the scheduler, such that the scheduler can make instance placement 
+decisions based on the cached keys. 
+Each cache also subscribes from the underlying KVS to receive value updates from the latter. 
