@@ -34,6 +34,14 @@ version_mgmt:
    software defined networks. But this would be difficult to be implemented in a distributed and autonomous manner,
    which defeats the purpose of serverless and complicates lots of things.
 
+3. The consistency model requires publishing the working set (or at least the read set) between function instances.
+   From a transaction perspective this is unnecessary.
+   Why not just treat each DAG as a transaction, and gives its a private working space (e.g., stored in the KVS with
+   the keys prefixed by the global ID)? The DAG can bring any value it has read into the working space and keep 
+   working on that private copy.
+   This is basically a concurrency control problem, and lots of elegant solutions already exists. You do not need to
+   invent new systems for that.
+
 This paper presents Cloudburst, a serverless framework that allows functions to preserve states between invocations
 by using a distributed key-value store with strong consistency guarantees.
 This paper is motivated by the fact that today's serverless frameworks only provide stateless functions, which disallows
@@ -141,3 +149,5 @@ function registration, DAG registration, and other system-level metadata in the 
 periodically report node statistics such as memory and CPU load to the scheduler by writing these information to the 
 KVS. The scheduler may decide to scale up or down a particular function instance and/or worker node, if the 
 workload is higher or lower than certain thresholds. 
+
+
