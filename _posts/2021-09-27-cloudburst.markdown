@@ -23,6 +23,13 @@ version_mgmt:
    I understand that most programs can be transformed to use static DAGs, but still, support for dynamic DAGs 
    would be a nice thing to have.
 
+2. The addressing scheme breaks isolation. If a function can translate arbitrary address into the physical IP/port pair
+   and then establishing TCP connection directly to another function, then why do you even enforce isolation?
+   Any function in the cloud is able to contact any other function this way.
+   A slightly better design would be to always authenticate function's identity on address translation, but this
+   cannot fully block malicious functions scanning the IP/port combination. 
+   
+
 This paper presents Cloudburst, a serverless framework that allows functions to preserve states between invocations
 by using a distributed key-value store with strong consistency guarantees.
 This paper is motivated by the fact that today's serverless frameworks only provide stateless functions, which disallows
