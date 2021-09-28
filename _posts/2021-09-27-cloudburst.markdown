@@ -103,9 +103,16 @@ arguments are KVS references that the node is like to have a cached copy, or bot
 The execution plan is then broadcasted to each of the worker node, and these worker nodes will start instances of the 
 assigned type (one worker node may be assigned with multiple instances), which wait for their predecessors to complete
 before they start execution.
-Every DAG invocation is assigned a unique global ID, and functions within the DAG are also assigned instance numbers, 
-which are also known by all of the participants of the execution plan.
+During plan stage, every DAG invocation is assigned a unique global ID, and functions within the DAG are also 
+assigned instance numbers, which are also known by all of the participants of the execution plan.
 Functions can be addressed individually by other functions in the same DAG using the global and instance ID, which 
 will be translated to the physical address, which is an IP and port pair that can reach the VM instance hosting 
 the function.
 
+Functions communicate with each other by first requesting a translate of the ID, and then establishing TCP 
+connections to the peer function.
+The paper also noted that functions can use the KVS as a secondary communication channel, if instances cannot 
+talk directly (e.g., due to strict isolation): The sending function writes the message into a pre-agreed key value, 
+and the receiving function probes the key until a value is written.
+In either case, serverless developers may use simple library calls to send and/or receive message to peer functions in 
+the same DAG, enabling fine-grained communication between instances.
