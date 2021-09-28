@@ -135,3 +135,9 @@ the data it retrieved from the KVS for a while for future accesses.
 The cache also regularly report its cached keys to the scheduler, such that the scheduler can make instance placement 
 decisions based on the cached keys. 
 Each cache also subscribes from the underlying KVS to receive value updates from the latter. 
+
+Cloudburst uses the KVS to store and maintain metadata and system statistics. For example, the scheduler stores 
+function registration, DAG registration, and other system-level metadata in the KVS. Each worker node also
+periodically report node statistics such as memory and CPU load to the scheduler by writing these information to the 
+KVS. The scheduler may decide to scale up or down a particular function instance and/or worker node, if the 
+workload is higher or lower than certain thresholds. 
