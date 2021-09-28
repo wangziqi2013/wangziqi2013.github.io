@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Functions can be chained by registering a DAG with nodes being function instances and edges being the control flow.
+   The DAG can be used to generate an execution plan by a scheduler, which is then dispatched to the worker nodes 
+   for execution. This way, all functions in the DAG knows the full topology and can work autonomously.
+
 **Comments:**
 
 1. Only static DAGs are supported, and it seems that the scheduler needs to plan ahead before the DAG starts execution.
