@@ -19,6 +19,9 @@ version_mgmt:
    The DAG can be used to generate an execution plan by a scheduler, which is then dispatched to the worker nodes 
    for execution. This way, all functions in the DAG knows the full topology and can work autonomously.
 
+2. Preserving states or passing information across function invocations can be achieved by using a key-value store.
+   Accesses to the KVS can be accelerated with a per-worker node cache.
+
 **Comments:**
 
 1. Only static DAGs are supported, and it seems that the scheduler needs to plan ahead before the DAG starts execution.
