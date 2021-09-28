@@ -83,3 +83,9 @@ User requests may be dispatched to a DAG if the request type is registered to be
 Cloudburst does not enforce atomicity of DAG execution, meaning that developers should be able to handle execution
 failures at any point of the DAG (e.g., make it fail-stop), and notify the infrastructure to restart execution from the 
 very beginning.
+Second, the output of an execution can be returned to the client, either through a message sent back from the API 
+gateway like on conventional platforms, or, they can be stored in the KVS and retrieved by the client side application.
+Another option is to abstract away the KVS, and provide client side application with the future object. The future 
+object listens on the response message, and, when a read is attempted, will return the result if it is already 
+available, or block execution of client side application if results are not ready yet.
+
