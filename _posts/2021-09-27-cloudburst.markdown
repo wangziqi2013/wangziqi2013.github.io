@@ -88,7 +88,7 @@ to be involved constitute the nodes of the DAG, while the invocation relation fo
 External requests can either invoke individual functions just like on conventional serverless platforms, or can 
 directly invoke a pre-registered DAG, and expect Cloudburst scheduler (discussed later) to handle function composition.
 Lastly, Cloudburst defines and implements two strong consistency models for concurrent accesses of the KVS. 
-These two consistency models, namely repeatable-reads and causal-consistency, expose a well-defined and 
+These two consistency models, namely repeatable-reads and causal consistency, expose a well-defined and 
 intuitive semantics to the functions executing concurrently, which greatly aids program design as most read-write
 interleaves can be handled correctly by the framework itself.
 
@@ -163,3 +163,11 @@ copy, or update this copy.
 Keys in the working set are published to downstream functions in the DAG, such that their first-time accesses 
 to the keys already in the DAG's working set will be redirected to the upstream function's caches to only access 
 the private copy, not a potentially different value in the local cache or the KVS.
+
+The second consistency model, namely causality consistency, requires that values be propagated properly between 
+functions that are not concurrent (i.e., directly or indirectly connected by an directed path).
+In other words, the data dependency of values must be consistent with the control dependency defined by the DAG.
+Cloudburst tracks dependencies using Lamport vector clock, and only allows a read to happen if the reader's 
+vector clock is strictly larger than a value's clock (I did not quite understand the details in the paper, but
+I get the general idea of using vector clocks. You can find discussion on this matter in many other paper
+focused on this topic.).
