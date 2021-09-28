@@ -100,5 +100,12 @@ by assigning each node in a DAG to an instance on the worker nodes.
 The plan is generated with preferences given to code and data locality. The scheduler tends to assign a DAG node to a 
 worker node, if the worker node contains a warm instance of the VM of the function type of the node, or if some 
 arguments are KVS references that the node is like to have a cached copy, or both.
-
+The execution plan is then broadcasted to each of the worker node, and these worker nodes will start instances of the 
+assigned type (one worker node may be assigned with multiple instances), which wait for their predecessors to complete
+before they start execution.
+Every DAG invocation is assigned a unique global ID, and functions within the DAG are also assigned instance numbers, 
+which are also known by all of the participants of the execution plan.
+Functions can be addressed individually by other functions in the same DAG using the global and instance ID, which 
+will be translated to the physical address, which is an IP and port pair that can reach the VM instance hosting 
+the function.
 
