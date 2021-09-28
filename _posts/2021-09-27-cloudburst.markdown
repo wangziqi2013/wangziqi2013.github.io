@@ -22,6 +22,11 @@ version_mgmt:
 2. Preserving states or passing information across function invocations can be achieved by using a key-value store.
    Accesses to the KVS can be accelerated with a per-worker node cache.
 
+3. Individual functions can be addressed by assigning them global IDs and instance IDs within the DAG. A translation
+   service translates the global and instance ID combination into the IP/port, which is known by the scheduler.
+
+4. 
+
 **Comments:**
 
 1. Only static DAGs are supported, and it seems that the scheduler needs to plan ahead before the DAG starts execution.
