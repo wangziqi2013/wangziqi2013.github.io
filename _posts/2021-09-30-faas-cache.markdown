@@ -27,4 +27,6 @@ after the function completes. Cloud providers keep function instances alive for 
 First, containers themselves incur the overhead of booting a system (for VMM), or setting up the isolated environment
 (for containers). Second, the language runtime is also likely to take time to initialize, including downloading and 
 importing library dependencies. 
-
+By keeping the container instance alive after execution, and hosting the same function the next time a request arrives,
+the so-called cold start overhead can be avoided, and functions generally will have shorter latency from being
+requested to being completed, which is a desired feature as serverless functions are typically small.
