@@ -36,4 +36,8 @@ resource utilization must be paid by keeping container instances in the main mem
 those containers, mostly memory resources, are not reclaimed. 
 It is, therefore, a crucial part of serverless services to be able to balance between performance and utilization
 with smart keep-alive policies.
+Existing commercial solutions are rather simple, which just keeps warm instances in the main memory for a fixed period
+of time before they are deemed as unlikely to be reused in the future and then destroyed.
+The paper argues that the simple policy does not always provide optimal result, and that it is challenging to 
+design a effective policy for two reasons.
 
