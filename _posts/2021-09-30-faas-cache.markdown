@@ -40,4 +40,7 @@ Existing commercial solutions are rather simple, which just keeps warm instances
 of time before they are deemed as unlikely to be reused in the future and then destroyed.
 The paper argues that the simple policy does not always provide optimal result, and that it is challenging to 
 design a effective policy for two reasons.
-
+First, function containers are not identical. They consume different amount of resources, require different setup
+times, and are requested at different frequencies. The simple policy obviously does not take any of these into 
+consideration, and a more comprehensive policy should cover all the factors that may affect the effectiveness of 
+function keep-alive.
