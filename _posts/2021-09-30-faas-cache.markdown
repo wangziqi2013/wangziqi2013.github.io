@@ -55,4 +55,8 @@ One of the most critical observation made in the paper is that function keep-ali
 If the total amount of resource (this paper mainly focuses on memory resource as it is the major cost of keeping
 function containers warm) is considered as the capacity of the cache, then the cold and warm start latencies are 
 analogous to the cache miss and hit overheads, respectively.
+Additionally, requests to invoke functions are just accesses to the cache, and each function type has a different
+frequency of access, indicating its popularity.
+The intuition here is that the caching policy should favor functions with smaller memory footprints, larger cold
+start overheads, and are requested more frequently. 
 
