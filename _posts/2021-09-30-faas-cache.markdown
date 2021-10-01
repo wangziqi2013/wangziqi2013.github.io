@@ -46,7 +46,13 @@ consideration, and a more comprehensive policy should cover all the factors that
 function keep-alive.
 Second, serverless functions are often scaled based on the dynamic workload, which requires a change of resource
 allocated to the function. The amount of resource reserved for function keep-live, in the meantime, should also
-change to better accommodate the incoming traffic. The simple policy, for example, is unable to determine the optimal
-number of warm instances per function type to keep alive. This paper proposes a mechanism, known as Elastic Dynamic
-Scaling, to properly scale the resource allocated to a single function type for an optimal "hit rate" of the 
-warm containers.
+change in order to better accommodate the incoming traffic. The simple policy, for example, is unable to determine 
+the optimal number of warm instances per function type to keep alive. This paper proposes a mechanism, known as 
+Elastic Dynamic Scaling, to properly scale the resource allocated to a single function type for an optimal "hit rate" 
+of the warm containers.
+
+One of the most critical observation made in the paper is that function keep-alive is essentially a caching problem.
+If the total amount of resource (this paper mainly focuses on memory resource as it is the major cost of keeping
+function containers warm) is considered as the capacity of the cache, then the cold and warm start latencies are 
+analogous to the cache miss and hit overheads, respectively.
+
