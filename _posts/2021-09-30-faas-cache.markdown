@@ -59,4 +59,12 @@ Additionally, requests to invoke functions are just accesses to the cache, and e
 frequency of access, indicating its popularity.
 The intuition here is that the caching policy should favor functions with smaller memory footprints, larger cold
 start overheads, and are requested more frequently. 
-
+There is, however, one major difference between function keep-alive and caching, which is the fact that multiple 
+instances of the same function can co-exist on the same worker node, while some of the traits mentioned above, such
+as the access frequency of a certain function type, are shared by all instances of the same type
+(counting per-instance access frequency is nonsense, because the scheduler will randomly choose an instance to
+satisfy the request).
+As a contract, in the classical caching problem, every cached object is considered as distinct, and they do not
+share any traits. 
+This little inconsistency, in fact, affected the design of the policy such that both per-instance and per-type traits
+are considered when making eviction decisions.
