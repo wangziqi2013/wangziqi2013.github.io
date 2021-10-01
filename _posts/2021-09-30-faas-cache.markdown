@@ -30,3 +30,10 @@ importing library dependencies.
 By keeping the container instance alive after execution, and hosting the same function the next time a request arrives,
 the so-called cold start overhead can be avoided, and functions generally will have shorter latency from being
 requested to being completed, which is a desired feature as serverless functions are typically small.
+
+The paper points out, however, that function keep-alive is not free lunch. The trade-off between performance and 
+resource utilization must be paid by keeping container instances in the main memory, as the resource allocated to
+those containers, mostly memory resources, are not reclaimed. 
+It is, therefore, a crucial part of serverless services to be able to balance between performance and utilization
+with smart keep-alive policies.
+
