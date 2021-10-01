@@ -44,3 +44,9 @@ First, function containers are not identical. They consume different amount of r
 times, and are requested at different frequencies. The simple policy obviously does not take any of these into 
 consideration, and a more comprehensive policy should cover all the factors that may affect the effectiveness of 
 function keep-alive.
+Second, serverless functions are often scaled based on the dynamic workload, which requires a change of resource
+allocated to the function. The amount of resource reserved for function keep-live, in the meantime, should also
+change to better accommodate the incoming traffic. The simple policy, for example, is unable to determine the optimal
+number of warm instances per function type to keep alive. This paper proposes a mechanism, known as Elastic Dynamic
+Scaling, to properly scale the resource allocated to a single function type for an optimal "hit rate" of the 
+warm containers.
