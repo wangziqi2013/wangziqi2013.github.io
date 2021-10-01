@@ -20,3 +20,11 @@ initialization cost of the container itself and the language runtime. The cachin
 well-studied, leading to simple but sub-optimal design decisions such as the naive expiration mechanism.
 This paper draws an analogy between the function caching problem with a more traditional and broadly studied problem 
 of caching variable sized objects, and proposes better policies for function caching and VM over-provisioning.
+
+FaaSCache is built upon the concept of function keep-alive, which has now become a standard practice for cloud 
+providers to not terminate the container or VMM instance (we use the term "container" below to refer to both)
+after the function completes. Cloud providers keep function instances alive for two reasons.
+First, containers themselves incur the overhead of booting a system (for VMM), or setting up the isolated environment
+(for containers). Second, the language runtime is also likely to take time to initialize, including downloading and 
+importing library dependencies. 
+
