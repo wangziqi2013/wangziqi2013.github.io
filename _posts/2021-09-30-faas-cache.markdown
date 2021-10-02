@@ -21,6 +21,11 @@ version_mgmt:
    Maybe cache locality is also taken into consideration here, e.g., the policy favors the instances that are recently
    used because it is likely that part of its working set is still in the LLC and thus it runs faster?
 
+2. Why maintain the per-worker node "clock" counter as eviction counter, rather than access counter? 
+   Wouldn't the latter be more intuitive, because it is then equivalent to the LRU recency counter?
+   Using eviction does not really count the recency, because instances accessed between two evictions will have
+   the same clock value.
+
 This paper presents FaaSCache, a caching policy for virtual machine keep-alive in multi-tenant environments containing
 heterogeneous function instances. The paper is motivated by the fact that commercial cloud providers nowadays all
 cache function instances on the worker node to alleviate the long cold start latency, which is incurred by the 
@@ -76,4 +81,5 @@ As a contract, in the classical caching problem, every cached object is consider
 share any traits. 
 This little inconsistency, in fact, affected the design of the policy such that both per-instance and per-type traits
 are considered when making eviction decisions.
+
 
