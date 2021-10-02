@@ -89,4 +89,8 @@ which will also be implemented in future releases of OpenLambda. We list these f
    Besides, the platform may offer to maintain low-level cross-invocation states, such as open TCP connections, 
    which can be bound to function instances. This enables function instances to talk to the same user session on 
    the web application using the same TCP connection.
-   
+   This addresses the second issue in the experiments discussed above: Long polling services on the server side no 
+   longer need to be running continuously in the background. Instead, they can be implemented as two serverless 
+   functions, with the first one receiving user requests and registering the TCP connection with the framework 
+   before it exits, while the second one, which is responsible for server-side data pushing, is started only after 
+   the activities it waits for happen.
