@@ -99,3 +99,5 @@ which will also be implemented in future releases of OpenLambda. We list these f
    functions on an existing database, or as data table iterators that are only triggered when new entires are inserted
    into the table. The latter can be used for monitoring data activities and solve the long polling problem as discussed
    in the previous point.
+   In addition, stronger consistency models may also be provided as a plus to enable more collaboration between
+   function instances using the data store as a communication channel.
