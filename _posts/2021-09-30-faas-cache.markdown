@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Function keep-alive can be modeled as a caching problem, and many principles of caching applies.
+   Function instances can be thought of as variable-sized objects, with the amount of free memory as the cache size, 
+   cold start latency as miss penalty, warm start latency as hit latency, function size as object size, 
+   and function invocation frequency as the access frequency.
+
+
+
 **Comments:**
 
 1. I do not quite get why you need per-instance clock? If all instances of the same type are using the same amount of
