@@ -115,3 +115,7 @@ The cache simulation can either be done by enumerating each reasonable size and 
 or analytically with reuse distance defined as the amount of memory that is needed by caching other functions between 
 two consecutive invocations of the same function.
 The paper also notes that this process is expensive, but is only performed once at initialization stage.
+During the execution, the actual hit ratio of the function cache is periodically compared with the target ratio. 
+If the former is lower, indicating that there is not sufficient number of instances to satisfy requests from cache, 
+the cache size will be increased by a certain amount, such that more function instances can be accommodated and 
+that the chances that a free instance can be found on a function request increases. 
