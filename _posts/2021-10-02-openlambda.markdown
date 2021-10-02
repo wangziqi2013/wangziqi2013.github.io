@@ -116,3 +116,7 @@ which will also be implemented in future releases of OpenLambda. We list these f
    data it needs to access as possible).
    Some of these features require that the scheduler know the resource access pattern of functions, which may 
    be prepared by function developers in a manifest file, or exposed dynamically in the run time.
+
+8. Lastly, the new platform should support comprehensive debugging and statistics reporting, such that performance   
+   decomposition showing a detailed breakdown of execution times and performance costs. 
+   These tools would be of great help in debugging web applications and future innovation.
