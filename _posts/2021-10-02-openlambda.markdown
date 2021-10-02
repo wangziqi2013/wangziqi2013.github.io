@@ -18,4 +18,8 @@ that implements the serverless paradigm as an experimental platform for serverle
 The authors of the paper identifies a few features that are critical for performance and usability of the platform, 
 and briefly discusses them as potential point of interests that can be implemented in OpenLambda.
 
+The paper begins with a discussion on the current commercial offering of serverless, namely, Amazon Lambda.
+Generally speaking, Lambda is a serverless platform that allows individual functions to be uploaded by users, which
+will also be individually scheduled anywhere on the cloud, triggered by external events. 
+
 
