@@ -43,3 +43,7 @@ in a sense that they do not share any run time states except the underlying data
 As a result, no consistency guarantee is provided between shared states observed by functions.
 Function instances are charged by the memory cap multiplied by the actual time it has executed (rounded 
 to 100ms).
+
+To demonstrate the benefit of being able to scale functions without any explicit server management, the paper 
+conducted an experiment in which independent RPC calls (that just spins and does nothing else) are made to the 
+serverless and conventional containerized platforms, respectively. 
