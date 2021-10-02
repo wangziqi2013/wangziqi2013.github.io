@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. I do not quite get why you need per-instance clock? If all instances of the same type are using the same amount of
+   resource, then evicting any of them would be the same. Why bother distinguishing between instances with the 
+   per-instance clock? Shouldn't per-type clock suffices?
+   Maybe cache locality is also taken into consideration here, e.g., the policy favors the instances that are recently
+   used because it is likely that part of its working set is still in the LLC and thus it runs faster?
+
 This paper presents FaaSCache, a caching policy for virtual machine keep-alive in multi-tenant environments containing
 heterogeneous function instances. The paper is motivated by the fact that commercial cloud providers nowadays all
 cache function instances on the worker node to alleviate the long cold start latency, which is incurred by the 
@@ -68,3 +76,4 @@ As a contract, in the classical caching problem, every cached object is consider
 share any traits. 
 This little inconsistency, in fact, affected the design of the policy such that both per-instance and per-type traits
 are considered when making eviction decisions.
+
