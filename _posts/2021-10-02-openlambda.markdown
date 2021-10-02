@@ -71,4 +71,7 @@ which will also be implemented in future releases of OpenLambda. We list these f
    Caching warm instances solves this problem, but cached instances will consume memory. It is therefore critical
    to find a balance between memory consumption and instance start latency.
 
-
+2. Lambda functions are written in high-level languages, which could be interpreted or JIT compiled. The latter may
+   result in more optimized code, and hence improved execution time. But if a function is only rarely invoked, or
+   does not constitute a significant part of total execution time, optimizing the code might be an overkill.
+   This is another performance trade-off that OpenLambda must take into consideration.
