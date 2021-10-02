@@ -21,5 +21,8 @@ and briefly discusses them as potential point of interests that can be implement
 The paper begins with a discussion on the current commercial offering of serverless, namely, Amazon Lambda.
 Generally speaking, Lambda is a serverless platform that allows individual functions to be uploaded by users, which
 will also be individually scheduled anywhere on the cloud, triggered by external events. 
+There are two major benefits of Lambda compared with conventional web applications. First, Lambda functions are 
+written in high level languages, and the source file is typically small. It is therefore convenient to 
+dispatch function code across the cloud, and then start execution with a language interpreter or JIT engine.
 
 
