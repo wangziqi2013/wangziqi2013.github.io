@@ -56,4 +56,8 @@ the paper also conducted experiment with a web application by treating every AJA
 Results show that the majority of RPC requests are short and small, which takes less than 100ms to complete.
 These requests, if implemented in serverless, will suffer from excessive overcharge as the minimum time unit for 
 billing is 100ms on Lambda.
-
+The paper also observes that a small portion of RPC requests last as long as a few minutes, as a result of 
+long polling (which allows the serverless to push data to clients, but the action is only triggered by some
+other activities).
+These RPC calls will also be hugely penalized under the serverless environment, as they mostly remain idle once
+started, but they will be charged anyway as they consume memory on the worker node.
