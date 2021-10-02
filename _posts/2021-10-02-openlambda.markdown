@@ -61,3 +61,14 @@ long polling (which allows the serverless to push data to clients, but the actio
 other activities).
 These RPC calls will also be hugely penalized under the serverless environment, as they mostly remain idle once
 started, but they will be charged anyway as they consume memory on the worker node.
+
+The paper then presents a few features that help increasing the productivity and usability of serverless platforms,
+which will also be implemented in future releases of OpenLambda. We list these features in a series of bullet points.
+
+1. The execution engine should support efficient instanciation of function instances, since on the current platform, 
+   a single instance may take a few seconds to fully start, which is much worse compared with conventional services.
+   This effect is most observable when the load is light and not bursty. 
+   Caching warm instances solves this problem, but cached instances will consume memory. It is therefore critical
+   to find a balance between memory consumption and instance start latency.
+
+
