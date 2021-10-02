@@ -20,7 +20,12 @@ version_mgmt:
    cold start latency as miss penalty, warm start latency as hit latency, function size as object size, 
    and function invocation frequency as the access frequency.
 
-
+2. The function cache also needs to be dynamically resized to maintain a stable hit ratio. This is consistent with
+   the serverless paradigm in which functions can be easily scaled up.
+   Cache size is determined given a target hit ratio by running simulations with either analytics or just cache
+   simulation.
+   The cache size is adjusted in the run time by comparing the dynamic hit ratio with the target ratio, and add or 
+   remove memory to the cache based on the result of comparison.
 
 **Comments:**
 
