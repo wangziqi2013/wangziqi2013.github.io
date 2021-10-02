@@ -28,6 +28,8 @@ version_mgmt:
 
 3. I also do not get why you need to over-provision? Isn't the best thing about serverless is that you do not 
    over-provision, and just start new instances anywhere on the cloud (i.e., easy scale up)? 
+   **OK, they are talking about over-provisioning of the cache storage. But this term is misleading, because it is
+   just dynamically changing cache size based on workloads**
 
 This paper presents FaaSCache, a caching policy for virtual machine keep-alive in multi-tenant environments containing
 heterogeneous function instances. The paper is motivated by the fact that commercial cloud providers nowadays all
@@ -102,3 +104,10 @@ a warm start. The measurement is performed only once when a new function type is
 accessed after being cached.
 On eviction, the priority value of all instances are computed and sorted, and then the lowest priority instances
 are evicted, until the resource is sufficient for starting the newly requested instance.
+
+FaaSCache also implements Elastic Dynamic Scaling, a mechanism for adjusting the cache size dynamically in the
+run time based on the workload. 
+Elastic Dynamic Scaling consists of two components. The first component statically computes the initial cache size
+using a profiling trace aiming at a certain hit ratio, and the second component dynamically adjusts the cache size
+based on the target hit ratio and the run time dynamic ratio.
+
