@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This workshop paper presents OpenLambda, an open-source framework (under development when the paper was published) 
+that implements the serverless paradigm as an experimental platform for serverless innovations.
+The authors of the paper identifies a few features that are critical for performance and usability of the platform, 
+and briefly discusses them as potential point of interests that can be implemented in OpenLambda.
+
+
