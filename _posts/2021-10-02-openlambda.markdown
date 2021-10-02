@@ -75,3 +75,10 @@ which will also be implemented in future releases of OpenLambda. We list these f
    result in more optimized code, and hence improved execution time. But if a function is only rarely invoked, or
    does not constitute a significant part of total execution time, optimizing the code might be an overkill.
    This is another performance trade-off that OpenLambda must take into consideration.
+
+3. Many functions require third-party packages that are not contained in the language library. The platform should 
+   be able to fetch these packages from one of the standard repositories, and cache them locally.
+   It is another interesting design decision on which packages should be cached, and which discarded.
+   Besides, the scheduler may also take the distribution of cached packages into account when making decisions,
+   and can prioritize dispatching functions requiring certain packages to a worker node that already cached these 
+   packages.
