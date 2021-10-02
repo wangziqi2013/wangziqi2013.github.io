@@ -93,3 +93,7 @@ The priority is computed as (clock + (frequency * cost) / (size)), in which freq
 the access frequency, the cold start latency, and the memory consumption of the function type as we discussed above.
 The clock is a per-worker node counter, which is incremented for every eviction, and is assigned to an instance when 
 a request is dispatched on it.
+Frequency, cost, and size are all per-type traits, and they can be measured by maintaining a statistics for each
+function type cached on the node. The cold start latency is measured as the difference between a cold start and 
+a warm start. The measurement is performed only once when a new function type is first time cached and first time
+accessed after being cached.
