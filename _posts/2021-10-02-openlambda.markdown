@@ -36,4 +36,8 @@ node for execution. Functions are started in containers that provide an isolated
 (although not mentioned explicitly in this paper) container processes will be kept alive for a while after the function
 completes, which can be reused immediately to serve any new request to the same function on the same worker node 
 to avoid the cold start latency. 
+The frontend scheduler will also maintain the "sticky route", and dispatches requests to the same function to the 
+same worker node to better utilize warm containers.
+Multiple instances of the same function can be started in parallel, and these instances are considered as stateless
+in a sense that they do not share any run time states except the underlying data storage.
 
