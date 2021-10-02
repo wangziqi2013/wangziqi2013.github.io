@@ -87,4 +87,9 @@ cache storage by FaaSCache, and the framework always attempts to fill the cache 
 When a request arrives, the framework will select a cached container instance of the requested function type, and 
 dispatch the request to one of the free instances. If such an instance cannot be found, then one or more existing free 
 instance must be evicted just like in a regular cache to free up the resource for the new instance.
-
+The eviction is based on a per-instance priority value computed given all the factors discussed above, plus a 
+"clock" value indicating the last time the instance is used (i.e., the "recency" of the instance as in LRU).
+The priority is computed as (clock + (frequency * cost) / (size)), in which frequency, cost, and size corresponds to
+the access frequency, the cold start latency, and the memory consumption of the function type as we discussed above.
+The clock is a per-worker node counter, which is incremented for every eviction, and is assigned to an instance when 
+a request is dispatched on it.
