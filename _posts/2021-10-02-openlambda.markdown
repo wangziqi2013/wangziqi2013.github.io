@@ -105,4 +105,6 @@ which will also be implemented in future releases of OpenLambda. We list these f
 6. The platform should also enable data aggregation, which is the foundation of many big-data algorithms, to be 
    implemented with serverless, in which each leaf-level function instance handles a partition of data,
    and high-level functions summarizes the results from lower level instances. 
-   
+   This has two implications. First, functions must be able to communicate in a fine-grained manner to each other.
+   Second, the platform should be able to "ship code to data", such that functions are executed on or next to the
+   node where data is physically stored, in order to reduce data movement over the network.
