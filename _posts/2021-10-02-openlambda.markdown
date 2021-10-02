@@ -94,3 +94,8 @@ which will also be implemented in future releases of OpenLambda. We list these f
    functions, with the first one receiving user requests and registering the TCP connection with the framework 
    before it exits, while the second one, which is responsible for server-side data pushing, is started only after 
    the activities it waits for happen.
+
+5. Collaborating with databases is a must-have for serverless. Serverless functions might be executed as user-defined
+   functions on an existing database, or as data table iterators that are only triggered when new entires are inserted
+   into the table. The latter can be used for monitoring data activities and solve the long polling problem as discussed
+   in the previous point.
