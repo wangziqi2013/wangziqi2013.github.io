@@ -46,4 +46,7 @@ to 100ms).
 
 To demonstrate the benefit of being able to scale functions without any explicit server management, the paper 
 conducted an experiment in which independent RPC calls (that just spins and does nothing else) are made to the 
-serverless and conventional containerized platforms, respectively. 
+serverless and conventional containerized platforms, respectively. Results shows that serverless has an obvious
+advantage as it could dispatch all the requests to scaled out function instances within a short period of time
+and let them execute in parallel, while on conventional platforms, these requests must wait in the queue, and be
+handled by the monolithic logic running in the container one by one.
