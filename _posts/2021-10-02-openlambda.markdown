@@ -101,3 +101,8 @@ which will also be implemented in future releases of OpenLambda. We list these f
    in the previous point.
    In addition, stronger consistency models may also be provided as a plus to enable more collaboration between
    function instances using the data store as a communication channel.
+
+6. The platform should also enable data aggregation, which is the foundation of many big-data algorithms, to be 
+   implemented with serverless, in which each leaf-level function instance handles a partition of data,
+   and high-level functions summarizes the results from lower level instances. 
+   
