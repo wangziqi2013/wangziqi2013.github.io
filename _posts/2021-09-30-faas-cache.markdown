@@ -82,4 +82,9 @@ share any traits.
 This little inconsistency, in fact, affected the design of the policy such that both per-instance and per-type traits
 are considered when making eviction decisions.
 
+We next discuss the operational details of FaaSCache. All resources allocated to serverless are considered as usable
+cache storage by FaaSCache, and the framework always attempts to fill the cache as long as resource permits. 
+When a request arrives, the framework will select a cached container instance of the requested function type, and 
+dispatch the request to one of the free instances. If such an instance cannot be found, then one or more existing free 
+instance must be evicted just like in a regular cache to free up the resource for the new instance.
 
