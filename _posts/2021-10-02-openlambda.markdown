@@ -30,3 +30,10 @@ workloads. In addition, high-level language functions are less affected by syste
 such as library version or compiler compatibilities issues. The language infrastructure requires very little 
 specification other than installing third-party packages. 
 
+On Lambda, functions are usually triggered by user-side web applications sending a POST message to a URL.
+The request will be turned into an RPC request by a frontend gateway, and then dispatched to the backend worker
+node for execution. Functions are started in containers that provide an isolated execution environment, and 
+(although not mentioned explicitly in this paper) container processes will be kept alive for a while after the function
+completes, which can be reused immediately to serve any new request to the same function on the same worker node 
+to avoid the cold start latency. 
+
