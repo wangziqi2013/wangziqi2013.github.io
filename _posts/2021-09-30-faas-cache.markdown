@@ -26,6 +26,9 @@ version_mgmt:
    Using eviction does not really count the recency, because instances accessed between two evictions will have
    the same clock value.
 
+3. I also do not get why you need to over-provision? Isn't the best thing about serverless is that you do not 
+   over-provision, and just start new instances anywhere on the cloud (i.e., easy scale up)? 
+
 This paper presents FaaSCache, a caching policy for virtual machine keep-alive in multi-tenant environments containing
 heterogeneous function instances. The paper is motivated by the fact that commercial cloud providers nowadays all
 cache function instances on the worker node to alleviate the long cold start latency, which is incurred by the 
