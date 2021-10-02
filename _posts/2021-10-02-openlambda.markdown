@@ -108,3 +108,11 @@ which will also be implemented in future releases of OpenLambda. We list these f
    This has two implications. First, functions must be able to communicate in a fine-grained manner to each other.
    Second, the platform should be able to "ship code to data", such that functions are executed on or next to the
    node where data is physically stored, in order to reduce data movement over the network.
+
+7. The scheduler (load balancer) should be aware of multiple locality requirements, such as session locality 
+   (instances sharing a TCP connection should be dispatched to the same worker node), 
+   code locality (requests should be dispatched to nodes that are likely to contain the code and third-party
+   libraries they need), and data locality (instances should be started as close to the physical location of
+   data it needs to access as possible).
+   Some of these features require that the scheduler know the resource access pattern of functions, which may 
+   be prepared by function developers in a manifest file, or exposed dynamically in the run time.
