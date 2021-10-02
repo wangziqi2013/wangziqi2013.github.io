@@ -40,4 +40,6 @@ The frontend scheduler will also maintain the "sticky route", and dispatches req
 same worker node to better utilize warm containers.
 Multiple instances of the same function can be started in parallel, and these instances are considered as stateless
 in a sense that they do not share any run time states except the underlying data storage.
-
+As a result, no consistency guarantee is provided between shared states observed by functions.
+Function instances are charged by the memory cap multiplied by the actual time it has executed (rounded 
+to 100ms).
