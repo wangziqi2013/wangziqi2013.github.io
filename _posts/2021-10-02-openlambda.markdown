@@ -50,3 +50,10 @@ serverless and conventional containerized platforms, respectively. Results shows
 advantage as it could dispatch all the requests to scaled out function instances within a short period of time
 and let them execute in parallel, while on conventional platforms, these requests must wait in the queue, and be
 handled by the monolithic logic running in the container one by one.
+
+To better understand the request pattern of real-world web applications, and the implications to serverless design, 
+the paper also conducted experiment with a web application by treating every AJAX request as a serverless RPC.
+Results show that the majority of RPC requests are short and small, which takes less than 100ms to complete.
+These requests, if implemented in serverless, will suffer from excessive overcharge as the minimum time unit for 
+billing is 100ms on Lambda.
+
