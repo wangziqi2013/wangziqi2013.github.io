@@ -110,4 +110,8 @@ run time based on the workload.
 Elastic Dynamic Scaling consists of two components. The first component statically computes the initial cache size
 using a profiling trace aiming at a certain hit ratio, and the second component dynamically adjusts the cache size
 based on the target hit ratio and the run time dynamic ratio.
-
+The static ratio is computed from a trace of function requests by simulating a cache of given size.
+The cache simulation can either be done by enumerating each reasonable size and running simulation with the given size,
+or analytically with reuse distance defined as the amount of memory that is needed by caching other functions between 
+two consecutive invocations of the same function.
+The paper also notes that this process is expensive, but is only performed once at initialization stage.
