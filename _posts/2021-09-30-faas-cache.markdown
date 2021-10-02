@@ -97,3 +97,5 @@ Frequency, cost, and size are all per-type traits, and they can be measured by m
 function type cached on the node. The cold start latency is measured as the difference between a cold start and 
 a warm start. The measurement is performed only once when a new function type is first time cached and first time
 accessed after being cached.
+On eviction, the priority value of all instances are computed and sorted, and then the lowest priority instances
+are evicted, until the resource is sufficient for starting the newly requested instance.
