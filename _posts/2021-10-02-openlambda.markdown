@@ -82,3 +82,11 @@ which will also be implemented in future releases of OpenLambda. We list these f
    Besides, the scheduler may also take the distribution of cached packages into account when making decisions,
    and can prioritize dispatching functions requiring certain packages to a worker node that already cached these 
    packages.
+
+4. Due to the fact that web applications may issue several RPC requests in the same session to complete a single logical
+   task, the platform should enable serverless functions to preserve states across invocations in the form of user 
+   cookies.
+   Besides, the platform may offer to maintain low-level cross-invocation states, such as open TCP connections, 
+   which can be bound to function instances. This enables function instances to talk to the same user session on 
+   the web application using the same TCP connection.
+   
