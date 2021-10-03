@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents benchmarking results on three serverless platforms and the performance and security implications
+of these results. The paper's experiments consist of various tests and functional benchmarks, and reveals 
+several critical design decisions and performance characteristics of serverless platforms that were never made public 
+to users. The paper serves as both a comprehensive user experience report, providing valuable insights for peer 
+serverless function developers to plan and optimize accordingly, and as a guideline for future iterations of these
+platforms.
+
+
