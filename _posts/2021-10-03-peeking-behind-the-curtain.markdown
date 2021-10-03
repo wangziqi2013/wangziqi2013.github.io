@@ -32,4 +32,9 @@ either queueing the requests or starting more instances, with the latter resulti
 Lambda functions are billed also individually per invocation, based on the resource consumption such as CPU time and
 memory usage.
 
+The paper also briefly discusses the internals of AWS Lambda. The requests are handled by an API gateway frontend,
+which queues and dispatches the requests to the backend worker nodes. 
+Each cloud user's account is called a "tenant" in this paper, and functions belonging to several different accounts may 
+co-locate on the same physical machine or even virtual machine (the paper disproves the possibility of the latter, 
+though), which is referred to as "multi-tenancy".
 
