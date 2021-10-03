@@ -20,4 +20,7 @@ to users. The paper serves as both a comprehensive user experience report, provi
 serverless function developers to plan and optimize accordingly, and as a guideline for future iterations of these
 platforms.
 
+The paper begins with a background review of the platform under discussion. In this summary, we focus on AWS Lambda,
+since it is the current de facto standard of serverless computation, while the other two has not gained as much market
+share and recognition compared with AWS Lambda. 
 
