@@ -41,6 +41,8 @@ Worker nodes use virtual machines to isolate different tenants, and within each 
 the same user are isolated using containers. The paper uses the term "function instance" to refer to the container
 process rather than each function invocation. **In this summary, we slightly change the usage of words, and we refer
 to container instances as "container processes", and reserve the term "function instance" to address individual 
-functions.** 
+functions.** These two concepts are not necessarily identical, since a container instance may be kept alive after the 
+function completes, and reused for future requests. AWS Lambda, in fact, implements this optimization to reduce cold
+start latency, which is incurred by container and language runtime initialization overhead.
 
 
