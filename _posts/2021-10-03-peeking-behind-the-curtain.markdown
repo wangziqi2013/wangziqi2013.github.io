@@ -27,3 +27,9 @@ The serverless platform allows users to upload and configure individual function
 languages, and each function will be invoked individually by external events, distinguishing the serverless platform
 from traditional cloud platforms where services are long-running and monolithic pieces of software whose scalability
 depends on the implementation and thus must be carefully tuned.
+Multiple instances of Lambda functions could be invoked in parallel, and the scheduler may handle traffic surges by
+either queueing the requests or starting more instances, with the latter resulting in better scalability.
+Lambda functions are billed also individually per invocation, based on the resource consumption such as CPU time and
+memory usage.
+
+
