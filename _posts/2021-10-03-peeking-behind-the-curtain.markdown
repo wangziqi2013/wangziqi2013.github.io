@@ -37,4 +37,10 @@ which queues and dispatches the requests to the backend worker nodes.
 Each cloud user's account is called a "tenant" in this paper, and functions belonging to several different accounts may 
 co-locate on the same physical machine or even virtual machine (the paper disproves the possibility of the latter, 
 though), which is referred to as "multi-tenancy".
+Worker nodes use virtual machines to isolate different tenants, and within each VM instance, functions started by
+the same user are isolated using containers. The paper uses the term "function instance" to refer to the container
+process rather than each function invocation. **In this summary, we slightly change the usage of words, and we refer
+to container instances as "container processes", and reserve the term "function instance" to address individual 
+functions.** 
+
 
