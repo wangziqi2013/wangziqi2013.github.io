@@ -23,4 +23,7 @@ platforms.
 The paper begins with a background review of the platform under discussion. In this summary, we focus on AWS Lambda,
 since it is the current de facto standard of serverless computation, while the other two has not gained as much market
 share and recognition compared with AWS Lambda. 
-
+The serverless platform allows users to upload and configure individual functions written in various high-level 
+languages, and each function will be invoked individually by external events, distinguishing the serverless platform
+from traditional cloud platforms where services are long-running and monolithic pieces of software whose scalability
+depends on the implementation and thus must be carefully tuned.
