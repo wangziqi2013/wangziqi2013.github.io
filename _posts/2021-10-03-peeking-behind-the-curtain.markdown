@@ -117,5 +117,11 @@ vulnerability is quite small, since the abnormal behavior only lasts for a few s
 In the last section, the paper delves into resource sharing and performance isolation. 
 CPU time share is measured by having the function continuously calling fine-grained timestamp functions, and record 
 the number of distinct time points in every 1000ms interval.
-Results show that AWS Lambda allocates CPU time based on the memory size of the function. Larger functions will be allocated more fractions of the CPU time than smaller functions. As the number of instances increases on a single 
+Results show that AWS Lambda allocates CPU time based on the memory size of the function. Larger functions will be 
+allocated more fractions of the CPU time than smaller functions. As the number of instances increases on a single 
 VM, the CPU share that each function is allocated also scales down proportionally.
+As for disk and network I/O, the paper did not confirm or disprove whether they are allocated based on 
+preconfigured memory size. Judging from the performance figure, however, it seems that maximum I/O throughout is still 
+affected by the memory size, while network bandwidth is free of such constraints.
+Similar to CPU cycles, as the number of co-located instances increase, the share that each of them can acquire also 
+becomes smaller.
