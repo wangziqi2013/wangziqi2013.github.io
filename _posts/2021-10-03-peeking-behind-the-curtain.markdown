@@ -75,4 +75,8 @@ The paper then investigates into the instance create and placement algorithm on 
 It is shown that instances are created for parallel requests up to 200 instances, which is the maximum observable 
 number of concurrent instances. After that, requests are simply just queued and wait for a previous instance to 
 complete. 
-
+It is also shown that instances are also dispatched to the same VM instance to achieve high memory utilization, 
+regardless of function types. The paper refers to this behavior as solving the "bin packing problem".
+AWS Lambda allocates at most 3228 MB memory to a single VM instance, and requests are dispatched until the instance
+run out of memory (Lambda functions are configured with memory requirements, so it is trivial to determine
+whether a function instance will fit into the VM instance).
