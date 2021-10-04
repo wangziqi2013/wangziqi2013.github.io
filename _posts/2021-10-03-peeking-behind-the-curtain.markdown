@@ -71,3 +71,8 @@ confirms that achieving co-residency is trivial with only a few attempts on at l
 The paper suggests that functions, even under the same AWS account, should be able to be assigned individual roles, and
 be separated based on the fine-grained roles.
 
+The paper then investigates into the instance create and placement algorithm on AWS Lambda. 
+It is shown that instances are created for parallel requests up to 200 instances, which is the maximum observable 
+number of concurrent instances. After that, requests are simply just queued and wait for a previous instance to 
+complete. 
+
