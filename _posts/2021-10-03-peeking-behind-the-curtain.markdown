@@ -99,4 +99,8 @@ Container process lifetime is another interesting topic to investigate, since co
 while they can be recycled and kept alive by the infrastructure to serve later requests. 
 The paper recognizes two types of container process lifetime. The first type is when the container is continuously hit
 by requests, and the second type is when no request hits the container.
-
+In the first case, the lifetime of containers are rather long, which can be as long as several hours.
+In the second case, AWS Lambda will recycle containers in an exponential fashion: The infrastructure will terminate 
+half of the existing containers of a certain function type for every 300 seconds, until there are two or three instances
+left. After 27 minutes, all remaining instances of the type will be terminated as well.
+This policy is enforced on a per-function type and per-VM basis.
