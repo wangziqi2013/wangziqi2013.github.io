@@ -80,3 +80,10 @@ regardless of function types. The paper refers to this behavior as solving the "
 AWS Lambda allocates at most 3228 MB memory to a single VM instance, and requests are dispatched until the instance
 run out of memory (Lambda functions are configured with memory requirements, so it is trivial to determine
 whether a function instance will fit into the VM instance).
+
+The paper measures cold start latency by sending two consecutive requests to the same function, with the first invoking 
+the function with a cold start, and the second hitting a warm container process. 
+Startup latency is measured as the time difference between the time the request is sent, and the time that the 
+function starts execution (the second measurement is done and reported by the function as the first thing it does after 
+being invoked).
+
