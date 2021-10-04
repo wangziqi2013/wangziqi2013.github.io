@@ -64,5 +64,10 @@ for the same tenant, but functions from different tenants will never be schedule
 isolation. The paper also noted that exposing procfs of the hosting OS to each containerized process may seem harmless,
 as only function instances from the same tenant can access them, this may actually turn into severe security threats
 and isolation violation, if third-party service providers use AWS Lambda as their backend infrastructure, and creates 
-functions on behalf of their users under the same AWS account (which is very likely). 
+functions on behalf of their users under the same AWS account (which is very likely). In this case, 
+these function instances can share the same VM, while in the same time belonging to different logical tenants at the 
+third-party provider's business logic. The paper conducted experiments on two real-world service providers, and 
+confirms that achieving co-residency is trivial with only a few attempts on at least one of them.
+The paper suggests that functions, even under the same AWS account, should be able to be assigned individual roles, and
+be separated based on the fine-grained roles.
 
