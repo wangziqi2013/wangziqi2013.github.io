@@ -89,4 +89,8 @@ being invoked).
 The paper also identifies two cases of cold start. In the first case, both the VM instance and the container instance
 is created, which will incur the maximum latency. In the second case, the VM instance is running, but the container
 process still needs to be initialized. This will still incur moderate latency compared with a warm start.
-
+Surprisingly, the paper finds out that the actual latency difference between the two cases is non-significant, and 
+concludes that AWS Lambda pre-warms the VM instance in a pool of ready-to-launch VMs.
+The paper also observes that due to the placement policy, the more parallel instances there are, the longer the latency
+will be, which is a natural consequence of resource contention caused by co-locating all parallel instances into the 
+same VM instance.
