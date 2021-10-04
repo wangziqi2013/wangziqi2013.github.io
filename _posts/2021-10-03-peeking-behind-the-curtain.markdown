@@ -86,4 +86,7 @@ the function with a cold start, and the second hitting a warm container process.
 Startup latency is measured as the time difference between the time the request is sent, and the time that the 
 function starts execution (the second measurement is done and reported by the function as the first thing it does after 
 being invoked).
+The paper also identifies two cases of cold start. In the first case, both the VM instance and the container instance
+is created, which will incur the maximum latency. In the second case, the VM instance is running, but the container
+process still needs to be initialized. This will still incur moderate latency compared with a warm start.
 
