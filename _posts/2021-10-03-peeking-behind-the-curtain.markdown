@@ -117,4 +117,5 @@ vulnerability is quite small, since the abnormal behavior only lasts for a few s
 In the last section, the paper delves into resource sharing and performance isolation. 
 CPU time share is measured by having the function continuously calling fine-grained timestamp functions, and record 
 the number of distinct time points in every 1000ms interval.
-
+Results show that AWS Lambda allocates CPU time based on the memory size of the function. Larger functions will be allocated more fractions of the CPU time than smaller functions. As the number of instances increases on a single 
+VM, the CPU share that each function is allocated also scales down proportionally.
