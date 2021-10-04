@@ -108,8 +108,13 @@ The paper also observes that, any request that hits a container will reset the i
 containers running in the same VM. This is perhaps implemented from a spatial point of view: If one container
 on a VM instance is hit, then it is likely that other co-located containers will also be hit. 
 
-The paper discovers a possible implementation bug in the consistency of function code that gets executed after the
+The paper discovers a possible implementation bug breaking the consistency of function code that gets executed after the
 function is updated. The observation is that if the code of a function is updated, and requests are sent shortly
 after that, it is still possible that the old version is executed. This is obviously caused by the infrastructure 
 being unable to update all locally cached function copies atomically. The paper noted, however, that the window of 
 vulnerability is quite small, since the abnormal behavior only lasts for a few seconds after the update.
+
+In the last section, the paper delves into resource sharing and performance isolation. 
+CPU time share is measured by having the function continuously calling fine-grained timestamp functions, and record 
+the number of distinct time points in every 1000ms interval.
+
