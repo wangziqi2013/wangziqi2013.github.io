@@ -22,10 +22,12 @@ version_mgmt:
 **Comments:**
 
 1. While this paper makes a few nicely put points, I think many of them, in fact, partially defeats the purpose of
-   serverless, as serverless requires zero management from the programmer (it does not even require that your code
-   to be 100% error-proof - your code could only be good for 90% of the time, but as long as you are willing to 
-   start 10% additional instances, you are still good given that the code is fail-stop, and that's exactly why 
-   serverless is powerful - stupid people will appear less stupid with it).
+   serverless, as serverless requires zero management from the programmer. In fact, serverless does not even require 
+   that your code to be 100% error-proof, as your code could only be good for 90% of the time, but as long as you are 
+   willing to start 10% additional instances, you are still good given that the code is fail-stop and functions are 
+   fully decoupled from each other. 
+   **This is exactly why serverless is powerful: Nothing cures stupidity, except time, natural selection, and serverless
+   computing.**
    The paper proposes that some management work must be done from user's side, such as using DSL or 
    declaring requirements, which contradicts the service goal.
 
