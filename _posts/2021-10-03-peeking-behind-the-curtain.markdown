@@ -48,6 +48,8 @@ Container processes are allocated ephemeral storage on the disk as scratchpads. 
 after the container process exits, but will be preserved if the process is kept running.
 This feature is leveraged in this paper to detect whether multiple function instances share the same container 
 processes. The first function instance ever started within the container creates a file and writes its unique 
-invocation ID to the file, and later invocations just check whether whether the file exists, and if it exists, reads 
+invocation ID to the file, and later invocations just check whether the file exists, and if it exists, reads 
 the ID before overwriting it with its own.
-
+In addition, physical machines can be identified by reading the procfs file /proc/self/cgroup, and the host machine's
+identity is recorded in the entry "instance root ID". The paper verifies this technique with an I/O side-channel 
+exposed in /proc/stat, but no details were revealed 
