@@ -107,3 +107,9 @@ This policy is enforced on a per-function type and per-VM basis.
 The paper also observes that, any request that hits a container will reset the idle counter for all other 
 containers running in the same VM. This is perhaps implemented from a spatial point of view: If one container
 on a VM instance is hit, then it is likely that other co-located containers will also be hit. 
+
+The paper discovers a possible implementation bug in the consistency of function code that gets executed after the
+function is updated. The observation is that if the code of a function is updated, and requests are sent shortly
+after that, it is still possible that the old version is executed. This is obviously caused by the infrastructure 
+being unable to update all locally cached function copies atomically. The paper noted, however, that the window of 
+vulnerability is quite small, since the abnormal behavior only lasts for a few seconds after the update.
