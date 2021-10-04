@@ -61,4 +61,8 @@ which allows containerized processes using this as a side-channel).
 The first thing that the paper observes is that AWS Lambda will always assign function instances from different 
 tenants, which correspond to different AWS accounts, to different VM instances. Multiple VM instances can be started
 for the same tenant, but functions from different tenants will never be scheduled on the same VM for security and 
-isolation.
+isolation. The paper also noted that exposing procfs of the hosting OS to each containerized process may seem harmless,
+as only function instances from the same tenant can access them, this may actually turn into severe security threats
+and isolation violation, if third-party service providers use AWS Lambda as their backend infrastructure, and creates 
+functions on behalf of their users under the same AWS account (which is very likely). 
+
