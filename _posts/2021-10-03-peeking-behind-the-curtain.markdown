@@ -94,3 +94,9 @@ concludes that AWS Lambda pre-warms the VM instance in a pool of ready-to-launch
 The paper also observes that due to the placement policy, the more parallel instances there are, the longer the latency
 will be, which is a natural consequence of resource contention caused by co-locating all parallel instances into the 
 same VM instance.
+
+Container process lifetime is another interesting topic to investigate, since containers are transparent to functions,
+while they can be recycled and kept alive by the infrastructure to serve later requests. 
+The paper recognizes two types of container process lifetime. The first type is when the container is continuously hit
+by requests, and the second type is when no request hits the container.
+
