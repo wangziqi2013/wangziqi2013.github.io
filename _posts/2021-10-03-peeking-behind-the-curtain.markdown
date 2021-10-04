@@ -104,3 +104,6 @@ In the second case, AWS Lambda will recycle containers in an exponential fashion
 half of the existing containers of a certain function type for every 300 seconds, until there are two or three instances
 left. After 27 minutes, all remaining instances of the type will be terminated as well.
 This policy is enforced on a per-function type and per-VM basis.
+The paper also observes that, any request that hits a container will reset the idle counter for all other 
+containers running in the same VM. This is perhaps implemented from a spatial point of view: If one container
+on a VM instance is hit, then it is likely that other co-located containers will also be hit. 
