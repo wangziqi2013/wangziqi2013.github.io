@@ -44,5 +44,10 @@ to container instances as "container processes", and reserve the term "function 
 functions.** These two concepts are not necessarily identical, since a container instance may be kept alive after the 
 function completes, and reused for future requests. AWS Lambda, in fact, implements this optimization to reduce cold
 start latency, which is incurred by container and language runtime initialization overhead.
-
+Container processes are allocated ephemeral storage on the disk as scratchpads. These ephemeral storage will be freed
+after the container process exits, but will be preserved if the process is kept running.
+This feature is leveraged in this paper to detect whether multiple function instances share the same container 
+processes. The first function instance ever started within the container creates a file and writes its unique 
+invocation ID to the file, and later invocations just check whether whether the file exists, and if it exists, reads 
+the ID before overwriting it with its own.
 
