@@ -52,8 +52,13 @@ invocation ID to the file, and later invocations just check whether the file exi
 the ID before overwriting it with its own.
 In addition, physical machines can be identified by reading the procfs file /proc/self/cgroup, and the host machine's
 identity is recorded in the entry "instance root ID". The paper verifies this technique with an I/O side-channel 
-exposed in /proc/stat, but no details were revealed (I think they just let one function write some data into the 
-disk, and let the other check /proc/state for disk I/O. If the numbers are consistent with the amount of data 
+exposed in /proc/stat, but no details were revealed (in the simplest form, just let one function write some data 
+into the disk, and let the other check /proc/state for disk I/O. If the numbers are consistent with the amount of data 
 written by I/O, then we can conclude that both instances are on the same physical machine. This is partially
 due to the fact that containers, at the time of writing this paper, do not shadow the procfs for system statistics,
 which allows containerized processes using this as a side-channel).
+
+The first thing that the paper observes is that AWS Lambda will always assign function instances from different 
+tenants, which correspond to different AWS accounts, to different VM instances. Multiple VM instances can be started
+for the same tenant, but functions from different tenants will never be scheduled on the same VM for security and 
+isolation.
