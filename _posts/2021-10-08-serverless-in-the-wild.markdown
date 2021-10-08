@@ -30,5 +30,6 @@ initialization overhead of the virtualization environment as well as the executi
 up for every execution. Due to the fact that serverless functions are relatively small, these added latency can 
 become more significant than in a conventional cloud setting where services would run for a long period of time
 after being invoked.
-
+The paper also observes that cold starts are more common during workload spikes, at which time the scheduler will try to
+scale up the application by starting more function instances, hence introducing more cold starts.
 
