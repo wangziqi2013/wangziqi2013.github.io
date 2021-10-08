@@ -37,5 +37,10 @@ scale up the application by starting more function instances, hence introducing 
 
 Existing serverless platforms address the cold start issue with function keep-alive. Instead of shutting down a 
 container process right after the function completes, the environment will be kept in the main memory of the 
-worker node for a while, such that if the same function is requested, the same container can be reused to handle the
-function, which eliminates the cold start latency.
+worker node for a fixed amount of time (typically tens of minutes), such that if the same function is requested, 
+the same container can be reused to handle the function, which eliminates the cold start latency.
+The paper argues that, however, such practice is sub-optimal for two reasons.
+First, these warm container processes continue to consume memory but does not do any useful work, which wastes system
+resources. Second, users are also aware of the simple caching mechanism, and will attempt to monopolize the 
+container process by deliberately sending dummy "heartbeat" requests periodically, further exacerbating the resource
+waste.
