@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
+hybrid, histogram-based caching policy for reducing cold starts.
+The paper is motivated by the performance-memory trade-off of pre-warming and caching the execution environment of 
+serverless functions, which effectively reduces the occurrences of cold starts, at the cost of extra resource 
+consumption. 
+
