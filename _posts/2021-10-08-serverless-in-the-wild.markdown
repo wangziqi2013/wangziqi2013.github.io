@@ -24,3 +24,11 @@ platform to perform well.
 The paper then proposes a hybrid caching policy that leverages either observed pattern histograms, or time series
 data, to compute the warm-up and keep-alive time, which is later shown to be able to reduce both resource consumption
 of caching and the invocation latency.
+
+The paper begins by identifying the cold start latency issue on today's serverless platform, which is caused by the 
+initialization overhead of the virtualization environment as well as the execution environment that needs to be set
+up for every execution. Due to the fact that serverless functions are relatively small, these added latency can 
+become more significant than in a conventional cloud setting where services would run for a long period of time
+after being invoked.
+
+
