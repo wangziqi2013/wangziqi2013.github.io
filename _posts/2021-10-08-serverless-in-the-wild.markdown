@@ -26,10 +26,16 @@ data, to compute the warm-up and keep-alive time, which is later shown to be abl
 of caching and the invocation latency.
 
 The paper begins by identifying the cold start latency issue on today's serverless platform, which is caused by the 
-initialization overhead of the virtualization environment as well as the execution environment that needs to be set
-up for every execution. Due to the fact that serverless functions are relatively small, these added latency can 
+initialization overhead of the virtualization environment (we use the term "container" and "container process" to 
+refer to this in the rest of this summary, despite that the environment can also be a virtual machine instance) 
+as well as the execution environment that needs to be set up for every execution. Due to the fact that serverless 
+functions are relatively small, these added latency can 
 become more significant than in a conventional cloud setting where services would run for a long period of time
 after being invoked.
 The paper also observes that cold starts are more common during workload spikes, at which time the scheduler will try to
 scale up the application by starting more function instances, hence introducing more cold starts.
 
+Existing serverless platforms address the cold start issue with function keep-alive. Instead of shutting down a 
+container process right after the function completes, the environment will be kept in the main memory of the 
+worker node for a while, such that if the same function is requested, the same container can be reused to handle the
+function, which eliminates the cold start latency.
