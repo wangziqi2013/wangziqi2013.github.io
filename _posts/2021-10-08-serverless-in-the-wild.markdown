@@ -18,4 +18,9 @@ hybrid, histogram-based caching policy for reducing cold starts.
 The paper is motivated by the performance-memory trade-off of pre-warming and caching the execution environment of 
 serverless functions, which effectively reduces the occurrences of cold starts, at the cost of extra resource 
 consumption. 
-
+The paper investigates several crucial factors that may affect the trade-off, such as function invocation
+pattern, execution time, and memory usage, and concludes that caching would be effective and necessary in order for the
+platform to perform well. 
+The paper then proposes a hybrid caching policy that leverages either observed pattern histograms, or time series
+data, to compute the warm-up and keep-alive time, which is later shown to be able to reduce both resource consumption
+of caching and the invocation latency.
