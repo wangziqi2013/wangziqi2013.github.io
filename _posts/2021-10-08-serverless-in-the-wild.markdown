@@ -18,6 +18,10 @@ version_mgmt:
 1. Is the IAT (inter-arrival time) computed at per-function basis, or per-application basis? I guess it has to be 
    per-function in order to make sense (because otherwise which function container you are going to warm up?).
    But the paper also mentions later that the policy applies at a per-application level.
+   **I think it is application level, because in a later paragraph the CV values are computed per application.
+     In this case, how do you know which function to warm up next, if the predicted value only gives you the 
+     interval but not function name? Did I miss something?**
+    
 
 This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
 hybrid, histogram-based caching policy for reducing cold starts.
@@ -79,6 +83,5 @@ Second, the invocation frequency varies significantly between functions and appl
 over eight orders of magnitude. Besides, less than 20% of the functions constitute more than 99% of total function
 invocations. Both facts suggest that the fixed keep-alive latency does not work well in general, as keeping those
 infrequently called functions alive will just waste resource.
-
 
 
