@@ -134,4 +134,8 @@ loading the application image proactively before a request actually arrives, whi
 to reuse an existing image after the previous one has completed, with the expectation that the next will arrive
 in the keep-alive interval.
 
-
+The paper derives both variables using the observed histogram of IAT. The pre-warming window is set to the minimum of
+the histogram, indicating that a request is expected after this much time since the last request.
+The keep-alive window is set to the width of the histogram (i.e., the difference between the leftmost and rightmost
+non-zero bins), indicating that the next request will arrive within this period of time since the previous one has
+been served. 
