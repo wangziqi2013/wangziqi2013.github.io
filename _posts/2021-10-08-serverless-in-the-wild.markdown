@@ -23,7 +23,9 @@ version_mgmt:
      interval but not function name? Did I miss something?**
    ** --> Most likely it is because Azure cloud hosts an entire application within a single container? So you only
       need to start the container for the application. This is mentioned in Section 2 of the paper as well.**
-    
+
+2. Typo at Section 3.4 second column, "50% of the functions have maximum execution time shorter than 3s". 
+   I think it is 75%.
 
 This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
 hybrid, histogram-based caching policy for reducing cold starts.
@@ -85,4 +87,12 @@ over eight orders of magnitude. Besides, less than 20% of the functions constitu
 invocations. Both facts suggest that the fixed keep-alive latency does not work well in general, as keeping those
 infrequently called functions alive will just waste resource.
 
-
+The paper also computes the coefficient of variation (CV) of the length of intervals (inter-arrival time, IAT) 
+between two consecutive requests
+of an application. Results show that certain applications have a CV of zero, indicating very a tight distribution, 
+which, as the paper explains, might be from IoT devices that report status periodically.
+On the other hand, most applications do not observe any particular probability distribution, and the CV values also
+vary greatly across applications. This result suggests that some application's IAT is easy to compute as they have 
+a regular pattern, while others are non-trivial.
+Idle time, the interval between two invocations of the same function, follows a similar pattern as IAT, which is
+measured at application level. 
