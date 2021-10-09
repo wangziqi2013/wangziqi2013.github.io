@@ -47,4 +47,7 @@ waste.
 
 Obviously, a better policy that does more than fixed time keep-alive is needed. The paper identifies two important
 goals of the new policy. First, policies should be able to be enforced at a per-application level, because the 
-invocation patterns and other criteria differ greatly from application to application. 
+invocation patterns and other criteria differ greatly from application to application. Second, the policy should 
+also support pre-warming of containers, such that even if requests arrive relatively infrequently, which makes 
+keep-alive less economical, cold start latency can still be avoided by starting the container right before the 
+request arrives.
