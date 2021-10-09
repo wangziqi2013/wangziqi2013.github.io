@@ -146,3 +146,8 @@ to the traditional fixed time keep-alive. A histogram is considered as non-repre
 of elements in each bin is smaller than a certain value. In other words, the histogram will not be used if 
 all the bins have roughly the same number of data points, in which case the policy is unable to derive the 
 two variables without enough confidence.
+
+If the histogram does not have sufficient number of data points, due to the fact that certain applications do not 
+have enough invocations, the paper suggests that certain time-series analysis models be used to predict the 
+request arrival time (the paper uses ARIMA in particular). The time-series model analysis is expensive, but luckily,
+since these applications are not invoked frequently, the actual overall is still small.
