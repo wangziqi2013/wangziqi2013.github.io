@@ -20,7 +20,11 @@ version_mgmt:
    (2) Keep the container alive for a while after the
    execution completes. These two are independent policies, and each should have its own control variable. 
 
-
+2. Both variables can be derived from the inter-arrival time histogram. the pre-warming window (time since
+   last completion before kick starting the container) is just the smallest value in the histogram (plus the
+   margin), and the keep-alive window is the width of the histogram.
+   The first represents the expected time between the two requests, while the second represents the 
+   expected time of the next request when the current one has completed.
 
 **Comments:**
 
