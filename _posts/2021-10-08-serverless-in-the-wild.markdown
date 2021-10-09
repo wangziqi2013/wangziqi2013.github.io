@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Without special fork()-based optimization, cold start latency can be reduced from the scheduler's perspective 
+   by (1) start the container right before requests arrive in a pre-warming window, and 
+   (2) Keep the container alive for a while after the
+   execution completes. These two are independent policies, and each should have its own control variable. 
+
+
+
 **Comments:**
 
 1. Is the IAT (inter-arrival time) computed at per-function basis, or per-application basis? I guess it has to be 
@@ -120,3 +129,5 @@ Note that these two variables serve different purposes: The pre-warming window a
 loading the application image proactively before a request actually arrives, while the keep-alive window intends
 to reuse an existing image after the previous one has completed, with the expectation that the next will arrive
 in the keep-alive interval.
+
+
