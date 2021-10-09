@@ -102,7 +102,10 @@ a regular pattern, while others are non-trivial.
 Idle time, the interval between two invocations of the same function, follows a similar pattern as IAT, which is
 measured at application level. 
 
-Lastly, the paper measures the execution time of each function, and concludes that functions are typically small,
-with most of them being within 60 seconds, and 50% of them completes within one second. 
-This further emphasizes the importance of reduce cold start latency, since the cold start overhead is relatively
+Lastly, the paper measures the execution time and memory consumption of each function, and concludes that functions 
+are typically small, with most of them being within 60 seconds, and 50% of them completes within one second. 
+This further emphasizes the importance of reducing cold start latency, since the cold start overhead is relatively
 large given the short function execution time.
+Memory usage varies by 4 times for most applications, suggesting that the caching overhead would be high, if the 
+policy is designed poorly.
+
