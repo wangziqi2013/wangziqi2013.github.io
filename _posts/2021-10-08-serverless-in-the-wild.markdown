@@ -64,4 +64,7 @@ In order to precisely predict function invocations to benefit function caching, 
 on a major serverless cloud platform, and makes the following observations regarding function invocation pattern
 and resource consumption.
 First, the most common triggers for invoking functions are HTTP requests, which is followed by timers as the second 
-common trigger. 
+common trigger. Although timer invocations are
+easy to predict as their deadlines are explicitly known to the scheduler, the paper noted that a large fraction of 
+functions either do not use timer, or they combine timer with other kinds of triggers, which is more difficult to 
+predict, implying that the primitive policy of waiting for timers to fire will not work well. 
