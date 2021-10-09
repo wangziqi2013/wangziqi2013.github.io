@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Is the IAT (inter-arrival time) computed at per-function basis, or per-application basis? I guess it has to be 
+   per-function in order to make sense (because otherwise which function container you are going to warm up?).
+   But the paper also mentions later that the policy applies at a per-application level.
+
 This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
 hybrid, histogram-based caching policy for reducing cold starts.
 The paper is motivated by the performance-memory trade-off of pre-warming and caching the execution environment of 
@@ -68,9 +74,11 @@ common trigger. Although timer invocations are
 easy to predict as their deadlines are explicitly known to the scheduler, the paper noted that a large fraction of 
 functions either do not use timer, or they combine timer with other kinds of triggers, which is more difficult to 
 predict. It is hence implied that the primitive policy of waiting for timers to fire will not work well. 
+
 Second, the invocation frequency varies significantly between functions and applications, with the difference being
 over eight orders of magnitude. Besides, less than 20% of the functions constitute more than 99% of total function
 invocations. Both facts suggest that the fixed keep-alive latency does not work well in general, as keeping those
 infrequently called functions alive will just waste resource.
+
 
 
