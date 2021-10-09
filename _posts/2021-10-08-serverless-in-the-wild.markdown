@@ -24,8 +24,11 @@ version_mgmt:
    ** --> Most likely it is because Azure cloud hosts an entire application within a single container? So you only
       need to start the container for the application. This is mentioned in Section 2 of the paper as well.**
 
-2. Typo at Section 3.4 second column, "50% of the functions have maximum execution time shorter than 3s". 
+2. Typo in Section 3.4 second column, "50% of the functions have maximum execution time shorter than 3s". 
    I think it is 75%.
+
+3. Likely a typo in Section 4.2, page 9, first column, "A histogram that has a single bin with a high count and all   
+   others 0 would have a high CV". I think in this case the CV will be zero?
 
 This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
 hybrid, histogram-based caching policy for reducing cold starts.
