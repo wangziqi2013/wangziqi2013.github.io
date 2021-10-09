@@ -29,6 +29,8 @@ version_mgmt:
 
 3. Likely a typo in Section 4.2, page 9, first column, "A histogram that has a single bin with a high count and all   
    others 0 would have a high CV". I think in this case the CV will be zero?
+   **OK, it is not, this is to compute the CV of the height of the bars in the histogram, not the distribution
+     of every data point (subtle difference). The former will result in small CV if all bars are equally high.**
 
 This paper presents serverless workload characteristics on Microsoft Azure cloud environment, and proposes a 
 hybrid, histogram-based caching policy for reducing cold starts.
