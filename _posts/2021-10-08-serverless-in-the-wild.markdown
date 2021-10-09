@@ -44,3 +44,7 @@ First, these warm container processes continue to consume memory but does not do
 resources. Second, users are also aware of the simple caching mechanism, and will attempt to monopolize the 
 container process by deliberately sending dummy "heartbeat" requests periodically, further exacerbating the resource
 waste.
+
+Obviously, a better policy that does more than fixed time keep-alive is needed. The paper identifies two important
+goals of the new policy. First, policies should be able to be enforced at a per-application level, because the 
+invocation patterns and other criteria differ greatly from application to application. 
