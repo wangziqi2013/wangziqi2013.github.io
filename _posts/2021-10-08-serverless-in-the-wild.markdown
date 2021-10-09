@@ -139,3 +139,10 @@ the histogram, indicating that a request is expected after this much time since 
 The keep-alive window is set to the width of the histogram (i.e., the difference between the leftmost and rightmost
 non-zero bins), indicating that the next request will arrive within this period of time since the previous one has
 been served. 
+In practice, bars at the extreme ends will be trimmed, and margins are also added to account for errors.
+
+If the histogram is non-representative, e.g., because it does not have a typical shape, the policy will fall back
+to the traditional fixed time keep-alive. A histogram is considered as non-representative if the CV of the number
+of elements in each bin is smaller than a certain value. In other words, the histogram will not be used if 
+all the bins have roughly the same number of data points, in which case the policy is unable to derive the 
+two variables without enough confidence.
