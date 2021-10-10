@@ -61,4 +61,6 @@ proxy, forms what is called a Pod. The queue proxy buffers requests dispatched t
 serially, and it reports the queue length back to the Knative autoscaler as the feedback for autoscaling.
 Each worker node has a background Container-Runtime Interface (CRI) process serving as the receiving end of the 
 Kubernetes cluster scheduler, which is responsible for executing the scheduling decisions made by the frontend
-Kubernetes scheduler. 
+Kubernetes scheduler. The paper also mentions two daemon processes, namely Containerd and Firecracker-Containerd, the
+responsibility of which is to manage the lifetime of regular containers and Firecracker MicroVMs, although not many
+details were given.
