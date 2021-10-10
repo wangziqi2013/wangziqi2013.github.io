@@ -26,5 +26,11 @@ Cold start latency complicates the management of serverless clouds for a few rea
 First, serverless functions are only billed for the actual time it takes to execute the function body. By spending
 time on cold start for every function invocation, the cloud provider is essentially wasting hardware resource on 
 computations that do not generate profit.
-
+To address this issue, current cloud providers simply keep the VM instances alive in the main memory for tens of 
+minutes before shutting it down. Future requests that hit the same function can hence reuse the VM instance, which
+eliminates the unnecessary cold start.
+Secondly, cloud providers tend to deploy thousands of instances on a single servers in order to achieve high tenancy 
+level. The caching policy, while effective for a single function, may become a heavy burden in terms of memory, as 
+each VM instance can take a few hundreds of memory, and thousands of them would require several hundreds GBs of main
+memory, if cached, which is not realistic on today's platforms.
 
