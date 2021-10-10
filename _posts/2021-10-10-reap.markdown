@@ -121,5 +121,10 @@ REAP redirects process-level page fault call back to its own handler running in 
 both track and record page fault, and satisfy a page fault with pages allocated by itself.
 REAP optimizes cold start in two phases. In the first record phase, REAP tracks a cold start instance's memory access,
 and records the guest virtual and physical address of the access. It also dumps the guest physical page into a 
-working set (WS) file for later use.
-
+working set (WS) file for later use. After execution completes, the set of virtual addresses being accessed, as well
+as the guest address mapping, is also saved.
+In the second stage, when an instance of the same type is started, REAP first loads the working set file into the 
+main memory (on the first page fault, which is triggered artificially by Firecracker), and uses the guest address 
+mapping to update the host page table. This process recovers the virtual and physical address layout for pages
+in the working set file. Additionally page faults may also occur during execution, which are handled in the same 
+manner as before.
