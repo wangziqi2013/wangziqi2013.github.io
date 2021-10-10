@@ -115,3 +115,11 @@ The eager scheme will not incur extra latency, since page faults are also on the
 Second, REAP stores the working set data in a separate file object continuously, and bulk loads the entire file
 into the main memory. This requires only one high-level I/O and mostly sequential disk access, which 
 leads to higher disk throughput.
+
+REAP is implemented as a standalone, user-space module, and runs as a thread within the VM instance's address space.
+REAP redirects process-level page fault call back to its own handler running in the user space, such that it could
+both track and record page fault, and satisfy a page fault with pages allocated by itself.
+REAP optimizes cold start in two phases. In the first record phase, REAP tracks a cold start instance's memory access,
+and records the guest virtual and physical address of the access. It also dumps the guest physical page into a 
+working set (WS) file for later use.
+
