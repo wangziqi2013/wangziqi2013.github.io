@@ -50,4 +50,10 @@ by reading it from the snapshot file into a page frame, and updating the page ta
 While being seemingly attractive, the paper points out later, however, that snapshotting incurs non-negligible cost
 on page fault handling and disk random access, which we discuss in the following.
 
+The paper assumes a serverless platform based on vHive, although the idea is generally applicable
+to other snapshot-based platforms. The platform provides a Lambda-like interface, in which functions can be addressed
+with an URL, both from the external or the internal, which allows functions to be composed to form more complicated
+program logic. The platform frontend (the control plane) consists of a load balancer, a Kubernetes cluster scheduler, 
+and a Knative autoscaler, which are responsible for request dispatching, worker node management, and function scaling, 
+respectively. 
 
