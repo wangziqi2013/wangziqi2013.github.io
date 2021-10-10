@@ -70,4 +70,6 @@ snapshot and from a warm container in the main memory. In order to better captur
 page fault, which mostly occurs during execution, the latency is measured as the time difference between the 
 moment the worker node receives the request, and the moment the result is sent back to the scheduler. 
 Frontend latency is considered as insignificant and not included.
-
+The testing platform is equipped with SSDs as local high-speed storage where the snapshot is stored, and to simulate
+infrequent function invocations, the OS page cache for storing recently accessed disk pages is also flushed before
+each cold start.
