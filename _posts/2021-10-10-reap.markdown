@@ -31,6 +31,12 @@ version_mgmt:
    Lastly, serverless function's page fault pattern lacks spatial locality, which makes disk accesses more random,
    and hence lowers the throughput.
 
+**Comments:**
+
+1. Do function access patterns change gradually over time? If true, then the profiling should be redone periodically.
+   I think it is unlikely, because serverless functions are small and typically simple, so they are largely input
+   agnostic, even if inputs are shifting.
+
 This paper presents Record-and-Prefetch (REAP), a lightweight software mechanism for accelerating cold start from a 
 VM image of serverless functions. The paper is motivated by the slowdown caused by frequent page faults and irregular
 disk accesses when starting a new serverless instance from a prior snapshot on the disk. 
