@@ -107,4 +107,8 @@ similar logics on different inputs. Second, since function instances are booted 
 have identical initial states to begin with, which will lead to identical allocation decisions even for dynamically
 allocated memory.
 
+The paper hence proposes REAP as a software component to prefetch the pages in the observed working set to get rid
+of the page fault handling and disk random access overhead in snapshot-based cold starts. 
+Serverless functions can benefit from REAP from two aspects. First, REAP eagerly installs all pages that are in the
+working set during the initialization stage, avoiding page fault handling on these pages during execution. 
 
