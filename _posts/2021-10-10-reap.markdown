@@ -94,3 +94,8 @@ that cold start instances exhibit lower memory consumption, while warm instances
 The paper concludes that this phenomenon is caused by pages that are only used during the OS and the runtime 
 initialization, which is no longer accessed during execution. The on-demand lazy paging strategy in cold start 
 instances exclude these pages from the in-memory working set, since they are never accessed during execution.
+The paper claims that while this observation partially justifies using snapshots for fast cold starts, as it lowers
+run time memory consumption, this technique alone is not sufficient to enable full caching of warm instances in
+the main memory. The memory consumption of co-locating these instance would still be unrealistic, due to the 
+opportunistic cost of wasting resources on idle function instances.
+
