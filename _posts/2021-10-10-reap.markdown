@@ -24,6 +24,13 @@ version_mgmt:
    likely to be accessed during execution, which eliminates page fault handling and makes disk accesses
    sequential.
 
+3. Serverless functions have distinctive memory properties. First, they access a consistent working set, making 
+   it trivial to identify these pages by one single profiling run, which also allows eager page loading.
+   Second, snapshot instances have smaller working sets than warm instances, due to the fact that some pages
+   are only accessed during initialization and never accessed ever since.
+   Lastly, serverless function's page fault pattern lacks spatial locality, which makes disk accesses more random,
+   and hence lowers the throughput.
+
 This paper presents Record-and-Prefetch (REAP), a lightweight software mechanism for accelerating cold start from a 
 VM image of serverless functions. The paper is motivated by the slowdown caused by frequent page faults and irregular
 disk accesses when starting a new serverless instance from a prior snapshot on the disk. 
