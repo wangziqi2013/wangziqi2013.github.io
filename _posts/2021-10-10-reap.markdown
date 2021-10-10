@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Record-and-Prefetch (REAP), a lightweight software mechanism for accelerating cold start from a 
+VM image of serverless functions. The paper is motivated by the slowdown caused by frequent page faults and irregular
+disk accesses when starting a new serverless instance from a prior snapshot on the disk. 
+
+
+
