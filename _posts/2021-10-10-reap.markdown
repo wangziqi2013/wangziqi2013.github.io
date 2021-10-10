@@ -64,3 +64,10 @@ Kubernetes cluster scheduler, which is responsible for executing the scheduling 
 Kubernetes scheduler. The paper also mentions two daemon processes, namely Containerd and Firecracker-Containerd, the
 responsibility of which is to manage the lifetime of regular containers and Firecracker MicroVMs, although not many
 details were given.
+
+To pinpoint the cause of inefficiency in snapshotting, The paper evaluates the latency of functions starting from a 
+snapshot and from a warm container in the main memory. In order to better capture the overall performance impact of 
+page fault, which mostly occurs during execution, the latency is measured as the time difference between the 
+moment the worker node receives the request, and the moment the result is sent back to the scheduler. 
+Frontend latency is considered as insignificant and not included.
+
