@@ -18,7 +18,11 @@ version_mgmt:
 1. VM snapshots can reduce cold start latency, but it still incurs non-negligible overhead due to page faults and 
    random disk accesses.
 
-
+2. Warm instance caching is effective for frequently invoked functions, at the cost of extra memory consumption, 
+   but not very effective for infrequent functions, which will waste memory. 
+   For the latter type of functions, we can reduce their cold start latency by eagerly loading the pages that are
+   likely to be accessed during execution, which eliminates page fault handling and makes disk accesses
+   sequential.
 
 This paper presents Record-and-Prefetch (REAP), a lightweight software mechanism for accelerating cold start from a 
 VM image of serverless functions. The paper is motivated by the slowdown caused by frequent page faults and irregular
