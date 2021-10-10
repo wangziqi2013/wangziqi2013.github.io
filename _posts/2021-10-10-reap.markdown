@@ -101,6 +101,10 @@ opportunistic cost of wasting resources on idle function instances.
 
 The last performance study looks into the consistency of the working sets between function invocations in terms of 
 accessed pages. The paper observes that most function instances access a rather stable set of pages 
-across different invocations. Two factors contribute to this important observation. 
+across different invocations. Two factors contribute to this important observation. First, functions of the same 
+type use the same libraries, share the same code, and most likely, due to the nature of being stateless, run 
+similar logics on different inputs. Second, since function instances are booted from the same snapshot, they
+have identical initial states to begin with, which will lead to identical allocation decisions even for dynamically
+allocated memory.
 
 
