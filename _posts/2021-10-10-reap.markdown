@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Benchmarking, Analysis, and Optimization of Serverless Function Snapshots"
+date:   2021-10-10 03:11:00 -0500
+categories: paper
+paper_title: "Benchmarking, Analysis, and Optimization of Serverless Function Snapshots"
+paper_link: https://dl.acm.org/doi/10.1145/3445814.3446714
+paper_keyword: Serverless; Keep-Alive; Caching Policy; REAP; Serverless Snapshot
+paper_year: ASPLOS 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
