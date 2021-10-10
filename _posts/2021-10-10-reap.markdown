@@ -33,4 +33,6 @@ Secondly, cloud providers tend to deploy thousands of instances on a single serv
 level. The caching policy, while effective for a single function, may become a heavy burden in terms of memory, as 
 each VM instance can take a few hundreds of memory, and thousands of them would require several hundreds GBs of main
 memory, if cached, which is not realistic on today's platforms.
-
+Lastly, according to a previous study conducted on Microsoft Azure, most functions (more than 90%) are only called 
+sparsely, indicating that a fixed time caching policy will not work, as they are likely not being reused before 
+being shut down, which offsets the purpose of caching.
