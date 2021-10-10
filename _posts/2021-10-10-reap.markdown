@@ -80,3 +80,11 @@ Performance decomposition results show that a snapshot-based cold start consists
 initializes the virtual machine, and the virtual devices. 
 The second stage reestablishes the persistent gRPC connection, which the control channel, between the VM instance 
 and the external world, which also takes some time.
+The paper does not intent to optimize these two types of overheads, and hence gives little analysis on this part.
+In the last stage, the function starts execution. The paper noted that function execution in a cold started instance
+takes significantly more time than starting from a warm instance. 
+Further study demonstrates that the lower performance is caused by frequent page faults (thousands per invocation), 
+which are necessary to bring the guest physical address space into the host memory. 
+Furthermore, the paper also shows that the spatial locality of the accessed pages are low, indicating that the 
+throughput of disk accesses cannot be fully utilized, as external storage tends to perform worse when the access pattern
+is more random, which is true even for SSDs.
