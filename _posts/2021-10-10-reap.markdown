@@ -23,5 +23,8 @@ fault handling and disk access overhead.
 The cold start latency has become a well-known problem for serverless VMs, and it consists of three causes: The 
 VMM itself, the kernel and runtime environment, and the function's own initialization.
 Cold start latency complicates the management of serverless clouds for a few reasons. 
+First, serverless functions are only billed for the actual time it takes to execute the function body. By spending
+time on cold start for every function invocation, the cloud provider is essentially wasting hardware resource on 
+computations that do not generate profit.
 
 
