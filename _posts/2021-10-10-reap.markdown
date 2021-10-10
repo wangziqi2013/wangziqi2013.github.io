@@ -111,4 +111,7 @@ The paper hence proposes REAP as a software component to prefetch the pages in t
 of the page fault handling and disk random access overhead in snapshot-based cold starts. 
 Serverless functions can benefit from REAP from two aspects. First, REAP eagerly installs all pages that are in the
 working set during the initialization stage, avoiding page fault handling on these pages during execution. 
-
+The eager scheme will not incur extra latency, since page faults are also on the critical path in the lazy scheme.
+Second, REAP stores the working set data in a separate file object continuously, and bulk loads the entire file
+into the main memory. This requires only one high-level I/O and mostly sequential disk access, which 
+leads to higher disk throughput.
