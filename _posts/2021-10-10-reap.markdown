@@ -45,6 +45,9 @@ dumped such that execution could resume at the precise point where the snapshot 
 The next time the same function is requested, the VM is started with all of its guest physical addresses marked as 
 invalid in the host OS's page table. The snapshot image is incrementally brought into the main memory following a 
 lazy loading strategy, i.e., a physical page of the VM instance is loaded only when the corresponding virtual 
-page is accessed for the first time. 
+page is accessed for the first time, which triggers a page fault, allowing the VMM to install the physical page
+by reading it from the snapshot file into a page frame, and updating the page table. 
+While being seemingly attractive, the paper points out later, however, that snapshotting incurs non-negligible cost
+on page fault handling and disk random access, which we discuss in the following.
 
 
