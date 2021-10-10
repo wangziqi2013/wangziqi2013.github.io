@@ -16,6 +16,8 @@ version_mgmt:
 This paper presents Record-and-Prefetch (REAP), a lightweight software mechanism for accelerating cold start from a 
 VM image of serverless functions. The paper is motivated by the slowdown caused by frequent page faults and irregular
 disk accesses when starting a new serverless instance from a prior snapshot on the disk. 
-
+The paper observes that most function instances access a very stable subset of the working data that is in the snapshot,
+and proposes to first track, and then prefetch those data pages in advance at VM start time to reduce the page 
+fault handling and disk access overhead.
 
 
