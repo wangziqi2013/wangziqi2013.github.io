@@ -73,3 +73,10 @@ Frontend latency is considered as insignificant and not included.
 The testing platform is equipped with SSDs as local high-speed storage where the snapshot is stored, and to simulate
 infrequent function invocations, the OS page cache for storing recently accessed disk pages is also flushed before
 each cold start.
+
+The paper reports the following results.
+First, even with snapshotting, cold starts are still one or two orders of magnitude slower than warm starts. 
+Performance decomposition results show that a snapshot-based cold start consists of three stages. The first stage
+initializes the virtual machine, and the virtual devices. 
+The second stage reestablishes the persistent gRPC connection, which the control channel, between the VM instance 
+and the external world, which also takes some time.
