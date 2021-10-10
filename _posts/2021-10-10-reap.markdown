@@ -56,4 +56,9 @@ with an URL, both from the external or the internal, which allows functions to b
 program logic. The platform frontend (the control plane) consists of a load balancer, a Kubernetes cluster scheduler, 
 and a Knative autoscaler, which are responsible for request dispatching, worker node management, and function scaling, 
 respectively. 
-
+The backend worker nodes (the data plane) execute functions in Firecracker MicroVM, which, packed with a Knative queue 
+proxy, forms what is called a Pod. The queue proxy buffers requests dispatched to the MicroVM for them to be handled 
+serially, and it reports the queue length back to the Knative autoscaler as the feedback for autoscaling.
+Each worker node has a background Container-Runtime Interface (CRI) process serving as the receiving end of the 
+Kubernetes cluster scheduler, which is responsible for executing the scheduling decisions made by the frontend
+Kubernetes scheduler. 
