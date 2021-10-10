@@ -20,4 +20,8 @@ The paper observes that most function instances access a very stable subset of t
 and proposes to first track, and then prefetch those data pages in advance at VM start time to reduce the page 
 fault handling and disk access overhead.
 
+The cold start latency has become a well-known problem for serverless VMs, and it consists of three causes: The 
+VMM itself, the kernel and runtime environment, and the function's own initialization.
+Cold start latency complicates the management of serverless clouds for a few reasons. 
+
 
