@@ -42,4 +42,9 @@ incurring excessive memory overheads. In snapshotting, the memory image of the v
 after initialization has been performed, and saved to the secondary storage together with the guest virtual and physical
 address layout (which can be obtained from the guest OS's page table) as a file object. The execution context is also
 dumped such that execution could resume at the precise point where the snapshot is taken.
+The next time the same function is requested, the VM is started with all of its guest physical addresses marked as 
+invalid in the host OS's page table. The snapshot image is incrementally brought into the main memory following a 
+lazy loading strategy, i.e., a physical page of the VM instance is loaded only when the corresponding virtual 
+page is accessed for the first time. 
+
 
