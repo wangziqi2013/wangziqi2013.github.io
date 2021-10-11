@@ -141,3 +141,10 @@ a separate part in the virtual address space (i.e., the OS loader is told to map
 that does not belong to the linear array of any Faaslet), and accesses to the shared pages in all Faaslets are
 relocated to the new location. 
 Sharing is thus achieved without sacrificing any isolation guarantee nor breaking the memory model of WASM.
+
+FaaSM supports persistent states using a two-tier architecture. The bottom tier is a distributed object store that
+can be read with a key, or written/updated with a key and value. The top tier is a per-process cache residing
+in the shared part of the Faaslet pages, which keeps recently accessed objects locally.
+The host interface also provides service calls to access objects either transparently (let the cache handle the 
+reads, if it is in the cache) or directly from the bottom tier.
+
