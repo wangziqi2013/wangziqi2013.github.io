@@ -23,6 +23,10 @@ version_mgmt:
    stack, followed by the heap. How would the stack be multiplexed between different threads? 
    I am not 100% sure what I said here is correct, so this may just be straightforward to experts and 
    practitioners.
+   **OK, Figure 2 might be conclusive. I think they just follow the single-array memory layout, and map them to
+     different parts of the virtual address space of the process. Thread scheduling is done by switching everything,
+     including data, stack, and heap. But in this case, wouldn't all absolute addresses require relocation? I guess
+     WASM are compiled as position independent code?**
 
 2. Again, a beginner's question: does WASM's binary format follow its abstract memory model? Does the binary image
    in the main memory only occupy a consecutive range of virtual address, with the bottommost being data, then
@@ -126,3 +130,5 @@ Each chained function call using the host interface will return a call ID, which
 results and to block on the invocation.
 The paper noted that this function chaining model is similar to how threads can spawn other threads, and block
 on an active thread until it exits.
+
+
