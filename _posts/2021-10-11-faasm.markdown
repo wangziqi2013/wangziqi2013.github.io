@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Language level isolation can be done by enforcing memory safety at language level and performing static checks at IR 
+   level. Users only needs to submit the IR to the platform, which will be optimized and linked. The resulting program
+   can thus guarantee memory isolation.
+
+2. 
+
 **Comments:**
 
 1. I am more interested to learn how multiple faaslets are compiled into the same binary and executed as different 
