@@ -37,4 +37,7 @@ version_mgmt:
    container uses MBs)?
    These questions are either unanswered, or only mentioned briefly without further elaboration.
 
+This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
+The paper is motivated by the relatively high overhead of OS or hypervisor level resource isolation and the inability
+of certain common tasks, such as sharing memory pages and/or file system. 
 
