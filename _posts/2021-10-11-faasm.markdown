@@ -19,7 +19,10 @@ version_mgmt:
    level. Users only needs to submit the IR to the platform, which will be optimized and linked. The resulting program
    can thus guarantee memory isolation.
 
-2. 
+2. Function's virtual address space can be just a linear array as in WASM to make memory access's bounds check easier.
+   This is critical for memory safety check. Also the simple memory layout allows us to link multiple functions into
+   the same binary (with proper relocation or position independent addressing), with each executing as a separate 
+   thread.
 
 **Comments:**
 
