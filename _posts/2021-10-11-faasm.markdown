@@ -46,3 +46,11 @@ isolation boundaries during the runtime for better performance.
 The paper also proposes incorporating object caching into the serverless framework that enables low-latency
 access of persistent objects. Stateful serverless functions can hence be created using the object store as a 
 communication channel.
+
+The paper begins by identifying the two limitations of today's serverless platforms, namely, data access overhead
+and container memory footprint.
+The former has become an issue for functions that access persistent storage, since data needs to be copied from the 
+storage to the function over the network. Co-locating function instance with data would be difficult and against
+the service goal of serverless, as functions are supposed to be able to execute anywhere on the cloud, and be scaled 
+up quickly as loads surge. These properties would be difficult to implement if functions that access data are shipped
+to the data store. 
