@@ -115,4 +115,7 @@ Network traffic is regulated using a traffic shaper, but the details are missing
 FaaSM restricts accesses to system calls and system features by only exposing a small subset of system calls 
 to the Faaslets. The paper lists these calls and categorize them into dynamic linking, memory management, 
 networking, file I/O, and time and random numbers. 
-
+These exposed system calls, namely the host interface, is implemented as a wrapper module, which is dynamically linked
+into the binary at runtime for best performance.
+The wrapper module forwards an incoming call and its arguments to the actual system call with possible argument 
+checking (for example, to avoid invoking mmap() in an illegal manner that can break isolation).
