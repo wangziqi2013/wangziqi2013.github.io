@@ -59,3 +59,10 @@ functions perform logically related tasks, then the same data will be copied ove
 wastes both network bandwidth and processor cycles. This issue is also hard to address within the functions, since
 functions are supposed to be stateless, and hence no state of its execution shall be preserved locally, including the 
 data objects.
+
+The second limitation plays an important role in the degree of multi-tenancy of the cluster, which is defined by the 
+number of instances that can be co-located on the same worker node, which is usually memory-bound. 
+As cloud providers tend to cache warm container instances after execution has completed to reduce the cold start 
+latency of future instances, this problem will only get worse since memory resource consumed by a container instance
+will only be freed after the keep-alive period.
+
