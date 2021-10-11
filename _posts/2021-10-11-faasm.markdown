@@ -92,5 +92,11 @@ FaaSM implements each function as a Faaslet. Faaslets are developed in any suita
 into the intermediate representation WebAssembly (WASM), and then translated into native machine code by an optimizer
 after passing the static check. The most critical feature of WASM is its memory safety. To elaborate: WASM's memory
 model is just a single flat array, and instructions can only access data as uninterpreted bytes in the array.
+There is no mechanism to address arbitrary memory outside of the array, and all memory references can be easily
+verified in the runtime by a simple bound checking. Besides, WASM code can be statically verified for memory safety.
+Programmers can thus compile their functions locally into IRs for testing, and then submit the IR to the 
+platform for execution. The IR code will first be verified for memory safety, and if it passes, be translated into 
+native machine code of the target platform. The native machine code is also guaranteed to be fully isolated
+from each other in terms of memory accesses.
 
 
