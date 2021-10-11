@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "FaaSM: Lightweight Isolation for Efficient Stateful Serverless Computing"
+date:   2021-10-11 00:29:00 -0500
+categories: paper
+paper_title: "FaaSM: Lightweight Isolation for Efficient Stateful Serverless Computing"
+paper_link: https://www.usenix.org/conference/atc20/presentation/shillaker
+paper_keyword: Serverless; WebAssembly
+paper_year: USENIX ATC 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
