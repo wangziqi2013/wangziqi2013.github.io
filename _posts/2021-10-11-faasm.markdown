@@ -30,5 +30,11 @@ version_mgmt:
    ("Since WebAssembly memory is represented by a contiguous byte array, containing the stack,heap and data, FAASM 
    restores a snapshot into a new Faaslet using a copy-on-write memory mapping.").
 
-This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
+3. The paper spent a major part discussing the OS and storage level interfaces, while leaving many important and
+   interesting topics unmentioned. For example, why do you need shared pages between different faaslets? Is it 
+   solely to support the local object cache?
+   Why faaslets only consume KBs of memory for non-function data? Is it due to page sharing (likely not, because 
+   container uses MBs)?
+   These questions are either unanswered, or only mentioned briefly without further elaboration.
+
 
