@@ -12,3 +12,17 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Comments:**
+
+1. I am more interested to learn how multiple faaslets are compiled into the same binary and executed as different 
+   threads from WASM, but unfortunately the paper did not discuss this matter. 
+   From my perspective (I can be very wrong because I did not know anything about WASM except the most basic concepts),
+   WASM programs are compiled into IRs and then code gen into machine code. The memory layout of WASM programs also
+   seem to be unable to handle multi-threading. For example, WASM binary has data at the very bottom, followed by 
+   stack, followed by the heap. How would the stack be multiplexed between different threads? 
+   Again, I am not 100% sure what I said here is correct, so this may just be straightforward to experts and 
+   practitioners.
+
+
+
