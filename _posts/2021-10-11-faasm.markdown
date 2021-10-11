@@ -40,4 +40,6 @@ version_mgmt:
 This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
 The paper is motivated by the relatively high overhead of OS or hypervisor level resource isolation and the inability
 of certain common tasks, such as sharing memory pages and/or file system. 
-
+The paper proposes using language-based isolation mechanism powered by a strong memory model and static program
+verification to enforce isolation statically at compilation and code generation time, while relaxing the hard 
+isolation boundaries during the runtime for better performance.
