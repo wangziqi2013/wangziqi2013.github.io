@@ -27,7 +27,7 @@ version_mgmt:
 2. Again, a beginner's question: does WASM's binary format follow its abstract memory model? Does the binary image
    in the main memory only occupy a consecutive range of virtual address, with the bottommost being data, then
    stack, then an extendable heap? The paper seems to be suggesting so 
-   ("Since WebAssembly memory is represented by a contiguous byte array, containing the stack,heap and data, FAASM 
+   ("Since WebAssembly memory is represented by a contiguous byte array, containing the stack, heap and data, FAASM 
    restores a snapshot into a new Faaslet using a copy-on-write memory mapping.").
 
 3. The paper spent a major part discussing the OS and storage level interfaces, while leaving many important and
@@ -74,3 +74,7 @@ Second, FaaSM should support efficient access to persistent states, thus allowin
 This is achieved with a local cache and a remote distributed key-value store. The local cache runs within the 
 function's address space, and can hence be accessed with even lower latency than if the cache is a separate 
 service running on the same machine.
+Third, FaaSM functions should be able to start with low latency, hence addressing the well-known cold start problem.
+The paper proposes a snapshot mechanism called Proto-Faaslet, which captures the initialized state of the system and
+saves them as a local persistent object as a shortcut.
+
