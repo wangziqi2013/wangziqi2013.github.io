@@ -131,4 +131,8 @@ results and to block on the invocation.
 The paper noted that this function chaining model is similar to how threads can spawn other threads, and block
 on an active thread until it exits.
 
+FaaSM also extends the WASM memory model to support, although still restricted, shared pages. The shared pages are
+mapped in the virtual address space of the process, which is shared and accessible by all Faaslets in the same
+process.
+In the WASM memory model, the shared pages are just an extended part of the memory, which is a flat array.
 
