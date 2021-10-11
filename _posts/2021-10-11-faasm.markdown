@@ -43,3 +43,6 @@ of certain common tasks, such as sharing memory pages and/or file system.
 The paper proposes using language-based isolation mechanism powered by a strong memory model and static program
 verification to enforce isolation statically at compilation and code generation time, while relaxing the hard 
 isolation boundaries during the runtime for better performance.
+The paper also proposes incorporating object caching into the serverless framework that enables low-latency
+access of persistent objects. Stateful serverless functions can hence be created using the object store as a 
+communication channel.
