@@ -35,7 +35,12 @@ version_mgmt:
    solely to support the local object cache?
    Why faaslets only consume KBs of memory for non-function data? Is it due to page sharing (likely not, because 
    container uses MBs)?
+   How network traffic shaping is done using tc? (what is tc?)
    These questions are either unanswered, or only mentioned briefly without further elaboration.
+
+4. How are Faaslets linked into a single binary? Is there the notation of an application (like Microsoft Azure) and
+   all Faaslets are linked into a single application?
+   Surely you will not link unrelated functions into a single binary?
 
 This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
 The paper is motivated by the relatively high overhead of OS or hypervisor level resource isolation and the inability
@@ -82,3 +87,5 @@ dynamically enforced access rules. FaaSM implements this feature by linking the 
 called the host interface, that only exposes a limited set of system calls, and enforce that only system calls within
 the host interface are used statically at compilation time. For certain system calls, the arguments are also checked
 in the runtime to make sure that only allowed system features are requested.
+
+
