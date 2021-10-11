@@ -161,4 +161,10 @@ Proto-Faaslets are also used for clearing the memory state of a function after i
 next invocation. This is particularly helpful to avoid information leak, if the two requests belong to different 
 users.
 
-
+FaaSM tracks, as persistent global states in the object store, the set of cached objects (reported by each Faaslet 
+process) and Proto-Faaslets stored in each worker node, and dispatches requests to worker nodes based on these info. 
+Scheduling decisions are made with distributed schedulers. 
+The central scheduler first dispatches requests in a round-robin manner to local schedulers running on each.
+The local schedulers dispatch the request to the local function instance, if the required objects and function code
+is already locally stored. Otherwise, the scheduler queries the global information, and dispatches the request
+to a peer worker that can fulfill the request.
