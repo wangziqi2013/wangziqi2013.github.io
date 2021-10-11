@@ -42,6 +42,8 @@ version_mgmt:
    all Faaslets are linked into a single application?
    Surely you will not link unrelated functions into a single binary?
 
+5. What is the read-global, write-local file system? Is it the same thing as the two-tier persistent states?
+
 This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
 The paper is motivated by the relatively high overhead of OS or hypervisor level resource isolation and the inability
 of certain common tasks, such as sharing memory pages and/or file system. 
