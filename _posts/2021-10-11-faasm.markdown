@@ -44,6 +44,9 @@ version_mgmt:
 
 5. What is the read-global, write-local file system? Is it the same thing as the two-tier persistent states?
 
+6. The message bus is only mentioned once in Section 3.1, and never again. What is the difference between the message
+   bus and the conventional message queue in other systems? How does it work? Is it even important?
+
 This paper proposes FaaSM, a language-level software framework for lightweight isolation between serverless functions.
 The paper is motivated by the relatively high overhead of OS or hypervisor level resource isolation and the inability
 of certain common tasks, such as sharing memory pages and/or file system. 
@@ -108,4 +111,8 @@ As mentioned earlier, the Faaslets are fully isolated from each other in terms o
 safety of WASM. Besides, FaaSM uses namespaces to isolate the threads from each other regarding resource naming,
 and assigns threads to different cgroups, with each thread having equal share of CPU time.
 Network traffic is regulated using a traffic shaper, but the details are missing from the paper.
+
+FaaSM restricts accesses to system calls and system features by only exposing a small subset of system calls 
+to the Faaslets. The paper lists these calls and categorize them into dynamic linking, memory management, 
+networking, file I/O, and time and random numbers. 
 
