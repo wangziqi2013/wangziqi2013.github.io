@@ -135,4 +135,9 @@ FaaSM also extends the WASM memory model to support, although still restricted, 
 mapped in the virtual address space of the process, which is shared and accessible by all Faaslets in the same
 process.
 In the WASM memory model, the shared pages are just an extended part of the memory, which is a flat array.
-
+Accesses to the shared area are also statically checked as other memory accesses.
+When multiple WASM IR objects are linked together into an executable binary, the shared area is relocated into 
+a separate part in the virtual address space (i.e., the OS loader is told to map it to a separate region
+that does not belong to the linear array of any Faaslet), and accesses to the shared pages in all Faaslets are
+relocated to the new location. 
+Sharing is thus achieved without sacrificing any isolation guarantee nor breaking the memory model of WASM.
