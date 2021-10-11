@@ -157,3 +157,8 @@ To reduce cold start latency, snapshots, namely Proto-Faaslets, are taken from i
 layout of Faaslets are very simple, i.e., they consists of just a single linear array divided into data, stack and 
 heap, they can be easily tracked and dumped to the disk as a local file, and then mmap'ed back later (the paper also 
 mentions that they can be stored as global persistent objects). 
+Proto-Faaslets are also used for clearing the memory state of a function after it has completed to prepare for the 
+next invocation. This is particularly helpful to avoid information leak, if the two requests belong to different 
+users.
+
+
