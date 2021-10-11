@@ -88,4 +88,9 @@ called the host interface, that only exposes a limited set of system calls, and 
 the host interface are used statically at compilation time. For certain system calls, the arguments are also checked
 in the runtime to make sure that only allowed system features are requested.
 
+FaaSM implements each function as a Faaslet. Faaslets are developed in any suitable high-level languages, compiled
+into the intermediate representation WebAssembly (WASM), and then translated into native machine code by an optimizer
+after passing the static check. The most critical feature of WASM is its memory safety. To elaborate: WASM's memory
+model is just a single flat array, and instructions can only access data as uninterpreted bytes in the array.
+
 
