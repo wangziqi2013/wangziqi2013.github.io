@@ -77,4 +77,8 @@ service running on the same machine.
 Third, FaaSM functions should be able to start with low latency, hence addressing the well-known cold start problem.
 The paper proposes a snapshot mechanism called Proto-Faaslet, which captures the initialized state of the system and
 saves them as a local persistent object as a shortcut.
-
+Lastly, FaaSM must restrict the set of system features and system calls that the function can use, as there is no 
+dynamically enforced access rules. FaaSM implements this feature by linking the function with a wrapper layer,
+called the host interface, that only exposes a limited set of system calls, and enforce that only system calls within
+the host interface are used statically at compilation time. For certain system calls, the arguments are also checked
+in the runtime to make sure that only allowed system features are requested.
