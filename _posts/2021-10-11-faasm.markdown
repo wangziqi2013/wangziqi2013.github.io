@@ -54,3 +54,8 @@ storage to the function over the network. Co-locating function instance with dat
 the service goal of serverless, as functions are supposed to be able to execute anywhere on the cloud, and be scaled 
 up quickly as loads surge. These properties would be difficult to implement if functions that access data are shipped
 to the data store. 
+To make the situation even worse, if multiple functions access the same data object, which is not uncommon if 
+functions perform logically related tasks, then the same data will be copied over the network repeatedly, which
+wastes both network bandwidth and processor cycles. This issue is also hard to address within the functions, since
+functions are supposed to be stateless, and hence no state of its execution shall be preserved locally, including the 
+data objects.
