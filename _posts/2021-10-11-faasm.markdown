@@ -70,4 +70,7 @@ The paper then lists a few design goals of FaaSM.
 First, FaaSM should support lightweight isolation and add as little runtime overhead as possible. FaasM achieves
 this using a mixture of conventional container techniques, such as cgroups, namespaces, and language-level
 isolation enforced by static checks and program verification.
-
+Second, FaaSM should support efficient access to persistent states, thus allowing functions to communicate.
+This is achieved with a local cache and a remote distributed key-value store. The local cache runs within the 
+function's address space, and can hence be accessed with even lower latency than if the cache is a separate 
+service running on the same machine.
