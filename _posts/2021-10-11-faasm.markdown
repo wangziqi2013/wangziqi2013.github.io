@@ -66,3 +66,8 @@ As cloud providers tend to cache warm container instances after execution has co
 latency of future instances, this problem will only get worse since memory resource consumed by a container instance
 will only be freed after the keep-alive period.
 
+The paper then lists a few design goals of FaaSM.
+First, FaaSM should support lightweight isolation and add as little runtime overhead as possible. FaasM achieves
+this using a mixture of conventional container techniques, such as cgroups, namespaces, and language-level
+isolation enforced by static checks and program verification.
+
