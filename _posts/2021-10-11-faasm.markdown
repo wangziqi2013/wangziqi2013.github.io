@@ -151,3 +151,9 @@ Locking primitives for local and global objects are also provided for proper syn
 FaaSM does not provide any extra consistency guarantee other than what is already provided by the object store.
 Furthermore, caching may incur consistency issues that are not originally possible. The function developers should
 be aware of this, and either live with it, or implement stronger semantics.
+
+To reduce cold start latency, snapshots, namely Proto-Faaslets, are taken from initialized Faaslet processes 
+(developers define how the Faaslets are initialized), and stored on the disk for fast revival. Since the memory 
+layout of Faaslets are very simple, i.e., they consists of just a single linear array divided into data, stack and 
+heap, they can be easily tracked and dumped to the disk as a local file, and then mmap'ed back later (the paper also 
+mentions that they can be stored as global persistent objects). 
