@@ -147,4 +147,7 @@ can be read with a key, or written/updated with a key and value. The top tier is
 in the shared part of the Faaslet pages, which keeps recently accessed objects locally.
 The host interface also provides service calls to access objects either transparently (let the cache handle the 
 reads, if it is in the cache) or directly from the bottom tier.
-
+Locking primitives for local and global objects are also provided for proper synchronization. 
+FaaSM does not provide any extra consistency guarantee other than what is already provided by the object store.
+Furthermore, caching may incur consistency issues that are not originally possible. The function developers should
+be aware of this, and either live with it, or implement stronger semantics.
