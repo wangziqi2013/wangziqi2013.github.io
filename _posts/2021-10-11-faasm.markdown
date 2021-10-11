@@ -119,3 +119,10 @@ These exposed system calls, namely the host interface, is implemented as a wrapp
 into the binary at runtime for best performance.
 The wrapper module forwards an incoming call and its arguments to the actual system call with possible argument 
 checking (for example, to avoid invoking mmap() in an illegal manner that can break isolation).
+
+The host interface also contains service calls that allow functions to be composed and synchronized. 
+Functions in FaaSM can invoke each other, and block on an active invocation until it returns. 
+Each chained function call using the host interface will return a call ID, which can be used to read the 
+results and to block on the invocation.
+The paper noted that this function chaining model is similar to how threads can spawn other threads, and block
+on an active thread until it exits.
