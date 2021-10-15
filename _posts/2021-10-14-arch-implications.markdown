@@ -46,4 +46,8 @@ In the second case, the frequency is too low, such that containers are likely te
 request, before the next request arrives. In this scenario, the latency of functions vary depending on the status 
 of the container when the request arrives, and hence both short and long latency can be observed.
 This scenario is called "under-invoked"
-
+In the third case, the speed of request arrival and the speed of request handling match, such that a constant 
+throughput can be maintained, and therefore, functions also have a constant latency.
+This is the "balanced case".
+The system capacity can be determined as the maximum ipc when the system is in a balanced case. Note that the balanced
+case is not an exact ipc value, but rather, a range of ipc values that achieves stable latencies.
