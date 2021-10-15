@@ -122,4 +122,7 @@ Lastly, the paper studies interferences between functions by first starting one 
 letting it run for a while, and then starting concurrent instances of a different function at a relatively lower
 invocation frequency.
 Performance statistics are collected and compared between the two stages.
-
+Results show that concurrent function invocation will move the balanced function to the over-subscribed mode, causing
+it to suffer more page faults, context switches, which leads to a significantly lower IPC.
+To deal with this, the paper suggests over-provisioning of TLB entries and addition of new mechanism for performance
+isolation.
