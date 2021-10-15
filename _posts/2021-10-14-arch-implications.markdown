@@ -65,4 +65,6 @@ By carefully analyzing the performance breakdown, the paper also concludes that 
 the queuing delay and container cold start overhead. The former is a natural consequence of local buffering of 
 requests before the previous one completes, and the latter is further affected by the status of containers in the 
 worker node (paused and unpaused, for example). 
-
+As a result, the OS kernel can contribute to a large portion of the overall delay, especially if containers are 
+constantly brought up and down, in which case the OS is frequently invoked to create new processes, perform 
+memory management and I/O, and so on.
