@@ -114,4 +114,6 @@ tends to to over-subscribe the system in order to reduce the amount
 of physical resources dedicated to serverless, which increases function latency as discussed earlier, while the 
 latter favors low latency. In addition, since users are billed by the amount of time spent on executing the
 functions, an over-subscribed system also tends to generate more profit for the service provider.
-
+In order to avoid cloud providers exploit the conflict of interest at user's cost, the paper suggests that the 
+billing model of serverless should be changed to only count the number of cycles spent in the application itself,
+instead of using both OS time and application time.
