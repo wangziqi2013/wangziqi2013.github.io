@@ -42,4 +42,8 @@ the wall clock latency of the invocations are recorded.
 Results show that there are three possible scenarios. In the first scenario, the speed of arrival is higher than 
 the speed of handling. Requests will start to accumulate in this case, which causes latencies to grow as the queue 
 becomes longer. The paper calls this case as "over-invoked".
+In the second case, the frequency is too low, such that containers are likely terminated or paused after handling a 
+request, before the next request arrives. In this scenario, the latency of functions vary depending on the status 
+of the container when the request arrives, and hence both short and long latency can be observed.
+This scenario is called "under-invoked"
 
