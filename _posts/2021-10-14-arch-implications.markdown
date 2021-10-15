@@ -39,4 +39,7 @@ container instances running on the node.
 The first experiment is to explore the relation between function latency and the invocation frequency.
 A driver keeps sending requests to the worker node at different frequencies, denoted as invocation per cycle (ipc), and 
 the wall clock latency of the invocations are recorded. 
+Results show that there are three possible scenarios. In the first scenario, the speed of arrival is higher than 
+the speed of handling. Requests will start to accumulate in this case, which causes latencies to grow as the queue 
+becomes longer. The paper calls this case as "over-invoked".
 
