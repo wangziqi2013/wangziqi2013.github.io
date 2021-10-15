@@ -90,6 +90,9 @@ make the predictor context part of the program context.
 The paper also conducts study on LLC and main memory bandwidth. 
 To investigate the relation between LLC size and performance, the paper leverages Intel Cache Allocation Technology to 
 restrict the amount of LLC allocated to the function process.
-For main bandwidth, the paper uses Cache Monitoring Technology (CMT) and Memory Bandwidth Monitoring (MBM).
+For memory bandwidth, the paper uses Cache Monitoring Technology (CMT) and Memory Bandwidth Monitoring (MBM).
 Results show that LLC is not the performance bottleneck, because there is not significant performance impact even 
 after shrinking the size of the LLC by 80%.
+On the other hand, cold starts consume more memory bandwidth than warm starts, due to the cost of the extra 
+initialization work that is exclusive to cold starts.
+
