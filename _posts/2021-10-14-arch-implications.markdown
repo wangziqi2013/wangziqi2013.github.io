@@ -25,5 +25,7 @@ The experimentation is conduced with Apache OpenWhisk, an open-sourced serverles
 Functions are invoked with external HTTP requests, which are handled by an HTTP reverse proxy, and forwarded to the 
 OpenWhisk controller. The controller authenticates the request with a database storing user information, and then 
 dispatches the request to one of the worker nodes.
-
+Function instances are wrapped in containers, and they are configured with a maximum amount of runtime memory.
+Scheduling decisions are also made with regard to the memory requirement, and function instances with more memory
+will be allocated more processor cycles.
 
