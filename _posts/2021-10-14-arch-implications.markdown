@@ -28,4 +28,9 @@ dispatches the request to one of the worker nodes.
 Function instances are wrapped in containers, and they are configured with a maximum amount of runtime memory.
 Scheduling decisions are also made with regard to the memory requirement, and function instances with more memory
 will be allocated more processor cycles.
+OpenWhisk also implements a keep-alive policy that keeps the container instance warm in the memory for a few 
+milliseconds after the function completes, after which the container will be swapped out to the disk (paused) to reduce
+memory consumption, or terminated (the paper did not mention in what situations these decisions are made). 
+This is to reduce cold starts, as future requests that use the same-type container can immediately be fulfilled by the
+warm container, rather than starting a new one.
 
