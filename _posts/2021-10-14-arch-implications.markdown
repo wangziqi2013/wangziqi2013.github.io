@@ -35,3 +35,8 @@ This is to reduce cold starts, as future requests that use the same-type contain
 warm container, rather than starting a new one.
 Each worker node has a local queue that buffers requests dispatched to the node, which is serviced collectively by all 
 container instances running on the node.
+
+The first experiment is to explore the relation between function latency and the invocation frequency.
+A driver keeps sending requests to the worker node at different frequencies, denoted as invocation per cycle (ipc), and 
+the wall clock latency of the invocations are recorded. 
+
