@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. I got confused at figure 4 because the x axis says "invocation time". I think a better term would be "wall clock 
+   time since experiment started", meanwhile "invocation time" sounds like the inverse of invocation frequency.
+
 This paper presents benchmarking results of serverless applications. 
 The paper is motivated by the question of whether today's commercial hardware is still a good fit for serverless
 workloads, which demonstrate drastically different performance traits than traditional cloud applications.
@@ -51,3 +56,5 @@ throughput can be maintained, and therefore, functions also have a constant late
 This is the "balanced case".
 The system capacity can be determined as the maximum ipc when the system is in a balanced case. Note that the balanced
 case is not an exact ipc value, but rather, a range of ipc values that achieves stable latencies.
+
+
