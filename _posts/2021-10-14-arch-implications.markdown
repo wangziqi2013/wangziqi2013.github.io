@@ -108,3 +108,10 @@ But above the threshold, the overhead of managing and scheduling these processes
 of overhead, which degrades performance and results in larger function latency.
 This phenomenon is perhaps unique for serverless functions, because the execution time of a typical function is 
 comparable with the OS's scheduling quantum.
+
+The paper also noted that there exists a conflict of interest between service provider and users, as the former 
+tends to to over-subscribe the system in order to reduce the amount
+of physical resources dedicated to serverless, which increases function latency as discussed earlier, while the 
+latter favors low latency. In addition, since users are billed by the amount of time spent on executing the
+functions, an over-subscribed system also tends to generate more profit for the service provider.
+
