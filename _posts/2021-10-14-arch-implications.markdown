@@ -99,3 +99,9 @@ The overall bandwidth consumption at system level when multiple functions are ru
 by the frequency of invocations rather than the per-function overhead: More frequent invocation may prevent cold start
 from happening, but on the absolute scale, more concurrently running functions will consume more bandwidth than a few
 functions that require more bandwidth for each.
+
+The paper then studies the relation between system capacity, which is defined as the maximum ipc that could sustain
+a stable throughput without severely degrading function latency, and the memory size, which is either
+the physical memory installed on the worker node, or the amount of memory allocated to the VM instance.
+The paper observes that under certain thresholds, the system capacity grows proportionally with the memory size.
+
