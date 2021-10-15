@@ -104,4 +104,7 @@ The paper then studies the relation between system capacity, which is defined as
 a stable throughput without severely degrading function latency, and the memory size, which is either
 the physical memory installed on the worker node, or the amount of memory allocated to the VM instance.
 The paper observes that under certain thresholds, the system capacity grows proportionally with the memory size.
-
+But above the threshold, the overhead of managing and scheduling these processes start to become a major source 
+of overhead, which degrades performance and results in larger function latency.
+This phenomenon is perhaps unique for serverless functions, because the execution time of a typical function is 
+comparable with the OS's scheduling quantum.
