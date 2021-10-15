@@ -61,4 +61,8 @@ This is the "balanced case".
 The system capacity can be determined as the maximum ipc when the system is in a balanced case. Note that the balanced
 case is not an exact ipc value, but rather, a range of ipc values that achieves stable latencies.
 
+By carefully analyzing the performance breakdown, the paper also concludes that the major factor that affects latency is
+the queuing delay and container cold start overhead. The former is a natural consequence of local buffering of 
+requests before the previous one completes, and the latter is further affected by the status of containers in the 
+worker node (paused and unpaused, for example). 
 
