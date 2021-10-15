@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper presents benchmarking results of serverless applications on an open-source FaaS platform. The experiments 
-focused on both macro- and micro-benchmarks, and studied the implications of the results to microarchitectural design
-on future generations of processors. 
+This paper presents benchmarking results of serverless applications. 
+The paper is motivated by the question of whether today's commercial hardware is still a good fit for serverless
+workloads, which demonstrate drastically different performance traits than traditional cloud applications.
+The paper conducted experiments on real hardware platform with an open-source FaaS software package, and collected
+performance statistics with hardware performance counters.
+The paper concluded that today's processor design is not exactly optimal for serverless execution, and some 
+hardware features need to be reconsidered in order to be fully exploited by serverless.
+
+
