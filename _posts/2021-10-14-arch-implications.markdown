@@ -18,6 +18,10 @@ version_mgmt:
 1. I got confused at figure 4 because the x axis says "invocation time". I think a better term would be "wall clock 
    time since experiment started", meanwhile "invocation time" sounds like the inverse of invocation frequency.
 
+2. In table 1 the paper claims that they use the five applications listed as the benchmark. Then in 3.2 it is claimed
+   that workloads from Python Performance Benchmark Suite is the benchmark. Isn't these two contradicting each other?
+   And in the rest of the paper, "json\_dump" and the other few mentioned workload names are all from the latter.
+
 This paper presents benchmarking results of serverless applications. 
 The paper is motivated by the question of whether today's commercial hardware is still a good fit for serverless
 workloads, which demonstrate drastically different performance traits than traditional cloud applications.
