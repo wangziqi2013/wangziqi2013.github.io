@@ -21,4 +21,9 @@ performance statistics with hardware performance counters.
 The paper concluded that today's processor design is not exactly optimal for serverless execution, and some 
 hardware features need to be reconsidered in order to be fully exploited by serverless.
 
+The experimentation is conduced with Apache OpenWhisk, an open-sourced serverless platform. 
+Functions are invoked with external HTTP requests, which are handled by an HTTP reverse proxy, and forwarded to the 
+OpenWhisk controller. The controller authenticates the request with a database storing user information, and then 
+dispatches the request to one of the worker nodes.
+
 
