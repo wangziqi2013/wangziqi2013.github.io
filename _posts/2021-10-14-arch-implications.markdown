@@ -87,4 +87,9 @@ relatively larger, which also aggravates the problem.
 The paper suggests that future processors should either be equipped with predictors that take less time to train, or
 make the predictor context part of the program context.
 
-
+The paper also conducts study on LLC and main memory bandwidth. 
+To investigate the relation between LLC size and performance, the paper leverages Intel Cache Allocation Technology to 
+restrict the amount of LLC allocated to the function process.
+For main bandwidth, the paper uses Cache Monitoring Technology (CMT) and Memory Bandwidth Monitoring (MBM).
+Results show that LLC is not the performance bottleneck, because there is not significant performance impact even 
+after shrinking the size of the LLC by 80%.
