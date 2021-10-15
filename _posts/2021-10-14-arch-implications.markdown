@@ -68,3 +68,10 @@ worker node (paused and unpaused, for example).
 As a result, the OS kernel can contribute to a large portion of the overall delay, especially if containers are 
 constantly brought up and down, in which case the OS is frequently invoked to create new processes, perform 
 memory management and I/O, and so on.
+
+The paper then studies branch prediction by measuring branch predictor's Misses per Kilo Instructions (MPKI) on
+different workloads. Results show that functions that execute for longer time have significantly smaller MPKI,
+while those that are shorter have larger MPKI.
+The paper argues that it is not because shorter functions are written in a way that is hard to predict, but because
+it takes a while to train the branch predictor, and the predictor fails to reach a stable state before the function
+completes in the case of short functions.
