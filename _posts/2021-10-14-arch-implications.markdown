@@ -75,3 +75,7 @@ while those that are shorter have larger MPKI.
 The paper argues that it is not because shorter functions are written in a way that is hard to predict, but because
 it takes a while to train the branch predictor, and the predictor fails to reach a stable state before the function
 completes in the case of short functions.
+Besides, for shorter functions, the number of instruction for initializing the container and language runtime is also 
+relatively larger, which also aggravates the problem.
+The paper suggests that future processors should either be equipped with predictors that take less time to train, or
+make the predictor context part of the program context.
