@@ -22,6 +22,13 @@ version_mgmt:
    that workloads from Python Performance Benchmark Suite is the benchmark. Isn't these two contradicting each other?
    And in the rest of the paper, "json\_dump" and the other few mentioned workload names are all from the latter.
 
+3. There are two different interpretations of LLC not being the performance bottleneck: Either the locality is too
+   good (small working sets), or the locality is very bad such that most accesses miss the LLC anyway.
+   These two cases are the two extremes of program locality, and the paper should further clarify which case is
+   observed in the experiments.
+   From the bandwidth study I guess it is the latter, because the memory bandwidth per invocation is higher for 
+   cold starts than warm starts, indicating that the LLC is not effective in reducing main memory accesses.
+
 This paper presents benchmarking results of serverless applications. 
 The paper is motivated by the question of whether today's commercial hardware is still a good fit for serverless
 workloads, which demonstrate drastically different performance traits than traditional cloud applications.
@@ -79,3 +86,5 @@ Besides, for shorter functions, the number of instruction for initializing the c
 relatively larger, which also aggravates the problem.
 The paper suggests that future processors should either be equipped with predictors that take less time to train, or
 make the predictor context part of the program context.
+
+
