@@ -95,4 +95,7 @@ Results show that LLC is not the performance bottleneck, because there is not si
 after shrinking the size of the LLC by 80%.
 On the other hand, cold starts consume more memory bandwidth than warm starts, due to the cost of the extra 
 initialization work that is exclusive to cold starts.
-
+The overall bandwidth consumption at system level when multiple functions are running, however, is still dominated
+by the frequency of invocations rather than the per-function overhead: More frequent invocation may prevent cold start
+from happening, but on the absolute scale, more concurrently running functions will consume more bandwidth than a few
+functions that require more bandwidth for each.
