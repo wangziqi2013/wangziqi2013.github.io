@@ -33,4 +33,5 @@ milliseconds after the function completes, after which the container will be swa
 memory consumption, or terminated (the paper did not mention in what situations these decisions are made). 
 This is to reduce cold starts, as future requests that use the same-type container can immediately be fulfilled by the
 warm container, rather than starting a new one.
-
+Each worker node has a local queue that buffers requests dispatched to the node, which is serviced collectively by all 
+container instances running on the node.
