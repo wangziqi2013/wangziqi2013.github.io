@@ -94,4 +94,8 @@ their own clflush instructions, being switched out, switched in again, and then 
 will return right before the sfence of the persist barrier). This sfence instruction will still stall the core
 until all earlier flushes are completed, while theoretically speaking, only flushes that are issued by the 
 coroutine issuing the sfence need to be drained.
-
+To address this issue, the paper proposes that all coroutines be assigned an unique context ID, which represents the
+logical flow. Stores, flushes, and sfences issued by the coroutine are tagged with the context ID, and they carry
+this ID to the store queue, which is also virtualized by adding a "context ID" field to each entry.
+The sfence instruction then only waits for the store queue to be drained of stores and flushes of the same ID, before it
+retires and unblocks the pipeline.
