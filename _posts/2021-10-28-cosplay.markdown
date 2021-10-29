@@ -15,10 +15,11 @@ version_mgmt:
 
 **Comments:**
 
-1. My biggest concern is that this mechanism require a few threads to be assigned to the same core for fast
+1. My biggest concern is that this mechanism require a few co-routine tasks to be assigned to the same core for fast
    switch (b/c otherwise they will not share the same store buffer anyway). This would have serious performance
-   implications because of resource contention. Servers typically only schedule less than two threads per core,
-   making this technique ineffective.
+   implications because of resource contention, locality problems, etc. Servers typically only schedule one or two
+   threads per core for this exact reason. Although the paper uses a different switching mechanism (coroutines),
+   the resource contention problem is not changed from the conventional thread model.
 
 2. It makes perfect sense to call it COSP rather than COSPlay
 
@@ -55,4 +56,5 @@ intensity of application increases, the performance becomes worse than non-fence
 In addition, the paper also points out that Backend Memory Operations (BMOs) will further aggravate this problem, 
 since BMOs are on the critical path of writes, and will make the latency longer. Evaluation shows that as the latency
 of BMOs becomes longer, the overall performance also degrades proportionally. 
+
 
