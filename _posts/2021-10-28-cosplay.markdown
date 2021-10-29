@@ -105,3 +105,9 @@ The paper also noted that aliasing of context IDs, which happens when the number
 on the same core exceeds the maximum allowed, does not matter, since context ID only denotes the dependency relation
 between logical tasks, and aliasing of the ID only adds unnecessary dependencies, which preserves correctness, and
 only incurs slight performance overhead.
+
+To avoid an associative lookup on every store buffer retire (to check whether all operations with the same context IDs
+have been drained), the paper also proposes adding a direct-mapped table from the context IDs to the number of 
+outstanding operations of the same ID in the store queue. Every time an operation retires, the table is updated
+using the context ID of the operation, and the counter is decremented. Once the counter reaches zero, the pipeline is 
+notified that the corresponding context ID has been drained, and the sfence is retired as well.
