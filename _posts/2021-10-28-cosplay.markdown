@@ -24,7 +24,9 @@ version_mgmt:
    store queue, this execution model is overly strong, as these coroutines are supposed to be independent from each 
    other, and hence their flushes do not need to be ordered.
 
-
+3. Adding context IDs to coroutines and store queue entries enables the fencing logic to only fence on a particular
+   context ID, while not affecting other IDs. This essentially virtualizes the store buffer, as it appears as multiple
+   independent buffers, where ordering is only enforced within each buffer, but not across.
 
 **Comments:**
 
