@@ -20,4 +20,7 @@ processors is limited to per-core barriers that block all future store and flush
 outstanding flushes are being served. This coarse-grained mechanism guarantees safety, but causes unnecessary 
 pipeline stalls, since not all store and flush operations waiting to be executed are dependent on the current
 persistent operation.
-
+This paper proposes that: (1) Stores and flushes should be made context-tagged, and the store buffer holding committed
+store operations should be virtualized such that entries from different contexts can be distinguished and processed
+independently, which maximizes the throughput; (2) Application threads should be switched out while a persist
+barrier is in effect, overlapping the persistence overhead with the execution of another thread.
