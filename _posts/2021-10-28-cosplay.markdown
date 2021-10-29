@@ -19,6 +19,11 @@ version_mgmt:
    another logical execution flow. This requires fast and fine-grained switch to a different flow, which can be 
    achieved by coroutines.
 
+2. sfence instructions have a global effect, i.e., it blocks the allocation of the store queue for all future 
+   ordered operations (stores, clwb, clflush). When multiple coroutines can issue their own stores and flushes to the 
+   store queue, this execution model is overly strong, as these coroutines are supposed to be independent from each 
+   other, and hence their flushes do not need to be ordered.
+
 
 
 **Comments:**
