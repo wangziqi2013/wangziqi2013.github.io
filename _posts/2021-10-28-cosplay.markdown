@@ -41,4 +41,7 @@ clwb to represent both in the rest of this article) to force the cached content 
 and the order of these write backs that is actually observed on the NVM side is not guaranteed to be consistent
 with the order of flush instructions for two reasons. First, the processor does not enforce ordering between 
 flush instructions on different addresses, meaning that they could potentially be reordered when deemed to be 
-convenient by the processor. 
+convenient by the processor. Secondly, even if flush instructions are strongly ordered, the NoC network connecting the 
+store queue and the NVM controller may still deliver messages out-of-order, making the task of inferring write 
+ordering impossible without proper fencing.
+
