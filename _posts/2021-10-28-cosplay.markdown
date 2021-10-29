@@ -99,3 +99,9 @@ logical flow. Stores, flushes, and sfences issued by the coroutine are tagged wi
 this ID to the store queue, which is also virtualized by adding a "context ID" field to each entry.
 The sfence instruction then only waits for the store queue to be drained of stores and flushes of the same ID, before it
 retires and unblocks the pipeline.
+The context ID is dispensed by either software or hardware, and is part of the coroutine context that needs to be 
+switched in and out regularly as coroutines are scheduled. 
+The paper also noted that aliasing of context IDs, which happens when the number of concurrent coroutines scheduled
+on the same core exceeds the maximum allowed, does not matter, since context ID only denotes the dependency relation
+between logical tasks, and aliasing of the ID only adds unnecessary dependencies, which preserves correctness, and
+only incurs slight performance overhead.
