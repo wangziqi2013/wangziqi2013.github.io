@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper introduces Coroutines for Synchronous Persistence (COSPlay), a hardware-software co-design that exploits 
+task-level parallelism from the software side, and virtualized write buffer on the hardware side, for improved 
+persistence throughput. The paper is motivated by the fact that current support for persistence ordering on commercial 
+processors is limited to per-core barriers that block all future store and flush operations while existing 
+outstanding flushes are being served. This coarse-grained mechanism guarantees safety, but causes unnecessary 
+pipeline stalls, since not all store and flush operations waiting to be executed are dependent on the current
+persistent operation.
+
