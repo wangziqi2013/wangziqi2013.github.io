@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "COSPlay: Leveraging Task-Level Parallelism for High-Throughput Synchronous Persistence"
+date:   2021-10-28 21:10:00 -0500
+categories: paper
+paper_title: "COSPlay: Leveraging Task-Level Parallelism for High-Throughput Synchronous Persistence"
+paper_link: https://dl.acm.org/doi/10.1145/3466752.3480075
+paper_keyword: NVM; Persist Barrier; COSPlay
+paper_year: MICRO 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
