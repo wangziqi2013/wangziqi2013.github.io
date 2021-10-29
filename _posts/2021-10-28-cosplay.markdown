@@ -84,3 +84,8 @@ manner to execute.
 Note that the sfence instruction is still necessary, even if it is only executed after the coroutine is scheduled 
 again after issuing flushes and calling YIELD(), because at that moment, it is not still unknown whether the previous 
 flushes have completed, and the sfence is just a conservative measure to ensure safety.
+
+The second type of inefficiency is the fact that the effect of sfence is global, meaning that it blocks the execution
+of the pipeline until all operations in the store buffer have been drained, regardless of whether these operations are
+actually related to the flushes that the sfence is intended for, or just some innocent clflush from another 
+logical task that has no dependency on the current one.
