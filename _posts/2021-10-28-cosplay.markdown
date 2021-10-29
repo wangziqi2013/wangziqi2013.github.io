@@ -50,3 +50,9 @@ when decoded in the frontend, will block future stores and flushes to be allocat
 the queue has been drained. This conservative implementation essentially stalls the pipeline while outstanding
 clflush operations and store instructions are being serviced, the performance impact of which is dependent on the 
 aggregated latency of these operations. 
+The paper conducted studies on the slowdown caused by the store fence, and unsurprisingly, as the memory access 
+intensity of application increases, the performance becomes worse than non-fenced executions.
+In addition, the paper also points out that Backend Memory Operations (BMOs) will further aggravate this problem, 
+since BMOs are on the critical path of writes, and will make the latency longer. Evaluation shows that as the latency
+of BMOs becomes longer, the overall performance also degrades proportionally. 
+
