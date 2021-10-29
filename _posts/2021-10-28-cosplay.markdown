@@ -39,4 +39,6 @@ the ordering of writes on x86 platform for cache-able memory is decoupled from t
 Programmers should manually issue cache line flush or write back instructions (without losing generality, we use
 clwb to represent both in the rest of this article) to force the cached content to be written back to the NVM,
 and the order of these write backs that is actually observed on the NVM side is not guaranteed to be consistent
-with the order of flush instructions for two reasons. 
+with the order of flush instructions for two reasons. First, the processor does not enforce ordering between 
+flush instructions on different addresses, meaning that they could potentially be reordered when deemed to be 
+convenient by the processor. 
