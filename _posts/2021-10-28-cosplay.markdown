@@ -45,3 +45,8 @@ convenient by the processor. Secondly, even if flush instructions are strongly o
 store queue and the NVM controller may still deliver messages out-of-order, making the task of inferring write 
 ordering impossible without proper fencing.
 
+Luckily, x86 provides a store fence instruction, namely sfence, to order flushes and stores. The sfence instruction, 
+when decoded in the frontend, will block future stores and flushes to be allocated in the store queue, until
+the queue has been drained. This conservative implementation essentially stalls the pipeline while outstanding
+clflush operations and store instructions are being serviced, the performance impact of which is dependent on the 
+aggregated latency of these operations. 
