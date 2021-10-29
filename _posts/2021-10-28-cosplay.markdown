@@ -70,3 +70,9 @@ Performing thread switches at long latency sfence instructions, however, are unr
 both because there is no notification mechanism on sfences (unlike blocking on I/O operations, in which case the OS
 issues the I/O and switches out the thread), and because of the switching overhead, which is a few orders of magnitude
 larger than the NVM latency.
+To enable fast task switches without incurring significant overhead, the paper proposes using a lightweight 
+task-based execution model within a single thread, implemented as software coroutines.
+In the proposed execution model, tasks are self-contained, logical executions of a single operation, which may 
+perform NVM writes and use persist barriers to commit the write.
+Different tasks do not communicate with each other to avoid complication of synchronization, and each task can be 
+scheduled and executed till the end.
