@@ -66,4 +66,7 @@ The paper observes two types of inefficiencies in the above persistence model. F
 while waiting for the store buffer to drain out, while there may be some other logical tasks
 that are ready to be executed. This is analogous to the classic I/O latency-hiding problem, which is solved in modern
 systems by switching to a different thread and overlaps the execution of that thread with I/O.
-
+Performing thread switches at long latency sfence instructions, however, are unrealistic,
+both because there is no notification mechanism on sfences (unlike blocking on I/O operations, in which case the OS
+issues the I/O and switches out the thread), and because of the switching overhead, which is a few orders of magnitude
+larger than the NVM latency.
