@@ -76,3 +76,8 @@ In the proposed execution model, tasks are self-contained, logical executions of
 perform NVM writes and use persist barriers to commit the write.
 Different tasks do not communicate with each other to avoid complication of synchronization, and each task can be 
 scheduled and executed till the end.
+Three utility functions control the lifetime and scheduling of the tasks: TASK\_START(), TASK\_END(), and YIELD(),
+with the first two creating and terminating tasks, respectively, and the last one relinquishing control over to the 
+scheduler, which is called right after the flush instructions in the persist barrier, but before the sfence.
+On a YIELD() call, control is transferred to the scheduler, which selects another waiting coroutine in a round-robin
+manner to execute.
