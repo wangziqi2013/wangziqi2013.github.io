@@ -81,3 +81,6 @@ with the first two creating and terminating tasks, respectively, and the last on
 scheduler, which is called right after the flush instructions in the persist barrier, but before the sfence.
 On a YIELD() call, control is transferred to the scheduler, which selects another waiting coroutine in a round-robin
 manner to execute.
+Note that the sfence instruction is still necessary, even if it is only executed after the coroutine is scheduled 
+again after issuing flushes and calling YIELD(), because at that moment, it is not still unknown whether the previous 
+flushes have completed, and the sfence is just a conservative measure to ensure safety.
