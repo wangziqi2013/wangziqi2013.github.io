@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. My biggest concern is that this mechanism require a few threads to be assigned to the same core for fast
+   switch (b/c otherwise they will not share the same store buffer anyway). This would have serious performance
+   implications because of resource contention. Servers typically only schedule less than two threads per core,
+   making this technique inefficient.
+
 This paper introduces Coroutines for Synchronous Persistence (COSPlay), a hardware-software co-design that exploits 
 task-level parallelism from the software side, and virtualized write buffer on the hardware side, for improved 
 persistence throughput. The paper is motivated by the fact that current support for persistence ordering on commercial 
