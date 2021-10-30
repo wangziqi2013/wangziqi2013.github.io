@@ -21,4 +21,9 @@ argument deserialization, to the network layer with an interface featuring hardw
 As the microservice architecture becomes a major software engineering trend, the efficiency of Remote Procedure Call 
 (RPC) has reemerged as an important factor in the overall performance of microservices, since the architecture 
 divides software components into simple, standalone modules, each running in their own process address space as 
-an independent unit, hence achieving functional and failure isolation. 
+an independent unit, hence achieving functional and failure isolation. Function calls between modules, which was 
+done with a single call instruction, is now replaced with more heavyweight RPC invocations. The paper points out
+that the overhead of performing RPCs in datacenters, dubbed as the "RPC tax", can be as much as 40% - 90% of the 
+total execution cycles. This situation can only become worse, because: (1) Microservices can also perform recursive RPC
+calls, such that the RPC tax will multiply and be propagated at all levels of the recursive call; 
+
