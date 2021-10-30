@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. RPCs are prevalent for microservices, but their overheads are large compared with the normally simple functions.
+
+2. RPC overheads can be decomposed into three parts: Header parsing, function dispatching, and payload manipulation.
+   The last part is usually the most expensive operation in RPC handling.
+
+
+
 **Comments:**
 
 1. How does the accelerator know how much buffer space to allocate? TCP does not have the field to specify the 
