@@ -33,4 +33,9 @@ which further highlights the RPC overhead as the bottleneck in total execution c
 already suffer from instruction supply problems due to binary size bloat (which is a result of static library linking).
 Adding RPC into the control path will only aggravate this issue as RPC introduces a few more software layers.
 
+The paper further conducts experiments to obtain a detailed decomposition of the overheads. The paper identifies
+three major tasks in the RPC handling process (other than executing the function itself, which the paper does not
+attempt to optimize): Header parsing, function dispatching, and payload manipulation.
+Header parsing refers to the process of identifying the function type, message type, etc. Judging from the figure 
+presented in the paper, this part only incurs minor overhead.
 
