@@ -28,5 +28,9 @@ total execution cycles. This situation can only become worse, because: (1) Micro
 calls, such that the RPC tax will multiply and be propagated at all levels of the recursive call; 
 (2) Microservices usually implement simple functions to limit the complexity of a single module. The RPC overhead,
 however, is rather static, and does not scale with the complexity of the function. As functions become smaller,
-RPC tax will only continue to rise; and (3) Existing hardware already optimizes the transportation layer protocols,
-which further highlights the RPC overhead as the bottleneck in total execution cycle.
+RPC tax will only continue to rise; (3) Existing hardware already optimizes the transportation layer protocols,
+which further highlights the RPC overhead as the bottleneck in total execution cycle; and (4) Datacenter applications
+already suffer from instruction supply problems due to binary size bloat (which is a result of static library linking).
+Adding RPC into the control path will only aggravate this issue as RPC introduces a few more software layers.
+
+
