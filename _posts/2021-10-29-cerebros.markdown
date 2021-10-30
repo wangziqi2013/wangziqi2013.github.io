@@ -30,6 +30,12 @@ version_mgmt:
    This, of course, could happen in any settings, but in this design, since we allocate 4x more storage, the DoS is 
    more likely to happen.
 
+4. Is the function pointer and the schema table part of the context? In other words, is it virtualized? If yes, then 
+   different threads could register different RPC family, but context switch would have a bigger overhead. 
+   If no, then this is useless in a cloud environment, which is the common case for microservices, because users 
+   of the cloud are not isolated.
+
+
 This paper proposes Cerebros, a hardware accelerator that offloads the responsibility of RPC handling from the CPU
 to an NIC-attached module. The paper is motivated by the high performance overhead and ill-suited nature of RPC
 handling, and it proposes to offload part of the RPC handling, i.e., header parsing, function dispatch, and 
