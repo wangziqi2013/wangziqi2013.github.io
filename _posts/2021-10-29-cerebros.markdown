@@ -105,3 +105,8 @@ and wire format (so maybe just use a general one). This process can be overlappe
 the message, and hence has no latency overhead.
 After the message is fully received, the accelerator then deserializes the payload using the schema just loaded 
 into its internal state machine into the buffer just allocated. 
+
+After the payload is deserialized, the accelerator can choose to cast the RPC request, together with the function
+pointer and a pointer to the argument storage to a core for execution. The paper suggests that requests could have 
+affinity to a certain core, if a request of the same function has been scheduled on the core recently, to 
+maximize the locality benefits. 
