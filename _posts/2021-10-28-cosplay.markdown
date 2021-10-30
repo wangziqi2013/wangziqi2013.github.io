@@ -38,10 +38,10 @@ version_mgmt:
 
 2. This is like hyper-threading, why not just extend hyper-threading such that threads will switch when an sfence is 
    active? How many coroutines can fully saturate the core pipeline to avoid stalls? Surely this number will not be
-   very large, due to the short latency of NoC NVM?
+   very large, due to the short latency of NVM?
 
 3. I do not quite get why the authors assume that clflush instructions are first queued in the store queue / write 
-   buffer, and then moved to the Write Back Buffer (WBB)? Why not just add it to WBB on decoding?
+   buffer, and then moved to the Write Back Buffer (WBB). Why not just add it to WBB on decoding?
    I understand this is because the flush and earlier writes to the same address still have an order, and maintaining
    them in the same FIFO store queue can simplify the ordering, as it is trivially implied by the queue order.
    But if you directly add flushes into the store queue, but not set the "ready" bit, and then when a store retires,

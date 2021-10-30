@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Cerebros: Evading the RPC Tax in Datacenters"
+date:   2021-10-29 20:19:00 -0500
+categories: paper
+paper_title: "Cerebros: Evading the RPC Tax in Datacenters"
+paper_link: https://dl.acm.org/doi/10.1145/3466752.3480055
+paper_keyword: RPC Tax; Accelerator; Cerebros
+paper_year: MICRO 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
