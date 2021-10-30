@@ -46,3 +46,9 @@ In the last step, the function (or the function handler) reads the payload of th
 function arguments to build the in-memory objects being passed as function arguments.
 According to the figure, this stage incurs the most overhead, but mostly due to simple data movement, integer
 sign extension, etc., which is ill-suited for CPU, and can be conveniently offloaded to specialized hardware.
+
+Although not pointed out explicitly, there are a few challenges in implementing such an accelerator. First, the 
+accelerator must be able to complete the whole process from header parsing to data manipulation, without involving
+the CPU. One obvious but sub-optimal design is to only let hardware parse the header, extract the function ID, and then
+pass the ID to the CPU. The CPU is responsible for locating the function, and initiate the accelerator for the second 
+time for data manipulation. 
