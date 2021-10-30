@@ -51,4 +51,7 @@ Although not pointed out explicitly, there are a few challenges in implementing 
 accelerator must be able to complete the whole process from header parsing to data manipulation, without involving
 the CPU. One obvious but sub-optimal design is to only let hardware parse the header, extract the function ID, and then
 pass the ID to the CPU. The CPU is responsible for locating the function, and initiate the accelerator for the second 
-time for data manipulation. 
+time for data manipulation. The paper points out that this design, despite its simplicity due to being stateless, 
+is not particularly useful, because the CPU is still involved in the handling process, and the communication cost
+of two rounds of message change can easily cripple performance.
+
