@@ -109,4 +109,7 @@ into its internal state machine into the buffer just allocated.
 After the payload is deserialized, the accelerator can choose to cast the RPC request, together with the function
 pointer and a pointer to the argument storage to a core for execution. The paper suggests that requests could have 
 affinity to a certain core, if a request of the same function has been scheduled on the core recently, to 
-maximize the locality benefits. 
+maximize the locality benefits. To track per-function core affinity, the accelerator maintains a CAM table in which
+each core has an entry storing the most recent function that was called. If an incoming function ID matches any
+of these, the function will be dispatched to that core. Otherwise, cores are selected in a round-robin manner to 
+spread the load evenly.
