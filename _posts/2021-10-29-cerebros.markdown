@@ -92,4 +92,7 @@ In order to send or receive messages, the CPU threads register Queue Pairs (QPs)
 the address of completed messages in the queue for CPU to fetch. 
 The CPU polls on the QP for new messages to arrive, and enqueues outgoing messages into the QP for sending. 
 
-
+With the RPC accelerator, the NIC must reserve space not only for transportation layer packets, but also for 
+deserialized data. The paper suggests that the accelerator should read the message head, once it is received, and
+reserve memory that is 4x the size of serialized payload, leveraging the observation that the wire format is at
+most 4x smaller than the original, uncompressed data. 
