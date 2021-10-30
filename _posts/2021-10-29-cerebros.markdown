@@ -25,6 +25,11 @@ version_mgmt:
    pointer-based data structures, can you reliably deserialize them without creating any fragmentation (especially
    in the NIC's on-board memory)?
 
+3. A malicious sender can exploit the buffer allocation restriction and keep sending huge messages to monopolize
+   the receiver buffer. This would cause other messages to be constantly NACK'ed.
+   This, of course, could happen in any settings, but in this design, since we allocate 4x more storage, the DoS is 
+   more likely to happen.
+
 This paper proposes Cerebros, a hardware accelerator that offloads the responsibility of RPC handling from the CPU
 to an NIC-attached module. The paper is motivated by the high performance overhead and ill-suited nature of RPC
 handling, and it proposes to offload part of the RPC handling, i.e., header parsing, function dispatch, and 
