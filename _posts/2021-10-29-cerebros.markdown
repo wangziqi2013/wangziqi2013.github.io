@@ -26,4 +26,7 @@ done with a single call instruction, is now replaced with more heavyweight RPC i
 that the overhead of performing RPCs in datacenters, dubbed as the "RPC tax", can be as much as 40% - 90% of the 
 total execution cycles. This situation can only become worse, because: (1) Microservices can also perform recursive RPC
 calls, such that the RPC tax will multiply and be propagated at all levels of the recursive call; 
-
+(2) Microservices usually implement simple functions to limit the complexity of a single module. The RPC overhead,
+however, is rather static, and does not scale with the complexity of the function. As functions become smaller,
+RPC tax will only continue to rise; and (3) Existing hardware already optimizes the transportation layer protocols,
+which further highlights the RPC overhead as the bottleneck in total execution cycle.
