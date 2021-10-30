@@ -68,4 +68,10 @@ instance of the design. Besides, having a centralized accelerator at the NIC sid
 i.e., RPC calls may be configured to only be dispatched to certain cores to maintain better locality, which is 
 impossible with a distributed design.
 
+We now describe the baseline hardware on which the accelerator is implemented. The accelerator co-locates with a 
+NIC, which already implements a hardware version of the transportation layer protocol. TCP packages will 
+be ACKed, sequenced, and reassembled by the NIC alone without invoking the OS level protocol stack. The NIC is assumed 
+to have a large on-board memory, which is addressable to the CPU as well, for buffering packets that have not been 
+assembled.
+
 
