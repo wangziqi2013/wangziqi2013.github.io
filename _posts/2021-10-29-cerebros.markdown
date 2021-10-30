@@ -95,4 +95,10 @@ The CPU polls on the QP for new messages to arrive, and enqueues outgoing messag
 With the RPC accelerator, the NIC must reserve space not only for transportation layer packets, but also for 
 deserialized data. The paper suggests that the accelerator should read the message head, once it is received, and
 reserve memory that is 4x the size of serialized payload, leveraging the observation that the wire format is at
-most 4x smaller than the original, uncompressed data. 
+most 4x smaller than the original, uncompressed data. If the buffer allocation fails, then the message needs to be 
+NACK'ed, indicating that the resource has run out on the receiving end, and it is up to the high-level policy to handle 
+the NACK. Then, as the rest of the message is being transferred, the accelerator loads the function pointer to be 
+called and the argument schema for deserializing the payload. Both pieces of information is stored in a lookup table,
+which is initialized by the RPC library. The schema contains information on reconstructing the in-memory object which
+are to be used as function arguments from their wire format, and the paper does not specify any particular scheme
+and wire format (so maybe just use a general one). 
