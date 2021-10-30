@@ -73,5 +73,7 @@ NIC, which already implements a hardware version of the transportation layer pro
 be ACKed, sequenced, and reassembled by the NIC alone without invoking the OS level protocol stack. The NIC is assumed 
 to have a large on-board memory, which is addressable to the CPU as well, for buffering packets that have not been 
 assembled.
-
+In order to send or receive messages, the CPU threads register Queue Pairs (QPs) to the NIC, and the NIC will put 
+the address of completed messages in the queue for CPU to fetch. 
+The CPU polls on the QP for new messages to arrive, and enqueues outgoing messages into the QP for sending. 
 
