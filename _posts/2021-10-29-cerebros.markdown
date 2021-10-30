@@ -20,7 +20,8 @@ version_mgmt:
 2. RPC overheads can be decomposed into three parts: Header parsing, function dispatching, and payload manipulation.
    The last part is usually the most expensive operation in RPC handling.
 
-
+3. An accelerator can be attached to the NIC to read incoming RPC messages (particularly headers), and overlap its 
+   operation with the receipt of the message. 
 
 **Comments:**
 
