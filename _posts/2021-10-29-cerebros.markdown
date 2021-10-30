@@ -38,4 +38,8 @@ three major tasks in the RPC handling process (other than executing the function
 attempt to optimize): Header parsing, function dispatching, and payload manipulation.
 Header parsing refers to the process of identifying the function type, message type, etc. Judging from the figure 
 presented in the paper, this part only incurs minor overhead.
+Function dispatching refers to the process of resolving the function ID or the string name of the function 
+to the actual function pointer on the host machine. Although this process is likely no more than a single table
+lookup, the paper mentions that the final function call is an indirect jump that is hard to both prefetch and predict,
+which can also cause significant overhead on the microarchitectural level.
 
