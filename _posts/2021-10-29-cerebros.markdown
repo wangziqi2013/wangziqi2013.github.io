@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. How does the accelerator know how much buffer space to allocate? TCP does not have the field to specify the 
+   length of the message, so it must be embedded within the message. In this case, the accelerator must be able to read
+   the first few packets (hopefully the first packet) before receiving the rest, in order to obtain the message
+   size, and allocate memory. I am not saying this is impossible. I am just saying that this can be more complicated 
+   than what the paper suggests, and would require tight coupling between the accelerator and the NIC.
+
 This paper proposes Cerebros, a hardware accelerator that offloads the responsibility of RPC handling from the CPU
 to an NIC-attached module. The paper is motivated by the high performance overhead and ill-suited nature of RPC
 handling, and it proposes to offload part of the RPC handling, i.e., header parsing, function dispatch, and 
@@ -59,4 +67,5 @@ the latter may seem more scalable, it incurs huge silicon overhead, since each c
 instance of the design. Besides, having a centralized accelerator at the NIC side also enables CPU affinity policies,
 i.e., RPC calls may be configured to only be dispatched to certain cores to maintain better locality, which is 
 impossible with a distributed design.
+
 
