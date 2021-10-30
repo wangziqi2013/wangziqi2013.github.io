@@ -42,4 +42,7 @@ Function dispatching refers to the process of resolving the function ID or the s
 to the actual function pointer on the host machine. Although this process is likely no more than a single table
 lookup, the paper mentions that the final function call is an indirect jump that is hard to both prefetch and predict,
 which can also cause significant overhead on the microarchitectural level.
-
+In the last step, the function (or the function handler) reads the payload of the RPC message, and deserializes the
+function arguments to build the in-memory objects being passed as function arguments.
+According to the figure, this stage incurs the most overhead, but mostly due to simple data movement, integer
+sign extension, etc., which is ill-suited for CPU, and can be conveniently offloaded to specialized hardware.
