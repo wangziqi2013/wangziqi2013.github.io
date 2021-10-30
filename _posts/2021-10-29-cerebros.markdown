@@ -54,4 +54,9 @@ pass the ID to the CPU. The CPU is responsible for locating the function, and in
 time for data manipulation. The paper points out that this design, despite its simplicity due to being stateless, 
 is not particularly useful, because the CPU is still involved in the handling process, and the communication cost
 of two rounds of message change can easily cripple performance.
+The second challenge is to determine whether the accelerator should be on the NIC side, or the CPU side. Although
+the latter may seem more scalable, it incurs huge silicon overhead, since each core must be equipped with an
+instance of the design. Besides, having a centralized accelerator at the NIC side also enables CPU affinity policies,
+i.e., RPC calls may be configured to only be dispatched to certain cores to maintain better locality, which is 
+impossible with a distributed design.
 
