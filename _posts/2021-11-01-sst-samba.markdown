@@ -162,4 +162,6 @@ core. The CPU, when issuing a memory access, enqueues a translation request (as 
 into the input link of the TLB hierarchy object. The TLB hierarchy object then, at each cycle, fetches the 
 requests from the input queue, and services the request from the TLB hierarchy, from the page walk cache, 
 and/or from the main memory by issuing page walk memory accesses. 
-
+After a translation request has been serviced, the TLB hierarchy forwards the request to the cache hierarchy via its 
+cache link. After the cache hierarchy completes the request, the request is sent back to the TLB hierarchy, which
+simply forwards it back to the CPU without any additional action.
