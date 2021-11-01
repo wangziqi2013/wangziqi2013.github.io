@@ -157,3 +157,9 @@ known virtual-to-physical translation at all levels of the page table, and sets 
 the page table. Besides, the class also defines link objects connecting to the CPU, the cache hierarchy, and the main 
 memory. Each `class TLBHierarchy` represents a private TLB hierarchy on each core.
 
+In the big picture of the memory hierarchy, the TLB hierarchy sits between the CPU and the cache hierarchy of each
+core. The CPU, when issuing a memory access, enqueues a translation request (as a `class MemEvent` object) 
+into the input link of the TLB hierarchy object. The TLB hierarchy object then, at each cycle, fetches the 
+requests from the input queue, and services the request from the TLB hierarchy, from the page walk cache, 
+and/or from the main memory by issuing page walk memory accesses. 
+
