@@ -1,0 +1,156 @@
+---
+layout: post
+title:  "Understanding TLB Simulation in Samba (SST)"
+date:   2021-11-01 00:59:00 -0500
+categories: article
+ontop: false
+---
+
+The Single-Level Multiple-Size TLBUnit
+--------------------------------------
+
+`class TLB` defines a set-associative, single-level TLB that supports multiple page sizes. Each page size is hosted by
+a standard implementation of a set-associative array (in data member `tags`), and different sizes use disjoint arrays.
+This class models functional features of a TLB array, such as lookup, insert, and replacement, as well as the timing
+traits, such as tag lookup latency, fixed service bandwidth per cycle, and deduplication of requests to the same 
+address.
+A multi-level TLB hierarchy (as is the case with most architectures nowadays) can be formed by connecting several
+objects using direct pointers (in data member `next_level`, note that it is not `class Link`, but just an object).
+The TLB hierarchy is connected with the CPU and the page walk cache via link objects, which is implemented in
+`class TLBhierarchy`, and not discussed here.
+Note that in the entire Samba implementation, `level` begins with one, and lower level means closer to the CPU.
+
+# The Set-Associative Array
+
+Each `class TLB` object implements a few size classes, the number of which is stored in data member `sizes` and is 
+specified in the configuration using the key `sizes_L%d` (`%d` is the level in the TLB hierarchy - same for other
+configuration keys, and we do not repeat this below). 
+Each size class has its own tag array, the size, associativity, and page size class is specified in the configuration
+using keys `size%d_L%d`, `assoc%d_L%d`, and `page_size%d_L%d`, respectively, where the first `%d` is the ID of the size 
+class. The size class ID is specified in the configuration file, and has no special meaning other than serving as a 
+unique identifier. Size classes are given in the unit of KB (1024-based) and stored in the `page_size%d_L%d` array
+in the unit of byte.
+The class constructor also derives the number of sets for each size class, and a mapping from page size class (in KB) 
+to the ID used in this class (i.e., the reverse mapping of `page_size%d_L%d` array), which are stored in data member 
+`sets` and `SIZE_LOOKUP`, respectively.
+
+For each size class, the object maintains three arrays for storing the relevant information: `tags`, `valid`,
+and `lru`, the meaning of which is just straightforward. They are all three-dimensional arrays, where the 
+first dimension is the page size class ID (i.e., output of `SIZE_LOOKUP`), the second dimension is the set number, 
+and the last dimension is the way number.
+
+The standard access functions for set-associative arrays are defined. 
+`insert_way()` inserts a new tag into a given way of a given size class. 
+`invalidate()` clears the `valid` bit of all entries in all size classes, and is used in TLB shootdowns (the `id`
+argument is redundant, and note that the `vadd` argument is page number, not full address).
+`check_hit()` performs lookup and signals hits or misses on a particular size class. 
+`find_victim_way()` returns the way number of the LRU entry on a particular size class.
+`update_lru()` promotes a given way to the MRU position on a particular size class.
+
+Note that TLBs implement precise LRU as the replacement algorithm. Each entry in a set is assigned an LRU counter 
+representing its position in the LRU stack (stored in data member `lru`). 
+The LRU entry is the one with a counter value of (number of ways - 1),
+and the MRU entry just has zero. An entry is moved to the MRU by incrementing all counters with a value 
+smaller than its value by one, and assigning the entry's counter with zero.
+
+# TLB Event Handling
+
+`class TLB` has only one event handling function, namely, `tick()`. This function is not registered to the clock, but
+it is merely called by the `tick()` function of its containing class, `class TLBhierarchy`.
+The `tick()` function simulates parallel operations of all buffers and processing logic in the TLB unit, and we discuss 
+them in the order that they appear in the source code as follows. 
+
+## Response Handling
+
+The response handling logic reads event objects that are responses of previous lookup requests to the lower level 
+component from the queue `pushed_back` (implemented with `std::vector`), which
+contains event object pointers. 
+A buddy structure, `pushed_back_size`, which is an `std::map`, maps response event objects using its event ID (a 
+globally unique ID) as keys to the page size class that the requested address is mapped to.
+Responses are handled by inserting them into the tag arrays for all size classes supported at this level that have
+smaller page sizes than the response size (e.g., if `pushed_back_size` indicates that the response size is 2MB, then
+the entry will be inserted into both the 4KB and 2KB array).
+
+Then, responses are matched with pending requests that missed the current level stored in `pending_misses`, and the
+pending requests are removed, because they have been serviced.
+
+Next, the completion time is computed by adding both the tag lookup latency as well as the uplink latency (times two,
+since this steps models both the request and response latency) to the current cycle, and add them into the 
+`ready_by` and `ready_by_size` queue (the latter simply copies over the response's size). 
+Event objects will be delivered to the upper level when the simulated cycle of the TLB unit reaches the `ready_by`
+value.
+
+Note that the TLB timing simulation is a little bit off, since both the link latency and tag lookup latency are 
+treated as if they were only paid when the miss request is serviced, which is not true.
+I guess this is an optimization to avoid the complication of adding `class Link` objects between TLB levels to
+properly simulate link latency, as well as splitting the lookup process into tag lookup and hit/miss handling.
+This also introduces weird artifacts. For example, the response is inserted into the array both here and below when the 
+response is eventually sent to the upper level.
+
+The TLB unit then checks the duplicated miss queue, `SAME_MISS`, which maps a virtual address to a set of 
+events that request the same address as the key while the "master miss" was being serviced when the duplicated request 
+came. If duplicated requests indeed exists, i.e., the address of the response occurs in `SAME_MISS`, then
+all the events will also be immediately serviced by adding them into `ready_by` and `ready_by_size`.
+The TLB unit also has another structure, namely `PENDING_MISS`, for tracking addresses with duplicated requests.
+This structure is logically just a set containing all addresses that are requested multiple times during the miss
+handling of the address.
+
+Note that the implementation is unnecessarily complex here, because the value of `SAME_MISS` and the `PENDING_MISS`
+by itself are logically unordered sets of addresses. The author of the code, however, chose to implement sets (which is 
+in the STL) as `std::map` objects with values being `1`. 
+
+The response object is removed from the queue after the above steps, and the next object is read from the response
+queue. The process drains all response objects at the simulated cycle, which also seems a little bit off, since in
+reality there is likely a maximum bandwidth for handling responses.
+
+## Request Handling
+
+`class TLB` models a fixed request processing bandwidth per cycle. If the number of requests arriving at a cycle 
+exceeds the processing bandwidth, only a subset of them will be handled, while the rest will be buffered.
+The request buffer of `class TLB` is modeled by data member `not_serviced`, which stores requests that have not been
+processed. 
+For each cycle before the bandwidth saturates, one request is taken from `not_serviced`, and is processed by 
+calling `check_hit()` with the requested address.
+If the lookup indicates a hit, the request is fulfilled immediately, and the event object is moved from `not_serviced`
+to `ready_by` and `ready_by_size` with a latency of lookup only (Note: I do not know why the upper link latency
+is not added to the total latency).
+
+If the lookup indicates a miss, however, then the request should be serviced by sending a request to the lower level
+component. This is achieved by calling `push_request()` (which simply calls `push_back()` on the request queue, 
+`not_serviced`) on the `next_level` pointer, if `next_level` is not NULL, meaning that the next level component 
+is a TLB. 
+Otherwise, we have reached the last level of the TLB hierarchy, and a TLB miss happens. In the latter case, the 
+request is pushed into the request queue of the page table walker (data member `PTW`).
+`class TLB` also models a maximum number of outstanding misses. If this threshold has not been reached,
+the request will be moved to `pending_misses`, if its address does not collides with the one of any another pending 
+miss. Alternatively, the request is moved to `SAME_MISS` and `PENDING_MISS` if it is deemed a duplicated request.
+In other words, `SAME_MISS` and `pending_misses` are exclusive, and `PENDING_MISS` covers all outstanding misses.
+
+If either the outstanding miss bandwidth or the request handling bandwidth is reached, the request will remain in
+`not_serviced` queue for the next cycle processing.
+
+## Sending Responses
+
+Responses generated at the current level, which can either be miss responses from the lower level or lookup hit
+responses at the current level, is processed by scanning `ready_by`.
+If an event completes at or before the current cycle, it will be first inserted into the local tag array
+(which, for some reason, is also done when miss responses are handled), removing itself from pending misses, and then 
+finally add the response event and the size into the response buffer of the upper level component.
+The response buffer of the upper level, which corresponds to `pushed_back` and `pushed_back_size` of the current 
+level, are accessible in the object as `service_back` and `service_back_size`.
+
+## Configuration-Specific Behaviors
+
+`class TLB` can behave differently for different configurations. First, multiple misses are fulfilled with the same 
+response only for L1 TLB (we described the process with this feature above). In other words, `SAME_MISS` and 
+`PENDING_MISS` are only used when `level` equals 1.
+Secondly, the configuration file can enable `parallel_mode` for any TLB unit, which means that lookup requests
+that hit the TLB do not incur any latency, and will logically be responded to the upper level in the same cycle.
+This is a consequence of the common practice of overlapping TLB lookup with cache tag lookup. If the TLB lookup hits,
+then its latency is entirely hidden by the cache lookup, and the cache simply ignores TLB latency.
+
+TLB Hierarchy
+-------------
+
+
+
