@@ -152,5 +152,8 @@ then its latency is entirely hidden by the cache lookup, and the cache simply ig
 TLB Hierarchy
 -------------
 
-
+`class TLBHierarchy` implements a multi-level TLB structure, with page walk handling, internal states for maintaining
+known virtual-to-physical translation at all levels of the page table, and sets of the current working set mapped by
+the page table. Besides, the class also defines link objects connecting to the CPU, the cache hierarchy, and the main 
+memory. Each `class TLBHierarchy` represents a private TLB hierarchy on each core.
 
