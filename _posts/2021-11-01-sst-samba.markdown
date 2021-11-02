@@ -375,4 +375,10 @@ The response message will be received by invoking page table walker's function `
 registered call back function). The function simply forwards the response in the form of a `class Samba` object,
 with the type being `EventType::PAGE_FAULT_RESPONSE`.
 
-
+On receiving the response event in `handleEvent()`, it will update the per-level tracking structure with the allocated
+physical page, meaning that the page table page is allocated a physical page, and addresses could be generated
+for later page walks, if the walk traverses through the page. 
+The function also decrements `fault_level`, if it is non-zero, and calls `allocatePage()` again, in order to allocate
+physical page for the next level of the page table.
+This process continues, until all nodes on the radix tree branch is allocated a physical page, in which case 
+`fault_level` would become zero, and page fault handling concludes. 
