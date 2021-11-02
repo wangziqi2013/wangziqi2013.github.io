@@ -256,3 +256,7 @@ The `to_mem` link is configured with port name `ptw_to_mem%d`, and the receiving
 This link serves as the channel for issuing memory operations and receiving results during a page table walk, but 
 a simpler page walk model is also allowed, in which the table walker is not connected to the memory hierarchy, and
 memory accesses during page walks are just simulated with a fixed latency.
+In the latter case, `self_connected` must be set in the configuration file, and `page_walk_latency` must also be 
+set to represent the fixed latency of a single memory operation. The link will then be configured as a self link,
+i.e., the page table walker just, effectively, calls its own handler function, `recvResp()`, when an event object is 
+sent over `to_mem`.
