@@ -179,4 +179,11 @@ TLB objects, and putting them into the array. The first level TLB is on `TLB_CAC
 As mentioned earlier, `class TLBUnit` objects are chained together using pointers, such that requests missing one
 level can be forwarded to the next level. This is achieved by passing the pointer of the previous level TLB to the 
 constructor of the current level.
+In addition, TLB units are also connected backwards by storing the pointers to the `pushed_back` and `pushed_back_size` 
+array of the previous level in the current level, as data member `service_back` and `service_back_size`.
+When a translation request is completed, it is passed back along the hierarchy by enqueuing it into the `service_back`
+and `service_back_size` array, which will then be processed by the previous level.
+In other words, translation requests are first passed down the hierarchy by calling `push_request()` on the next level,
+if the request misses the current level. When the request is serviced, it will be passed up the hierarchy by pushing 
+the completed request into `service_back` and `service_back_size` of the previous level.
 
