@@ -342,3 +342,8 @@ The fault address is tracked by data member `stall_addr`, and the fault address 
 pending page fault, namely, `PENDING_PAGE_FAULTS`, if not already.
 If there is no pending fault on the same address, the page fault is delivered via the link `s_EventChan`, using a 
 `class SambaEvent` of type `EventType::PAGE_FAULT`.
+As the last step, data member `stall` and `hold` are both set, indicating that a page fault is being handled.
+During page fault handling, normal page walk requests will not be processed (upper level TLBs are not affected), 
+which is indicated by the condition checking the `stall` flag at the beginning of `tick()`. If the flag is on, 
+then no processing will happen, and the page walker only waits for the fault handling to complete at each tick.
+
