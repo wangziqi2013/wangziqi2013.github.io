@@ -247,3 +247,12 @@ of the TLB hierarchy. Translation requests that miss all levels of the hierarchy
 a page walk will be performed.
 This class also implements a hierarchy of page walk caches, which caches the page table entries from all levels 
 (PGD, PUD, PMD, PTE), and reduces the number of memory accesses, if the walk hits the cache.
+
+# Linking to Other Components
+
+`class PageTableWalker` contains two link objects, namely, `to_mem` and `s_EventChan`.
+As with the case of `class TLBHierarchy`, both links are configured within `class Samba`. 
+The `to_mem` link is configured with port name `ptw_to_mem%d`, and the receiving end is registered to `recvResp()`.
+This link serves as the channel for issuing memory operations and receiving results during a page table walk, but 
+a simpler page walk model is also allowed, in which the table walker is not connected to the memory hierarchy, and
+memory accesses during page walks are just simulated with a fixed latency.
