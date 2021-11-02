@@ -350,8 +350,9 @@ while `hold` is defined as a data member in `class TLBHierarchy`, and the hierar
 from processing requests, if `hold` is set to `1`. The page walker holds a reference to `hold` in order to 
 notify the upper level that a fault is being handled.
 
-Also note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZE`, and the page table objects,
-are shared across all instances of page walkers, and hence they must always use the same virtual to physical mapping. 
+Also note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZExxx`, and the per-level
+page table page's physical address tracking structures (`PGD`, `PUD`, `PMD`, and `PTE`),
+are shared across all instances of page walkers, and hence they always use the same virtual to physical mapping. 
 Synchronization would not be a problem, as the simulation is already synchronous, and only processes one event at 
 the current cycle at a time. 
 One implication is that, although it seems impossible for `PENDING_PAGE_FAULTS` to have more than one pending requests,
@@ -389,4 +390,9 @@ Future page walk requests to the same address will not incur the page fault, as 
 that the address is already mapped.
 Besides, the page table walker will unstall on the next tick, since the address is no longer in `PENDING_PAGE_FAULTS`.
 This is checked at the beginning of `tick()`, and, if the address is truly missing from `PENDING_PAGE_FAULTS`,
-both `stall` and `hold` will be cleared, allowing page walk requests to be served on all page table walkers.
+both `stall` and `hold` will be cleared, allowing page walk requests and translation requests to be served by
+the page table walker and upper level TLBs, respectively.
+
+If `emulate_faults` is turned off, then all the physical address tracking structures will not be used. In this case,
+page walks have no reliable sources to generate the physical address for each step of the walk, and can thus only
+use random numbers as the page number to be accessed during the walk. 
