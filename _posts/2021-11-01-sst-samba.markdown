@@ -300,9 +300,9 @@ Additionally, a `class PageFaultHandler` object is initialized and added to the 
 Although the handler is not fully implemented yet in the current distribution of SST, its duty in page fault handling
 is to mimic an OS memory allocator that maintains a pool of available physical pages, and allocates these pages on 
 page faults for page table pages and data pages.
-It does not seem that timing of the page fault is simulated, since the actual page fault handling runs as an OS thread, 
-which can be simulated just like any instruction stream.
 
+It does not seem that timing of the page fault is simulated, but this is acceptable, since the actual page fault 
+handling runs as an OS thread, the timing of which is already modeled by just simulating the instruction stream.
 The major role of the page fault handler, therefore, is to simulate the OS's memory allocator such that the page table
 and data pages in the simulator can be assigned physical addresses. These addresses are tracked by multiple page table
 related structures, namely, data member `PGD`, `PUD`, `PMD`, and `PTE`. These structures are just `std::map`s that 
@@ -317,3 +317,11 @@ Handler registration is performed by calling `registerPageFaultHandler()`, which
 Each page table walker object has its member function `recvPageFaultResp()` registered, with a 
 `class PageFaultHandlerPacket` object as argument specifying the action, virtual address, physical address, and 
 the size class of the page of the handler event.
+
+## Page Fault Handling Control Flow
+
+We only discuss the non-confined page table walker case (controlled by data member `ptw_confined`, and configured by
+`ptw_confined`), which is the default. The confined page table walker seems to lack certain elements to work properly
+(e.g., it does not seem to stall the page table walker anywhere, but unstalls it when page fault is handled).
+
+
