@@ -291,3 +291,13 @@ The page walker emulates page faults, if `emulate_faults` is set in the configur
 page fault as separated code paths from the normal page walk request handling, which greatly simplifies the 
 structure of the logic.
 
+The entry of page fault related features in the link `s_EventChan`, which is initialized by `class Samba`. 
+All page fault related events are routed to this method, which maintains a state machine tracking the current 
+status of page fault handling.
+Additionally, a `class PageFaultHandler` object is initialized and added to the page table walker object. 
+Although the handler is not fully implemented yet in the current distribution of SST, its duty in page fault handling
+is to mimic an OS memory allocator that maintains a pool of available physical pages, and allocates these pages on 
+page faults for page table pages and data pages.
+It does not seem that timing of the page fault is simulated, since the actual page fault handling runs as an OS thread, 
+which can be simulated just like any instruction stream.
+
