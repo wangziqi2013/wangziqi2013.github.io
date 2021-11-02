@@ -337,4 +337,8 @@ is reasonable. Moreover, when the simulated OS changes the mapping (most likely 
 the simulator can be instructed to erase certain mappings from these structures, which will cause a new 
 physical address to be assigned on the next translation request for these entries.
 
-
+If the requested translation is not tracked by any of the three structures, then a page fault is signaled.
+The fault address is tracked by data member `stall_addr`, and the fault address is added to the structure tracking
+pending page fault, namely, `PENDING_PAGE_FAULTS`, if not already.
+If there is no pending fault on the same address, the page fault is delivered via the link `s_EventChan`, using a 
+`class SambaEvent` of type `EventType::PAGE_FAULT`.
