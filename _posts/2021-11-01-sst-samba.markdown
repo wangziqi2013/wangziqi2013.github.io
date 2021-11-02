@@ -363,5 +363,13 @@ structures, namely, `PGD`, `PUD`, `PMD`, and `PTE`. Page fault will be handled f
 page table page is not mapped, and physical pages will be allocated for the page table itself as well as the data page.
 After determining the level, which is stored in data member `fault_level`, the page fault handler's 
 `allocatePage()` is called to grab an unused physical page. 
-
+Although in the current distribution of SST, the `allocatePage()` function is not implemented, it is supposed to 
+maintain a pool of free physical pages, and just allocate one of them to the page fault handler. 
+The response event is supposed to sent by calling 
+the handler registered to its data member `pageFaultHandlerInterface` with the newly allocated physical address,
+using a `class PageFaultHandlerPacket` object and setting the action to 
+`PageFaultHandler::PageFaultHandlerAction::RESPONSE`.
+The response message will be received by invoking page table walker's function `recvPageFaultResp()` (which is the 
+registered call back function). The function simply forwards the response in the form of a `class Samba` object,
+with the type being `EventType::PAGE_FAULT_RESPONSE`.
 
