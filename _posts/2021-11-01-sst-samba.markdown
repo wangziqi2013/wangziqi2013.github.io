@@ -277,4 +277,10 @@ pages mapped at PTE, PMD, PUD, and PGD level (although the last is not supported
 Data member `page_size` stores the hardwired page sizes at all page table levels, with element zero being the 
 smallest page (4KB), and element three being the largest (512GB).
 
-
+The size and associativity of page walk caches are specified in the configuration file, using keys 
+`size%d_PTWC` and `assoc%d_PTWC`, respectively.
+Data member `size`, `assoc`, and `sets` store these parameters (`sets` is derived from the previous two).
+The `tag`, `valid`, and `lru` are implemented in the same manner as the TLB, which has already been described above. 
+Access functions for the page walk cache are also defined in exactly the same manner, i.e., `insert_way()` to insert
+an address tag, `invalidate()` to remove an entry, `check_hit()` to perform lookups, and 
+`find_victim_way()/update_lru()` for LRU evict and update.
