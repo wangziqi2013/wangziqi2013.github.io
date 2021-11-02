@@ -208,7 +208,18 @@ queue.
 Two links are maintained in the `class TLBHierarchy `object, `to_cache` and `to_cpu`. These two links are not 
 initialized in the object itself. Instead, the `class Samba` object configures the link, and passes them to the 
 TLB hierarchy object.
-The `to_cache` link is configured in the file as `cpu_to_mmu%d` (`%d` stands for the core ID; Same notion below),
+The `to_cpu` link is configured in the file as `cpu_to_mmu%d` (`%d` stands for the core ID; Same notions below),
 and the receiving call back function is registered to `handleEvent_CPU()`. This function is invoked when the CPU
 requests address translation, and it simply records the time of the event in `time_tracker` object, and forwards
 the request to the L1 TLB to initiate the translation process. 
+The `to_cache` link is configured in the file as `mmu_to_cache%d`, and the receiving call back is `handleEvent_CACHE()`.
+This function just relays the event to the CPU by calling `send()` on the `to_cpu` link.
+
+# TLB Hierarchy Event Handling
+
+The event handling function in `class TLBHierarchy` is `tick()`, and the logic is rather straightforward.
+If `hold` is `true`, which is set by the page table walker when a page walk is going on, the entire hierarchy
+is blocked from accepting new requests, and only the page table walker can make progress. In this case, only
+the page table walker ticks, and the function returns.
+Otherwise, each level of the TLB ticks, by calling `tick()` function on each of them, and the page table walker
+also ticks. 
