@@ -231,4 +231,10 @@ of the translation is provided by the page fault handler, then the physical addr
 set by calling `setAddr()` and `setBaseAddr()` on it. The physical address is obtained from the internal mapping
 table, `PTE`, which is defined in `class Samba` (in fact, the physical address of all levels of the page table are 
 maintained for page walk purposes which we discuss in the page walker section). 
-
+Then, the time it takes for servicing the request is computed by taking the difference between the current cycle,
+and the start cycle recorded in `time_tracker` (recall that the start cycle is recorded in `handleEvent_CPU()`), 
+followed by a statistics update.
+The event is eventually sent to the cache hierarchy by calling `send()` on the `to_cache` link, before it is removed
+from the `mem_reqs` and `mem_reqs_sizes` queue.
+Note that, in this process, the `mem_reqs_sizes` queue is ignored. The sole purpose of the queue is to keep the 
+interface consistent.
