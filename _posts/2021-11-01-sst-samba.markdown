@@ -304,11 +304,11 @@ page faults for page table pages and data pages.
 It does not seem that timing of the page fault is simulated, but this is acceptable, since the actual page fault 
 handling runs as an OS thread, the timing of which is already modeled by just simulating the instruction stream.
 The major role of the page fault handler, therefore, is to simulate the OS's memory allocator such that the page table
-and data pages in the simulator can be assigned physical addresses. These addresses are tracked by multiple page table
-related structures, namely, data member `PGD`, `PUD`, `PMD`, and `PTE`. These structures are just `std::map`s that 
-map virtual addresses on that level (i.e., upper bits of the VA) to physical addresses on the next level (or data page, 
-if PTE). New entries are inserted into these maps when the page fault handler returns the allocated physical page, on
-a page fault event, and the maps are queried during a hardware page walk to generate the physical addresses of 
+pages and data pages in the simulator can be assigned physical addresses. These addresses are tracked by multiple page 
+table related structures, namely, data member `PGD`, `PUD`, `PMD`, and `PTE`. These structures are just `std::map`s 
+that map virtual addresses on that level (i.e., upper bits of the VA) to physical addresses on the next level (or data 
+page, if PTE). New entries are inserted into these maps when the page fault handler returns the allocated physical 
+page, on a page fault event, and the maps are queried during a hardware page walk to generate the physical addresses of 
 page table entries at the corresponding level.
 
 The page fault handler defines an interface object, `class PageFaultHandlerInterface`, which is just a standard 
@@ -345,9 +345,23 @@ If there is no pending fault on the same address, the page fault is delivered vi
 As the last step, data member `stall` and `hold` are both set, indicating that a page fault is being handled.
 During page fault handling, normal page walk requests will not be processed (upper level TLBs are not affected), 
 which is indicated by the condition checking the `stall` flag at the beginning of `tick()`. If the flag is on, 
-then no processing will happen, and the page walker only waits for the fault handling to complete at each tick.
+then no processing will happen, and the page walker only waits for the fault handling at the stalled address 
+to complete at each tick.
 
 Note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZE`, and the page table objects,
 are shared across all instances of page walkers, and hence they must always use the same virtual to physical mapping. 
 Synchronization would not be a problem, as the simulation is already synchronous, and only processes one event at 
 the current cycle at a time. 
+One implication is that, although it seems impossible for `PENDING_PAGE_FAULTS` to have more than one pending requests,
+since a page walker can only handle one fault at a time, it is, in fact, possible that another page walker is 
+already in the process of handling a fault on the same address, and hence checking `PENDING_PAGE_FAULTS` is actually 
+necessary to avoid multiple allocations to the same virtual address.
+
+The page fault object sent via `s_EventChan` will invoke `handleEvent()` at a later cycle. On receiving the event,
+the function will first determine the level of the fault by querying the fault address in the per-level tracking 
+structures, namely, `PGD`, `PUD`, `PMD`, and `PTE`. Page fault will be handled from the highest level that the 
+page table page is not mapped, and physical pages will be allocated for the page table itself as well as the data page.
+After determining the level, which is stored in data member `fault_level`, the page fault handler's 
+`allocatePage()` is called to grab an unused physical page. 
+
+
