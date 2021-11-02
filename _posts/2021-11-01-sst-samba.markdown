@@ -187,3 +187,7 @@ In other words, translation requests are first passed down the hierarchy by call
 if the request misses the current level. When the request is serviced, it will be passed up the hierarchy by pushing 
 the completed request into `service_back` and `service_back_size` of the previous level.
 
+The `service_back` and `service_back_size` of the L1 TLB (or the page walker, if `levels` equals zero) is set to 
+data member `mem_reqs` and `mem_reqs_sizes` of `class TLBHierarchy`, such that a completed request will finally be
+delivered by the L1 TLB into these two arrays.
+
