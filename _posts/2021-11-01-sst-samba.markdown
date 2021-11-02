@@ -285,7 +285,9 @@ Access functions for the page walk cache are also defined in exactly the same ma
 an address tag, `invalidate()` to remove an entry, `check_hit()` to perform lookups, and 
 `find_victim_way()/update_lru()` for LRU evict and update.
 
-# Page Fault Handling
+# Page Fault Handling (w/ non-confined PTW)
+
+## Page Fault Handler
 
 The page walker emulates page faults, if `emulate_faults` is set in the configuration file. The page walker implements
 page fault as separated code paths from the normal page walk request handling, which greatly simplifies the 
@@ -308,3 +310,10 @@ map virtual addresses on that level (i.e., upper bits of the VA) to physical add
 if PTE). New entries are inserted into these maps when the page fault handler returns the allocated physical page, on
 a page fault event, and the maps are queried during a hardware page walk to generate the physical addresses of 
 page table entries at the corresponding level.
+
+The page fault handler defines an interface object, `class PageFaultHandlerInterface`, which is just a standard 
+functor object that, when being called, invokes a registered member function on a registered object instance.
+Handler registration is performed by calling `registerPageFaultHandler()`, which is done in `class Samba`'s constructor.
+Each page table walker object has its member function `recvPageFaultResp()` registered, with a 
+`class PageFaultHandlerPacket` object as argument specifying the action, virtual address, physical address, and 
+the size class of the page of the handler event.
