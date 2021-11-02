@@ -165,3 +165,10 @@ and/or from the main memory by issuing page walk memory accesses.
 After a translation request has been serviced, the TLB hierarchy forwards the request to the cache hierarchy via its 
 cache link. After the cache hierarchy completes the request, the request is sent back to the TLB hierarchy, which
 simply forwards it back to the CPU without any additional action.
+
+# Organizing TLBUnits to Form a Hierarchy
+
+Data member `coreID` is the core ID that the TLB hierarchy is attached to. Data member `levels` is the number of 
+levels in the TLB hierarchy, which must be a non-negative number. `levels` being zero means that there is no TLB,
+and hence no caching of translation results. Every memory operation in this case will trigger a page walk by directly
+enqueuing the request into the queue of the page walker.
