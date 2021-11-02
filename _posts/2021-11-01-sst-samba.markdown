@@ -238,3 +238,12 @@ The event is eventually sent to the cache hierarchy by calling `send()` on the `
 from the `mem_reqs` and `mem_reqs_sizes` queue.
 Note that, in this process, the `mem_reqs_sizes` queue is ignored. The sole purpose of the queue is to keep the 
 interface consistent.
+
+The Page Table Walker
+---------------------
+
+`class PageTableWalker` defines the Intel-compatible, four-level page table walker object, which is the last level 
+of the TLB hierarchy. Translation requests that miss all levels of the hierarchy will be passed to this object, and 
+a page walk will be performed.
+This class also implements a hierarchy of page walk caches, which caches the page table entries from all levels 
+(PGD, PUD, PMD, PTE), and reduces the number of memory accesses, if the walk hits the cache.
