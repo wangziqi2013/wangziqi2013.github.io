@@ -267,3 +267,14 @@ As for `s_EventChan`, it is merely a self link with 1 nanosecond link latency, a
 object being sent, so it is just a delayed function call.
 The `s_EventChan` is for handling page faults with an external page fault handler. 
 If `emulate_faults` is turned off, this link will not be initialized, and will not be used.
+
+# Page Walk Cache
+
+The page walker implements a page walk cache that stores intermediate results and PTE entries of previous page walks.
+The page walk cache only has one level, and every supported page size has its own page walk cache. 
+Currently, the number of page sizes is hardwired to four, namely, 4KB, 2MB, 1GB, and 512GB, which corresponds to 
+pages mapped at PTE, PMD, PUD, and PGD level (although the last is not supported on real hardware).
+Data member `page_size` stores the hardwired page sizes at all page table levels, with element zero being the 
+smallest page (4KB), and element three being the largest (512GB).
+
+
