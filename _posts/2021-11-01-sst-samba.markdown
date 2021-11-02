@@ -347,3 +347,7 @@ During page fault handling, normal page walk requests will not be processed (upp
 which is indicated by the condition checking the `stall` flag at the beginning of `tick()`. If the flag is on, 
 then no processing will happen, and the page walker only waits for the fault handling to complete at each tick.
 
+Note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZE`, and the page table objects,
+are shared across all instances of page walkers, and hence they must always use the same virtual to physical mapping. 
+Synchronization would not be a problem, as the simulation is already synchronous, and only processes one event at 
+the current cycle at a time. 
