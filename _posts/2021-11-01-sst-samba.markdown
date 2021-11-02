@@ -331,4 +331,10 @@ implementing the set semantics (I have no idea why the author does not just use 
 Addresses that already have their page fault handled will be entered into these three structures (which happens in 
 the page fault handler when a fault is fully handled), such
 that the simulator just assume that no further page fault would ever happen for these addresses, and the physical page
-they have been mapped to will not change since then. 
+they have been mapped to will not change since then. Recall that the fault simulation is mainly to assign physical
+addresses to virtual addresses for page walk address generation, and it does not care about timing, so this assumption 
+is reasonable. Moreover, when the simulated OS changes the mapping (most likely followed by a shootdown), 
+the simulator can be instructed to erase certain mappings from these structures, which will cause a new 
+physical address to be assigned on the next translation request for these entries.
+
+
