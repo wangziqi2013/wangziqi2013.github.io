@@ -324,4 +324,11 @@ We only discuss the non-confined page table walker case (controlled by data memb
 `ptw_confined`), which is the default. The confined page table walker seems to lack certain elements to work properly
 (e.g., it does not seem to stall the page table walker anywhere, but unstalls it when page fault is handled).
 
-
+Page fault is triggered in the main event loop `tick()`. For every page walk request in `not_serviced` queue, 
+the requested virtual address is checked against three structures that track the mapped pages, namely, 
+`MAPPED_PAGE_SIZE4KB`, `MAPPED_PAGE_SIZE2MB`, and `MAPPED_PAGE_SIZE1GB`. These three structures are `std::map` objects
+implementing the set semantics (I have no idea why the author does not just use `std::set`).
+Addresses that already have their page fault handled will be entered into these three structures (which happens in 
+the page fault handler when a fault is fully handled), such
+that the simulator just assume that no further page fault would ever happen for these addresses, and the physical page
+they have been mapped to will not change since then. 
