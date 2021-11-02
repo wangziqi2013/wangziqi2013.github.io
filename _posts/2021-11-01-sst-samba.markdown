@@ -223,3 +223,12 @@ is blocked from accepting new requests, and only the page table walker can make 
 the page table walker ticks, and the function returns.
 Otherwise, each level of the TLB ticks, by calling `tick()` function on each of them, and the page table walker
 also ticks. 
+
+Next, the TLB hierarchy handles completed translation requests that are passed up the hierarchy and pushed into its
+internal arrays, namely, `mem_reqs` and `mem_reqs_sizes`.
+For each completed translation request, if `emulate_faults` option is turned on, meaning that the physical address
+of the translation is provided by the page fault handler, then the physical address of the memory event object is 
+set by calling `setAddr()` and `setBaseAddr()` on it. The physical address is obtained from the internal mapping
+table, `PTE`, which is defined in `class Samba` (in fact, the physical address of all levels of the page table are 
+maintained for page walk purposes which we discuss in the page walker section). 
+
