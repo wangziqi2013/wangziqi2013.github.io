@@ -382,3 +382,11 @@ The function also decrements `fault_level`, if it is non-zero, and calls `alloca
 physical page for the next level of the page table.
 This process continues, until all nodes on the radix tree branch is allocated a physical page, in which case 
 `fault_level` would become zero, and page fault handling concludes. 
+A `class SambaEvent` of type `EventType::PAGE_FAULT_SERVED` is then sent to `s_EventChan` (i.e., to the same function
+as the sending one), on receiving of which, the page address is entered into `MAPPED_PAGE_SIZE4KB`, and 
+removed from `PENDING_PAGE_FAULTS`. 
+Future page walk requests to the same address will not incur the page fault, as `MAPPED_PAGE_SIZE4KB` will indicate
+that the address is already mapped.
+Besides, the page table walker will unstall on the next tick, since the address is no longer in `PENDING_PAGE_FAULTS`.
+This is checked at the beginning of `tick()`, and, if the address is truly missing from `PENDING_PAGE_FAULTS`,
+both `stall` and `hold` will be cleared, allowing page walk requests to be served on all page table walkers.
