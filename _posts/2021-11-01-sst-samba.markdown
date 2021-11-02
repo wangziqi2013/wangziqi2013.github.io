@@ -343,12 +343,14 @@ pending page fault, namely, `PENDING_PAGE_FAULTS`, if not already.
 If there is no pending fault on the same address, the page fault is delivered via the link `s_EventChan`, using a 
 `class SambaEvent` of type `EventType::PAGE_FAULT`.
 As the last step, data member `stall` and `hold` are both set, indicating that a page fault is being handled.
-During page fault handling, normal page walk requests will not be processed (upper level TLBs are not affected), 
-which is indicated by the condition checking the `stall` flag at the beginning of `tick()`. If the flag is on, 
-then no processing will happen, and the page walker only waits for the fault handling at the stalled address 
-to complete at each tick.
+During page fault handling, normal page walk requests will not be processed, and upper level TLBs will also stop
+processing translation requests. Note that `stall` and `hold` are always set or cleared together. The difference
+is that `stall` is a data member of `class PageTableWalker`, which is only read by the table walker itself,
+while `hold` is defined as a data member in `class TLBHierarchy`, and the hierarchy will prevent all TLBs
+from processing requests, if `hold` is set to `1`. The page walker holds a reference to `hold` in order to 
+notify the upper level that a fault is being handled.
 
-Note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZE`, and the page table objects,
+Also note that the tracking structures, such as `PENDING_PAGE_FAULTS`, `MAPPED_PAGE_SIZE`, and the page table objects,
 are shared across all instances of page walkers, and hence they must always use the same virtual to physical mapping. 
 Synchronization would not be a problem, as the simulation is already synchronous, and only processes one event at 
 the current cycle at a time. 
@@ -372,4 +374,5 @@ using a `class PageFaultHandlerPacket` object and setting the action to
 The response message will be received by invoking page table walker's function `recvPageFaultResp()` (which is the 
 registered call back function). The function simply forwards the response in the form of a `class Samba` object,
 with the type being `EventType::PAGE_FAULT_RESPONSE`.
+
 
