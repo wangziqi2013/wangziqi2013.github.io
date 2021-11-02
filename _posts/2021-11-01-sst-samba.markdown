@@ -301,3 +301,10 @@ page faults for page table pages and data pages.
 It does not seem that timing of the page fault is simulated, since the actual page fault handling runs as an OS thread, 
 which can be simulated just like any instruction stream.
 
+The major role of the page fault handler, therefore, is to simulate the OS's memory allocator such that the page table
+and data pages in the simulator can be assigned physical addresses. These addresses are tracked by multiple page table
+related structures, namely, data member `PGD`, `PUD`, `PMD`, and `PTE`. These structures are just `std::map`s that 
+map virtual addresses on that level (i.e., upper bits of the VA) to physical addresses on the next level (or data page, 
+if PTE). New entries are inserted into these maps when the page fault handler returns the allocated physical page, on
+a page fault event, and the maps are queried during a hardware page walk to generate the physical addresses of 
+page table entries at the corresponding level.
