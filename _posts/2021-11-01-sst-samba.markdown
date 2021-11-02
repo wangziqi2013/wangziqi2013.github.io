@@ -257,6 +257,13 @@ This link serves as the channel for issuing memory operations and receiving resu
 a simpler page walk model is also allowed, in which the table walker is not connected to the memory hierarchy, and
 memory accesses during page walks are just simulated with a fixed latency.
 In the latter case, `self_connected` must be set in the configuration file, and `page_walk_latency` must also be 
-set to represent the fixed latency of a single memory operation. The link will then be configured as a self link,
-i.e., the page table walker just, effectively, calls its own handler function, `recvResp()`, when an event object is 
-sent over `to_mem`.
+set to represent the fixed latency of a single memory operation (in nanoseconds). 
+The link will then be configured as a self link,
+i.e., the page table walker just, effectively, calls its own handler function, `recvResp()`, with a delay, 
+when an event object is sent over `to_mem`.
+
+As for `s_EventChan`, it is merely a self link with 1 nanosecond link latency, and the receiving end is registered with 
+`handleEvent()`. Every `send()` operation on `s_EventChan` will cause `handleEvent()` to be invoked with the event 
+object being sent, so it is just a delayed function call.
+The `s_EventChan` is for handling page faults with an external page fault handler. 
+If `emulate_faults` is turned off, this link will not be initialized, and will not be used.
