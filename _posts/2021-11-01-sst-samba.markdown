@@ -191,3 +191,11 @@ The `service_back` and `service_back_size` of the L1 TLB (or the page walker, if
 data member `mem_reqs` and `mem_reqs_sizes` of `class TLBHierarchy`, such that a completed request will finally be
 delivered by the L1 TLB into these two arrays.
 
+The `TLBHierarchy` object also contains the page table walker, as a `class PageTableWalker` object, the reference of 
+which is stored in data member `PTW`. The page table walker is the last level of the hierarchy that handles a 
+translation request, and it honors the same event passing mechanism as the TLB units. 
+To elaborate: The page table walker is registered with the last level of the hierarchy into its `PTW` data member
+(and in this case the `next_level` will be `NULL`). This is done during the initialization of the `class TLBHierarchy`
+object. Memory events for translation, if missed the last TLB
+level, is passed to the page table walker by calling `push_request()` on the walker object.
+
