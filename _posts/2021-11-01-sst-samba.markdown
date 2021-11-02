@@ -218,7 +218,7 @@ This function just relays the event to the CPU by calling `send()` on the `to_cp
 # TLB Hierarchy Event Handling
 
 The event handling function in `class TLBHierarchy` is `tick()`, and the logic is rather straightforward.
-If `hold` is `true`, which is set by the page table walker when a page walk is going on, the entire hierarchy
+If `hold` is `true`, which is set by the page table walker when a page fault is being serviced, the entire hierarchy
 is blocked from accepting new requests, and only the page table walker can make progress. In this case, only
 the page table walker ticks, and the function returns.
 Otherwise, each level of the TLB ticks, by calling `tick()` function on each of them, and the page table walker
@@ -284,3 +284,10 @@ The `tag`, `valid`, and `lru` are implemented in the same manner as the TLB, whi
 Access functions for the page walk cache are also defined in exactly the same manner, i.e., `insert_way()` to insert
 an address tag, `invalidate()` to remove an entry, `check_hit()` to perform lookups, and 
 `find_victim_way()/update_lru()` for LRU evict and update.
+
+# Page Fault Handling
+
+The page walker emulates page faults, if `emulate_faults` is set in the configuration file. The page walker implements
+page fault as separated code paths from the normal page walk request handling, which greatly simplifies the 
+structure of the logic.
+
