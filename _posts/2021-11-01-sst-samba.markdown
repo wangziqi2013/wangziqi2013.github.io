@@ -6,8 +6,7 @@ categories: article
 ontop: false
 ---
 
-The Single-Level Multiple-Size TLBUnit
---------------------------------------
+## The Single-Level Multiple-Size TLBUnit
 
 `class TLB` defines a set-associative, single-level TLB that supports multiple page sizes. Each page size is hosted by
 a standard implementation of a set-associative array (in data member `tags`), and different sizes use disjoint arrays.
@@ -20,7 +19,7 @@ The TLB hierarchy is connected with the CPU and the page walk cache via link obj
 `class TLBhierarchy`, and not discussed here.
 Note that in the entire Samba implementation, `level` begins with one, and lower level means closer to the CPU.
 
-# The Set-Associative Array
+### The Set-Associative Array
 
 Each `class TLB` object implements a few size classes, the number of which is stored in data member `sizes` and is 
 specified in the configuration using the key `sizes_L%d` (`%d` is the level in the TLB hierarchy - same for other
@@ -53,14 +52,14 @@ The LRU entry is the one with a counter value of (number of ways - 1),
 and the MRU entry just has zero. An entry is moved to the MRU by incrementing all counters with a value 
 smaller than its value by one, and assigning the entry's counter with zero.
 
-# TLB Event Handling
+### TLB Event Handling
 
 `class TLB` has only one event handling function, namely, `tick()`. This function is not registered to the clock, but
 it is merely called by the `tick()` function of its containing class, `class TLBhierarchy`.
 The `tick()` function simulates parallel operations of all buffers and processing logic in the TLB unit, and we discuss 
 them in the order that they appear in the source code as follows. 
 
-## Response Handling
+#### Response Handling
 
 The response handling logic reads event objects that are responses of previous lookup requests to the lower level 
 component from the queue `pushed_back` (implemented with `std::vector`), which
@@ -103,7 +102,7 @@ The response object is removed from the queue after the above steps, and the nex
 queue. The process drains all response objects at the simulated cycle, which also seems a little bit off, since in
 reality there is likely a maximum bandwidth for handling responses.
 
-## Request Handling
+#### Request Handling
 
 `class TLB` models a fixed request processing bandwidth per cycle. If the number of requests arriving at a cycle 
 exceeds the processing bandwidth, only a subset of them will be handled, while the rest will be buffered.
@@ -129,7 +128,7 @@ In other words, `SAME_MISS` and `pending_misses` are exclusive, and `PENDING_MIS
 If either the outstanding miss bandwidth or the request handling bandwidth is reached, the request will remain in
 `not_serviced` queue for the next cycle processing.
 
-## Sending Responses
+#### Sending Responses
 
 Responses generated at the current level, which can either be miss responses from the lower level or lookup hit
 responses at the current level, is processed by scanning `ready_by`.
@@ -139,7 +138,7 @@ finally add the response event and the size into the response buffer of the uppe
 The response buffer of the upper level, which corresponds to `pushed_back` and `pushed_back_size` of the current 
 level, are accessible in the object as `service_back` and `service_back_size`.
 
-## Configuration-Specific Behaviors
+#### Configuration-Specific Behaviors
 
 `class TLB` can behave differently for different configurations. First, multiple misses are fulfilled with the same 
 response only for L1 TLB (we described the process with this feature above). In other words, `SAME_MISS` and 
@@ -149,8 +148,7 @@ that hit the TLB do not incur any latency, and will logically be responded to th
 This is a consequence of the common practice of overlapping TLB lookup with cache tag lookup. If the TLB lookup hits,
 then its latency is entirely hidden by the cache lookup, and the cache simply ignores TLB latency.
 
-TLB Hierarchy
--------------
+## TLB Hierarchy
 
 `class TLBHierarchy` implements a multi-level TLB structure, with page walk handling, internal states for maintaining
 known virtual-to-physical translation at all levels of the page table, and sets of the current working set mapped by
@@ -166,7 +164,7 @@ After a translation request has been serviced, the TLB hierarchy forwards the re
 cache link. After the cache hierarchy completes the request, the request is sent back to the TLB hierarchy, which
 simply forwards it back to the CPU without any additional action.
 
-# Organizing TLBUnits to Form a Hierarchy
+### Organizing TLBUnits to Form a Hierarchy
 
 Data member `coreID` is the core ID that the TLB hierarchy is attached to. Data member `levels` is the number of 
 levels in the TLB hierarchy, which must be a non-negative number. `levels` being zero means that there is no TLB,
@@ -215,7 +213,7 @@ the request to the L1 TLB to initiate the translation process.
 The `to_cache` link is configured in the file as `mmu_to_cache%d`, and the receiving call back is `handleEvent_CACHE()`.
 This function just relays the event to the CPU by calling `send()` on the `to_cpu` link.
 
-# TLB Hierarchy Event Handling
+### TLB Hierarchy Event Handling
 
 The event handling function in `class TLBHierarchy` is `tick()`, and the logic is rather straightforward.
 If `hold` is `true`, which is set by the page table walker when a page fault is being serviced, the entire hierarchy
@@ -239,8 +237,7 @@ from the `mem_reqs` and `mem_reqs_sizes` queue.
 Note that, in this process, the `mem_reqs_sizes` queue is ignored. The sole purpose of the queue is to keep the 
 interface consistent.
 
-The Page Table Walker
----------------------
+## The Page Table Walker
 
 `class PageTableWalker` defines the Intel-compatible, four-level page table walker object, which is the last level 
 of the TLB hierarchy. Translation requests that miss all levels of the hierarchy will be passed to this object, and 
@@ -248,7 +245,7 @@ a page walk will be performed.
 This class also implements a hierarchy of page walk caches, which caches the page table entries from all levels 
 (PGD, PUD, PMD, PTE), and reduces the number of memory accesses, if the walk hits the cache.
 
-# Linking to Other Components
+### Linking to Other Components
 
 `class PageTableWalker` contains two link objects, namely, `to_mem` and `s_EventChan`.
 As with the case of `class TLBHierarchy`, both links are configured within `class Samba`. 
@@ -268,7 +265,7 @@ object being sent, so it is just a delayed function call.
 The `s_EventChan` is for handling page faults with an external page fault handler. 
 If `emulate_faults` is turned off, this link will not be initialized, and will not be used.
 
-# Page Walk Cache
+### Page Walk Cache
 
 The page walker implements a page walk cache that stores intermediate results and PTE entries of previous page walks.
 The page walk cache only has one level, and every supported page size has its own page walk cache. 
@@ -285,9 +282,9 @@ Access functions for the page walk cache are also defined in exactly the same ma
 an address tag, `invalidate()` to remove an entry, `check_hit()` to perform lookups, and 
 `find_victim_way()/update_lru()` for LRU evict and update.
 
-# Page Fault Handling (w/ non-confined PTW)
+### Page Fault Handling (w/ non-confined PTW)
 
-## Page Fault Handler
+#### Page Fault Handler
 
 The page walker emulates page faults, if `emulate_faults` is set in the configuration file. The page walker implements
 page fault as separated code paths from the normal page walk request handling, which greatly simplifies the 
@@ -318,7 +315,7 @@ Each page table walker object has its member function `recvPageFaultResp()` regi
 `class PageFaultHandlerPacket` object as argument specifying the action, virtual address, physical address, and 
 the size class of the page of the handler event.
 
-## Page Fault Handling Control Flow
+#### Page Fault Handling Control Flow
 
 We only discuss the non-confined page table walker case (controlled by data member `ptw_confined`, and configured by
 `ptw_confined`), which is the default. The confined page table walker seems to lack certain elements to work properly
@@ -368,7 +365,7 @@ After determining the level, which is stored in data member `fault_level`, the p
 `allocatePage()` is called to grab an unused physical page. 
 Although in the current distribution of SST, the `allocatePage()` function is not implemented, it is supposed to 
 maintain a pool of free physical pages, and just allocate one of them to the page fault handler. 
-The response event is supposed to sent by calling 
+The response event is supposed to be sent by calling 
 the handler registered to its data member `pageFaultHandlerInterface` with the newly allocated physical address,
 using a `class PageFaultHandlerPacket` object and setting the action to 
 `PageFaultHandler::PageFaultHandlerAction::RESPONSE`.
@@ -396,3 +393,5 @@ the page table walker and upper level TLBs, respectively.
 If `emulate_faults` is turned off, then all the physical address tracking structures will not be used. In this case,
 page walks have no reliable sources to generate the physical address for each step of the walk, and can thus only
 use random numbers as the page number to be accessed during the walk. 
+
+
