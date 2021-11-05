@@ -422,5 +422,13 @@ Note that only one system page size is supported for now, which is specified usi
 file (unit is KB, so valid values are `4`, `2048`, and `1024 * 1024`), despite the fact that upper level TLBs may 
 have several size classes.
 
+On the other hand, if all of the page walk caches signal misses, or one of them hit, but the level of hit is 
+higher than the system page size, then page walks are still needed to retrieve the missing levels from the 
+in-memory page table. The number of levels to fetch is computed and stored in local variable `k` based on the system
+page size.
+The handler then attempts to add the walk request into the pending request queue, `pending_misses`, if the 
+maximum number of pending requests per cycle has not been reached (data member `max_outstanding`, specified with
+`max_outstanding_PTWC` in the configuration file). If the limit is reached, then the request remains in the 
+`not_serviced` queue, and will be re-handled in the next cycle.
 
 
