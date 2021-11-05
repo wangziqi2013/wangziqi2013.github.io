@@ -481,3 +481,7 @@ The address generation process is similar to the one in `tick()`, with the excep
 different physical address tracking structures (`PGD`, `PUD`, `PMD`, and `PTE`) according to the value of `WSR_COUNT`.
 A new `class MemEvent` object is allocated to convey the next level access, and sent via the link by calling 
 `send()` on `to_mem` link.
+The `WSR_COUNT` value of the walk instance is also decremented by one, and the `MEM_REQ` mapping is also updated to 
+reflect the most recent memory access (instance ID does not change, but the event object is the newly allocated one).
+This process will be repeated several times, until the page walk reaches the terminating level with regard to the 
+configured OS page size.
