@@ -402,5 +402,16 @@ The first thing that `tick()` does is to check whether the current page table wa
 true, then no page table walk is performed, and the function waits for fault handling to complete.
 Otherwise, page walk requests are fetched from `not_serviced` queue, which is enqueued by the last level TLB by
 calling `push_request()` on the page walker, and examined for processing.
+The page table walker also implements a maximum number of walks per cycle with local variable `dispatched`, which is 
+incremented for every request serviced at the current cycle. If this value exceeds the maximum, specified by 
+`max_width_PTWC` in the configuration, and stored in data member `max_width`.
+Then page fault logic checks whether the page walk will induce a fault. Note that this deviates from the theoretical
+way that a page table walker works, where page fault is only triggered when page walk encounters an invalid entry
+at some levels.
+On a page fault, as discussed earlier, the handling function will block the processing and all upper level TLBs, until
+fault handling completes.
+If not, the next step is to check page walk cache. All caches are assumed to be checked in parallel at the same cycle,
+and priority of hit is given to lower levels (i.e., PTE > PMD > PUD > PGD), since lower level hits in the page table 
+leads to shorter page walk path.
 
 
