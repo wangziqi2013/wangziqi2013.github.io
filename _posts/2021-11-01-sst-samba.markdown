@@ -455,4 +455,10 @@ All three of them use the page walk instance ID as the key.
 This map is used to recover the page walk instance ID from the event object when it is fulfilled by the memory,
 and the instance ID is then used to retrieve the status of the current walk.
 
+The initial memory address to be accessed for the current step of the page walk is either generated as a random number,
+if page fault emulation (i.e., allocation of physical pages for page table pages) is turned off,
+or computed as the address of one of the PGD entries depending on bit 39 to 47 of the virtual address in the request.
+Note that this seems inconsistent with what an actual page walk would behave, since an actual page walk will traverse
+down the page table from the lowest level whose page walk cache is hit, but here the traversal always begins from the 
+top level (i.e., PGD).
 
