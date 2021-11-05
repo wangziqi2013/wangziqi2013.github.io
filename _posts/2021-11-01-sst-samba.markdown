@@ -485,3 +485,11 @@ The `WSR_COUNT` value of the walk instance is also decremented by one, and the `
 reflect the most recent memory access (instance ID does not change, but the event object is the newly allocated one).
 This process will be repeated several times, until the page walk reaches the terminating level with regard to the 
 configured OS page size.
+
+We now return to the event handling loop in `tick()`. After dealing with the memory access of page walks, the 
+walk request is removed from the `not_serviced` queue. Pending page walks still remain in the `pending_misses`
+queue until they are moved from `ready_by` queue to the last level TLB's response message queue.
+The last step of event handling is to check completed requests in the `ready_by` queue, and move 
+them into the last level TLB's response queue, if the current tick cycle is no less than the completion cycle
+of the request.
+
