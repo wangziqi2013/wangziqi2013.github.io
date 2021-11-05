@@ -13,7 +13,10 @@ The first is the TLB unit (`class TLB`) that represent a single level of the TLB
 page sizes, where each size class has its own separate lookup structure.
 The second is the TLB hierarchy (`class TLBhierarchy`) which serves as a container class for multi-level TLBs
 and the page walker, and defines the interface for communicating with the CPU and the cache hierarchy.
-
+The third is the page table walker (`class PageTableWalker`), which is responsible for simulating the memory
+accesses when a translation request misses all levels of the TLB in the hierarchy. It also emulates the OS physical
+page allocator, and tracks the physical addresses (if `emulate_faults` is turned on) of all known page table entries at 
+all levels.
 
 ## The Single-Level Multiple-Size TLBUnit
 
