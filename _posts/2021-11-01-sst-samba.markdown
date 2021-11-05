@@ -492,4 +492,8 @@ queue until they are moved from `ready_by` queue to the last level TLB's respons
 The last step of event handling is to check completed requests in the `ready_by` queue, and move 
 them into the last level TLB's response queue, if the current tick cycle is no less than the completion cycle
 of the request.
+This is done by scanning the `ready_by` queue, comparing the completion cycle of the request (which is the 
+value of the map), and for every request whose completion cycle is no less than the current tick cycle,
+insert the requested virtual address into the PTE cache (on index zero), if not already, after which LRU is 
+also updated.
 
