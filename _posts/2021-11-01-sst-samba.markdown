@@ -438,4 +438,11 @@ event, and the result will be immediately added to the `ready_by` array with a d
 `latency + 2 * upper_link_latency + page_walk_latency` cycles. The page walk latency can be configured using 
 `page_walk_latency` in the configuration file, and is defaulted to 50 cycles.
 
+In the more difficult case, the page table walker is actually connected to a memory object, then the walk is simulated
+by issuing instructions to the memory one after another, beginning from the lowest level that hits the page walk
+cache, until the required number of steps is reached (stored in local variable `k`).
+Since page walks require a multi-round message exchange between the page table walker and the memory system, the 
+page table walker, therefore, uses state machines to track the status of in-progress walk instances across
+calls to `tick()` and the memory call back function, `recvResp()`.
+
 
