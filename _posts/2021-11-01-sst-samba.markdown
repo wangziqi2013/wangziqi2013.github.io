@@ -449,7 +449,8 @@ the corresponding request event object is added to the queue, `WID_EV`.
 Four extra mapping structures track additional information of the page walk's status:
 `WSR_COUNT` tracks the remaining number of steps to walk down the page table;
 `WID_Add` tracks the virtual address of the walk;
-`WSR_READY` tracks whether the page table walk has completed using boolean flags.
+`WSR_READY` tracks whether the page table walk has completed using boolean flags (note that this structure is
+only set, but not used anywhere).
 All three of them use the page walk instance ID as the key.
 `MEM_REQ` maps the memory access request (not the translation request!) event ID to the global unique ID. 
 This map is used to recover the page walk instance ID from the event object when it is fulfilled by the memory,
@@ -466,3 +467,9 @@ virtual address, and the address to be accessed.
 The memory access request's ID is entered into `MEM_REQ`, and the request itself is sent to the memory for 
 fulfillment by calling `send()` on data member `to_mem`.
 
+Once the memory request is fulfilled, the call back function, `recvResp()`, will be invoked.
+The page walk instance ID is first fetched from the mapping structure `MEM_REQ`, using the request ID stored in the 
+response event object (by calling `getResponseToID()`), and stored in a local variable `pw_id`. 
+The virtual address, which is tracked by `WID_Add`, is first inserted, by calling `insert_way()`, into the page 
+walk cache of the current level (tracked by `WSR_COUNT`), after evicting an existing entry from the structure by 
+calling `find_victim_way()`.
