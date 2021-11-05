@@ -6,7 +6,7 @@ categories: article
 ontop: false
 ---
 
-# Samba
+# Samba Overview
 
 Samba (defined in `class Samba`) is the TLB simulation implementation in SST. It consists of four (sub)components.
 The first is the TLB unit (`class TLB`) that represent a single level of the TLB potentially supporting multiple 
@@ -17,6 +17,18 @@ The third is the page table walker (`class PageTableWalker`), which is responsib
 accesses when a translation request misses all levels of the TLB in the hierarchy. It also emulates the OS physical
 page allocator, and tracks the physical addresses (if `emulate_faults` is turned on) of all known page table entries at 
 all levels.
+All Samba components run the standard discrete event simulation using the simulation infrastructure, including timers
+that tick periodically, and links that deliver event objects to the registered call back function with an 
+optional delay.
+Components are driven by the clock, which is registered with the `tick()` function as a call back.
+Components may also communicate with each other or even with themselves by sending messages via the link objects. 
+
+At the functional level, the Samba TLB sits between the CPU and the memory hierarchy. CPU side requests for memory
+accesses would always be handled as translation requests, which, after translation concludes, will be forwarded to
+the memory hierarchy as an access request.
+Memory responses, on the other hand, will just pass through the Samba TLB, and be relayed directly back to the CPU.
+The Samba TLB itself may also issue memory requests for page table walks using a separate TLB-memory
+channel.
 
 ## The Single-Level Multiple-Size TLBUnit
 
