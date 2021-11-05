@@ -431,4 +431,11 @@ maximum number of pending requests per cycle has not been reached (data member `
 `max_outstanding_PTWC` in the configuration file). If the limit is reached, then the request remains in the 
 `not_serviced` queue, and will be re-handled in the next cycle.
 
+If the request is successfully added to the `pending_misses` queue, the handler will then proceed to model the timing 
+of the page walk. In the simpler case, if the page walker is not connected to a memory object (`self_connected` is set
+in the configuration file, causing data member `to_mem` to be set as NULL), page walks are handled as a fixed latency
+event, and the result will be immediately added to the `ready_by` array with a delay of 
+`latency + 2 * upper_link_latency + page_walk_latency` cycles. The page walk latency can be configured using 
+`page_walk_latency` in the configuration file, and is defaulted to 50 cycles.
+
 
