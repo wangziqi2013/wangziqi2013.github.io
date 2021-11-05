@@ -473,3 +473,11 @@ response event object (by calling `getResponseToID()`), and stored in a local va
 The virtual address, which is tracked by `WID_Add`, is first inserted, by calling `insert_way()`, into the page 
 walk cache of the current level (tracked by `WSR_COUNT`), after evicting an existing entry from the structure by 
 calling `find_victim_way()`.
+Then, if the page walk has reached the lowest level, indicated by the `WSR_COUNT` value of the instance ID being
+zero, then the page walk concludes, and the translation request is added to the `ready_by` and `ready_by_size`
+queue with an extra latency of `latency + 2 * upper_link_latency` to model the page walk cache lookup and link delay.
+Otherwise, more memory accesses need to be made to read lower levels of the page table. 
+The address generation process is similar to the one in `tick()`, with the exception that the address is read from
+different physical address tracking structures (`PGD`, `PUD`, `PMD`, and `PTE`) according to the value of `WSR_COUNT`.
+A new `class MemEvent` object is allocated to convey the next level access, and sent via the link by calling 
+`send()` on `to_mem` link.
