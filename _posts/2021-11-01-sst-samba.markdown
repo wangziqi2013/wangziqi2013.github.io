@@ -6,6 +6,15 @@ categories: article
 ontop: false
 ---
 
+# Samba
+
+Samba (defined in `class Samba`) is the TLB simulation implementation in SST. It consists of four (sub)components.
+The first is the TLB unit (`class TLB`) that represent a single level of the TLB potentially supporting multiple 
+page sizes, where each size class has its own separate lookup structure.
+The second is the TLB hierarchy (`class TLBhierarchy`) which serves as a container class for multi-level TLBs
+and the page walker, and defines the interface for communicating with the CPU and the cache hierarchy.
+
+
 ## The Single-Level Multiple-Size TLBUnit
 
 `class TLB` defines a set-associative, single-level TLB that supports multiple page sizes. Each page size is hosted by
