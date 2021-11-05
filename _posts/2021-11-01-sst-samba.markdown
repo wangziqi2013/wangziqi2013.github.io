@@ -413,5 +413,14 @@ fault handling completes.
 If not, the next step is to check page walk cache. All caches are assumed to be checked in parallel at the same cycle,
 and priority of hit is given to lower levels (i.e., PTE > PMD > PUD > PGD), since lower level hits in the page table 
 leads to shorter page walk path.
+If the PTE page walk cache is hit, indicating that the translation entry is already in the cache (`k == 0`), 
+then no page walk is needed, and the request can be fulfilled either at the current cycle (if parallel mode is on,
+which is typical for VIPT L1 caches), or `latency` cycles after the current cycle.
+In either case, the event object representing the request is moved to `ready_by` queue, and the corresponding 
+`ready_by_size` queue is populated with the system page size.
+Note that only one system page size is supported for now, which is specified using `os_page_size` in the configuration
+file (unit is KB, so valid values are `4`, `2048`, and `1024 * 1024`), despite the fact that upper level TLBs may 
+have several size classes.
+
 
 
