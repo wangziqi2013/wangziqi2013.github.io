@@ -394,4 +394,13 @@ If `emulate_faults` is turned off, then all the physical address tracking struct
 page walks have no reliable sources to generate the physical address for each step of the walk, and can thus only
 use random numbers as the page number to be accessed during the walk. 
 
+### Page Table Walk Event Handling
+
+The main page table walk logic is implemented in function `tick()` and the call back function of the link connecting
+to the page table walker with memory, `recvResp()`.
+The first thing that `tick()` does is to check whether the current page table walker is stalled in a page fault, and if 
+true, then no page table walk is performed, and the function waits for fault handling to complete.
+Otherwise, page walk requests are fetched from `not_serviced` queue, which is enqueued by the last level TLB by
+calling `push_request()` on the page walker, and examined for processing.
+
 
