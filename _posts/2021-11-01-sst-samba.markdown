@@ -444,5 +444,15 @@ cache, until the required number of steps is reached (stored in local variable `
 Since page walks require a multi-round message exchange between the page table walker and the memory system, the 
 page table walker, therefore, uses state machines to track the status of in-progress walk instances across
 calls to `tick()` and the memory call back function, `recvResp()`.
+Each page walker instance is assigned a globally unique ID by incrementing data member `mmu_id`, and is then 
+the corresponding request event object is added to the queue, `WID_EV`.
+Four extra mapping structures track additional information of the page walk's status:
+`WSR_COUNT` tracks the remaining number of steps to walk down the page table;
+`WID_Add` tracks the virtual address of the walk;
+`WSR_READY` tracks whether the page table walk has completed using boolean flags.
+All three of them use the page walk instance ID as the key.
+`MEM_REQ` maps the memory access request (not the translation request!) event ID to the global unique ID. 
+This map is used to recover the page walk instance ID from the event object when it is fulfilled by the memory,
+and the instance ID is then used to retrieve the status of the current walk.
 
 
