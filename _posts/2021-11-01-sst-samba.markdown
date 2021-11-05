@@ -461,4 +461,8 @@ or computed as the address of one of the PGD entries depending on bit 39 to 47 o
 Note that this seems inconsistent with what an actual page walk would behave, since an actual page walk will traverse
 down the page table from the lowest level whose page walk cache is hit, but here the traversal always begins from the 
 top level (i.e., PGD).
+As the last step, a memory access request is constructed as a `class MemRequest` object with both the requested
+virtual address, and the address to be accessed.
+The memory access request's ID is entered into `MEM_REQ`, and the request itself is sent to the memory for 
+fulfillment by calling `send()` on data member `to_mem`.
 
