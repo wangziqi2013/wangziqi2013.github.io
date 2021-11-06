@@ -572,3 +572,13 @@ but it requires collaboration from other parts of the simulator, since TLB shoot
 happens on page table updates. 
 The TLB simulator itself hence has no way to know when an entry is no longer valid.
 
+Data member `CR3` stores the physical address of the PGD page, i.e., root level of the 4-level page table. 
+Data member `PGD`, `PUD`, and `PMD` map from the higher bits of the virtual address, i.e., bit 12 -- 47, 
+bit 21 -- 47, bit 30 -- 47, and 39 -- 47, respectively.
+Caveat here: confined and non-confined page table walker seem to differ on these index bits, but I could not decipher
+the purpose of using different bit indexing schemes due to lack of documentation.
+Data member `PTE` maps virtual page numbers to physical page numbers, and is used in `class TLBHierarchy` to generate 
+the physical address for memory access when translation completes.
+All these structures are updated in `class PageTableWalker`, with the aid of `class PageFaultHandler`, which mimics 
+an OS physical page allocator.
+
