@@ -565,3 +565,10 @@ This is handled by adding the current ongoing page fault handling in the shared 
 and checking the structure every time a fault is to be started on the page table walker. 
 The process has already been described in the relevant sections, and we do not cover details here.
 
+Context switches are not modeled, but can be easily added by flushing the content of TLB arrays, page walk caches,
+and the tracking structures. 
+Fine-grained shootdown is also possible by only removing entries that match the requested virtual address, 
+but it requires collaboration from other parts of the simulator, since TLB shootdown is an OS-level task, which
+happens on page table updates. 
+The TLB simulator itself hence has no way to know when an entry is no longer valid.
+
