@@ -558,4 +558,10 @@ Each TLB instance holds pointers to the shared mapping structures
 (which are registered during initialization by calling `setPageTablePointers()` on both `class TLBHierarchy`
 and `class PageTableWalker`), and they access the structures synchronously in the timer call back, `tick()`, or
 link object call backs.
+Operation-level contention is impossible, as accesses will not overlap (`tick()` and link call backs are executed
+serially). Semantic-level contention may happen when, for example, multiple TLB page walkers fault on the same virtual
+address, and each of them may request a physical page without noticing each other's fault. 
+This is handled by adding the current ongoing page fault handling in the shared structure `PENDING_PAGE_FAULTS`,
+and checking the structure every time a fault is to be started on the page table walker. 
+The process has already been described in the relevant sections, and we do not cover details here.
 
