@@ -262,8 +262,9 @@ Next, the TLB hierarchy handles completed translation requests that are passed u
 internal arrays, namely, `mem_reqs` and `mem_reqs_sizes`.
 For each completed translation request, if `emulate_faults` option is turned on, meaning that the physical address
 of the translation is provided by the page fault handler, then the physical address of the memory event object is 
-set by calling `setAddr()` and `setBaseAddr()` on it. The physical address is obtained from the internal mapping
-table, `PTE`, which is defined in `class Samba` (in fact, the physical address of all levels of the page table are 
+set by calling `setAddr()` and `setBaseAddr()` on it. The physical address is obtained from the address mapping 
+structure, `PTE`, which is defined in `class Samba`, and maintained by the page table walker's page fault handler 
+(in fact, the physical address of all levels of the page table are 
 maintained for page walk purposes which we discuss in the page walker section). 
 Then, the time it takes for servicing the request is computed by taking the difference between the current cycle,
 and the start cycle recorded in `time_tracker` (recall that the start cycle is recorded in `handleEvent_CPU()`), 
@@ -542,5 +543,8 @@ which should definitely happen before the walk request is completed.
 ## Samba
 
 `class Samba` is merely a container class that implements no concrete functionality other than initialization
-and event propagation. 
+and event propagation. The class implements the full multi-core, multi-size TLB hierarchy, with page walkers 
+and communication links on each core.
+The topology on each core must be identical, meaning that only homogeneous TLB configuration can be supported.
+
 
