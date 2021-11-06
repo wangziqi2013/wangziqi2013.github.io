@@ -582,3 +582,9 @@ the physical address for memory access when translation completes.
 All these structures are updated in `class PageTableWalker`, with the aid of `class PageFaultHandler`, which mimics 
 an OS physical page allocator.
 
+Pages that are already mapped (i.e., have a physical address associated) is tracked by data members 
+`MAPPED_PAGE_SIZE4KB`, `MAPPED_PAGE_SIZE2MB`, and `MAPPED_PAGE_SIZE1GB`. These structures are used to determine whether
+a page fault is needed, which simply emulates the allocation of physical pages, and enters the 
+virtual to physical address mapping into one of the three structures.
+
+
