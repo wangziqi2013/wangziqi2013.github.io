@@ -587,4 +587,13 @@ Pages that are already mapped (i.e., have a physical address associated) is trac
 a page fault is needed, which simply emulates the allocation of physical pages, and enters the 
 virtual to physical address mapping into one of the three structures.
 
+On initialization, Samba creates the per-core TLB hierarchy after reading the essential configurations. 
+Link objects that connect the per-core hierarchy with other components are also created in the initialization routine,
+and then passed to the corresponding Samba components.
+It configures the per-core TLB to CPU link, per-core TLB to cache hierarchy link, the per-table walker to memory
+(or to one of the caches in the hierarchy) link, if the page table walk is to be simulated (`self_connected` in
+the configuration file), and the loop back link of the page table walker for casting page fault events.
+At the end of initialization, Samba registers itself to the global clock of the discrete event simulation.
+If the frequency is not specified, it will default to `1GHz`.
 
+The `tick()` function is very simple, which just calls `tick()` of each `class TLBHierarchy` object.
