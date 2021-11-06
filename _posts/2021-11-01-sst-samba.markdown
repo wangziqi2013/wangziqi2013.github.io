@@ -17,7 +17,7 @@ The third is the page table walker (`class PageTableWalker`), which is responsib
 accesses when a translation request misses all levels of the TLB in the hierarchy. It also emulates the OS physical
 page allocator, and tracks the physical addresses (if `emulate_faults` is turned on) of all known page table entries at 
 all levels.
-All Samba components run the standard discrete event simulation using the simulation infrastructure, including timers
+All Samba components run standard discrete event simulation using the simulation infrastructure, including timers
 that tick periodically, and links that deliver event objects to the registered call back function with an 
 optional delay.
 Components are driven by the clock, which is registered with the `tick()` function as a call back.
@@ -29,6 +29,12 @@ the memory hierarchy as an access request.
 Memory responses, on the other hand, will just pass through the Samba TLB, and be relayed directly back to the CPU.
 The Samba TLB itself may also issue memory requests for page table walks using a separate TLB-memory
 channel.
+
+The Samba TLB simulator implements basic functionalities, such as translation lookup, page table walker, and 
+page walk caches. It is, however, still incomplete and does not implement page fault emulation 
+(`class PageFaultHandler` is only a stub), TLB entry invalidation (i.e., TLB shootdown), and there is no
+notion of contexts (e.g., PCID/ASID).
+
 
 ## The Single-Level Multiple-Size TLBUnit
 
@@ -526,3 +532,9 @@ The code also performs a sanity check on whether the physical address of the PTE
 requested virtual address is mapped in the physical address tracing structure, `PTE`. If not, then something
 is seriously going wrong, because it is supposed to be mapped after the first emulation of the page fault,
 which should definitely happen before the walk request is completed.
+
+## Samba
+
+`class Samba` is merely a container class that implements no concrete functionality other than initialization
+and event propagation. 
+
