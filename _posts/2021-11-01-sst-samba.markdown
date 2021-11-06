@@ -34,7 +34,13 @@ The Samba TLB simulator implements basic functionalities, such as translation lo
 page walk caches. It is, however, still incomplete and does not implement page fault emulation 
 (`class PageFaultHandler` is only a stub), TLB entry invalidation (i.e., TLB shootdown), and there is no
 notion of contexts (e.g., PCID/ASID).
-
+Due to lack of information on the actual page table content and OS internal states, Samba keeps track the set of mapped 
+virtual pages in a demand-driven manner: Initially, no page is assumed to be mapped; As translation requests are 
+being serviced, the virtual page address is added to the set of mapped addresses, and the OS's physical page
+allocation is emulated with a page fault handler (actual page fault handling is still simulated as part of the 
+OS's control flow. Here we only emulate the physical page allocation process). 
+As a consequence, the memory accesses issued by the page walker are likely to use addresses that differ
+from the OS being simulated if it were executed on a non-simulating environment.
 
 ## The Single-Level Multiple-Size TLBUnit
 
