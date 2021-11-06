@@ -547,4 +547,15 @@ and event propagation. The class implements the full multi-core, multi-size TLB 
 and communication links on each core.
 The topology on each core must be identical, meaning that only homogeneous TLB configuration can be supported.
 
+Samba maintains the global physical address tracking structure that map virtual page numbers and page table pages
+at all levels to the physical addresses. 
+As have mentioned earlier, these structures mimic the OS physical page
+allocator, and is used to generate the physical addresses for cache accesses and physical addresses for page 
+table walks. 
+Samba assumes that all simulated TLBs operate under the same address space, and hence only one copy of the 
+mapping structures is maintained.
+Each TLB instance holds pointers to the shared mapping structures
+(which are registered during initialization by calling `setPageTablePointers()` on both `class TLBHierarchy`
+and `class PageTableWalker`), and they access the structures synchronously in the timer call back, `tick()`, or
+link object call backs.
 
