@@ -357,3 +357,15 @@ The number of bytes allocated is the size of the template type, plus `extraSpace
 to adjust the size of the actual allocation for variable sized data structures, such as the payload part of the 
 circular queue (defined as `T buffer[0]`) and the `offsets` array of `struct InternalSharedData`.
 The function returns a pair consisting of the allocated size, and a pointer to the allocated memory address.
+
+Messages in the queue can be accessed by calling, with the index of the buffer as the argument, 
+`writeMessage()`, `readMessage()`, and `readMessageNB()`, the semantics of which is straightforward.
+
+Data structures in the shared region is initialized by calling `initialize()` with the pointer to the beginning
+of the region. Initialization only takes place when `master` equals `true`.
+This function first calls `reserveSpace()` to allocate storage for `struct InternalSharedData`
+as well as the trailing `offsets` array (which needs `(1 + numBuffs) * sizeof(size_t)` bytes) at the beginning of the 
+region. Important system arguments, such as the number of queue objects and the size of the shared region, are
+stored in the shared region such that the other end of the IPC channel (where `master` equals `false`) can access 
+these information as well.
+
