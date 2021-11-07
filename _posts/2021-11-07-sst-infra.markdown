@@ -316,3 +316,14 @@ or the queue becomes non-empty.
 `readNB()` performs non-blocking read, which simply returns `false` if the read fails due to a locked queue, or 
 because of the queue is empty.
 Write operations will always block on a full queue, or on the spin lock, which is performed by calling `write()`. 
+
+### Tunnel
+
+The tunnel object defines the layout of the shared memory, given a pointer to the shared region. 
+The region consists of three parts. The first part is the metadata for the shared region, including the 
+region size and the layout of the rest of the region. The layout of this part is described by 
+`struct InternalSharedData`. Note that this struct is variable-sized, i.e., there is an array of offset values
+at the end of the struct (defined as `size_t offsets[0]`, and must be allocated as extra space after the struct).
+The first element of the `offsets` array is the offset to the second part, while the rest of the array points to
+individual queue objects.
+
