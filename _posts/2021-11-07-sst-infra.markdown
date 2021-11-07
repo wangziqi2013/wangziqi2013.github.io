@@ -344,6 +344,11 @@ and passed as an constructor argument. Data member `shmSize` tracks the size of 
 Data member `nextAllocPtr` is the allocation pointer that points to the next unallocated byte within the region,
 and is advanced by the memory allocation function `reserveSpace()` to reserve memory for the previously mentioned 
 shared data structures.
-
+Data member `numBuffs` stores the number of queues in the third part, and `buffSize` stores the number of elements
+in each queue.
+Boolean data member `master` tracks whether the tunnel object is on the SST side (set to `true`), 
+or on some third-party process side (set to `false`). The master tunnel object is responsible for initializing the 
+shared data structure, while the non-master object just reads them from the shared region and uses them for local
+configuration.
 
 
