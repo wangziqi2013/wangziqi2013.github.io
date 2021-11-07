@@ -284,6 +284,10 @@ The `complete()` phase concludes when no message is sent during a tick.
 `finish()` is the last notification before objects are destroyed. Statistics information should be printed in this stage
 according to the source code.
 
-## Inter-Process Communication
+## Shared Memory IPC
 
-
+Inter-process communication can be performed using Linux shared memory support in SST. IPC provides a message-based
+communication channel between two independent processes, most likely providing external information to support 
+simulation, such as the flow of instruction (with potentially multiple threads) to the core pipeline simulator.
+In the abstract model, the IPC channel consists of one or more buffers allocated from the shared memory region, 
+with each buffer being a circular queue that serves messages in a FIFO order. 
