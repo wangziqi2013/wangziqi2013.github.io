@@ -351,4 +351,9 @@ or on some third-party process side (set to `false`). The master tunnel object i
 shared data structure, while the non-master object just reads them from the shared region and uses them for local
 configuration.
 
-
+Member function `reserveSpace()` allocates a given number of bytes from the shared region by advancing the 
+`nextAllocPtr` pointer. It takes a type as template argument, and a function argument `extraSpace`.
+The number of bytes allocated is the size of the template type, plus `extraSpace`. The `extraSpace` argument is
+to adjust the size of the actual allocation for variable sized data structures, such as the payload part of the 
+circular queue (defined as `T buffer[0]`) and the `offsets` array of `struct InternalSharedData`.
+The function returns a pair consisting of the allocated size, and a pointer to the allocated memory address.
