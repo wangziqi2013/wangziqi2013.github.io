@@ -334,3 +334,16 @@ The last part is an array of buffers, the message type of which is given as temp
 There can be multiple buffers of the same size in the shared memory region, and these buffers are allocated in the 
 remaining storage of the region after the first two parts.
 Buffers are referred to by the `offsets` array in the first part, as we have mentioned earlier.
+
+Note that although the tunnel object also contains pointers to data structures in the shared region,
+in, for example, data members `isd` that points to the first part, and `circBuffs` that contains pointers to all
+the buffer objects, the tunnel object is not shared across processes.
+
+Data member `shmPtr` tracks the beginning of the shared memory region, which is allocated outside of this class,
+and passed as an constructor argument. Data member `shmSize` tracks the size of the region in bytes.
+Data member `nextAllocPtr` is the allocation pointer that points to the next unallocated byte within the region,
+and is advanced by the memory allocation function `reserveSpace()` to reserve memory for the previously mentioned 
+shared data structures.
+
+
+
