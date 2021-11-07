@@ -368,4 +368,10 @@ as well as the trailing `offsets` array (which needs `(1 + numBuffs) * sizeof(si
 region. Important system arguments, such as the number of queue objects and the size of the shared region, are
 stored in the shared region such that the other end of the IPC channel (where `master` equals `false`) can access 
 these information as well.
-
+It then allocates storage for template argument type `ShareDataType` right after the previous part, and stores the
+pointer value to this part to `offsets[0]`.
+Eventually, the queues are initialized in a loop, which allocates storage for the queue itself, and the message
+storage at the end of the queue, which takes an extra `sizeof(MsgType) * buffSize` bytes.
+Pointers to queue objects are inserted into both the shared part (`isd->offsets`) and data member `circBuffs`.
+On the other hand, if `master` equals `false`, initialization is merely pulling information from the shared region
+(which was written by the master tunnel object), and stores them in the local, non-master tunnel object.
