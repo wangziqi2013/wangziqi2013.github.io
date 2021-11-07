@@ -1,0 +1,289 @@
+---
+layout: post
+title:  "Understanding Simulation Infrastructure in SST"
+date:   2021-11-07 03:32:00 -0500
+categories: article
+ontop: false
+---
+
+# The Simulation Infrastructure
+
+## Simulation Object
+
+The simulator's global data structure is defined in `simulation.h` as the base class `class Simulation`.
+The derived class that is actually instantiated is defined in `simulation_impl.h` as `class Simulation_impl`,
+and the implementation is in `simulation.cpp`.
+The simulator maintains a per-thread singleton simulation object, which can be accessed by calling 
+`Simulation_impl::getSimulation()`.
+
+The simulation body is defined in `Simulation::run()`, which consists of a simple loop that fetches the next 
+activity from the event queue, and then execute the activity by calling `execute()` on the activity object. 
+This is just the standard implementation of Discrete Event Simulation (DES).
+
+The simulation is driven forward by two mechanisms. First, events handled at time `T` can generate new events 
+at time `T + t`. Second, components can also register for periodic clocks that fires at a regular interval,
+calling the component handler function. The handler function may also generate events that need to be handled
+in the future.
+
+## Activity and Event
+
+`class Activity` is defined in activity.h, and it is the fundamental building block of Discrete Event Simulation.
+`class Activity` is an abstract class that cannot be directly instantiated, and it stores event timing related
+information, such as delivery time, queue order, and priority, relying on derived classes to implement the 
+actual actions on calling the virtual abstract interface function `execute()`.
+The class also overrides `operator<` for computing the partial ordering between objects in the global event queue.
+Derivative objects from this class can be inserted into the global event queue at a specified time,
+on which point the object will be executed.
+
+`class Event` is a non-abstract class derived from `class Activity`. It is used for passing events across
+links that connect two ports (which are defined in the configuration file). 
+This event object keeps track of the receiving end of the link when it is sent, and will invoke the call back function
+on the receiving side on execution.
+Sending an event over a non-polling link will result in the event being inserted into the global event queue.
+
+Event objects and its derivatives are identified by unique IDs, which is of type `id_type` defined as 
+`std::pair<uint64_t, int>` in the class body, where the first component is the per-process unique ID, 
+and the second component is the rank number.
+The per-process ID is dispensed by incrementing an atomic, static data member of the class, `id_counter`,
+which is then combined with the rank (i.e., partition ID for multi-process distributed simulation) of the 
+simulation process to form the event object's ID.
+
+Note that although the ID generation function `generateUniqueId()` is defined in `class Event`, the event object
+itself has no ID field. In further derived classes, such as `class MemEventBase`, IDs are stored for the object
+and initialized using this function every time a new object is created.
+Events can use this ID as a unique identifier (i.e., key to map objects) during memory hierarchy simulation by 
+calling `getID()` method of `class MemEventBase`.
+
+`class Event` also defines the handler type, `class Event::Handler`, which is just a standard functor (function
+object) that stores the object instance and the call back function on the receiving end of the event.
+The handler object is registered to the receiving link at initialization time using `configureLink()` of 
+`class BaseComponent`, and will be called when the `execute()` method of the event is invoked.
+
+## Global Event Queue
+
+The global event queue is a data member named `timeVortex` of type `class TimeVortex` contained in 
+`class Simulation_impl`. The class itself is an abstract class
+that cannot be instantiated, but its derived class `class TimeVortexPQ` under `impl/timevortex` is what is 
+instantiated by the simulation.
+The implementation uses `std::priority_queue` for ordering, and in `Simulation::run`, the closest events are popped 
+using the `pop()` method of the time vortex, and then executed.
+If the activity is an event object, calling `execute()` will invoke the registered handler function, which is 
+registered with the receiving end of the link object.
+All events sent over all links will be sent to and serialized by the global event queue. 
+Link objects (of non-polling type) store references to the global event queue, and for every event object sent, 
+the `insert()` method of the global queue is called to put the event into the global queue at the specified cycle.
+
+## Simulation and Component Time
+
+The global simulation time, also known as the "core time", is the absolute unit of time in the simulation object,
+which is of type `SimTime_t` (defined as `uint64_t`) stored in data member `currentSimCycle`, and accessed 
+via `getCurrentSimCycle()`.
+This is the highest frequency cycle counter in the system, and hence the name "core time", since the core typically 
+runs at the highest frequency in a real system. Components may have their own slower cycle counters, but these 
+counters must only count at a integer division of the core time, e.g., 1/2, 1/3 or 1/7 of the core frequency.
+Component's local clocks are of type `Cycle_t`, which is also defined as `uint64_t`, and components are implemented 
+with their local clocks rather than the global clock.
+
+To convert from core time to component time, components can optionally create a time converter object, which is 
+defined as `class TimeConverter`. The object is very simple: It only contains a clock divisor, namely the 
+data member `factor`, which indicates that the component time runs at `1/factor` of the speed of the core time.
+Conversion from core to component time (or from component to core time) only involves dividing the core time by 
+`factor` (or multiplying component time by `factor`).
+The conversion object defines a component's local time, and is hence used in all cases where a component 
+interacts with the simulation object (e.g., when registering a clock).
+
+New time converter objects can be created with `getTimeConverter()` in `class TimeLord`. This function implements 
+several conversions between different time units, and is merely a helper for convenience.
+The time lord object is a static member object of `class Simulation`, and can be accessed by calling 
+`Simulation_impl::getTimeLord()` anywhere in the source code.
+The time base, which is used also as the core time, is initialized by calling `init()` on the time lord object. 
+This is performed early in the initialization phase in function `main()` using the time base read from the 
+configuration file. Component frequencies must be an integral division of the base frequency derived from the core 
+time, which is consistent with the fact that time converter objects can only use integer factors.
+
+## Clocks
+
+`class Clock` implements the analogy of a clock that fires periodically and invokes a clock handler function.
+This corresponds to an actual clock in a real system which fires regularly and drives state transition of 
+storage components.
+The clock object is a direct derivation of `class Action`, which itself is a derived class of `class Activity`
+acting as a thin abstraction layer of no critical functionality.
+Clock objects can also be inserted into the global priority queue, and be invoked by calling `execute()` just like 
+an event object.
+
+The clock object contains the current component time, `currentCycle` (of type `Cycle_t`), the next global time 
+for invocation, `next` (of type `SimTime_t`), and a time converter object that defines the component's local time.
+The clock class also defines a handler class, `Clock::Handler`, which is just a standard functor class that stores
+the instance of the component and the call back member function.
+
+The functor object overrides the function call operator, which if invoked, will call the call back member 
+function with the instance pointer, the component's local time, and an optional argument. 
+A clock object can be registered with multiple handlers potentially driving different components by calling 
+`registerHandler()`. Registered handlers are stored in a vector, `staticHandlerMap`, and they will be called
+exactly once on every clock event.
+Handler functions return a boolean value indicating whether the function wishes to be triggered on the next clock
+event. If the return value is true, then the handler will be removed from all future clock events.
+
+Clocks are triggered by calling the `execute()` method just like an event object.
+Each clock invocation will advance `currentCycle` by one, then invoke all handler functions and optionally remove
+them from the registered handlers list, if the return value indicated so, and computes the next global cycle 
+that the clock should be invoked before inserting the same clock object into the global priority queue
+by calling `insertActivity()`.
+Note that `period->getFactor()` is just the number of global cycles between two consecutive local cycles.
+
+An optimization allows the clock to be de-scheduled from the global queue, if there is currently no registered
+handler, in order to avoid empty clock invocations, and rescheduled when handlers are inserted. 
+This is controlled by the boolean data member `scheduled`, which, if set to `false`, indicates that the clock is 
+not scheduled in the global queue. Meanwhile, `schedule()` implements rescheduling by synchronizing 
+the local clock with the global clock first, and then inserting the clock object into the global queue.
+
+Components that require a clock will typically implement a function `tick()`, and register it with the clock
+by calling `registerClock()` with the desired component clock frequency, which is typically read from the configuration.
+The function is implemented in `class BaseComponent`, and will forward the call to the function with the same name in 
+`class Simulation_impl`. 
+The simulator object maintains a global pool of clocks in `clockMap`, each with a different frequency. A new clock will
+be created if the requested frequency does not exist. The handler is then registered with one of the clocks, and the 
+clock will be scheduled.
+
+## Links and Ports
+
+`class Link` defines the communication end points between components or within the same component.
+It enables components to insert events into the global event queue, which, if executed, can invoke a call back function 
+registered to the link object. This is roughly the equivalence of links in real systems where messages can be sent, 
+buffered, and processed by a functional unit.
+In the source code, link objects are also referred to as "ports" due to the fact that it simulates a message endpoint.
+
+Links are always attached to components and subcomponents, and they must be specified in the configuration 
+file. To connect two components, a Python `Link` object must be created, and `connect()` is called on the Python
+link object with the Python component object, the name of the link (i.e., port name), and link latencies. 
+Components connected this way can send event objects using the corresponding C++ link object to each other by
+calling the `send()` method of `class Link`.
+
+Note that the naming here is a little bit confusing, because in the simulator implementation, `class Link` is more
+similar to end points of a conceptual link, while in Python configuration, the `Link` object serves as the 
+abstraction of a connection. The simulator does not explicitly implement any connection object. Instead, it just 
+let link objects keep a reference to each other, and directly use the reference to deliver events.
+
+Link configuration is processed during initialization in function `performWireUp()` of `class Simulation_impl`.
+This function creates link objects for each component and subcomponent as instructed by the configuration file, 
+inserts them into the per-component map `linkMap` (contained in `class ComponentInfo`), and connects link objects 
+in C++ using a `class LinkPair` object. The object will set `pair_link`, which is the data member of `class Link`, to
+the other link object constituting the connection.
+After initialization, link objects can be retrieved by calling `getLink()` on the per-component `class LinkMap`
+object with the link name appearing in the Python configuration file.
+
+After `performWireUp()`, connected link objects are created and hold a reference to each other, but configuration
+has not finished yet, because the call back functions have not been registered.
+This is indicated by the fact that the boolean data member `configured` of `class Link` is still set to `false`.
+This cannot be done, however, in the Python configuration file, and must be performed by the component itself.
+During component initialization, the constructor needs to call `configureLink()`, which is defined in 
+`class BaseComponent`, with the name of the link (which should match the name specified in the configuration file), 
+a time converter object (or any equivalence that can be converted to 
+the time converter), and a functor object of type `class Event::Handler` wrapping the call back function and the object 
+instance as the argument. 
+The call back function is registered with the specified link object by calling `setFunctor()`, and configuration
+concludes by calling `setAsConfigured()` to set `configured` to `true`.
+
+During simulation, components can send an event object via a link object to another component (possibly itself, if the 
+link is of type `class SelfLink`) by calling `send()` on the link object on its own side.
+The `send()` function will simply compute the time of delivery using component latency value (which is in 
+the unit of local cycles) and the time
+converter, stores delivery time in the event object by calling `setDeliveryTime()`, sets the `delivery_link` of the 
+event object to a reference to the other link (i.e., stored in `pair_link` of the link 
+object) by calling `setDeliveryLink()`, and inserts the event object into the global event queue. 
+The event will be delivered at the exact cycle it is scheduled by calling `execute()` on the event object, which 
+further calls `deliverEvent()` of the target link object on `delivery_link`, and eventually invokes the call back 
+function registered at the other end of the connection.
+
+Note that the link object actually holds a reference to the global event queue in `configuredQueue` and 
+`recvQueue` by calling `getTimeVortex()` to obtain the reference and assigning it to the data members during 
+initialization. In `send()` function, the event object is inserted into the global event queue simply by calling 
+`insert()` on the `recvQueue` of the `pair_link`.
+
+What we have discussed above covers one of the two types of the link, the non-polling link, which has fixed latency, 
+and delivers the event using the Discrete Event Simulation mechanism at the exact specified cycle, 
+eliminating the need of explicit receiving calls. 
+There is a second type of link, the polling link, which does not involve a call back function, and requires the 
+receiver to explicitly call `recv()` to acquire the event object. 
+This type of link is easier to configure, since they do not need a call back function.
+If `setPolling()` is called during initialization, then the link is a polling link. 
+The `recvQueue` and `configuredQueue` of a polling link is not the global event queue, but a `class PollingLinkQueue` 
+object local to the link object (the object is no more than a thin wrapper around `std::multiset`).
+On `send()` calls, events are inserted into the polling queue of the other end of the connection.
+On explicit `recv()` calls, which must be made on the receiving end, event objects in the polling queue 
+is checked against the current global cycle, and returned to the caller if the deliver cycle of the event is
+not in the future. In other words, the event appears to be received only at the cycle in which `recv()` is called,
+which can differ from the canonical delivery cycle.
+
+Both types of links can also be configured as self links, defined in `class SelfLink` as a derived class of 
+`class Link`. A self link is no more than a simple modification of a normal link, where the `pair_link` data member
+points to the object itself, such that the component can receive the event object it sends via the self link.
+Self links do not need to be declared in the configuration file, and they can be just added by calling 
+`configureSelfLink()` in `class BaseComponent`, and use the returned link object as usual.
+
+## Initialization and Teardown
+
+Before simulation starts, components and links built from the configuration file needs to go through an initialize 
+phase. Similarly, before the simulation shuts down, they need to terminate properly and perform certain tasks such 
+as printing the statistics. 
+Four interface functions are defined in `class BaseComponent`, namely, `init()`, `setup()`, `complete()`, 
+and `finish()`, as dummy functions. Derived components can override these interface functions to change their
+behavior and implement actual initialization and teardown.
+
+The high-level initialization sequence is defined in `main.c`, function `start_simulation()`, which calls into the 
+simulation object (of type `class Simulation_impl`). The sequence is as follows: `initialize()`, `setup()`,
+`run()`, `complete()`, and `finish()`, which also loosely correspond to the four interface functions of 
+`class BaseComponent` except `run()`.
+
+During the first stage `initialize()`, components can send essential information to other connected components using
+the link objects, and can perform multi-step initialization in a tick-by-tick manner (e.g., warming up a 
+state machine). This stage is similar to the simulation body in a way that it also has a loop in which a clock (tracked 
+by the variable `untimed_phase`) is maintained and incremented for every loop iteration.
+For each iteration, the `init()` method is called on all components, with the value of the clock as argument, and 
+components can send event objects across links as in the simulation.
+
+Links behave differently during the `init()` stage. First, link latency is ignored, and event objects are always 
+delivered in the next tick (i.e., `untimed_phase + 1`) or the same tick, if the event is sent synchronously.
+Second, link objects must be polled like polling links in the normal simulation, and there is no automatic
+delivery of event objects by calling the registered call back function handler.
+Correspondingly, component `init()` method must call the untimed version of send of receive, namely, 
+`sendUntimedData()` (or `sendUntimedData_sync()` for same-tick delivery) and `recvUntimedData()`, to 
+communicate with each other during initialization.
+These two functions are also aliased to `sendInitData()` and `recvInitData()`, which just forward the call to 
+the untimed versions.
+
+To implement this special initialization behavior, link objects use a initialization-specific queue, the 
+`untimedQueue`, to send and receive event objects for untimed operations. This data member is of type
+`class InitQueue`, which is just a thin wrapper layer of `std::deque`. Events are enqueued and dequeued
+into and from the queue (plus a time check for receive) on send and receive, respectively.
+The `recvQueue`, which is used during normal simulation, is disabled at this stage by setting it to an object
+of type `class UninitializedQueue`. An error will be reported if component initialization routines attempt to
+use the regular link functions.
+
+During the first initialization stage, the simulation object also tracks the number of messages being sent via
+all links between all components using variable `untimed_msg_count`, which is incremented by `sendUntimedData()`
+of link objects. The first stage concludes when the number of events is zero on a tick, indicating that all
+components have finished message exchange.
+Links also change to their normal behavior after `finalizeLinkConfiguration()` of `class ComponentInfo` is called.
+This function just iteratively calls `finalizeConfiguration()` on all links in the component and recursively calls the 
+same function in child subcomponents, enabling the `recvQueue` of all links in the simulation.
+The untimed queue is disabled by assigning `afterInitQueue` to it, which will report error if used.
+
+The second stage initialization is simple: Just iterate over all components in the system, and call `setup()` on these
+components. This is the last notification before simulation begins.
+
+`complete()` and `finish()` are identical to `initialize()` and `setup()`, except that `complete()` and `finish()`
+calls `complete()` and `finish()` on components, respectively.
+`complete()` also runs tick-by-tick, in which components communicate post-simulation states using the untimed
+channel of the links.
+During `complete()`, links behavior will be altered as in `initialize()` by calling `prepareForComplete()` on 
+each `ComponentInfo`, which forwards the call to the function with the same name in `class Link`.
+This function will disable the `recvQueue` and reenable `untimedQueue` for untimed communication.
+The `complete()` phase concludes when no message is sent during a tick.
+
+`finish()` is the last notification before objects are destroyed. Statistics information should be printed in this stage
+according to the source code.
+
+## Inter-Process Communication
+
+
