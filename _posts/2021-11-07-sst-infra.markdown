@@ -296,3 +296,23 @@ queue overflow. The reading end retrieves the oldest message from the queue, and
 non-blocking. A blocking read will wait for new messages to be inserted, if the queue is empty. A non-blocking
 read will return a boolean value indicating whether the operation has succeeded or not. An empty or locked 
 queue will cause a non-blocking read to fail.
+
+### Circular Queue
+
+The circular queue (`class CircularBuffer`) implements a single message buffer as a FIFO queue. To avoid reader
+writer contention, the queue is protected by a spin lock, `bufferMutex` (`class SSTMutex`), which only grants one
+exclusive reader or writer. 
+The queue is parameterized to serve message objects of type `T`, given as the template argument.
+The actual storage of the queue is at the end of the object, defined as `T buffer[0]`, which must be allocated as 
+extra storage after the object itself.
+The queue maintains two pointers, the read pointer `readIndex` for retrieving messages, which points to the next
+message to read, and the write pointer `writeIndex` for inserting new messages, which points to the next free
+slot to insert. 
+The queue is considered as empty when the two pointers have the same value, and full when the write pointer is one slot
+before the read pointer (i.e., the actual capacity is one less than the number of physically allocated slots).
+
+Calling `read()` on the queue will perform a blocking read, which will not return until the queue is unlocked,
+or the queue becomes non-empty.
+`readNB()` performs non-blocking read, which simply returns `false` if the read fails due to a locked queue, or 
+because of the queue is empty.
+Write operations will always block on a full queue, or on the spin lock, which is performed by calling `write()`. 
