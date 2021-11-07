@@ -291,3 +291,8 @@ communication channel between two independent processes, most likely providing e
 simulation, such as the flow of instruction (with potentially multiple threads) to the core pipeline simulator.
 In the abstract model, the IPC channel consists of one or more buffers allocated from the shared memory region, 
 with each buffer being a circular queue that serves messages in a FIFO order. 
+The writing end inserts messages into the queue, and may block on this operation if the queue is full to avoid
+queue overflow. The reading end retrieves the oldest message from the queue, and can be either blocking or 
+non-blocking. A blocking read will wait for new messages to be inserted, if the queue is empty. A non-blocking
+read will return a boolean value indicating whether the operation has succeeded or not. An empty or locked 
+queue will cause a non-blocking read to fail.
