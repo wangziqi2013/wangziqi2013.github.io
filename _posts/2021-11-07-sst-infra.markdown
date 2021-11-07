@@ -326,4 +326,7 @@ region size and the layout of the rest of the region. The layout of this part is
 at the end of the struct (defined as `size_t offsets[0]`, and must be allocated as extra space after the struct).
 The first element of the `offsets` array is the offset to the second part, while the rest of the array points to
 individual queue objects.
-
+The second part is a user-defined shared data structure that is transparent to the tunnel object, the type
+of which is given in the template parameter. Storage
+is allocated for this data structure right after the tunnel metadata. The layout of this part is unknown,
+and users should initialize this part properly.
