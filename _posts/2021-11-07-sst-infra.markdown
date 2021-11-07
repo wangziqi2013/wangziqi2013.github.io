@@ -330,3 +330,7 @@ The second part is a user-defined shared data structure that is transparent to t
 of which is given in the template parameter. Storage
 is allocated for this data structure right after the tunnel metadata. The layout of this part is unknown,
 and users should initialize this part properly.
+The last part is an array of buffers, the message type of which is given as template parameters.
+There can be multiple buffers of the same size in the shared memory region, and these buffers are allocated in the 
+remaining storage of the region after the first two parts.
+Buffers are referred to by the `offsets` array in the first part, as we have mentioned earlier.
