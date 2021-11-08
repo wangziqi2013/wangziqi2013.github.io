@@ -23,6 +23,12 @@ as high-level memory layout information.
 `numCores` is simply the number of buffers in the shared region. `child_attached` tracks the number of child processes
 (running non-master tunnel objects) that have registered themselves with the master tunnel object.
 
+If the Ariel tunnel is being initialized on the child process, the process will register itself to the master
+by incrementing the `child_attached` counter in `struct ArielSharedData`.
+The current implementation does not use atomic instruction for the increment operation, which can potentially break
+due to data contention, if multiple child processes increment it at the same time. It is, however, safe in practice,
+since the Ariel core is only expecting one child process.
+
 
 
 ## Ariel Frontend
