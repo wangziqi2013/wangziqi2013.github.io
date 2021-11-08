@@ -423,4 +423,14 @@ shared region. The counter's initial value is provided as a construction argumen
 the number of non-master tunnels that are allowed to connect to this shared region.
 Once the counter value reaches zero after a non-master tunnel completes initialization, the 
 shared memory file descriptor will be removed by calling `shm_unlink()` on the non-master side, which eliminates the
-region name from the shared memory name space, and prevents it from being mapped by other non-master IPC endpoints.
+region name from the shared memory name space, and prevents it from being mapped by other non-master IPC endpoints. 
+
+### Variants
+
+There are also variants of the shared memory endpoint implementation to fit into different non-master environment. The
+most typical of them is the shared memory child endpoint specially designed for Pin3, due to the fact that common
+operating system calls would not work properly in Pin3, which must be replaced with the PinCRT version.
+`class MMAPChild_Pin3` implements this non-master endpoint that can be used in Pin environment. The high-level logic is 
+identical to those in the standard implementation of `class SHMChild`.
+
+
