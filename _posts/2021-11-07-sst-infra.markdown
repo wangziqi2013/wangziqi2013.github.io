@@ -393,6 +393,12 @@ On construction, `class SHMParent` constructor generates a key of the format `"/
 integer components being the PID, the component ID of the owner (given in construction argument), and a random number.
 This key is then used as the path argument for `shm_open()`, which creates a shared region with the given path as the 
 key. Other processes could map the same region into their own address space using the same key.
-
+The tunnel object `tunnel` is also constructed after this with arguments defining the shared region's layout.
+`shm_open()` returns a file descriptor that represents the shared region, which is then passed into `ftruncate()`
+with the desired size of shared region obtained from the tunnel object by calling `getTunnelSize()`.
+Finally, the shared region is mapped into the virtual address space of the master process by calling `mmap()` with the
+file descriptor and region size.
+The layout is initialized by calling `initialize()` on the tunnel object using the mapped address of the shared
+region as the argument, which concludes the shared memory IPC initialization process on the master side.
 
 
