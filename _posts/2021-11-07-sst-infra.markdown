@@ -375,3 +375,18 @@ storage at the end of the queue, which takes an extra `sizeof(MsgType) * buffSiz
 Pointers to queue objects are inserted into both the shared part (`isd->offsets`) and data member `circBuffs`.
 On the other hand, if `master` equals `false`, initialization is merely pulling information from the shared region
 (which was written by the master tunnel object), and stores them in the local, non-master tunnel object.
+
+Data member `shmSize` stores the total number of bytes (aligned to page boundaries) required for the given
+shared region layout. This number can be obtained by external classes by calling `getTunnelSize()`.
+
+### SHMParent
+
+`class SHMParent` encapsulates the OS interface for creating a shared memory region, and contains a master 
+tunnel object for managing the layout of the shared region. The object is supposed to be instanciated at the 
+master side of the IPC, which allocates a shared memory region based on the message class, number of
+buffers, and the buffer size. The region name (a string object) is then passed to the non-master side of the IPC
+(via command line argument of the child process started by the master, for example), such that the other side
+can also map the same shared region, instanciate the non-master tunnel object, and pull the configuration
+information to complete the construction of the IPC channel.
+
+
