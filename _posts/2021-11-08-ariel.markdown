@@ -10,7 +10,8 @@ ontop: false
 
 ## Ariel Tunnel
 
-`class ArielTunnel` implements the shared memory layout and parent-child synchronization between processes.
+`class ArielTunnel` (in file `ariel_shmem.h`) implements the shared memory layout and parent-child synchronization 
+between processes.
 `class ArielTunnel` inherits from `class TunnelDef`, with `struct ArielSharedData` as the shared metadata between
 processes, and `struct ArielCommand` as the message type.
 `struct ArielCommand` is the unit of message exchange between the instruction source and the Ariel core simulator.
@@ -82,4 +83,13 @@ The newly spawned process will then start, finish the initialization of the non-
 process, and registers itself on the shared memory region.
 The SST process will wait for the child process to register by calling `waitForChild()` on the tunnel object,
 and then the initialization concludes.
+
+## Ariel Pintool
+
+The pintool that works with Ariel core is implemented in file `fesimple.cc`, and will compile into a dynamic library,
+`fesimple.so`. 
+The pintool implements the instrumentations that are essential to obtain instruction traces within the potentially
+multi-threaded application, as well as to capture certain operations, such as `malloc()/free()` and the stack trace.
+The pintool runs a `class ArielTunnel` object in non-master mode, which is referred to by global variable `tunnel`, 
+and a shared memory IPC endpoint of type `class MMAPChild_Pin3`, which is referred to by global variable `tunnelmgr`.
 
