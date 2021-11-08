@@ -401,4 +401,12 @@ file descriptor and region size.
 The layout is initialized by calling `initialize()` on the tunnel object using the mapped address of the shared
 region as the argument, which concludes the shared memory IPC initialization process on the master side.
 
+### SHMChild
+
+`class SHMChild` implements shared memory IPC endpoint on the non-master side. The class is constructed with the name
+of the shared region. It calls `shm_open()` to obtain the file descriptor that corresponds to the name, and then
+maps a smaller region of size `sizeof(InternalSharedData)`. This step is necessary, because the child has not yet
+known the size of the shared region. It then initializes the non-master tunnel object, which pulls essential information
+from the mapped region, including the shared region size, `shmSize` (note that the constructor being called is
+not the same one as in master tunnel object). 
 
