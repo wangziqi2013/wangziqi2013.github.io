@@ -389,4 +389,10 @@ buffers, and the buffer size. The region name (a string object) is then passed t
 can also map the same shared region, instanciate the non-master tunnel object, and pull the configuration
 information to complete the construction of the IPC channel.
 
+On construction, `class SHMParent` constructor generates a key of the format `"/sst_shmem_%u-%u-%d"`, with the three
+integer components being the PID, the component ID of the owner (given in construction argument), and a random number.
+This key is then used as the path argument for `shm_open()`, which creates a shared region with the given path as the 
+key. Other processes could map the same region into their own address space using the same key.
+
+
 
