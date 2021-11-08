@@ -24,4 +24,15 @@ The program to be instrumented must be started as a separate process by invoking
 program's binary. The pin binary will set up the execution environment for the pintool, load the application binary,
 and then execute the binary with the instrumentations defined in the pintool.
 
+`class Pin3Frontend` implements this process by calling `fork()` to create a child process, and then `execvp()`
+to load the pin binary with command line arguments, including the path to the pintool, the path to the application 
+binary, and arguments for running the application.
+`class Pin3Frontend` also sets up the shared memory region, and pass the region name to the fork'ed child process
+running Pin.
+At the other side of the IPC channel, the pintool also contains a non-master mode Ariel tunnel object 
+(`class ArielTunnel` in non-master mode) and a shared memory child object (`class MMAPChild_Pin3`).
+Instructions intercepted by the instrumentation are sent over the tunnel object as message objects 
+(`class ArielCommand`), which can be extracted on the simulator side and then fed into the Ariel core simulator.
+
+
 
