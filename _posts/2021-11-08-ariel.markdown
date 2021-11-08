@@ -18,6 +18,12 @@ It is a multi-purpose class consisting of several `union`s. The class can either
 being executed in the simulated binary, or special memory operations, such as `malloc()/free()` or DMA transfer, 
 as high-level memory layout information.
 
+`class ArielTunnel` behaves similarly to the base class, except that it defines a few more data member in 
+`struct ArielSharedData`. Simulation time and cycle are tracked by `simTime` and `cycles`. 
+`numCores` is simply the number of buffers in the shared region. `child_attached` tracks the number of child processes
+(running non-master tunnel objects) that have registered themselves with the master tunnel object.
+
+
 
 ## Ariel Frontend
 
