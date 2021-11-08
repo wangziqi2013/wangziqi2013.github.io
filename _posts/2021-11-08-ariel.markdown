@@ -1,0 +1,18 @@
+---
+layout: post
+title:  "Understanding Ariel Core Simulation in SST"
+date:   2021-11-08 02:04:00 -0500
+categories: article
+ontop: false
+---
+
+# Ariel Core
+
+## Ariel Frontend
+
+The ariel frontend defined in `class ArielFrontend` is a generic interface for the Ariel core to obtain a tunnel object
+as instruction source. The class itself is abstract and does not implement any concrete function.
+Any instruction source can be implemented as a derived class of `class ArielFrontend`, and be incorporated seamlessly
+into Ariel core.
+
+
