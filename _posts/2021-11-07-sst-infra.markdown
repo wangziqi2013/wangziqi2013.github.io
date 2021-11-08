@@ -449,3 +449,10 @@ allocation and layout management are divided into two classes.
 one single class. 
 Like tunnel objects, the class operates on master and non-master mode, when running on SST and external processes, 
 respectively. 
+The constructor that takes the component ID and buffer parameters will initialize the object in master mode, which,
+just a like a `class SHMParent` object, will first generate a key for the shared region and allocate shared memory 
+using `shm_open()` system call, and then initialize the layout into three parts like a tunnel object.
+The constructor that takes the key will initialize the object in non-master mode, which simply opens the shared region,
+maps the region into its own address space, and then pulls information from the shared information area to the local.
+Processes communicate with each other with the same message-based model by calling `writeMessage()`,
+`readMessage()`, and `readMessageNB()`, just as in a tunnel object.
