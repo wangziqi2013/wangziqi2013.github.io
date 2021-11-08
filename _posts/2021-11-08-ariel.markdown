@@ -34,5 +34,17 @@ At the other side of the IPC channel, the pintool also contains a non-master mod
 Instructions intercepted by the instrumentation are sent over the tunnel object as message objects 
 (`class ArielCommand`), which can be extracted on the simulator side and then fed into the Ariel core simulator.
 
+`class Pin3Frontend`'s constructor takes the parameter object that stores various invocation parameters for the pin
+binary, the number of cores, and the size of the queue objects in the tunnel.
+Pintool path and application binary path are specified with `arieltool` and `executable`, respectively.
+If the pintool path is not specified, it will, by default, be `fesimple.so`, which is compiled from `fesimple.cc`.
+The path of the Pin binary is specified with `launcher`, which defaults to macro value `PINTOOL_EXECUTABLE`.
+We do not cover the rest of the parameters here, and readers should be able to find the list of parameter options
+and their definitions in file `pin3frontend.h`.
+The constructor also creates the shared memory region and initializes the layout of the region by constructing a 
+`class MMAPParent` object as data member `tunnelmgr`, and obtains the tunnel object (of type `class ArielTunnel`) as 
+data member `tunnel`.
+The key to map the shared region in another process is stored in local variable `shmem_region_name`, which will
+be passed to the pintool in the command line.
 
 
