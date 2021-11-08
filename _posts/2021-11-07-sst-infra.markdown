@@ -409,4 +409,13 @@ maps a smaller region of size `sizeof(InternalSharedData)`. This step is necessa
 known the size of the shared region. It then initializes the non-master tunnel object, which pulls essential information
 from the mapped region, including the shared region size, `shmSize` (note that the constructor being called is
 not the same one as in master tunnel object). 
+Then the small region is unmapped, and the larger region is mapped into the address space of the process by calling
+`mmap()` using the file descriptor and `shmSize`.
+The tunnel object is initialized again using the full shared region by calling `initialize()` under non-master mode, 
+which pulls the layout information from the `struct InternalSharedData` part.
+Note that the object offsets recorded in `struct InternalSharedData` are relative offsets to the beginning of the shared
+region. The non-master tunnel needs to rebuild the virtual address pointer by adding these offsets to the 
+beginning address of the shared region, since the OS does not guarantee to map the region on the same virtual address
+in different processes.
+
 
