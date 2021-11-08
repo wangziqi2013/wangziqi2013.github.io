@@ -47,4 +47,11 @@ data member `tunnel`.
 The key to map the shared region in another process is stored in local variable `shmem_region_name`, which will
 be passed to the pintool in the command line.
 
+When `init()` is called during the timed initialization stage, `forkPINChild()` will be called to bootstrap Pin.
+This function first calls `fork()` to create a new child process, and then calls 
+`execvp()/execve()` (depending on whether environmental variables are needed) to load the 
+pin binary with the path to the pintool and the application binary. Other arguments, 
+such as the shared region's name, are also passed via the second argument of `execvp()/execve()`.
+
+
 
