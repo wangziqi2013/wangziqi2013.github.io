@@ -53,5 +53,8 @@ This function first calls `fork()` to create a new child process, and then calls
 pin binary with the path to the pintool and the application binary. Other arguments, 
 such as the shared region's name, are also passed via the second argument of `execvp()/execve()`.
 
-
+The newly spawned process will then start, finish the initialization of the non-master tunnel object in the child
+process, and registers itself on the shared memory region.
+The SST process will wait for the child process to register by calling `waitForChild()` on the tunnel object,
+and then the initialization concludes.
 
