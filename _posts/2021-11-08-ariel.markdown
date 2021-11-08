@@ -92,4 +92,9 @@ The pintool implements the instrumentations that are essential to obtain instruc
 multi-threaded application, as well as to capture certain operations, such as `malloc()/free()` and the stack trace.
 The pintool runs a `class ArielTunnel` object in non-master mode, which is referred to by global variable `tunnel`, 
 and a shared memory IPC endpoint of type `class MMAPChild_Pin3`, which is referred to by global variable `tunnelmgr`.
+The name for the shared region is passed via command line argument from the SST process via `execvp()/execve()`,
+and is received by Pin's `KNOB` object `SSTNamedPipe`. 
+Other parameters to the pintool are also passed via command line, and received by `KNOB` objects, which we do not
+cover here. Readers should be able to obtain a fairly detailed description of these parameters and their descriptions
+in file `fesimple.cc`.
 
