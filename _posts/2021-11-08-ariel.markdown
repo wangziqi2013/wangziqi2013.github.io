@@ -8,6 +8,17 @@ ontop: false
 
 # Ariel Core
 
+## Ariel Tunnel
+
+`class ArielTunnel` implements the shared memory layout and parent-child synchronization between processes.
+`class ArielTunnel` inherits from `class TunnelDef`, with `struct ArielSharedData` as the shared metadata between
+processes, and `struct ArielCommand` as the message type.
+`struct ArielCommand` is the unit of message exchange between the instruction source and the Ariel core simulator.
+It is a multi-purpose class consisting of several `union`s. The class can either encode instructions that are 
+being executed in the simulated binary, or special memory operations, such as `malloc()/free()` or DMA transfer, 
+as high-level memory layout information.
+
+
 ## Ariel Frontend
 
 The ariel frontend defined in `class ArielFrontend` is a generic interface for the Ariel core to obtain a tunnel object
