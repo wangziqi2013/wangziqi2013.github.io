@@ -98,3 +98,10 @@ Other parameters to the pintool are also passed via command line, and received b
 cover here. Readers should be able to obtain a fairly detailed description of these parameters and their descriptions
 in file `fesimple.cc`.
 
+The main instrumentation function for instructions is `InstrumentInstruction`, which checks the instruction type,
+and dispatches the instruction to different functions for processing.
+Instructions are decoded into Ariel primitives (note that this is not the same as x86 uop decoding), which are then
+encoded into `struct ArielCommand` objects. These objects are sent to the SST process by calling `writeMessage()` on
+the tunnel object. Multi-threaded applications will write the message into the queue indexed by Pin's internal 
+thread ID. If the queue is full, then `writeMessage()` will block, which also blocks the execution of the 
+simulated application (since it is called in Pin's "analysis routine"). 
