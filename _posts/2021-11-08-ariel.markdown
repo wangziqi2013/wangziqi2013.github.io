@@ -29,7 +29,9 @@ The current implementation does not use atomic instruction for the increment ope
 due to data contention, if multiple child processes increment it at the same time. It is, however, safe in practice,
 since the Ariel core is only expecting one child process.
 
-
+Function `waitForChild()` is called on the SST side after spawning child processes. This function contains a single 
+loop that repeatedly checks the `child_attached` variable in the shared region. It exits the loop when this variable
+is no longer zero, meaning that the (supposedly single) child has registered.
 
 ## Ariel Frontend
 
