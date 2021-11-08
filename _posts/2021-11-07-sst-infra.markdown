@@ -440,3 +440,12 @@ between processes is to directly `mmap()` a disk file backed by external storage
 The high-level logic is similar to the one using shared memory, except that the file descriptor is obtained by creating
 a file under the `/tmp` directory, which is then passed to `mmap()`.
 This is implemented in `class MMAPParent`.
+
+### IPC Tunnel
+
+The combination of tunnel objects and shared memory objects is unnecessarily complicated, since shared memory
+allocation and layout management are divided into two classes. 
+`class IPCTunnel` addresses this problem by implementing both allocation and management of the shared region in
+one single class. 
+Like tunnel objects, the class operates on master and non-master mode, when running on SST and external processes, 
+respectively. 
