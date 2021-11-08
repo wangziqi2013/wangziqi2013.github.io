@@ -433,4 +433,10 @@ operating system calls would not work properly in Pin3, which must be replaced w
 `class MMAPChild_Pin3` implements this non-master endpoint that can be used in Pin environment. The high-level logic is 
 identical to those in the standard implementation of `class SHMChild`.
 
+### Using mmap()
 
+Instead of relying on `shm_open()` to return a file descriptor representing shared region, another way of sharing memory
+between processes is to directly `mmap()` a disk file backed by external storage.
+The high-level logic is similar to the one using shared memory, except that the file descriptor is obtained by creating
+a file under the `/tmp` directory, which is then passed to `mmap()`.
+This is implemented in `class MMAPParent`.
