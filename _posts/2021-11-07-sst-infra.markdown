@@ -456,3 +456,5 @@ The constructor that takes the key will initialize the object in non-master mode
 maps the region into its own address space, and then pulls information from the shared information area to the local.
 Processes communicate with each other with the same message-based model by calling `writeMessage()`,
 `readMessage()`, and `readMessageNB()`, just as in a tunnel object.
+
+

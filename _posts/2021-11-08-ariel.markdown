@@ -15,4 +15,13 @@ as instruction source. The class itself is abstract and does not implement any c
 Any instruction source can be implemented as a derived class of `class ArielFrontend`, and be incorporated seamlessly
 into Ariel core.
 
+Specifically, the SST package provides an implementation, `class Pin3Frontend`, that works with Pin3, which is a binary 
+instrumentation tool that dynamically rewrites application image in the main memory, such that the instruction trace 
+can be obtained by invoking call backs after every instruction.
+The instrumentation part (called a "pintool") is implemented as a separate module using the Pin library, and 
+compiled into a dynamic library.
+The program to be instrumented must be started as a separate process by invoking the pin binary with the pintool and 
+program's binary. The pin binary will set up the execution environment for the pintool, load the application binary,
+and then execute the binary with the instrumentations defined in the pintool.
+
 
