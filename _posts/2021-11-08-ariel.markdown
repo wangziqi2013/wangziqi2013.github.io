@@ -134,4 +134,10 @@ The executing state is the state where instructions are allowed to be dispatched
 no instruction is dispatched due to a resource hazard on the pending transaction queue), and for each cycle
 being simulated, the core will attempt to dispatch instructions until the limit `maxIssuePerCycle` is reached.
 
+The stalled state is where an explicit fence instruction occurs in the instruction stream, which blocks further issuing
+of all instructions until all pending memory operations have been drained.
+This is to mimic the draining effect of actual implementation of certain memory fences on commercial processors.
+In both execution and stalled states, the core clock `currentCycles` keeps ticking, since the core is still 
+logically active.
+
 
