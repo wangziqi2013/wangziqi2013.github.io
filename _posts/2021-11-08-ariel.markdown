@@ -117,3 +117,7 @@ no more memory operations can be issued, and all four lanes will be stalled unti
 complete. Fence instructions are modelled by stalling instruction processing until all memory operations in the 
 pending transaction queue has been drained.
 
+The Ariel core does not have any instruction decoding and supply frontend, and it relies on the tunnel object
+(data member `tunnel`) to feed instructions into the timing model. The core pulls instruction supplied from the 
+frontend by calling `readMessageNB()` on the tunnel object, and then adds these instructions in the order that they
+are received as event objects of type `class ArielEvent` into the core's private event queue, `coreQ`.
