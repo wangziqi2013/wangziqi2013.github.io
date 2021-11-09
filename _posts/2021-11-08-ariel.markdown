@@ -106,16 +106,18 @@ the tunnel object. Multi-threaded applications will write the message into the q
 thread ID. If the queue is full, then `writeMessage()` will block, which also blocks the execution of the 
 simulated application (since it is called in Pin's "analysis routine"). 
 
-## Ariel Core
+## Ariel Core (w/o CUDA GPU)
 
 Ariel core (`class ArielCore`) implements a simple core timing model. It models a four-issue super scalar execution
 unit, with a single cycle delay for non-memory instructions.
 Memory operations are forwarded to the cache and memory hierarchy for detailed timing simulation, and is 
 asynchronous to the execution of non-memory operations. The core also models a limited capacity for the pending
-transactions buffer tracking outstanding memory operations. If the pending transactions buffer is full, then 
+transactions queue tracking outstanding memory operations. If the pending transactions queue is full, then 
 no more memory operations can be issued, and all four lanes will be stalled until one of the pending memory transactions
 complete. Fence instructions are modelled by stalling instruction processing until all memory operations in the 
 pending transaction queue has been drained.
+
+### Instruction Supply
 
 The Ariel core does not have any instruction decoding and supply frontend, and it relies on the tunnel object
 (data member `tunnel`) to feed instructions into the timing model. The core pulls instruction supplied from the 
@@ -124,3 +126,12 @@ are received as event objects of type `class ArielEvent` into the core's private
 The tunnel object is initialized in the containing class, `class ArielCPU`, and passed to the Ariel core as 
 one of the constructor arguments. One of the options is to use Pin as the instruction provider, but Ariel core
 also works perfectly with other forms of the frontend. 
+
+### Core States
+
+An Ariel core can be in one of the three states after initialization: executing, stalled, or halted.
+The executing state is the state where instructions are allowed to be dispatched (but it is still possible that
+no instruction is dispatched due to a resource hazard on the pending transaction queue), and for each cycle
+being simulated, the core will attempt to dispatch instructions until the limit `maxIssuePerCycle` is reached.
+
+
