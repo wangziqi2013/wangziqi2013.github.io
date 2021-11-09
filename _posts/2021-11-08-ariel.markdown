@@ -121,3 +121,6 @@ The Ariel core does not have any instruction decoding and supply frontend, and i
 (data member `tunnel`) to feed instructions into the timing model. The core pulls instruction supplied from the 
 frontend by calling `readMessageNB()` on the tunnel object, and then adds these instructions in the order that they
 are received as event objects of type `class ArielEvent` into the core's private event queue, `coreQ`.
+The tunnel object is initialized in the containing class, `class ArielCPU`, and passed to the Ariel core as 
+one of the constructor arguments. One of the options is to use Pin as the instruction provider, but Ariel core
+also works perfectly with other forms of the frontend. 
