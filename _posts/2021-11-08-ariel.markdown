@@ -105,3 +105,15 @@ encoded into `struct ArielCommand` objects. These objects are sent to the SST pr
 the tunnel object. Multi-threaded applications will write the message into the queue indexed by Pin's internal 
 thread ID. If the queue is full, then `writeMessage()` will block, which also blocks the execution of the 
 simulated application (since it is called in Pin's "analysis routine"). 
+
+## Ariel Core
+
+Ariel core (`class ArielCore`) implements a simple core timing model. It models a four-issue super scalar execution
+unit, with a single cycle delay for non-memory instructions.
+Memory operations are forwarded to the cache and memory hierarchy for detailed timing simulation, and is 
+asynchronous to the execution of non-memory operations. The core also models a limited capacity for the pending
+transactions buffer tracking outstanding memory operations. If the pending transactions buffer is full, then 
+no more memory operations can be issued, and all four lanes will be stalled until one of the pending memory transactions
+complete. Fence instructions are modelled by stalling instruction processing until all memory operations in the 
+pending transaction queue has been drained.
+
