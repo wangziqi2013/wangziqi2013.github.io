@@ -168,6 +168,15 @@ that either the circular queue that provides instruction is empty, or the queue 
 This is merely an artifact on the host created by IPC and process scheduling, and should not incur any observable 
 state change in the simulation. Unfortunately, in the current implementation of Ariel core, queue contention and 
 temporary starvation will cause the processor to stall for no architectural reason, which introduces 
-unpredicable simulation errors.
+non-predicable simulation errors.
 A better implementation would be to use blocking reads on the tunnel object, which guarantees that a frontend 
 generated message is read before it returns, which never stalls the processor because of the queue.
+
+In function `processNextEvent()`, the core's instruction queue, `coreQ`, (which is not timing related) is first 
+checked. If the queue is empty, then `refillQueue()` is called to pull more frontend generated messages from the 
+frontend, and translate these messages into `class ArielEvent objects`, before inserting them into `coreQ`.
+The `refillQueue()` function simply calls `readMessageNB()` on the tunnel object with the core's ID (in case it is
+a multithreaded simulation), and reads the message into a local `class ArielCommand` object.
+Messages of command type `ARIEL_START_INSTRUCTION` and `ARIEL_END_INSTRUCTION` delimits the memory operations of a 
+multi-operand instruction, and they are essentially just for statistics purposes (e.g., to keep track of the actual
+number of instructions, not memory operations, that have been simulated).
