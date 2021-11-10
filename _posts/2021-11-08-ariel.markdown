@@ -262,3 +262,13 @@ queue when executed.
 Similarly, cache line flushes are also not the implementation of x86 `clflush/clflushopt/clwb`. Users must explicitly
 call `ariel_flushline()` in the source code with the pointer value to be flushes (the value is computed in the runtime
 and passed to the function).
+
+Fences are handled by setting `isFenced` and `isStalled` to `true`, if the number of pending transactions is greater 
+than zero. As discussed earlier, the fence will eventually commit when tha last outstanding memory operation is 
+completed.
+
+Flush events are handled by `handleFlushEvent()` similarly to a memory operations, except that it always affects a 
+single cache block. After obtaining the physical address of the flush, `commitFlushEvent()` is called to create 
+a memory event object of type `SimpleMem::Request`, with the command being `SimpleMem::Request::FlushLineInv`.
+The event is sent to the memory hierarchy after being added to the pending transaction queue and incrementing the 
+pending transaction counter. 
