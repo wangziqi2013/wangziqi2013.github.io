@@ -145,3 +145,12 @@ The halted state is when the core has reached the maximum number of instructions
 In the implementation, this flag is only set for the first core in a multi-core simulation for some reason. 
 The containing class, `class ArielCPU`, will check this flag for all cores after every tick. If any one of them
 is set, the simulation will terminate.
+
+### Main Loop
+
+The main simulation loop is implemented in `tick()`, which is registered as the clock call back function in its 
+containing class, `class ArielCPU`. The frequency of the CPU clock is specified in configuration as `clock`.
+In the main event loop, if the simulator is neither halted nor stalled, then it will execute up to `maxIssuePerCycle`
+instructions. For each iteration, it calls `processNextEvent()` to extract an event object of type `class ArielEvent`,
+and simulate the event as one instruction. 
+
