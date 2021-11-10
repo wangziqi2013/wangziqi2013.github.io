@@ -229,4 +229,10 @@ accessed are requested separately by first computing the cache block address and
 calling `commitReadEvent()` twice to simulate two cache accesses.
 In the former case, only one base and length is computed, and `commitReadEvent()` is called once.
 
+In `commitReadEvent()`, an event object of type `class SimpleMem::Request` with the info of the access is constructed,
+and sent to the memory hierarchy for timing simulation via the link `cacheLink`. The link object connects the Ariel
+core to the memory hierarchy, and is initialized in the containing class `class ArielCPU` on a per-core basis.
+Note that the memory event object is handled in parallel with core execution, which will be sent back via the 
+same link from the memory hierarchy at a future cycle. To track outstanding memory operations, the newly constructed 
+event object is also registered with the pending transaction queue, `pendingTransactions`, which is a mapping structure
 
