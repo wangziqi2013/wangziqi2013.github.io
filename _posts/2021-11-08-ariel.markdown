@@ -292,3 +292,11 @@ defines fall back functions that will print error messages, if not implemented i
 If Ariel core users desire to have a working memory manager,
 then one of the derived classes should be selected using option `memmgr` in the configuration file.
 
+The core interface function of a memory manager is `translateAddress()`, which, given a virtual address, returns the
+physical address for memory accesses.
+As mentioned earlier, the memory manager maintains its own free page pool, and emulates free page allocation as well as
+virtual-to-physical mapping assignment, which should normally be performed during OS page faults.
+An extra two pairs of interface allows memory allocation information on virtual addresses to be passed to the memory 
+manager: `allocateMalloc()/freeMalloc()` for malloc-based virtual address tracking, and `allocateMMAP()/freeMMAP()`
+for mmap-based tracking. These functions are not implemented in the base class, which, if not implemented by the 
+derived class but called, will report errors.
