@@ -188,3 +188,7 @@ the length of the memory operation.
 Other types of instructions, such as no-ops (`ARIEL_NOOP`), flushes (`ARIEL_FLUSHLINE_INSTRUCTION`),
 and fences (`ARIEL_FENCE_INSTRUCTION`), are also processed accordingly, which result in an event object being inserted
 into `coreQ` and eventually being executed.
+High-level semantics operations that do not correspond to any instruction, such as `mmap()`, `malloc()/free()`,
+pool switching, and simulation exit, will also be inserted into `coreQ` as `ArielEvent` objects.
+Ariel core can use these operations to fine tune the simulation, such as generating the correct 
+physical address for address translation.
