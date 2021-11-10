@@ -153,4 +153,13 @@ containing class, `class ArielCPU`. The frequency of the CPU clock is specified 
 In the main event loop, if the simulator is neither halted nor stalled, then it will execute up to `maxIssuePerCycle`
 instructions. For each iteration, it calls `processNextEvent()` to extract an event object of type `class ArielEvent`,
 and simulate the event as one instruction. 
+The function returns a boolean flag `didProcess` indicating whether the instruction is successfully processed, or 
+not, due to a resource hazard (e.g., pending transaction queue is full). 
+In the latter case, the pipeline is immediately stalled, and no instruction could be further processed beyond the
+instruction. Note that in this case, the stalled flag is not set, since this is not a software induced stall.
+The core, nevertheless, stops processing instructions, and will retry the same instruction that blocked the pipeline
+in the future cycles, until it unblocks (`didProcess` is `true`). 
+No matter whether the core processes any instruction, or the core is stalled, as long as the core is not
+halted, the `currentCycles` counter will be incremented after the iteration, indicating that a logical cycle has passed.
+
 
