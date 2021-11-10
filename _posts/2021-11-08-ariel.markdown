@@ -223,7 +223,10 @@ Memory reads and writes are simulated by calling `handleReadRequest()` and `hand
 These two functions are largely symmetric, so we only cover read handling. Write handling is almost identical except
 that the command issued to the memory hierarchy is a write, rather than a read.
 
-In `handleReadRequest()`, the function first checks whether the operation spans two blocks (multi-block reads that 
+In `handleReadRequest()`, the function first translates the virtual address to physical address using its own
+embedded TLB (not the timing TLB, which is simulated separately) by calling `translateAddress()` on data member 
+`memmgr`.
+It then checks whether the operation spans two blocks (multi-block reads that 
 require more than two are not supported), or just access a single block. In the former case, the two blocks to be 
 accessed are requested separately by first computing the cache block address and the read size, and then
 calling `commitReadEvent()` twice to simulate two cache accesses.
@@ -263,12 +266,15 @@ Similarly, cache line flushes are also not the implementation of x86 `clflush/cl
 call `ariel_flushline()` in the source code with the pointer value to be flushes (the value is computed in the runtime
 and passed to the function).
 
-Fences are handled by setting `isFenced` and `isStalled` to `true`, if the number of pending transactions is greater 
-than zero. As discussed earlier, the fence will eventually commit when tha last outstanding memory operation is 
-completed.
+Fences are handled by calling `fence()`, which sets `isFenced` and `isStalled` to `true`, if the number of 
+pending transactions is greater than zero. 
+As discussed earlier, the fence will eventually commit when tha last outstanding memory operation is completed, at 
+which point `unfence()` is called to set both `isFenced` and `isStalled` to `false`.
 
-Flush events are handled by `handleFlushEvent()` similarly to a memory operations, except that it always affects a 
+Flush events are handled by `handleFlushEvent()` in a way similar to memory operations, except that it always affects a 
 single cache block. After obtaining the physical address of the flush, `commitFlushEvent()` is called to create 
 a memory event object of type `SimpleMem::Request`, with the command being `SimpleMem::Request::FlushLineInv`.
 The event is sent to the memory hierarchy after being added to the pending transaction queue and incrementing the 
 pending transaction counter. 
+
+
