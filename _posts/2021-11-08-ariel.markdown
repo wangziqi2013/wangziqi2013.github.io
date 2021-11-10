@@ -192,3 +192,9 @@ High-level semantics operations that do not correspond to any instruction, such 
 pool switching, and simulation exit, will also be inserted into `coreQ` as `ArielEvent` objects.
 Ariel core can use these operations to fine tune the simulation, such as generating the correct 
 physical address for address translation.
+
+Note that, despite lacking an instruction class for representing ALU instructions and branches, these instructions are 
+still captured and simulated as no-ops. The Pin frontend treats any non-read and non-write instruction as a no-op,
+and inserts them into the circular buffer by calling `WriteNoOp()` in file `fesimple.cc`.
+These instructions still consume dispatching bandwidth in the core simulation, it is just that the detailed 
+architectural state transitions are ignored.
