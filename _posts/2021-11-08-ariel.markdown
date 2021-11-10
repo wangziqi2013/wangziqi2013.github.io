@@ -180,3 +180,11 @@ a multithreaded simulation), and reads the message into a local `class ArielComm
 Messages of command type `ARIEL_START_INSTRUCTION` and `ARIEL_END_INSTRUCTION` delimits the memory operations of a 
 multi-operand instruction, and they are essentially just for statistics purposes (e.g., to keep track of the actual
 number of instructions, not memory operations, that have been simulated).
+The actual memory operation is encoded in `ac.command` field for messages between instruction start and end
+messages. If the instruction is a read (`ARIEL_PERFORM_READ`) or write (`ARIEL_PERFORM_WRITE`), then a corresponding 
+event is inserted into the `coreQ` by calling `createReadEvent()` or `createWriteEvent()`, respectively.
+These two functions will simply create and enqueue `class ArielEvent` objects with the address to be read/written and 
+the length of the memory operation.
+Other types of instructions, such as no-ops (`ARIEL_NOOP`), flushes (`ARIEL_FLUSHLINE_INSTRUCTION`),
+and fences (`ARIEL_FENCE_INSTRUCTION`), are also processed accordingly, which result in an event object being inserted
+into `coreQ` and eventually being executed.
