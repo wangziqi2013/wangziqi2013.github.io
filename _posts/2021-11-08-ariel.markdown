@@ -162,4 +162,12 @@ in the future cycles, until it unblocks (`didProcess` is `true`).
 No matter whether the core processes any instruction, or the core is stalled, as long as the core is not
 halted, the `currentCycles` counter will be incremented after the iteration, indicating that a logical cycle has passed.
 
-
+I noted a possible bug in this mechanism, which would happen in `processNextEvent()`, if the call to `refillQueue()`
+returns `false`. This would happen if `readMessageNB()`, which is called in `refillQueue()`, returns `false`, indicating
+that either the circular queue that provides instruction is empty, or the queue is currently being locked for write.
+This is merely an artifact on the host created by IPC and process scheduling, and should not incur any observable 
+state change in the simulation. Unfortunately, in the current implementation of Ariel core, queue contention and 
+temporary starvation will cause the processor to stall for no architectural reason, which introduces 
+unpredicable simulation errors.
+A better implementation would be to use blocking reads on the tunnel object, which guarantees that a frontend 
+generated message is read before it returns, which never stalls the processor because of the queue.
