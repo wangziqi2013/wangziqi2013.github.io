@@ -196,5 +196,16 @@ physical address for address translation.
 Note that, despite lacking an instruction class for representing ALU instructions and branches, these instructions are 
 still captured and simulated as no-ops. The Pin frontend treats any non-read and non-write instruction as a no-op,
 and inserts them into the circular buffer by calling `WriteNoOp()` in file `fesimple.cc`.
-These instructions still consume dispatching bandwidth in the core simulation, it is just that the detailed 
+These instructions still consume dispatching bandwidth in the core simulation. It is just that the detailed 
 architectural state transitions are ignored.
+
+Function `processNextEvent()` then pops the first event object in the `coreQ`, and simulates the operation. 
+No-op events are not further processed, as their sole purpose is to consume dispatch bandwidth for simulating ALU
+and branching instructions. Reads and writes are handled by calling `handleReadRequest()` and `handleWriteRequest()`
+respectively, if the pending transaction queue's size `pending_transaction_count` is still not at the
+the maximum capacity `maxPendingTransactions`. Otherwise, the memory operation is not processed due to a 
+resource hazard on the pending transaction queue, and the event object is not taken off the `coreQ`, meaning that
+they will be reattempted in the next cycle. On a resource hazard, the local variable `removeEvent` is also set to
+`false`, meaning that the core's main loop (described above) will be blocked until the event is able to proceed.
+
+
