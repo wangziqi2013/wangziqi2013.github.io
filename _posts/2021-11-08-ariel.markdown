@@ -216,3 +216,17 @@ High-level events are processed according to their semantics. `CORE_EXIT` event 
 by setting the `isHalted` flag, which will be checked at the end of every loop. Memory operations such as `mmap()`,
 `malloc()` and `free()` are handled by the handler functions, which tracks the virtual to physical mapping with
 best efforts.
+
+### Reads and Writes
+
+Memory reads and writes are simulated by calling `handleReadRequest()` and `handleWriteRequest()` respectively.
+These two functions are largely symmetric, so we only cover read handling. Write handling is almost identical except
+that the command issued to the memory hierarchy is a write, rather than a read.
+
+In `handleReadRequest()`, the function first checks whether the operation spans two blocks (multi-block reads that 
+require more than two are not supported), or just access a single block. In the former case, the two blocks to be 
+accessed are requested separately by first computing the cache block address and the read size, and then
+calling `commitReadEvent()` twice to simulate two cache accesses.
+In the former case, only one base and length is computed, and `commitReadEvent()` is called once.
+
+
