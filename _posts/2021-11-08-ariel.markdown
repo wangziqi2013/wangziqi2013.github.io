@@ -250,4 +250,15 @@ in the pending transaction queue by decrementing `pending_transaction_count`; an
 transactions drop to zero, and the core is stalled, then the core is unstalled, because the pending transactions 
 have been drained.
 
+### Fences and Cache Line Flushes
 
+Ariel core models fences as a draining instruction: It stalls the core from executing until all pending transactions
+have been drained, hence enforcing a strong ordering between memory operations before and after the fence instruction. 
+Note that Ariel core fences are not the simulator's implementation of regular x86 memory fence family. Instead, Ariel
+fence should be called explicitly as a function `ariel_fence()` in the source code. The Pin instrumentation routines 
+will recognize the function invocation, and replace it will a fence message that will be inserted into the circular 
+queue when executed.
+
+Similarly, cache line flushes are also not the implementation of x86 `clflush/clflushopt/clwb`. Users must explicitly
+call `ariel_flushline()` in the source code with the pointer value to be flushes (the value is computed in the runtime
+and passed to the function).
