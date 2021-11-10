@@ -235,4 +235,8 @@ core to the memory hierarchy, and is initialized in the containing class `class 
 Note that the memory event object is handled in parallel with core execution, which will be sent back via the 
 same link from the memory hierarchy at a future cycle. To track outstanding memory operations, the newly constructed 
 event object is also registered with the pending transaction queue, `pendingTransactions`, which is a mapping structure
-
+that maps the ID of the outstanding request to the request object.
+The number of pending transactions is also updated by incrementing `pending_transaction_count`.
+Note that the Ariel core only implements minimum logic for handling memory operations. 
+More complicated tasks that are essential on a real core, such as deduplication of requests on the same address
+and read-write forwarding, are not implemented. 
