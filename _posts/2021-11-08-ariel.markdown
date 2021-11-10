@@ -208,4 +208,6 @@ resource hazard on the pending transaction queue, and the event object is not ta
 they will be reattempted in the next cycle. On a resource hazard, the local variable `removeEvent` is also set to
 `false`, meaning that the core's main loop (described above) will be blocked until the event is able to proceed.
 
-
+Cache address flushes and fences are handled by calling `handleFlushEvent()` and `handleFenceEvent()`, respectively.
+Flushes are also entered into the pending transaction queue, and hence it is also prone to resource hazards just
+like reads and writes. Fences are always instantly executed, which we discuss later below.
