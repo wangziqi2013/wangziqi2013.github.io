@@ -240,3 +240,14 @@ The number of pending transactions is also updated by incrementing `pending_tran
 Note that the Ariel core only implements minimum logic for handling memory operations. 
 More complicated tasks that are essential on a real core, such as deduplication of requests on the same address
 and read-write forwarding, are not implemented. 
+
+Memory responses are sent by the memory hierarchy via the same link object when they are completed. The receiving end
+of the link is registered with call back function `handleEvent()`, which will be invoked with the response event object.
+The function first extracts the request event ID stored in the response object, and then performs a lookup in the
+mapping structure `pendingTransactions` for the request object.
+Then the memory operation retires by: (1) Removing the request object in the mapping structure; (2) Freeing a slot 
+in the pending transaction queue by decrementing `pending_transaction_count`; and (3) If the number of pending 
+transactions drop to zero, and the core is stalled, then the core is unstalled, because the pending transactions 
+have been drained.
+
+
