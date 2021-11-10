@@ -211,3 +211,8 @@ they will be reattempted in the next cycle. On a resource hazard, the local vari
 Cache address flushes and fences are handled by calling `handleFlushEvent()` and `handleFenceEvent()`, respectively.
 Flushes are also entered into the pending transaction queue, and hence it is also prone to resource hazards just
 like reads and writes. Fences are always instantly executed, which we discuss later below.
+
+High-level events are processed according to their semantics. `CORE_EXIT` event will immediately terminate simulation
+by setting the `isHalted` flag, which will be checked at the end of every loop. Memory operations such as `mmap()`,
+`malloc()` and `free()` are handled by the handler functions, which tracks the virtual to physical mapping with
+best efforts.
