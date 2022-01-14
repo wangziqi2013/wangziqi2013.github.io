@@ -56,29 +56,29 @@ Publications
 ------------
 **2021**
 <br />
-Wang, Ziqi, Michael A. Kozuch, Todd C. Mowry, Vivek Seshadri, Gennady Pekhimenko, Chulhwan Choo, Dimitrios Skarlatos. "NVOverlay: Enabling Efficient and Scalable High-Frequency Snapshotting to NVM. " Proceedings of the 48th Intl. Symposium on Computer Architecture (ISCA), Virtual, June 2021.
+__Wang, Ziqi__, Michael A. Kozuch, Todd C. Mowry, Vivek Seshadri, Gennady Pekhimenko, Chulhwan Choo, Dimitrios Skarlatos. "NVOverlay: Enabling Efficient and Scalable High-Frequency Snapshotting to NVM. " Proceedings of the 48th Intl. Symposium on Computer Architecture (ISCA), Virtual, June 2021.
 
 **2019**
 <br />
-Wang, Ziqi, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. "Multiversioned Page Overlays: Enabling Faster Serializable Hardware Transactional Memory." In 2019 28th International Conference on Parallel Architectures and Compilation Techniques (PACT). IEEE, 2019.
+__Wang, Ziqi__, Vivek Seshadri, Todd C. Mowry, and Michael Kozuch. "Multiversioned Page Overlays: Enabling Faster Serializable Hardware Transactional Memory." In 2019 28th International Conference on Parallel Architectures and Compilation Techniques (PACT). IEEE, 2019.
 
-Zimmeck, Sebastian, Peter Story, Daniel Smullen, Abhilasha Ravichander, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "MAPS: Scaling privacy compliance analysis to a million apps." Proceedings on Privacy Enhancing Technologies 2019, no. 3 (2019): 66-86. 
+Zimmeck, Sebastian, Peter Story, Daniel Smullen, Abhilasha Ravichander, __Ziqi Wang__, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "MAPS: Scaling privacy compliance analysis to a million apps." Proceedings on Privacy Enhancing Technologies 2019, no. 3 (2019): 66-86. 
 
-Story, Peter, Sebastian Zimmeck, Abhilasha Ravichander, Daniel Smullen, Ziqi Wang, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "Natural language processing for mobile app privacy compliance." In AAAI Spring Symposium on Privacy Enhancing AI and Language Technologies (PAL 2019). 2019.
+Story, Peter, Sebastian Zimmeck, Abhilasha Ravichander, Daniel Smullen, __Ziqi Wang__, Joel Reidenberg, N. Cameron Russell, and Norman Sadeh. "Natural language processing for mobile app privacy compliance." In AAAI Spring Symposium on Privacy Enhancing AI and Language Technologies (PAL 2019). 2019.
 
 **2018**
 <br />
-Wang, Ziqi, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. "Building a bw-tree takes more than just buzz words." In Proceedings of the 2018 International Conference on Management of Data, pp. 473-488. ACM, 2018. 
+__Wang, Ziqi__, Andrew Pavlo, Hyeontaek Lim, Viktor Leis, Huanchen Zhang, Michael Kaminsky, and David G. Andersen. "Building a bw-tree takes more than just buzz words." In Proceedings of the 2018 International Conference on Management of Data, pp. 473-488. ACM, 2018. 
 
 **2017**
 <br />
-Pavlo, Andrew, Gustavo Angulo, Joy Arulraj, Haibin Lin, Jiexi Lin, Lin Ma, Prashanth Menon, Todd Mowry, Matthew Perron, Ian Quah, Siddharth Santurkar, Anthony Tomasic, Skye Toor, Dana Van Aken, Ziqi Wang, Yingjun Wu, Ran Xian, and Tieying Zhang. "Self-Driving Database Management Systems." In CIDR, vol. 4, p. 1. 2017.
+Pavlo, Andrew, Gustavo Angulo, Joy Arulraj, Haibin Lin, Jiexi Lin, Lin Ma, Prashanth Menon, Todd Mowry, Matthew Perron, Ian Quah, Siddharth Santurkar, Anthony Tomasic, Skye Toor, Dana Van Aken, __Ziqi Wang__, Yingjun Wu, Ran Xian, and Tieying Zhang. "Self-Driving Database Management Systems." In CIDR, vol. 4, p. 1. 2017. ***(Authors are sorted by last name)***
 
-Zimmeck, Sebastian, Ziqi Wang, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman M. Sadeh, Steven M. Bellovin, and Joel R. Reidenberg. "Automated Analysis of Privacy Requirements for Mobile Apps." In NDSS. 2017.
+Zimmeck, Sebastian, __Ziqi Wang__, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman M. Sadeh, Steven M. Bellovin, and Joel R. Reidenberg. "Automated Analysis of Privacy Requirements for Mobile Apps." In NDSS. 2017.
 
 **2016**
 <br />
-Zimmeck, Sebastian, Ziqi Wang, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman Sadeh, Steven Bellovin, and Joel Reidenberg. "Automated analysis of privacy requirements for mobile apps." In 2016 AAAI Fall Symposium Series. 2016.
+Zimmeck, Sebastian, __Ziqi Wang__, Lieyong Zou, Roger Iyengar, Bin Liu, Florian Schaub, Shomir Wilson, Norman Sadeh, Steven Bellovin, and Joel Reidenberg. "Automated analysis of privacy requirements for mobile apps." In 2016 AAAI Fall Symposium Series. 2016.
 
 Fun Stuff
 ---------
