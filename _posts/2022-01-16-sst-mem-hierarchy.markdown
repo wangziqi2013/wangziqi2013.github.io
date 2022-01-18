@@ -92,6 +92,17 @@ it extracts the first argument of macro `X`.
 `X_CMDS` is inserted after the definition of `X`, which is replaced by an array of table rows encoded with 
 macro `X`, which will simply be replaced by the first macro argument of `X`, i.e., the command itself.
 
+Other constant arrays are defined in an exact same way by extracting different columns from the `X_CMDS` table.
+`CommandResponse` defines the response message of each command, and it exacts the second column of the `X_CMDS` table
+as the body of the array. If a command is not of the request type, and hence has no corresponding response command,
+the response command will be `NULLCMD`.
+This array, as well as all arrays covered below, are indexed by the command's `enum class` integer value.
+`BasicCommandClassArr` and `CommandClassArr` define basic command classes and command classes, which extract the 
+third and the fourth element of the `X_CMDS` table.
+Similarly, `CommandRouteByAddress`, `CommandWriteback`, and `MemEventTypeArr` define command route,
+command write back flag, and the memory event type, which are extracted from the rest of the table columns.
+
+
 
 ## The Hierarchy Interface
 
