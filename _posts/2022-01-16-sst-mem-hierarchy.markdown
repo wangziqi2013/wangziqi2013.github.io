@@ -54,9 +54,10 @@ source as the destination, meaning that the response message is intended to be s
 sender of the given message. 
 The `responseToID_` field is also set as the unique global ID of the request event, such that the receiving end 
 can match the response with the request.
-The `makeResponse()` function simples does slightly more than `setResponse()` by allocating a new event object,
-and passing it as the first argument to `setResponse()`. The newly created object is returned by the function,
-and is ready to be sent via a link.
+The `makeResponse()` function simples does slightly more than `setResponse()` by allocating a new event object
+as an exact clone of the current one (passing `*this` into the copy constructor),
+and then passing the current object as the first argument to `setResponse()`. 
+The newly created object is a response event to the current event on which the member function is called.
 
 ### MemEvent
 
@@ -66,7 +67,10 @@ such as the byte-granularity address of the request, `addr_`, the block-aligned 
 whether the message contains dirty data, `dirty_`, whether the message is a block eviction, `isEvict_`, and payload
 of either a request or a response, `payload_` (which is merely a vector of bytes, `std::vector<uint8_t>`, typedef'ed
 as `dataVec`). The object also maintains memory transaction-level control variables, such as the number of retries,
-`retries_`, and whether the event is blocked by another pending event on the same address, `blocked_`, and so on.
+`retries_`, and whether the event is blocked by another pending event on the same address, `blocked_`, 
+whether the event is currently being handled by the controller, `inProgress_`, and so on.
+
+
 
 ## The Hierarchy Interface
 
