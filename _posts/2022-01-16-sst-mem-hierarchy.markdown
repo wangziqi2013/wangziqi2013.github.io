@@ -102,7 +102,10 @@ third and the fourth element of the `X_CMDS` table.
 Similarly, `CommandRouteByAddress`, `CommandWriteback`, and `MemEventTypeArr` define command route,
 command write back flag, and the memory event type, which are extracted from the rest of the table columns.
 
-
+Coherence states are defined as a table by the macro `STATE_TYPES`, with the first column being the state,
+and the second column being the next state.
+The `enum` type `State` stores a list of all coherence states, which is defined by extracting the first column
+of the `STATE_TYPES` table.
 
 ## The Hierarchy Interface
 
