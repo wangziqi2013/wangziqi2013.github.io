@@ -58,5 +58,15 @@ The `makeResponse()` function simples does slightly more than `setResponse()` by
 and passing it as the first argument to `setResponse()`. The newly created object is returned by the function,
 and is ready to be sent via a link.
 
+### MemEvent
+
+`class MemEvent` is a direct derivation of `class MemEventBase`, and an indirect child class of `class Event`. It
+inherits all data fields carrying link-level information, and in addition, it also defines high-level operation details,
+such as the byte-granularity address of the request, `addr_`, the block-aligned address, `baseAddr_`, 
+whether the message contains dirty data, `dirty_`, whether the message is a block eviction, `isEvict_`, and payload
+of either a request or a response, `payload_` (which is merely a vector of bytes, `std::vector<uint8_t>`, typedef'ed
+as `dataVec`). The object also maintains memory transaction-level control variables, such as the number of retries,
+`retries_`, and whether the event is blocked by another pending event on the same address, `blocked_`, and so on.
+
 ## The Hierarchy Interface
 
