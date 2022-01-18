@@ -75,5 +75,18 @@ whether the event is currently being handled by the controller, `inProgress_`, a
 the method is called. Other versions of `makeResponse()` are also available, which creates new event objects using
 an explicit `cmd` argument as the command of the new object, or with an unused `state` argument.
 
+The rest of the source file just defines getters and setters of data members, and method functions for testing various
+flags.
+
+### Constants, Macros, and Flags
+
+File `memTypes.h` defines the full set of memory commands, coherence states, and coherence transitions used in the 
+memory hierarchy.
+The macro `X_CMDS` defines a table of memory commands, with the response command, command class,
+command route, write back flag, and the type of the command.
+Each row of the table is defined by a macro `X`. According to the exact definition of X, different columns
+of the `X_CMDS` table can be extracted.
+
+
 ## The Hierarchy Interface
 
