@@ -86,6 +86,11 @@ The macro `X_CMDS` defines a table of memory commands, with the response command
 command route, write back flag, and the type of the command.
 Each row of the table is defined by a macro `X`. According to the exact definition of X, different columns
 of the `X_CMDS` table can be extracted.
+For example, `enum class Command` is a C++ `enum class` with the body being a list of the memory commands.
+In order to define the class, macro `X` is temporarily defined as `#define X(a,b,c,d,e,f,g) a,`, meaning that
+it extracts the first argument of macro `X`.
+`X_CMDS` is inserted after the definition of `X`, which is replaced by an array of table rows encoded with 
+macro `X`, which will simply be replaced by the first macro argument of `X`, i.e., the command itself.
 
 
 ## The Hierarchy Interface
