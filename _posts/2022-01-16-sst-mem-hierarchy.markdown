@@ -20,7 +20,9 @@ any other event objects. `class MemEventBase` defines low-level link layer prope
 source and destination names (which, surprisingly, are of `std::string` type) of the current hop, `src_` and `dst_`, 
 the original requestor's name (which is also an `std::string`), `rqstr_`, and the globally unique event ID, 
 `eventID_`. 
-
+If the message is a response to a previous request, then the ID of the matching request event is stored in 
+`responseToID_`, such that the requestor as well as all components on the path can identify the matching request
+message when receiving a response.
 
 ## The Hierarchy Interface
 
