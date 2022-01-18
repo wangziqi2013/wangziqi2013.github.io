@@ -48,6 +48,9 @@ source as the destination, meaning that the response message is intended to be s
 sender of the given message. 
 The `responseToID_` field is also set as the unique global ID of the request event, such that the receiving end 
 can match the response with the request.
+The `makeResponse()` function simples does slightly more than `setResponse()` by allocating a new event object,
+and passing it as the first argument to `setResponse()`. The newly created object is returned by the function,
+and is ready to be sent via a link.
 
 ## The Hierarchy Interface
 
