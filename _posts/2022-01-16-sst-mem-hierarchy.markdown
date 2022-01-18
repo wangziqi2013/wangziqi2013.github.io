@@ -24,6 +24,10 @@ If the message is a response to a previous request, then the ID of the matching 
 `responseToID_`, such that the requestor as well as all components on the path can identify the matching request
 message when receiving a response.
 
+The `class MemEventBase` object also carries cache flags in `flags_` field, which uses the flag constants defined 
+in the same source file that begins with `F_`. These flags indicate special semantics of the message,
+such as locked accesses, non-cacheable accesses, etc., and are only used in specific scenarios.
+
 The lifetime of memory event objects is from the sending of the message to the successful processing of the message.
 If a new message is to be generated, the old one is freed, after the new message is created based on the contents 
 of the old. This way, the memory hierarchy defines the ownership rule for memory event objects: These objects are 
@@ -32,6 +36,8 @@ the message, once delivered, and is responsible for destroying the messages when
 (destruction can be delayed, if the processing indicates a failure and demands a reattempt later).
 In other words, each memory event object only carries information for one hop, from the source to the destination
 (which correspond to the `src_` and `dst_` fields).
+
+
 
 ## The Hierarchy Interface
 
