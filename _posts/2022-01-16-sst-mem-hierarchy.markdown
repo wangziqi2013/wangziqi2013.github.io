@@ -27,6 +27,12 @@ If the message is a response to a previous request, then the ID of the matching 
 `responseToID_`, such that the requestor as well as all components on the path can identify the matching request
 message when receiving a response.
 
+All memory hierarchy event objects are assigned globally unique IDs by calling `generateUniqueId()`, which is 
+defined in the base class, `class Event`. The ID is assigned in member function `setDefaults()`, which is called
+by the constructor, meaning that all memory hierarchy event objects carry a valid ID.
+Interestingly, `class Event` objects themselves do not define the unique ID, but leave it to the derived class for
+generation and storage of the ID.
+
 The `class MemEventBase` object also carries cache flags in `flags_` field, which uses the flag constants defined 
 in the same source file that begins with `F_`. These flags indicate special semantics of the message,
 such as locked accesses, non-cacheable accesses, etc., and are only used in specific scenarios.
