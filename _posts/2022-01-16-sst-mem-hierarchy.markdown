@@ -70,7 +70,10 @@ as `dataVec`). The object also maintains memory transaction-level control variab
 `retries_`, and whether the event is blocked by another pending event on the same address, `blocked_`, 
 whether the event is currently being handled by the controller, `inProgress_`, and so on.
 
-
+`class MemEvent` also defines the `makeResponse()` interface. The argument-less version overrides the method of 
+`class MemEventBase`, and it creates a new `class MemEvent` object that is the response to the current one on which
+the method is called. Other versions of `makeResponse()` are also available, which creates new event objects using
+an explicit `cmd` argument as the command of the new object, or with an unused `state` argument.
 
 ## The Hierarchy Interface
 
