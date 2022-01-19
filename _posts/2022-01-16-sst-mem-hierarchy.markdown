@@ -323,6 +323,14 @@ and the before value of the global counter is assigned to the tag's counter, as 
 
 The `findBestCandidate()` method of `class LRU` takes a vector of `class ReplacementInfo` objects, which correspond
 to tag entries of the set on which the replacement is being performed, and searches for the entry with either
-`I` state, or the minimal value (if none of the entry is in `I` state), as the LRU entry.
+`I` state, or the minimal value of the LRU counters tracked by `array` 
+(if none of the entry is in `I` state), as the LRU entry.
 The index of the LRU entry is stored in data member `bestCandidate`, and is also returned by the method.
 Method `getBestCandidate` simply returns the `bestCandidate` value.
+
+Note that the comment block on top of `findBestCandidate()` in the source code describes the function incorrectly
+(up to version 11.1.0, which is the reference version this article assumes), 
+and it seems that the developers copy-pasted it from that of `class LRUOpt`. A mistake on their part!
+
+`class LRUOpt` implements an optimized version of LRU, which not only takes LRU counter values into consideration,
+but also gives priority to entries with a particular state.
