@@ -145,3 +145,14 @@ Note that the command used by `class Request` differ from the internal commands 
 `memTypes.h`. The interface-level commands are designed for the relatively high-level operations from the
 perspective of CPUs, and will be translated to and from the internal command by the implementation of the interface 
 class for requests and responses, respectively.
+
+### The Interface Object
+
+The implementation of the interface object in SST's memory hierarchy is defined in files `memHierarchyInterface.h/cc`,
+as `class MemHierarchyInterface`. The class is derived from `class SimpleMem`, and hence can be loaded as a 
+subcomponent into the component slot.
+In the Python configuration file, `class MemHierarchyInterface` is instanciated by calling `setSubComponent()` on the 
+CPU component object, with the first argument (slot name) being `memory`, and the second argument being 
+`memHierarchy.memInterface`. 
+
+
