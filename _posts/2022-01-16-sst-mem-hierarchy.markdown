@@ -280,3 +280,13 @@ set's `class ReplacementInfo` vector, which is maintained by `rInfo` as we have 
 Method `replace()` just invalidates an existing entry plus its replacement info (by calling `replaced()` into the 
 replacement manager), and sets a new address to the entry. Method `deallocate()` simply invalidates an entry and 
 its replacement information.
+
+### Replacement Manager
+
+The memory hierarchy provides several flavors of the replacement manager, which are contained in file 
+`replacementManager.h`. This file also defines two extra classes: `class ReplacementInfo` and 
+`class CoherenceReplacementInfo`, which must be included in tag array entries, and obtainable by calling 
+`getReplacementInfo()` on these entries (i.e., the type `T` argument of `class cacheArray`).
+Both classes store the information that is necessary to make a replacement decision within a set.
+
+
