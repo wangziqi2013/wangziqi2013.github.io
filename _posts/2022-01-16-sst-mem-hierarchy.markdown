@@ -289,4 +289,13 @@ The memory hierarchy provides several flavors of the replacement manager, which 
 `getReplacementInfo()` on these entries (i.e., the type `T` argument of `class cacheArray`).
 Both classes store the information that is necessary to make a replacement decision within a set.
 
-
+`class ReplacementInfo` stores the index of the corresponding tag entry in data field `index` 
+(this is a duplication of the index field
+of tag entries, but is also necessary, since the replacement manager has no idea of the tag entry),
+and the coherence state of the tag in data field `state`. 
+The state need not precisely reflect the actual coherence protocol, and could just be a rough approximation,
+such as `I`/Non-`I`.
+`class CoherenceReplacementInfo` inherits from `class ReplacementInfo`, and it stores more detailed 
+information about the coherence state, i.e., `owned` boolean flag to indicate whether the tag is owned by
+the current cache, and `shared` flag to indicate whether the block is shared by upper level caches.
+Replacement decisions can hence prioritize certain lines over the others based on their detailed coherence status.
