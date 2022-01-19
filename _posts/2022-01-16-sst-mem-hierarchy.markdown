@@ -167,3 +167,8 @@ Once an event is received, it is transformed into a `class Request` object, and 
 registered call back (note that this call back is registered to the hierarchy interface by the CPU, not to the link
 object), `recvHandler_`, which is provided as a constructor argument, `handler`.
 
+The CPU may also choose to not register a call back with the interface object, in which case the `handler` argument to
+the interface constructor is set to `NULL`. The constructor will then register the receiving link as a polling link,
+meaning that messages received at the link will be buffered in a local queue, and must be retrieved explicitly
+by the CPU via the interface's method function `recvResponse()`.
+We focus on callback-based mechanism in this article.
