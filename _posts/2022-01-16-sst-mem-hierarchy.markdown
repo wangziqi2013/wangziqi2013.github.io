@@ -283,6 +283,8 @@ its replacement information.
 
 ### Replacement Manager
 
+#### Replacement Information
+
 The memory hierarchy provides several flavors of the replacement manager, which are contained in file 
 `replacementManager.h`. This file also defines two extra classes: `class ReplacementInfo` and 
 `class CoherenceReplacementInfo`, which must be included in tag array entries, and obtainable by calling 
@@ -299,3 +301,12 @@ such as `I`/Non-`I`.
 information about the coherence state, i.e., `owned` boolean flag to indicate whether the tag is owned by
 the current cache, and `shared` flag to indicate whether the block is shared by upper level caches.
 Replacement decisions can hence prioritize certain lines over the others based on their detailed coherence status.
+
+#### Replacement Algorithm
+
+All replacement algorithms inherit from the base class, `class ReplacementPolicy`, which itself is derived
+from `class SubComponent`, and therefore must be instanciated into the slot of its containing component
+in the Python configuration file.
+The class is pure abstract, and only serves the purposes of specifying the exposed interface of the replacement 
+algorithm: `update()`, `replaced()`, `getBestCandidate()`, and `findBestCandidate()`. As we have seen above,
+the cache tag array calls these methods to implement block replacement and invalidation.
