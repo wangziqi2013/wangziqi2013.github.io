@@ -218,6 +218,11 @@ request object exists, but the command is `Inv` (external invalidation), then a 
 with the command being `Inv`, and returned to the caller.
 Otherwise, if the query succeeds, meaning that the memory event is a response to a previous request, 
 the original request object of type `class Request` is then fetched from the pending request map `requests_`,
-and updated to reflect the completion of the request by calling `processIncoming()`.
+and updated to reflect the completion of the request by calling `updateRequest()`.
 Finally, the request object will be returned to the caller, which is then delivered back to the CPU.
 
+Function `updateRequest()` updates the command of the `class Request` object according to the command of the 
+response memory event object. Read operations will receive `GetSResp`, which is translated to `ReadResp`.
+Writes will receive `GetXResp`, which is translated to `WriteResp`.
+CPU-initiated flush will receive `Command::FlushLineResp` on completion, which is translated to 
+`SimpleMem::Request::FlushLineResp`.
