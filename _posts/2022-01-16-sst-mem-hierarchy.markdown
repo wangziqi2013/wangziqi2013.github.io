@@ -122,4 +122,11 @@ generates a response object, before returning that to the CPU via a function cal
 
 ### SimpleMem
 
-`class SimpleMem`
+`class SimpleMem` is the base class of the memory interface, and it resides in the core part of SST, in file 
+`simpleMem.h`. It exposes an interface to the memory hierarchy via 
+`class Request` objects, and two simple interface functions: `sendRequest()` and `recvResponse()` (the latter is
+only used for polling-based interface, though, while we only cover event-based interface).
+`class SimpleMem` and all its derived classes are derived from `class SubComponent`, which cannot be instanciated
+independently, but must be loaded into a subcomponent slot of the containing component via the configuration script.
+
+
