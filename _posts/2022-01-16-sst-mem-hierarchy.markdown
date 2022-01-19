@@ -201,3 +201,12 @@ obtained by `getName()` function call into `class BaseComponent`, and both the `
 `init()`, the value of which is the identify of the other end of the receiving link. This suggests that the 
 `rqstr_` field of the interface object stores the string name of the next hop, which is typically the L1 cache
 or the TLB object.
+
+The memory hierarchy also supports custom commands, which carries a command of `CustomCmd` in the request object.
+Custom commands are transformed into a memory event object by calling `createCustomEvent()`, and the resulting
+memory event object carries a command of `CustomReq`. We do not cover custom command in this article, as the are 
+pretty straightforward to implement.
+
+### Transforming MemEvents to Requests
+
+
