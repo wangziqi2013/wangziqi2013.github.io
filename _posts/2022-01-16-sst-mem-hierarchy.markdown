@@ -254,8 +254,11 @@ Tag objects are stored in data member `lines_`, which is simply a vector of type
 Blocks (in fact, tags) are uniquely identified using their indexes into the `lines_` vector. 
 Hash functions for mapping addresses to set indexes and replacement algorithms that selects a victim block
 on insert eviction are also given as constructor arguments. The implementation of these two are also decoupled
-from the tag array, and they can be loaded as subcomponents into slot `hash` and `replacement`, respectively,
-using the Python configuration file.
+from the tag array, and they can be loaded as subcomponents into slot `hash` and `replacement`
+(of `class Cache`, not `class CacheArray`), respectively, using the Python configuration file.
+Note that both `hash` and `replacement` are just regular data members of `class CacheArray`, and they 
+are supposed to be initialized and loaded into the subcomponent slots by the containing class, and then
+passed to `class CacheArray` as constructor arguments.
 
 The tag array object also explicitly maintains replacement information of each tag entry in its data member
 `rInfo`. `rInfo` is maintained as a mapping structure, with the set number being the key, and type 
@@ -310,3 +313,12 @@ in the Python configuration file.
 The class is pure abstract, and only serves the purposes of specifying the exposed interface of the replacement 
 algorithm: `update()`, `replaced()`, `getBestCandidate()`, and `findBestCandidate()`. As we have seen above,
 the cache tag array calls these methods to implement block replacement and invalidation.
+
+`class LRU` is an implementation of ideal LRU replacement algorithm. The class constructor takes the total number of 
+blocks in the cache, and the number of ways (which is not used, though), and initializes an internal
+vector, `array`, which stores per-tag LRU counter. Note that `class LRU` does not rely on the per-tag 
+`class ReplacementPolicy` objects to store the LRU counter, as the counter is not defined in that class.
+The class also maintains a global LRU counter, which is incremented every time the counter of a tag is updated,
+and the before value of the global counter is assigned to the tag's counter.
+
+
