@@ -235,3 +235,14 @@ response memory event object. Read operations will receive `GetSResp`, which is 
 Writes will receive `GetXResp`, which is translated to `WriteResp`.
 CPU-initiated flush will receive `Command::FlushLineResp` on completion, which is translated to 
 `SimpleMem::Request::FlushLineResp`.
+
+## Cache: Array, Replacement, and Hash
+
+The next big topic is the cache, which is the central component of SST's memory hierarchy. 
+SST decouples the organization and coherence aspects of a cache, and makes them into two largely independent parts.
+In this section, we focus on cache organization, which includes the tag array, the replacement algorithm, and hash 
+functions.
+
+### The Cache Tag Array
+
+
