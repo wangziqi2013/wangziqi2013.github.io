@@ -146,6 +146,14 @@ Note that the command used by `class Request` differ from the internal commands 
 perspective of CPUs, and will be translated to and from the internal command by the implementation of the interface 
 class for requests and responses, respectively.
 
+The lifetime of request objects, contrary to the lifetime of memory event objects, span the duration of the memory
+operation. Request objects are allocated by the CPU who initiates the memory operation (e.g., in 
+`commitReadEvent()`, `commitWriteEvent()`, and `commitFlushEvent()` of `class ArielCore`), and are kept in an internal 
+pending operation map of the interface, which are matched against incoming completion notices from the hierarchy. 
+When an operation completes, the original request object will be 
+retrieved, updated to reflect the completion status of the operation, and sent back to the CPU. The CPU is responsible
+for the final destruction of the request after processing it (for example, in `ArielCore::handleEvent()`).
+
 ### The Interface Object
 
 The implementation of the interface object in SST's memory hierarchy is defined in files `memHierarchyInterface.h/cc`,
@@ -220,6 +228,7 @@ Otherwise, if the query succeeds, meaning that the memory event is a response to
 the original request object of type `class Request` is then fetched from the pending request map `requests_`,
 and updated to reflect the completion of the request by calling `updateRequest()`.
 Finally, the request object will be returned to the caller, which is then delivered back to the CPU.
+The mapping entry is removed from the internal map, if the request object is retrieved.
 
 Function `updateRequest()` updates the command of the `class Request` object according to the command of the 
 response memory event object. Read operations will receive `GetSResp`, which is translated to `ReadResp`.
