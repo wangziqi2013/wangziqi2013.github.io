@@ -319,6 +319,10 @@ blocks in the cache, and the number of ways (which is not used, though), and ini
 vector, `array`, which stores per-tag LRU counter. Note that `class LRU` does not rely on the per-tag 
 `class ReplacementPolicy` objects to store the LRU counter, as the counter is not defined in that class.
 The class also maintains a global LRU counter, which is incremented every time the counter of a tag is updated,
-and the before value of the global counter is assigned to the tag's counter.
+and the before value of the global counter is assigned to the tag's counter, as can be seen in `update()`.
 
-
+The `findBestCandidate()` method of `class LRU` takes a vector of `class ReplacementInfo` objects, which correspond
+to tag entries of the set on which the replacement is being performed, and searches for the entry with either
+`I` state, or the minimal value (if none of the entry is in `I` state), as the LRU entry.
+The index of the LRU entry is stored in data member `bestCandidate`, and is also returned by the method.
+Method `getBestCandidate` simply returns the `bestCandidate` value.
