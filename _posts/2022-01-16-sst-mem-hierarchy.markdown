@@ -266,3 +266,11 @@ The vector's element data type `class ReplacementInfo` is an opaque type exposed
 algorithm module, and stores per-entry replacement information, which we discuss later.
 Tag entries of type `T` is also supposed to implement a method, `getReplacementInfo()`, which, when invoked,
 returns the `class ReplacementInfo` object of that tag entry.
+
+The tag array also implements several standard routines for lookup and replacement.
+Method `lookup()` just looks up a particular set based on the provided address, and returns a type `T` pointer as 
+a result, if the lookup hits, or NULL, if it misses.
+It also takes an argument on whether to update the LRU information of the hit entry, which is performed by 
+calling `update()` on the replacement manager with the `class ReplacementInfo` object of the entry.
+
+
