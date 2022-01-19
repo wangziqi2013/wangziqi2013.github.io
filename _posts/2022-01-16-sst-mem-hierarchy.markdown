@@ -245,4 +245,14 @@ functions.
 
 ### The Cache Tag Array
 
-
+The cache tag array is defined as `class CacheArray`, in file `cacheArray.h`. The cache array class does not 
+specify the exact contents of the tag, and the class has one template argument `T` for specifying the type that 
+holds per-block tag information. The tag array object is initialized with cache layout information, such as 
+the number of ways (associativity), the cache size (in the number of blocks), and the block size. 
+The number of sets is also derived from the above information.
+Tag objects are stored in data member `lines_`, which is simply a vector of type `T` objects. 
+Blocks (or tags) are uniquely identified using their indexes into the `lines_` vector. 
+Hash functions for mapping addresses to set indexes and replacement algorithms that selects a victim block
+on insert eviction are also given as constructor arguments. The implementation of these two are also decoupled
+from the tag array, and they can be loaded as subcomponents into slot `hash` and `replacement`, respectively,
+using the Python configuration file.
