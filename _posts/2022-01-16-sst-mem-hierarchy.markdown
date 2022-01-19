@@ -246,13 +246,23 @@ functions.
 ### The Cache Tag Array
 
 The cache tag array is defined as `class CacheArray`, in file `cacheArray.h`. The cache array class does not 
-specify the exact contents of the tag, and the class has one template argument `T` for specifying the type that 
-holds per-block tag information. The tag array object is initialized with cache layout information, such as 
+specify the exact contents of the tag. Instead, the class has one template argument `T` for specifying the type that 
+holds per-block tag contents. The tag array object is initialized with cache layout information, such as 
 the number of ways (associativity), the cache size (in the number of blocks), and the block size. 
 The number of sets is also derived from the above information.
 Tag objects are stored in data member `lines_`, which is simply a vector of type `T` objects. 
-Blocks (or tags) are uniquely identified using their indexes into the `lines_` vector. 
+Blocks (in fact, tags) are uniquely identified using their indexes into the `lines_` vector. 
 Hash functions for mapping addresses to set indexes and replacement algorithms that selects a victim block
 on insert eviction are also given as constructor arguments. The implementation of these two are also decoupled
 from the tag array, and they can be loaded as subcomponents into slot `hash` and `replacement`, respectively,
 using the Python configuration file.
+
+The tag array object also explicitly maintains replacement information of each tag entry in its data member
+`rInfo`. `rInfo` is maintained as a mapping structure, with the set number being the key, and type 
+`std::vector<ReplacementInfo *>` objects being the value.
+Value objects of `rInfo` represent per-set replacement information, and each element of the vector corresponds to 
+a tag entry within the set.
+The vector's element data type `class ReplacementInfo` is an opaque type exposed by the replacement 
+algorithm module, and stores per-entry replacement information, which we discuss later.
+Tag entries of type `T` is also supposed to implement a method, `getReplacementInfo()`, which, when invoked,
+returns the `class ReplacementInfo` object of that tag entry.
