@@ -273,4 +273,10 @@ a result, if the lookup hits, or NULL, if it misses.
 It also takes an argument on whether to update the LRU information of the hit entry, which is performed by 
 calling `update()` on the replacement manager with the `class ReplacementInfo` object of the entry.
 
+Method `findReplacementCandidate()` returns the tag entry object to replace within the set, but does not actually
+replace it. This function is implemented by merely calling replacement manager's `findBestCandidate()` with the 
+set's `class ReplacementInfo` vector, which is maintained by `rInfo` as we have discussed above.
 
+Method `replace()` just invalidates an existing entry plus its replacement info (by calling `replaced()` into the 
+replacement manager), and sets a new address to the entry. Method `deallocate()` simply invalidates an entry and 
+its replacement information.
