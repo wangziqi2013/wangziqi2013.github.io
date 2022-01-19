@@ -209,4 +209,15 @@ pretty straightforward to implement.
 
 ### Transforming MemEvents to Requests
 
+Function `processIncoming()` first attempts to match the memory event object with the request, by obtaining the ID
+of the request memory event using `getResponseToID()`, and then querying the map `requests_` that tracks pending
+memory operations (the map uses request memory event's ID as key, and maps to the matching 
+request `class Request` object).
+If the query fails, meaning that the message is initiated by the hierarchy itself, and no corresponding 
+request object exists, but the command is `Inv` (external invalidation), then a new request object is created
+with the command being `Inv`, and returned to the caller.
+Otherwise, if the query succeeds, meaning that the memory event is a response to a previous request, 
+the original request object of type `class Request` is then fetched from the pending request map `requests_`,
+and updated to reflect the completion of the request by calling `processIncoming()`.
+Finally, the request object will be returned to the caller, which is then delivered back to the CPU.
 
