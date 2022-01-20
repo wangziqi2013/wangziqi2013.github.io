@@ -239,7 +239,8 @@ CPU-initiated flush will receive `Command::FlushLineResp` on completion, which i
 ## Cache: Array, Replacement, and Hash
 
 The next big topic is the cache, which is the central component of SST's memory hierarchy. 
-SST decouples the organization and coherence aspects of a cache, and makes them into two largely independent parts.
+SST decouples the organization, operation, and coherence aspects of a cache, and makes them into three 
+largely independent parts.
 In this section, we focus on cache organization, which includes the tag array, the replacement algorithm, and hash 
 functions.
 
@@ -283,6 +284,9 @@ set's `class ReplacementInfo` vector, which is maintained by `rInfo` as we have 
 Method `replace()` just invalidates an existing entry plus its replacement info (by calling `replaced()` into the 
 replacement manager), and sets a new address to the entry. Method `deallocate()` simply invalidates an entry and 
 its replacement information.
+
+Note that the cache tag array is not initialized in the cache constructor. Instead, it is initialized by the coherence
+controller, which selects a tag type (template argument `T`)
 
 ### Replacement Manager
 
@@ -370,3 +374,17 @@ Three hash function implementations are provided, all of which inherit from `cla
 `1103515245 * x + 12345`, and it ignores the ID argument.
 `class XorHashFunction` XORs every byte of the input value with the higher byte, except the last byte, which 
 is unchanged. It ignores the ID argument as well.
+
+## Cache: Constructor and Controller Operation
+
+This section focuses on cache object's construction and high-level event processing operations that do not involve 
+coherence (which we simply just treat as a black box). 
+
+### Memory Links
+
+Cache objects are not always connected by point-to-point regular links of type `class Link`. 
+Instead, they are connected by `class MemLink` 
+objects or its derivations, which may provide some routing capabilities based on address ranges and interleaving. 
+In this article, we mainly focus on `class MemLink` itself, which still provides the abstraction of a point-to-point 
+communication link, and is simply just a wrapping layer over `class Link`.
+
