@@ -333,4 +333,13 @@ Note that the comment block on top of `findBestCandidate()` in the source code d
 and it seems that the developers copy-pasted it from that of `class LRUOpt`. A mistake on their part!
 
 `class LRUOpt` implements an optimized version of LRU, which not only takes LRU counter values into consideration,
-but also gives priority to entries with a particular state.
+but also gives priority to entries with a particular state. To elaborate: The algorithm aims at minimizing 
+cache blocks that will likely be used and/or will incur larger overhead if evicted. The heuristics is as follows.
+First, invalid tag entries always have the highest priority, i.e., just the same as LRU.
+Second, if a block is shared by upper level caches, the block will also be 
+given higher priority than those that do not, as evicting the block will incur extra invalidations to the 
+sharers to maintain inclusiveness. 
+Next, if a block is owned by the cache, then ownership must not be given up, since ownership typically indicates
+an intention to write and/or dirty blocks.
+Tag entries that satisfy none of the above criteria has the lowest priority.
+
