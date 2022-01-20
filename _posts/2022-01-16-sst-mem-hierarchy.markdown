@@ -403,4 +403,9 @@ receiving call back function being `recvNotify()`, which is a member function in
 seen above. `class MemLink` also exposes a `send()` method, which does exactly what a `send()` on link object does,
 and in fact, the wrapper function just calls `send()` on the `link` member.
 
-
+The net effect of using `class MemLink` is that, after initialization and setting the external receiving handler,
+a `send()` method call on the memory link object will send an event object through the link. A received message
+will first invoke the internal method `recvNotify()`, which in turn calls `recvHandler` with the received event
+object, passing the object to the external handler. 
+We conclude, therefore, that the `class MemLink` object alone is merely a wrapped link object with identical 
+semantics. 
