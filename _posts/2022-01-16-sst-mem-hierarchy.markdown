@@ -375,10 +375,13 @@ Three hash function implementations are provided, all of which inherit from `cla
 `class XorHashFunction` XORs every byte of the input value with the higher byte, except the last byte, which 
 is unchanged. It ignores the ID argument as well.
 
-## Cache: Constructor and Controller Operation
+## Cache: Initialization and Controller Operation
 
 This section focuses on cache object's construction and high-level event processing operations that do not involve 
 coherence (which we simply just treat as a black box). 
+We mainly cover the trunk of the cache object's operation logic, and largely ignore minor details such that
+debugging, statistics, prefetching, and so on (and they are pretty straightforward once the cache operations 
+are made clear).
 
 ### Memory Links
 
@@ -412,6 +415,8 @@ semantics.
 
 ### Cache Object Initialization
 
+#### High-Level Initialization Workflow
+
 Contrary to most source files in SST, the cache, due to its size and complexity, is divided into several source files
 that do not follow the naming convention, making the source tree hard to navigate for beginners.
 File `cacheFactory.cc` contains the cache object constructor. File `cacheController.h/cc` contains the class definition
@@ -420,3 +425,13 @@ which only computes the cache array parameters, and does not have anything to do
 creation of cache arrays. In fact, `class CacheArray` is not even a data member of the cache. Instead, it is 
 contained in the coherence controller, and is initialized along with the coherence protocol (i.e., different 
 coherence protocol options may initialize cache arrays differently).
+
+The cache object's constructor is defined in file `cacheFactory.cc`. It first reads cache block size and the number
+of banks, and stores them in data member `lineSize_` and `banked_`, respectively. 
+Data member `bankStatus_`, which is a vector of booleans tracking whether a particular bank has been active in
+a cycle of event processing, is also initialized by reserving elements, the number of which 
+equals the value of `banked_`.
+
+
+
+#### Creating Links
