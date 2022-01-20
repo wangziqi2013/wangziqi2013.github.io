@@ -343,3 +343,9 @@ Next, if a block is owned by the cache, then ownership must not be given up, sin
 an intention to write and/or dirty blocks.
 Tag entries that satisfy none of the above criteria has the lowest priority.
 
+To establish the relation between tag entries according to the prioritization rule described above, `class LRUOpt`
+defines a helper class, `struct Rank`, that enables comparisons between tag entries using the mentioned criteria.
+In method `findBestCandidate()`, each element of `rInfo` is used to construct a `struct Rank` object by copying the
+`state`, `owned`, and `shared` members from the `class CoherenceReplacementInfo` object to `struct Rank`'s fields
+with the same name, and copying the timestamp value of these entries from `array` to `struct Rank`'s `timestamp` 
+member. 
