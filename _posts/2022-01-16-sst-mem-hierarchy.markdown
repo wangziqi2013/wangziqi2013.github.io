@@ -361,6 +361,12 @@ arbitration, which will never result in a tie.
 
 Hash functions are another class of subcomponent that `class CacheArray` uses, which are defined in file `hash.h`.
 The pure, abstract base class, `class HashFunction`, exposes a single method `hash()`, which, given an ID and an
-address, returns a hash value. In practice, `class CacheArray` always calls `hash()` with the ID being zero.
+address, returns a hash value. In practice, `class CacheArray` always calls `hash()` with the ID being zero, and the 
+address being the address of the block.
 
-
+Three hash function implementations are provided, all of which inherit from `class HashFunction`. 
+`class NoHashFunction` does not perform any hashing, and simply returns the original value unchanged.
+`class LinearHashFunction` performs a linear transformation of the input value `x` using the formula 
+`1103515245 * x + 12345`, and it ignores the ID argument.
+`class XorHashFunction` XORs every byte of the input value with the higher byte, except the last byte, which 
+is unchanged. It ignores the ID argument as well.
