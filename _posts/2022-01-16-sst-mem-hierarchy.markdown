@@ -432,6 +432,13 @@ Data member `bankStatus_`, which is a vector of booleans tracking whether a part
 a cycle of event processing, is also initialized by reserving elements, the number of which 
 equals the value of `banked_`.
 
+The constructor then calls `createCacheArray()` to compute the parameters of the cache tag array, specifically, the 
+number of blocks in the cache. The function inserts the key `lines` with the string representing the 
+number of blocks into the param object, as a result, for future use.
 
+Next, the constructor reads the number of requests that can be processed per cycle into data member 
+`maxRequestsPerCycle_`. At last, the constructor initializes the cache links with other components by calling
+`configureLinks()`, initializes the coherence manager (and the tag array) by calling `createCoherenceManager()`,
+and registers statistics using `registerStatistics()`.
 
 #### Creating Links
