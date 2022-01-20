@@ -349,3 +349,10 @@ In method `findBestCandidate()`, each element of `rInfo` is used to construct a 
 `state`, `owned`, and `shared` members from the `class CoherenceReplacementInfo` object to `struct Rank`'s fields
 with the same name, and copying the timestamp value of these entries from `array` to `struct Rank`'s `timestamp` 
 member. 
+Then a loop that is similar to the one in `class LRU` is executed to find the smallest `struct Rank` object, and its
+corresponding tag entry. `struct Rank` objects are compared based on the prioritization rule: For any two entries in
+a comparison, the `I` state entry is always smaller than non-`I` state entries (in the current source code, 
+this check is performed outside of `struct Rank`, but it could also be made otherwise); 
+shared entries are always smaller than non-shared entries; Owned entries are always smaller than non-owned entries. 
+At last, if the ordering still cannot be determined between the two entries, the LRU timestamp is used for final
+arbitration, which will never result in a tie.
