@@ -409,3 +409,14 @@ will first invoke the internal method `recvNotify()`, which in turn calls `recvH
 object, passing the object to the external handler. 
 We conclude, therefore, that the `class MemLink` object alone is merely a wrapped link object with identical 
 semantics. 
+
+### Cache Object Initialization
+
+Contrary to most source files in SST, the cache, due to its size and complexity, is divided into several source files
+that do not follow the naming convention, making the source tree hard to navigate for beginners.
+File `cacheFactory.cc` contains the cache object constructor. File `cacheController.h/cc` contains the class definition
+and implementation of event processing. Certain method names are rather misleading, such as `createCacheArray()`,
+which only computes the cache array parameters, and does not have anything to do with the actual 
+creation of cache arrays. In fact, `class CacheArray` is not even a data member of the cache. Instead, it is 
+contained in the coherence controller, and is initialized along with the coherence protocol (i.e., different 
+coherence protocol options may initialize cache arrays differently).
