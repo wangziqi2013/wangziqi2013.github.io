@@ -388,3 +388,12 @@ objects or its derivations, which may provide some routing capabilities based on
 In this article, we mainly focus on `class MemLink` itself, which still provides the abstraction of a point-to-point 
 communication link, and is simply just a wrapping layer over `class Link`.
 
+`class MemLink` is defined in file `memLink.h/cc`, which itself is derived from `class MemLinkBase`, defined in
+file `memLinkBase.h`. `class MemLinkBase` is derived from `class SubComponent`, meaning that it must be loaded
+into a containing component's slot. `class MemLinkBase` contains a call back function as data member, 
+`recvHandler`, which is called in method `recvNotify()`. 
+The call back function must be set after the initialization of the object (or its derivations) by calling 
+`setRecvHandler()`, with a caller-provided standard functor object for `class Event`.
+The object also contains a `struct EndpointInfo` data object, but 
+`class MemLink` does not leverage the endpoint, and hence we exclude this from our discussion.
+
