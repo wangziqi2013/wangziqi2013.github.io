@@ -397,3 +397,10 @@ The call back function must be set after the initialization of the object (or it
 The object also contains a `struct EndpointInfo` data object, but 
 `class MemLink` does not leverage the endpoint, and hence we exclude this from our discussion.
 
+`class MemLink` wraps a linked object as its data member, `link`. The link is initialized and registered to SST's
+global link map in `class MemLink`'s constructor, with the port name given in argument `params`, and the 
+receiving call back function being `recvNotify()`, which is a member function in `class MemLinkBase`, as we have
+seen above. `class MemLink` also exposes a `send()` method, which does exactly what a `send()` on link object does,
+and in fact, the wrapper function just calls `send()` on the `link` member.
+
+
