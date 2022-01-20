@@ -356,3 +356,11 @@ this check is performed outside of `struct Rank`, but it could also be made othe
 shared entries are always smaller than non-shared entries; Owned entries are always smaller than non-owned entries. 
 At last, if the ordering still cannot be determined between the two entries, the LRU timestamp is used for final
 arbitration, which will never result in a tie.
+
+### Hash Functions
+
+Hash functions are another class of subcomponent that `class CacheArray` uses, which are defined in file `hash.h`.
+The pure, abstract base class, `class HashFunction`, exposes a single method `hash()`, which, given an ID and an
+address, returns a hash value. In practice, `class CacheArray` always calls `hash()` with the ID being zero.
+
+
