@@ -468,3 +468,11 @@ with a subcomponent derived from `class MemLinkBase`. If true, then they will be
 Otherwise, the function checks the connectivity of the following four ports: `high_network_0`, `cache`, 
 `directory`, and `low_network_0`. The combination of connection ports is also checked for validity.
 
+If both `high_network_0` and `low_network_0` are connected, the function just initializes two `class MemLink` objects
+into subcomponent slot `cpulink` and `memlink`, by calling `loadAnonymousSubComponent()`. Note that in this case,
+neither subcomponent needs to be explicitly specified in the configuration file. 
+The parameter given to `class MemLink`'s constructor is `memlink` and `cpulink` (unwise naming, of course)
+defined right above the `if` code block.
+The parameter specifies key `port` as `high_network_0` and `low_network_0`, respectively, such that the 
+`class Link` object wrapped within the memory link can be configured correctly.
+
