@@ -437,6 +437,10 @@ The constructor then calls `createCacheArray()` to compute the parameters of the
 number of blocks in the cache. As a result, the function inserts the key `lines` with the string representing the 
 number of blocks into the param object for future use.
 
+The cache is registered to the global clock in the method `createClock()`, which is called after `createCacheArray()`.
+The method registers the cache with a tick frequency read from parameter key `cache_frequency`, and the 
+handler being the method `clockTick()`. 
+
 Next, the constructor reads the number of requests that can be processed per cycle into data member 
 `maxRequestsPerCycle_`. At last, the constructor initializes the cache links with other components by calling
 `configureLinks()`, initializes the coherence manager (and the tag array) by calling `createCoherenceManager()`,
@@ -488,3 +492,7 @@ The last step of link initialization is to bind the memory links (and the wrappe
 for receiving memory events. 
 The handler function is `class Cache`'s member function, `handleEvent()`, which will be called if any of the 
 two links receive a message.
+
+### Cache Operations
+
+The cache class definition and method implementations are in file `cacheController.h/cc`. 
