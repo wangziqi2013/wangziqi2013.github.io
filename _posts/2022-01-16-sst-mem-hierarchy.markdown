@@ -502,9 +502,13 @@ we skip the rest of the function, because they more or less follow the same logi
 ### Cache Operations
 
 The cache class definition and method implementations are in file `cacheController.h/cc`. 
+The call back function for receiving incoming events from both links is `handleEvent()`, the logic of which simply
+adds the event object into the new event buffer, `eventBuffer_`, after calling `recordIncomingRequest()` on the 
+coherence manager. The latter is solely for statistical purposes, and does not involve any operational details.
 Cache operations are implemented in method `clockTick()`, which is registered as the clock tick function
 during initialization.
-At the beginning of the function, the cache drains the coherence manager on the outgoing queues for 
+
+At the beginning of `clockTick()`, the cache drains the coherence manager on the outgoing queues for 
 both directions, by calling `sendOutgoingEvents()` on the coherence manager. 
 Recall that the coherence manager also keeps a copy of the memory link objects of the cache, and hence they could
 send their own messages without going through the cache.
