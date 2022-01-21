@@ -541,3 +541,19 @@ The processing logic is identical to the one of the retry buffer, except that th
 `processEvent()` is `false`, indicating that no MSHR entry is occupied by the event object.
 The prefetch buffer, `prefetchBuffer_`, is also processed after the event buffer. We do not cover prefetching here,
 and we will also skip it in the rest of the section.
+
+After processing buffers, the cache moves the retry buffer of the coherence manager into the cache's retry buffer.
+These events are exactly those that are rejected and should be retried. 
+
+### Event Processing
+
+Method `processEvent()` implements event processing function for each individual event.
+At the beginning, it checks whether the event represents a non-cacheable operation. If true, it is handled separately,
+and the operation always succeeds.
+Next, for cachable operations, which is the normal case, the cache arbitrates the access by calling `arbitrateAccess()`.
+The function decides whether the request can be processed in the current cycle or not using the history of 
+previous accesses in the same cycle. 
+There are two ways that accesses can be arbitrated. If the boolean flag `banked_` is false, meaning that banked 
+cache access is not modeled, then access is arbitrated with data member `addrsThisCycle_`, which tracks the set
+of addresses that have been accessed in the current cycle. If the address of the current event has already been
+accessed in the same cycle, then the request is rejected.
