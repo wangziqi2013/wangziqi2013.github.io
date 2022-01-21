@@ -557,3 +557,13 @@ There are two ways that accesses can be arbitrated. If the boolean flag `banked_
 cache access is not modeled, then access is arbitrated with data member `addrsThisCycle_`, which tracks the set
 of addresses that have been accessed in the current cycle. If the address of the current event has already been
 accessed in the same cycle, then the request is rejected.
+
+On the other hand, if banking is modeled, then `bankStatus_` is used for tracking the access status of each bank.
+If a bank is accessed previously in the same cycle, the corresponding bit flag is set to `true`, which will cause
+a later event on the same bank to be rejected. The bank index of a given address is computed by calling 
+`getBank()` on the coherence manager, which forwards the call to the function with the same name in 
+`class CacheArray`. The index computing function simply returns the address modular the number of banks,
+meaning that addresses are mapped to different banks in an interleaved manner.
+(Note: I think this is incorrect, because set-associative caches allow a block to be stored in any of the 
+ways of the set the address maps to. The bank index should at least be a function of the set number, e.g.,
+be the module of the set number and the number of banks).
