@@ -458,9 +458,13 @@ At a high level, function `configureLinks()` guesses the cache's link configurat
 connected in the configuration, and then sets up the memory link objects based on the guess. 
 According to the comment and function body, six port combinations are considered valid (the comment block above
 the function header specifies five valid combinations, while in the function body, it also seems that loading
-user-defined memory link objects as subcomponents into slot `cpulink` and `memlink` is also supported), 
-and we discuss the simplest among 
+user-defined memory link objects as subcomponents into slot `cpulink` and `memlink` explicitly in the configuration 
+file is also supported), and we discuss the simplest among 
 them: `high_network_0` and `low_network_0`, which is the configuration where the cache object connects to 
 a higher- and lower-level component, respectively, via point-to-point `class MemLink` objects. 
 
+First, `configureLinks()` checks whether either the cache component's slot `cpulink` or `memlink` (or both) is loaded 
+with a subcomponent derived from `class MemLinkBase`. If true, then they will be used as the link.
+Otherwise, the function checks the connectivity of the following four ports: `high_network_0`, `cache`, 
+`directory`, and `low_network_0`. The combination of connection ports is also checked for validity.
 
