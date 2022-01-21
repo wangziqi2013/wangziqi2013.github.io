@@ -445,6 +445,9 @@ Next, the constructor reads the number of requests that can be processed per cyc
 `maxRequestsPerCycle_`. At last, the constructor initializes the cache links with other components by calling
 `configureLinks()`, initializes the coherence manager (and the tag array) by calling `createCoherenceManager()`,
 and registers statistics using `registerStatistics()`.
+One thing to note is that the coherence manager also keeps a copy of the memory link objects of the cache,
+meaning that the coherence manager can implement its own methods for sending messages. Receiving messages,
+however, must always go through the cache object, as the receiving handler is bound to the cache's method.
 
 #### Creating Links
 
@@ -493,6 +496,19 @@ for receiving memory events.
 The handler function is `class Cache`'s member function, `handleEvent()`, which will be called if any of the 
 two links receive a message.
 
+Other combinations can also be initialized in the same function as the one we have discussed above. For simplicity,
+we skip the rest of the function, because they more or less follow the same logic.
+
 ### Cache Operations
 
 The cache class definition and method implementations are in file `cacheController.h/cc`. 
+Cache operations are implemented in method `clockTick()`, which is registered as the clock tick function
+during initialization.
+At the beginning of the function, the cache drains the coherence manager on the outgoing queues for 
+both directions, by calling `sendOutgoingEvents()` on the coherence manager. 
+Recall that the coherence manager also keeps a copy of the memory link objects of the cache, and hence they could
+send their own messages without going through the cache.
+Also, this method will not always fully drain the queues, if the outgoing bandwidth per cycle exceeds the 
+maximum bandwidth of the coherence manager (we will discuss later in sections talking about coherence managers).
+
+
