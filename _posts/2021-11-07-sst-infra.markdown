@@ -164,20 +164,22 @@ similar to end points of a conceptual link, while in Python configuration, the `
 abstraction of a connection. The simulator does not explicitly implement any connection object. Instead, it just 
 let link objects keep a reference to each other, and directly use the reference to deliver events.
 
-Link configuration is processed during initialization in function `performWireUp()` of `class Simulation_impl`.
-This function creates link objects for each component and subcomponent as instructed by the configuration file, 
+Link configuration is processed during initialization in function `prepareLinks()` of `class Simulation_impl`.
+This function creates link objects for each component as instructed by the configuration file (which is parsed
+into a configuration graph), 
 inserts them into the per-component map `linkMap` (contained in `class ComponentInfo`), and connects link objects 
 in C++ using a `class LinkPair` object. The object will set `pair_link`, which is the data member of `class Link`, to
 the other link object constituting the connection.
 After initialization, link objects can be retrieved by calling `getLink()` on the per-component `class LinkMap`
 object with the link name appearing in the Python configuration file.
 
-After `performWireUp()`, connected link objects are created and hold a reference to each other, but configuration
+After `prepareLinks()`, connected link objects are created and hold a reference to each other, but configuration
 has not finished yet, because the call back functions have not been registered.
 This is indicated by the fact that the boolean data member `configured` of `class Link` is still set to `false`.
 This cannot be done, however, in the Python configuration file, and must be performed by the component itself.
-During component initialization, the constructor needs to call `configureLink()`, which is defined in 
-`class BaseComponent`, with the name of the link (which should match the name specified in the configuration file), 
+During component initialization, which is performed in `performWireUp()` of `class Simulation_impl`, 
+the constructor needs to call `configureLink()`, which is defined in 
+`class BaseComponent`, with the name of the port (which should match the name specified in the configuration file), 
 a time converter object (or any equivalence that can be converted to 
 the time converter), and a functor object of type `class Event::Handler` wrapping the call back function and the object 
 instance as the argument. 
