@@ -476,3 +476,8 @@ defined right above the `if` code block.
 The parameter specifies key `port` as `high_network_0` and `low_network_0`, respectively, such that the 
 `class Link` object wrapped within the memory link can be configured correctly.
 
+Recall that, in SST, the topology of components is inferred from the Python configuration file first, 
+and then `class Link` objects are initialized based on the topology, and inserted into per-component link maps, 
+after which components are initialized. So at component 
+construction time, the link objects have already been created, which can be retrieved using the 
+port name specified in the Python configuration file.
