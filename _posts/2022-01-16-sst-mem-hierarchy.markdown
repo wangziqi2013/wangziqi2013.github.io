@@ -520,3 +520,14 @@ The cache processes entries in the buffer one by one, until the buffer is empty,
 have been processed. The latter condition essentially implements a processing bandwidth limit. 
 On the other hand, `maxRequestsPerCycle_` can be configured to be -1, in which case there is not bandwidth limit.
 
+Each entry in the retry buffer is processed by calling `processEvent()`. If the entry is accepted, the function
+returns `true`, and it is removed from the retry buffer. Otherwise, it just stays there, and waits for the next
+processing cycle .
+Also note that the second argument to `processEvent()` indicates whether the event is a fresh one just received, or
+a retried event. The different between these two is that new events that have never been rejected before will 
+not occupy space in the Miss Status Handling Register (MSHR), and they will be handled with the flag being `true`.
+On the other hand, when an event is rejected for the first time, it will be
+inserted into the MSHR, and remain there until the event is successfully handled.
+On all later retries of the event, the flag will be set to `true`, indicating that the MSHR entry that correspond to
+the event should also be cleared, if the handling succeeds.
+
