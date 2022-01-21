@@ -481,3 +481,10 @@ and then `class Link` objects are initialized based on the topology, and inserte
 after which components are initialized. So at component 
 construction time, the link objects have already been created, which can be retrieved using the 
 port name specified in the Python configuration file.
+
+Region information (which is likely not important) for the two memory links are also given by the parameter objects,
+which we do not discuss. 
+The last step of link initialization is to bind the memory links (and the wrapped link objects) with a handler function
+for receiving memory events. 
+The handler function is `class Cache`'s member function, `handleEvent()`, which will be called if any of the 
+two links receive a message.
