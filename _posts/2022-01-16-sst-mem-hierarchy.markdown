@@ -569,7 +569,9 @@ ways of the set the address maps to. The bank index should at least be a functio
 be the module of the set number and the number of banks).
 
 After access arbitration, the function just uses a big switch statement to call into the coherence manager
-methods based on the event command. The return value of these methods reflects whether the event is successfully
+methods based on the event command. Note that both request type and response type commands are processed
+in this switch block, since the event handler is registered as the call back for memory links on both directions.
+The return value of these methods reflects whether the event is successfully
 processed, or requires retry. In the former case, the arbitration information is updated by calling 
 `updateAccessStatus()`. In the latter case, the event is kept by the coherence manager in its own retry buffer,
 which, as we have seen above, will be moved to the cache's retry buffer at the end of the event handling cycle.
