@@ -531,3 +531,9 @@ inserted into the MSHR, and remain there until the event is successfully handled
 On all later retries of the event, the flag will be set to `true`, indicating that the MSHR entry that correspond to
 the event should also be cleared, if the handling succeeds.
 
+After processing the retry buffer, the cache then proceeds to handle the event buffer, `eventBuffer_`, which stores
+newly received events from both links that have not been rejected.
+The processing logic is identical to the one of the retry buffer, except that the second argument to 
+`processEvent()` is `false`, indicating that no MSHR entry is occupied by the event object.
+The prefetch buffer, `prefetchBuffer_`, is also processed after the event buffer. We do not cover prefetching here,
+and we will also skip it in the rest of the section.
