@@ -454,4 +454,13 @@ routing. In this configuration, the cache object only has two ports: The high ne
 connects to a higher level component, and `low_network_0`, which connects to a lower level component.
 More complicated topologies, such as those with an on-chip network, can be realized by connecting the cache with other components via more advanced memory link objects. 
 
-Function `configureLinks()`
+At a high level, function `configureLinks()` guesses the cache's link configuration by detecting the ports that are
+connected in the configuration, and then sets up the memory link objects based on the guess. 
+According to the comment and function body, six port combinations are considered valid (the comment block above
+the function header specifies five valid combinations, while in the function body, it also seems that loading
+user-defined memory link objects as subcomponents into slot `cpulink` and `memlink` is also supported), 
+and we discuss the simplest among 
+them: `high_network_0` and `low_network_0`, which is the configuration where the cache object connects to 
+a higher- and lower-level component, respectively, via point-to-point `class MemLink` objects. 
+
+
