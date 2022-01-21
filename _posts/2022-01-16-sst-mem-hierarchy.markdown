@@ -388,7 +388,7 @@ are made clear).
 Cache objects are not always connected by point-to-point regular links of type `class Link`. 
 Instead, they are connected by `class MemLink` 
 objects or its derivations, which may provide some routing capabilities based on address ranges and interleaving. 
-In this article, we mainly focus on `class MemLink` itself, which still provides the abstraction of a point-to-point 
+In this section, we mainly focus on `class MemLink` itself, which still provides the abstraction of a point-to-point 
 communication link, and is simply just a wrapping layer over `class Link`.
 
 `class MemLink` is defined in file `memLink.h/cc`, which itself is derived from `class MemLinkBase`, defined in
@@ -417,7 +417,8 @@ semantics.
 
 #### High-Level Initialization Workflow
 
-Contrary to most source files in SST, the cache, due to its size and complexity, is divided into several source files
+Contrary to most source files in SST, the cache, due to its code size and complexity, is divided into several 
+source files
 that do not follow the naming convention, making the source tree hard to navigate for beginners.
 File `cacheFactory.cc` contains the cache object constructor. File `cacheController.h/cc` contains the class definition
 and implementation of event processing. Certain method names are rather misleading, such as `createCacheArray()`,
@@ -429,12 +430,12 @@ coherence protocol options may initialize cache arrays differently).
 The cache object's constructor is defined in file `cacheFactory.cc`. It first reads cache block size and the number
 of banks, and stores them in data member `lineSize_` and `banked_`, respectively. 
 Data member `bankStatus_`, which is a vector of booleans tracking whether a particular bank has been active in
-a cycle of event processing, is also initialized by reserving elements, the number of which 
+an event processing cycle, is also initialized by reserving elements, the number of which 
 equals the value of `banked_`.
 
 The constructor then calls `createCacheArray()` to compute the parameters of the cache tag array, specifically, the 
-number of blocks in the cache. The function inserts the key `lines` with the string representing the 
-number of blocks into the param object, as a result, for future use.
+number of blocks in the cache. As a result, the function inserts the key `lines` with the string representing the 
+number of blocks into the param object for future use.
 
 Next, the constructor reads the number of requests that can be processed per cycle into data member 
 `maxRequestsPerCycle_`. At last, the constructor initializes the cache links with other components by calling
@@ -442,3 +443,13 @@ Next, the constructor reads the number of requests that can be processed per cyc
 and registers statistics using `registerStatistics()`.
 
 #### Creating Links
+
+The links between the current cache object being initialized and other components of the hierarchy are configured
+during construction by calling `configureLinks()`. This function is also the biggest function in file 
+`cacheFactory.cc`, as the cache object supports several different flavors of configuration for being connected 
+to other components in the hierarchy.
+In this section, we only cover the simplest configuration, namely, connecting the cache objects to an upper
+(closer to CPU) and a lower (further away from CPU) component via point-to-point link, without any packet 
+routing. More complicated topologies, such as those with an on-chip network, can be realized by connecting the cache with other components via more advanced memory link objects. 
+
+Function `configureLinks()`
