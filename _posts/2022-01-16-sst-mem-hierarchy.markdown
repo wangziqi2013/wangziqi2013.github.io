@@ -511,4 +511,12 @@ send their own messages without going through the cache.
 Also, this method will not always fully drain the queues, if the outgoing bandwidth per cycle exceeds the 
 maximum bandwidth of the coherence manager (we will discuss later in sections talking about coherence managers).
 
+Then the function clears the state from the previous cycle for access arbitration. Access arbitration can be 
+modeled at per-address or per-bank level, which uses data member `addrsThisCycle_` and `bankStatus_`, respectively.
+
+Next, the cache handles retried events. An event is retried if it is rejected by the coherence manager or fails the
+access arbitration, in which case the event is added into the retry buffer, `retryBuffer_`. 
+The cache processes entries in the buffer one by one, until the buffer is empty, or `maxRequestsPerCycle_` events
+have been processed. The latter condition essentially implements a processing bandwidth limit. 
+On the other hand, `maxRequestsPerCycle_` can be configured to be -1, in which case there is not bandwidth limit.
 
