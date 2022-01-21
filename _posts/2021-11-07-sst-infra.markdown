@@ -170,8 +170,18 @@ into a configuration graph),
 inserts them into the per-component map `linkMap` (contained in `class ComponentInfo`), and connects link objects 
 in C++ using a `class LinkPair` object. The object will set `pair_link`, which is the data member of `class Link`, to
 the other link object constituting the connection.
-After initialization, link objects can be retrieved by calling `getLink()` on the per-component `class LinkMap`
-object with the link name appearing in the Python configuration file.
+After link initialization, link objects can be retrieved by calling `getLink()` on the per-component `class LinkMap`
+object with the port name appearing in the Python configuration file.
+
+Note that only connected ports in the Python configuration file are being initialized as link objects. 
+Components and subcomponents can retrieve the initialized link objects using the port name in the 
+configuration file, by calling the member function `configureLink()` (which has several different flavors), 
+and further configure them.
+In other words, in SST, link objects are first initialized before their components are, and the initialization
+will assign link objects with the port name used in the configuration file At component initialization time,
+link objects are retrieved given the component ID and the port name, and is eventually bounded with a call back
+function. This process is somehow counter-intuitive, as most would think that the components would 
+initialize first, which creates the links. 
 
 After `prepareLinks()`, connected link objects are created and hold a reference to each other, but configuration
 has not finished yet, because the call back functions have not been registered.

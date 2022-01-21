@@ -450,6 +450,8 @@ during construction by calling `configureLinks()`. This function is also the big
 to other components in the hierarchy.
 In this section, we only cover the simplest configuration, namely, connecting the cache objects to an upper
 (closer to CPU) and a lower (further away from CPU) component via point-to-point link, without any packet 
-routing. More complicated topologies, such as those with an on-chip network, can be realized by connecting the cache with other components via more advanced memory link objects. 
+routing. In this configuration, the cache object only has two ports: The high network port, or `high_network_0`, which
+connects to a higher level component, and `low_network_0`, which connects to a lower level component.
+More complicated topologies, such as those with an on-chip network, can be realized by connecting the cache with other components via more advanced memory link objects. 
 
 Function `configureLinks()`
