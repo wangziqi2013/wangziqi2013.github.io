@@ -160,9 +160,15 @@ Components connected this way can send event objects using the corresponding C++
 calling the `send()` method of `class Link`.
 
 Note that the naming here is a little bit confusing, because in the simulator implementation, `class Link` is more
-similar to end points of a conceptual link, while in Python configuration, the `Link` object serves as the 
-abstraction of a connection. The simulator does not explicitly implement any connection object. Instead, it just 
-let link objects keep a reference to each other, and directly use the reference to deliver events.
+similar to end points of a link (i.e., the conception of ports in SST), while in Python configuration, 
+the `Link` object represents a connection, and users need to explicitly call `connect()` on the link object,
+with component objects and port names as arguments. 
+The simulator then, during initialization stage, maps Python `Link` objects into `class LinkPair` objects, and 
+for each port name that is explicitly connected in the configuration, creates a `class Link` object.
+The simulator also does not implement any connection object. Instead, it just 
+let link objects keep a reference to each other, and directly use the reference for event delivery.
+
+### Link Initialization and Configuration
 
 Link configuration is processed during initialization, in function `prepareLinks()` of `class Simulation_impl`.
 This function creates link objects for each component as instructed by the configuration file (which is parsed
@@ -201,6 +207,8 @@ link objects are retrieved given the component ID and the port name, and is even
 function. This process is somehow counter-intuitive, as most would think that the components would 
 initialize first, which creates the links. 
 
+### Event Delivery
+
 During simulation, components can send an event object via a link object to another component (possibly itself, if the 
 link is of type `class SelfLink`) by calling `send()` on the link object on its own side.
 The `send()` function will simply compute the time of delivery using component latency value (which is in 
@@ -216,6 +224,8 @@ Note that the link object actually holds a reference to the global event queue i
 `recvQueue` by calling `getTimeVortex()` to obtain the reference and assigning it to the data members during 
 initialization. In `send()` function, the event object is inserted into the global event queue simply by calling 
 `insert()` on the `recvQueue` of the `pair_link`.
+
+### Polling Links
 
 What we have discussed above covers one of the two types of the link, the non-polling link, which has fixed latency, 
 and delivers the event using the Discrete Event Simulation mechanism at the exact specified cycle, 
