@@ -443,10 +443,10 @@ handler being the method `clockTick()`.
 
 Next, the constructor reads the number of requests that can be processed per cycle into data member 
 `maxRequestsPerCycle_`. At last, the constructor initializes the cache links with other components by calling
-`configureLinks()`, initializes the coherence manager (and the tag array) by calling `createCoherenceManager()`,
+`configureLinks()`, initializes the coherence controller (and the tag array) by calling `createCoherenceManager()`,
 and registers statistics using `registerStatistics()`.
-One thing to note is that the coherence manager also keeps a copy of the memory link objects of the cache,
-meaning that the coherence manager can implement its own methods for sending messages. Receiving messages,
+One thing to note is that the coherence controller also keeps a copy of the memory link objects of the cache,
+meaning that the coherence controller can implement its own methods for sending messages. Receiving messages,
 however, must always go through the cache object, as the receiving handler is bound to the cache's method.
 
 #### Creating Links
@@ -504,21 +504,21 @@ we skip the rest of the function, because they more or less follow the same logi
 The cache class definition and method implementations are in file `cacheController.h/cc`. 
 The call back function for receiving incoming events from both links is `handleEvent()`, the logic of which simply
 adds the event object into the new event buffer, `eventBuffer_`, after calling `recordIncomingRequest()` on the 
-coherence manager. The latter is solely for statistical purposes, and does not involve any operational details.
+coherence controller. The latter is solely for statistical purposes, and does not involve any operational details.
 Cache operations are implemented in method `clockTick()`, which is registered as the clock tick function
 during initialization.
 
-At the beginning of `clockTick()`, the cache drains the coherence manager on the outgoing queues for 
-both directions, by calling `sendOutgoingEvents()` on the coherence manager. 
-Recall that the coherence manager also keeps a copy of the memory link objects of the cache, and hence they could
+At the beginning of `clockTick()`, the cache drains the coherence controller on the outgoing queues for 
+both directions, by calling `sendOutgoingEvents()` on the coherence controller. 
+Recall that the coherence controller also keeps a copy of the memory link objects of the cache, and hence they could
 send their own messages without going through the cache.
 Also, this method will not always fully drain the queues, if the outgoing bandwidth per cycle exceeds the 
-maximum bandwidth of the coherence manager (we will discuss later in sections talking about coherence managers).
+maximum bandwidth of the coherence controller (we will discuss later in sections talking about coherence controllers).
 
 Then the function clears the state from the previous cycle for access arbitration. Access arbitration can be 
 modeled at per-address or per-bank level, which uses data member `addrsThisCycle_` and `bankStatus_`, respectively.
 
-Next, the cache handles retried events. An event is retried if it is rejected by the coherence manager or fails the
+Next, the cache handles retried events. An event is retried if it is rejected by the coherence controller or fails the
 access arbitration, in which case the event is added into the retry buffer, `retryBuffer_`. 
 The cache processes entries in the buffer one by one, until the buffer is empty, or `maxRequestsPerCycle_` events
 have been processed. The latter condition essentially implements a processing bandwidth limit. 
@@ -542,7 +542,7 @@ The processing logic is identical to the one of the retry buffer, except that th
 The prefetch buffer, `prefetchBuffer_`, is also processed after the event buffer. We do not cover prefetching here,
 and we will also skip it in the rest of the section.
 
-After processing buffers, the cache moves the retry buffer of the coherence manager into the cache's retry buffer.
+After processing buffers, the cache moves the retry buffer of the coherence controller into the cache's retry buffer.
 These events are exactly those that are rejected and should be retried. 
 
 ### Event Processing
@@ -561,17 +561,33 @@ accessed in the same cycle, then the request is rejected.
 On the other hand, if banking is modeled, then `bankStatus_` is used for tracking the access status of each bank.
 If a bank is accessed previously in the same cycle, the corresponding bit flag is set to `true`, which will cause
 a later event on the same bank to be rejected. The bank index of a given address is computed by calling 
-`getBank()` on the coherence manager, which forwards the call to the function with the same name in 
+`getBank()` on the coherence controller, which forwards the call to the function with the same name in 
 `class CacheArray`. The index computing function simply returns the address modular the number of banks,
 meaning that addresses are mapped to different banks in an interleaved manner.
 (Note: I think this is incorrect, because set-associative caches allow a block to be stored in any of the 
 ways of the set the address maps to. The bank index should at least be a function of the set number, e.g.,
 be the module of the set number and the number of banks).
 
-After access arbitration, the function just uses a big switch statement to call into the coherence manager
+After access arbitration, the function just uses a big switch statement to call into the coherence controller
 methods based on the event command. Note that both request type and response type commands are processed
 in this switch block, since the event handler is registered as the call back for memory links on both directions.
 The return value of these methods reflects whether the event is successfully
 processed, or requires retry. In the former case, the arbitration information is updated by calling 
-`updateAccessStatus()`. In the latter case, the event is kept by the coherence manager in its own retry buffer,
+`updateAccessStatus()`. In the latter case, the event is kept by the coherence controller in its own retry buffer,
 which, as we have seen above, will be moved to the cache's retry buffer at the end of the event handling cycle.
+
+## Cache: Coherence Controllers
+
+The next major part of the cache is the coherence controller. SST's memory hierarchy implements a number of 
+different protocols derived from MESI, either to give users more flexibility on choosing the base protocol 
+(e.g., MSI or MESI), 
+or to adapt to different scenarios (e.g., inclusive or non-inclusive, private or shared, L1 or non-L1).
+Each flavor of the coherence protocol is implemented as an individual class, and which class is instanciated 
+as the coherence controller of the cache is dependent on both user configuration, and the role of the 
+cache in the memory hierarchy.
+All coherence controllers are derived from the same base class, `class CoherenceController`, defined in file 
+`coherenceController.h/cc` under the `coherencemgr` directory. Each type of the coherence controller
+is defined in its own header and cpp files, with the file names being self-descriptive.
+
+
+

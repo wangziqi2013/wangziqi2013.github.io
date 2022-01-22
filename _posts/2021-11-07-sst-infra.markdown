@@ -161,9 +161,9 @@ calling the `send()` method of `class Link`.
 
 Note that the naming here is a little bit confusing, because in the simulator implementation, `class Link` is more
 similar to end points of a link (i.e., the conception of ports in SST), while in Python configuration, 
-the `Link` object represents a connection, and users need to explicitly call `connect()` on the link object,
+the `sst.Link` object represents a connection, and users need to explicitly call `connect()` on the link object,
 with component objects and port names as arguments. 
-The simulator then, during initialization stage, maps Python `Link` objects into `class LinkPair` objects, and 
+The simulator then, during initialization stage, maps Python `sst.Link` objects into `class LinkPair` objects, and 
 for each port name that is explicitly connected in the configuration, creates a `class Link` object.
 The simulator also does not implement any connection object. Instead, it just 
 let link objects keep a reference to each other, and directly use the reference for event delivery.
