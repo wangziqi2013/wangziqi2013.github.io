@@ -345,6 +345,12 @@ more complicated operations, such as LL/SC, locked/atomic instructions, and so o
 Since LL/SC and locked instructions are only seen by the L1 cache, it is suggested that this type of tags is 
 most likely used for L1 caches.
 
+`class SharedCacheLine` is also derived from `class CacheLine`, and it adds sharers and owner information
+just as those in `class DirectoryLine`. It also contains a `class CoherenceReplacementInfo` object for 
+replacement. Since there is no LL/SC and locked/atomic instruction support, we can conclude that this type of
+tag is used for lower-level shared caches. 
+
+
 
 ### Replacement Manager
 
