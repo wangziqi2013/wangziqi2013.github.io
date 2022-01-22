@@ -350,7 +350,12 @@ just as those in `class DirectoryLine`. It also contains a `class CoherenceRepla
 replacement. Since there is no LL/SC and locked/atomic instruction support, we can conclude that this type of
 tag is used for lower-level shared caches. 
 
-
+`class PrivateCacheLine`, like the previous two, also derive from `class CacheLine`. As the name suggests, it is
+used on private, non-L1 caches. There is no LL/SC and locked/atomic instruction support. 
+The only additional information it has are two boolean flags that reflect the status of the block in the 
+current cache: `owned`, and `shared`. It also contains a `class CoherenceReplacementInfo` object.
+The `owned` and `shared` flags are kept consistent with the two flags within the `class CoherenceReplacementInfo` 
+object, the meaning of which will be explained below.
 
 ### Replacement Manager
 
