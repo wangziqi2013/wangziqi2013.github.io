@@ -296,6 +296,12 @@ File `lineTypes.h` defines several tag entry types that can be passed to `class 
 argument. The file defines three base classes, from which inherited classes are created to represent different 
 tag contents.
 
+Base class `class DirectoryLine` defines tag entries that only contain coherence states, but not data.
+It is supposed to be used as directory cache's tag entries. The base class contains the block address for which
+coherence states are maintained, the state of the block at the current level, a list of sharers in the 
+form of a vector of `std::string` objects, and the identity of the exclusive owner in the form of an `std::string`.
+As mentioned earlier, the base class also carries replacement information in data member `CoherenceReplacementInfo`.
+
 
 
 ### Replacement Manager
