@@ -589,6 +589,8 @@ All coherence controllers are derived from the same base class, `class Coherence
 `coherenceController.h/cc` under the `coherencemgr` directory. Each type of the coherence controller
 is defined in its own header and cpp files, with the file names being self-descriptive.
 
+### Coherence Controller Initialization
+
 `class CoherenceController` is initialized during cache initialization, in function `createCoherenceManager()` 
 (file `cacheFactory.cc`). The function first reads the access latency of the cache data, specified with parameter
 key `access_latency_cycles`, and the latency of cache tag, specified with key `tag_access_latency_cycles`. 
@@ -631,3 +633,17 @@ by calling `setLinks()`.
 In other words, the coherence controller also keeps a copy of the memory link objects of the cache, such that
 it is also capable of sending memory event objects to other components in the hierarchy.
 In addition, the MSHR object of the cache is also passed to the coherence controller by calling `setMSHR()`.
+
+### The Coherence Controller Base Class
+
+The base class of the controller controller, `class CoherenceController`, defines a few handy functions that are useful
+for all derived classes. Function `createReplacementPolicy()` initializes a replacement manager object as indicated
+by the parameter key `replacement_policy`. It supports a few possible values: `lru` for Least Recently Used (LRU),
+`lfu` for Least Frequently Used (LFU), and `mru` for Most Recently Used (MRU), `random` for random replacement,
+and `nmru` for `Not Most Recently Used`. 
+For non-L1 caches, the `-opt` version of the corresponding replacement policy is used, while for L1 caches, the 
+non-`opt` version is used.
+The replacement manager is eventually loaded, as a subcomponent, into the `replacement` slot of the coherence 
+controller.
+
+
