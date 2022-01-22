@@ -302,6 +302,16 @@ coherence states are maintained, the state of the block at the current level, a 
 form of a vector of `std::string` objects, and the identity of the exclusive owner in the form of an `std::string`.
 As mentioned earlier, the base class also carries replacement information in data member `CoherenceReplacementInfo`.
 
+`class DirectoryLine` also carries a data member, `lastSendTimestamp_`, that is not used for functional simulation,
+but to emulate the timing of tag access. This data member remembers the last time (in local object time) the 
+tag is accessed, and new accesses to the tag can only be made after this time point. 
+This data member implements a miniature queuing simulation: If the `lastSendTimestamp_` value is T1, and an access
+to the block is made at time T2, then if T1 > T2, the access at time T2 can only be performed at T1, resulting in the
+tag being actually accessed at T1, and the value of T1 is updated to T1 + t where t is the access latency.
+If, on the other hand, T2 > T1, then when the access at time T2 happens, the tag entry is not under some prior
+operation, meaning that it can be accessed immediately at time T2. The value is updated to T2 + t, which is the 
+time the entry will be free for access again in the future. 
+
 
 
 ### Replacement Manager
