@@ -646,4 +646,7 @@ non-`opt` version is used.
 The replacement manager is eventually loaded, as a subcomponent, into the `replacement` slot of the coherence 
 controller.
 
-
+Function `createHashFunction()` initializes the hash function for the tag array, and loads it as a subcomponent into
+the `hash` slot of the controller. Both this function and the previous one are called by derived classes in their 
+constructors, when they initialize the tag array (recall that `class CacheArray` takes a replacement manager and a 
+hash function object as construction arguments). 
