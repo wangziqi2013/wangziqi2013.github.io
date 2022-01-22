@@ -620,6 +620,9 @@ Note that inclusive, non-L1 caches do not get to choose whether a directory is n
 For coherent L1 caches, inclusiveness does not matter (must be inclusive), and the coherence manager is 
 of type `class MESIL1`, in file `MESI_L1.h/cc`.
 
+Non-coherent caches use `class Incoherent` objects (file `Incoherent.h/cc`) and `class IncoherentL1` (file `Incoherent_L1.h/cc`), respectively, for non-L1 and L1 caches. Inclusion does not matter for non-coherent
+caches, since they are intrinsically non-inclusive. 
+Their implementations are just trivial, and we do not cover them in this article.
 
 
 
