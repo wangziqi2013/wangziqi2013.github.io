@@ -598,8 +598,28 @@ The boolean flag `L1` is also read with the key `L1`, to indicate whether the ca
 (L1 cache requires specific treatments during initialization).
 The cache type is read with key `cache_type`, which can be of value `inclusive`, `noninclusive`, or 
 `noninclusive_with_directory`. 
-The function also ensures that L1 caches are always configured to be inclusive, and that non-coherence caches must
-be non-inclusive (although the latter is rare, since most caches need some sort of coherence).
+The function also ensures that L1 caches are always configured to be inclusive, and that non-coherent caches must
+be non-inclusive (although the latter case is rare, since most caches need some sort of coherence).
 The MSHR object is then created by calling `createMSHR()`. We postpone the discussion on the MSHR to a later section,
 and only focus on the coherence controller.
+
+The function then proceeds to preparing the parameters, stored in `coherenceParams`, for initializing the coherence 
+controller. We do not cover the meaning of all parameters or switches here, and only introduce them as they are 
+encountered during later discussions.
+The coherence controller is then loaded into the cache object's subcomponent slot `coherence` as an anonymous
+subcomponent. The exact type of the coherence controller to load, however, is dependent on the combination of 
+the protocol, the inclusiveness, and the L1 flag.
+For coherent, non-L1 caches, if it is inclusive, the controller class that will be loaded is 
+`class MESIInclusive`, defined in file `MESI_Inclusive.h/cc`.
+If it is not inclusive, and has no directory (i.e., a non-shared cache, likely a private L2), then the class is 
+`class MESIPrivNoninclusive`, defined in file `MESI_Private_Noninclusive.h/cc`.
+If it is not inclusive, and has a directory (i.e., a shared cache, likely an LLC or shared L2), then the class 
+is `class MESISharNoninclusive`, defined in file `MESI_Shared_Noninclusive.h/cc`.
+Note that inclusive, non-L1 caches do not get to choose whether a directory is needed or not, and always use 
+`class MESIInclusive`.
+For coherent L1 caches, inclusiveness does not matter (must be inclusive), and the coherence manager is 
+of type `class MESIL1`, in file `MESI_L1.h/cc`.
+
+
+
 
