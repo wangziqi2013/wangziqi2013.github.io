@@ -336,7 +336,14 @@ data member `data_`, and a pointer to `class DirectoryLine` object, in data memb
 `class CacheLine` implements a tag entry that contains both data, as a vector of bytes, and a coherence state 
 variable, as data member `state_`. There is neither sharer nor owner information stored, suggesting that this
 class can only be used in private caches.
+In addition, this base class does not have replacement information, and method `getReplacementInfo()` is a pure
+function, making the class a pure abstract class that cannot be instanciated as well.
 
+`class L1CacheLine` is derived from `class CacheLine`, and it adds some additional information to support
+more complicated operations, such as LL/SC, locked/atomic instructions, and so on. It also adds an 
+`class ReplacementInfo` object and `getReplacementInfo()` method.
+Since LL/SC and locked instructions are only seen by the L1 cache, it is suggested that this type of tags is 
+most likely used for L1 caches.
 
 
 ### Replacement Manager
@@ -357,7 +364,7 @@ The state need not precisely reflect the actual coherence protocol, and could ju
 such as `I`/Non-`I`.
 `class CoherenceReplacementInfo` inherits from `class ReplacementInfo`, and it stores more detailed 
 information about the coherence state, i.e., `owned` boolean flag to indicate whether the tag is owned by
-the current cache, and `shared` flag to indicate whether the block is shared by upper level caches.
+the current cache, and `shared` flag to indicate whether upper level caches may also have a copy of the same block.
 Replacement decisions can hence prioritize certain lines over the others based on their detailed coherence status.
 
 #### Replacement Algorithm
