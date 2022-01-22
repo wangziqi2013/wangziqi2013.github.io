@@ -650,3 +650,10 @@ Function `createHashFunction()` initializes the hash function for the tag array,
 the `hash` slot of the controller. Both this function and the previous one are called by derived classes in their 
 constructors, when they initialize the tag array (recall that `class CacheArray` takes a replacement manager and a 
 hash function object as construction arguments). 
+
+The base class also defines stub functions for each type of coherence message it may receive, with the name being 
+`handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
+simulation, in order to indicate that the functionality regarding event type `X` is not implemented.
+Derived classes should override at least a subset of these functions and implement the coherence handling logic.
+
+
