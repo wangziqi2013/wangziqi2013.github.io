@@ -312,7 +312,16 @@ If, on the other hand, T2 > T1, then when the access at time T2 happens, the tag
 operation, meaning that it can be accessed immediately at time T2. The value is updated to T2 + t, which is the 
 time the entry will be free for access again in the future. 
 
-
+Note that this queuing simulation only handles in-order requests, i.e., the accesses time T2 must be a non-decreasing
+sequence. As we will see later in the coherence controller section, this property is trivially guaranteed by the cache 
+controller processing memory events at a tick-by-tick manner.
+This is also the part where SST does not strictly follow the principles of DES: 
+Theoretically speaking, a component being simulated by DES
+shall only remember the state at the current cycle, and state changes at a future cycle shall be implemented 
+by enqueuing an event that updates the state at the future cycle. 
+The cache hierarchy designers abandons this idea, due to the overhead it takes to enqueue a trivial state change
+object (i.e., changing the state of the block from busy to free), and just uses a variable to remember a future state 
+change. 
 
 ### Replacement Manager
 
