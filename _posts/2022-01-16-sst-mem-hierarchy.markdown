@@ -327,6 +327,15 @@ change.
 Specifically, caller can add or remove sharers, query whether a particular cache is a sharer, or whether there is
 any sharer at all.
 In addition, the owner can be set or removed, and the coherence state can be changed to one of the four states.
+The timestamp, although not being part of the functional coherence states, can also be set or obtained by calling
+the member functions.
+
+`class DataLine` implements a tag entry that contains only data, which is stored as a vector of bytes in
+data member `data_`, and a pointer to `class DirectoryLine` object, in data member `tag_`.
+
+`class CacheLine` implements a tag entry that contains both data, as a vector of bytes, and a coherence state 
+variable, as data member `state_`. There is neither sharer nor owner information stored, suggesting that this
+class can only be used in private caches.
 
 
 
