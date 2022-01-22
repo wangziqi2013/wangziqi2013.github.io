@@ -164,27 +164,24 @@ similar to end points of a conceptual link, while in Python configuration, the `
 abstraction of a connection. The simulator does not explicitly implement any connection object. Instead, it just 
 let link objects keep a reference to each other, and directly use the reference to deliver events.
 
-Link configuration is processed during initialization in function `prepareLinks()` of `class Simulation_impl`.
+Link configuration is processed during initialization, in function `prepareLinks()` of `class Simulation_impl`.
 This function creates link objects for each component as instructed by the configuration file (which is parsed
 into a configuration graph), 
 inserts them into the per-component map `linkMap` (contained in `class ComponentInfo`), and connects link objects 
-in C++ using a `class LinkPair` object. The object will set `pair_link`, which is the data member of `class Link`, to
-the other link object constituting the connection.
+using a `class LinkPair` object. The link pair object will set `pair_link`, which is the data member of `class Link`, 
+to the other link object constituting the connection, essentially connecting the two link objects.
 After link initialization, link objects can be retrieved by calling `getLink()` on the per-component `class LinkMap`
 object with the port name appearing in the Python configuration file.
 
-Note that only connected ports in the Python configuration file are being initialized as link objects. 
-Components and subcomponents can retrieve the initialized link objects using the port name in the 
-configuration file, by calling the member function `configureLink()` (which has several different flavors), 
-and further configure them.
-In other words, in SST, link objects are first initialized before their components are, and the initialization
-will assign link objects with the port name used in the configuration file At component initialization time,
-link objects are retrieved given the component ID and the port name, and is eventually bounded with a call back
-function. This process is somehow counter-intuitive, as most would think that the components would 
-initialize first, which creates the links. 
+Note that only connected ports in the Python configuration file are initialized as link objects. 
+Components and subcomponents can retrieve the initialized link objects by calling the member function 
+`configureLink()` (which has several different flavors), passing the port name that occurs in the 
+configuration file as the first argument.
+Link objects can thus be further configured (e.g., binding to a call back function) after 
+they are initialized by component's member functions.
 
-After `prepareLinks()`, connected link objects are created and hold a reference to each other, but configuration
-has not finished yet, because the call back functions have not been registered.
+After `prepareLinks()`, connected link objects have been created and hold a reference to each other, 
+but configuration has not finished yet, because the call back functions have not been registered.
 This is indicated by the fact that the boolean data member `configured` of `class Link` is still set to `false`.
 This cannot be done, however, in the Python configuration file, and must be performed by the component itself.
 During component initialization, which is performed in `performWireUp()` of `class Simulation_impl`, 
@@ -195,6 +192,14 @@ the time converter), and a functor object of type `class Event::Handler` wrappin
 instance as the argument. 
 The call back function is registered with the specified link object by calling `setFunctor()`, and configuration
 concludes by calling `setAsConfigured()` to set `configured` to `true`.
+
+To summarize: In SST, link objects are initialized before their components are. Link initialization
+creates link objects, assigns them a port name, stores them in a per-component map structure, and connects 
+those links as indicated by the Python configuration file.
+Later at component initialization time,
+link objects are retrieved given the component ID and the port name, and is eventually bounded to a call back
+function. This process is somehow counter-intuitive, as most would think that the components would 
+initialize first, which creates the links. 
 
 During simulation, components can send an event object via a link object to another component (possibly itself, if the 
 link is of type `class SelfLink`) by calling `send()` on the link object on its own side.
