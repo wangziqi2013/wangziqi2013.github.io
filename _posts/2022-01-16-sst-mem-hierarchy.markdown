@@ -323,6 +323,13 @@ The cache hierarchy designers abandons this idea, due to the overhead it takes t
 object (i.e., changing the state of the block from busy to free), and just uses a variable to remember a future state 
 change. 
 
+`class DirectoryLine` also implements several getter and setter functions to query and update the coherence information.
+Specifically, caller can add or remove sharers, query whether a particular cache is a sharer, or whether there is
+any sharer at all.
+In addition, the owner can be set or removed, and the coherence state can be changed to one of the four states.
+
+
+
 ### Replacement Manager
 
 #### Replacement Information
