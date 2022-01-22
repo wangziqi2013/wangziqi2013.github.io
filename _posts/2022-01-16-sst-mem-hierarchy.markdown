@@ -589,5 +589,17 @@ All coherence controllers are derived from the same base class, `class Coherence
 `coherenceController.h/cc` under the `coherencemgr` directory. Each type of the coherence controller
 is defined in its own header and cpp files, with the file names being self-descriptive.
 
-
+`class CoherenceController` is initialized during cache initialization, in function `createCoherenceManager()` 
+(file `cacheFactory.cc`). The function first reads the access latency of the cache data, specified with parameter
+key `access_latency_cycles`, and the latency of cache tag, specified with key `tag_access_latency_cycles`. 
+The tag access latency is optional, though, and if not specified, it is by default set to the data access latency.
+Then, the protocol is read using the key `coherence_protocol`, the value of which can be `mesi`, `msi`, or `none`.
+The boolean flag `L1` is also read with the key `L1`, to indicate whether the cache is an L1 cache or not
+(L1 cache requires specific treatments during initialization).
+The cache type is read with key `cache_type`, which can be of value `inclusive`, `noninclusive`, or 
+`noninclusive_with_directory`. 
+The function also ensures that L1 caches are always configured to be inclusive, and that non-coherence caches must
+be non-inclusive (although the latter is rare, since most caches need some sort of coherence).
+The MSHR object is then created by calling `createMSHR()`. We postpone the discussion on the MSHR to a later section,
+and only focus on the coherence controller.
 
