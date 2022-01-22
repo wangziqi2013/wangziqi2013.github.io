@@ -246,6 +246,8 @@ functions.
 
 ### The Cache Tag Array
 
+#### Tag Array Operations
+
 The cache tag array is defined as `class CacheArray`, in file `cacheArray.h`. The cache array class does not 
 specify the exact contents of the tag. Instead, the class has one template argument `T` for specifying the type that 
 holds per-block tag contents. The tag array object is initialized with cache layout information, such as 
@@ -286,7 +288,15 @@ replacement manager), and sets a new address to the entry. Method `deallocate()`
 its replacement information.
 
 Note that the cache tag array is not initialized in the cache constructor. Instead, it is initialized by the coherence
-controller, which selects a tag type (template argument `T`)
+controller, which selects a tag type (template argument `T`) from those defined in file `lineTypes.h`.
+
+#### Cache Tag Types
+
+File `lineTypes.h` defines several tag entry types that can be passed to `class CacheArray` as the template
+argument. The file defines three base classes, from which inherited classes are created to represent different 
+tag contents.
+
+
 
 ### Replacement Manager
 
@@ -634,7 +644,21 @@ In other words, the coherence controller also keeps a copy of the memory link ob
 it is also capable of sending memory event objects to other components in the hierarchy.
 In addition, the MSHR object of the cache is also passed to the coherence controller by calling `setMSHR()`.
 
+### Initialization Performed In Derived Classes
+
+The coherence controller base class also leaves some objects uninitialized, the initialization of which 
+should be completed by the derived class constructors. The main reason is that `class CacheArray` requires 
+protocol-specific template argument for the contents of the tag. Such information is not known until 
+derived class construction time. 
+
+The base class, however, provides two method functions that can be called by child class to initialize the 
+replacement manager and the hash function, which are both needed by `class CacheArray`. 
+
 ### The Coherence Controller Base Class
+
+#### The General Workflow
+
+#### 
 
 The base class of the controller controller, `class CoherenceController`, defines a few handy functions that are useful
 for all derived classes. Function `createReplacementPolicy()` initializes a replacement manager object as indicated
