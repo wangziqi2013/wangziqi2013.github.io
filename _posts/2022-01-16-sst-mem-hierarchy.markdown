@@ -705,22 +705,16 @@ In addition, the MSHR object of the cache is also passed to the coherence contro
 
 ### Initialization Performed In Derived Classes
 
-The coherence controller base class also leaves some objects uninitialized, the initialization of which 
+The coherence controller base class also leaves the `class CacheArray` object uninitialized, which 
 should be completed by the derived class constructors. The main reason is that `class CacheArray` requires 
 protocol-specific template argument for the contents of the tag. Such information is not known until 
 derived class construction time. 
 
+#### Replacement Manager and Hash Function
+
 The base class, however, provides two method functions that can be called by child class to initialize the 
 replacement manager and the hash function, which are both needed by `class CacheArray`. 
-
-### The Coherence Controller Base Class
-
-#### The General Workflow
-
-#### 
-
-The base class of the controller controller, `class CoherenceController`, defines a few handy functions that are useful
-for all derived classes. Function `createReplacementPolicy()` initializes a replacement manager object as indicated
+Function `createReplacementPolicy()` initializes a replacement manager object as indicated
 by the parameter key `replacement_policy`. It supports a few possible values: `lru` for Least Recently Used (LRU),
 `lfu` for Least Frequently Used (LFU), and `mru` for Most Recently Used (MRU), `random` for random replacement,
 and `nmru` for `Not Most Recently Used`. 
@@ -733,6 +727,13 @@ Function `createHashFunction()` initializes the hash function for the tag array,
 the `hash` slot of the controller. Both this function and the previous one are called by derived classes in their 
 constructors, when they initialize the tag array (recall that `class CacheArray` takes a replacement manager and a 
 hash function object as construction arguments). 
+
+### The Coherence Controller Base Class
+
+#### The General Workflow
+
+The base class of the coherence controller, `class CoherenceController`, defines a few handy functions that are useful
+for all derived classes. 
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
 `handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
