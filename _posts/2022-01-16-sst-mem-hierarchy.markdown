@@ -737,9 +737,10 @@ controller is used for inclusive caches (both shared and private), in which case
 the upper levels must also be present at the current level, and the directory can just be conveniently implemented
 in the tag entry. 
 
-
-
-
+`class MESIPrivNoninclusive` uses `CacheArray<PrivateCacheLine>`, which only keeps track of very limited information
+about a block, i.e., `owned` and `shared`, indicating whether the block is owned at the current level, or potentially
+present at a higher level. For private caches, since there could only be one upper level cache,
+using one bit for tracking the block status would be sufficient.
 
 ### The Coherence Controller Base Class
 
