@@ -750,6 +750,10 @@ which is data member `dirArray_`, of type `CacheArray<DirectoryLine>`, and the o
 tracking blocks only at the current cache (i.e., just the regular tag array), which is in data member `dataArray_`, of type `CacheArray<DataLine>`. Recall that `class DataLine` also keeps a reference to a directory entry, which stores
 coherence information of the block.
 
+Lastly, `class MESIL1` uses `CacheArray<L1CacheLine>`, which carries only the most essential information without
+coherence states, plus several extra data members for supporting LL/SC and locked/atomic instructions. 
+These bits are only present in the L1 tag array, because these high-level operations are only performed in the L1.
+
 
 ### The Coherence Controller Base Class
 
