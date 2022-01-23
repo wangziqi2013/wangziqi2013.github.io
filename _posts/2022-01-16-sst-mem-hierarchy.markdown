@@ -687,7 +687,7 @@ If it is not inclusive, and has no directory (i.e., a non-shared cache, likely a
 If it is not inclusive, and has a directory (i.e., a shared cache, likely an LLC or shared L2), then the class 
 is `class MESISharNoninclusive`, defined in file `MESI_Shared_Noninclusive.h/cc`.
 Note that inclusive, non-L1 caches do not get to choose whether a directory is needed or not, and always use 
-`class MESIInclusive`.
+`class MESIInclusive`, which has inline directory entries.
 For coherent L1 caches, inclusiveness does not matter (must be inclusive), and the coherence manager is 
 of type `class MESIL1`, in file `MESI_L1.h/cc`.
 
@@ -705,9 +705,9 @@ In addition, the MSHR object of the cache is also passed to the coherence contro
 
 ### Initialization Performed In Derived Classes
 
-The coherence controller base class also leaves the `class CacheArray` object uninitialized, which 
+The coherence controller base class constructor leaves the `class CacheArray` object uninitialized, which 
 should be completed by the derived class constructors. The main reason is that `class CacheArray` requires 
-protocol-specific template argument for the contents of the tag. Such information is not known until 
+protocol-specific template argument `T` as the contents of the tag. Such information is not known until 
 derived class construction time. 
 
 #### Replacement Manager and Hash Function
@@ -728,9 +728,22 @@ the `hash` slot of the controller. Both this function and the previous one are c
 constructors, when they initialize the tag array (recall that `class CacheArray` takes a replacement manager and a 
 hash function object as construction arguments). 
 
+#### The Cache Tag Array
+
+Each derived class of `class CoherenceController` selects its own tag array types. 
+`class MESIInclusive` uses `CacheArray<SharedCacheLine>`, which contains sharer and owner information within the 
+tag entry, i.e., the cache directory is inline. This is consistent with the fact that `class MESIInclusive`
+controller is used for inclusive caches (both shared and private), in which case, all addresses that are cached in
+the upper levels must also be present at the current level, and the directory can just be conveniently implemented
+in the tag entry. 
+
+
+
+
+
 ### The Coherence Controller Base Class
 
-#### The General Workflow
+#### Helper Functions
 
 The base class of the coherence controller, `class CoherenceController`, defines a few handy functions that are useful
 for all derived classes. 
@@ -740,4 +753,4 @@ The base class also defines stub functions for each type of coherence message it
 simulation, in order to indicate that the functionality regarding event type `X` is not implemented.
 Derived classes should override at least a subset of these functions and implement the coherence handling logic.
 
-
+#### Request Objects
