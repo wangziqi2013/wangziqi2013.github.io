@@ -781,6 +781,13 @@ To overcome this, `class Response` objects use `deliveryTime` to remember the si
 event is generated.
 The sending functions should hence ignore response objects with `deliveryTime` less than the current simulated cycle.
 
+The last member of `class Response` objects is `size`, which stores the number of bytes that the memory event object
+is supposed to be. This value is not the physical storage it takes on the simulator. Rather, it is the simulated size
+of the message, which is used for bandwidth auditing while sending the message.
+
+Also note that `class Response` has nothing to do with `class Request` in the interface object. The object is only
+used as a wrapper layer within the controller class. External objects will not find this class useful by any means.
+
 #### Helper Functions
 
 
