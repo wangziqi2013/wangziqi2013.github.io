@@ -775,7 +775,11 @@ actually generated, due to the
 fact that tag access delay is not modeled using DES, but just using a miniature queueing model, with a per-tag
 timestamp variable remembering the local time when the block becomes free (see Section "Cache Tag Types" for more 
 details).
-
+As we have discussed earlier, this violates the principle of DES, since the event object "time travels" to an
+earlier cycle, at which time it would not have been in the sending queue. 
+To overcome this, `class Response` objects use `deliveryTime` to remember the simulated cycle in which the 
+event is generated.
+The sending functions should hence ignore response objects with `deliveryTime` less than the current simulated cycle.
 
 #### Helper Functions
 
