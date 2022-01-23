@@ -754,6 +754,9 @@ Lastly, `class MESIL1` uses `CacheArray<L1CacheLine>`, which carries only the mo
 coherence states, plus several extra data members for supporting LL/SC and locked/atomic instructions. 
 These bits are only present in the L1 tag array, because these high-level operations are only performed in the L1.
 
+Non-coherence caches use `CacheArray<PrivateCacheLine>` and `CacheArray<L1CacheLine>`, respectively, for non-L1
+and L1 caches. The reason is straightforward: They do not need to keep coherence information, but L1 cache still
+need the extra flags to support certain instructions.
 
 ### The Coherence Controller Base Class
 
