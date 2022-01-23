@@ -493,6 +493,11 @@ that the memory link object belongs to by calling `getParentComponentName()` in 
 (derived classes may modify it, but `class MemLink` does not).
 The `addr` and `id` fields are the routing address for on-chip routing, and the context-specific ID of the link.
 For `class MemLink`, both fields are set to zero, and is not used.
+The `region` field is of type `class MemRegion`, defined in file `memTypes.h`, and it describes a memory region
+in the from of start address, end address, interleave size, and interleave step.
+Region information of a memory link can be specified via the component, but for point-to-point `class MemLink`, 
+the region is just set to `[0, -1UL]` without any interleaving, covering the entire address space.
+
 
 
 ### Cache Object Initialization
