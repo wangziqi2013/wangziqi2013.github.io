@@ -807,7 +807,13 @@ or response objects already exist at `deliveryTime`, and the insertion happens a
 end of all response objects at `deliveryTime`, i.e., the order of objects with the same delivery time is 
 consistent with the order they are inserted.
 
-
+In the latter case, the response object is essentially delayed by a later response object on the same block address.
+This is to guarantee that response messages on the same address are not reordered. 
+(Notes: I doubt whether this check is necessary, since the coherence controller handles events in a tick-by-tick
+basis. If two response objects on the same address are to be inserted into the queue, then the first one must
+have a smaller delivery time, since they must use the same tag entry to derive the delivery time, and these two
+response objects will be serialized on that tag entry. This, however, does not hold, if some responses are generated
+without being serialized on the tag entry.)
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
 `handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
