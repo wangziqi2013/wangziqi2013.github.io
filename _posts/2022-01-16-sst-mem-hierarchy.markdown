@@ -742,6 +742,15 @@ about a block, i.e., `owned` and `shared`, indicating whether the block is owned
 present at a higher level. For private caches, since there could only be one upper level cache,
 using one bit for tracking the block status would be sufficient.
 
+`class MESISharNoninclusive` needs a more complicated mechanism to track block state both at the current level, and
+at higher levels. This is because the cache is non-inclusive, and therefore, blocks that are present in the higher
+levels may not always be present at the current level. To track blocks in both conditions, the controller
+initializes two tag arrays: One directory tag array for tracking blocks in the upper levels and the current cache, 
+which is data member `dirArray_`, of type `CacheArray<DirectoryLine>`, and the other is a data tag array for 
+tracking blocks only at the current cache (i.e., just the regular tag array), which is in data member `dataArray_`, of type `CacheArray<DataLine>`. Recall that `class DataLine` also keeps a reference to a directory entry, which stores
+coherence information of the block.
+
+
 ### The Coherence Controller Base Class
 
 #### Helper Functions
