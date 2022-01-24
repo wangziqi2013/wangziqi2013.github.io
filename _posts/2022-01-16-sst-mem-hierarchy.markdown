@@ -19,7 +19,7 @@ is obvious that "initialize" here means construction operations).
 
 # Memory Hierarchy
 
-## MemEventBase and MemEvent
+## Memory Event Objects
 
 `class MemEventBase` and `class MemEvent` are the two classes that are used throughout the memory hierarchy to model
 message exchange between memory components, and to carry the commands as well as responses.
@@ -27,6 +27,10 @@ They are defined in file `memEventBase.h` and `memEvent.h`, respectively. The re
 memory commands, coherence states, and command classes, are defined separately in `memTypes.h`.
 Both classes are derived from the base class `class Event`, meaning that they can be sent over link objects just like
 any other event objects. 
+
+During initialization in which runtime configuration (such as topology learning) and parameter exchange, 
+another type of event objects are passed around, which is of type `class MemEventInit`, or its derived classes.
+These objects carry initialize-related information, and are only exchanged during the initialization stage.
 
 ### MemEventBase
 
@@ -88,6 +92,17 @@ an explicit `cmd` argument as the command of the new object, or with an unused `
 
 The rest of the source file just defines getters and setters of data members, and method functions for testing various
 flags.
+
+### MemEventInit and Its Derived Classes
+
+`class MemEventInit` is only used during initialization. The class defines its own set of commands of type 
+`enum class InitCommand`, and stores the command in data member `initCmd_`. 
+The initialization command can only be one of the four values: `Region`, `Data`, `Coherence`, and `Endpoint`.
+The class inherits from `class MemEventBase`, and it can be sent over the memory hierarchy just like other event 
+objects, although this only happens during initialization, and the message is received with polling, rather than
+with function call backs.
+The base class's command is always set to `NULLCMD`.
+
 
 ### Constants, Macros, and Flags
 
