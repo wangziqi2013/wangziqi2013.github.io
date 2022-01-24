@@ -1000,6 +1000,12 @@ without being serialized on the tag entry.)
 
 Method `forwardByAddress()` and `forwardByDestination()` implement event forwarding (sending an event object to
 another component via the memory link).
+Method `forwardByAddress()` obtains the base address from the event object to be sent via `getRoutingAddress()`,
+and tests on `linkDown_` and `linkUp_` respectively to find the outlet by calling `findTargetDestination()`
+on the link object. The function gives priorty to `linkDown_` over `linkUp_`, meaning that if the address
+falls into the range of both links, then it will be sent down. This is exactly what will happen if 
+point-to-point memory links are used, i.e., all event objects sent with `forwardByAddress()` will be
+sent downwards (for more complicated topologies, this is not guaranteed).
 
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
