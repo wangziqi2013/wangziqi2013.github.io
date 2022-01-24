@@ -498,7 +498,12 @@ in the from of start address, end address, interleave size, and interleave step.
 Region information of a memory link can be specified via the component, but for point-to-point `class MemLink`, 
 the region is just set to `[0, -1UL]` without any interleaving, covering the entire address space.
 
-
+`class MemLink` also maintains information about the other end of the memory link, i.e., its
+immediate neighbor, as well as all reachable end points from its immediate neighbor.
+The former is stored in data members `remotes`, while the latter in data member `endpoints`.
+Both members are of type `std::set<EndpointInfo>`, and can be updated by calling `addRemote()` and `addEndpoint()`,
+respectively. Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
+a single remote end point, and hence the set `remotes` is always of size one.
 
 ### Cache Object Initialization
 
