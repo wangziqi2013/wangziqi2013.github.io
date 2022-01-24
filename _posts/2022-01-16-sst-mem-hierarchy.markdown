@@ -919,7 +919,14 @@ such as whether the protocol is inclusive (`inclusive_`), whether write backs wi
 and whether the controller tracks the presence of addresses in other caches (`tracksPresence_`).
 According to the source code comments, the last boolean flag affects whether clean eviction is needed.
 
-
+Method `getInitCoherenceEvent()` is implemented in derived classes of the cache controller, and what it does 
+is to just create a `class MemEventInitCoherence` object, and initializes it by passing construction arguments.
+`processInitCoherenceEvent()`, on the contrary, is implemented in the base class, and it takes two arguments.
+The first argument, `event`, is the event object received from the link, and the second argument, `source`, 
+indicates whether the message is sent by the controller above or below (`true` for above, and `false` for below).
+Note that the naming is a little bit confusing. My best guess is that the method was originally designed 
+for the scenario where `linkUp_` and `linkDown_` are identical, in which case the argument just indicates 
+whether the message is sent by the controller itself from one of the two links and received by the other.
 
 ### The Coherence Controller Base Class
 
