@@ -1032,6 +1032,12 @@ otherwise, it is the MSHR latency `mshrLatency_`.
 The newly created object is eventually sent to the lower level by calling `forwardByAddress()`, before the
 delivery time is returned.
 
+Method `sendNACK()` just creates a NACK event object based on a given event object by calling `makeNACKResponse()`,
+which is essentially just a response event object with the command being `NACK`.
+The delivery time is the simulated tick plus tag access latency (i.e., modeling a tag access).
+The new event object, with its destination and source being the source and destination of the input object, is 
+returned to the sender of the input object by calling `forwardByDestination()`.
+
 #### Function Stubs
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
