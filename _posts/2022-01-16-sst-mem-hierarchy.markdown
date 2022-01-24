@@ -552,6 +552,13 @@ end of the memory link.
 One thing that differs from the handling of `Region` command is that, the `Endpoint` command event is not destroyed
 in the loop. Instead, it is added to the data member, `initReceiveQ`, such that the message can also be read
 by its containing component during initialization.
+The memory link object provides such an interface, namely, `recvInitData()`, for the containing component to read
+event objects that are added into `initReceiveQ`. Correspondingly, the containing component may also send
+initializing messages via the memory link by calling `sendInitData()` on the link object, the implementation
+of which is simply wrapping `sendInitData()` of `class Link`.
+
+Event objects with unknown commands are just inserted into `initReceiveQ`, such that the containing component
+may read them in their `init()` functions. 
 
 ### Cache Object Construction
 
