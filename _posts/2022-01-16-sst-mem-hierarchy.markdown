@@ -6,6 +6,17 @@ categories: article
 ontop: false
 ---
 
+**Notes:**
+
+1. In this article, we make a strict distinction between the term "initialization" and "construction". "Initialization"
+refers to the operations performed in function `init()`, which will be called after object construction, and it mainly
+performs runtime configuration or parameter exchange between components.
+"Construction", on the other hand, refers to operations performed within object constructors, which happens before
+initialization. 
+The term "initialize", however, are used interchangeably, and the exact meaning can be deduced from the context
+(e.g., if we are talking about "initializing a data member" within the section ob object construction, then it
+is obvious that "initialize" here means construction operations).
+
 # Memory Hierarchy
 
 ## MemEventBase and MemEvent
@@ -205,7 +216,7 @@ Then it allocates a new `class MemEvent` object from the heap, and initializes t
 information in order to perform the operation.
 Note that the `src_` field of the memory event object is set to the name of the interface object itself, which is
 obtained by `getName()` function call into `class BaseComponent`, and both the `dest_` and `rqstr_` is set to the 
-`rqstr_` field of the interface object. This field is initialized during the initialization phase, in function
+`rqstr_` field of the interface object. This field is initialized in function
 `init()`, the value of which is the identify of the other end of the receiving link. This suggests that the 
 `rqstr_` field of the interface object stores the string name of the next hop, which is typically the L1 cache
 or the TLB object.
@@ -444,7 +455,7 @@ Three hash function implementations are provided, all of which inherit from `cla
 `class XorHashFunction` XORs every byte of the input value with the higher byte, except the last byte, which 
 is unchanged. It ignores the ID argument as well.
 
-## Cache: Initialization and Controller Operation
+## Cache: Construction and Controller Operation
 
 This section focuses on cache object's construction and high-level event processing operations that do not involve 
 coherence (which we simply just treat as a black box). 
@@ -466,7 +477,7 @@ communication link, and is simply just a wrapping layer over `class Link`.
 file `memLinkBase.h`. `class MemLinkBase` is derived from `class SubComponent`, meaning that it must be loaded
 into a containing component's slot. `class MemLinkBase` contains a call back function as data member, 
 `recvHandler`, which is called in method `recvNotify()`. 
-The call back function must be set after the initialization of the object (or its derivations) by calling 
+The call back function must be set after the construction of the object (or its derivations) by calling 
 `setRecvHandler()`, with a caller-provided standard functor object for `class Event`.
 The object also contains a `struct EndpointInfo` data object, but 
 `class MemLink` does not leverage the endpoint, and hence we exclude this from our discussion.
@@ -477,7 +488,7 @@ receiving call back function being `recvNotify()`, which is a member function in
 seen above. `class MemLink` also exposes a `send()` method, which does exactly what a `send()` on link object does,
 and in fact, the wrapper function just calls `send()` on the `link` member.
 
-The net effect of using `class MemLink` is that, after initialization and setting the external receiving handler,
+The net effect of using `class MemLink` is that, after construction and setting the external receiving handler,
 a `send()` method call on the memory link object will send an event object through the link. A received message
 will first invoke the internal method `recvNotify()`, which in turn calls `recvHandler` with the received event
 object, passing the object to the external handler. 
@@ -502,12 +513,16 @@ the region is just set to `[0, -1UL]` without any interleaving, covering the ent
 immediate neighbor, as well as all reachable end points from its immediate neighbor.
 The former is stored in data members `remotes`, while the latter in data member `endpoints`.
 Both members are of type `std::set<EndpointInfo>`, and can be updated by calling `addRemote()` and `addEndpoint()`,
-respectively. Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
+respectively, which usually happens at initialization time. 
+Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
 a single remote end point, and hence the set `remotes` is always of size one.
 
-### Cache Object Initialization
 
-#### High-Level Initialization Workflow
+
+
+### Cache Object Construction
+
+#### High-Level Construction Workflow
 
 Contrary to most source files in SST, the cache, due to its code size and complexity, is divided into several 
 source files
@@ -583,7 +598,7 @@ port name specified in the Python configuration file.
 
 Region information (which is likely not important) for the two memory links are also given by the parameter objects,
 which we do not discuss. 
-The last step of link initialization is to bind the memory links (and the wrapped link objects) with a handler function
+The last step of link construction is to bind the memory links (and the wrapped link objects) with a handler function
 for receiving memory events. 
 The handler function is `class Cache`'s member function, `handleEvent()`, which will be called if any of the 
 two links receive a message.
@@ -598,7 +613,7 @@ The call back function for receiving incoming events from both links is `handleE
 adds the event object into the new event buffer, `eventBuffer_`, after calling `recordIncomingRequest()` on the 
 coherence controller. The latter is solely for statistical purposes, and does not involve any operational details.
 Cache operations are implemented in method `clockTick()`, which is registered as the clock tick function
-during initialization.
+during construction.
 
 At the beginning of `clockTick()`, the cache drains the coherence controller on the outgoing queues for 
 both directions, by calling `sendOutgoingEvents()` on the coherence controller. 
@@ -681,15 +696,15 @@ All coherence controllers are derived from the same base class, `class Coherence
 `coherenceController.h/cc` under the `coherencemgr` directory. Each type of the coherence controller
 is defined in its own header and cpp files, with the file names being self-descriptive.
 
-### Coherence Controller Initialization
+### Coherence Controller Construction
 
-`class CoherenceController` is initialized during cache initialization, in function `createCoherenceManager()` 
+`class CoherenceController` is initialized during cache construction, in function `createCoherenceManager()` 
 (file `cacheFactory.cc`). The function first reads the access latency of the cache data, specified with parameter
 key `access_latency_cycles`, and the latency of cache tag, specified with key `tag_access_latency_cycles`. 
 The tag access latency is optional, though, and if not specified, it is by default set to the data access latency.
 Then, the protocol is read using the key `coherence_protocol`, the value of which can be `mesi`, `msi`, or `none`.
 The boolean flag `L1` is also read with the key `L1`, to indicate whether the cache is an L1 cache or not
-(L1 cache requires specific treatments during initialization).
+(L1 cache requires specific treatments during construction).
 The cache type is read with key `cache_type`, which can be of value `inclusive`, `noninclusive`, or 
 `noninclusive_with_directory`. 
 The function also ensures that L1 caches are always configured to be inclusive, and that non-coherent caches must
@@ -726,7 +741,7 @@ In other words, the coherence controller also keeps a copy of the memory link ob
 it is also capable of sending memory event objects to other components in the hierarchy.
 In addition, the MSHR object of the cache is also passed to the coherence controller by calling `setMSHR()`.
 
-### Initialization Performed In Derived Classes
+### Construction Performed In Derived Classes
 
 The coherence controller base class constructor leaves the `class CacheArray` object uninitialized, which 
 should be completed by the derived class constructors. The main reason is that `class CacheArray` requires 
