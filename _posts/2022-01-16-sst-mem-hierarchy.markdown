@@ -517,7 +517,15 @@ respectively, which usually happens at initialization time.
 Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
 a single remote end point, and hence the set `remotes` is always of size one.
 
+#### Memory Link Initialization
 
+During initialization, `class MemLink` objects that are connected together exchange their identities, and register 
+each other in their `remotes` structure. 
+This happens in `init()` function, which is called during first stage initialization.
+Recall that the first stage initialization happens globally by the simulator main function iteratively 
+calling `init()` on all components (in the case of link objects, their `init()` is called by the 
+containing component's `init()`), with the argument (`phase` in `class MemLink`'s `init()` function) 
+being the current iteration number.
 
 
 ### Cache Object Construction
