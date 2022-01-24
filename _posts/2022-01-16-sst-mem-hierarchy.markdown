@@ -920,13 +920,24 @@ and whether the controller tracks the presence of addresses in other caches (`tr
 According to the source code comments, the last boolean flag affects whether clean eviction is needed.
 
 Method `getInitCoherenceEvent()` is implemented in derived classes of the cache controller, and what it does 
-is to just create a `class MemEventInitCoherence` object, and initializes it by passing construction arguments.
+is to just create a `class MemEventInitCoherence` object, and initializes it by passing construction arguments
+(we do not discuss how each controller class selects their own arguments).
 `processInitCoherenceEvent()`, on the contrary, is implemented in the base class, and it takes two arguments.
 The first argument, `event`, is the event object received from the link, and the second argument, `source`, 
 indicates whether the message is sent by the controller above or below (`true` for above, and `false` for below).
 Note that the naming is a little bit confusing. My best guess is that the method was originally designed 
 for the scenario where `linkUp_` and `linkDown_` are identical, in which case the argument just indicates 
 whether the message is sent by the controller itself from one of the two links and received by the other.
+
+Method `processInitCoherenceEvent()` sets the current controller's data members and booleans flags,
+according to the received message. Message sent from the above will cause an update on the local `sendWritebackAck_`
+flag, and if the message is from a CPU, then the name of the CPU will also be added into data member `cpus`.
+Messages from the below will cause updates on `lastLevel_` (if the below component is not a memory, then
+`lastLevel_` will be `false`), `silentEvictClean_` (if the below component uses a bitmap to track
+block sharers, then even clean evictions should generate an event to the lower level), `writebackCleanBlocks_` 
+(if the lower level is not inclusive, then clean blocks need to be written back explicitly), 
+and `recvWritebackAck_` (if lower level will send ACK for write backs, then this one will also expect to
+receive it).
 
 ### The Coherence Controller Base Class
 
