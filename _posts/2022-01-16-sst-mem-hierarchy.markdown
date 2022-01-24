@@ -1045,6 +1045,14 @@ The backoff value is computed based on how many reattempts have been made.
 The delivery time of the event is then the current tick, plus tag latency, plus the backoff cycles.
 The event is sent with `forwardByDestination()`.
 
+Method `sendResponseUp()` is very similar to `forwardMessage()`, but it creates a response event given an existing one,
+and sends it up by calling `forwardByDestination()` (since the source and destination is just the inverse
+of those in the existing object, which is assumed to be a request received from the above), rather than down.
+The delivery time models MSHR latency, if the input event object is from the MSHR (argument `replay` set to `true`),
+or models tag latency, if it is a freshly receieved event object that is just handled for the first time 
+(argument `replay` set to `false`).
+The delivery time is also returned.
+
 #### Function Stubs
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
