@@ -538,6 +538,13 @@ The initialization message carries the `name` and `region` values in the current
 event command being `InitCommand::Region` (set implicitly in the event object's constructor).
 This happens on the first iteration at both ends of the `class MemLink` connection.
 
+Then, at later iterations, the `init()` function simply listens on the link for initialization messages
+from the other end. This is implemented as a `while()` loop that calls `recvInitData()` repeatedly until
+the receive queue is empty. For each event, the command is inspected.
+If the command is `Region`, then the link object itself processes the event by creating a `struct EndpointInfo`
+object with information contained in the message, and insert the object into its own data member `remotes`.
+The event object is not used anywhere else as it is destroyed right in the loop.
+
 
 
 ### Cache Object Construction
