@@ -910,6 +910,15 @@ As discussed earlier, at the first iteration of `init()`, the cache controller w
 and then this object will be sent to the neighboring caches.
 On receiving a coherence type message, the `processInitCoherenceEvent()` will then be called to process it.
 
+`class MemEventInitCoherence` carries the name of the originating cache, stored in base class data member `src`,
+the end point type of type `enum class Endpoint` (`type_`, defined in file `util.h`), 
+the data block size (`lineSize_`), and a few booleans flags
+describing the operational properties of the controller,
+such as whether the protocol is inclusive (`inclusive_`), whether write backs will always send write back ACKs
+(`sendWBAck_`), whether write back ACKs are expected (`recvWBAck_`), 
+and whether the controller tracks the presence of addresses in other caches (`tracksPresence_`).
+According to the source code comments, the last boolean flag affects whether clean eviction is needed.
+
 
 
 ### The Coherence Controller Base Class
