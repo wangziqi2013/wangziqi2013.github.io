@@ -514,8 +514,11 @@ immediate neighbor, as well as all reachable end points from its immediate neigh
 The former is stored in data members `remotes`, while the latter in data member `endpoints`.
 Both members are of type `std::set<EndpointInfo>`, and can be updated by calling `addRemote()` and `addEndpoint()`,
 respectively, which usually happens at initialization time. 
+Besides, data member `remoteNames` stores the set of string names for each `struct EndpointInfo` object in `remotes`.
+This structure is used to quickly decide whether an immediate neighbor is reachable via the current link in
+method `isReachable()`.
 Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
-a single remote end point, and hence the set `remotes` is always of size one.
+a single remote end point, and hence the set `remotes` and `remoteNames` is always of size one.
 
 `class MemLink` exposes a few interface functions for querying the remote and endpoint information.
 Method `findTargetDestination()` returns the name (which is used as a global identifier) of the component
