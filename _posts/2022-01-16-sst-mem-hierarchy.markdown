@@ -545,7 +545,13 @@ If the command is `Region`, then the link object itself processes the event by c
 object with information contained in the message, and insert the object into its own data member `remotes`.
 The event object is not used anywhere else as it is destroyed right in the loop.
 
-
+If the command is `Endpoint`, then the message is cast into type `class MemEventInitEndpoint` (also defined in
+`memEventBase.h`), and the end point information carried by the message is added into data member `endpoints`
+using `addEndpoint()`, meaning that this message contains a list of objects that are reachable from the other
+end of the memory link.
+One thing that differs from the handling of `Region` command is that, the `Endpoint` command event is not destroyed
+in the loop. Instead, it is added to the data member, `initReceiveQ`, such that the message can also be read
+by its containing component during initialization.
 
 ### Cache Object Construction
 
