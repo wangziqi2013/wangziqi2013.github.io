@@ -996,10 +996,10 @@ have a smaller delivery time, since they must use the same tag entry to derive t
 response objects will be serialized on that tag entry. This, however, does not hold, if some responses are generated
 without being serialized on the tag entry.)
 
-#### Message Forwarding Helper Functions, Part I
+#### Message Helper Functions, Part I
 
-Method `forwardByAddress()` and `forwardByDestination()` implement event forwarding (sending an event object to
-another component via the memory link).
+Method `forwardByAddress()` and `forwardByDestination()` implement event message helper functions that assist 
+the processing of creating new event objects, and sending the event objects to another component via the memory link.
 Method `forwardByAddress()` obtains the base address from the event object to be sent via `getRoutingAddress()`,
 and tests on `linkDown_` and `linkUp_` respectively to find the outlet by calling `findTargetDestination()`
 on the link object. The function gives priorty to `linkDown_` over `linkUp_`, meaning that if the address
@@ -1019,7 +1019,7 @@ A heavily used paradigm of this function is to call `makeResponse()` on the even
 source and destination, and then send the new event using `forwardByDestination()`. This way, the event
 will be sent upwards, most likely as the response message to an earlier request.
 
-#### Message Forwarding Helper Functions, Part II
+#### Message Helper Functions, Part II
 
 There are also message forwarding helper functions that are built based on the two discussed in Part I.
 Method `forwardMessage()`, given an existing event, duplicates that event by copy contruction.
@@ -1052,6 +1052,22 @@ The delivery time models MSHR latency, if the input event object is from the MSH
 or models tag latency, if it is a freshly receieved event object that is just handled for the first time 
 (argument `replay` set to `false`).
 The delivery time is also returned.
+This function also has several overloaded versions, which mainly differ from each other on what the command in the
+response object is, or whether dirty bit is passed by argument.
+
+#### Message Helper Functions, Part III
+
+Method `sendOutgoingEvents()` drains the outgoing event queues, until the queues become empty, or until a byte limit
+per cycle is reached, whichever comes first.
+At the very beginning of the function, the current simulated cycle is incremented by one. Recall that this function
+is called at the very beginning of cache object's clock call back, meaning that it is the de facto tick function for
+coherence controllers.
+The function then drains both queues, `outgoingEventQueueDown_` and `outgoingEventQueueUp_`, with local variable 
+`bytesLeft` tracking the number of remaining bytes that can be sent at the current tick. Note that this function
+allows partial messages to be sent, i.e., an event object can be sent over a few cycles.
+The actual sending is performed by calling `send()` on the corresponding memory link object, and then popping
+the front object from the queues.
+The function returns a boolean to indicate whether both queues are empty.
 
 #### Function Stubs
 
