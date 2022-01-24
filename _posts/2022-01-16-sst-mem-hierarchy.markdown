@@ -517,6 +517,15 @@ respectively, which usually happens at initialization time.
 Note that for `class MemLink`, since it is a direct point-to-point link, there can be only
 a single remote end point, and hence the set `remotes` is always of size one.
 
+`class MemLink` exposes a few interface functions for querying the remote and endpoint information.
+Method `findTargetDestination()` returns the name (which is used as a global identifier) of the component
+whose address region contains the given address. 
+It can be regarded as a simple routing function which, given the address, selects the next hop destination
+from all registered destinations tracked by `remotes`.
+Method `getTargetDestination()` is identical to `findTargetDestination()`, except that, if the next hop
+destination could not be found because no region contains the given address, it prints an error message
+and a list of known destinations to assist debugging.
+
 #### Memory Link Initialization
 
 During initialization, `class MemLink` objects that are connected together exchange their identities, and register 
@@ -645,6 +654,10 @@ two links receive a message.
 
 Other combinations can also be initialized in the same function as the one we have discussed above. For simplicity,
 we skip the rest of the function, because they more or less follow the same logic.
+
+### Cache Initialization
+
+
 
 ### Cache Operations
 
