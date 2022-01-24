@@ -689,7 +689,17 @@ If the iteration number of zero, the cache also sends, on both directions, the i
 of the coherence controller, by calling `getInitCoherenceEvent()` on the controller to obtain the message,
 and then calling `sendInitData()` on the memory link objects.
 
-
+On all iterations, the initialization routine will keep receiving messages on the link objects by calling 
+`recvInitData()` repeatedly (i.e., polling) until there is no more message in the current iteration.
+We use event processing on `linkUp_` as an example.
+For each initialization event object received, the function first inspects its command, and if the command
+is `NULLCMD`, meaning that it is an initialization event object that carries a separate initialization
+command, then the latter will be obtained by calling `getInitCmd()`. 
+For `Coherence` type messages, they will be processed at the current cache, by calling `processInitCoherenceEvent()`
+on the coherence controller, and not forwarded, since the current cache also sends coherence message to its neighbors.
+In other words, coherence type messages will only travel by one hop.
+For `Endpoint` type messages, however, it will be duplicated, and sent to the other direction (`linkDown_`), by
+calling `sendInitData()`. 
 
 ### Cache Operations
 
