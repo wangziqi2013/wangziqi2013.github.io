@@ -103,6 +103,10 @@ objects, although this only happens during initialization, and the message is re
 with function call backs.
 The base class's command is always set to `NULLCMD`.
 
+Three classes inherit from `class MemEventInit`, namely, `class MemEventInitCoherence`, `class MemEventInitEndpoint`, 
+and `class MemEventInitRegion`. As the name suggests, they carry the command `Coherence`, `Endpoint`, and `Region`,
+respectively, as well as the information related with these matters. We, however, postpone the discussion of 
+each specific event type until the section that they are used with a context. 
 
 ### Constants, Macros, and Flags
 
