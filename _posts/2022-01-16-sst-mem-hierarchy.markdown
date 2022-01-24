@@ -996,7 +996,7 @@ have a smaller delivery time, since they must use the same tag entry to derive t
 response objects will be serialized on that tag entry. This, however, does not hold, if some responses are generated
 without being serialized on the tag entry.)
 
-#### Message Forwarding Helper Functions
+#### Message Forwarding Helper Functions, Part I
 
 Method `forwardByAddress()` and `forwardByDestination()` implement event forwarding (sending an event object to
 another component via the memory link).
@@ -1019,9 +1019,23 @@ A heavily used paradigm of this function is to call `makeResponse()` on the even
 source and destination, and then send the new event using `forwardByDestination()`. This way, the event
 will be sent upwards, most likely as the response message to an earlier request.
 
+#### Message Forwarding Helper Functions, Part II
+
+There are also message forwarding helper functions that are built based on the two discussed in Part I.
+Method `forwardMessage()`, given an existing event, duplicates that event by copy contruction.
+Optional data payload is set, if it is given.
+The delivery time for the event object, which is also the return value, is computed based on the given base 
+time argument `baseTime` (although in L1 MESI controller, this value is always zero, meaning that starting
+from the current simulated tick) and the current simulated tick `timestamp_`.
+If the event object is a cachable, then the access latency being modeled is the tag latency, `tagLatency_`, and
+otherwise, it is the MSHR latency `mshrLatency_`.
+The newly created object is eventually sent to the lower level by calling `forwardByAddress()`, before the
+delivery time is returned.
+
+#### Function Stubs
+
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
 `handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
 simulation, in order to indicate that the functionality regarding event type `X` is not implemented.
 Derived classes should override at least a subset of these functions and implement the coherence handling logic.
 
-#### Request Objects
