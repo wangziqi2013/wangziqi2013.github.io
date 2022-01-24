@@ -706,7 +706,10 @@ with the destination being set properly according to the address carried in the 
 In all cases, the originally received message is destroyed, meaning that initialization message's lifetime,
 similar to those of the regular messages, is also only one hop.
 
-
+The event processing on `linkDown_` is similar, but messages of non-`NULLCMD` commands will not be forwarded up,
+because otherwise, it would cause an infinite loop as the up links also forward them back. `Endpoint`
+type messages will be forwarded still, but the destination is not set to the next hop neighbor, but
+remains the same as in the original one.
 
 ### Cache Operations
 
