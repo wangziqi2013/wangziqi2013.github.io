@@ -1038,6 +1038,13 @@ The delivery time is the simulated tick plus tag access latency (i.e., modeling 
 The new event object, with its destination and source being the source and destination of the input object, is 
 returned to the sender of the input object by calling `forwardByDestination()`.
 
+Method `resendEvent()` does not create any new event object, but just implements exponential backoff for an existing
+object, and schedules its sending in a future cycle. This also violates the principle of DES, just like how 
+access latency is modeled.
+The backoff value is computed based on how many reattempts have been made. 
+The delivery time of the event is then the current tick, plus tag latency, plus the backoff cycles.
+The event is sent with `forwardByDestination()`.
+
 #### Function Stubs
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
