@@ -701,6 +701,13 @@ In other words, coherence type messages will only travel by one hop.
 For `Endpoint` type messages, however, it will be duplicated, and sent to the other direction (`linkDown_`), by
 calling `sendInitData()`. 
 
+Messages with non-`NULLCMD` command type will be forwarded to the other direction after being duplicated, 
+with the destination being set properly according to the address carried in the message.
+In all cases, the originally received message is destroyed, meaning that initialization message's lifetime,
+similar to those of the regular messages, is also only one hop.
+
+
+
 ### Cache Operations
 
 The cache class definition and method implementations are in file `cacheController.h/cc`. 
