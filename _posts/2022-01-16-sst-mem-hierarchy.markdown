@@ -1006,6 +1006,13 @@ on the link object. The function gives priorty to `linkDown_` over `linkUp_`, me
 falls into the range of both links, then it will be sent down. This is exactly what will happen if 
 point-to-point memory links are used, i.e., all event objects sent with `forwardByAddress()` will be
 sent downwards (for more complicated topologies, this is not guaranteed).
+A heavily used paradigm of this function is to create a new event and copy the address from an
+earlier request, or duplicate an earlier request, and then call `forwardByAddress()` on the new event.
+This is likely the case where an existing request is forwarded to a lower level, because it could not be
+satisfied at the current level, or the current cache generates a request on its own, and sends it down.
+The source and destination fields of event objects sent this way still need to be valid, though, as these
+two fields might be needed when creating the response event object at the lower level.
+
 
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
