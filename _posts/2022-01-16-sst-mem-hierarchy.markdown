@@ -901,6 +901,17 @@ Non-coherence caches use `CacheArray<PrivateCacheLine>` and `CacheArray<L1CacheL
 and L1 caches. The reason is straightforward: They do not need to keep coherence information, but L1 cache still
 need the extra flags to support certain instructions.
 
+### Coherence Controller Initialization
+
+The coherence controller class does not have an `init()` function, and its initialization is performed by the 
+`init()` function of the containing cache controller. 
+As discussed earlier, at the first iteration of `init()`, the cache controller will generate a type 
+`class MemEventInitCoherence` object, by calling `getInitCoherenceEvent()` on the coherence controller, 
+and then this object will be sent to the neighboring caches.
+On receiving a coherence type message, the `processInitCoherenceEvent()` will then be called to process it.
+
+
+
 ### The Coherence Controller Base Class
 
 The base class of the coherence controller, `class CoherenceController`, defines a few handy functions and types 
