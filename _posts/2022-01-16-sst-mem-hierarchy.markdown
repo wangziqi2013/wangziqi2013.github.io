@@ -526,6 +526,18 @@ Recall that the first stage initialization happens globally by the simulator mai
 calling `init()` on all components (in the case of link objects, their `init()` is called by the 
 containing component's `init()`), with the argument (`phase` in `class MemLink`'s `init()` function) 
 being the current iteration number.
+In the first iteration (where `phase` is zero), the `class MemLink` object creates an initialization
+message of type `class MemEventInitRegion`, and sends it over the link by calling `sendInitData()` on
+the link object. Note that the send and receive function during the initialization stage are polling-based,
+meaning that the receiving end must explicitly call `recvInitData()` in order to read messages. 
+The `class MemEventInitRegion` type is defined in `memEventBase.h`, and is derived from `class MemEventInit`,
+which itself is derived from `class MemEventBase`.
+We do not cover the implementation details of these initialization-related classes, as their data members and 
+methods are pretty straightforward.
+The initialization message carries the `name` and `region` values in the current `info` object, with the 
+event command being `InitCommand::Region` (set implicitly in the event object's constructor).
+This happens on the first iteration at both ends of the `class MemLink` connection.
+
 
 
 ### Cache Object Construction
