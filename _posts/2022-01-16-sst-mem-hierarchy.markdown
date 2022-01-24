@@ -682,6 +682,13 @@ identical, and the case where they are distinct objects, differently.
 In this section, we only discuss the latter, as it is the more general case. The former, however, is almost
 identical to the latter, except that only one link is used for sending and receiving instead of both.
 
+On each iteration, the link objects' `init()` is called, with the iteration number passed as the argument.
+As we have discussed earlier, the link objects will learn their immediate neighbors, as well as the overall
+topology of the memory hierarchy.
+If the iteration number of zero, the cache also sends, on both directions, the initialization message on behalf 
+of the coherence controller, by calling `getInitCoherenceEvent()` on the controller to obtain the message,
+and then calling `sendInitData()` on the memory link objects.
+
 
 
 ### Cache Operations
