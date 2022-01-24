@@ -1013,7 +1013,11 @@ satisfied at the current level, or the current cache generates a request on its 
 The source and destination fields of event objects sent this way still need to be valid, though, as these
 two fields might be needed when creating the response event object at the lower level.
 
-
+Method `forwardByDestination()`, on the other hand, tests on both links by calling `isReachable()` to see if
+the destination (a `std::string` object) of the event object is an immediate neighbor. 
+A heavily used paradigm of this function is to call `makeResponse()` on the event, which revers the input event's
+source and destination, and then send the new event using `forwardByDestination()`. This way, the event
+will be sent upwards, most likely as the response message to an earlier request.
 
 The base class also defines stub functions for each type of coherence message it may receive, with the name being 
 `handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
