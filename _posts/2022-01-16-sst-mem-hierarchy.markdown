@@ -1109,4 +1109,9 @@ into the MSHR, which blocks all future requests on the same address, i.e., reque
 serialized by the MSHR.
 The request in the MSHR will be removed when the response is received, and later requests on the same address can
 proceed.
-Second, 
+
+Second, requests that originate from the current cache, such as block evictions and write backs, will use the 
+MSHR as an event buffer. These requests are inserted into the MSHR, possibly serialized with existing requests
+on the same address, and expect to be serviced just like a normal request.
+
+
