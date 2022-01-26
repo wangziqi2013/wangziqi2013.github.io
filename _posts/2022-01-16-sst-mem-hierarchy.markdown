@@ -1164,4 +1164,9 @@ type entries are for the internally generated eviction and write back requests, 
 occupy MSHR space to avoid protocol deadlock (i.e., external requests can be blocked by internal requests and
 fail to be allocated an MSHR entry, but not vice versa). 
 
-
+Other data members of `class MSHREntry` also play their respective roles in different parts of the coherence
+protocol. Data member `inProgress` indicates whether the request is already being handled, and it is only 
+defined for `Event` type entries. The flag is set when a `GET` or flush request has been issued to the lower level
+cache, but the response is not received yet. The coherence controller will check this flag when trying to 
+schedule a waiting event in the MSHR, and if the flag is set, indicating that the current head MSHR entry
+for a given address has already been scheduled, the coherence controller will not schedule it twice.
