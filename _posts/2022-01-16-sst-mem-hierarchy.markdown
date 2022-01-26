@@ -1184,3 +1184,17 @@ multiple addresses can potentially be the new address for an eviction.
 Write back entries are constructed with a boolean flag argument, `downgr`, which initializes data member `downgrade`,
 to indicate whether the write back is a downgrade from exclusive to shared state, or it also invalidates the block.
 
+#### MSHR Operations
+
+Method `insertEvent()` inserts an event type entry into the MSHR for a given address. Besides the address
+and the event object, is also has three arguments: `pos`, `fwdRequest`, and `stallEvict`.
+Argument `pos` indicates the position in the list of entries where the insertion should happen. The most common
+values are `-1` and `0`, where `-1` means appending at the end, and `0` means inserting at the beginning.
+Most events are appended to the MSHR, but high priority events, such as external invalidations (from the lower
+level) will override all existing event objects, and be inserted at the very beginning of the list.
+Argument `fwdRequest` indicates whether the event is an explicit invalidation from the lower level.
+If this flag is set, then two slots, instead of one, will be reserved, since the invalidation also needs to
+be forwarded to the upper level. Argument `stallEvict` is just forwarded to the MSHR entry object, and is not used
+by the method. 
+
+
