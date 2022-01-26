@@ -1217,3 +1217,9 @@ of caches are always inclusive, uses `class L1CacheLine` type cache tags, and do
 This type of cache also features a simpler coherence protocol compared with the more general type of inclusive
 and non-inclusive caches, since there is no maintenance of coherence for upper levels.
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
+
+In the following text, we discuss the three major classes of operations, namely, CPU-initiated requests, 
+internally generated requests, and external requests (invalidations of all kinds), in three separate sections.
+Helper functions are covered when they are first time encountered.
+
+
