@@ -1114,4 +1114,7 @@ Second, requests that originate from the current cache, such as block evictions 
 MSHR as an event buffer. These requests are inserted into the MSHR, possibly serialized with existing requests
 on the same address, and expect to be serviced just like a normal request.
 
-
+Lastly, the MSHR is also essential for implementing atomic instructions. It allows a request to temporarily fail
+on a locked cache block just because the block is under the protection of an atomic instruction, even if the 
+tag array lookup indicates a cache hit. In this case, the failing request will also be inserted into the MSHR,
+and retried at a later cycle. 
