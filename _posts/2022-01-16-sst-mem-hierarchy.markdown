@@ -1150,4 +1150,11 @@ waiting events. The class contains a map object, `mshr_`, of type `MSHRBlock` wh
 objects in the MSHR, and `maxSize_` which is the size of the MSHR, and is initialized during construction. 
 We ignore other data members as they are either prefetching- or debugging-related.
 
+The data type of `mshr_` is `struct MSHRRegister`, which is a per-address structure that contains a list of 
+request objects being buffered, `entries`, a data member `pendingRetries`, which tracks the number of 
+requests for the address that are in the coherence controller's retry buffer and might be processed later
+in the current or future cycles, and other data members, such as `acksNeeded`, `dataBuffer`,
+and `dataDirty`. 
+We will cover the usage of these data members in details when we first encounter them in the following discussion.
+
 
