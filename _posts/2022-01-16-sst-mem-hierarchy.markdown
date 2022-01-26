@@ -1142,3 +1142,12 @@ is one cycle for the L1 cache, and computed from a lookup table with regard to t
 Later in the cache constructor, both the MSHR object and its latency is passed to the coherence controller,
 by calling `setMSHR()` and by setting the key `mshr_latency_cycles` in the parameter object, respectively. 
 
+#### MSHR Data Structure
+
+The main class, `class MSHR`, is implemented as a mapping structure that translates from addresses to a list of 
+waiting events. The class contains a map object, `mshr_`, of type `MSHRBlock` which is defined as 
+`std::map<Addr, MSHRRegister>`, a data member `size_` for tracking the current number of external event 
+objects in the MSHR, and `maxSize_` which is the size of the MSHR, and is initialized during construction. 
+We ignore other data members as they are either prefetching- or debugging-related.
+
+
