@@ -1165,8 +1165,22 @@ occupy MSHR space to avoid protocol deadlock (i.e., external requests can be blo
 fail to be allocated an MSHR entry, but not vice versa). 
 
 Other data members of `class MSHREntry` also play their respective roles in different parts of the coherence
-protocol. Data member `inProgress` indicates whether the request is already being handled, and it is only 
-defined for `Event` type entries. The flag is set when a `GET` or flush request has been issued to the lower level
-cache, but the response is not received yet. The coherence controller will check this flag when trying to 
-schedule a waiting event in the MSHR, and if the flag is set, indicating that the current head MSHR entry
-for a given address has already been scheduled, the coherence controller will not schedule it twice.
+protocol. One of the most commonly seen data member is `inProgress`, which indicates whether the request is 
+already being handled, and it is only defined for `Event` type entries. The flag is set when a `GET` or flush 
+request has been issued to the lower level cache, but the response is not received yet. The coherence controller 
+will check this flag when trying to schedule a waiting event in the MSHR, and if the flag is set, indicating that 
+the current head MSHR entry for a given address has already been scheduled, the coherence controller will not schedule 
+it twice.
+
+Each entry type has a unique constructor, and hence the constructor is overloaded. Event type entries is constructed
+with the event object and a boolean flag `stallEvict` that initializes the `needEvict` field. 
+Evict type entries are initialized with an address, which is the new address that will replace the old address
+(which is the address key used to query `mshr_`) after the eviction.
+The new address value is needed for cascaded evictions, i.e., one eviction blocks the other and both are in MSHR,
+in which case the second eviction needs to evict the new address stored in the first eviction's entry, 
+rather than the old address stored in the second eviction's entry.
+Also note that the data member for storing these new pointers, `evictPtrs`, is a `std::list<Addr>`, meaning that
+multiple addresses can potentially be the new address for an eviction.
+Write back entries are constructed with a boolean flag argument, `downgr`, which initializes data member `downgrade`,
+to indicate whether the write back is a downgrade from exclusive to shared state, or it also invalidates the block.
+
