@@ -747,6 +747,15 @@ The processing logic is identical to the one of the retry buffer, except that th
 The prefetch buffer, `prefetchBuffer_`, is also processed after the event buffer. We do not cover prefetching here,
 and we will also skip it in the rest of the section.
 
+Note that the second argument to `processEvent()` indicates whether the event is from the MSHR, or from the
+event buffer. The different between these two is that requests that are either 
+internally generated (e.g., evictions and write backs), or cause cache misses will be allocated one or more
+slots in the Miss Status Handling Register (MSHR) file. These requests will be handled with the flag being `true`,
+indicating that the MSHR slot needs to be recycled, if the request is successfully processed.
+On the other hand, if an event can be fulfilled immediately, or the MSHR allocation itself is rejected 
+(due to the MSHR being full), it will not be inserted into the MSHR, and the flag will be set to `false`.
+Detailed discussions on MSHRs are postponed to later section.
+
 An event in the `eventBuffer_` can be in one of the three states after being handled by `processEvent()`.
 First, if the event is successfully processed, and no more action is needed in the future, `processEvent()`
 will return `true`, and the event is removed from the buffer before being deallocated. 
@@ -758,30 +767,23 @@ event can be removed from the buffer (because the handling of the event itself i
 coherence controller will later on put the generated events into the retry buffer, such that these 
 internal events are also handled. In addition, the event object will not be deallocated until the 
 response message for the cache miss it has incurred is received. 
-Lastly, the event can also be in a state where the coherence controller has decided that MSHR entries
-should be allocated, but MSHR allocation fails. In this case, `processEvent()` returns `false`,
+Lastly, the event can also be rejected by the bank arbitrator (see below) or the coherence controller. 
+In this case, `processEvent()` returns `false`,
 and the event object will remain in the `eventBuffer_`. These events will be repeatedly attempted
-in the following cycles, until the handlings are eventually successful. The second argument to `processEvent()`
-is set to `false`, since these events are not in the MSHR.
-
-Note that the second argument to `processEvent()` indicates whether the event is from the MSHR, or from the
-event buffer. The different between these two is that requests that are either 
-internally generated (e.g., evictions and write backs), or cause cache misses will be allocated one or more
-slots in the Miss Status Handling Register (MSHR) file. These requests will be handled with the flag being `true`,
-indicating that the MSHR slot needs to be recycled, if the request is successfully processed.
-On the other hand, if an event can be fulfilled immediately, or the MSHR allocation itself is rejected 
-(due to the MSHR being full), it will not be inserted into the MSHR, and the flag will be set to `false`.
-Detailed discussions on MSHRs are postponeed to later section.
+in the following cycles, until the handlings are eventually successful. 
+The second argument to `processEvent()` is set to `false`, since these events are not in the MSHR.
 
 After processing buffers, the cache appends the retry buffer of the coherence controller (obtained 
 by calling `getRetryBuffer()` on the controller object) to the cache's 
-retry buffer. These events will be processed in the next cycle, with a priority higher than those in the 
-event buffer.
+retry buffer. These events are those that are accepted by the coherence controller, but cannot be 
+immediately handled, for which MSHR entries are allocated.
+consequently, all events in the retry buffer are handled by `processEvent()` with the second argument 
+set to `true`.
 
 ### Event Processing
 
 Method `processEvent()` implements event processing function for each individual event.
-At the beginning, it checks whether the event represents a non-cacheable operation. If true, it is handled separately,
+At the beginning, it checks whether the event represents a non-cachable operation. If true, it is handled separately,
 and the operation always succeeds.
 Next, for cachable operations, which is the normal case, the cache arbitrates the access by calling `arbitrateAccess()`.
 The function decides whether the request can be processed in the current cycle or not using the history of 
@@ -1023,7 +1025,7 @@ Method `forwardByAddress()` and `forwardByDestination()` implement event message
 the processing of creating new event objects, and sending the event objects to another component via the memory link.
 Method `forwardByAddress()` obtains the base address from the event object to be sent via `getRoutingAddress()`,
 and tests on `linkDown_` and `linkUp_` respectively to find the outlet by calling `findTargetDestination()`
-on the link object. The function gives priorty to `linkDown_` over `linkUp_`, meaning that if the address
+on the link object. The function gives priority to `linkDown_` over `linkUp_`, meaning that if the address
 falls into the range of both links, then it will be sent down. This is exactly what will happen if 
 point-to-point memory links are used, i.e., all event objects sent with `forwardByAddress()` will be
 sent downwards (for more complicated topologies, this is not guaranteed).
@@ -1043,7 +1045,7 @@ will be sent upwards, most likely as the response message to an earlier request.
 #### Message Helper Functions, Part II
 
 There are also message forwarding helper functions that are built based on the two discussed in Part I.
-Method `forwardMessage()`, given an existing event, duplicates that event by copy contruction.
+Method `forwardMessage()`, given an existing event, duplicates that event by copy construction.
 Optional data payload is set, if it is given.
 The delivery time for the event object, which is also the return value, is computed based on the given base 
 time argument `baseTime` (although in L1 MESI controller, this value is always zero, meaning that starting
@@ -1059,18 +1061,18 @@ The delivery time is the simulated tick plus tag access latency (i.e., modeling 
 The new event object, with its destination and source being the source and destination of the input object, is 
 returned to the sender of the input object by calling `forwardByDestination()`.
 
-Method `resendEvent()` does not create any new event object, but just implements exponential backoff for an existing
+Method `resendEvent()` does not create any new event object, but just implements exponential back off for an existing
 object, and schedules its sending in a future cycle. This also violates the principle of DES, just like how 
 access latency is modeled.
-The backoff value is computed based on how many reattempts have been made. 
-The delivery time of the event is then the current tick, plus tag latency, plus the backoff cycles.
+The back off value is computed based on how many reattempts have been made. 
+The delivery time of the event is then the current tick, plus tag latency, plus the back off cycles.
 The event is sent with `forwardByDestination()`.
 
 Method `sendResponseUp()` is very similar to `forwardMessage()`, but it creates a response event given an existing one,
 and sends it up by calling `forwardByDestination()` (since the source and destination is just the inverse
 of those in the existing object, which is assumed to be a request received from the above), rather than down.
 The delivery time models MSHR latency, if the input event object is from the MSHR (argument `replay` set to `true`),
-or models tag latency, if it is a freshly receieved event object that is just handled for the first time 
+or models tag latency, if it is a freshly received event object that is just handled for the first time 
 (argument `replay` set to `false`).
 The delivery time is also returned.
 This function also has several overloaded versions, which mainly differ from each other on what the command in the
@@ -1099,4 +1101,12 @@ Derived classes should override at least a subset of these functions and impleme
 
 ### Miss Status Handling Registers (MSHR)
 
-
+The Miss Status Handling Register (MSHR) is a critical component of the coherence controller that has serves three 
+distinct roles in request handling.
+First, requests that cause cache misses cannot be handled locally, and the request must be forwarded to a remote
+cache (e.g., a lower level cache for CPU `GET` requests). During this period, the original request will be inserted
+into the MSHR, which blocks all future requests on the same address, i.e., requests on the same address are 
+serialized by the MSHR.
+The request in the MSHR will be removed when the response is received, and later requests on the same address can
+proceed.
+Second, 
