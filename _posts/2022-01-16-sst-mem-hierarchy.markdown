@@ -1124,3 +1124,21 @@ when a request from an MSHR completes, the next request on the same address will
 and added into the retry buffer, `retryBuffer_`, of the coherence controller.
 As have discussed in earlier sections, these requests will be copied to the cache controller's retry buffer
 at the cycle end, and will then be reattempted in the next processing cycle.
+
+The MSHR is implemented by `class MSHR`, in file `mshr.h/cc`. Note that the class is neither a component nor a 
+subcomponent, since it is always instanciated.
+
+#### MSHR Construction
+
+The MSHR is constructed along with the cache, in the cache object's member function, ``createMSHR``, defined in file 
+`cacheFactory.cc`.
+The function reads two MSHR parameters: `mshr_num_entries`, which is the number of entries for storing 
+external requests (internally generated requests will be counted as an entry, as we will see later),
+and `mshrLatency`, which is the latency of accessing the MSHR. The latter will be used, instead of the
+cache tag latency, to compute cache block access time, if the request is from the MSHR rather than from the
+cache's event buffer.
+In addition, `mshrLatency` is an optional argument. If not given, then the default value would be used, which
+is one cycle for the L1 cache, and computed from a lookup table with regard to the cache access latency.
+Later in the cache constructor, both the MSHR object and its latency is passed to the coherence controller,
+by calling `setMSHR()` and by setting the key `mshr_latency_cycles` in the parameter object, respectively. 
+
