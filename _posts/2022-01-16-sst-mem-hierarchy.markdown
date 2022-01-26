@@ -1201,3 +1201,11 @@ The method first checks whether the MSHR is full or not (recall that if `fwdRequ
 If full, no allocation will happen, and the function returns `-1`. Otherwise, `size_` is incremented by one.
 Then the function creates a new entry, and possibly the register object for the address, if it does not exist, and 
 adds the new entry into the requested position of the list in the register object.
+
+Method `insertEviction()` and `insertWriteback()` work similarly by creating the entry of the respective type and
+inserting them into the register's list. The difference is that, first, both functions do not check the size, the
+reason of which has been discussed earlier. Second, `insertWriteback()` will insert at the beginning of the list,
+meaning write back requests have higher priority than every other request waiting in the MSHR.
+
+The above functions are the most frequently used one in the coherence controller. We will cover other functions
+when we first encountered them during later discussion.
