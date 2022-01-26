@@ -737,25 +737,27 @@ have been processed. The latter condition essentially implements a processing ba
 On the other hand, `maxRequestsPerCycle_` can be configured to be -1, in which case there is not bandwidth limit.
 
 Each entry in the retry buffer is processed by calling `processEvent()`. If the entry is accepted, the function
-returns `true`, and it is removed from the retry buffer. Otherwise, it just stays there, and waits for the next
-processing cycle .
-Also note that the second argument to `processEvent()` indicates whether the event is a fresh one just received, or
-a retried event. The different between these two is that new events that have never been rejected before will 
-not occupy space in the Miss Status Handling Register (MSHR), and they will be handled with the flag being `true`.
-On the other hand, when an event is rejected for the first time, it will be
-inserted into the MSHR, and remain there until the event is successfully handled.
-On all later retries of the event, the flag will be set to `true`, indicating that the MSHR entry that correspond to
-the event should also be cleared, if the handling succeeds.
+returns `true`, and it is removed from the retry buffer. Otherwise, it just stays there, and will be revisited
+in the next tick.
 
 After processing the retry buffer, the cache then proceeds to handle the event buffer, `eventBuffer_`, which stores
 newly received events from both links that have not been rejected.
 The processing logic is identical to the one of the retry buffer, except that the second argument to 
-`processEvent()` is `false`, indicating that no MSHR entry is occupied by the event object.
+`processEvent()` is `false`.
 The prefetch buffer, `prefetchBuffer_`, is also processed after the event buffer. We do not cover prefetching here,
 and we will also skip it in the rest of the section.
 
-After processing buffers, the cache moves the retry buffer of the coherence controller into the cache's retry buffer.
-These events are exactly those that are rejected and should be retried. 
+Note that the second argument to `processEvent()` indicates whether the event is from the MSHR, or from the
+event buffer. The different between these two is that requests that are either 
+internally generated (e.g., evictions and write backs), or cause cache misses will be allocated one or more
+slots in the Miss Status Handling Register (MSHR) file. These requests will be handled with the flag being `true`,
+indicating that the MSHR slot needs to be recycled, if the request is successfully processed.
+On the other hand, when an event can be fulfilled immediately, or the MSHR allocation is rejected (due to the MSHR
+being full), it will not be inserted into the MSHR, and the flag will be set to `false`.
+Detailed discussions on MSHRs are postponeed to later section.
+
+After processing buffers, the cache appends the retry buffer of the coherence controller to the cache's retry buffer.
+These events are exactly those that are allocated a slot in the MSHR, and therefore, 
 
 ### Event Processing
 
@@ -1075,4 +1077,7 @@ The base class also defines stub functions for each type of coherence message it
 `handleX` where `X` is the event type. These stub functions, once called, will print an error message and terminate
 simulation, in order to indicate that the functionality regarding event type `X` is not implemented.
 Derived classes should override at least a subset of these functions and implement the coherence handling logic.
+
+### Miss Status Handling Registers (MSHR)
+
 
