@@ -1157,4 +1157,11 @@ in the current or future cycles, and other data members, such as `acksNeeded`, `
 and `dataDirty`. 
 We will cover the usage of these data members in details when we first encounter them in the following discussion.
 
+All MSHR entries are of type `class MSHREntry`, which carries a `type` field of type `enum class MSHREntryType`.
+The `type` field can be of one of the following three values: `Event`, `Evict`, and `Writeback`. Among them,
+the `Event` type entry is for external events that will occupy MSHR space, while both `Evict` and `Writeback`
+type entries are for the internally generated eviction and write back requests, respectively, and they do not
+occupy MSHR space to avoid protocol deadlock (i.e., external requests can be blocked by internal requests and
+fail to be allocated an MSHR entry, but not vice versa). 
+
 
