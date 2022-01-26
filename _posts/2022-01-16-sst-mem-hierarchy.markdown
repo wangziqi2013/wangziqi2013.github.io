@@ -1118,3 +1118,9 @@ Lastly, the MSHR is also essential for implementing atomic instructions. It allo
 on a locked cache block just because the block is under the protection of an atomic instruction, even if the 
 tag array lookup indicates a cache hit. In this case, the failing request will also be inserted into the MSHR,
 and retried at a later cycle. 
+
+Since the MSHR buffers requests that cannot be completed at an earlier cycle in which they were processed, 
+when a request from an MSHR completes, the next request on the same address will be removed from the MSHR,
+and added into the retry buffer, `retryBuffer_`, of the coherence controller.
+As have discussed in earlier sections, these requests will be copied to the cache controller's retry buffer
+at the cycle end, and will then be reattempted in the next processing cycle.
