@@ -758,7 +758,11 @@ event can be removed from the buffer (because the handling of the event itself i
 coherence controller will later on put the generated events into the retry buffer, such that these 
 internal events are also handled. In addition, the event object will not be deallocated until the 
 response message for the cache miss it has incurred is received. 
-
+Lastly, the event can also be in a state where the coherence controller has decided that MSHR entries
+should be allocated, but MSHR allocation fails. In this case, `processEvent()` returns `false`,
+and the event object will remain in the `eventBuffer_`. These events will be repeatedly attempted
+in the following cycles, until the handlings are eventually successful. The second argument to `processEvent()`
+is set to `false`, since these events are not in the MSHR.
 
 Note that the second argument to `processEvent()` indicates whether the event is from the MSHR, or from the
 event buffer. The different between these two is that requests that are either 
