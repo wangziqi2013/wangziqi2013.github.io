@@ -1222,4 +1222,11 @@ In the following text, we discuss the three major classes of operations, namely,
 internally generated requests, and external requests (invalidations of all kinds), in three separate sections.
 Helper functions are covered when they are first time encountered.
 
+#### CPU-Initiated Requests
 
+CPU may initiate three types of requests: `GETS`, which obtains a block in shared state for read, `GETX`, 
+which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GETX`, except that
+the block is locked in the L1 cache, until a future `GETX` hits it.
+`GETSX` is essential for implementing atomic read-modify-write instructions.
+
+From a high-level perspective, 
