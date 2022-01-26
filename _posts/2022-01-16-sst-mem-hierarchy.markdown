@@ -1197,4 +1197,7 @@ If this flag is set, then two slots, instead of one, will be reserved, since the
 be forwarded to the upper level. Argument `stallEvict` is just forwarded to the MSHR entry object, and is not used
 by the method. 
 
-
+The method first checks whether the MSHR is full or not (recall that if `fwdRequest` is set, two slots are needed).
+If full, no allocation will happen, and the function returns `-1`. Otherwise, `size_` is incremented by one.
+Then the function creates a new entry, and possibly the register object for the address, if it does not exist, and 
+adds the new entry into the requested position of the list in the register object.
