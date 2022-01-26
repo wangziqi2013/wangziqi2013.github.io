@@ -1209,3 +1209,11 @@ meaning write back requests have higher priority than every other request waitin
 
 The above functions are the most frequently used one in the coherence controller. We will cover other functions
 when we first encountered them during later discussion.
+
+### Coherence Protocol: MESI L1
+
+We next delve into the realm of the coherence protocol of MESI L1 type cache. As have discussed earlier, this type
+of caches are always inclusive, uses `class L1CacheLine` type cache tags, and do not have a directory of any kind.
+This type of cache also features a simpler coherence protocol compared with the more general type of inclusive
+and non-inclusive caches, since there is no maintenance of coherence for upper levels.
+The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
