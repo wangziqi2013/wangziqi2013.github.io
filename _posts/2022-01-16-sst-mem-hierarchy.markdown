@@ -751,6 +751,13 @@ An event in the `eventBuffer_` can be in one of the three states after being han
 First, if the event is successfully processed, and no more action is needed in the future, `processEvent()`
 will return `true`, and the event is removed from the buffer before being deallocated. 
 This is most likely a cache hit, which does not generate internal events, nor require miss handling.
+Second, the event can be successfully processed, but it causes internal events being generated, or incurs 
+a cache miss. The event needs to be allocated an entry in the MSHR, possibly together with all the 
+internal events it generates. In this case, `processEvent()` still returns `true`, meaning that the 
+event can be removed from the buffer (because the handling of the event itself is successful), but the 
+coherence controller will later on put the generated events into the retry buffer, such that these 
+internal events are also handled. In addition, the event object will not be deallocated until the 
+response message for the cache miss it has incurred is received. 
 
 
 Note that the second argument to `processEvent()` indicates whether the event is from the MSHR, or from the
