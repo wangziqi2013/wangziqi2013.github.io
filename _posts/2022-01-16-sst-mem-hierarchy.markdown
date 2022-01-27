@@ -1394,7 +1394,15 @@ responded to is from the MSHR.
 Finally, the method calls `cleanUpAfterResponse()` to remove the front entry from the MSHR, and schedule the following
 entry on the same address.
 
-
+Method `cleanUpAfterResponse()` behaves similarly to its buddy, `cleanUpAfterRequest()`. 
+It removes both the front entry of the MSHR register on the response event's address, and the 
+request event object that is in the entry as well, if the entry is of `Event` type.
+Note that the entry can also be of other type as well, since write backs and flush response handler will 
+also call this function, in which case there is no associated request object in the front entry.
+The method then adds the next waiting entry in the MSHR register to the retry buffer in a way that is similar to
+the one in `cleanUpAfterRequest()`. The only difference is that `cleanUpAfterResponse()` assumes that
+the next entry in the MSHR register will not be a write back entry, since write back entries are always
+inserted in the front of the register, and hence could not be retried.
 
 ##### handleGetS(), Eviction Path
 
