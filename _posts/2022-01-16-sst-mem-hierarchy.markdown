@@ -1404,6 +1404,13 @@ the one in `cleanUpAfterRequest()`. The only difference is that `cleanUpAfterRes
 the next entry in the MSHR register will not be a write back entry, since write back entries are always
 inserted in the front of the register, and hence could not be retried.
 
+In the case of `cleanUpAfterRequest()`, the reason that a write back request may be after the front 
+request is that external invalidation requests have even higher priority than write backs, i.e., 
+when an invalidation is received, if it cannot be handled immediately, the event entry will always be 
+inserted as the front entry of the MSHR register. 
+After this request is handled, `cleanUpAfterRequest()` will be called to remove its entry from the MSHR, 
+in which case the next entry being a write back is truly possible.
+
 ##### handleGetS(), Eviction Path
 
 A few helper functions are used in `handleGetS()`.
