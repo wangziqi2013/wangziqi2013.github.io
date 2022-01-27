@@ -1276,4 +1276,10 @@ The `inMSHR` argument is set to `false`, if the event object is from the cache c
 or `true`, if the object is from its retry buffer (which itself is just copied from the coherence controller's
 retry buffer at the end of every tick).
 
+At the beginning of `handleGetS()`, a tag lookup is performed on the tag array by calling `lookup()` on `cacheArray_`,
+which either returns a valid pointer to the line, if there is an address match, or returns `NULL`.
+The line state is stored in local variable `state`, and then a switch statement decides the next action.
+If the line is in state `S`, `E`, or `M`, indicating a cache miss, then the request is fulfilled at
+the current cycle, and the response message is sent by calling `sendResponseUp()`, followed by `cleanUpAfterRequest()`.
+Note that the line's timestamp is also updated by calling `setTimestamp()` with the return value of `sendResponseUp`.
 
