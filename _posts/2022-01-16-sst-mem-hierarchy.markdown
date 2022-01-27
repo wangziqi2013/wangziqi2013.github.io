@@ -1256,8 +1256,8 @@ The write back request might be optional for clean blocks, if the lower level ca
 clean write backs (this is negotiated during initialization, as discussed in cache controller's `init()` function).
 
 The coherence state of the cache block also transits to an unstable state to indicate the ongoing transaction of 
-block fetching or upgrading. `I` state blocks will transit to `I_S` or `I_M`, depending on the type of the request.
-`S` state blocks will transit to `S_M`, if an upgrade is required.
+block fetching or upgrading. `I` state blocks will transit to `IS` or `IM`, depending on the type of the request.
+`S` state blocks will transit to `SM`, if an upgrade is required.
 `E` and `M` state blocks will never miss, and the request is handled trivially in one cycle (although `E` state
 blocks will become `M` on `GETX` requests).
 
@@ -1278,6 +1278,7 @@ retry buffer at the end of every tick).
 
 At the beginning of `handleGetS()`, a tag lookup is performed on the tag array by calling `lookup()` on `cacheArray_`,
 which either returns a valid pointer to the line, if there is an address match, or returns `NULL`.
+Note that this lookup operation will update replacement, as the second argument is `true`.
 The line state is stored in local variable `state`, and then a switch statement decides the next action.
 If the line is in state `S`, `E`, or `M`, indicating a cache miss, then the request is fulfilled at
 the current cycle, and the response message is sent by calling `sendResponseUp()`, followed by `cleanUpAfterRequest()`.
@@ -1331,4 +1332,27 @@ The controller will first attempt to evict a block from the cache, by calling `p
 This function may perform the following three operations (some are optional): (1) Adding the request into MSHR,
 if not already; (2) Evict the tag if necessary, or schedule an eviction request in the MSHR; (3) Send a write
 back request to the lower level for the eviction.
+The function may return `MemEventStatus::OK`, `MemEventStatus::Stall`, or `MemEventStatus::Reject`,
+which are enum class types defined in file `memTypes.h`. 
+In the first case, everything succeeds, and the CPU-generated request can be processed.
+In the middle case, the request cannot be handled immediately, but we know that it has already been added to the 
+MSHR, so the request can be removed from the cache controller's buffer, and it will be retried later.
+In the last case, the request does not even get into the MSHR, and it must be retained in the 
+cache controller's buffer.
+
+If the return value of `processCacheMiss()` is `OK`, then the processing proceeds by performing a second 
+lookup on the tag array. The second lookup is necessary, since a replacement may have already been made.
+Also note that the lookup does not change replacement information, as its purpose is merely just to 
+find the tag entry rather than simulating an access.
+The controller creates a new request object and sends it to the lower level cache by calling `forwardMessage()`
+(which is defined in the base class),
+transits the state of the block to `IS`, which is equivalent to `S` but data is missing (so any data related
+request on `IS` block should be stalled unless the response arrives).
+Finally, the timestamp of the block is updated to the send time, and the MSHR entry of the request is set as 
+in progress, such that it will not be scheduled twice.
+If the return value of `processCacheMiss()` is not `OK`, the request will not be further processed.
+The return value of `handleGetS()` also depends on the return value of `processCacheMiss()`, i.e., 
+whether the request has been successfully added to the MSHR. If true, then `handleGetS()` returns `true`,
+and the request will be removed from the cache controller's buffer. Otherwise, the method returns `false`,
+and the request remains in the buffer, which will be processed in the next cycle.
 
