@@ -1224,6 +1224,8 @@ Helper functions are covered when they are first time encountered.
 
 #### CPU-Initiated Requests
 
+##### High-Level Overview
+
 CPU may initiate three types of requests: `GETS`, which obtains a block in shared state for read, `GETX`, 
 which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GETX`, except that
 the block is locked in the L1 cache, until a future `GETX` hits it.
@@ -1252,3 +1254,11 @@ In addition, the controller also creates a request to write back the contents of
 inserts it into the MSHR.
 The write back request might be optional for clean blocks, if the lower level cache does not explicitly request
 clean write backs (this is negotiated during initialization, as discussed in cache controller's `init()` function).
+
+The coherence state of the cache block also transits to an unstable state to indicate the ongoing transaction of 
+block fetching or upgrading. `I` state blocks will transit to `I_S` or `I_M`, depending on the type of the request.
+`S` state blocks will transit to `S_M`, if an upgrade is required.
+`E` and `M` state blocks will never miss, and the request is handled trivially in one cycle (although `E` state
+blocks will become `M` on `GETX` requests).
+
+
