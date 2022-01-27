@@ -1415,7 +1415,7 @@ inserted as the front entry of the MSHR register.
 After this request is handled, `cleanUpAfterRequest()` will be called to remove its entry from the MSHR, 
 in which case the next entry being a write back is truly possible.
 
-##### handleGetS(), Eviction Path
+##### handleGetS(), Eviction Path, Part I
 
 We have left out the eviction path of `handleGetS()` in the previous sections, which will be covered in this section.
 The eviction path starts in function `processCacheMiss()`. 
@@ -1443,8 +1443,7 @@ If the eviction is feasible, `handleEviction()` returns `true`, which means that
 in the current cycle.
 In this case, the tag is updated with the requested address by calling `replace()`, and the line object with the 
 new address is returned.
-If eviction is infeasible, due to pending retries on the old address or due to the tag being locked, 
-`handleEviction()` returns `false`.
+If eviction is infeasible, due to some ongoing actions on the old address, `handleEviction()` returns `false`.
 In this case, an eviction entry is inserted into the MSHR by calling `insertEviction()`, and the function 
 returns `NULL`. 
 Note that the eviction entry is inserted on the old address, with the entry object carrying both the old and the 
@@ -1492,3 +1491,11 @@ by calling `handleAckPut()`.
 This function is extremely simple: It does nothing except calling `cleanUpAfterResponse()`, which, as we have discussed
 earlier, removes the front entry of the MSHR register, which is the write back entry, and inserts the 
 event in the following entry into the retry buffer.
+
+##### handleGetS(), Eviction Path, Part II
+
+When `handleEviction()` fails, due to ongoing operations on the old address, an eviction entry is inserted 
+into the MSHR register of the old address. The eviction entry will be translated into eviction 
+request objects of type `class MemEvent`, with command `NULLCMD`, in method `cleanUpAfterRequest()` and
+`cleanUpAfterResponse()`, before being inserted into the retry buffer.
+
