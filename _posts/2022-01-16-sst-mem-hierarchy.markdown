@@ -432,7 +432,7 @@ The index of the LRU entry is stored in data member `bestCandidate`, and is also
 Method `getBestCandidate` simply returns the `bestCandidate` value.
 
 Note that the comment block on top of `findBestCandidate()` in the source code describes the function incorrectly
-(up to version 11.1.0, which is the reference version this article assumes), 
+(up to version `11.1.0`, which is the reference version this article assumes), 
 and it seems that the developers copy-pasted it from that of `class LRUOpt`. A mistake on their part!
 
 `class LRUOpt` implements an optimized version of LRU, which not only takes LRU counter values into consideration,
@@ -1316,15 +1316,15 @@ that some CPU-generated event will be processed for the address in the next cycl
 Note that in the current version of SST (version `11.1.0`), there is likely a bug in `cleanUpAfterRequest()`, where 
 curly braces are missing for the if statement `if (!mshr_->getInProgress(addr))`. This way,
 the statement, `mshr_->addPendingRetry(addr);`, which is supposed to be only executed when the `if` holds,
-will be always executed regardless of whether the `if` condition evaluates to `true` or not. 
+will be always executed regardless of the `if` condition. 
 
 If the next MSHR entry is of evict type, the function will then generate one eviction request for every "new address"
 stored in the entry (the list of new address is obtained by calling `getEvictPointers()`). 
 Note that internally generated eviction requests carry a command of `NULLCMD`, and that they also carry the old
 address (i.e., the address to be evicted), `addr`.
 
-Also Note that write back entries in the MSHR are not handled in `cleanUpAfterRequest()`, even if they are at the 
-front of the queue.
+Also Note that write back entries in the MSHR register are not retried in `cleanUpAfterRequest()`, even if they 
+are at the front of the queue.
 The reason is that the coherence controller always sends the write back request to the lower level in the same 
 cycle as the entry is added to the MSHR, and hence these entries are just waiting for 
 write back responses (i.e., they are always in progress), while blocking all future requests.
@@ -1401,8 +1401,12 @@ Note that the entry can also be of other type as well, since write backs and flu
 also call this function, in which case there is no associated request object in the front entry.
 The method then adds the next waiting entry in the MSHR register to the retry buffer in a way that is similar to
 the one in `cleanUpAfterRequest()`. The only difference is that `cleanUpAfterResponse()` assumes that
-the next entry in the MSHR register will not be a write back entry, since write back entries are always
-inserted in the front of the register, and hence could not be retried.
+the next entry in the MSHR register will never be a write back entry, since write back entries
+have higher priority than CPU-generated requests as well as evictions, which are the type of requests that need
+to call `cleanUpAfterResponse()` on completion. Additionally, write backs on the same address 
+will not stack on each other, since the block state will transit to `I` after the write back entry is inserted 
+into MSHR.
+This implies that write back entries will never be queued in the MSHR after these request entries.
 
 In the case of `cleanUpAfterRequest()`, the reason that a write back request may be after the front 
 request is that external invalidation requests have even higher priority than write backs, i.e., 
@@ -1413,8 +1417,17 @@ in which case the next entry being a write back is truly possible.
 
 ##### handleGetS(), Eviction Path
 
-A few helper functions are used in `handleGetS()`.
-Method `allocateMSHR()` is defined in the base class.
-As the name indicates, it allocates a MSHR for a given CPU-generated event. Note that this
-function does not handle eviction and write back events, since they have their own specific functions.
+We have left out the eviction path of `handleGetS()` in the previous sections, which will be covered in this section.
+The eviction path starts in function `processCacheMiss()`. 
+The function first allocates an MSHR entry for the request, if it is not already in the MSHR. If the allocation
+fails, due to the MSHR being full, the function returns `Rejected` without any further action, and the request
+will be reattempted in the next cycle.
+If the request is already in the MSHR, the function also checks whether the request is, in fact, also the front
+event of the MSHR register. The eviction path will only be executed if the request is the in the front. 
+This check is necessary, since it is possible that the event was the front entry of the MSHR register, and hence 
+was added to the retry buffer in the previous cycle, but an
+invalidation is received in the current cycle, which has a higher priority, and will be inserted as the 
+front request. In this case, the CPU-generated request should give up the cycle, and let the invalidation be 
+handled first by returning `Stall` to the caller. 
+
 
