@@ -1453,3 +1453,16 @@ new address, while the event entry representing the request is inserted on the n
 Also note that, in the case where eviction fails, `allocateLine()` returns `NULL`, which causes its caller, 
 `processCacheMiss()`, to return `Stall`. This will further cause the request to be removed from the cache
 controller's buffer. The request will eventually be retried when the eviction on the old address succeeds. 
+
+Method `handleEviction()` attempts to evict the block given by the replacement manager if feasible.
+Note that the second argument is both an input and an output argument.
+The function first finds the replacement block, if one is needed (`line` being `NULL`) by calling 
+`findReplacementCandidate()` on the tag array with the old address.
+It then checks whether the line is locked, and if true, then an atomic instruction is currently half-way, and
+eviction must not proceed until the block is unlocked, in which case `false` is returned.
+Otherwise, the function checks whether the address also has pending retries by calling 
+`getPendingRetries()` on the block address at the beginning of every case block. 
+If true, then these retires are logically ordered before the eviction, and eviction could not proceed either,
+which causes the control flow to fall though to the `default` case, and `false` is returned.
+
+
