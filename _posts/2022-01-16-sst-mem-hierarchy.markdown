@@ -1311,4 +1311,8 @@ stored in the entry (the list of new address is obtained by calling `getEvictPoi
 Note that internally generated eviction requests carry a command of `NULLCMD`, and that they also carry the old
 address (i.e., the address to be evicted), `addr`.
 
-
+Note that write back entries in the MSHR does not need to be added, even if they are at the front of the queue.
+The coherence controller always sends the write back request to the lower level in the same cycle as the entry
+is added to the MSHR at the current cache, and hence these entries are just waiting for write back responses,
+while blocking all future requests.
+The write back entries will be removed when write back responses are received.
