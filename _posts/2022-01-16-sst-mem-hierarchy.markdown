@@ -1207,8 +1207,8 @@ inserting them into the register's list. The difference is that, first, both fun
 reason of which has been discussed earlier. Second, `insertWriteback()` will insert at the beginning of the list,
 meaning write back requests have higher priority than every other request waiting in the MSHR.
 
-The above functions are the most frequently used one in the coherence controller. We will cover other functions
-when we first encountered them during later discussion.
+The above functions are the most frequently used ones in the coherence controller. We will cover other less used 
+functions of `class MSHR` when we first encountered them during later discussion.
 
 ### Coherence Protocol: MESI L1
 
@@ -1293,3 +1293,19 @@ retry buffer), in which case is data member `mshrLatency_`, or it is from the ca
 in which case is data member `tagLatency_`.
 The response event is eventually inserted into the send queue by calling `forwardByDestination()`, which is 
 defined in the base class.
+
+Method `cleanUpAfterRequest()` is called after a request event has been completed. This function is called under the
+invariance that the request must be the first in the MSHR's entry list of the requested address.
+The function first removes the front (i.e., current) entry from the MSHR register of the given address by 
+calling `removeFront()`, if the request is from the MSHR (indicated by argument `inMSHR`).
+The function then moves the next request on the same address that was blocked by the completed request into the 
+retry buffer, which will then be copied to the cache controller's own retry buffer and processed in the next cycle.
+To achieve this, the function first inspects the type of the entry in the MSHR.
+If the entry is of event type, and the event object is not already scheduled (by checking `getInProgress()`), 
+then the event object is scheduled to the processed in the next cycle by inserting it into `retryBuffer_`.
+The `addPendingRetry()` is also called to increment the `pendingRetries` counter in the MSHR register, indicating
+that some CPU-generated event will be processed for the address in the next cycle.
+
+
+
+
