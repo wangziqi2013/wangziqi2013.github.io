@@ -1499,3 +1499,12 @@ into the MSHR register of the old address. The eviction entry will be translated
 request objects of type `class MemEvent`, with command `NULLCMD`, in method `cleanUpAfterRequest()` and
 `cleanUpAfterResponse()`, before being inserted into the retry buffer.
 
+On seeing a `NULLCMD` type event object, the cache controller will call `handleNULLCMD()` to perform the
+eviction. The function first obtains the line object with the old address by performing a tag lookup.
+The function then reuses `handleEviction()` to perform eviction in the current cycle.
+If eviction succeeds, then it calls `deallocate()` on the line object to clear the line's state and mark it
+as unused.
+Since the eviction has been performed, the originating CPU-generated request on the new address, which is 
+obtained by calling `getBaseAddr()` on the event object, is then added to the retry buffer, and the 
+new address's pending retries counter is also incremented by one.
+
