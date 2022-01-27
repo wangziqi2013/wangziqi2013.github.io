@@ -1465,4 +1465,9 @@ Otherwise, the function checks whether the address also has pending retries by c
 If true, then these retires are logically ordered before the eviction, and eviction could not proceed either,
 which causes the control flow to fall though to the `default` case, and `false` is returned.
 
+Note that there is also likely a coding bug that fails to return `false` directly when the `getPendingRetries()`
+check fails. The bug, although not affecting correctness, causes the check with `getPendingRetries()` to be called 
+multiple times, until the control flow falls through to `default`. 
+A better scheme would be just to add an else to the `if` statement that checks pending retries, and return 
+`false` there.
 
