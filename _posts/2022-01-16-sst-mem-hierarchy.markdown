@@ -1471,3 +1471,16 @@ multiple times, until the control flow falls through to `default`.
 A better scheme would be just to add an else to the `if` statement that checks pending retries, and return 
 `false` there.
 
+If there is no pending retry on the old address, the block is not locked, and the state of the block is 
+a stable state, eviction could then proceed in the current cycle, by sending write back requests to the 
+lower level with `PUTS`, `PUTE`, or `PUTM` commands,
+for state `S`, `E`, and `M`, respectively. Transient states indicate ongoing transactions on the address, 
+in which case eviction should also be delayed (the control flow will hit the `default` case).
+The actual request object is sent with `sendWriteback()`, which is just a simple function that creates a 
+new event object, computes the delivery time, initializes related fields, sends the request downwards by calling 
+`forwardByAddress()`, and finally updates the block's timestamp.
+After sending the write back event object, if the cache is expecting an `ACK` for write backs (which is 
+configured during `init()`), a write back entry is also inserted into the MSHR for the old address 
+by calling `insertWriteback()`. Note that the write back entry is always inserted as the front request of the 
+old address.
+The state of the block is reset to `I` to reflect the fact that the block has been evicted.
