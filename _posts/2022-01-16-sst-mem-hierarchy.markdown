@@ -1244,4 +1244,11 @@ The rest of the actions depends on whether the address tag already exists in the
 meaning that the coherence action is taken to upgrade the permission of the block (which only happens for `GETX`
 and `GETSX`), then no further action is taken.
 
-
+If, however, the address tag does not exist, then two more transactions are started: eviction and write back.
+The coherence controller first attempts to evict the block on the same cycle. If this is not achievable due to the
+block being locked, or pending retries on the address to be evicted, the controller creates an eviction request 
+using the existing block's address, and inserts it into the MSHR. 
+In addition, the controller also creates a request to write back the contents of the evicted block, and also
+inserts it into the MSHR.
+The write back request might be optional for clean blocks, if the lower level cache does not explicitly request
+clean write backs (this is negotiated during initialization, as discussed in cache controller's `init()` function).
