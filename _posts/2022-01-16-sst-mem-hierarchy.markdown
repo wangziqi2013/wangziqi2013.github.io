@@ -1283,3 +1283,13 @@ If the line is in state `S`, `E`, or `M`, indicating a cache miss, then the requ
 the current cycle, and the response message is sent by calling `sendResponseUp()`, followed by `cleanUpAfterRequest()`.
 Note that the line's timestamp is also updated by calling `setTimestamp()` with the return value of `sendResponseUp`.
 
+Method `sendResponseUp()` just takes the request event, creates a new response event by calling `makeResponse()`
+(which also sets the source and destination of the response event by inverting the two in the request event),
+and simulates the access latency using the input argument `time`, which is the last cycle the cache block is 
+busy, and the current timestamp `timestamp_`. 
+We have already covered access latency simulation in earlier sections, and do not repeat it here.
+The access latency value being used depends on whether the request is from the MSHR (i.e., cache controller's
+retry buffer), in which case is data member `mshrLatency_`, or it is from the cache controller's event buffer,
+in which case is data member `tagLatency_`.
+The response event is eventually inserted into the send queue by calling `forwardByDestination()`, which is 
+defined in the base class.
