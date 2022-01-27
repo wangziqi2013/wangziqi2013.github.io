@@ -1356,3 +1356,10 @@ whether the request has been successfully added to the MSHR. If true, then `hand
 and the request will be removed from the cache controller's buffer. Otherwise, the method returns `false`,
 and the request remains in the buffer, which will be processed in the next cycle.
 
+Note that it is possible that the request is successfully inserted into the MSHR, but the eviction fails,
+which will cause `processCacheMiss()` to return `Stall`, and `handleGetS()` will return `true` regardless,
+causing the request to be removed from the cache controller's buffer.
+At the first sight, this will block overall progress, since the request will never be re-executed. With further 
+inspection, however, it is revealed that when this happens, there must already be earlier requests in the MSHR.
+When these requests complete, they will insert the current request back into the retry buffer.
+This is also the reason why function `handleGetS()` always calls `removePendingRetry()`.
