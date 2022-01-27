@@ -1313,6 +1313,11 @@ then the event object is scheduled to be processed in the next cycle by insertin
 The `addPendingRetry()` is also called to increment the `pendingRetries` counter in the MSHR register, indicating
 that some CPU-generated event will be processed for the address in the next cycle.
 
+Note that in the current version of SST (version `11.1.0`), there is likely a bug in `cleanUpAfterRequest()`, where 
+curly braces are missing for the if statement `if (!mshr_->getInProgress(addr))`. This way,
+the statement, `mshr_->addPendingRetry(addr);`, which is supposed to be only executed when the `if` holds,
+will be always executed regardless of whether the `if` condition evaluates to `true` or not. 
+
 If the next MSHR entry is of evict type, the function will then generate one eviction request for every "new address"
 stored in the entry (the list of new address is obtained by calling `getEvictPointers()`). 
 Note that internally generated eviction requests carry a command of `NULLCMD`, and that they also carry the old
@@ -1325,7 +1330,7 @@ cycle as the entry is added to the MSHR, and hence these entries are just waitin
 write back responses (i.e., they are always in progress), while blocking all future requests.
 The write back entries will be removed when write back responses are received.
 
-##### handleGetS(), Miss Path
+##### handleGetS(), Miss Path (Despite Eviction)
 
 If the state of the tag is `I`, meaning that the tag address is not found, then a cache miss has occurred, and the
 request must be completed with a few more transactions. 
@@ -1340,6 +1345,7 @@ In the middle case, the request cannot be handled immediately, but we know that 
 MSHR, so the request can be removed from the cache controller's buffer, and it will be retried later.
 In the last case, the request does not even get into the MSHR, and it must be retained in the 
 cache controller's buffer.
+We postpone discussion of the eviction path to later section, and only focuses on miss handling here.
 
 If the return value of `processCacheMiss()` is `OK`, then the processing proceeds by performing a second 
 lookup on the tag array. The second lookup is necessary, since a replacement may have already been made.
@@ -1388,9 +1394,9 @@ responded to is from the MSHR.
 Finally, the method calls `cleanUpAfterResponse()` to remove the front entry from the MSHR, and schedule the following
 entry on the same address.
 
-Method 
 
-##### handleGetS(), Helper Functions
+
+##### handleGetS(), Eviction Path
 
 A few helper functions are used in `handleGetS()`.
 Method `allocateMSHR()` is defined in the base class.
