@@ -1508,3 +1508,11 @@ Since the eviction has been performed, the originating CPU-generated request on 
 obtained by calling `getBaseAddr()` on the event object, is then added to the retry buffer, and the 
 new address's pending retries counter is also incremented by one.
 
+Recall that if the eviction MSHR entry has multiple new addresses, then multiple eviction request object will
+be generated. Each successful `handleEviction()` in these requests will remove the new address value from the 
+eviction MSHR entry (which remains the front entry as these evictions are processed)
+by calling `removeEvictPointer()`. 
+The last eviction request that is successfully completed will call `retry()` on the old address to schedule
+the next entry in the old address's MSHR register, if any.
+
+
