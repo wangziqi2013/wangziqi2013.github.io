@@ -1306,6 +1306,9 @@ then the event object is scheduled to the processed in the next cycle by inserti
 The `addPendingRetry()` is also called to increment the `pendingRetries` counter in the MSHR register, indicating
 that some CPU-generated event will be processed for the address in the next cycle.
 
-
+If the next MSHR entry is of evict type, the function will then generate one eviction request for every "new address"
+stored in the entry (the list of new address is obtained by calling `getEvictPointers()`). 
+Note that internally generated eviction requests carry a command of `NULLCMD`, and that they also carry the old
+address (i.e., the address to be evicted), `addr`.
 
 
