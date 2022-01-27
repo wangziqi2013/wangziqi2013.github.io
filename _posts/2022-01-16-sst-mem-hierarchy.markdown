@@ -1269,3 +1269,11 @@ atomic flag. The transaction concludes by creating and sending the a response me
 completion of the access.
 
 ##### Function handleGetS()
+
+We use function `handleGetS()` to walk over the above sequence as an example. This function is called in the 
+cache controller's tick handler to process an memory event object of type `GETS`. 
+The `inMSHR` argument is set to `false`, if the event object is from the cache controller's event buffer,
+or `true`, if the object is from its retry buffer (which itself is just copied from the coherence controller's
+retry buffer at the end of every tick).
+
+
