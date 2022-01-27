@@ -1379,7 +1379,16 @@ All processing on the address is blocked (including invalidations, which is cons
 the access operation) until the response event from the lower level cache arrives, in which case, `handleGetSResp()`
 will be invoked.
 
+Method `handleGetSResp()` first performs a lookup on the tag array, acquires the cache tag, and sets the block
+state to the stable state, `S`. 
+We ignore the mundane part of the function on data and memory flags as they are pretty straightforward.
+The method then calls `sendResponseUp()` to send a response message to the higher level component 
+(for L1 cache, the CPU). Note that the `replay` argument is set to `true` to indicate that the request being
+responded to is from the MSHR.
+Finally, the method calls `cleanUpAfterResponse()` to remove the front entry from the MSHR, and schedule the following
+entry on the same address.
 
+Method 
 
 ##### handleGetS(), Helper Functions
 
