@@ -1430,4 +1430,12 @@ invalidation is received in the current cycle, which has a higher priority, and 
 front request. In this case, the CPU-generated request should give up the cycle, and let the invalidation be 
 handled first by returning `Stall` to the caller. 
 
+If all checks are passed, or the MSHR is allocated successfully, then the value of the local variable `status` 
+will be `OK`.
+The function then checks whether an eviction is needed by checking whether the argument `line` is `NULL`. 
+If true, this implies that the tag lookup does not find the address, and hence an existing block should be 
+evicted. Otherwise, the address is already in the cache, and the miss is caused by an upgrade.
+In the former case, `allocateLine()` is called to perform eviction and write back, while in the latter case,
+no eviction is needed, as the block is already present.
+
 
