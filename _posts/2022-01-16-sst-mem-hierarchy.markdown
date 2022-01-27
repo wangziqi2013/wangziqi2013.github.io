@@ -1219,7 +1219,7 @@ and non-inclusive caches, since there is no maintenance of coherence for upper l
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated requests, 
-internally generated requests, and external requests (invalidations of all kinds), in three separate sections.
+internally generated requests, and external requests (i.e., invalidations of all kinds), in three separate sections.
 Helper functions are covered when they are first time encountered.
 
 #### CPU-Initiated Requests
@@ -1229,4 +1229,10 @@ which obtains a block in exclusive state for write, and `GETSX`, which is equiva
 the block is locked in the L1 cache, until a future `GETX` hits it.
 `GETSX` is essential for implementing atomic read-modify-write instructions.
 
-From a high-level perspective, 
+From a high-level perspective, these requests are handled as either a single transaction, in the case of 
+cache hits, or as a few separate atomic transactions, if the access misses. 
+The coherence controller first performs a lookup on the tag array. If the tag entry of the requested address
+exists, and it is in a state that does not need further coherence actions 
+(e.g., `E/M` state on `GETX`), then the access is a hit, and the response is sent back in the same cycle the
+request is processed. 
+
