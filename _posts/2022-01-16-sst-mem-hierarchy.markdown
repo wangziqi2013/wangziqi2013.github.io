@@ -1236,3 +1236,12 @@ exists, and it is in a state that does not need further coherence actions
 (e.g., `E/M` state on `GETX`), then the access is a hit, and the response is sent back in the same cycle the
 request is processed. 
 
+Otherwise, the access incurs a cache miss, and the coherence controller inserts the request into the MSHR (if this
+fails, then the request is rejected by the coherence controller, and the cache controller just keeps it, as 
+discussed earlier). Meanwhile, a new request is created based on the current request, and the new request is sent
+to the lower level to acquire the block.
+The rest of the actions depends on whether the address tag already exists in the current cache or not. If it does,
+meaning that the coherence action is taken to upgrade the permission of the block (which only happens for `GETX`
+and `GETSX`), then no further action is taken.
+
+
