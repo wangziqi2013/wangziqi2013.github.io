@@ -1261,4 +1261,11 @@ block fetching or upgrading. `I` state blocks will transit to `I_S` or `I_M`, de
 `E` and `M` state blocks will never miss, and the request is handled trivially in one cycle (although `E` state
 blocks will become `M` on `GETX` requests).
 
+The second half of the transaction begins when the response event for an earlier cache miss is received.
+The coherence controller matches the response event with the outstanding MSHR entry, removes the entry,
+and then transits the block state to a stable state.
+Extra actions may also be taken, such as locking the cache block, if the request is `GETSX`, or marking the LL/SC's
+atomic flag. The transaction concludes by creating and sending the a response message up that indicates the 
+completion of the access.
 
+##### Function handleGetS()
