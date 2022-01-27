@@ -1484,3 +1484,11 @@ configured during `init()`), a write back entry is also inserted into the MSHR f
 by calling `insertWriteback()`. Note that the write back entry is always inserted as the front request of the 
 old address.
 The state of the block is reset to `I` to reflect the fact that the block has been evicted.
+
+##### handleGetS(), Write Back Response Path
+
+If write back `ACKs` are received, the response event of type `AckPut` will be processed by the cache controller 
+by calling `handleAckPut()`.
+This function is extremely simple: It does nothing except calling `cleanUpAfterResponse()`, which, as we have discussed
+earlier, removes the front entry of the MSHR register, which is the write back entry, and inserts the 
+event in the following entry into the retry buffer.
