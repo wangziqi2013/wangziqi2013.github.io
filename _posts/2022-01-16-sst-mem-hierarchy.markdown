@@ -1450,4 +1450,6 @@ returns `NULL`.
 Note that the eviction entry is inserted on the old address, with the entry object carrying both the old and the 
 new address, while the event entry representing the request is inserted on the new address.
 
-
+Also note that, in the case where eviction fails, `allocateLine()` returns `NULL`, which causes its caller, 
+`processCacheMiss()`, to return `Stall`. This will further cause the request to be removed from the cache
+controller's buffer. The request will eventually be retried when the eviction on the old address succeeds. 
