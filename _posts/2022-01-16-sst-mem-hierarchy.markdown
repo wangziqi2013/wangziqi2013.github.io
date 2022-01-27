@@ -759,7 +759,7 @@ Detailed discussions on MSHRs are postponed to later section.
 An event in the `eventBuffer_` can be in one of the three states after being handled by `processEvent()`.
 First, if the event is successfully processed, and no more action is needed in the future, `processEvent()`
 will return `true`, and the event is removed from the buffer before being deallocated. 
-This is most likely a cache hit, which does not generate internal events, nor require miss handling.
+This is most likely a cache hit, which neither generates internal events, nor requires miss handling.
 Second, the event can be successfully processed, but it causes internal events being generated, or incurs 
 a cache miss. The event needs to be allocated an entry in the MSHR, possibly together with all the 
 internal events it generates. In this case, `processEvent()` still returns `true`, meaning that the 
@@ -767,11 +767,10 @@ event can be removed from the buffer (because the handling of the event itself i
 coherence controller will later on put the generated events into the retry buffer, such that these 
 internal events are also handled. In addition, the event object will not be deallocated until the 
 response message for the cache miss it has incurred is received. 
-Lastly, the event can also be rejected by the bank arbitrator (see below) or the coherence controller. 
+Lastly, the event can also be rejected by the bank arbitrator (see below) or the MSHR. 
 In this case, `processEvent()` returns `false`,
 and the event object will remain in the `eventBuffer_`. These events will be repeatedly attempted
 in the following cycles, until the handlings are eventually successful. 
-The second argument to `processEvent()` is set to `false`, since these events are not in the MSHR.
 
 After processing buffers, the cache appends the retry buffer of the coherence controller (obtained 
 by calling `getRetryBuffer()` on the controller object) to the cache's 
@@ -1166,7 +1165,8 @@ fail to be allocated an MSHR entry, but not vice versa).
 
 Other data members of `class MSHREntry` also play their respective roles in different parts of the coherence
 protocol. One of the most commonly seen data member is `inProgress`, which indicates whether the request is 
-already being handled, and it is only defined for `Event` type entries. The flag is set when a `GET` or flush 
+already being handled and is just waiting for response, and it is only defined for `Event` type entries. 
+The flag is set when a `GET` or flush 
 request has been issued to the lower level cache, but the response is not received yet. The coherence controller 
 will check this flag when trying to schedule a waiting event in the MSHR, and if the flag is set, indicating that 
 the current head MSHR entry for a given address has already been scheduled, the coherence controller will not schedule 
@@ -1268,7 +1268,7 @@ Extra actions may also be taken, such as locking the cache block, if the request
 atomic flag. The transaction concludes by creating and sending the a response message up that indicates the 
 completion of the access.
 
-##### Function handleGetS()
+##### handleGetS(), Hit Path
 
 We use function `handleGetS()` to walk over the above sequence as an example. This function is called in the 
 cache controller's tick handler to process an memory event object of type `GETS`. 
@@ -1282,6 +1282,10 @@ The line state is stored in local variable `state`, and then a switch statement 
 If the line is in state `S`, `E`, or `M`, indicating a cache miss, then the request is fulfilled at
 the current cycle, and the response message is sent by calling `sendResponseUp()`, followed by `cleanUpAfterRequest()`.
 Note that the line's timestamp is also updated by calling `setTimestamp()` with the return value of `sendResponseUp`.
+
+The function also calls `removePendingRetry()` to decrement the MSHR register's `pendingRetries` field,
+if it is from the cache controller's retry buffer, as an 
+indication that one less requests need to be processed for the address in the current cycle.
 
 Method `sendResponseUp()` just takes the request event, creates a new response event by calling `makeResponse()`
 (which also sets the source and destination of the response event by inverting the two in the request event),
@@ -1301,8 +1305,9 @@ calling `removeFront()`, if the request is from the MSHR (indicated by argument 
 The function then moves the next request on the same address that was blocked by the completed request into the 
 retry buffer, which will then be copied to the cache controller's own retry buffer and processed in the next cycle.
 To achieve this, the function first inspects the type of the entry in the MSHR.
-If the entry is of event type, and the event object is not already scheduled (by checking `getInProgress()`), 
-then the event object is scheduled to the processed in the next cycle by inserting it into `retryBuffer_`.
+If the entry is of event type, and the event object is not already scheduled and just sitting there waiting
+for the response (by checking `getInProgress()`), 
+then the event object is scheduled to be processed in the next cycle by inserting it into `retryBuffer_`.
 The `addPendingRetry()` is also called to increment the `pendingRetries` counter in the MSHR register, indicating
 that some CPU-generated event will be processed for the address in the next cycle.
 
@@ -1311,8 +1316,19 @@ stored in the entry (the list of new address is obtained by calling `getEvictPoi
 Note that internally generated eviction requests carry a command of `NULLCMD`, and that they also carry the old
 address (i.e., the address to be evicted), `addr`.
 
-Note that write back entries in the MSHR does not need to be added, even if they are at the front of the queue.
-The coherence controller always sends the write back request to the lower level in the same cycle as the entry
-is added to the MSHR at the current cache, and hence these entries are just waiting for write back responses,
-while blocking all future requests.
+Also Note that write back entries in the MSHR are not handled in `cleanUpAfterRequest()`, even if they are at the 
+front of the queue.
+The reason is that the coherence controller always sends the write back request to the lower level in the same 
+cycle as the entry is added to the MSHR, and hence these entries are just waiting for 
+write back responses (i.e., they are always in progress), while blocking all future requests.
 The write back entries will be removed when write back responses are received.
+
+##### handleGetS(), Miss Path
+
+If the state of the tag is `I`, meaning that the tag address is not found, then a cache miss has occurred, and the
+request must be completed with a few more transactions. 
+The controller will first attempt to evict a block from the cache, by calling `processCacheMiss()`.
+This function may perform the following three operations (some are optional): (1) Adding the request into MSHR,
+if not already; (2) Evict the tag if necessary, or schedule an eviction request in the MSHR; (3) Send a write
+back request to the lower level for the eviction.
+
