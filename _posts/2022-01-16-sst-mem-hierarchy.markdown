@@ -1515,4 +1515,13 @@ by calling `removeEvictPointer()`.
 The last eviction request that is successfully completed will call `retry()` on the old address to schedule
 the next entry in the old address's MSHR register, if any.
 
-
+If `handleEviction()` fails with the eviction entry being the front entry of the MSHR register, then either
+the block is still being locked, or the address to be evicted has no longer been in the cache. The latter
+is a possible scenario if multiple eviction requests on the same old address are being processed,
+in which case the earlier `lookup()` will return `NULL`, causing the `handleEviction()` to pick a new replacement
+block with a different address.
+The function seems to only handle the latter, though, by comparing the line's address with the old address.
+If they mismatch, then the address of the current `line` is used as the old address to insert another eviction
+entry into the MSHR.
+The `removeEvictPointer()` and `retry()` calls just serve identical purposes as those in the other branch.
+Whether the former case matters and whether it is handled at all is unknown to me.
