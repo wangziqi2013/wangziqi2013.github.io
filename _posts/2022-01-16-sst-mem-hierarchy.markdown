@@ -1255,7 +1255,8 @@ inserts it into the MSHR.
 The write back request might be optional for clean blocks, if the lower level cache does not explicitly request
 clean write backs (this is negotiated during initialization, as discussed in cache controller's `init()` function).
 
-The coherence state of the cache block also transits to an unstable state to indicate the ongoing transaction of 
+The coherence state of the cache block also transits to an transient (unstable, intermediate) state to indicate the 
+ongoing transaction of 
 block fetching or upgrading. `I` state blocks will transit to `IS` or `IM`, depending on the type of the request.
 `S` state blocks will transit to `SM`, if an upgrade is required.
 `E` and `M` state blocks will never miss, and the request is handled trivially in one cycle (although `E` state
@@ -1363,3 +1364,27 @@ At the first sight, this will block overall progress, since the request will nev
 inspection, however, it is revealed that when this happens, there must already be earlier requests in the MSHR.
 When these requests complete, they will insert the current request back into the retry buffer.
 This is also the reason why function `handleGetS()` always calls `removePendingRetry()`.
+
+If the request hits an transient state, it will be inserted into the MSHR by calling `allocateMSHR()`, 
+if not already, since CPU-generated requests always operate on stable states. 
+The older request that is responsible for causing the transient state will put this request in the retry buffer
+when it completes. 
+
+##### handleGetS(), Response Path
+
+When a cache miss occurs, the request object is inserted into the MSHR, and we know that it also must be the
+first entry of the MSHR register (because otherwise, the block will be in a transient state, and the request
+will not be processed). 
+All processing on the address is blocked (including invalidations, which is considered as being ordered before
+the access operation) until the response event from the lower level cache arrives, in which case, `handleGetSResp()`
+will be invoked.
+
+
+
+##### handleGetS(), Helper Functions
+
+A few helper functions are used in `handleGetS()`.
+Method `allocateMSHR()` is defined in the base class.
+As the name indicates, it allocates a MSHR for a given CPU-generated event. Note that this
+function does not handle eviction and write back events, since they have their own specific functions.
+
