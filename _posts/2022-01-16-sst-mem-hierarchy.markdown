@@ -1438,4 +1438,16 @@ evicted. Otherwise, the address is already in the cache, and the miss is caused 
 In the former case, `allocateLine()` is called to perform eviction and write back, while in the latter case,
 no eviction is needed, as the block is already present.
 
+Method `allocateLine()` first calls `handleEviction()` to attempt performing an eviction in the current cycle. 
+If the eviction is feasible, `handleEviction()` returns `true`, which means that the block has already been evicted
+in the current cycle.
+In this case, the tag is updated with the requested address by calling `replace()`, and the line object with the 
+new address is returned.
+If eviction is infeasible, due to pending retries on the old address or due to the tag being locked, 
+`handleEviction()` returns `false`.
+In this case, an eviction entry is inserted into the MSHR by calling `insertEviction()`, and the function 
+returns `NULL`. 
+Note that the eviction entry is inserted on the old address, with the entry object carrying both the old and the 
+new address, while the event entry representing the request is inserted on the new address.
+
 
