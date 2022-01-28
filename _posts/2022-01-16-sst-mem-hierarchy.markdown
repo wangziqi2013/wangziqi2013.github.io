@@ -1534,3 +1534,14 @@ to be locked in the cache, the instruction would never retry, never miss the cac
 the first attempt, never requiring an MSHR. 
 After the `GETX` completes (which will hit an `M` state line), the method `cleanUpAfterRequest()` is called,
 which, in this case, will see the eviction entry, and the eviction requests will be retried again.
+
+##### handleGetX()
+
+The logic of `handleGetX()` is almost identical to those of `handleGetS()`, with a few exceptions:
+
+1. `handleGetX()` will not forward the request to the lower level, if the current level is known to be the 
+   last level cache, as the last level cache is assumed to be shared by all caches, and hence exclusive permission
+   can be granted locally. The last level cache is tracked by the flag `lastLevel_`, which is set during `init()`,
+   if the down link connects to a memory end point.
+
+2. 
