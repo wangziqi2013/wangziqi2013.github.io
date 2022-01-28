@@ -1585,3 +1585,12 @@ This type of requests are used to implement atomic read-modify-write instruction
 to the `GETSX` request, which locks the block in `M` state to avoid data race, and the later write unlocks
 the block with a `GETX` request and the `F_LOCKED` flag set.
 
+The only difference between `handleGetSX()` and `handleGetX()` is that, on a cache hit, the lock counter on the
+block is incremented by calling `incLock()`. If the access incurs a miss or upgrade, then the `GETSX` request
+will be forwarded to the lower level, and the block transits to one of the transient states. 
+On receiving the response, which is of type `GetXResp`, function `handleGetXResp()` will check whether the 
+originating request is a `GETSX`.
+If positive, then the block will be locked as well by calling `incLock()`.
+
+Note that `GETSX` handler will not check whether the request has the `F_LOCKED` flag set, nor does it
+decrement the lock counter on a direct hit. 
