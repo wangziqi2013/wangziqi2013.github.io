@@ -1219,7 +1219,7 @@ and non-inclusive caches, since there is no maintenance of coherence for upper l
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
-CPU-initiated flush requests, and external requests (i.e., invalidations of all kinds), in separate sections.
+CPU-initiated flush requests, and external requests (i.e., fetches and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
 
 #### CPU-Initiated Data Requests
@@ -1681,7 +1681,7 @@ The response event is forwarded to the upper level by calling `sendResponseUp()`
 (via `success()` on the response event) to indicate whether the flush has succeeded or not.
 Finally, the method calls `cleanUpAfterResponse()` to conclude response handling.
 
-##### handleFlushLineInv(), Request Path
+##### handleFlushLineInv(), Request and Response Path
 
 Method `handleFlushLineInv()` performs a similar task as `handleFlushLine()`, and the logic is almost identical
 to the one of `handleFlushLine()`. Differences are:
@@ -1691,4 +1691,9 @@ If this returns `NULL`, indicating there is a non-event type entry in the front,
 event object, it will stall, and let the front event be handled first. 
 It is unclear to me why this function needs this check, while `handleFlushLine()` does not.
 
-2. 
+2. The block transits to transient state `I_B`, meaning that the block has logically been invalidated, but the
+response is still not received.
+
+3. The related path in the response method is the switch case with state `I_B`. On receiving a response, `I_B` blocks
+will transit to `I` state.
+
