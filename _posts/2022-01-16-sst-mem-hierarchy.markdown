@@ -1218,10 +1218,9 @@ This type of cache also features a simpler coherence protocol compared with the 
 and non-inclusive caches, since there is no maintenance of coherence for upper levels.
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
 
-In the following text, we discuss the four major classes of operations, namely, CPU-initiated data requests, 
-CPU-initiated flush requests, 
-internally generated requests, and external requests (i.e., invalidations of all kinds), in separate sections.
-Helper functions are covered when they are first time encountered.
+In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
+CPU-initiated flush requests, and external requests (i.e., invalidations of all kinds), in separate sections.
+Helper functions are covered when they are encountered for the first time.
 
 #### CPU-Initiated Data Requests
 
@@ -1681,3 +1680,15 @@ an external invalidation from the lower level will be ordered after the flush, a
 The response event is forwarded to the upper level by calling `sendResponseUp()`, using the success bit 
 (via `success()` on the response event) to indicate whether the flush has succeeded or not.
 Finally, the method calls `cleanUpAfterResponse()` to conclude response handling.
+
+##### handleFlushLineInv(), Request Path
+
+Method `handleFlushLineInv()` performs a similar task as `handleFlushLine()`, and the logic is almost identical
+to the one of `handleFlushLine()`. Differences are:
+
+1. `handleFlushLineInv()` checks whether itself is the front event in the MSHR register by calling `getFrontEvent()`.
+If this returns `NULL`, indicating there is a non-event type entry in the front, or the returned pointer is not the
+event object, it will stall, and let the front event be handled first. 
+It is unclear to me why this function needs this check, while `handleFlushLine()` does not.
+
+2. 
