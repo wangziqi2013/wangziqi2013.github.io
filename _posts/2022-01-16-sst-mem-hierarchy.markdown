@@ -1649,3 +1649,16 @@ Also note that it is possible for a flush to fail immediately without being adde
 This will happen, if (1) the request is not already in the MSHR; (2) there is no contending entries in the MSHR,
 and (3) the check for locked block fails. 
 This case, however, is handled normally by `cleanUpAfterRequest()`.
+
+If the check passes, then it is certain that the flush will succeed, and an MSHR entry will be allocated, if not 
+already yet, regardless of whether there is contention on the same address. 
+MSHR allocation failures, as usual, will cause `false` to be returned, and the cache controller will 
+retain this request in its buffer for the next cycle.
+The address being flushed is also marked as undergoing some transaction by calling `setInProgress()` to avoid it from
+being retried multiple times.
+Then a flush request is forwarded to the lower level by calling `forwardFlush()`, with boolean argument `downgrade`
+to indicate whether the flush also causes the cache to give up ownership (`M` or `E` state lines being downgraded).
+This piece of information is essential for the lower level cache to update ownership and sharer information in its 
+own directory.
+
+
