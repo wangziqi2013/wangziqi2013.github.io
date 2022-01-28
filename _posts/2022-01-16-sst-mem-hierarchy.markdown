@@ -1540,11 +1540,17 @@ which, in this case, will see the eviction entry, and the eviction requests will
 The logic of `handleGetX()` is almost identical to those of `handleGetS()`, with a few exceptions:
 
 1. `handleGetX()` will not forward the request to the lower level, if the current level is known to be the 
-   last level cache, as the last level cache is assumed to be shared by all caches, and hence exclusive permission
-   can be granted locally. The last level cache is tracked by the flag `lastLevel_`, which is set during `init()`,
-   if the down link connects to a memory end point.
+last level cache, as the last level cache is assumed to be shared by all caches, and hence exclusive permission
+can be granted locally. The last level cache is tracked by the flag `lastLevel_`, which is set during `init()`,
+if the down link connects to a memory end point.
 
-2. The access will incur cache misses on both `I` and `S` state blocks, causing the block to transit to transit state,
-   `IM` and `SM`, respectively. 
-   `E` and `M` states will be cache hits, and in the case of `E` state blocks, it will transit to `M` state.
+2. The access will incur cache misses on both `I` and `S` state blocks, causing the block to transit to transient 
+state, `IM` and `SM`, respectively. 
+`E` and `M` states will be cache hits, and in the case of `E` state blocks, it will transit to `M` state.
 
+3. In the case of cache misses, the request sent down the hierarchy is of type `GETX`. Correspondingly, the response
+message received is `GetXResp`, which is handled by method `handleGetXResp()`.
+On receiving the response message, `IM` and `SM` state blocks will transit back to the stable state, `M`.
+In addition, if the `GETX` request is the second half of an atomic read-modify-write instruction, receiving the 
+response will cause the lock counter to be decremented (by calling `decLock()`), indicating the completion 
+of the locked instruction.
