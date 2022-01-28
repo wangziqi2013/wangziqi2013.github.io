@@ -1577,4 +1577,11 @@ should never see a locked `GETX` as the request type.
 instructions. When such a request is processed (it should always hit on the first attempt), the flag is checked,
 and if the flag is set, the lock counter of the block will be incremented by calling `incLock()`.
 
+##### handleGetSX()
+
+`handleGetSX()` is almost identical to `handleGetX()`. Its purpose is to acquire a cache block in exclusive state,
+and then lock the block in the cache until a later `GETX` on the same address writes to the block. 
+This type of requests are used to implement atomic read-modify-write instructions, where the read part corresponds 
+to the `GETSX` request, which locks the block in `M` state to avoid data race, and the later write unlocks
+the block with a `GETX` request and the `F_LOCKED` flag set.
 
