@@ -1526,4 +1526,11 @@ entry into the MSHR.
 The `removeEvictPointer()` and `retry()` calls at the end of the branch just serve identical purposes as those 
 in the other branch.
 
-
+As for the former case, in which the old address to be evicted is still locked, the handler just let the
+evictions requests be destroyed quietly at the end of the function without causing any effect.
+The eviction entry, though, still remains as the front entry of the MSHR with all new addresses in the entry object. 
+When the second request of the locked instruction is handled by `handleGetX()`, since the address is guaranteed
+to be locked in the cache, the instruction would never retry, never miss the cache, and hence will always succeed on 
+the first attempt, never requiring an MSHR. 
+After the `GETX` completes (which will hit an `M` state line), the method `cleanUpAfterRequest()` is called,
+which, in this case, will see the eviction entry, and the eviction requests will be retried again.
