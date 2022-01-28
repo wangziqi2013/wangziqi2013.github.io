@@ -1376,7 +1376,7 @@ if not already, since CPU-generated requests always operate on stable states.
 The older request that is responsible for causing the transient state will put this request in the retry buffer
 when it completes. 
 
-##### handleGetS(), Response Path
+##### handleGetS(), Response Path, Part I
 
 When a cache miss occurs, the request object is inserted into the MSHR, and we know that it also must be the
 first entry of the MSHR register (because otherwise, the block will be in a transient state, and the request
@@ -1414,6 +1414,16 @@ when an invalidation is received, if it cannot be handled immediately, the event
 inserted as the front entry of the MSHR register. 
 After this request is handled, `cleanUpAfterRequest()` will be called to remove its entry from the MSHR, 
 in which case the next entry being a write back is truly possible.
+
+##### handleGetS(), Response Path, Part II
+
+It is also possible that `GETS` request receives a `GetXResp` as the response message, which invokes 
+`handleGetXResp()` for event handling. This may happen if one or more lower level caches are non-inclusive,
+and on the `GETS` request, they just decide to give up the ownership of a dirty block.
+The dirty block will be delivered to the requesting cache via `GetXResp`, and the handler will 
+see transient state `IS`.
+
+
 
 ##### handleGetS(), Eviction Path, Part I
 
