@@ -1477,6 +1477,9 @@ Otherwise, the function checks whether the address also has pending retries by c
 If true, then these retires are logically ordered before the eviction, and eviction could not proceed either,
 which causes the control flow to fall though to the `default` case, and `false` is returned.
 
+If the eviction is performed successfully, then the state of the line will transit to `I`. There is no transient
+state for evictions, meaning that evictions happen atomically.
+
 Note that there is also likely a coding bug that fails to return `false` directly when the `getPendingRetries()`
 check fails. The bug, although not affecting correctness, causes the check with `getPendingRetries()` to be called 
 multiple times, until the control flow falls through to `default`. 
@@ -1491,7 +1494,7 @@ in which case eviction should also be delayed (the control flow will hit the `de
 The actual request object is sent with `sendWriteback()`, which is just a simple function that creates a 
 new event object, computes the delivery time, initializes related fields, sends the request downwards by calling 
 `forwardByAddress()`, and finally updates the block's timestamp.
-After sending the write back event object, if the cache is expecting an `ACK` for write backs (which is 
+After sending the write back event object, if the cache is expecting acknowledgements for write backs (which is 
 configured during `init()`), a write back entry is also inserted into the MSHR for the old address 
 by calling `insertWriteback()`. Note that the write back entry is always inserted as the front request of the 
 old address.
@@ -1499,7 +1502,7 @@ The state of the block is reset to `I` to reflect the fact that the block has be
 
 ##### handleGetS(), Write Back Response Path
 
-If write back `ACKs` are received, the response event of type `AckPut` will be processed by the cache controller 
+If write back `ACKs` are to be received, the response event of type `AckPut` will be processed by the cache controller 
 by calling `handleAckPut()`.
 This function is extremely simple: It does nothing except calling `cleanUpAfterResponse()`, which, as we have discussed
 earlier, removes the front entry of the MSHR register, which is the write back entry, and inserts the 
@@ -1697,3 +1700,19 @@ response is still not received.
 3. The related path in the response method is the switch case with state `I_B`. On receiving a response, `I_B` blocks
 will transit to `I` state.
 
+#### External Requests
+
+The L1 cache may also receive external requests from the below cache, i.e., fetches and invalidations.
+These requests are generated as part of the coherence protocol for maintaining the one single copy semantics
+of writable data, or to facilitate ownership transfer between caches at the same level. 
+External events are handled differently from non-external events, mostly in the following aspects:
+
+1. External events are never inserted into the MSHR, and are always handled in the same cycle they are received.
+
+2. As a result, external events may race with other events, and the event handler needs to deal with transient 
+states as well as stable states, although it is impossible for some stable states to receive certain 
+types of external requests (e.g., coherence downgrade will never been sent to an stable `S` state block).
+
+3. In the case of transient states, external events are always logically ordered before the corresponding event that 
+caused the transition into the transient state. In addition, such event is only logically completed, when the 
+state moves out of the transient state.
