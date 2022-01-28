@@ -1218,17 +1218,18 @@ This type of cache also features a simpler coherence protocol compared with the 
 and non-inclusive caches, since there is no maintenance of coherence for upper levels.
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
 
-In the following text, we discuss the three major classes of operations, namely, CPU-initiated requests, 
-internally generated requests, and external requests (i.e., invalidations of all kinds), in three separate sections.
+In the following text, we discuss the four major classes of operations, namely, CPU-initiated data requests, 
+CPU-initiated flush requests, 
+internally generated requests, and external requests (i.e., invalidations of all kinds), in separate sections.
 Helper functions are covered when they are first time encountered.
 
-#### CPU-Initiated Requests
+#### CPU-Initiated Data Requests
 
 ##### High-Level Overview
 
-CPU may initiate three types of requests: `GETS`, which obtains a block in shared state for read, `GETX`, 
+CPU may initiate three types of data requests: `GETS`, which obtains a block in shared state for read, `GETX`, 
 which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GETX`, except that
-the block is locked in the L1 cache, until a future `GETX` hits it.
+the block is locked in the L1 cache, until a future `GETX` with an atomic flag hits it.
 `GETSX` is essential for implementing atomic read-modify-write instructions.
 
 From a high-level perspective, these requests are handled as either a single transaction, in the case of 
@@ -1592,5 +1593,22 @@ On receiving the response, which is of type `GetXResp`, function `handleGetXResp
 originating request is a `GETSX`.
 If positive, then the block will be locked as well by calling `incLock()`.
 
-Note that `GETSX` handler will not check whether the request has the `F_LOCKED` flag set, nor does it
+Note that the `GETSX` handler will not check whether the request has the `F_LOCKED` flag set, nor does it
 decrement the lock counter on a direct hit. 
+
+#### CPU-Initiated Flush Requests
+
+In addition to data requests, the CPU may also proactively flush addresses out of the cache by issuing flushes.
+Two types of flush requests are supported, namely, flush and flush invalidation (flush-inv).
+Normal flushes will retain the block in the cache, while downgrading it from exclusive state to shared state, if
+the block is valid and not already in shared state. 
+Both dirty data and the request itself will be propagated to the lower level, causing a global effect on the 
+entire cache hierarchy. 
+Flush invalidation, on the contrary, will invalidate the block while carrying dirty data, if any, down the hierarchy.
+As a result, this type of the request will totally get rid of an address in the hierarchy, and potentially force 
+dirty data to be written into the main memory.
+The two types of requests are handled by `handleFlushLine()` and `handleFlushLineInv()`, respectively.
+
+Despite the fact that there is no data to respond, flush requests need to be acknowledged by lower level caches,
+meaning that they always require an MSHR entry, and will wait for the response message.
+Both types of flushes expect the same response message, `FlushLineResp`, which is handled by `handleFlushLineResp()`.
