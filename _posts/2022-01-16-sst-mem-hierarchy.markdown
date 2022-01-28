@@ -1550,7 +1550,7 @@ which, in this case, will see the eviction entry, and the eviction requests will
 
 ##### handleGetX()
 
-The logic of `handleGetX()` is almost identical to those of `handleGetS()`, with a few exceptions:
+The logic of `handleGetX()` is very similar to those of `handleGetS()`, with a few exceptions:
 
 1. `handleGetX()` will not forward the request to the lower level, if the current level is known to be the 
 last level cache, as the last level cache is assumed to be shared by all caches, and hence exclusive permission
@@ -1572,3 +1572,9 @@ because locked cache blocks will be acquired in `M` state from the beginning, an
 or downgraded until the second `GETX` releases the lock.
 This way, it is impossible for a locked `GETX` instruction to cause a cache miss, and hence `handleGetXResp()`
 should never see a locked `GETX` as the request type.
+
+4. `GETX` requests with the `F_LOCKED` flag set is regarded as the second half of read-modify-write atomic
+instructions. When such a request is processed (it should always hit on the first attempt), the flag is checked,
+and if the flag is set, the lock counter of the block will be incremented by calling `incLock()`.
+
+
