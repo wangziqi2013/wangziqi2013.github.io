@@ -1567,3 +1567,8 @@ On receiving the response message, `IM` and `SM` state blocks will transit back 
 In addition, if the `GETX` request is the second half of an atomic read-modify-write instruction, receiving the 
 response will cause the lock counter to be decremented (by calling `decLock()`), indicating the completion 
 of the locked instruction.
+Note: I am quite sure whether the last part about locked instructions is necessary or not, 
+because locked cache blocks will be acquired in `M` state from the beginning, and will never be evicted 
+or downgraded until the second `GETX` releases the lock.
+This way, it is impossible for a locked `GETX` instruction to cause a cache miss, and hence `handleGetXResp()`
+should never see a locked `GETX` as the request type.
