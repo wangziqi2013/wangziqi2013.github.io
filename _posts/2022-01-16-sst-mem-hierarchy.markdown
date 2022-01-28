@@ -1629,4 +1629,10 @@ to complete.
 Depending on the result of MSHR allocation, the cache controller either removes the request from its internal 
 buffer on a success, or retains the request on an allocation failure.
 
+Note that checking for MSHR emptiness, rather than the current coherence state, is a necessary step to perform to 
+avoid race condition. Otherwise, the flush may contend with other transactions that does not alter the visible coherence state, most notably, evictions.
+Imagine if a flush races with an eviction, then the eviction handling method will mistakenly think that the block
+has been evicted by an earlier eviction, and then turn to select a different eviction victim.
 
+If the request is already in the MSHR, then `removePendingRetry()` is called to decrement the register's 
+pending retry counter.
