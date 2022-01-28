@@ -1423,7 +1423,10 @@ and on the `GETS` request, they just decide to give up the ownership of a dirty 
 The dirty block will be delivered to the requesting cache via `GetXResp`, and the handler will 
 see transient state `IS`.
 
-
+The relevant logic of `handleGetXResp()` is no different from those in `handleGetSResp()`.
+In the switch statement, transient state `IS` is handled by transiting to either `M`, if the response data is 
+dirty as indicated by the lower level, or to `E` or `S`, depending on whether `E` state is enabled for the
+protocol.
 
 ##### handleGetS(), Eviction Path, Part I
 
