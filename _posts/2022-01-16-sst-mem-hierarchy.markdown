@@ -1612,3 +1612,21 @@ The two types of requests are handled by `handleFlushLine()` and `handleFlushLin
 Despite the fact that there is no data to respond, flush requests need to be acknowledged by lower level caches,
 meaning that they always require an MSHR entry, and will wait for the response message.
 Both types of flushes expect the same response message, `FlushLineResp`, which is handled by `handleFlushLineResp()`.
+
+##### handleFlushLine(), Request Path
+
+As with all request handling method, this method first performs a lookup on the tag array, and acquires the 
+line object as well as its coherence state. 
+Then the method checks whether an MSHR is needed (`inMSHR` is false). If true, then it is further checked whether
+the MSHR register for the given address already has entries, which indicates that there are currently 
+other transactions being active (including evictions) at the given address, in which case the function just 
+attempts to allocate an MSHR for the request, and return.
+The check on the MSHR register is performed by calling `exists()` on the MSHR object (if there is no entry in the
+register, the MSHR will also remove the register, so address not existing in the MSHR's register map is
+sufficient for ensuring that no other transaction is active).
+In this case, the method just returns, and the flush is queued in the MSHR waiting for the ongoing transaction
+to complete.
+Depending on the result of MSHR allocation, the cache controller either removes the request from its internal 
+buffer on a success, or retains the request on an allocation failure.
+
+
