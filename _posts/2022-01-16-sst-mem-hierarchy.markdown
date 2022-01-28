@@ -1708,6 +1708,7 @@ of writable data, or to facilitate ownership transfer between caches at the same
 External events are handled differently from non-external events, mostly in the following aspects:
 
 1. External events are never inserted into the MSHR, and are always handled in the same cycle they are received.
+They do not expect response events. 
 
 2. As a result, external events may race with other events, and the event handler needs to deal with transient 
 states as well as stable states, although it is impossible for some stable states to receive certain 
@@ -1716,3 +1717,15 @@ types of external requests (e.g., coherence downgrade will never been sent to an
 3. In the case of transient states, external events are always logically ordered before the corresponding event that 
 caused the transition into the transient state. In addition, such event is only logically completed, when the 
 state moves out of the transient state.
+
+Four external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
+requires a copy of the block to be sent down; `Inv`, which just invalidates the block, if it is not in exclusive 
+state (used for invalidating shared copies when a sharer requests exclusive ownership); `ForceInv`,
+which invalidates a block regardless of its coherence state (used for maintaining inclusiveness);  
+`FetchInv`, which invalidates the block, while also requesting its contents to be sent down
+(used for invalidation an owner, and transferring the ownership to a new owner); and
+`handleFetchInvX`, which downgrades a block from exclusive to non-exclusive, while also requesting its 
+contents to be sent down (used for downgrading the owner to be a sharer, and allowing other sharers to 
+hold a non-exclusive copy of the block).
+These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`, `handleFetchInv`, and 
+`handleFetchInvX`,  respectively.
