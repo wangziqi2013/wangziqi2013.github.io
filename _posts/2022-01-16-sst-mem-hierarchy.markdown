@@ -1718,6 +1718,14 @@ types of external requests (e.g., coherence downgrade will never been sent to an
 caused the transition into the transient state. In addition, such event is only logically completed, when the 
 state moves out of the transient state.
 
+4. The handlers for external events all share the same common prologue and epilogue. In the prologue, the line object
+and the block state is obtained. The CPU is notified of the external events by calling `snoopInvalidation()`,
+which just creates an event object of type `Inv` for each CPU registered in the L1 cache during `init()`, and
+sends these objects to the CPU.
+The epilogue code just does some simple maintenance work, and destroys the event object, as the object is 
+always fully processed by the handler.
+We do not repeatedly discuss the common prologue and epilogue in the following sections.
+
 Four external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
 requires a copy of the block to be sent down; `Inv`, which just invalidates the block, if it is not in exclusive 
 state (used for invalidating shared copies when a sharer requests exclusive ownership); `ForceInv`,
@@ -1729,3 +1737,7 @@ contents to be sent down (used for downgrading the owner to be a sharer, and all
 hold a non-exclusive copy of the block).
 These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`, `handleFetchInv`, and 
 `handleFetchInvX`,  respectively.
+
+##### handleFetch()
+
+
