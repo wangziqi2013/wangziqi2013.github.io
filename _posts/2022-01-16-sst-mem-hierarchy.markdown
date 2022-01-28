@@ -1307,8 +1307,7 @@ calling `removeFront()`, if the request is from the MSHR (indicated by argument 
 The function then moves the next request on the same address that was blocked by the completed request into the 
 retry buffer, which will then be copied to the cache controller's own retry buffer and processed in the next cycle.
 To achieve this, the function first inspects the type of the entry in the MSHR.
-If the entry is of event type, and the event object is not already scheduled and just sitting there waiting
-for the response (by checking `getInProgress()`), 
+If the entry is of event type, and the event object is not already in progress (by checking `getInProgress()`), 
 then the event object is scheduled to be processed in the next cycle by inserting it into `retryBuffer_`.
 The `addPendingRetry()` is also called to increment the `pendingRetries` counter in the MSHR register, indicating
 that some CPU-generated event will be processed for the address in the next cycle.
@@ -1328,7 +1327,8 @@ are at the front of the queue.
 The reason is that the coherence controller always sends the write back request to the lower level in the same 
 cycle as the entry is added to the MSHR, and hence these entries are just waiting for 
 write back responses (i.e., they are always in progress), while blocking all future requests.
-The write back entries will be removed when write back responses are received.
+The write back entries will be removed when write back responses are received, in which scenario 
+`cleanUpAfterResponse()` will be called to retry the next request in the MSHR register.
 
 ##### handleGetS(), Miss Path (Despite Eviction)
 
@@ -1544,4 +1544,7 @@ The logic of `handleGetX()` is almost identical to those of `handleGetS()`, with
    can be granted locally. The last level cache is tracked by the flag `lastLevel_`, which is set during `init()`,
    if the down link connects to a memory end point.
 
-2. 
+2. The access will incur cache misses on both `I` and `S` state blocks, causing the block to transit to transit state,
+   `IM` and `SM`, respectively. 
+   `E` and `M` states will be cache hits, and in the case of `E` state blocks, it will transit to `M` state.
+
