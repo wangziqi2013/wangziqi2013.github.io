@@ -1668,3 +1668,16 @@ related fields. Specifically, `dirty` is set if the block state is `M` before th
 After sending the request to lower level, the coherence state of the block will transit to `S_B` state, meaing that
 it is effectively an `S` state block, despite that the flush transaction has not completed, and the block is
 still waiting for response.
+
+##### handleFlushLine(), Response Path
+
+The response event of flush operation is of type `FlushLineResp`, which is handled by `handleFlushLineResp()`.
+On receiving this response, the handler first obtains the line object by a tag lookup.
+Then the originating flush request object is also obtained at the front of the MSHR register by calling 
+`getFrontEvent()` on the MSHR.
+The method completes the state transition: state `S_B` blocks will transit to the stable state `S`, and `I_B`
+block will transit to `I`. Note that although flush request will not cause a block to transit into `I_B`,
+an external invalidation from the lower level will be ordered after the flush, and transit `S_B` to `I_B`.
+The response event is forwarded to the upper level by calling `sendResponseUp()`, using the success bit 
+(via `success()` on the response event) to indicate whether the flush has succeeded or not.
+Finally, the method calls `cleanUpAfterResponse()` to conclude response handling.
