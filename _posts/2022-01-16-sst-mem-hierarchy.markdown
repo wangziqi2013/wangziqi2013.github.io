@@ -1661,4 +1661,10 @@ to indicate whether the flush also causes the cache to give up ownership (`M` or
 This piece of information is essential for the lower level cache to update ownership and sharer information in its 
 own directory.
 
+Method `forwardFlush()` is defined in the same class, and it simply copy constructs a new request object, sets the
+related fields. Specifically, `dirty` is set if the block state is `M` before the flush, and `downgrade` being
+`true` will cause `isEvict_` to be set as well.
 
+After sending the request to lower level, the coherence state of the block will transit to `S_B` state, meaing that
+it is effectively an `S` state block, despite that the flush transaction has not completed, and the block is
+still waiting for response.
