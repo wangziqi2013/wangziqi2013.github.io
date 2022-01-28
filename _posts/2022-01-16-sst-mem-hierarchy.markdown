@@ -1645,4 +1645,7 @@ add the following entries into the retry buffer.
 Note that the flush response event always uses command `FlushLineResp`, and the success status is 
 indicated by the event object's `F_SUCCESS` flag, which is not set in this case.
 
-
+Also note that it is possible for a flush to fail immediately without being added into the MSHR.
+This will happen, if (1) the request is not already in the MSHR; (2) there is no contending entries in the MSHR,
+and (3) the check for locked block fails. 
+This case, however, is handled normally by `cleanUpAfterRequest()`.
