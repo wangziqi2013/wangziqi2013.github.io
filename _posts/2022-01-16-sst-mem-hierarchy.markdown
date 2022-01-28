@@ -1609,8 +1609,9 @@ As a result, this type of the request will totally get rid of an address in the 
 dirty data to be written into the main memory.
 The two types of requests are handled by `handleFlushLine()` and `handleFlushLineInv()`, respectively.
 
-Despite the fact that there is no data to respond, flush requests need to be acknowledged by lower level caches,
-meaning that they always require an MSHR entry, and will wait for the response message.
+Despite the fact that there is no data to respond, flush requests need to be acknowledged by lower level caches
+(unless they are attempted on locked addresses), meaning that they may also require an MSHR entry, and will wait 
+for the response message.
 Both types of flushes expect the same response message, `FlushLineResp`, which is handled by `handleFlushLineResp()`.
 
 ##### handleFlushLine(), Request Path
@@ -1636,3 +1637,12 @@ has been evicted by an earlier eviction, and then turn to select a different evi
 
 If the request is already in the MSHR, then `removePendingRetry()` is called to decrement the register's 
 pending retry counter.
+
+The method then checks whether the block is locked. If true, the flush operation fails, and the 
+response message is immediately sent to the upper level by calling `sendResponseUp()`, before 
+`cleanUpAfterRequest()` is called to remove the event from the MSHR (if it is already in there), and to
+add the following entries into the retry buffer.
+Note that the flush response event always uses command `FlushLineResp`, and the success status is 
+indicated by the event object's `F_SUCCESS` flag, which is not set in this case.
+
+
