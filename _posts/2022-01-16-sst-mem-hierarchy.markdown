@@ -1193,9 +1193,10 @@ values are `-1` and `0`, where `-1` means appending at the end, and `0` means in
 Most events are appended to the MSHR, but high priority events, such as external invalidations (from the lower
 level) will override all existing event objects, and be inserted at the very beginning of the list.
 Argument `fwdRequest` indicates whether the event is an explicit invalidation from the lower level.
-If this flag is set, then two slots, instead of one, will be reserved, since the invalidation also needs to
-be forwarded to the upper level. Argument `stallEvict` is just forwarded to the MSHR entry object, and is not used
-by the method. 
+If this flag is set, then two slots, instead of one, will be reserved, since the invalidation in this case 
+will be waiting for another request that can unblock the invalidation, which may further allocate an MSHR entry. 
+If no extra slot is reserved, the invalidation and the second request will deadlock.
+Argument `stallEvict` is just forwarded to the MSHR entry object constructor, and is not used by the method. 
 
 The method first checks whether the MSHR is full or not (recall that if `fwdRequest` is set, two slots are needed).
 If full, no allocation will happen, and the function returns `-1`. Otherwise, `size_` is incremented by one.
@@ -1727,6 +1728,9 @@ The epilogue code just does some simple maintenance work, and destroys the event
 always handled in the current cycle.
 We do not repeatedly discuss the common prologue and epilogue in the following sections.
 
+5. Source code comments are somehow incorrect in many places, and I suspect that some of the implementations are 
+also problematic. I will point this out as we go through the source code.
+
 Five external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
 requires a copy of the block to be sent down; `Inv`, which just invalidates the block, if it is not in exclusive 
 state (used for invalidating shared copies when a sharer requests exclusive ownership); `ForceInv`,
@@ -1754,4 +1758,10 @@ flush response is received, it then becomes `I`.
 `handleInv()` is used by the coherence protocol to invalidate shared copies of a block, when another cache 
 performs `GETS` or an upgrade.
 
-Method `handleForceInv()`
+Note that the source comment for `handleFetch()` says "In these cases, an eviction raced with this request"
+under switch case `I_B`. This is incorrect, because evictions do not cause the cache block to transit into
+transient states (in `handleEviction()`, a successful eviction will immediately transit the state to `I`).
+
+##### handleForceInv()
+
+
