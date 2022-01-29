@@ -1733,11 +1733,11 @@ also problematic. I will point this out as we go through the source code.
 
 Five external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
 requires a copy of the block to be sent down; `Inv`, which just invalidates the block, if it is not in exclusive 
-state (used for invalidating shared copies when a sharer requests exclusive ownership); `ForceInv`,
-which invalidates a block regardless of its coherence state (used for maintaining inclusiveness);  
+state (used for invalidating shared copies of non-owners); `ForceInv`,
+which invalidates a block regardless of its coherence state (used for invalidating blocks regardless of its state);  
 `FetchInv`, which invalidates the block, while also requesting its contents to be sent down
-(used for invalidation an owner, and transferring the ownership to a new owner); and
-`handleFetchInvX`, which downgrades a block from exclusive to non-exclusive, while also requesting its 
+(used for invalidation an owner); and
+`FetchInvX`, which downgrades a block from exclusive to non-exclusive, while also requesting its 
 contents to be sent down (used for downgrading the owner to be a sharer, and allowing other sharers to 
 hold a non-exclusive copy of the block).
 These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`, `handleFetchInv`, and 
@@ -1748,8 +1748,10 @@ These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`,
 Method `handleFetch()` aims at fetching data from an upper level cache that only has a shared, non-exclusive copy 
 of the block. Correspondingly, the switch statement only handles `I` and `S` states and their transient states.
 Other states are not handled, and will incur fatal errors.
-The function calls `sendResponseDown()` with boolean argument `data` set to `true`, indicating that block 
-data is also carried in the response message. The state of the block remains the same.
+The function calls `sendResponseDown()` with boolean argument `data` set to `true` for stable and transient `S`
+states, indicating that block data is also carried in the response message. 
+No response is sent for stable and transient `I` states.
+The state of the block remains the same in all cases.
 
 Method `handleInv()` is almost identical to `handleFetch()`, expect that it also transits the block state to `I`,
 or the equivalent transient of `I`. For example, upgrade transient state `S_M` will become `I_M`, and after the 
@@ -1766,11 +1768,6 @@ transient states (in `handleEviction()`, a successful eviction will immediately 
 
 Method `handleForceInv()` aims at invalidating a block of given address regardless of its coherence state, and
 the response message to the lower level does not carry data.
-Note that this may not be correct, since if the block is in `M` state, then the data in the lower level is stale,
-and data from the current level is still necessary for correctness.
-This function is used to implement recursive invalidation, required for maintaining inclusiveness, when a block from 
-the lower level is evicted or invalidated.
-
 If the block state is in one of the stable states, or state `S_B`, then the method checks whether the block is locked.
 If true, then it cannot be invalidated immediately, and must wait for the atomic instruction to complete.
 In this case, an MSHR register entry is allocated for the event by calling `allocateMSHR()`.
@@ -1784,13 +1781,15 @@ After a `GETX` unlocks the block (which will always hit, since the block is lock
 earlier `GETSX`), the `GETX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
 This time, since the block is unlocked, the invalidation can be processed without trouble.
 The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
-Responses are also sent down by calling `sendResponseDown()`, with `data` being `false` in all cases.
+Responses are also sent down by calling `sendResponseDown()`, with `data` being `false` for
+stable and transient non-`I` states.
 
 Note that this function has a few peculiarities. First, if the block is locked, then it could only be in one
 state, namely, state `M`. The source code, however, checks the locked flag in many irrelevant states, which 
 may cause MSHR entries be allocated/reserved even if it is not really necessary. 
 Second, the method does not call `cleanUpAfterRequest()`, even if the invalidation is from the MSHR. This
 will keep the entry in the MSHR forever, and block all other requests on the address.
-Third, the method always does not send data to the below level. In reality, if the current level contains an 
-`M` state block, being the owner of the address, the contents of the `M` state block needs to be written back,
-because all other copies in the hierarchy are potentially stale.
+Third, the method does not send data down even when the state is in stable or transient `M` (i.e., owner state), 
+potentially leaving stale data in the lower levels, as the owner holds the most up-to-date data in the hierarchy.
+
+##### handleFetchInv() and handleFetchInvX()
