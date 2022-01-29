@@ -1715,18 +1715,19 @@ states as well as stable states, although it is impossible for some stable state
 types of external requests (e.g., coherence downgrade will never been sent to an stable `S` state block).
 
 3. In the case of transient states, external events are always logically ordered before the corresponding event that 
-caused the transition into the transient state. In addition, such event is only logically completed, when the 
-state moves out of the transient state.
+caused the transition into the transient state. 
+Consequently, such event is only logically considered as completed when the state moves out of the transient state
+after receiving a response.
 
 4. The handlers for external events all share the same common prologue and epilogue. In the prologue, the line object
 and the block state is obtained. The CPU is notified of the external events by calling `snoopInvalidation()`,
 which just creates an event object of type `Inv` for each CPU registered in the L1 cache during `init()`, and
 sends these objects to the CPU.
 The epilogue code just does some simple maintenance work, and destroys the event object, as the object is 
-always fully processed by the handler.
+always handled in the current cycle.
 We do not repeatedly discuss the common prologue and epilogue in the following sections.
 
-Four external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
+Five external requests are handled by the L1 cache: `Fetch`, which does not change the current state, and just 
 requires a copy of the block to be sent down; `Inv`, which just invalidates the block, if it is not in exclusive 
 state (used for invalidating shared copies when a sharer requests exclusive ownership); `ForceInv`,
 which invalidates a block regardless of its coherence state (used for maintaining inclusiveness);  
@@ -1740,4 +1741,9 @@ These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`,
 
 ##### handleFetch()
 
+This function aims at fetching data from an upper level cache that only has a shared, non-exclusive copy 
+of the block. Correspondingly, the switch statement only handles `I` and `S` states and their transient states.
+Other states are not handled, and will incur fatal errors.
+The function calls `sendResponseDown()` with boolean argument `data` set to `true`, indicating that block 
+data is also carried in the response message. The state of the block remains the same.
 
