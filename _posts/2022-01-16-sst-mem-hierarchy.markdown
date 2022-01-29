@@ -1749,12 +1749,13 @@ Method `handleFetch()` aims at fetching data from an upper level cache that only
 of the block. Correspondingly, the switch statement only handles `I` and `S` states and their transient states.
 Other states are not handled, and will incur fatal errors.
 The function calls `sendResponseDown()` with boolean argument `data` set to `true` for stable and transient `S`
-states, indicating that block data is also carried in the response message. 
+states, indicating that block data is also carried in the response message, which is of type `FetchResp`. 
 No response is sent for stable and transient `I` states.
 The state of the block remains the same in all cases.
 
 Method `handleInv()` is almost identical to `handleFetch()`, expect that it also transits the block state to `I`,
-or the equivalent transient of `I`. For example, upgrade transient state `S_M` will become `I_M`, and after the 
+or the equivalent transient of `I`, and the response type is `InvAck`. 
+For example, upgrade transient state `S_M` will become `I_M`, and after the 
 response of the upgrade arrives, it becomes `M`. Flush transient state `S_B` will become `I_B`, and when the 
 flush response is received, it then becomes `I`.
 `handleInv()` is used by the coherence protocol to invalidate shared copies of a block, when another cache 
@@ -1781,7 +1782,7 @@ After a `GETX` unlocks the block (which will always hit, since the block is lock
 earlier `GETSX`), the `GETX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
 This time, since the block is unlocked, the invalidation can be processed without trouble.
 The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
-Responses are also sent down by calling `sendResponseDown()`, with `data` being `false` for
+Responses of type `AckInv` are also sent down by calling `sendResponseDown()`, with `data` being `false` for
 stable and transient non-`I` states.
 
 Note that this function has a few peculiarities. First, if the block is locked, then it could only be in one
@@ -1795,8 +1796,8 @@ Judging from its behavior, it is also unclear under which circumstances this met
 
 ##### handleFetchInv() and handleFetchInvX()
 
-`handleFetchInv()` is almost identical to `handleForceInv()`, except that it always sends data to the lower level
-for both shared and exclusive states.
+`handleFetchInv()` is almost identical to `handleForceInv()`, except that it always sends response 
+with data to the lower level for both shared and exclusive states, and the type is `FetchResp`.
 This method also handles all stable and transient states, and can be used to implement recursive invalidation when
 a lower level block is evicted (for inclusive caches only) or invalidated.
 The method also checks whether the block is locked, and may also allocated one MSHR entry, and reserve for another 
@@ -1805,5 +1806,7 @@ one.
 `handleFetchInvX()` almost identical to `handleFetchInv()`, except that (1) It does not handle `S` and `SM` 
 state, since the request is exclusively used to downgrade an owner into a non-exclusive sharer; 
 (2) `E` and `M` state blocks will transit to `S` state as the result of being downgraded, and 
-send the data response. stable and transient 
+send the data response of type `FetchXResp`. stable and transient 
 `I` blocks will not send any response, and does not transit to any other state.
+
+### Coherence Protocol: MESI Inclusive
