@@ -1793,3 +1793,11 @@ Third, the method does not send data down even when the state is in stable or tr
 potentially leaving stale data in the lower levels, as the owner holds the most up-to-date data in the hierarchy.
 
 ##### handleFetchInv() and handleFetchInvX()
+
+`handleFetchInv()` is almost identical to `handleForceInv()`, expect that is always sends data to the lower level.
+This method also handles all stable and transient states, and can be used to implement recursive invalidation when
+a lower level block is evicted (for inclusive caches only) or invalidated.
+The method also checks whether the block is locked, and may also allocated one MSHR entry, and reserve for another 
+one.
+
+
