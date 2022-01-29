@@ -1771,3 +1771,12 @@ and data from the current level is still necessary for correctness.
 This function is used to implement recursive invalidation, required for maintaining inclusiveness, when a block from 
 the lower level is evicted or invalidated.
 
+If the block state is in one of the stable states, or state `S_B`, then the method checks whether the block is locked.
+If true, then it cannot be invalidated immediately, and must wait for the atomic instruction to complete.
+In this case, an MSHR register entry is allocated for the event by calling `allocateMSHR()`.
+If the allocation is rejected, then the handler function returns `false`, which will leave the event in the 
+cache controller's buffer for the next cycle, and otherwise, it returns `true`.
+Note that the allocation passes `true` to argument `fwdRequest`, and zero to argument `pos`, meaning that two
+entries from the MSHR register is reserved (since the invalidation is waiting for another `GETX` request to unlock
+the block), and that the invalidation event type entry will be allocated at the front of the register.
+
