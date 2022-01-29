@@ -1786,3 +1786,11 @@ This time, since the block is unlocked, the invalidation can be processed withou
 The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
 Responses are also sent down by calling `sendResponseDown()`, with `data` being `false` in all cases.
 
+Note that this function has a few peculiarities. First, if the block is locked, then it could only be in one
+state, namely, state `M`. The source code, however, checks the locked flag in many irrelevant states, which 
+may cause MSHR entries be allocated/reserved even if it is not really necessary. 
+Second, the method does not call `cleanUpAfterRequest()`, even if the invalidation is from the MSHR. This
+will keep the entry in the MSHR forever, and block all other requests on the address.
+Third, the method always does not send data to the below level. In reality, if the current level contains an 
+`M` state block, being the owner of the address, the contents of the `M` state block needs to be written back,
+because all other copies in the hierarchy are potentially stale.
