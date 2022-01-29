@@ -1739,11 +1739,15 @@ hold a non-exclusive copy of the block).
 These events are handled by method `handleFetch`, `handleInv`, `handleForceInv`, `handleFetchInv`, and 
 `handleFetchInvX`,  respectively.
 
-##### handleFetch()
+##### handleFetch() and handleInv()
 
-This function aims at fetching data from an upper level cache that only has a shared, non-exclusive copy 
+Method `handleFetch()` aims at fetching data from an upper level cache that only has a shared, non-exclusive copy 
 of the block. Correspondingly, the switch statement only handles `I` and `S` states and their transient states.
 Other states are not handled, and will incur fatal errors.
 The function calls `sendResponseDown()` with boolean argument `data` set to `true`, indicating that block 
 data is also carried in the response message. The state of the block remains the same.
 
+Method `handleInv()` is almost identical to `handleFetch()`, expect that it also transits the block state to `I`,
+or the equivalent transient of `I`. For example, upgrade transient state `S_M` will become `I_M`, and after the 
+response of the upgrade arrives, it becomes `M`. Flush transient state `S_B` will become `I_B`, and when the 
+flush response is received, it then becomes `I`.
