@@ -1791,13 +1791,19 @@ Second, the method does not call `cleanUpAfterRequest()`, even if the invalidati
 will keep the entry in the MSHR forever, and block all other requests on the address.
 Third, the method does not send data down even when the state is in stable or transient `M` (i.e., owner state), 
 potentially leaving stale data in the lower levels, as the owner holds the most up-to-date data in the hierarchy.
+Judging from its behavior, it is also unclear under which circumstances this method will be useful. 
 
 ##### handleFetchInv() and handleFetchInvX()
 
-`handleFetchInv()` is almost identical to `handleForceInv()`, expect that is always sends data to the lower level.
+`handleFetchInv()` is almost identical to `handleForceInv()`, except that it always sends data to the lower level
+for both shared and exclusive states.
 This method also handles all stable and transient states, and can be used to implement recursive invalidation when
 a lower level block is evicted (for inclusive caches only) or invalidated.
 The method also checks whether the block is locked, and may also allocated one MSHR entry, and reserve for another 
 one.
 
-
+`handleFetchInvX()` almost identical to `handleFetchInv()`, except that (1) It does not handle `S` and `SM` 
+state, since the request is exclusively used to downgrade an owner into a non-exclusive sharer; 
+(2) `E` and `M` state blocks will transit to `S` state as the result of being downgraded, and 
+send the data response. stable and transient 
+`I` blocks will not send any response, and does not transit to any other state.
