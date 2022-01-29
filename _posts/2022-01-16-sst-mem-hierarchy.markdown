@@ -1765,7 +1765,7 @@ transient states (in `handleEviction()`, a successful eviction will immediately 
 ##### handleForceInv()
 
 Method `handleForceInv()` aims at invalidating a block of given address regardless of its coherence state, and
-the response message from the upper level does not carry data.
+the response message to the lower level does not carry data.
 Note that this may not be correct, since if the block is in `M` state, then the data in the lower level is stale,
 and data from the current level is still necessary for correctness.
 This function is used to implement recursive invalidation, required for maintaining inclusiveness, when a block from 
@@ -1779,4 +1779,10 @@ cache controller's buffer for the next cycle, and otherwise, it returns `true`.
 Note that the allocation passes `true` to argument `fwdRequest`, and zero to argument `pos`, meaning that two
 entries from the MSHR register is reserved (since the invalidation is waiting for another `GETX` request to unlock
 the block), and that the invalidation event type entry will be allocated at the front of the register.
+
+After a `GETX` unlocks the block (which will always hit, since the block is locked in the cache in `M` state by an
+earlier `GETSX`), the `GETX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
+This time, since the block is unlocked, the invalidation can be processed without trouble.
+The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
+Responses are also sent down by calling `sendResponseDown()`, with `data` being `false` in all cases.
 
