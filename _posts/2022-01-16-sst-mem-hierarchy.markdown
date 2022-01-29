@@ -1707,10 +1707,10 @@ These requests are generated as part of the coherence protocol for maintaining t
 of writable data, or to facilitate ownership transfer between caches at the same level. 
 External events are handled differently from non-external events, mostly in the following aspects:
 
-1. External events are never inserted into the MSHR, and are always handled in the same cycle they are received.
-They do not expect response events. 
+1. External events are always inserted as the front entry into the MSHR register, and, as a result, is processed
+with the highest priority. They do not expect response events from the lower level. 
 
-2. As a result, external events may race with other events, and the event handler needs to deal with transient 
+2. External events may race with other events, and the event handler needs to deal with transient 
 states as well as stable states, although it is impossible for some stable states to receive certain 
 types of external requests (e.g., coherence downgrade will never been sent to an stable `S` state block).
 
@@ -1751,3 +1751,7 @@ Method `handleInv()` is almost identical to `handleFetch()`, expect that it also
 or the equivalent transient of `I`. For example, upgrade transient state `S_M` will become `I_M`, and after the 
 response of the upgrade arrives, it becomes `M`. Flush transient state `S_B` will become `I_B`, and when the 
 flush response is received, it then becomes `I`.
+`handleInv()` is used by the coherence protocol to invalidate shared copies of a block, when another cache 
+performs `GETS` or an upgrade.
+
+Method `handleForceInv()`
