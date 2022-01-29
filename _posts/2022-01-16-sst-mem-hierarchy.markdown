@@ -1764,4 +1764,10 @@ transient states (in `handleEviction()`, a successful eviction will immediately 
 
 ##### handleForceInv()
 
+Method `handleForceInv()` aims at invalidating a block of given address regardless of its coherence state, and
+the response message from the upper level does not carry data.
+Note that this may not be correct, since if the block is in `M` state, then the data in the lower level is stale,
+and data from the current level is still necessary for correctness.
+This function is used to implement recursive invalidation, required for maintaining inclusiveness, when a block from 
+the lower level is evicted or invalidated.
 
