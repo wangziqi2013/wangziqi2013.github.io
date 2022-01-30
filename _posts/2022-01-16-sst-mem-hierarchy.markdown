@@ -1872,6 +1872,15 @@ the requestor, causing the ownership to transfer from the upper level to the cur
 to transfer from both levels to the next level; and
 (3) When an external downgrade is received from the lower level, and the current block has an owner in the upper
 level, causing the ownership to transfer from both levels to the next level.
-In this section, we only discuss the request path. The response path will be discussed in the next section.
+
+In all of the contexts, the event object that incurs the downgrade, which is also the first argument of the method, 
+is assumed to have already been added into the MSHR when the function is called.
+In addition, method argument `inMSHR` indicates whether the event is in the MSHR when the handler is called. 
+If the event is not in the MSHR when the handler is called, then even if one is allocated later during the
+function, this argument would be set to `false`, and the latency being simulated is the tag array latency, rather
+than MSHR latency.
+
+
+
 
 
