@@ -1998,6 +1998,13 @@ The transition logic handles all states that have a `_Inv` suffix, and transits 
 stable states. Non `_Inv`-suffix states are not supported, and will cause an error to be reported.
 If the invalidation transaction has completed, the function returns `false`, and otherwise it returns `true`.
 
+Note that, just like any other response message handler, `handleAckInv()` will call `retry()` after state 
+transition to schedule the next entry in the MSHR, if any, for all cases except `SM_Inv`, in which case
+`retry()` is called only after checking that the next event is not in progress by calling `getInProgress()`
+on the MSHR. 
+The reason that `retry()` cannot be blindly called for `SM_Inv` is that this state indicates an ongoing upgrade
+transaction, the event entry of which is also in the MSHR, and it must not be retried multiple times. 
+
 ##### invalidateOwner(), Request Path
 
 Method `invalidateOwner()` is similar to `downgradeOwner()`, except that it sends `FetchInv` command for invalidation
