@@ -1949,4 +1949,9 @@ the method only handles three cases: `E`, `E_Inv`, and `E_InvX`, and they will t
 `M`, `M_Inv`, and `M_InvX`, respectively. Other cases are either impossible, or 
 do not require transition as they are already dirty (i.e., transient or stable `M` states).
 
-
+The function then removes the source of the event from the owner field and sharer's lists, if not already,
+and caller should update the coherence states further to reflect the change, if any.
+At the end, the function clears the `isEvict_` flag in the `class MemEvent` object by calling `setEvict()` 
+on the event object. This will prevent the 
+event object being processed multiple times from the MSHR.
+The new state is also returned to the caller for convenience.
