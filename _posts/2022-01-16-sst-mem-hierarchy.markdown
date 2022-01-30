@@ -1880,7 +1880,11 @@ If the event is not in the MSHR when the handler is called, then even if one is 
 function, this argument would be set to `false`, and the latency being simulated is the tag array latency, rather
 than MSHR latency.
 
-
+The function first obtains the address of the downgrade, and creates a new memory event object of command `FetchInvX`.
+The new request object inherits the requestor and flags from the originating request object, and the destination
+is set to the current owner of the address (obtained by calling `getOwner()` on the line object).
+The method also increments the ACK counter in the MSHR register of the address by one, by calling 
+`incrementAcksNeeded()`, indicating that only one response from the owner is expected.
 
 
 
