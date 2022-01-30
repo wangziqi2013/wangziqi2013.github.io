@@ -1863,7 +1863,14 @@ operations stumbling upon them should either stall, or treat these states as the
 In other words, these coherence actions are not considered as logically completed, before they transit back to
 a stable state.
 
-
+The coherence controller introduces the following three classes of transient states: 
+(1) `S_Inv`, `E_Inv`, and `M_Inv`, which indicate that an invalidation transaction that invalidates
+all copies of the address in upper level caches is going on;
+(2) `E_InvX` and `M_InvX`, which indicate that a downgrade transaction that transfers ownership and perhaps
+dirty data from the upper level to the current level is going on.
+(3) `SM_Inv`, which indicates that the block is in the process of upgrading from `S` to `M` after issuing `GETX`
+to the lower level to obtain ownership, while also in the process of invalidating all shared copies in the 
+above level. This state may transit to `M_Inv` or `SM` depending on which transaction completes first.
 
 #### Helper Functions
 
