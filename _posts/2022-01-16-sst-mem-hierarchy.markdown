@@ -2016,3 +2016,17 @@ Besides, `invalidateOwner()` allows a custom command to be passed as the command
 owner of the address. If not given, the command defaults to `FetchInv`.
 The only case where the default command is overridden is in `handleForceInv()`, which calls `invalidateAll()`
 with the command `ForceInv`, and the command will be passed to `invalidateOwner()` as well.
+
+##### invalidateOwner(), Response Path
+
+As mentioned earlier, the response event is of type `FetchResp`, if the default command is used.
+The event is handled by method `handleFetchResp()`.
+What the handler does is simple. First, it decrements the ACK counter in the MSHR register, and then
+removes the entry representing the earlier invalidation request from `responses`.
+It also calls `doEviction()` to simulate dirty write back and the respective state transition, which we have
+covered earlier.
+Eventually, the method performs state transition on completion of the transaction. 
+The state transition only supports two possible states, namely, the transient `M`, or the transient `E`, which will
+transit to stable `M` and `E`, respectively.
+The method also calls `retry()` to schedule the next entry in the MSHR for retry, if there is any.
+
