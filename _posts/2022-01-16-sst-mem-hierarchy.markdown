@@ -1863,4 +1863,15 @@ to introduce them first.
 
 ##### downgradeOwner(), Request Path
 
-Method `downgradeOwner()`
+Method `downgradeOwner()`, as the name implies, downgrades the current owner of the block in upper level caches
+into the shared state. Since there can be at most a single owner on any address, this method only needs to send
+one downgrade request to the owner tracked by the per-block coherence states, and waits for the response.
+This method is called in three cases: (1) When a `GETS` request hits a block that has an exclusive owner which is not
+the requestor, causing the ownership to transfer from the upper level to the current cache; 
+(2) When a flush request hits a block that has an owner that is different from the requestor, causing the ownership
+to transfer from both levels to the next level; and
+(3) When an external downgrade is received from the lower level, and the current block has an owner in the upper
+level, causing the ownership to transfer from both levels to the next level.
+In this section, we only discuss the request path. The response path will be discussed in the next section.
+
+
