@@ -1855,6 +1855,16 @@ outstanding request being sent to the receiver.
 Entries will be inserted into this structure, when the coherence controller sends invalidations or downgrades,
 in one of the three methods: `downgradeOwner()`, `invalidateSharer()`, and `invalidateOwner()`.
 
+#### New Transient States
+
+Due to the existence of downgrades and invalidations, a few new transient states are introduced into the controller.
+These states just act as a indicator showing that an ongoing coherence transaction is happening, and that parallel
+operations stumbling upon them should either stall, or treat these states as the corresponding stable states.
+In other words, these coherence actions are not considered as logically completed, before they transit back to
+a stable state.
+
+
+
 #### Helper Functions
 
 Before delving into the details of coherence actions, we go over the helper functions that perform invalidation
@@ -1875,10 +1885,13 @@ level, causing the ownership to transfer from both levels to the next level.
 
 In all of the contexts, the event object that incurs the downgrade, which is also the first argument of the method, 
 is assumed to have already been added into the MSHR when the function is called.
-In addition, method argument `inMSHR` indicates whether the event is in the MSHR when the handler is called. 
+Method argument `inMSHR` indicates whether the event is in the MSHR when the handler is called. 
 If the event is not in the MSHR when the handler is called, then even if one is allocated later during the
 function, this argument would be set to `false`, and the latency being simulated is the tag array latency, rather
 than MSHR latency.
+In addition, since downgrading an address indicates the existence of an owner in the above level, the state
+of the block in the current level must also be in one of the exclusive states, because otherwise,
+exclusive states would not have been able to be granted to the upper levels.
 
 The function first obtains the address of the downgrade, and creates a new memory event object of command `FetchInvX`.
 The new request object inherits the requestor and flags from the originating request object, and the destination
@@ -1892,3 +1905,7 @@ entry is inserted into the per-address map, with the key being the owner name, a
 globally unique ID of the downgrade event object.
 Eventually, the newly created object is sent to the owner of the address by calling `forwardByDestination()`.
 The timestamp of the send operation is also computed, and block timestamp is updated.
+
+##### downgradeOwner(), Response Path
+
+
