@@ -1997,3 +1997,16 @@ just updates the state to reflect the fact that the invalidation transaction has
 The transition logic handles all states that have a `_Inv` suffix, and transits them back to the corresponding 
 stable states. Non `_Inv`-suffix states are not supported, and will cause an error to be reported.
 If the invalidation transaction has completed, the function returns `false`, and otherwise it returns `true`.
+
+##### invalidateOwner(), Request Path
+
+Method `invalidateOwner()` is similar to `downgradeOwner()`, except that it sends `FetchInv` command for invalidation
+rather than `FetchInvX` for downgrade. Correspondingly, the response event is of command `FetchResp`, rather than
+`FetchXResp`. The response is handled by method `handleFetchResp`.
+
+`invalidateOwner()` is directly called in method `handleGetX()`, when the block is in `E` or `M` state, and the
+block is exclusively owned by an upper level cache (which cannot be the requestor).
+The method is also used by another helper function, `invalidateAll()`, to implement the case where only a single
+owner is to be invalidated.
+
+
