@@ -1915,4 +1915,9 @@ The timestamp of the send operation is also computed, and block timestamp is upd
 
 ##### downgradeOwner(), Response Path
 
+The `FetchInvX` event will be replied by the upper cache with `FetchXResp` event object.
+The `FetchXResp` event carries data, and the dirty flag which indicates whether the data is dirty or not.
+In the former case, the dirty data should be written into the current cache, which may also potentially change
+the local state. 
+
 
