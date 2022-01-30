@@ -2009,4 +2009,10 @@ block is exclusively owned by an upper level cache (which cannot be the requesto
 The method is also used by another helper function, `invalidateAll()`, to implement the case where only a single
 owner is to be invalidated.
 
-
+Note that `invalidateOwner()` may just fail to invalidate and return `false`, if the given block does not have 
+an owner (the `owner` field is empty string). This property is being relied on in `invalidateAll()` as a quick check
+to see whether the block is exclusively owned, or just shared.
+Besides, `invalidateOwner()` allows a custom command to be passed as the command of the event being sent to the 
+owner of the address. If not given, the command defaults to `FetchInv`.
+The only case where the default command is overridden is in `handleForceInv()`, which calls `invalidateAll()`
+with the command `ForceInv`, and the command will be passed to `invalidateOwner()` as well.
