@@ -1846,4 +1846,13 @@ and MSI if otherwise.
 Data member `protocolState_` is of value `E`, if `protocol_` is `true`, and `S` if otherwise, meaning that
 if the protocol is MSI, then shared reads will always only grant `S` state.
 
+Data member `responses` tracks all outstanding invalidation and downgrade requests sent to the upper level caches.
+This structure is an `std::map`, with the address being the key, and a pair of `std::string`
+and `MemEvent::id_type` being the value. 
+The first element of the value is the identity of the receiver, i.e., either an owner, in the case of an exclusively
+owned block, or a sharer, in the case of a shared block. The second element is the ID of the 
+outstanding request being sent to the receiver.
+Entries will be inserted into this structure, when the coherence controller sends invalidations or downgrades,
+in one of the three methods: `downgradeOwner()`, `invalidateSharer()`, and `invalidateOwner()`.
+
 
