@@ -1936,3 +1936,17 @@ Otherwise, it must be that the block is in `E_InvX` (since only `M` and `E` bloc
 transient states at the beginning), and so it will transit back to `E`.
 After the downgrade completes, the next event in the MSHR on the address is retried by calling `retry()`. 
 Also note that the actual event being retried may or may not be the originating event of the downgrade transaction.
+
+##### doEviction()
+
+Method `doEviction()` is called in `downgradeOwner()` and many other methods to simulate the local write back of
+receiving a dirty eviction or invalidation from the upper level.
+The function first checks whether the response event carries dirty data by calling `getDirty()`.
+If true, it then performs state transition of writing back dirty data with a switch statement.
+Since dirty write back can only happen when the upper level has a dirty block, namely, having exclusive ownership,
+which further suggests that the current cache must also in an exclusive state (transient or stable),
+the method only handles three cases: `E`, `E_Inv`, and `E_InvX`, and they will transit to 
+`M`, `M_Inv`, and `M_InvX`, respectively. Other cases are either impossible, or 
+do not require transition as they are already dirty (i.e., transient or stable `M` states).
+
+
