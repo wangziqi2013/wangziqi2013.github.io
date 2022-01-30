@@ -1886,5 +1886,9 @@ is set to the current owner of the address (obtained by calling `getOwner()` on 
 The method also increments the ACK counter in the MSHR register of the address by one, by calling 
 `incrementAcksNeeded()`, indicating that only one response from the owner is expected.
 
-
-
+The method then updates `responses` by inserting the response to be expected. 
+Since only one response from the owner is necessary to complete the downgrade transaction, only one 
+entry is inserted into the per-address map, with the key being the owner name, and the value being the
+globally unique ID of the downgrade event object.
+Eventually, the newly created object is sent to the owner of the address by calling `forwardByDestination()`.
+The timestamp of the send operation is also computed, and block timestamp is updated.
