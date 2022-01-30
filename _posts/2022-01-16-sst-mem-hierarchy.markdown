@@ -1929,3 +1929,10 @@ The method then calls `doEviction()` to simulate the potential state transition 
 into the current cache (which will only happen if the dirty flag of the response event object is set).
 The `responses` map is also updated to remove the entry that represents the event object we just received.
 
+The method then adds the sender of the message, which is also assumed to be the previous owner, into the sharer list.
+Since the downgrade always completes within the same cycle of processing the response event, 
+the state of the block also transits back to a stable state. If it is in `M_InvX`, then it will transit back to `M`.
+Otherwise, it must be that the block is in `E_InvX` (since only `M` and `E` blocks will transit to these two
+transient states at the beginning), and so it will transit back to `E`.
+After the downgrade completes, the next event in the MSHR on the address is retried by calling `retry()`. 
+Also note that the actual event being retried may or may not be the originating event of the downgrade transaction.
