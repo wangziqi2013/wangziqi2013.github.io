@@ -1871,6 +1871,8 @@ dirty data from the upper level to the current level is going on.
 (3) `SM_Inv`, which indicates that the block is in the process of upgrading from `S` to `M` after issuing `GETX`
 to the lower level to obtain ownership, while also in the process of invalidating all shared copies in the 
 above level. This state may transit to `M_Inv` or `SM` depending on which transaction completes first.
+Note that after the `SM_Inv` state transits back to the stable state `M`, there is still one sharer, which is the
+one that issues the `GETX` request and has successfully upgraded its local block.
 
 #### Helper Functions
 
@@ -1955,3 +1957,21 @@ At the end, the function clears the `isEvict_` flag in the `class MemEvent` obje
 on the event object. This will prevent the 
 event object being processed multiple times from the MSHR.
 The new state is also returned to the caller for convenience.
+
+##### invalidateSharer(), Request Path
+
+Method `invalidateSharer()` sends an invalidation message to a specified clean sharer in the upper level.
+This method takes, as arguments, the identity of the sharer as a string, and an optional event object
+(set to `NULL` if not available). It also takes an argument `cmd` to indicate the command to use for the 
+invalidation, which has a default value of `Inv`, meaning that by default, the function just invalidates
+without requiring data response (so it only receives `InvAck`).
+The method is called directly in handlers `handleForceInv()` and `handleFetchInv()`, when a block of state
+`SM_Inv` is to be invalidated. Note that an `SM_Inv` block, despite the fact that the `_Inv` suffix 
+implies that invalidations have been issued to sharers, still has one sharer, which is the one who issued 
+the `GETX` for an upgrade. The only sharer (not owner, since the upgrade has not completed yet), therefore, 
+needs to be invalidated by calling this function.
+
+Besides, the method is also used by helper functions `invalidateExceptRequestor()` and `invalidateAll()` as a 
+building block to implement more complicated coherence transactions. 
+
+
