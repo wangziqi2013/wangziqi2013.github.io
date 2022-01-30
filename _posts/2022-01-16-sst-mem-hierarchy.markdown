@@ -1836,3 +1836,14 @@ for blocks both in the current cache and in upper level caches using the same ta
 blocks are only a subset of blocks in the current cache.
 
 #### Data Members
+
+Data member `cacheArray_` is the tag array of the cache, which maintains both the local state as well as the 
+coherence state of the upper level caches on the tag address.
+Boolean field `protocol_` specifies whether the clean-exclusive `E` state should be granted to the upper level
+cache. The `E` state will be granted, when a `GETS` is processed, and the requestor is the only sharer of the 
+block. In other words, the protocol being simulated by the controller is MESI, if the field is `true`, 
+and MSI if otherwise.
+Data member `protocolState_` is of value `E`, if `protocol_` is `true`, and `S` if otherwise, meaning that
+if the protocol is MSI, then shared reads will always only grant `S` state.
+
+
