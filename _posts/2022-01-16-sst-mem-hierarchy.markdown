@@ -1864,8 +1864,8 @@ In other words, these coherence actions are not considered as logically complete
 a stable state.
 
 The coherence controller introduces the following three classes of transient states: 
-(1) `S_Inv`, `E_Inv`, and `M_Inv`, which indicate that an invalidation transaction that invalidates
-all copies of the address in upper level caches is going on;
+(1) `S_Inv`, `SB_Inv`, `E_Inv`, and `M_Inv`, which indicate that an invalidation transaction that invalidates
+all or some copies of the address in upper level caches is going on;
 (2) `E_InvX` and `M_InvX`, which indicate that a downgrade transaction that transfers ownership and perhaps
 dirty data from the upper level to the current level is going on.
 (3) `SM_Inv`, which indicates that the block is in the process of upgrading from `S` to `M` after issuing `GETX`
@@ -1985,3 +1985,15 @@ The method then inserts an entry with the name of the sharer and the event ID in
 The event is sent by calling `forwardByDestination()` after computing the delivery time.
 At last, the number of ACKs to expect in the response handler is incremented by 
 calling `incrementAcksNeeded()`.
+
+##### invalidateSharer(), Response Path
+
+The response event is of command `AckInv`, which is handled by `handleAckInv()`.
+The function first removes the source cache, which is the one whose cache block just gets invalidated,
+from the sharer list or from the owner field, depending on whether it is a sharer or an owner.
+Then the entry is also removed from `responses`.
+Next, the method calls `decrementAcksNeeded()` to decrement ACK counter, and if the counter reaches zero, the method 
+just updates the state to reflect the fact that the invalidation transaction has completed.
+The transition logic handles all states that have a `_Inv` suffix, and transits them back to the corresponding 
+stable states. Non `_Inv`-suffix states are not supported, and will cause an error to be reported.
+If the invalidation transaction has completed, the function returns `false`, and otherwise it returns `true`.
