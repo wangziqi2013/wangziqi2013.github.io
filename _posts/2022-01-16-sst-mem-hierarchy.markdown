@@ -14,7 +14,7 @@ performs runtime configuration or parameter exchange between components.
 "Construction", on the other hand, refers to operations performed within object constructors, which happens before
 initialization. 
 The term "initialize", however, are used interchangeably, and the exact meaning can be deduced from the context
-(e.g., if we are talking about "initializing a data member" within the section ob object construction, then it
+(e.g., if we are talking about "initializing a data member" within the section of object construction, then it
 is obvious that "initialize" here means construction operations).
 
 # Memory Hierarchy
@@ -1814,3 +1814,16 @@ intended usage. This does not cause correctness issues, though, because it is ju
 will never be seen during the operation.
 
 ### Coherence Protocol: MESI Inclusive
+
+`class MESIInclusive` implements a MESI protocol on non-L1, inclusive caches. This class also inherits from 
+the base class, `class CoherenceController`. Compared with L1 MESI coherence controller, non-L1 controllers 
+need to implement invalidation and downgrades of upper level blocks, in the case of certain combinations of 
+current block states and coherence requests. 
+Besides, to maintain inclusiveness, on a block eviction, external invalidation, and downgrade, the upper-level 
+blocks on the same address should be recursively invalidated or downgraded.
+This suggests that evictions and external requests cannot be easily processed in the same cycle as they are 
+received, due to the extra complication brought about by inclusiveness.
+
+
+
+#### Data Members
