@@ -1831,6 +1831,8 @@ tracking the owner, in the case of an exclusive block.
 Correspondingly, the tag array type used in the class is `CacheArray<SharedCacheLine>`, which only contains 
 coherence information, but not operational information as in the L1 cache array.
 
-
+Compared with non-inclusive caches, this type of the coherence controller can maintain coherence information
+for blocks both in the current cache and in upper level caches using the same tag array, since the upper level
+blocks are only a subset of blocks in the current cache.
 
 #### Data Members
