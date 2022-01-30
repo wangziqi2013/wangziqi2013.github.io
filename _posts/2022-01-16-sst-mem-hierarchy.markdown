@@ -1974,4 +1974,14 @@ needs to be invalidated by calling this function.
 Besides, the method is also used by helper functions `invalidateExceptRequestor()` and `invalidateAll()` as a 
 building block to implement more complicated coherence transactions. 
 
+`invalidateSharer()` first checks that the given sharer is in fact an actual sharer. If negative, this function
+does nothing and just returns.
+Then it creates a new event object with the given command (default to `Inv`), and then initializes the object either
+with metadata from the originating event (if not `NULL`), or just initializes with the name of the current 
+cache as the original requestor.
+Destination of the event is set to the name of the sharer.
 
+The method then inserts an entry with the name of the sharer and the event ID into `responses`.
+The event is sent by calling `forwardByDestination()` after computing the delivery time.
+At last, the number of ACKs to expect in the response handler is incremented by 
+calling `incrementAcksNeeded()`.
