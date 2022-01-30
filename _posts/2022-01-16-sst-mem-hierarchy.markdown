@@ -1824,6 +1824,13 @@ blocks on the same address should be recursively invalidated or downgraded.
 This suggests that evictions and external requests cannot be easily processed in the same cycle as they are 
 received, due to the extra complication brought about by inclusiveness.
 
+The non-L1 controllers, however, also have less per-block state to maintain and less cases to handle when it comes
+to locked blocks, and LL/SC transactions. 
+Instead, per-block coherence states are maintained for tracking sharers, in the case of a shared block, or 
+tracking the owner, in the case of an exclusive block.
+Correspondingly, the tag array type used in the class is `CacheArray<SharedCacheLine>`, which only contains 
+coherence information, but not operational information as in the L1 cache array.
+
 
 
 #### Data Members
