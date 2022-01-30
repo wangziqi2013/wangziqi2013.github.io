@@ -1855,4 +1855,12 @@ outstanding request being sent to the receiver.
 Entries will be inserted into this structure, when the coherence controller sends invalidations or downgrades,
 in one of the three methods: `downgradeOwner()`, `invalidateSharer()`, and `invalidateOwner()`.
 
+#### Helper Functions
 
+Before delving into the details of coherence actions, we go over the helper functions that perform invalidation
+and downgrades first. These functions are heavily utilized by the rest of the protocol, and hence, it is beneficial
+to introduce them first.
+
+##### downgradeOwner(), Request Path
+
+Method `downgradeOwner()`
