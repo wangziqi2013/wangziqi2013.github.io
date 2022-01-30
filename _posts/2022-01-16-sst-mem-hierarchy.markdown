@@ -1920,4 +1920,12 @@ The `FetchXResp` event carries data, and the dirty flag which indicates whether 
 In the former case, the dirty data should be written into the current cache, which may also potentially change
 the local state. 
 
+The response event is handled by method `handleFetchXResp()`. The function never allocates an MSHR, and can always 
+complete in the same cycle that it is handled.
+The method first obtains the line object and the state. Then it decrements the ACK counter in the MSHR
+register by calling `decrementAcksNeeded()`. Note that downgrades always only have one ACK to process 
+(i.e., the current one), and hence the ACK counter is not checked and is assumed to be zero.
+The method then calls `doEviction()` to simulate the potential state transition caused by writing upper level data 
+into the current cache (which will only happen if the dirty flag of the response event object is set).
+The `responses` map is also updated to remove the entry that represents the event object we just received.
 
