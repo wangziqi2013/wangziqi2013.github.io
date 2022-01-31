@@ -2104,9 +2104,19 @@ evicted; and (3) Whether the address is not locked by an atomic instruction.
 If all three criteria are satisfied, the eviction is handled by issuing a `PUTS`, `PUTE`, or `PUTM`, respectively,
 for block state `S`, `E`, and `M`.
 
+##### Race Condition Between Eviction and Invalidation
+
+When an eviction operation succeeds, the cache block immediately transits to `I` state, without transitioning into
+an intermediate state first. This design is intentional, because not every configuration requires an `AckPut` be 
+sent by the lower level after receiving the eviction, and for those that do not, transitioning into a transient 
+state after eviction would mean that there is no further event that cause the state to transit back. 
+
+
+
 ##### sendAckPut()
 
-This method is called by all put handlers to send a response to the upper level cache as acknowledgement.
+This method is called by all put handlers to send a response to the upper level cache as acknowledgement,
+if the data member `sendWritebackAck_` is set (which is initialized in `init()`).
 The method's logic is simple: Given the put event object, it creates a new event object by calling `makeResponse()`,
 sets the source and message size, and sends the event by calling `forwardByDestination()`. 
 The latency of the event is always the tag latency, since put events are always handled in the same cycle
