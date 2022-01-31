@@ -2073,4 +2073,12 @@ The only occasion where a non-default command is used, though, is in method `han
 upper level.
 The method returns `true`, if the block to be invalidated in the upper level is owned, or `false` if otherwise.
 
-
+The method calls attempts to call `invalidateOwner()`, with the command being either `FetchInv`, if not specified
+in the argument, or whatever in the argument, if otherwise.
+If `invalidateOwner()` returns `true`, meaning that the block is indeed owned by an upper level cache, the 
+function returns `true` as well.
+Otherwise, if `invalidateOwner()` returns `false`, meaning that the block does not have an owner, and all copies
+in the above level are shared (or it is not cached by upper levels at all), then the method enumerates
+all sharers, and calls `invalidateSharer()` on each of the sharer.
+The command, if not explicitly given, is set to `Inv` by default.
+The timestamp of the block is updated in the same way as in `invalidateExceptRequestor()`.
