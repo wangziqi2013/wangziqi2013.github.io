@@ -2103,3 +2103,15 @@ Whether the block is in one of the stable states; (2) Whether there are no pendi
 evicted; and (3) Whether the address is not locked by an atomic instruction.
 If all three criteria are satisfied, the eviction is handled by issuing a `PUTS`, `PUTE`, or `PUTM`, respectively,
 for block state `S`, `E`, and `M`.
+
+##### sendAckPut()
+
+This method is called by all put handlers to send a response to the upper level cache as acknowledgement.
+The method's logic is simple: Given the put event object, it creates a new event object by calling `makeResponse()`,
+sets the source and message size, and sends the event by calling `forwardByDestination()`. 
+The latency of the event is always the tag latency, since put events are always handled in the same cycle
+when it is received, and hence no MSHR entry is needed.
+
+##### handlePutS()
+
+
