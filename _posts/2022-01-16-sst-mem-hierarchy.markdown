@@ -2120,6 +2120,9 @@ whose eviction has been completed locally but not yet handled by the receiver, t
 since the receiver in the upper level will not respond to downgrades or invalidations on a non-existing block, 
 while the issuer expects a response from the upper level, causing a race condition.
 
+Luckily, the race condition is still solvable, because the sender of the downgrade or invalidation will eventually
+receive the put message. In addition, by checking the `responses` structure, the sender is also able to identify
+whether the put message originates from an unsolicited eviction, or is the result of the race condition. 
 
 ##### sendAckPut()
 
