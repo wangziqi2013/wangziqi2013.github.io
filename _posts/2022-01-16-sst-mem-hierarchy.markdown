@@ -2159,5 +2159,9 @@ with the suffix `_Inv`, then they will only transit back to the corresponding st
 The only exception is `SM_Inv`, which should also check whether the next event object is already in progress
 (the reason of which has been discussed earlier).
 
-
+Note that the `S_B` state means an ongoing flush operation has already forwarded the flush request to the lower level,
+but has not received any response yet. This does not preclude the possibility of having shared state blocks in the
+upper level, as flush itself only downgrades dirty blocks on its way.
+`SB_Inv`, on the other hand, is observed when an ongoing flush operation races with an external invalidation, which
+itself raced with the eviction. 
 
