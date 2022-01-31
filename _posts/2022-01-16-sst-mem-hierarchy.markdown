@@ -2206,3 +2206,8 @@ If true, then the owner must be degraded first, by calling `downgradeOwner()`, a
 successfully allocating an MSHR entry. The state transits to `E_InvX` and `M_InvX`, respectively, for state `E` and 
 `M`, and the `GETS` request will be retried by the downgrade response handler when the downgrade completes.
 
+If the address does not have any owner, but has sharers, then the new sharer will be added into the list, and 
+the response event will be `GetSResp`. If there is no existing sharer, meaning that the requestor will become
+the sole holder of the shared copy, then the state granted to the upper level will be `GetXResp`, and the 
+upper level block, on receiving this message, will transit into `E` state.
+
