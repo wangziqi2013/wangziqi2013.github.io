@@ -2111,6 +2111,14 @@ an intermediate state first. This design is intentional, because not every confi
 sent by the lower level after receiving the eviction, and for those that do not, transitioning into a transient 
 state after eviction would mean that there is no further event that cause the state to transit back. 
 
+This protocol simplification creates a window of vulnerability, in which the lower level cache still
+marks the upper level cache as a sharer / owner, while the upper level cache has already evicted the block, with 
+the state transited to `I`, due to the fact that it may take several cycles for the eviction message 
+(i.e., `PUTx` events) to be delivered or processed. 
+As a result, in the window of vulnerability, if invalidations or downgrades are sent to the upper level cache
+whose eviction has been completed locally but not yet handled by the receiver, there would be an inconsistency, 
+since the receiver in the upper level will not respond to downgrades or invalidations on a non-existing block, 
+while the issuer expects a response from the upper level, causing a race condition.
 
 
 ##### sendAckPut()
