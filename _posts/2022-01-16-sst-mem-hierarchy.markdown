@@ -2194,5 +2194,10 @@ explain invocations of helper functions, such as `removePendingRetry()`, `setInP
 To simplify discussion, we also only focus on the difference between the handlers in the inclusive cache and the L1 
 cache.
 
+The handling of state `I` and `S` are almost identical to those in the L1 cache. In the case of 
+state `I`, the sharer is added to the list only after the response message of the forwarded `GETS` is processed,
+i.e., when the block is in `IS` state, the sharer list does not contain the requestor.
+For state `S`, since it is a direct hit without further forwarding, the sharer list is updated immediately
+in the same cycle.
 
 
