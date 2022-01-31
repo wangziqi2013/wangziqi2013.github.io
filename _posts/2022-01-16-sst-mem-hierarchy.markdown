@@ -2253,3 +2253,8 @@ The method returns the value of `evicted`, which, if set to `false`, will cause 
 MSHR entry.
 
 ##### handleGetS(), Response Path
+
+The response event to `GETS` is `GetSResp`, which will be handled by `handleGetSResp()`. 
+The handler is largely the same as the one in the L1 cache, with the only exception being that the 
+original requestor of `GETS` is added to the block's sharer list.
+Besides, the `GETS` response event is also sent to the upper level, by calling `sendResponseUp()`.
