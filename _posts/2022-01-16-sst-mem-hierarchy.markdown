@@ -2121,7 +2121,8 @@ since the receiver in the upper level will not respond to downgrades or invalida
 while the issuer expects a response from the upper level, causing a race condition.
 
 Luckily, the race condition is still solvable, because the sender of the downgrade or invalidation will eventually
-receive the put message. In addition, by checking the `responses` structure, the sender is also able to identify
+receive the put message. In addition, by checking the number of ACKs expected in the MSHR register of the address, 
+the sender is also able to identify
 whether the put message originates from an unsolicited eviction, or is the result of the race condition. 
 
 ##### sendAckPut()
@@ -2134,5 +2135,10 @@ The latency of the event is always the tag latency, since put events are always 
 when it is received, and hence no MSHR entry is needed.
 
 ##### handlePutS()
+
+Method `handlePutS()` may handle an unsolicited eviction, or treat it as the response event to an earlier 
+invalidation due to a race condition. Note that `PUTS` will not race with downgrades, since `S` state blocks
+in the upper level will never cause a downgrade to be issued from the current cache.
+
 
 
