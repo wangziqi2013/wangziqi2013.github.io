@@ -2258,3 +2258,20 @@ The response event to `GETS` is `GetSResp`, which will be handled by `handleGetS
 The handler is largely the same as the one in the L1 cache, with the only exception being that the 
 original requestor of `GETS` is added to the block's sharer list.
 Besides, the `GETS` response event is also sent to the upper level, by calling `sendResponseUp()`.
+
+##### handleGetX(), Request Path
+
+Method `handleGetX()` handles `GETX` request from the upper level, which can be a read or upgrade. 
+Blocks of `I` state is handled in the same way as in the L1 cache.
+Blocks of `S` state will always incur a cache upgrade transaction, with an optional invalidation.
+The method first forwards the `GETS` to the lower level by calling `forwardMessage()` to start the
+upgrade transaction. Then it calls `invalidateExceptRequestor()` to invalidate all potential sharers of
+the block. Note that since the state of the line itself is non-exclusive, there cannot be exclusive states
+in upper level caches, and hence only issuing invalidation is sufficient.
+If `invalidateExceptRequestor()` returns `true`, indicating that at least one invalidation has been sent,
+the state will transit to `SM_Inv`, to indicate that there are two transactions going on, one is upgrade
+transaction from `S` to `M`, while the other is invalidation.
+On the other hand, if `invalidateExceptRequestor()` returns `false`, then no invalidation is issued, and the
+state transits to `SM`.
+
+
