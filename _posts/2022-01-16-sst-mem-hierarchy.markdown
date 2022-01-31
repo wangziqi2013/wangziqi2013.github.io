@@ -1874,7 +1874,7 @@ above level. This state may transit to `M_Inv` or `SM` depending on which transa
 Note that after the `SM_Inv` state transits back to the stable state `M`, there is still one sharer, which is the
 one that issues the `GETX` request and has successfully upgraded its local block.
 
-#### Helper Functions, Part I
+#### Helper Functions
 
 Before delving into the details of coherence actions, we go over the helper functions that perform invalidation
 and downgrades first. These functions are heavily utilized by the rest of the protocol, and hence, it is beneficial
@@ -2091,10 +2091,10 @@ all sharers, and calls `invalidateSharer()` on each of the sharer.
 The command, if not explicitly given, is set to `Inv` by default.
 The timestamp of the block is updated in the same way as in `invalidateExceptRequestor()`.
 
-#### Helper Functions, Part II
+#### Handling Write Backs
 
-There are also helper functions that handle write backs induced by eviction from the upper level. 
-Recall that when a write back is received, if the cache is configured to send an acknowledgement, or the upper 
+There are also functions that handle write backs (event type `PUTx`) induced by eviction from the upper level. 
+Recall that when a write back event is received, if the cache is configured to send an acknowledgement, or the upper 
 level expects to hear back from the write back request, then 
 the write back will be inserted as the front entry of the MSHR in the upper level, 
 and the acknowledgement should be sent from the lower level.
@@ -2182,3 +2182,17 @@ Transient states will become their stable counterparts, and stable states do not
 Method `handlePutE()` is called when a `PUTE` event is received. Its logic is identical to `handlePutE()`, but the
 actual operations being performed differ, since `doEviction()` will now also perform some state transition to
 simulate the local write back, in addition to removing the owner from the local coherence state.
+
+#### CPU-Generated Data Requests
+
+##### handleGetS(), Request Path
+
+Method `handleGetS()` in the inclusive cache shares an overall similar structure as the one in the L1 cache.
+In this section, we skip the parts where the logic is identical to those in the L1 cache, e.g., we do not repeatedly
+explain invocations of helper functions, such as `removePendingRetry()`, `setInProgress()`, 
+`cleanUpAfterRequest/Response()`, `allocateMSHR()` and the related logic, and so on.
+To simplify discussion, we also only focus on the difference between the handlers in the inclusive cache and the L1 
+cache.
+
+
+
