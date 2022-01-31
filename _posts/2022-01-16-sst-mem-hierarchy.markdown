@@ -2046,3 +2046,13 @@ requestor of a given event.
 This method is used when a `GETX` hits a block in the cache, and it is indicated by the coherence state 
 that the address is also being shared in upper level caches in shared states. 
 
+The method's logic is very straightforward: It enumerates the given block's sharer, and for each sharer that
+is not the source of the given event (which is a `GETX` issued by one of the upper level caches), then
+an invalidation will be sent to the cache by calling `invalidateSharer()`.
+For each invocation of `invalidateSharer()`, the timestamp of the block will be updated, and the final timestamp
+is in local variable `deliveryTime`, which will be set as the block's timestamp after the operation.
+The method returns `true`, if at least one invalidation request has been issued, meaning that the block should 
+transit to a transient state until the responses are received (the method itself does not perform any state
+transition, though).
+
+
