@@ -2242,6 +2242,14 @@ state of the block transits to the corresponding transient state (with `_Inv` su
 `evict` is also set to `false`, to indicate to the caller that an eviction entry should be inserted into the MSHR
 register, such that it can be retried from the MSHR when all responses are received.
 
+On the other hand, if `invalidateAll()` returns `false`, meaning that there is nothing to invalidate, then
+the eviction can proceed immediately. In this case, a write back request is sent to the lower level
+by calling `sendWriteback()`, and the state of the block transits `I`. 
+The local flag `wbSent` that tracks whether write backs have been sent is set to `true`.
 
+At the end of the method, a write back entry is inserted into the MSHR, if a write back has been sent (`wbSent`), 
+and that the cache is configured to expect write back ACKs. 
+The method returns the value of `evicted`, which, if set to `false`, will cause the caller to insert an eviction
+MSHR entry.
 
 ##### handleGetS(), Response Path
