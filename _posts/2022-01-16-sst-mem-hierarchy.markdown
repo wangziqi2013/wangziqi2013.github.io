@@ -1813,6 +1813,20 @@ Note that in `handleFetchInvX()`, state `S_B` is somehow handled, which is incon
 intended usage. This does not cause correctness issues, though, because it is just that the case statement
 will never be seen during the operation.
 
+#### Negative ACKs (NACKs)
+
+The L1 cache may also receive NACK for a CPU-generated request that it has sent to the lower level. 
+The NACK indicates that the lower level MSHR is full, and could not accept more events. 
+Note that the L1 itself will not send NACK to the CPU, and it will only keep those that are rejected MSHR
+allocation in the buffer of the cache controller, which will just be reattempted in the next cycle.
+
+Method `handleNACK()` handles the NACK message. The method extracts the original event that is rejected by the
+lower level by calling `getNACKedEvent()` on the NACK event object. 
+The original event will be scheduled for sending on a future cycle by calling `resendEvent()`, which is defined
+in the base class. The method `resendEvent()` computes the send cycle with exponential back off based on the
+number of re-sends, and then inserts the event into the outgoing queue by calling `forwardByDestination()`
+with the computed cycle.
+
 ### Coherence Protocol: MESI Inclusive
 
 `class MESIInclusive` implements a MESI protocol on non-L1, inclusive caches. This class also inherits from 
