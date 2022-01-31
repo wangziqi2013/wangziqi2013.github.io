@@ -2055,4 +2055,22 @@ The method returns `true`, if at least one invalidation request has been issued,
 transit to a transient state until the responses are received (the method itself does not perform any state
 transition, though).
 
+Note that the method uses the default `cmd` argument of `invalidateSharer()`, which is `Inv`, indicating that it
+intends to invalidate shared blocks in the upper level.
+
+##### invalidateAll()
+
+Method `invalidateAll()` just invalidates all sharers or the owner of an address, regardless of its current status.
+This function implements recursive invalidation, which happens when an address from the current cache is removed, 
+due to eviction, flush, or external invalidation.
+This method is called by handler functions `handleFlushLineInv()`, `handleInv()`, `handleForceInv()`, 
+`handleFetchInv()`, and `handleEviction()`.
+The method also takes an optional argument, `cmd`, which specifies a command to be used. The command is set to 
+`NULLCMD` by default, meaning that the method is free to choose the most appropriate command based on the 
+sharer and owner information of the block.
+The only occasion where a non-default command is used, though, is in method `handleForceInv()`, in which case
+`ForceInv` is passed as `cmd`, forcing an invalidation to be performed regardless of the block state in the 
+upper level.
+The method returns `true`, if the block to be invalidated in the upper level is owned, or `false` if otherwise.
+
 
