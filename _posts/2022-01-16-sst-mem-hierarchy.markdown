@@ -1874,7 +1874,7 @@ above level. This state may transit to `M_Inv` or `SM` depending on which transa
 Note that after the `SM_Inv` state transits back to the stable state `M`, there is still one sharer, which is the
 one that issues the `GETX` request and has successfully upgraded its local block.
 
-#### Helper Functions
+#### Helper Functions, Part I
 
 Before delving into the details of coherence actions, we go over the helper functions that perform invalidation
 and downgrades first. These functions are heavily utilized by the rest of the protocol, and hence, it is beneficial
@@ -2090,3 +2090,16 @@ in the above level are shared (or it is not cached by upper levels at all), then
 all sharers, and calls `invalidateSharer()` on each of the sharer.
 The command, if not explicitly given, is set to `Inv` by default.
 The timestamp of the block is updated in the same way as in `invalidateExceptRequestor()`.
+
+#### Helper Functions, Part II
+
+There are also helper functions that handle write backs induced by eviction from the upper level. 
+Recall that when a write back is received, if the cache is configured to send an acknowledgement, or the upper 
+level expects to hear back from the write back request, then 
+the write back will be inserted as the front entry of the MSHR in the upper level, 
+and the acknowledgement should be sent from the lower level.
+Also recall that, when eviction is being requested due to a replacement, `handleEviction()` will check (1)
+Whether the block is in one of the stable states; (2) Whether there are no pending retry on the address to be
+evicted; and (3) Whether the address is not locked by an atomic instruction.
+If all three criteria are satisfied, the eviction is handled by issuing a `PUTS`, `PUTE`, or `PUTM`, respectively,
+for block state `S`, `E`, and `M`.
