@@ -2200,4 +2200,9 @@ i.e., when the block is in `IS` state, the sharer list does not contain the requ
 For state `S`, since it is a direct hit without further forwarding, the sharer list is updated immediately
 in the same cycle.
 
+The handling of `E` and `M` state (they share the same logic) need to check whether the upper level cache 
+has exclusive ownership, by calling `hasOwner()`.
+If true, then the owner must be degraded first, by calling `downgradeOwner()`, after 
+successfully allocating an MSHR entry. The state transits to `E_InvX` and `M_InvX`, respectively, for state `E` and 
+`M`, and the `GETS` request will be retried by the downgrade response handler when the downgrade completes.
 
