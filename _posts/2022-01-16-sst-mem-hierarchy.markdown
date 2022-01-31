@@ -2274,4 +2274,18 @@ transaction from `S` to `M`, while the other is invalidation.
 On the other hand, if `invalidateExceptRequestor()` returns `false`, then no invalidation is issued, and the
 state transits to `SM`.
 
+`E` state and `M` state are handled in the same manner. First, if the address has non-exclusive sharers, which
+is checked by calling `hasOtherSharers()`, then an MSHR is allocated, and `invalidateExceptRequestor()` is
+called to invalidate these sharers. 
+Otherwise, if it has an owner, checked by `hasOwner()`, then the owner will be invalidated by calling 
+`invalidateOwner()`.
+In both cases, the method returns, and will wait for the invalidation transaction to complete, before the
+current event is retried by the invalidation response handler.
+The state of the block also both transits to `M_Inv`. This suggests that the dirty state in the 
+non-L1 caches will be marked as early as the `GETX` from the L1 is processed (rather than when the dirty block
+is actually written back).
 
+If neither of the above two cases hold, the `GETX` can be processed immediately by adding the requestor as
+the exclusive owner of the address.
+
+Again, if any of the MSHR allocation fails, NACK will be sent back to the requestor.
