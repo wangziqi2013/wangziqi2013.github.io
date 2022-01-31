@@ -2225,3 +2225,23 @@ the response event will be `GetSResp`. If there is no existing sharer, meaning t
 the sole holder of the shared copy, then the state granted to the upper level will be `GetXResp`, and the 
 upper level block, on receiving this message, will transit into `E` state.
 
+If MSHR allocation fails, an NACK that contains the current event object will be sent back to the upper level 
+cache by calling `sendNACK()`. The upper level cache is expected to re-send the event after waiting for 
+a while.
+The method always returns `true`, such that it will be removed from the cache controller's
+buffer regardless of the success status.
+
+Method `processCacheMiss()` and `allocateLine()` are also identical with those in the L1 cache.
+Method `handleEviction()`, however, differs from the one in the L1 due to the fact that eviction may also
+cause recursive invalidation.
+In `handleEviction()`, the method checks whether there are pending retries on the address. If true, then
+it just returns `false`, and the caller will insert an eviction entry into the MSHR register.
+Otherwise, the method first calls `invalidateAll()` to send `Inv` or `FetchInv` to the upper level.
+If `invalidateAll()` returns `true`, meaning that at least one invalidation is sent, then the 
+state of the block transits to the corresponding transient state (with `_Inv` suffix). Local variable
+`evict` is also set to `false`, to indicate to the caller that an eviction entry should be inserted into the MSHR
+register, such that it can be retried from the MSHR when all responses are received.
+
+
+
+##### handleGetS(), Response Path
