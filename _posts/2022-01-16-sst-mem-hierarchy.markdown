@@ -2176,3 +2176,9 @@ current level must also have exclusive state, state transition may only happen o
 state states of `E` and `M`.
 Specifically, the state transition action only accepts state `E`, `M`, as well as the `_Inv` and `_InvX` versions.
 Transient states will become their stable counterparts, and stable states do not change at all.
+
+##### handlePutM()
+
+Method `handlePutE()` is called when a `PUTE` event is received. Its logic is identical to `handlePutE()`, but the
+actual operations being performed differ, since `doEviction()` will now also perform some state transition to
+simulate the local write back, in addition to removing the owner from the local coherence state.
