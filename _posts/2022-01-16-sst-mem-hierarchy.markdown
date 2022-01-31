@@ -2289,3 +2289,21 @@ If neither of the above two cases hold, the `GETX` can be processed immediately 
 the exclusive owner of the address.
 
 Again, if any of the MSHR allocation fails, NACK will be sent back to the requestor.
+
+##### handleGetX(), Response Path
+
+The response event of both `GETX` and `GETS` is `GetXResp`, which is handled by `handleGetXResp()`. 
+The main body of the handler is the logic to perform state transition.
+If the state of the block is `IS`, meaning that the cache has issued a `GETS`, but the lower level
+granted exclusive ownership, then the state will transit to either `M`, if the response event carries
+dirty data (which will happen if the lower level cache is non-inclusive), or transit to `E`.
+In addition, the current cache also decide whether to grant shared or exclusive ownership to the 
+upper level. The decision is made by checking the number of entries in the MSHR register
+(`protocol_` and the line state are also checked, but they are not of major interest). If the MSHR
+register does not contain any other request other than the original `GETS`, then exclusive ownership
+is granted by calling `sendResponseUp()` to send a response event with the command `GetXResp`, and
+the original requestor is also added as an owner.
+Otherwise, since the MSHR already queues a few requests on the address, it is likely that the following
+operations will downgrade or invalidate the current owner. In this case, only shared state is granted,
+by calling `sendResponseUp()` with the command being `GetSResp`.
+
