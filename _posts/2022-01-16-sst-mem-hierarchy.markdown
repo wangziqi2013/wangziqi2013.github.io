@@ -2004,6 +2004,8 @@ transition to schedule the next entry in the MSHR, if any, for all cases except 
 on the MSHR. 
 The reason that `retry()` cannot be blindly called for `SM_Inv` is that this state indicates an ongoing upgrade
 transaction, the event entry of which is also in the MSHR, and it must not be retried multiple times. 
+The MSHR front event should eventually be retried by function `cleanUpAfterResponse()`, which does not 
+check the in progress flag of the MSHR entry, when the `GETX` response event is received from the lower level. 
 
 ##### invalidateOwner(), Request Path
 
@@ -2036,4 +2038,11 @@ Eventually, the method performs state transition on completion of the transactio
 The state transition only supports two possible states, namely, the transient `M`, or the transient `E`, which will
 transit to stable `M` and `E`, respectively.
 The method also calls `retry()` to schedule the next entry in the MSHR for retry, if there is any.
+
+##### invalidateExceptRequestor()
+
+Method `invalidateExceptRequestor()`, as the name implies, invalidates all other copies of a block except the 
+requestor of a given event. 
+This method is used when a `GETX` hits a block in the cache, and it is indicated by the coherence state 
+that the address is also being shared in upper level caches in shared states. 
 
