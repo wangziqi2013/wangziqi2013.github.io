@@ -1998,6 +1998,14 @@ The transition logic handles all states that have a `_Inv` suffix, and transits 
 stable states. Non `_Inv`-suffix states are not supported, and will cause an error to be reported.
 If the invalidation transaction has completed, the function returns `false`, and otherwise it returns `true`.
 
+The reason that `handleAckInv()` may see a block in transient exclusive state is that both `Inv` and `ForceInv`
+expect to be responded by `AckInv` (without data). 
+The former will only invalidate shared state blocks in the upper level, 
+but this does not prevent the current level state from being an exclusive state, since it is totally normal for
+an exclusive state lower level to grant shared states to the upper levels. As for the latter, since
+`ForceInv` invalidates blocks of all states forcibly, it needs to handle all possible scenarios including both
+exclusive and non-exclusive.
+
 Note that, just like any other response message handler, `handleAckInv()` will call `retry()` after state 
 transition to schedule the next entry in the MSHR, if any, for all cases except `SM_Inv`, in which case
 `retry()` is called only after checking that the next event is not in progress by calling `getInProgress()`
