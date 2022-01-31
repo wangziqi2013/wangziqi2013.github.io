@@ -2140,5 +2140,15 @@ Method `handlePutS()` may handle an unsolicited eviction, or treat it as the res
 invalidation due to a race condition. Note that `PUTS` will not race with downgrades, since `S` state blocks
 in the upper level will never cause a downgrade to be issued from the current cache.
 
+The method begins with the usual prologue as in other handler functions. Most notably, it calls `removePendingRetry()`
+if the `inMSHR` flag is set, but it is impossible for this event to be inserted into the MSHR, and the invocation
+will never be executed.
+The method then calls `doEviction()` to perform the local state transition of writing evicted data, in which case
+will perform both state transition of the local state (no-op in this case, since `PUTS` does not contain dirty data), 
+and remove the source of the event from the sharer list or from the owner field (in this case, always sharer list).
+If the source also has an entry in the `responses` structure, the corresponding entry will be removed,
+just as if an `AckInv` has been received.
+In addition, if the ACK counter on the address is not zero, then it will also be decremented.
+If the ACK counter reaches zero, the invalidation has been completed, which will cause the flag `done` to be set.
 
 
