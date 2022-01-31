@@ -2151,4 +2151,13 @@ just as if an `AckInv` has been received.
 In addition, if the ACK counter on the address is not zero, then it will also be decremented.
 If the ACK counter reaches zero, the invalidation has been completed, which will cause the flag `done` to be set.
 
+The method then performs local state transition.
+If the state is stable, or is `S_B`, meaning that the event is an unsolicited eviction, no state transition is needed.
+Otherwise, if the states is one of the transient states waiting for invalidation to complete, i.e., those
+with the suffix `_Inv`, then they will only transit back to the corresponding state without `_Inv` suffix, if
+`done` is set to `true`, and then call `retry()` to schedule the originating event that caused the invalidation.
+The only exception is `SM_Inv`, which should also check whether the next event object is already in progress
+(the reason of which has been discussed earlier).
+
+
 
