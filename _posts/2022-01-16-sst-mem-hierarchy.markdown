@@ -2307,3 +2307,11 @@ Otherwise, since the MSHR already queues a few requests on the address, it is li
 operations will downgrade or invalidate the current owner. In this case, only shared state is granted,
 by calling `sendResponseUp()` with the command being `GetSResp`.
 
+State `IM` and `SM` blocks are processed similarly. The block just transits to `M` state, and the
+original requestor is added the owner.
+The same response is forwarded to the upper level by calling `sendResponseUp()`.
+
+For state `SM_Inv`, this indicates that the upgrade transaction has completed before invalidation does.
+The state transits to `M_Inv`, but no response is sent, and the original event is not retried.
+When the invalidation transaction also completes, the original `GETX` event will be retried, and the response
+event is sent to the requestor in the handler of the `GETX` event.
