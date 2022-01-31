@@ -2150,6 +2150,8 @@ If the source also has an entry in the `responses` structure, the corresponding 
 just as if an `AckInv` has been received.
 In addition, if the ACK counter on the address is not zero, then it will also be decremented.
 If the ACK counter reaches zero, the invalidation has been completed, which will cause the flag `done` to be set.
+The helper function `sendAckPut()` is also called, if flag `sendWritebackAck_` is set, to send the `AckPut` back
+to complete the eviction operation in the upper cache.
 
 The method then performs local state transition.
 If the state is stable, or is `S_B`, meaning that the event is an unsolicited eviction, no state transition is needed.
@@ -2165,3 +2167,12 @@ upper level, as flush itself only downgrades dirty blocks on its way.
 `SB_Inv`, on the other hand, is observed when an ongoing flush operation races with an external invalidation, which
 itself raced with the eviction. 
 
+##### handlePutE()
+
+Method `handlePutE()` is called when a `PUTE` event is received. It is similar to `handlePutX()`, with 
+the state transition table being the major difference.
+Since a `PUTE` indicates the existence with ownership in an upper cache, which, in return, indicates that the
+current level must also have exclusive state, state transition may only happen on one of the few transient and
+state states of `E` and `M`.
+Specifically, the state transition action only accepts state `E`, `M`, as well as the `_Inv` and `_InvX` versions.
+Transient states will become their stable counterparts, and stable states do not change at all.
