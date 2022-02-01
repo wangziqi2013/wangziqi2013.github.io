@@ -2350,3 +2350,10 @@ state block, followed by the lower level cache issuing a downgrade, then the dow
 responded to by the upper level cache, since `S_B` state blocks just ignore downgrades.
 In this case, the flush request, if it contains data, indicating that it performs ownership transfer, should
 be considered as the equivalence of a `FetchInvXResp` with ownership transfer.
+
+In the second scenario, a `FlushInv` is issued from the upper level from any state, and the block transits to
+`I_B`. Meanwhile, the lower level issues either a downgrade or an invalidation to the upper level. In this 
+scenario, since `I_B` blocks do not respond to any external events, the downgrade or invalidation will never
+receive the response from the upper level cache.
+To resolve the issue, the lower level cache must treat the `FlushInv` as a `FetchInvResp`, or as a `FetchInvXResp`,
+depending on the pending transactions in the lower level (since an invalidation is also a downgrade).
