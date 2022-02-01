@@ -2370,4 +2370,6 @@ the event involves a downgrade (indicated by `isEvict_` flag) and/or the data it
 `dirty_` flag). Besides, on later tries of the event, `doEviction()` will effectively be a no-op, since the 
 evict flag of the event object is cleared.
 
-
+Note that, if a downgrade happens, then after `doEviction()`, the local coherence state is temporarily 
+inconsistent, because the requestor has been removed as an owner of the address, but it has not been added
+as a sharer. In this case, calling `hasOwner()` on the block will return `false`.
