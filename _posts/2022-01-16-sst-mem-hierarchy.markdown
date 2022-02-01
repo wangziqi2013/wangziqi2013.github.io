@@ -1382,7 +1382,7 @@ when it completes.
 When a cache miss occurs, the request object is inserted into the MSHR, and we know that it also must be the
 first entry of the MSHR register (because otherwise, the block will be in a transient state, and the request
 will not be processed). 
-All processing on the address is blocked (including invalidations, which is considered as being ordered before
+All processing on the address is blocked (excluding invalidations, which is considered as being ordered before
 the access operation) until the response event from the lower level cache arrives, in which case, `handleGetSResp()`
 will be invoked.
 
@@ -1475,7 +1475,7 @@ It then checks whether the line is locked, and if true, then an atomic instructi
 eviction must not proceed until the block is unlocked, in which case `false` is returned.
 Otherwise, the function checks whether the address also has pending retries by calling 
 `getPendingRetries()` on the block address at the beginning of every case block. 
-If true, then these retires are logically ordered before the eviction, and eviction could not proceed either,
+If true, then these retries are logically ordered before the eviction, and eviction could not proceed either,
 which causes the control flow to fall though to the `default` case, and `false` is returned.
 
 If the eviction is performed successfully, then the state of the line will transit to `I`. There is no transient
@@ -1679,8 +1679,9 @@ On receiving this response, the handler first obtains the line object by a tag l
 Then the originating flush request object is also obtained at the front of the MSHR register by calling 
 `getFrontEvent()` on the MSHR.
 The method completes the state transition: state `S_B` blocks will transit to the stable state `S`, and `I_B`
-block will transit to `I`. Note that although flush request will not cause a block to transit into `I_B`,
-an external invalidation from the lower level will be ordered after the flush, and transit `S_B` to `I_B`.
+block will transit to `I`. Note that state `I_B` can either be the result of handling flush line with invalidation,
+as we will discuss in the next section, or it can also be because of the `S_B` block was invalidated by an 
+external invalidation, which was ordered before the ongoing flush request.
 The response event is forwarded to the upper level by calling `sendResponseUp()`, using the success bit 
 (via `success()` on the response event) to indicate whether the flush has succeeded or not.
 Finally, the method calls `cleanUpAfterResponse()` to conclude response handling.
@@ -2183,7 +2184,7 @@ itself raced with the eviction.
 
 ##### handlePutE()
 
-Method `handlePutE()` is called when a `PUTE` event is received. It is similar to `handlePutX()`, with 
+Method `handlePutE()` is called when a `PUTE` event is received. It is similar to `handlePutS()`, with 
 the state transition table being the major difference.
 Since a `PUTE` indicates the existence with ownership in an upper cache, which, in return, indicates that the
 current level must also have exclusive state, state transition may only happen on one of the few transient and
@@ -2193,7 +2194,7 @@ Transient states will become their stable counterparts, and stable states do not
 
 ##### handlePutM()
 
-Method `handlePutE()` is called when a `PUTE` event is received. Its logic is identical to `handlePutE()`, but the
+Method `handlePutE()` is called when a `PUTM` event is received. Its logic is identical to `handlePutE()`, but the
 actual operations being performed differ, since `doEviction()` will now also perform some state transition to
 simulate the local write back, in addition to removing the owner from the local coherence state.
 
@@ -2259,7 +2260,7 @@ The handler is largely the same as the one in the L1 cache, with the only except
 original requestor of `GETS` is added to the block's sharer list.
 Besides, the `GETS` response event is also sent to the upper level, by calling `sendResponseUp()`.
 
-##### handleGetX(), Request Path
+##### handleGetX() and handleGetSX(), Request Path
 
 Method `handleGetX()` handles `GETX` request from the upper level, which can be a read or upgrade. 
 Blocks of `I` state is handled in the same way as in the L1 cache.
@@ -2290,7 +2291,10 @@ the exclusive owner of the address.
 
 Again, if any of the MSHR allocation fails, NACK will be sent back to the requestor.
 
-##### handleGetX(), Response Path
+Method `handleGetSX()` is completely identical to `handleGetX()`, since non-L1 caches do not implement
+atomic instructions.
+
+##### handleGetX() and handleGetSX(), Response Path
 
 The response event of both `GETX` and `GETS` is `GetXResp`, which is handled by `handleGetXResp()`. 
 The main body of the handler is the logic to perform state transition.
@@ -2315,3 +2319,7 @@ For state `SM_Inv`, this indicates that the upgrade transaction has completed be
 The state transits to `M_Inv`, but no response is sent, and the original event is not retried.
 When the invalidation transaction also completes, the original `GETX` event will be retried, and the response
 event is sent to the requestor in the handler of the `GETX` event.
+
+#### CPU-Generated Flush Request
+
+
