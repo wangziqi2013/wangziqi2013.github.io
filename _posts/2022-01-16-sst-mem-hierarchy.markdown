@@ -2127,7 +2127,7 @@ sent by the lower level after receiving the eviction, and for those that do not,
 state after eviction would mean that there is no further event that cause the state to transit back. 
 
 This protocol simplification creates a window of vulnerability, in which the lower level cache still
-marks the upper level cache as a sharer / owner, while the upper level cache has already evicted the block, with 
+marks the upper level cache as a sharer or owner, while the upper level cache has already evicted the block, with 
 the state transited to `I`, due to the fact that it may take several cycles for the eviction message 
 (i.e., `PUTx` events) to be delivered or processed. 
 As a result, in the window of vulnerability, if invalidations or downgrades are sent to the upper level cache
@@ -2335,7 +2335,7 @@ up the hierarchy following the same path.
 
 In non-L1 caches, flush requests may race with an ongoing downgrade or invalidation, in a way that is similar to
 how `PUTx` requests race with them.
-In fact, flushes just achieve the same effect as downgrades (`Flush`) or invalidations (`FlushInv`), except that they
+In fact, flushes just achieve the same effect as downgrades (`FlushLine`) or invalidations (`FlushLineInv`), except that they
 are unsolicited requests since it is the CPU who originally initiates the request.
 In addition, the window of vulnerability in `PUTx` handling also exists for flush handling, that is, between the 
 time point when the flush is issued to the lower level, and the point when the lower level receives the 
@@ -2351,9 +2351,23 @@ responded to by the upper level cache, since `S_B` state blocks just ignore down
 In this case, the flush request, if it contains data, indicating that it performs ownership transfer, should
 be considered as the equivalence of a `FetchInvXResp` with ownership transfer.
 
-In the second scenario, a `FlushInv` is issued from the upper level from any state, and the block transits to
+In the second scenario, a `FlushLineInv` is issued from the upper level from any state, and the block transits to
 `I_B`. Meanwhile, the lower level issues either a downgrade or an invalidation to the upper level. In this 
 scenario, since `I_B` blocks do not respond to any external events, the downgrade or invalidation will never
 receive the response from the upper level cache.
-To resolve the issue, the lower level cache must treat the `FlushInv` as a `FetchInvResp`, or as a `FetchInvXResp`,
+To resolve the issue, the lower level cache must treat the `FlushLineInv` as a `FetchInvResp`, or as a `FetchInvXResp`,
 depending on the pending transactions in the lower level (since an invalidation is also a downgrade).
+
+##### handleFlushLine()
+
+Method `handleFlushLine()` handles the flush line event, which may or may not carry dirty data evicted from the 
+above level. The method first allocates an MSHR for the event, and simulates the local write back, if any, by 
+calling `doEviction()`. Note that local write backs will always be simulated on the first and only the first invocation
+of the handler, regardless of the MSHR allocation status, and will not be executed repeatedly on later retries or 
+NACKs. The function, under this context, will either do nothing, if the write back does not involve a downgrade,
+or perform local state transition and/or remove the requestor from the owner list, if 
+the event involves a downgrade (indicated by `isEvict_` flag) and/or the data it carries is dirty (indicated by 
+`dirty_` flag). Besides, on later tries of the event, `doEviction()` will effectively be a no-op, since the 
+evict flag of the event object is cleared.
+
+
