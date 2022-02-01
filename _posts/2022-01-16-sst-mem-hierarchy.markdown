@@ -2344,3 +2344,9 @@ stale. If a downgrade or invalidation is issued to the upper level in this windo
 event may not be handled properly by the upper level, and hence extra steps need to be taken, in the lower level
 cache, to properly identify the role that a flush request plays. 
 
+There are two scenarios where the race condition could occur and disrupt normal event processing.
+First, if the upper level cache issues a regular flush, downgrading its exclusive block into `S_B`
+state block, followed by the lower level cache issuing a downgrade, then the downgrade will never be 
+responded to by the upper level cache, since `S_B` state blocks just ignore downgrades.
+In this case, the flush request, if it contains data, indicating that it performs ownership transfer, should
+be considered as the equivalence of a `FetchInvXResp` with ownership transfer.
