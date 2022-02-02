@@ -2547,8 +2547,8 @@ The `GETx` request will then be retried on an non-existing block, which incurs u
 data.
 
 If, however, that the `ForceInv` does not race with `GETx` request, then the only possibility is that it raced with
-a `FlushLine` or `FlushLineInv`. In either case, the `ForceInv` can be ordered before the flush, by calling
-`allocateMSHR()` with `pos` being zero.
+a `FlushLine`, `FlushLineInv`, or eviction. In either case, the `ForceInv` can be ordered before the flush
+or eviction, by calling `allocateMSHR()` with `pos` being zero.
 
 Transient and stable `I` state blocks do not response to the `ForceInv`, and in the case of `I_B`, it simply transits
 to `I`.
@@ -2582,4 +2582,19 @@ If the block has neither sharer nor owner, then the `ForceInv` completes immedia
 `sendResponseDown()` and `cleanUpAfterRequest()`, and transiting the state to the one in `state2`.
 Otherwise, `ForceInv` initiates an invalidation transaction, and transits the state to the one in `state1`.
 
-##### 
+##### handleFetchInv()
+
+Method `handleFetchInv()` handles `FetchInv`, which is the equivalence of `handleForceInv`, except that 
+dirty data will be sent down, and exclusive states will also indicate a downgrade in the `FetchResp` response message.
+This method is almost identical to `handleForceInv()`, with the following exceptions:
+
+1. If the state is `S_Inv`, indicating either a `FlushLineInv` or eviction, then the `FetchInv` is inserted into 
+position one, rather than zero, i.e., the `FetchInv` is ordered after the concurrent operation, for some reason.
+In this case, the lower level cache that issued the `FetchInv` should treat the `PutS` or `FlushLineInv` event
+as the response to `FetchInv`.
+
+2. If the state is `E_Inv`, indicating either a `FlushLineInv` or eviction, but never `GETx` since `GETx` will not
+transit into this state (`GETX` will eagerly mark the block in all levels that process this request as dirty).
+
+I do not know why these two cases are treated differently from those in `handleFetchInv()`, although correctness
+seems to be preserved.
