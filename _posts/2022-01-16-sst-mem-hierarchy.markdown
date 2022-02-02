@@ -2369,7 +2369,17 @@ or perform local state transition and/or remove the requestor from the owner lis
 the event involves a downgrade (indicated by `isEvict_` flag) and/or the data it carries is dirty (indicated by 
 `dirty_` flag). Besides, on later tries of the event, `doEviction()` will effectively be a no-op, since the 
 evict flag of the event object is cleared.
+If the flush is equivalent to a downgrade, then local variable `ack` will be set to `true`.
 
 Note that, if a downgrade happens, then after `doEviction()`, the local coherence state is temporarily 
 inconsistent, because the requestor has been removed as an owner of the address, but it has not been added
 as a sharer. In this case, calling `hasOwner()` on the block will return `false`.
+
+The method then performs state transition and/or coherence actions with a switch block.
+For `I` and `S` states, the flush will not incur any local action, and the switch is essentially a no-op.
+For `E` and `M` states, if MSHR is allocated successfully, then `downgradeOwner()` is called to issue a downgrade
+to the upper level, and the request is stalled in the MSHR until downgrade succeeds by changing the 
+status to `Stall`. The state of the block also transits to the corresponding `_InvX` version to indicate that
+a downgrade is going on.
+
+
