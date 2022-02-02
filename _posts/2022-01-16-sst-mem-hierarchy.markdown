@@ -2371,9 +2371,8 @@ the event involves a downgrade (indicated by `isEvict_` flag) and/or the data it
 evict flag of the event object is cleared.
 If the flush is equivalent to a downgrade, then local variable `ack` will be set to `true`.
 
-Note that, if a downgrade happens, then after `doEviction()`, the local coherence state is temporarily 
-inconsistent, because the requestor has been removed as an owner of the address, but it has not been added
-as a sharer. In this case, calling `hasOwner()` on the block will return `false`.
+Note that, if a downgrade happens, then after `doEviction()`, the upper level cache will be added as a sharer,
+and calling `hasOwner()` on the block will return `false`. 
 
 The method then performs state transition and/or coherence actions with a switch block.
 For `I` and `S` states, the flush will not incur any local action, and the switch is essentially a no-op.
@@ -2419,3 +2418,16 @@ This method is the same as the one in the L1, which performs state transition fr
 `I_B` to `I`.
 It also propagates the response events up by calling `sendResponseUp()`.
 The flush line event is removed from the MSHR, and the next entry is retried, by calling `cleanUpAfterResponse()`.
+
+##### handleFlushLineInv(), Request Path
+
+Request `FlushLineInv` performs an unsolicited eviction of a block, if it exists in the cache, and, as 
+discussed earlier, this request may also race with an going downgrade or invalidation.
+At the beginning of `handleFlushLineInv()`, the request is inserted into the MSHR.
+If the event is an eviction (which is set as long as the upper level cache had contained the address), 
+then the ACK counter of the requested address is checked to see if there is any outstanding invalidation or 
+downgrade response to be expected.
+If true, then the response is removed from `responses`, and the ACK counter is decremented, as the flush inv event 
+counts as both downgrade and invalidation.
+Note that this is universally handled for all cases, although in some cases, there will not be any response to
+expect, in which case what is described above will not have any effect except `doEviction()`.
