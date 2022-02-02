@@ -2476,13 +2476,23 @@ it is processed, and does not require an MSHR.
 Method `handleInv()` is different from the one in the L1 cache, mainly because of the needs to recursively invalidate
 upper level cache's copies. This method only handles shared, non-exclusive states.
 The order between the event and a concurrent, ongoing event depends on the exact operation. The general rule is that,
-if the concurrent operation also involves invalidating sharers, then the `Inv` event is ordered after it, since
+if the concurrent operation also involves invalidating sharers, then the `Inv` event is ordered after the
+invalidation, but before the event that initiated it, since
 otherwise there will be two concurrent invalidation transactions.
 In the rest of the cases, the `Inv` is ordered before the current event, and will initiate an invalidation transaction,
 if one is needed.
 
 The method uses three variables to control the execution flow. Local variable `handle` is a flag to indicate whether
-invalidations are issued in the current cycle, or invalidation should be postponed or not issued. This flag essentially
-orders the event before concurrent events, if it is set `true`, and after if set to `false`.
+invalidations are issued in the current cycle, or invalidation should be postponed or not issued. 
 Local variable `state1` and `state2` are the two states to transit to, respectively, for the case where invalidation
 should be issued, and the case where invalidation is not needed.
+
+The method begins with a switch block. 
+State `S`, `S_B` and `SM` blocks are essentially still in `S` state, and there is no ongoing invalidation
+transaction. The `Inv` request can hence be ordered before the concurrent flush line or upgrade.
+If invalidations are needed (which is checked after the switch block, for code simplicity), then they will 
+transit to `S_Inv`, `SB_Inv`, and `SM_Inv`, respectively.
+Otherwise, the state will be `I`, `I`, and `IM`, respectively (note that `S_B` can also transit to `I_B`, which
+does not affect correctness).
+Flag `handle` is also set to `true`, indicating that the event is potentially ordered before the concurrent event.
+
