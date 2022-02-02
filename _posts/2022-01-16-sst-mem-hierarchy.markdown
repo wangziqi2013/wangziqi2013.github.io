@@ -2533,3 +2533,19 @@ state directly transits to `I` (`state2`).
 State `S_Inv` and `E_Inv` blocks are not handled, and the method just allocates an MSHR in the front entry
 of the register, such that when the ongoing invalidation transaction completes, the `ForceInv` can be retried.
 
+State `M_Inv`, `E_InvX`, and `M_InvX` should be handled more carefully. The method first check
+whether these states are caused by a concurrent `GETx` event that only performs local operations involving
+the current cache and its upper level caches, without forwarding the request to the lower level, 
+namely, one cache requests to read or write a block that is cached in exclusive state in another cache. 
+If true, then the `ForceInv` must be ordered after this request, by calling `allocateMSHR()` with `pos`
+being one.
+The reason for this arrangement is that, image if the `ForceInv` is inserted into the front entry, then after the
+ongoing invalidation or downgrade transaction completes, the `ForceInv` will be ordered before the `GETx` request,
+sets the state to `I`, and itself completes. 
+The `GETx` request will then be retried on an non-existing block, which incurs undefined behavior, because the 
+`GETx` in this case does not expect a response from the lower level that can further transit `I` into a meaningful
+data.
+
+If, however, that the `ForceInv` does not race with `GETx` request, then the only possibility is that it raced with
+a `FlushLine` or `FlushLineInv`. In either case, the `ForceInv` can be ordered before the flush, by calling
+`allocateMSHR()` with `pos` being zero.
