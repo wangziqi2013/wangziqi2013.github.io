@@ -2514,3 +2514,14 @@ Otherwise, if there is no sharer to invalidate (`invalidateAll()` returns `false
 directly should also work), then the state transits to the one in `state2`, and the `Inv` completes by
 calling `sendResponseDown()` to send a `AckInv` to the lower level, plus cleaning up the MSHR entry, if any,
 and schedule the next entry with `cleanUpAfterRequest()`.
+
+##### handleForceInv()
+
+Method `handleForceInv()` handles forced invalidation, in which case the contents of dirty blocks are also lost.
+This method may be called on blocks with any state except `SB_Inv` (because `SB_Inv` can only be caused by
+external events, which will not race with each other), and thus handles significantly more cases 
+than the previous ones.
+The logic of the function, however, is similar to the one in `handleInv()`, due to the handling of concurrent 
+invalidations.
+
+
