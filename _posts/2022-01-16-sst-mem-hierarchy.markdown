@@ -2549,3 +2549,19 @@ data.
 If, however, that the `ForceInv` does not race with `GETx` request, then the only possibility is that it raced with
 a `FlushLine` or `FlushLineInv`. In either case, the `ForceInv` can be ordered before the flush, by calling
 `allocateMSHR()` with `pos` being zero.
+
+Transient and stable `I` state blocks do not response to the `ForceInv`, and in the case of `I_B`, it simply transits
+to `I`.
+
+Another piece of complication comes from state `SM_Inv`, which is entered when one of the upper level caches 
+issue a `GETX`, hitting the `S` state line at the current level, which incurs two concurrent transactions: 
+(1) Invalidation of other sharers; and (2) Upgrade from `S` to `M` from the lower level.
+The `ForceInv` cannot be simply ordered before (2) and after (1), since (1) and (2) may complete in any order, and 
+additionally, even if (1) completes first, there would potentially still be a sharer of the block, which is the 
+issuer of the `GETX`.
+To deal with this complication, the method first inserts `ForceInv` as the front entry of the MSHR register by
+calling `allocateMSHR()` with `pos` being zero. Then, the method potentially issues one more invalidation
+to the issuer of the `GETX` (obtained via `getSrc()` on the MSHR front entry), by calling `invalidateSharer()`
+with `ForceInv` as the custom command (this helper method will not issue the invalidation if the issuer is not
+a sharer, which could happen if the upper level cache does not have a shared copy when issuing `GETX`).
+
