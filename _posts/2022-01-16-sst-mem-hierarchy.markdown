@@ -2457,11 +2457,27 @@ which has already been discussed above.
 
 Non-L1 cache handles external downgrades and invalidations differently from the L1 cache, mostly because of the 
 need to recursively downgrade or invalidate the upper level copies, and to deal with the contention between the
-external requests and unsolicited evictions or flushes from the upper level. 
+external requests as well as unsolicited evictions or flushes from the upper level. 
 
 ##### handleFetch()
 
-Method `handleFetch` is identical to the one in the L1 cache. It only works on shared, non-exclusive copies of the
+Method `handleFetch()` is almost identical to the one in the L1 cache. It only works on shared, non-exclusive 
+copies of the
 block, and it sends the contents of the block in a `FetchResp` event, which always contains clean data (i.e.,
 eviction flag is set, but dirty flag is clear), by calling `sendResponseDown()`. 
-The method only handles transient and stable versions of `I` and `S`, and they will not transit
+The method only handles transient and stable versions of `I` and `S`, and the state will not change.
+No response will be sent, if the state is transient or stable `I`.
+
+Although the method calls `cleanUpEvent()` at the very end, the event is always handled in the same cycle when 
+it is processed, and does not require an MSHR.
+
+##### handleInv()
+
+Method `handleInv()` is different from the one in the L1 cache, mainly because of the needs to recursively invalidate
+upper level cache's copies. This method only handles shared, non-exclusive states.
+The order between the event and a concurrent, ongoing event depends on the exact operation. The general rule is that,
+if the concurrent operation also involves invalidating sharers, then the `Inv` event is ordered after it, since
+otherwise there will be two concurrent invalidation transactions.
+In the rest of the cases, the `Inv` is ordered before the current event, and will initiate an invalidation transaction,
+if one is needed.
+
