@@ -2429,7 +2429,9 @@ then the ACK counter of the requested address is checked to see if there is any 
 downgrade response to be expected.
 If true, then the response is removed from `responses`, and the ACK counter is decremented, as the flush inv event 
 counts as both downgrade and invalidation.
-Note that this is universally handled for all cases, although in some cases, there will not be any response to
+Note that this is universally handled for all cases, and only for the first attempt of the event even if it 
+is NACK'ed due to MSHR allocation failure.
+Though, in some cases, there will not be any response to
 expect, in which case what is described above will not have any effect except `doEviction()`.
 
 The method then performs state transition and coherence actions with a switch block.
@@ -2439,4 +2441,8 @@ of the blocks from the upper level, and if at least one invalidation is issued (
 then the state transits to the corresponding transient state, and local variable `status` is set to `Stall`,
 indicating that the request should not be further propagated until the invalidation transaction completes. 
 
+On the other hand, `_Inv` and `_InvX` state blocks will first check `done` flag, which indicates whether there
+are still pending responses to be expected. If `done` is `true`, then these blocks will transit back to the 
+corresponding state without `_Inv` or `_InvX`, and `retry()` will be called to retry the event at the 
+head of the MSHR register that initiated the downgrade or invalidation transactions.
 
