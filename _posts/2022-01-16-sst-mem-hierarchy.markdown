@@ -2524,4 +2524,12 @@ than the previous ones.
 The logic of the function, however, is similar to the one in `handleInv()`, due to the handling of concurrent 
 invalidations.
 
+The method also uses flag `handle`, `state1` and `state2` to control the execution flow after the 
+switch block. 
+In the switch block, `ForceInv` on block with state `S`, `E`, `M`, `SM`, and `S_B` can be handled immediately.
+If invalidation is needed, then the state transits to the corresponding `_Inv` version (`state1`). Otherwise, the 
+state directly transits to `I` (`state2`).
+
+State `S_Inv` and `E_Inv` blocks are not handled, and the method just allocates an MSHR in the front entry
+of the register, such that when the ongoing invalidation transaction completes, the `ForceInv` can be retried.
 
