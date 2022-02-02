@@ -2401,7 +2401,7 @@ downgrade transaction.
 For all other transient states, no race condition has occurred, and the flush is ordered after all existing 
 requests by the MSHR.
 
-After the switch statement, the method checks the current status. If it is `OK`, indicating that the current
+After the switch statement, the method checks the local variable `status`. If it is `OK`, indicating that the current
 request is in the first entry of the MSHR register, and there is no pending response, then the flush
 operation is performed by forwarding the request to the lower level, via the helper method `forwardFlush()`.
 Flag `downgrade` is set, if the block state indicates exclusive ownership. 
@@ -2431,3 +2431,12 @@ If true, then the response is removed from `responses`, and the ACK counter is d
 counts as both downgrade and invalidation.
 Note that this is universally handled for all cases, although in some cases, there will not be any response to
 expect, in which case what is described above will not have any effect except `doEviction()`.
+
+The method then performs state transition and coherence actions with a switch block.
+`I` state blocks (i.e., not found) do not need any action nor transition.
+For stable state blocks, if MSHR allocation succeeds, then `invalidateAll()` is called to invalidate all copies
+of the blocks from the upper level, and if at least one invalidation is issued (by checking the return value), 
+then the state transits to the corresponding transient state, and local variable `status` is set to `Stall`,
+indicating that the request should not be further propagated until the invalidation transaction completes. 
+
+
