@@ -2504,3 +2504,13 @@ event that caused the invalidation.
 
 In the case of transient and stable `I` states, the `Inv` will be ignored, and `I_B` will just directly transit
 to `I`.
+
+After the switch block, `handle` is checked. If `handle` is `true`, meaning that invalidations should be issued at
+the current cycle, then the method further checks whether the block has any upper level sharer. If true,
+then an MSHR entry is allocated at the front of the register.
+If the allocation succeeds, then `invalidateAll()` is called to send invalidations to all upper level
+sharers, and state transits to the one stored in `state1`.
+Otherwise, if there is no sharer to invalidate (`invalidateAll()` returns `false`, but checking the line's sharer
+directly should also work), then the state transits to the one in `state2`, and the `Inv` completes by
+calling `sendResponseDown()` to send a `AckInv` to the lower level, plus cleaning up the MSHR entry, if any,
+and schedule the next entry with `cleanUpAfterRequest()`.
