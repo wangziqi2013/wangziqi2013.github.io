@@ -2572,4 +2572,7 @@ When the upgrade completes, method `handleGetXResp()` will transit the state to 
 `GETX` event again (since the `ForceInv` entry has been removed from the MSHR register), resulting in the 
 correct behavior.
 
-
+On the other hand, if the upgrade completes first, then `handleGetXResp()` will transit the state to `M_Inv`,
+and retry `ForceInv`, which will just keep waiting (it is already in the MSHR, so it will not be inserted twice).
+When the invalidations arrive, the `handlerAckInv()` handler further transits the state to `M`, and then
+retry the `ForceInv`. In this case, the event is handled immediately, leaving the state to `I`.
