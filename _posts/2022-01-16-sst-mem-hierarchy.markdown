@@ -2598,3 +2598,11 @@ transit into this state (`GETX` will eagerly mark the block in all levels that p
 
 I do not know why these two cases are treated differently from those in `handleFetchInv()`, although correctness
 seems to be preserved.
+
+##### handleFetchInvX()
+
+Method `handleFetchInvX()` handles downgrade, and hence only operates on exclusive states. 
+If the state is `E` or `M`, and that there is an upper level owner, then the method recursively issues a
+downgrade by calling `downgradeOwner()`, allocates an MSHR, and transits the state to the `_InvX` version.
+Otherwise, the event is completed immediately by calling `sendResponseDown()` and `cleanUpAfterRequest()`,
+and transiting the state to `S`.
