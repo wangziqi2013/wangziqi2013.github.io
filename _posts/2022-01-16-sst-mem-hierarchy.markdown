@@ -2496,3 +2496,11 @@ Otherwise, the state will be `I`, `I`, and `IM`, respectively (note that `S_B` c
 does not affect correctness).
 Flag `handle` is also set to `true`, indicating that the event is potentially ordered before the concurrent event.
 
+In the case of `S_Inv` and `SM_Inv`, since an invalidation is already going on, the `Inv` can only be ordered
+after the concurrent event. In this case, an MSHR entry is allocated at the front entry by calling `allocateMSHR()`
+with `pos` being zero. After the current invalidation completes, the `retry()` method called in `handleAckInv()`
+will then schedule the current `Inv` for execution, meaning that the `Inv` is still ordered before the 
+event that caused the invalidation.
+
+In the case of transient and stable `I` states, the `Inv` will be ignored, and `I_B` will just directly transit
+to `I`.
