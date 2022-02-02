@@ -2358,7 +2358,7 @@ receive the response from the upper level cache.
 To resolve the issue, the lower level cache must treat the `FlushLineInv` as a `FetchInvResp`, or as a `FetchInvXResp`,
 depending on the pending transactions in the lower level (since an invalidation is also a downgrade).
 
-##### handleFlushLine()
+##### handleFlushLine(), Request Path
 
 Method `handleFlushLine()` handles the flush line event, which may or may not carry dirty data evicted from the 
 above level. The method first allocates an MSHR for the event, and simulates the local write back, if any, by 
@@ -2412,3 +2412,10 @@ complete, or will not retry this request.
 The flush request is eventually completed and removed from the MSHR, when the flush response is received
 from the lower level.
 
+##### handleFlushLine(), Response Path
+
+The response event to flush line event is `FlushLineResp`, and it is handled by `handleFlushLineResp()`.
+This method is the same as the one in the L1, which performs state transition from `S_B` to `S`, or from
+`I_B` to `I`.
+It also propagates the response events up by calling `sendResponseUp()`.
+The flush line event is removed from the MSHR, and the next entry is retried, by calling `cleanUpAfterResponse()`.
