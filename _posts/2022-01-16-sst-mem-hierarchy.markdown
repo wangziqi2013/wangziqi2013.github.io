@@ -2576,3 +2576,10 @@ On the other hand, if the upgrade completes first, then `handleGetXResp()` will 
 and retry `ForceInv`, which will just keep waiting (it is already in the MSHR, so it will not be inserted twice).
 When the invalidations arrive, the `handlerAckInv()` handler further transits the state to `M`, and then
 retry the `ForceInv`. In this case, the event is handled immediately, leaving the state to `I`.
+
+The rest of the method is similar to the one in `handleInv()`. The flag `handle` is checked for immediate processing.
+If the block has neither sharer nor owner, then the `ForceInv` completes immediately by calling 
+`sendResponseDown()` and `cleanUpAfterRequest()`, and transiting the state to the one in `state2`.
+Otherwise, `ForceInv` initiates an invalidation transaction, and transits the state to the one in `state1`.
+
+##### 
