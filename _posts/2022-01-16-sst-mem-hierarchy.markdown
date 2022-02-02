@@ -2382,4 +2382,11 @@ to the upper level, and the request is stalled in the MSHR until downgrade succe
 status to `Stall`. The state of the block also transits to the corresponding `_InvX` version to indicate that
 a downgrade is going on.
 
-
+The race condition discussed above happens, if blocks are already in `E_InvX` and `M_InvX` states, indicating 
+that when the flush line request arrives, there is already a downgrade transaction on the address.
+In this case, the `ack` flag is checked. If `ack` is `true`, meaning that the ownership transferred has occurred
+with the flush line request, then it should be regarded as a valid response to the downgrade transaction.
+The pending response is hence removed from `responses`, and the ACK counter is decremented by calling 
+`decrementAcksNeeded`. Besides, the block state changes back to the corresponding stable state, indicating the
+completion of the downgrade.
+The original request that caused the downgrade is retried by calling `retry()`.
