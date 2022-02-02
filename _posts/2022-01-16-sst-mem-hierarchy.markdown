@@ -2392,6 +2392,13 @@ completion of the downgrade.
 The original request that caused the downgrade is retried by calling `retry()` as its downgrade transaction has 
 completed.
 
+The race condition may also occur if the blocks are in `E_Inv` and `M_Inv` state, and if the head 
+entry of the MSHR is a `FetchInvX` request. (Note: I have no idea why this race will even happen - it does not
+seem obvious to me why there would be an external downgrade at MSHR head, and the state indicates invalidation).
+In this case, the expected response is also removed, and the downgrade transaction is retried.
+Note that state transition is not performed in these two cases, which are expected to be performed by the
+downgrade transaction. 
+
 For all other transient states, no race condition has occurred, and the flush is ordered after all existing 
 requests by the MSHR.
 
