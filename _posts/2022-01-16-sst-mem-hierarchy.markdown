@@ -2481,3 +2481,8 @@ otherwise there will be two concurrent invalidation transactions.
 In the rest of the cases, the `Inv` is ordered before the current event, and will initiate an invalidation transaction,
 if one is needed.
 
+The method uses three variables to control the execution flow. Local variable `handle` is a flag to indicate whether
+invalidations are issued in the current cycle, or invalidation should be postponed or not issued. This flag essentially
+orders the event before concurrent events, if it is set `true`, and after if set to `false`.
+Local variable `state1` and `state2` are the two states to transit to, respectively, for the case where invalidation
+should be issued, and the case where invalidation is not needed.
