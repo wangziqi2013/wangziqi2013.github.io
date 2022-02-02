@@ -1702,7 +1702,7 @@ response is still not received.
 3. The related path in the response method is the switch case with state `I_B`. On receiving a response, `I_B` blocks
 will transit to `I` state.
 
-#### External Requests
+#### External Downgrades and Invalidations
 
 The L1 cache may also receive external requests from the below cache, i.e., fetches and invalidations.
 These requests are generated as part of the coherence protocol for maintaining the one single copy semantics
@@ -2419,7 +2419,7 @@ This method is the same as the one in the L1, which performs state transition fr
 It also propagates the response events up by calling `sendResponseUp()`.
 The flush line event is removed from the MSHR, and the next entry is retried, by calling `cleanUpAfterResponse()`.
 
-##### handleFlushLineInv(), Request Path
+##### handleFlushLineInv(), Request and Response Path
 
 Request `FlushLineInv` performs an unsolicited eviction of a block, if it exists in the cache, and, as 
 discussed earlier, this request may also race with an going downgrade or invalidation.
@@ -2449,3 +2449,19 @@ head of the MSHR register that initiated the downgrade or invalidation transacti
 After the switch block, if local variable `status` is `OK`, indicating that the request is at the head of the MSHR,
 and that no responses is being expected for the request itself, then the `FlushLineInv` is propagated to the 
 lower level by calling `forwardFlush()`, and the state of the block transits to `I_B`.
+
+The response event of `FlushLineInv` is `FlushLineResp`. The event is handled by method `handleFlushLineResp()`,
+which has already been discussed above.
+
+#### External Downgrades and Invalidations
+
+Non-L1 cache handles external downgrades and invalidations differently from the L1 cache, mostly because of the 
+need to recursively downgrade or invalidate the upper level copies, and to deal with the contention between the
+external requests and unsolicited evictions or flushes from the upper level. 
+
+##### handleFetch()
+
+Method `handleFetch` is identical to the one in the L1 cache. It only works on shared, non-exclusive copies of the
+block, and it sends the contents of the block in a `FetchResp` event, which always contains clean data (i.e.,
+eviction flag is set, but dirty flag is clear), by calling `sendResponseDown()`. 
+The method only handles transient and stable versions of `I` and `S`, and they will not transit
