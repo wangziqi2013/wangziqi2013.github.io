@@ -2606,3 +2606,15 @@ If the state is `E` or `M`, and that there is an upper level owner, then the met
 downgrade by calling `downgradeOwner()`, allocates an MSHR, and transits the state to the `_InvX` version.
 Otherwise, the event is completed immediately by calling `sendResponseDown()` and `cleanUpAfterRequest()`,
 and transiting the state to `S`.
+
+For `_Inv` and `_InvX` versions of `E` and `M`, the method handle them similarly as in `handleForceInv()`, namely,
+the downgrade is ordered after an ongoing `GETx` transaction, if the concurrent invalidation or downgrade
+is initiated by `GETx`.
+Otherwise, if the block has an owner, then an MSHR entry is allocated from the front entry, which orders the
+`FetchInvX` before the flush or eviction that caused the state, and `FetchInvX` will be retried when the
+concurrent invalidation or downgrades complete.
+
+If the current block has no owner, then no further downgrade is needed, and the stare simply transits to `S_Inv`
+(note that this case can only be reached if the states are of the `_Inv` versions, since `_InvX` suggests the
+existence of a upper level owner). The event completes immediately by calling `sendResponseDown()` and 
+`cleanUpAfterRequest()`.
