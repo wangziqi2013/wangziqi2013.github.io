@@ -2565,3 +2565,11 @@ to the issuer of the `GETX` (obtained via `getSrc()` on the MSHR front entry), b
 with `ForceInv` as the custom command (this helper method will not issue the invalidation if the issuer is not
 a sharer, which could happen if the upper level cache does not have a shared copy when issuing `GETX`).
 
+This way, when invalidation completes (including those in (1) and the one just issued), the `handlerAckInv()`
+function will transit the state to `SM`, and then retry the `ForceInv` method, which will 
+complete the `ForceInv`, and transit the state to `IM`.
+When the upgrade completes, method `handleGetXResp()` will transit the state to `M`, and retry the
+`GETX` event again (since the `ForceInv` entry has been removed from the MSHR register), resulting in the 
+correct behavior.
+
+
