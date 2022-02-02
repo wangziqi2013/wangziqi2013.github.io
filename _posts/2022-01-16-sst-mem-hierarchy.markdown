@@ -2446,3 +2446,6 @@ are still pending responses to be expected. If `done` is `true`, then these bloc
 corresponding state without `_Inv` or `_InvX`, and `retry()` will be called to retry the event at the 
 head of the MSHR register that initiated the downgrade or invalidation transactions.
 
+After the switch block, if local variable `status` is `OK`, indicating that the request is at the head of the MSHR,
+and that no responses is being expected for the request itself, then the `FlushLineInv` is propagated to the 
+lower level by calling `forwardFlush()`, and the state of the block transits to `I_B`.
