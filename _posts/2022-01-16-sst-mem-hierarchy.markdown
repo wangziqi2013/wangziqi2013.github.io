@@ -2389,4 +2389,19 @@ with the flush line request, then it should be regarded as a valid response to t
 The pending response is hence removed from `responses`, and the ACK counter is decremented by calling 
 `decrementAcksNeeded`. Besides, the block state changes back to the corresponding stable state, indicating the
 completion of the downgrade.
-The original request that caused the downgrade is retried by calling `retry()`.
+The original request that caused the downgrade is retried by calling `retry()` as its downgrade transaction has 
+completed.
+
+For all other transient states, no race condition has occurred, and the flush is ordered after all existing 
+requests by the MSHR.
+
+After the switch statement, the method checks the current status. If it is `OK`, indicating that the current
+request is in the first entry of the MSHR register, and there is no pending response, then the flush
+operation is performed by forwarding the request to the lower level, via the helper method `forwardFlush()`.
+Flag `downgrade` is set, if the block state indicates exclusive ownership. 
+The state then transits to `S_B`, and the request is marked as being in progress in the MSHR register by
+calling `setInProgress()`. Later requests that check the in progress flag will either wait for it to
+complete, or will not retry this request.
+The flush request is eventually completed and removed from the MSHR, when the flush response is received
+from the lower level.
+
