@@ -1228,12 +1228,22 @@ coherence handling as follows:
 queued in the same MSHR register (recall that MSHR registers are maintained on a per-address basis) to avoid
 race conditions. In other words, the MSHR essentially serves as a serialization point for these requests. 
 When CPU-initiated requests observe transient states, and/or outstanding requests in the MSHR register, 
-the handler will allocate an MSHR entry, and wait for the previous requests to be handled.
+the handler will allocate an MSHR entry, and wait for the preceding requests to be handled, before the
+request itself can be handled.
 
-2. When a request completes, either by itself, or by receiving the corresponding responses, it will call 
-helper functions, which check the MSHR. If there are requests waiting in the MSHR, and that the request is
-not already in progress (tracked by the MSHR entry), then the following request will be scheduled for
-retry in the next cycle. This drives forward the simulation progress, when requests are waiting in MSHR registers.
+2. Data requests that incur cache misses as well as flush requests will be handled in a non-atomic, 
+split-transaction manner. 
+In the first half (request path), the controller forwards the request to the lower level, 
+and inserts the original request into the MSHR register.
+In the second half (response path), the response is received, which is processed by the controller. 
+The corresponding request completes on receiving the response event, after which the controller retries 
+the next entry of the MSHR register by calling 
+`cleanUpAfterResponse()` (there are exceptions for this and the below clean up function; we discuss this point later).
+Similarly, when the request itself completes without needing responses, the controller will 
+call `cleanUpAfterRequest()` to retry the next entry in the MSHR register.
+This drives forward the simulation progress, when requests are waiting in MSHR registers.
+
+
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
