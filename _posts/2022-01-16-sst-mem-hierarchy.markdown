@@ -1264,6 +1264,18 @@ Meanwhile, the original request must be sitting at the front entry of the MSHR r
 when the retry happens, the original request can be found in an expected position, and then inserted into the 
 retry queue.
 
+5. If a request can be handled immediately, then it will just complete in the same cycle as it is handled,
+without involving the MSHR.
+Otherwise, the coherence controller will insert it into the MSHR, which will be handled in the future after
+all requests that precede it are drained (and as discussed earlier, the waiting request is scheduled for retry
+by one of the preceding requests).
+Insertion into MSHR takes place by calling `allocateMSHR()`, which is defined in the base class controller.
+There are three outcomes to MSHR allocation: (1) The allocation succeeds, and the entry allocated is the 
+front entry of the register. The function returns `OK`; 
+(2) The allocation succeeds, and the entry is not the front entry. The function returns `Stall`;
+(3) The allocation fails, due to the MSHR being full. The function returns `Reject`.
+
+
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
