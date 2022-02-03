@@ -1256,6 +1256,14 @@ Note that the reason some requests are already handled while not sitting at the 
 register is that some requests can "cut the line", and be inserted at the front of the MSHR. When such
 requests complete, it is necessary to check whether the next request is already in progress.
 
+4. Some requests may generate internal events (most notably, evictions and write backs, for L1, as well as 
+downgrades and invalidations, for non-L1). These internal events are handled non-atomically, meaning that they
+will be processed like a separate transaction, which, on completion, will schedule the originating request
+for retry by calling the helper function `retry()`. 
+Meanwhile, the original request must be sitting at the front entry of the MSHR register, such that
+when the retry happens, the original request can be found in an expected position, and then inserted into the 
+retry queue.
+
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
