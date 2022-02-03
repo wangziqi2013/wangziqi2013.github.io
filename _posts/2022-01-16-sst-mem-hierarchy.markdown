@@ -1230,6 +1230,11 @@ race conditions. In other words, the MSHR essentially serves as a serialization 
 When CPU-initiated requests observe transient states, and/or outstanding requests in the MSHR register, 
 the handler will allocate an MSHR entry, and wait for the previous requests to be handled.
 
+2. When a request completes, either by itself, or by receiving the corresponding responses, it will call 
+helper functions, which check the MSHR. If there are requests waiting in the MSHR, and that the request is
+not already in progress (tracked by the MSHR entry), then the following request will be scheduled for
+retry in the next cycle. This drives forward the simulation progress, when requests are waiting in MSHR registers.
+
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
