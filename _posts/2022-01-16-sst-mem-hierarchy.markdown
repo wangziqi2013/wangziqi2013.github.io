@@ -1275,6 +1275,17 @@ front entry of the register. The function returns `OK`;
 (2) The allocation succeeds, and the entry is not the front entry. The function returns `Stall`;
 (3) The allocation fails, due to the MSHR being full. The function returns `Reject`.
 
+6. The caller of `allocateMSHR()` must check the return value, and act accordingly:
+In case (1), the request must be handled immediately, which executes the first half of the split transaction. 
+The event will be removed from the cache controller's buffer when the handler returns `true`. 
+When the second half of the split completes on receiving the response event, the response event handler 
+will eventually remove the request from the MSHR.
+
+In case (2), the request must not be handled immediately, since it is not at the front entry of the MSHR.
+The caller should just return `true` to the cache controller, which indicates that the request can be removed
+from the cache controller's buffer. The request will be scheduled for retry (in fact, its first time attempt)
+when the preceding request completes.
+
 
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
