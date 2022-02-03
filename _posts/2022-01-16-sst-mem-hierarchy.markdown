@@ -1252,6 +1252,11 @@ by `cleanUpAfterRequest()` and ``cleanUpAfterResponse()``.
 Correspondingly, when a request finishes its first half execution, then the handler needs to call 
 `setInProgress()` to set the in progress flag.
 
+Note that the reason some requests are already handled while not sitting at the front entry of the MSHR
+register is that some requests can "cut the line", and be inserted at the front of the MSHR. When such
+requests complete, it is necessary to check whether the next request is already in progress.
+
+
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
