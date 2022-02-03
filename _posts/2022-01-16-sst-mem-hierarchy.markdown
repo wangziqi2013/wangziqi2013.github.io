@@ -1219,8 +1219,19 @@ This type of cache also features a simpler coherence protocol compared with the 
 and non-inclusive caches, since there is no maintenance of coherence for upper levels.
 The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L1.h/cc`.
 
+#### The General Coherence Handling Flow
+
+Before discussing different classes of coherence operations in details, we first summarize the general rule of
+coherence handling as follows:
+
+1. CPU-initiated requests are handled in a first-in-first-out manner, and requests on the same address are 
+queued in the same MSHR register (recall that MSHR registers are maintained on a per-address basis) to avoid
+race conditions. In other words, the MSHR essentially serves as a serialization point for these requests. 
+When CPU-initiated requests observe transient states, and/or outstanding requests in the MSHR register, 
+the handler will allocate an MSHR entry, and wait for the previous requests to be handled.
+
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
-CPU-initiated flush requests, and external requests (i.e., fetches and invalidations), in separate sections.
+CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
 
 #### CPU-Initiated Data Requests
