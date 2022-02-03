@@ -1243,7 +1243,14 @@ Similarly, when the request itself completes without needing responses, the cont
 call `cleanUpAfterRequest()` to retry the next entry in the MSHR register.
 This drives forward the simulation progress, when requests are waiting in MSHR registers.
 
-
+3. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
+requests complete or when a response is received and handled. 
+This indicates that the request has completed the first half of the split transaction, and is waiting for 
+the responses, and hence need not be retried on completion of the preceding request. 
+In this case, these requests will not be retried
+by `cleanUpAfterRequest()` and ``cleanUpAfterResponse()``.
+Correspondingly, when a request finishes its first half execution, then the handler needs to call 
+`setInProgress()` to set the in progress flag.
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
