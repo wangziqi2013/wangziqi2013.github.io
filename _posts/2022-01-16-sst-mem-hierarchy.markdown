@@ -1286,7 +1286,16 @@ The caller should just return `true` to the cache controller, which indicates th
 from the cache controller's buffer. The request will be scheduled for retry (in fact, its first time attempt)
 when the preceding request completes.
 
+In case (3), for L1 caches, the request must not be handled immediately, since it fails to acquire an MSHR entry.
+The caller should return `false` to to the cache controller, which indicates that the request must remain
+in the cache controller's buffer, and be retried by the cache controller in the next cycle.
+For non-L1 caches, if case (3) happens, the caller still returns `true`, and will send `NACK` to the upper
+level cache, indicating that the upper level cache is responsible for a retry in the future.
 
+7. External downgrades and invalidations can be received, and they will race with CPU-initiated requests. 
+The coherence protocol always orders external events before concurrent CPU-initiated requests, only with
+a few exceptions, such as when the cache block is locked, or (for non-L1 caches) when the external
+event will cause the second half of the split transaction to fail.
 
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
