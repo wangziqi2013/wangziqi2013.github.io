@@ -1297,6 +1297,12 @@ The coherence protocol always orders external events before concurrent CPU-initi
 a few exceptions, such as when the cache block is locked, or (for non-L1 caches) when the external
 event will cause the second half of the split transaction to fail.
 
+8. Each MSHR register has a pending retry counter, which tracks the number of queued requests 
+that will be retried in the current cycle.
+This counter is incremented when a new request is inserted into the coherence controller's retry buffer,
+and decremented when a request handler executes with `inMSHR` flag set. 
+Certain operations (most notably, evictions) require this counter to be zero in order to be able to proceed.
+
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
@@ -1362,7 +1368,8 @@ Note that this lookup operation will update replacement, as the second argument 
 The line state is stored in local variable `state`, and then a switch statement decides the next action.
 If the line is in state `S`, `E`, or `M`, indicating a cache miss, then the request is fulfilled at
 the current cycle, and the response message is sent by calling `sendResponseUp()`, followed by `cleanUpAfterRequest()`.
-Note that the line's timestamp is also updated by calling `setTimestamp()` with the return value of `sendResponseUp`.
+Note that the line's timestamp is also updated by calling `setTimestamp()` with the return value of 
+`sendResponseUp()`.
 
 The function also calls `removePendingRetry()` to decrement the MSHR register's `pendingRetries` field,
 if it is from the cache controller's retry buffer, as an 
