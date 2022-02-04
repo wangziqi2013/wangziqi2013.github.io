@@ -2780,4 +2780,11 @@ required, but the cache does not have it for now. Under these states, the cache 
 upper levels to fetch the requested block, and when data arrives, the data slot will be allocated, and states will 
 transient back to the stable state.
 
+To deal with write backs to a non-existing data block from the upper level, the cache also adds 
+transient state `SA`, `EA`, and `MA` to indicate that a write back has happened on a non-existing address,
+and that the data slot is not available. The controller in this case will allocate a data block via a
+potential eviction, and on success of the allocation, the state will transit back to the corresponding 
+stable state.
 
+To deal with flushes, the cache adds new flush transient state `E_B` and `M_B`, as the `E` and `M` state counterpart
+for the existing `S_B` and `I_B`.
