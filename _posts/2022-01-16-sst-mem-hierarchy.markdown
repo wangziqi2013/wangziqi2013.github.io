@@ -2809,6 +2809,11 @@ Otherwise, the method checks whether the event is still the front entry of the M
 Despite the fact that the event must be at the front entry of the MSHR register when it is retried or received 
 in the previous cycle, it is possible that an earlier event that was processed during the same cycle has added 
 a new entry to the front of the MSHR, which is most likely an external event.
-In this case, the current event together with the potential eviction will be ordered after the external event, and
-that is why this condition is checked.
+In this case, the current event together with the potential eviction will be ordered after the event
+with higher priority, and that is why this check is performed.
 
+If the event is confirmed to be the front entry of the MSHR register, then it calls `allocateDirLine()` to acquire
+a directory entry that can be used to resolve the miss.
+Method `allocateDirLine()` either allocates an entry successfully immediately, in which case it returns non-`NULL`,
+or an eviction must be made, in which case it returns `NULL`, plus an eviction event is scheduled on the old 
+address. The current event will just wait in the MSHR (by returning `Stall`) for the completion of the eviction.
