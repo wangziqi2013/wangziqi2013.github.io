@@ -1224,12 +1224,21 @@ The MESI L1 coherence protocol is implemented by class `MESIL1`, in file `MESI_L
 Before discussing different classes of coherence operations in details, we first summarize the general rule of
 coherence handling as follows:
 
-1. CPU-initiated requests are handled in a first-in-first-out manner, and requests on the same address are 
-queued in the same MSHR register (recall that MSHR registers are maintained on a per-address basis) to avoid
-race conditions. In other words, the MSHR essentially serves as a serialization point for these requests. 
-When CPU-initiated requests observe transient states, and/or outstanding requests in the MSHR register, 
-the handler will allocate an MSHR entry, and wait for the preceding requests to be handled, before the
-request itself can be handled.
+1. CPU-initiated requests can be served from either the receive buffer of the cache controller, or from the retry
+buffer of the coherence controller.
+Requests that cannot be handled immediately will be inserted into the MSHR, which, when certain conditions are 
+met (e.g., when the message they expect are received), can be sent to the retry buffer, and be attempted
+in the next cycle.
+The per-address MSHR register field `pendingRetries` tracks the number of retries on the address for the current 
+moment.
+
+Note that there is always a race condition between requests served from the retry buffer (i.e., from the MSHR), 
+and those that are served from the receiving buffer. In the latter case, the requests are not allocated any
+MSHR entry, and they can be considered as logically ordered before those that are currently in the MSHR, if 
+they perform operations that can be completed immediately, most likely being cache hits. 
+These race conditions are harmless, though, since cache hits do not change the tag array regarding addresses.
+Method argument `inMSHR`, which is common to most of the coherence handling methods, indicates whether the 
+request is served from MSHR, or from the receiving buffer.
 
 2. A data request can be completed in one of the three manners:
 (1) The data request can be immediately completed in the current cycle. The request may or may not have been
