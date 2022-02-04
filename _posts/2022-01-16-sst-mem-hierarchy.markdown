@@ -1237,10 +1237,20 @@ and those that are served from the receiving buffer. In the latter case, the req
 MSHR entry, and they can be considered as logically ordered before those that are currently in the MSHR, if 
 they perform operations that can be completed immediately, most likely being cache hits. 
 These race conditions are harmless, though, since cache hits do not change the tag array regarding addresses.
-Method argument `inMSHR`, which is common to most of the coherence handling methods, indicates whether the 
-request is served from MSHR, or from the receiving buffer.
 
-2. A data request can be completed in one of the three manners:
+2. Method argument `inMSHR`, which is common to most of the coherence handling methods, indicates whether the 
+request is served from MSHR, or from the receiving buffer.
+Many handlers or branches, especially those that implement operations that cannot be completed immediately, assume an 
+invariant that the `inMSHR` flag is `true` and that the event to be handled is at
+the front of the MSHR register, before any real coherence action is taken. 
+The invariant is most likely enforced by checking whether `inMSHR` is already `true`. If not, then
+an MSHR entry will be allocated by calling `allocateMSHR()`. 
+The processing will only continue, if the return value of `allocateMSHR()`
+indicates that the allocation is successful, and that the entry is at the front.
+Otherwise, the handler will just return `true`, such that it will be removed from the memory controller's buffer,
+and only be retried when it reaches the front entry of the MSHR register.
+
+3. A data request can be completed in one of the three manners:
 (1) The data request can be immediately completed in the current cycle. The request may or may not have been
 waiting in the MSHR in this case. The request will call `cleanUpAfterRequest()` to attempt to 
 schedule the next request in the MSHR for retry. This case usually happens if there is a cache hit.
@@ -1258,7 +1268,7 @@ state transition and post-response processing to the request handler.
 Note that this is merely a programming artifact to simplify coding, and it does not reflect the way that
 real hardware handles coherence requests.
 
-3. In particular, data requests that miss the current level will be inserted into the MSHR, and then 
+4. In particular, data requests that miss the current level will be inserted into the MSHR, and then 
 handled in a non-atomic, split-transaction manner when its reaches the front. 
 In the first half (request path), if eviction is needed, the controller will insert an eviction entry
 in the old address's MSHR register. When that eviction request reaches the front of the MSHR register, and is 
@@ -1270,7 +1280,7 @@ In the second half (response path), the response is received, which is processed
 The response handler transits the state back to a stable state, and the request is completed 
 in the response handler by calling `cleanUpAfterResponse()`.
 
-4. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
+5. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
 requests complete or when a response is received and handled. 
 This indicates that the request has completed the first half of the split transaction, and is waiting for 
 the responses, and hence need not be retried on completion of the preceding request. 
@@ -1283,7 +1293,7 @@ Note that the reason some requests are already handled while not sitting at the 
 register is that some requests can "cut the line", and be inserted at the front of the MSHR. When such
 requests complete, it is necessary to check whether the next request is already in progress.
 
-5. If a request can be handled immediately, then it will just complete in the same cycle as it is handled,
+6. If a request can be handled immediately, then it will just complete in the same cycle as it is handled,
 without involving the MSHR.
 Otherwise, the coherence controller will insert it into the MSHR, which will be handled in the future after
 all requests that precede it are drained (and as discussed earlier, the waiting request is scheduled for retry
@@ -1295,7 +1305,7 @@ front entry of the register. The function returns `OK`;
 (2) The allocation succeeds, and the entry is not the front entry. The function returns `Stall`;
 (3) The allocation fails, due to the MSHR being full. The function returns `Reject`.
 
-6. The caller of `allocateMSHR()` must check the return value, and act accordingly:
+7. The caller of `allocateMSHR()` must check the return value, and act accordingly:
 In case (1), the request must be handled immediately, which executes the first half of the split transaction. 
 The event will be removed from the cache controller's buffer when the handler returns `true`. 
 When the second half of the split completes on receiving the response event, the response event handler 
@@ -1312,12 +1322,12 @@ in the cache controller's buffer, and be retried by the cache controller in the 
 For non-L1 caches, if case (3) happens, the caller still returns `true`, and will send `NACK` to the upper
 level cache, indicating that the upper level cache is responsible for a retry in the future.
 
-7. External downgrades and invalidations can be received, and they will race with CPU-initiated requests. 
+8. External downgrades and invalidations can be received, and they will race with CPU-initiated requests. 
 The coherence protocol always orders external events before concurrent CPU-initiated requests, only with
 a few exceptions, such as when the cache block is locked, or (for non-L1 caches) when the external
 event will cause the second half of the split transaction to fail.
 
-8. Each MSHR register has a pending retry counter, which tracks the number of queued requests 
+9. Each MSHR register has a pending retry counter, which tracks the number of queued requests 
 that will be retried in the current cycle.
 This counter is incremented when a new request is inserted into the coherence controller's retry buffer,
 and decremented when a request handler executes with `inMSHR` flag set. 
