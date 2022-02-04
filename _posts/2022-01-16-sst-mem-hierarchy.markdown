@@ -2736,4 +2736,8 @@ situation in the upper level caches.
 Meanwhile, `class DataLine` just contains a data vector, and a pointer to the corresponding directory
 in the directory array.
 
+Note that in the case of non-inclusive caches, the tag array can indicate that a block is in one of the valid states,
+with the actual block missing. Here, these states are more of a notion of ownership (`E`, `M` indicate ownership)
+and dirtiness (`M` indicates dirty), rather than a notion of the data block.
+
 
