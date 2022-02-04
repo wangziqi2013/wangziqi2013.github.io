@@ -2945,4 +2945,21 @@ does not check `inMSHR` flag, and does not check for race conditions.
 The reason is that the data eviction path is not called on access misses,
 but only on upper level cache write backs, i.e., in methods `handlePutS()`, `handlePutE()`, and `handlePutM()`. 
 
-3. In the second half of `handleNULLCMD()`, 
+3. In the second half of `handleNULLCMD()`, on a successful eviction, extra state transition must also be
+performed. This is because when a write back is received from the upper level, if the data block does not
+exist in the current level, then it must be allocated first. This will cause the state to transit into 
+`SA`, `MA` or `EA`, with the `A` indicating that a write back is pending for the eviction.
+Therefore, after the eviction is performed, the `A` states will just transit back to their corresponding 
+stable states to indicate that the write back has been completed.
+
+Note that `IA` is a special state that cannot be caused by write backs, but is handled regardless.
+The reason that we need an `IA` state is due to prefetching: On a prefetch, two allocations, inetead of one,
+are needed, one for the directory entry, and the other for the data entry. 
+This must be implemented explicitly, because by default, the cache will only allocate a directory entry,
+and act opportunistically on whether data is inserted when it is read from the lower level.
+Between these two allocations, we need an extra state, `IA`, to indicate that it is in the middle of a transaction
+where the data entry still has not been allocated.
+On completing the data array allocation, `handleNULLCMD()` will then transit the `IA` block back to `I`, and 
+retry the prefetch access, which will still miss the cache. Since both directory and data entries are guaranteed to
+exist, however, when the response of the prefetch access is received, the data from the lower level will 
+always be inserted into the data array, achieving the effect of prefetching for a non-inclusive cache.
