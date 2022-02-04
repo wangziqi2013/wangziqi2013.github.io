@@ -1235,21 +1235,31 @@ request itself can be handled.
 (1) The data request can be immediately completed in the current cycle. The request may or may not have been
 waiting in the MSHR in this case. The request will call `cleanUpAfterRequest()` to attempt to 
 schedule the next request in the MSHR for retry. This case usually happens if there is a cache hit.
+
 (2) The data request cannot be immediately completed in the current cycle, due to conditions such as cache misses
 or downgrades, invalidations, etc., and the request is inserted into the MSHR, if not already. 
-In the meantime, the request will initiate intrenal requests to eliminate the condition that blocks it from being
+In the meantime, the request will initiate internal requests to eliminate the condition that blocks it from being
 completed. When the responses to the internal requests are received, the request completes automatically, and the
 response handler calls `cleanUpAfterResponse()` to attempt to schedule the next request in the MSHR for retry.
-(3) Same as (2), except that after the responses have been handled, the same request is further retried by 
-calling `retry()`. Then it will either be case (1), or case (2).
 
-In particular, data requests that miss the current level will be handled in a non-atomic, 
-split-transaction manner. 
-In the first half (request path), the controller forwards the request to the lower level, 
-and inserts the original request into the MSHR register. Evictions are also 
-potentially scheduled on the evicted address's MSHR.
-In the second half (response path), the response is received, which is processed by the controller. 
-The corresponding request is completed on receiving the response event, with its MSHR entry being removed.
+(3) Same as (2), except that after the responses have been handled, the same request is retried by 
+calling `retry()`. Then it will either be case (1), or case (2). This case is common if 
+the response handler is unsure of the type of the request it is dealing with, and would just like to delegate
+state transition and post-response processing to the request handler.
+Note that this is merely a programming artifact to simplify coding, and it does not reflect the way that
+real hardware handles coherence requests.
+
+In particular, data requests that miss the current level will be inserted into the MSHR, and then 
+handled in a non-atomic, split-transaction manner when its reaches the front. 
+In the first half (request path), if eviction is needed, the controller will insert an eviction entry
+in the old address's MSHR register. When that eviction request reaches the front of the MSHR register, and is 
+successfully handled, the original data request is retried by calling `retry()`.
+If the miss persists on the retry, or, if eviction is not needed, the data request handler will 
+forward the data request to the lower level.
+The coherence state of the block will also transit to a transient state to indicate a pending transaction.
+In the second half (response path), the response is received, which is processed by the response handler. 
+The response handler transits the state back to a stable state, and the request is completed 
+in the response handler by calling `cleanUpAfterResponse()`.
 
 3. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
 requests complete or when a response is received and handled. 
