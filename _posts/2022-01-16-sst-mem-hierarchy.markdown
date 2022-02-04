@@ -1231,17 +1231,25 @@ When CPU-initiated requests observe transient states, and/or outstanding request
 the handler will allocate an MSHR entry, and wait for the preceding requests to be handled, before the
 request itself can be handled.
 
-2. Data requests that incur cache misses as well as flush requests will be handled in a non-atomic, 
+2. A data request can be completed in one of the three manners:
+(1) The data request can be immediately completed in the current cycle. The request may or may not have been
+waiting in the MSHR in this case. The request will call `cleanUpAfterRequest()` to attempt to 
+schedule the next request in the MSHR for retry. This case usually happens if there is a cache hit.
+(2) The data request cannot be immediately completed in the current cycle, due to conditions such as cache misses
+or downgrades, invalidations, etc., and the request is inserted into the MSHR, if not already. 
+In the meantime, the request will initiate intrenal requests to eliminate the condition that blocks it from being
+completed. When the responses to the internal requests are received, the request completes automatically, and the
+response handler calls `cleanUpAfterResponse()` to attempt to schedule the next request in the MSHR for retry.
+(3) Same as (2), except that after the responses have been handled, the same request is further retried by 
+calling `retry()`. Then it will either be case (1), or case (2).
+
+In particular, data requests that miss the current level will be handled in a non-atomic, 
 split-transaction manner. 
 In the first half (request path), the controller forwards the request to the lower level, 
-and inserts the original request into the MSHR register.
+and inserts the original request into the MSHR register. Evictions are also 
+potentially scheduled on the evicted address's MSHR.
 In the second half (response path), the response is received, which is processed by the controller. 
-The corresponding request completes on receiving the response event, after which the controller retries 
-the next entry of the MSHR register by calling 
-`cleanUpAfterResponse()` (there are exceptions for this and the below clean up function; we discuss this point later).
-Similarly, when the request itself completes without needing responses, the controller will 
-call `cleanUpAfterRequest()` to retry the next entry in the MSHR register.
-This drives forward the simulation progress, when requests are waiting in MSHR registers.
+The corresponding request is completed on receiving the response event, with its MSHR entry being removed.
 
 3. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
 requests complete or when a response is received and handled. 
@@ -1268,7 +1276,8 @@ retry queue.
 without involving the MSHR.
 Otherwise, the coherence controller will insert it into the MSHR, which will be handled in the future after
 all requests that precede it are drained (and as discussed earlier, the waiting request is scheduled for retry
-by one of the preceding requests).
+by one of the preceding requests or the corresponding responses).
+
 Insertion into MSHR takes place by calling `allocateMSHR()`, which is defined in the base class controller.
 There are three outcomes to MSHR allocation: (1) The allocation succeeds, and the entry allocated is the 
 front entry of the register. The function returns `OK`; 
@@ -2699,7 +2708,7 @@ Otherwise, if the block has an owner, then an MSHR entry is allocated from the f
 `FetchInvX` before the flush or eviction that caused the state, and `FetchInvX` will be retried when the
 concurrent invalidation or downgrades complete.
 
-If the current block has no owner, then no further downgrade is needed, and the stare simply transits to `S_Inv`
+If the current block has no owner, then no further downgrade is needed, and the state simply transits to `S_Inv`
 (note that this case can only be reached if the states are of the `_Inv` versions, since `_InvX` suggests the
 existence of a upper level owner). The event completes immediately by calling `sendResponseDown()` and 
 `cleanUpAfterRequest()`.
