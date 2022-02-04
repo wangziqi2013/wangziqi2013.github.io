@@ -2796,3 +2796,19 @@ implementation details have changed due to the decoupled directory and data arra
 For those methods or part of the handling logic that remain the same, we just refer the readers to the previous 
 sections in which they were discussed.
 
+##### Directory Eviction
+
+The entry point for directory entry eviction is method `processDirectoryMiss()`, which further calls 
+`allocateDirLine()` and `handleDirEviction()`. As the reader may have noticed, the overall flow of this
+function is very similar to the one for eviction in L1 and non-L1 inclusive caches. 
+This method is only called in two places: `handleGetS()` and `handleGetX()`, when the access incurs a directory
+miss. 
+At the beginning, the method allocates an MSHR entry for the `GETS` or `GETX` event that caused the miss, if the
+event is not not already in the MSHR.
+Otherwise, the method checks whether the event is still the front entry of the MSHR register. 
+Despite the fact that the event must be at the front entry of the MSHR register when it is retried or received 
+in the previous cycle, it is possible that an earlier event that was processed during the same cycle has added 
+a new entry to the front of the MSHR, which is most likely an external event.
+In this case, the current event together with the potential eviction will be ordered after the external event, and
+that is why this condition is checked.
+
