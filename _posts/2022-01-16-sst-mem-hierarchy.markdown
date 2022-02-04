@@ -2946,4 +2946,11 @@ then the directory entry will also be evicted.
 This enforces the invariant that the most up-to-date data of an address can always be ontained from the 
 upper level, as long as a directory entry exists.
 
+2. There is no method of name `allocateDataLine()` as the counterpart to `allocateDirLine()`.
+The corresponding logic is merged into `processDataMiss()`, and is also much simplified.
+For example, `processDataMiss()` does not perform MSHR allocation for the originating event, 
+does not check `inMSHR` flag, and does not check for race conditions. 
+The reason is that the data eviction path is not called on access misses (which, in fact, bypasses the LLC data array),
+but only on upper level cache write backs, i.e., in methods `handlePutS()`, `handlePutE()`, and `handlePutM()`. 
 
+3. In the second half of `handleNULLCMD()`, 
