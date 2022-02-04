@@ -2919,4 +2919,16 @@ new eviction entry is inserted into the MSHR.
 
 This part is almost identical to the L1 eviction path implemented in L1's `handleNULLCMD()`.
 
+##### Data Eviction
 
+The data eviction path is implemented by `processDataMiss()`, `handleDataEviction()`, and the second half of 
+`handleNULLCMD()`.
+The logic of data eviction is very similar to those of directory eviction, except the following:
+
+1. Data eviction will not initiate any invalidation transaction to the upper level, since the data array
+is non-inclusive. Besides, data eviction will also not evict the corresponding tag entry, if the directory entry
+indicates that sharers or owner exists in the upper level.
+On the other hand, if a data entry is to be evicted, and the directory entry indicates neither sharers nor an owner,
+then the directory entry will also be evicted. 
+This enforces the invariant that the most up-to-date data of an address can always be ontained from the 
+upper level, as long as a directory entry exists.
