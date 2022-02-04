@@ -2754,3 +2754,13 @@ directory entry would cause further inclusion evictions from the upper level.
 This is the scenario where the non-inclusive cache becomes truly non-inclusive. 
 Normal accesses and write backs from the upper level still go through the cache, and they always cause a 
 data block to be allocated, unlike some non-inclusive designs where blocks could bypass a non-inclusive cache.
+
+On the other hand, on a data eviction, if the directory entry indicates that no copies of data exists in the upper 
+level (neither sharer nor owner), the directory will also be invalidated.
+**The non-inclusive cache, therefore, maintains an invariant that if a directory entry is present, then 
+it is guaranteed that the corresponding data block can be obtained by requesting it from the upper level caches.**
+This invariant simplifies protocol design, because as we will see later, when data is requested but not present
+in the non-inclusive cache, it can always transit to a transient state dedicated to this situation, and then
+issue requests to the upper level.
+
+
