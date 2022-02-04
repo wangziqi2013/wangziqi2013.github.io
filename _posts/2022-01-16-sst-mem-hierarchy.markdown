@@ -2808,7 +2808,7 @@ event is not not already in the MSHR.
 Otherwise, the method checks whether the event is still the front entry of the MSHR register. 
 Despite the fact that the event must be at the front entry of the MSHR register when it is retried or received 
 in the previous cycle, it is possible that an earlier event that was processed during the same cycle has added 
-a new entry to the front of the MSHR, which is most likely an external event.
+a new entry to the front of the MSHR, which is most likely an external event or a write back.
 In this case, the current event together with the potential eviction will be ordered after the event
 with higher priority, and that is why this check is performed.
 
@@ -2817,3 +2817,14 @@ a directory entry that can be used to resolve the miss.
 Method `allocateDirLine()` either allocates an entry successfully immediately, in which case it returns non-`NULL`,
 or an eviction must be made, in which case it returns `NULL`, plus an eviction event is scheduled on the old 
 address. The current event will just wait in the MSHR (by returning `Stall`) for the completion of the eviction.
+
+Method `allocateDirLine()` calls `handleDirEviction()` to attempt eviction, and if one can be evicted, 
+`handleDirEviction()` returns `true`, in which case the replacement is also done, and the method 
+returns a pointer to the entry. 
+Otherwise, eviction cannot be performed in the current cycle, in which case the method calls `insertEviction()`
+to add an eviction entry to the MSHR register of the old address (i.e., the current address of the tag entry 
+selected for replacement). The eviction entry contains both the old and the new address (i.e., the address contained
+in the event object).
+
+
+
