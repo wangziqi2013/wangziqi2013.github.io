@@ -2826,5 +2826,12 @@ to add an eviction entry to the MSHR register of the old address (i.e., the curr
 selected for replacement). The eviction entry contains both the old and the new address (i.e., the address contained
 in the event object).
 
+Although this just seems identical to the eviction path of L1 and non-L1 inclusive caches, non-inclusive
+cache also inserts the pair (old address, new address) (local variable `evictpair`) into its data member, 
+`evictionType_`, which is a map type whose boolean value indicates whether the eviction is for directory 
+entry for data entry (`true` for directory entry, and `false` for data entry).
+This data member will be useful in `handleNULLCMD()` to determine whether an eviction request is for
+directory or data, since they both have the same event type, namely, `NULLCMD`.
+
 
 
