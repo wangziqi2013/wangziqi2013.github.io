@@ -2740,4 +2740,13 @@ Note that in the case of non-inclusive caches, the tag array can indicate that a
 with the actual block missing. Here, these states are more of a notion of ownership (`E`, `M` indicate ownership)
 and dirtiness (`M` indicates dirty), rather than a notion of the data block.
 
+To ensure that coherence requests from the upper levels can still be performed correctly, the directory array
+remains inclusive of the upper level contents. i.e., if an address is cached by one or more upper level
+caches, the address must also exists in the directory array, the coherence states of which are maintained
+properly. 
+Besides, to ensure that data blocks in the current cache can be accessed properly, the directory array is 
+also inclusive of the data array, and on the occasion of a directory array eviction, if there exists a 
+corresponding data array entry, then both the data and directory entry should be evicted, in addition to any
+upper level sharers or owner.
+
 
