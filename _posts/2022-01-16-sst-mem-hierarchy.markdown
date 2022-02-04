@@ -2749,4 +2749,8 @@ also inclusive of the data array, and on the occasion of a directory array evict
 corresponding data array entry, then both the data and directory entry should be evicted, in addition to any
 upper level sharers or owner.
 
-
+When a data array entry is invalidated, however, the directory entry does not have to be evicted, if eviction of the
+directory entry would cause further inclusion evictions from the upper level. 
+This is the scenario where the non-inclusive cache becomes truly non-inclusive. 
+Normal accesses and write backs from the upper level still go through the cache, and they always cause a 
+data block to be allocated, unlike some non-inclusive designs where blocks could bypass a non-inclusive cache.
