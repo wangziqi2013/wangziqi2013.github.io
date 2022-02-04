@@ -2833,5 +2833,13 @@ entry for data entry (`true` for directory entry, and `false` for data entry).
 This data member will be useful in `handleNULLCMD()` to determine whether an eviction request is for
 directory or data, since they both have the same event type, namely, `NULLCMD`.
 
-
+Method `handleDirEviction()` performs eviction by first selecting the replacement entry via 
+`findReplacementCandidate()`, and then entering a switch block for case-by-case handling.
+`I` state entries can be replaced without any further action. 
+Transient states will cause the eviction to stall, and wait for the ongoing transaction to finish (the `default`
+case).
+For the rest three stable states, i.e., `S`, `E`, and `M`, eviction can only be performed, if there is no pending
+retries on the address to be evicted for the current cycle. 
+The check for retry is necessary to avoid events that are later handled in the same cycle finding themselves 
+in an expected state, e.g., the address that those events operate on has been evicted and no long exists in the cache.
 
