@@ -2726,4 +2726,14 @@ for each tag entry, and can hence be much smaller than the coherence tag bank.
 In reality, this design choice reduces the storage waste by caching what has already been in the upper level caches,
 which can be quite significant, if there are many of them.
 
+#### Data And Directory Arrays
+
+The non-inclusive cache has two major components, namely, the directory bank and the data bank. Both banks are of type 
+`class CacheArray`, with the directory bank being `class CacheArray<DirectoryLine>`, and the data bank being 
+`CacheArray<DataLine>`. Recall from earlier sections that `class DirectoryLine` contains coherence states including 
+a sharer list, and an owner field. These states store both the state of the block and the sharing or ownership 
+situation in the upper level caches. 
+Meanwhile, `class DataLine` just contains a data vector, and a pointer to the corresponding directory
+in the directory array.
+
 
