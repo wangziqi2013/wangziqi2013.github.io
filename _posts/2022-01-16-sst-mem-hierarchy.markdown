@@ -1238,8 +1238,8 @@ MSHR entry, and they can be considered as logically ordered before those that ar
 they perform operations that can be completed immediately, most likely being cache hits. 
 These race conditions are harmless, though, since cache hits do not change the tag array regarding addresses.
 
-2. Method argument `inMSHR`, which is common to most of the coherence handling methods, indicates whether the 
-request is served from MSHR, or from the receiving buffer.
+2. Method argument `inMSHR`, which is common to most of the coherence handling methods and many helper functions, 
+indicates whether the request is served from MSHR, or from the receiving buffer.
 Many handlers or branches, especially those that implement operations that cannot be completed immediately, assume an 
 invariant that the `inMSHR` flag is `true` and that the event to be handled is at
 the front of the MSHR register, before any real coherence action is taken. 
@@ -2827,9 +2827,12 @@ event is not not already in the MSHR.
 Otherwise, the method checks whether the event is still the front entry of the MSHR register. 
 Despite the fact that the event must be at the front entry of the MSHR register when it is retried or received 
 in the previous cycle, it is possible that an earlier event that was processed during the same cycle has added 
-a new entry to the front of the MSHR, which is most likely an external event or a write back.
-In this case, the current event together with the potential eviction will be ordered after the event
-with higher priority, and that is why this check is performed.
+a new entry to the front of the MSHR, which is most likely an external event.
+In this case, the current event will be ordered after the event at the front of the MSHR register, to avoid
+the race condition where an eviction is performed, completed, but only to find out that the front entry of the
+MSHR is not the data request that originally initiated the eviction (which may also create problem for the 
+external request as well, since on eviction completion, the handler will just blindly retry the 
+front entry of the MSHR on the new address).
 
 If the event is confirmed to be the front entry of the MSHR register, then it calls `allocateDirLine()` to acquire
 a directory entry that can be used to resolve the miss.
@@ -2860,5 +2863,12 @@ case).
 For the rest three stable states, i.e., `S`, `E`, and `M`, eviction can only be performed, if there is no pending
 retries on the address to be evicted for the current cycle. 
 The check for retry is necessary to avoid events that are later handled in the same cycle finding themselves 
-in an expected state, e.g., the address that those events operate on has been evicted and no long exists in the cache.
+in an unexpected state, e.g., the address that those events operate on has been evicted and no long exists 
+in the cache.
+
+The eviction path for the three stable states are more or less the same. First, the method calls 
+`invalidateAll()` to attempt an invalidation transaction on all upper level blocks. 
+If at least one invalidation is sent, indicated by the return value being `true`, then the stable state
+transits to the corresponding `_Inv` version. Eviction will not be performed in the current cycle, and will 
+be retried after the invalidation transaction completes.
 
