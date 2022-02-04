@@ -2872,3 +2872,9 @@ If at least one invalidation is sent, indicated by the return value being `true`
 transits to the corresponding `_Inv` version. Eviction will not be performed in the current cycle, and will 
 be retried after the invalidation transaction completes.
 
+Otherwise, if `invalidateAll()` returns `false`, then there is nothing to invalidate, then eviction can
+proceed in the current cycle. For `S` and `E` state blocks, a clean write back can optionally be sent to the 
+lower level, if `silentEvictClean_` is not set. For `M` state blocks, a dirty write back is always sent.
+The method uses local flag `wbSent` to track whether a write back, dirty or clean, is sent.
+In all cases, the state will transit to `I`.
+
