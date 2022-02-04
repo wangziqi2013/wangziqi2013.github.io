@@ -2774,4 +2774,10 @@ All stable and transient states from the inclusive version of the protocol are s
 the same. The directory array itself essentially act as an inclusive cache without data, for which
 downgrades, invalidations will be issued to maintain coherence among upper level caches.
 
+To deal with the new cases where data is requested by the upper level, but is not present in the data array,
+the non-inclusive cache adds transient state `S_D`, `E_D` and `M_D` to indicate that an access to the data is 
+required, but the cache does not have it for now. Under these states, the cache controller will issue requests to
+upper levels to fetch the requested block, and when data arrives, the data slot will be allocated, and states will 
+transient back to the stable state.
+
 
