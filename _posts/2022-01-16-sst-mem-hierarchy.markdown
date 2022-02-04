@@ -2878,3 +2878,12 @@ lower level, if `silentEvictClean_` is not set. For `M` state blocks, a dirty wr
 The method uses local flag `wbSent` to track whether a write back, dirty or clean, is sent.
 In all cases, the state will transit to `I`.
 
+If eviction on the tag entry is performed, the corresponding entry in the data array is also evicted to
+maintain the inclusiveness of the data array by the directory array.
+Also note that the non-inclusive cache supports sending data from either the data array, or from the MSHR,
+using helper functions `sendWritebackFromCache()` and `sendWritebackFromMSHR()`, respectively.
+These two functions are almost identical to each other, with the only difference being the source of payload.
+Both functions send an event to the lower level cache, which may carry the command `PUTS`, `PUTE`, or `PUTM`.
+We do not distinguish between them in our discussion, since we mainly focus on the protocol, rather than the payload.
+
+
