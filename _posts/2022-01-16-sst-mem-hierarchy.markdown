@@ -1333,6 +1333,16 @@ This counter is incremented when a new request is inserted into the coherence co
 and decremented when a request handler executes with `inMSHR` flag set. 
 Certain operations (most notably, evictions) require this counter to be zero in order to be able to proceed.
 
+10. Despite the serialization provided by MSHR registers, evictions will always race with all requests on the
+old address. This is because evictions are initiated by requests on the new address (i.e., the address whose
+access incurs a cache miss), but the eviction itself operates on the old address (i.e., the address to be replaced).
+In addition, although evictions can only be initiated after the original request has been inserted into the MSHR,
+the eviction can be attempted on the old address without first being inserted into the MSHR register of the old
+address, essentially making it of higher priority than all existing entries on the old address.
+As a result, the eviction path handling is extremely cumbersome, with lots of condition checks, the purpose
+of which is just to ensure that evictions will not race with existing entries in the old address's MSHR register
+in a harmful way.
+
 In the following text, we discuss the three major classes of operations, namely, CPU-initiated data requests, 
 CPU-initiated flush requests, and external requests (i.e., downgrades and invalidations), in separate sections.
 Helper functions are covered when they are encountered for the first time.
@@ -2815,7 +2825,7 @@ implementation details have changed due to the decoupled directory and data arra
 For those methods or part of the handling logic that remain the same, we just refer the readers to the previous 
 sections in which they were discussed.
 
-##### Directory Eviction
+##### Directory Eviction, Part I
 
 The entry point for directory entry eviction is method `processDirectoryMiss()`, which further calls 
 `allocateDirLine()` and `handleDirEviction()`. As the reader may have noticed, the overall flow of this
@@ -2886,4 +2896,6 @@ These two functions are almost identical to each other, with the only difference
 Both functions send an event to the lower level cache, which may carry the command `PUTS`, `PUTE`, or `PUTM`.
 We do not distinguish between them in our discussion, since we mainly focus on the protocol, rather than the payload.
 
-
+At the end of the method, of `recvWritebackAck_` is set, and a write back is sent (`wbSent` flag), then a write
+back event will also be inserted at the front of the MSHR register of the old address.
+The write back ACK is handled in the same way as in the L1 cache by method `handleAckPut()`.
