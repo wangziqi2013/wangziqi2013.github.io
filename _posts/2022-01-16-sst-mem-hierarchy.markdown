@@ -2758,14 +2758,6 @@ of the contents of the upper level, and can hence be much smaller than the direc
 In reality, this design choice reduces the storage waste by caching what has already been in the upper level caches,
 which can be quite significant, if there are many of them.
 
-In SST's particular implementation, the non-inclusive cache is, in fact, exclusive, meaning that a data block in the
-hierarchy is either cached by one of the upper level caches, or by the current cache, but not both. 
-This property is enforced by two simple rules: (1) When an access misses the non-inclusive cache, the block
-data is fetched from the lower level, and forwarded to the requestor in the upper level, but not inserted into
-the current cache; (2) When a block is written back from the upper level, the block is inserted into the 
-data array, if the write back indicates an invalidation. Otherwise, if the write back indicates a downgrade,
-then the data is straightly written back into the lower level without being inserted into the data array.
-
 #### Data And Directory Arrays
 
 The non-inclusive cache has two major components, namely, the directory array and the data array. Both arrays are 
@@ -2950,7 +2942,7 @@ upper level, as long as a directory entry exists.
 The corresponding logic is merged into `processDataMiss()`, and is also much simplified.
 For example, `processDataMiss()` does not perform MSHR allocation for the originating event, 
 does not check `inMSHR` flag, and does not check for race conditions. 
-The reason is that the data eviction path is not called on access misses (which, in fact, bypasses the LLC data array),
+The reason is that the data eviction path is not called on access misses,
 but only on upper level cache write backs, i.e., in methods `handlePutS()`, `handlePutE()`, and `handlePutM()`. 
 
 3. In the second half of `handleNULLCMD()`, 
