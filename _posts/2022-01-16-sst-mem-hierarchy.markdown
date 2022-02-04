@@ -1249,7 +1249,7 @@ state transition and post-response processing to the request handler.
 Note that this is merely a programming artifact to simplify coding, and it does not reflect the way that
 real hardware handles coherence requests.
 
-In particular, data requests that miss the current level will be inserted into the MSHR, and then 
+3. In particular, data requests that miss the current level will be inserted into the MSHR, and then 
 handled in a non-atomic, split-transaction manner when its reaches the front. 
 In the first half (request path), if eviction is needed, the controller will insert an eviction entry
 in the old address's MSHR register. When that eviction request reaches the front of the MSHR register, and is 
@@ -1261,7 +1261,7 @@ In the second half (response path), the response is received, which is processed
 The response handler transits the state back to a stable state, and the request is completed 
 in the response handler by calling `cleanUpAfterResponse()`.
 
-3. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
+4. Certain requests may already be in progress, which is checked by calling `getInProgress()`, when their preceding 
 requests complete or when a response is received and handled. 
 This indicates that the request has completed the first half of the split transaction, and is waiting for 
 the responses, and hence need not be retried on completion of the preceding request. 
@@ -1273,14 +1273,6 @@ Correspondingly, when a request finishes its first half execution, then the hand
 Note that the reason some requests are already handled while not sitting at the front entry of the MSHR
 register is that some requests can "cut the line", and be inserted at the front of the MSHR. When such
 requests complete, it is necessary to check whether the next request is already in progress.
-
-4. Some requests may generate internal events (most notably, evictions and write backs, for L1, as well as 
-downgrades and invalidations, for non-L1). These internal events are handled non-atomically, meaning that they
-will be processed like a separate transaction, which, on completion, will schedule the originating request
-for retry by calling the helper function `retry()`. 
-Meanwhile, the original request must be sitting at the front entry of the MSHR register, such that
-when the retry happens, the original request can be found in an expected position, and then inserted into the 
-retry queue.
 
 5. If a request can be handled immediately, then it will just complete in the same cycle as it is handled,
 without involving the MSHR.
@@ -2722,3 +2714,16 @@ If the current block has no owner, then no further downgrade is needed, and the 
 (note that this case can only be reached if the states are of the `_Inv` versions, since `_InvX` suggests the
 existence of a upper level owner). The event completes immediately by calling `sendResponseDown()` and 
 `cleanUpAfterRequest()`.
+
+### Coherence Protocol: MESI Non-Inclusive
+
+The third type of coherence protocol is shared non-inclusive cache, implemented by `class MESISharNoninclusive`. 
+Compared with inclusive caches, a non-inclusive
+cache decouples the tag bank that maintains coherence states from the data bank that maintains cache blocks, such that
+while the tag bank always remain inclusive of the upper level states, such that upper level requests can still be 
+handled correctly based on the inclusive MESI protocol, the data bank does not need to associate a data block
+for each tag entry, and can hence be much smaller than the coherence tag bank.
+In reality, this design choice reduces the storage waste by caching what has already been in the upper level caches,
+which can be quite significant, if there are many of them.
+
+
