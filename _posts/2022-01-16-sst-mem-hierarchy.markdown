@@ -2788,3 +2788,11 @@ stable state.
 
 To deal with flushes, the cache adds new flush transient state `E_B` and `M_B`, as the `E` and `M` state counterpart
 for the existing `S_B` and `I_B`.
+
+#### Helper Functions
+
+In this section, we discuss helper functions that are exclusive to the non-inclusive cache, including those whose
+implementation details have changed due to the decoupled directory and data array. 
+For those methods or part of the handling logic that remain the same, we just refer the readers to the previous 
+sections in which they were discussed.
+
