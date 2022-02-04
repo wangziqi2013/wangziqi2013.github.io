@@ -2763,4 +2763,15 @@ This invariant simplifies protocol design, because as we will see later, when da
 in the non-inclusive cache, it can always transit to a transient state dedicated to this situation, and then
 issue requests to the upper level.
 
+#### New Coherence States and Actions
+
+Since data and directory arrays are decoupled from each other, the inclusive cache hence enables a new combination
+where only the directory entry is valid, while data is not present. 
+These partially cached addresses require new coherence states and actions to be added in order to properly handle
+tag and data separately.
+
+All stable and transient states from the inclusive version of the protocol are still used, and their semantics remain
+the same. The directory array itself essentially act as an inclusive cache without data, for which
+downgrades, invalidations will be issued to maintain coherence among upper level caches.
+
 
