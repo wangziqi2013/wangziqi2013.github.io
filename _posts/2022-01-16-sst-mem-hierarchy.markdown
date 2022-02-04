@@ -2899,3 +2899,15 @@ We do not distinguish between them in our discussion, since we mainly focus on t
 At the end of the method, of `recvWritebackAck_` is set, and a write back is sent (`wbSent` flag), then a write
 back event will also be inserted at the front of the MSHR register of the old address.
 The write back ACK is handled in the same way as in the L1 cache by method `handleAckPut()`.
+
+##### Directory Eviction, Part II
+
+If the directory eviction cannot be performed immediately, when it is first time attempted, then, as we discussed
+earlier, an eviction entry of type `NULLCMD` will be inserted into the MSHR.
+Just as in the L1 cache, the `NULLCMD` event will be handled by method `handleNULLCMD()` when the eviction entry
+reaches the head of the MSHR register.
+The method first checks data member `evictionType_()` with the new and old address (both stored in the event 
+object) to determine whether the eviction is to the directory or data array.
+If it is to the directory array, then directory eviction is performed by the first half of `handleNULLCMD()`. 
+
+
