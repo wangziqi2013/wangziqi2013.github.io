@@ -362,6 +362,8 @@ the member functions.
 
 `class DataLine` implements a tag entry that contains only data, which is stored as a vector of bytes in
 data member `data_`, and a pointer to `class DirectoryLine` object, in data member `tag_`.
+Note that the data line object does not contain a coherence state field, and the call to method `getState()`
+will either return `I`, or call into its corresponding tag object's `getState()`.
 
 `class CacheLine` implements a tag entry that contains both data, as a vector of bytes, and a coherence state 
 variable, as data member `state_`. There is neither sharer nor owner information stored, suggesting that this
@@ -2748,26 +2750,37 @@ existence of a upper level owner). The event completes immediately by calling `s
 
 The third type of coherence protocol is shared non-inclusive cache, implemented by `class MESISharNoninclusive`. 
 Compared with inclusive caches, a non-inclusive
-cache decouples the tag bank that maintains coherence states from the data bank that maintains cache blocks, such that
-while the tag bank always remain inclusive of the upper level states, such that upper level requests can still be 
-handled correctly based on the inclusive MESI protocol, the data bank does not need to associate a data block
-for each tag entry, and can hence be much smaller than the coherence tag bank.
+cache decouples the directory array that maintains coherence states from the data array that maintains cache 
+blocks, such that
+while the directory array always remain inclusive of the upper level states, such that upper level requests can 
+still be handled correctly based on the inclusive MESI protocol, the data array does not need to be a super set
+of the contents of the upper level, and can hence be much smaller than the directory array.
 In reality, this design choice reduces the storage waste by caching what has already been in the upper level caches,
 which can be quite significant, if there are many of them.
 
+In SST's particular implementation, the non-inclusive cache is, in fact, exclusive, meaning that a data block in the
+hierarchy is either cached by one of the upper level caches, or by the current cache, but not both. 
+This property is enforced by two simple rules: (1) When an access misses the non-inclusive cache, the block
+data is fetched from the lower level, and forwarded to the requestor in the upper level, but not inserted into
+the current cache; (2) When a block is written back from the upper level, the block is inserted into the 
+data array, if the write back indicates an invalidation. Otherwise, if the write back indicates a downgrade,
+then the data is straightly written back into the lower level without being inserted into the data array.
+
 #### Data And Directory Arrays
 
-The non-inclusive cache has two major components, namely, the directory bank and the data bank. Both banks are of type 
-`class CacheArray`, with the directory bank being `class CacheArray<DirectoryLine>`, and the data bank being 
+The non-inclusive cache has two major components, namely, the directory array and the data array. Both arrays are 
+of type `class CacheArray`, with the directory array being `class CacheArray<DirectoryLine>`, and the data array being 
 `CacheArray<DataLine>`. Recall from earlier sections that `class DirectoryLine` contains coherence states including 
 a sharer list, and an owner field. These states store both the state of the block and the sharing or ownership 
 situation in the upper level caches. 
 Meanwhile, `class DataLine` just contains a data vector, and a pointer to the corresponding directory
-in the directory array.
+in the directory array. Calling `getState()` on a data line object is equivalent to calling `getState()` on the
+corresponding directory object.
 
-Note that in the case of non-inclusive caches, the tag array can indicate that a block is in one of the valid states,
+Note that in the case of non-inclusive caches, the directory array can indicate that a block is in one of the 
+valid states,
 with the actual block missing. Here, these states are more of a notion of ownership (`E`, `M` indicate ownership)
-and dirtiness (`M` indicates dirty), rather than a notion of the data block.
+and dirtiness (`M` indicates dirty), rather than representing the state of the data block.
 
 To ensure that coherence requests from the upper levels can still be performed correctly, the directory array
 remains inclusive of the upper level contents. i.e., if an address is cached by one or more upper level
@@ -2797,7 +2810,7 @@ issue requests to the upper level.
 Since data and directory arrays are decoupled from each other, the inclusive cache hence enables a new combination
 where only the directory entry is valid, while data is not present. 
 These partially cached addresses require new coherence states and actions to be added in order to properly handle
-tag and data separately.
+directory and data separately.
 
 All stable and transient states from the inclusive version of the protocol are still used, and their semantics remain
 the same. The directory array itself essentially act as an inclusive cache without data, for which
@@ -2854,7 +2867,7 @@ Method `allocateDirLine()` calls `handleDirEviction()` to attempt eviction, and 
 `handleDirEviction()` returns `true`, in which case the replacement is also done, and the method 
 returns a pointer to the entry. 
 Otherwise, eviction cannot be performed in the current cycle, in which case the method calls `insertEviction()`
-to add an eviction entry to the MSHR register of the old address (i.e., the current address of the tag entry 
+to add an eviction entry to the MSHR register of the old address (i.e., the current address of the directory entry 
 selected for replacement). The eviction entry contains both the old and the new address (i.e., the address contained
 in the event object).
 
@@ -2888,7 +2901,7 @@ lower level, if `silentEvictClean_` is not set. For `M` state blocks, a dirty wr
 The method uses local flag `wbSent` to track whether a write back, dirty or clean, is sent.
 In all cases, the state will transit to `I`.
 
-If eviction on the tag entry is performed, the corresponding entry in the data array is also evicted to
+If eviction on the directory entry is performed, the corresponding entry in the data array is also evicted to
 maintain the inclusiveness of the data array by the directory array.
 Also note that the non-inclusive cache supports sending data from either the data array, or from the MSHR,
 using helper functions `sendWritebackFromCache()` and `sendWritebackFromMSHR()`, respectively.
@@ -2926,9 +2939,11 @@ The data eviction path is implemented by `processDataMiss()`, `handleDataEvictio
 The logic of data eviction is very similar to those of directory eviction, except the following:
 
 1. Data eviction will not initiate any invalidation transaction to the upper level, since the data array
-is non-inclusive. Besides, data eviction will also not evict the corresponding tag entry, if the directory entry
+is non-inclusive. Besides, data eviction will also not evict the corresponding directory entry, if the directory entry
 indicates that sharers or owner exists in the upper level.
 On the other hand, if a data entry is to be evicted, and the directory entry indicates neither sharers nor an owner,
 then the directory entry will also be evicted. 
 This enforces the invariant that the most up-to-date data of an address can always be ontained from the 
 upper level, as long as a directory entry exists.
+
+
