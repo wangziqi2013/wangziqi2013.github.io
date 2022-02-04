@@ -2910,4 +2910,13 @@ The method first checks data member `evictionType_()` with the new and old addre
 object) to determine whether the eviction is to the directory or data array.
 If it is to the directory array, then directory eviction is performed by the first half of `handleNULLCMD()`. 
 
+On the directory array eviction path, the method first calls `handleDirEviction()` to attempt the eviction
+in the current cycle. If the method succeeds, then the eviction path completes, and the originating request
+on the new address is retried by calling `retry()`. Besides, the new address is removed from the eviction entry.
+Otherwise, if eviction fails, then the method checks whether it is due to a race condition of multiple evictions
+(of different new addresses) on the same old address, and if true, then a new victim entry is selected, and a
+new eviction entry is inserted into the MSHR. 
+
+This part is almost identical to the L1 eviction path implemented in L1's `handleNULLCMD()`.
+
 
