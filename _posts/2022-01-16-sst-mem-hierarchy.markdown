@@ -2983,3 +2983,10 @@ Besides, it also takes a boolean argument, `remove`, which, if set, removes the 
 from the `responses` map.
 In other words, this method simulates the receipt of an acknowledgement to an invalidation, which was issued
 earlier to a shared block in the upper level. 
+
+Method `removeOwnerViaInv()` is the exclusive counterpart of `removeSharerViaInv()`, and its works on events that
+can be treated as an knowledgement to an invalidation issued earlier to an exclusive owner in the upper level.
+In addition to removing the owner from the directory entry, and optionally updating the `responses` map, this
+method also simulates the state transition when performing the local write back.
+The method checks whether the event carries dirty data by calling `getDirty()` on the given event object,
+and if true, the transient or stable `E` state will transit to the corresponding version of `M` state.
