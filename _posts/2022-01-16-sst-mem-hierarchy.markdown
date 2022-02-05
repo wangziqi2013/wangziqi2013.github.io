@@ -2975,4 +2975,11 @@ The method takes an argument, `cmd`, as the custom command to the fetch event, t
 with the ownership, this method can hence either read data from the upper level, or read and downgrade an exclusive
 block from the upper level.
 
-##### 
+##### removeSharerViaInv() and removeOwnerViaInv()
+
+Method `removeSharerViaInv()` is a handy helper function that, given an event object, removes the source of the event
+from the given directory entry's sharer list. 
+Besides, it also takes a boolean argument, `remove`, which, if set, removes the source of the event object
+from the `responses` map.
+In other words, this method simulates the receipt of an acknowledgement to an invalidation, which was issued
+earlier to a shared block in the upper level. 
