@@ -2953,7 +2953,7 @@ Therefore, after the eviction is performed, the `A` states will just transit bac
 stable states to indicate that the write back has been completed.
 
 Note that `IA` is a special state that cannot be caused by write backs, but is handled regardless.
-The reason that we need an `IA` state is due to prefetching: On a prefetch, two allocations, inetead of one,
+The reason that we need an `IA` state is due to prefetching: On a prefetch, two allocations, instead of one,
 are needed, one for the directory entry, and the other for the data entry. 
 This must be implemented explicitly, because by default, the cache will only allocate a directory entry,
 and act opportunistically on whether data is inserted when it is read from the lower level.
@@ -2963,3 +2963,16 @@ On completing the data array allocation, `handleNULLCMD()` will then transit the
 retry the prefetch access, which will still miss the cache. Since both directory and data entries are guaranteed to
 exist, however, when the response of the prefetch access is received, the data from the lower level will 
 always be inserted into the data array, achieving the effect of prefetching for a non-inclusive cache.
+
+##### sendFetch()
+
+Method `sendFetch()` is very similar to other methods that generate external requests to the upper level.
+The purpose of this method is to acquire the data block from the upper level, when an access
+hits the cache and requires data to be sent, but the data block is missing.
+
+The method takes an argument, `cmd`, as the custom command to the fetch event, though non-inclusive caches only use
+`Fetch` or `FetchInvX`. Recall that `Fetch` only works on shared blocks, while `FetchInvX` only works on blocks 
+with the ownership, this method can hence either read data from the upper level, or read and downgrade an exclusive
+block from the upper level.
+
+##### 
