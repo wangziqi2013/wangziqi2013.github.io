@@ -3270,3 +3270,18 @@ Then, if an owner or other sharers still exist, they are invalidated using `Fetc
 after which the state transit to `E_Inv` and `M_Inv`.
 Otherwise, the flush invalidation completes immediately, and the state transits to `I_B`.
 
+Note that for flush invalidation, the evict flag is set in all cases except `I` 
+(the second argument to `forwardFlush()`),
+regardless of whether the block contains exclusive data or not.
+
+The event races with all versions of `_Inv` and `_InvX` states as the response event. 
+The method first checks the evicted flag to make sure that the requestor actually holds a copy of the block in
+any state. Note that it is possible that the flag is not set, if the upper level cache does not have this block,
+in which case, the event does not race with the ongoing downgrade or invalidation.
+Then, the race is resolved by treating the event as a response to the downgrade or invalidation.
+Helper function `removeOwnerViaInv()` or `removeSharerViaInv()` is called with the last argument being `true`, meaning
+that the `responses` map will also be updated, in addition to sharer list update and/or the state transition.
+Lastly, the ACK counter is decremented, and if it reaches zero, the current front entry of the MSHR register
+is retried by calling `retry()`.
+The state of the block also transits back to the corresponding stable version.
+
