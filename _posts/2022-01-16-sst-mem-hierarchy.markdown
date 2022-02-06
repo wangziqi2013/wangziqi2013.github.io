@@ -3072,3 +3072,18 @@ It adds the original requestor as a sharer to the block, and forwards the respon
 At the end of the method, the original `GETS` event object is removed from the MSHR front entry by 
 calling `cleanUpAfterResponse()`.
 
+##### handleGetX(), Request Path
+
+Method `handleGetX()` handles `GETX`, and its logic is similar to `handleGetS()`, especially the distinction
+between full miss and partial miss.
+If the access misses the cache, then a directory entry is allocated, and its state transits to `IM`.
+The `GETX` event is also forwarded to the lower level by calling `forwardMessage()`.
+If the access sees a `S` state entry, an upgrade is only needed if the cache is not a last-level cache.
+The upgrade is perfomed by first forwarding the event to the lower level, and then calling 
+`invalidateExceptRequestor()` to either invalidate (`INV`), or to invalidate and fetch data from the upper level 
+(`FetchInv`). 
+If at least one invalidation is sent to the upper level, then the state transits to `SM_Inv`. 
+Otherwise, there is no need to wait for invalidation, because there is not any upper level sharer nor owner,
+in which case the state transits to `SM`.
+
+
