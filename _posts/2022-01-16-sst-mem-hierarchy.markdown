@@ -3176,7 +3176,14 @@ completed immediately, and the event is forwarded to the lower level by calling 
 Besides, flushes on `S` state blocks do not need to check write backs, since the upper level cache must not have
 any ownership, and hence will not perform any write back.
 
-
+On `E` and `M` state blocks, there are several possibilities to handle. 
+First, if the flush contains an evict and/or dirty
+data, meaning that one of the upper level caches have exclusive ownership to the block, and/or has an `M` state
+block that just got flushed, then the local write back is simulated immediately by calling `removeOwnerViaInv()`,
+with the last argument setting to `false`, which means that the flush event may not be considered as a response 
+to an earlier downgrade or invalidation, since the state here is stable.
+After simulating the local write back, the requestor is added as a sharer, and the `setEvict()` is called on the
+event with `false` to avoid simulating the write back multuple times in the case of retries.
 
 Method `removeOwnerViaInv()` is just similar to `doEviction()` for inclusive caches, but it does slightly more.
 In addition to simulating the local write back and performing state transitions (turning transient and stable `E`
@@ -3185,3 +3192,7 @@ it also installs block data either into the data array, if the data entry exists
 Besides, the boolean argument `remove` indicates whether the event in the argument can be regarded as a response to
 an earlier downgrade or invalidation. If `remove` is set to `true`, then the corresponding entry will also be 
 removed from `responses`.
+
+Second, if the flush does not contain an evicted block, then the requestor of the flush is not an upper level
+owner. A second check is therefore made to check if any upper level owner exists by calling `hasOwner()`.
+If true, then the owner is downgraded
