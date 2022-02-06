@@ -3097,4 +3097,9 @@ as the owner (and potentially removing it as a sharer), and then sending the res
 Note that in this case, it is guaranteed that data is available, since the non-inclusive cache enforces the invariant
 that if a directory entry exists, then data either exists in the upper level, or exists in the current level.
 
-
+In the second and third case, there are upper level sharers or owner, and they will be invalidated by calling 
+`invalidateExceptRequestor()` and `invalidateOwner()`, respectively.
+For the sharer case, the command can be either `Inv`, if the request is an upgrade from one of the sharers,
+or `FetchInv` to perform invalidation and fetch in the same transaction.
+For the latter case, the command is always `FetchInv`, just like in an inclusive cache.
+In both cases, the state transits to `M_Inv` (not `M_D`).
