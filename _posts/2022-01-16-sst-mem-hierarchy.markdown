@@ -3285,3 +3285,12 @@ Lastly, the ACK counter is decremented, and if it reaches zero, the current fron
 is retried by calling `retry()`.
 The state of the block also transits back to the corresponding stable version.
 
+For all versions of `_D` state, there is also a race, if the request comes from the first upper level sharer of the 
+block, since the controller always issues the `Fetch` to the first sharer.
+If the check passes, then the flush invalidation is treated as the response to the earlier fetch, and 
+`removeSharerViaInv()` is called with the last argument being `true` to simulate the sharer list update and 
+to update `responses`. 
+The ACK counter is also decremented, before the front entry of the MSHR is retried.
+The state of the block transits back to the stable version as well.
+Otherwise, the event does not race with the ongoing fetch, and only `removeSharerViaInv()` is called with the
+last aegument being `false` to update the sharer list.
