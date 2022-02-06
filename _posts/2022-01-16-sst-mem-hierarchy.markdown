@@ -2808,11 +2808,11 @@ All stable and transient states from the inclusive version of the protocol are s
 the same. The directory array itself essentially act as an inclusive cache without data, for which
 downgrades, invalidations will be issued to maintain coherence among upper level caches.
 
-To deal with the new cases where data is requested by the upper level, but is not present in the data array,
+To deal with the new cases where data is requested, but is not present in the data array,
 the non-inclusive cache adds transient state `S_D`, `E_D` and `M_D` to indicate that an access to the data is 
 required, but the cache does not have it for now. Under these states, the cache controller will issue requests to
 upper levels to fetch the requested block, and when data arrives, the data slot will be allocated, and states will 
-transient back to the stable state.
+transit back to the stable state.
 
 To deal with write backs to a non-existing data block from the upper level, the cache also adds 
 transient state `SA`, `EA`, and `MA` to indicate that a write back has happened on a non-existing address,
@@ -2984,9 +2984,25 @@ from the `responses` map.
 In other words, this method simulates the receipt of an acknowledgement to an invalidation, which was issued
 earlier to a shared block in the upper level. 
 
-Method `removeOwnerViaInv()` is the exclusive counterpart of `removeSharerViaInv()`, and its works on events that
-can be treated as an knowledgement to an invalidation issued earlier to an exclusive owner in the upper level.
+Method `removeOwnerViaInv()` is the exclusive state counterpart of `removeSharerViaInv()`, and its works on events that
+can be treated as an acknowledgement to an invalidation issued earlier to an exclusive owner in the upper level.
 In addition to removing the owner from the directory entry, and optionally updating the `responses` map, this
 method also simulates the state transition when performing the local write back.
 The method checks whether the event carries dirty data by calling `getDirty()` on the given event object,
 and if true, the transient or stable `E` state will transit to the corresponding version of `M` state.
+
+#### CPU-Generated Data Requests
+
+##### handleGetS()
+
+Method `handleGetS()` in non-inclusive caches differs from its counterpart in inclusive caches by having to handle
+two different types of misses. The first type, full miss, occurs when both the directory entry and the data entry
+do not exist. In this case, the controller only allocates a directory entry, and let data bypass the cache to
+the upper level.
+The second type, partial miss, occurs when the dirctory entry is present, but data block is not in the data array.
+In this case, the controller needs to fetch data from one of the upper level caches, and send data to the requestor.
+Meanwhile, the state of the directory entry transits to the transient `_D` version to indicate that an outstanding 
+fetch is being performed, and the fetch response has not been received.
+
+The overall structure of `handleGetS()` is similar to the one in inclusive caches, but there are 
+
