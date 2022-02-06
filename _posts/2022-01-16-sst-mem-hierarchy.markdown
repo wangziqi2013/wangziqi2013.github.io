@@ -3294,3 +3294,13 @@ The ACK counter is also decremented, before the front entry of the MSHR is retri
 The state of the block transits back to the stable version as well.
 Otherwise, the event does not race with the ongoing fetch, and only `removeSharerViaInv()` is called with the
 last aegument being `false` to update the sharer list.
+
+For the rest of the transient states, the flush invalidation event does not race with them, and it will just
+remain in the MSHR register waiting to be retried.
+
+##### handleFlushLineInv(), Response Path
+
+The response path of `handleFlushLineInv()` is also `handleFlushLineResp()`, which we have already discussed earlier.
+The method transits `I_B` blocks to `I`, before it calls `deallocate()` on both arrays to invalidate the entries.
+
+
