@@ -3163,4 +3163,17 @@ atomic instructions.
 ##### handleFlushLine(), Request Path
 
 Method `handleFlushLine()` downgrades a block, and sends data to the lower level, if the block just downgraded 
-has ownership.
+has ownership, which, as we have discussed earlier, may also race with an outstanding downgrade that can be 
+observed by the downgrade-specific transient state.
+At the beginning of the method, the event will be inserted into the MSHR, if it has not been.
+Otherwise, the method performs an extra check to make sure that the event is actually the front entry of the 
+MSHR register, and only proceeds if it is.
+This is to prevent the event from racing with higher priority external events.
+
+Then the method uses a switch block to perform state transition. For state `I`, and `S`, the flush can be 
+completed immediately, and the event is forwarded to the lower level by calling `forwardFlush()`.
+`S` state blocks also transit to `S_B` to indicate an ongoing flush transaction.
+Besides, flushes on `S` state blocks do not need to check write backs, since the upper level cache must not have
+any ownership, and hence will not perform any write back.
+
+
