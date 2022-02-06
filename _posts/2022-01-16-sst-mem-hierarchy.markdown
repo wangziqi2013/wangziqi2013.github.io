@@ -3037,7 +3037,7 @@ by calling `sendNACK()`.
 
 ##### handleGetS(), Response Path
 
-There are two possible response paths. The first one is `handleFetchResp()`, which handles the response event to 
+There are three possible response paths. The first one is `handleFetchResp()`, which handles the response event to 
 a `Fetch` or `FetchInvX` sent earlier in order to acquire the data, and to optionally downgrade the upper level
 owner. At the beginning of the method, it first updates ACK counter of the MSHR register by calling 
 `decrementAcksNeeded()`, and then removes the sender of the fetch response event from `responses`.
@@ -3071,6 +3071,15 @@ It adds the original requestor as a sharer to the block, and forwards the respon
 `sendResponseUp()`. 
 At the end of the method, the original `GETS` event object is removed from the MSHR front entry by 
 calling `cleanUpAfterResponse()`.
+
+Method `handleGetXResp()` may also handle the response for a `GETS` event from the lower level. This will happen
+if the lower level grants exclusive ownership to the requestor. 
+In our case, only the `IS` branch in the switch block is releveant.
+The state will transit to `M` or `E` depending on whether data from the lower level is dirty (I could not see
+how this is possible, though, because `GETS` will never cause the lower level controller to issue `FetchInv` and
+hence acquire a dirty block). 
+The event forwarded to the requestor can also be `GetSResp` or `GetXResp`, depending on whether the address has
+any sharer in the upper level or not.
 
 ##### handleGetX(), Request Path
 
@@ -3124,4 +3133,13 @@ In both cases, the sharer or the owner is removed, and the state transits to `SM
 
 Method `handleAckInv()` operates similarly to `handleFetchResp()`. The methods updates the ACK counter and the 
 `responses` map, and sets `done` flag if all invalidations have been received.
-There is no state transition in `handleAckInv`, and in all cases, the front entry of the MSHR is retried.
+The state transition is performed using the table `NextState`, in which `_Inv` states will just transit
+back to the corresponding non-`Inv` stable states, and in all cases, the front entry of the 
+MSHR is retried.
+
+Note that `handleAckInv()` does not check the in progress flag, which will cause the `GETX` event to be retried
+after all invalidations are received, if the block is in state `SM_Inv`. 
+This will cause unnecessary retries of the `GETX` event, since `SM_Inv` blocks will transit to `SM` blocks
+in this method, before the front event, which is `GETX`, is retried. 
+If `GETX` (which is already in the MSHR) is retried on a block in state `SM`, it will do nothing.
+
