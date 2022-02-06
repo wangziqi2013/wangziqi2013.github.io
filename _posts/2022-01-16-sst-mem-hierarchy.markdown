@@ -3154,3 +3154,13 @@ For `SM_Inv`, the state transits to `M_Inv`, and the in progress flag is cleared
 in `handleFetchResp()`, the event will be retried after the fetch response event have been received.
 The `GETX`, however, is still not completed, and must wait for all invalidations or fetches to finish. 
 This is why `cleanUpEvent()` is called for this case branch, instead of `cleanUpAfterResponse()`.
+
+##### handleGetSX(), Request and Response Path
+
+Method `handleGetSX()` is completely identical to `handleGetX()`, since non-L1 caches do not implement
+atomic instructions.
+
+##### handleFlushLine(), Request Path
+
+Method `handleFlushLine()` downgrades a block, and sends data to the lower level, if the block just downgraded 
+has ownership.
