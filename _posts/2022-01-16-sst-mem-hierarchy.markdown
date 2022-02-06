@@ -3208,7 +3208,7 @@ removed from `responses`.
 Second, if the flush does not contain an evicted block, then the requestor of the flush is not an upper level
 owner. A second check is therefore made to check if any upper level owner exists by calling `hasOwner()`.
 If true, then the owner is downgraded by calling `sendFetch()` with the command being `FetchInvX`.
-The state will transits to the `_Invx` version.
+The state will transits to the `_InvX` version.
 
 On `_InvX` blocks, if the flush contains evicted data, meaing that the flush is issued by the sole upper level 
 owner (`_InvX` indicates the existance of an upper level owner), then this is a race condition, and the flush
@@ -3237,4 +3237,32 @@ once.
 
 In all other cases, the flush cannot proceed and it will just wait in the MSHR register. 
 
-##### handleFlushLine(), Request Path
+##### handleFlushLine(), Response Path
+
+There are two response path to the flush. In the first response path, method `handleFetchResp()` handles the 
+response event to the `FetchInvX` issued to downgrade the upper level owner. The handling is trivial: The 
+`_InvX` version blocks will just transit back to the corresponding stable version, and the flush event is 
+retried.
+
+In the second response path, method `handleFlushLineResp()` handles the response message to the flush line
+event forwarded to the lower level.
+In the case of flushes, `S_B`, `E_B` and `M_B` blocks will transit back to `S` state.
+If the flush also races with external invalidations, then the block state may also be `I_B`, in which case it 
+will transit from `I_B` to `I`. 
+In this case, the directory and data array will also be invalidated, by calling `dealloc()`.
+(Strangely, the `deallocate()` part is not in the flush response handler of inclusive cache).
+
+##### handleFlushLineInv(), Request Path
+
+Method `handleFlushLineInv()` handles flush and invalidation, which invalidates the block, if it exists 
+in the current cache, and sends data to the lower level if the data is also owned by the current or one of
+the upper level caches.
+Handling of this event on stable states is not different from inclusive caches.
+For `I` state blocks, the event is simply forwarded to the lower level.
+For `S` state blocks, the local state change of the write back is first simulated by calling `removeSharerViaInv()`
+(with the second argument being `false`), if the event contains evicted data. 
+Then, if there is any upper level sharer, an invalidation transaction is started, and the state transits to `S_Inv`.
+Otherwise, the flush invalidation completes immediately, and the state transits to `I_B`.
+
+
+
