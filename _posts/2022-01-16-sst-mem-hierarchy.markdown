@@ -3004,5 +3004,15 @@ In this case, the controller needs to fetch data from one of the upper level cac
 Meanwhile, the state of the directory entry transits to the transient `_D` version to indicate that an outstanding 
 fetch is being performed, and the fetch response has not been received.
 
-The overall structure of `handleGetS()` is similar to the one in inclusive caches, but there are 
+The overall structure of `handleGetS()` is similar to the one in inclusive caches, but details are different.
+The method first performs a lookup on both the directory and the data array, and stores the results of the 
+lookups in local varibales `tag` and `data`, respectively.
+If the block does not exist in the directory array (the `I` state case), the controller first allocates a 
+directory entry by calling `processDirectoryMiss()` (which, if not already, also inserts the access into the MSHR).
+If allocation is successful, then the `GETS` request is forwarded to the lower level by calling `forwardMessage()`,
+and the state transits to `IS`.
+Note that we ignore the `IA` case, which, as we have discussed above, is only used for reserving a data array
+entry during prefetching.
+
+
 
