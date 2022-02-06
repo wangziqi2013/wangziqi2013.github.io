@@ -1313,10 +1313,15 @@ The event will be removed from the cache controller's buffer when the handler re
 When the second half of the split completes on receiving the response event, the response event handler 
 will eventually remove the request from the MSHR.
 
-In case (2), the request must not be handled immediately, since it is not at the front entry of the MSHR.
+In case (2), if the request does not work on transient states, then the request must not be handled immediately, 
+since it is not at the front entry of the MSHR.
 The caller should just return `true` to the cache controller, which indicates that the request can be removed
 from the cache controller's buffer. The request will be scheduled for retry (in fact, its first time attempt)
 when the preceding request completes.
+
+On the contrary, if the request works on transient states, because it can resolve race conditions 
+(e.g., race between downgrade and upper level flush), then the request may still be handled to resolve the 
+race condition first, and then at a later cycle, be retried from the MSHR to perform its own task.
 
 In case (3), for L1 caches, the request must not be handled immediately, since it fails to acquire an MSHR entry.
 The caller should return `false` to to the cache controller, which indicates that the request must remain
@@ -3216,3 +3221,5 @@ The state also transits back to the stable version to signal the completion of t
 Note that this branch does not check whether MSHR allocation is successful (`status` being `OK`), since it resolves
 the race condition in which case the front entry of the MSHR register must be an unfinished event, rather than
 the flush.
+
+
