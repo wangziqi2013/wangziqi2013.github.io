@@ -3184,6 +3184,13 @@ with the last argument setting to `false`, which means that the flush event may 
 to an earlier downgrade or invalidation, since the state here is stable.
 After simulating the local write back, the requestor is added as a sharer, and the `setEvict()` is called on the
 event with `false` to avoid simulating the write back multuple times in the case of retries.
+The state also transits to `E_B` and `M_B` for `E` and `M`, respectively, and the flush is forwarded
+to the lower level by calling `forwardFlush()`.
+Lastly, the flush event is marked as in progress by calling `setInProgress()`. This means that the flush event
+will not be retried when a preceding event in the MSHR completes. The flush event is only completed when a response
+from the lower level is received.
+(note that the state transition, event forwarding logic and `setInProgress()` is not in the `if` branch, 
+but down below for some reason).
 
 Method `removeOwnerViaInv()` is just similar to `doEviction()` for inclusive caches, but it does slightly more.
 In addition to simulating the local write back and performing state transitions (turning transient and stable `E`
@@ -3195,4 +3202,5 @@ removed from `responses`.
 
 Second, if the flush does not contain an evicted block, then the requestor of the flush is not an upper level
 owner. A second check is therefore made to check if any upper level owner exists by calling `hasOwner()`.
-If true, then the owner is downgraded
+If true, then the owner is downgraded by calling `sendFetch()` with the command being `FetchInvX`.
+The state will transits to the `_Invx` version.
