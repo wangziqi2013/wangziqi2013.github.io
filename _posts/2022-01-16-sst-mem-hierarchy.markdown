@@ -3103,3 +3103,21 @@ For the sharer case, the command can be either `Inv`, if the request is an upgra
 or `FetchInv` to perform invalidation and fetch in the same transaction.
 For the latter case, the command is always `FetchInv`, just like in an inclusive cache.
 In both cases, the state transits to `M_Inv` (not `M_D`).
+
+All other transient states will cause the event to be inserted into the MSHR, and serialized after the existing ones
+on the same address.
+
+##### handleGetX(), Response Path
+
+There are three responses paths for an `GETX`, and they are the fetch, invalidation, and data response from the
+lower level.
+Method `handleFetchResp()` handles response events for earlier `FetchInv`s sent to one or more upper level caches.
+The method first decrements the ACK counter, and sets the local boolean flag `done` if it reaches zero, and it
+then updates `responses`.
+The method also inserts data into the data array, if it exists, or into the MSHR.
+For `GETX`, the possible states it will see are `SM_Inv` and `M_Inv`.
+In the former case, the front event will not be retried, if the in progress flag is set. This is the case for 
+`GETX`, since the flag is set in the handler `SM_Inv`. The retry will only
+be attempted when the response for `GETX` is received from the lower level.
+In the latter case, the event is always retried.
+In both cases, the sharer or the owner is removed, and the state transits to `SM` and `M`, respectively.
