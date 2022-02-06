@@ -3143,3 +3143,10 @@ This will cause unnecessary retries of the `GETX` event, since `SM_Inv` blocks w
 in this method, before the front event, which is `GETX`, is retried. 
 If `GETX` (which is already in the MSHR) is retried on a block in state `SM`, it will do nothing.
 
+Method `handleGetXResp()` handles the response event from the lower level. 
+For `IM` and `SM` states, the state will first transit to `M`, and the requestor is also added as the owner.
+If the requestor is also currently a sharer, then no data will be sent. Otherwise, data is sent either from the
+data array, if it exists, or from the MSHR.
+MSHR data is cleared after sending the response, since the ownership now transfers to the upper level, and there is
+no need to keep a copy of data locally.
+
