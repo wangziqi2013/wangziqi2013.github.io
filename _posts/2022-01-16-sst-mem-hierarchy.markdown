@@ -3066,5 +3066,9 @@ the data array opportunistically, meaing that this will happen only if the data 
 In the full miss path of `GETS`, this will never happen, as the `GETS` is only sent to the lower level when
 there is a directory miss, in which case data must also not be present.
 
-
+Method `handleGetSResp()` also completes the `GETX` request without having to retry the handler itself.
+It adds the original requestor as a sharer to the block, and forwards the response event up by calling 
+`sendResponseUp()`. 
+At the end of the method, the original `GETS` event object is removed from the MSHR front entry by 
+calling `cleanUpAfterResponse()`.
 
