@@ -3080,10 +3080,13 @@ If the access misses the cache, then a directory entry is allocated, and its sta
 The `GETX` event is also forwarded to the lower level by calling `forwardMessage()`.
 If the access sees a `S` state entry, an upgrade is only needed if the cache is not a last-level cache.
 The upgrade is perfomed by first forwarding the event to the lower level, and then calling 
-`invalidateExceptRequestor()` to either invalidate (`INV`), or to invalidate and fetch data from the upper level 
-(`FetchInv`). 
+`invalidateExceptRequestor()` to invalidate (`INV`) shared copies of the block in the upper level (`FetchInv`). 
 If at least one invalidation is sent to the upper level, then the state transits to `SM_Inv`. 
 Otherwise, there is no need to wait for invalidation, because there is not any upper level sharer nor owner,
 in which case the state transits to `SM`.
 
-
+Note that the last argument to `invalidateExceptRequestor()` is a boolean variable indicating whether data is fetched
+from one of the sharers. In method `handleGetX()`, it is set to `true` if the data entry is not found.
+In the helper function `invalidateExceptRequestor()`, if that argument is set to `true`, and that the source
+of the request is not already a sharer (i.e., not an upgrade `GETX` request), then the command used will be
+`FetchInv`, such that data will be received. Otherwise, the command is just `Inv`.
