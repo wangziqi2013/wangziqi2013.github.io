@@ -3204,3 +3204,15 @@ Second, if the flush does not contain an evicted block, then the requestor of th
 owner. A second check is therefore made to check if any upper level owner exists by calling `hasOwner()`.
 If true, then the owner is downgraded by calling `sendFetch()` with the command being `FetchInvX`.
 The state will transits to the `_Invx` version.
+
+On `_InvX` blocks, if the flush contains evicted data, meaing that the flush is issued by the sole upper level 
+owner (`_InvX` indicates the existance of an upper level owner), then this is a race condition, and the flush
+is regarded as the response to the earlier downgrade. In this case, `removeOwnerViaInv()` is called with the second 
+argument being `true`, meaing that the requestor should also be removed from the `responses`.
+Then the rest of the downgrade is also completed by decrementing the ACK counter, and retrying the current
+front entry of the MSHR register.
+The state also transits back to the stable version to signal the completion of the downgrade.
+
+Note that this branch does not check whether MSHR allocation is successful (`status` being `OK`), since it resolves
+the race condition in which case the front entry of the MSHR register must be an unfinished event, rather than
+the flush.
