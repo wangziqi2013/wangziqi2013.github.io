@@ -3034,3 +3034,18 @@ Third, if data is present, and there is no upper level owner, the access is a hi
 For all other states, the event is inserted into the MSHR, and serialized after all existing entries of the MSHR
 register. If MSHR insertion fails in any of the above steps, then the event will be NACK'ed to the upper level,
 by calling `sendNACK()`.
+
+##### handleGetS(), Response Path
+
+There are three possible response paths. The first one is `handleFetchResp()`, which is just similar to other
+downgrade and invalidation handling methods. 
+At the beginning of the method, it first updates ACK counter of the MSHR register by calling `decrementAcksNeeded()`,
+and then removes the sender of the fetch response event from `responses`.
+Then a switch block is used to perform state transition. Here, we only care about the `_D` state,
+which will transit to the state stored in table `NextState`, which is defined in `memTypes.h`, and it defines a 
+subset of state transitions that can be used to simplify coding.
+In our case, the `_D` state will transit to the non-`_D` stable version, i.e., `S_D`, `E_D`, `M_D` will transit
+to `S`, `E`, and `M`, respectively, meaing that a copy of the data has been acquired from.
+After the state transition, the current front event of the MSHR register is retried by calling `retry()`.
+
+
