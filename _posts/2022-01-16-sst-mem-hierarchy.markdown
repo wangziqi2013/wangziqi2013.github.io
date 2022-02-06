@@ -3264,5 +3264,9 @@ For `S` state blocks, the local state change of the write back is first simulate
 Then, if there is any upper level sharer, an invalidation transaction is started, and the state transits to `S_Inv`.
 Otherwise, the flush invalidation completes immediately, and the state transits to `I_B`.
 
-
+For state `E` and `M`, the logic is more of less the same as in state `S`. First, local write back or state change 
+is simulated by calling `removeOwnerViaInv()` or `removeSharerViaInv()` depending on whether there is an owner.
+Then, if an owner or other sharers still exist, they are invalidated using `FetchInv` or `Inv`, respectively,
+after which the state transit to `E_Inv` and `M_Inv`.
+Otherwise, the flush invalidation completes immediately, and the state transits to `I_B`.
 
