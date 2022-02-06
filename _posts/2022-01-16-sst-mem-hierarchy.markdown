@@ -3150,3 +3150,7 @@ data array, if it exists, or from the MSHR.
 MSHR data is cleared after sending the response, since the ownership now transfers to the upper level, and there is
 no need to keep a copy of data locally.
 
+For `SM_Inv`, the state transits to `M_Inv`, and the in progress flag is cleared, such that later on, 
+in `handleFetchResp()`, the event will be retried after the fetch response event have been received.
+The `GETX`, however, is still not completed, and must wait for all invalidations or fetches to finish. 
+This is why `cleanUpEvent()` is called for this case branch, instead of `cleanUpAfterResponse()`.
