@@ -3048,4 +3048,10 @@ In our case, the `_D` state will transit to the non-`_D` stable version, i.e., `
 to `S`, `E`, and `M`, respectively, meaing that a copy of the data has been acquired from.
 After the state transition, the current front event of the MSHR register is retried by calling `retry()`.
 
+Note that, if the data array entry is still not present when the response event is handled, data received from the 
+fetch event is not inserted into the data array, due to the cache being 
+non-inclusive. Instead, the data is stored in the MSHR register by calling `setData()` on the data member `mshr_`.
+In the `GETS` handler, if the data entry is not present, but there is one in the MSHR, then the one in the MSHR
+will be used.
 
+The second response path is `handleFetchInvXResp()`, which 
