@@ -3014,5 +3014,12 @@ and the state transits to `IS`.
 Note that we ignore the `IA` case, which, as we have discussed above, is only used for reserving a data array
 entry during prefetching.
 
-
+On hitting an `S` state block, the method checks whether the data array entry is valid. If true, then this is a full
+hit, and the access is satisfied immediately in the current cycle by calling `sendResponseUp()`.
+Otherwise, the access still incurs a partial miss, where the directory entry is valid, but data is not available.
+In this case, the event is first inserted into the MSHR, and if the insertion is successful, then 
+the method issues a `Fetch` command to the first sharer of the block (obtained with `tag->getSharers()->begin()`) 
+by calling `sendFetch()`, and the state transits to transient state `S_D`.
+The `S_D` state indicates that an going transaction is waiting for data to arrive, in which case it transits 
+back to `S`, and the transaction is retried.
 
