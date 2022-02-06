@@ -3121,3 +3121,7 @@ In the former case, the front event will not be retried, if the in progress flag
 be attempted when the response for `GETX` is received from the lower level.
 In the latter case, the event is always retried.
 In both cases, the sharer or the owner is removed, and the state transits to `SM` and `M`, respectively.
+
+Method `handleAckInv()` operates similarly to `handleFetchResp()`. The methods updates the ACK counter and the 
+`responses` map, and sets `done` flag if all invalidations have been received.
+There is no state transition in `handleAckInv`, and in all cases, the front entry of the MSHR is retried.
