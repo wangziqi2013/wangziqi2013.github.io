@@ -3037,21 +3037,29 @@ by calling `sendNACK()`.
 
 ##### handleGetS(), Response Path
 
-There are three possible response paths. The first one is `handleFetchResp()`, which is just similar to other
-downgrade and invalidation handling methods. 
-At the beginning of the method, it first updates ACK counter of the MSHR register by calling `decrementAcksNeeded()`,
-and then removes the sender of the fetch response event from `responses`.
-Then a switch block is used to perform state transition. Here, we only care about the `_D` state,
+There are two possible response paths. The first one is `handleFetchResp()`, which handles the response event to 
+a `Fetch` or `FetchInvX` sent earlier in order to acquire the data, and to optionally downgrade the upper level
+owner. At the beginning of the method, it first updates ACK counter of the MSHR register by calling 
+`decrementAcksNeeded()`, and then removes the sender of the fetch response event from `responses`.
+Then a switch block is used to perform state transition. Here, we only care about the `_D` and the `_InvX` state,
 which will transit to the state stored in table `NextState`, which is defined in `memTypes.h`, and it defines a 
 subset of state transitions that can be used to simplify coding.
 In our case, the `_D` state will transit to the non-`_D` stable version, i.e., `S_D`, `E_D`, `M_D` will transit
 to `S`, `E`, and `M`, respectively, meaing that a copy of the data has been acquired from.
+The `_InvX` state will also transit to the corresponding stable state, i.e., `E` and `M`.
 After the state transition, the current front event of the MSHR register is retried by calling `retry()`.
+For downgrades, the previous owner is removed as an owner, and added to the sharer list.
 
 Note that, if the data array entry is still not present when the response event is handled, data received from the 
 fetch event is not inserted into the data array, due to the cache being 
 non-inclusive. Instead, the data is stored in the MSHR register by calling `setData()` on the data member `mshr_`.
 In the `GETS` handler, if the data entry is not present, but there is one in the MSHR, then the one in the MSHR
 will be used.
+This is different from the one in inclusive caches, in which case, if the response event carries data, then
+the local state must be updated by simulating the local write back (via `doEviction()`).
+Non-inclusive caches do not need the local write back, and hence the state transition is easier than what is in the 
+inclusive design.
 
-The second response path is `handleFetchInvXResp()`, which 
+The second response path is method `handleGetSResp()`, which handles the response event from the lower level to
+an earlier `GETS`. 
+
