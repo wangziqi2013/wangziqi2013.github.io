@@ -3061,5 +3061,10 @@ Non-inclusive caches do not need the local write back, and hence the state trans
 inclusive design.
 
 The second response path is method `handleGetSResp()`, which handles the response event from the lower level to
-an earlier `GETS`. 
+an earlier `GETS`. This method simply transits the state of the directory to `S`, and only inserts new data into
+the data array opportunistically, meaing that this will happen only if the data entry already exists. 
+In the full miss path of `GETS`, this will never happen, as the `GETS` is only sent to the lower level when
+there is a directory miss, in which case data must also not be present.
+
+
 
