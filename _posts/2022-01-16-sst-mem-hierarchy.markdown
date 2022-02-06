@@ -2993,7 +2993,7 @@ and if true, the transient or stable `E` state will transit to the corresponding
 
 #### CPU-Generated Data Requests
 
-##### handleGetS()
+##### handleGetS(), Request Path
 
 Method `handleGetS()` in non-inclusive caches differs from its counterpart in inclusive caches by having to handle
 two different types of misses. The first type, full miss, occurs when both the directory entry and the data entry
@@ -3021,5 +3021,16 @@ In this case, the event is first inserted into the MSHR, and if the insertion is
 the method issues a `Fetch` command to the first sharer of the block (obtained with `tag->getSharers()->begin()`) 
 by calling `sendFetch()`, and the state transits to transient state `S_D`.
 The `S_D` state indicates that an going transaction is waiting for data to arrive, in which case it transits 
-back to `S`, and the transaction is retried.
+back to `S`, and the transaction will be retried.
 
+On hitting `E` or `M` state block, there are three possibilities. First, if the block has an upper level owner,
+then a downgrade is sent to the owner by calling `sendFetch()` with the command being `FetchInvX`, after which
+the state transits to `E_InvX` or `M_InvX`. In this case, the data array is not checked, since the downgrade
+response event always carries data.
+Second, if data is not present, then data is fetched from the first sharer in the upper level, which is similar
+to the `S` state case, despite that the state transits to `S_D` and `E_D`, respectively.
+Third, if data is present, and there is no upper level owner, the access is a hit, and is satidified immediately.
+
+For all other states, the event is inserted into the MSHR, and serialized after all existing entries of the MSHR
+register. If MSHR insertion fails in any of the above steps, then the event will be NACK'ed to the upper level,
+by calling `sendNACK()`.
