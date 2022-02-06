@@ -3218,8 +3218,23 @@ Then the rest of the downgrade is also completed by decrementing the ACK counter
 front entry of the MSHR register.
 The state also transits back to the stable version to signal the completion of the downgrade.
 
+If the flush does not contain evicted data, then it must come from one of the non-owners. In this case no action is
+required, and flush is not performed either.
+
 Note that this branch does not check whether MSHR allocation is successful (`status` being `OK`), since it resolves
-the race condition in which case the front entry of the MSHR register must be an unfinished event, rather than
-the flush.
+the race condition in which case the front entry of the MSHR register must be an unfinished event. 
+The flush is not performed in this case, as the flush event is not at the front of the MSHR register.
+After resolving the race condition, the event still remains in the MSHR register, which will be retried later.
 
+On `_InV` blocks, the flush races with an ongoing invalidation. If the block contains evicted data, then we may
+further conclude that the invalidation must be issued to the sole owner of the address in the upper level
+(because otherwise the flush will not contain data). Although the flush may not be regarded as the response to
+invalidation in this case, and the upper level block, despite being downgraded by the flush, will still respond 
+to the invalidation event, the flush event still acts as a transfer of ownership.
+In this regard, the transfer of ownership and the local write back is simulated by calling `removeOwnerViaInv()`
+and adding the requestor as a sharer. The evict flag is also set to `false` such that the above is only simulated 
+once.
 
+In all other cases, the flush cannot proceed and it will just wait in the MSHR register. 
+
+##### handleFlushLine(), Request Path
