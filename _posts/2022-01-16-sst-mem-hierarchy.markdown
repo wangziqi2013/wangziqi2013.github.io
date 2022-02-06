@@ -3177,3 +3177,11 @@ Besides, flushes on `S` state blocks do not need to check write backs, since the
 any ownership, and hence will not perform any write back.
 
 
+
+Method `removeOwnerViaInv()` is just similar to `doEviction()` for inclusive caches, but it does slightly more.
+In addition to simulating the local write back and performing state transitions (turning transient and stable `E`
+state to the corresponding `M` version) and removing the requestor of the event in the argument as an owner, 
+it also installs block data either into the data array, if the data entry exists, or into the MSHR.
+Besides, the boolean argument `remove` indicates whether the event in the argument can be regarded as a response to
+an earlier downgrade or invalidation. If `remove` is set to `true`, then the corresponding entry will also be 
+removed from `responses`.
