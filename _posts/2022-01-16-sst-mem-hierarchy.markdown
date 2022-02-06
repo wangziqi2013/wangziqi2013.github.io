@@ -3090,3 +3090,11 @@ from one of the sharers. In method `handleGetX()`, it is set to `true` if the da
 In the helper function `invalidateExceptRequestor()`, if that argument is set to `true`, and that the source
 of the request is not already a sharer (i.e., not an upgrade `GETX` request), then the command used will be
 `FetchInv`, such that data will be received. Otherwise, the command is just `Inv`.
+
+For state `E` and `M` blocks, there are three possible cases. First, if the block is not shared by any means 
+in the upper level, then the access indicates a hit, and can be completed immediately by setting the requestor
+as the owner (and potentially removing it as a sharer), and then sending the response with `sendResponseUp()`.
+Note that in this case, it is guaranteed that data is available, since the non-inclusive cache enforces the invariant
+that if a directory entry exists, then data either exists in the upper level, or exists in the current level.
+
+
