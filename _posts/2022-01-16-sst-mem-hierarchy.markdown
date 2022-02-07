@@ -3371,4 +3371,17 @@ transits to `EA` or `MA` to indicate the fact that the current event is waiting 
 data eviction to complete. 
 The states will transit back to normal and the `PUTE` will be retried in the eviction handler. 
 
+On `E_InvX` and `M_InvX` blocks, since `PUTE` indicates that the requestor is the only upper level owner,
+the event performs an ownership transfer, which involves removing the requestor as the owner, updating the
+ACK counter, updating the `responses` map, and transiting to the corresponding stable state such that the
+ongoing downgrade is completed.
+The method then attempts to insert data into the data array by checking whether the data array entry exists.
+If true, then the insertion can complete immediately, and the handling concludes.
+Otherwise, a data entry must be allocated by evicting an existing one.
+To achieve this, the method inserts a `PUTS` (by reusing the current event object after changing its 
+command to `PUTS`) into the MSHR. Just similar to how the `PUTS` handler preserves the non-inclusiveness invariant,
+this method also inserts the event as either the second or the third entry depending on the existing 
+entries. Note that the reason that a `PUTS` event is used, instead if the current `PUTE`, is because the ownership
+transferred has already been done, if control reaches here, and the transfer should only be done once.
+The `PUTS` is solely to avoid the method from performing the ownership transfer multiple times.
 
