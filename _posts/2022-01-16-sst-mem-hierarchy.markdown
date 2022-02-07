@@ -3385,3 +3385,14 @@ entries. Note that the reason that a `PUTS` event is used, instead if the curren
 transferred has already been done, if control reaches here, and the transfer should only be done once.
 The `PUTS` is solely to avoid the method from performing the ownership transfer multiple times.
 
+On `E_Inv` and `M_Inv` blocks, ownership transfer will also happen just like how it is performed in the `_InvX` case.
+The only difference is that the event is always completed after handling ownership transfer, without being 
+inserted into the MSHR. The reason is that the `_Inv` states, in all cases, do not need the data. 
+If the `_Inv` state is incurred due to a data access, and there is an upper level `E` state block, 
+then it must be caused by a `GETX` on a different upper level cache, in which case, the ownership just transfers
+to the `GETX` requestor.
+The `_Inv` state may also be caused by eviction, flush invalidation, or lower level external requests, in which 
+case the current cache will lose the ownership and even the directory entry of the address, anyway, and 
+keeping the block in the data array is also unnecessary.
+Based on the above reasons, in this switch branch, the data is only set in the MSHR, if the data array entry is not 
+found.
