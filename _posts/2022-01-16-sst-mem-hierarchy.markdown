@@ -3396,3 +3396,8 @@ case the current cache will lose the ownership and even the directory entry of t
 keeping the block in the data array is also unnecessary.
 Based on the above reasons, in this switch branch, the data is only set in the MSHR, if the data array entry is not 
 found.
+
+##### handlePutM()
+
+Method `handlePutM()` is almost identical to `handlePutE()`, except that the transient state is always `MA`, if 
+a data array entry is to be allocated, and that the eventual state is always `M`.
