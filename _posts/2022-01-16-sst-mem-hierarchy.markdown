@@ -3345,5 +3345,16 @@ the current cache nor the upper level cache will have a valid copy of the block,
 If the check does not pass, however, then the `PUTS` is essentially a no-op, and the handling concludes by
 removing the requestor as a sharer, and then sending back an explicit ACK, and eventually calling `cleanUpEvent()`.
 
+For all `_D` version states that indicate an ongoing fetch, the `PUTS` races with the fetch only if it is 
+from the first sharer of the sharer list (otherwise it is just a no-op).
+If this is true, then the method will first conclude the fetch by updating the ACK counter, the `responses` map,
+and then calling `retry()` to retry the original event that caused the fetch.
+The state also transits from the `_D` version to the stable version as well.
+The method then checks whether the requestor is the last upper level sharer of the block.
+If true, then the `PUTS` should also be handled as early as possible after the state transits back to a stable
+state, such that the non-inclusiveness invariant is not broken.
+To this end, the method finds the oldest entry in the MSHR after which the `PUTS` can be processed.
+For this method specifically, the `PUTS` will be either inserted as the third event in the MSHR, if the second event
+is an external event or it is in progress, or as the second event, if otherwise.
 
 
