@@ -3335,4 +3335,15 @@ The request completes immediately, and the next event in the MSHR register is re
 Note that in this case, no data array allocation is required, and block data is stored in the MSHR, if the
 data array entry does not exist. This is also consistent with how invalidations are usually handled.
 
+For all `_B` version states that indicate an ongoing flush, the method will check whether data exists locally,
+and whether the requestor has the last upper level copy of the block. If both are true, then the `PUTS`
+is inserted as the second front entry of the MSHR register, right after the ongoing flush event.
+The reason is that the invariant must be maintained such that, if the directory entry is valid, then there
+must be a copy either in the upper level, or exists locally.
+If the `PUTS` is not handled right after the flush, then there is a window of vulnerability in which neither
+the current cache nor the upper level cache will have a valid copy of the block, which breaks the invariant.
+If the check does not pass, however, then the `PUTS` is essentially a no-op, and the handling concludes by
+removing the requestor as a sharer, and then sending back an explicit ACK, and eventually calling `cleanUpEvent()`.
+
+
 
