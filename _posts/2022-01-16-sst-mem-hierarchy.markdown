@@ -3325,3 +3325,14 @@ In the former case, the block data in the event is inserted into the data array,
 as a sharer. Eventually, the handling completes by calling `cleanUpAfterRequest()`.
 In the latter case, the state transit to the corresponding `_A` version, and the handling completes.
 The `PUTS` will be retried in eviction handler when the eviction on the old address succeeds.
+
+For all `_Inv` version states, the `PUTS` is regarded as a valid response for an earlier invalidation, which
+is simulated by calling `removeSharerViaInv()`, with the last argument being `true`. 
+Besides, the ACK counter is updated, and if it reaches zero, invalidation completes, and the state will
+transit back to the corresponding stable states.
+The request completes immediately, and the next event in the MSHR register is retried by calling 
+`cleanUpAfterRequest()`.
+Note that in this case, no data array allocation is required, and block data is stored in the MSHR, if the
+data array entry does not exist. This is also consistent with how invalidations are usually handled.
+
+
