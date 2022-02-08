@@ -229,8 +229,8 @@ call back function, `recvHandler_`, with the object being the only argument.
 ### Transforming Requests to MemEvents
 
 What function `createMemEvent()` does is quite straightforward, and does not require much explanation. It first
-translates the request command into the memory hierarchy's command, e.g., reads will become `GETS`, and writes
-will become `GETX` (but reads will the locked flag set will become `GETSX`). 
+translates the request command into the memory hierarchy's command, e.g., reads will become `GetS`, and writes
+will become `GetX` (but reads will the locked flag set will become `GETSX`). 
 Then it allocates a new `class MemEvent` object from the heap, and initializes the object with all necessary
 information in order to perform the operation.
 Note that the `src_` field of the memory event object is set to the name of the interface object itself, which is
@@ -1358,16 +1358,16 @@ Helper functions are covered when they are encountered for the first time.
 
 ##### High-Level Overview
 
-CPU may initiate three types of data requests: `GETS`, which obtains a block in shared state for read, `GETX`, 
-which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GETX`, except that
-the block is locked in the L1 cache, until a future `GETX` with an atomic flag hits it.
+CPU may initiate three types of data requests: `GetS`, which obtains a block in shared state for read, `GetX`, 
+which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GetX`, except that
+the block is locked in the L1 cache, until a future `GetX` with an atomic flag hits it.
 `GETSX` is essential for implementing atomic read-modify-write instructions.
 
 From a high-level perspective, these requests are handled as either a single transaction, in the case of 
 cache hits, or as a few separate atomic transactions, if the access misses. 
 The coherence controller first performs a lookup on the tag array. If the tag entry of the requested address
 exists, and it is in a state that does not need further coherence actions 
-(e.g., `E/M` state on `GETX`), then the access is a hit, and the response is sent back in the same cycle the
+(e.g., `E/M` state on `GetX`), then the access is a hit, and the response is sent back in the same cycle the
 request is processed. 
 
 Otherwise, the access incurs a cache miss, and the coherence controller inserts the request into the MSHR (if this
@@ -1375,7 +1375,7 @@ fails, then the request is rejected by the coherence controller, and the cache c
 discussed earlier). Meanwhile, a new request is created based on the current request, and the new request is sent
 to the lower level to acquire the block.
 The rest of the actions depends on whether the address tag already exists in the current cache or not. If it does,
-meaning that the coherence action is taken to upgrade the permission of the block (which only happens for `GETX`
+meaning that the coherence action is taken to upgrade the permission of the block (which only happens for `GetX`
 and `GETSX`), then no further action is taken.
 
 If, however, the address tag does not exist, then two more transactions are started: eviction and write back.
@@ -1392,7 +1392,7 @@ ongoing transaction of
 block fetching or upgrading. `I` state blocks will transit to `IS` or `IM`, depending on the type of the request.
 `S` state blocks will transit to `SM`, if an upgrade is required.
 `E` and `M` state blocks will never miss, and the request is handled trivially in one cycle (although `E` state
-blocks will become `M` on `GETX` requests).
+blocks will become `M` on `GetX` requests).
 
 The second half of the transaction begins when the response event for an earlier cache miss is received.
 The coherence controller matches the response event with the outstanding MSHR entry, removes the entry,
@@ -1404,7 +1404,7 @@ completion of the access.
 ##### handleGetS(), Hit Path
 
 We use function `handleGetS()` to walk over the above sequence as an example. This function is called in the 
-cache controller's tick handler to process an memory event object of type `GETS`. 
+cache controller's tick handler to process an memory event object of type `GetS`. 
 The `inMSHR` argument is set to `false`, if the event object is from the cache controller's event buffer,
 or `true`, if the object is from its retry buffer (which itself is just copied from the coherence controller's
 retry buffer at the end of every tick).
@@ -1550,9 +1550,9 @@ in which case the next entry being a write back is truly possible.
 
 ##### handleGetS(), Response Path, Part II
 
-It is also possible that `GETS` request receives a `GetXResp` as the response message, which invokes 
+It is also possible that `GetS` request receives a `GetXResp` as the response message, which invokes 
 `handleGetXResp()` for event handling. This may happen if one or more lower level caches are non-inclusive,
-and on the `GETS` request, they just decide to give up the ownership of a dirty block.
+and on the `GetS` request, they just decide to give up the ownership of a dirty block.
 The dirty block will be delivered to the requesting cache via `GetXResp`, and the handler will 
 see transient state `IS`.
 
@@ -1621,7 +1621,7 @@ A better scheme would be just to add an else to the `if` statement that checks p
 
 If there is no pending retry on the old address, the block is not locked, and the state of the block is 
 a stable state, eviction could then proceed in the current cycle, by sending write back requests to the 
-lower level with `PUTS`, `PUTE`, or `PUTM` commands,
+lower level with `PutS`, `PutE`, or `PutM` commands,
 for state `S`, `E`, and `M`, respectively. Transient states indicate ongoing transactions on the address, 
 in which case eviction should also be delayed (the control flow will hit the `default` case).
 The actual request object is sent with `sendWriteback()`, which is just a simple function that creates a 
@@ -1681,7 +1681,7 @@ The eviction entry, though, still remains as the front entry of the MSHR with al
 When the second request of the locked instruction is handled by `handleGetX()`, since the address is guaranteed
 to be locked in the cache, the instruction would never retry, never miss the cache, and hence will always succeed on 
 the first attempt, never requiring an MSHR. 
-After the `GETX` completes (which will hit an `M` state line), the method `cleanUpAfterRequest()` is called,
+After the `GetX` completes (which will hit an `M` state line), the method `cleanUpAfterRequest()` is called,
 which, in this case, will see the eviction entry, and the eviction requests will be retried again.
 
 ##### handleGetX()
@@ -1697,29 +1697,29 @@ if the down link connects to a memory end point.
 state, `IM` and `SM`, respectively. 
 `E` and `M` states will be cache hits, and in the case of `E` state blocks, it will transit to `M` state.
 
-3. In the case of cache misses, the request sent down the hierarchy is of type `GETX`. Correspondingly, the response
+3. In the case of cache misses, the request sent down the hierarchy is of type `GetX`. Correspondingly, the response
 message received is `GetXResp`, which is handled by method `handleGetXResp()`.
 On receiving the response message, `IM` and `SM` state blocks will transit back to the stable state, `M`.
-In addition, if the `GETX` request is the second half of an atomic read-modify-write instruction, receiving the 
+In addition, if the `GetX` request is the second half of an atomic read-modify-write instruction, receiving the 
 response will cause the lock counter to be decremented (by calling `decLock()`), indicating the completion 
 of the locked instruction.
 Note: I am quite sure whether the last part about locked instructions is necessary or not, 
 because locked cache blocks will be acquired in `M` state from the beginning, and will never be evicted 
-or downgraded until the second `GETX` releases the lock.
-This way, it is impossible for a locked `GETX` instruction to cause a cache miss, and hence `handleGetXResp()`
-should never see a locked `GETX` as the request type.
+or downgraded until the second `GetX` releases the lock.
+This way, it is impossible for a locked `GetX` instruction to cause a cache miss, and hence `handleGetXResp()`
+should never see a locked `GetX` as the request type.
 
-4. `GETX` requests with the `F_LOCKED` flag set is regarded as the second half of read-modify-write atomic
+4. `GetX` requests with the `F_LOCKED` flag set is regarded as the second half of read-modify-write atomic
 instructions. When such a request is processed (it should always hit on the first attempt), the flag is checked,
 and if the flag is set, the lock counter of the block will be incremented by calling `incLock()`.
 
 ##### handleGetSX()
 
 `handleGetSX()` is almost identical to `handleGetX()`. Its purpose is to acquire a cache block in exclusive state,
-and then lock the block in the cache until a later `GETX` on the same address writes to the block. 
+and then lock the block in the cache until a later `GetX` on the same address writes to the block. 
 This type of requests are used to implement atomic read-modify-write instructions, where the read part corresponds 
 to the `GETSX` request, which locks the block in `M` state to avoid data race, and the later write unlocks
-the block with a `GETX` request and the `F_LOCKED` flag set.
+the block with a `GetX` request and the `F_LOCKED` flag set.
 
 The only difference between `handleGetSX()` and `handleGetX()` is that, on a cache hit, the lock counter on the
 block is incremented by calling `incLock()`. If the access incurs a miss or upgrade, then the `GETSX` request
@@ -1892,7 +1892,7 @@ For example, upgrade transient state `S_M` will become `I_M`, and after the
 response of the upgrade arrives, it becomes `M`. Flush transient state `S_B` will become `I_B`, and when the 
 flush response is received, it then becomes `I`.
 `handleInv()` is used by the coherence protocol to invalidate shared copies of a block, when another cache 
-performs `GETS` or an upgrade.
+performs `GetS` or an upgrade.
 
 Note that the source comment for `handleFetch()` says "In these cases, an eviction raced with this request"
 under switch case `I_B`. This is incorrect, because evictions do not cause the cache block to transit into
@@ -1908,11 +1908,11 @@ In this case, an MSHR register entry is allocated for the event by calling `allo
 If the allocation is rejected, then the handler function returns `false`, which will leave the event in the 
 cache controller's buffer for the next cycle, and otherwise, it returns `true`.
 Note that the allocation passes `true` to argument `fwdRequest`, and zero to argument `pos`, meaning that two
-entries from the MSHR register is reserved (since the invalidation is waiting for another `GETX` request to unlock
+entries from the MSHR register is reserved (since the invalidation is waiting for another `GetX` request to unlock
 the block), and that the invalidation event type entry will be allocated at the front of the register.
 
-After a `GETX` unlocks the block (which will always hit, since the block is locked in the cache in `M` state by an
-earlier `GETSX`), the `GETX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
+After a `GetX` unlocks the block (which will always hit, since the block is locked in the cache in `M` state by an
+earlier `GETSX`), the `GetX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
 This time, since the block is unlocked, the invalidation can be processed without trouble.
 The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
 Responses of type `AckInv` are also sent down by calling `sendResponseDown()`, with `data` being `false` for
@@ -1987,7 +1987,7 @@ blocks are only a subset of blocks in the current cache.
 Data member `cacheArray_` is the tag array of the cache, which maintains both the local state as well as the 
 coherence state of the upper level caches on the tag address.
 Boolean field `protocol_` specifies whether the clean-exclusive `E` state should be granted to the upper level
-cache. The `E` state will be granted, when a `GETS` is processed, and the requestor is the only sharer of the 
+cache. The `E` state will be granted, when a `GetS` is processed, and the requestor is the only sharer of the 
 block. In other words, the protocol being simulated by the controller is MESI, if the field is `true`, 
 and MSI if otherwise.
 Data member `protocolState_` is of value `E`, if `protocol_` is `true`, and `S` if otherwise, meaning that
@@ -2015,11 +2015,11 @@ The coherence controller introduces the following three classes of transient sta
 all or some copies of the address in upper level caches is going on;
 (2) `E_InvX` and `M_InvX`, which indicate that a downgrade transaction that transfers ownership and perhaps
 dirty data from the upper level to the current level is going on.
-(3) `SM_Inv`, which indicates that the block is in the process of upgrading from `S` to `M` after issuing `GETX`
+(3) `SM_Inv`, which indicates that the block is in the process of upgrading from `S` to `M` after issuing `GetX`
 to the lower level to obtain ownership, while also in the process of invalidating all shared copies in the 
 above level. This state may transit to `M_Inv` or `SM` depending on which transaction completes first.
 Note that after the `SM_Inv` state transits back to the stable state `M`, there is still one sharer, which is the
-one that issues the `GETX` request and has successfully upgraded its local block.
+one that issues the `GetX` request and has successfully upgraded its local block.
 
 #### Helper Functions
 
@@ -2032,7 +2032,7 @@ to introduce them first.
 Method `downgradeOwner()`, as the name implies, downgrades the current owner of the block in upper level caches
 into the shared state. Since there can be at most a single owner on any address, this method only needs to send
 one downgrade request to the owner tracked by the per-block coherence states, and waits for the response.
-This method is called in three cases: (1) When a `GETS` request hits a block that has an exclusive owner which is not
+This method is called in three cases: (1) When a `GetS` request hits a block that has an exclusive owner which is not
 the requestor, causing the ownership to transfer from the upper level to the current cache; 
 (2) When a flush request hits a block that has an owner that is different from the requestor, causing the ownership
 to transfer from both levels to the next level; and
@@ -2115,7 +2115,7 @@ without requiring data response (so it only receives `InvAck`).
 The method is called directly in handlers `handleForceInv()` and `handleFetchInv()`, when a block of state
 `SM_Inv` is to be invalidated. Note that an `SM_Inv` block, despite the fact that the `_Inv` suffix 
 implies that invalidations have been issued to sharers, still has one sharer, which is the one who issued 
-the `GETX` for an upgrade. The only sharer (not owner, since the upgrade has not completed yet), therefore, 
+the `GetX` for an upgrade. The only sharer (not owner, since the upgrade has not completed yet), therefore, 
 needs to be invalidated by calling this function.
 
 Besides, the method is also used by helper functions `invalidateExceptRequestor()` and `invalidateAll()` as a 
@@ -2160,7 +2160,7 @@ on the MSHR.
 The reason that `retry()` cannot be blindly called for `SM_Inv` is that this state indicates an ongoing upgrade
 transaction, the event entry of which is also in the MSHR, and it must not be retried multiple times. 
 The MSHR front event should eventually be retried by function `cleanUpAfterResponse()`, which does not 
-check the in progress flag of the MSHR entry, when the `GETX` response event is received from the lower level. 
+check the in progress flag of the MSHR entry, when the `GetX` response event is received from the lower level. 
 
 ##### invalidateOwner(), Request Path
 
@@ -2198,11 +2198,11 @@ The method also calls `retry()` to schedule the next entry in the MSHR for retry
 
 Method `invalidateExceptRequestor()`, as the name implies, invalidates all other copies of a block except the 
 requestor of a given event. 
-This method is used when a `GETX` hits a block in the cache, and it is indicated by the coherence state 
+This method is used when a `GetX` hits a block in the cache, and it is indicated by the coherence state 
 that the address is also being shared in upper level caches in shared states. 
 
 The method's logic is very straightforward: It enumerates the given block's sharer, and for each sharer that
-is not the source of the given event (which is a `GETX` issued by one of the upper level caches), then
+is not the source of the given event (which is a `GetX` issued by one of the upper level caches), then
 an invalidation will be sent to the cache by calling `invalidateSharer()`.
 For each invocation of `invalidateSharer()`, the timestamp of the block will be updated, and the final timestamp
 is in local variable `deliveryTime`, which will be set as the block's timestamp after the operation.
@@ -2248,7 +2248,7 @@ and the acknowledgement should be sent from the lower level.
 Also recall that, when eviction is being requested due to a replacement, `handleEviction()` will check (1)
 Whether the block is in one of the stable states; (2) Whether there are no pending retry on the address to be
 evicted; and (3) Whether the address is not locked by an atomic instruction.
-If all three criteria are satisfied, the eviction is handled by issuing a `PUTS`, `PUTE`, or `PUTM`, respectively,
+If all three criteria are satisfied, the eviction is handled by issuing a `PutS`, `PutE`, or `PutM`, respectively,
 for block state `S`, `E`, and `M`.
 
 ##### Race Condition Between Eviction and Invalidation
@@ -2284,14 +2284,14 @@ when it is received, and hence no MSHR entry is needed.
 ##### handlePutS()
 
 Method `handlePutS()` may handle an unsolicited eviction, or treat it as the response event to an earlier 
-invalidation due to a race condition. Note that `PUTS` will not race with downgrades, since `S` state blocks
+invalidation due to a race condition. Note that `PutS` will not race with downgrades, since `S` state blocks
 in the upper level will never cause a downgrade to be issued from the current cache.
 
 The method begins with the usual prologue as in other handler functions. Most notably, it calls `removePendingRetry()`
 if the `inMSHR` flag is set, but it is impossible for this event to be inserted into the MSHR, and the invocation
 will never be executed.
 The method then calls `doEviction()` to perform the local state transition of writing evicted data, in which case
-will perform both state transition of the local state (no-op in this case, since `PUTS` does not contain dirty data), 
+will perform both state transition of the local state (no-op in this case, since `PutS` does not contain dirty data), 
 and remove the source of the event from the sharer list or from the owner field (in this case, always sharer list).
 If the source also has an entry in the `responses` structure, the corresponding entry will be removed,
 just as if an `AckInv` has been received.
@@ -2316,9 +2316,9 @@ itself raced with the eviction.
 
 ##### handlePutE()
 
-Method `handlePutE()` is called when a `PUTE` event is received. It is similar to `handlePutS()`, with 
+Method `handlePutE()` is called when a `PutE` event is received. It is similar to `handlePutS()`, with 
 the state transition table being the major difference.
-Since a `PUTE` indicates the existence with ownership in an upper cache, which, in return, indicates that the
+Since a `PutE` indicates the existence with ownership in an upper cache, which, in return, indicates that the
 current level must also have exclusive state, state transition may only happen on one of the few transient and
 state states of `E` and `M`.
 Specifically, the state transition action only accepts state `E`, `M`, as well as the `_Inv` and `_InvX` versions.
@@ -2326,7 +2326,7 @@ Transient states will become their stable counterparts, and stable states do not
 
 ##### handlePutM()
 
-Method `handlePutE()` is called when a `PUTM` event is received. Its logic is identical to `handlePutE()`, but the
+Method `handlePutE()` is called when a `PutM` event is received. Its logic is identical to `handlePutE()`, but the
 actual operations being performed differ, since `doEviction()` will now also perform some state transition to
 simulate the local write back, in addition to removing the owner from the local coherence state.
 
@@ -2342,7 +2342,7 @@ To simplify discussion, we also only focus on the difference between the handler
 cache.
 
 The handling of state `I` and `S` are almost identical to those in the L1 cache. In the case of 
-state `I`, the sharer is added to the list only after the response message of the forwarded `GETS` is processed,
+state `I`, the sharer is added to the list only after the response message of the forwarded `GetS` is processed,
 i.e., when the block is in `IS` state, the sharer list does not contain the requestor.
 For state `S`, since it is a direct hit without further forwarding, the sharer list is updated immediately
 in the same cycle.
@@ -2351,7 +2351,7 @@ The handling of `E` and `M` state (they share the same logic) need to check whet
 has exclusive ownership, by calling `hasOwner()`.
 If true, then the owner must be degraded first, by calling `downgradeOwner()`, after 
 successfully allocating an MSHR entry. The state transits to `E_InvX` and `M_InvX`, respectively, for state `E` and 
-`M`, and the `GETS` request will be retried by the downgrade response handler when the downgrade completes.
+`M`, and the `GetS` request will be retried by the downgrade response handler when the downgrade completes.
 
 If the address does not have any owner, but has sharers, then the new sharer will be added into the list, and 
 the response event will be `GetSResp`. If there is no existing sharer, meaning that the requestor will become
@@ -2387,17 +2387,17 @@ MSHR entry.
 
 ##### handleGetS(), Response Path
 
-The response event to `GETS` is `GetSResp`, which will be handled by `handleGetSResp()`. 
+The response event to `GetS` is `GetSResp`, which will be handled by `handleGetSResp()`. 
 The handler is largely the same as the one in the L1 cache, with the only exception being that the 
-original requestor of `GETS` is added to the block's sharer list.
-Besides, the `GETS` response event is also sent to the upper level, by calling `sendResponseUp()`.
+original requestor of `GetS` is added to the block's sharer list.
+Besides, the `GetS` response event is also sent to the upper level, by calling `sendResponseUp()`.
 
 ##### handleGetX() and handleGetSX(), Request Path
 
-Method `handleGetX()` handles `GETX` request from the upper level, which can be a read or upgrade. 
+Method `handleGetX()` handles `GetX` request from the upper level, which can be a read or upgrade. 
 Blocks of `I` state is handled in the same way as in the L1 cache.
 Blocks of `S` state will always incur a cache upgrade transaction, with an optional invalidation.
-The method first forwards the `GETS` to the lower level by calling `forwardMessage()` to start the
+The method first forwards the `GetS` to the lower level by calling `forwardMessage()` to start the
 upgrade transaction. Then it calls `invalidateExceptRequestor()` to invalidate all potential sharers of
 the block. Note that since the state of the line itself is non-exclusive, there cannot be exclusive states
 in upper level caches, and hence only issuing invalidation is sufficient.
@@ -2415,10 +2415,10 @@ Otherwise, if it has an owner, checked by `hasOwner()`, then the owner will be i
 In both cases, the method returns, and will wait for the invalidation transaction to complete, before the
 current event is retried by the invalidation response handler.
 The state of the block also both transits to `M_Inv`. This suggests that the dirty state in the 
-non-L1 caches will be marked as early as the `GETX` from the L1 is processed (rather than when the dirty block
+non-L1 caches will be marked as early as the `GetX` from the L1 is processed (rather than when the dirty block
 is actually written back).
 
-If neither of the above two cases hold, the `GETX` can be processed immediately by adding the requestor as
+If neither of the above two cases hold, the `GetX` can be processed immediately by adding the requestor as
 the exclusive owner of the address.
 
 Again, if any of the MSHR allocation fails, NACK will be sent back to the requestor.
@@ -2428,15 +2428,15 @@ atomic instructions.
 
 ##### handleGetX() and handleGetSX(), Response Path
 
-The response event of both `GETX` and `GETS` is `GetXResp`, which is handled by `handleGetXResp()`. 
+The response event of both `GetX` and `GetS` is `GetXResp`, which is handled by `handleGetXResp()`. 
 The main body of the handler is the logic to perform state transition.
-If the state of the block is `IS`, meaning that the cache has issued a `GETS`, but the lower level
+If the state of the block is `IS`, meaning that the cache has issued a `GetS`, but the lower level
 granted exclusive ownership, then the state will transit to either `M`, if the response event carries
 dirty data (which will happen if the lower level cache is non-inclusive), or transit to `E`.
 In addition, the current cache also decide whether to grant shared or exclusive ownership to the 
 upper level. The decision is made by checking the number of entries in the MSHR register
 (`protocol_` and the line state are also checked, but they are not of major interest). If the MSHR
-register does not contain any other request other than the original `GETS`, then exclusive ownership
+register does not contain any other request other than the original `GetS`, then exclusive ownership
 is granted by calling `sendResponseUp()` to send a response event with the command `GetXResp`, and
 the original requestor is also added as an owner.
 Otherwise, since the MSHR already queues a few requests on the address, it is likely that the following
@@ -2449,8 +2449,8 @@ The same response is forwarded to the upper level by calling `sendResponseUp()`.
 
 For state `SM_Inv`, this indicates that the upgrade transaction has completed before invalidation does.
 The state transits to `M_Inv`, but no response is sent, and the original event is not retried.
-When the invalidation transaction also completes, the original `GETX` event will be retried, and the response
-event is sent to the requestor in the handler of the `GETX` event.
+When the invalidation transaction also completes, the original `GetX` event will be retried, and the response
+event is sent to the requestor in the handler of the `GetX` event.
 
 #### CPU-Generated Flush Request
 
@@ -2686,22 +2686,22 @@ Transient and stable `I` state blocks do not response to the `ForceInv`, and in 
 to `I`.
 
 Another piece of complication comes from state `SM_Inv`, which is entered when one of the upper level caches 
-issue a `GETX`, hitting the `S` state line at the current level, which incurs two concurrent transactions: 
+issue a `GetX`, hitting the `S` state line at the current level, which incurs two concurrent transactions: 
 (1) Invalidation of other sharers; and (2) Upgrade from `S` to `M` from the lower level.
 The `ForceInv` cannot be simply ordered before (2) and after (1), since (1) and (2) may complete in any order, and 
 additionally, even if (1) completes first, there would potentially still be a sharer of the block, which is the 
-issuer of the `GETX`.
+issuer of the `GetX`.
 To deal with this complication, the method first inserts `ForceInv` as the front entry of the MSHR register by
 calling `allocateMSHR()` with `pos` being zero. Then, the method potentially issues one more invalidation
-to the issuer of the `GETX` (obtained via `getSrc()` on the MSHR front entry), by calling `invalidateSharer()`
+to the issuer of the `GetX` (obtained via `getSrc()` on the MSHR front entry), by calling `invalidateSharer()`
 with `ForceInv` as the custom command (this helper method will not issue the invalidation if the issuer is not
-a sharer, which could happen if the upper level cache does not have a shared copy when issuing `GETX`).
+a sharer, which could happen if the upper level cache does not have a shared copy when issuing `GetX`).
 
 This way, when invalidation completes (including those in (1) and the one just issued), the `handlerAckInv()`
 function will transit the state to `SM`, and then retry the `ForceInv` method, which will 
 complete the `ForceInv`, and transit the state to `IM`.
 When the upgrade completes, method `handleGetXResp()` will transit the state to `M`, and retry the
-`GETX` event again (since the `ForceInv` entry has been removed from the MSHR register), resulting in the 
+`GetX` event again (since the `ForceInv` entry has been removed from the MSHR register), resulting in the 
 correct behavior.
 
 On the other hand, if the upgrade completes first, then `handleGetXResp()` will transit the state to `M_Inv`,
@@ -2726,7 +2726,7 @@ In this case, the lower level cache that issued the `FetchInv` should treat the 
 as the response to `FetchInv`.
 
 2. If the state is `E_Inv`, indicating either a `FlushLineInv` or eviction, but never `GETx` since `GETx` will not
-transit into this state (`GETX` will eagerly mark the block in all levels that process this request as dirty).
+transit into this state (`GetX` will eagerly mark the block in all levels that process this request as dirty).
 
 I do not know why these two cases are treated differently from those in `handleFetchInv()`, although correctness
 seems to be preserved.
@@ -2842,7 +2842,7 @@ The entry point for directory entry eviction is method `processDirectoryMiss()`,
 function is very similar to the one for eviction in L1 and non-L1 inclusive caches. 
 This method is only called in two places: `handleGetS()` and `handleGetX()`, when the access incurs a directory
 miss. 
-At the beginning, the method allocates an MSHR entry for the `GETS` or `GETX` event that caused the miss, if the
+At the beginning, the method allocates an MSHR entry for the `GetS` or `GetX` event that caused the miss, if the
 event is not not already in the MSHR.
 Otherwise, the method checks whether the event is still the front entry of the MSHR register. 
 Despite the fact that the event must be at the front entry of the MSHR register when it is retried or received 
@@ -2903,7 +2903,7 @@ maintain the inclusiveness of the data array by the directory array.
 Also note that the non-inclusive cache supports sending data from either the data array, or from the MSHR,
 using helper functions `sendWritebackFromCache()` and `sendWritebackFromMSHR()`, respectively.
 These two functions are almost identical to each other, with the only difference being the source of payload.
-Both functions send an event to the lower level cache, which may carry the command `PUTS`, `PUTE`, or `PUTM`.
+Both functions send an event to the lower level cache, which may carry the command `PutS`, `PutE`, or `PutM`.
 We do not distinguish between them in our discussion, since we mainly focus on the protocol, rather than the payload.
 
 At the end of the method, of `recvWritebackAck_` is set, and a write back is sent (`wbSent` flag), then a write
@@ -3014,7 +3014,7 @@ The method first performs a lookup on both the directory and the data array, and
 lookups in local varibales `tag` and `data`, respectively.
 If the block does not exist in the directory array (the `I` state case), the controller first allocates a 
 directory entry by calling `processDirectoryMiss()` (which, if not already, also inserts the access into the MSHR).
-If allocation is successful, then the `GETS` request is forwarded to the lower level by calling `forwardMessage()`,
+If allocation is successful, then the `GetS` request is forwarded to the lower level by calling `forwardMessage()`,
 and the state transits to `IS`.
 Note that we ignore the `IA` case, which, as we have discussed above, is only used for reserving a data array
 entry during prefetching.
@@ -3058,7 +3058,7 @@ For downgrades, the previous owner is removed as an owner, and added to the shar
 Note that, if the data array entry is still not present when the response event is handled, data received from the 
 fetch event is not inserted into the data array, due to the cache being 
 non-inclusive. Instead, the data is stored in the MSHR register by calling `setData()` on the data member `mshr_`.
-In the `GETS` handler, if the data entry is not present, but there is one in the MSHR, then the one in the MSHR
+In the `GetS` handler, if the data entry is not present, but there is one in the MSHR, then the one in the MSHR
 will be used.
 This is different from the one in inclusive caches, in which case, if the response event carries data, then
 the local state must be updated by simulating the local write back (via `doEviction()`).
@@ -3066,32 +3066,32 @@ Non-inclusive caches do not need the local write back, and hence the state trans
 inclusive design.
 
 The second response path is method `handleGetSResp()`, which handles the response event from the lower level to
-an earlier `GETS`. This method simply transits the state of the directory to `S`, and only inserts new data into
+an earlier `GetS`. This method simply transits the state of the directory to `S`, and only inserts new data into
 the data array opportunistically, meaing that this will happen only if the data entry already exists. 
-In the full miss path of `GETS`, this will never happen, as the `GETS` is only sent to the lower level when
+In the full miss path of `GetS`, this will never happen, as the `GetS` is only sent to the lower level when
 there is a directory miss, in which case data must also not be present.
 
-Method `handleGetSResp()` also completes the `GETX` request without having to retry the handler itself.
+Method `handleGetSResp()` also completes the `GetX` request without having to retry the handler itself.
 It adds the original requestor as a sharer to the block, and forwards the response event up by calling 
 `sendResponseUp()`. 
-At the end of the method, the original `GETS` event object is removed from the MSHR front entry by 
+At the end of the method, the original `GetS` event object is removed from the MSHR front entry by 
 calling `cleanUpAfterResponse()`.
 
-Method `handleGetXResp()` may also handle the response for a `GETS` event from the lower level. This will happen
+Method `handleGetXResp()` may also handle the response for a `GetS` event from the lower level. This will happen
 if the lower level grants exclusive ownership to the requestor. 
 In our case, only the `IS` branch in the switch block is releveant.
 The state will transit to `M` or `E` depending on whether data from the lower level is dirty (I could not see
-how this is possible, though, because `GETS` will never cause the lower level controller to issue `FetchInv` and
+how this is possible, though, because `GetS` will never cause the lower level controller to issue `FetchInv` and
 hence acquire a dirty block). 
 The event forwarded to the requestor can also be `GetSResp` or `GetXResp`, depending on whether the address has
 any sharer in the upper level or not.
 
 ##### handleGetX(), Request Path
 
-Method `handleGetX()` handles `GETX`, and its logic is similar to `handleGetS()`, especially the distinction
+Method `handleGetX()` handles `GetX`, and its logic is similar to `handleGetS()`, especially the distinction
 between full miss and partial miss.
 If the access misses the cache, then a directory entry is allocated, and its state transits to `IM`.
-The `GETX` event is also forwarded to the lower level by calling `forwardMessage()`.
+The `GetX` event is also forwarded to the lower level by calling `forwardMessage()`.
 If the access sees a `S` state entry, an upgrade is only needed if the cache is not a last-level cache.
 The upgrade is perfomed by first forwarding the event to the lower level, and then calling 
 `invalidateExceptRequestor()` to invalidate (`INV`) shared copies of the block in the upper level (`FetchInv`). 
@@ -3102,7 +3102,7 @@ in which case the state transits to `SM`.
 Note that the last argument to `invalidateExceptRequestor()` is a boolean variable indicating whether data is fetched
 from one of the sharers. In method `handleGetX()`, it is set to `true` if the data entry is not found.
 In the helper function `invalidateExceptRequestor()`, if that argument is set to `true`, and that the source
-of the request is not already a sharer (i.e., not an upgrade `GETX` request), then the command used will be
+of the request is not already a sharer (i.e., not an upgrade `GetX` request), then the command used will be
 `FetchInv`, such that data will be received. Otherwise, the command is just `Inv`.
 
 For state `E` and `M` blocks, there are three possible cases. First, if the block is not shared by any means 
@@ -3123,16 +3123,16 @@ on the same address.
 
 ##### handleGetX(), Response Path
 
-There are three responses paths for an `GETX`, and they are the fetch, invalidation, and data response from the
+There are three responses paths for an `GetX`, and they are the fetch, invalidation, and data response from the
 lower level.
 Method `handleFetchResp()` handles response events for earlier `FetchInv`s sent to one or more upper level caches.
 The method first decrements the ACK counter, and sets the local boolean flag `done` if it reaches zero, and it
 then updates `responses`.
 The method also inserts data into the data array, if it exists, or into the MSHR.
-For `GETX`, the possible states it will see are `SM_Inv` and `M_Inv`.
+For `GetX`, the possible states it will see are `SM_Inv` and `M_Inv`.
 In the former case, the front event will not be retried, if the in progress flag is set. This is the case for 
-`GETX`, since the flag is set in the handler `SM_Inv`. The retry will only
-be attempted when the response for `GETX` is received from the lower level.
+`GetX`, since the flag is set in the handler `SM_Inv`. The retry will only
+be attempted when the response for `GetX` is received from the lower level.
 In the latter case, the event is always retried.
 In both cases, the sharer or the owner is removed, and the state transits to `SM` and `M`, respectively.
 
@@ -3142,11 +3142,11 @@ The state transition is performed using the table `NextState`, in which `_Inv` s
 back to the corresponding non-`Inv` stable states, and in all cases, the front entry of the 
 MSHR is retried.
 
-Note that `handleAckInv()` does not check the in progress flag, which will cause the `GETX` event to be retried
+Note that `handleAckInv()` does not check the in progress flag, which will cause the `GetX` event to be retried
 after all invalidations are received, if the block is in state `SM_Inv`. 
-This will cause unnecessary retries of the `GETX` event, since `SM_Inv` blocks will transit to `SM` blocks
-in this method, before the front event, which is `GETX`, is retried. 
-If `GETX` (which is already in the MSHR) is retried on a block in state `SM`, it will do nothing.
+This will cause unnecessary retries of the `GetX` event, since `SM_Inv` blocks will transit to `SM` blocks
+in this method, before the front event, which is `GetX`, is retried. 
+If `GetX` (which is already in the MSHR) is retried on a block in state `SM`, it will do nothing.
 
 Method `handleGetXResp()` handles the response event from the lower level. 
 For `IM` and `SM` states, the state will first transit to `M`, and the requestor is also added as the owner.
@@ -3157,7 +3157,7 @@ no need to keep a copy of data locally.
 
 For `SM_Inv`, the state transits to `M_Inv`, and the in progress flag is cleared, such that later on, 
 in `handleFetchResp()`, the event will be retried after the fetch response event have been received.
-The `GETX`, however, is still not completed, and must wait for all invalidations or fetches to finish. 
+The `GetX`, however, is still not completed, and must wait for all invalidations or fetches to finish. 
 This is why `cleanUpEvent()` is called for this case branch, instead of `cleanUpAfterResponse()`.
 
 ##### handleGetSX(), Request and Response Path
@@ -3307,14 +3307,14 @@ The method transits `I_B` blocks to `I`, before it calls `deallocate()` on both 
 
 ##### handlePutS()
 
-Recall that a `PUTS` is generated by the upper level cache when an `S` state block is evicted. In non-inclusive 
+Recall that a `PutS` is generated by the upper level cache when an `S` state block is evicted. In non-inclusive 
 caches, this write back event is more of an importance than in inclusive caches, as non-inclusive caches do not
 always maintain redundant copies of the block if the upper level has it. As a result, the block being written back,
 despite it being clean, should also be inserted into the array, which may incur a data array miss, and then eviction.
-Besides, `PUTS` may also race with downgrades, invalidations, and sometimes fetches, since `PUTS` essentially just
+Besides, `PutS` may also race with downgrades, invalidations, and sometimes fetches, since `PutS` essentially just
 invalidates a block, and sends its contents back to the lower level cache. 
 
-Method `handlePutS()` handles `PUTS` event from the upper level.
+Method `handlePutS()` handles `PutS` event from the upper level.
 For stable states, the method checks whether data is present in the data array, and whether there are any other
 copies of the block in the upper level. If neither of the two condition is true, then the data being
 written back will be inserted into the current data array.
@@ -3324,9 +3324,9 @@ This method either succeeds immediately, or inserts an eviction event on the old
 In the former case, the block data in the event is inserted into the data array, and the requestor is removed
 as a sharer. Eventually, the handling completes by calling `cleanUpAfterRequest()`.
 In the latter case, the state transit to the corresponding `_A` version, and the handling completes.
-The `PUTS` will be retried in eviction handler when the eviction on the old address succeeds.
+The `PutS` will be retried in eviction handler when the eviction on the old address succeeds.
 
-For all `_Inv` version states, the `PUTS` is regarded as a valid response for an earlier invalidation, which
+For all `_Inv` version states, the `PutS` is regarded as a valid response for an earlier invalidation, which
 is simulated by calling `removeSharerViaInv()`, with the last argument being `true`. 
 Besides, the ACK counter is updated, and if it reaches zero, invalidation completes, and the state will
 transit back to the corresponding stable states.
@@ -3336,31 +3336,31 @@ Note that in this case, no data array allocation is required, and block data is 
 data array entry does not exist. This is also consistent with how invalidations are usually handled.
 
 For all `_B` version states that indicate an ongoing flush, the method will check whether data exists locally,
-and whether the requestor has the last upper level copy of the block. If both are true, then the `PUTS`
+and whether the requestor has the last upper level copy of the block. If both are true, then the `PutS`
 is inserted as the second front entry of the MSHR register, right after the ongoing flush event.
 The reason is that the invariant must be maintained such that, if the directory entry is valid, then there
 must be a copy either in the upper level, or exists locally.
-If the `PUTS` is not handled right after the flush, then there is a window of vulnerability in which neither
+If the `PutS` is not handled right after the flush, then there is a window of vulnerability in which neither
 the current cache nor the upper level cache will have a valid copy of the block, which breaks the invariant.
-If the check does not pass, however, then the `PUTS` is essentially a no-op, and the handling concludes by
+If the check does not pass, however, then the `PutS` is essentially a no-op, and the handling concludes by
 removing the requestor as a sharer, and then sending back an explicit ACK, and eventually calling `cleanUpEvent()`.
 
-For all `_D` version states that indicate an ongoing fetch, the `PUTS` races with the fetch only if it is 
+For all `_D` version states that indicate an ongoing fetch, the `PutS` races with the fetch only if it is 
 from the first sharer of the sharer list (otherwise it is just a no-op).
 If this is true, then the method will first conclude the fetch by updating the ACK counter, the `responses` map,
 and then calling `retry()` to retry the original event that caused the fetch.
 The state also transits from the `_D` version to the stable version as well.
 The method then checks whether the requestor is the last upper level sharer of the block.
-If true, then the `PUTS` should also be handled as early as possible after the state transits back to a stable
+If true, then the `PutS` should also be handled as early as possible after the state transits back to a stable
 state, such that the non-inclusiveness invariant is not broken.
-To this end, the method finds the oldest entry in the MSHR after which the `PUTS` can be processed.
-For this method specifically, the `PUTS` will be either inserted as the third event in the MSHR, if the second event
+To this end, the method finds the oldest entry in the MSHR after which the `PutS` can be processed.
+For this method specifically, the `PutS` will be either inserted as the third event in the MSHR, if the second event
 is an external event or it is in progress, or as the second event, if otherwise.
 
 ##### handlePutE()
 
 Method `handlePutE()` handles the write back of an exclusive block from the upper level.
-For `E` and `M` state blocks, the `PUTE` indicates that the upper level owner has given up the ownership, and hence
+For `E` and `M` state blocks, the `PutE` indicates that the upper level owner has given up the ownership, and hence
 the current level must allocate a data array entry for the block, if there is not one present.
 The event is first inserted into the MSHR, and if the insertion is successful, an eviction is attempted
 by calling `processDataMiss()`.
@@ -3369,28 +3369,28 @@ by calling `sendWritebackAck()` followed by `cleanUpAfterRequest()`.
 Otherwise, the eviction will be inserted into the MSHR on the old address to be evicted, and the state 
 transits to `EA` or `MA` to indicate the fact that the current event is waiting for the 
 data eviction to complete. 
-The states will transit back to normal and the `PUTE` will be retried in the eviction handler. 
+The states will transit back to normal and the `PutE` will be retried in the eviction handler. 
 
-On `E_InvX` and `M_InvX` blocks, since `PUTE` indicates that the requestor is the only upper level owner,
+On `E_InvX` and `M_InvX` blocks, since `PutE` indicates that the requestor is the only upper level owner,
 the event performs an ownership transfer, which involves removing the requestor as the owner, updating the
 ACK counter, updating the `responses` map, and transiting to the corresponding stable state such that the
 ongoing downgrade is completed.
 The method then attempts to insert data into the data array by checking whether the data array entry exists.
 If true, then the insertion can complete immediately, and the handling concludes.
 Otherwise, a data entry must be allocated by evicting an existing one.
-To achieve this, the method inserts a `PUTS` (by reusing the current event object after changing its 
-command to `PUTS`) into the MSHR. Just similar to how the `PUTS` handler preserves the non-inclusiveness invariant,
+To achieve this, the method inserts a `PutS` (by reusing the current event object after changing its 
+command to `PutS`) into the MSHR. Just similar to how the `PutS` handler preserves the non-inclusiveness invariant,
 this method also inserts the event as either the second or the third entry depending on the existing 
-entries. Note that the reason that a `PUTS` event is used, instead if the current `PUTE`, is because the ownership
+entries. Note that the reason that a `PutS` event is used, instead if the current `PutE`, is because the ownership
 transferred has already been done, if control reaches here, and the transfer should only be done once.
-The `PUTS` is solely to avoid the method from performing the ownership transfer multiple times.
+The `PutS` is solely to avoid the method from performing the ownership transfer multiple times.
 
 On `E_Inv` and `M_Inv` blocks, ownership transfer will also happen just like how it is performed in the `_InvX` case.
 The only difference is that the event is always completed after handling ownership transfer, without being 
 inserted into the MSHR. The reason is that the `_Inv` states, in all cases, do not need the data. 
 If the `_Inv` state is incurred due to a data access, and there is an upper level `E` state block, 
-then it must be caused by a `GETX` on a different upper level cache, in which case, the ownership just transfers
-to the `GETX` requestor.
+then it must be caused by a `GetX` on a different upper level cache, in which case, the ownership just transfers
+to the `GetX` requestor.
 The `_Inv` state may also be caused by eviction, flush invalidation, or lower level external requests, in which 
 case the current cache will lose the ownership and even the directory entry of the address, anyway, and 
 keeping the block in the data array is also unnecessary.
@@ -3406,8 +3406,8 @@ a data array entry is to be allocated, and that the eventual state is always `M`
 
 External requests for non-inclusive caches require more rigorous handling, due to the window of vulnerability
 in which neither the upper level nor the current level has the data block. 
-Such window of vulnerability is usually caused by ownership transfer (e.g., flush, flush invalidation, `PUTE`,
-`PUTM`) or the invalidation of the last shared copy (flush invalidation or `PUTS`) from the upper level.
+Such window of vulnerability is usually caused by ownership transfer (e.g., flush, flush invalidation, `PutE`,
+`PutM`) or the invalidation of the last shared copy (flush invalidation or `PutS`) from the upper level.
 If an external request arrives during the window, the external request may have to be fulfilled by an MSHR entry
 that contains the data, which introduces extra complexity to external event handling.
 
