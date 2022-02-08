@@ -3401,3 +3401,13 @@ found.
 
 Method `handlePutM()` is almost identical to `handlePutE()`, except that the transient state is always `MA`, if 
 a data array entry is to be allocated, and that the eventual state is always `M`.
+
+#### External Downgrades and Invalidations
+
+External requests for non-inclusive caches require more rigorous handling, due to the window of vulnerability
+in which neither the upper level nor the current level has the data block. 
+Such window of vulnerability is usually caused by ownership transfer (e.g., flush, flush invalidation, `PUTE`,
+`PUTM`) or the invalidation of the last shared copy (flush invalidation or `PUTS`) from the upper level.
+If an external request arrives during the window, the external request may have to be fulfilled by an MSHR entry
+that contains the data, which introduces extra complexity to external event handling.
+
