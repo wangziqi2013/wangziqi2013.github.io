@@ -3414,7 +3414,13 @@ Such window of vulnerability is usually caused by ownership transfer (e.g., flus
 `PutM`) or the invalidation of the last shared copy (flush invalidation or `PutS`) from the upper level, which
 we uniformly refer to as "write backs".
 
-
+If an external request arrives during the window of vulnerability, then the handler needs to check whether
+an upper level write back has been handled earlier and is then inserted into the MSHR (because of
+a race condition that it could not resolve immediately). 
+This is performed by calling `applyPendingReplacement()`, which scans the MSHR for a pending write back event.
+If the event is found, the write back event is promoted to the front entry of the MSHR, and then
+retried. The external event, meanwhile, will just have to wait in the MSHR for the write back to complete before
+itself can proceed outside the window of vulnerability.
 
 ##### handleFetch()
 
