@@ -3411,3 +3411,16 @@ Such window of vulnerability is usually caused by ownership transfer (e.g., flus
 If an external request arrives during the window, the external request may have to be fulfilled by an MSHR entry
 that contains the data, which introduces extra complexity to external event handling.
 
+##### handleFetch()
+
+Method `handleFetch()` handles `Fetch` from the lower level, and it only works on transient and stable form
+of shared states.
+If the request hits an `S` state block, then the data array and the MSHR is checked. 
+If either the data array or the MSHR contains data, then the fetch can be fulfilled immediately by 
+calling `sendResponseDown()` and `cleanUpEvent()`.
+Otherwise, the event is inserted into the front entry of the MSHR register first by calling `allocateMSHR()`
+with argument `pos` being zero, and if the insertion is successful, the fetch
+will be forwarded to the first upper level sharer of the block to acquire a copy of block data,
+after which the state also transits to `S_D`.
+Note that this process may propagate recursively for a few levels, if the upper level cache is also
+non-inclusive.
