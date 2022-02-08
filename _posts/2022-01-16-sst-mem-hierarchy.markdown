@@ -3422,6 +3422,11 @@ If the event is found, the write back event is promoted to the front entry of th
 retried. The external event, meanwhile, will just have to wait in the MSHR for the write back to complete before
 itself can proceed outside the window of vulnerability.
 
+If the external request is handled first, entering a transient state to fetch data,
+and the write back event is received later, then the write back event handler, on the first attempt of handling 
+the event, will actually see the transient state caused by the fetch, and will try to resolve it by treating the
+write back as a response event to the earlier fetch.
+
 ##### handleFetch()
 
 Method `handleFetch()` handles `Fetch` from the lower level, and it only works on transient and stable form
