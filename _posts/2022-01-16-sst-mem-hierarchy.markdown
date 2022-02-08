@@ -3439,4 +3439,9 @@ If the state is `SA`, which indicates that a `PutS` has been handled, but since 
 a data array eviction is currently being processed, and has not completed yet. In this case, the `PutS` just sits
 in the MSHR with data and waits for the data eviction to complete.
 The `Fetch` request is therefore handled by searching the `PutS` request in the MSHR, by calling `getFirstEventEntry()`
-with the last argument being `PutS`
+with the second argument being `PutS`. The request is also completed immediately by calling 
+`sendResponseDown()`, with data from the `PutS` event in the MSHR.
+
+If the state is `SM`, indicating that the fetch races with an upgrade `GetX` request, then the data can be sent
+directly, if data is present in the data array, or it needs to be acquired recursively from the upper level.
+This state is treated in the same way as state `S`.
