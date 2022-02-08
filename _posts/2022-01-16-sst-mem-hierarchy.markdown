@@ -3357,7 +3357,7 @@ If true, then the `PutS` should also be handled as early as possible after the s
 state, such that the non-inclusiveness invariant is not broken.
 To this end, the method finds the oldest entry in the MSHR after which the `PutS` can be processed.
 For this method specifically, the `PutS` will be either inserted as the third event in the MSHR, if the second event
-is an external event or it is in progress, or as the second event, if otherwise.
+is an external event (to maintain event priority) or it is in progress, or as the second event, if otherwise.
 
 ##### handlePutE()
 
@@ -3406,12 +3406,15 @@ a data array entry is to be allocated, and that the eventual state is always `M`
 
 #### External Downgrades and Invalidations
 
+##### Race Conditions Between External Events and Write Backs
+
 External requests for non-inclusive caches require more rigorous handling, due to the window of vulnerability
 in which neither the upper level nor the current level has the data block. 
 Such window of vulnerability is usually caused by ownership transfer (e.g., flush, flush invalidation, `PutE`,
-`PutM`) or the invalidation of the last shared copy (flush invalidation or `PutS`) from the upper level.
-If an external request arrives during the window, the external request may have to be fulfilled by an MSHR entry
-that contains the data, which introduces extra complexity to external event handling.
+`PutM`) or the invalidation of the last shared copy (flush invalidation or `PutS`) from the upper level, which
+we uniformly refer to as "write backs".
+
+
 
 ##### handleFetch()
 
@@ -3456,3 +3459,16 @@ Such waiting will not cause deadlock, because the `S_D` and `S_Inv` can eventual
 any event to the lower level and hence will not be blocked by the event that issued the `Fetch` (which forms a 
 circular wait dependency).
 
+##### handleInv()
+
+Method `handleInv()` handles the `Inv` event, which will only be received by a non-owner.
+For `I` state blocks, the request is a no-op, and does not need to be replied.
+For `S` state blocks, the handler first checks whether there is any upper level sharers. If at least one 
+exists, then the event is first inserted into the front entry of the MSHR register, and if the insertion
+is successful, it just issues invalidations to the upper levels by calling `invalidateSharers()`, and 
+transiting the state to `S_Inv`. 
+
+
+
+For `I_B` state blocks, the `Inv` event just orders before it, and causes both the directory and the data entry, if
+one exists, to be deallocated.
