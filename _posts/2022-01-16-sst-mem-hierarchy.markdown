@@ -3444,4 +3444,15 @@ with the second argument being `PutS`. The request is also completed immediately
 
 If the state is `SM`, indicating that the fetch races with an upgrade `GetX` request, then the data can be sent
 directly, if data is present in the data array, or it needs to be acquired recursively from the upper level.
-This state is treated in the same way as state `S`.
+This state is treated in the same way as state `S`, except that in the latter case, the state transits to `SM_D`.
+The same applies to `S_B`, and in the case where the fetch is recursively forwarded to the upper level,
+the state transits to `SB_D`.
+
+Blocks in state `S_D` and `S_Inv` will cause the fetch event to wait in the MSHR, since blocks in state `S_D`
+definitely do not have data (otherwise it will not enter this state), and blocks in state `S_Inv` may possibly 
+not have data, since the non-inclusive cache design minimizes the number of inclusive blocks that it keeps in the 
+data array.
+Such waiting will not cause deadlock, because the `S_D` and `S_Inv` can eventually complete without sending 
+any event to the lower level and hence will not be blocked by the event that issued the `Fetch` (which forms a 
+circular wait dependency).
+
