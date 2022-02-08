@@ -3424,3 +3424,13 @@ will be forwarded to the first upper level sharer of the block to acquire a copy
 after which the state also transits to `S_D`.
 Note that this process may propagate recursively for a few levels, if the upper level cache is also
 non-inclusive.
+
+If the state is transient state `I_B`, `E_B`, or `M_B`, indicating that the fetch races with an going flush
+or flush invalidation, then the fetch will simply be ignored, since the lower level handler for flush
+requests is expected to properly treat the flush event as the fetch response.
+Although it is not clear to me why `E_B` and `M_B` blocks will see a fetch, since these two states imply the existence
+of `E` and `M` blocks, respectively, which carry the ownership of the address. Fetch events, however, should only
+be used for shared, non-owner state blocks, and therefore, is never supposed to race with transient states `E_B` and 
+`M_B`.
+
+
