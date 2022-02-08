@@ -230,7 +230,7 @@ call back function, `recvHandler_`, with the object being the only argument.
 
 What function `createMemEvent()` does is quite straightforward, and does not require much explanation. It first
 translates the request command into the memory hierarchy's command, e.g., reads will become `GetS`, and writes
-will become `GetX` (but reads will the locked flag set will become `GETSX`). 
+will become `GetX` (but reads will the locked flag set will become `GetSX`). 
 Then it allocates a new `class MemEvent` object from the heap, and initializes the object with all necessary
 information in order to perform the operation.
 Note that the `src_` field of the memory event object is set to the name of the interface object itself, which is
@@ -1105,7 +1105,7 @@ Derived classes should override at least a subset of these functions and impleme
 The Miss Status Handling Register (MSHR) is a critical component of the coherence controller that has serves three 
 distinct roles in request handling.
 First, requests that cause cache misses cannot be handled locally, and the request must be forwarded to a remote
-cache (e.g., a lower level cache for CPU `GET` requests). During this period, the original request will be inserted
+cache (e.g., a lower level cache for CPU data requests). During this period, the original request will be inserted
 into the MSHR, which blocks all future requests on the same address, i.e., requests on the same address are 
 serialized by the MSHR.
 The request in the MSHR will be removed when the response is received, and later requests on the same address can
@@ -1168,7 +1168,7 @@ fail to be allocated an MSHR entry, but not vice versa).
 Other data members of `class MSHREntry` also play their respective roles in different parts of the coherence
 protocol. One of the most commonly seen data member is `inProgress`, which indicates whether the request is 
 already being handled and is just waiting for response, and it is only defined for `Event` type entries. 
-The flag is set when a `GET` or flush 
+The flag is set when a data or flush 
 request has been issued to the lower level cache, but the response is not received yet. The coherence controller 
 will check this flag when trying to schedule a waiting event in the MSHR, and if the flag is set, indicating that 
 the current head MSHR entry for a given address has already been scheduled, the coherence controller will not schedule 
@@ -1359,9 +1359,9 @@ Helper functions are covered when they are encountered for the first time.
 ##### High-Level Overview
 
 CPU may initiate three types of data requests: `GetS`, which obtains a block in shared state for read, `GetX`, 
-which obtains a block in exclusive state for write, and `GETSX`, which is equivalent to a `GetX`, except that
+which obtains a block in exclusive state for write, and `GetSX`, which is equivalent to a `GetX`, except that
 the block is locked in the L1 cache, until a future `GetX` with an atomic flag hits it.
-`GETSX` is essential for implementing atomic read-modify-write instructions.
+`GetSX` is essential for implementing atomic read-modify-write instructions.
 
 From a high-level perspective, these requests are handled as either a single transaction, in the case of 
 cache hits, or as a few separate atomic transactions, if the access misses. 
@@ -1376,7 +1376,7 @@ discussed earlier). Meanwhile, a new request is created based on the current req
 to the lower level to acquire the block.
 The rest of the actions depends on whether the address tag already exists in the current cache or not. If it does,
 meaning that the coherence action is taken to upgrade the permission of the block (which only happens for `GetX`
-and `GETSX`), then no further action is taken.
+and `GetSX`), then no further action is taken.
 
 If, however, the address tag does not exist, then two more transactions are started: eviction and write back.
 The coherence controller first attempts to evict the block on the same cycle. If this is not achievable due to the
@@ -1397,7 +1397,7 @@ blocks will become `M` on `GetX` requests).
 The second half of the transaction begins when the response event for an earlier cache miss is received.
 The coherence controller matches the response event with the outstanding MSHR entry, removes the entry,
 and then transits the block state to a stable state.
-Extra actions may also be taken, such as locking the cache block, if the request is `GETSX`, or marking the LL/SC's
+Extra actions may also be taken, such as locking the cache block, if the request is `GetSX`, or marking the LL/SC's
 atomic flag. The transaction concludes by creating and sending the a response message up that indicates the 
 completion of the access.
 
@@ -1718,17 +1718,17 @@ and if the flag is set, the lock counter of the block will be incremented by cal
 `handleGetSX()` is almost identical to `handleGetX()`. Its purpose is to acquire a cache block in exclusive state,
 and then lock the block in the cache until a later `GetX` on the same address writes to the block. 
 This type of requests are used to implement atomic read-modify-write instructions, where the read part corresponds 
-to the `GETSX` request, which locks the block in `M` state to avoid data race, and the later write unlocks
+to the `GetSX` request, which locks the block in `M` state to avoid data race, and the later write unlocks
 the block with a `GetX` request and the `F_LOCKED` flag set.
 
 The only difference between `handleGetSX()` and `handleGetX()` is that, on a cache hit, the lock counter on the
-block is incremented by calling `incLock()`. If the access incurs a miss or upgrade, then the `GETSX` request
+block is incremented by calling `incLock()`. If the access incurs a miss or upgrade, then the `GetSX` request
 will be forwarded to the lower level, and the block transits to one of the transient states. 
 On receiving the response, which is of type `GetXResp`, function `handleGetXResp()` will check whether the 
-originating request is a `GETSX`.
+originating request is a `GetSX`.
 If positive, then the block will be locked as well by calling `incLock()`.
 
-Note that the `GETSX` handler will not check whether the request has the `F_LOCKED` flag set, nor does it
+Note that the `GetSX` handler will not check whether the request has the `F_LOCKED` flag set, nor does it
 decrement the lock counter on a direct hit. 
 
 #### CPU-Initiated Flush Requests
@@ -1912,7 +1912,7 @@ entries from the MSHR register is reserved (since the invalidation is waiting fo
 the block), and that the invalidation event type entry will be allocated at the front of the register.
 
 After a `GetX` unlocks the block (which will always hit, since the block is locked in the cache in `M` state by an
-earlier `GETSX`), the `GetX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
+earlier `GetSX`), the `GetX` handler will call `cleanUpAfterRequest()`, which retries the invalidation.
 This time, since the block is unlocked, the invalidation can be processed without trouble.
 The block state will transit to `I` for all cases, except `SM`, in which case it will transit to `IM`.
 Responses of type `AckInv` are also sent down by calling `sendResponseDown()`, with `data` being `false` for
@@ -2666,19 +2666,19 @@ State `S_Inv` and `E_Inv` blocks are not handled, and the method just allocates 
 of the register, such that when the ongoing invalidation transaction completes, the `ForceInv` can be retried.
 
 State `M_Inv`, `E_InvX`, and `M_InvX` should be handled more carefully. The method first check
-whether these states are caused by a concurrent `GETx` event that only performs local operations involving
+whether these states are caused by a concurrent data request that only performs local operations involving
 the current cache and its upper level caches, without forwarding the request to the lower level, 
 namely, one cache requests to read or write a block that is cached in exclusive state in another cache. 
 If true, then the `ForceInv` must be ordered after this request, by calling `allocateMSHR()` with `pos`
 being one.
 The reason for this arrangement is that, image if the `ForceInv` is inserted into the front entry, then after the
-ongoing invalidation or downgrade transaction completes, the `ForceInv` will be ordered before the `GETx` request,
+ongoing invalidation or downgrade transaction completes, the `ForceInv` will be ordered before the data request,
 sets the state to `I`, and itself completes. 
-The `GETx` request will then be retried on an non-existing block, which incurs undefined behavior, because the 
-`GETx` in this case does not expect a response from the lower level that can further transit `I` into a meaningful
-data.
+The data request will then be retried on an non-existing block, which incurs undefined behavior, because the 
+data request in this case does not expect a response from the lower level that can further transit `I` into a 
+meaningful data.
 
-If, however, that the `ForceInv` does not race with `GETx` request, then the only possibility is that it raced with
+If, however, that the `ForceInv` does not race with data request, then the only possibility is that it raced with
 a `FlushLine`, `FlushLineInv`, or eviction. In either case, the `ForceInv` can be ordered before the flush
 or eviction, by calling `allocateMSHR()` with `pos` being zero.
 
@@ -2725,10 +2725,12 @@ position one, rather than zero, i.e., the `FetchInv` is ordered after the concur
 In this case, the lower level cache that issued the `FetchInv` should treat the `PutS` or `FlushLineInv` event
 as the response to `FetchInv`.
 
-2. If the state is `E_Inv`, indicating either a `FlushLineInv` or eviction, but never `GETx` since `GETx` will not
-transit into this state (`GetX` will eagerly mark the block in all levels that process this request as dirty).
+2. If the state is `E_Inv`, indicating either a `FlushLineInv` or eviction, but never a data request, since 
+data requests will not cause a block to transit into this state 
+(`GetX` will eagerly mark the block in all levels that process this request as dirty), 
+then it will be treated in the same way as an `M_Inv`.
 
-I do not know why these two cases are treated differently from those in `handleFetchInv()`, although correctness
+I do not know why these two cases are treated differently from those in `handleForceInv()`, although correctness
 seems to be preserved.
 
 ##### handleFetchInvX()
@@ -2740,8 +2742,8 @@ Otherwise, the event is completed immediately by calling `sendResponseDown()` an
 and transiting the state to `S`.
 
 For `_Inv` and `_InvX` versions of `E` and `M`, the method handle them similarly as in `handleForceInv()`, namely,
-the downgrade is ordered after an ongoing `GETx` transaction, if the concurrent invalidation or downgrade
-is initiated by `GETx`.
+the downgrade is ordered after an ongoing data request, if the concurrent invalidation or downgrade
+is initiated by the data request.
 Otherwise, if the block has an owner, then an MSHR entry is allocated from the front entry, which orders the
 `FetchInvX` before the flush or eviction that caused the state, and `FetchInvX` will be retried when the
 concurrent invalidation or downgrades complete.
@@ -3433,4 +3435,8 @@ of `E` and `M` blocks, respectively, which carry the ownership of the address. F
 be used for shared, non-owner state blocks, and therefore, is never supposed to race with transient states `E_B` and 
 `M_B`.
 
-
+If the state is `SA`, which indicates that a `PutS` has been handled, but since data is missing in the current cache,
+a data array eviction is currently being processed, and has not completed yet. In this case, the `PutS` just sits
+in the MSHR with data and waits for the data eviction to complete.
+The `Fetch` request is therefore handled by searching the `PutS` request in the MSHR, by calling `getFirstEventEntry()`
+with the last argument being `PutS`
