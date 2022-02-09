@@ -3449,8 +3449,8 @@ calling `sendResponseDown()` and `cleanUpEvent()`.
 If data is not locally available, then the handler will first transit the local state to `S_D` to indicate
 that data is needed, but is missing locally.
 In this case, one of the two things will happen: Either a write back event already exists in the MSHR, which 
-will be applied first to avoid the possible race condition, or no write back event is found, and a fetch to the
-upper level will be issued.
+will be promoted to the front of the MSHR and retried first to avoid the possible race condition, or no 
+write back event is found, and a fetch to the upper level will be issued.
 In both cases, the event cannot be handled immediately, and it will just wait in the MSHR until the next retry.
 
 In the former case above, method `applyPendingReplacement()` is called to search and retry the write back event.
@@ -3506,11 +3506,18 @@ circular wait dependency).
 Method `handleInv()` handles the `Inv` event, which will only be received by a non-owner.
 For `I` state blocks, the request is a no-op, and does not need to be replied.
 For `S` state blocks, the handler first checks whether there is any upper level sharers. If at least one 
-exists, then the event is first inserted into the front entry of the MSHR register, and if the insertion
-is successful, it just issues invalidations to the upper levels by calling `invalidateSharers()`, and 
-transiting the state to `S_Inv`. 
+exists, then the event is inserted into the front entry of the MSHR register. 
+If the insertion is successful, the method will first try to promote and retry the existing write back request
+in the MSHR to avoid race conditions by calling `applyPendingReplacement()`.
+Note that the write back will be retried with the block state being `S_Inv`, under which context the write back
+will be treated as a response for an earlier invalidation. 
+The retry of the write back event will also cause the block to transit back to `S`, after which the current
+`Inv` request is retried. 
+On the other hand, if no existing write back is found, the handler will just issue invalidations to the upper 
+level sharers by calling `invalidateSharers()`, with the command being `Inv`.
+In both cases, the state transits to `S_Inv`.
 
+If no upper level sharer is present, the `Inv` can be immediately completed by calling `sendResponseDown()`
+to send the `AckInv` to the lower level, and then calling `deallocate()` on both directory and data arrays.
+The MSHR data, if any, is also cleared.
 
-
-For `I_B` state blocks, the `Inv` event just orders before it, and causes both the directory and the data entry, if
-one exists, to be deallocated.
