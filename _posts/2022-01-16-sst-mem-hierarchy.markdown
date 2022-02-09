@@ -3529,3 +3529,8 @@ by calling `sendWritebackAck()` and then calling `cleanUpAfterRequest()` with th
 The current `Inv` event is also completed immediately by calling `sendResponseDown()`.
 Note that since `SA` indicates that there is no more upper level sharers of the block (because otherwise the 
 `PutS` will simply be ignored), no recursive invalidation will be sent to the upper levels.
+
+For `S_D` state blocks, the `Inv` event will simply be inserted into the MSHR as the second entry, i.e., after the
+current front entry that caused the `S_D` state. 
+The reason that it could not be completed immediately is that `Inv` may incur invalidations, which will race with
+the ongoing fetch operation.
