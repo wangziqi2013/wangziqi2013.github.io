@@ -2942,7 +2942,7 @@ is non-inclusive. Besides, data eviction will also not evict the corresponding d
 indicates that sharers or owner exists in the upper level.
 On the other hand, if a data entry is to be evicted, and the directory entry indicates neither sharers nor an owner,
 then the directory entry will also be evicted. 
-This enforces the invariant that the most up-to-date data of an address can always be ontained from the 
+This enforces the invariant that the most up-to-date data of an address can always be obtained from the 
 upper level, as long as a directory entry exists.
 
 2. There is no method of name `allocateDataLine()` as the counterpart to `allocateDirLine()`.
@@ -3006,14 +3006,14 @@ Method `handleGetS()` in non-inclusive caches differs from its counterpart in in
 two different types of misses. The first type, full miss, occurs when both the directory entry and the data entry
 do not exist. In this case, the controller only allocates a directory entry, and let data bypass the cache to
 the upper level.
-The second type, partial miss, occurs when the dirctory entry is present, but data block is not in the data array.
+The second type, partial miss, occurs when the directory entry is present, but data block is not in the data array.
 In this case, the controller needs to fetch data from one of the upper level caches, and send data to the requestor.
 Meanwhile, the state of the directory entry transits to the transient `_D` version to indicate that an outstanding 
 fetch is being performed, and the fetch response has not been received.
 
 The overall structure of `handleGetS()` is similar to the one in inclusive caches, but details are different.
 The method first performs a lookup on both the directory and the data array, and stores the results of the 
-lookups in local varibales `tag` and `data`, respectively.
+lookups in local variables `tag` and `data`, respectively.
 If the block does not exist in the directory array (the `I` state case), the controller first allocates a 
 directory entry by calling `processDirectoryMiss()` (which, if not already, also inserts the access into the MSHR).
 If allocation is successful, then the `GetS` request is forwarded to the lower level by calling `forwardMessage()`,
@@ -3036,7 +3036,7 @@ the state transits to `E_InvX` or `M_InvX`. In this case, the data array is not 
 response event always carries data.
 Second, if data is not present, then data is fetched from the first sharer in the upper level, which is similar
 to the `S` state case, despite that the state transits to `S_D` and `E_D`, respectively.
-Third, if data is present, and there is no upper level owner, the access is a hit, and is satidified immediately.
+Third, if data is present, and there is no upper level owner, the access is a hit, and is satisfied immediately.
 
 For all other states, the event is inserted into the MSHR, and serialized after all existing entries of the MSHR
 register. If MSHR insertion fails in any of the above steps, then the event will be NACK'ed to the upper level,
@@ -3052,7 +3052,7 @@ Then a switch block is used to perform state transition. Here, we only care abou
 which will transit to the state stored in table `NextState`, which is defined in `memTypes.h`, and it defines a 
 subset of state transitions that can be used to simplify coding.
 In our case, the `_D` state will transit to the non-`_D` stable version, i.e., `S_D`, `E_D`, `M_D` will transit
-to `S`, `E`, and `M`, respectively, meaing that a copy of the data has been acquired from.
+to `S`, `E`, and `M`, respectively, meaning that a copy of the data has been acquired from.
 The `_InvX` state will also transit to the corresponding stable state, i.e., `E` and `M`.
 After the state transition, the current front event of the MSHR register is retried by calling `retry()`.
 For downgrades, the previous owner is removed as an owner, and added to the sharer list.
@@ -3069,7 +3069,7 @@ inclusive design.
 
 The second response path is method `handleGetSResp()`, which handles the response event from the lower level to
 an earlier `GetS`. This method simply transits the state of the directory to `S`, and only inserts new data into
-the data array opportunistically, meaing that this will happen only if the data entry already exists. 
+the data array opportunistically, meaning that this will happen only if the data entry already exists. 
 In the full miss path of `GetS`, this will never happen, as the `GetS` is only sent to the lower level when
 there is a directory miss, in which case data must also not be present.
 
@@ -3081,7 +3081,7 @@ calling `cleanUpAfterResponse()`.
 
 Method `handleGetXResp()` may also handle the response for a `GetS` event from the lower level. This will happen
 if the lower level grants exclusive ownership to the requestor. 
-In our case, only the `IS` branch in the switch block is releveant.
+In our case, only the `IS` branch in the switch block is relevant.
 The state will transit to `M` or `E` depending on whether data from the lower level is dirty (I could not see
 how this is possible, though, because `GetS` will never cause the lower level controller to issue `FetchInv` and
 hence acquire a dirty block). 
@@ -3095,7 +3095,7 @@ between full miss and partial miss.
 If the access misses the cache, then a directory entry is allocated, and its state transits to `IM`.
 The `GetX` event is also forwarded to the lower level by calling `forwardMessage()`.
 If the access sees a `S` state entry, an upgrade is only needed if the cache is not a last-level cache.
-The upgrade is perfomed by first forwarding the event to the lower level, and then calling 
+The upgrade is performed by first forwarding the event to the lower level, and then calling 
 `invalidateExceptRequestor()` to invalidate (`INV`) shared copies of the block in the upper level (`FetchInv`). 
 If at least one invalidation is sent to the upper level, then the state transits to `SM_Inv`. 
 Otherwise, there is no need to wait for invalidation, because there is not any upper level sharer nor owner,
@@ -3190,7 +3190,7 @@ block that just got flushed, then the local write back is simulated immediately 
 with the last argument setting to `false`, which means that the flush event may not be considered as a response 
 to an earlier downgrade or invalidation, since the state here is stable.
 After simulating the local write back, the requestor is added as a sharer, and the `setEvict()` is called on the
-event with `false` to avoid simulating the write back multuple times in the case of retries.
+event with `false` to avoid simulating the write back multiple times in the case of retries.
 The state also transits to `E_B` and `M_B` for `E` and `M`, respectively, and the flush is forwarded
 to the lower level by calling `forwardFlush()`.
 Lastly, the flush event is marked as in progress by calling `setInProgress()`. This means that the flush event
@@ -3251,7 +3251,7 @@ event forwarded to the lower level.
 In the case of flushes, `S_B`, `E_B` and `M_B` blocks will transit back to `S` state.
 If the flush also races with external invalidations, then the block state may also be `I_B`, in which case it 
 will transit from `I_B` to `I`. 
-In this case, the directory and data array will also be invalidated, by calling `dealloc()`.
+In this case, the directory and data array will also be invalidated, by calling `deallocate()`.
 (Strangely, the `deallocate()` part is not in the flush response handler of inclusive cache).
 
 ##### handleFlushLineInv(), Request Path
@@ -3520,4 +3520,7 @@ In both cases, the state transits to `S_Inv`.
 If no upper level sharer is present, the `Inv` can be immediately completed by calling `sendResponseDown()`
 to send the `AckInv` to the lower level, and then calling `deallocate()` on both directory and data arrays.
 The MSHR data, if any, is also cleared.
+
+For `I_B` state blocks, the `Inv` event just orders before it, and causes both the directory and the data entry, if
+one exists, to be deallocated. For `I` state blocks, the `Inv` event is ignored, and no response will be sent.
 
