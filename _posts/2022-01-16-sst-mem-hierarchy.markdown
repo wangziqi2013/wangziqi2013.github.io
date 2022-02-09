@@ -3532,5 +3532,13 @@ Note that since `SA` indicates that there is no more upper level sharers of the 
 
 For `S_D` state blocks, the `Inv` event will simply be inserted into the MSHR as the second entry, i.e., after the
 current front entry that caused the `S_D` state. 
-The reason that it could not be completed immediately is that `Inv` may incur invalidations, which will race with
-the ongoing fetch operation.
+The reason that it could not be ordered before the event is unclear to me (seems perfectly fine to order
+the `Inv` before the current event: When 
+the `FetchResp` is received, the block changes state back to `S`, and `Inv` is retried, which invalidates 
+all copies of the block. Then the current event is also retried, which sees `I` state, and will incur a cache miss).
+
+For `S_Inv` and `SM_Inv` state blocks, the `Inv` event is inserted as the front entry of the MSHR register, such
+that when the invalidation completes, the state of the block will then transit back to the stable state, i.e.,
+`S` and `SM`, respectively. The `Inv` event will be retried on the stable state, and is logically ordered before
+the ongoing event that caused the invalidation. 
+
