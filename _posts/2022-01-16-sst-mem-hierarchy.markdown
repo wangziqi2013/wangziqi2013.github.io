@@ -3638,8 +3638,15 @@ MSHR register, being logically ordered after the current front event.
 
 In addition to the point-to-point communication capabilities provided by simple memory links, SST also implements 
 shared channel communication between any pairs of links connected to the channel, namely, a bus. 
-The bus object models a shared communication channel that memory objects can connect to and send events to each other.
+The bus object models a shared communication channel, to which memory objects can connect and over which 
+memory event objects can be sent by one memory component to another.
 The bus also implements a minimal routing table that enables single-hop routing, i.e., an incoming event from
-a source link will be casted to the destination link based on the destination name in the memory event object.
+a source link will be delivered to the destination link based on the destination name in the memory event object.
 The routine table is configured automatically during the initialization stage by monitoring self-reported
 identities of the connected memory components.
+
+Note that, contrary to the common notion of a physical bus, which typically also always performs broadcasting,
+the bus object in SST is not necessarily a broadcasting medium. In fact, the bus supports several different 
+configurations. Users may configure the bus to perform point-to-point routing, to always broadcast from one side
+to the other side, or to always broadcast to all connected components.
+
