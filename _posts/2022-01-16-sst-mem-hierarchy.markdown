@@ -3594,4 +3594,17 @@ This method is almost identical to `handleForceInv()`, with the only exception b
 sent by calling `sendResponseDown()`, with the data pointer either from the data array, if a data entry 
 exists, or from the MSHR.
 
+##### handleFetchInvX()
+
+Method `handleFetchInv()` handles event `FetchInvX`, which downgrades an exclusive block and also sends data in the
+response event. This event will only be sent to an exclusive owner.
+
+Blocks in state `I` and `IB` will simply ignore this event. But for `I` state blocks, the event might be a retry, and
+therefore `cleanUpAfterRequest()` is called to remove the event from the MSHR and to retry the next one 
+in the MSHR register.
+
+Blocks in state `E_B` and `M_B` are handled by simply transiting the state to `S_B`. The event also completes
+immediately. Note that in these two cases, no response event is sent, since the flush event that was sent earlier to 
+the lower level will be properly treated as the response to the downgrade request. 
+
 
