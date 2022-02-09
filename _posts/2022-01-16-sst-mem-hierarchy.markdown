@@ -3618,4 +3618,15 @@ On the other hand, if there is no upper level owner, then no recursive downgrade
 But, if the current level cache does not have data, then the data still needs to be fetched from the upper level
 by calling `sendFetch()` with the command being `Fetch`. The state also transits to the `_D` version in this case.
 
+If neither sharer nor owner exists, the event can be completed immediately by calling `sendResponseDown()`.
+In this case, it is guaranteed that the current level must have a copy of data, which is either in the data array,
+or in the MSHR.
 
+Blocks in state `EA` and `MA` are handled by downgrading the write back event (which must be exclusive write back and
+contain data) in the MSHR directly. First, the write back event is obtained by calling `getFrontEvent()`.
+Then the response event is generated and sent to the lower level by calling `sendResponseDown()`, with data pointer
+from the write back event.
+The write back event is also updated such that the command becomes `PutS` by calling `setCmd`.
+At last, the requestor of the write back is re-added as a sharer, and removed as an owner.
+The state of the block also transits to `SA` to reflect the fact that the pending write back now becomes a clean
+write back with data (since the clean write back from the last sharer will trigger transition from `S` to `SA`).
