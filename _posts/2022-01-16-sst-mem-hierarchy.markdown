@@ -3650,3 +3650,13 @@ the bus object in SST is not necessarily a broadcasting medium. In fact, the bus
 configurations. Users may configure the bus to perform point-to-point routing, to always broadcast from one side
 to the other side, or to always broadcast to all connected components.
 
+The bus object is implemented by `class Bus`, in file `bus.h/cc`. The `class bus` object is a derived class of 
+`class Component`, meaning that the object must be explicitly initialized as a component in the Python
+configuration file. The object defines ports that other memory components can connect to, 
+namely, `low_network_%d` and `high_network_%d`, in which `%d` is just an identifier that has no actual 
+implication (but must start from zero and leave no gap). The low network components are considered as being further
+away from the CPU, while the high network components are closer to the CPU. 
+In the run time, though, it hardly matters whether a component is connected to the high or the low network,
+for point-to-point routing or broadcasting, because
+events are routed based on the identity of the source and destination, instead of based on side of the bus a
+component is connected to.
