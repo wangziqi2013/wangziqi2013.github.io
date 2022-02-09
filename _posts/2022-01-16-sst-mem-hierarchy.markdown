@@ -3585,3 +3585,13 @@ flush invalidation. This check is not present in `Inv` handling.
 
 State `EA` and `MA` are handled in the same way as `SA`, i.e., the pending write back is dropped (data is not
 sent down, since `ForceInv` does not require data in the response event), and the event completed immediately.
+
+##### handleFetchInv()
+
+Method `handleFetchInv()` handles event `FetchInv`, which invalidates all copies of an address in the current 
+level and the above.
+This method is almost identical to `handleForceInv()`, with the only exception being that data also needs to be
+sent by calling `sendResponseDown()`, with the data pointer either from the data array, if a data entry 
+exists, or from the MSHR.
+
+
