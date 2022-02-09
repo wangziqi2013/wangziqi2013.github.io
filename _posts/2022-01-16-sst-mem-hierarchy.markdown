@@ -3633,3 +3633,13 @@ write back with data (since the clean write back from the last sharer will trigg
 
 Blocks in state `_Inv`, `_InvX` and `_D` will cause the event to be inserted as the second front entry of the
 MSHR register, being logically ordered after the current front event.
+
+## Bus
+
+In addition to the point-to-point communication capabilities provided by simple memory links, SST also implements 
+shared channel communication between any pairs of links connected to the channel, namely, a bus. 
+The bus object models a shared communication channel that memory objects can connect to and send events to each other.
+The bus also implements a minimal routing table that enables single-hop routing, i.e., an incoming event from
+a source link will be casted to the destination link based on the destination name in the memory event object.
+The routine table is configured automatically during the initialization stage by monitoring self-reported
+identities of the connected memory components.
