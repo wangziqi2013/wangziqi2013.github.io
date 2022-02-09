@@ -3446,17 +3446,14 @@ If the request hits an `S` state block, then the data array and the MSHR is chec
 If either the data array or the MSHR contains data, then the fetch can be fulfilled immediately by 
 calling `sendResponseDown()` and `cleanUpEvent()`.
 
-If data is not locally available, then either the data is fetched from the upper level by recursively
-forwarding the fetch event upwards, or finding a pending write back event in the MSHR, and applying the 
-pending event first.
-Note that the second part is 
+If data is not locally available, then the handler will first transit the local state to `S_D` to indicate
+that data is needed, but is missing locally.
+In this case, one of the two things will happen: Either a write back event already exists in the MSHR, which 
+will be applied first to avoid the possible race condition, or no write back event is found, and a fetch to the
+upper level will be issued.
+In both cases, the event cannot be handled immediately, and it will just wait in the MSHR until the next retry.
 
-The next step involves race condition checking and 
-and if the insertion is successful, the fetch
-will be forwarded to the first upper level sharer of the block to acquire a copy of block data,
-after which the state also transits to `S_D`.
-Note that this process may propagate recursively for a few levels, if the upper level cache is also
-non-inclusive.
+
 
 If the state is transient state `I_B`, `E_B`, or `M_B`, indicating that the fetch races with an going flush
 or flush invalidation, then the fetch will simply be ignored, since the lower level handler for flush
