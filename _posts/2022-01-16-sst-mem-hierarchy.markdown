@@ -3463,7 +3463,9 @@ and the handler will decide that the write back must have raced with an existing
 in which case it decrements the ACK counter and removes the requestor of the write back from `responses`.
 Method `applyPendingReplacement()` must compensate for this, since there is not any actual fetch being issued.
 
-
+In the latter case, the fetch is issued by calling `sendFetch()` with the command being `Fetch`. The fetch
+event is sent to the first sharer of the block. Note that, at this stage, we can infer that there must be at 
+least one upper level sharers, since data is not available locally.
 
 If the state is transient state `I_B`, `E_B`, or `M_B`, indicating that the fetch races with an going flush
 or flush invalidation, then the fetch will simply be ignored, since the lower level handler for flush
