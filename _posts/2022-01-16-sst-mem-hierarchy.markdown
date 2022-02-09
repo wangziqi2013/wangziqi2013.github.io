@@ -3630,3 +3630,6 @@ The write back event is also updated such that the command becomes `PutS` by cal
 At last, the requestor of the write back is re-added as a sharer, and removed as an owner.
 The state of the block also transits to `SA` to reflect the fact that the pending write back now becomes a clean
 write back with data (since the clean write back from the last sharer will trigger transition from `S` to `SA`).
+
+Blocks in state `_Inv`, `_InvX` and `_D` will cause the event to be inserted as the second front entry of the
+MSHR register, being logically ordered after the current front event.
