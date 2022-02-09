@@ -3542,3 +3542,11 @@ that when the invalidation completes, the state of the block will then transit b
 `S` and `SM`, respectively. The `Inv` event will be retried on the stable state, and is logically ordered before
 the ongoing event that caused the invalidation. 
 
+For `SM` state blocks, the event is first inserted into the MSHR. Then if there is any upper level sharer (in fact,
+there can be at most one sharer),
+the sharers will be invalidated by calling `invalidateSharers()` with the command being `Inv`, 
+and transiting the state to `SM_Inv`.
+Otherwise, the event is completed immediately by calling `sendResponseDown()`, and the state transits to `IM`.
+
+`S_B` state blocks are handled similarly to `SM` state blocks, except that the state will change to `SB_Inv`,
+if there are upper level sharers and invalidations are issued.
