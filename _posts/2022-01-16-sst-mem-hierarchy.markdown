@@ -3550,3 +3550,15 @@ Otherwise, the event is completed immediately by calling `sendResponseDown()`, a
 
 `S_B` state blocks are handled similarly to `SM` state blocks, except that the state will change to `SB_Inv`,
 if there are upper level sharers and invalidations are issued.
+
+##### handleForceInv()
+
+Method `handleForceInv()` operates similarly to `handleInv()`, except that it also works on transient and 
+stable exclusive states. 
+To avoid redundancy in the discussion, we only cover the handling of exclusive states in this section.
+Non-exclusive state handling is identical to those in `handleInv()`.
+
+
+
+
+
