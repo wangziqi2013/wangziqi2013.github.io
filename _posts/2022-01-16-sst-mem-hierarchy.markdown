@@ -3569,5 +3569,19 @@ The state will also transit to the corresponding `_Inv` version.
 If neither sharer nor owner exists, the event will complete immediately by calling `sendResponseDown()`
 and `cleanUpAfterRequest()`.
 
+State `E_B` and `M_B` blocks are handled in the same way as `S_B` blocks. Note that if extra invalidations
+are to be issued, then the state will always transit to `SB_Inv`, regardless of the original state.
 
+State `E_D`, `M_D`, `E_InvX`, `M_InvX` are handled in the same way as `S_D`, i.e., the event is simply added
+as the second front entry of the MSHR register, which will be retried after the current event concludes. 
 
+State `E_Inv` and `M_Inv` are handled in the same way as `S_Inv`, i.e., the event is inserted as the front entry
+of the MSHR, and will be retried by the invalidation response, if the current front entry is not 
+an eviction or a flush invalidation.
+In other words, the `ForceInv` is only ordered before regular data requests.
+Otherwise, the event will be inserted as the second front entry after the current one.
+I have no idea why in the case of `ForceInv`, the front entry is also checked against eviction and 
+flush invalidation. This check is not present in `Inv` handling.
+
+State `EA` and `MA` are handled in the same way as `SA`, i.e., the pending write back is dropped (data is not
+sent down, since `ForceInv` does not require data in the response event), and the event completed immediately.
