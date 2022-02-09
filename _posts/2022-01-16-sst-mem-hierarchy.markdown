@@ -3558,7 +3558,16 @@ stable exclusive states.
 To avoid redundancy in the discussion, we only cover the handling of exclusive states in this section.
 Non-exclusive state handling is identical to those in `handleInv()`.
 
+For blocks in state `E` and `M`, the handler first inserts the event into the MSHR, if the block has upper level
+sharers or owner. If the insertion is successful, then the existence of sharers or the owner is checked.
+If any of these two exists, the method first attempts to promote and retry an existing write back event in the 
+MSHR to avoid the race condition, by calling `applyPendingReplacement()`, and then starts the invalidation
+operation by calling `invalidateSharers()` or `invalidateOwner()`, for sharers and the owner, respectively,
+if no write back is retried.
+The state will also transit to the corresponding `_Inv` version.
 
+If neither sharer nor owner exists, the event will complete immediately by calling `sendResponseDown()`
+and `cleanUpAfterRequest()`.
 
 
 
