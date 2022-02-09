@@ -3351,7 +3351,8 @@ For all `_D` version states that indicate an ongoing fetch, the `PutS` races wit
 from the first sharer of the sharer list (otherwise it is just a no-op).
 If this is true, then the method will first conclude the fetch by updating the ACK counter, the `responses` map,
 and then calling `retry()` to retry the original event that caused the fetch.
-The state also transits from the `_D` version to the stable version as well.
+The state also transits to the corresponding stable version as well.
+
 The method then checks whether the requestor is the last upper level sharer of the block.
 If true, then the `PutS` should also be handled as early as possible after the state transits back to a stable
 state, such that the non-inclusiveness invariant is not broken.
@@ -3427,6 +3428,16 @@ and the write back event is received later, then the write back event handler, o
 the event, will actually see the transient state caused by the fetch, and will try to resolve it by treating the
 write back as a response event to the earlier fetch.
 
+Note that the race condition is more complicated than the one in the inclusive cache, where
+write back events always complete immediately in the same cycle as they are handled. 
+This eliminates the possible deadlock scenario where a response for a downgrade or invalidation is expected,
+while the write back event is waiting in the MSHR.
+In a non-inclusive cache, however, write back events may also be inserted into the MSHR, which opens the
+window of vulnerability. 
+Consequently, if a later event is to issues an external request to the upper level, the handler must first 
+check the MSHR for the waiting write back event and apply it first, which closes the windows of 
+vulnerability, before the external requests can be issued.
+
 ##### handleFetch()
 
 Method `handleFetch()` handles `Fetch` from the lower level, and it only works on transient and stable form
@@ -3434,8 +3445,14 @@ of shared states.
 If the request hits an `S` state block, then the data array and the MSHR is checked. 
 If either the data array or the MSHR contains data, then the fetch can be fulfilled immediately by 
 calling `sendResponseDown()` and `cleanUpEvent()`.
-Otherwise, the event is inserted into the front entry of the MSHR register first by calling `allocateMSHR()`
-with argument `pos` being zero, and if the insertion is successful, the fetch
+
+If data is not locally available, then either the data is fetched from the upper level by recursively
+forwarding the fetch event upwards, or finding a pending write back event in the MSHR, and applying the 
+pending event first.
+Note that the second part is 
+
+The next step involves race condition checking and 
+and if the insertion is successful, the fetch
 will be forwarded to the first upper level sharer of the block to acquire a copy of block data,
 after which the state also transits to `S_D`.
 Note that this process may propagate recursively for a few levels, if the upper level cache is also
