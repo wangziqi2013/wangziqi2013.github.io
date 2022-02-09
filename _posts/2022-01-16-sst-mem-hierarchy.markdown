@@ -3453,6 +3453,16 @@ will be applied first to avoid the possible race condition, or no write back eve
 upper level will be issued.
 In both cases, the event cannot be handled immediately, and it will just wait in the MSHR until the next retry.
 
+In the former case above, method `applyPendingReplacement()` is called to search and retry the write back event.
+This method specifically searches for `PUTS`, `PutE`, or `PutM` events in the MSHR register of the given address,
+and promotes them to the front entry, before calling `retry()` on the event found.
+The method also increments the ACK counter and updates `responses` to add the requestor of the write back 
+into the map.
+The reason for doing so is that, when the write back event is retried, the state of the block it sees will be `S_D`,
+and the handler will decide that the write back must have raced with an existing fetch from the upper level,
+in which case it decrements the ACK counter and removes the requestor of the write back from `responses`.
+Method `applyPendingReplacement()` must compensate for this, since there is not any actual fetch being issued.
+
 
 
 If the state is transient state `I_B`, `E_B`, or `M_B`, indicating that the fetch races with an going flush
