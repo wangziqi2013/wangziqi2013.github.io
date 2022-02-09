@@ -3607,4 +3607,15 @@ Blocks in state `E_B` and `M_B` are handled by simply transiting the state to `S
 immediately. Note that in these two cases, no response event is sent, since the flush event that was sent earlier to 
 the lower level will be properly treated as the response to the downgrade request. 
 
+Blocks in state `E` and `M` are handled by first checking whether they have any upper level sharers or the owner.
+and if true, then the event is inserted to the MSHR.
+If the insertion is successful, and that the event has an upper level owner, then the owner is also
+downgrades by first attempting to promote and retry an existing write back in the MSHR with 
+`applyPendingReplacement()`, and then recursively forwarding the downgrade to the owner with `sendFetch()` 
+(with the command being `FetchInvX`). The state also transits to the `_InvX` version in both cases.
+
+On the other hand, if there is no upper level owner, then no recursive downgrade is needed.
+But, if the current level cache does not have data, then the data still needs to be fetched from the upper level
+by calling `sendFetch()` with the command being `Fetch`. The state also transits to the `_D` version in this case.
+
 
