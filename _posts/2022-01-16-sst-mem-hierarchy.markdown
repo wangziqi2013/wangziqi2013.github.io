@@ -3524,3 +3524,8 @@ The MSHR data, if any, is also cleared.
 For `I_B` state blocks, the `Inv` event just orders before it, and causes both the directory and the data entry, if
 one exists, to be deallocated. For `I` state blocks, the `Inv` event is ignored, and no response will be sent.
 
+For `SA` state blocks, the `Inv` event will first force the current front event (which must be a `PutS`) to complete
+by calling `sendWritebackAck()` and then calling `cleanUpAfterRequest()` with the `PutS` event object.
+The current `Inv` event is also completed immediately by calling `sendResponseDown()`.
+Note that since `SA` indicates that there is no more upper level sharers of the block (because otherwise the 
+`PutS` will simply be ignored), no recursive invalidation will be sent to the upper levels.
