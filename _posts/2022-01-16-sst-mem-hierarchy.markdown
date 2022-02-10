@@ -3636,6 +3636,8 @@ MSHR register, being logically ordered after the current front event.
 
 ## Bus
 
+### Overview
+
 In addition to the point-to-point communication capabilities provided by simple memory links, SST also implements 
 shared channel communication between any pairs of links connected to the channel, namely, a bus. 
 The bus object models a shared communication channel, to which memory objects can connect and over which 
@@ -3650,6 +3652,8 @@ the bus object in SST is not necessarily a broadcasting medium. In fact, the bus
 configurations. Users may configure the bus to perform point-to-point routing, to always broadcast from one side
 to the other side, or to always broadcast to all connected components.
 
+### The Bus Object
+
 The bus object is implemented by `class Bus`, in file `bus.h/cc`. The `class bus` object is a derived class of 
 `class Component`, meaning that the object must be explicitly initialized as a component in the Python
 configuration file. The object defines ports that other memory components can connect to, 
@@ -3660,3 +3664,14 @@ In the run time, though, it hardly matters whether a component is connected to t
 for point-to-point routing or broadcasting, because
 events are routed based on the identity of the source and destination, instead of based on side of the bus a
 component is connected to.
+
+Link objects that represent connected ports are stored in data member `highNetPorts_` and `lowNetPorts_`, respectively,
+which correspond to the high ports and low ports in the configuration.
+Data member `linkIdMap_` maps the globally unique link ID to the link object, which must be one of the high 
+or low links.
+Data member `nameMap_` maps component names at the other end of the link to the link ID (which can further be
+mapped to the link object using `linkIdMap_`). This table is also the routing table of the bus. When a request is
+received, the destination component's name is looked up in the table, and if found, the link object is retrieved using
+the link ID, after which the event is forwarded to the link object.
+
+
