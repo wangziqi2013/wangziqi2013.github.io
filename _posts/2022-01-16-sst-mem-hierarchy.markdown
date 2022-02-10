@@ -3710,4 +3710,19 @@ All events received from one side of the bus will be broadcasted to all ports on
 This way, all memory components can learn their immediate neighbors, including the identities, address ranges, etc.,
 by receiving and parsing the initialization events.
 
+### Bus Construction
+
+The constructor of `class Bus` performs parameter retrieval, which is implemented in `configureParameters()` 
+and link configuration, which is implemented in `configureLinks()`. 
+Method `configureLinks()` enumerates port names `high_network_%d` with `%d` starting from zero to the first index
+that is not connected. For each high network side port, The bus configures the link by calling `configureLink()`,
+with a fixed `50ps` latency on the link. The call back function for receiving events is method 
+`processIncomingEvent()`.
+The configured link will then be pushed into the list of links, `highNetPorts_`, and the mapping from link ID
+to link object will also be inserted into `linkIdMap_`.
+The same process is conducted for low network ports as well, with the exception that the link objects will be
+inserted into `lowNetPorts_`.
+
+### Bus Operations
+
 
