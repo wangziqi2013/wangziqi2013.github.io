@@ -3706,6 +3706,8 @@ table by calling `mapNodeEntry()`, which takes the source of the event as the fi
 ID of the link object as the second argument. Method `mapNodeEntry()` simply checks that the name does not
 already exist, and then inserts the mapping entry into `nameMap_`.
 
-
+All events received from one side of the bus will be broadcasted to all ports on the other side of the bus.
+This way, all memory components can learn their immediate neighbors, including the identities, address ranges, etc.,
+by receiving and parsing the initialization events.
 
 
