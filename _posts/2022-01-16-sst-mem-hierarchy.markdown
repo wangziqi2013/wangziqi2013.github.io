@@ -3736,3 +3736,10 @@ Method `sendSingleEvent()` extracts the destination name by calling `getDst()` o
 uses the name to query the routing table `nameMap_` by calling `lookupNode()`. 
 The link ID from the routine table is then used to obtain the link object by querying `linkIdMap_`,
 after which the event is sent over the link object using the regular `send()` method of the link.
+Note that the event being sent to the destination is a cloned copy, while the original event will be
+destroyed.
+
+Method `broadcastEvent()` obtains the source link object (note: not destination) using the same way as 
+in `sendSingleEvent()`, after which the event is sent to all other links in 
+`highNetPorts_` and `lowNetPorts_`.
+Each send operation uses a cloned copy of the event, while the original event will be destroyed.
