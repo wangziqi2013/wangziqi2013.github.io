@@ -3674,4 +3674,9 @@ mapped to the link object using `linkIdMap_`). This table is also the routing ta
 received, the destination component's name is looked up in the table, and if found, the link object is retrieved using
 the link ID, after which the event is forwarded to the link object.
 
-
+As mentioned earlier, the bus object supports three different modes of operation, which is controlled by flag
+`broadcast` and `fanout`. If both are set to `false` (which is the default value), then the bus is just a simple
+point-to-point forwarding network with fixed latency. If `broadcast` is `true`, then the bus will broadcast 
+a copy of the event it received from any of the ports to the rest. If `fanout` is set to `true`, though not actually
+implemented by the current `class Bus`, it is expected that the event received from the high network will be
+broadcasted to the low network, and vice versa.
