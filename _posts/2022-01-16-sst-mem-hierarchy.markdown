@@ -3725,4 +3725,11 @@ inserted into `lowNetPorts_`.
 
 ### Bus Operations
 
+The bus is called on each clock tick (unless the clock is turned off, which we do not cover), and the call back
+function for clock ticks is `clockTick()`.
+The method simply calls `broadcastEvent()` or `sendSingleEvent()` on every event object from the event queue,
+`eventQueue_`, depending on whether `broadcast_` is set. 
+If boolean flag `drain_` is set to `true`, then only one event is processed, and the rest will
+still be in the queue, which will be processed in later events.
 
+Method 
