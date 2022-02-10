@@ -3680,3 +3680,11 @@ point-to-point forwarding network with fixed latency. If `broadcast` is `true`, 
 a copy of the event it received from any of the ports to the rest. If `fanout` is set to `true`, though not actually
 implemented by the current `class Bus`, it is expected that the event received from the high network will be
 broadcasted to the low network, and vice versa.
+
+The bus also has a latency value, stored in data member `latency_`, and configure with parameter `bus_latency_cycles`.
+This value is currently not used, and all events will be sent with zero latency.
+
+Lastly, data member `drain_`, which is configured by parameter `drain_bus`, controls the message throughput of the
+bus. Right now, there are only two options: Either `drain_` is set to `true`, meaning that the bus has infinite 
+bandwidth, and will drain all events from the receiving queue on each cycle, or the value is set to `false`,
+meaning that only one event will be processed per cycle.
