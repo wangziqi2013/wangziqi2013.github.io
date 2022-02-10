@@ -3688,3 +3688,24 @@ Lastly, data member `drain_`, which is configured by parameter `drain_bus`, cont
 bus. Right now, there are only two options: Either `drain_` is set to `true`, meaning that the bus has infinite 
 bandwidth, and will drain all events from the receiving queue on each cycle, or the value is set to `false`,
 meaning that only one event will be processed per cycle.
+
+### Bus Initialization
+
+Initialization is an indispensable stage for the bus's normal operation, during which the bus object learns the 
+routing table from all its connected components. 
+As with all other components, bus object's initialization is performed in method `init()`, which has an argument
+`stage` to indicate the current number of of iteration.
+
+In each iteration, the initialization method attempts to read initialization messages from each of the ports (both
+high network and low network)
+by calling `recvInitData()` until the port has been drained for the current cycle. For every event it reads
+from the port, the method checks whether the command is `NULLCMD`.
+If true, then the event is an initialization event, and it can be casted to `class MemEventInit` objects.
+For each initialization event received, the bus object registers the sender of the event to the routing
+table by calling `mapNodeEntry()`, which takes the source of the event as the first argument, and the 
+ID of the link object as the second argument. Method `mapNodeEntry()` simply checks that the name does not
+already exist, and then inserts the mapping entry into `nameMap_`.
+
+
+
+
