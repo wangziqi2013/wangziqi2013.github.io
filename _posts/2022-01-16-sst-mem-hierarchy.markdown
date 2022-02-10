@@ -3732,4 +3732,7 @@ The method simply calls `broadcastEvent()` or `sendSingleEvent()` on every event
 If boolean flag `drain_` is set to `true`, then only one event is processed, and the rest will
 still be in the queue, which will be processed in later events.
 
-Method 
+Method `sendSingleEvent()` extracts the destination name by calling `getDst()` on the event object, and 
+uses the name to query the routing table `nameMap_` by calling `lookupNode()`. 
+The link ID from the routine table is then used to obtain the link object by querying `linkIdMap_`,
+after which the event is sent over the link object using the regular `send()` method of the link.
