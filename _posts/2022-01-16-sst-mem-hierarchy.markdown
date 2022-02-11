@@ -3843,6 +3843,8 @@ initialization data. The backing store will be updated when the `GetX` event is 
 
 ### Memory Controller Operations
 
+#### Request Path
+
 Method `handleEvent()` handles incoming events from the cache hierarchy.
 This method first checks whether the event has a customized command, and if true, then it calls `handleCustomEvent()`
 to handle the event, and then exists.
@@ -3855,3 +3857,19 @@ For `FlushLine` and `FlushLineInv`, the method first generates a new event of ty
 same workload, and passes the event to `handleMemEvent()`.
 The original event is also processed in the same way, after the new event, with the command being changed to 
 `FlushLine`, it it was `FlushLineInv`.
+Clean write backs, i.e., `PutE` and `PutS`, are just ignored.
+
+#### Response Path
+
+When an event handling completes, method `handleMemResponse()` is called within the converter object, with the 
+arguments being the ID of the event, and the flag that the response event should carry.
+The method first finds the original event using the ID in the map `outstandingEvents_`, and then removes the mapping 
+entry. If the original request has a custom command, then the event will be sent to the custom command's handler object
+for post-completion processing, before it is sent via the link.
+Otherwise, the method first performs writes on the backing storage with data in the event, if any.
+If the event has flag `F_NORESPONSE` being set, then no response will be sent, and event handling concludes.
+If not, the response event is created by calling `makeResponse()` on the event object.
+For read request events, data is also read from the backing storage, and set to the event object.
+The flag of the response event is updated with `flags` in the argument as well.
+Finally, the response event is sent to the upper level by calling `send()` on the link object, while the 
+original event is destroyed.
