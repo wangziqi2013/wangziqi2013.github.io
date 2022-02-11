@@ -4032,7 +4032,16 @@ The class also has one functor data member, `m_getRequestor`, which, when invoke
 of the original requestor given an internally generated request ID.
 The functor is set in the backend converter construtor as we have seen earlier.
 
-### SimpleMemBackend
+### Simple Memory Backend
 
 `class SimpleMemBackend` is derived from `class MemBackend`, and it is still an abstract class that cannot be 
 directly instanciated.
+This class defines a simple interface for communicating with the converter object.
+Method `issueRequest()`, which is an abstract function, and must be overridden by the child class, is the 
+interface for issuing a request object to the backend.
+Method `handleMemResponse()` is the method that will be called when a request is completed. The method will 
+forward the call to its data member, `m_respFunc`, which is a functor object registered via `setResponseHandler()`.
+
+Method `getBackendConvertorType()` selects the compatible converter object during the construction of the memory
+controller object. The method returns `memHierarchy.simpleMemBackendConvertor`, meaning that a 
+`class simpleMemBackendConvertor` type converter object will be constructed. 
