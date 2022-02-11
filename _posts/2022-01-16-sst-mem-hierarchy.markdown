@@ -4063,3 +4063,8 @@ The class also provides a concrete implementation of method `issueRequest()`, su
 abstract, and can be directly instanciated. 
 In order to use it, the parameter key `backend` or `backendConvertor.backend`, which are given to the 
 memory controller object, should be set to value `memHierarchy.simpleMem`.
+
+On construction, the object configures its self link by calling `configureSelfLink()`. This method registers 
+the call back function as method `handleSelfEvent()`, with a link latency of the value read from the parameter
+key `access_time`. This way, the fixed access latency is, in fact, simulated as the link latency.
+
