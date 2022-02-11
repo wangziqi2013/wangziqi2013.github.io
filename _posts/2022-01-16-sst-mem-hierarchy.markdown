@@ -3700,7 +3700,7 @@ In each iteration, the initialization method attempts to read initialization mes
 high network and low network)
 by calling `recvInitData()` until the port has been drained for the current cycle. For every event it reads
 from the port, the method checks whether the command is `NULLCMD`.
-If true, then the event is an initialization event, and it can be casted to `class MemEventInit` objects.
+If true, then the event is an initialization event, and it can be cast to `class MemEventInit` objects.
 For each initialization event received, the bus object registers the sender of the event to the routing
 table by calling `mapNodeEntry()`, which takes the source of the event as the first argument, and the 
 ID of the link object as the second argument. Method `mapNodeEntry()` simply checks that the name does not
@@ -3999,6 +3999,18 @@ Method `sendResponse()` simply calls `m_notifyResponse()` with the same argument
 `m_notifyResponse` is a functor object set by `setCallbackHandlers()`, which is called by the upper level memory
 controller with the controller's handler function.
 
+### Simple Memory Backend Converter
+
+`class SimpleMemBackendConvertor` inherits from `class MemBackendConvertor`, and it is a non-abstract class.
+The class defines the concrete interface for interacting with memory backend objects as follows.
+First, it overrides method `issue()`, and provides a concrete implementation, which, given a request object,
+will simply invoke `issueRequest()` on the memory backend object (cast to `class SimpleMemBackend` type).
+Second, the class also registers its own method, `handleMemResponse()`, as the response handler to the backend
+object by calling `setResponseHandler()`. 
+Method `handleMemResponse()` will simply forward the call to the base class method `doResponse()`.
+
+
+
 ## Memory Backend
 
 The memory backend implements the timing model of a main memory. All memory backend implementations must inherit 
@@ -4012,3 +4024,8 @@ The memory backend base class constructor reads parameter keys `max_requests_per
 The class also has one functor data member, `m_getRequestor`, which, when invoked, returns the string identifier
 of the original requestor given an internally generated request ID.
 The functor is set in the backend converter construtor as we have seen earlier.
+
+### SimpleMemBackend
+
+`class SimpleMemBackend` is derived from `class MemBackend`, and it is still an abstract class that cannot be 
+directly instanciated.
