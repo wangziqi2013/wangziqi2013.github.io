@@ -3840,3 +3840,18 @@ calls `processInitEvent()` on the event.
 Initialization events may be used to set up the initial memory image before simulatation starts. This is 
 achieved by sending `GetX` type event objects to the memory controller, with the data member set to 
 initialization data. The backing store will be updated when the `GetX` event is processed.
+
+### Memory Controller Operations
+
+Method `handleEvent()` handles incoming events from the cache hierarchy.
+This method first checks whether the event has a customized command, and if true, then it calls `handleCustomEvent()`
+to handle the event, and then exists.
+Otherwise, the controller converts the global address in the event, if any, to the local address of the main memory
+component.
+Events are actually handled in the following switch block.
+`Get` requests and `PutM` are handled by first adding them into the `outstandingEvents_` map, which maps event 
+ID to the event object, and then calling converter object's `handleMemEvent()` to pass the event.
+For `FlushLine` and `FlushLineInv`, the method first generates a new event of type `PutM` on the same address with the
+same workload, and passes the event to `handleMemEvent()`.
+The original event is also processed in the same way, after the new event, with the command being changed to 
+`FlushLine`, it it was `FlushLineInv`.
