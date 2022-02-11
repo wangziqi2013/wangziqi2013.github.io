@@ -4007,4 +4007,8 @@ from the base class, `class MemBackend` , in file `memBackend.h`.
 child class of `class SubComponent`, and it must be loaded into the slot of the memory controller, as we have
 already seen earlier.
 
-
+The memory backend base class constructor reads parameter keys `max_requests_per_cycle`, `request_width`, and 
+`mem_size`, into data members `m_maxReqPerCycle`, `m_memSize`, and `m_reqWidth`, respectively. 
+The class also has one functor data member, `m_getRequestor`, which, when invoked, returns the string identifier
+of the original requestor given an internally generated request ID.
+The functor is set in the backend converter construtor as we have seen earlier.
