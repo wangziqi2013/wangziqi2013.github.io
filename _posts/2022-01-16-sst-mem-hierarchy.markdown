@@ -3921,3 +3921,12 @@ Then the method calls `setupMemReq()` on the event to add the event into an inte
 certain orderings. If the method `setupMemReq()` returns false, then the event can be responded to immediately
 by calling `sendResponse()`. Otherwise, the event has been inserted into the queue, and will be processed in a future
 cycle.
+
+Method `setupMemReq()` is defined in the header file. This method first checks whether the request is a flush. If true,
+then a dependency check is performed against all earlier requests in the queue `m_requestQueue`.
+If an earlier request (if there are multiple of them, just pick the most recent one) with the same address is found, 
+then the dependency is tracked by adding the flush into `m_dependentRequests`, which is a map from the event
+that has the same address as the flush, to a set of dependent flushes.
+Besides, the flush event and the event it depends on is also inserted into `m_waitingFlushes`, which uses the 
+flush event as key, and the other event as value.
+
