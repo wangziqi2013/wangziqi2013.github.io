@@ -3988,4 +3988,6 @@ reverse map `m_waitingFlushes`.
 If for some flushes, all conflicting events have been completed, then the event itself can also complete
 by calling `sendResponse()` on the flush event as well.
 
-Method `sendResponse()` 
+Method `sendResponse()` simply calls `m_notifyResponse()` with the same arguments. Recall that 
+`m_notifyResponse` is a functor object set by `setCallbackHandlers()`, which is called by the upper level memory
+controller with the controller's handler function.
