@@ -3823,3 +3823,16 @@ address space. If backing is not needed, then parameter `backing` should be set 
 should be set to `false` (the latter is deprecated, though). 
 Otherwise, the backing storage will be constructor either as malloc-based or mmap-based, depending on the 
 value of the parameter `backing`.
+
+### Memory Controller Initialization
+
+The `init()` method of the memory controller is pretty simple. It first calls `init()` on the link object, which
+will exchange the identity of the controller component with its upper level component. 
+Two one-time initialization events are also sent at stage zero, namely, `class MemEventInitCoherence`, and 
+`class MemEventInitEndpoint`. The first event negotiates the coherence protocol with the upper levels.
+Note notably, the controller presents itself as a memory component by setting the type to `Memory`, such that 
+the upper level cache will identify itself as a last-level cache.
+Besides, the controller also indicates that it in inclusive, will not send write back ACKs, and that it does not
+track the presence of data elsewhere.
+
+
