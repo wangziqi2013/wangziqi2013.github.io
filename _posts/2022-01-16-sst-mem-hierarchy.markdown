@@ -3796,4 +3796,14 @@ specified by parameter key `backendConvertor.backend`, by calling `loadAnonymous
 If the key does not exist, then the default memory backend to be constructed is of type `memHierarchy.simpleMem`.
 The reference to the memory backend object is stored in local variable `memory`.
 
-
+The memory converter is constructed by first obtaining the converter type as a string, via memory backend's 
+method function `getBackendConvertorType()`, and then loading the converter object by calling 
+`loadAnonymousSubComponent()`. The memory backend object and the request width are passed to the 
+converter constructor as arguments.
+The caller back handler of the converter object is set by calling `setCallbackHandlers()`, with the first
+argument being a functor object that essentially calls `handleMemResponse()`, meaning that whenever a 
+request fully handled, the response message will be passed to the memory controller by calling 
+method `handleMemResponse()` from the converter object.
+Note that here, instead of implementing a private class as the functor object, the code author just used 
+`std::bind` and placeholders to generate a `std::function` object, and pass the object as a functor to the 
+converter. 
