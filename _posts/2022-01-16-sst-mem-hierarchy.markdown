@@ -3779,6 +3779,8 @@ Otherwise, if port `network` is connected, then the slot is loaded with a more c
 Other optional subcomponent slots also exist, and they can be loaded with subcomponents that enhances the 
 functionality. For example, slot `listener` can be loaded with event listeners, and slot `customCmdHandler`
 can be loaded with an extra module for handling custom events.
+In our discussion, we ignore these optional components, because their implementation is relatively insignificant
+to understanding the memory controller.
 
 ### Memory Controller Construction
 
@@ -3807,3 +3809,12 @@ method `handleMemResponse()` from the converter object.
 Note that here, instead of implementing a private class as the functor object, the code author just used 
 `std::bind` and placeholders to generate a `std::function` object, and pass the object as a functor to the 
 converter. 
+
+The constructor then proceeds to construct the link that connects the controller with the upper level component. 
+The constructor first attempts to load a component from the explicitly set slot, `cpulink`, as the link object.
+If this fails, then it checks whether port `direct_link` is connected. If true, then a `class MemLink` object is 
+constructed. Otherwise, if port `network` is connected, then some NoC class object is constructed (which we do not
+cover). The link object is then stored in local variable `link_`.
+The call back function of the link is `handleEvent()`, meaning that events from the cache hierarchy will be processed
+by this method function.
+
