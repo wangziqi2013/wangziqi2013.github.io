@@ -4045,3 +4045,9 @@ forward the call to its data member, `m_respFunc`, which is a functor object reg
 Method `getBackendConvertorType()` selects the compatible converter object during the construction of the memory
 controller object. The method returns `memHierarchy.simpleMemBackendConvertor`, meaning that a 
 `class simpleMemBackendConvertor` type converter object will be constructed. 
+
+Two more types of abstract backends are also defined in the same file. The first is `class FlagMemBackend`,
+which has a more expressive `issueRequest()` method, allowing an extra flag from the converter to be passed.
+The second is `class ExtMemBackend`, which defines an extra `issueCustomRequest()` that allows customized requests
+to be handled with a different method.
+
