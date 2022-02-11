@@ -3949,4 +3949,12 @@ has no implementation, on the request. Child classes must override this method t
 for event issuing to the backend.
 If the method returns `false`, then the request is rejected by the memory backend, and request issue concludes for
 the current cycle.
+Otherwise, `m_backendRequestWidth` bytes is sent, and this value is aggregated to the request object by calling
+`increment()`, which just increments the `m_offset` field of the request object by the same amount.
+If the request size is smaller than the aggregated size that has been sent, which is checked by `issueDone()`, 
+then the request is fully issued to the backend, and it can be removed from `m_requestQueue`.
+If there are still issuing bandwidth left, the next request can be extracted from the queue, and the same process
+repeats.
 
+The method also calls `clock()` to drive the memory backend forward, if the memory backend has a clocked 
+implementation.
