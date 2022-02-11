@@ -3913,6 +3913,13 @@ The only additional step during converter construction is to register the method
 call back of the memory backend. This method, when called with the request ID, performs a lookup on the internal
 pending request table, and returns the string name of the requestor (i.e., the LLC) of the associated memory event.
 
+The constructor also negotiates the issue width with the backend, by calling `getRequestWidth()` on the backend object.
+This value will be compared with the front end issue width (which is the constructor argument `request_width`),
+and the smaller of the two are used as the actual issue width. 
+The issue width defines how many bytes can be sent in a single request to the backend. A frontend request that is
+too large to be sent as a whole may need to be issued as a few separate requests (most likely, 
+large write operations).
+
 ### Converter Operation
 
 #### Request Path
