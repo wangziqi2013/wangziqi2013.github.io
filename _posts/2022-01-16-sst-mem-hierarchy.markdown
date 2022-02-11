@@ -4068,3 +4068,10 @@ On construction, the object configures its self link by calling `configureSelfLi
 the call back function as method `handleSelfEvent()`, with a link latency of the value read from the parameter
 key `access_time`. This way, the fixed access latency is, in fact, simulated as the link latency.
 
+When `issueRequest()` is called from the converter object, the method just constructs a new `class MemCtrlEvent`
+object that carries the request ID, and sends it via the link by calling `send()`. Note that the first argument
+to `send()` is one, meaning that the operation has an extra unit of delay in the unit of the link's time base.
+
+When an event is received in a future cycle, method `handleSelfEvent()` will be called, which simply calls 
+`handleMemResponse()`. The call chain will eventually reach the convertor object's receive handler, 
+`doResponse()`, causing the response event to be sent back to the upper level.
