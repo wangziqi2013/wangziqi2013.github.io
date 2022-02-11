@@ -3873,3 +3873,11 @@ For read request events, data is also read from the backing storage, and set to 
 The flag of the response event is updated with `flags` in the argument as well.
 Finally, the response event is sent to the upper level by calling `send()` on the link object, while the 
 original event is destroyed.
+
+## Memory Backend Converter
+
+The memory backend converter object, defined as `class MemBackendConvertor` in file `memBackendConverter.h/cc`,
+is responsible for translating between memory hierarchy's event object and the memory backend's request object.
+Besides, this class also enforces the request bandwidth limit, as well as the ordering constraints between the 
+flush instruction and other memory instructions on the same address.
+
