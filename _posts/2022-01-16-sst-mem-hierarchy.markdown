@@ -3902,3 +3902,12 @@ the responses, and the request can only complete when all of its smaller request
 To this end, the field `m_offset` tracks the current sending offset of data contained in the request in the 
 issue stage, while `m_numReq` tracks the number of smaller requests that the request has been broken into during
 issue, and the number of responses to expect before completion.
+
+### Converter Construction
+
+Recall that the converter object is constructed by its containing memory controller class. The constructor arguments 
+are the memory backend object and the width of the internal bus (i.e., the number of bytes to issue per request).
+The only additional step during converter construction is to register the method `getRequestor()` as the get requestor
+call back of the memory backend. This method, when called with the request ID, performs a lookup on the internal
+pending request table, and returns the string name of the requestor (i.e., the LLC) of the associated memory event.
+
