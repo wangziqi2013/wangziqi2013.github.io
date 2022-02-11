@@ -3980,3 +3980,12 @@ The event object that accompanies the request is also obtained and stored in loc
 The completion of the event is then notified to the memory controller object by calling `sendResponse()` with `event`'s
 ID and the flags.
 
+After sending the response, the dependency between flushes and other memory operations are resolved.
+The method finds all dependent flush requests by looking up `m_dependentRequests` using the ID of the current
+memory event object. 
+Then for all flush events that are in the value set, the current conflicting event is removed from the 
+reverse map `m_waitingFlushes`. 
+If for some flushes, all conflicting events have been completed, then the event itself can also complete
+by calling `sendResponse()` on the flush event as well.
+
+Method `sendResponse()` 
