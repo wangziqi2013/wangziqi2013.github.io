@@ -4009,7 +4009,14 @@ Second, the class also registers its own method, `handleMemResponse()`, as the r
 object by calling `setResponseHandler()`. 
 Method `handleMemResponse()` will simply forward the call to the base class method `doResponse()`.
 
-
+`class SimpleMemBackendConvertor` only works with backend objects of type `class SimpleMemBackend`, or its derived
+classes. This is the reason why the simple converter always casts the backend object to type `class SimpleMemBackend`.
+Correspondingly, in `class SimpleMemBackend`, the converter type is specified as 
+`memHierarchy.simpleMemBackendConvertor`, in the return value of method `getBackendConvertorType()`.
+During the construction of the containing memory controller object, the converter will be selected by 
+first constructing the memory backend, and then calling `getBackendConvertorType()` to obtain the string name
+of the converter class. The converter is then instanciated by calling `loadAnonymousSubComponent()` with the
+name of the converter type.
 
 ## Memory Backend
 
