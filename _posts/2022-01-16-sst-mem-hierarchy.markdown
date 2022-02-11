@@ -3743,3 +3743,16 @@ Method `broadcastEvent()` obtains the source link object (note: not destination)
 in `sendSingleEvent()`, after which the event is sent to all other links in 
 `highNetPorts_` and `lowNetPorts_`.
 Each send operation uses a cloned copy of the event, while the original event will be destroyed.
+
+Method `processIncomingEvent()` handles received messages from any of the link objects. This function is
+extremely simple, as it just pushes the received event into `eventQueue_`. These events will be processed in the 
+next clock tick.
+
+## Memory Controller
+
+`class MemoryController` (in file `memoryController.h/cc`) implements the memory controller interface. The memory
+controller object sits between the last level cache and the memory backend (including the converter), and it serves 
+as an entry point for accessing the main memory. The memory controller object is derived from `class Component`,
+meaning that it can be instanciated in the configuration file, and connected to the upper level components.
+
+
