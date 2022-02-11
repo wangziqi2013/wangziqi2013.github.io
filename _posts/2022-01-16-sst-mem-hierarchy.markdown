@@ -3770,3 +3770,12 @@ for translating between memory hierarchy's event type and the backend's event ty
 The convertor cannot be loaded explicitly, and the type of the converter is obtained from the memory backend object
 by calling `getBackendConvertorType()`.
 
+The last slot, `cpulink`, stores a reference to the memory link object (which can be either a direct link, or a
+network-on-chip endpoint) that the controller objects communicate with upper level components in the hierarchy.
+The exact type of the subcomponent in this slot depends on the port that is connected in the configuration file.
+If port `direct_link` is connected, then the slot is loaded with a point-to-point type `class MemLink` object.
+Otherwise, if port `network` is connected, then the slot is loaded with a more complicated NoC.
+
+Other optional subcomponent slots also exist, and they can be loaded with subcomponents that enhances the 
+functionality. For example, slot `listener` can be loaded with event listeners, and slot `customCmdHandler`
+can be loaded with an extra module for handling custom events.
