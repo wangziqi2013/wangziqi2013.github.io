@@ -4032,7 +4032,7 @@ The class also has one functor data member, `m_getRequestor`, which, when invoke
 of the original requestor given an internally generated request ID.
 The functor is set in the backend converter construtor as we have seen earlier.
 
-### Simple Memory Backend
+### Simple Memory Backend (SimpleMemBackend)
 
 `class SimpleMemBackend` is derived from `class MemBackend`, and it is still an abstract class that cannot be 
 directly instanciated.
@@ -4051,3 +4051,15 @@ which has a more expressive `issueRequest()` method, allowing an extra flag from
 The second is `class ExtMemBackend`, which defines an extra `issueCustomRequest()` that allows customized requests
 to be handled with a different method.
 
+### Simple Memory Backend (SimpleMemory)
+
+`class SimpleMemory` inherits from `class SimpleMemBackend` (file `simpleMemBackend.h/cc`), and it implements 
+a fixed latency simple memory timing model.
+The class takes one parameter, `access_time`, which is the constant delay of accesses regardless of type, address,
+status, etc.
+The class has only one data member, `self_link`, which is configured as a self-connected internal link,
+and hence does not need to be connected explicitly in the configuration. 
+The class also provides a concrete implementation of method `issueRequest()`, such that it is no longer 
+abstract, and can be directly instanciated. 
+In order to use it, the parameter key `backend` or `backendConvertor.backend`, which are given to the 
+memory controller object, should be set to value `memHierarchy.simpleMem`.
