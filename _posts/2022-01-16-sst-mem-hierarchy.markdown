@@ -3998,3 +3998,13 @@ by calling `sendResponse()` on the flush event as well.
 Method `sendResponse()` simply calls `m_notifyResponse()` with the same arguments. Recall that 
 `m_notifyResponse` is a functor object set by `setCallbackHandlers()`, which is called by the upper level memory
 controller with the controller's handler function.
+
+## Memory Backend
+
+The memory backend implements the timing model of a main memory. All memory backend implementations must inherit 
+from the base class, `class MemBackend` , in file `memBackend.h`. 
+`class MemBackend` is an abstract class and hence cannot be directly instanciated. The class is also a 
+child class of `class SubComponent`, and it must be loaded into the slot of the memory controller, as we have
+already seen earlier.
+
+
