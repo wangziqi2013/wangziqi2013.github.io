@@ -3881,3 +3881,13 @@ is responsible for translating between memory hierarchy's event object and the m
 Besides, this class also enforces the request bandwidth limit, as well as the ordering constraints between the 
 flush instruction and other memory instructions on the same address.
 
+### BaseReq and MemReq
+
+The converter class defines a few inner classes that represent main memory requests. The base class of all
+request types, `class BaseReq`, only maintains a tyoe field, `m_type`, and ID field, `m_reqId`. The type is of one of 
+the three possible values: `BASE`, `MEM`, and `CUSTOM`, in which `MEM` means that the request object is of a derived
+type (`class MemReq`, as we will see later), and that there is an associated memory event object.
+We do not discuss custom requests, since they are insignificant to understanding the converter object.
+The ID is a 32-bit integer allocated from a counter in the converter object. Using 32-bit values may risk 
+occasionally overflowing the counter, but since the ID field is only used as a key during the request's lifetime
+to distinguish it from other requests, it is very unlikely that wrap-backs will become an issue.
