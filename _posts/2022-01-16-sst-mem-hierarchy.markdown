@@ -3880,6 +3880,8 @@ The memory backend converter object, defined as `class MemBackendConvertor` in f
 is responsible for translating between memory hierarchy's event object and the memory backend's request object.
 Besides, this class also enforces the request bandwidth limit, as well as the ordering constraints between the 
 flush instruction and other memory instructions on the same address.
+This class is a virtual abstract class, meaning that the class cannot be instanciated. The class should be 
+inherited by child classes that override its abstract methods, in order to be eligible for instanciation.
 
 ### BaseReq and MemReq
 
@@ -3924,17 +3926,22 @@ cycle.
 
 Method `setupMemReq()` is defined in the header file. This method first checks whether the request is a flush. If true,
 then a dependency check is performed against all earlier requests in the queue `m_requestQueue`.
-If an earlier request (if there are multiple of them, just pick the most recent one) with the same address is found, 
-then the dependency is tracked by adding the flush into `m_dependentRequests`, which is a map from the event
-that has the same address as the flush, to a set of dependent flushes.
-Besides, the flush event and the event it depends on is also inserted into `m_waitingFlushes`, which uses the 
-flush event as key, and the other event as value.
+If an earlier request with the same address is found, 
+then the dependency is tracked by adding the flush into `m_dependentRequests`, which is a map from the conflicting
+event that has the same address as the flush, to a set of dependent flushes.
+Besides, the flush event and all the events it depends on is also inserted into `m_waitingFlushes`, which uses the 
+flush event as key, and the set of conflicting events as value.
+Note that if there are multiple of them, all of them will be recorded, and the flush can only complete if all
+the dependencies are resolved.
 
 The reason that dependencies between flushes and conflicting events are tracked is that, since the memory backend
 may reorder requests, it is not always guaranteed that requests will be completed in the order they they are 
-processed by the memory controller. Consequently, flush instructions may be reordered with other memory requests, which
+processed by the memory controller. Consequently, flush instructions may be reordered with conflicting requests
+that are originally before it, which
 might violate the ordering property of the flush, since it is expected by the upper level caches
-and the CPU that the flush be properly ordered with instructions on the same address.
+and the CPU that the flush takes place after all preceding memory instructions in the program order.
+If this is not observed, certain programs that depend on this ordering, such as NVM
+applications, might just stop working.
 
 After potential dependencies are recorded, a new request ID allocated by calling `genReqId()` which simply increments
 the ID counter. Then a new `class MemReq` object is created and inserted into the queue `m_requestQueue`.
@@ -3958,3 +3965,18 @@ repeats.
 
 The method also calls `clock()` to drive the memory backend forward, if the memory backend has a clocked 
 implementation.
+
+#### Response Path
+
+The full response path of request handling should be implemented in the child class, and `class MemBackendConvertor`
+only provides a common response path handling function, `doResponse()`, that the child class can use.
+
+Method `doResponse()` is called with the ID of the request object, and the flag that the request memory event should 
+carry. The method first looks up the pending request map, `m_pendingRequests`, to find the request object, and then
+decrements the number of expected responses on the request object by calling `decrement()`. If the value 
+of `m_numReq` reaches zero, meaning that all smaller requests issued from the current request have been completed
+(checked by `isDone()`), then the request is removed from `m_pendingRequests`.
+The event object that accompanies the request is also obtained and stored in local variable `event`.
+The completion of the event is then notified to the memory controller object by calling `sendResponse()` with `event`'s
+ID and the flags.
+
