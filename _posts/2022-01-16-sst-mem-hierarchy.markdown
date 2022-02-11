@@ -3911,3 +3911,13 @@ The only additional step during converter construction is to register the method
 call back of the memory backend. This method, when called with the request ID, performs a lookup on the internal
 pending request table, and returns the string name of the requestor (i.e., the LLC) of the associated memory event.
 
+### Converter Operation
+
+#### Request Path
+
+Requests are sent by the memory controller to the converter by calling `handleMemEvent()`. This method sets the 
+delivery time of the event to `m_cycleCount`, which is just the local clock value. 
+Then the method calls `setupMemReq()` on the event to add the event into an internal event queue, after checking
+certain orderings. If the method `setupMemReq()` returns false, then the event can be responded to immediately
+by calling `sendResponse()`. Otherwise, the event has been inserted into the queue, and will be processed in a future
+cycle.
