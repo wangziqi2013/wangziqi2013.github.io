@@ -3940,3 +3940,13 @@ After potential dependencies are recorded, a new request ID allocated by calling
 the ID counter. Then a new `class MemReq` object is created and inserted into the queue `m_requestQueue`.
 The request is also added to the pending request map, `m_pendingRequests`, with the key being the ID, and the 
 value being the request object.
+
+Request issue is modeled at each clock tick, which is handled by method `clock()`.
+The method uses a while loop to extract requests from the `m_requestQueue` queue until the queue is empty, or
+until the maximum issuing bandwidth (obtained via `getMaxReqPerCycle()` on the backend) has been reached.
+If requests can still be issued at the current cycle, the method calls `issue()`, which is an abstract method that
+has no implementation, on the request. Child classes must override this method to implement concrete behavior
+for event issuing to the backend.
+If the method returns `false`, then the request is rejected by the memory backend, and request issue concludes for
+the current cycle.
+
