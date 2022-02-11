@@ -3891,3 +3891,14 @@ We do not discuss custom requests, since they are insignificant to understanding
 The ID is a 32-bit integer allocated from a counter in the converter object. Using 32-bit values may risk 
 occasionally overflowing the counter, but since the ID field is only used as a key during the request's lifetime
 to distinguish it from other requests, it is very unlikely that wrap-backs will become an issue.
+
+`class MemReq` inherits from `class BaseReq`, and it contains a reference to a memory event object, `m_event`,
+a request offset field, `m_offset`, and a request count field, `m_numReq`.
+The reason that the latter two are added is that for requests whose data size is larger than the internal bus
+width, the request must be broken down into several smaller requests, each carrying part of the data. These 
+smaller requests will be issued to the memory backend as different entities, and each of them will be responded to
+separately. After the requests have been processed by the memory backend, the request object will be matched against
+the responses, and the request can only complete when all of its smaller requests are completed.
+To this end, the field `m_offset` tracks the current sending offset of data contained in the request in the 
+issue stage, while `m_numReq` tracks the number of smaller requests that the request has been broken into during
+issue, and the number of responses to expect before completion.
