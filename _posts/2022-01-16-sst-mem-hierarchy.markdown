@@ -3818,3 +3818,8 @@ cover). The link object is then stored in local variable `link_`.
 The call back function of the link is `handleEvent()`, meaning that events from the cache hierarchy will be processed
 by this method function.
 
+The constructor also attempts to constructor the backing storage, which holds the contents of the simulated physical 
+address space. If backing is not needed, then parameter `backing` should be set to `none`, or `do_not_back`
+should be set to `false` (the latter is deprecated, though). 
+Otherwise, the backing storage will be constructor either as malloc-based or mmap-based, depending on the 
+value of the parameter `backing`.
