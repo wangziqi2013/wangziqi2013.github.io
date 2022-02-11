@@ -3930,3 +3930,13 @@ that has the same address as the flush, to a set of dependent flushes.
 Besides, the flush event and the event it depends on is also inserted into `m_waitingFlushes`, which uses the 
 flush event as key, and the other event as value.
 
+The reason that dependencies between flushes and conflicting events are tracked is that, since the memory backend
+may reorder requests, it is not always guaranteed that requests will be completed in the order they they are 
+processed by the memory controller. Consequently, flush instructions may be reordered with other memory requests, which
+might violate the ordering property of the flush, since it is expected by the upper level caches
+and the CPU that the flush be properly ordered with instructions on the same address.
+
+After potential dependencies are recorded, a new request ID allocated by calling `genReqId()` which simply increments
+the ID counter. Then a new `class MemReq` object is created and inserted into the queue `m_requestQueue`.
+The request is also added to the pending request map, `m_pendingRequests`, with the key being the ID, and the 
+value being the request object.
