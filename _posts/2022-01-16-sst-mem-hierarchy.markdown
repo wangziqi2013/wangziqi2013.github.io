@@ -3755,10 +3755,18 @@ controller object sits between the last level cache and the memory backend (incl
 as an entry point for accessing the main memory. The memory controller object is derived from `class Component`,
 meaning that it can be instanciated in the configuration file, and connected to the upper level components.
 
+### Subcomponent Slots
+
 The controller object also serves as an upper level container to other memory related components. 
 These related components are loaded into three subcomponent slots.
 The first slot, `backend`, stores a reference to the memory backend that implements the timing of the main memory.
+The slot can be explicitly loaded by calling `setSubComponent()` on the component object in the Python
+configuration file, with the name of the slot and the type name, or, if not explicitly loaded, be specified 
+in the controller parameter using key `backend` or `backendConvertor.backend` (these two keys are equivalent).
+In the latter case, the subcomponent slot is loaded implicitly using the parameter value as the backend type.
+
 The second slot, `backendConvertor`, stores a reference to the backend convertor object that is responsible 
 for translating between memory hierarchy's event type and the backend's event type.
-The last slot, `cpulink`, stores a reference to the memory link object (which can be either a direct link, or a
-network-on-chip endpoint) that the controller objects communicate with upper level components in the hierarchy.
+The convertor cannot be loaded explicitly, and the type of the converter is obtained from the memory backend object
+by calling `getBackendConvertorType()`.
+
