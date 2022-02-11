@@ -3779,3 +3779,21 @@ Otherwise, if port `network` is connected, then the slot is loaded with a more c
 Other optional subcomponent slots also exist, and they can be loaded with subcomponents that enhances the 
 functionality. For example, slot `listener` can be loaded with event listeners, and slot `customCmdHandler`
 can be loaded with an extra module for handling custom events.
+
+### Memory Controller Construction
+
+The memory controller constructor first translates parameter keys `backend` to `backendConvertor.backend`,
+`backendConvertor.backend` to `backendConvertor.request_width`, and `max_requests_per_cycle`
+to `backendConvertor.backend.max_requests_per_cycle`, such that these parameters can be recognized by the 
+convertor subcomponent (when the parameter is passed to the subcomponents for construction, the key prefix 
+will be trimmed).
+Then the constructor registers method `clock()` as the clock tick handler, with the frequency specified in
+parameter key `clock`.
+The constructor next attempts to construct the backend object. It first tried to instanciate an explicitly loaded
+object in slot `backend` by calling `loadUserSubComponent()` (which corresponds to an explicitly set subcomponent
+in the configuration file). If this fails, then it tries to loads a subcomponent whose registered type name is 
+specified by parameter key `backendConvertor.backend`, by calling `loadAnonymousSubComponent()`.
+If the key does not exist, then the default memory backend to be constructed is of type `memHierarchy.simpleMem`.
+The reference to the memory backend object is stored in local variable `memory`.
+
+
