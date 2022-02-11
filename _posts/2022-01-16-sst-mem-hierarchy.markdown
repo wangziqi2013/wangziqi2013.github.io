@@ -3835,4 +3835,8 @@ the upper level cache will identify itself as a last-level cache.
 Besides, the controller also indicates that it in inclusive, will not send write back ACKs, and that it does not
 track the presence of data elsewhere.
 
-
+In the rest of the cycles, the controller just keeps receiving from the link, and for each event received,
+calls `processInitEvent()` on the event. 
+Initialization events may be used to set up the initial memory image before simulatation starts. This is 
+achieved by sending `GetX` type event objects to the memory controller, with the data member set to 
+initialization data. The backing store will be updated when the `GetX` event is processed.
