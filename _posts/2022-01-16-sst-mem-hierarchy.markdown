@@ -4148,3 +4148,11 @@ after each access, then no row buffer close event is scheduled, and the row is a
 to `false`.
 
 In both cases, the response of the access is sent to the converter object by calling `handleMemResponse()`.
+
+### DRAMSim Backend
+
+`class DRAMSimMemory` is the backend type implemented as a wrapping layer around the third party DRAMSim.
+DRAMSim itself is implemented separately from SST, and must be installed. The DRAMSim backend includes the
+header file `DRAMSim.h`, which must be present when the module is compiled.
+
+
