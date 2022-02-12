@@ -4098,5 +4098,12 @@ key `bank_interleave_granularity`, i.e., adjacent blocks of size `bank_interleav
 space with be mapped to adjacent banks.
 Besides, the row number of a given address in each bank is just the address modular the row size, which
 can be specified with parameter key `row_size`, and by default it is set to 8KB.
+The number of banks and the row buffer policy is specified using parameter keys `banks` and `row_policy`, respectively.
+
+The class tracks per-bank status using two data members. Data member `busy` tracks whether a bank is busy in the 
+current simulated cycle. Data member `openRow` stores an integer, which tracks the currently opened row of the bank.
+A `-1` value indicates that no row is currently open.
+The link object `self_link`, just as in the simple memory bankend, is configured as a self link, with the receiving
+call back being `handleSelfEvent()`.
 
 
