@@ -4133,3 +4133,14 @@ access happens, and hence does not need any write back on the critical path.
 It is, however, necessary that a write back be scheduled asynchronously after the access.
 This is done properly in the simulation, as we will see shortly, by scheduling another row buffer close 
 event on completion of the access, with a latency of `tRP` cycles.
+
+When the request completes, the event will be delivered to `handleSelfEvent()`. 
+The method first cast the event object to type `class MemCtrlEvent`, and then checks the value of `close`.
+If `close` is `false`, meaning that the event indicates the conclusion of an earlier request, then the 
+method further checks the row buffer policy. If row policy is `CLOSED` (specified with paremeter key `row_policy`),
+then a row close event will be scheduled after `tRP` cycles.
+The row close event is also a `class MemCtrlEvent` type object, created with the bank index, and with data member 
+`close` set to `true`. The row close event is sent on the self link, which will be received by the same handler 
+function, and the event is handled by setting `openRow` to `-1` and `busy` to `false`.
+
+
