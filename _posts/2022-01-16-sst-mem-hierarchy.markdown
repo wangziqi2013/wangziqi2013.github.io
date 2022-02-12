@@ -4079,3 +4079,24 @@ When an event is received in a future cycle, method `handleSelfEvent()` will be 
 The controller request object, `class MemCtrlEvent`, is defined as an inner class of the backend class, and
 it merely carries the request ID from the converter. The class derines from `class Event`, and it can be sent
 over a link just like any other events.
+
+### Simple DRAM Backend
+
+`class SimpleDRAM` implements a slightly more complicated DRAM timing model. The timing model assumes a banked
+DRAM, in which banks can be accessed in parallel. Banks consists of rows, which are the basic unit of internal access.
+Each bank has a row buffer, which stores the content of the last accessed row. If a later access hits the row buffer,
+then the access can be fulfilled by the row buffer directly.
+In order to access a row, the bank first needs to be activated, which has a latency of `tRCD` cycles, 
+and then the row is fetched into the row buffer.
+If an earlier row already exists in the row buffer, the existing row also needs to be written back,
+with an extra latency of `tRP` on the critical path.
+The row buffer access itself also has a latency of `tRCD`, which is always paid regardless of whether the row
+buffer is hit or not.
+
+Addresses are mapped to banks in an interleaved manner, the granularity of which is specified with parameter
+key `bank_interleave_granularity`, i.e., adjacent blocks of size `bank_interleave_granularity` on the address 
+space with be mapped to adjacent banks.
+Besides, the row number of a given address in each bank is just the address modular the row size, which
+can be specified with parameter key `row_size`, and by default it is set to 8KB.
+
+
