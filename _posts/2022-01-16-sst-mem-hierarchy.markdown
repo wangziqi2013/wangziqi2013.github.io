@@ -4124,4 +4124,12 @@ After simulating the access, the bank status `busy` is set to `true`, indicating
 access until the current one completes in a future cycle.
 A new `class MemCtrlEvent` which carries the bank index and the request ID is also sent via the self link,
 with the delivery latency just computed above.
+Note that the `class MemCtrlEvent` object has data member `close` set to `false` to indicate that it is
+the conclusion of an access operation.
 
+Note that the first case above will never occur if the simulated DRAM has a close row policy, since the row
+buffer is closed on every access. The row buffer will never contain the contents of another row when the
+access happens, and hence does not need any write back on the critical path. 
+It is, however, necessary that a write back be scheduled asynchronously after the access.
+This is done properly in the simulation, as we will see shortly, by scheduling another row buffer close 
+event on completion of the access, with a latency of `tRP` cycles.
