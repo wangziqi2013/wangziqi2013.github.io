@@ -4075,3 +4075,7 @@ to `send()` is one, meaning that the operation has an extra unit of delay in the
 When an event is received in a future cycle, method `handleSelfEvent()` will be called, which simply calls 
 `handleMemResponse()`. The call chain will eventually reach the convertor object's receive handler, 
 `doResponse()`, causing the response event to be sent back to the upper level.
+
+The controller request object, `class MemCtrlEvent`, is defined as an inner class of the backend class, and
+it merely carries the request ID from the converter. The class derines from `class Event`, and it can be sent
+over a link just like any other events.
