@@ -4155,4 +4155,12 @@ In both cases, the response of the access is sent to the converter object by cal
 DRAMSim itself is implemented separately from SST, and must be installed. The DRAMSim backend includes the
 header file `DRAMSim.h`, which must be present when the module is compiled.
 
-
+The DRAMSim backend requires two parameter keys, `device_ini` and `system_ini`, which specify paths to the 
+configuration file needed for initializing a DRAMSim object.
+In the constructor, a DRAMSim memory object is initialized by calling `getMemorySystemInstance()`, the 
+return value of which is stored in data member `memSystem`.
+The constructor also registers call back functions for reads and writes using DRAMSim's interface function,
+`RegisterCallbacks()`.
+When a request handling completes, the call back function, `dramSimDone()`, will be called, with the argument being
+the ID of the request (DRAMSim's internal ID, which is not used by the method), the requested address, and the 
+clock cycle when the completion notification is sent. 
