@@ -4143,4 +4143,8 @@ The row close event is also a `class MemCtrlEvent` type object, created with the
 `close` set to `true`. The row close event is sent on the self link, which will be received by the same handler 
 function, and the event is handled by setting `openRow` to `-1` and `busy` to `false`.
 
+Otherwise, if the row buffer policy is `OPEN`, meaning that the contents of the row buffer is not written back
+after each access, then no row buffer close event is scheduled, and the row is always closed by setting `busy`
+to `false`.
 
+In both cases, the response of the access is sent to the converter object by calling `handleMemResponse()`.
