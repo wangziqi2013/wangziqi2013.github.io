@@ -4026,6 +4026,11 @@ from the base class, `class MemBackend` , in file `memBackend.h`.
 child class of `class SubComponent`, and it must be loaded into the slot of the memory controller, as we have
 already seen earlier.
 
+The `class MemBackend`'s method function `isClocked()` always returns `true`, meaning that the backend will
+receive the clock tick as the converter does. This method is called during converter object's construction,
+and saved in its data member `m_clockBackend`. In converter object's `clock()` function, this data member
+is checked, and if it is `true`, then the `clock()` of the backend is also called.
+
 The memory backend base class constructor reads parameter keys `max_requests_per_cycle`, `request_width`, and 
 `mem_size`, into data members `m_maxReqPerCycle`, `m_memSize`, and `m_reqWidth`, respectively. 
 The class also has one functor data member, `m_getRequestor`, which, when invoked, returns the string identifier
