@@ -4106,4 +4106,22 @@ A `-1` value indicates that no row is currently open.
 The link object `self_link`, just as in the simple memory bankend, is configured as a self link, with the receiving
 call back being `handleSelfEvent()`.
 
+Method `issueRequest()` handles requests from the converter. The method first computes the row number and the bank 
+index, and stores them in local variables `row` and `bank`.
+Then the method checks whether the bank is busy in the current cycle, by comparing the value in data member `busy`.
+If the bank is busy, then the request is rejected by returning `false`. On rejection of a request, the 
+converter object's `clock()` method will simply stop processing requests for the current cycle, and return from
+the method.
+Otherwise, the access is simulated. There are three different cases. In the first case, the row buffer misses
+(i.e., the requested row differs from the one recorded in `openRow`), and 
+the row buffer previously has the content of another row. In this case, the access latency is the longest,
+which equals `tCAS` + `tRCD` + `tRP`.
+In the second case, the row buffer misses, but the row buffer previously has no content. In this case, the write back
+delay is unnecessary, and the access latency equals `tCAS` + `tRCD`.
+In the third case, the row buffer hits, and the access latency is simply the latency of streaming data from the 
+buffer, which equals `tCAS`.
+After simulating the access, the bank status `busy` is set to `true`, indicating that the bank will not accept another
+access until the current one completes in a future cycle.
+A new `class MemCtrlEvent` which carries the bank index and the request ID is also sent via the self link,
+with the delivery latency just computed above.
 
