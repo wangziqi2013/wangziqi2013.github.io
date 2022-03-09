@@ -114,6 +114,19 @@ The proper image for QEMU emulation is the one with `amd64` in the file name (fo
 and `.img` as suffix. Typically, emulation should use the non-KVM version, as the KVM version contains a slightly
 different Linux kernel that is optimized towards hardware virtualization. 
 
+**Setting the Root Password**
+
+By default, the system image will only have one user, `root`, and the password is not configured yet. That means
+you cannot login directly into the system with a fresh new image. To configure the password of root user, use
+the following command:
+
+```
+virt-customize -a [path] --set-password password:[password]
+```
+
+where `[path]` is the path to the system image, and `[password]` is the password to be used. After this, the 
+system can be logged in using `root` and the user name, and whatever password you just set as password.
+
 **Installing Packages**
 
 With a system image, new packages can be installed without booting into the system and connecting it to the 
