@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "QEMU Cheat Sheet with Full-System Simulation"
+title:  "QEMU Cheat Sheet for Full-System Simulation"
 date:   2022-03-18 22:12:00 -0500
 categories: article
 ontop: true
@@ -37,6 +37,8 @@ sudo makefs.ext4 /dev/nbd0
 This command will create a new ext4 file system, which is probably the most common type for a data disk. You can also
 choose other types of formatting program based on the particular needs.
 
+**Writing the New Image File**
+
 After the file system is created, the image can be mounted to the host file system as a regular device (assuming
 it has already been virtualized as `/dev/nbd0`):
 
@@ -56,6 +58,24 @@ Optionally, the virtual device can also be disconnected with the following comma
 ```
 sudo qemu-nbd --disconnect /dev/nbd0
 ```
+
+**Emulating the Image File as a Disk**
+
+The newly created image file can be emulated by QEMU as an extra device by configuring a secondary hard disk
+when starting QEMU:
+
+```
+qemu-system-x86_64 -m 4g -hda [path to system image] -hdb [path to data image]
+```
+
+After the system has started, the image disk can be mounted just like a regular device 
+(within the emulated system):
+
+```
+sudo mount /dev/sdb [path]
+```
+
+where `[path]` is the mounting point within the emulated system.
 
 **Convert Image from qcow3 to qcow2**
 
