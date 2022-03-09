@@ -6,6 +6,8 @@ categories: article
 ontop: true
 ---
 
+### Data Disk Related Topics
+
 **Creating, Mounting, and Formatting New Image File**
 
 Usually, you need to create a new image file and copy data to it such that the workload files and the dataset,
@@ -28,6 +30,13 @@ sudo qemu-nbd --connect=/dev/nbd0 [path]
 ```
 
 where `[path]` is the path to the image file you just created, and `/dev/nbd0` is the virtual device name. 
+If this command reports error "qemu-nbd: Failed to open /dev/nbd0: No such file or directory", then run the 
+following first, and then retry:
+
+```
+modprobe nbd max_part=8
+```
+
 The image is then formatted with a file system using the conventional Linux command as follows:
 
 ```
@@ -37,7 +46,7 @@ sudo makefs.ext4 /dev/nbd0
 This command will create a new ext4 file system, which is probably the most common type for a data disk. You can also
 choose other types of formatting program based on the particular needs.
 
-**Writing the New Image File**
+**Populating the New Image File**
 
 After the file system is created, the image can be mounted to the host file system as a regular device (assuming
 it has already been virtualized as `/dev/nbd0`):
@@ -90,3 +99,19 @@ qemu-img amend -f qcow2 -o compat=0.10 [path]
 
 where `[path]` is the path to the image file to be downgraded. The downgrade will happen on the same
 file as the input, and therefore, no output file is specified.
+
+### System Disk Related Topics
+
+**Downloading the System Image**
+
+System images are readily available at Ubuntu official site:
+
+```
+https://cloud-images.ubuntu.com/
+```
+
+The proper image for QEMU emulation is the one with `amd64` in the file name (for x86-64 emulation, of course), 
+and `.img` as suffix. Typically, emulation should use the non-KVM version, as the KVM version contains a slightly
+different Linux kernel that is optimized towards hardware virtualization. 
+
+
