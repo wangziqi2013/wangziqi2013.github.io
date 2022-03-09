@@ -114,4 +114,14 @@ The proper image for QEMU emulation is the one with `amd64` in the file name (fo
 and `.img` as suffix. Typically, emulation should use the non-KVM version, as the KVM version contains a slightly
 different Linux kernel that is optimized towards hardware virtualization. 
 
+**Installing Packages**
 
+With a system image, new packages can be installed without booting into the system and connecting it to the 
+network. This requires `virt-customize` utility, with the command as follows:
+
+```
+virt-customize -a [path] --install [package name]
+```
+
+where `[path]` is the path to the system image, and `[package name]` is the name of the package as you would have
+used with `apt-get install`.
