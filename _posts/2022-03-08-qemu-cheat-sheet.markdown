@@ -151,4 +151,12 @@ After downloading the kernel, which is a `.tar.gz` file, unpack the kernel sourc
 tag -xvzf [file name of the compressed tarball]
 ```
 
+Before invoking `Make`, you need to first specify a kernel configuration file. Two of the most commonly used 
+configurations are `make defconfig` and `make oldconfig`. The former uses the default configuration that comes with
+the kernel source tree, which should work in most cases. The latter uses the configuration of the system on which
+`make` is invoked. In particular, it extracts the current kernel build configuration from the current system's 
+`/boot/` directory. Customized configurations can also be generated either manually or using an existing configuration
+file as a baseline, but we do not discuss them here.
 
+After invoking the command, the kernel build configuration will be written into a file `.config` under the source tree.
+This file will be used by the build system.
