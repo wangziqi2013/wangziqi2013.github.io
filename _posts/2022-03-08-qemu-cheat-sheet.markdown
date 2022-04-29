@@ -86,7 +86,7 @@ sudo mount /dev/sdb [path]
 
 where `[path]` is the mounting point within the emulated system.
 
-**Convert Image from qcow3 to qcow2**
+**Converting Image from qcow3 to qcow2**
 
 If QEMU reports error saying "'ide0-hd1' uses a qcow2 feature which is not supported by 
 this qemu version: QCOW version 3" (note that ide0-hd1 can be different based on your
@@ -138,3 +138,17 @@ virt-customize -a [path] --install [package name]
 
 where `[path]` is the path to the system image, and `[package name]` is the name of the package as you would have
 used with `apt-get install`.
+
+**Compiling Linux Kernel**
+
+The first step of compiling a customized Linux kernel is to download the kernel source tree from the official kernel 
+repository: `https://www.kernel.org/`. It is best practice to pick the kernel noted as `mainline` or `longterm` for
+stability and compatibility.
+
+After downloading the kernel, which is a `.tar.gz` file, unpack the kernel source tree using the command:
+
+```
+tag -xvzf [file name of the compressed tarball]
+```
+
+
