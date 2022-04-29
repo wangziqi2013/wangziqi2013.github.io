@@ -139,6 +139,8 @@ virt-customize -a [path] --install [package name]
 where `[path]` is the path to the system image, and `[package name]` is the name of the package as you would have
 used with `apt-get install`.
 
+### Building and Running Linux
+
 **Compiling Linux Kernel**
 
 The first step of compiling a customized Linux kernel is to download the kernel source tree from the official kernel 
@@ -159,4 +161,10 @@ the kernel source tree, which should work in most cases. The latter uses the con
 file as a baseline, but we do not discuss them here.
 
 After invoking the command, the kernel build configuration will be written into a file `.config` under the source tree.
-This file will be used by the build system.
+This file will be used by the build system. Just run `make` to start building the kernel. You may also want to specify
+`-j` followed by the number of concurrent build threads. Refrain from using `make -j` with a large thread count or
+with the parallelism of the system, especially on large machines with tens of cores, because the kernel building 
+process is memory-consuming, and using up all cores for the task may deplete system memory and render the entire 
+system irresponsive.
+
+
