@@ -167,7 +167,9 @@ with the parallelism of the system, especially on large machines with tens of co
 process is memory-consuming, and using up all cores for the task may deplete system memory and render the entire 
 system irresponsive.
 
-**Disabling Automatic Upgrade**
+****
+
+**Disabling Ubuntu Automatic Upgrade**
 
 If you are using an Ubuntu distribution, it is likely that automatic upgrade is enabled by default, which will
 attempt to check and download upgrades in the background. To disable the automatic update service, which is almost
@@ -185,3 +187,8 @@ To completely disable all updates, check out the files under the directory `/etc
 contain switches that configure automatic update. 
 In my case (`Ubuntu 20.04 LTS`), it is a file named `10periodic`, and I disabled the switch 
 `APT::Periodic::Update-Package-Lists` by changing its value to `"0"`.
+
+Please note that what I described in this section only applies to an emulated system, where security is not 
+a concern, and that we want to minimize performance noise introduced by unrelated applications as much as possible.
+On an Ubuntu distribution for daily usage, it is strongly recommended that you should enable automatic update,
+and periodically install these updates to keep the system secure.
