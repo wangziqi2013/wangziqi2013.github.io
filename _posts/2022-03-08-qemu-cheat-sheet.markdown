@@ -167,4 +167,13 @@ with the parallelism of the system, especially on large machines with tens of co
 process is memory-consuming, and using up all cores for the task may deplete system memory and render the entire 
 system irresponsive.
 
+**Disabling Automatic Upgrade**
 
+If you are using an Ubuntu distribution, it is likely that automatic upgrade is enabled by default, which will
+attempt to check and download upgrades in the background. To disable the automatic update service, which is almost
+always what you want to do (because it consume system resources, and because it introduces lots of noises),
+run the following command:
+
+```
+sudo apt -y purge unattended-upgrades
+```
