@@ -177,3 +177,11 @@ run the following command:
 ```
 sudo apt -y purge unattended-upgrades
 ```
+
+I particularly uninstalled this component because I observed huge CPU occupation of a process of the same name.
+You may or may not need to do the same, depending on your system configuration.
+
+To completely disable all updates, check out the files under the directory `/etc/apt/apt.conf.d/`. Certain files
+contain switches that configure automatic update. 
+In my case (`Ubuntu 20.04 LTS`), it is a file named `10periodic`, and I disabled the switch 
+`APT::Periodic::Update-Package-Lists` by changing its value to `"0"`.
