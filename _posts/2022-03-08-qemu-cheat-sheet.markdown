@@ -150,7 +150,7 @@ stability and compatibility.
 After downloading the kernel, which is a `.tar.gz` file, unpack the kernel source tree using the command:
 
 ```
-tag -xvzf [file name of the compressed tarball]
+tar -xvzf [file name of the compressed tarball]
 ```
 
 Before invoking `Make`, you need to first specify a kernel configuration file. Two of the most commonly used 
@@ -163,11 +163,25 @@ file as a baseline, but we do not discuss them here.
 After invoking the command, the kernel build configuration will be written into a file `.config` under the source tree.
 This file will be used by the build system. Just run `make` to start building the kernel. You may also want to specify
 `-j` followed by the number of concurrent build threads. Refrain from using `make -j` with a large thread count or
-with the parallelism of the system, especially on large machines with tens of cores, because the kernel building 
-process is memory-consuming, and using up all cores for the task may deplete system memory and render the entire 
-system irresponsive.
+without any number which will use the parallelism of the system, though, especially on large machines with 
+tens of cores. The reason is that the kernel 
+building process is cpu- and memory-intensive, and dedicating all cores for the task may deplete system memory and 
+render the entire system irresponsive.
 
-****
+**Booting QEMU with the New Kernel**
+
+Once kernel build finishes, you should be able to find the uncompressed kernel image, `vmlinux`, in the root of 
+the kernel source tree. This image, however, cannot be directly used to boot the system. 
+The compressed kernel image resides in `arch/x86/boot/` as file `bzImage`.
+
+One way of replacing the old kernel with the newly compiled one is to copy the binary `bzImage` into the 
+`/boot/` directory of the disk image (not your host system!) as `vmlinuz`. The bootloader will use it as 
+the kernel the next time you start the system. 
+
+An even better way, if you are using QEMU, is to specify the kernel image to load using QEMU command line 
+option `-kernel`. This option allows users to specify a kernel image (i.e., the `bzImage`) that exists in the 
+host system (not the emulated guest!), such the image will be loaded directly by QEMU into the emulated address 
+space, rather than following the regular booting process and using whatever in the emulated `/boot/` directory.
 
 **Disabling Ubuntu Automatic Upgrade**
 
