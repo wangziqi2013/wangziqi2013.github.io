@@ -241,3 +241,12 @@ Please note that what I described in this section only applies to an emulated sy
 a concern, and that we want to minimize performance noise introduced by unrelated applications as much as possible.
 On an Ubuntu distribution for daily usage, it is strongly recommended that you should enable automatic update,
 and periodically install these updates to keep the system secure.
+
+**Configuring the Emulated Terminal**
+
+Since we used the option `-nographic` to start QEMU, all outputs from the emulated system will be redirected to
+the host's terminal where QEMU is started. 
+One problem is that the size of the host terminal (which can be set by adjusting the window size on the host) may not
+match the size in the emulated guest, which can give you weird artifacts. If you observe these artifacts, one way of
+solving it is to configure the guest terminal rows and columns to match those of the host, using the command below:
+
