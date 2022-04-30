@@ -74,7 +74,7 @@ The newly created image file can be emulated by QEMU as an extra device by confi
 when starting QEMU:
 
 ```
-qemu-system-x86_64 -m 4g -hda [path to system image] -hdb [path to data image]
+qemu-system-x86_64 -m 4g -hda [System disk image path] -hdb [Data disk image path]
 ```
 
 After the system has started, the image disk can be mounted just like a regular device 
@@ -182,6 +182,28 @@ An even better way, if you are using QEMU, is to specify the kernel image to loa
 option `-kernel`. This option allows users to specify a kernel image (i.e., the `bzImage`) that exists in the 
 host system (not the emulated guest!), such the image will be loaded directly by QEMU into the emulated address 
 space, rather than following the regular booting process and using whatever in the emulated `/boot/` directory.
+
+In addition to the `-kernel` option, you need also to specify the following to QEMU in order to properly boot 
+the system:
+
+```
+... (Other options)
+-kernel [Compressed kernel image path] \
+-append "root=/dev/sda1 console=ttyS0 nokaslr" \
+... (Other options)
+```
+
+The `-append` switch sets the kernel boot options, which will be read by the kernel during the boot. 
+`root` specifies the device that will be mounted as the root file system (i.e., the `/` directory). In this 
+example, we use `/dev/sda1`, assuming that the system disk drive (i.e., the Ubuntu image) is specified 
+as `-hda [System disk image path]`.
+`console=ttyS0` just ensures that the output can be seen on the host terminal. If this option is missing, nothing 
+will show up after you start the emulation.
+`nokaslr` is not strictly required, but as it disables kernel address space randomization, you would expect it to
+introduce less performance noise compared with the case where randomization is enabled.
+I also paste the complete list of command line arguments that I use below:
+
+
 
 **Disabling Ubuntu Automatic Upgrade**
 
