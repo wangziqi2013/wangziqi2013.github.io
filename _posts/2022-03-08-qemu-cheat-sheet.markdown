@@ -74,7 +74,7 @@ The newly created image file can be emulated by QEMU as an extra device by confi
 when starting QEMU:
 
 ```
-qemu-system-x86_64 -m 4g -hda [System disk image path] -hdb [Data disk image path]
+qemu-system-x86_64 -m 512m -hda [System disk image path] -hdb [Data disk image path]
 ```
 
 After the system has started, the image disk can be mounted just like a regular device 
@@ -139,7 +139,7 @@ virt-customize -a [path] --install [package name]
 where `[path]` is the path to the system image, and `[package name]` is the name of the package as you would have
 used with `apt-get install`.
 
-### Building and Running Linux
+### Building and Emulating Linux Kernel
 
 **Compiling Linux Kernel**
 
@@ -150,7 +150,7 @@ stability and compatibility.
 After downloading the kernel, which is a `.tar.gz` file, unpack the kernel source tree using the command:
 
 ```
-tar -xvzf [file name of the compressed tarball]
+tar -xvzf [Path to the compressed tarball]
 ```
 
 Before invoking `Make`, you need to first specify a kernel configuration file. Two of the most commonly used 
@@ -201,7 +201,8 @@ as `-hda [System disk image path]`.
 will show up after you start the emulation.
 `nokaslr` is not strictly required, but as it disables kernel address space randomization, you would expect it to
 introduce less performance noise compared with the case where randomization is enabled.
-I also paste the complete list of command line arguments that I use below:
+
+I also present the complete list of command line arguments that I use below:
 
 ```
 ./build/qemu-system-x86_64 \
@@ -209,9 +210,13 @@ I also paste the complete list of command line arguments that I use below:
 -nographic \
 -hda [System disk image directory]/ubuntu-20.04-server-cloudimg-amd64.img \
 -hdb [Data disk image path] \
--kernel Compressed kernel image path] \
+-kernel [Compressed kernel image path] \
 -append "root=/dev/sda1 console=ttyS0 nokaslr"
 ```
+
+The `-m` option specifies the amount of physical memory allocated to the emulated guest. `-smp` specifies the number
+of emulated CPUs. `-nographic` disables QEMU's graphic window, and will redirect input/output to/from the emulated
+guest to the current terminal on the host.
 
 **Disabling Ubuntu Automatic Upgrade**
 
@@ -224,7 +229,7 @@ run the following command:
 sudo apt -y purge unattended-upgrades
 ```
 
-I particularly uninstalled this component because I observed huge CPU occupation of a process of the same name.
+I particularly uninstalled this component because I observed high CPU occupation by a process of the same name.
 You may or may not need to do the same, depending on your system configuration.
 
 To completely disable all updates, check out the files under the directory `/etc/apt/apt.conf.d/`. Certain files
