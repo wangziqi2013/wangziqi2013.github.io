@@ -203,7 +203,15 @@ will show up after you start the emulation.
 introduce less performance noise compared with the case where randomization is enabled.
 I also paste the complete list of command line arguments that I use below:
 
-
+```
+./build/qemu-system-x86_64 \
+-smp 1 -m 512 \
+-nographic \
+-hda [System disk image directory]/ubuntu-20.04-server-cloudimg-amd64.img \
+-hdb [Data disk image path] \
+-kernel Compressed kernel image path] \
+-append "root=/dev/sda1 console=ttyS0 nokaslr"
+```
 
 **Disabling Ubuntu Automatic Upgrade**
 
