@@ -250,3 +250,10 @@ One problem is that the size of the host terminal (which can be set by adjusting
 match the size in the emulated guest, which can give you weird artifacts. If you observe these artifacts, one way of
 solving it is to configure the guest terminal rows and columns to match those of the host, using the command below:
 
+```
+stty rows [Number of rows] cols [Number of columns]
+```
+
+The two parameters given to the `stty` command must exactly match the host terminal size. One way of obtaining such 
+information in Ubuntu is to move your mouse to one of the four corners of the window, and then hold the mouse left 
+button when the cursor turns into an arrow. The size of the terminal should be shown at the middle of the window.
