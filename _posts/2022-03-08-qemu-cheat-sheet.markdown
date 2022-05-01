@@ -202,7 +202,7 @@ will show up after you start the emulation.
 `nokaslr` is not strictly required, but as it disables kernel address space randomization, you would expect it to
 introduce less performance noise compared with the case where randomization is enabled.
 
-I also present the complete list of command line arguments that I use below:
+I also present the complete list of command line arguments that I use below (under the root of QEMU source tree):
 
 ```
 ./build/qemu-system-x86_64 \
@@ -235,7 +235,9 @@ You may or may not need to do the same, depending on your system configuration.
 To completely disable all updates, check out the files under the directory `/etc/apt/apt.conf.d/`. Certain files
 contain switches that configure automatic update. 
 In my case (`Ubuntu 20.04 LTS`), it is a file named `10periodic`, and I disabled the switch 
-`APT::Periodic::Update-Package-Lists` by changing its value to `"0"`.
+`APT::Periodic::Update-Package-Lists` by changing its value to `"0"`. Some online resources also indicate
+that you should look into the file `20auto-upgrades` under the same directory. In my case, I did not see that
+file, and the options are actually in `10periodic`.
 
 Please note that what I described in this section only applies to an emulated system, where security is not 
 a concern, and that we want to minimize performance noise introduced by unrelated applications as much as possible.
