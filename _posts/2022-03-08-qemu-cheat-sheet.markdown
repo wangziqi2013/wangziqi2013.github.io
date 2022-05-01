@@ -279,4 +279,14 @@ QEMU has a handy feature that saves and loads full-system snapshots of the emula
 consists of both the memory and CPU states, such that execution can resume right on the point where the snapshot is 
 taken.
 
+To use this feature, you need to first boot the system in the normal manner, and then enter QEMU monitor.
+A new snapshot can be created by typing the following command into the console:
+
+```
+savevm [Snapshot Tag]
+```
+
+where `[Snapshot Tag]` is an arbitrary name you chose for it. The snapshot is generated and attached to the system
+disk image file (i.e., the one you specify with `-hda` option). Multiple snapshots can be created on the same 
+system disk image, as long as each of them is given a unique name.
 
