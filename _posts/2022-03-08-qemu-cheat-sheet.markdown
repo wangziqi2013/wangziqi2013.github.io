@@ -273,7 +273,7 @@ If you just want to terminate QEMU immediately, a shortcut is provided as "Ctrl+
 Please note that QEMU monitor seems to run asynchronously with the emulated system, at least from my experience.
 The emulated system will keep running and printing on the terminal even with the monitor being active.
 
-### Saving and Restoring to System Checkpoints
+### Saving System Snapshots
 
 QEMU has a handy feature that saves and loads full-system snapshots of the emulated system. The full-system snapshot
 consists of both the memory and CPU states, such that execution can resume right on the point where the snapshot is 
@@ -299,3 +299,12 @@ qemu-img snapshot -l [System disk image path]
 If multiple images are loaded on the emulated system, then the snapshot tag will exist on all image files. 
 
 Snapshots can be deleted using the same utility by passing `snapshot -d` with the name of the snapshot.
+
+### Loading System Snapshots
+
+System snapshots can be loaded in two ways. In the less common approach, you can enter QEMU monitor, and then
+type `loadvm [Name]` where `[Name]` is the name of the snapshot to be loaded. 
+
+Snapshots can also be loaded using `-loadvm` option followed by the name of the snapshot. The rest of the 
+command lines must match those where the snapshot was taken. After starting QEMU with `-loadvm`, the system will
+be quickly set up and restored to the exact state when `savevm` is issued.
