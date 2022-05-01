@@ -259,3 +259,13 @@ stty rows [Number of rows] cols [Number of columns]
 The two parameters given to the `stty` command must exactly match the host terminal size. One way of obtaining such 
 information in Ubuntu is to move your mouse to one of the four corners of the window, and then hold the mouse left 
 button when the cursor turns into an arrow. The size of the terminal should be shown at the middle of the window.
+
+**QEMU Monitor**
+
+QEMU provides a "monitor" that allows host system users to control the emulated guest system. 
+To wake up the console, press "Ctrl+A" on the host system with the focus on the emulated terminal 
+(assuming you are on MacOS or Ubuntu), and then press "c". QEMU console prompt `(qemu)` should then be printed.
+You can then experiment with the monitor by typing commands into it. 
+A good beginning point is to type `help` to view a complete list of supported commands and their actions.
+
+
