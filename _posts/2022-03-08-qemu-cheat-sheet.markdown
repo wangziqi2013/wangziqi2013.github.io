@@ -268,4 +268,15 @@ To wake up the console, press "Ctrl+A" on the host system with the focus on the 
 You can then experiment with the monitor by typing commands into it. 
 A good beginning point is to type `help` to view a complete list of supported commands and their actions.
 
+If you just want to terminate QEMU immediately, a shortcut is provided as "Ctrl+A" and then pressing "x".
+
+Please note that QEMU monitor seems to run asynchronously with the emulated system, at least from my experience.
+The emulated system will keep running and printing on the terminal even with the monitor being active.
+
+### Saving and Restoring to System Checkpoints
+
+QEMU has a handy feature that saves and loads full-system snapshots of the emulated system. The full-system snapshot
+consists of both the memory and CPU states, such that execution can resume right on the point where the snapshot is 
+taken.
+
 
