@@ -290,3 +290,12 @@ where `[Snapshot Tag]` is an arbitrary name you chose for it. The snapshot is ge
 disk image file (i.e., the one you specify with `-hda` option). Multiple snapshots can be created on the same 
 system disk image, as long as each of them is given a unique name.
 
+The list of snapshots can be seen with `qemu-img` utility without invoking QEMU, using the following command:
+
+```
+qemu-img snapshot -l [System disk image path]
+```
+
+If multiple images are loaded on the emulated system, then the snapshot tag will exist on all image files. 
+
+Snapshots can be deleted using the same utility by passing `snapshot -d` with the name of the snapshot.
