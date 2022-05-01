@@ -168,6 +168,15 @@ tens of cores. The reason is that the kernel
 building process is cpu- and memory-intensive, and dedicating all cores for the task may deplete system memory and 
 render the entire system irresponsive.
 
+If something does wrong, or you want a clean build, then execute the following make command to revert the
+kernel source tree to the initial state:
+
+```
+make mrproper
+```
+
+This command will remove all intermediate files as well as the generated configuration file.
+
 **Booting QEMU with the New Kernel**
 
 Once kernel build finishes, you should be able to find the uncompressed kernel image, `vmlinux`, in the root of 
@@ -258,7 +267,8 @@ stty rows [Number of rows] cols [Number of columns]
 
 The two parameters given to the `stty` command must exactly match the host terminal size. One way of obtaining such 
 information in Ubuntu is to move your mouse to one of the four corners of the window, and then hold the mouse left 
-button when the cursor turns into an arrow. The size of the terminal should be shown at the middle of the window.
+button when the cursor turns into an arrow. The size of the terminal should be shown at the middle of the window
+(in col * row format, not the opposite).
 
 **QEMU Monitor**
 
@@ -276,8 +286,8 @@ The emulated system will keep running and printing on the terminal even with the
 ### Saving System Snapshots
 
 QEMU has a handy feature that saves and loads full-system snapshots of the emulated system. The full-system snapshot
-consists of both the memory and CPU states, such that execution can resume right on the point where the snapshot is 
-taken.
+consists of the memory, CPU, and disk states, such that execution can resume, at a later point, right on 
+the moment where the snapshot is taken.
 
 To use this feature, you need to first boot the system in the normal manner, and then enter QEMU monitor.
 A new snapshot can be created by typing the following command into the console:
@@ -299,12 +309,14 @@ qemu-img snapshot -l [System disk image path]
 If multiple images are loaded on the emulated system, then the snapshot tag will exist on all image files. 
 
 Snapshots can be deleted using the same utility by passing `snapshot -d` with the name of the snapshot.
+Alternatively, they can also be deleted using `delvm` while in the QEMU monitor.
 
 ### Loading System Snapshots
 
 System snapshots can be loaded in two ways. In the less common approach, you can enter QEMU monitor, and then
 type `loadvm [Name]` where `[Name]` is the name of the snapshot to be loaded. 
+Snapshots can also be loaded using `-loadvm` option followed by the name of the snapshot. 
+In both cases, the rest of the command lines for starting QEMU must match those where the snapshot was taken. 
 
-Snapshots can also be loaded using `-loadvm` option followed by the name of the snapshot. The rest of the 
-command lines must match those where the snapshot was taken. After starting QEMU with `-loadvm`, the system will
-be quickly set up and restored to the exact state when `savevm` is issued.
+Note that by loading a system snapshot, modifications to the disk image after the snapshot was taken will not
+be visible. 
