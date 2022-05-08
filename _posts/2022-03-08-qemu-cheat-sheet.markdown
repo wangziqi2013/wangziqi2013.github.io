@@ -257,6 +257,14 @@ instructions it has executed. With `icount` enabled, the emulated guest system w
 message from the kernel thread, since the kernel can now only observe elapsed time as the number of instructions
 that have been executed.
 
+**Beware of SIMD Instructions**
+
+If you run into illegal instruction fault on the emulated guest system, but the same binary works fine on 
+your host system, one of the many possible causes is that QEMU does not support the full set of SIMD instructions,
+especially when the binary is cross-compiled on the host system rather than the guest.
+Once identified, the issue is relatively easy to resolve -- Just disable SIMD instructions in the compiler option.
+On `gcc`, this can be done by removing options like `-mavx`, `-mavx2`, etc.
+
 **Disabling Ubuntu Automatic Upgrade**
 
 If you are using an Ubuntu distribution, it is likely that automatic upgrade is enabled by default, which will
