@@ -227,6 +227,18 @@ The `-m` option specifies the amount of physical memory allocated to the emulate
 of emulated CPUs. `-nographic` disables QEMU's graphic window, and will redirect input/output to/from the emulated
 guest to the current terminal on the host.
 
+**Virtualizing Time Properly**
+
+By default, QEMU does not virtualize time, meaning that the emulated guest system is able to observe the
+time elapsed on the host system, rather than in the emulated environment. The reason of not virtualizing time is 
+that QEMU only performs functional emulation, without the capability of deriving the timing of instructions and 
+I/O operations. One consequence of lacking time virtualization is that the emulated guest system may behave 
+differently under QEMU, since certain kernel or user components may require precise timing. One example is 
+kernel RCU, which is monitored by a background kernel thread. The following kernel message might be printed
+on the console, if the emulated system is running at extremely low throughput:
+
+
+
 **Disabling Ubuntu Automatic Upgrade**
 
 If you are using an Ubuntu distribution, it is likely that automatic upgrade is enabled by default, which will
