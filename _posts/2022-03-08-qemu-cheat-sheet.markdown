@@ -121,7 +121,7 @@ you cannot login directly into the system with a fresh new image. To configure t
 the following command:
 
 ```
-virt-customize -a [path] --set-password password:[password]
+virt-customize -a [path] --root-password password:[password]
 ```
 
 where `[path]` is the path to the system image, and `[password]` is the password to be used. After this, the 
@@ -153,7 +153,7 @@ After downloading the kernel, which is a `.tar.gz` file, unpack the kernel sourc
 tar -xvzf [Path to the compressed tarball]
 ```
 
-Before invoking `Make`, you need to first specify a kernel configuration file. Two of the most commonly used 
+Before invoking `make`, you need to first specify a kernel configuration file. Two of the most commonly used 
 configurations are `make defconfig` and `make oldconfig`. The former uses the default configuration that comes with
 the kernel source tree, which should work in most cases. The latter uses the configuration of the system on which
 `make` is invoked. In particular, it extracts the current kernel build configuration from the current system's 
@@ -168,7 +168,7 @@ tens of cores. The reason is that the kernel
 building process is cpu- and memory-intensive, and dedicating all cores for the task may deplete system memory and 
 render the entire system irresponsive.
 
-If something does wrong, or you want a clean build, then execute the following make command to revert the
+If something goes wrong, or you want a clean build, then execute the following make command to revert the
 kernel source tree to the initial state:
 
 ```
@@ -268,7 +268,7 @@ stty rows [Number of rows] cols [Number of columns]
 The two parameters given to the `stty` command must exactly match the host terminal size. One way of obtaining such 
 information in Ubuntu is to move your mouse to one of the four corners of the window, and then hold the mouse left 
 button when the cursor turns into an arrow. The size of the terminal should be shown at the middle of the window
-(in col * row format, not the opposite).
+(in col * row format, rather than the opposite).
 
 **QEMU Monitor**
 
@@ -280,7 +280,8 @@ A good beginning point is to type `help` to view a complete list of supported co
 
 If you just want to terminate QEMU immediately, a shortcut is provided as "Ctrl+A" and then pressing "x".
 
-Please note that QEMU monitor seems to run asynchronously with the emulated system, at least from my experience.
+Please note that QEMU monitor seems to run asynchronously with the emulated system, at least it is the case 
+from my experience.
 The emulated system will keep running and printing on the terminal even with the monitor being active.
 
 ### Saving System Snapshots
@@ -318,5 +319,5 @@ type `loadvm [Name]` where `[Name]` is the name of the snapshot to be loaded.
 Snapshots can also be loaded using `-loadvm` option followed by the name of the snapshot. 
 In both cases, the rest of the command lines for starting QEMU must match those where the snapshot was taken. 
 
-Note that by loading a system snapshot, modifications to the disk image after the snapshot was taken will not
-be visible. 
+Note that by loading a system snapshot, modifications to the disk image after the snapshot was taken will be
+rolled back.
