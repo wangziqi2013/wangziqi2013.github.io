@@ -237,7 +237,16 @@ differently under QEMU, since certain kernel or user components may require prec
 kernel RCU, which is monitored by a background kernel thread. The following kernel message might be printed
 on the console, if the emulated system is running at extremely low throughput:
 
-
+```
+[  854.090892] rcu: INFO: rcu_preempt self-detected stall on CPU
+[  854.143514] rcu: 	0-...!: (2683 ticks this GP) idle=59b/1/0x4000000000000000 softirq=79396/79396 fqs=1 
+[  854.276564] rcu: rcu_preempt kthread timer wakeup didn't happen for 60043 jiffies! g143537 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+[  854.382524] rcu: 	Possible timer handling issue on cpu=0 timer-softirq=27154
+[  854.445642] rcu: rcu_preempt kthread starved for 60046 jiffies! g143537 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=0
+[  854.549432] rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+[  854.611767] rcu: RCU grace-period kthread stack dump:
+[  855.205647] rcu: Stack dump where RCU GP kthread last ran:
+```
 
 **Disabling Ubuntu Automatic Upgrade**
 
