@@ -235,7 +235,8 @@ that QEMU only performs functional emulation, without the capability of deriving
 I/O operations. One consequence of lacking time virtualization is that the emulated guest system may behave 
 differently under QEMU, since certain kernel or user components may require precise timing. One example is 
 kernel RCU, which is monitored by a background kernel thread. The following kernel message might be printed
-on the console, if the emulated system is running at extremely low throughput:
+on the console, if the emulated system is running at extremely low throughput (e.g., you added lots of 
+instrumentations which slow down the emulation significantly):
 
 ```
 [  854.090892] rcu: INFO: rcu_preempt self-detected stall on CPU
@@ -247,6 +248,14 @@ on the console, if the emulated system is running at extremely low throughput:
 [  854.611767] rcu: RCU grace-period kthread stack dump:
 [  855.205647] rcu: Stack dump where RCU GP kthread last ran:
 ```
+
+This happens, because the emulated system runs much slowly than it is supposed to be, but the kernel is able to
+observe wall-clock time, thus reaching to the wrong conclusion that the system has been stalled.
+
+To address this matter, run QEMU with the option `-icount`, which instructs QEMU to virtualize time based on how many
+instructions it has executed. With `icount` enabled, the emulated guest system will stop printing the RCU warning
+message from the kernel thread, since the kernel can now only observe elapsed time as the number of instructions
+that have been executed.
 
 **Disabling Ubuntu Automatic Upgrade**
 
