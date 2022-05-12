@@ -373,4 +373,22 @@ We do not discuss QEMU plugin development and plugin API here. Interested reader
 find online resources that cover these topics, such as 
 [the official documentation](https://qemu.readthedocs.io/en/latest/devel/tcg-plugins.html).
 
+**Loading Plugins**
 
+QEMU plugins are compiled independently from the source tree (but may include header files from the source). 
+Once the `.so` file is generated, it can be loaded by QEMU at startup time by specifying `-plugin` option
+in the command line as follows:
+
+```
+-plugin [Path to plugin .so file]
+```
+
+If customized arguments are to be passed to the plugin itself, these arguments should follow the path to the 
+`.so` file, after a comma, which is shown as follows:
+
+```
+-plugin [Path to plugin .so file],arg=[1st argument],arg=[2nd argument],arg=[3rd argument],...
+```
+
+QEMU does not attempt to parse whatever that follows `arg=` after each comma, and every character between the 
+equal sign and the next comma (or the next space character) will be passed to the plugin as-is.
