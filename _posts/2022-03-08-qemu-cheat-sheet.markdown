@@ -322,7 +322,9 @@ Please note that QEMU monitor seems to run asynchronously with the emulated syst
 from my experience.
 The emulated system will keep running and printing on the terminal even with the monitor being active.
 
-### Saving System Snapshots
+### System Snapshots
+
+**Saving System Snapshots**
 
 QEMU has a handy feature that saves and loads full-system snapshots of the emulated system. The full-system snapshot
 consists of the memory, CPU, and disk states, such that execution can resume, at a later point, right on 
@@ -350,7 +352,7 @@ If multiple images are loaded on the emulated system, then the snapshot tag will
 Snapshots can be deleted using the same utility by passing `snapshot -d` with the name of the snapshot.
 Alternatively, they can also be deleted using `delvm` while in the QEMU monitor.
 
-### Loading System Snapshots
+**Loading System Snapshots**
 
 System snapshots can be loaded in two ways. In the less common approach, you can enter QEMU monitor, and then
 type `loadvm [Name]` where `[Name]` is the name of the snapshot to be loaded. 
@@ -359,3 +361,5 @@ In both cases, the rest of the command lines for starting QEMU must match those 
 
 Note that by loading a system snapshot, modifications to the disk image after the snapshot was taken will be
 rolled back.
+
+### QEMU Plugins
