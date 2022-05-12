@@ -363,3 +363,14 @@ Note that by loading a system snapshot, modifications to the disk image after th
 rolled back.
 
 ### QEMU Plugins
+
+**Using Plugins to Access QEMU Internal States**
+
+QEMU plugins are implemented as shared objects that expose certain interfaces in order for 
+QEMU to load and unload. These plugins interact with QEMU and access QEMU's internal states via 
+plugin-specific function calls that expose the states of translation blocks, instructions, memory operations, etc.
+We do not discuss QEMU plugin development and plugin API here. Interested readers are encouraged to
+find online resources that cover these topics, such as 
+[the official documentation](https://qemu.readthedocs.io/en/latest/devel/tcg-plugins.html).
+
+
