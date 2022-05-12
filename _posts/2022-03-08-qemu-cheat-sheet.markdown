@@ -392,3 +392,12 @@ If customized arguments are to be passed to the plugin itself, these arguments s
 
 QEMU does not attempt to parse whatever that follows `arg=` after each comma, and every character between the 
 equal sign and the next comma (or the next space character) will be passed to the plugin as-is.
+
+**Accessing Plugin Arguments**
+
+Arguments provided to the plugin can be accessed in the plugin entry point function, `qemu_plugin_install()`.
+This function will be called first after the `.so` file is loaded into QEMU's address space by the dynamic linker. 
+The function is called with `argc`, which indicates the number of arguments, and `argv`, which is a vector of 
+`char *` that stores the contents of the arguments.
+Note that the value of `argc` matches the number of customized arguments specified in the command line, instead of
+being one plus the number, unlike the `argc` value in C language runtime. 
