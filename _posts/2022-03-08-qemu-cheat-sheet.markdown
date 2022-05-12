@@ -383,7 +383,7 @@ in the command line as follows:
 -plugin [Path to plugin .so file]
 ```
 
-If customized arguments are to be passed to the plugin itself, these arguments should follow the path to the 
+If custom arguments are to be passed to the plugin itself, these arguments should follow the path to the 
 `.so` file, after a comma, which is shown as follows:
 
 ```
@@ -399,5 +399,19 @@ Arguments provided to the plugin can be accessed in the plugin entry point funct
 This function will be called first after the `.so` file is loaded into QEMU's address space by the dynamic linker. 
 The function is called with `argc`, which indicates the number of arguments, and `argv`, which is a vector of 
 `char *` that stores the contents of the arguments.
-Note that the value of `argc` matches the number of customized arguments specified in the command line, instead of
+Note that the value of `argc` matches the number of custom arguments specified in the command line, instead of
 being one plus the number, unlike the `argc` value in C language runtime. 
+
+Note that the way arguments should be passed differs from what was described in 
+[the official documents](https://qemu.readthedocs.io/en/latest/devel/tcg-plugins.html). More specifically the 
+official documentation claims that arguments can be passed by appending the key-value pairs of the 
+form `,key1=value1,key2=value2`, after the `.so` file path. In practice, this will only incur an error
+saying something like `-plugin: unexpected parameter 'key1'; ignored`. 
+
+The part of QEMU that handles plugin arguments is in `plugins/loader.c`, function `plugin_add()`. As can
+be seen clearly from the source code, the function only recognizes two switches, namely, `file` and `arg`.
+The contents that follows `file` will be treated as the path to the `.so` file, and the contents that follows
+`arg` will be added to the custom argument list (`p->argc` and `p->argv`), and later on passed to the plugin
+entry point function in function `plugin_load()` by calling the function pointer `install`. 
+The `install` pointer stores the address of the plugin's entry point, which is resolved from the plugin object 
+that was just loaded.
