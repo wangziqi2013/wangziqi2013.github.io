@@ -429,4 +429,10 @@ One way of redirecting QEMU's input from the host terminal to another channel is
 The `dup2()` system call redirects a file descriptor to another opened file structure. All other system calls
 that use the redirected file descriptor will then operate on the latter, instead of the former.
 Named pipe IPC is an inter-process communication mechanism that replies on Linux's file abstraction for
-passing information from one process to another. 
+passing information from one process to another. In named pipe IPC, a file system entity is created, which 
+can be opened, read from and written to like a normal file. The writing process (the sending end) 
+calls the `write()` system call on the file descriptor after opening the named pipe as a regular file 
+with `O_WRONLY` permission, and the reading process (the receiving end) calls `read()` on the file descriptor
+after opening the same file with `O_RDONLY` permission. 
+In order for QEMU to read input from the named pipe rather than from `stdin`, we use `dup2()` to redirect
+the `stdin` file descriptor number (`STDIN_FILENO` in libc headers) to the descriptor of the named pipe.
