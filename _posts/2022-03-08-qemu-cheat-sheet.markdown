@@ -415,3 +415,13 @@ The contents that follows `file` will be treated as the path to the `.so` file, 
 entry point function in function `plugin_load()` by calling the function pointer `install`. 
 The `install` pointer stores the address of the plugin's entry point, which is resolved from the plugin object 
 that was just loaded.
+
+**Redirecting QEMU's Input**
+
+When `-nogaphic` option is used, QEMU accepts inputs from the host terminal, and emulates a character device 
+that forwards terminal input to the emulated guest OS. 
+This way of interaction, however, requires manual input to the host terminal, which is not easily automated.
+More than often, we wish to be able to send commands from another program to QEMU, such that the entire 
+process can be automated without human intervention.
+
+
