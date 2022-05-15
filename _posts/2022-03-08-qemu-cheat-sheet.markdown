@@ -424,4 +424,9 @@ This way of interaction, however, requires manual input to the host terminal, wh
 More than often, we wish to be able to send commands from another program to QEMU, such that the entire 
 process can be automated without human intervention.
 
-
+One way of redirecting QEMU's input from the host terminal to another channel is to use a combination of 
+`dup2()` system call and named pipe IPC.
+The `dup2()` system call redirects a file descriptor to another opened file structure. All other system calls
+that use the redirected file descriptor will then operate on the latter, instead of the former.
+Named pipe IPC is an inter-process communication mechanism that replies on Linux's file abstraction for
+passing information from one process to another. 
