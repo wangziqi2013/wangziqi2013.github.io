@@ -446,7 +446,7 @@ After the named pipe is created, the plugin can then connect it by calling `open
 `O_RDONLY`. The operation system will block the call with `O_RDONLY` permission until a writer has connected,
 so no extra synchronization is required here.
 The writer process, on the other hand, just connects to the named pipe by calling `open()` with the permission being 
-`O_WRONLY`. Once the writer process has connected, both processes can proceed.
+`O_WRONLY`. Once the writer process has connected, both processes will proceed.
 
 On the QEMU side, the next step is to redirect stdin to the named pipe. 
 We first call `dup()` on `STDIN_FILENO` to create a backup file descriptor that refers to the original `stdin` 
@@ -459,3 +459,8 @@ On the sending side (which is likely the simulation backend), shell commands can
 descriptor, which will be received by QEMU as external inputs, sent to the OS, and then interpreted by the 
 emulated shell. Binary data can also be sent, but they may incur peculiar behavior, so users should be careful when
 sending binary data.
+
+Note that the writer process should keep connected to the named pipe and never close the file descriptor or
+exit, before the simulation terminates. This is because once the writer process closes the file descriptor, 
+it can never reconnect again. Meantime, on the reader side, `read()` will always return `0` without blocking,
+which is the behavior when End-of-File (`EOF`) is met.
