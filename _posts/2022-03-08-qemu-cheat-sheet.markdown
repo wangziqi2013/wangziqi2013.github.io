@@ -403,7 +403,7 @@ Note that the value of `argc` matches the number of custom arguments specified i
 being one plus the number, unlike the `argc` value in C language runtime. 
 
 Note that the way arguments should be passed differs from what was described in 
-[the official documents](https://qemu.readthedocs.io/en/latest/devel/tcg-plugins.html). More specifically the 
+[the official documents](https://qemu.readthedocs.io/en/latest/devel/tcg-plugins.html). More specifically, the 
 official documentation claims that arguments can be passed by appending the key-value pairs of the 
 form `,key1=value1,key2=value2`, after the `.so` file path. In practice, this will only incur an error
 saying something like `-plugin: unexpected parameter 'key1'; ignored`. 
@@ -436,3 +436,12 @@ with `O_WRONLY` permission, and the reading process (the receiving end) calls `r
 after opening the same file with `O_RDONLY` permission. 
 In order for QEMU to read input from the named pipe rather than from `stdin`, we use `dup2()` to redirect
 the `stdin` file descriptor number (`STDIN_FILENO` in libc headers) to the descriptor of the named pipe.
+
+The perfect place to implement this is in QEMU plugin's initialization routine, `qemu_plugin_install()`.
+As noted earlier, this function also receives the plugin's arguments, which can carry the file 
+name of the named pipe.
+The named pipe is created by calling `mkfifo()`, with the first argument being the file name of the named pipe, and 
+the second argument being the permission (usually just set it to `0666`).
+After the named pipe is created, the plugin can then connect it by calling `open()`, with the permission being 
+`O_RDONLY`. The operation system will block the call with `O_RDONLY` permission until a writer has connected,
+so no extra synchronization is required here.
