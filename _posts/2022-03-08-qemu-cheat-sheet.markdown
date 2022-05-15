@@ -445,3 +445,13 @@ the second argument being the permission (usually just set it to `0666`).
 After the named pipe is created, the plugin can then connect it by calling `open()`, with the permission being 
 `O_RDONLY`. The operation system will block the call with `O_RDONLY` permission until a writer has connected,
 so no extra synchronization is required here.
+The writer process, on the other hand, just connects to the named pipe by calling `open()` with the permission being 
+`O_WRONLY`. Once the writer process has connected, both processes can proceed.
+
+On the QEMU side, the next step is to redirect stdin to the named pipe. 
+We first call `dup()` on `STDIN_FILENO` to create a backup file descriptor that refers to the original `stdin` 
+file structure, such that we can restore `stdin` as the input channel as needed.
+The backup descriptor is stored elsewhere for later restoration.
+Then we call `dup2()` with `oldfd` being the named pipe's file descriptor, and `newfd` being `STDIN_FILENO`.
+After this call returns, all QEMU's input will be read from the named pipe, rather than from the host terminal. 
+
