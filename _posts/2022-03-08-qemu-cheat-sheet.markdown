@@ -455,3 +455,7 @@ The backup descriptor is stored elsewhere for later restoration.
 Then we call `dup2()` with `oldfd` being the named pipe's file descriptor, and `newfd` being `STDIN_FILENO`.
 After this call returns, all QEMU's input will be read from the named pipe, rather than from the host terminal. 
 
+On the sending side (which is likely the simulation backend), shell commands can just be written to the file
+descriptor, which will be received by QEMU as external inputs, sent to the OS, and then interpreted by the 
+emulated shell. Binary data can also be sent, but they may incur peculiar behavior, so users should be careful when
+sending binary data.
