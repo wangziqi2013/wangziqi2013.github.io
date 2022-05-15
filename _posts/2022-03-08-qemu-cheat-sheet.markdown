@@ -477,3 +477,14 @@ Therefore, in order to enter QEMU monitor when named pipe IPC is in effect, the 
 `0x01` and `c` into the pipe. 
 Similarly, in order to terminate emulation, just write `0x01` and `x`, which is identical to pressing `Ctrl+A`
 followed by the `X` key.
+
+The part of logic that handles this in QEMU resides in file `chardev/charmux.c`, function `mux_proc_byte()`. This 
+function is called by its preceding function, `mux_chr_read()`, with every character received from the input 
+stream. The function simply checks whether the current character is `term_escape_char`, which is defined as a 
+global variable `0x01`, and if true, then it flips the local variable `term_got_escape` to `1`, and for the 
+next character received, the big switch statement will be used to interpret them differently.
+As we can see in the `case x` branch, when `0x01` followed by `x` is received, QEMU will simply just flush the 
+output (which is emulated to print on the host terminal), and then exit by calling `exit()`.
+Correspondingly, when `0x01` followed by `c` is received, QEMU will switch to another device
+context by calling `mux_set_focus()` (and this is exactly why the device is called `charmux` -- it multiplexes between
+several registered device contexts).
