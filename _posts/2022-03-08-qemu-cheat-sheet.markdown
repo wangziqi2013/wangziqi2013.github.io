@@ -464,3 +464,16 @@ Note that the writer process should keep connected to the named pipe and never c
 exit, before the simulation terminates. This is because once the writer process closes the file descriptor, 
 it can never reconnect again. Meantime, on the reader side, `read()` will always return `0` without blocking,
 which is the behavior when End-of-File (`EOF`) is met.
+
+**Sending Special Command via Named Pipe**
+
+One of QEMU's features, the QEMU monitor, requires users to press `Ctrl+A` on the host terminal to activate. 
+When the input is sent via the named pipe, it is not straightforward to emulate this keyboard press, because 
+there is no ASCII code that corresponds to the `Ctrl` key.
+
+Further inspection to the control sequence, however, would reveal that the terminal will translate `Ctrl+A`
+key combination to ASCII code `0x01`, and put it into the `stdin` stream.
+Therefore, in order to enter QEMU monitor when named pipe IPC is in effect, the writer just need to write 
+`0x01` and `c` into the pipe. 
+Similarly, in order to terminate emulation, just write `0x01` and `x`, which is identical to pressing `Ctrl+A`
+followed by the `X` key.
