@@ -488,3 +488,15 @@ output (which is emulated to print on the host terminal), and then exit by calli
 Correspondingly, when `0x01` followed by `c` is received, QEMU will switch to another device
 context by calling `mux_set_focus()` (and this is exactly why the device is called `charmux` -- it multiplexes between
 several registered device contexts).
+
+**Switching Back and Forth Between Named Pipe and Stdin**
+
+Having QEMU's input disconnected from `stdin` and redirected to a named pipe has a side effect: You cannot 
+directly interact with QEMU on the console where you started it. In order to maintain flexibility, we would 
+prefer to have both ways of interaction available, with some ways of switching between these two.
+
+To this end, I added a new QEMU monitor shortcut, `Ctrl+A Z`, to switch between the two modes of interaction.
+The new monitor shortcut is added to function `mux_proc_byte()` in file `chardev/charmux.c`. Essentially, we add
+a new `case x` branch to the big `switch` statement that handles escaped sequences. 
+Within that branch, we just check whether the current input is from `stdin` or from the named pipe, and then use 
+`dup2()` to redirect input to the other one. 
