@@ -500,3 +500,14 @@ The new monitor shortcut is added to function `mux_proc_byte()` in file `chardev
 a new `case x` branch to the big `switch` statement that handles escaped sequences. 
 Within that branch, we just check whether the current input is from `stdin` or from the named pipe, and then use 
 `dup2()` to redirect input to the other one. 
+
+**Dynamically Adding Features**
+
+One of the nicest things about QEMU plugins is that they are simply dynamically loadable shared object files, 
+indicating that we can also import functions from the plugins to enrich QEMU features.
+By default, QEMU expects the plugin to export two symbols. The first is `qemu_plugin_install()`, which is the 
+plugin's initialization routine that will be called when it is loaded. 
+The second is `qemu_plugin_version`, which is an integer typed global variable that declares the expected API
+version from QEMU. QEMU plugin loader will check this version to ensure that a compatible API is implemented.
+As of the time of writing, QEMU supports API version 1, which is defined as a macro `QEMU_PLUGIN_VERSION`, 
+in file `include/qemu/qemu-plugin.h`
