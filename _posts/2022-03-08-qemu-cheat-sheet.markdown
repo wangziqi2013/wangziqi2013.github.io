@@ -511,3 +511,12 @@ The second is `qemu_plugin_version`, which is an integer typed global variable t
 version from QEMU. QEMU plugin loader will check this version to ensure that a compatible API is implemented.
 As of the time of writing, QEMU supports API version 1, which is defined as a macro `QEMU_PLUGIN_VERSION`, 
 in file `include/qemu/qemu-plugin.h`
+
+Additional symbols can be exported from a plugin and imported by QEMU at run time. These symbols should 
+be defined as non-static global names with declarator macro `QEMU_PLUGIN_EXPORT`, which just translates
+to linker directive `__attribute__((visibility("default")))` on Linux.
+Then, in file `plugins/loader.c`, function `plugin_load()`, the pointer to the aforementioned function can be
+obtained by calling `g_module_symbol()`. We do not elaborate on how the function should be used, as there
+are abundant number of examples in that file. 
+After obtaining the function pointer, it can be called by other QEMU components as a regular function until
+the plugin is uninstalled.
