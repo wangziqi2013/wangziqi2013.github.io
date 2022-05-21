@@ -383,6 +383,22 @@ Snapshotting is an emulation mode of QEMU, in which all modifications to the dis
 temporary file, and discarded on exit. Under snapshotting mode, disk images will be opened in read mode, rather
 than write-exclusive mode, because QEMU is guaranteed to not update them.
 
+To perform live migration, enter QEMU monitor using the key combination Ctrl+A C, and then enter the following 
+command:
+
+```
+migrate "exec: cat > memsnapshot"
+```
+
+This command will capture the current system state, and save it to an external disk file named `memsnapshot`. In order
+to load the saved states on the next startup, use the `-incoming` option in QEMU's command line:
+
+```
+-incoming "exec: cat memsnapshot"
+```
+
+which restores the system state and resumes execution at the point where live migration is performed.
+
 
 
 ### QEMU Plugins
