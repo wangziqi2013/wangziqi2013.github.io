@@ -399,7 +399,15 @@ to load the saved states on the next startup, use the `-incoming` option in QEMU
 
 which restores the system state and resumes execution at the point where live migration is performed.
 
+On the other hand, in order to enable snapshotting mode, just add the following option to QEMU:
 
+```
+-snapshot
+```
+
+All modifications to the disk image will be discarded after the program exits, and the overall system state will
+remain the same on future invocations. Most importantly, multiple instances can be started on the same image files
+under snapshotting mode, allowing these files to be shared under copy-on-write.
 
 ### QEMU Plugins
 
