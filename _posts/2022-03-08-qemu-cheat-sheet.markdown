@@ -373,6 +373,16 @@ One trivial solution is to make multiple copies of the disk files, with each bei
 This approach, however, is storage-inefficient, because the image can be quite large, and besides, most parts 
 of the images will be identical anyway. 
 
+To deal with this, we leverage QEMU's live migration and snapshotting mechanism to support sharing image files
+between multiple instances. Live migration is a technique that serializes the emulated system states, including
+memory states and device states (not including the disk image, though) to an external stream (most likely a file,
+but sockets and other types of streams also work). The emulated system states can be loaded back later
+to resume execution just like internal snapshots (actually, internal snapshots are implemented with this feature,
+with the only addition being that the object storing system states is appended to the disk image).
+Snapshotting is an emulation mode of QEMU, in which all modifications to the disk images are redirected to a 
+temporary file, and discarded on exit. Under snapshotting mode, disk images will be opened in read mode, rather
+than write-exclusive mode, because QEMU is guaranteed to not update them.
+
 
 
 ### QEMU Plugins
