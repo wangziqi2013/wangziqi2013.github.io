@@ -369,7 +369,11 @@ documentation) is handy for debugging and development, but it has one fatal flaw
 multiple instances of emulated guests. The reason is that QEMU will lock the image file in exclusive mode, which
 prevents another process from acquiring the same write lock.
 
-One trivial
+One trivial solution is to make multiple copies of the disk files, with each being used by their own instance.
+This approach, however, is storage-inefficient, because the image can be quite large, and besides, most parts 
+of the images will be identical anyway. 
+
+
 
 ### QEMU Plugins
 
