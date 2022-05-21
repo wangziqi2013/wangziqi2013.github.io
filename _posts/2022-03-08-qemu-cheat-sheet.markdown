@@ -88,8 +88,8 @@ where `[path]` is the mounting point within the emulated system.
 
 **Converting Image from qcow3 to qcow2**
 
-If QEMU reports error saying "'ide0-hd1' uses a qcow2 feature which is not supported by 
-this qemu version: QCOW version 3" (note that ide0-hd1 can be different based on your
+If QEMU reports error saying `'ide0-hd1' uses a qcow2 feature which is not supported by 
+this qemu version: QCOW version 3` (note that `ide0-hd1` can be different based on your
 startup configuration), then the image is created with a different version of qcow, and
 needs to be downgraded. The downgrade command is as follows:
 
@@ -361,6 +361,15 @@ In both cases, the rest of the command lines for starting QEMU must match those 
 
 Note that by loading a system snapshot, modifications to the disk image after the snapshot was taken will be
 rolled back.
+
+**Memory Snapshots**
+
+The above mechanism of creating and loading full-system snapshots (called "internal snapshot" in QEMU's official
+documentation) is handy for debugging and development, but it has one fatal flaw: you cannot share the image between
+multiple instances of emulated guests. The reason is that QEMU will lock the image file in exclusive mode, which
+prevents another process from acquiring the same write lock.
+
+One trivial
 
 ### QEMU Plugins
 
