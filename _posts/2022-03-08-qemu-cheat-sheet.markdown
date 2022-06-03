@@ -597,6 +597,17 @@ which has already been redirected to the file. Note that the order of `>` and `2
 otherwise, the `stderr` will be redirected to the regular `stdout`, and only after that `stdout` will be 
 redirected to the file.
 
+If you want not only to redirect the standard output and error to a file, but also to see them on the terminal,
+you can use the `tee` utility as follows:
+
+```
+[Your command] > 2>&1 | tee [Output file name]
+```
+
+which will first redirect the program's `stderr` to `stdout`, and then redirect both to the input of the 
+`tee` utility. The `tee` utility, given an output file name, will print whatever it has received in the input
+on the terminal, in addition to writing them into the file.
+
 **Preserving Jobs Across Sessions**
 
 One problem with running jobs in `ssh` sessions is that the jobs might be killed after you have logged out (Note:
