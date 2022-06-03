@@ -599,8 +599,18 @@ redirected to the file.
 
 **Preserving Jobs Across Sessions**
 
-One problem with running jobs in `ssh` sessions is that the jobs might be killed after you have logged out.
+One problem with running jobs in `ssh` sessions is that the jobs might be killed after you have logged out (Note:
+this behavior is not consistent; See below for more details).
 This is because a hung up signal `SIGHUP` might be sent by the `sshd` process to the login shell spawned by
-it. The login shell may then forward this signal to all the child processes that itself had spawned, resulting 
-in the termination of those child processes as well. 
+it. The login shell may then forward this signal to all the child processes that itself had spawned as jobs, 
+resulting in the termination of those child processes as well. 
 
+To avoid such behavior, the best practice is to start a separate shell that is independent from the login
+shell, which can survive different sessions (i.e., logins and logouts). The `screen` utility supports exactly
+this feature. To start a new shell, simply run `screen` on the login shell, after which a new shell will be
+started, replacing the previous one on the terminal. 
+You can invoke background jobs as usual in the new shell, and eventually detach from the shell
+by pressing `Ctrl+A` followed by `d`.
+The shell can be reattached to (potentially after logouts and logins) by running `screen -r`.
+Processes started in the `screen` shell are safe from session to session, as the `screen` utility is programmed
+to be unaffected by `SIGHUP` signals.
