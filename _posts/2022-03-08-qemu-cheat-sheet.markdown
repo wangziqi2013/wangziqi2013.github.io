@@ -614,3 +614,13 @@ by pressing `Ctrl+A` followed by `d`.
 The shell can be reattached to (potentially after logouts and logins) by running `screen -r`.
 Processes started in the `screen` shell are safe from session to session, as the `screen` utility is programmed
 to be unaffected by `SIGHUP` signals.
+
+As mentioned earlier, however, the killing behavior of ssh sessions are inconsistent on different machines
+due to different configurations.
+Sometimes background jobs will not be sent the `SIGHUP` signal if the ssh session is terminated peacefully
+by typing `logout`, `exit` or pressing `Ctrl+D`, and hence the background processes can keep running in these 
+cases. You can verify whether it is the case by running `sleep 1000000 &`, logout of the session, log back in,
+and use `ps x` to see if the `sleep` process is still there.
+The behavior may again be different, if the session is terminated by long-time inactivity or network
+disruption, in which case `SIGHUP` will be sent.
+To prevent surprises, it is therefore recommended to always use the `screen` utility. 
