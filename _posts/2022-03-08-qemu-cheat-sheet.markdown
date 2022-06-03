@@ -252,7 +252,7 @@ instrumentations which slow down the emulation significantly):
 This happens, because the emulated system runs much slowly than it is supposed to be, but the kernel is able to
 observe wall-clock time, thus reaching to the wrong conclusion that the system has been stalled.
 
-To address this matter, run QEMU with the option `-icount`, which instructs QEMU to virtualize time based on how many
+To address this matter, run QEMU with the option `-icount shift=auto`, which instructs QEMU to virtualize time based on how many
 instructions it has executed. With `icount` enabled, the emulated guest system will stop printing the RCU warning
 message from the kernel thread, since the kernel can now only observe elapsed time as the number of instructions
 that have been executed.
@@ -387,14 +387,14 @@ To perform live migration, enter QEMU monitor using the key combination Ctrl+A C
 command:
 
 ```
-migrate "exec: cat > memsnapshot"
+migrate "exec: cat > mem_snapshot"
 ```
 
-This command will capture the current system state, and save it to an external disk file named `memsnapshot`. In order
+This command will capture the current system state, and save it to an external disk file named `mem_snapshot`. In order
 to load the saved states on the next startup, use the `-incoming` option in QEMU's command line:
 
 ```
--incoming "exec: cat memsnapshot"
+-incoming "exec: cat mem_snapshot"
 ```
 
 which restores the system state and resumes execution at the point where live migration is performed.
@@ -530,7 +530,7 @@ function is called by its preceding function, `mux_chr_read()`, with every chara
 stream. The function simply checks whether the current character is `term_escape_char`, which is defined as a 
 global variable `0x01`, and if true, then it flips the local variable `term_got_escape` to `1`, and for the 
 next character received, the big switch statement will be used to interpret them differently.
-As we can see in the `case x` branch, when `0x01` followed by `x` is received, QEMU will simply just flush the 
+As we can see in the `case 'x'` branch, when `0x01` followed by `x` is received, QEMU will simply just flush the 
 output (which is emulated to print on the host terminal), and then exit by calling `exit()`.
 Correspondingly, when `0x01` followed by `c` is received, QEMU will switch to another device
 context by calling `mux_set_focus()` (and this is exactly why the device is called `charmux` -- it multiplexes between
