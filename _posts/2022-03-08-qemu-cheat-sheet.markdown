@@ -597,4 +597,10 @@ which has already been redirected to the file. Note that the order of `>` and `2
 otherwise, the `stderr` will be redirected to the regular `stdout`, and only after that `stdout` will be 
 redirected to the file.
 
-Asynchronous jobs are also preserved when you log out of the ssh session, because the process is not 
+**Preserving Jobs Across Sessions**
+
+One problem with running jobs in `ssh` sessions is that the jobs might be killed after you have logged out.
+This is because a hung up signal `SIGHUP` might be sent by the `sshd` process to the login shell spawned by
+it. The login shell may then forward this signal to all the child processes that itself had spawned, resulting 
+in the termination of those child processes as well. 
+
