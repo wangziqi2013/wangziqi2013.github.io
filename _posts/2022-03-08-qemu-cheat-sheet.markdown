@@ -567,3 +567,17 @@ obtained by calling `g_module_symbol()`. We do not elaborate on how the function
 are abundant number of examples in that file. 
 After obtaining the function pointer, it can be called by other QEMU components as a regular function until
 the plugin is uninstalled.
+
+### Deploying Workloads
+
+**Running Workloads Asynchronously**
+
+Linux `bash` shell provides a convenient way of starting asynchronous jobs: Just adding an ampersand (`&`) symbol
+after the shell command, and shell will spawn a new process to execute the command in the background, 
+and return immediately for the next command, without waiting for it to complete first. 
+The background process still has its stdout connected to the current terminal, but the stdin is disconnected,
+meaning that the process can normally print, but when it attempts to read from stdin, the process will block.
+Standard input can also be reconnected back to a potentially different terminal with bash's job control utility,
+but it seems to be less used for our purpose, and therefore we do not cover it here. 
+
+
