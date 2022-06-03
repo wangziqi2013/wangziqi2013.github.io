@@ -591,4 +591,10 @@ The bash syntax for doing this is as follows:
 [Your command] > [Output file name] 2>&1 &
 ```
 
+in which the `>` operator simply redirects the `stdout` of the process (whose file descriptor number is 1) 
+to the given file, and the following `2>&1` redirects `stderr` (whose file descriptor number is 2) to stdout,
+which has already been redirected to the file. Note that the order of `>` and `2>&1` is important, because 
+otherwise, the `stderr` will be redirected to the regular `stdout`, and only after that `stdout` will be 
+redirected to the file.
 
+Asynchronous jobs are also preserved when you log out of the ssh session, because the process is not 
