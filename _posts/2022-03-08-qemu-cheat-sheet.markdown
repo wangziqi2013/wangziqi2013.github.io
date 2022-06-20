@@ -40,7 +40,7 @@ modprobe nbd max_part=8
 The image is then formatted with a file system using the conventional Linux command as follows:
 
 ```
-sudo makefs.ext4 /dev/nbd0
+sudo mkfs.ext4 /dev/nbd0
 ```
 
 This command will create a new ext4 file system, which is probably the most common type for a data disk. You can also
@@ -66,6 +66,14 @@ Optionally, the virtual device can also be disconnected with the following comma
 
 ```
 sudo qemu-nbd --disconnect /dev/nbd0
+```
+
+If the mounted directory can only be written by root user (e.g., prompted permission denied when trying to copying 
+or creating files), you need to run the following command to change thw ownership
+back to the current user:
+
+```
+chown -R [user name] [mount path]
 ```
 
 **Emulating the Image File as a Disk**
