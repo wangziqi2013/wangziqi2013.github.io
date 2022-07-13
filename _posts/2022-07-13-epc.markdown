@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Entropy-Based Pattern Compression (EPC), a novel main memory compression and decompression
+pipeline that utilizes global common patterns for higher compression ratio than single-block compression.
+The proposed design compresses memory blocks to be stored in the DRAM using a pattern table, which is trained
+from the data stream being written into DRAM earlier. This leverages global pattern information, and enables 
+compression to work using inter-block redundancy.
+
