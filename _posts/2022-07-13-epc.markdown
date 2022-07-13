@@ -41,7 +41,9 @@ and so does EPC.
 
 EPC extends attache by adopting a different compression and decompression pipeline that utilizes global pattern
 information.
-The compression pipeline consists of four stages that process input data in the unit of 64-byte words.
+The compression pipeline consists of four stages that process input data in the unit of 64-byte words,
+and compression is performed on 64-byte blocks, which is the unit of data exchange between DRAM and the cache
+hierarchy.
 In the first stage, the compressor identifies the data types stored in the 64-byte word.
 The paper lists several combinations of narrow integer values, pointer values, and floating point values, each
 with a different number of "high entropy" lower bits. 
@@ -56,3 +58,6 @@ low-entropy bits. The sign bit is also preserved as part of the output in order 
 to restore the original value.
 The purpose of this stage is to reduce the number of patterns, since k and negative k are both mapped to
 the same pattern k (where k is a positive value).
+The output of this stage consists of all from the first stage, plus the sign bit.
+
+In the last stage, the number of patterns are further reduced by XOR'ing 
