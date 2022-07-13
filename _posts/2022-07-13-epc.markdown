@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Exploiting Inter-block Entropy to Enhance the Compressibility of Blocks with Diverse Data"
+date:   2022-07-13 05:14:00 -0500
+categories: paper
+paper_title: "Exploiting Inter-block Entropy to Enhance the Compressibility of Blocks with Diverse Data"
+paper_link: https://ieeexplore.ieee.org/document/9773200
+paper_keyword: Memory Compression; EPC; Pattern-Based Compression; Attache
+paper_year: HPCA 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
