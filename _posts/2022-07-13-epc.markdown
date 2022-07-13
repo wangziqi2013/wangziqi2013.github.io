@@ -117,3 +117,6 @@ patterns that have been seen previously, and is replaced in an LRU fashion.
 Each table entry has a reference counter which is incremented when an input block contains the 
 pattern. The pattern in the candidate table is moved into the pattern table (which is smaller than
 the candidate table) if the counter value exceeds a threshold. 
+The pattern table is also referenced counted. The counter is decremented when a pattern
+no longer exists (which can be tracked when they are modified in the LLC). A pattern can only
+be freed if its reference count is zero.
