@@ -67,3 +67,8 @@ Non-zero values are XOR'ed with the first non-zero value, and are indicated by a
 "0" bit in the output metadata.
 The values after XOR are also stored in the final output, in additional to the metadata.
 
+The paper argues that the last step helps reducing the number of patterns in two ways. First, if the block
+is under initialization, then many values would be zeros, indicating that zeros should be 
+treated differently.
+Second, in the case that the block contains a mixture of different types, this can at least 
+extract more redundancy between the first non-zero word in the block and the rest of the words.
