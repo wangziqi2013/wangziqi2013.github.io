@@ -38,3 +38,10 @@ an actual compressed row. The extra bit is stored in a dedicated region in the D
 fraction of total storage, and is only accessed rarely.
 Note that the attache design only aims at increasing DRAM access bandwidth, rather than saving any physical storage,
 and so does EPC.
+
+EPC extends attache by adopting a different compression and decompression pipeline that utilizes global pattern
+information.
+The compression pipeline consists of four stages that process input data in the unit of 64-byte words.
+In the first stage, the compressor identifies the data types stored in the 64-byte word.
+The paper lists several combinations of narrow integer values, pointer values, and floating point values, each
+with a different number of "high entropy" lower bits. 
