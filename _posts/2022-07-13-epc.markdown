@@ -18,4 +18,7 @@ pipeline that utilizes global common patterns for higher compression ratio than 
 The proposed design compresses memory blocks to be stored in the DRAM using a pattern table, which is trained
 from the data stream being written into DRAM earlier. This leverages global pattern information, and enables 
 compression to work using inter-block redundancy.
-
+The pattern table stores common bit patterns that are found in the data blocks, and compression works by replacing
+the same pattern in the incoming block with indices to the pattern table entries.
+Furthermore, the paper proposes three optimizations in the compression pipeline for transforming data words,
+hence increasing the chances that incoming data blocks can be compressed using the pattern table.
