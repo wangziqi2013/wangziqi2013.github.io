@@ -28,3 +28,7 @@ To elaborate: The attache design divides a DRAM row into two sub-rows (sub-ranks
 separately. If two consecutive rows are compressed to less than or equal to 30 bytes, then the two rows are able 
 to be stored within only one single row, and can be accessed separately by activating different ranks, hence doubling 
 the bandwidth if both lines are accessed.
+Rows that cannot be compressed to <= 30 bytes remain uncompressed, and are stored in the 
+first rank of the original row.
+Each compressed row also has a 2-byte magic marker prefixing the actual compressed content. The magic marker 
+is used by the DRAM controller to distinguish between a compressed row stored in a sub-rank, and an uncompressed row.
