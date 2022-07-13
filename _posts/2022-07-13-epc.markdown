@@ -32,3 +32,9 @@ Rows that cannot be compressed to <= 30 bytes remain uncompressed, and are store
 first rank of the original row.
 Each compressed row also has a 2-byte magic marker prefixing the actual compressed content. The magic marker 
 is used by the DRAM controller to distinguish between a compressed row stored in a sub-rank, and an uncompressed row.
+In the rare case where the magic marker conflicts with the first two bytes of an uncompressed row, 
+an extra bit per row is used to further indicate whether the magic op is a result of value aliasing, or indicates 
+an actual compressed row. The extra bit is stored in a dedicated region in the DRAM, only constitutes a small
+fraction of total storage, and is only accessed rarely.
+Note that the attache design only aims at increasing DRAM access bandwidth, rather than saving any physical storage,
+and so does EPC.
