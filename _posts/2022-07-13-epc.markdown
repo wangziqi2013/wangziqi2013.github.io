@@ -45,3 +45,7 @@ The compression pipeline consists of four stages that process input data in the 
 In the first stage, the compressor identifies the data types stored in the 64-byte word.
 The paper lists several combinations of narrow integer values, pointer values, and floating point values, each
 with a different number of "high entropy" lower bits. 
+This stage uses five detectors to determine the number of high-entropy bits in parallel, by counting the number of 
+leading zeros and ones in each of the 32-bit words.
+The output of this stage is the number of high-entropy lower bits, which is fed to the input of the 
+second stage together with the two 32-bit words.
