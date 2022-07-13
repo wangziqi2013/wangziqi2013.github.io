@@ -35,6 +35,10 @@ achievable in this case.
 In addition, the 256-entry pattern table as a CAM can be prohibitively expensive to implement, and the 
 lookup latency can be higher that what the paper shows, not to mention the 512-entry candidate table.
 
+3. Is the pattern table context switched (likely not). In this case, does performance degrade 
+with more applications (likely yes, but not evaluated). Most global-pattern
+based designs have the same issue, though.
+
 This paper proposes Entropy-Based Pattern Compression (EPC), a novel main memory compression and decompression
 pipeline that utilizes global common patterns for higher compression ratio than single-block compression.
 The proposed design compresses memory blocks to be stored in the DRAM using a pattern table, which is trained
@@ -101,3 +105,5 @@ A match in the pattern table will cause the corresponding word to be replaced wi
 pattern table (which is presumably smaller than the value itself), hence achieving pattern compression.
 Unmatched data is stored in the form as is in the output from the previous stage, which may still be
 shorter than the full 32-bit original word.
+
+
