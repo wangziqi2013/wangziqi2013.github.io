@@ -60,4 +60,10 @@ The purpose of this stage is to reduce the number of patterns, since k and negat
 the same pattern k (where k is a positive value).
 The output of this stage consists of all from the first stage, plus the sign bit.
 
-In the last stage, the number of patterns are further reduced by XOR'ing 
+In the last stage, the number of patterns are further reduced by XOR'ing between non-zero low-entropy bits.
+This stage consists of two steps. In the first step, zero values from the previous stage are omitted,
+and indicated by a "1" bit in the output metadata.
+Non-zero values are XOR'ed with the first non-zero value, and are indicated by a 
+"0" bit in the output metadata.
+The values after XOR are also stored in the final output, in additional to the metadata.
+
