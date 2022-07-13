@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Redundancy between blocks can be utilized by having a machine-generated pattern table that stores 
+commonly used global patterns.
+
+2. Redundancy within a block can be reduced by: (1) Shrinking data width, which is common in other
+compression designs as well; (2) Flipping the value from negative to positive, and remembering
+the sign bit; (3) XOR'ing non-zero values to extract even more bit-level redundancy.
+
 **Comments:**
 
 1. Does the XOR stage works well, if the first non-zero value of the block does not have a common
