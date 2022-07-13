@@ -61,7 +61,7 @@ into just like a regular disk. The image also needs to be unmounted after usage 
 ```
 sudo umount /dev/nbd0
 ```
- 
+
 Optionally, the virtual device can also be disconnected with the following command:
 
 ```
