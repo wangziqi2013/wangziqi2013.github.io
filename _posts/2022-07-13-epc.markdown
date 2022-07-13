@@ -39,6 +39,9 @@ lookup latency can be higher that what the paper shows, not to mention the 512-e
 with more applications (likely yes, but not evaluated). Most global-pattern
 based designs have the same issue, though.
 
+4. What happens when a new pattern is to be inserted, but pattern table has no free entry?
+I guess the only sensible solution is to not insert it, totally wasting the compression opportunity.
+
 By the way, if the pattern table is not context switched, I could not see how profiling works, unless the
 entire machine runs the same workload with the same data pattern, which is highly unlikely.
 
