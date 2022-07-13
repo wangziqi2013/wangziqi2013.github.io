@@ -18,6 +18,14 @@ version_mgmt:
 1. Does the XOR stage works well, if the first non-zero value of the block does not have a common
 high-entropy region as the rest of the words?
 
+2. The hardware overhead is not as small as the paper suggests. For example, 8 copies of the compressor
+and the decompressor circuit is needed. In particular, the last XOR stage cannot operate individually on
+each 64-bit word. Instead, it must operate over all 16 32-bit words. Single cycle latency may not be 
+achievable in this case.
+
+In addition, the 256-entry pattern table as a CAM can be prohibitively expensive to implement, and the 
+lookup latency can be higher that what the paper shows, not to mention the 512-entry candidate table.
+
 This paper proposes Entropy-Based Pattern Compression (EPC), a novel main memory compression and decompression
 pipeline that utilizes global common patterns for higher compression ratio than single-block compression.
 The proposed design compresses memory blocks to be stored in the DRAM using a pattern table, which is trained
