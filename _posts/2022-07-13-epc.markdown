@@ -82,7 +82,7 @@ The purpose of this stage is to reduce the number of patterns, since k and negat
 the same pattern k (where k is a positive value).
 The output of this stage consists of all from the first stage, plus the sign bit.
 
-In the last stage, the number of patterns are further reduced by XOR'ing between non-zero low-entropy bits.
+In the third stage, the number of patterns are further reduced by XOR'ing between non-zero low-entropy bits.
 This stage consists of two steps. In the first step, zero values from the previous stage are omitted,
 and indicated by a "1" bit in the output metadata.
 Non-zero values are XOR'ed with the first non-zero value, and are indicated by a 
@@ -94,3 +94,10 @@ is under initialization, then many values would be zeros, indicating that zeros 
 treated differently.
 Second, in the case that the block contains a mixture of different types, this can at least 
 extract more redundancy between the first non-zero word in the block and the rest of the words.
+
+In the last stage, the patterns are compressed with regard to the pattern table.
+The pattern table is a reference-counted table of patterns that have been previously.
+A match in the pattern table will cause the corresponding word to be replaced with the index into the 
+pattern table (which is presumably smaller than the value itself), hence achieving pattern compression.
+Unmatched data is stored in the form as is in the output from the previous stage, which may still be
+shorter than the full 32-bit original word.
