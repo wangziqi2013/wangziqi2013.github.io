@@ -39,6 +39,9 @@ lookup latency can be higher that what the paper shows, not to mention the 512-e
 with more applications (likely yes, but not evaluated). Most global-pattern
 based designs have the same issue, though.
 
+By the way, if the pattern table is not context switched, I could not see how profiling works, unless the
+entire machine runs the same workload with the same data pattern, which is highly unlikely.
+
 This paper proposes Entropy-Based Pattern Compression (EPC), a novel main memory compression and decompression
 pipeline that utilizes global common patterns for higher compression ratio than single-block compression.
 The proposed design compresses memory blocks to be stored in the DRAM using a pattern table, which is trained
@@ -106,4 +109,11 @@ pattern table (which is presumably smaller than the value itself), hence achievi
 Unmatched data is stored in the form as is in the output from the previous stage, which may still be
 shorter than the full 32-bit original word.
 
-
+The pattern table can be generated from profiling, or by the hardware.
+In the former case, the profiling program monitors the memory contents of the application at 
+fixed intervals, and selects commonly occurring patterns to be statically loaded into the table.
+In the latter case, the DRAM controller maintains a candidate pattern table consisting of 
+patterns that have been seen previously, and is replaced in an LRU fashion.
+Each table entry has a reference counter which is incremented when an input block contains the 
+pattern. The pattern in the candidate table is moved into the pattern table (which is smaller than
+the candidate table) if the counter value exceeds a threshold. 
