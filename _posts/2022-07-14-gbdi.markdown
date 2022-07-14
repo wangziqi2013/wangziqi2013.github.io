@@ -72,3 +72,9 @@ Then at compression time, the compressor performs an associative lookup for ever
 in the table, and gets the index of the base value in the table.
 The associative lookup compares the word with all base values, and selects the base value that yields 
 the smallest delta.
+If the delta can be encoded in the required number of bits, then the encoding succeeds, and the 
+code word is stored in the output as the index and the delta value.
+To simplify the design, the paper proposes that the output code word in this case be 16 bits, meaning that
+for a base table of size 2^N, the width of delta for all bases is hard wired to (16 - N).
+In evaluation, N is 11, meaning that there are 2048 global bases. The delta, therefore, is of width 5 with 
+the range being \[-16, 15\].
