@@ -119,4 +119,10 @@ The paper also proposes three optimizations to further improve performance.
 First, for those blocks that intra-block compression already yields satisfactory results, they are not compressed
 using global bases. Instead, they are compressed with regular BDI engine, and stored with two-bit metadata to
 indicate so.
-
+Second, for certain blocks, the size of delta for all values is smaller than the hard wired delta size.
+In this case, the delta can be encoded into smaller units, and the size is explicitly stored in the compressed block.
+The decompressor must recognize this case using the two-bit metadata, and decode accordingly.
+Lastly, in the case where only a few base values are used for the block, the base value indices themselves can be 
+compressed using Huffman coding, which gives smaller code words than storing the full 11-bit base value index
+(assuming 2048-entry base table). The Huffman tree must also be stored in the output, such that the decompressor
+can correctly restore the base values.
