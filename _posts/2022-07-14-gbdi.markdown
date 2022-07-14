@@ -114,3 +114,9 @@ The before-table can be discarded after a full round of recompression over all c
 To distinguish between blocks compressed using the two tables, the compressed block has one bit to indicate 
 which version of the global base table it uses. The DRAM controller similarly maintains a sense bit, which is 
 flipped every time the table is updated. The sense bit is also written into the compression output.
+
+The paper also proposes three optimizations to further improve performance.
+First, for those blocks that intra-block compression already yields satisfactory results, they are not compressed
+using global bases. Instead, they are compressed with regular BDI engine, and stored with two-bit metadata to
+indicate so.
+
