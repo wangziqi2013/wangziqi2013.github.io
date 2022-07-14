@@ -78,3 +78,8 @@ To simplify the design, the paper proposes that the output code word in this cas
 for a base table of size 2^N, the width of delta for all bases is hard wired to (16 - N).
 In evaluation, N is 11, meaning that there are 2048 global bases. The delta, therefore, is of width 5 with 
 the range being \[-16, 15\].
+
+In practice, to avoid associative lookups against all entries of the base table, the table is partitioned 
+into several smaller blocks based on the base values. Associative lookups are only performed on a particular
+partition, if the input word value lies within the range of that partition. This is implemented with 
+per-partition bound registers that filter out the word if its value lies outside of the partition.
