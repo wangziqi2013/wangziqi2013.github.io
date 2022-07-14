@@ -28,3 +28,10 @@ Broadly speaking, all designs that leverage inter-block compression have the sam
 are heavily bound to the execution context.
 This is an inherent trade-off of inter-block designs: The larger the search space is, the potential better 
 compression you can get. But as the search space becomes larger, you need to keep more metadata for each context.
+
+2. The algorithm is actually nowhere close to BDI. For example, immediate number compression is not used (because
+you can always have an explicit zero in the base table). The fixed-width code word design of BDI is also not there.
+The compression and decompression latency is much higher than original BDI which makes global BDI quite 
+heavy-weight. None of these is fundamental problem, though.
+
+This paper proposes Global Base-Delta-Immediate (BDI), 
