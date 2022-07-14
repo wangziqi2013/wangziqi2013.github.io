@@ -40,4 +40,8 @@ The paper is motivated by two limitations of intra-block BDI. First, BDI only le
 similar code words within a 64 byte block, without looking into other blocks for redundancy.
 The restricted search space limits compressibility since a single block may not contain all the possible 
 base values for efficient compression.
-
+Second, the paper also observes that floating point numbers are difficult to be compressed under BDI, because
+BDI interprets compression inputs as integers, and hence computes the arithmetic difference.
+For floating point numbers, however, this approach can be rather unreliable, because floating point numbers that
+are numerically close to each other may appear radically different on the integer value domain.
+This further reduces the effectiveness of intra-block base value searching for floating point numbers.
