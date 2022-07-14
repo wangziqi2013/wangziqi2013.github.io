@@ -34,6 +34,10 @@ you can always have an explicit zero in the base table). The fixed-width code wo
 The compression and decompression latency is much higher than original BDI which makes global BDI quite 
 heavy-weight. None of these is fundamental problem, though.
 
+3. I find it hard to understand what is "bin ranges" and how it relates to the number of bins. Does "15 bin ranges"
+mean 2^15 (i.e., 32K) bins for sampling? Are bins evenly divided across the 32-bit value domain?
+The paper should have done a better job describing the binning algorithm.
+
 This paper proposes Global Base-Delta-Immediate (GBDI), a main memory compression architecture leveraging 
 inter-block compression with global bases.
 The paper is motivated by two limitations of intra-block BDI. First, BDI only leverages redundancy between
@@ -45,3 +49,5 @@ BDI interprets compression inputs as integers, and hence computes the arithmetic
 For floating point numbers, however, this approach can be rather unreliable, because floating point numbers that
 are numerically close to each other may appear radically different on the integer value domain.
 This further reduces the effectiveness of intra-block base value searching for floating point numbers.
+
+
