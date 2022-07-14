@@ -19,3 +19,7 @@ version_mgmt:
 does not change much. The problem is that recompression is inevitable, if the workload consists of many
 different applications on a multicore system.
 
+In addition, context switch may be problematic, because the global bases are not part of any context. 
+As a result, the more applications there are in the system, the more likely the number of global bases will be larger.
+The paper did not evaluate mixtures of different workloads. Instead, only the same workload is simulated.
+
