@@ -55,5 +55,10 @@ described in the paper. The goal of main memory compression is to reduce bandwid
 data from DRAM and reduce the latency of data access.
 This is achieved by compressing four consecutive blocks on the physical address space into a sector, which is stored
 on the physical location of the first block.
+The DRAM controller is extended with a prefetch buffer. When any of the blocks are accessed, its neighboring
+block will be prefetched into the prefetch buffer (the paper also mentions that this is not always the case, 
+because the DRAM controller can determine not to prefetch depending on the hit rate of the prefetch buffer
+and the size of the compressed sector), such that on later accesses, they will be hit in the 
+prefetch buffer without going into the DRAM again. 
 
 
