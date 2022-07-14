@@ -34,4 +34,10 @@ you can always have an explicit zero in the base table). The fixed-width code wo
 The compression and decompression latency is much higher than original BDI which makes global BDI quite 
 heavy-weight. None of these is fundamental problem, though.
 
-This paper proposes Global Base-Delta-Immediate (BDI), 
+This paper proposes Global Base-Delta-Immediate (GBDI), a main memory compression architecture leveraging 
+inter-block compression with global bases.
+The paper is motivated by two limitations of intra-block BDI. First, BDI only leverages redundancy between
+similar code words within a 64 byte block, without looking into other blocks for redundancy.
+The restricted search space limits compressibility since a single block may not contain all the possible 
+base values for efficient compression.
+
