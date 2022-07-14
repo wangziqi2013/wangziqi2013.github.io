@@ -38,6 +38,10 @@ heavy-weight. None of these is fundamental problem, though.
 mean 2^15 (i.e., 32K) bins for sampling? Are bins evenly divided across the 32-bit value domain?
 The paper should have done a better job describing the binning algorithm.
 
+4. Does recompression needs to scan all of the DRAM contents? The paper mentions that this can be done just like
+DRAM refresh, so I guess it is just the DRAM controller issuing commands in the background and performing 
+recompression. 
+
 This paper proposes Global Base-Delta-Immediate (GBDI), a main memory compression architecture leveraging 
 inter-block compression with global bases.
 The paper is motivated by two limitations of intra-block BDI. First, BDI only leverages redundancy between
