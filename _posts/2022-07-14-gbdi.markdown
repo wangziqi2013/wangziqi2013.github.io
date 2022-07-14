@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Compressing four consecutive blocks in the DRAM as a sector, and prefetch them to the 
+prefetch buffer for future accesses. The DRAM controller may also decide whether and how many to
+prefetch, using the compressed size and the prefetch buffer hit rate.
+
+2. BDI can be extended to use global base from a table. Each compressed code word consists of an
+index value into the base table and the fixed-width delta. The code word can still be fixed-width in this case.
+
+
 **Comments:**
 
 1. The paper did not evaluate recompression. Instead, it only shows that for a single workload, compressibility
