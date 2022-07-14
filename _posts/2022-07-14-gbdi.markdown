@@ -23,3 +23,8 @@ In addition, context switch may be problematic, because the global bases are not
 As a result, the more applications there are in the system, the more likely the number of global bases will be larger.
 The paper did not evaluate mixtures of different workloads. Instead, only the same workload is simulated.
 
+Broadly speaking, all designs that leverage inter-block compression have the same problem: The global bases 
+(clusteroid for Thesaurus, pattern table for EPC, and the global base for GBDI) are not scalable, and
+are heavily bound to the execution context.
+This is an inherent trade-off of inter-block designs: The larger the search space is, the potential better 
+compression you can get. But as the search space becomes larger, you need to keep more metadata for each context.
