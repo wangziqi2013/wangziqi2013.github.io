@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "GBDI: Going Beyond Base-Delta-Immediate Compression with Global Bases"
+date:   2022-07-14 02:48:00 -0500
+categories: paper
+paper_title: "GBDI: Going Beyond Base-Delta-Immediate Compression with Global Bases"
+paper_link: https://ieeexplore.ieee.org/document/9773255/
+paper_keyword: Memory Compression; BDI; GBDI
+paper_year: HPCA 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
