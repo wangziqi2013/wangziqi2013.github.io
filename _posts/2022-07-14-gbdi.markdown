@@ -50,4 +50,10 @@ For floating point numbers, however, this approach can be rather unreliable, bec
 are numerically close to each other may appear radically different on the integer value domain.
 This further reduces the effectiveness of intra-block base value searching for floating point numbers.
 
+The GBDI design consists of two parts. The first part is the main memory architecture, which is only briefly
+described in the paper. The goal of main memory compression is to reduce bandwidth consumption of fetching 
+data from DRAM and reduce the latency of data access.
+This is achieved by compressing four consecutive blocks on the physical address space into a sector, which is stored
+on the physical location of the first block.
+
 
