@@ -106,4 +106,11 @@ The paper suggests that the sampling process is very short, where merely 200K va
 After the base values are generated, software loads these values into the compressor's global base table.
 The decompressor, on the other hand, must keep two copies of the base table, one for blocks compressed
 using the global bases before the update, and another for blocks compressed after the update.
-
+When an update happens, the contents of the after-table is copied to the before-table, and the after-table
+is also loaded with the newly generated base values.
+The DRAM controller, in the background, constantly issues decompression commands for every DRAM row in a way
+similar to how DRAM is refreshed.
+The before-table can be discarded after a full round of recompression over all contents of the DRAM device.
+To distinguish between blocks compressed using the two tables, the compressed block has one bit to indicate 
+which version of the global base table it uses. The DRAM controller similarly maintains a sense bit, which is 
+flipped every time the table is updated. The sense bit is also written into the compression output.
