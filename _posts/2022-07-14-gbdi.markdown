@@ -87,3 +87,7 @@ per-partition bound registers that filter out the word if its value lies outside
 If the input word cannot be encoded with the base value (i.e., the delta size exceeds (16 - N)), the 
 input word is an outlier, which is stored in the output unchanged. The output contains a bit mask
 indicating which words are outliers, and which are encoded.
+
+Decompression works in the reverse direction as compression. For each code word, the decompressor 
+performs a lookup into the base table using the index, and then adds the delta to the base value to restore the 
+original value. Outliers are directly written into the output without any decoding.
