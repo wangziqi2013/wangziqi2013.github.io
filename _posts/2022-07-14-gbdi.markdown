@@ -53,12 +53,17 @@ This further reduces the effectiveness of intra-block base value searching for f
 The GBDI design consists of two parts. The first part is the main memory architecture, which is only briefly
 described in the paper. The goal of main memory compression is to reduce bandwidth consumption of fetching 
 data from DRAM and reduce the latency of data access.
-This is achieved by compressing four consecutive blocks on the physical address space into a sector, which is stored
-on the physical location of the first block.
+This is achieved by compressing four consecutive 64-byte blocks on the physical address space into a sector, 
+which is stored on the physical location of the first block (and the rest of the storage is just wasted).
 The DRAM controller is extended with a prefetch buffer. When any of the blocks are accessed, its neighboring
 block will be prefetched into the prefetch buffer (the paper also mentions that this is not always the case, 
 because the DRAM controller can determine not to prefetch depending on the hit rate of the prefetch buffer
 and the size of the compressed sector), such that on later accesses, they will be hit in the 
 prefetch buffer without going into the DRAM again. 
+
+The compressed size of each 64-byte block is stored as metadata in a dedicated region of the DRAM.
+The compressed sizes are fetched also when a sector is accessed in order to delimit the compressed blocks
+in the sector. To avoid having to access the DRAM twice on every request, the paper proposes that the 
+memory controller also maintains a 1K entry cache of metadata to achieve a metadata hit rate larger than 95%.
 
 
