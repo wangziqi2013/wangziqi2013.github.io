@@ -66,4 +66,9 @@ The compressed sizes are fetched also when a sector is accessed in order to deli
 in the sector. To avoid having to access the DRAM twice on every request, the paper proposes that the 
 memory controller also maintains a 1K entry cache of metadata to achieve a metadata hit rate larger than 95%.
 
-
+The second part of GBDI is the compression algorithm. GBDI relies on software to load a global table 
+with predetermined bases and size of deltas (in the number of bits the delta is encoded with).
+Then at compression time, the compressor performs an associative lookup for every 32-bit input words
+in the table, and gets the index of the base value in the table.
+The associative lookup compares the word with all base values, and selects the base value that yields 
+the smallest delta.
