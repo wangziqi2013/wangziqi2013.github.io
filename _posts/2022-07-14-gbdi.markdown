@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Comments:**
+
+1. The paper did not evaluate recompression. Instead, it only shows that for a single workload, compressibility
+does not change much. The problem is that recompression is inevitable, if the workload consists of many
+different applications on a multicore system.
+
