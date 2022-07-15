@@ -18,6 +18,9 @@ version_mgmt:
 1. Atomic snapshots can be achieved by redirecting all writes from read-write sequences to a new location, and 
 only updating the mapping table atomically during the snapshot.
 
+2. Writes in write-read sequences do not need to be redirected, because these writes are blind writes, and 
+are guaranteed to generate the same value on every re-execution.
+
 
 
 **Comments:**
