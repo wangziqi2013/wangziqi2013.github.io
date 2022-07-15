@@ -48,7 +48,11 @@ which can evict dirty cache blocks back to the NVM at any moment during executio
 Snapshots are taken periodically at some points during execution as a measure of preserving progress.
 The snapshot is logically atomic with regard to execution, and it reflects the system state at the logical 
 time point the snapshot is taken.
-
+A snapshot consists of a register dump of the processor, and the memory image that is consistent with the 
+register dump. 
+When execution is interrupted due to power interrupts or system failures, the most recent snapshot is restored 
+by loading the register dump back to the processor, and reverting the memory state to the one recorded in the snapshot.
+Execution can then resume from the last snapshot as if the interrupt had never occurred.
 
 The challenge of snapshotting in intermittent computing, however, is that dirty data might be evicted from the cache,
 before the snapshot takes place, which pollutes the memory image. 
