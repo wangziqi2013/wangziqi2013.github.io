@@ -101,3 +101,8 @@ The new location field is updated with the allocated slot address from the free 
 The old location field is updated with the mapping table entry fetched from the NVM when a read access 
 needs to access the NVM and misses the mapping cache. 
 The read access itself is also redirected to the old location of data.
+
+Cache blocks that only see write-read sequences are not remapped on eviction, and the dirty block is always
+written back to the old location stored in the mapping table (and cached by the mapping cache).
+
+
