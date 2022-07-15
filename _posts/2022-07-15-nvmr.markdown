@@ -23,6 +23,9 @@ before being read since the last snapshot, then the word does not need to be hel
 This is because on an re-execution, the word will still be blindly written anyway, so its contents do not matter,
 indicating that the word can be polluted without corrupting program state.
 
+This technique works with all redo-logging based design, and is not particularly related to intermittent computing.
+Of course, the algorithm proposed by the paper is not pure redo-logging. In fact, it is shadow paging + redo-logging
+with lower write amplification. 
 
 This paper proposes NVMR, a NVM-based intermittent computing framework that supports snapshotting (called "backups"
 in the paper). Snapshotting is an indispensable feature for intermittent devices, due to the lack of reliable 
