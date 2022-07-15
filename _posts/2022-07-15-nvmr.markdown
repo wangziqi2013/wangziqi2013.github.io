@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes NVMR, a NVM-based intermittent computing framework that supports snapshotting (called "backups"
+in the paper). Snapshotting is an indispensable feature for intermittent devices, due to the lack of reliable 
+power source and the resulting intermittent nature of computing. With snapshotting, the device periodically
+checkpoints its execution state and memory state to the NVM. When the power source completely drains, or when an
+unexpected power interrupt occurs, the device loses all volatile states and the progress since the last snapshot. 
+When power supply resumes, the device will restart from the last snapshot by loading the execution state and memory
+state. This way, some computing progress can always be made as long as the device makes at least one snapshot
+between power cycles.
