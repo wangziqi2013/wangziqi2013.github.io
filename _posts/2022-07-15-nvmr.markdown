@@ -120,4 +120,8 @@ To recover from a snapshot, the system simply loads the register dump from the N
 mapping table will be consistent with the register dump, since the two are persisted atomically.
 The mapping table entries will also point to data that is consistent with the snapshot, since if the power interrupt
 happens before the second step of snapshotting, then all entries of the table point to the old location, and the
-register dump is also from the last snapshot. 
+register dump is also from the last snapshot. Otherwise, if the interrupt happens after the second and the third
+step, then the mapping table entries would point to the new locations, and the register dump is from the current 
+snapshot, which is also consistent.
+Power interrupts will not happen between the second and the third steps, since we assume that they are 
+conducted atomically.
