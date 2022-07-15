@@ -80,4 +80,12 @@ frequent read-write/write-read on the same address.
 The paper argues that idempotent regions can still be preserved in the presence of read-write and write-read
 sequences, if read-writes are handled by redirecting the write to another location when the write
 is to be evicted from the cache, with some extra mapping information. 
+This way, the system has two copies of the data on the address to be written,
+an old copy, which belongs to the previous snapshot, and a new copy, which belongs to the current execution and
+not yet committed to the snapshot. The new copy is committed to the next snapshot by atomically updating the 
+mapping information to point to the new copy for all cache blocks that have seen the read-write sequence.
+Write-read, on the other hand, does not need any special treatment. The writes can be performed and 
+evicted freely without any remapping. This is because even in the presence of an re-execution, the write will
+still be performed correctly with the same value, and the following read will always return the same value.
+
 
