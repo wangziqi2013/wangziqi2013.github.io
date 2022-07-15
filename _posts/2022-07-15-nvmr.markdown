@@ -63,4 +63,7 @@ before the snapshot operation takes place, which pollutes the memory image.
 If power interrupts happen after the eviction and before the snapshot, the system might be in an inconsistent state,
 because the memory image is no longer the one from the previous snapshot, making the system unrecoverable.
 
-
+One way of dealing with the challenges is to divide the execution into idempotent regions. Each idempotent region
+represent a part of the execution that, given the same initial register dump, can always result in the same system 
+state, regardless of the initial memory state. In other words, the system state at the end of the idempotent region
+is only a function of the input register state. 
