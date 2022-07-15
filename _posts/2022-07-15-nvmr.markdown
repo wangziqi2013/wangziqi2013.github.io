@@ -13,6 +13,17 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The paper seems to over-complicate a very simple concept: On redo-logging, all dirty blocks must be held from
+being written back from the cache, before the transaction commits (or before the snapshot is taken), 
+because otherwise the NVM image will be polluted.
+This paper seeks to loosen this requirement a little, with the observation that if a word is blindly written
+before being read since the last snapshot, then the word does not need to be held back.
+This is because on an re-execution, the word will still be blindly written anyway, so its contents do not matter,
+indicating that the word can be polluted without corrupting program state.
+
+
 This paper proposes NVMR, a NVM-based intermittent computing framework that supports snapshotting (called "backups"
 in the paper). Snapshotting is an indispensable feature for intermittent devices, due to the lack of reliable 
 power source and the resulting intermittent nature of computing. With snapshotting, the device periodically
@@ -21,3 +32,5 @@ unexpected power interrupt occurs, the device loses all volatile states and the 
 When power supply resumes, the device will restart from the last snapshot by loading the execution state and memory
 state. This way, some computing progress can always be made as long as the device makes at least one snapshot
 between power cycles.
+
+The challenge of snapshotting in intermittent computing, however, is that the 
