@@ -96,3 +96,8 @@ remembers the location of the old version only, and the free list is simply an a
 sized slots that can be allocated to evicted dirty data.
 To avoid updating the mapping table every time an eviction happens, NVMR also adds a mapping cache to the cache 
 hierarchy. 
+The mapping cache tracks both the new and the old copies of evicted dirty blocks since the last snapshot. 
+The new location field is updated with the allocated slot address from the free list when an eviction occurs. 
+The old location field is updated with the mapping table entry fetched from the NVM when a read access 
+needs to access the NVM and misses the mapping cache. 
+The read access itself is also redirected to the old location of data.
