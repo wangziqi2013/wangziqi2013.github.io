@@ -71,3 +71,6 @@ This way, the snapshot can be taken as two separate, non-atomic parts, by writin
 then taking the register dump. If a power interrupt happens between these two, or during either of the two steps,
 execution can always resume from the previous snapshot, and reach the same system state, according to the 
 definition of idempotent regions.
+In practice, an idempotent region can be delimited as a part of the execution where each memory location is either
+read-only or write-only, but not read-write. A snapshot is taken when a read-write on the same memory location is 
+detected to avoid forming a non-idempotent region.
