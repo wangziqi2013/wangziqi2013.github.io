@@ -24,14 +24,13 @@ the sign bit; (3) XOR'ing non-zero values to extract even more bit-level redunda
 
 **Comments:**
 
-1. Does the XOR stage works well, if the first non-zero value of the block does not have a common
+1. Does the XOR stage work well, if the first non-zero value of the block does not have a common
 high-entropy region as the rest of the words?
 
 2. The hardware overhead is not as small as the paper suggests. For example, 8 copies of the compressor
 and the decompressor circuit is needed. In particular, the last XOR stage cannot operate individually on
 each 64-bit word. Instead, it must operate over all 16 32-bit words. Single cycle latency may not be 
 achievable in this case.
-
 In addition, the 256-entry pattern table as a CAM can be prohibitively expensive to implement, and the 
 lookup latency can be higher that what the paper shows, not to mention the 512-entry candidate table.
 
@@ -41,7 +40,6 @@ based designs have the same issue, though.
 
 4. What happens when a new pattern is to be inserted, but pattern table has no free entry?
 I guess the only sensible solution is to not insert it, totally wasting the compression opportunity.
-
 By the way, if the pattern table is not context switched, I could not see how profiling works, unless the
 entire machine runs the same workload with the same data pattern, which is highly unlikely.
 
