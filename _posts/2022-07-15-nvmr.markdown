@@ -43,7 +43,16 @@ state and resumes execution from the snapshot.
 This way, some computing progress can always be made as long as the device makes at least one snapshot
 between power cycles.
 
+The snapshotting model the paper assumes is as follows. The system is equipped with a write-back cache hierarchy, 
+which can evict dirty cache blocks back to the NVM at any moment during execution. 
+Snapshots are taken periodically at some points during execution as a measure of preserving progress.
+The snapshot is logically atomic with regard to execution, and it reflects the system state at the logical 
+time point the snapshot is taken.
+
+
 The challenge of snapshotting in intermittent computing, however, is that dirty data might be evicted from the cache,
 before the snapshot takes place, which pollutes the memory image. 
 If power interrupts happen after the eviction and before the snapshot, the system might be in an inconsistent state,
 because the memory image is no longer the one from the previous snapshot, making the system unrecoverable.
+
+
