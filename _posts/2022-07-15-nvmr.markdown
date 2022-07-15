@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Atomic snapshots can be achieved by redirecting all writes from read-write sequences to a new location, and 
+only updating the mapping table atomically during the snapshot.
+
+
+
 **Comments:**
 
 1. The paper seems to over-complicate a very simple concept: On redo-logging, all dirty blocks must be held from
