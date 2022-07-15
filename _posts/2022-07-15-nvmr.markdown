@@ -36,4 +36,7 @@ When power supply resumes, the device will restart from the last snapshot by loa
 state. This way, some computing progress can always be made as long as the device makes at least one snapshot
 between power cycles.
 
-The challenge of snapshotting in intermittent computing, however, is that the 
+The challenge of snapshotting in intermittent computing, however, is that dirty data might be evicted from the cache,
+before the snapshot takes place, which pollutes the memory image. 
+If power interrupts happen after the eviction and before the snapshot, the system might be in an inconsistent state,
+because the memory image is no longer the one from the previous snapshot, making the system unrecoverable.
