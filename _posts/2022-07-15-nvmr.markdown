@@ -21,7 +21,10 @@ only updating the mapping table atomically during the snapshot.
 2. Writes in write-read sequences do not need to be redirected, because these writes are blind writes, and 
 are guaranteed to generate the same value on every re-execution.
 
-
+3. Idempotent regions (executions whose final state is only a function of the initial register and memory state)
+can be delimited as a region that is free of read-write and write-read sequences on the 
+same address. Such a region can be re-executed and interrupted for arbitrary number of times, 
+given the same initial states, and always reach the same final state.
 
 **Comments:**
 
