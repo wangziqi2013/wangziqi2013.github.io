@@ -105,4 +105,8 @@ The read access itself is also redirected to the old location of data.
 Cache blocks that only see write-read sequences are not remapped on eviction, and the dirty block is always
 written back to the old location stored in the mapping table (and cached by the mapping cache).
 
+The snapshot is taken when the mapping cache is about to evict an entry that tracks both the new and the old copy.
+The snapshot operation consists of three steps. In the first step, all dirty data in the cache hierarchy is 
+written back to the NVM, using either the new location stored in the mapping cache (if the new location exists), or 
+using the old location stored in the mapping table and cached by the mapping cache (if the new location does not exist).
 
