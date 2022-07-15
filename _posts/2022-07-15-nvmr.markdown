@@ -67,3 +67,7 @@ One way of dealing with the challenges is to divide the execution into idempoten
 represent a part of the execution that, given the same initial register dump, can always result in the same system 
 state, regardless of the initial memory state. In other words, the system state at the end of the idempotent region
 is only a function of the input register state. 
+This way, the snapshot can be taken as two separate, non-atomic parts, by writing dirty data from the cache, and 
+then taking the register dump. If a power interrupt happens between these two, or during either of the two steps,
+execution can always resume from the previous snapshot, and reach the same system state, according to the 
+definition of idempotent regions.
