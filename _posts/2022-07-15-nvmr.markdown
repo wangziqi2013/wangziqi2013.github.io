@@ -27,13 +27,20 @@ This technique works with all redo-logging based design, and is not particularly
 Of course, the algorithm proposed by the paper is not pure redo-logging. In fact, it is shadow paging + redo-logging
 with lower write amplification. 
 
+2. The mapping table update and register dumping should be atomic, i.e., there should be no power interrupt
+between these two processes, because otherwise, the mapping table will be in an inconsistent state, which
+makes the system unrecoverable. The paper does not explicitly state this requirement, and also it is non-trivial
+to make mapping table update atomic (one way is to have two mapping tables. Updating the table is merely a 
+single pointer swing).
+
 This paper proposes NVMR, a NVM-based intermittent computing framework that supports snapshotting (called "backups"
 in the paper). Snapshotting is an indispensable feature for intermittent devices, due to the lack of reliable 
 power source and the resulting intermittent nature of computing. With snapshotting, the device periodically
 checkpoints its execution state and memory state to the NVM. When the power source completely drains, or when an
 unexpected power interrupt occurs, the device loses all volatile states and the progress since the last snapshot. 
 When power supply resumes, the device will restart from the last snapshot by loading the execution state and memory
-state. This way, some computing progress can always be made as long as the device makes at least one snapshot
+state and resumes execution from the snapshot. 
+This way, some computing progress can always be made as long as the device makes at least one snapshot
 between power cycles.
 
 The challenge of snapshotting in intermittent computing, however, is that dirty data might be evicted from the cache,
