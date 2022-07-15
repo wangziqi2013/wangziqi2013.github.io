@@ -72,5 +72,12 @@ then taking the register dump. If a power interrupt happens between these two, o
 execution can always resume from the previous snapshot, and reach the same system state, according to the 
 definition of idempotent regions.
 In practice, an idempotent region can be delimited as a part of the execution where each memory location is either
-read-only or write-only, but not read-write. A snapshot is taken when a read-write on the same memory location is 
-detected to avoid forming a non-idempotent region.
+read-only or write-only, but not read-write and write-read. 
+A snapshot is taken when a read-write on the same memory location is detected to avoid forming a non-idempotent region.
+
+The paper observes that, however, the above idempotent-region will generate lots of unnecessary traffic due to
+frequent read-write/write-read on the same address.
+The paper argues that idempotent regions can still be preserved in the presence of read-write and write-read
+sequences, if read-writes are handled by redirecting the write to another location when the write
+is to be evicted from the cache, with some extra mapping information. 
+
