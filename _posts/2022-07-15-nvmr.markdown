@@ -54,8 +54,12 @@ When execution is interrupted due to power interrupts or system failures, the mo
 by loading the register dump back to the processor, and reverting the memory state to the one recorded in the snapshot.
 Execution can then resume from the last snapshot as if the interrupt had never occurred.
 
-The challenge of snapshotting in intermittent computing, however, is that dirty data might be evicted from the cache,
-before the snapshot takes place, which pollutes the memory image. 
+There are two challenges with the snapshot model described above. First, during a snapshot operation, dirty data
+should be written back from the cache, together with the register dump. These writes must be conducted as an
+atomic unit, because otherwise, the system will be in an inconsistent state during the operation. If power interrupts
+occur on this window, the snapshot would be unfinished, while the system is unrecoverable.
+Second, due to write back caching, dirty data may might be evicted from the cache
+before the snapshot operation takes place, which pollutes the memory image. 
 If power interrupts happen after the eviction and before the snapshot, the system might be in an inconsistent state,
 because the memory image is no longer the one from the previous snapshot, making the system unrecoverable.
 
