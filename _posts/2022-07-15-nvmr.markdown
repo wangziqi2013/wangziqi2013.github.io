@@ -113,4 +113,11 @@ Then the mapping table is updated atomically by written mapping cache entries th
 to the NVM. The old location field of the mapping table is updated with the new location stored in the 
 mapping cache entries. This process should be performed atomically, but the paper does not elaborate how atomicity 
 is enforced.
-Then in the last step, the register dump is taken, and the snapshot completes. 
+Then in the last step, the register dump is taken, and the snapshot completes. This step should also be atomic
+with the mapping table update, and again the paper does not mention this requirement.
+
+To recover from a snapshot, the system simply loads the register dump from the NVM, and resumes execution. The 
+mapping table will be consistent with the register dump, since the two are persisted atomically.
+The mapping table entries will also point to data that is consistent with the snapshot, since if the power interrupt
+happens before the second step of snapshotting, then all entries of the table point to the old location, and the
+register dump is also from the last snapshot. 
