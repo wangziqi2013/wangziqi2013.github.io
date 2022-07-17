@@ -13,4 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
 
+1. I wonder whether control dependency should be strictly followed (as ASAP does). Imagine two transactions 
+on the same thread, one of them writes location X, the other one writes location Y. These two transactions have no
+dependency and can be committed entirely out-of-order. It does not matter whether one of them gets lost while the other
+one is undone during recovery.
+On the other hand, the persistency model assumed by this paper might be that the recovered state should be 
+one that conforms to the logical ordering, which indeed requires control dependency to be followed.
