@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Persistent transactions should be committed to the NVM image following both control dependency and data dependency.
+The former occurs when the same thread starts transactions. The latter occurs on RAW and WAW sequences from two
+different transactions on different threads (Note: WAR is not observed). 
+These dependencies are essential for the recovered state to remain valid.
+
+
+
 **Comments:**
 
 1. I wonder whether control dependency should be strictly followed (as ASAP does). Imagine two transactions 
