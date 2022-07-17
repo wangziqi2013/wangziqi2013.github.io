@@ -63,4 +63,7 @@ transactions must be committed strictly in the order that they are started, beca
 state after recovery would be inconsistent as no execution history could lead to such a state.
 The second type of dependency is data dependency, which is established by read-after-write (RAW) and write-after-write
 (WAW) on the same data item from different transactions on different threads. 
-
+Data dependency must also be observed for transaction commit, because otherwise anomaly will occur after recovery.
+For RAW, if the writer transaction is uncommitted, while the reader is committed, then during recovery, the 
+data item will be rolled back to its previous value before the writer transaction modifies it, indicating that the
+reader transaction has accessed a value that do not exist in the recovered NVM image.
