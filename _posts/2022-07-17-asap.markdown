@@ -20,6 +20,10 @@ The former occurs when the same thread starts transactions. The latter occurs on
 different transactions on different threads (Note: WAR is not observed). 
 These dependencies are essential for the recovered state to remain valid.
 
+2. Dependency can be tracked by a per-cache line owner tag to indicate the most recent writer of the line. 
+All later readers or writers establish data dependency with the first writer, and should be only committed
+after the first writer commits.
+
 
 
 **Comments:**
