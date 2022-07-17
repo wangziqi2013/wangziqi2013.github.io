@@ -41,6 +41,11 @@ one is undone during recovery.
 On the other hand, the persistency model assumed by this paper might be that the recovered state should be 
 one that conforms to the logical ordering, which indeed requires control dependency to be followed.
 
+2. I also wonder whether WAW should be tracked, if (1) There is no aliasing, and (2) The log entry also stores
+ordering information such that the recovery process will not roll back the data item if the data item has been
+written by a later, successfully committed transaction. I guess this is possible, but is too difficult to
+be tracked.
+
 This paper proposes ASAP (which stands for Architectural Support for Asynchronous Persistence), a persistent
 transaction framework combining undo-logging and asynchronous transaction commit.
 The paper is motivated by the relatively inefficient commit process of undo-logging based transactions. 
