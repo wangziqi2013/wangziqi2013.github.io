@@ -27,22 +27,25 @@ given the same initial states, and always reach the same final state.
 
 **Comments:**
 
-1. The paper seems to over-complicate a very simple concept: On redo-logging, all dirty blocks must be held from
+1. The paper applies a simple concept to intermittent computing: On redo-logging, all dirty blocks must be held from
 being written back from the cache, before the transaction commits (or before the snapshot is taken), 
-because otherwise the NVM image will be polluted.
+because otherwise the NVM image will be corrupted.
 This paper seeks to loosen this requirement a little, with the observation that if a word is blindly written
-before being read since the last snapshot, then the word does not need to be held back.
+before being read since the last snapshot, then the dirty word does not need to be held back in the cache.
 This is because on an re-execution, the word will still be blindly written anyway, so its contents do not matter,
-indicating that the word can be polluted without corrupting program state.
+indicating that the word can be polluted on NVM without corrupting program state.
 This technique works with all redo-logging based design, and is not particularly related to intermittent computing.
-Of course, the algorithm proposed by the paper is not pure redo-logging. In fact, it is shadow paging + redo-logging
-with lower write amplification. 
+Of course, the algorithm proposed by the paper is not pure redo-logging. In fact, it is shadow paging + redo-logging,
+which has lower write amplification (similar to HOOP). 
 
 2. The mapping table update and register dumping should be atomic, i.e., there should be no power interrupt
 between these two processes, because otherwise, the mapping table will be in an inconsistent state, which
 makes the system unrecoverable. The paper does not explicitly state this requirement, and also it is non-trivial
 to make mapping table update atomic (one way is to have two mapping tables. Updating the table is merely a 
-single pointer swing).
+single pointer swing). -- **On a second thought**, NVMR is applied to intermittent computing devices, in which 
+case you have a battery to ensure that the snapshotting can always be successfully taken without power interrupt.
+This is fundamentally different from conventional NVM-based snapshotting where interrupts can occur anytime.
+In other words, NVMR is more of a planned shutdown, rather than failure recovery.
 
 This paper proposes NVMR, a NVM-based intermittent computing framework that supports snapshotting (called "backups"
 in the paper). Snapshotting is an indispensable feature for intermittent devices, due to the lack of reliable 
