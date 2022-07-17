@@ -124,5 +124,7 @@ On transaction reads, the hardware also checks the ownership tag against the cur
 If they do not match, the hardware informs the memory controller to add the previous owner of the block to its 
 dependent list. 
 
-
+To avoid costly commit-time data write back, the hardware will also eagerly write cache blocks in the dirty
+write working set back to the NVM. The paper suggests that a block should be written back after it is written
+four times. When a block is written back, it will be removed from the dirty write working set.
 
