@@ -53,5 +53,14 @@ transaction cannot commit before all dirty blocks are written back into the NVM,
 waiting period at the commit point. 
 As a solution, it is more favorable to allow transactions to commit in the background by the hardware, 
 while overlapping normal execution with the commit process.
+This removes the long waiting period from the critical path, and improves performance for NVM transactions.
 
+Committing transactions in the background, however, will raise more complications than committing transactions 
+synchronously. 
+The paper points out two types of dependencies that would be violated under such a setting.
+The first is control dependency, which is established between transactions started by the same thread. These 
+transactions must be committed strictly in the order that they are started, because otherwise, the system
+state after recovery would be inconsistent as no execution history could lead to such a state.
+The second type of dependency is data dependency, which is established by read-after-write (RAW) and write-after-write
+(WAW) on the same data item from different transactions on different threads. 
 
