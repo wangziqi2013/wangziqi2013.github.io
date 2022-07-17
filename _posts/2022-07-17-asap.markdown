@@ -28,7 +28,9 @@ after the first writer commits.
 essentially building an DAG indicating the commit order. Persistent transactions are committed following this DAG's
 topological sort order.
 
-
+4. Order or commits of undo-logging transactions can be enforced by controlling the order that the undo logs are 
+deleted. A transaction with its undo log still not deleted will be undone during recovery
+regardless of its data and log persistence progress.
 
 **Comments:**
 
