@@ -1,0 +1,16 @@
+---
+layout: paper-summary
+title:  "ASAP: Architecture Support for Asynchronous Persistence"
+date:   2022-07-17 02:11:00 -0500
+categories: paper
+paper_title: "ASAP: Architecture Support for Asynchronous Persistence"
+paper_link: https://dl.acm.org/doi/10.1145/3470496.3527413
+paper_keyword: NVM; ASAP; Asynchronous Commit; Undo Logging
+paper_year: ISCA 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
+
+
