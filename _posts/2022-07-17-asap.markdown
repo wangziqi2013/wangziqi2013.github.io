@@ -76,3 +76,11 @@ For WAW, if the first writer is uncommitted, while the second writer is committe
 undo log will be applied to the data item using the first writer's log entry, which rolls back the data item
 to the value before the first writer modifies it. This will also lead to inconsistent state, because the
 second writer transaction has logically committed, but one of its writes is rolled back.
+
+ASAP avoids the above anomalies while still allowing background transaction commit by tracking both types of 
+dependencies as transactions are being executed. 
+From a high level, this is achieved using two major hardware extensions.
+First, each cache block in the cache hierarchy is extended with a ownership field indicating the last writer 
+of that cache line.
+
+
