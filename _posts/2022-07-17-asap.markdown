@@ -128,3 +128,11 @@ To avoid costly commit-time data write back, the hardware will also eagerly writ
 write working set back to the NVM. The paper suggests that a block should be written back after it is written
 four times. When a block is written back, it will be removed from the dirty write working set.
 
+Note that the ownership tag should be preserved even when a block is evicted from the cache hierarchy. The paper 
+proposes that a small region of DRAM should be reserved to store the ownership tag of a block when it is 
+evicted. The small region will be accessed to fetch the ownership tag when a block is read. 
+As an optimization, ownership tags can be maintained only for those that currently belong to an uncommitted
+transaction. When the system enters quiescent state, i.e., a state where no uncommitted transaction is outstanding,
+all ownership tags stored in the DRAM can be cleared, and future accesses do not need to access the ownership tag.
+To reduce DRAM traffic for accessing the ownership tag, the set of addresses that have an ownership tag in the DRAM is approximately summarized with a bloom filter, which is cleared when the system enter quiescent state.
+
