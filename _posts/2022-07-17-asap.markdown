@@ -105,4 +105,8 @@ Each thread also has a a corresponding dependency list on the memory controller 
 dependent transactions. 
 These metadata is part of the context, and will be spilled and reloaded on process switches.
 
-
+On transaction begin, a new transaction ID is allocated by concatenating the thread ID with a per-thread,
+monotonically increasing counter. The memory controller checks whether the same thread has an uncommitted 
+transaction (by checking the thread ID part of all uncommitted transactions), and if true, adds that transaction's ID 
+to the new transaction's dependency list.
+The new transaction is also allocated a new undo log, and its dirty write set is cleared.
