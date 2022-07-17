@@ -87,4 +87,13 @@ when the cache block is modified.
 When another transaction attempts to read or write the same cache block, it will see a different ownership tag
 than its own transaction ID, and will hence record the current owner as a dependent transaction.
 The transaction will not be able to logically commit before all its dependent transactions commit. 
+Control dependencies are added when a thread starts a new transaction between the new transaction and the 
+most recent transaction the thread has started.
+
+Second, when a transaction is ready to commit, hardware will write all its dirty data from the cache hierarchy 
+back to the NVM, as in the standard undo-logging commit protocol. When this completes, hardware will further 
+wait for all dependent transactions to commit, before the current one commits. 
+A transaction is committed by first atomically clearing its undo log, meaning that the transaction will not be 
+undone after this point, and then removing the transaction as a dependent transaction from every other outstanding
+transactions. 
 
