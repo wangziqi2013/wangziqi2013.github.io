@@ -97,3 +97,12 @@ A transaction is committed by first atomically clearing its undo log, meaning th
 undone after this point, and then removing the transaction as a dependent transaction from every other outstanding
 transactions. 
 
+We next describe the operational details as follows.
+In addition to metadata mentioned in the previous paragraph, ASAP also adds per-thread metadata for tracking 
+undo log status and the dirty write set in the hierarchy.
+The L1 cache is extended with the hardware structures for storing these metadata.
+Each thread also has a a corresponding dependency list on the memory controller that tracks its 
+dependent transactions. 
+These metadata is part of the context, and will be spilled and reloaded on process switches.
+
+
