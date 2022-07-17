@@ -24,6 +24,10 @@ These dependencies are essential for the recovered state to remain valid.
 All later readers or writers establish data dependency with the first writer, and should be only committed
 after the first writer commits.
 
+3. When dependency is established, the memory controller stores the dependencies in a dependency list,
+essentially building an DAG indicating the commit order. Persistent transactions are committed following this DAG's
+topological sort order.
+
 
 
 **Comments:**
