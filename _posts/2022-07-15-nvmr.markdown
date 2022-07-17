@@ -147,7 +147,7 @@ Power interrupts will not happen between the second and the third steps, since w
 conducted atomically.
 
 The mapping table stored on the NVM should also be constantly garbage collected (GC'ed) 
-to avoid having too many entries. In fact, without GC, the mapping table will keep expending to cover
+to avoid having too many entries. In fact, without GC, the mapping table will keep expanding to cover
 the full write working set.
 GC on the mapping table works by copying data, in the background, from its remapped location back to the home
 location, and removing the mapping table entry after the copy completes.
