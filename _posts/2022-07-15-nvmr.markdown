@@ -25,6 +25,11 @@ are guaranteed to generate the same value on every re-execution.
 same address. Such a region can be re-executed and interrupted for arbitrary number of times, 
 given the same initial states, and always reach the same final state.
 
+4. The algorithm in this paper is similar to the one in HOOP, except that the mapping table update and the 
+register dump do not need to be performed atomically. This is due to the battery-backed nature of intermittent 
+computing devices -- you can get a notification before battery depletion. It is therefore guaranteed that the 
+battery can provide energy for the snapshotting operation before it completely drains.
+
 **Comments:**
 
 1. The paper applies a simple concept to intermittent computing: On redo-logging, all dirty blocks must be held from
@@ -68,13 +73,13 @@ When execution is interrupted due to power interrupts or system failures, the mo
 by loading the register dump back to the processor, and reverting the memory state to the one recorded in the snapshot.
 Execution can then resume from the last snapshot as if the interrupt had never occurred.
 
-There are two challenges with the snapshot model described above. First, during a snapshot operation, dirty data
+There are two challenges with the snapshotting model described above. First, during a snapshot operation, dirty data
 should be written back from the cache, together with the register dump. These writes must be conducted as an
 atomic unit, because otherwise, the system will be in an inconsistent state during the operation. If power interrupts
 occur on this window, the snapshot would be unfinished, while the system is unrecoverable.
 Second, due to write back caching, dirty data may might be evicted from the cache
-before the snapshot operation takes place, which pollutes the memory image. 
-If power interrupts happen after the eviction and before the snapshot, the system might be in an inconsistent state,
+before the snapshot operation takes place, which pollutes the memory image on the NVM device. 
+If power interrupt happens after the eviction and before the snapshot, the system might be in an inconsistent state,
 because the memory image is no longer the one from the previous snapshot, making the system unrecoverable.
 
 One way of dealing with the challenges is to divide the execution into idempotent regions. Each idempotent region
@@ -123,12 +128,13 @@ The snapshot is taken when the mapping cache is about to evict an entry that tra
 The snapshot operation consists of three steps. In the first step, all dirty data in the cache hierarchy is 
 written back to the NVM, using either the new location stored in the mapping cache (if the new location exists), or 
 using the old location stored in the mapping table and cached by the mapping cache (if the new location does not exist).
-Then the mapping table is updated atomically by written mapping cache entries that have a new location back
+Then the mapping table is updated atomically by writing mapping cache entries that have a new location back
 to the NVM. The old location field of the mapping table is updated with the new location stored in the 
 mapping cache entries. This process should be performed atomically, but the paper does not elaborate how atomicity 
-is enforced.
+is enforced. 
 Then in the last step, the register dump is taken, and the snapshot completes. This step should also be atomic
 with the mapping table update, and again the paper does not mention this requirement.
+**-- Correction: It does not need to be atomic, because the paper assumes that the device is battery-backed.**
 
 To recover from a snapshot, the system simply loads the register dump from the NVM, and resumes execution. The 
 mapping table will be consistent with the register dump, since the two are persisted atomically.
@@ -139,3 +145,5 @@ step, then the mapping table entries would point to the new locations, and the r
 snapshot, which is also consistent.
 Power interrupts will not happen between the second and the third steps, since we assume that they are 
 conducted atomically.
+
+The mapping table stored on the NVM should also be constantly garbage collected to avoid having too many entries.
