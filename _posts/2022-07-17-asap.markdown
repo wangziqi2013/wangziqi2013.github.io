@@ -102,14 +102,15 @@ In addition to metadata mentioned in the previous paragraph, ASAP also adds per-
 undo log status and the dirty write working set in the hierarchy.
 The L1 cache is extended with the hardware structures for storing these metadata.
 Each thread also has a a corresponding dependency list on the memory controller that tracks its 
-dependent transactions. 
+dependent transactions and the write log head pointer. 
 These metadata is part of the context, and will be spilled and reloaded on process switches.
 
 On transaction begin, a new transaction ID is allocated by concatenating the thread ID with a per-thread,
 monotonically increasing counter. The memory controller checks whether the same thread has an uncommitted 
 transaction (by checking the thread ID part of all uncommitted transactions), and if true, adds that transaction's ID 
 to the new transaction's dependency list.
-The new transaction is also allocated a new undo log, and its dirty write set is cleared.
+The new transaction is also allocated a new undo log (the head pointer of which is also sent to the memory
+controller for later use), and its dirty write set is cleared.
 
 On transactional writes, the hardware checks whether the ownership tag of the block match the transaction's ID.
 If they match, then no additional operation is performed. 
@@ -135,4 +136,14 @@ As an optimization, ownership tags can be maintained only for those that current
 transaction. When the system enters quiescent state, i.e., a state where no uncommitted transaction is outstanding,
 all ownership tags stored in the DRAM can be cleared, and future accesses do not need to access the ownership tag.
 To reduce DRAM traffic for accessing the ownership tag, the set of addresses that have an ownership tag in the DRAM is approximately summarized with a bloom filter, which is cleared when the system enter quiescent state.
+
+On transaction end, the hardware generates requests to write all blocks in the dirty write working set back to 
+the NVM, and clears all transaction metadata except the write log.
+Transaction end does not wait for commit, and is hence an instant operation. New transactions can be started
+on the same thread while the old transactions are being committed in the background. 
+When the write back of the dirty write working set completes, the transaction is ready to commit.
+The memory controller then monitors the transaction's dependency list, and logically commits the transaction
+by discarding its write log when the list becomes empty. 
+On transaction commit, the transaction ID is removed from the dependency list of every other uncommitted transaction.
+
 
