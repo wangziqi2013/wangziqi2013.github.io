@@ -99,7 +99,7 @@ transactions.
 
 We next describe the operational details as follows.
 In addition to metadata mentioned in the previous paragraph, ASAP also adds per-thread metadata for tracking 
-undo log status and the dirty write set in the hierarchy.
+undo log status and the dirty write working set in the hierarchy.
 The L1 cache is extended with the hardware structures for storing these metadata.
 Each thread also has a a corresponding dependency list on the memory controller that tracks its 
 dependent transactions. 
@@ -110,3 +110,14 @@ monotonically increasing counter. The memory controller checks whether the same 
 transaction (by checking the thread ID part of all uncommitted transactions), and if true, adds that transaction's ID 
 to the new transaction's dependency list.
 The new transaction is also allocated a new undo log, and its dirty write set is cleared.
+
+On transactional writes, the hardware checks whether the ownership tag of the block match the transaction's ID.
+If they match, then no additional operation is performed. 
+Otherwise, if the ownership tag does not match the transaction's ID, meaning that it is the first time the block is 
+written by the transaction, and that a WAW dependency
+is to be established, the hardware (1) generates an undo log entry containing pre-image of the block, and flushes
+the log back to the NVM immediately,
+(2) informs the memory controller to add the previous owner of the block to its dependent list, (3) updates the 
+ownership tag to its own transaction ID, and (4) adds the block address to the transaction's dirty write working set.
+
+
