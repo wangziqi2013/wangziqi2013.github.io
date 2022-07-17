@@ -146,4 +146,12 @@ snapshot, which is also consistent.
 Power interrupts will not happen between the second and the third steps, since we assume that they are 
 conducted atomically.
 
-The mapping table stored on the NVM should also be constantly garbage collected to avoid having too many entries.
+The mapping table stored on the NVM should also be constantly garbage collected (GC'ed) 
+to avoid having too many entries. In fact, without GC, the mapping table will keep expending to cover
+the full write working set.
+GC on the mapping table works by copying data, in the background, from its remapped location back to the home
+location, and removing the mapping table entry after the copy completes.
+The mapping table cache should also be invalidated during the process (although the paper did not cover what if
+the entry to be invalidated is currently being redirected to a new location).
+The location of data stored in the mapping table entry is returned to the free list as well.
+This process is similar to the log replay in redo logging, and will introduce slight write amplification.
