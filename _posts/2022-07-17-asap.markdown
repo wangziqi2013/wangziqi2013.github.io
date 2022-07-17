@@ -103,6 +103,8 @@ undo log status and the dirty write working set in the hierarchy.
 The L1 cache is extended with the hardware structures for storing these metadata.
 Each thread also has a a corresponding dependency list on the memory controller that tracks its 
 dependent transactions and the write log head pointer. 
+The memory controller is assumed to be in the persistence domain, meaning that data maintained by the 
+memory controller will be persistent.
 These metadata is part of the context, and will be spilled and reloaded on process switches.
 
 On transaction begin, a new transaction ID is allocated by concatenating the thread ID with a per-thread,
@@ -146,4 +148,7 @@ The memory controller then monitors the transaction's dependency list, and logic
 by discarding its write log when the list becomes empty. 
 On transaction commit, the transaction ID is removed from the dependency list of every other uncommitted transaction.
 
+On recovery, the memory controller scans the dependency list of all uncommitted transactions (recall the list
+is in the persistence domain). For uncommitted transactions, a DAG is built with regard to the dependency relation
+stored in the lists. These transactions are then undone using their undo log entries in the reverse order.
 
