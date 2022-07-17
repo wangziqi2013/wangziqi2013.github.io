@@ -82,5 +82,9 @@ dependencies as transactions are being executed.
 From a high level, this is achieved using two major hardware extensions.
 First, each cache block in the cache hierarchy is extended with a ownership field indicating the last writer 
 of that cache line.
-
+Every transaction in the system is assigned a unique transaction ID, which is stored in the ownership tag
+when the cache block is modified.
+When another transaction attempts to read or write the same cache block, it will see a different ownership tag
+than its own transaction ID, and will hence record the current owner as a dependent transaction.
+The transaction will not be able to logically commit before all its dependent transactions commit. 
 
