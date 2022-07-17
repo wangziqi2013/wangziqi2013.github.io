@@ -67,3 +67,7 @@ Data dependency must also be observed for transaction commit, because otherwise 
 For RAW, if the writer transaction is uncommitted, while the reader is committed, then during recovery, the 
 data item will be rolled back to its previous value before the writer transaction modifies it, indicating that the
 reader transaction has accessed a value that do not exist in the recovered NVM image.
+For WAW, if the first writer is uncommitted, while the second writer is committed, then during recovery, the 
+undo log will be applied to the data item using the first writer's log entry, which rolls back the data item
+to the value before the first writer modifies it. This will also lead to inconsistent state, because the
+second writer transaction has logically committed, but one of its writes is rolled back.
