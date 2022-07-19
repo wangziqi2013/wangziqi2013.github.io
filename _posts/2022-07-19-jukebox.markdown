@@ -129,4 +129,10 @@ LLC using the cache block's address.
 This process is repeated for every log entry as quickly as the cache system can sustain, and there seems to be
 no throttle for the purpose of rate limiting.
 
-The paper notes that both stages use virtual address
+The paper notes that both record and replay stages use virtual addresses to prevent aliasing problem, which
+can become an issue if the OS moves around physical instruction pages.
+As a result, virtual addresses must be passed to the record hardware via the MSHR.
+In addition, the prefetcher should also use the instruction TLB to translate virtual addresses in the 
+collected trace to physical addresses, before issuing prefetch requests.
+This process also prefetches the translation entries that will be used later into the I-TLB, and it
+may actually benefit performance.
