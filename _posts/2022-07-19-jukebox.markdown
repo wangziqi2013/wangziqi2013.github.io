@@ -40,7 +40,12 @@ claimed that prefetching into the L2 cache is sufficient because L2 is big enoug
 2. I am pretty sure this question has been asked by one of the reviewers, but how does Jukebox interplay with
 address space randomization? This is especially critical on cloud settings, because you cannot simply turn it off.
 
+3. How does Jukebox work with multithreaded functions? Does each thread have its own log (unlikely)? If not, then
+how would the hardware coordinate? I would image the OS only collects the trace on one of the threads. And most
+serverless functions are not multithreaded anyway.
 
+4. Although a little bit unrelated to the topic itself, but what is the policy for refreshing the 
+collected trace? I image there would be a TTL. Or, even simpler, just let it be torn down with the container process.
 
 This paper proposes Jukebox, an instruction cache prefetching mechanism designed to reduce instruction
 cache misses for short-lived serverless functions. 
