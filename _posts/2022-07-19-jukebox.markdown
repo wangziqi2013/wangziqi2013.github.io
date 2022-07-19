@@ -26,4 +26,7 @@ technologies which make it possible to subscribe the same physical machine to ma
 Lastly, intervals between function invocations can be much longer than the function's lifetime.
 This is especially true when function's lifetime is short.
 
+The three observations, combined together, brings about an issue known that as cold start problem. When a function
+is short and frequently invoked, the overhead of initializing and tearing down the function container 
+cannot be well amortized over the function's execution period unlike the case of traditional long-running services.
 
