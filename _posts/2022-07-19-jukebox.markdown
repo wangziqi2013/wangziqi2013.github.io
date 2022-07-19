@@ -13,4 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+This paper proposes Jukebox, an instruction cache prefetching mechanism designed to reduce instruction
+cache misses for short-lived serverless functions. 
+The paper is motivated by the three distinctive properties of serverless functions, which are not observed on
+other types of cloud services.
+First, serverless functions generally have short execution time, in the unit of milliseconds, and small
+memory footprint, which is usually within a few hundreds of megabytes, due to the fact that most functions are
+deployed for web services, and they only perform simple tasks such as HTML rendering.
+
+
 
