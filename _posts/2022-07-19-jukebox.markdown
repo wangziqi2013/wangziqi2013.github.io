@@ -55,4 +55,13 @@ Meanwhile, when executions are back-to-back, L1 and L2 still demonstrate high mi
 size exceeding maximum cache size, but the LLC has lower misses.
 These two combined together indicate that last-level cache thrashing on instruction data is a major source of 
 bottleneck that causes slowdowns known as lukewarm execution.
+Besides, since processors are over-subscribed to many functions, the total instruction footprint of which 
+is much larger than the LLC, attempting to keep all instruction data in the LLC will not work, necessitating 
+a different mechanism.
+
+The paper therefore proposes Jukebox as a record-and-replay instruction prefetching mechanism 
+to alleviate the negative effect of LLC thrashing on instruction data.
+Jukebox works as a two-stage process. In the record stage, the instruction access miss history is logged
+by a special piece of hardware into the main memory, thus saving the access pattern for costly instructions.
+
 
