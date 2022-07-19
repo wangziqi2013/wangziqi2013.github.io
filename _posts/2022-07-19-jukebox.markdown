@@ -42,3 +42,8 @@ platform with high degrees of interleaving still suffer from performance degrada
 conducted back-to-back without any interleaving. 
 The paper calls this phenomenon "lukewarm execution", and attributes the performance issue to cold processor
 states as a result of over-subscribing the processor with many different instances between two invocations. 
+
+The paper further conducted experiments comparing the execution's CPI between interleaved and back-to-back,
+and makes the following conclusions.
+First, the instruction footprint of functions are typically several hundreds of KBs, showing low variance
+between different functions. 
