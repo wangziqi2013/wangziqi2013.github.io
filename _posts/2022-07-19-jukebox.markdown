@@ -63,5 +63,8 @@ The paper therefore proposes Jukebox as a record-and-replay instruction prefetch
 to alleviate the negative effect of LLC thrashing on instruction data.
 Jukebox works as a two-stage process. In the record stage, the instruction access miss history is logged
 by a special piece of hardware into the main memory, thus saving the access pattern for costly instructions.
-
+Then in the replay stage, the instruction access log is loaded by the prefetching hardware, and instruction blocks
+are fetched into the L2 cache. The paper suggests that it is better to prefetch into the L2 cache, instead of 
+prefetching into the L1, as the typical instruction footprint is too large to be stored entirely in the L1.
+We next describe the two stages in more details.
 
