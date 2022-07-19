@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The experiments in section 2 are conducted on a real machine with 256KB L2 cache, but the final evaluation is 
+conducted on simulated 1MB L2 cache. 
+This creates some minor confusion, because in section 2, it is concluded that L2 is too small for holding the 
+full instruction working set for both back-to-back and interleaved execution. Then in later sections it is
+claimed that prefetching into the L2 cache is sufficient because L2 is big enough.
+
 This paper proposes Jukebox, an instruction cache prefetching mechanism designed to reduce instruction
 cache misses for short-lived serverless functions. 
 The paper is motivated by the three distinctive properties of serverless functions, which are not observed on
