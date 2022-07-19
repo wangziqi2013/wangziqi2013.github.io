@@ -37,6 +37,11 @@ This creates some minor confusion, because in section 2, it is concluded that L2
 full instruction working set for both back-to-back and interleaved execution. Then in later sections it is
 claimed that prefetching into the L2 cache is sufficient because L2 is big enough.
 
+2. I am pretty sure this question has been asked by one of the reviewers, but how does Jukebox interplay with
+address space randomization? This is especially critical on cloud settings, because you cannot simply turn it off.
+
+
+
 This paper proposes Jukebox, an instruction cache prefetching mechanism designed to reduce instruction
 cache misses for short-lived serverless functions. 
 The paper is motivated by the three distinctive properties of serverless functions, which are not observed on
@@ -118,3 +123,5 @@ every cache block that has the bit set during the record stage, issues a fetch r
 LLC using the cache block's address.
 This process is repeated for every log entry as quickly as the cache system can sustain, and there seems to be
 no throttle for the purpose of rate limiting.
+
+The paper notes that both stages use virtual address
