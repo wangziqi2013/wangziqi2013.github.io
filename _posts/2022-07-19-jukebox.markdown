@@ -22,6 +22,12 @@ invocation interval, and interleaved execution of different functions on the sam
 2. Cache thrashing for instruction data happens mostly on LLC, because most functions have several KBs
 of instruction footprint, which is too large to be fully stored in higher levels of the hierarchy anyway.
 
+3. This issue can be dealt with using a simple logging mechanism that logs L2 miss pattern in the unit 
+of 1KB regions. Misses on the same region are coalesced into the same entry of the hardware log buffer.
+The log buffer is evicted into the main memory for later usage.
+
+4. The prefetching can be as simple as replaying the instruction access pattern from the previously recorded
+log. There is no need for rate limiting or throttling because the L2 cache is assumed to be big enough.
 
 **Comments:**
 
