@@ -68,3 +68,9 @@ are fetched into the L2 cache. The paper suggests that it is better to prefetch 
 prefetching into the L1, as the typical instruction footprint is too large to be stored entirely in the L1.
 We next describe the two stages in more details.
 
+The record stage begins when a function is started, and there is no instruction log for the function type.
+The OS kick starts the record stage by preparing a small memory area for storing the access log, and 
+passing the pointer to the record hardware co-located with the L1 cache.
+Then during execution, whenever an instruction access misses the L2 cache, the record hardware adds the access
+into a hardware access log called the CRRB.
+
