@@ -51,3 +51,8 @@ Second, most of the instruction footprint are common on repeated invocations of 
 Third, performance counters suggest that the main bottleneck during execution is frontend instruction fetch latency.
 Further investigation into cache misses reveals that the cache hit rate for instruction fetches in all levels of the 
 hierarchy are uniformly low, when executions are interleaved.
+Meanwhile, when executions are back-to-back, L1 and L2 still demonstrate high miss rate due to the working set
+size exceeding maximum cache size, but the LLC has lower misses.
+These two combined together indicate that last-level cache thrashing on instruction data is a major source of 
+bottleneck that causes slowdowns known as lukewarm execution.
+
