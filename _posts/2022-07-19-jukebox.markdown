@@ -20,6 +20,10 @@ other types of cloud services.
 First, serverless functions generally have short execution time, in the unit of milliseconds, and small
 memory footprint, which is usually within a few hundreds of megabytes, due to the fact that most functions are
 deployed for web services, and they only perform simple tasks such as HTML rendering.
-
+Second, different serverless functions often co-reside on the same physical machine and share the hardware
+resource. This is natural outcome in today's cloud computing paradigm as service providers adopt virtualization
+technologies which make it possible to subscribe the same physical machine to many unrelated service instances.
+Lastly, intervals between function invocations can be much longer than the function's lifetime.
+This is especially true when function's lifetime is short.
 
 
