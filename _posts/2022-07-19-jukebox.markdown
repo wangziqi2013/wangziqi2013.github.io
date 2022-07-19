@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Serverless functions suffer "lukewarm execution", especially cache thrashing for instruction data, 
+as a result of short execution time, long
+invocation interval, and interleaved execution of different functions on the same core.
+
+2. Cache thrashing for instruction data happens mostly on LLC, because most functions have several KBs
+of instruction footprint, which is too large to be fully stored in higher levels of the hierarchy anyway.
+
+
 **Comments:**
 
 1. The experiments in section 2 are conducted on a real machine with 256KB L2 cache, but the final evaluation is 
