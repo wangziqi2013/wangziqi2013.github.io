@@ -29,4 +29,10 @@ This is especially true when function's lifetime is short.
 The three observations, combined together, brings about an issue known that as cold start problem. When a function
 is short and frequently invoked, the overhead of initializing and tearing down the function container 
 cannot be well amortized over the function's execution period unlike the case of traditional long-running services.
-
+To address the issue, function service providers have already adopted a technique known as function keep-alive,
+which maintains "warm" instances of the function containers in a process pool. 
+Function invocations are serviced by an already initialized process in the pool without paying the initialization cost,
+and when a function completes execution, the container process is returned to the pool without tearing it down, thus
+avoiding paying the extra cost that container initialization and teardown.
+A container process is destroyed when the function is not invoked for a while in order to free up the resource 
+it consumes.
