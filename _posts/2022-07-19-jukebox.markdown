@@ -36,3 +36,9 @@ and when a function completes execution, the container process is returned to th
 avoiding paying the extra cost that container initialization and teardown.
 A container process is destroyed when the function is not invoked for a while in order to free up the resource 
 it consumes.
+
+This paper observes that, however, even with function keep-alive, the instances executing on a shared 
+platform with high degrees of interleaving still suffer from performance degradation, compared with executions
+conducted back-to-back without any interleaving. 
+The paper calls this phenomenon "lukewarm execution", and attributes the performance issue to cold processor
+states as a result of over-subscribing the processor with many different instances between two invocations. 
