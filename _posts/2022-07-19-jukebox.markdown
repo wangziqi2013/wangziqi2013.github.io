@@ -89,4 +89,8 @@ If, however, the function already has an access log recorded earlier, the OS can
 directly start replaying when the function begins.
 The OS will initialize the prefetcher hardware with the pointer to the main memory access log for that 
 function type (which is maintained either in a per-type table, or in the task struct of container processes).
-
+Then as the prefetcher kickstarts, it keeps reading the log entries from the main memory log, and for 
+every cache block that has the bit set during the record stage, issues a fetch request to the 
+LLC using the cache block's address.
+This process is repeated for every log entry as quickly as the cache system can sustain, and there seems to be
+no throttle for the purpose of rate limiting.
