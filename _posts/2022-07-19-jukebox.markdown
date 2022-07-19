@@ -78,4 +78,9 @@ The entry consists of a tag address, which is aligned to 1KB boundaries, and a 1
 represents a cache line being accessed in the 1KB region. 
 The CRRB is implemented as a small associative CAM (e.g., 16 entries).
 When a miss occurs, the miss virtual address is used to lookup the CRRB. If an entry is found, then the 
-corresponding bit is set. 
+corresponding bit is set. Otherwise, the oldest entry is evicted and appended to the main memory log,
+and a new entry is allocated at the tail of the CRRB with the tag being the miss address.
+Note that CRRB logs the ordering of the first access to regions, while chooses not to preserve the ordering for
+accesses within a region.
+Entries evicted from the CRRB will never be loaded back. Therefore, it is possible that multiple regions with the
+same tag address exist in the main memory log.
