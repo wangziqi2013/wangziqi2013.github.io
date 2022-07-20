@@ -94,5 +94,14 @@ With the removal of the fence, however, an earlier store may be handled by the c
 is. In this case, since uops are drained from the store buffer in-order, the intermediate store uop will block
 the following unlocking store uop from draining, which further prevents itself from being serviced, as the 
 address is locked in another processor.
+Another case of deadlock occurs when a later load speculates in-between the locking load and the unlocking store.
+The intermediate load uop will be unable to commit, which also blocks the commit of the unlocking store uop,
+since uops are committed in-order.
 
-
+The paper also studies a third scenario introduced by cache line invalidation to enforce inclusion. 
+The deadlock mechanism is roughly the same, except that deadlock occurs because one intermediate memory
+operation on one core causes the lower level cache to evict a block locked in another processor.
+The eviction, however, will be denied since a locked cache block must be retained in the L1 cache until
+the unlocking store uop drains. If this occurs symmetrically on two processors, then deadlock
+will arise. Even worse, since the deadlock can only be detected by the lower level directory, the L1
+cache does not even know that the deadlock is formed.
