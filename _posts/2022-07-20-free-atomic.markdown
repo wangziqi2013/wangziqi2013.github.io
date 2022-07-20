@@ -90,4 +90,9 @@ The next complication is deadlock, which occurs when two processors request an a
 each holding a locked block in their private L1 cache, the address of which is being locked in the other.
 This case will not occur in the baseline system, because no other memory uop will be between the load uop for
 locking and the store uop for unlocking. 
+With the removal of the fence, however, an earlier store may be handled by the cache, after the locking load uop
+is. In this case, since uops are drained from the store buffer in-order, the intermediate store uop will block
+the following unlocking store uop from draining, which further prevents itself from being serviced, as the 
+address is locked in another processor.
+
 
