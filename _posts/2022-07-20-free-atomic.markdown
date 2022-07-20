@@ -79,3 +79,7 @@ based on the same reason above, the load is logically conducted atomically with 
 the two atomic operations are essentially soldered into one big atomic operation.
 The paper claims that this is actually good for locality, because atomic operations that are close to each
 other are likely merged as one big atomic operation, which avoids any intermediate coherence invalidation.
+This, however, can also potentially turn into starvation, where one processor keeps issuing atomic operations
+on the same cache block, gets forwarded infinitely, and blocks the address from being accessed by other cores.
+To prevent this pathological case, the paper suggests that the maximum number of forwarding should be limited
+(e.g., to 16).
