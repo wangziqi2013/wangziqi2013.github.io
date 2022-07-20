@@ -122,4 +122,13 @@ contents of the locked block. However, with more careful reasoning, the store, i
 loading load uop, then the load uop will be forwarded from the store uop, in which case the store uop
 is logically atomic with the load, as we have explained earlier.
 
+However, the above analysis is still missing one case, where a later load reorders with both the load and the store 
+of the atomic operation, and also reorders with an earlier store. This is disallowed, since the atomic operation
+itself is also semantically a barrier that no memory operation may be reordered with (this is different from reordering
+with individual load or store of the atomic).
+**I did not quite understand the analysis presented in the paper**, because the paper repeated says
+"committing a Free atomic only when the SB is empty.". I thought this is the case for baseline system, but the 
+paragraphs in Section 3.2.3 discuss the Free Atomic design where stores are free to be committed while all other 
+stores are still in the store buffer.
+
 
