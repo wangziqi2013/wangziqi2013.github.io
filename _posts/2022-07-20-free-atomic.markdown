@@ -38,3 +38,11 @@ will not be rolled back after it has been handled by the cache.
 Second, the barrier also prevents earlier loads from being reordered with the atomic operation's load and store. 
 This may create complicated race condition that results in deadlock or livelock with another core performing atomic 
 operation.
+
+The second barrier is inserted after the store uop, such that no later load uop will be issued until the store uop
+is fully drained from the store buffer (i.e., becomes globally visible). 
+Note that since the first barrier already drains the store buffer, and that the load uop will acquire the target
+block and lock it in the L1 cache, the store uop can always be instantly written into the cache in this case
+after the atomic operation commits in the ROB (and hence, it is equivalent to saying that the second barrier 
+actually only blocks the load until the atomic operation commits, as the paper does).
+A side effect of both barriers is that earlier stores and later loads will not cross the atomic operation.
