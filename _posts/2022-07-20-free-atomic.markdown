@@ -67,3 +67,10 @@ In addition, since multiple lock uops can be speculated, the system must also ke
 several locked addresses.
 Assuming that the above requirements are met, then when a mis-speculation happens, as load uop is rolled back,
 the processor will also unlock the cache block being locked by the load uop using the address of the uop. 
+
+Another complication that can occur is store-load forwarding. There are several subcases.
+First, when an atomic load uop forwards from a non-atomic store, the load uop is logically performed
+atomically as the store uop. In this case, the processor should lock the cache block as soon as the 
+store uop brings the block into the local L1 cache, because otherwise, an interleaving store from a remote core 
+would break atomicity.
+
