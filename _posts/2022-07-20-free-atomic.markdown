@@ -117,4 +117,9 @@ The paper also argues that atomicity is not harmed if the atomic operation can f
 operations as if they were just regular memory operation. 
 First, earlier loads reordering with the locking load uop will not affect atomicity, because loads do not change
 system state. The same reasoning applies with later loads reordering with the unlocking store uop.
+Second, earlier stores that reorder with the locking load may appear to be problematic, since it modifies the 
+contents of the locked block. However, with more careful reasoning, the store, if it overlaps with the 
+loading load uop, then the load uop will be forwarded from the store uop, in which case the store uop
+is logically atomic with the load, as we have explained earlier.
+
 
