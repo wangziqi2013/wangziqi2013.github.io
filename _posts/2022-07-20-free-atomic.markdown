@@ -131,4 +131,9 @@ with individual load or store of the atomic).
 paragraphs in Section 3.2.3 discuss the Free Atomic design where stores are free to be committed while all other 
 stores are still in the store buffer.
 
-
+To implement the above design points, the paper proposes adding an Atomic Queue (AQ) to the L1 cache as a 
+tracking structure for outstanding atomic operations. 
+The AQ tracks the locking status of the cache block accessed by the atomic operation as a 1-bit locked flag, 
+the cache set and way of the block, 
+the store queue entry, if the locking load uop is forwarded from an earlier store,
+and the ROB serial number for flushing the atomic operation when the watchdog fires.
