@@ -147,3 +147,10 @@ When the local L1 cache is to evict a block, the set number is also used to sear
 be evicted by the replacement protocol (assuming that the number of AQ entries is fewer than L1 ways, such that
 a victim can always be found) in order to maintain the locked status. 
 
+The AQ also handles store-load forwarding. When a store forwards value to a locking load uop, the store's entry index
+in the store buffer is saved in the AQ (or, when it leaves store queue and enter store buffer). 
+When the store uop is drained from the store buffer, if the entry is saved in one of the AQ entries, the cache block
+accessed by the store uop will be locked, and the locked bit, the set and way index of the corresponding AQ entry
+will be updated.
+This mechanism works for both regular stores and unlocking store uops, because in both cases, the cache block
+to be accessed by the store will remain locked after the store is handled by the cache.
