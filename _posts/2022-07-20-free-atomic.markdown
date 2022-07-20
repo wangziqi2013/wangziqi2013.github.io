@@ -18,4 +18,7 @@ operations.
 The paper is motivated by the overhead incurred by the two implicit memory barriers surrounding x86 atomic operations.
 The paper proposes removing these two barriers, allowing the load-store pair belonging to the atomic operation
 to freely speculate and be reordered with regular memory operations, thus reducing the overhead.
-
+However, without care, anomalies such as deadlocks, livelocks, and store-load forwarding may also occur after
+removing the barriers, due to more complicated cases of memory access reordering.
+These anomalies are addressed with either operation timeouts, or an extra hardware structure that tracks 
+the ongoing status of atomic operations. 
