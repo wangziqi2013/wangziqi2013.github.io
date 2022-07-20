@@ -83,3 +83,11 @@ This, however, can also potentially turn into starvation, where one processor ke
 on the same cache block, gets forwarded infinitely, and blocks the address from being accessed by other cores.
 To prevent this pathological case, the paper suggests that the maximum number of forwarding should be limited
 (e.g., to 16).
+The last case is memory forwarding from atomic store to non-atomic load. This case does not require any special
+attention, and just works as usual.
+
+The next complication is deadlock, which occurs when two processors request an address from each other, while
+each holding a locked block in their private L1 cache, the address of which is being locked in the other.
+This case will not occur in the baseline system, because no other memory uop will be between the load uop for
+locking and the store uop for unlocking. 
+
