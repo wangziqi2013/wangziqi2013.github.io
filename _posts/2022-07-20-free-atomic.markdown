@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Free Atomics, a microarchitecture optimization aiming at reducing memory barrier cost of atomic 
+operations.
+The paper is motivated by the overhead incurred by the two implicit memory barriers surrounding x86 atomic operations.
+The paper proposes removing these two barriers, allowing the load-store pair belonging to the atomic operation
+to freely speculate and be reordered with regular memory operations, thus reducing the overhead.
+
