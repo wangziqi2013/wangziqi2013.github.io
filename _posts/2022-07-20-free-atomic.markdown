@@ -137,3 +137,13 @@ The AQ tracks the locking status of the cache block accessed by the atomic opera
 the cache set and way of the block, 
 the store queue entry, if the locking load uop is forwarded from an earlier store,
 and the ROB serial number for flushing the atomic operation when the watchdog fires.
+The locked bit is set when a locking load uop brings the cache block into the local L1 cache.
+The set and way of the locked block is also set to the physical location of the block as well.
+The locked bit is cleared when the unlocking store uop is handled by the L1 cache (note that this is
+after the atomic operation is committed). 
+When external coherence or invalidation requests arrived, they are looked up in the AQ. If the requested block
+is currently locked, the request is denied.
+When the local L1 cache is to evict a block, the set number is also used to search the AQ. Locked lines will not
+be evicted by the replacement protocol (assuming that the number of AQ entries is fewer than L1 ways, such that
+a victim can always be found) in order to maintain the locked status. 
+
