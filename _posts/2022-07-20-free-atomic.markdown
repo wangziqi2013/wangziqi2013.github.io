@@ -59,4 +59,11 @@ block is unlocked.
 
 This paper observes that, under certain conditions, these two barriers can be removed, which unleashes more 
 instruction level parallelism.
-
+The first condition is to allow speculative execution of the load uop.
+One complication is that, if the load uop can be speculatively executed, then it may also be squashed on a 
+mis-speculation. This requires the system to be able to unlock a block when the load uop that originally locks
+it is squashed.
+In addition, since multiple lock uops can be speculated, the system must also keep track of potentially
+several locked addresses.
+Assuming that the above requirements are met, then when a mis-speculation happens, as load uop is rolled back,
+the processor will also unlock the cache block being locked by the load uop using the address of the uop. 
