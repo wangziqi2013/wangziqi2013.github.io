@@ -27,6 +27,17 @@ barriers will cause neither consistency order violation nor atomicity violation.
 speculate and be ordered (in a limited but rather relaxed fashion) with other memory operations, or even operations
 from other atomics.
 
+**Comments:**
+
+1. I am not very sure about the baseline system's implementation of load speculation. Does the author assume 
+load-load reordering during speculation? From the text it appears that loads can speculate freely without 
+obeying program order. But since TSO disallows load-load reordering from a consistency point of view, this 
+requires some extra mechanism (e.g., implementing speculative loads like HTM transactions) that is not
+described in the paper.
+
+2. Does the Free Atomic design still only commit the unlocking store uop when the store buffer is free?
+It would appear so from the text, but this is not mentioned anywhere as part of the design. 
+
 This paper proposes Free Atomics, a microarchitecture optimization aiming at reducing memory barrier cost of atomic 
 operations.
 The paper is motivated by the overhead incurred by the two implicit memory barriers surrounding x86 atomic operations.
