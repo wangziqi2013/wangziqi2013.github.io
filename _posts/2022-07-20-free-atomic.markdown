@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. x86 inserts two implicit barriers to atomic operations. One before it to ensure that all memory operations are 
+committed and drained before the load uop issues, and another after it to ensure that no load operation can issue
+before the store uop drains.
+
+
+
 This paper proposes Free Atomics, a microarchitecture optimization aiming at reducing memory barrier cost of atomic 
 operations.
 The paper is motivated by the overhead incurred by the two implicit memory barriers surrounding x86 atomic operations.
