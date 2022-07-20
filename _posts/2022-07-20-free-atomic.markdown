@@ -105,3 +105,11 @@ The eviction, however, will be denied since a locked cache block must be retaine
 the unlocking store uop drains. If this occurs symmetrically on two processors, then deadlock
 will arise. Even worse, since the deadlock can only be detected by the lower level directory, the L1
 cache does not even know that the deadlock is formed.
+
+To address all three scenarios of deadlocks with a simple mechanism, the paper proposes using a watchdog timer
+to monitor the time it takes between a locking load uop and an unlocking store uop.
+If the atomic operation takes too long to finish, then the watchdog timer will fire, which causes the pipeline to
+flush all uops since the oldest atomic operation, and reexecute. 
+This resolves the deadlock and ensures that global progress is always made, since after one processor flushes its
+pipeline hence releasing the locked block, the other processor can make progress. 
+
