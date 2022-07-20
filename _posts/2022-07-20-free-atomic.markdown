@@ -73,4 +73,9 @@ First, when an atomic load uop forwards from a non-atomic store, the load uop is
 atomically as the store uop. In this case, the processor should lock the cache block as soon as the 
 store uop brings the block into the local L1 cache, because otherwise, an interleaving store from a remote core 
 would break atomicity.
-
+Second, when an atomic load forwards from an atomic store (note that this is now possible since the pipeline
+may have several speculative atomic operations), the store does not need to unlock the cache block, because, 
+based on the same reason above, the load is logically conducted atomically with the store, and in this case,
+the two atomic operations are essentially soldered into one big atomic operation.
+The paper claims that this is actually good for locality, because atomic operations that are close to each
+other are likely merged as one big atomic operation, which avoids any intermediate coherence invalidation.
