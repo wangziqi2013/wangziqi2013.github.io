@@ -22,3 +22,8 @@ However, without care, anomalies such as deadlocks, livelocks, and store-load fo
 removing the barriers, due to more complicated cases of memory access reordering.
 These anomalies are addressed with either operation timeouts, or an extra hardware structure that tracks 
 the ongoing status of atomic operations. 
+
+The paper assumes a baseline implementation of atomic operations on x86 platforms that we describe as follows.
+The baseline processor implements out-of-order execution with separate load and store queues. The memory consistency
+model is Total Store Ordering (TSO), meaning that store-load sequence in program can be reordered as long as the 
+store and load are to non-overlapping addresses, while load-load, store-store, and load-store are not reordered.
