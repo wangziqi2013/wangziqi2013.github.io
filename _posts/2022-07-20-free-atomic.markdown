@@ -19,7 +19,13 @@ version_mgmt:
 committed and drained before the load uop issues, and another after it to ensure that no load operation can issue
 before the store uop drains.
 
+2. The main purpose of the two barriers is to prevent deadlock, simplify store-load forwarding, and simplify load
+speculation of atomic operations. The paper argues that with proper handling of these three issues, removing the
+barriers will cause neither consistency order violation nor atomicity violation.
 
+3. The paper relaxes the memory ordering requirements of atomic operations, which allows these operations to
+speculate and be ordered (in a limited but rather relaxed fashion) with other memory operations, or even operations
+from other atomics.
 
 This paper proposes Free Atomics, a microarchitecture optimization aiming at reducing memory barrier cost of atomic 
 operations.
