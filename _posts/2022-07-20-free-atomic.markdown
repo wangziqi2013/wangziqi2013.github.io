@@ -52,4 +52,11 @@ in write-exclusive mode, and then locks the block in the cache. Locking is typic
 storing the address being locked.
 A single locked address design suffices for the baseline system, since atomic operations are always executed 
 non-speculatively, and in isolation from other instructions.
+External requests for the locked address, such that coherence invalidations, downgrades, and evictions, will
+be denied, until the block is unlocked.
+The block is unlocked when the store uop is handled by the cache (not when it is committed!).
+block is unlocked.
+
+This paper observes that, under certain conditions, these two barriers can be removed, which unleashes more 
+instruction level parallelism.
 
