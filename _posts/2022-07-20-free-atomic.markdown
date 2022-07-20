@@ -45,4 +45,11 @@ Note that since the first barrier already drains the store buffer, and that the 
 block and lock it in the L1 cache, the store uop can always be instantly written into the cache in this case
 after the atomic operation commits in the ROB (and hence, it is equivalent to saying that the second barrier 
 actually only blocks the load until the atomic operation commits, as the paper does).
-A side effect of both barriers is that earlier stores and later loads will not cross the atomic operation.
+A side effect of the two barriers is that earlier stores and later loads will not cross the atomic operation.
+
+When being handled by the cache hierarchy, the load uop of the atomic operation will acquire the cache block
+in write-exclusive mode, and then locks the block in the cache. Locking is typically implemented as a single register
+storing the address being locked.
+A single locked address design suffices for the baseline system, since atomic operations are always executed 
+non-speculatively, and in isolation from other instructions.
+
