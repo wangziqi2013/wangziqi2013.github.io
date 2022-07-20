@@ -113,3 +113,8 @@ flush all uops since the oldest atomic operation, and reexecute.
 This resolves the deadlock and ensures that global progress is always made, since after one processor flushes its
 pipeline hence releasing the locked block, the other processor can make progress. 
 
+The paper also argues that atomicity is not harmed if the atomic operation can freely reorder with other memory
+operations as if they were just regular memory operation. 
+First, earlier loads reordering with the locking load uop will not affect atomicity, because loads do not change
+system state. The same reasoning applies with later loads reordering with the unlocking store uop.
+
