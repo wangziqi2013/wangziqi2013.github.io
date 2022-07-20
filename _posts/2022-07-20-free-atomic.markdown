@@ -33,4 +33,8 @@ other store operation may occur in-between the load and the store in the global 
 The atomic operation is decoded into several uops: a load, a store, and one or more ALUs uops.
 In addition, two implicit barriers are added. The first barrier is inserted before the load uop, which prevents it
 from being issued, until all earlier memory uops have successfully committed.
-This barrier serves two purposes. 
+This barrier serves two purposes. First, it avoids executing the load uop in a speculative manner, such that the load
+will not be rolled back after it has been handled by the cache. 
+Second, the barrier also prevents earlier loads from being reordered with the atomic operation's load and store. 
+This may create complicated race condition that results in deadlock or livelock with another core performing atomic 
+operation.
