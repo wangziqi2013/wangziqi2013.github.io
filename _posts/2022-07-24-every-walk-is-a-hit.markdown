@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Page table pages can also use huge pages just like data pages. Hardware support for achieving this is also
+extremely simple: Just use two extra bits to indicate to the page table walker the page size on the next level.
+
+2. 
+
 **Comments:**
 
 1. With flattened page table design, how are TLB shootdowns affected? On a related question, how is coherence 
