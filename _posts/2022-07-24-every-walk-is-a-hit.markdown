@@ -18,7 +18,9 @@ version_mgmt:
 1. Page table pages can also use huge pages just like data pages. Hardware support for achieving this is also
 extremely simple: Just use two extra bits to indicate to the page table walker the page size on the next level.
 
-2. 
+2. When both data and translation have high miss rates in the cache hierarchy, it is more beneficial to dedicate
+caching capability to translation than to data, because (1) both are on the critical path; and (2) translation
+requires far less storage than actual data, and is hence more cost-effective.
 
 **Comments:**
 
