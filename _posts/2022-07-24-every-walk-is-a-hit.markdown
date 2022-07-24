@@ -33,4 +33,9 @@ The paper assumes a x86-like system with four levels of page tables, but does no
 such as five-level page tables. 
 Address translations are performed by the two-level TLB structure, and when the TLB misses, a page walk is conducted
 to retrieve the address translation entry from the page table in the main memory.
-
+The MMU is assumed to have page walk caches (PWCs) that store the intermediate results of the page walk. These PWCs 
+are indexed using the index bits that lead to the intermediate levels.
+When the PWC misses, the page table walker will attempt to retrieve the entry from the cache hierarchy.
+If the translation entry is cached by the hierarchy, the page table walker can still avoid a main memory access
+by reading the entry from the cache.
+Otherwise, the entry is read from the main memory, and inserted into both the cache hierarchy and the PWCs.
