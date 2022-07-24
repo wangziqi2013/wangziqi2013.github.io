@@ -24,11 +24,6 @@ This paper seeks to improve the performance on address translation from two aspe
 steps in page table walk by using huge pages for page tables, and (2) Reducing the latency of each step of 
 page table walk with better caching policies.
 
-The paper observes that existing radix tree-based page table designs always map radix nodes in 4KB granularity,
-which is also the minimum unit supported by address translation. While larger granularity page mapping for data
-pages are available as huge pages in the form 2MB and 1GB pages, these huge pages are not available 
-for page tables.
-
 The paper assumes a x86-like system with four levels of page tables, but does not exclude other possible designs
 such as five-level page tables. 
 Address translations are performed by the two-level TLB structure, and when the TLB misses, a page walk is conducted
@@ -39,3 +34,14 @@ When the PWC misses, the page table walker will attempt to retrieve the entry fr
 If the translation entry is cached by the hierarchy, the page table walker can still avoid a main memory access
 by reading the entry from the cache.
 Otherwise, the entry is read from the main memory, and inserted into both the cache hierarchy and the PWCs.
+
+The design is based on two critical observations.
+The first observation is that existing radix tree-based page table designs always map radix nodes in 4KB granularity,
+which is also the minimum unit supported by address translation. While larger granularity page mapping for data
+pages are available as huge pages in the form 2MB and 1GB pages, these huge pages are not available 
+for page tables.
+The second observation is that, when the working set is large, or when access locality is low, it is usually 
+the case that both data and translation entries have high cache misses, and hence both constitute performance
+bottlenecks.
+However, compared with data, translation entries have a much smaller data footprint, because an 8-byte entry
+can map at least 4KB of data, a 1:512 ratio.
