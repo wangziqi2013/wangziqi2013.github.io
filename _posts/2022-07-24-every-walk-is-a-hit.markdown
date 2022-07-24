@@ -58,4 +58,23 @@ always warm in the shared LLC. With this simple technique alone, the paper obser
 former thread, despite the extra memory bandwidth consumed by the software approach, proving the correctness
 of the second observation above.
 
+To address the first observation, the paper proposes flattened page table, where two or three consecutive levels 
+of the radix tree are merged to create larger nodes that are backed by huge pages. 
+For example, on a four-level page table, level 4 and level 3 could merge to become a single level,
+requiring 18 bits to index, and all entries are stored in a 2MB huge page, and these entries point to
+the level 4 entry.
+Similarly, level 2 and level 1 could merge in the same manner, reducing the total number of steps in the 
+page walk from four to two.
+Alternatively, the paper suggests that level 3 and level 2 can merge, which reduces the number of steps
+by one, but still beneficial.
+Merging three levels into one is also possible, which creates 1GB huge pages, and reduces the number of steps
+from four to two.
+
+Page table flattening is controlled by the OS, and can be carried out dynamically at a per-entry granularity
+(i.e., whether or not the next level is merged is encoded in the parent entry). 
+This is important, because by
+using huge pages to store page table entries, the OS risks not being to find an aligned physical memory slot
+despite still having abundant fragmented physical memory.
+The paper also notes that, if level 1 and level 2 are merged, then mapping 2MB data pages would require 512
+consecutive entries, instead of one, to be set up in the 2MB page table page.
 
