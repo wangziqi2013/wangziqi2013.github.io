@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. With flattened page table design, how are TLB shootdowns affected? On a related question, how is coherence 
+on the PWC change? I would imagine it not be any issue, because the TLB always stores the mapped data page size
+(rather than page table page size), and PWC is already designed to handle different prefixes.
+
+2. 
+
 This paper proposes a novel page table and MMU co-design that reduces the overhead of address translation misses
 on large working sets.
 The paper is motivated by the fact that today's application generally has working sets at GB or even TB scale, 
