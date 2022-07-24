@@ -78,3 +78,7 @@ despite still having abundant fragmented physical memory.
 The paper also notes that, if level 1 and level 2 are merged, then mapping 2MB data pages would require 512
 consecutive entries, instead of one, to be set up in the 2MB page table page.
 
+In order to support page table flattening, the paper proposes adding two extra bits per entry as well as to
+the root pointer (e.g., CR3 on x86) to indicate whether the next level is merged, and what is the page size
+of the next level. The page table walker can then generate addresses using different bit slices from the virtual
+address to be translated based on this piece of information.
