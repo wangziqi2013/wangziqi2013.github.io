@@ -51,3 +51,11 @@ In fact, according to the paper's calculation, for 8GB of data, the translation 
 which is smaller than a typical LLC on server-grade CPU chips. 
 It is therefore theoretically possible to store all translation entries of the working set in the LLC, resulting in
 100% hit rate of page walks, potentially without reducing data hit rate by much (if data access locality is low).
+
+The paper even conducted a proof-of-concept experiment by running a large workload on one core, and starting another 
+thread on a separate core that repeatedly accesses the translation entries to make sure that these entries are 
+always warm in the shared LLC. With this simple technique alone, the paper observes 5% performance increase of the 
+former thread, despite the extra memory bandwidth consumed by the software approach, proving the correctness
+of the second observation above.
+
+
