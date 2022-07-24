@@ -45,3 +45,9 @@ the case that both data and translation entries have high cache misses, and henc
 bottlenecks.
 However, compared with data, translation entries have a much smaller data footprint, because an 8-byte entry
 can map at least 4KB of data, a 1:512 ratio.
+The paper concludes, therefore, that when the hierarchy suffers high miss rates for both data and the TLB, it is 
+generally much more cost-effective to dedicate more caching storage to translation. 
+In fact, according to the paper's calculation, for 8GB of data, the translation entry will be approximately 16MB,
+which is smaller than a typical LLC on server-grade CPU chips. 
+It is therefore theoretically possible to store all translation entries of the working set in the LLC, resulting in
+100% hit rate of page walks, potentially without reducing data hit rate by much (if data access locality is low).
