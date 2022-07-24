@@ -19,7 +19,10 @@ version_mgmt:
 on the PWC change? I would imagine it not be any issue, because the TLB always stores the mapped data page size
 (rather than page table page size), and PWC is already designed to handle different prefixes.
 
-2. 
+2. Is it possible to allow non-aligned huge pages for page table pages? I mean, the current 8-byte page table 
+entries have enough number of bits to address the next level in 4KB granularity. I did not see any problem
+of not enforcing alignment for huge pages. Although this may complicate OS's buddy allocator, and I think there
+must be a good reason that huge data pages must be aligned.
 
 This paper proposes a novel page table and MMU co-design that reduces the overhead of address translation misses
 on large working sets.
