@@ -107,4 +107,9 @@ To address the second observation, the paper proposes that cache space for trans
 There are two possible ways of achieving this. First, existing cache partitioning technologies already enables 
 applications to monopolize part of the cache. We just need to add simple logic to make it also possible to
 reserve space for translation entries in the partitioned region.
-
+Second, the paper also proposes a mechanism that favors translation entries when selecting eviction victims.
+In the proposed design, the cache replacement algorithm is modified, such that on 99% of times it will only select
+the victim among data blocks. Only in the remaining 1% cases, or when the set is full of translation data, will the 
+algorithm will select the victim among all blocks of the set.
+at least one extra bit should be added to cache tags to indicate whether a block holds to translation entries or not.
+More bits can also be added to serve as context identifier, such that per-context policy can be made.
