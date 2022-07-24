@@ -102,3 +102,9 @@ In order to support page table flattening, the paper proposes adding two extra b
 the root pointer (e.g., CR3 on x86) to indicate whether the next level is merged, and what is the page size
 of the next level. The page table walker can then generate addresses using different bit slices from the virtual
 address to be translated based on this piece of information.
+
+To address the second observation, the paper proposes that cache space for translation entries should be reserved.  
+There are two possible ways of achieving this. First, existing cache partitioning technologies already enables 
+applications to monopolize part of the cache. We just need to add simple logic to make it also possible to
+reserve space for translation entries in the partitioned region.
+
