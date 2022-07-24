@@ -24,4 +24,9 @@ This paper seeks to improve the performance on address translation from two aspe
 steps in page table walk by using huge pages for page tables, and (2) Reducing the latency of each step of 
 page table walk with better caching policies.
 
+The paper observes that existing radix tree-based page table designs always map radix nodes in 4KB granularity,
+which is also the minimum unit supported by address translation. While larger granularity page mapping for data
+pages are available as huge pages in the form 2MB and 1GB pages, these huge pages are not available 
+for page tables.
+
 
