@@ -12,3 +12,13 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a novel page table and MMU co-design that reduces the overhead of address translation misses
+on large working sets.
+The paper is motivated by the fact that today's application generally has working sets at GB or even TB scale, 
+but the capability of hardware to cache translation fails to scale proportionally. 
+As a result, address translation becomes more frequent, and becomes more and more of a performance bottleneck.
+The situation is only worsened by the introduction of virtualization, which requires a 2D page table and nested 
+address translation, and the five-level page table that comes with the bigger virtual address space.
+
+
