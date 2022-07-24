@@ -29,4 +29,8 @@ which is also the minimum unit supported by address translation. While larger gr
 pages are available as huge pages in the form 2MB and 1GB pages, these huge pages are not available 
 for page tables.
 
+The paper assumes a x86-like system with four levels of page tables, but does not exclude other possible designs
+such as five-level page tables. 
+Address translations are performed by the two-level TLB structure, and when the TLB misses, a page walk is conducted
+to retrieve the address translation entry from the page table in the main memory.
 
