@@ -27,6 +27,9 @@ and applies different address generation schemes within a chunk in order to mini
 monitoring the DRAM access pattern of these variables. Then according to the pattern, these variables will be 
 allocated on different chunks, and the pattern will be notified to the hardware on a per-chunk basis.
 
+5. Does the 2MB chunk need to be aligned? I think the paper suggests so by referring to OS buddy allocator.
+In this case, the design would face the same external fragmentation problem as 2MB huge pages do.
+
 **Comments:**
 
 1. Typo "verse versa" on page 5 under "Functional correctness guarantee".
@@ -104,4 +107,11 @@ memory controller stores the mapping from chunks to patterns in a special table,
 On memory accesses, chunk information is retrieved from the CMT, and the address for accessing the device is 
 generated using pattern information stored in the CMT by a hardware unit, the Address Mapping Unit (AMU).
 
-We elaborate the process as follows. On memory allocation time, assuming that the access pattern 
+From the hardware side, memory access pattern is tracked at 2MB chunk granularity. Chunks are registered to hardware
+via software interfaces, and they are stored in the CMT. CMT entries are retrieved on memory accesses to obtain the
+pattern. A small cache may also be added to reduce the latency of CMT access.
+
+
+We elaborate the process as follows. 
+On memory allocation time, assuming that the access pattern is known in advance,
+then the allocation will be fulfilled by 
