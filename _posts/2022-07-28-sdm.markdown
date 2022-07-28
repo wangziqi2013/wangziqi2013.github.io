@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Software-Defined Address Mapping: A Case on 3D Memory"
+date:   2022-07-28 03:51:00 -0500
+categories: paper
+paper_title: "Software-Defined Address Mapping: A Case on 3D Memory"
+paper_link: https://dl.acm.org/doi/10.1145/3503222.3507774
+paper_keyword: 3D Memory; HBM; HMC; DRAM
+paper_year: ASPLOS 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
