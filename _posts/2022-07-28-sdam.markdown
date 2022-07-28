@@ -49,4 +49,7 @@ which is insufficient to capture all access patterns, and the software approach 
 access patterns at page granularity, which might be fine for regular DRAM, but 
 3D memory has row size much smaller than a page.
 
-
+The paper also makes three observations regarding memory access pattern. First, when several different 
+simple patterns are mixed together, the overall access pattern will be dependent on all the individual ones.
+This suggests that an effective scheme must be able to adapt to changing patterns, rather than only using 
+a global pattern. 
