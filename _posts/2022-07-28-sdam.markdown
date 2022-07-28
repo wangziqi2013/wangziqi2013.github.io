@@ -131,4 +131,8 @@ When the pattern is simple, programmer may enter the pattern information at call
 Otherwise, the paper proposes using offline profiling with k-means or machine learning to infer the pattern.
 The profiling process identifies allocation sites in the program, and associates them with the addresses 
 being accessed.
-
+Then a clustering algorithm (e.g., k-means or more complicated ML algorithms) is used to identify the 
+access patterns.
+If a major variable is deemed to have a pattern, then the allocation site of that major variable will be 
+modified to pass the pattern information to the allocator. 
+The modified program can then enjoy the benefits of SDAM as a result of lowered channel contention on the DRAM.
