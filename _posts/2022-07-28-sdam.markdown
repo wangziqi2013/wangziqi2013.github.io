@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Typo "verse versa" on page 5 under "Functional correctness guarantee".
+
 This paper proposes Software-Defined Address Mapping (SADM), a software-hardware co-design aimed at optimizing 
 address mapping for 3D stacked memory.
 The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
