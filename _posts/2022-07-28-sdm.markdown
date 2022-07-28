@@ -23,4 +23,8 @@ access patterns to the same chunk.
 Channel contention is reduced by performing different address mapping for different chunks based on their access 
 patterns.
 
-
+SDM is based on 3D stacked DRAM modules. One of the biggest difference between 3D DRAM and the regular DRAM is 
+that the controller has considerably more channels (32 channels), while having much smaller rows (256 bytes).
+This property opens the opportunity of Channel-Level Parallelism (CLP), where memory requests are interleaved 
+on different channels, such that these requests can be serviced concurrently. 
+With all channels working in parallel, 3D DRAM can deliver much higher peak bandwidth than traditional DRAM modules.
