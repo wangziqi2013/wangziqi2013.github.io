@@ -55,4 +55,6 @@ This suggests that an effective scheme must be able to adapt to changing pattern
 a global pattern. The second observation is that when multiple access patterns co-exist, no global address
 mapping scheme works optimally. This necessitates that a per-pattern address mapping policy, because it is 
 difficult to come up with a one-fit-all policy.
-
+Lastly, the paper also observes that in SPEC, most memory accesses are only caused by a small number of 
+language-level variables, and these variables constitute a large fraction of the application's memory
+footprint. It is therefore sufficient to only focus on these "major variables" and capture their access pattern.
