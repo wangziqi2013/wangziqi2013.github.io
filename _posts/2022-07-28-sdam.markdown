@@ -17,7 +17,11 @@ version_mgmt:
 
 1. Typo "verse versa" on page 5 under "Functional correctness guarantee".
 
-This paper proposes Software-Defined Address Mapping (SADM), a software-hardware co-design aimed at optimizing 
+2. Does the approach require recompilation of existing binaries? The design itself does not seem to
+move data items around in the runtime, so I think the objects must be placed at allocation time, and stay
+there until deallocation.
+
+This paper proposes Software-Defined Address Mapping (SDAM), a software-hardware co-design aimed at optimizing 
 address mapping for 3D stacked memory.
 The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
 physical-to-hardware address mapping scheme. 
@@ -62,3 +66,4 @@ difficult to come up with a one-fit-all policy.
 Lastly, the paper also observes that in SPEC, most memory accesses are only caused by a small number of 
 language-level variables, and these variables constitute a large fraction of the application's memory
 footprint. It is therefore sufficient to only focus on these "major variables" and capture their access pattern.
+
