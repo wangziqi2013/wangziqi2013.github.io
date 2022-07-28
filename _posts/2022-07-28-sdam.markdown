@@ -110,6 +110,9 @@ generated using pattern information stored in the CMT by a hardware unit, the Ad
 From the hardware side, memory access pattern is tracked at 2MB chunk granularity. Chunks are registered to hardware
 via software interfaces, and they are stored in the CMT. CMT entries are retrieved on memory accesses to obtain the
 pattern. A small cache may also be added to reduce the latency of CMT access.
+The physical storage of the DRAM device is also divided into 2MB chunks, and address mapping works independently
+within each chunk according to the pattern. 
+
 
 
 We elaborate the process as follows. 
