@@ -39,6 +39,14 @@ to be handled by channel zero, serializing all memory requests, which causes und
 throughput.
 
 Prior works leverage CLP in both hardware and software. Hardware approaches monitor the address patterns for memory
-requests, and profiles the access pattern using the frequency of bit flips as a metric. 
+requests, and monitors the access pattern using the frequency of bit flips as a metric. 
 Bits that flip the most frequently will be used to constitute the channel address, such that consecutive memory
 accesses are likely to be mapped to different channels, which maximizes CLP.
+Software approaches track memory access pattern at page level, and changes the physical address mapping of pages
+that cause channel contention.  
+The paper notes that neither approach is optimal, because the hardware approach only supports a global policy,
+which is insufficient to capture all access patterns, and the software approach is only able to keep track of 
+access patterns at page granularity, which might be fine for regular DRAM, but 
+3D memory has row size much smaller than a page.
+
+
