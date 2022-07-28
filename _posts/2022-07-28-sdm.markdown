@@ -18,6 +18,9 @@ for 3D stacked memory.
 The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
 physical-to-hardware address mapping scheme. 
 The paper proposes a virtualized, dynamic address remapping scheme that performs address mapping in the unit of
-chunks. 
+chunks. The per-chunk address mapping is configurable, such that software components can cluster data with similar
+access patterns to the same chunk.
+Channel contention is reduced by performing different address mapping for different chunks based on their access 
+patterns.
 
 
