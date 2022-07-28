@@ -29,6 +29,15 @@ This property opens the opportunity of Channel-Level Parallelism (CLP), where me
 on different channels, such that these requests can be serviced concurrently. 
 With all channels working in parallel, 3D DRAM can deliver much higher peak bandwidth than traditional DRAM modules.
 
+Existing 3D DRAM device uses a simple and static address mapping scheme that is initialized at boot time.
+Bit slices of physical addresses are used to address channel, bank, and row.
+The paper presents an example of existing physical address mapping, where the lower bits are used to address 
+channel, the middle bits for bank, and high bits for row.
+Such scheme, however, is vulnerable to access patterns that cause channel contention. 
+For example, if the channel is addressed by the low 4 bits, then an access stride of 16 will cause all memory requests
+to be handled by channel zero, serializing all memory requests, which causes under-utilization and lowers the
+throughput.
+
 Prior works leverage CLP in both hardware and software. Hardware approaches monitor the address patterns for memory
 requests, and profiles the access pattern using the frequency of bit flips as a metric. 
 Bits that flip the most frequently will be used to constitute the channel address, such that consecutive memory
