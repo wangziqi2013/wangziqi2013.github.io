@@ -5,7 +5,7 @@ date:   2022-07-28 03:51:00 -0500
 categories: paper
 paper_title: "Software-Defined Address Mapping: A Case on 3D Memory"
 paper_link: https://dl.acm.org/doi/10.1145/3503222.3507774
-paper_keyword: 3D Memory; HBM; HMC; DRAM
+paper_keyword: 3D Memory; HBM; HMC; DRAM; SDAM
 paper_year: ASPLOS 2022
 rw_set:
 htm_cd:
@@ -13,8 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
-This paper proposes Software-Defined Mapping (SDM), a software-hardware co-design aimed at optimizing address mapping
-for 3D stacked memory.
+This paper proposes Software-Defined Address Mapping (SADM), a software-hardware co-design aimed at optimizing 
+address mapping for 3D stacked memory.
 The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
 physical-to-hardware address mapping scheme. 
 The paper proposes a virtualized, dynamic address remapping scheme that performs address mapping in the unit of
@@ -28,3 +28,8 @@ that the controller has considerably more channels (32 channels), while having m
 This property opens the opportunity of Channel-Level Parallelism (CLP), where memory requests are interleaved 
 on different channels, such that these requests can be serviced concurrently. 
 With all channels working in parallel, 3D DRAM can deliver much higher peak bandwidth than traditional DRAM modules.
+
+Prior works leverage CLP in both hardware and software. Hardware approaches monitor the address patterns for memory
+requests, and profiles the access pattern using the frequency of bit flips as a metric. 
+Bits that flip the most frequently will be used to constitute the channel address, such that consecutive memory
+accesses are likely to be mapped to different channels, which maximizes CLP.
