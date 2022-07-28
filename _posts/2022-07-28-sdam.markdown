@@ -44,6 +44,12 @@ wouldn't you also change the access pattern? So to which extent are the profilin
 I think if the major variables are big arrays, then the pattern is unlikely to change, and the problem is
 just a matter of allocating big arrays from the corresponding chunk pool.
 
+5. The method seems to work better for large array-of-struct allocation. But how does it work for smaller allocations?
+What if the program's working set consists of millions or billions of small objects? In this case, the objects will
+be grouped together on allocator's internal arenas.
+How does software profiling figure out the pattern in this case?
+Note that variables are heavily aliased, if pointers are used to traverse through these objects.
+
 This paper proposes Software-Defined Address Mapping (SDAM), a software-hardware co-design aimed at optimizing 
 address mapping for 3D stacked memory.
 The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
@@ -98,4 +104,4 @@ memory controller stores the mapping from chunks to patterns in a special table,
 On memory accesses, chunk information is retrieved from the CMT, and the address for accessing the device is 
 generated using pattern information stored in the CMT by a hardware unit, the Address Mapping Unit (AMU).
 
-
+We elaborate the process as follows. On memory allocation time, assuming that the access pattern 
