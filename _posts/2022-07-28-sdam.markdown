@@ -23,6 +23,9 @@ on strided patterns.
 3. Hardware can be designed in a way that it leverages pattern information from software in the unit of 2MB chunks,
 and applies different address generation schemes within a chunk in order to minimize channel contention. 
 
+4. Software can find the access pattern by first identifying the major variables in the program, and then
+monitoring the DRAM access pattern of these variables. Then according to the pattern, these variables will be 
+allocated on different chunks, and the pattern will be notified to the hardware on a per-chunk basis.
 
 **Comments:**
 
