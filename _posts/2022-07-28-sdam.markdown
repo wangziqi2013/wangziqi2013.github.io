@@ -67,3 +67,12 @@ Lastly, the paper also observes that in SPEC, most memory accesses are only caus
 language-level variables, and these variables constitute a large fraction of the application's memory
 footprint. It is therefore sufficient to only focus on these "major variables" and capture their access pattern.
 
+The paper proposes SDAM that works as a software-hardware co-design.
+From software's perspective, data items that have similar access patterns are identified by offline profiling,
+and then allocated on the same 2MB memory chunks. 
+Meanwhile, the software notifies the memory controller of the access pattern of a particular chunk, and the 
+memory controller stores the mapping from chunks to patterns in a special table, called the Chunk Mapping Table (CMT).
+On memory accesses, chunk information is retrieved from the CMT, and the address for accessing the device is 
+generated using pattern information stored in the CMT by a hardware unit, the Address Mapping Unit (AMU).
+
+
