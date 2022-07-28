@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. 3D Stacked DRAM has many more channels and much smaller rows, which makes channel contention a problem especially
+on strided patterns.
+
+2. Global address mapping schemes based on bit flip frequency does not work well because there can be mixed patterns.
+
+
+
 **Comments:**
 
 1. Typo "verse versa" on page 5 under "Functional correctness guarantee".
