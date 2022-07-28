@@ -20,6 +20,8 @@ on strided patterns.
 
 2. Global address mapping schemes based on bit flip frequency does not work well because there can be mixed patterns.
 
+3. Hardware can be designed in a way that it leverages pattern information from software in the unit of 2MB chunks,
+and applies different address generation schemes within a chunk in order to minimize channel contention. 
 
 
 **Comments:**
