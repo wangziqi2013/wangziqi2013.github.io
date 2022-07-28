@@ -126,3 +126,9 @@ and that they accept pattern information from the application, and passes them t
 Applications allocate memory by calling malloc() with an extra argument describing pattern information. 
 The allocator fulfills the allocation from one of the 256 heaps based on the pattern information,
 such that objects that share an access pattern will also be on the same 2MB chunk.
+
+When the pattern is simple, programmer may enter the pattern information at call sites of malloc().
+Otherwise, the paper proposes using offline profiling with k-means or machine learning to infer the pattern.
+The profiling process identifies allocation sites in the program, and associates them with the addresses 
+being accessed.
+
