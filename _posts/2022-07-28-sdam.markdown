@@ -52,4 +52,7 @@ access patterns at page granularity, which might be fine for regular DRAM, but
 The paper also makes three observations regarding memory access pattern. First, when several different 
 simple patterns are mixed together, the overall access pattern will be dependent on all the individual ones.
 This suggests that an effective scheme must be able to adapt to changing patterns, rather than only using 
-a global pattern. 
+a global pattern. The second observation is that when multiple access patterns co-exist, no global address
+mapping scheme works optimally. This necessitates that a per-pattern address mapping policy, because it is 
+difficult to come up with a one-fit-all policy.
+
