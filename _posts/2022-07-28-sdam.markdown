@@ -17,9 +17,18 @@ version_mgmt:
 
 1. Typo "verse versa" on page 5 under "Functional correctness guarantee".
 
-2. Does the approach require recompilation of existing binaries? The design itself does not seem to
-move data items around in the runtime, so I think the objects must be placed at allocation time, and stay
-there until deallocation.
+2. Does the approach work on existing binaries? I think it is possible by using an instrumented malloc() library,
+but the design is meant to be used in a scenario that you have the binary and can conveniently modify it, or at
+least the memory allocation sites of major variables.
+
+3. What happens after profiling? Do you identify the major variables, and manually change the source
+code such that these variables are allocated to the corresponding chunks?
+Can this be further automated such that the information is passed to the allocator by the profiler?
+
+4. The results look promising, so I guess the method works well. But if you change the allocation pattern,
+wouldn't you also change the access pattern? So to which extent are the profiling results representative?
+I think if the major variables are big arrays, then the pattern is unlikely to change, and the problem is
+just a matter of allocating big arrays from the corresponding chunk pool.
 
 This paper proposes Software-Defined Address Mapping (SDAM), a software-hardware co-design aimed at optimizing 
 address mapping for 3D stacked memory.
