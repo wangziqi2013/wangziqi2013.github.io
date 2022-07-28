@@ -120,3 +120,9 @@ On the software side, both the OS and the user-space heap memory allocator are m
 The OS gives away physical pages to allocators in 2MB chunks (e.g., as a huge page), and tracks chunk's pattern
 information in its internal virtual memory data structure.
 The user-space allocator maintains a heap for each of the 256 patterns.
+The implementation of the allocator is unchanged, except that they request memory from the OS in 2MB chunks,
+and that they accept pattern information from the application, and passes them to the OS when allocating pages
+(i.e., on mmap() system calls).
+Applications allocate memory by calling malloc() with an extra argument describing pattern information. 
+The allocator fulfills the allocation from one of the 256 heaps based on the pattern information,
+such that objects that share an access pattern will also be on the same 2MB chunk.
