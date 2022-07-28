@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Software-Defined Mapping (SDM), a software-hardware co-design aimed at optimizing address mapping
+for 3D stacked memory.
+The paper is motivated by the channel contention problem in high-performance 3D memory introduced by the static 
+physical-to-hardware address mapping scheme. 
+The paper proposes a virtualized, dynamic address remapping scheme that performs address mapping in the unit of
+chunks. 
+
+
