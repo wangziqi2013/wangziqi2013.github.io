@@ -73,10 +73,17 @@ contend resource with the application.
 
 Second, in order to reliably find 1GB memory chunks, the paper proposes that Trident should keep compacting pages
 in the background to create 1GB memory chunks. 
-In the naive solution, Trident attempts to free up 1GB chunks by scanning the entire physical address allocation map,
+In the naive approach, Trident attempts to free up 1GB chunks by scanning the entire physical address allocation map,
 and then moving as many physical pages as possible to create consecutive 1GB physical memory chunks.
-This approach, however, is agnostic to the copy overhead and unmovable pages (e.g., pages for kernel data structures). 
+This approach, however, is agnostic to data copy overhead as well as unmovable pages 
+(e.g., pages for kernel data structures). 
 Trident improves the naive approach by tracking the amount of allocated memory and the number of unmovable data 
 for every 1GB page frame.
-Page compaction is prioritizes for those that do not have unmovable contents, and with the minimum amount of 
+Page compaction is prioritized for those that do not have unmovable contents, and with the minimum amount of 
 data to copy.
+
+Third, when 1GB physical memory chunk cannot be allocated, Trident will fall back to using 2MB pages for a virtual
+memory region mapped as 1GB page, instead of directly using 4KB. 
+Trident can hence extract the most benefit out of huge pages, rather than just benefiting from 1GB huge page.
+
+
