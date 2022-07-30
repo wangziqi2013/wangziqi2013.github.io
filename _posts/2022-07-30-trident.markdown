@@ -20,4 +20,8 @@ the hardware resource dedicated to it.
 The paper proposes a software mechanism that enables applications to leverage 1GB huge pages for better performance,
 with a combination of techniques to ensure that large 1GB addresses can be efficiently found.
 
+The paper points out that there are currently two ways of leveraging huge pages. 
+First, huge pages can be mapped explicitly using a helper library, most notably libHugetlbfs, and the OS will set up
+the mapping eagerly by allocating 2MB or 1GB chunks or physical memory, and mapping the corresponding virtual
+addresses to it.
 
