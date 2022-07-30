@@ -86,4 +86,7 @@ Third, when 1GB physical memory chunk cannot be allocated, Trident will fall bac
 memory region mapped as 1GB page, instead of directly using 4KB. 
 Trident can hence extract the most benefit out of huge pages, rather than just benefiting from 1GB huge page.
 
-
+The paper also proposes Trident-PV, which is a paravirtualizing technique based on Trident that allows virtualized 
+guests to copy data around with zero copy overhead.
+The Trident-PV design is based on the fact that 1GB physical chunks can be created easily in a virtualized guest without
+any data copy, since the virtualized guest physical memory is actually further mapped by the host page table.
