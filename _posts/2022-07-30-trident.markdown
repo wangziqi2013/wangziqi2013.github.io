@@ -50,3 +50,10 @@ virtual address ranges are just fragmented as memory is allocated and deallocate
 Besides, only supporting 1GB and 4KB pages is also sub-optimal, because frequent page faults are observed for 
 the 4KB regions. The paper hence concludes as all three page sizes should be leveraged in order to delivery optimal 
 performance.
+
+The paper then presents Trident as a software mechanism that enables 1GB huge pages to applications. 
+Trident is implemented as an OS kernel addition, and it works with libHugetlbfs.
+Instead of eagerly allocating huge pages to applications as in the current ligHugetlbfs implementation, Trident allows
+applications to map 1GB pages explicitly in the user space, and then lazily back them with 1GB physical memory chunk
+on page faults, just like how traditional 4KB pages are backed by physical memory. 
+
