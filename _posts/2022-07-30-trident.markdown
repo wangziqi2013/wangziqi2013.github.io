@@ -65,3 +65,8 @@ Trident addresses several issues that will occur during 1GB page allocation.
 First, the paper observes that zeroing out the 1GB page lies on the critical path. For 4KB pages, the cost of
 zeroing out is minimal, due to the small page size. For 1GB pages, however, zeroing out would consume numerous 
 cycles and memory bandwidth.
+The paper therefore proposes a background zeroing scheme where 1GB pages are zeroed out by a kernel thread
+in the background, once they are found. The kernel thread may utilize idle resources when the application is 
+inactive (e.g., waiting for I/O).
+This way, the overhead of zeroing out pages not only is removed from the critical path, but also does not 
+contend resource with the application.
