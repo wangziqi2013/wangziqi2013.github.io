@@ -90,3 +90,9 @@ The paper also proposes Trident-PV, which is a paravirtualizing technique based 
 guests to copy data around with zero copy overhead.
 The Trident-PV design is based on the fact that 1GB physical chunks can be created easily in a virtualized guest without
 any data copy, since the virtualized guest physical memory is actually further mapped by the host page table.
+To leverage this observation, Trident-PV adds a hyper-call interface to the virtualization platform that enables 
+the guest to inform the host of the data copy.
+On receiving the hyper-call, the host satisfies the request by simply updating its page table to remap guest 
+physical memory as specified in the request.
+The overhead of the hyper-call can also be amortized by batching all memory copy requests for compaction of a 1GB page
+in a single call.
