@@ -36,3 +36,9 @@ As a result, when the amount of memory mapped with 1GB pages exceed the maximum 
 TLB thrashing would occur, which degrades performance.
 Lastly, software support for 1GB huge pages is difficult to build, mostly because finding large 1GB chunks of physical
 memory is challenging, and often poses a great overhead due to the amount of data copy involved.
+
+The paper also conducted studies on 1GB huge pages on a variety of applications, by enabling 1GB huge pages via static
+allocation using libHugetlbfs. 
+The paper presents two observations. First, 1GB huge pages help improve performance for many applications, and the 
+performance improvement is more prominent in a virtualized environment. 
+
