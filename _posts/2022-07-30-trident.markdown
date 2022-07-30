@@ -45,4 +45,8 @@ This is not surprising, because 1GB huge pages reduces both the number of TLB mi
 the same amount of mapped memory, and it reduces the steps of page walk when TLB misses occur.
 Furthermore, in virtualized environments, the cost of TLB misses are even larger, as every step of page walk in the 
 guest will now be a full walk in the host as well, which explains the increased benefits.
-
+The second observation is that 1GB pages alone are not sufficient to map a process's address space, since many 
+virtual address ranges are just fragmented as memory is allocated and deallocated incrementally.
+Besides, only supporting 1GB and 4KB pages is also sub-optimal, because frequent page faults are observed for 
+the 4KB regions. The paper hence concludes as all three page sizes should be leveraged in order to delivery optimal 
+performance.
