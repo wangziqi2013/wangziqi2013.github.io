@@ -19,7 +19,9 @@ version_mgmt:
 are more difficult to allocate, the compaction process should take into account unmovable pages and 
 the amount of data copy. Trident implements this feature using two counters per 1GB frame.
 
-2. 
+2. Page-level data copy is less expensive for a virtualized guest, because this can be done by the host changing
+its address mapping for the guest, making it ideal for page compaction. 
+This feature requires a paravirtualization interface that allows the guest to communicate the intent to the host.
 
 This paper presents Trident, an OS kernel mechanism that enables 1GB huge pages for general applications.
 The paper is motivated by the fact that today's processor's 1GB huge page support is largely wasted due to not being
