@@ -34,3 +34,5 @@ only using 2MB pages.
 Second, in earlier processor models, there was only a very limited number of TLB entries for 1GB pages.
 As a result, when the amount of memory mapped with 1GB pages exceed the maximum supported on hardware,
 TLB thrashing would occur, which degrades performance.
+Lastly, software support for 1GB huge pages is difficult to build, mostly because finding large 1GB chunks of physical
+memory is challenging, and often poses a great overhead due to the amount of data copy involved.
