@@ -24,4 +24,7 @@ The paper points out that there are currently two ways of leveraging huge pages.
 First, huge pages can be mapped explicitly using a helper library, most notably libHugetlbfs, and the OS will set up
 the mapping eagerly by allocating 2MB or 1GB chunks or physical memory, and mapping the corresponding virtual
 addresses to it.
+Second, huge pages may also be leveraged in the background by an OS kernel thread compacting data pages into 2MB
+chunks, and then mapping user space memory using 2MB huge pages whenever it is possible.
+This approach is implemented in the Linux kernel as Transparent Huge Page (THP), but only 2MB huge pages are supported.
 
