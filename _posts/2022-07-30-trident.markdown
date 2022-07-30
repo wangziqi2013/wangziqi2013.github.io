@@ -31,3 +31,6 @@ This approach is implemented in the Linux kernel as Transparent Huge Page (THP),
 The paper then lists several reasons that 1GB huge pages are not widely adopted.
 First, there lacks sufficient evidence to show the performance benefits brought by 1GB huge pages, compared with 
 only using 2MB pages.
+Second, in earlier processor models, there was only a very limited number of TLB entries for 1GB pages.
+As a result, when the amount of memory mapped with 1GB pages exceed the maximum supported on hardware,
+TLB thrashing would occur, which degrades performance.
