@@ -52,7 +52,7 @@ the 4KB regions. The paper hence concludes as all three page sizes should be lev
 performance.
 
 The paper then presents Trident as a software mechanism that enables 1GB huge pages to applications. 
-Trident is implemented as an OS kernel addition, and it works with libHugetlbfs.
+Trident is implemented as an OS kernel component, and it works with libHugetlbfs.
 Instead of eagerly allocating huge pages to applications as in the current ligHugetlbfs implementation, Trident allows
 applications to map 1GB pages explicitly in the user space, and then lazily back them with 1GB physical memory chunk
 on page faults, just like how traditional 4KB pages are backed by physical memory. 
@@ -61,4 +61,7 @@ and efficiently find 1GB memory chunks lazily page faults.
 This task is generally non-trivial as physical memory tends to become more and more fragmented as the system 
 allocates and releases memory.
 
-Trident addresses several challenges of 
+Trident addresses several issues that will occur during 1GB page allocation.
+First, the paper observes that zeroing out the 1GB page lies on the critical path. For 4KB pages, the cost of
+zeroing out is minimal, due to the small page size. For 1GB pages, however, zeroing out would consume numerous 
+cycles and memory bandwidth.
