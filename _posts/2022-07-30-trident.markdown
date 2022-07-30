@@ -70,3 +70,9 @@ in the background, once they are found. The kernel thread may utilize idle resou
 inactive (e.g., waiting for I/O).
 This way, the overhead of zeroing out pages not only is removed from the critical path, but also does not 
 contend resource with the application.
+
+Second, in order to reliably find 1GB memory chunks, the paper proposes that Trident should keep compacting pages
+in the background to create 1GB memory chunks. 
+In the naive solution, Trident attempts to free up 1GB chunks by scanning the entire physical address allocation map,
+and then moving as many physical pages as possible to create consecutive 1GB physical memory chunks.
+
