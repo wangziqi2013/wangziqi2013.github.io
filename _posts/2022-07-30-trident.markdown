@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Trident, an OS kernel mechanism that enables 1GB huge pages for general applications.
+The paper is motivated by the fact that today's processor's 1GB huge page support is largely wasted due to not being
+used in most applications. Meanwhile, users are still penalized even if the support is not enabled because of 
+the hardware resource dedicated to it.
+The paper proposes a software mechanism that enables applications to leverage 1GB huge pages for better performance,
+with a combination of techniques to ensure that large 1GB addresses can be efficiently found.
+
+
