@@ -56,4 +56,9 @@ Trident is implemented as an OS kernel addition, and it works with libHugetlbfs.
 Instead of eagerly allocating huge pages to applications as in the current ligHugetlbfs implementation, Trident allows
 applications to map 1GB pages explicitly in the user space, and then lazily back them with 1GB physical memory chunk
 on page faults, just like how traditional 4KB pages are backed by physical memory. 
+The paper states that the biggest challenge of implementing Trident is hence to reliably 
+and efficiently find 1GB memory chunks lazily page faults.
+This task is generally non-trivial as physical memory tends to become more and more fragmented as the system 
+allocates and releases memory.
 
+Trident addresses several challenges of 
