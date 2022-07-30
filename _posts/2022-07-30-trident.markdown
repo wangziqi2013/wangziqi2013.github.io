@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Trident: Harnessing Architectural Resources for All Page Sizes in x86 Processors"
+date:   2022-07-30 12:44:00 -0500
+categories: paper
+paper_title: "Trident: Harnessing Architectural Resources for All Page Sizes in x86 Processors"
+paper_link: https://dl.acm.org/doi/pdf/10.1145/3466752.3480062
+paper_keyword: TLB; Huge Page; Virtual Memory; Trident; THP
+paper_year: MICRO 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
