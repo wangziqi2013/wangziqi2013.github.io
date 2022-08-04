@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Illuminator, a virtual memory technique that reduces the overhead of memory compaction for 
+Transparent Huge Pages (THP).
+Illuminator is motivated by the inefficient implementation of memory compaction in current Linux kernel THP caused by 
+unmovable kernel pages. 
+The paper proposes that memory compaction should be done with unmovable pages taken into consideration such that the
+kernel does not attempt to allocate huge 2MB pages with unmovable 4KB pages allocated in it.
