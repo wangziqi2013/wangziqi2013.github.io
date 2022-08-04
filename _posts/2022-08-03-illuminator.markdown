@@ -18,7 +18,8 @@ version_mgmt:
 1. Are all 2MB chunks in the hybrid pool checked on every compaction? If compaction is expensive, then this seems
 to be of little overhead, though. 
 
-2. 
+2. How does Illuminator know the number of kernel and non-kernel pages on a chunk? Does it add new counters to the 
+per-chunk structure?
 
 This paper proposes Illuminator, a virtual memory technique that reduces the overhead of memory compaction for 
 Transparent Huge Pages (THP).
