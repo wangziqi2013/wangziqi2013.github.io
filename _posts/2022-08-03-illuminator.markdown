@@ -29,3 +29,9 @@ In THP, aligned 2MB physical memory chunks need to be allocated to back 2MB virt
 always possible, given that the physical memory can often be fragmented, in which case there is sufficient amount of
 memory, but no consecutive 2MB physical chunks exist.
 
+To deal with fragmentation, the kernel uses a kernel thread, khugepaged, to periodically compact pages by copying 
+valid baseline pages from 2MB chunks to be selected for allocation into other 2MB chunks that still have free 
+baseline page slots.
+Since the virtual memory system hides the physical address for user space programs, the page compaction process is
+transparent to application programs.
+
