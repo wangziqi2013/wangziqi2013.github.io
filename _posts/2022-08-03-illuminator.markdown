@@ -34,4 +34,10 @@ valid baseline pages from 2MB chunks to be selected for allocation into other 2M
 baseline page slots.
 Since the virtual memory system hides the physical address for user space programs, the page compaction process is
 transparent to application programs.
+This process, however, cannot move pages that contain kernel data structures, because kernel refers to its own data 
+structure using a special virtual address range that direct-maps the entire physical address space.
+The virtual-to-physical mapping in this direct-mapped region is hardwired, and cannot be changed even for page 
+compaction. 
+As a result, khugepaged cannot allocate 2MB chunk, if the chunk contains an unmovable page.
+
 
