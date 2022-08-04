@@ -45,4 +45,11 @@ mechanism described as follows.
 All physical 2MB frames are divided into two pools, one "unmovable pool" that contains 2MB chunks that are likely to
 contain at least one unmovable baseline pages, and a "movable pool" that contains 2MB chunks that are unlikely 
 to contain any unmovable page.
-
+Initially, all 2MB chunks in the system are added to the movable pool. When the kernel requests a page from one of the 
+2MB chunks, if the chunk is still in the movable pool, then it is moved to the unmovable pool.
+Unmovable allocations are satisfied by chunks in the unmovable pool, unless the pool is full, in which case a 
+chunk from the movable pool is used.
+Similarly, non-kernel allocations are satisfied from the movable pool, unless the pool is full, in which case a 
+chunk from the unmovable pool is used, and that chunk is moved into the movable pool.
+In addition, page free does not change the pool a chunk belongs to, because that would require scanning all
+pages in the chunk, which is a time consuming task, and it lies on the critical path of the buddy allocator.
