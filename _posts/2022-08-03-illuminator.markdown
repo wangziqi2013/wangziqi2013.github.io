@@ -75,3 +75,12 @@ pages, Illuminator adds a new hybrid pool, which consists of chunks that contain
 Kernel page allocation will always be fulfilled from the unmovable pool first, and if it fails, then from the 
 hybrid pool. The allocation will only be satisfied from a unmovable pool chunk if the first two both fail, in
 which case the chunk is moved to the hybrid pool.
+Illuminator therefore minimizes fragmentation by always allocating from the hybrid pool before turning to the 
+unmovable pool.
+
+To reduce the latency of synchronous page compaction, Illuminator only selects a chunk as the candidate for page
+compaction if the chunk is in the movable pool, which is guaranteed to only contain movable pages. 
+Pages in the hybrid and unmovable pool contain, meanwhile, may contain movable pages, but they are also likely
+to contain unmovable pages, making them bad candidates for compaction.
+
+
