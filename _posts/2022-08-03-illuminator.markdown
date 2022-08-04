@@ -17,10 +17,15 @@ version_mgmt:
 
 1. Existing memory compaction mechanism suffers from fragmented address space, which affects the success rate of 
 allocating 2MB chunks, and unmovable pages that contain kernel data structures, which incurs wasted work and 
-increases the latency of synchronous compaction. This is caused by current algorithm only uses two lists 
+increases the latency of synchronous compaction. This is caused by current algorithm only uses two pools 
 (movable and unmovable) to track chunk status, which lacks essential information to guide allocation and compaction.
 
-2. 
+2. Illuminator uses three pools to also track the status of hybrid chunks, in addition to movable and unmovable 
+chunks. Page allocation is fulfilled from unmovable chunks first, and from hybrid, if fails.
+Page compaction avoids chunks in both unmovable and hybrid pools because they are likely to contain
+unmovable pages.
+
+
 
 **Comments:**
 
