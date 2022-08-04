@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Are all 2MB chunks in the hybrid pool checked on every compaction? If compaction is expensive, then this seems
+to be of little overhead, though. 
+
+2. 
+
 This paper proposes Illuminator, a virtual memory technique that reduces the overhead of memory compaction for 
 Transparent Huge Pages (THP).
 Illuminator is motivated by the inefficient implementation of memory compaction in current Linux kernel THP caused by 
@@ -84,7 +91,9 @@ Pages in the hybrid and unmovable pool contain, meanwhile, may contain movable p
 to contain unmovable pages, making them bad candidates for compaction.
 
 As movable and unmovable pages are freed, the hybrid pool chunks may become qualified for the unmovable or movable pool.
-This checks is performed during compaction, where the compaction process also tests the number of movable and 
+This check is performed during compaction, where the compaction process also tests the number of movable and 
 unmovable pages for every chunk in the hybrid pool.
 If a chunk only contains kernel pages, then it will be moved to the unmovable pool. Otherwise, if a chunk only contains
 non-kernel pages, then the chunk will be moved to the movable pool.
+
+
