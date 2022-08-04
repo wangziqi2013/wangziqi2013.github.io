@@ -53,3 +53,9 @@ Similarly, non-kernel allocations are satisfied from the movable pool, unless th
 chunk from the unmovable pool is used, and that chunk is moved into the movable pool.
 In addition, page free does not change the pool a chunk belongs to, because that would require scanning all
 pages in the chunk, which is a time consuming task, and it lies on the critical path of the buddy allocator.
+
+The paper points out two issues with the above memory compaction process.
+First, the process does not minimize fragmentation, causing many pages to be unmovable, since it lacks information on
+how unmovable pages are distributed on each chunk.
+As a result, 2MB allocation will be less likely to succeed compared with the case where fragmentation is minimized.
+Second, fragmentation will cause the latency of synchronous compaction (which happens during page fault) to increase.
