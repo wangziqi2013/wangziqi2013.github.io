@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Existing memory compaction mechanism suffers from fragmented address space, which affects the success rate of 
+allocating 2MB chunks, and unmovable pages that contain kernel data structures, which incurs wasted work and 
+increases the latency of synchronous compaction.
+
 **Comments:**
 
 1. Are all 2MB chunks in the hybrid pool checked on every compaction? If compaction is expensive, then this seems
