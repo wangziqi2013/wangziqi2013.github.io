@@ -68,3 +68,7 @@ The last issue is that Linux kernel adopts RCU to allow concurrent access to sha
 the lifespan of pages containing objects that are accessed by RCU, since it delays the actual deallocation of objects 
 only till after the grace period, which prevents pages containing those objects from being freed to the page allocator.
 
+To address all these issues, the paper proposes Illuminator, which improves over the current implementation by having
+three pools, instead of two, to better distinguish between 2MB chunks. 
+In addition to the movable and movable pools, which consist of chunks that consist of all unmovable and all movable 
+pages, Illuminator adds a new hybrid pool, which consists of chunks that contain both movable and unmovable pages.
