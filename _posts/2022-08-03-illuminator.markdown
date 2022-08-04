@@ -72,3 +72,6 @@ To address all these issues, the paper proposes Illuminator, which improves over
 three pools, instead of two, to better distinguish between 2MB chunks. 
 In addition to the movable and movable pools, which consist of chunks that consist of all unmovable and all movable 
 pages, Illuminator adds a new hybrid pool, which consists of chunks that contain both movable and unmovable pages.
+Kernel page allocation will always be fulfilled from the unmovable pool first, and if it fails, then from the 
+hybrid pool. The allocation will only be satisfied from a unmovable pool chunk if the first two both fail, in
+which case the chunk is moved to the hybrid pool.
