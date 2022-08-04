@@ -25,7 +25,9 @@ chunks. Page allocation is fulfilled from unmovable chunks first, and from hybri
 Page compaction avoids chunks in both unmovable and hybrid pools because they are likely to contain
 unmovable pages.
 
+3. Hybrid chunks can be periodically moved to movable or unmovable pools at page compaction time. 
 
+4. The slab allocator can integrate with RCU for more timely memory recycling and to reduce page allocation.
 
 **Comments:**
 
