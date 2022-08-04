@@ -23,4 +23,9 @@ kernel does not attempt to allocate huge 2MB pages with unmovable 4KB pages allo
 The paper points out that there are two ways 2MB huge pages (which is what the paper mainly focuses on) can be 
 utilized by the software stack. The first is libhugetlbfs, which requires explicit software collaboration, and 
 runtime information on memory access patterns. 
+The second is Transparent Huge Page (THP), which is a kernel functionality that attempts to map existing baseline pages 
+(i.e., 4KB standard pages) using 2MB huge pages without user intervention. 
+In THP, aligned 2MB physical memory chunks need to be allocated to back 2MB virtual pages. This task, however, is not
+always possible, given that the physical memory can often be fragmented, in which case there is sufficient amount of
+memory, but no consecutive 2MB physical chunks exist.
 
