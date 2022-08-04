@@ -54,9 +54,9 @@ chunk from the unmovable pool is used, and that chunk is moved into the movable 
 In addition, page free does not change the pool a chunk belongs to, because that would require scanning all
 pages in the chunk, which is a time consuming task, and it lies on the critical path of the buddy allocator.
 
-The paper points out two issues with the above memory compaction process.
-First, the process does not minimize fragmentation, causing many pages to be unmovable, since it lacks information on
-how unmovable pages are distributed on each chunk.
+The paper points out three issues with the above memory compaction process.
+First, the process does not minimize fragmentation, causing many pages to be unmovable, since the two pools both 
+lack information on how unmovable pages are distributed on each chunk.
 As a result, 2MB allocation will be less likely to succeed compared with the case where fragmentation is minimized.
 Second, fragmentation will cause the latency of synchronous compaction (which happens during page fault) to increase.
 This is because a chunk containing one or more unmovable pages will fail to be compacted, which wastes all compaction 
@@ -64,3 +64,7 @@ efforts that have been spent on the page.
 Note that this increased overhead can, in fact, be prevented by the kernel by checking the status of all
 baseline pages in the 2MB chunk before the compaction begins. The paper claims that the kernel design appears to
 choose to allow the longer latency as a trade-off for less future fragmentation.
+The last issue is that Linux kernel adopts RCU to allow concurrent access to shared memory objects. RCU will increase
+the lifespan of pages containing objects that are accessed by RCU, since it delays the actual deallocation of objects 
+only till after the grace period, which prevents pages containing those objects from being freed to the page allocator.
+
