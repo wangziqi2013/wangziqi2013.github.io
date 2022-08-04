@@ -59,3 +59,8 @@ First, the process does not minimize fragmentation, causing many pages to be unm
 how unmovable pages are distributed on each chunk.
 As a result, 2MB allocation will be less likely to succeed compared with the case where fragmentation is minimized.
 Second, fragmentation will cause the latency of synchronous compaction (which happens during page fault) to increase.
+This is because a chunk containing one or more unmovable pages will fail to be compacted, which wastes all compaction 
+efforts that have been spent on the page.
+Note that this increased overhead can, in fact, be prevented by the kernel by checking the status of all
+baseline pages in the 2MB chunk before the compaction begins. The paper claims that the kernel design appears to
+choose to allow the longer latency as a trade-off for less future fragmentation.
