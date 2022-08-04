@@ -40,4 +40,9 @@ The virtual-to-physical mapping in this direct-mapped region is hardwired, and c
 compaction. 
 As a result, khugepaged cannot allocate 2MB chunk, if the chunk contains an unmovable page.
 
+To increase the chance that 2MB chunks can be successfully allocated, current system uses some fragmentation reduction
+mechanism described as follows. 
+All physical 2MB frames are divided into two pools, one "unmovable pool" that contains 2MB chunks that are likely to
+contain at least one unmovable baseline pages, and a "movable pool" that contains 2MB chunks that are unlikely 
+to contain any unmovable page.
 
