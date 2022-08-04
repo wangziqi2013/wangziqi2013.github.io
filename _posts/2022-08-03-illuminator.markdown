@@ -17,7 +17,10 @@ version_mgmt:
 
 1. Existing memory compaction mechanism suffers from fragmented address space, which affects the success rate of 
 allocating 2MB chunks, and unmovable pages that contain kernel data structures, which incurs wasted work and 
-increases the latency of synchronous compaction.
+increases the latency of synchronous compaction. This is caused by current algorithm only uses two lists 
+(movable and unmovable) to track chunk status, which lacks essential information to guide allocation and compaction.
+
+2. 
 
 **Comments:**
 
