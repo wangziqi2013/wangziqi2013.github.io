@@ -113,3 +113,9 @@ still hardcoded, such that banks can still operate in parallel to read 256 bits 
 The tag array itself is also 2x over-provisioned, such that at most twice as much data as an uncompressed cache may
 be stored in the compressed cache.
 
+Compression is performed at block insertion time by deduplicating every individual 64-bit value in the block
+using existing values stored in the arrays. If an identical value is found, then the 64-bit word in the newly 
+inserted line is not stored, but rather, the tag entry just stores the physical location of the existing value.
+In order to find potentially duplicated value, a search is performed on the array and on all other 
+banks on the same index. This is essentially deduplicating the value using values on the same offset from 
+another cache block on the same way but in different sets, or on a different way.
