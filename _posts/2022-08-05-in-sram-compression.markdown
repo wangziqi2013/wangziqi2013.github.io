@@ -30,7 +30,9 @@ same data bus.
 tag comparison. In the compressed cache, the in-array and the way number physical location needs to be 
 stored for every bank, to allow the compressed word to be stored in another location.
 
-
+4. Compression can be performed in the granularity of 64-bit words, by comparing the word with words that are 
+physically close to it in the array or from an adjacent array. If the values match, the word is deduplicated by
+directing the explicitly stored physical location of the word to the existing word.
 
 **Comments:**
 
