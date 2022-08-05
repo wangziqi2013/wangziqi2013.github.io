@@ -20,3 +20,7 @@ as a scratchpad, and base the design on such an abstraction. In reality, however
 is not a flat storage structure, but instead, consists of smaller units that can be separately addressed
 and may share control and/or data signal, which can complicates a seemingly simple design using the 
 flat storage abstraction.
+Besides, in these designs, the unit of compression is typically cache blocks. If a cache block is 
+compressed using another block as the reference, then both blocks must be fetched and decompressed 
+at access time. Both operations will incur extra latency on the read critical path, and as a result,
+the benefits of compression diminish.
