@@ -119,3 +119,8 @@ inserted line is not stored, but rather, the tag entry just stores the physical 
 In order to find potentially duplicated value, a search is performed on the array and on all other 
 banks on the same index. This is essentially deduplicating the value using values on the same offset from 
 another cache block on the same way but in different sets, or on a different way.
+The search space can be flexible, as long as they can be addressed by the tag and do not
+prevent from all banks from operating in parallel.
+If the value cannot be duplicated, then it will be allocated a physical location in the tag entry's 
+addressable range. This requires extra allocation logic as in a conventional compressed cache.
+
