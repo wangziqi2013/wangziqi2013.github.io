@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. In Xeon LLC slice, set data of a single way is distributed over 4 banks. Cache blocks are stored as 
+individual 64-bit words in SRAM arrays.
+Within each bank, 64-bit words from adjacent sets are stored in the same array physically next to each other.
+Banks on the same index from different ways share the same data bus, and only one bank on the same
+data bus can be active at a time.
+
+
 **Comments:**
 
 1. The metadata overhead on the tag array is huge. Given 2048 sets and 8 ways (the example of Xeon LLC slice
