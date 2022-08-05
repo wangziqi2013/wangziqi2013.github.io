@@ -27,3 +27,7 @@ compressed using another block as the reference, then both blocks must be fetche
 at access time. Both operations will incur extra latency on the read critical path, and as a result,
 the benefits of compression diminish.
 
+This paper proposes a different way of performing compression, which builds compression and decompression 
+logic within the SRAM access logic. Besides, the unit of compression is designed in a way that is consistent
+with the granularity of storage and data indexing, which both simplifies the design, and allows finer grained 
+compression.
