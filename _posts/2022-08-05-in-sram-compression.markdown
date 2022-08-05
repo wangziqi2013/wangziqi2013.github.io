@@ -18,9 +18,12 @@ physical organization of SRAM storage elements to perform compression and indexi
 The paper is motivated by the fact that most existing cache compression designs only treat the data array
 as a scratchpad, and base the design on such an abstraction. In reality, however, the cache's data array
 is not a flat storage structure, but instead, consists of smaller units that can be separately addressed
-and may share control and/or data signal, which can complicates a seemingly simple design using the 
-flat storage abstraction.
+and may share control and/or data signal. 
+The storage organization of caches can complicate a seemingly simple design using the flat storage abstraction,
+because data is indexed in a particular pattern that may or may not be compatible with the access pattern
+required by the compressed cache.
 Besides, in these designs, the unit of compression is typically cache blocks. If a cache block is 
 compressed using another block as the reference, then both blocks must be fetched and decompressed 
 at access time. Both operations will incur extra latency on the read critical path, and as a result,
 the benefits of compression diminish.
+
