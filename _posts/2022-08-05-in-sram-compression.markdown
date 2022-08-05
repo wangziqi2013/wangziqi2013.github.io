@@ -26,6 +26,12 @@ granularity of 64-bit words, since words from different blocks on adjacent sets 
 Similarly, inter-way can also be done because words different blocks on adjacent ways are accessed via the 
 same data bus.
 
+3. In the baseline cache, the physical location of a word is determined by the set index and way number from
+tag comparison. In the compressed cache, the in-array and the way number physical location needs to be 
+stored for every bank, to allow the compressed word to be stored in another location.
+
+
+
 **Comments:**
 
 1. The metadata overhead on the tag array is huge. Given 2048 sets and 8 ways (the example of Xeon LLC slice
