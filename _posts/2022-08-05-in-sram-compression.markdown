@@ -31,3 +31,10 @@ This paper proposes a different way of performing compression, which builds comp
 logic within the SRAM access logic. Besides, the unit of compression is designed in a way that is consistent
 with the granularity of storage and data indexing, which both simplifies the design, and allows finer grained 
 compression.
+
+The compression design is based on the last-level cache organization in Xeon processor, which we describe as follows.
+In Xeon, the LLC is partitioned into slices by cache sets, and each core has its own slice.
+Each cache slice can be considered as a separate cache in our context, because each slide has its own storage 
+elements and access logic.
+Each way of a slice is implemented as a column, which contains all sets in that way, and each column is 
+divided into four banks. 
