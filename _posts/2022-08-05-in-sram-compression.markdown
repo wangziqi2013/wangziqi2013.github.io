@@ -59,3 +59,10 @@ upper half or lower half in the current access cycle.
 When the set index is given, and the array is selected, each array will read either the high 32 bits 
 or low 32 bits from the corresponding location indicated by set index, and then the result will be
 concatenated and sent to the 64-bit data bus.
+**Note:** The above description simplifies the actual implementation. In the actual implementation, one 
+single SRAM unit may not be able to hold a 64-bit word for all sets. In this case, more than one SRAM array
+is employed, and set index is further decoded into an array selection and offset within the selected array.
+The paper uses an example with 256 * 256 bit array, where the row size is 512, and each row stores a 64-bit
+word for four sets, and each array can store data for 1024 sets.
+The slice, however, consists of 2048 sets, meaning that two arrays are needed for 64-bit words on all sets, and
+each bank actually consists of four SRAM arrays.
