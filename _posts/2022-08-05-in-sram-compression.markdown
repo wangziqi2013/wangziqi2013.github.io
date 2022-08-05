@@ -54,3 +54,8 @@ Within a bank, the 128-bit data is stored as two 64-bit words in two separate SR
 Each SRAM array stores the 64-bit word for all sets in the slice, and they operate in parallel.
 Unfortunately, since the data bus per array is only 64 bits in width, only half of the word from each 
 array will be read on each access.
+The cache controller, therefore, must also generate an extra signal to specify whether to read the 
+upper half or lower half in the current access cycle. 
+When the set index is given, and the array is selected, each array will read either the high 32 bits 
+or low 32 bits from the corresponding location indicated by set index, and then the result will be
+concatenated and sent to the 64-bit data bus.
