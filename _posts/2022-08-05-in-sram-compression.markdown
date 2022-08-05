@@ -48,3 +48,9 @@ specifies the lower or the upper half of the cache block to be accessed.
 Note that since all banks on the same index from different ways share the same control signal and data bus,
 at most one way (i.e., the selected way) can be active at a given time.
 
+As mentioned earlier, the 512-bit cache block is stored in four banks, and each bank is responsible for 
+128-bit of data. 
+Within a bank, the 128-bit data is stored as two 64-bit words in two separate SRAM arrays. 
+Each SRAM array stores the 64-bit word for all sets in the slice, and they operate in parallel.
+Unfortunately, since the data bus per array is only 64 bits in width, only half of the word from each 
+array will be read on each access.
