@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The metadata overhead on the tag array is huge. Given 2048 sets and 8 ways (the example of Xeon LLC slice
+in the paper), 11+3=14 bits are needed for every bank, and that is 56 extra bits per tag entry solely for indexing.
+By contrast, on a conventional compressed cache with 4-byte segment, only segment index (7 bits) and compressed 
+size (7 bits) are added per tag, which only sums up to 14 extra bits.
+
 This paper proposes in-SRAM data compression, a novel cache compression technique that leverages the 
 physical organization of SRAM storage elements to perform compression and indexing of compressed data.
 The paper is motivated by the fact that most existing cache compression designs only treat the data array
