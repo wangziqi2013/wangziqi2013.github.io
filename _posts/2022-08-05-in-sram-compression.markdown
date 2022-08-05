@@ -124,3 +124,10 @@ prevent from all banks from operating in parallel.
 If the value cannot be duplicated, then it will be allocated a physical location in the tag entry's 
 addressable range. This requires extra allocation logic as in a conventional compressed cache.
 
+When a dirty write back from the upper level updates an existing block in the LLC, the block is removed by
+removing all 64-bit words from all banks, recompressed, and then re-inserted.
+When a block is evicted from the LLC, all 64-bit words are removed, and the tag entry is invalidated.
+To perform garbage collection for 64-bit words that are not referred to by any valid block, an extra reference 
+count array is maintained for every 64-bit word. The reference count is decremented when a block referring to the 
+64-bit word is removed from the cache. A slot with the reference count being zero can be allocated to fulfill
+insertion requests.
