@@ -38,3 +38,7 @@ Each cache slice can be considered as a separate cache in our context, because e
 elements and access logic.
 Each way of a slice is implemented as a column, which contains all sets in that way, and each column is 
 divided into four banks. 
+Bank operate independently from each other, and each bank has its own access logic, which can read or write 
+64 bit data on the data bus in a single cycle. Banks on the same index from different ways share a data bus.
+Overall, the cache slide has four 64-bit data buses, shared among banks from different ways.
+
