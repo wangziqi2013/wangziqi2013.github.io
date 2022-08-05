@@ -21,6 +21,10 @@ Within each bank, 64-bit words from adjacent sets are stored in the same array p
 Banks on the same index from different ways share the same data bus, and only one bank on the same
 data bus can be active at a time.
 
+2. The above data organization creates an opportunity for inter-set compression at the 
+granularity of 64-bit words, since words from different blocks on adjacent sets are stored next to each other.
+Similarly, inter-way can also be done because words different blocks on adjacent ways are accessed via the 
+same data bus.
 
 **Comments:**
 
