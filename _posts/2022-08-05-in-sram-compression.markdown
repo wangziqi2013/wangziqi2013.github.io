@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes in-SRAM data compression, a novel cache compression technique that leverages the 
+physical organization of SRAM storage elements to perform compression and indexing of compressed data.
+The paper is motivated by the fact that most existing cache compression designs only treat the data array
+as a scratchpad, and base the design on such an abstraction. In reality, however, the cache's data array
+is not a flat storage structure, but instead, consists of smaller units that can be separately addressed
+and may share control and/or data signal, which can complicates a seemingly simple design using the 
+flat storage abstraction.
