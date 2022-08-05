@@ -38,8 +38,12 @@ directing the explicitly stored physical location of the word to the existing wo
 
 1. The metadata overhead on the tag array is huge. Given 2048 sets and 8 ways (the example of Xeon LLC slice
 in the paper), 11+3=14 bits are needed for every bank, and that is 56 extra bits per tag entry solely for indexing.
+This scheme assumes full search on the entire array and on all ways. The paper suggests that the search can be 
+restricted to only a small number of sets, which can reduce metadata cost, but still, 4x physical pointers are needed.
 By contrast, on a conventional compressed cache with 4-byte segment, only segment index (7 bits) and compressed 
 size (7 bits) are added per tag, which only sums up to 14 extra bits.
+Besides, the reference count (which also serves as the allocation map) are some big sources of extra metadata, 
+which the paper does not even quantify.
 
 This paper proposes in-SRAM data compression, a novel cache compression technique that leverages the 
 physical organization of SRAM storage elements to perform compression and indexing of compressed data.
@@ -108,3 +112,4 @@ Note that the bank index and the array index (i.e., the extra one-bit control si
 still hardcoded, such that banks can still operate in parallel to read 256 bits in a single cycle.
 The tag array itself is also 2x over-provisioned, such that at most twice as much data as an uncompressed cache may
 be stored in the compressed cache.
+
