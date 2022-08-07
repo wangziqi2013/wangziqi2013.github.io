@@ -66,3 +66,8 @@ no way selection logic), then the cache controller computes whether both blocks 
 checking whether the number of uncompressed words exceed the data slot capacity.
 If both blocks can fit, then no eviction happens, and the tag entry is set accordingly. 
 Otherwise, the existing line is evicted, and the tag entry is replaced using the newly inserted block.
+
+If the process modifies a block, the cache controller checks whether the words being affected can remain in its
+current form. If the modification causes a compressed word to become incompressable, then a new word is 
+allocated from the data array slot, and the new word is written to that location. The tag is also updated accordingly
+to reflect the change.
