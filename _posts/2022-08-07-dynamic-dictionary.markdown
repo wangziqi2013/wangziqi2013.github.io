@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. The major challenge of implementing dynamic dictionaries is to preserve entries that are still being
+used from eviction. In other words, data dependency from cache blocks to dictionary entries must be preserved 
+in some way.
+
+
+
 **Comments:**
 
 1. Even with decaying, it is still possible that the dictionary is fully utilized, and no entry can be evicted.
