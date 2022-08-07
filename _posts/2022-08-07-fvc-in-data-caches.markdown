@@ -41,4 +41,7 @@ the dictionary entry index that the word is compressed with.
 The word's value is not stored in the data array in this case.
 Otherwise, if the word is uncompressed, then the 1-bit status is "0", and the 3-bit metadata stores the offset
 of the word in the data array slot.
+On a lookup hit, if the cache access requests a word that is compressed, then the value is provided by the 
+dictionary, and the data array is not accessed. Otherwise, the value is read from the data array using the 
+metadata field.
 
