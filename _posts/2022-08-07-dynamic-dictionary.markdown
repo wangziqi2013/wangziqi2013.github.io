@@ -19,7 +19,11 @@ version_mgmt:
 used from eviction. In other words, data dependency from cache blocks to dictionary entries must be preserved 
 in some way.
 
-
+2. This paper proposes using decay period to evict both "dead" blocks that have not been accessed for a 
+long period, and to evict dictionary entries that are not being used.
+The essence is that when a block is being used, all dictionary entries that are used to compress the block
+is refreshed (i.e., will not be evicted at the end of the decay period).
+Data dependency is tracked at the decay period boundary in a similar way to epoch-based garbage collection.
 
 **Comments:**
 
