@@ -17,3 +17,9 @@ This paper proposes Dynamic Frequent Value Cache (DFVC), a compressed L1 cache d
 dictionary. The paper is motivated by the ineffectiveness of statically generated cache as proposed in earlier works.
 The paper proposes a dynamic dictionary scheme that enables low-cost dependency tracking between compressed data
 and dictionary entry in which both dictionary entries and cache blocks periodically "decay" using a global counter.
+
+The paper begins by recognizing dictionary compression as an effective method for improving L1 access performance.
+L1 caches are latency sensitive as it is directly connected to the CPU. L1 cache compression therefore must use a
+low-latency decompression algorithm such that the access latency of compressed blocks is not affected.
+Dictionary compression is an ideal candidate under this criterion, because decompression is simply just reading
+the dictionary structure (which can be implemented as a register file) using the index.
