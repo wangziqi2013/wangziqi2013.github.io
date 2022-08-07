@@ -23,3 +23,8 @@ L1 caches are latency sensitive as it is directly connected to the CPU. L1 cache
 low-latency decompression algorithm such that the access latency of compressed blocks is not affected.
 Dictionary compression is an ideal candidate under this criterion, because decompression is simply just reading
 the dictionary structure (which can be implemented as a register file) using the index.
+
+Previous works (as of the time of writing), however, only adopts static dictionary design, where the dictionary is 
+generated beforehand by profiling the top K most frequent values in the workload memory. 
+After the top K values are is generated, it will be loaded into the hardware dictionary, and then used throughout 
+the rest of the execution.
