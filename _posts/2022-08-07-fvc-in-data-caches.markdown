@@ -18,7 +18,10 @@ version_mgmt:
 1. This design is statically-mapped tag-data entries + 2x over-provisioned tag array to achieve an best-effort
 2x compression. Every data array slot can host at most 2 logic blocks due to the static mapping.
 
+2. The data array is still segmented, and uncompressed words are stored like individual segments.
+The tag array must be able to index each individual uncompressed word, with a per-word "mask" field.
 
+3. Compressed words are directly encoded by the tag array rather than being stored in the data array.
 
 This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
