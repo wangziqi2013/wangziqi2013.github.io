@@ -29,6 +29,12 @@ The tag array must be able to index each individual uncompressed word, with a pe
 In contrast, a regular segmented cache design assumes that segments are stored in a consecutive range
 of segments, and therefore only a begin index field and a size field are needed.
 
+2. This design requires serialized tag data access, both for compressed and uncompressed words. This will
+increase L1 access cycle by at least one cycle, not to mention the extra delay of accessing the dictionary.
+**On a second thought**, this is not a concern. For compressed words, dictionary access can be conducted in parallel
+with tag access (dictionary is very small, so this is doable). 
+For compressed words, just read data array as in a regular cache.
+
 This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
 set and memory traffic.
