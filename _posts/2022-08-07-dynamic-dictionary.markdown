@@ -75,7 +75,11 @@ The system maintains the invariant that a dictionary entry will remain valid, as
 using the entry is accessed at least once during the last decay period. 
 
 We describe the design as follows. To track the decay status, every cache block and dictionary entry has an extra
-bit indicating whether they have been accessed since the last delay period. 
+"access" bit indicating whether they have been accessed since the last delay period. 
 The cache controller also maintains a timer that periodically fires at the end of delay periods. 
 The paper suggests that the decay period should be a few thousand cycles (8000 cycles in the evaluation)
-
+When the timer fires, the cache controller checks the "access" bit of all blocks and dictionary entries, and 
+those that are not set will be evicted. 
+This operation is conducted atomically to avoid opening a vulnerability window in which the dictionary 
+entry is evicted, but the corresponding block has not yet been evicted, causing data corruption when the 
+block is accessed.
