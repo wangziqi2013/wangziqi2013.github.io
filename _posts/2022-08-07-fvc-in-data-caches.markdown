@@ -53,3 +53,9 @@ If both blocks described by the two tag array entries can be compressed to less 
 then the two blocks are stored in the same data array slot. Otherwise, only one tag entry is used, and the block
 is stored in completely uncompressed form.
 
+A compressed block is stored in the data array as an array of uncompressed words in that block. Compressed 
+words do not need to be stored, as they are already encoded in the "mask" fields of the tag array.
+The uncompressed words also do not need to be stored with a per-determined order. In fact, the "mask"
+fields for uncompressed words allow them to be stored in arbitrary locations of the data slot, 
+as long as the metadata bits in the "mask" fields can address them.
+Correspondingly, the cache controller logic must be able to allocate storage of data array slots in word granularity.
