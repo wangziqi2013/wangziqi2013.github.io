@@ -94,3 +94,8 @@ compressed code words of a block, and the second part stores uncompressed code w
 compressed by the dictionary, then only the first smaller data store is accessed, saving the energy for 
 access the second. However, if a block has one or more uncompressed words, the second data bank is accessed,
 which incurs extra latency.
+The second design aims at increasing effective cache size. It duplicates the tag entries per data slot, which enables
+two compressed blocks to be stored in the same data slot whenever possible. 
+Compressed words within a block are encoded by the tag array metadata, while uncompressed words are stored in the 
+data array, and indexed by the tag entry.
+Performance can be potentially improved because the cache stores more logical blocks than the uncompressed one. 
