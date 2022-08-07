@@ -23,6 +23,12 @@ The tag array must be able to index each individual uncompressed word, with a pe
 
 3. Compressed words are directly encoded by the tag array rather than being stored in the data array.
 
+**Comments:**
+
+1. The metadata overhead is huge, because every individual word in the block needs its own indexing.
+In contrast, a regular segmented cache design assumes that segments are stored in a consecutive range
+of segments, and therefore only a begin index field and a size field are needed.
+
 This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
 set and memory traffic.
