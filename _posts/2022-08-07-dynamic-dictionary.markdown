@@ -28,3 +28,8 @@ Previous works (as of the time of writing), however, only adopts static dictiona
 generated beforehand by profiling the top K most frequent values in the workload memory. 
 After the top K values are is generated, it will be loaded into the hardware dictionary, and then used throughout 
 the rest of the execution.
+While such a design greatly simplifies the dictionary logic, it has severe usability problems. First, generating 
+the dictionary entries in software requires profiling runs, and is hence cumbersome to deploy.
+Second, the dictionary is only sampled from a single application's memory image, while in reality, the values 
+will be a mixture from different applications running on the same machine. The dictionary, however, is not 
+context sensitive, and cannot adapt to multiple contexts running in the system.
