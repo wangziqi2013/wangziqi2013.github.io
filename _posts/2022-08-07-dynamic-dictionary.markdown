@@ -74,4 +74,8 @@ Dictionary entries are also evicted by decaying, with the same decay parameter a
 The system maintains the invariant that a dictionary entry will remain valid, as long as any cache block
 using the entry is accessed at least once during the last decay period. 
 
+We describe the design as follows. To track the decay status, every cache block and dictionary entry has an extra
+bit indicating whether they have been accessed since the last delay period. 
+The cache controller also maintains a timer that periodically fires at the end of delay periods. 
+The paper suggests that the decay period should be a few thousand cycles (8000 cycles in the evaluation)
 
