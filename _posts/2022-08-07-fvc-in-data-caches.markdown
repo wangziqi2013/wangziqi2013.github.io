@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. This design is statically-mapped tag-data entries + 2x over-provisioned tag array to achieve an best-effort
+2x compression. Every data array slot can host at most 2 logic blocks due to the static mapping.
+
+
+
 This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
 set and memory traffic.
