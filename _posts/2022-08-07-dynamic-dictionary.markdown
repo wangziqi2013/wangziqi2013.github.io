@@ -83,3 +83,7 @@ those that are not set will be evicted.
 This operation is conducted atomically to avoid opening a vulnerability window in which the dictionary 
 entry is evicted, but the corresponding block has not yet been evicted, causing data corruption when the 
 block is accessed.
+Per-block "access" bits are updated when the block is accessed.
+In addition, the "access" bits of all dictionary entries that are used to compress the block are also updated,
+to reflect the fact that these entries must remain valid for the next decay period, because the block that needs them
+will be either.
