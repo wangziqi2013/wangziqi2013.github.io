@@ -40,9 +40,13 @@ useless and largely invalidate the statically generated dictionary.
 A hardware dynamically-generated dictionary, on the other hand, does not have the above issues, because the 
 hardware can automatically and continuously monitor the workload's data pattern, and update the dictionary
 contents according to the most recent observed values, rather than based on a small number of static samples.
-The major challenge, however, is to determine how and when to evict dictionary entries.
+The major challenge is therefore to determine how and when to evict dictionary entries.
 Entry eviction is necessary for dynamic dictionary designs, because for large workloads, the dictionary is likely
 fully utilized. Being able to evict less used entries from the dictionary is a critical part for adapting to the 
 workload's data pattern.
 
-The paper points out, however, that dictionary entry eviction cannot be done arbitrarily. 
+The paper points out, however, that dictionary entry eviction cannot be done arbitrarily. If an entry is evicted
+while there are still cache blocks compressed with the entry, then the cache block data will be corrupted, because
+the block cannot be restored to its original uncompressed content.
+Maintaining cross references between dictionary entries and cache blocks would also be a bad decision, because of 
+the intolerable metadata cost.
