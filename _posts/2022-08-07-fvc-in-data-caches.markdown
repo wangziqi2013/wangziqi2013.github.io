@@ -45,3 +45,7 @@ On a lookup hit, if the cache access requests a word that is compressed, then th
 dictionary, and the data array is not accessed. Otherwise, the value is read from the data array using the 
 metadata field.
 
+Tag entries and data array slots still maintain a one-to-one static mapping, i.e., every tag array entry only has
+one statically associated data array slot.
+To enable the compressed to store more logic blocks than the capacity of the data array, every data array slot
+is associated with two tag array entries (i.e., the tag array is 2x over-provisioned).
