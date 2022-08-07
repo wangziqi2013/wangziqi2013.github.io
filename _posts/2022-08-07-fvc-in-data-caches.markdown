@@ -50,8 +50,7 @@ one statically associated data array slot.
 To enable the compressed to store more logic blocks than the capacity of the data array, every data array slot
 is associated with two tag array entries (i.e., the tag array is 2x over-provisioned).
 If both blocks described by the two tag array entries can be compressed to less than half of the slot size,
-then the two blocks are stored in the same data array slot. Otherwise, only one tag entry is used, and the block
-is stored in completely uncompressed form.
+then the two blocks are stored in the same data array slot. Otherwise, only one tag entry is used.
 
 A compressed block is stored in the data array as an array of uncompressed words in that block. Compressed 
 words do not need to be stored, as they are already encoded in the "mask" fields of the tag array.
@@ -59,3 +58,11 @@ The uncompressed words also do not need to be stored with a per-determined order
 fields for uncompressed words allow them to be stored in arbitrary locations of the data slot, 
 as long as the metadata bits in the "mask" fields can address them.
 Correspondingly, the cache controller logic must be able to allocate storage of data array slots in word granularity.
+
+When a block is to be inserted, the block is compressed first by comparing every 32-bit value with dictionary entries.
+Only uncompressed values need to be allocated storage in the data slot.
+If an existing line is already occupying the data slot (note: this paper assumes direct-mapped cache, so there is
+no way selection logic), then the cache controller computes whether both blocks can fit in the data slot by
+checking whether the number of uncompressed words exceed the data slot capacity.
+If both blocks can fit, then no eviction happens, and the tag entry is set accordingly. 
+Otherwise, the existing line is evicted, and the tag entry is replaced using the newly inserted block.
