@@ -33,3 +33,5 @@ the dictionary entries in software requires profiling runs, and is hence cumbers
 Second, the dictionary is only sampled from a single application's memory image, while in reality, the values 
 will be a mixture from different applications running on the same machine. The dictionary, however, is not 
 context sensitive, and cannot adapt to multiple contexts running in the system.
+Lastly, many applications exhibit phased behavior. Values samples from one phase, despite being representative 
+for that phase, may not be representative for other phases. This behavior can render the dictionary entries mostly useless and largely invalidate the statically generated dictionary.
