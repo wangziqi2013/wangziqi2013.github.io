@@ -34,4 +34,9 @@ Second, the dictionary is only sampled from a single application's memory image,
 will be a mixture from different applications running on the same machine. The dictionary, however, is not 
 context sensitive, and cannot adapt to multiple contexts running in the system.
 Lastly, many applications exhibit phased behavior. Values samples from one phase, despite being representative 
-for that phase, may not be representative for other phases. This behavior can render the dictionary entries mostly useless and largely invalidate the statically generated dictionary.
+for that phase, may not be representative for other phases. This behavior can render the dictionary entries mostly 
+useless and largely invalidate the statically generated dictionary.
+
+A hardware dynamically-generated dictionary, on the other hand, does not have the above issues, because the 
+hardware can automatically and continuously monitor the workload's data pattern, and update the dictionary
+contents according to the most recent observed values, rather than based on a small number of static samples.
