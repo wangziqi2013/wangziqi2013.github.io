@@ -35,6 +35,9 @@ increase L1 access cycle by at least one cycle, not to mention the extra delay o
 with tag access (dictionary is very small, so this is doable). 
 For compressed words, just read data array as in a regular cache.
 
+3. Every global pattern table / base cache / dictionary design has this problem: The dictionary or whatever
+structure is not scalable, and is insensitive to program contexts.
+
 This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
 set and memory traffic.
