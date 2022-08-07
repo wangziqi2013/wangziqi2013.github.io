@@ -50,3 +50,11 @@ while there are still cache blocks compressed with the entry, then the cache blo
 the block cannot be restored to its original uncompressed content.
 Maintaining cross references between dictionary entries and cache blocks would also be a bad decision, because of 
 the intolerable metadata cost.
+
+To address the challenge, the paper proposes using the decay cache design, in which cache blocks are proactively
+evicted after a long period of non-activity, instead of on-demand as in a regular cache.
+Dictionary entries are also evicted by decaying, with the same decay parameter as cache blocks. 
+The system maintains the invariant that a dictionary entry will remain valid, as long as any cache block
+using the entry is accessed at least once during the last decay period. 
+
+
