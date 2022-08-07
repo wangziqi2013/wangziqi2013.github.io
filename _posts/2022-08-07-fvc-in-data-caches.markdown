@@ -29,3 +29,11 @@ Only a small number of values are needed. For example, the paper suggests that e
 more than 50% of the working set for six out of the ten applications in in SPECint95.
 When the frequent values are determined, they are loaded into the hardware dictionary, and will remain there for the 
 rest of the execution to serve as the compression and decompression reference.
+
+The paper focuses on direct-mapped compressed caches, but the design principle generally applies to set-associative
+caches as well.
+each tag array entry is extended with N "mask" field where N is the number of 32-bit words per cache block.
+Each "mask" field describes the compression status of the word, as well as compression metadata.
+With an eight-entry dictionary, each "mask" field consists of a 1-bit status bit to indicate whether the word is
+compressed, and a 3-bit metadata field.
+
