@@ -76,4 +76,5 @@ If an uncompressed word is modified with another incompressible value, then noth
 modification is applied to the data array.
 The paper also specifically points out that the cache controller will not attempt to compress the new value, when 
 an uncompressed word is modified with a value in the dictionary, in order to simplify hardware design.
-
+The paper also notes that changes of compressibility on processor modifications are relatively rare.
+It is therefore not a worthy trade-off to make with extra hardware complications.
