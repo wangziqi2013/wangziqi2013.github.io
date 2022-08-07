@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Frequent Value Compression in L1 data cache. The paper is motivated by frequent value locality,
+a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
+set and memory traffic.
+The design leverages a static dictionary, and encodes values in the cache blocks using dictionary entries. 
+
+
