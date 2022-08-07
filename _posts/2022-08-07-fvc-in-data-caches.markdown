@@ -23,3 +23,9 @@ than the uncompressed value.
 Effective cache size is hence increased by storing two compressed cache blocks into the same slot whenever possible,
 achieving a maximum effective compression ratio of 2x.
 
+In order to collect frequent values, the paper proposes using software profiling to scan the memory image of the 
+application and identify the most frequently occurring values.
+Only a small number of values are needed. For example, the paper suggests that eight values are sufficient to cover
+more than 50% of the working set for six out of the ten applications in in SPECint95.
+When the frequent values are determined, they are loaded into the hardware dictionary, and will remain there for the 
+rest of the execution to serve as the compression and decompression reference.
