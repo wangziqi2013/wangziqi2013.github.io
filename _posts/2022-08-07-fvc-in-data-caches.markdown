@@ -36,4 +36,9 @@ each tag array entry is extended with N "mask" field where N is the number of 32
 Each "mask" field describes the compression status of the word, as well as compression metadata.
 With an eight-entry dictionary, each "mask" field consists of a 1-bit status bit to indicate whether the word is
 compressed, and a 3-bit metadata field.
+When the word is stored in a compressed form, then the 1-bit status is "1", and the 3-bit metadata stores 
+the dictionary entry index that the word is compressed with. 
+The word's value is not stored in the data array in this case.
+Otherwise, if the word is uncompressed, then the 1-bit status is "0", and the 3-bit metadata stores the offset
+of the word in the data array slot.
 
