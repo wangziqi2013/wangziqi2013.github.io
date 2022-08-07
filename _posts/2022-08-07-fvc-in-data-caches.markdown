@@ -17,5 +17,9 @@ This paper proposes Frequent Value Compression in L1 data cache. The paper is mo
 a data phenomenon that a small number of frequently occurring values constitute a large portion of a program's working
 set and memory traffic.
 The design leverages a static dictionary, and encodes values in the cache blocks using dictionary entries. 
-
+Since the dictionary is expected to generally capture a large portion of values in the 
+cache block, these values can be represented by the index of the dictionary entry, which needs a smaller number of bits
+than the uncompressed value. 
+Effective cache size is hence increased by storing two compressed cache blocks into the same slot whenever possible,
+achieving a maximum effective compression ratio of 2x.
 
