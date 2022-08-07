@@ -71,3 +71,9 @@ If the process modifies a block, the cache controller checks whether the words b
 current form. If the modification causes a compressed word to become incompressable, then a new word is 
 allocated from the data array slot, and the new word is written to that location. The tag is also updated accordingly
 to reflect the change.
+If a compressed word is modified with another compressible value, then only the "mask" field is updated.
+If an uncompressed word is modified with another incompressible value, then nothing happens, and the 
+modification is applied to the data array.
+The paper also specifically points out that the cache controller will not attempt to compress the new value, when 
+an uncompressed word is modified with a value in the dictionary, in order to simplify hardware design.
+
