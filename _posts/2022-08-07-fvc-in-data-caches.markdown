@@ -49,3 +49,7 @@ Tag entries and data array slots still maintain a one-to-one static mapping, i.e
 one statically associated data array slot.
 To enable the compressed to store more logic blocks than the capacity of the data array, every data array slot
 is associated with two tag array entries (i.e., the tag array is 2x over-provisioned).
+If both blocks described by the two tag array entries can be compressed to less than half of the slot size,
+then the two blocks are stored in the same data array slot. Otherwise, only one tag entry is used, and the block
+is stored in completely uncompressed form.
+
