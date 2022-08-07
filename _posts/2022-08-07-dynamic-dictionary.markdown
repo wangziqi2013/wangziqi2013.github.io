@@ -87,3 +87,10 @@ Per-block "access" bits are updated when the block is accessed.
 In addition, the "access" bits of all dictionary entries that are used to compress the block are also updated,
 to reflect the fact that these entries must remain valid for the next decay period, because the block that needs them
 will be either.
+
+The paper also proposes two compressed L1 designs based on the dynamic dictionary. 
+The first design aims at saving energy, and it divides the data bank into two parts. The first part stores 
+compressed code words of a block, and the second part stores uncompressed code words. If a block can be fully
+compressed by the dictionary, then only the first smaller data store is accessed, saving the energy for 
+access the second. However, if a block has one or more uncompressed words, the second data bank is accessed,
+which incurs extra latency.
