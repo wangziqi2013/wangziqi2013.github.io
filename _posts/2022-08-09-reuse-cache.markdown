@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Reuse Cache, a last-level cache (LLC) design that selectively caches data only when they are
+reused and thus saves storage. The design is based on the observation that most cache blocks in the LLC are useless
+(i.e., will not see reference during their lifetime), and that even for useful blocks, cache hits are only concentrated 
+on a small subset of them. 
