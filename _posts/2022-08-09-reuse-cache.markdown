@@ -42,6 +42,11 @@ Based on this assumption, the RRIP algorithm improves over LRU with two major di
 First, when a block is first-time accessed and inserted into the cache, instead of inserting the new block 
 at the head of the LRU chain as in LRU, the block is inserted into the middle of the LRU chain. 
 This operation indicates that newly inserted block is only predicted as having a moderate re-reference distance.
-
+Second, when a block is accessed by the upper level (i.e., sees a re-reference), instead of immediately moving the 
+block to the head of the LRU chain as in LRU, the block is only moved towards the head by one step.
+This operation implies that the more re-references a block sees, the more unlikely the block is evicted, as 
+a result of being closer to the LRU head.
+In practice, due to prohibitively high hardware cost of maintaining precise LRU information, the cache implementation
+usually adopts narrow counters to approximate the LRU chain.
 
 The paper begins by pointing out that while LRU is a good indication of re-use distance on 
