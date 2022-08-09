@@ -49,4 +49,14 @@ a result of being closer to the LRU head.
 In practice, due to prohibitively high hardware cost of maintaining precise LRU information, the cache implementation
 usually adopts narrow counters to approximate the LRU chain.
 
-The paper begins by pointing out that while LRU is a good indication of re-use distance on 
+This paper confirms the underlying theory of RRIP via experiments.
+In the first experiment, the cache is periodically scanned to count the number of "live" blocks, i.e., blocks 
+that see at least one re-reference before being evicted.
+The experiment shows that only a small fraction of blocks are actually live, while most blocks do not see any
+re-reference and hence fail to provide performance benefit.
+Besides, it is also shown that re-reference distance-based replacement algorithms generally perform better than LRU, 
+and can keep more live blocks in the LLC.
+
+
+This paper extends the basic RRIP idea by further avoiding caching blocks that have low re-reference counts in the 
+data array. 
