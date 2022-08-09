@@ -84,3 +84,10 @@ cleared. Eviction decisions are made randomly for blocks having the NRR bit brin
 reset all block's NRR bit to 1, and then a random tag entry is evicted from the set.
 Meanwhile, data slots are evicted using either NRR or a variant using the Clock algorithm.
 As mentioned earlier, the range for victim search on the data array is dependent on associativity.
+The Reuse Cache enables decoupled replacement of tag array entries and data slots.
+When a tag entry is evicted, the corresponding data slot is also invalidated.
+However, when a data slot is replaced, the corresponding tag entry is not invalidated. Instead, the 
+cache controller follows the back pointer of the data slot to find the tag entry, and then sets its coherence
+state to a special value to indicate that the tag is valid, but block data is not present.
+
+
