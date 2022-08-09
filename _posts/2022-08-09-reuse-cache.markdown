@@ -39,6 +39,9 @@ To fix this issue, Intel proposes and implements RRIP, which predicts the re-ref
 the number of re-references it has already seen in the past. In other words, if a block sees frequent re-references,
 then it is likely that the block will also be re-referenced in the future.
 Based on this assumption, the RRIP algorithm improves over LRU with two major differences.
+First, when a block is first-time accessed and inserted into the cache, instead of inserting the new block 
+at the head of the LRU chain as in LRU, the block is inserted into the middle of the LRU chain. 
+This operation indicates that newly inserted block is only predicted as having a moderate re-reference distance.
 
 
 The paper begins by pointing out that while LRU is a good indication of re-use distance on 
