@@ -27,4 +27,7 @@ the cache itself, and the reduction of memory traffic as a result of lowered mis
 Meanwhile, little attention is given to the bandwidth saving aspect of compression via transferring data blocks in
 compressed form, which also effectively reduces memory traffic, because less number of bits are transferred for
 compressed blocks.
-
+In addition, cache compression may also cooperate with main memory compression to further expand the 
+logical capacity of main memory storage.
+The latter requires extra metadata and memory controller logic, and this paper solely focuses on leveraging the 
+first opportunity, i.e., reducing memory bandwidth consumption by transferring blocks in compressed form.
