@@ -78,3 +78,7 @@ way the data slot set index is generated).
 The tag array runs NRR (Not Recently Reused) replacement algorithm.
 Each tag entry has a single bit indicating whether the entry is re-referenced after being inserted 
 (value being 0) or not (value being 1). 
+When a new entry is inserted, the NRR bit is set to 1, and when the block is accessed again, the NRR bit is
+cleared. Eviction decisions are made randomly for blocks having the NRR bit bring 1.
+**If all blocks have NRR bit being 0, a case that the paper did not cover,** I think the reasonable action is to
+reset all block's NRR bit to 1, and then a random tag entry is evicted from the set.
