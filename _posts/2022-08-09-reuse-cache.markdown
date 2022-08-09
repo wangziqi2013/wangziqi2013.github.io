@@ -31,4 +31,10 @@ locality, in which an access to an address usually indicates more accesses in th
 As a result, if a block was just accessed, then it is likely that the block will also be accessed in the near future,
 and hence the block should not be evicted by promoting it to the head (LRU side) of the LRU chain.
 
+On the other hand, for the LLC, temporal locality is a poor indication of future re-reference, because the access
+stream seen by the LLC has already been filtered by the L1 and L2 caches, which already captures most of the temporal 
+locality, leaving very little for the LLC to take advantage of.
+As a result, LRU does not work well on the LLC, which is observed on real workloads.
+
+
 The paper begins by pointing out that while LRU is a good indication of re-use distance on 
