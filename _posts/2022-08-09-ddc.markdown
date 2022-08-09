@@ -17,4 +17,7 @@ This paper proposes Dual Dictionary Compression (DDC), a compressed cache and ma
 leverages two separate dictionaries for compressing the cache and memory data, respectively.
 The paper is motivated by the memory bandwidth saving benefit of transferring compressed blocks on the bus,
 which most previous proposals on cache compression do not focus on.
-
+The design aims at maintaining data in compressed form both in the cache and in the main memory for maximum
+compression benefit.
+Data is compressed using different dictionaries located at the LLC and the main memory level, respectively, and 
+compressed data is transferred on the bus in compressed form using a technique called dictionary index swap.
