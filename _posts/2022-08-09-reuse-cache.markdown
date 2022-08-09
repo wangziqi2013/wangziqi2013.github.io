@@ -96,3 +96,7 @@ data.
 In the former case, the cache block is first time referenced, and hence only the tag array entry is inserted.
 Data block fetched from the main memory is provided to the upper level, but the LLC itself will not store the
 data block in its data array.
+In the latter case, the LLC has already seen at least one re-reference of the block, and hence the block is deemed 
+likely to be re-referenced later. In this case, the LLC controller will insert the block into the data array,
+and transits the tag's coherence state to the normal state.
+If an access hits both tag and data, the request is handled normally as in a regular cache.
