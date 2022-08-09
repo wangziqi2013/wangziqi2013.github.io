@@ -26,4 +26,9 @@ The theoretical foundation of cache replacement is Belady's OPT algorithm, which
 decision by always selecting the block in the cache whose re-reference is the furthest in the future reference
 stream. The OPT algorithm, however, is unachievable, because in practice future references cannot be known in advance.
 However, given a past reference history, it is possible to predict the re-reference distance of a block into the future.
+For example, the LRU algorithm, which yields good result on L1 caches, assumes that cache accesses demonstrate temporal 
+locality, in which an access to an address usually indicates more accesses in the near future.
+As a result, if a block was just accessed, then it is likely that the block will also be accessed in the near future,
+and hence the block should not be evicted by promoting it to the head (LRU side) of the LRU chain.
 
+The paper begins by pointing out that while LRU is a good indication of re-use distance on 
