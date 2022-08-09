@@ -23,6 +23,12 @@ that are not dead, indicating a highly concentrated hit pattern.
 need to be inserted into the LLC. This will not hurt performance, because those that are not inserted do not
 provide any caching benefit anyway.
 
+3. In order to predict which block is more likely to see re-references, the Reuse Cache leverages a decoupled
+tag-data design that allows a tag entry to track a block whose data is not in the data array. If the block
+sees any past re-reference, then the block will be inserted into the data array on the next miss.
+By default, blocks will not be inserted into the data array if the block is first time accessed 
+(i.e., there is no tag entry tracking re-reference status of the block).
+
 This paper proposes Reuse Cache, a last-level cache (LLC) design that selectively caches data only when they are
 reused and thus saves storage. The design is based on the observation that most cache blocks in the LLC are useless
 (i.e., will not see reference during their lifetime), and that even for useful blocks, cache hits are only concentrated 
