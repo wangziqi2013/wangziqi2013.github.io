@@ -90,4 +90,9 @@ However, when a data slot is replaced, the corresponding tag entry is not invali
 cache controller follows the back pointer of the data slot to find the tag entry, and then sets its coherence
 state to a special value to indicate that the tag is valid, but block data is not present.
 
-
+The Reuse Cache operates as follows. When an access misses the tag array, or the access hits the tag array but the
+coherence state indicates that data is not present, the access is always forwarded to the main memory to fetch block 
+data.
+In the former case, the cache block is first time referenced, and hence only the tag array entry is inserted.
+Data block fetched from the main memory is provided to the upper level, but the LLC itself will not store the
+data block in its data array.
