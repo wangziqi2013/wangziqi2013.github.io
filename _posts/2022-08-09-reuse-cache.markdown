@@ -17,3 +17,8 @@ This paper proposes Reuse Cache, a last-level cache (LLC) design that selectivel
 reused and thus saves storage. The design is based on the observation that most cache blocks in the LLC are useless
 (i.e., will not see reference during their lifetime), and that even for useful blocks, cache hits are only concentrated 
 on a small subset of them. 
+The Reuse Cache leverages this observation by decoupling the tag and the data array, and enabling the tag array
+to track re-reference status for non-existing blocks. This design enables the cache to have a smaller 
+physical data array while achieving similar hit rates compared with a regular cache with the same associativity
+and the same number of tag entries.
+
