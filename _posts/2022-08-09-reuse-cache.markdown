@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Experiments show that a large portion of LLC blocks are dead, meaning that they will not see any re-reference
+expect the one that brings them into the LLC. Furthermore, most re-references are seen on a small subset of blocks
+that are not dead, indicating a highly concentrated hit pattern.
+
 This paper proposes Reuse Cache, a last-level cache (LLC) design that selectively caches data only when they are
 reused and thus saves storage. The design is based on the observation that most cache blocks in the LLC are useless
 (i.e., will not see reference during their lifetime), and that even for useful blocks, cache hits are only concentrated 
