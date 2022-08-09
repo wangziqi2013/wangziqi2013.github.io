@@ -82,3 +82,5 @@ When a new entry is inserted, the NRR bit is set to 1, and when the block is acc
 cleared. Eviction decisions are made randomly for blocks having the NRR bit bring 1.
 **If all blocks have NRR bit being 0, a case that the paper did not cover,** I think the reasonable action is to
 reset all block's NRR bit to 1, and then a random tag entry is evicted from the set.
+Meanwhile, data slots are evicted using either NRR or a variant using the Clock algorithm.
+As mentioned earlier, the range for victim search on the data array is dependent on associativity.
