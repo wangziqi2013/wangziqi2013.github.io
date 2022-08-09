@@ -65,6 +65,8 @@ hit rate.
 In fact, it suffices to only insert the blocks that see many re-references into the LLC, while the rest are not,
 since the latter will not be re-referenced anyway and do not contribute to the benefit of caching.
 
-
-This paper extends the basic RRIP idea by further avoiding caching blocks that have low re-reference counts in the 
-data array. 
+To leverage the above observations, the Reuse Cache design implements a decoupled tag and data array, in which
+the tag still has the same layout (number of sets and associativity as a regular cache), while the data 
+array is smaller than the one in a regular cache, and can have arbitrary associativity.
+Similar to other decoupled tag-data designs, each tag entry has a pointer to the data array slot that stores 
+block data, and each data slot has a back pointer to the tag that stores the address.
