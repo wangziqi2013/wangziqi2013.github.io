@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Dual Dictionary Compression for the Last Level Cache"
+date:   2022-08-09 18:28:00 -0500
+categories: paper
+paper_title: "Dual Dictionary Compression for the Last Level Cache"
+paper_link: https://dl.acm.org/doi/10.1145/2540708.2540735
+paper_keyword: Cache Compression; Dictionary Compression
+paper_year: ICCD 2017
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
