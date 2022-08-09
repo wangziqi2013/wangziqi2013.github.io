@@ -74,3 +74,7 @@ The paper also notes that the associativity of the data array is largely arbitra
 only matters during replacements, which delimits the range of search for the victim block.
 (Note that this may also implicitly limits the data slots a tag entry at certain set can point to, due to the 
 way the data slot set index is generated).
+
+The tag array runs NRR (Not Recently Reused) replacement algorithm.
+Each tag entry has a single bit indicating whether the entry is re-referenced after being inserted 
+(value being 0) or not (value being 1). 
