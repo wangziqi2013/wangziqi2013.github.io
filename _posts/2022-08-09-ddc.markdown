@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Dual Dictionary Compression (DDC), a compressed cache and main memory architecture that
+leverages two separate dictionaries for compressing the cache and memory data, respectively.
+The paper is motivated by the memory bandwidth saving benefit of transferring compressed blocks on the bus,
+which most previous proposals on cache compression do not focus on.
+
