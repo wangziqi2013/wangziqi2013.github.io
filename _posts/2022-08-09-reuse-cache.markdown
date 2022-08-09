@@ -70,3 +70,7 @@ the tag still has the same layout (number of sets and associativity as a regular
 array is smaller than the one in a regular cache, and can have arbitrary associativity.
 Similar to other decoupled tag-data designs, each tag entry has a pointer to the data array slot that stores 
 block data, and each data slot has a back pointer to the tag that stores the address.
+The paper also notes that the associativity of the data array is largely arbitrary, since the associativity
+only matters during replacements, which delimits the range of search for the victim block.
+(Note that this may also implicitly limits the data slots a tag entry at certain set can point to, due to the 
+way the data slot set index is generated).
