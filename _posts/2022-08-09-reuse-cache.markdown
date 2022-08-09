@@ -35,6 +35,10 @@ On the other hand, for the LLC, temporal locality is a poor indication of future
 stream seen by the LLC has already been filtered by the L1 and L2 caches, which already captures most of the temporal 
 locality, leaving very little for the LLC to take advantage of.
 As a result, LRU does not work well on the LLC, which is observed on real workloads.
+To fix this issue, Intel proposes and implements RRIP, which predicts the re-reference distance of a block based on
+the number of re-references it has already seen in the past. In other words, if a block sees frequent re-references,
+then it is likely that the block will also be re-referenced in the future.
+Based on this assumption, the RRIP algorithm improves over LRU with two major differences.
 
 
 The paper begins by pointing out that while LRU is a good indication of re-use distance on 
