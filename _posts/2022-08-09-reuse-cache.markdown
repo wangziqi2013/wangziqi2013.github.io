@@ -56,6 +56,11 @@ The experiment shows that only a small fraction of blocks are actually live, whi
 re-reference and hence fail to provide performance benefit.
 Besides, it is also shown that re-reference distance-based replacement algorithms generally perform better than LRU, 
 and can keep more live blocks in the LLC.
+The second experiment keeps track of the number of re-references that each block see during their lifetime
+in the LLC.
+Results show that around 5% of lines that are inserted into the LLC actually see re-reference. 
+In addition, most hits are concentrated on a small subset of blocks that see re-reference at all.
+
 
 
 This paper extends the basic RRIP idea by further avoiding caching blocks that have low re-reference counts in the 
