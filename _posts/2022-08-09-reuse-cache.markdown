@@ -19,6 +19,10 @@ version_mgmt:
 expect the one that brings them into the LLC. Furthermore, most re-references are seen on a small subset of blocks
 that are not dead, indicating a highly concentrated hit pattern.
 
+2. The implication of the observation is that only those blocks that will see at least one re-reference
+need to be inserted into the LLC. This will not hurt performance, because those that are not inserted do not
+provide any caching benefit anyway.
+
 This paper proposes Reuse Cache, a last-level cache (LLC) design that selectively caches data only when they are
 reused and thus saves storage. The design is based on the observation that most cache blocks in the LLC are useless
 (i.e., will not see reference during their lifetime), and that even for useful blocks, cache hits are only concentrated 
