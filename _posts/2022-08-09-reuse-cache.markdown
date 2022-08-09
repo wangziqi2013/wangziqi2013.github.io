@@ -22,3 +22,8 @@ to track re-reference status for non-existing blocks. This design enables the ca
 physical data array while achieving similar hit rates compared with a regular cache with the same associativity
 and the same number of tag entries.
 
+The theoretical foundation of cache replacement is Belady's OPT algorithm, which yields an optimal cache eviction
+decision by always selecting the block in the cache whose re-reference is the furthest in the future reference
+stream. The OPT algorithm, however, is unachievable, because in practice future references cannot be known in advance.
+However, given a past reference history, it is possible to predict the re-reference distance of a block into the future.
+
