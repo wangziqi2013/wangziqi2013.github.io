@@ -21,3 +21,10 @@ The design aims at maintaining data in compressed form both in the cache and in 
 compression benefit.
 Data is compressed using different dictionaries located at the LLC and the main memory level, respectively, and 
 compressed data is transferred on the bus in compressed form using a technique called dictionary index swap.
+
+The paper begins by noticing that existing cache compression designs only focus on expanding the logical capacity of
+the cache itself, and the reduction of memory traffic as a result of lowered miss rates. 
+Meanwhile, little attention is given to the bandwidth saving aspect of compression via transferring data blocks in
+compressed form, which also effectively reduces memory traffic, because less number of bits are transferred for
+compressed blocks.
+
