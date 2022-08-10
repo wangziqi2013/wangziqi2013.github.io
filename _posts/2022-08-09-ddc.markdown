@@ -37,5 +37,11 @@ reference for compression. The explicit dictionary can either be statically or d
 dictionary entries are supposed to be frequently occurring values in the working set.
 The dictionary is stored in a associative lookup structure (e.g., a CAM), with each entry containing the value
 and other metadata, such as the valid bit, the decay bit (which we describe later), and so on.
-
+Compression works by comparing the value from the input stream with dictionary entries, and the value matches an
+entry, or can be compressed with a small delta with the entry, then the value is stored as the index to the entry,
+plus the optional delta value. Compression is achieved in this case by encoding the index and the small delta value
+in less number of bits than an uncompressed value.
+The algorithm also performs what the paper calls "static compression", which is essentially pattern-based compression
+that matches the input value with common patterns. The value is compressed without any dictionary entry, but instead,
+with the pattern ID and other necessary information for restoring the original value. 
 
