@@ -61,6 +61,12 @@ Due to larger amount of data in the main memory, the dictionary on the main memo
 entries. This enables the main memory compressor to potentially encode more values with dictionary entries.
 The paper recommends 64 entries for the LLC dictionary, and 128 for the main memory dictionary.
 
-With an explicit dictionary compression algorithm, the paper identifies the main challenge as keeping the 
-dictionary consistent for both in-cache and in-memory blocks. 
+The LLC side dictionary is dynamically updated as the compressor encounters a new value that is not in the dictionary
+and if the dictionary is not full. This dynamic behavior helps the dictionary to adapt to a changing workload.
+The paper also points our that with a dynamic dictionary scheme, the dictionary entries cannot be easily replaced,
+because existing blocks in the cache may still need the entry to be replaced in order to be decompressed.
+To address such complication, both the dictionary and the LLC use a "decaying" mechanism which we describe briefly 
+below. A cache block decays if it has not been accessed for a while (i.e., in the last "decaying period" which
+is typically a few thousand cycles). A decayed block is evicted from the LLC at the end of the decaying period.
+
 
