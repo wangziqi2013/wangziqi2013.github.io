@@ -23,7 +23,8 @@ version_mgmt:
 C-PACK is an implicit dictionary algorithm with a per-block, dynamically generated dictionary per compression
 and decompression.
 
-
+2. The paper did not cover how main memory side dictionary is updated and how recompression works. 
+Other works (e.g., GBDI) have presented solutions like recompressing on DRAM refresh.
 
 This paper proposes Dual Dictionary Compression (DDC), a compressed cache and main memory architecture that
 leverages two separate dictionaries for compressing the cache and memory data, respectively.
