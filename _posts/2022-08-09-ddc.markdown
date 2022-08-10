@@ -75,3 +75,11 @@ is guaranteed to be free from any reference in the LLC.
 The decaying mechanism is implemented as having one "decay" bit per block and per dictionary entry that indicate
 whether the block or the entry should decay.
 The cache controller periodically sets the bit at the end of every decaying period.
+During execution, if a cache block is accessed, its "decay" bit is cleared, and so are the "decay" bits of all 
+dictionary entries that the block references.
+At the end of the decaying period, the cache controller simply evicts cache blocks and dictionary entries with the
+"decay" bit still set.
+
+With an explicit dictionary compression algorithm, and the dynamically updated LLC side dictionary, the 
+paper identifies the main challenge as keeping the dictionary consistent for both in-cache and in-memory blocks. 
+
