@@ -44,4 +44,10 @@ in less number of bits than an uncompressed value.
 The algorithm also performs what the paper calls "static compression", which is essentially pattern-based compression
 that matches the input value with common patterns. The value is compressed without any dictionary entry, but instead,
 with the pattern ID and other necessary information for restoring the original value. 
+Decompression for dictionary-compressed values require the same dictionary, and restores the original value 
+by adding the dictionary entry's value with the small delta (if any).
+Statically compressed values are restored based on the pattern ID and the information generated during compression.
+
+With an explicit dictionary compression algorithm, the paper identifies the main challenge as keeping the 
+dictionary consistent for both in-cache and in-memory blocks.
 
