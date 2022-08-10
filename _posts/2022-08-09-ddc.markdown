@@ -94,3 +94,8 @@ The main memory dictionary may also be slowly updated to reflect long term drift
 updates are rather expensive, since potentially many data blocks stored in the main memory need to be recompressed 
 with the updated entries (and the paper did not cover this part).
 
+To save memory bandwidth, data blocks evicted from the LLC are transferred on the memory bus in a compressed or 
+partially compressed form. 
+The challenge here is to enable correct decompression of the block on the main memory side, as the 
+main memory side dictionary is likely to contain different entries than the LLC side dictionary.
+To address the challenge, DDC leverages two properties of its dictionary compression algorithm. 
