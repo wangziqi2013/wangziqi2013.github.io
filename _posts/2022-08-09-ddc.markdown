@@ -80,6 +80,11 @@ dictionary entries that the block references.
 At the end of the decaying period, the cache controller simply evicts cache blocks and dictionary entries with the
 "decay" bit still set.
 
-With an explicit dictionary compression algorithm, and the dynamically updated LLC side dictionary, the 
-paper identifies the main challenge as keeping the dictionary consistent for both in-cache and in-memory blocks. 
+With a dynamically updated LLC side dictionary, and a compressed main memory storing blocks in the compressed form, 
+the paper identifies the main challenge as keeping the dictionary consistent for both in-cache and in-memory blocks. 
+Problem would arise if a block is compressed with the LLC side dictionary, written back to the main memory 
+in a compressed form, and then the LLC side dictionary is updated with new entries. 
+While the LLC remains consistent, thanks to the decaying mechanism, the main memory blocks might be corrupted,
+since the dictionary entries that are needed for decompressing the block may no longer exist when the block
+is read back to the main memory.
 
