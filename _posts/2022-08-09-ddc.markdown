@@ -31,3 +31,11 @@ In addition, cache compression may also cooperate with main memory compression t
 logical capacity of main memory storage.
 The latter requires extra metadata and memory controller logic, and this paper solely focuses on leveraging the 
 first opportunity, i.e., reducing memory bandwidth consumption by transferring blocks in compressed form.
+
+DDC is based on explicit dictionary compression, in which an explicit dictionary is maintained to serve as the 
+reference for compression. The explicit dictionary can either be statically or dynamically generated, and 
+dictionary entries are supposed to be frequently occurring values in the working set.
+The dictionary is stored in a associative lookup structure (e.g., a CAM), with each entry containing the value
+and other metadata, such as the valid bit, the decay bit (which we describe later), and so on.
+
+
