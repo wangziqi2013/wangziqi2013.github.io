@@ -68,5 +68,10 @@ because existing blocks in the cache may still need the entry to be replaced in 
 To address such complication, both the dictionary and the LLC use a "decaying" mechanism which we describe briefly 
 below. A cache block decays if it has not been accessed for a while (i.e., in the last "decaying period" which
 is typically a few thousand cycles). A decayed block is evicted from the LLC at the end of the decaying period.
-
-
+Similarly, a dictionary entry decays, if none of the blocks using the entry has been accessed in the last decaying
+period, which results in the eviction of the dictionary entry.
+Since cache blocks also decay at the end of the decaying period, this way the dictionary entry that is replaced
+is guaranteed to be free from any reference in the LLC.
+The decaying mechanism is implemented as having one "decay" bit per block and per dictionary entry that indicate
+whether the block or the entry should decay.
+The cache controller periodically sets the bit at the end of every decaying period.
