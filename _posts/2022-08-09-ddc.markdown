@@ -57,7 +57,9 @@ dictionary compression and pattern-based compression, which generally leverages 
 DDC also assumes a compressed hierarchy in which both the LLC and the main memory stores data block in compressed
 form. DDC uses two separate dictionaries for blocks in the LLC and in the main memory, respectively, and hence 
 the name dual-dictionary compression.
-
+Due to larger amount of data in the main memory, the dictionary on the main memory side is also bigger with more 
+entries. This enables the main memory compressor to potentially encode more values with dictionary entries.
+The paper recommends 64 entries for the LLC dictionary, and 128 for the main memory dictionary.
 
 With an explicit dictionary compression algorithm, the paper identifies the main challenge as keeping the 
 dictionary consistent for both in-cache and in-memory blocks. 
