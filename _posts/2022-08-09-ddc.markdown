@@ -126,8 +126,12 @@ without a dictionary.
 Second, for those that are compressed with an index into the LLC side dictionary, the paper proposes an index 
 rewriter on the eviction data path to "fix" the index by replacing it with the corresponding index into the 
 main memory side dictionary. 
+The rest of the values not covered by the above two properties must be decompressed before they are transferred.
+
 To facilitate index rewriting, every entry of the LLC side dictionary is extended with an extra field that stores the 
 corresponding index of the entry's value in the main memory side dictionary.
 This extra field is kept in synchronization with the main memory side dictionary when the latter is updated.
-
+If the entry does not exist in the main memory side dictionary, indicated by a special value in the extra field, 
+the entry itself may also be sent in the same message with the compressed block.
+The main memory side dictionary may update its own dictionary using the entry in the message.
 
