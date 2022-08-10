@@ -13,6 +13,18 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. C-PACK
+
+**Comments:**
+
+1. While sharing similarities with C-PACK, the compression algorithm presented in this paper is not C-PACK, because
+C-PACK is an implicit dictionary algorithm with a per-block, dynamically generated dictionary per compression
+and decompression.
+
+
+
 This paper proposes Dual Dictionary Compression (DDC), a compressed cache and main memory architecture that
 leverages two separate dictionaries for compressing the cache and memory data, respectively.
 The paper is motivated by the memory bandwidth saving benefit of transferring compressed blocks on the bus,
@@ -108,3 +120,5 @@ main memory side dictionary.
 To facilitate index rewriting, every entry of the LLC side dictionary is extended with an extra field that stores the 
 corresponding index of the entry's value in the main memory side dictionary.
 This extra field is kept in synchronization with the main memory side dictionary when the latter is updated.
+
+
