@@ -54,6 +54,11 @@ as is the case with the original C-PACK.
 On the other hand, the explicit dictionary algorithm presented in this paper resembles C-PACK by adopting both
 dictionary compression and pattern-based compression, which generally leverages a wider range of value redundancy.
 
+DDC also assumes a compressed hierarchy in which both the LLC and the main memory stores data block in compressed
+form. DDC uses two separate dictionaries for blocks in the LLC and in the main memory, respectively, and hence 
+the name dual-dictionary compression.
+
+
 With an explicit dictionary compression algorithm, the paper identifies the main challenge as keeping the 
-dictionary consistent for both in-cache and in-memory blocks.
+dictionary consistent for both in-cache and in-memory blocks. 
 
