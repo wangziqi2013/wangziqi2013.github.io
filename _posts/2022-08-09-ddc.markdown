@@ -99,3 +99,9 @@ partially compressed form.
 The challenge here is to enable correct decompression of the block on the main memory side, as the 
 main memory side dictionary is likely to contain different entries than the LLC side dictionary.
 To address the challenge, DDC leverages two properties of its dictionary compression algorithm. 
+First, some values are statically compressed, i.e., without reference to the LLC side dictionary.
+These values can be transferred in the compressed form, and the decompressor can easily restore the original value
+without a dictionary.
+Second, for those that are compressed with an index into the LLC side dictionary, the paper proposes an index 
+rewriter on the eviction data path to "fix" the index by replacing it with the corresponding index into the 
+main memory side dictionary. 
