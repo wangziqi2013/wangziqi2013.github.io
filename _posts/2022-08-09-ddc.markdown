@@ -15,7 +15,13 @@ version_mgmt:
 
 **Highlight:**
 
-1. C-PACK
+1. Statically compressed values (i.e., only using pattern-based compression without referring to a dictionary entry)
+can be transferred in a compressed form, because they can be easily decompressed without the dictionary.
+
+2. Separate dictionaries can be used for compressing LLC and main memory. This has several advantages, such as 
+easier dictionary and algorithm design, less coupling, etc.
+
+
 
 **Comments:**
 
