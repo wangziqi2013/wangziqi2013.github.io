@@ -21,7 +21,9 @@ can be transferred in a compressed form, because they can be easily decompressed
 2. Separate dictionaries can be used for compressing LLC and main memory. This has several advantages, such as 
 easier dictionary and algorithm design, less coupling, etc.
 
-
+3. Values compressed with a dictionary entry can be transferred by rewriting the indexing of entry the compressed code word references with the corresponding index on the receiving side.
+If the entry does not exist on the receiving side, the dictionary entry may also be sent with the compressed block
+to update the receiving side dictionary.
 
 **Comments:**
 
