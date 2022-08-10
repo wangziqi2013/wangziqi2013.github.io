@@ -88,3 +88,9 @@ While the LLC remains consistent, thanks to the decaying mechanism, the main mem
 since the dictionary entries that are needed for decompressing the block may no longer exist when the block
 is read back to the main memory.
 
+To address this issue, the paper proposes that data blocks stored in the main memory should be compressed using the 
+main memory side dictionary, which can potentially deviate from the LLC dictionary.
+The main memory dictionary may also be slowly updated to reflect long term drifting of data patterns, but such 
+updates are rather expensive, since potentially many data blocks stored in the main memory need to be recompressed 
+with the updated entries (and the paper did not cover this part).
+
