@@ -48,6 +48,12 @@ Decompression for dictionary-compressed values require the same dictionary, and 
 by adding the dictionary entry's value with the small delta (if any).
 Statically compressed values are restored based on the pattern ID and the information generated during compression.
 
+Note that although the paper claims that they adapted C-PACK, the actual dictionary algorithm presented in the 
+paper differs from C-PACK by using an explicit dictionary, rather than implicitly generated, per-block dictionary
+as is the case with the original C-PACK.
+On the other hand, the explicit dictionary algorithm presented in this paper resembles C-PACK by adopting both
+dictionary compression and pattern-based compression, which generally leverages a wider range of value redundancy.
+
 With an explicit dictionary compression algorithm, the paper identifies the main challenge as keeping the 
 dictionary consistent for both in-cache and in-memory blocks.
 
