@@ -94,4 +94,8 @@ for it, in which case no eviction happens, or one or two blocks are evicted from
 slot (depending on the size of the newly inserted block), and the new block is inserted into the slot.
 Note that compression related metadata only needs to be added to every three out of four ways of the LLC.
 
-
+We next describe the ECC design.
+Cocoa reserves one out of four ways to store the ECC code for the remaining three ways.
+ECC is maintained for compressed blocks at 32-bit word granularity. 
+For each 32-bit word in the data slot, if the word is prone to 1-bit error, then the regular SECDED code is used to
+correct ont bit error and detect two bits errors for the word. 
