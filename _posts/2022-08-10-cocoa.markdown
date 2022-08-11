@@ -21,6 +21,10 @@ less than 3 errors.
 In the case where the defect rate is really high, Cocoa would not work well as well, because Cocoa falls back to
 the fine-grained disabling approach if a single word in a compressed block has more than two faulty bits.
 
+2. Actually, Cocoa does not need to store the begin segment of each compressed block in the tag entry, because
+(1) BDI metadata already implicitly encodes compressed size, and (2) the second block can just be stored backwards
+from the last bit. 
+
 This paper proposes Synergistic Cache Compression and Error Correction (Cocoa), a technique that enables the LLC
 to operate under low voltage while maintaining low error rate.
 Cocoa is motivated by the power benefit of operating caches on low voltages, at the cost of increased error rate.
@@ -72,3 +76,5 @@ the effective capacity of the remaining three ways by at most 2x.
 Cocoa can accomplish low error rate without paying any significant storage penalty with a moderate compression ratio.
 In certain cases when the compression ratio is high, Cocoa may even gain a performance advantage due to an even 
 larger logical LLC capacity than a regular cache.
+
+
