@@ -103,3 +103,7 @@ Otherwise, if the word is prone two 2-bit error, then the more storage hungry OL
 correcting two bit errors. 
 The paper indicates that more than 2-bit error per 32-bit word is very rare, and can hence be handled by simply 
 disabling the entire data slot.
+To indicate which word uses which type of ECC code, every tag entry also stores a "side info" field, which is a bitmask
+whose size equals the number of 32-bit words in a slot (16, given 64 byte slots).
+Each bit in the "side info" mask indicates whether the corresponding word uses SECDED or OLSC encoding.
+In addition, the offset of the ECC bits of a given word can also be inferred from the "side info" mask.
