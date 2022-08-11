@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The paper claims that fine-grained remapping/disabling approaches do not work well under high defect rates.
+Then later on in the paper, it is shown that actually the defect rate is not that high, with most words containing
+less than 3 errors.
+In the case where the defect rate is really high, Cocoa would not work well as well, because Cocoa falls back to
+the fine-grained disabling approach if a single word in a compressed block has more than two faulty bits.
+
 This paper proposes Synergistic Cache Compression and Error Correction (Cocoa), a technique that enables the LLC
 to operate under low voltage while maintaining low error rate.
 Cocoa is motivated by the power benefit of operating caches on low voltages, at the cost of increased error rate.
