@@ -22,3 +22,8 @@ To counter the performance degradation caused by a smaller data array for strong
 applied to the rest of the ways such that more logic blocks can be stored in compressed form.
 The resulting design enables the LLC to operate at a much lower voltage with low error rate, hence harvesting
 the power benefit, without hurting performance.
+
+The main challenge of low-voltage cache design is the increased error rate, which is a natural result of 
+randomness from the manufacturing process. While operating nicely on the normal voltage, small manufacturing 
+variations on SRAM cells will become a bigger concern when the cache operates under a lower voltage, where some 
+cells are more prone to suffer bit errors than other cells. 
