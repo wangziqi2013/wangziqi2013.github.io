@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Synergistic Cache Compression and Error Correction (Cocoa), a technique that enables the LLC
+to operate under low voltage while maintaining low error rate.
+Cocoa is motivated by the power benefit of operating caches on low voltages, at the cost of increased error rate.
+Cocoa addresses the issue with extra error correction and detection code stored in a few dedicated way of the 
+data array.
+
