@@ -99,3 +99,7 @@ Cocoa reserves one out of four ways to store the ECC code for the remaining thre
 ECC is maintained for compressed blocks at 32-bit word granularity. 
 For each 32-bit word in the data slot, if the word is prone to 1-bit error, then the regular SECDED code is used to
 correct ont bit error and detect two bits errors for the word. 
+Otherwise, if the word is prone two 2-bit error, then the more storage hungry OLSC code is used, which is capable of
+correcting two bit errors. 
+The paper indicates that more than 2-bit error per 32-bit word is very rare, and can hence be handled by simply 
+disabling the entire data slot.
