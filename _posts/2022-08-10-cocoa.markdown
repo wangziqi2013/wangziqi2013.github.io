@@ -19,7 +19,8 @@ version_mgmt:
 effective cache capacity. Broadly speaking, compression can be applied to many scenarios where extra data
 or metadata needs to be stored for the cache.
 
-
+2. Different ECC codes have different trade-offs. We can apply different code in a fine-grained, per-segment 
+manner based on segment property.
 
 **Comments:**
 
