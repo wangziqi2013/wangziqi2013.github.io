@@ -67,4 +67,8 @@ Cocoa addresses the challenge by combing two different error correction and dete
 Cache blocks are protected with a combination of weak SECDEC and stronger OLSC in the unit of 32-bit words.
 One out of four ways in the LLC is dedicated to store ECC codes for the remaining three ways of data, resulting in 
 a 25% capacity loss without compression.
-
+With compression, each data slot in the remaining three ways can store two compressed logical blocks, which increases
+the effective capacity of the remaining three ways by at most 2x.
+Cocoa can accomplish low error rate without paying any significant storage penalty with a moderate compression ratio.
+In certain cases when the compression ratio is high, Cocoa may even gain a performance advantage due to an even 
+larger logical LLC capacity than a regular cache.
