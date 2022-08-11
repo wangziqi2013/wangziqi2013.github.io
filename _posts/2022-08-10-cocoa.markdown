@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Cocoa: Synergistic Cache Compression and Error Correction in Capacity Sensitive Last Level Caches"
+date:   2022-08-10 22:40:00 -0500
+categories: paper
+paper_title: "Cocoa: Synergistic Cache Compression and Error Correction in Capacity Sensitive Last Level Caches"
+paper_link: https://dl.acm.org/doi/10.1145/3240302.3240304
+paper_keyword: Cache Compression; BDI; ECC
+paper_year: MEMSYS 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
