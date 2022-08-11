@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Cache compression and ECC code can be combined to support error correction and detection without sacrificing
+effective cache capacity. Broadly speaking, compression can be applied to many scenarios where extra data
+or metadata needs to be stored for the cache.
+
+
+
 **Comments:**
 
 1. The paper claims that fine-grained remapping/disabling approaches do not work well under high defect rates.
