@@ -54,3 +54,7 @@ remapped to the redundant SRAM storage.
 While preserving the logical cache capacity, this approach is upper bounded the number of defects it can fix.
 When the number of defective bits exceed the maximum amount of redundancy, this approach would still fall back
 to the previous one, and suffer cache capacity loss.
+
+Lastly, error detection and correction code has been applied to provide extra redundancy. 
+The paper points out that a single type of error detection and correction code is often not sufficient, because of 
+the rigid trade-offs between capability, hardware complexity, and storage overhead. 
