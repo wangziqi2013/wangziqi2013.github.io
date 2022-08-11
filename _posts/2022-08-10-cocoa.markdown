@@ -81,4 +81,10 @@ We next describe the compressed cache design.
 Cocoa adopts BDI as the compression algorithm, due to its simplicity and moderate compression ratio.
 Tag array entries are still statically mapped to data array slots, and each tag array entry contains two
 copies of address tags as well as state bits (including BDI metadata). 
-
+Two compressed blocks can co-reside in a data slot if their compressed sizes do not exceed slot capacity which 
+is 64 bytes. In this case, the first compressed block is stored at offset zero, while the second 
+compressed block is stored backwards from the last bit of the slot.
+When a new block is to be inserted, either the cache controller finds an existing slot that has enough storage
+for it, in which case no eviction happens, or one or two blocks are evicted from a data 
+slot (depending on the size of the newly inserted block), and the new block is inserted into the slot.
+Note that compression related metadata only needs to be added to every three out of four ways of the LLC.
