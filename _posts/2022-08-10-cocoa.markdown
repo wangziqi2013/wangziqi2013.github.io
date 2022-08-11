@@ -27,3 +27,8 @@ The main challenge of low-voltage cache design is the increased error rate, whic
 randomness from the manufacturing process. While operating nicely on the normal voltage, small manufacturing 
 variations on SRAM cells will become a bigger concern when the cache operates under a lower voltage, where some 
 cells are more prone to suffer bit errors than other cells. 
+To address this problem, several attempts have been made by prior works, which we describe as follows.
+First, prior works have proposed bigger and more complicated SRAM cell structure, which is more tolerant to 
+random variations and hence perform better in terms of error rate under low voltage. These cells, however,
+generally require much more transistors per cell, which increases the area and power overhead of the SRAM
+cache, partially offsetting the purpose of low voltage operation.
