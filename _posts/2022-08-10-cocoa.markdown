@@ -58,3 +58,7 @@ to the previous one, and suffer cache capacity loss.
 Lastly, error detection and correction code has been applied to provide extra redundancy. 
 The paper points out that a single type of error detection and correction code is often not sufficient, because of 
 the rigid trade-offs between capability, hardware complexity, and storage overhead. 
+For example, BCH code is optimized for storage overhead, but it is only feasible for correcting a small number of
+bits (1 or 2 bits mostly), due to the hardware complexity for encoding and decoding.
+On the other hand, OLSC code enables fast encoding and decoding, but it incurs larger capacity overhead, which can be
+as big as 50% of total cache capacity in some proposals.
