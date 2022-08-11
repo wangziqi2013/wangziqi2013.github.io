@@ -25,6 +25,11 @@ the fine-grained disabling approach if a single word in a compressed block has m
 (1) BDI metadata already implicitly encodes compressed size, and (2) the second block can just be stored backwards
 from the last bit. 
 
+3. If a word has more than 2 defective bits, the data slot can still be partially used, if the defective bit 
+only occurs at one half of the slot. This should be a likely case, since 2 bit errors per 32-bit are very rare.
+On a second thought, This adds extra bit per tag entry, but it only provides very limited benefit since 
+the case is so rare that the capacity loss should not be noticeable.
+
 This paper proposes Synergistic Cache Compression and Error Correction (Cocoa), a technique that enables the LLC
 to operate under low voltage while maintaining low error rate.
 Cocoa is motivated by the power benefit of operating caches on low voltages, at the cost of increased error rate.
@@ -68,7 +73,7 @@ On the other hand, OLSC code enables fast encoding and decoding, but it incurs l
 as big as 50% of total cache capacity in some proposals.
 
 Cocoa addresses the challenge by combing two different error correction and detection code with cache compression. 
-Cache blocks are protected with a combination of weak SECDEC and stronger OLSC in the unit of 32-bit words.
+Cache blocks are protected with a combination of weak SECDED and stronger OLSC in the unit of 32-bit words.
 One out of four ways in the LLC is dedicated to store ECC codes for the remaining three ways of data, resulting in 
 a 25% capacity loss without compression.
 With compression, each data slot in the remaining three ways can store two compressed logical blocks, which increases
@@ -77,7 +82,7 @@ Cocoa can accomplish low error rate without paying any significant storage penal
 In certain cases when the compression ratio is high, Cocoa may even gain a performance advantage due to an even 
 larger logical LLC capacity than a regular cache.
 
-We next describe the compressed cache design. 
+We first describe the compressed cache design. 
 Cocoa adopts BDI as the compression algorithm, due to its simplicity and moderate compression ratio.
 Tag array entries are still statically mapped to data array slots, and each tag array entry contains two
 copies of address tags as well as state bits (including BDI metadata). 
@@ -88,3 +93,5 @@ When a new block is to be inserted, either the cache controller finds an existin
 for it, in which case no eviction happens, or one or two blocks are evicted from a data 
 slot (depending on the size of the newly inserted block), and the new block is inserted into the slot.
 Note that compression related metadata only needs to be added to every three out of four ways of the LLC.
+
+
