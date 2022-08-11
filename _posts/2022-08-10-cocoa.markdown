@@ -36,4 +36,6 @@ Second, prior works have also attempted to dynamically disable or remap faulty S
 beforehand. This task can be carried out in either coarse or fine granularity. In the former case, an entire line,
 set or way can be disabled if they are known to be error-prone. This often results in severe and unnecessary 
 loss of capacity, since one single bit defect can cause a large chunk of non-faulty bit to be disabled as well.
-In the latter case
+In the latter case, complicated hardware is required to remap SRAM cells at fine granularity. Besides, the paper
+claims that these techniques are not really effective with high defect density, as still suffer great capacity 
+loss in these situations.
