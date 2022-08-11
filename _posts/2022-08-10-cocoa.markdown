@@ -77,4 +77,8 @@ Cocoa can accomplish low error rate without paying any significant storage penal
 In certain cases when the compression ratio is high, Cocoa may even gain a performance advantage due to an even 
 larger logical LLC capacity than a regular cache.
 
+We next describe the compressed cache design. 
+Cocoa adopts BDI as the compression algorithm, due to its simplicity and moderate compression ratio.
+Tag array entries are still statically mapped to data array slots, and each tag array entry contains two
+copies of address tags as well as state bits (including BDI metadata). 
 
