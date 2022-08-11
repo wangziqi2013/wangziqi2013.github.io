@@ -62,3 +62,9 @@ For example, BCH code is optimized for storage overhead, but it is only feasible
 bits (1 or 2 bits mostly), due to the hardware complexity for encoding and decoding.
 On the other hand, OLSC code enables fast encoding and decoding, but it incurs larger capacity overhead, which can be
 as big as 50% of total cache capacity in some proposals.
+
+Cocoa addresses the challenge by combing two different error correction and detection code with cache compression. 
+Cache blocks are protected with a combination of weak SECDEC and stronger OLSC in the unit of 32-bit words.
+One out of four ways in the LLC is dedicated to store ECC codes for the remaining three ways of data, resulting in 
+a 25% capacity loss without compression.
+
