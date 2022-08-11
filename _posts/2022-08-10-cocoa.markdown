@@ -40,6 +40,7 @@ First, prior works have proposed bigger and more complicated SRAM cell structure
 random variations and hence perform better in terms of error rate under low voltage. These cells, however,
 generally require much more transistors per cell, which increases the area and power overhead of the SRAM
 cache, partially offsetting the purpose of low voltage operation.
+
 Second, prior works have also attempted to dynamically disable or remap faulty SRAM bits that are detected
 beforehand. This task can be carried out in either coarse or fine granularity. In the former case, an entire line,
 set or way can be disabled if they are known to be error-prone. This often results in severe and unnecessary 
@@ -47,3 +48,9 @@ loss of capacity, since one single bit defect can cause a large chunk of non-fau
 In the latter case, complicated hardware is required to remap SRAM cells at fine granularity. Besides, the paper
 claims that these techniques are not really effective with high defect density, as still suffer great capacity 
 loss in these situations.
+
+Previous works also propose adding extra redundancy to the data array, such that defective blocks or sets can be 
+remapped to the redundant SRAM storage.
+While preserving the logical cache capacity, this approach is upper bounded the number of defects it can fix.
+When the number of defective bits exceed the maximum amount of redundancy, this approach would still fall back
+to the previous one, and suffer cache capacity loss.
