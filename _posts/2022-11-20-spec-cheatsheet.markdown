@@ -74,3 +74,18 @@ runspec action=build config=[Your config file name, without ./config directory n
 
 The target of compilation can be `all`, which means compiling all workloads. It can also be a space separated 
 list of workloads that you wish to build.
+
+## Compilation Errors
+
+SPEC 2006 is a rather old benchmark and is likely incompatible with current releases of gcc.
+Consequently, a few workloads would fail to compile, including (on my own machine) 
+400.perlbench(base), 416.gamess(base), 447.dealII(base), 450.soplex(base), and 483.xalancbmk(base).
+
+There are online resources that focus on fixing these issues, such as 
+[this Github repo](https://github.com/mollybuild/RISCV-Measurement/blob/master/Install-CPU2006-on-unmatched.md).
+
+Many errors can be fixed by adding the following compiler flags to the `PORTABILITY` option in the configuration file:
+
+```
+-std=gnu++98 -include cstdlib -include cstring
+```
