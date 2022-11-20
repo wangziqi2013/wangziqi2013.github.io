@@ -63,3 +63,14 @@ compiler on your platform.
 
 `PORTABILITY` -- Extra compilation flags can be passed to the compiler by adding them to this option. There
 are also per-workload flags that you can set, which are located below this flag.
+
+## Compiling Workloads
+
+SPEC 2006 workloads can be compiled by invoking the following command under the top-level directory:
+
+```
+runspec action=build config=[Your config file name, without ./config directory name and .cfg suffix] [target]
+```
+
+The target of compilation can be `all`, which means compiling all workloads. It can also be a space separated 
+list of workloads that you wish to build.
