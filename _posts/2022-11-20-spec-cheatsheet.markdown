@@ -89,3 +89,18 @@ Many errors can be fixed by adding the following compiler flags to the `PORTABIL
 ```
 -std=gnu++98 -include cstdlib -include cstring
 ```
+
+## Finding Output Binary
+
+After compilation, the output binary can be found under the following directory:
+
+```
+benchspec/CPU2006/[workload name, e.g., 403.gcc]/run/build_base_amd64-m64-gcc42-nn.0000/[workload name, e.g., gcc]
+```
+
+Note that `build_base_amd64-m64-gcc42-nn.0000` is generated based on `tune` and `ext` options in the configuration
+file. The trailing `.0000` is the version of binary.
+
+## Running Workloads Manually
+
+Before invoking the workload binary
