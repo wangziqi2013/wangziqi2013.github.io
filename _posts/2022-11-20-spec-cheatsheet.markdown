@@ -103,4 +103,21 @@ file. The trailing `.0000` is the version of binary.
 
 ## Running Workloads Manually
 
-Before invoking the workload binary
+Before invoking the workload binary, first switch the current working directory to the input directory 
+(which can be achieved with `chdir()` programmatically):
+
+```
+benchspec/CPU2006/[workload name, e.g., 403.gcc]/data/ref/input/
+```
+
+Then you can invoke the binary with the input file name under the directory. 
+
+Note that there are several workloads that accept inputs from `stdin`. For these workloads, 
+the input file must be fed to the `stdin` of the process.
+If you are using bash, then it can be easily done with `<` redirection.
+If you are doing it programmatically, first open the file using `open()` system call and obtain a file 
+descriptor `fd`. Then replace the current process's `stdin` using `dup2()` system call:
+
+```
+dup2(fp, FILENO_STDIN);
+```
