@@ -112,8 +112,8 @@ benchspec/CPU2006/[workload name, e.g., 403.gcc]/data/ref/input/
 
 Then you can invoke the binary with the input file name under the directory. 
 
-Note that there are several workloads that accept inputs from `stdin`. For these workloads, 
-the input file must be fed to the `stdin` of the process.
+Note that there are several workloads that accept inputs from `stdin` (`gamess`, `milc`, `gobmk`, and `leslie3d`). 
+For these workloads, the input file must be fed to the `stdin` of the process.
 If you are using bash, then it can be easily done with `<` redirection.
 If you are doing it programmatically, first open the file using `open()` system call and obtain a file 
 descriptor `fd`. Then replace the current process's `stdin` using `dup2()` system call:
@@ -121,3 +121,18 @@ descriptor `fd`. Then replace the current process's `stdin` using `dup2()` syste
 ```
 dup2(fp, FILENO_STDIN);
 ```
+
+# SPEC 2017
+
+Building and deploying SPEC 2017 is almost identical to those of SPEC 2006. The biggest difference is that
+the build command should use `runcpu` instead of `runspec`. 
+Besides, the configuration file has a definition `%define label mytest`, which is used to generate the 
+output directory for the compiled binary.
+
+After compilation, the output binary is located at:
+
+```
+benchspec/CPU/[workload name, e.g., 502.gcc_r]/exe/[build name, e.g., cpugcc_r_base.mytest-m64]
+```
+
+SPEC 2017 also has two workloads (`bwaves` and `roms`) that accept inputs from `stdin`.
