@@ -3,7 +3,7 @@ layout: post
 title:  "Analyzing Optimistic Concurrency Control Anomalies and Solutions"
 date:   2018-03-20 21:47:00 -0500
 categories: article
-ontop: true
+ontop: false
 ---
 
 ### Introduction
