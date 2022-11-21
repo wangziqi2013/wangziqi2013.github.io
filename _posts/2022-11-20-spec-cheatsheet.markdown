@@ -136,3 +136,12 @@ benchspec/CPU/[workload name, e.g., 502.gcc_r]/exe/[build name, e.g., cpugcc_r_b
 ```
 
 SPEC 2017 also has two workloads (`bwaves` and `roms`) that accept inputs from `stdin`.
+
+## Running Workloads Manually
+
+Most workloads in SPEC 2017 can be executed by switching to the input file directory, and invoke the 
+binary. 
+However, several workloads need special attention when running manually (e.g., `fotonik3d_r`, `roms_r`, `wrf_r`). 
+These workloads need input files that are not located in the `data/refrate/input` directory. Instead, you need to 
+copy files in `data/all/input` into `data/refrate/input` before invoking the binary.
+For `fotonik3d_r`, the tarball `OBJ.dat.xz` should also be extracted to `OBJ.dat`.
