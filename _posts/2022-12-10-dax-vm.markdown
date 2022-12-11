@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "DaxVM: Stressing the Limits of Memory as a File Interface"
+date:   2022-12-10 23:47:00 -0500
+categories: paper
+paper_title: "DaxVM: Stressing the Limits of Memory as a File Interface"
+paper_link: https://ieeexplore.ieee.org/document/9923852/
+paper_keyword: Virtual Memory; NVM; mmap
+paper_year: MICRO 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
