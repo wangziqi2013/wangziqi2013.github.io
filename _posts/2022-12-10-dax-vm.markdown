@@ -21,3 +21,6 @@ expensive operations on the critical path, and so on. As a solution, the paper p
 of virtual memory interfaces as well as adding new interfaces in order to optimize system performance for direct-mapped 
 NVM.
 
+The paper assumes direct-mapped NVM access, in which the NVM storage is mapped into part of the physical address space.
+The NVM-based file system manages NVM storage area and allocates NVM pages to files as in a regular file system.
+When a file is to be accessed by user applications, 
