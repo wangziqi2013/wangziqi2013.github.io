@@ -27,3 +27,10 @@ When a file is to be accessed by user applications, instead of using the traditi
 open(), read() and write(), the file system enables applications to directly map the physical pages of the file 
 into the virtual address space of the application via mmap(). The mapped file can then be accessed as a memory object
 while the OS handles pages faults as well as the mappings between the virtual and the physical addresses.
+
+While the direct-mapped access model reduces unnecessary data copies, i.e., from the disk to the OS page buffer and 
+from the OS page buffer to the user-space buffer (e.g., passed as a parameter to the read() system call), the paper 
+still observes several performance issues with the access model. One of the examples is when the applications access
+many small files for small amount of data, and each file offset is only accessed once.
+In this scenario, the paper suggests that the performance is much worse than that of traditional file interfaces.
+
