@@ -18,6 +18,11 @@ version_mgmt:
 1. mmap()'ed files do not necessarily have better access performance than using traditional interface, due to reasons 
 such as page fault handling, kernel lock contention, and dirty bit tracking.
 
+2. On x86, the page table of a mapped file can be constructed as physical pages are allocated to the file, because
+the page table is a radix tree and hence does not need the virtual address explicitly. 
+The pre-populated page table can be plugged into the process page table with constant cost (but only at aligned 
+offsets).
+
 
 
 **Comments:**
