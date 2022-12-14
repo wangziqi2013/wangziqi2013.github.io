@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. mmap()'ed files do not necessarily have better access performance than using traditional interface, due to reasons 
+such as page fault handling, kernel lock contention, and dirty bit tracking.
+
+
+
 **Comments:**
 
 1. The pre-populated page table assumes that the NVM storage is always mapped at the same physical address.
