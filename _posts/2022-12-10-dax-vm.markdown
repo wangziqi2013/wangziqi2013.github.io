@@ -95,3 +95,9 @@ entry permission at higher level entries.
 The second, more radical solution entirely nullifies dirty status tracking at the kernel level, and encourages 
 user applications to implement their own durability protocol. The second solution makes sense for direct-mapped NVM,
 as the durability protocol is often fine-grained and implemented at the user-space level.
+
+The last problem is block zeroing, which happens in the current system when a new block is allocated. Block-zeroing 
+avoids leaking the contents of an already-freed block to a different user via block recycling and is hence a 
+critical security measurement. However, this operation is currently performed on the critical path and hence 
+negatively affects performance.
+
