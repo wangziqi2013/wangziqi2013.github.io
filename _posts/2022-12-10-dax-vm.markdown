@@ -35,3 +35,7 @@ many small files for small amount of data, and each file offset is only accessed
 In this scenario, the paper suggests that the performance is much worse than that of traditional file interfaces.
 The second example is when multiple threads of the same process access the file. The paper reported decreased 
 throughput as the thread count increases and concluded that this phenomenon is due to lock contention in the OS kernel. 
+Lastly, the paper also experimented with different file sizes. It is shown that when the access pattern leaves the 
+address space fragmented, i.e., mapped with many regular 4KB pages, the performance is worse than if the file is 
+backed by 2MB huge pages. As a result, 2MB files can yield far better performance as the entire file can be backed by
+a single huge page (of course, it only works when the underlying physical pages are also contiguous on the NVM).
