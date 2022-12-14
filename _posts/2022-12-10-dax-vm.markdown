@@ -104,3 +104,8 @@ To address this problem, the paper proposes adding recycled pages into a special
 thread to zero them out in the background only when the system is idle. 
 This way, block zeroing need not be performed on the critical path as block allocator can just pick the already-zeroed 
 blocks from the per-core lists.
+
+All the proposed features above are implemented as two system calls: daxvm_mmap() and daxvm_munmap(). The two system
+calls accept a set of new flags to selectly enable or disable these features based on application's 
+requirements. The existing virtual memory system calls, such as mremap() and madvise(), are also modified accordingly
+such that certain invariants of DaxVM will not break (e.g., files must not be partially unmapped and remapped).
