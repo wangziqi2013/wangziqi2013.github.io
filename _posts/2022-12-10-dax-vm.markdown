@@ -58,3 +58,6 @@ when physical pages is allocated to the file. The pre-populated page table is st
 structurally identical to a subtree of the existing page table radix tree (and hence the top-level node must be 
 a PUD, PMD or less likely, a PTE). With the pre-populated page table, when a file is opened for access, the 
 pre-populated table is directed wired onto the page table of the OS. 
+File access permissions are set up at a per-file basis (smaller granularity is disabled) on the top-level page table
+tree. This new feature enables O(1) file mapping and page fault handling at the cost of higher overhead for 
+MMU page walks (as they must access the page table stored on the NVM).
