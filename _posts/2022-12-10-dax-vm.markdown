@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The pre-populated page table assumes that the NVM storage is always mapped at the same physical address.
+This behavior, however, may not be guaranteed especially if the NVM device is installed on a different system
+where existing NVM devices are already installed. Besides, it breaks compatibility of the file system as a 
+page table generated on x86 system cannot work on ARM. The second issue is easy to solve -- if compatibility
+is a concern then the default mmap() behavior is restored.
+
 This paper proposes DaxVM, a virtual memory abstraction that facilitates the user scenarios of direct-mapped NVM.
 DaxVM is motivated by the fact that traditional virtual memory interfaces, i.e., mmap() and munmap(), are not 
 implemented properly for direct-mapped NVM due to their original purpose of supporting disk-file based mapping 
@@ -39,3 +47,5 @@ Lastly, the paper also experimented with different file sizes. It is shown that 
 address space fragmented, i.e., mapped with many regular 4KB pages, the performance is worse than if the file is 
 backed by 2MB huge pages. As a result, 2MB files can yield far better performance as the entire file can be backed by
 a single huge page (of course, it only works when the underlying physical pages are also contiguous on the NVM).
+
+
