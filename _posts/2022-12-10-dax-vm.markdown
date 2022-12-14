@@ -33,4 +33,5 @@ from the OS page buffer to the user-space buffer (e.g., passed as a parameter to
 still observes several performance issues with the access model. One of the examples is when the applications access
 many small files for small amount of data, and each file offset is only accessed once.
 In this scenario, the paper suggests that the performance is much worse than that of traditional file interfaces.
-
+The second example is when multiple threads of the same process access the file. The paper reported decreased 
+throughput as the thread count increases and concluded that this phenomenon is due to lock contention in the OS kernel. 
