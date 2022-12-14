@@ -48,4 +48,8 @@ address space fragmented, i.e., mapped with many regular 4KB pages, the performa
 backed by 2MB huge pages. As a result, 2MB files can yield far better performance as the entire file can be backed by
 a single huge page (of course, it only works when the underlying physical pages are also contiguous on the NVM).
 
-
+The paper then analyzes the cause of the problems and proposed the corresponding solutions. 
+First, the paper suggests that paging overhead can cause suboptimal performance, since the existing implementation
+of mmap() populates page table entries for the process only lazily, i.e., when the mapped virtual page is accessed
+for the first time. Consequently, the application must pay the overhead of a page fault for every virtual page accessed,
+which is proportional to the memory footprint of the file access. 
