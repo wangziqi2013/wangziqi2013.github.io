@@ -100,4 +100,7 @@ The last problem is block zeroing, which happens in the current system when a ne
 avoids leaking the contents of an already-freed block to a different user via block recycling and is hence a 
 critical security measurement. However, this operation is currently performed on the critical path and hence 
 negatively affects performance.
-
+To address this problem, the paper proposes adding recycled pages into a special per-core list, and use a kernel
+thread to zero them out in the background only when the system is idle. 
+This way, block zeroing need not be performed on the critical path as block allocator can just pick the already-zeroed 
+blocks from the per-core lists.
