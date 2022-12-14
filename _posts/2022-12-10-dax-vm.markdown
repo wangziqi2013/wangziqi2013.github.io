@@ -82,3 +82,11 @@ performed using the regular shootdown path but by flushing the TLB entirely.
 The paper also noted that this approach may expose security risks if the unmapped page remains accessible on remote 
 cores, especially when the physical page is recycled for storing valid data in another file. In this scenario, the 
 design will simply perform TLB flushes eagerly to prevent unexpected accesses to the underlying physical addresses.
+
+The next problem is dirty status tracking which is needed by msync() and fsync() system calls to flush dirty cache 
+blocks back to the NVM. In the current Linux kernel, dirty pages are tracked via page faults, i.e., the 
+kernel initially maps all pages of a file as read-only, and marks the corresponding virtual page as dirty in the 
+page cache when the first write incurs a fault. 
+However, as we have shown earlier, page faults at 4KB granularity constitute a large portion of 
+overhead during execution. The paper hence proposes two possible solutions. 
+
