@@ -71,3 +71,9 @@ for the process's memory descriptor every time new virtual addresses are needed.
 Besides, to support fast operations on the virtual address heap, the design only maintains mapping metadata for 
 the first page of a mapped file in a dedicated data structure. Consequently, the file can only be mapped with a single
 permission set, and must not be unmapped partially.
+
+The third problem is the overhead of munmap() which is paid when a file ceases to be needed by the application. 
+The paper observes that the most time consuming part of munmap() is to perform TLB shootdowns, which involves 
+IPIs and spin waiting. To eliminate TLB shootdowns from the critical path, the paper proposes asynchronous unmap,
+which batches TLB shootdowns that are supposed to be performed by munmap() calls and performs them by flushing the 
+entire TLB. 
