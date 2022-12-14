@@ -29,6 +29,11 @@ be maintained in an ephemeral heap separately from the regular virtual addresses
 4. TLB shootdowns, as a result of munmap(), can be batched for multiple files and implemented as flushing the 
 entire TLB. This approach may expose certain security risks. though, and must be used carefully.
 
+5. Many NVM applications track dirty status of address with user-space protocols, making kernel tracking redundant.
+We can optionally remove kernel dirty status tracking in this scenario to avoid the page fault overhead.
+
+6. Blocks can be zeroed in the background when they are recycled, hence also eliminating the overhead from the 
+critical path.
 
 **Comments:**
 
