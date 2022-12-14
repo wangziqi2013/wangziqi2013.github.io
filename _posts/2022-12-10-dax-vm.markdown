@@ -65,4 +65,9 @@ MMU page walks (as they must access the page table stored on the NVM).
 Secondly, the paper attempts to address the kernel lock contention problem by observing that most file accesses are 
 ephemeral, i.e., most files are only accessed for less than 0.25 seconds. One implication is that a small amount 
 of virtual pages can satisfy most file mapping requests, as these pages are expected to be recycled shortly when
-the files are unmapped. 
+the files are unmapped. Based on this observation, the paper proposes allocating a small private heap on the 
+virtual address space for each process to serve mmap() requests, rather than letting mmap() grab the kernel lock 
+for the process's memory descriptor every time new virtual addresses are needed.
+Besides, to support fast operations on the virtual address heap, the design only maintains mapping metadata for 
+the first page of a mapped file in a dedicated data structure. Consequently, the file can only be mapped with a single
+permission set, and must not be unmapped partially.
