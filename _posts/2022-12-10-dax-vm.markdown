@@ -76,4 +76,9 @@ The third problem is the overhead of munmap() which is paid when a file ceases t
 The paper observes that the most time consuming part of munmap() is to perform TLB shootdowns, which involves 
 IPIs and spin waiting. To eliminate TLB shootdowns from the critical path, the paper proposes asynchronous unmap,
 which batches TLB shootdowns that are supposed to be performed by munmap() calls and performs them by flushing the 
-entire TLB. 
+entire TLB. This feature is implemented by tracking virtual pages (called "zombie VMAs") that are already unmapped 
+but not yet shot down from the remote TLBs. When the number of such pages exceeds the threshold, the shootdown is 
+performed using the regular shootdown path but by flushing the TLB entirely.
+The paper also noted that this approach may expose security risks if the unmapped page remains accessible on remote 
+cores, especially when the physical page is recycled for storing valid data in another file. In this scenario, the 
+design will simply perform TLB flushes eagerly to prevent unexpected accesses to the underlying physical addresses.
