@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes DaxVM, a virtual memory abstraction that facilitates the user scenarios of direct-mapped NVM.
+DaxVM is motivated by the fact that traditional virtual memory interfaces, i.e., mmap() and munmap(), are not 
+implemented properly for direct-mapped NVM due to their original purpose of supporting disk-file based mapping 
+or anonymous mapping. 
+
