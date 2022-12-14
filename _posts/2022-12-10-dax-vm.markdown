@@ -23,6 +23,11 @@ the page table is a radix tree and hence does not need the virtual address expli
 The pre-populated page table can be plugged into the process page table with constant cost (but only at aligned 
 offsets).
 
+3. Most file accesses are ephemeral, meaning that many virtual pages will be recycled fast. These virtual pages can
+be maintained in an ephemeral heap separately from the regular virtual addresses.
+
+4. TLB shootdowns, as a result of munmap(), can be batched for multiple files and implemented as flushing the 
+entire TLB. This approach may expose certain security risks. though, and must be used carefully.
 
 
 **Comments:**
