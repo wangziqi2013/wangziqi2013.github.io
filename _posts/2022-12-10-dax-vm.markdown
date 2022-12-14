@@ -23,4 +23,7 @@ NVM.
 
 The paper assumes direct-mapped NVM access, in which the NVM storage is mapped into part of the physical address space.
 The NVM-based file system manages NVM storage area and allocates NVM pages to files as in a regular file system.
-When a file is to be accessed by user applications, 
+When a file is to be accessed by user applications, instead of using the traditional file system calls such as 
+open(), read() and write(), the file system enables applications to directly map the physical pages of the file 
+into the virtual address space of the application via mmap(). The mapped file can then be accessed as a memory object
+while the OS handles pages faults as well as the mappings between the virtual and the physical addresses.
