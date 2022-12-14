@@ -89,4 +89,9 @@ kernel initially maps all pages of a file as read-only, and marks the correspond
 page cache when the first write incurs a fault. 
 However, as we have shown earlier, page faults at 4KB granularity constitute a large portion of 
 overhead during execution. The paper hence proposes two possible solutions. 
-
+The first solution remains compatible with the current system, but only tracks dirty status of pages at higher 
+levels of the page table, i.e., at 2MB level or above. This feature can be implemented by setting the page table 
+entry permission at higher level entries.
+The second, more radical solution entirely nullifies dirty status tracking at the kernel level, and encourages 
+user applications to implement their own durability protocol. The second solution makes sense for direct-mapped NVM,
+as the durability protocol is often fine-grained and implemented at the user-space level.
