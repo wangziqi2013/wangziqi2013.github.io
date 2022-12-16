@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
+memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
+existing hardware designs introduce an extra level of indirection between the physical address and the storage location
+of compressed pages. This extra level of indirection can incur great overhead on the access critical path and 
+therefore should be reduced. 
