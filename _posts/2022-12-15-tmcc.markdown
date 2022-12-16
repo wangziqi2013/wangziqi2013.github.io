@@ -32,3 +32,12 @@ The work of this paper is based on a software-based memory compression approach 
 page granularity in two levels, namely memory level 1 (ML1) and memory level 2 (ML2). ML1 consists of physical pages
 that are uncompressed, and the virtual-to-physical mapping is set up normally as in an uncompressed system. Meanwhile,
 the ML2 consists of compressed physical pages, which are not directly mapped via the virtual memory system. 
+Instead, virtual addresses that are mapped to ML2 pages rely on page faults to notify the OS kernel when they are 
+accessed such that the OS will decompress them into a page frame and then set up the mapping, hence moving the 
+page from ML2 to ML1.
+Due to the high overhead of accessing ML2 pages, the OS kernel only moves a page from ML1 to ML2 when the page is 
+deemed "cold", i.e., when the system is under memory pressure and the page is not accessed for a while. 
+The detection of cold pages is performed using an LRU list called the "Recency List". The Recency List is updated
+for a small fraction of accesses to approximate the actual access frequency (although the paper did not mention how
+it can be achieved).
+
