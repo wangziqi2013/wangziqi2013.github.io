@@ -16,8 +16,8 @@ version_mgmt:
 **Comments:**
 
 1. This paper lacks a high-level overview of the design while focusing too much on implementation details. 
-As a result, the overall picture of how TMCC works is not clear. The paper also uses jargons and abbreviations 
-extensively which makes it harder to read. 
+As a result, the overall picture of how TMCC works is not clear. For example, the paper did not give any
+description of how to detect accesses to compressed pages and how these pages are moved between ML1 and ML2.
 
 This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
 memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
@@ -81,3 +81,12 @@ For pages that store PTEs, i.e., PTB pages, the compression metadata is maintain
 In this scenario, the metadata describes the layout of the compressed PTBs (because some PTEs may not be 
 compressible), instead of storing the translated physical address (the physical address of the next-level
 PTB is always the one stored in the upper-level PTE). 
+When the compression ratio is limited, only a small number of CTEs can be embedded into the PTB, which upper bounds
+the maximum number of pages that can be compressed in the address range represented by the CTE.
+
+During a page walk, the MMU page table walker fetches both the regular translation entry and the CTE from the 
+memory hierarchy. The CTEs are then inserted into a translation cache called the CTE buffer. The CTE buffer uses 
+physical addresses as keys and translates the physical address to the storage location of physical memory. 
+On regular memory accesses, the physical address is translated by the CTE buffer, and the resulting address
+is used to access the main memory. However, for page table walk accesses, the physical address is not translated
+by the CTE buffer. Instead, the same physical address is used to access the main memory as PTBs always reside in ML1.
