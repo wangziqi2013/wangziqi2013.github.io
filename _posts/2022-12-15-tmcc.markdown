@@ -21,3 +21,7 @@ therefore should be reduced. Second, prior works on hardware dictionary compress
 compression and decompression engines. However, these engines are designed for general-purpose user scenarios and 
 have an emphasis on compatibility, resulting in less efficient operations. The paper proposes a more specialized 
 ASIC design that eliminates the overheads by tailoring the algorithm to fit into memory compression.
+
+The work of this paper is based on a software-based memory compression approach implemented within the OS kernel 
+(i.e., the OS-inspired approach in the paper). In the software-based approach, physical memory is managed at 
+page granularity in two levels, namely memory level 1 (ML1) and memory level 2 (ML2). 
