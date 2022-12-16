@@ -16,7 +16,8 @@ version_mgmt:
 **Comments:**
 
 1. This paper lacks a high-level overview of the design while focusing too much on implementation details. 
-As a result, the overall picture of how TMCC works is not clear.
+As a result, the overall picture of how TMCC works is not clear. The paper also uses jargons and abbreviations 
+extensively which makes it harder to read. 
 
 This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
 memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
@@ -74,3 +75,9 @@ pages, especially those located on the same PTB, will have the same permission b
 physical address tend to be identical, especially for systems that do not use the whole physical address space.
 As a result, if the PTEs on a PTB are compressed, the extra CTEs that belong to the next level of translation can
 be embedded in the same PTB by occupying the storage freed up by compression.
+For regular pages that store data, the CTE contains status bits indicating the compression status of the page,
+as well as the storage location of the page if it is compressed. 
+For pages that store PTEs, i.e., PTB pages, the compression metadata is maintained in the upper-level PTB. 
+In this scenario, the metadata describes the layout of the compressed PTBs (because some PTEs may not be 
+compressible), instead of storing the translated physical address (the physical address of the next-level
+PTB is always the one stored in the upper-level PTE). 
