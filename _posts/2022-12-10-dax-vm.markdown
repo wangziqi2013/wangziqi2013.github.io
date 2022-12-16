@@ -18,7 +18,7 @@ version_mgmt:
 1. mmap()'ed files do not necessarily have better access performance than using traditional interface, due to reasons 
 such as page fault handling, kernel lock contention, and dirty bit tracking.
 
-2. On x86, the page table of a mapped file can be constructed as physical pages are allocated to the file, because
+2. On x86, the page table of a mapped file can be constructed as physical pages are allocated to the file because
 the page table is a radix tree and hence does not need the virtual address explicitly. 
 The pre-populated page table can be plugged into the process page table with constant cost (but only at aligned 
 offsets).
@@ -29,7 +29,8 @@ be maintained in an ephemeral heap separately from the regular virtual addresses
 4. TLB shootdowns, as a result of munmap(), can be batched for multiple files and implemented as flushing the 
 entire TLB. This approach may expose certain security risks. though, and must be used carefully.
 
-5. Many NVM applications track dirty status of address with user-space protocols, making kernel tracking redundant.
+5. Many NVM applications track the dirty status of addresses with user-space protocols, making kernel 
+tracking redundant.
 We can optionally remove kernel dirty status tracking in this scenario to avoid the page fault overhead.
 
 6. Blocks can be zeroed in the background when they are recycled, hence also eliminating the overhead from the 
@@ -39,13 +40,13 @@ critical path.
 
 1. The pre-populated page table assumes that the NVM storage is always mapped at the same physical address.
 This behavior, however, may not be guaranteed especially if the NVM device is installed on a different system
-where existing NVM devices are already installed. Besides, it breaks compatibility of the file system as a 
+where existing NVM devices are already installed. Besides, it breaks the compatibility of the file system as a 
 page table generated on x86 system cannot work on ARM. The second issue is easy to solve -- if compatibility
 is a concern then the default mmap() behavior is restored.
 
 This paper proposes DaxVM, a virtual memory abstraction that facilitates the user scenarios of direct-mapped NVM.
 DaxVM is motivated by the fact that traditional virtual memory interfaces, i.e., mmap() and munmap(), are not 
-implemented properly for direct-mapped NVM due to their original purpose of supporting disk-file based mapping 
+implemented properly for direct-mapped NVM due to their original purpose of supporting disk-file-based mapping 
 or anonymous mapping. As a result, applications may suffer issues such as paging overhead, kernel lock contention,
 expensive operations on the critical path, and so on. As a solution, the paper proposes changing the implementation
 of virtual memory interfaces as well as adding new interfaces in order to optimize system performance for direct-mapped 
@@ -56,15 +57,15 @@ The NVM-based file system manages NVM storage area and allocates NVM pages to fi
 When a file is to be accessed by user applications, instead of using the traditional file system calls such as 
 open(), read() and write(), the file system enables applications to directly map the physical pages of the file 
 into the virtual address space of the application via mmap(). The mapped file can then be accessed as a memory object
-while the OS handles pages faults as well as the mappings between the virtual and the physical addresses.
+while the OS handles page faults as well as the mappings between the virtual and the physical addresses.
 
 While the direct-mapped access model reduces unnecessary data copies, i.e., from the disk to the OS page buffer and 
 from the OS page buffer to the user-space buffer (e.g., passed as a parameter to the read() system call), the paper 
 still observes several performance issues with the access model. One of the examples is when the applications access
-many small files for small amount of data, and each file offset is only accessed once.
+many small files for a small amount of data, and each file offset is only accessed once.
 In this scenario, the paper suggests that the performance is much worse than that of traditional file interfaces.
 The second example is when multiple threads of the same process access the file. The paper reported decreased 
-throughput as the thread count increases and concluded that this phenomenon is due to lock contention in the OS kernel. 
+throughput as the thread count increased and concluded that this phenomenon is due to lock contention in the OS kernel. 
 Lastly, the paper also experimented with different file sizes. It is shown that when the access pattern leaves the 
 address space fragmented, i.e., mapped with many regular 4KB pages, the performance is worse than if the file is 
 backed by 2MB huge pages. As a result, 2MB files can yield far better performance as the entire file can be backed by
@@ -76,16 +77,16 @@ of mmap() populates page table entries for the process only lazily, i.e., when t
 for the first time. Consequently, the application must pay the overhead of a page fault for every virtual page accessed,
 which is proportional to the memory footprint of the file access. 
 To address this problem, the paper proposes that the file system can pre-populate the page table entries for the file
-when physical pages is allocated to the file. The pre-populated page table is stored as file metadata, and it is 
+when physical pages are allocated to the file. The pre-populated page table is stored as file metadata, and it is 
 structurally identical to a subtree of the existing page table radix tree (and hence the top-level node must be 
 a PUD, PMD or less likely, a PTE). With the pre-populated page table, when a file is opened for access, the 
 pre-populated table is directed wired onto the page table of the OS. 
-File access permissions are set up at a per-file basis (smaller granularity is disabled) on the top-level page table
+File access permissions are set up on a per-file basis (smaller granularity is disabled) on the top-level page table
 tree. This new feature enables O(1) file mapping and page fault handling at the cost of higher overhead for 
 MMU page walks (as they must access the page table stored on the NVM).
 
 Secondly, the paper attempts to address the kernel lock contention problem by observing that most file accesses are 
-ephemeral, i.e., most files are only accessed for less than 0.25 seconds. One implication is that a small amount 
+ephemeral, i.e., most files are only accessed for less than 0.25 seconds. One implication is that a small number 
 of virtual pages can satisfy most file mapping requests, as these pages are expected to be recycled shortly when
 the files are unmapped. Based on this observation, the paper proposes allocating a small private heap on the 
 virtual address space for each process to serve mmap() requests, rather than letting mmap() grab the kernel lock 
@@ -95,7 +96,7 @@ the first page of a mapped file in a dedicated data structure. Consequently, the
 permission set, and must not be unmapped partially.
 
 The third problem is the overhead of munmap() which is paid when a file ceases to be needed by the application. 
-The paper observes that the most time consuming part of munmap() is to perform TLB shootdowns, which involves 
+The paper observes that the most time-consuming part of munmap() is to perform TLB shootdowns, which involve 
 IPIs and spin waiting. To eliminate TLB shootdowns from the critical path, the paper proposes asynchronous unmap,
 which batches TLB shootdowns that are supposed to be performed by munmap() calls and performs them by flushing the 
 entire TLB. This feature is implemented by tracking virtual pages (called "zombie VMAs") that are already unmapped 
@@ -111,10 +112,10 @@ kernel initially maps all pages of a file as read-only, and marks the correspond
 page cache when the first write incurs a fault. 
 However, as we have shown earlier, page faults at 4KB granularity constitute a large portion of 
 overhead during execution. The paper hence proposes two possible solutions. 
-The first solution remains compatible with the current system, but only tracks dirty status of pages at higher 
+The first solution remains compatible with the current system, but only tracks the dirty status of pages at higher 
 levels of the page table, i.e., at 2MB level or above. This feature can be implemented by setting the page table 
-entry permission at higher level entries.
-The second, more radical solution entirely nullifies dirty status tracking at the kernel level, and encourages 
+entry permission at higher-level entries.
+The second, more radical solution entirely nullifies dirty status tracking at the kernel level and encourages 
 user applications to implement their own durability protocol. The second solution makes sense for direct-mapped NVM,
 as the durability protocol is often fine-grained and implemented at the user-space level.
 
@@ -122,12 +123,12 @@ The last problem is block zeroing, which happens in the current system when a ne
 avoids leaking the contents of an already-freed block to a different user via block recycling and is hence a 
 critical security measurement. However, this operation is currently performed on the critical path and hence 
 negatively affects performance.
-To address this problem, the paper proposes adding recycled pages into a special per-core list, and use a kernel
+To address this problem, the paper proposes adding recycled pages into a special per-core list and uses a kernel
 thread to zero them out in the background only when the system is idle. 
-This way, block zeroing need not be performed on the critical path as block allocator can just pick the already-zeroed 
-blocks from the per-core lists.
+This way, block zeroing need not be performed on the critical path as the block allocator can just pick 
+the already-zeroed blocks from the per-core lists.
 
-All the proposed features above are implemented as two system calls: daxvm_mmap() and daxvm_munmap(). The two system
-calls accept a set of new flags to selectly enable or disable these features based on application's 
+All the proposed features above are implemented as two system calls daxvm_mmap() and daxvm_munmap(). The two system
+calls accept a set of new flags to selectively enable or disable these features based on the application's 
 requirements. The existing virtual memory system calls, such as mremap() and madvise(), are also modified accordingly
 such that certain invariants of DaxVM will not break (e.g., files must not be partially unmapped and remapped).
