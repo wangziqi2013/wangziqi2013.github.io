@@ -106,6 +106,15 @@ Second, the paper also proposes using a 256-character alphabet for LZ, instead o
 Deflate. Using the 256-character alphabet also makes the algorithm more efficient, as all output words can be encoded 
 with 8 bits, rather than 9 bits.
 Next, the paper observes that a majority of the setup overhead of the prior work is on preparing the Huffman tree
-stored in hardware registers. To reduce this part of the latency, the paper proposes to use a smaller Huffman tree,
+stored in hardware registers (which is part of the second stage of Deflate). 
+To reduce this part of the latency, the paper proposes to use a smaller Huffman tree,
 such that this preparation phase can be shortened. As a result, the paper uses a Huffman tree of 16 elements,
 instead of the standard 286, with only marginal losses on compressibility.
+Lastly, the paper also observes that the two stages of compression, i.e., LZ compression and Huffman compression,
+do not overlap in the prior implementation. The reason is that the Huffman tree must be built with the full
+distribution of the characters in the input. To eliminate this limitation, the paper suggests that the distribution
+of characters in the input (which is the output of LZ compression) can be approximated using only a small fraction
+of the LZ output. As a result, in the final implementation, the distribution is computed using only the first 
+few characters from the LZ output, after which the Huffman stage of Deflate compression kick starts and processes the 
+output of LZ compression in a pipelined manner, hence reducing the overall latency of the operation.
+
