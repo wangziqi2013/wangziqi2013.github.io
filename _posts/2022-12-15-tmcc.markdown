@@ -69,4 +69,8 @@ To address the first problem, the paper proposes that the translation entries (c
 locations should be embedded in the regular page table entries. The CTEs are then fetched during the page table walk
 by the MMU page table walker and then inserted into a special translation cache located next to the L2 cache.
 In order to embed CTEs into regular page table entries, the paper proposes to compress the regular PTEs on the page 
-table page (called a PTB). 
+table page (called a PTB). The paper also noted that PTE compression works very well in practice, because (1) many
+pages, especially those located on the same PTB, will have the same permission bits, and (2) The higher bits of the 
+physical address tend to be identical, especially for systems that do not use the whole physical address space.
+As a result, if the PTEs on a PTB are compressed, the extra CTEs that belong to the next level of translation can
+be embedded in the same PTB by occupying the storage freed up by compression.
