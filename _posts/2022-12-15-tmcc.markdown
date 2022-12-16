@@ -17,4 +17,7 @@ This paper proposes TMCC, a hardware-based main memory compression technique bas
 memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
 existing hardware designs introduce an extra level of indirection between the physical address and the storage location
 of compressed pages. This extra level of indirection can incur great overhead on the access critical path and 
-therefore should be reduced. 
+therefore should be reduced. Second, prior works on hardware dictionary compression proposed specialized ASIC 
+compression and decompression engines. However, these engines are designed for general-purpose user scenarios and 
+have an emphasis on compatibility, resulting in less efficient operations. The paper proposes a more specialized 
+ASIC design that eliminates the overheads by tailoring the algorithm to fit into memory compression.
