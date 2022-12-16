@@ -105,4 +105,7 @@ CAM array, this reduced-size CAM design saves energy and enables lower access la
 Second, the paper also proposes using a 256-character alphabet for LZ, instead of the 286-character one for standard 
 Deflate. Using the 256-character alphabet also makes the algorithm more efficient, as all output words can be encoded 
 with 8 bits, rather than 9 bits.
-Next,
+Next, the paper observes that a majority of the setup overhead of the prior work is on preparing the Huffman tree
+stored in hardware registers. To reduce this part of the latency, the paper proposes to use a smaller Huffman tree,
+such that this preparation phase can be shortened. As a result, the paper uses a Huffman tree of 16 elements,
+instead of the standard 286, with only marginal losses on compressibility.
