@@ -102,3 +102,7 @@ for performing string matching. The CAM array serves as the dictionary that reco
 that have already been processed. In practice, however, since pages are only 4KB in size, smaller CAMs of size 1KB
 would be sufficient to handle most cases without losing too much compression ratio. Compared with the original 32KB
 CAM array, this reduced-size CAM design saves energy and enables lower access latency to the structure.
+Second, the paper also proposes using a 256-character alphabet for LZ, instead of the 286-character one for standard 
+Deflate. Using the 256-character alphabet also makes the algorithm more efficient, as all output words can be encoded 
+with 8 bits, rather than 9 bits.
+Next,
