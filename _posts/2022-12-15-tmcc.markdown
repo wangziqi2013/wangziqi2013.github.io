@@ -13,13 +13,19 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. The extra level of indirection from the physical address to the storage location can be embedded in the page 
+table page by compressing the PTEs and making space for the translation entry. 
+
+
 **Comments:**
 
 1. This paper lacks a high-level overview of the design while focusing too much on implementation details. 
 As a result, the overall picture of how TMCC works is not clear. For example, the paper did not give any
 description of how to detect accesses to compressed pages and how these pages are moved between ML1 and ML2.
 
-2. It is not clear how TMCC would interact with 2MB huge pages. I can image the PTE trick to keep working.
+2. It is not clear how TMCC would interact with 2MB huge pages. I can imagine the PTE trick to keep working.
 But how could 2MB pages be compressed with the customized compressor? Do you simply treat them as individual 4KB pages?
 
 This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
