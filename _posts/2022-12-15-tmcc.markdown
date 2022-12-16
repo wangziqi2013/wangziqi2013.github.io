@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. This paper lacks a high-level overview of the design while focusing too much on implementation details. 
+As a result, 
+
 This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
 memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
 existing hardware designs introduce an extra level of indirection between the physical address and the storage location
@@ -24,4 +29,6 @@ ASIC design that eliminates the overheads by tailoring the algorithm to fit into
 
 The work of this paper is based on a software-based memory compression approach implemented within the OS kernel 
 (i.e., the OS-inspired approach in the paper). In the software-based approach, physical memory is managed at 
-page granularity in two levels, namely memory level 1 (ML1) and memory level 2 (ML2). 
+page granularity in two levels, namely memory level 1 (ML1) and memory level 2 (ML2). ML1 consists of physical pages
+that are uncompressed, and the virtual-to-physical mapping is set up normally as in an uncompressed system. Meanwhile,
+the ML2 consists of compressed physical pages, which are not directly mapped via the virtual memory system. 
