@@ -16,7 +16,7 @@ version_mgmt:
 **Comments:**
 
 1. This paper lacks a high-level overview of the design while focusing too much on implementation details. 
-As a result, 
+As a result, the overall picture of how TMCC works is not clear.
 
 This paper proposes TMCC, a hardware-based main memory compression technique based on the existing OS-supported 
 memory compression framework. The paper focuses on two aspects of the design to make it efficient. First, the 
@@ -47,3 +47,11 @@ OS physical page allocator. The second list belongs to ML2, and it is further di
 accommodate compressed pages of different sizes. Physical storage can move around in both lists. When a page 
 is moved from ML1 to ML2, it is broken down into smaller sub-pages of the desired size class. On the other hand, when
 free ML2 sub-pages form a whole page, the page can also be optionally moved to ML1.
+
+The paper identifies two issues when the above mechanism is implemented on hardware. First, in a hardware 
+implementation, there is no OS kernel to explicitly manage the address mapping between virtual and physical address
+space. Consequently, the hardware must manage the mapping instead, which inevitably adds another level of indirection
+between the physical address space and the storage location of the page. 
+
+
+
