@@ -61,6 +61,8 @@ The second issue is that by only compressing cold pages as in the software appro
 algorithm must be higher than the scenario where all pages are compressed in order to reach the same overall ratio.
 Prior works have relied on the Deflate compressor and decompressor implemented on ASICs to offer a supreme raw
 compression ratio. However, the paper suggests that the actual implementation of the ASIC is still sub-optinal.
-
+For example, the circuit offers a moderate peak bandwidth but requires a high setup time whenever processing
+a new page that is independent of the previous one. As a result, the overall compression bandwidth is much lower 
+than the peak bandwidth, which can also negatively affect overall system performance.
 
 
