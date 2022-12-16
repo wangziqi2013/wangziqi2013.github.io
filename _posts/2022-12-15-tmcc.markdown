@@ -52,6 +52,9 @@ The paper identifies two issues when the above mechanism is implemented on hardw
 implementation, there is no OS kernel to explicitly manage the address mapping between virtual and physical address
 space. Consequently, the hardware must manage the mapping instead, which inevitably adds another level of indirection
 between the physical address space and the storage location of the page. 
-
+Unfortunately, this mapping lies on the critical path of memory accesses as well as regular address translation, as 
+it must be conducted on LLC misses after the physical address is available. 
+Prior works attempted to alleviate such cost by adding an extra translation metadata cache at the memory controller
+level. The metadata cache stores frequently used entries such that most translations can be performed with low latency.
 
 
