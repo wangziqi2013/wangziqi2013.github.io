@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Translation-optimized Memory Compression for Capacity"
+date:   2022-12-15 23:53:00 -0500
+categories: paper
+paper_title: "Translation-optimized Memory Compression for Capacity"
+paper_link: https://ieeexplore.ieee.org/document/9923870
+paper_keyword: Memory Compression; TMCC; Deflate
+paper_year: MICRO 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
