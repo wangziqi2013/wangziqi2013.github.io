@@ -41,3 +41,9 @@ The detection of cold pages is performed using an LRU list called the "Recency L
 for a small fraction of accesses to approximate the actual access frequency (although the paper did not mention how
 it can be achieved).
 
+In the software approach, the OS maintains two free lists consisting of physical storage at the page or sub-page level.
+The first list belongs to ML1 and always maintains storage at page granularity. This list can also be regarded as the 
+OS physical page allocator. The second list belongs to ML2, and it is further divided into different size classes to 
+accommodate compressed pages of different sizes. Physical storage can move around in both lists. When a page 
+is moved from ML1 to ML2, it is broken down into smaller sub-pages of the desired size class. On the other hand, when
+free ML2 sub-pages form a whole page, the page can also be optionally moved to ML1.
