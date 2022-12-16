@@ -94,4 +94,11 @@ On regular memory accesses, the physical address is translated by the CTE buffer
 is used to access the main memory. However, for page table walk accesses, the physical address is not translated
 by the CTE buffer. Instead, the same physical address is used to access the main memory as PTBs always reside in ML1.
 
-
+To address the second problem, the paper presents a new Deflate implementation on ASIC that specifically optimizes 
+for throughput. 
+The proposed implementation differs from the standard implementation as follows.
+First, the paper observes that the LZ compression stage (the first stage of Deflate) requires a large CAM array 
+for performing string matching. The CAM array serves as the dictionary that records a truncated history of bytes 
+that have already been processed. In practice, however, since pages are only 4KB in size, smaller CAMs of size 1KB
+would be sufficient to handle most cases without losing too much compression ratio. Compared with the original 32KB
+CAM array, this reduced-size CAM design saves energy and enables lower access latency to the structure.
