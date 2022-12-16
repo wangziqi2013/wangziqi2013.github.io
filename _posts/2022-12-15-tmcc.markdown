@@ -18,6 +18,8 @@ version_mgmt:
 1. The extra level of indirection from the physical address to the storage location can be embedded in the page 
 table page by compressing the PTEs and making space for the translation entry. 
 
+2. The standard implementation of Deflate on ASIC is overly general-purpose and hence incurs high overhead.
+We can reduce the overheads by customizing it towards memory compression.
 
 **Comments:**
 
