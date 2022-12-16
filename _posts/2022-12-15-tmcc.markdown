@@ -65,4 +65,8 @@ For example, the circuit offers a moderate peak bandwidth but requires a high se
 a new page that is independent of the previous one. As a result, the overall compression bandwidth is much lower 
 than the peak bandwidth, which can also negatively affect overall system performance.
 
-
+To address the first problem, the paper proposes that the translation entries (called CTEs) from physical to hardware
+locations should be embedded in the regular page table entries. The CTEs are then fetched during the page table walk
+by the MMU page table walker and then inserted into a special translation cache located next to the L2 cache.
+In order to embed CTEs into regular page table entries, the paper proposes to compress the regular PTEs on the page 
+table page (called a PTB). 
