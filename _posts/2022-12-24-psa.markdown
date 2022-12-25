@@ -31,5 +31,13 @@ Second, spatial prefetchers can prevent compulsory misses, since the predicted a
 in the previous execution history. By contrast, temporal prefetchers need to see the trace at least once in order to
 reproduce them later, hence suffering compulsory misses when the address is accessed for the first time.
 Lastly, spatial prefetchers also have better row buffer locality as the prefetching request is spatially 
-close to the recent addresses being accessed. Temporal prefetchers, on the other hand, do not have such guarantees,
-and therefore it exhibits lower row buffer hit rate, resulting in higher latency and energy consumption.
+close to the recent addresses being accessed. Temporal prefetchers, on the other hand, do not have such guarantees
+and therefore exhibit a lower row buffer hit ratio, resulting in higher latency and energy consumption.
+
+Despite the many advantages of spatial prefetchers, the paper identifies that one of the biggest problems of spatial 
+prefetchers is their inability to prefetch across 4KB page boundaries in the past literature. Two factors contributed 
+to such a uniform design decision. First, due to the regular 4KB granularity address mapping, pages that are consecutive
+on the virtual address space are not necessarily consecutive on the physical address space. Consequently, in order to
+prefetch across page boundaries on the physical address space (which is mandatory as lower-level caches are tagged
+using physical addresses), the prefetcher must have access to translation metadata. However, translation metadata is 
+usually only accessible to the L1 cache, since the TLB is physically located at that level.
