@@ -48,4 +48,7 @@ and leaks data not belonging to the current process.
 Based on the above reasons, the paper investigated the feasibility of prefetching on huge pages, which is a 
 feature supported by recent x86 architectures. With huge pages enabled, either the application programmer or the 
 Operating System kernel can choose to map physical memory in bigger granularity, such as 2MB or 1GB (the latter
-is only available using the `hugetlbfs` library). 
+is only available using the `hugetlbfs` library). The paper also made several observations on the interaction
+between huge pages and spatial prefetching. First, the paper evaluated several benchmarks with Transparent Huge 
+Page (THP) enabled. Results show that most of the workloads can efficiently utilize huge page support during 
+the entire execution, indicating the feasibility of performing prefetching at huge page granularity.
