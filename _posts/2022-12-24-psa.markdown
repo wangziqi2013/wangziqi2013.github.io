@@ -30,4 +30,6 @@ Temporal prefetchers, on the contrary, need to keep track of access traces in or
 Second, spatial prefetchers can prevent compulsory misses, since the predicted addresses do not have to occur 
 in the previous execution history. By contrast, temporal prefetchers need to see the trace at least once in order to
 reproduce them later, hence suffering compulsory misses when the address is accessed for the first time.
-
+Lastly, spatial prefetchers also have better row buffer locality as the prefetching request is spatially 
+close to the recent addresses being accessed. Temporal prefetchers, on the other hand, do not have such guarantees,
+and therefore it exhibits lower row buffer hit rate, resulting in higher latency and energy consumption.
