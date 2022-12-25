@@ -21,7 +21,10 @@ low-level cache's prefetchers, such that the prefetcher can dynamically decide w
 4KB page boundaries. 
 
 This paper focuses on improving spatial prefetchers, one of the two types of prefetchers that predict future
-addresses for memory accesses based on past access patterns. Compared with temporal prefetchers, which record histories 
-of past cache misses and replay the accesses to fulfill the misses in the hope that future accesses will replicate
+addresses for memory accesses based on past spatial access patterns (e.g., deltas). Compared with temporal 
+prefetchers, which record histories 
+of past cache misses and replay the accesses to fulfill the misses in the hope that future accesses will reproduce
 the past pattern, spatial prefetchers have three apparent advantages.
+First, spatial prefetchers require much less metadata, as it only maintains metadata for describing the pattern.
+Temporal prefetchers, on the contrary, need to keep track of access traces in order to reproduce them.
 
