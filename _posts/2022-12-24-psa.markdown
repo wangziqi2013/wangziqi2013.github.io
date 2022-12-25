@@ -44,3 +44,8 @@ usually only accessible to the L1 cache, since the TLB is physically located at 
 Secondly, without translation metadata, speculatively allowing prefetchers to read past virtual page boundaries may
 raise serious security concerns, as the prefetcher can become a side channel that breaks address space isolation
 and leaks data not belonging to the current process.
+
+Based on the above reasons, the paper investigated the feasibility of prefetching on huge pages, which is a 
+feature supported by recent x86 architectures. With huge pages enabled, either the application programmer or the 
+Operating System kernel can choose to map physical memory in bigger granularity, such as 2MB or 1GB (the latter
+is only available using the `hugetlbfs` library). 
