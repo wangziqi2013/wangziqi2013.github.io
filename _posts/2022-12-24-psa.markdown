@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Page Size Aware Cache Prefetching"
+date:   2022-12-24 23:48:00 -0500
+categories: paper
+paper_title: "Page Size Aware Cache Prefetching"
+paper_link: https://ieeexplore.ieee.org/document/9923823/
+paper_keyword: Prefetching; Set Dueling; Huge Page
+paper_year: MICRO 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
