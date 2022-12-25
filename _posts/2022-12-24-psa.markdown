@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Page Size Propagation Module (PPM), an extension to the existing spatial cache prefetchers that
+enables prefetching on 2MB huge pages. The paper was motivated by the fact that 2MB huge pages are prevalent in 
+most workloads, but the existing spatial prefetchers cannot prefetch across the regular 4KB page boundary.
+
