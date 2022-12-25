@@ -27,7 +27,7 @@ of past cache misses and replay the accesses to fulfill the misses in the hope t
 the past pattern, spatial prefetchers have three apparent advantages.
 First, spatial prefetchers require much less metadata, as it only maintains metadata for describing the pattern.
 Temporal prefetchers, on the contrary, need to keep track of access traces in order to reproduce them.
-Second, spatial prefetchers can prevent compulsory misses, since the predicted addresses do not have to occur 
+Secondly, spatial prefetchers can prevent compulsory misses, since the predicted addresses do not have to occur 
 in the previous execution history. By contrast, temporal prefetchers need to see the trace at least once in order to
 reproduce them later, hence suffering compulsory misses when the address is accessed for the first time.
 Lastly, spatial prefetchers also have better row buffer locality as the prefetching request is spatially 
@@ -41,3 +41,6 @@ on the virtual address space are not necessarily consecutive on the physical add
 prefetch across page boundaries on the physical address space (which is mandatory as lower-level caches are tagged
 using physical addresses), the prefetcher must have access to translation metadata. However, translation metadata is 
 usually only accessible to the L1 cache, since the TLB is physically located at that level.
+Secondly, without translation metadata, speculatively allowing prefetchers to read past virtual page boundaries may
+raise serious security concerns, as the prefetcher can become a side channel that breaks address space isolation
+and leaks data not belonging to the current process.
