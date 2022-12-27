@@ -21,7 +21,11 @@ version_mgmt:
 
 3. Set dueling can be used to determine which page size to use if both are available
 
+**Comments:**
 
+1. The paper underestimates the hardware overhead by not counting the bits needed to indicate whether 
+the block is a result of prefetching. The overhead is relatively small, though, since it is only needed
+for the static sets.
 
 This paper proposes Page Size Propagation Module (PPM), an extension to the existing spatial cache prefetchers that
 enables prefetching on 2MB huge pages. The paper was motivated by the fact that 2MB huge pages are prevalent in 
