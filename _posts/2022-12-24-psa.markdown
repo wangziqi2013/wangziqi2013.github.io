@@ -82,3 +82,7 @@ leverages a technique called set dueling to select the proper page granularity w
 The mechanism works as follows. PPM adds a saturating counter of three bits whose highest bit is used to select
 the prefetching size. A smaller number of sets in the L2 cache are dedicated to 4KB and 2MB pages statically, i.e.,
 accesses that hit these sets will always trigger prefetching (if any) in the corresponding granularity.
+When a prefetched block is hit by an access (marked with a per-block bit), the saturating counter is incremented 
+by one, if the block is in the 4KB sets, and decremented by one, if otherwise. 
+Accesses to the rest of the sets will then use the highest bit of the saturating counter to determine the 
+page size if both sizes are available.
