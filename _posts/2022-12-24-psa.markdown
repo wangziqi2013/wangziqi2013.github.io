@@ -61,3 +61,9 @@ to track pattern information; and (2) patterns that cross 4KB page boundaries ca
 mapped to the same entry.
 All the above three observations support the claim that prefetching at larger page granularity can potentially help
 with performance.
+
+Based on these observations, the paper proposes Page-Size Propagation Module (PPM) to leverage the opportunity of 
+prefetching across 4KB page boundaries. The PPM design assumes a hardware spatial prefetcher located at the L2
+data cache. The design itself, however, is not restricted to L2 prefetchers. In addition, the PPM design is compatible
+with most prefetchers, but in the paper, it is assumed that pattern information is tracked by a hardware table 
+that is indexed with the lower bits of the page address (the exact bits to be selected depending on the page size). 
