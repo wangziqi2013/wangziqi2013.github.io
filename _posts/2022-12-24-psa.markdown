@@ -55,3 +55,9 @@ the entire execution, indicating the feasibility of performing prefetching at hu
 Secondly, the paper also conducted experiments by enabling the prefetcher to prefetch across 4KB page boundaries
 when the page size allows with pattern information still maintained at 4KB granularity. The result shows that 
 extra benefits can be gained on most workloads due to the increased opportunity exposed.
+Lastly, the paper modified the prefetcher design to store pattern information at 2MB granularity whenever the page 
+size allows. Results show further improvement for most workloads, due to (1) less metadata is needed 
+to track pattern information; and (2) patterns that cross 4KB page boundaries can be discovered as they can now be
+mapped to the same entry.
+All the above three observations support the claim that prefetching at larger page granularity can potentially help
+with performance.
