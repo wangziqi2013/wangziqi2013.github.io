@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Spatial prefetchers can prefetch across 4KB page boundaries if huge page is used
+
+2. The prefetcher can be notified of the page size by passing 1 bit from the MMU to indicate page size
+
+3. Set dueling can be used to determine which page size to use if both are available
+
+
+
 This paper proposes Page Size Propagation Module (PPM), an extension to the existing spatial cache prefetchers that
 enables prefetching on 2MB huge pages. The paper was motivated by the fact that 2MB huge pages are prevalent in 
 most workloads, but the existing spatial prefetchers cannot prefetch across the regular 4KB page boundary.
