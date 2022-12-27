@@ -52,3 +52,6 @@ is only available using the `hugetlbfs` library). The paper also made several ob
 between huge pages and spatial prefetching. First, the paper evaluated several benchmarks with Transparent Huge 
 Page (THP) enabled. Results show that most of the workloads can efficiently utilize huge page support during 
 the entire execution, indicating the feasibility of performing prefetching at huge page granularity.
+Secondly, the paper also conducted experiments by enabling the prefetcher to prefetch across 4KB page boundaries
+when the page size allows with pattern information still maintained at 4KB granularity. The result shows that 
+extra benefits can be gained on most workloads due to the increased opportunity exposed.
