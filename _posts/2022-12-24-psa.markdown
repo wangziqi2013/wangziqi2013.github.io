@@ -67,3 +67,9 @@ prefetching across 4KB page boundaries. The PPM design assumes a hardware spatia
 data cache. The design itself, however, is not restricted to L2 prefetchers. In addition, the PPM design is compatible
 with most prefetchers, but in the paper, it is assumed that pattern information is tracked by a hardware table 
 that is indexed with the lower bits of the page address (the exact bits to be selected depending on the page size). 
+The most critical goal of PPM is to propagate the page size information from the MMU to the prefetcher. To achieve this 
+goal, PPM adds an extra bit to the L1 MSHR that stores page size information, with a zero bit indicating that the 
+cache miss occurs on a regular 4KB page, and a one bit indicating that it occurs on a 2MB page. More page sizes 
+can be supported by adding extra bits into the MSHR. With the extra bit added, when the MMU performs an address 
+translation on a memory access, it also sends the page size information to the L1 cache controller. 
+
