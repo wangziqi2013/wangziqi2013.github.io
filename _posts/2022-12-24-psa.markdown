@@ -75,3 +75,10 @@ translation on a memory access, it also sends the page size information to the L
 If the memory access misses the L1 cache, the extra bit is then inserted into the MSHR, and then passed to the L2
 cache. On receiving the access request, the prefetcher will then use the page address to index into the hardware 
 table that stores pattern information. The bits are selected based on the value of the bit.
+
+While the above naive approach works well in some cases, the authors have also noted that prefetching at 2MB 
+granularity is not always desired, as it can sometimes decrease performance. To address this problem, PPM also
+leverages a technique called set dueling to select the proper page granularity when both are available.
+The mechanism works as follows. PPM adds a saturating counter of three bits whose highest bit is used to select
+the prefetching size. A smaller number of sets in the L2 cache are dedicated to 4KB and 2MB pages statically, i.e.,
+accesses that hit these sets will always trigger prefetching (if any) in the corresponding granularity.
