@@ -72,4 +72,6 @@ goal, PPM adds an extra bit to the L1 MSHR that stores page size information, wi
 cache miss occurs on a regular 4KB page, and a one bit indicating that it occurs on a 2MB page. More page sizes 
 can be supported by adding extra bits into the MSHR. With the extra bit added, when the MMU performs an address 
 translation on a memory access, it also sends the page size information to the L1 cache controller. 
-
+If the memory access misses the L1 cache, the extra bit is then inserted into the MSHR, and then passed to the L2
+cache. On receiving the access request, the prefetcher will then use the page address to index into the hardware 
+table that stores pattern information. The bits are selected based on the value of the bit.
