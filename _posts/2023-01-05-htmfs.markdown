@@ -108,6 +108,10 @@ Page deallocation also faces similar issues, and the same solution applies.
 
 The paper also demonstrates how certain complicated operations are implemented. The list includes path walk,
 directory updates, timestamp updates, and rename. These operations are specifically optimized with ad-hoc 
-protocols, such that HTM aborts are minimized.
+protocols, such that consistency is always guaranteed.
 
-
+The paper lastly discusses minimizing HTM aborts. There are four empirically discovered rules. First, timestamp
+updates should be placed at the end of the last stage, because it yields the least number of aborts during experiments.
+Second, the paper also observes that a major source of aborts is page fault. To address this issue, the paper proposes
+first dry-running the operation to pre-fault the addresses in the working set on an abort, before the RTM transaction 
+is restarted.
