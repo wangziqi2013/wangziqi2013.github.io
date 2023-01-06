@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. File systems designed for DAX NVM can adopt HTM to guarantee both atomicity and durability.
+
+
+
 **Comments:**
 
 1. The paper seems to mix two different types of consistency: multi-threaded synchronization, i.e., consistency
