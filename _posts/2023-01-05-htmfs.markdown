@@ -77,3 +77,12 @@ Otherwise, the last stage performs the writes with values computed in the previo
 the sequence counters for every piece of metadata it has modified. 
 Any attempts to write the sequence counters after they have been verified will also cause the current RTM transaction
 to abort, and the operation is restarted as if the validation had failed.
+The operation logically commits when the RTM transaction from the last stage commits, after which point the metadata 
+updates will be guaranteed to be atomic and persisted.
+
+Data operations, however, cannot be performed as metadata updates as data operations can be unbounded in size. 
+To deal with this challenge, the paper proposes several different techniques.
+First, for read operations, instead of wrapping the entire operation in an RTM transaction, which will unlikely
+to succeed if the read set is large, HTMFS simply records the page pointers and the sequence counter for those 
+pointers, and validate them later during the last stage as if it were metadata accesses.
+
