@@ -61,4 +61,10 @@ The main contribution of this paper is to adapt HTMFS file system implementation
 benefits while guaranteeing forward progress. From a high level, all file system operations are implemented as 
 a three-stage process. In the first stage, the metadata required by the operation is read, without any write operation
 on shared data (writes to private buffers that are only accessible to the thread itself and will not be persisted
-after a power failure is fine). 
+after a power failure is fine). In HTMFS, every piece of metadata is accompanied by a sequence counter 
+that stores the version of the metadata. The granularity that versions are tracked, though, is not revealed 
+(and it can vary based on the logical meaning of the metadata).
+In this stage, after a piece of metadata is read, the corresponding sequence counter is also accessed, whose value
+will then be saved into the local buffer of the accessing thread.
+Then in the second stage, the operation performs local computation to derive the new values that should be written 
+to update shared metadata. 
