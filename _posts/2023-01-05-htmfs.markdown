@@ -73,3 +73,7 @@ To verify that the metadata read during the first stage remains unchanged, at th
 the operation will first validate the sequence counters stored in its local buffer against the current value of 
 the counters, hence adding them to the transaction's read set. If any of the counters mismatches, indicating that 
 some writer transaction must have already updated the metadata, the current operation is abandoned and then restarted.
+Otherwise, the last stage performs the writes with values computed in the previous stage, and then increments 
+the sequence counters for every piece of metadata it has modified. 
+Any attempts to write the sequence counters after they have been verified will also cause the current RTM transaction
+to abort, and the operation is restarted as if the validation had failed.
