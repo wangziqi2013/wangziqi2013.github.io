@@ -105,3 +105,9 @@ To eliminate such a risk, the paper proposes that the allocator adopts logical l
 been allocated but not yet committed (i.e., the "temporary list" in the paper). On crash recovery, the allocator log 
 is then replayed, and the pages containing uncommitted writes are properly recycled. 
 Page deallocation also faces similar issues, and the same solution applies.
+
+The paper also demonstrates how certain complicated operations are implemented. The list includes path walk,
+directory updates, timestamp updates, and rename. These operations are specifically optimized with ad-hoc 
+protocols, such that HTM aborts are minimized.
+
+
