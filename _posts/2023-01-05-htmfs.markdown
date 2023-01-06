@@ -33,4 +33,9 @@ Both approaches, however, involve a large overhead.
 In the case of journaling, the same data is written twice, hence incurring 2x write amplification. 
 In the case of shadow paging, even a small write to a data page can result in numerous writes to copy the page 
 and update page pointers, causing an avalanche effect, as the paper authors have observed with NOVA.
-Consequently, conventional file systems often chose to trade-off consistency guarantees for better performance.
+Consequently, conventional file systems often chose to trade off consistency guarantees for better performance.
+
+With the introduction of Non-Volatile Memory, file systems can be implemented as directly operating on the address 
+space, thanks to a technique called DAX which maps the NVM storage to the virtual address space for random access.
+As noted by the paper, this paradigm change has simplified the consistency challenge a little since processors can 
+now perform atomic updates on a single cache block within the cache hierarchy. 
