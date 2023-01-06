@@ -127,7 +127,7 @@ updates should be placed at the end of the last stage, because it yields the lea
 Second, the paper also observes that a major source of aborts is page fault. To address this issue, the paper proposes
 first dry-running the operation to pre-fault the addresses in the working set on an abort, before the RTM transaction 
 is restarted.
-The source of transaction aborts is the REP-prefixed MOV instructions that occur in memcpy implementation. 
+Thirdly, the source of transaction aborts is the REP-prefixed MOV instructions that occur in memcpy implementation. 
 The paper hence proposes replacing these memcpy functions with those implemented with SSE2 MOVs, which incurs 
 far fewer aborts.
 Lastly, if a transaction has been restarted for too many times, HTMFS will deem it to be never committing, in which 
