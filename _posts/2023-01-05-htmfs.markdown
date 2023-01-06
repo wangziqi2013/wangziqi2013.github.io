@@ -21,6 +21,9 @@ these two types of consistency requirements have different considerations. For e
 occur even with a single thread. The paper started with consistency for crash recovery but focused more on
 multi-threaded synchronization throughout the body.
 
+2. The paper mentions in Section 4.3 that HTMFS will fall back to using locks if RTM cannot commit after several 
+retries. In this scenario, how is durability enforced? Do you also fall back to use journaling?
+
 This paper presents HTMFS, a file system that leverages existing Hardware Transactional Memory (HTM) support to
 provide strong consistency guarantees while incurring low overhead. HTMFS achieves its design goals by wrapping 
 multi-store operations within hardware transactions, whose atomicity is guaranteed by the hardware. As a result,
