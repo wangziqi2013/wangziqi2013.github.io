@@ -85,4 +85,5 @@ To deal with this challenge, the paper proposes several different techniques.
 First, for read operations, instead of wrapping the entire operation in an RTM transaction, which will unlikely
 to succeed if the read set is large, HTMFS simply records the page pointers and the sequence counter for those 
 pointers, and validate them later during the last stage as if it were metadata accesses.
-
+For small writes, HTMFS will simply wrap them in RTM transactions, as small writes are unlikely to cause 
+transaction aborts. 
