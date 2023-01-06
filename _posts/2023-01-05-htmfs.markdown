@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents HTMFS, a file system that leverages existing Hardware Transactional Memory (HTM) support to
+provide strong consistency guarantees while incurring low overhead. HTMFS achieves its design goals by wrapping 
+multi-store operations within hardware transactions, whose atomicity is guaranteed by the hardware. As a result,
+HTMFS, compared with similar designs that use journaling or shadow paging, achieves similar or better performance 
+without weakening the consistency guarantees.
+
+
