@@ -98,3 +98,7 @@ This situation arises when a large write operation allocates a free page from th
 the page, but does not commit the operation before the system crashes. In this case, even though the allocator
 status may remain intact due to the metadata update protocol, the after-crash image of the page on the NVM may contain 
 uncommitted writes, which poses a potential security risk. 
+To eliminate such a risk, the paper proposes that the allocator adopts logical logging which tracks pages that have
+been allocated but not yet committed (i.e., the "temporary list" in the paper). On crash recovery, the allocator log 
+is then replayed, and the pages containing uncommitted writes are properly recycled. 
+Page deallocation also faces similar issues, and the same solution applies.
