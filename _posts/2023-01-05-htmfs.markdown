@@ -68,3 +68,8 @@ In this stage, after a piece of metadata is read, the corresponding sequence cou
 will then be saved into the local buffer of the accessing thread.
 Then in the second stage, the operation performs local computation to derive the new values that should be written 
 to update shared metadata. 
+In the last stage, an RTM transaction is started, and all writes are performed as an atomic unit within the transaction.
+To verify that the metadata read during the first stage remains unchanged, at the beginning of the third stage, 
+the operation will first validate the sequence counters stored in its local buffer against the current value of 
+the counters, hence adding them to the transaction's read set. If any of the counters mismatches, indicating that 
+some writer transaction must have already updated the metadata, the current operation is abandoned and then restarted.
