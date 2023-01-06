@@ -17,7 +17,9 @@ version_mgmt:
 
 1. File systems designed for DAX NVM can adopt HTM to guarantee both atomicity and durability.
 
-
+2. We can use sequence counters and OCC-style validation to protect metadata accesses. In this protocol, an
+operation is implemented as read-modify-write, where the read stage only reads shared data and their sequence
+counter, and the write stage is performed atomically using RTM and validates the sequence counters.
 
 **Comments:**
 
