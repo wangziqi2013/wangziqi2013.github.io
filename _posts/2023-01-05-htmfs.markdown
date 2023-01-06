@@ -87,3 +87,7 @@ to succeed if the read set is large, HTMFS simply records the page pointers and 
 pointers, and validate them later during the last stage as if it were metadata accesses.
 For small writes, HTMFS will simply wrap them in RTM transactions, as small writes are unlikely to cause 
 transaction aborts. 
+Lastly, for large writes, the paper proposes copy-on-write, where the existing content of a page is copied to a 
+private page, to which the intended modifications are applied. At the last stage of the write operation, the 
+page pointers are updated to point to the new page, and the sequence counter is incremented to notify concurrent 
+read operations that the content of the page has been changed.
