@@ -30,3 +30,7 @@ without weakening the consistency guarantees.
 The paper was motivated by the high overhead for maintaining consistency in conventional file systems. The paper 
 has noted that conventional file systems use either journaling or shadow paging to maintain crash consistency. 
 Both approaches, however, involve a large overhead.
+In the case of journaling, the same data is written twice, hence incurring 2x write amplification. 
+In the case of shadow paging, even a small write to a data page can result in numerous writes to copy the page 
+and update page pointers, causing an avalanche effect, as the paper authors have observed with NOVA.
+Consequently, conventional file systems often chose to trade-off consistency guarantees for better performance.
