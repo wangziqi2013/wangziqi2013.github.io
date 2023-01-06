@@ -52,5 +52,9 @@ data will be visible after the crash.
 By leveraging such a novel and powerful hardware feature, NVM file system development is greatly simplified because 
 developers can simply wrap all file system operations within a single transaction and let the hardware serialize 
 them when multiple threads are accessing the same piece of data and on power failures. 
+However, this ideal model is highly unrealistic for today's commercial HTM implementation (Intel® RTM),
+the reason being that today's RTM only supports limited transaction size regarding both read and write sets.
+As a result, a transaction on RTM may never be able to commit due to the working set size exceeding a certain 
+threshold, or due to the data access pattern.
 
 
