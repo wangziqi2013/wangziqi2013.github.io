@@ -57,4 +57,8 @@ the reason being that today's RTM only supports limited transaction size regardi
 As a result, a transaction on RTM may never be able to commit due to the working set size exceeding a certain 
 threshold, or due to the data access pattern.
 
-
+The main contribution of this paper is to adapt HTMFS file system implementation to use RTM for its consistency
+benefits while guaranteeing forward progress. From a high level, all file system operations are implemented as 
+a three-stage process. In the first stage, the metadata required by the operation is read, without any write operation
+on shared data (writes to private buffers that are only accessible to the thread itself and will not be persisted
+after a power failure is fine). 
