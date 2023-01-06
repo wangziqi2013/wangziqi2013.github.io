@@ -18,10 +18,8 @@ version_mgmt:
 1. The paper seems to mix two different types of consistency: multi-threaded synchronization, i.e., consistency
 at the memory ordering level, and durability, i.e., consistency for crash recovery. While Intel RTM guarantees both,
 these two types of consistency requirements have different considerations. For example, durability problems can
-occur even with a single thread. The paper started with consistency for crash recovery, but focused more on
+occur even with a single thread. The paper started with consistency for crash recovery but focused more on
 multi-threaded synchronization throughout the body.
-
-2. 
 
 This paper presents HTMFS, a file system that leverages existing Hardware Transactional Memory (HTM) support to
 provide strong consistency guarantees while incurring low overhead. HTMFS achieves its design goals by wrapping 
@@ -29,4 +27,6 @@ multi-store operations within hardware transactions, whose atomicity is guarante
 HTMFS, compared with similar designs that use journaling or shadow paging, achieves similar or better performance 
 without weakening the consistency guarantees.
 
-
+The paper was motivated by the high overhead for maintaining consistency in conventional file systems. The paper 
+has noted that conventional file systems use either journaling or shadow paging to maintain crash consistency. 
+Both approaches, however, involve a large overhead.
