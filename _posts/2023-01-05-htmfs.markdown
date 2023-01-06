@@ -38,4 +38,6 @@ Consequently, conventional file systems often chose to trade off consistency gua
 With the introduction of Non-Volatile Memory, file systems can be implemented as directly operating on the address 
 space, thanks to a technique called DAX which maps the NVM storage to the virtual address space for random access.
 As noted by the paper, this paradigm change has simplified the consistency challenge a little since processors can 
-now perform atomic updates on a single cache block within the cache hierarchy. 
+now perform atomic updates on a single cache block within the cache hierarchy. However, multi-update atomicity is 
+still not guaranteed as the cache hierarchy may write back a dirty block halfway through the update, leaving the 
+NVM image in an inconsistent state after a system crash.
