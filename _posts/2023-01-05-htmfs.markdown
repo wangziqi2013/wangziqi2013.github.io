@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "HTMFS: Strong Consistency Comes for Free with Hardware Transactional Memory in Persistent Memory File Systems"
+date:   2022-01-05 19:40:00 -0500
+categories: paper
+paper_title: "HTMFS: Strong Consistency Comes for Free with Hardware Transactional Memory in Persistent Memory File Systems"
+paper_link: https://www.usenix.org/system/files/fast22-yi.pdf
+paper_keyword: NVM; File System; HTM
+paper_year: FAST 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
