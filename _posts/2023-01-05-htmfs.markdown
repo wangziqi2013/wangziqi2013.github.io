@@ -49,4 +49,8 @@ guaranteed to be persisted on the NVM even in the event of power failures (as wi
 cache hierarchy), while uncommitted transactions will simply be rolled back by the failure and none of its modified
 data will be visible after the crash.
 
+By leveraging such a novel and powerful hardware feature, NVM file system development is greatly simplified because 
+developers can simply wrap all file system operations within a single transaction and let the hardware serialize 
+them when multiple threads are accessing the same piece of data and on power failures. 
+
 
