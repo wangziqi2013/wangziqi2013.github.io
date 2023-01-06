@@ -21,6 +21,9 @@ version_mgmt:
 operation is implemented as read-modify-write, where the read stage only reads shared data and their sequence
 counter, and the write stage is performed atomically using RTM and validates the sequence counters.
 
+3. Page allocator can be extra-protected with logical logging such that speculatively allocated and 
+deallocated pages can be handled properly on crash recovery in order to minimize security risks.
+
 **Comments:**
 
 1. The paper seems to mix two different types of consistency: multi-threaded synchronization, i.e., consistency
