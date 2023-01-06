@@ -40,4 +40,13 @@ space, thanks to a technique called DAX which maps the NVM storage to the virtua
 As noted by the paper, this paradigm change has simplified the consistency challenge a little since processors can 
 now perform atomic updates on a single cache block within the cache hierarchy. However, multi-update atomicity is 
 still not guaranteed as the cache hierarchy may write back a dirty block halfway through the update, leaving the 
-NVM image in an inconsistent state after a system crash.
+NVM image in an inconsistent state after a system crash. 
+
+To address this problem, the paper noticed that HTM is a perfect solution as HTMs guarantee the atomicity of a 
+code block (called a transaction) with regard to concurrently executing threads by hardware. On newer hardware 
+models, HTM transactions are atomic with regard to failures as well, meaning that committed transactions are 
+guaranteed to be persisted on the NVM even in the event of power failures (as with all dirty data in the 
+cache hierarchy), while uncommitted transactions will simply be rolled back by the failure and none of its modified
+data will be visible after the crash.
+
+
