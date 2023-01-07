@@ -28,6 +28,11 @@ it less effective to assume that data on the same offset is likely identical.
 On the contrary, Rabin hash is oblivious to unaligned data as the algorithm generates a hash value for 
 every possible window with small overheads.
 
+4. Function checkpoints can be generated using CRIU. In Medes, a small subset of function instances (1 in every
+40 instances) are checkpointed and used as the reference. Pages in these checkpoints are regarded as reference
+pages, whose fingerprint values are entered into a central repository mapping the hash values to the 
+storage locations of the corresponding pages.
+
 **Comments:**
 
 1. My biggest concern is that, as the paper points out, two major sources of redundancy are shared libraries and 
