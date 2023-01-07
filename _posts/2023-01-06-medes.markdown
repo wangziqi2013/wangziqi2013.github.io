@@ -93,4 +93,9 @@ reference page locations. On receiving the fingerprints, it looks up the hash ta
 in the request and retrieves pages that have the same hash value. If more than one page is returned, the page that
 has the most matches between hash values is selected as the reference page. 
 
+After selecting the reference page, the page location is sent back to the dedup agent, and the dedup agent 
+reads the page using RDMA from its storage location. After the reference page is read, the dedup agent performs 
+local deduplication using Xdelta3 library which extracts the longest common subsequence between the page under
+deduplication and the reference page. A "patch" is generated based on the result of the comparison, which is then 
+stored with the location of the reference page together as the deduplicated representation of the page.
 
