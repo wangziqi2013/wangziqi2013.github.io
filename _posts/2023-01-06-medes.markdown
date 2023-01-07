@@ -55,3 +55,10 @@ newly started "cold" instance, at the cost of higher memory pressure since the w
 as idle functions containers in the main memory.
 The paper points out that Keep-Alive policies hardly work well in practice, due to the unpredictable nature 
 of function arrivals.
+
+Instead of simply keeping existing function instances in the main memory as warm instances, Medes proposes to 
+deduplicate these warm instances using a small number of base instances as references. 
+Consequently, these instances, after deduplication, consume less memory and hence cause less memory pressure, at the 
+cost of a slightly longer latency to bring them up by performing the restoration.
+
+
