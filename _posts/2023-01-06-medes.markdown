@@ -12,3 +12,12 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+
+
+This paper presents Medes, an in-memory deduplication module that enables fast startups of serverless functions.
+Medes is built based on the observation that serverless functions running on a cluster often share identical or 
+similar pages, which can then be leveraged for deduplication. The deduplicated function instances consume less 
+memory and can hence be preserved in the memory in a warm state for a longer period without causing memory pressure. 
+Medes achieves this design goal by using process checkpoints and fingerprint hashing to identify similarities between
+process images. 
