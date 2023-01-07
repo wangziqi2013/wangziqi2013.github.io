@@ -23,8 +23,15 @@ I understand that the Medes design uses CRIU for checkpointing and restoration, 
 for the above scenarios, but I am still curious to learn how they are done from a high level. 
 
 2. It also seems to me that Medes is most effective for data segment and heap memory since they contain private 
-memory that no other process may share. In the case of shared memory (page cache, shared library), the OS already
-does a good job deduplicating them.
+memory that no other process may share. In the case of shared memory (e.g., page cache, shared library), the OS 
+already does a good job deduplicating them.
+
+3. The paper mentions that a page's signature consists of five chunks selected from the page. What if the page
+only contains fewer than five chunks? Besides, chunks are selected if the last two bytes match a particular
+pattern. Assuming an even value distribution, this mechanism will only select a chunk every 2^16 = 64KB, and 
+five chunks will require, on average, 320KB of data.
+
+
 
 This paper presents Medes, an in-memory deduplication module that enables fast startups of serverless functions.
 Medes is built based on the observation that serverless functions running on a cluster often share identical or 
