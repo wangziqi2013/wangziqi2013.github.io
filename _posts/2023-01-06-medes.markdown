@@ -23,7 +23,10 @@ The dedup state consumes less memory than warm state and has shorter startup lat
 chunk whose hash value matches a certain pattern. If an identical chunk exists on another page, then both
 pages will have the same fingerprint being generated, which can then be matched with a hash table.
 
-
+3. Deduplication should take ASLR and unaligned data into consideration. These two properties make 
+it less effective to assume that data on the same offset is likely identical.
+On the contrary, Rabin hash is oblivious to unaligned data as the algorithm generates a hash value for 
+every possible window with small overheads.
 
 **Comments:**
 
