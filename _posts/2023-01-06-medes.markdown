@@ -101,3 +101,8 @@ stored with the location of the reference page together as the deduplicated repr
 The patch contains the offsets and the sequences that must be applied on top of the reference page in order to  
 restore the content of the current page. Since the two pages are expected to contain similar contents, thanks to
 the fingerprinting process, the patch should be relatively smaller than a full page, and therefore it saves memory.
+
+On restoration, the local dedup agent just performs the opposite of deduplication. It first reads the reference 
+page from the storage location using RDMA just like in deduplication. Then the dedup agent applies patches to each
+reference page and hence restores the content of the deduplicated page. The restored memory image is then loaded back
+to the address space, after which the function instance is brought up and ready to run.
