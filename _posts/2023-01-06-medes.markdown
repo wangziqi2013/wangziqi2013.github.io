@@ -13,7 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
 
+1. My biggest concern is that, as the paper points out, two major sources of redundancy are shared libraries and 
+opened files. In the former case, there is nothing to deduplicate as the OS effectively deduplicates them. In the 
+latter case, the content of the file may have already been loaded into the OS page cache and is used by another
+thread. These two cases seem to involve great complications as they have to be dealt with in the kernel.
+I understand that the Medes design uses CRIU for checkpointing and restoration, which may already have solutions
+for the above scenarios, but I am still curious to learn how they are done from a high level. 
 
 This paper presents Medes, an in-memory deduplication module that enables fast startups of serverless functions.
 Medes is built based on the observation that serverless functions running on a cluster often share identical or 
