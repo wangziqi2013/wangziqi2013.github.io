@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. In addition to warm and cold states, function instances can be maintained in a dedup state where its 
+address space is deduplicated and it requires an extra restoration step to be brought up. 
+The dedup state consumes less memory than warm state and has shorter startup latency.
+
+2. 
+
 **Comments:**
 
 1. My biggest concern is that, as the paper points out, two major sources of redundancy are shared libraries and 
