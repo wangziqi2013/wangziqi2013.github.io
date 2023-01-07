@@ -112,4 +112,8 @@ for deduplication. The small subset is constituted by pages in function instance
 The Medes controller generated a few checkpoints for every function type, keeping the ratio between the number of 
 instances and the number of checkpoints at approximately 40 to 1, i.e., for every 40 instances of functions in the 
 system, one checkpoint is generated and registered with the Medes controller.
-
+Pages in checkpoints are fingerprinted in the same manner as in deduplication, and the hash values are sent to the 
+Medes controller together with the storage location of the reference pages (node name + local memory address)
+such that the controller will insert them into the central repository. 
+To make deduplication and restoration operations fast, the reference pages are kept in the main memory and can be 
+fetched via RDMA.
