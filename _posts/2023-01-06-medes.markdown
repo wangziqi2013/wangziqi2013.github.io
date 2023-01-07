@@ -65,6 +65,9 @@ state, functions are still kept in the main memory, but their address spaces are
 consumption. When a function in the dedup state is to be brought up by an incoming request, Medes will first
 restore the function's address space image by restoring its content from both the reference pages and the patches 
 (diff that should be applied to reference pages).
-
+Functions can transform from the warm state to the dedup state under the command of the Medes controller 
+when deemed necessary. The controller may also purge (i.e., terminate) dedup function instances completely, freeing
+all its memory resources, when the time that the function spends in that state exceeds a certain threshold (denoted
+as the "keep-dedup period").
 
 
