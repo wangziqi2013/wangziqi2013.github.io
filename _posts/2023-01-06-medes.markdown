@@ -117,3 +117,10 @@ Medes controller together with the storage location of the reference pages (node
 such that the controller will insert them into the central repository. 
 To make deduplication and restoration operations fast, the reference pages are kept in the main memory and can be 
 fetched via RDMA.
+
+The paper also discusses operations policies adopted by Medes controller in order to achieve a balance between memory
+consumption and average startup latency. From a high-level perspective, the more instances are maintained in the 
+dedup state, the less the memory pressure will be, at the cost of higher average startup latency.
+Therefore, the main goal of the policy is to dynamically balance function instances between the warm and the 
+dedup states, such that the given constraints are met.
+
