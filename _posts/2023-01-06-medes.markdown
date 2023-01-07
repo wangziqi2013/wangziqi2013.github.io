@@ -26,7 +26,7 @@ for the above scenarios, but I am still curious to learn how they are done from 
 memory that no other process may share. In the case of shared memory (e.g., page cache, shared library), the OS 
 already does a good job deduplicating them.
 
-3. The paper mentions that a page's signature consists of five chunks selected from the page. What if the page
+3. The paper mentions that a page's fingerprint consists of five chunks selected from the page. What if the page
 only contains fewer than five chunks? Besides, chunks are selected if the last two bytes match a particular
 pattern. Assuming an even value distribution, this mechanism will only select a chunk every 2^16 = 64KB, and 
 five chunks will require, on average, 320KB of data.
@@ -75,8 +75,8 @@ the existing function instances. Similarly, when a function is brought up, it mu
 state before execution can start. In Medes, deduplication and restoration are local operations being performed by a
 daemon process called the dedup agent. When a function instance is to be deduplicated, a checkpoint of the process 
 image is first taken using the CRIU framework. After the checkpoint is taken, the local dedup agent scans 
-checkpoint data, and for each page, computes the signature that represents the content of the page.
-Page signatures are computed by running the Rabin rolling hash on a 64-byte window and selecting the 64-byte chunk
+checkpoint data, and for each page, computes the fingerprint that represents the content of the page.
+Page fingerprint is computed by running the Rabin rolling hash on a 64-byte window and selecting the 64-byte chunk
 whose hash value matches a certain pattern. The selected 64-byte chunks are called Reusable Sandbox Chunks (RSCs)
 of the page, and a total of five RSCs for each page constitute the fingerprint of the page. 
 
@@ -85,5 +85,12 @@ it only requires a linear scan of the page to generate hash values for all 64-by
 at a smaller granularity than the page size adapt to ASLR and, in general, unaligned in data on the address space very
 well, since Rabin hash can capture data similarity even at different offsets (and is hence more widely known as 
 a string matching algorithm). 
+
+After the page fingerprints are generated, the local dedup agent sends the fingerprints to the central Medes 
+controller located at a gateway node for deduplication. The Medes controller maintains a  
+central repository of reference pages and their fingerprints, implemented as a hash table mapping hash values to
+reference page locations. On receiving the fingerprints, it looks up the hash table using the hash values included 
+in the request and retrieves pages that have the same hash value. If more than one page is returned, the page that
+has the most matches between hash values is selected as the reference page. 
 
 
