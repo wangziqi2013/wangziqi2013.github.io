@@ -60,5 +60,11 @@ Instead of simply keeping existing function instances in the main memory as warm
 deduplicate these warm instances using a small number of base instances as references. 
 Consequently, these instances, after deduplication, consume less memory and hence cause less memory pressure, at the 
 cost of a slightly longer latency to bring them up by performing the restoration.
+To achieve this goal, Medes introduces a third state of function instance, called the "dedup" state. Under the dedup
+state, functions are still kept in the main memory, but their address spaces are deduplicated for reduced memory
+consumption. When a function in the dedup state is to be brought up by an incoming request, Medes will first
+restore the function's address space image by restoring its content from both the reference pages and the patches 
+(diff that should be applied to reference pages).
+
 
 
