@@ -98,4 +98,6 @@ reads the page using RDMA from its storage location. After the reference page is
 local deduplication using Xdelta3 library which extracts the longest common subsequence between the page under
 deduplication and the reference page. A "patch" is generated based on the result of the comparison, which is then 
 stored with the location of the reference page together as the deduplicated representation of the page.
-
+The patch contains the offsets and the sequences that must be applied on top of the reference page in order to  
+restore the content of the current page. Since the two pages are expected to contain similar contents, thanks to
+the fingerprinting process, the patch should be relatively smaller than a full page, and therefore it saves memory.
