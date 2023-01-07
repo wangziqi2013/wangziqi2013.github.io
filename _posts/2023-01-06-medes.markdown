@@ -43,4 +43,10 @@ Medes is built based on the observation that serverless functions running on a c
 similar pages, which can then be leveraged for deduplication. The deduplicated function instances consume less 
 memory and can hence be preserved in the memory in a warm state for a longer period without causing memory pressure. 
 Medes achieves this design goal by using process checkpoints and fingerprint hashing to identify similarities between
-process images. 
+their memory images. 
+
+The Medes design is motivated by the classic problem of reducing cold-start latency in serverless computing.
+Cold-start latency has become a major problem as serverless functions are typically short in execution time. 
+As a result, the relatively heavyweight process of starting the function instance and setting up the execution
+environment can occupy a significant part of function execution.
+
