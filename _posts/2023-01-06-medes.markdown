@@ -49,4 +49,9 @@ The Medes design is motivated by the classic problem of reducing cold-start late
 Cold-start latency has become a major problem as serverless functions are typically short in execution time. 
 As a result, the relatively heavyweight process of starting the function instance and setting up the execution
 environment can occupy a significant part of function execution.
-
+To reduce such latency, prior works proposed using Keep-Alive policies that keep function instances "warm"
+in the system after the function completes. A warm function instance can be invoked much faster than a 
+newly started "cold" instance, at the cost of higher memory pressure since the warm instances are maintained 
+as idle functions containers in the main memory.
+The paper points out that Keep-Alive policies hardly work well in practice, due to the unpredictable nature 
+of function arrivals.
