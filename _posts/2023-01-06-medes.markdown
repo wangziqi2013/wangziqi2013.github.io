@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Memory Deduplication for Serverless Computing with Medes"
+date:   2023-01-06 20:36:00 -0500
+categories: paper
+paper_title: "Memory Deduplication for Serverless Computing with Medes"
+paper_link: https://dl.acm.org/doi/10.1145/3492321.3524272
+paper_keyword: Serverless; Deduplication; Cold-Start Latency
+paper_year: EuroSys 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
