@@ -32,7 +32,11 @@ pattern. Assuming an even value distribution, this mechanism will only select a 
 five chunks will require, on average, 320KB of data.
 
 4. In 4.1.2, are the chunks selected based on the last two bytes of chunk data (which is what the text seems to 
-suggest), or the last two bytes of hash value (which is more reasonable as with Rabin-Karp algorithm)?
+suggest -- also there is a typo), or the last two bytes of the hash value (which is more reasonable as with 
+Rabin-Karp algorithm)?
+
+5. In Section 2.1, if you sample K bytes at "regular fixed offsets of 2K bytes", then why bother using Rabin hash?
+Aren't the K-byte chunks selected at fixed offsets as well?
 
 This paper presents Medes, an in-memory deduplication module that enables fast startups of serverless functions.
 Medes is built based on the observation that serverless functions running on a cluster often share identical or 
