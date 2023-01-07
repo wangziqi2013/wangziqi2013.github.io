@@ -74,4 +74,16 @@ When a function transits from warm to dedup state, the address space of the func
 the existing function instances. Similarly, when a function is brought up, it must be restored to its original
 state before execution can start. In Medes, deduplication and restoration are local operations being performed by a
 daemon process called the dedup agent. When a function instance is to be deduplicated, a checkpoint of the process 
-image is first taken using the CRIU framework. 
+image is first taken using the CRIU framework. After the checkpoint is taken, the local dedup agent scans 
+checkpoint data, and for each page, computes the signature that represents the content of the page.
+Page signatures are computed by running the Rabin rolling hash on a 64-byte window and selecting the 64-byte chunk
+whose hash value matches a certain pattern. The selected 64-byte chunks are called Reusable Sandbox Chunks (RSCs)
+of the page, and a total of five RSCs for each page constitute the fingerprint of the page. 
+
+The reasons that Rabin hashes are used for generating page fingerprints are (1) Rabin hash is easy to compute as 
+it only requires a linear scan of the page to generate hash values for all 64-byte windows, and (2) Running Rabin hash
+at a smaller granularity than the page size adapt to ASLR and, in general, unaligned in data on the address space very
+well, since Rabin hash can capture data similarity even at different offsets (and is hence more widely known as 
+a string matching algorithm). 
+
+
