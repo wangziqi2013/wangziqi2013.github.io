@@ -32,3 +32,8 @@ dedicated TLB structures to the GPU device or rely on the existing IOMMU to perf
 In both cases, the address translation is not free, since TLB misses will trigger page walks to fetch the 
 translation entry from the in-memory page table, the latency of which is usually non-negligible and is 
 on the critical path.
+
+To study the properties of address translation on GPU devices, the paper conducted experiments on a GPU simulator
+with 22 workloads. The simulator models a two-level TLB hierarchy, with the first level being private and at a 
+per-SM basis and the second level being a shared TLB structure. 
+The paper presents several observations. 
