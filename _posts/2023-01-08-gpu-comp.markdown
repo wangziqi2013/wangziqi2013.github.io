@@ -68,4 +68,10 @@ resulting in an effective compression ratio of 1.5 across the entire TLB.
 Every set also has two base address registers storing the higher bits from virtual and physical addresses, 
 respectively. All compressed entries in a set share the same base stored in the corresponding registers.
 
+During a TLB lookup, both the base registers and the set are fetched. The TLB controller checks the uncompressed 
+partition as usual. For the compressed partition, the controller first generates the full virtual address by 
+concatenating the higher bits with the bits stored in the compressed entry. Then it checks the requested address with 
+the full virtual address as in the uncompressed case. 
+A hit is signaled if the lookup finds a matching address in any of the two partitions. 
+
 
