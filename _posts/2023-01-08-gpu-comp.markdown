@@ -82,5 +82,8 @@ eviction policies, such that insertion operations within one partition always on
 The above simple scheme may not work well with the clustered access pattern presented earlier, in
 which case more than one base address is needed for different windows. Therefore, it is critical for the 
 compression scheme to be able to dynamically adjust the base address of each set. To achieve this goal,
-the paper proposes to add an extra "rebasing" counter for each set. 
+the paper proposes to add an extra "rebasing" counter for each set. The initial value of the rebasing counter
+is set to a positive value. Whenever an insert operation fails to insert the entry into the compressed partition,
+the value of the counter is decremented by one. When the counter value drops to zero, the TLB controller will 
+evict all existing entries in the compressed partition, and reset the base register values on the next insertion.
 
