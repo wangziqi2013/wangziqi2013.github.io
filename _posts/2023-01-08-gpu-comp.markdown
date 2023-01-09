@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. 
+
+**Comments:**
+
+1. The paper over-estimates the effective compression ratio, which is not 2, but 1.5, since only half of the 
+TLB is compressed.
+
 This paper proposes a technique for compressing GPGPU TLB entries to accommodate the increasingly irregular
 access pattern of modern GPU workloads. The paper is motivated by the observation that modern GPGPU workloads 
 suffer a high L2 TLB miss ratio which can become a performance bottleneck under Unified Virtual Memory (UVM).
