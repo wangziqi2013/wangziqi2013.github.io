@@ -12,3 +12,11 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes a technique for compressing GPGPU TLB entries to accommodate the increasingly irregular
+access pattern of modern GPU workloads. The paper is motivated by the observation that modern GPGPU workloads 
+suffer a high L2 TLB miss ratio which can become a performance bottleneck under Unified Virtual Memory (UVM).
+The paper proposes to compress the TLB translation entry by extracting the common high bits of both virtual
+and physical addresses and storing compressed translation entries in the hardware structure for reduced misses.
+
+
