@@ -74,4 +74,7 @@ concatenating the higher bits with the bits stored in the compressed entry. Then
 the full virtual address as in the uncompressed case. 
 A hit is signaled if the lookup finds a matching address in any of the two partitions. 
 
-
+On an L2 TLB insertion, the controller first checks whether the inserted address can be compressed with the 
+base address of the set. If positive, then the new entry is allocated from the compressed partition, and otherwise,
+it is allocated from the uncompressed partition. The paper also suggests that both partitions implement their own
+eviction policies, such that insertion operations within one partition always only evict from the same partition.
