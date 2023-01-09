@@ -22,7 +22,9 @@ than L1 TLB as the latter can be avoided by wrap scheduling.
 compressed entries store the delta. Both virtual and physical addresses can be compressed this way.
 We can also partition the ways of the TLB to only compress some ways.
 
-
+3. The base value for each set can also be dynamically updated using a rebase counter. The counter is decremented
+for every insert miss (i.e., insertions that cannot be compressed). When the counter reaches zero, a new 
+base is chosen after evicting all existing entries.
 
 **Comments:**
 
