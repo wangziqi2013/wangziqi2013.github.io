@@ -18,6 +18,10 @@ version_mgmt:
 1. The TLB of GPGPU suffers high miss ratios due to the clustered access pattern; The misses affect L2 TLB more 
 than L1 TLB as the latter can be avoided by wrap scheduling.
 
+2. TLB entries can be compressed using base-delta algorithm. A per-set register stores the shared base, while 
+compressed entries store the delta. Both virtual and physical addresses can be compressed this way.
+We can also partition the ways of the TLB to only compress some ways.
+
 
 
 **Comments:**
