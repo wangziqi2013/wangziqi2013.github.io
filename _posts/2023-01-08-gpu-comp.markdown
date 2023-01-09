@@ -22,4 +22,6 @@ and physical addresses and storing compressed translation entries in the hardwar
 The paper assumes Unified Virtual Memory (UVM) architecture where the GPU device shares the same virtual address
 space as the process running on the CPU. Compared with prior memory architectures where the GPU and CPU do not 
 share any address space, UVM has two obvious advantages. First, programmers no longer need to manually transfer
-data from and into the GPU memory, which greatly simplifies the development process. 
+data from and into the GPU memory, which greatly simplifies the development process. Secondly, UVM enables 
+the GPU device to access a working set that is larger than its onboard memory size, as data can be dynamically
+paged in and out of GPU memory.
