@@ -25,3 +25,8 @@ share any address space, UVM has two obvious advantages. First, programmers no l
 data from and into the GPU memory, which greatly simplifies the development process. Secondly, UVM enables 
 the GPU device to access a working set that is larger than its onboard memory size, as data can be dynamically
 paged in and out of GPU memory.
+
+To support UVM, GPU devices must be able to translate virtual addresses issued by programs into the physical address
+of the main memory, before the address can be used for memory accesses. Current GPU implementations either add 
+dedicated TLB structures to the GPU device or rely on the existing IOMMU to perform address translation.
+
