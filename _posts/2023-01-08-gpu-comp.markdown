@@ -53,4 +53,9 @@ The observed access pattern is a strong hint that most addresses in the TLB will
 are close to each other in the address space.
 
 Based on the above observations, the paper proposes a TLB compression scheme where the L2 TLB entries are compressed
-
+using a simple base-delta algorithm.
+At a high level, every set of the compressed L2 TLB is partitioned into two equally sized parts. The uncompressed 
+partition stores TLB entries in an uncompressed format as in the baseline system. The compressed partition, 
+however, only stores the delta of both virtual and physical addresses from the base address, leaving the common 
+base address being stored by a per-set register (we need two separate registers for virtual and physical addresses in 
+the set). 
