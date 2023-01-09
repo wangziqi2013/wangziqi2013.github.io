@@ -78,3 +78,9 @@ On an L2 TLB insertion, the controller first checks whether the inserted address
 base address of the set. If positive, then the new entry is allocated from the compressed partition, and otherwise,
 it is allocated from the uncompressed partition. The paper also suggests that both partitions implement their own
 eviction policies, such that insertion operations within one partition always only evict from the same partition.
+
+The above simple scheme may not work well with the clustered access pattern presented earlier, in
+which case more than one base address is needed for different windows. Therefore, it is critical for the 
+compression scheme to be able to dynamically adjust the base address of each set. To achieve this goal,
+the paper proposes to add an extra "rebasing" counter for each set. 
+
