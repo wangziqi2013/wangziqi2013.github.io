@@ -19,4 +19,7 @@ suffer a high L2 TLB miss ratio which can become a performance bottleneck under 
 The paper proposes to compress the TLB translation entry by extracting the common high bits of both virtual
 and physical addresses and storing compressed translation entries in the hardware structure for reduced misses.
 
-
+The paper assumes Unified Virtual Memory (UVM) architecture where the GPU device shares the same virtual address
+space as the process running on the CPU. Compared with prior memory architectures where the GPU and CPU do not 
+share any address space, UVM has two obvious advantages. First, programmers no longer need to manually transfer
+data from and into the GPU memory, which greatly simplifies the development process. 
