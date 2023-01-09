@@ -39,10 +39,18 @@ per-SM basis and the second level being a shared TLB structure.
 The paper presents several observations. First, different workloads demonstrate different TLB miss ratios, but in 
 general, the miss ratios are significant, indicating that TLB misses have become a major source of bottleneck
 in these executions. In particular, if we quantitatively classify the degree of locality using reuse distance, 
-i.e., the number of other accesses between two consecutive accesses to the same page, the paper observes that 
+i.e., the number of other accesses between two consecutive accesses to the same page, we can observe that 
 most pages demonstrate larger reuse distances, which implies bad locality.
-Second, the paper observes that, by replacing the realistic L1 cache with an ideal L1 that does not incur any access 
+Second, by replacing the realistic L1 cache with an ideal L1 that does not incur any access 
 overhead (but can still miss), the overall performance improvement is very limited. 
 On the contrary, by replacing the existing L2 TLB with an ideal one, the paper observes significant performance 
 improvement, which is a good indication that optimizing the L2 TLB can bring more benefits than optimizing the L1 TLB.
-Lastly, 
+Lastly, the paper also observes that accesses exhibit a clustered pattern, meaning that most accesses are clustered 
+around one or more regions during a time window, and in different time windows, the regions where accesses are 
+clustered may vary. However, the paper also noted that most accesses do not demonstrate any stride pattern, i.e.,
+there is no consistent stride value such that these accesses can be described.
+The observed access pattern is a strong hint that most addresses in the TLB will share the same higher bits as they
+are close to each other in the address space.
+
+Based on the above observations, the paper proposes a TLB compression scheme where the L2 TLB entries are compressed
+
