@@ -15,11 +15,14 @@ version_mgmt:
 
 **Highlights:**
 
-1. 
+1. The TLB of GPGPU suffers high miss ratios due to the clustered access pattern; The misses affect L2 TLB more 
+than L1 TLB as the latter can be avoided by wrap scheduling.
+
+
 
 **Comments:**
 
-1. The paper over-estimates the effective compression ratio, which is not 2, but 1.5, since only half of the 
+1. The paper overestimates the effective compression ratio, which is not 2, but 1.5, since only half of the 
 TLB is compressed.
 
 This paper proposes a technique for compressing GPGPU TLB entries to accommodate the increasingly irregular
