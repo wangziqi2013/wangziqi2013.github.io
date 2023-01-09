@@ -36,4 +36,9 @@ on the critical path.
 To study the properties of address translation on GPU devices, the paper conducted experiments on a GPU simulator
 with 22 workloads. The simulator models a two-level TLB hierarchy, with the first level being private and at a 
 per-SM basis and the second level being a shared TLB structure. 
-The paper presents several observations. 
+The paper presents several observations. First, different workloads demonstrate different TLB miss ratios, but in 
+general, the miss ratios are significant, indicating that TLB misses have become a major source of bottleneck
+in these executions. In particular, if we quantitatively classify the degree of locality using reuse distance, 
+i.e., the number of other accesses between two consecutive accesses to the same page, the paper observes that 
+most pages demonstrate larger reuse distances, which implies bad locality.
+Second, 
