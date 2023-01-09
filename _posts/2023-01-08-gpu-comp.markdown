@@ -58,4 +58,10 @@ At a high level, every set of the compressed L2 TLB is partitioned into two equa
 partition stores TLB entries in an uncompressed format as in the baseline system. The compressed partition, 
 however, only stores the delta of both virtual and physical addresses from the base address, leaving the common 
 base address being stored by a per-set register (we need two separate registers for virtual and physical addresses in 
-the set). 
+the set). More specifically, the paper assumes 2GB physical memory with regular 4KB pages and also assumes an L2 TLB 
+of 32 sets (i.e., 5 lowest bits for set indexing). Therefore, each virtual page address has 
+31 bits, and each physical address has 19 bits, which sum up to a total of 50 bits without compression. 
+With compression enabled, every compressed entry only stores the 13 bits and 9 bits delta for virtual and 
+physical addresses respectively as the delta, leaving the higher 18 and 10 bits as the base address.
+
+
