@@ -63,5 +63,9 @@ of 32 sets (i.e., 5 lowest bits for set indexing). Therefore, each virtual page 
 31 bits, and each physical address has 19 bits, which sum up to a total of 50 bits without compression. 
 With compression enabled, every compressed entry only stores the 13 bits and 9 bits delta for virtual and 
 physical addresses respectively as the delta, leaving the higher 18 and 10 bits as the base address.
+Consequently, each TLB entry slot (which has 50 bits) can now store two compressed entries (21 bits each),
+resulting in an effective compression ratio of 1.5 across the entire TLB.
+Every set also has two base address registers storing the higher bits from virtual and physical addresses, 
+respectively. All compressed entries in a set share the same base stored in the corresponding registers.
 
 
