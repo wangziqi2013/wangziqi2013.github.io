@@ -28,7 +28,10 @@ should be populated by the page walker.
 3. If the cache block containing the ATLB entry is evicted from the private hierarchy (or from the LLC, depending
 on whether the coherence protocol has silent L2 eviction), then cache coherence will no longer be able to reach the 
 private hierarchy potentially holding the TLB entry. How did ATTC deal with this scenario? 
-
+One possible solution is to mark cache blocks containing ATLB entries in the L2 cache and then invalidate 
+TLN entries as well when a marked block is evicted. However, this approach would make the L2 essentially
+inclusive of the TLB, which may incur unexpected performance issues. Besides, it introduces extra tagging per 
+cache block.
 
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
