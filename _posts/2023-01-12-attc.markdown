@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. TLB shootdown is a more complicated problem to address, because (1) the 2D nested page table walk design has more 
+shootdown scenarios, e.g., both the host and the guest can update the mapping; (2) existing software solutions 
+do not support fine-grained, precise tracking of the paging history; and (3) in hybrid NVM-DRAM systems, frequent
+page migration between the two may aggravate the situation as every page migration operation requires a TLB shootdown.
+
 **Comments:**
 
 1. Modern TLB entries have two disambiguation fields. One is VMID which distinguishes between VMs and the 
