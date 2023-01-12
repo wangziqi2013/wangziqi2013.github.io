@@ -12,3 +12,8 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
+in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
+to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
+virtualized environments better and incurs only minimum hardware additions on the TLB structure.
