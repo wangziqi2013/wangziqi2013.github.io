@@ -47,6 +47,9 @@ TLN entries as well when a marked block is evicted. However, this approach would
 inclusive of the TLB, which may incur unexpected performance issues. Besides, it introduces extra tagging per 
 cache block.
 
+4. If an entry is evicted from the ATLB as part of the MMU's page walk process, does the MMU also evict 
+all locally cached TLB entries for correctness? The paper should have added a discuss of this scenario.
+
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
