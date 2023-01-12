@@ -20,6 +20,11 @@ VMM, which the paper discusses. The other, however, is PCID which distinguishes 
 within the same VM instance or within the VMM/host OS, which the paper neglects. How does the PCID field
 affect the design of ATTC?
 
+2. The paper did not discuss how are the tables (ATLB and INVTBL) populated. Are they populated automatically by 
+the MMU page walker on the completion of page walks? Are they populated by the guest or host OS (unlikely)?
+It seems that the paper adds the ATLB as a level 3 in-memory TLB. If this assumption is true, then the ATLB
+should be populated by the page walker.
+
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
