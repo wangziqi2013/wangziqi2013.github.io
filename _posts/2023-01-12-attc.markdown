@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ATTC (@C): Addressable-TLB based Translation Coherence"
+date:   2023-01-12 05:00:00 -0500
+categories: paper
+paper_title: "ATTC (@C): Addressable-TLB based Translation Coherence"
+paper_link: https://dl.acm.org/doi/10.1145/3410463.3414653
+paper_keyword: ATTC; TLB Shootdown; Virtualization
+paper_year: PACT 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
