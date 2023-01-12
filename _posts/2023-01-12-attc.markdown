@@ -20,6 +20,13 @@ shootdown scenarios, e.g., both the host and the guest can update the mapping; (
 do not support fine-grained, precise tracking of the paging history; and (3) in hybrid NVM-DRAM systems, frequent
 page migration between the two may aggravate the situation as every page migration operation requires a TLB shootdown.
 
+2. We can address the TLB coherence problem on hardware by adding a level-3 TLB in the main memory. TLB coherence 
+messages can then be sent as regular cache coherence messages using the memory address containing the entry's 
+address. In other words, the in-memory TLB structure becomes the point of coherence, where every update to the 
+translation entry (i.e., the page table) is also reflected on the in-memory TLB as a memory update. The 
+memory update is then captured by regular cache coherence and sent to the sharer core that has the same 
+translation entry, which triggers TLB invalidation.
+
 **Comments:**
 
 1. Modern TLB entries have two disambiguation fields. One is VMID which distinguishes between VMs and the 
