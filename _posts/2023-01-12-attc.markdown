@@ -25,6 +25,11 @@ the MMU page walker on the completion of page walks? Are they populated by the g
 It seems that the paper adds the ATLB as a level 3 in-memory TLB. If this assumption is true, then the ATLB
 should be populated by the page walker.
 
+3. If the cache block containing the ATLB entry is evicted from the private hierarchy (or from the LLC, depending
+on whether the coherence protocol has silent L2 eviction), then cache coherence will no longer be able to reach the 
+private hierarchy potentially holding the TLB entry. How did ATTC deal with this scenario? 
+
+
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
