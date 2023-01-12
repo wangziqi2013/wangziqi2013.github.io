@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Modern TLB entries have two disambiguation fields. One is VMID which distinguishes between VMs and the 
+VMM, which the paper discusses. The other, however, is PCID which distinguishes between different processes 
+within the same VM instance or within the VMM/host OS, which the paper neglects. How does the PCID field
+affect the design of ATTC?
+
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
