@@ -120,3 +120,8 @@ When the host OS updates the gPA to hPA mapping, however, the ATLB cannot be dir
 since the ATLB is indexed by the gVA. 
 To fill the gap, ATTC also introduces an inverse mapping table, the INVTBL, which maps an hPA to the set index of 
 the gVA that translates to it. The INVTBL is also a set-associative structure stored in the main memory. 
+The INBTBL is populated by the page table walker after a 2D page walk completes, and is maintained inclusive 
+to the ATLB, i.e., when a ATLB entry is invalidated, the INVTLB entry that map to it should also be invalidated
+(using the hPA stored in the ATLB entry).
+When the host updates the outer page table, it performs a dummy write operation to the INVTBL entry after 
+calculating the entry's address using hPA. 
