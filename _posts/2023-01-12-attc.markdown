@@ -68,4 +68,7 @@ In the second scenario, the host OS (or hypervisor) updates the translation from
 host physical addresses (hPA). In the second case, the set of cores that can potentially cache the translation is 
 not clear to the host OS, as the host OS only tracks the set of virtual cores allocated to a particular VM, but not 
 the cores that each individual process is scheduled on. Besides, the host OS cannot derive the gVA that corresponds 
-to the gPA being updated, as it requires a reverse mapping of the inner (guest OS) page table. 
+to the gPA being updated, as it requires a reverse mapping of the inner (guest OS) page table. As a result, the 
+host OS is unable to determine the virtual address to be invalidated (which must be the gVA because the TLB is designed
+to be indexed by gVA). In the current implementation, this issue is addressed by flushing the entire TLB on all 
+virtual cores that have been allocated to the VM instance. 
