@@ -96,3 +96,10 @@ sets than the L2 TLB. Each entry of the ATLB stores the gVA to hPA mapping as a 
 When TLB lookups miss the local hierarchy, the MMU will further perform lookups in the ATLB. The ATLB is indexed 
 using both the VMID and the gVA, such that translation entries of different VM instances can co-exist peacefully 
 in the ATLB.
+
+The ATTC design performs hardware TLB shootdown using regular cache coherence  and leverages the in-memory ATLB as the 
+point of coherence. More specifically, when a core performs a page walk and brings the translation entry into its 
+local TLB hierarchy, the core should also read the ATLB and bring the corresponding cache block into its local 
+hierarchy (as a natural result of the ATLB lookup). As long as the cache block stays in the private hierarchy, the 
+core that caches the translation entry in the local TLBs is bound to receive cache coherence messages when the 
+ATLB entry containing the translation is modified by another core. 
