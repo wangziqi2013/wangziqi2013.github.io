@@ -109,3 +109,9 @@ a simple address check to see whether write operations lie within ATLB's address
 performs sanity checks to ensure that the core has the right permission to update the ATLB entry.
 When the write operation is handled by regular cache coherence, all other cores that have read the same entry earlier
 will receive a cache invalidation message containing the physical address of the ATLB entry.
+On receiving the message, the local cache controller will decide whether physical address lies within ATLB's address
+range, and if positive, the cache controller will compute the set index using the entry's physical address and the 
+starting address of the ATLB. The set index of ATLB is designed such that it encodes both the partial gVA of the 
+entry as well as the VMID. After computing the set index, the cache controller then issues invalidation messages to the 
+TLB using the partial gVA and the VMID. False matches can arise as a result of using only partial gVAs to perform tag 
+match. However, the paper noted that this case is very rare and does not affect performance.
