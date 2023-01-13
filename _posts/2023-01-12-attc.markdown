@@ -48,9 +48,15 @@ inclusive of the TLB, which may incur unexpected performance issues. Besides, it
 cache block.
 
 4. If an entry is evicted from the ATLB as part of the MMU's page walk process, does the MMU also evict 
-all locally cached TLB entries for correctness? The paper should have added a discuss of this scenario.
+all locally cached TLB entries for correctness? The paper should have added a discussion of this scenario.
 
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
 virtualized environments better and incurs only minimum hardware additions on the TLB structure.
+
+The paper is motivated by the inefficiency of existing software solutions to maintain TLB coherence. Conventionally, 
+when the OS kernel updates a page table entry that mandates a TLB coherence action on a processor core, the kernel must 
+explicitly notify the other cores that can potentially cache the same translation entry in their local TLB, and wait
+for their response to complete the TLB shootdown process. This process is implemented in pure software using IPIs and 
+is blocking, which incurs non-negligible overhead. 
