@@ -72,7 +72,7 @@ host physical addresses (hPA). In this case, the set of cores that can potential
 not clear to the host OS, as the host OS only tracks the set of virtual cores allocated to a particular VM, but not 
 the cores that each individual process running in the VM instance is scheduled on. Besides, the host OS cannot 
 decide the gVA that corresponds 
-to the gPA being updated, as it requires a reverse mapping of the inner (guest OS) page table. As a result, the 
+to the gPA being updated, as it requires an inverse mapping of the inner (guest OS) page table. As a result, the 
 host OS is unable to determine the virtual address to be invalidated (which must be the gVA because the TLB is designed
 to be indexed by gVA). In the current OS implementation, this issue is addressed by flushing the entire TLB on all 
 virtual cores that have been allocated to the VM instance. 
@@ -115,3 +115,8 @@ starting address of the ATLB. The set index of ATLB is designed such that it enc
 entry as well as the VMID. After computing the set index, the cache controller then issues invalidation messages to the 
 TLB using the partial gVA and the VMID. False matches can arise as a result of using only partial gVAs to perform tag 
 match. However, the paper noted that this case is very rare and does not affect performance.
+
+When the host OS updates the gPA to hPA mapping, however, the ATLB cannot be directly used to perform invalidation,
+since the ATLB is indexed by the gVA. 
+To fill the gap, ATTC also introduces an inverse mapping table, the INVTBL, which maps an hPA to the set index of 
+the gVA that translates to it. The INVTBL is also a set-associative structure stored in the main memory. 
