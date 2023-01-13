@@ -124,4 +124,8 @@ The INBTBL is populated by the page table walker after a 2D page walk completes,
 to the ATLB, i.e., when a ATLB entry is invalidated, the INVTLB entry that map to it should also be invalidated
 (using the hPA stored in the ATLB entry).
 When the host updates the outer page table, it performs a dummy write operation to the INVTBL entry after 
-calculating the entry's address using hPA. 
+calculating the entry's address using hPA. The dummy write 
+operation will be intercepted by the hardware MMU, and then redirected to the corresponding ATLB entry
+whose address is stored in the INVTBL entry. The write to the ATLB entry will trigger cache coherence messages
+in the same manner as in the previous case, which eventually invalidates all local TLB entries affected by the 
+outer page table update. 
