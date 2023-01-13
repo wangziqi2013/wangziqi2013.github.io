@@ -88,3 +88,8 @@ Lastly, as byte-addressable NVM is gradually adopted as a slower but bigger repl
 memory, the paper observes that on future systems, pages need to be constantly migrated between NVM and DRAM.
 Page migration would incur more frequent TLB shootdowns, which makes an efficient solution incredibly valuable.
 
+Based on the above observations, the paper proposes ATTC which we describe as follows. In ATTC, a level-3 TLB,
+called the ATLB, is added to the main memory. The ATLB is organized as a set-associative main memory cache, but 
+it stores translation entries from gVA to hPA as a result of 2D page table walks. Although the paper did not specify
+the optimal parameters for ATLB, it is suggested that ATLB should be at least a few MBs in size, and have more 
+sets than the L2 TLB. 
