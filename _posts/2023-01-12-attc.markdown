@@ -92,4 +92,7 @@ Based on the above observations, the paper proposes ATTC which we describe as fo
 called the ATLB, is added to the main memory. The ATLB is organized as a set-associative main memory cache, but 
 it stores translation entries from gVA to hPA as a result of 2D page table walks. Although the paper did not specify
 the optimal parameters for ATLB, it is suggested that ATLB should be at least a few MBs in size, and have more 
-sets than the L2 TLB. 
+sets than the L2 TLB. Each entry of the ATLB stores the gVA to hPA mapping as a regular hardware TLB.
+When TLB lookups miss the local hierarchy, the MMU will further perform lookups in the ATLB. The ATLB is indexed 
+using both the VMID and the gVA, such that translation entries of different VM instances can co-exist peacefully 
+in the ATLB.
