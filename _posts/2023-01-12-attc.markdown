@@ -79,3 +79,7 @@ The first is nested page table to support virtualization, since prior works most
 between VA and PA and are generally difficult to be extended to support 2D page tables.
 Secondly, prior works tend to extend TLB entries with more metadata bits, which results in higher hardware cost
 and more design complications. 
+
+Lastly, as byte-addressable NVM is gradually adopted as a slower but bigger replacement to DRAM to serve as the main 
+memory, the paper observes that on future systems, pages need to be constantly migrated between NVM and DRAM.
+Page migration would incur more frequent TLB shootdowns, which makes an efficient solution incredibly valuable.
