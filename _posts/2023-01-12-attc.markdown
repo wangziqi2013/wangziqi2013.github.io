@@ -59,4 +59,8 @@ The paper is motivated by the inefficiency of existing software solutions to mai
 when the OS kernel updates a page table entry that mandates a TLB coherence action on a processor core, the kernel must 
 explicitly notify the other cores that can potentially cache the same translation entry in their local TLB, and wait
 for their response to complete the TLB shootdown process. This process is implemented in pure software using IPIs and 
-is blocking, which incurs non-negligible overhead. 
+is blocking, which incurs non-negligible overhead. The problem is further exacerbated with the introduction of 
+nested page tables as part of the virtualization support. In particular, with the nested page table, the TLB shootdown 
+mechanism must deal with two radically different scenarios. The first scenario is when the guest OS updates the 
+guest page table. In this case, the guest OS tracks the virtual cores on which the translation entry can be potentially
+cached, and issues IPIs to these cores. 
