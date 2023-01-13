@@ -102,4 +102,10 @@ point of coherence. More specifically, when a core performs a page walk and brin
 local TLB hierarchy, the core should also read the ATLB and bring the corresponding cache block into its local 
 hierarchy (as a natural result of the ATLB lookup). As long as the cache block stays in the private hierarchy, the 
 core that caches the translation entry in the local TLBs is bound to receive cache coherence messages when the 
-ATLB entry containing the translation is modified by another core. 
+ATLB entry containing the translation is modified by another core. Based on this observation, the TLB shootdown process
+of the guest OS is implemented as follows. First, when the guest OS updates a page table entry, it also issues a 
+write to update the corresponding ATLB entry. This write operation will then be intercepted by the MMU (by performing
+a simple address check to see whether write operations lie within ATLB's address range), and the MMU
+performs sanity checks to ensure that the core has the right permission to update the ATLB entry.
+When the write operation is handled by regular cache coherence, all other cores that have read the same entry earlier
+will receive a cache invalidation message containing the physical address of the ATLB entry.
