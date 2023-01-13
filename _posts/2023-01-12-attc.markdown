@@ -64,3 +64,8 @@ nested page tables as part of the virtualization support. In particular, with th
 mechanism must deal with two radically different scenarios. The first scenario is when the guest OS updates the 
 guest page table. In this case, the guest OS tracks the virtual cores on which the translation entry can be potentially
 cached, and issues IPIs to these cores. 
+In the second scenario, the host OS (or hypervisor) updates the translation from guest physical addresses (gPA) to 
+host physical addresses (hPA). In the second case, the set of cores that can potentially cache the translation is 
+not clear to the host OS, as the host OS only tracks the set of virtual cores allocated to a particular VM, but not 
+the cores that each individual process is scheduled on. Besides, the host OS cannot derive the gVA that corresponds 
+to the gPA being updated, as it requires a reverse mapping of the inner (guest OS) page table. 
