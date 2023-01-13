@@ -20,12 +20,15 @@ shootdown scenarios, e.g., both the host and the guest can update the mapping; (
 do not support fine-grained, precise tracking of the paging history; and (3) in hybrid NVM-DRAM systems, frequent
 page migration between the two may aggravate the situation as every page migration operation requires a TLB shootdown.
 
-2. We can address the TLB coherence problem on hardware by adding a level-3 TLB in the main memory. TLB coherence 
+2. We can address the TLB coherence problem on hardware by adding a level-3 ATLB in the main memory. TLB coherence 
 messages can then be sent as regular cache coherence messages using the memory address containing the entry's 
 address. In other words, the in-memory TLB structure becomes the point of coherence, where every update to the 
 translation entry (i.e., the page table) is also reflected on the in-memory TLB as a memory update. The 
 memory update is then captured by regular cache coherence and sent to the sharer core that has the same 
 translation entry, which triggers TLB invalidation.
+
+3. Cache coherence only use physical addresses. However, we can design the ATLB such that the physical address
+encodes both virtual address and VMID information. 
 
 **Comments:**
 
@@ -43,15 +46,12 @@ should be populated by the page walker.
 on whether the coherence protocol has silent L2 eviction), then cache coherence will no longer be able to reach the 
 private hierarchy potentially holding the TLB entry. How did ATTC deal with this scenario? 
 One possible solution is to mark cache blocks containing ATLB entries in the L2 cache and then invalidate 
-TLN entries as well when a marked block is evicted. However, this approach would make the L2 essentially
+TLB entries as well when a marked block is evicted. However, this approach would make the L2 essentially
 inclusive of the TLB, which may incur unexpected performance issues. Besides, it introduces extra tagging per 
 cache block.
 
 4. If an entry is evicted from the ATLB as part of the MMU's page walk process, does the MMU also evict 
 all locally cached TLB entries for correctness? The paper should have added a discussion of this scenario.
-
-5. It seems that the design assumes that the ATLB index is generated the same way as the local TLB hierarchy.
-Otherwise, it is impossible to use ATLB's entry index to perform invalidation on the local TLB.
 
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
