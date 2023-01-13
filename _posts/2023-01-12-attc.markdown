@@ -50,6 +50,9 @@ cache block.
 4. If an entry is evicted from the ATLB as part of the MMU's page walk process, does the MMU also evict 
 all locally cached TLB entries for correctness? The paper should have added a discussion of this scenario.
 
+5. It seems that the design assumes that the ATLB index is generated the same way as the local TLB hierarchy.
+Otherwise, it is impossible to use ATLB's entry index to perform invalidation on the local TLB.
+
 This paper proposes ATTC, a hardware TLB coherence scheme that eliminates the overhead of software TLB shootdown
 in a virtualized environment. ATTC is built upon cache coherence and it reuses the existing cache coherence network
 to perform TLB coherence on hardware. Compared with prior schemes that also rely on cache coherence, ATTC handles 
@@ -65,21 +68,23 @@ mechanism must deal with two radically different scenarios. The first scenario i
 guest page table. In this case, the guest OS tracks the virtual cores on which the translation entry can be potentially
 cached, and issues IPIs to these cores. 
 In the second scenario, the host OS (or hypervisor) updates the translation from guest physical addresses (gPA) to 
-host physical addresses (hPA). In the second case, the set of cores that can potentially cache the translation is 
+host physical addresses (hPA). In this case, the set of cores that can potentially cache the translation is 
 not clear to the host OS, as the host OS only tracks the set of virtual cores allocated to a particular VM, but not 
-the cores that each individual process is scheduled on. Besides, the host OS cannot derive the gVA that corresponds 
+the cores that each individual process running in the VM instance is scheduled on. Besides, the host OS cannot 
+decide the gVA that corresponds 
 to the gPA being updated, as it requires a reverse mapping of the inner (guest OS) page table. As a result, the 
 host OS is unable to determine the virtual address to be invalidated (which must be the gVA because the TLB is designed
-to be indexed by gVA). In the current implementation, this issue is addressed by flushing the entire TLB on all 
+to be indexed by gVA). In the current OS implementation, this issue is addressed by flushing the entire TLB on all 
 virtual cores that have been allocated to the VM instance. 
 
 The paper also pointed out that while prior works seem to perfectly reduce the overhead of software TLB shootdowns, 
-these proposed mechanisms have been largely rendered less effective by newly introduced hardware technologies.
-The first is nested page table to support virtualization, since prior works mostly assume a single-level translation
-between VA and PA and are generally difficult to be extended to support 2D page tables.
-Secondly, prior works tend to extend TLB entries with more metadata bits, which results in higher hardware cost
+these proposed mechanisms have been largely rendered less effective by nested page table, since prior works mostly 
+assume a single-level translation between VA and PA and are generally difficult to be extended to support 2D 
+page tables.
+Furthermore, prior works tend to extend TLB entries with more metadata bits, which results in higher hardware cost
 and more design complications. 
 
 Lastly, as byte-addressable NVM is gradually adopted as a slower but bigger replacement to DRAM to serve as the main 
 memory, the paper observes that on future systems, pages need to be constantly migrated between NVM and DRAM.
 Page migration would incur more frequent TLB shootdowns, which makes an efficient solution incredibly valuable.
+
