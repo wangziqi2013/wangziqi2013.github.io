@@ -72,3 +72,10 @@ to the gPA being updated, as it requires a reverse mapping of the inner (guest O
 host OS is unable to determine the virtual address to be invalidated (which must be the gVA because the TLB is designed
 to be indexed by gVA). In the current implementation, this issue is addressed by flushing the entire TLB on all 
 virtual cores that have been allocated to the VM instance. 
+
+The paper also pointed out that while prior works seem to perfectly reduce the overhead of software TLB shootdowns, 
+these proposed mechanisms have been largely rendered less effective by newly introduced hardware technologies.
+The first is nested page table to support virtualization, since prior works mostly assume a single-level translation
+between VA and PA and are generally difficult to be extended to support 2D page tables.
+Secondly, prior works tend to extend TLB entries with more metadata bits, which results in higher hardware cost
+and more design complications. 
