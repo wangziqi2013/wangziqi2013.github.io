@@ -37,10 +37,10 @@ VMM, which the paper discusses. The other, however, is PCID which distinguishes 
 within the same VM instance or within the VMM/host OS, which the paper neglects. How does the PCID field
 affect the design of ATTC?
 
-2. The paper did not discuss how are the tables (ATLB and INVTBL) populated. Are they populated automatically by 
-the MMU page walker on the completion of page walks? Are they populated by the guest or host OS (unlikely)?
-It seems that the paper adds the ATLB as a level 3 in-memory TLB. If this assumption is true, then the ATLB
-should be populated by the page walker.
+2. The paper did not discuss how are the ATLB is populated. Is it populated automatically by 
+the MMU page walker on the completion of page walks? Is it populated by the guest OS?
+It seems to me that the paper adds the ATLB as a level 3 in-memory TLB. If this impression is true, then the ATLB
+should be populated by the 2D page table walker.
 
 3. If the cache block containing the ATLB entry is evicted from the private hierarchy (or from the LLC, depending
 on whether the coherence protocol has silent L2 eviction), then cache coherence will no longer be able to reach the 
