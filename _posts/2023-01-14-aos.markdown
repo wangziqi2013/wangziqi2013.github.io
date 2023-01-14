@@ -18,7 +18,8 @@ version_mgmt:
 1. Memory bounds metadata can be embedded in the higher unused bits of a pointer. The metadata can then be used as 
 an index into a table that stores the bounds information.
 
-
+2. Memory accesses can be validated in the runtime by a special hardware component. This process can be overlapped with
+regular execution to avoid executing excessive instructions on the CPU.
 
 **Comments:**
 
