@@ -96,3 +96,11 @@ When a pointer is freed, the entry that corresponds to the pointer is cleared us
 address remains unchanged, but the size field is set to zero. The entry can detect use-after-free attack
 if the same pointer is dereference, since the size field is zero, meaning that any access using the pointer will
 incur a protection fault to the OS.
+
+The second critical component of AOS is the hardware component that performs memory access validation. When a 
+pointer is returned from the malloc() function, the compiler will issue a pacma/pacmb (which are used for data and 
+instruction, respectively) instruction, which, when executed, computes a PAC value and embed the value on higher
+bits of the virtual pointer. The PAC value is computed based on the pointer value itself, the allocation size, and a 
+context value. The HBT is also updated using the PAC value and the bndstr instruction with the base address and the 
+allocation size.
+
