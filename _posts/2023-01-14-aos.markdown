@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Hardware-based Always-On Heap Memory Safety"
+date:   2023-01-14 01:52:00 -0500
+categories: paper
+paper_title: "Hardware-based Always-On Heap Memory Safety"
+paper_link: https://ieeexplore.ieee.org/document/9251969
+paper_keyword: AOS; Allocator; malloc; Memory Safety
+paper_year: MICRO 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
