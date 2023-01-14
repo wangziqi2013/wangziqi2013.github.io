@@ -35,3 +35,9 @@ allocates shadow memory for every possible memory location in the address space.
 Lastly, prior works often introduce complicated schemes to address runtime metadata that is essential for performing 
 memory checks. The addressing scheme can potentially introduce a considerable number of extra operations 
 which may slow down execution.
+
+The design of AOS overcomes the above five challenges by embedding the metadata in higher unused bits of pointers and 
+then directly use the bits as an index into a set-associative lookup table in the main memory. 
+AOS is based on an existing feature provided by ARM ISA, namely, the Pointer Authentication (PA) instructions. 
+In the current PA design, a pointer value is embedded with a Pointer Authentication Code (PAC) computed from the 
+pointer value itself plus a context value (which is usually the stack pointer). 
