@@ -72,3 +72,8 @@ the access lies within the bound, then the access is successfully validated. Oth
 fault to the processor as in the current design.
 To make it easier for hardware to walk the table and to preserve locality, entries of the same set are stored in 
 consecutive cache blocks. 
+In addition, when a new bound entry is to be inserted into the HBT, but no empty slot can be found, the hardware
+also raises a fault to the OS kernel, such that the kernel can allocate a large HBT (by doubling the number of ways)
+and copying existing entries of the table to the new table. The paper suggests that the resizing process can be 
+performed in parallel with regular execution by using a pointer that indicates the process of the copy
+(similar to the resizing process of a Cuckoo page table).
