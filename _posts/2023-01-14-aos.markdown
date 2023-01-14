@@ -117,5 +117,11 @@ In order to reduce the number of memory accesses for retrieving the bounds infor
 adding a special cache that holds the most recently used bounds information. The cache is called bounds way buffer 
 (BWB), and it maps the 32-bit partial address (i.e., the one stored in HBT entries) to the last accessed way number
 of the tag. Note that BWB lookups do not always compare the full 32 bits of the requested address, since the pointer
-to be validated may point to the middle of an allocated block. 
+to be validated may point to the middle of an allocated block. In this case, the lowest few bits of the pointer 
+should be masked off to avoid spurious misses in the BWB. To serve this purpose, in the AOS design, the higher 
+bits of a pointer also encodes the size class of the allocation, called the Address Hashing Code (AHC). 
+A total of three size classes are supported,
+namely, 1--64 bytes, 65--256 bytes, and greater than 256 bytes, and hence two bits are sufficient for encoding
+size class information. When performing an BWB lookup, the hardware will mask off the lower bits based on the AHC
+bits, before the lookup is performed. 
 
