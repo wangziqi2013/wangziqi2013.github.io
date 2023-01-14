@@ -106,4 +106,9 @@ allocation size.
 Then, during regular execution, when a pointer whose higher bits contain a PAC value is used to access memory,
 the memory instruction is inserted into a dedicated hardware queue, called the Memory Check Queue (MCQ), whose 
 responsibility is to store the information that are essential to validate the access.
-
+When a memory access is in the MCQ, a hardware state machine, called the Memory Check Unit (MCU), will then 
+issue memory operations to the cache hierarchy to retrieve bounds information from the HBT. After bounds information
+is available, the MCU performs the check by comparing the access offset against the size of the allocation
+stored in the HBT. A fault is raised to the kernel if the validation fails.
+Memory operations are prevented from being retired in the ROB before their validations complete.
+The MCQ is also designed to obey the memory consistency order as well as to perform data forwarding if necessary.
