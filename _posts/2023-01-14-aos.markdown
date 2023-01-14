@@ -56,5 +56,8 @@ instructions around these two operations to update the HBT. During the runtime, 
 memory access by first retrieving bounds metadata from the HBT using the PAC embedded into the pointer as an index
 and then comparing the requested address of the access against the memory bounds.
 
-
-
+We next describe the implementation level details of each AOS component.
+The most important structure of AOS is the HBT, which is essentially a set-associative lookup table that stores 
+bounds information of allocated blocks. The HBT can be updated using instructions bndstr and bndclr for setting 
+and clearing the bounds information, respectively. Bounds information of a block is stored as a 8-byte entry
+containing the lower bits of the base virtual address (bit 4 to 32) and the 32-bit size. 
