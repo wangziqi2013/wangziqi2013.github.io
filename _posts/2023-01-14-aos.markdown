@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Are entries removed from the HBT? It seems that the HBT can only grow during execution, but never shrink.
+The reason is that bounds information must remain in the HBT even after the pointers are freed to detect use-after-free.
+I understand that malloc() tends to reuse pointers and give priority to recently freed pointers when giving out
+allocations for better locality, so this design choice may not be a major issue. However, it is also possible 
+that certain pointers that have been allocated will never be reused, e.g., if the malloc library returns the page 
+containing the pointer back to the OS.
+In this scenario, is there a way to delete entries that are known to be not part of the heap?
+
 This paper proposes Always-On Memory Safety (AOS), a software-hardware mechanism for ensuring memory access integrity
 by embedding bound information in unused bits of virtual address pointers. The design is motivated by the existing 
 memory safety mechanism in ARM ISA and further extends the ISA to support integrity check of heap memory accesses. 
