@@ -103,4 +103,7 @@ instruction, respectively) instruction, which, when executed, computes a PAC val
 bits of the virtual pointer. The PAC value is computed based on the pointer value itself, the allocation size, and a 
 context value. The HBT is also updated using the PAC value and the bndstr instruction with the base address and the 
 allocation size.
+Then, during regular execution, when a pointer whose higher bits contain a PAC value is used to access memory,
+the memory instruction is inserted into a dedicated hardware queue, called the Memory Check Queue (MCQ), whose 
+responsibility is to store the information that are essential to validate the access.
 
