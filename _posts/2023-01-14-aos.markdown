@@ -45,3 +45,10 @@ in higher bits of the pointer, which is then validated by recomputing the PAC us
 context value at dereference time. If the two values match, validation succeeds, and the memory operation is 
 performed normally. Otherwise, validation fails, and the processor raises an exception to notify the OS that an 
 illegal memory access has been detected.
+
+The design of AOS follows a similar approach which we describe as follows. First, in AOS, the unused higher bits of 
+a pointer value is also used to store a PAC computed from the pointer value and a context value. The computed PAC
+is then treated as an index into an in-memory table, the Hashed Bounds Table (HBT), which stores the bounds of heap 
+allocated blocks. The content of the HBT entry that corresponds to a newly allocated pointer is initialized by software 
+using AOS instructions after malloc() returns. 
+
