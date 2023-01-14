@@ -60,4 +60,9 @@ We next describe the implementation level details of each AOS component.
 The most important structure of AOS is the HBT, which is essentially a set-associative lookup table that stores 
 bounds information of allocated blocks. The HBT can be updated using instructions bndstr and bndclr for setting 
 and clearing the bounds information, respectively. Bounds information of a block is stored as a 8-byte entry
-containing the lower bits of the base virtual address (bit 4 to 32) and the 32-bit size. 
+containing the lower bits of the base virtual address (bit 4 to 32) and the 32-bit size. Note that only storing the 
+lower bits of the base instead of the full address may result in false positives when validating a memory access
+due to aliasing on the higher bits not stored. The paper suggested, however, that this case is extremely unlikely
+because addresses that alias with each other must be 4GB away, making them hardly useful for conducting attacks.
+The HBT consists of a power-of-two number of sets, and the number of sets can be expanded dynamically 
+in the runtime. 
