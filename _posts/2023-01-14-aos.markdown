@@ -23,6 +23,11 @@ that certain pointers that have been allocated will never be reused, e.g., if th
 containing the pointer back to the OS.
 In this scenario, is there a way to delete entries that are known to be not part of the heap?
 
+2. The size of HBT grows with the number of blocks within the heap, and so does the overhead of validating 
+pointers since search operations on the HBT is not free. It would be nice to have a sensitivity analysis of the 
+effect of the heap size w.r.t. the number of pointers. Also, I am also eager to see the result on HBT size
+during the course of execution.
+
 This paper proposes Always-On Memory Safety (AOS), a software-hardware mechanism for ensuring memory access integrity
 by embedding bound information in unused bits of virtual address pointers. The design is motivated by the existing 
 memory safety mechanism in ARM ISA and further extends the ISA to support integrity check of heap memory accesses. 
