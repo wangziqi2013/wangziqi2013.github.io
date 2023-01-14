@@ -18,3 +18,9 @@ by embedding bound information in unused bits of virtual address pointers. The d
 memory safety mechanism in ARM ISA and further extends the ISA to support integrity check of heap memory accesses. 
 Compared with prior works, AOS minimizes the overhead of memory safety checking by performing them on hardware and 
 by using relatively simpler addressing schemes for memory bound metadata.
+
+The paper is motivated by the increasingly obvious trend that heap attacks have become the mainstream of memory
+safety attack due to the effectiveness of protection methods against stack-based attacks. In particular, the paper
+named three heap-based attacks that are rapidly gaining popularity, i.e., heap corruption, out-of-bounds read, and 
+use-after-free. The paper also noted that prior hardware proposals for solving the problem are unsatisfactory 
+for five reasons. 
