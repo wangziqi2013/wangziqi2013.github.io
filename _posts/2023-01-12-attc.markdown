@@ -15,10 +15,11 @@ version_mgmt:
 
 **Highlight:**
 
-1. TLB shootdown is a more complicated problem to address, because (1) the 2D nested page table walk design has more 
-shootdown scenarios, e.g., both the host and the guest can update the mapping; (2) existing software solutions 
-do not support fine-grained, precise tracking of the paging history; and (3) in hybrid NVM-DRAM systems, frequent
-page migration between the two may aggravate the situation as every page migration operation requires a TLB shootdown.
+1. TLB shootdown has become more complicated in recent architectures, because (1) the 2D nested page table walk 
+design has more shootdown scenarios, e.g., both the host and the guest can update the mapping; (2) existing 
+software solutions do not support fine-grained, precise tracking of the paging history; and (3) in hybrid 
+NVM-DRAM systems, frequent page migration between the two may aggravate the situation as every page migration 
+operation requires a TLB shootdown.
 
 2. We can address the TLB coherence problem on hardware by adding a level-3 ATLB in the main memory. TLB coherence 
 messages can then be sent as regular cache coherence messages using the memory address containing the entry's 
@@ -37,7 +38,7 @@ VMM, which the paper discusses. The other, however, is PCID which distinguishes 
 within the same VM instance or within the VMM/host OS, which the paper neglects. How does the PCID field
 affect the design of ATTC?
 
-2. The paper did not discuss how are the ATLB is populated. Is it populated automatically by 
+2. The paper did not discuss how the ATLB is populated. Is it populated automatically by 
 the MMU page walker on the completion of page walks? Is it populated by the guest OS?
 It seems to me that the paper adds the ATLB as a level 3 in-memory TLB. If this impression is true, then the ATLB
 should be populated by the 2D page table walker.
