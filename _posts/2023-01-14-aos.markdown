@@ -65,4 +65,10 @@ lower bits of the base instead of the full address may result in false positives
 due to aliasing on the higher bits not stored. The paper suggested, however, that this case is extremely unlikely
 because addresses that alias with each other must be 4GB away, making them hardly useful for conducting attacks.
 The HBT consists of a power-of-two number of sets, and the number of sets can be expanded dynamically 
-in the runtime. 
+in the runtime. When an emory access is to be validated, the HBT is addressed using the PAC of the pointer as 
+the set index, and then the hardware walks every entry within the set to search for a matching base address
+(by comparing the pointer of the access and the partial base address stored in the entry). If a match is found and 
+the access lies within the bound, then the access is successfully validated. Otherwise, the hardware raises a
+fault to the processor as in the current design.
+To make it easier for hardware to walk the table and to preserve locality, entries of the same set are stored in 
+consecutive cache blocks. 
