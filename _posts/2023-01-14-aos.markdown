@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Always-On Memory Safety (AOS), a software-hardware mechanism for ensuring memory access integrity
+by embedding bound information in unused bits of virtual address pointers. The design is motivated by the existing 
+memory safety mechanism in ARM ISA and further extends the ISA to support integrity check of heap memory accesses. 
+Compared with prior works, AOS minimizes the overhead of memory safety checking by performing them on hardware and 
+by using relatively simpler addressing schemes for memory bound metadata.
