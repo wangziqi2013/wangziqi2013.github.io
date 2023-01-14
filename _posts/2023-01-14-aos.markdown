@@ -40,4 +40,8 @@ The design of AOS overcomes the above five challenges by embedding the metadata 
 then directly use the bits as an index into a set-associative lookup table in the main memory. 
 AOS is based on an existing feature provided by ARM ISA, namely, the Pointer Authentication (PA) instructions. 
 In the current PA design, a pointer value is embedded with a Pointer Authentication Code (PAC) computed from the 
-pointer value itself plus a context value (which is usually the stack pointer). 
+pointer value itself plus a context value (which is usually the stack pointer). The PAC, once computed, is stored
+in higher bits of the pointer, which is then validated by recomputing the PAC using the pointer value plus the 
+context value at dereference time. If the two values match, validation succeeds, and the memory operation is 
+performed normally. Otherwise, validation fails, and the processor raises an exception to notify the OS that an 
+illegal memory access has been detected.
