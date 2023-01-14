@@ -26,3 +26,8 @@ use-after-free. The paper also noted that prior hardware proposals for solving t
 for five reasons. First, many prior works require extending registers that hold pointer values with extra metadata 
 bits, hence forming what is called "fat pointers". The proposed design will, however, incur radical changes to the 
 core pipeline and increase power consumption of the processor.
+Secondly, most prior works also require an explicit bound checks instruction before every memory operation, which
+unfortunately causes an non-negligible increase in the number of instruction executed and brings large instruction 
+overhead even if the checks are themselves very fast. Similarly, when performing pointer arithmetics and assignments,
+these proposals also need explicit instructions to propagate the per-pointer metadata, which further exacerbate the 
+design's runtime overhead. 
