@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Memory bounds metadata can be embedded in the higher unused bits of a pointer. The metadata can then be used as 
+an index into a table that stores the bounds information.
+
+
+
 **Comments:**
 
 1. Are entries removed from the HBT? It seems that the HBT can only grow during execution, but never shrink.
