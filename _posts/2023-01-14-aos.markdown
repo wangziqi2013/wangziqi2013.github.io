@@ -50,5 +50,11 @@ The design of AOS follows a similar approach which we describe as follows. First
 a pointer value is also used to store a PAC computed from the pointer value and a context value. The computed PAC
 is then treated as an index into an in-memory table, the Hashed Bounds Table (HBT), which stores the bounds of heap 
 allocated blocks. The content of the HBT entry that corresponds to a newly allocated pointer is initialized by software 
-using AOS instructions after malloc() returns. 
+using AOS instructions after malloc() returns. The same entry is also cleared when the pointer is freed by library 
+function free(). At compilation time, the compiler detects invocations to malloc() and free() and inserts AOS
+instructions around these two operations to update the HBT. During the runtime, the hardware validates the heap
+memory access by first retrieving bounds metadata from the HBT using the PAC embedded into the pointer as an index
+and then comparing the requested address of the access against the memory bounds.
+
+
 
