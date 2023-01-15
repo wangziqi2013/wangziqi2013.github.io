@@ -31,6 +31,14 @@ to commit the change.
 
 While the paper does not specify a concrete implementation, and Pacman is generally applicable to virtually any
 log-structured key-value store design, it is suggested in the paper that logs are implemented as per-thread 
-memory blocks of MBs in size, and the index can be implemented as either a hash table or a tree structure.
+memory segments of MBs in size, and the index can be implemented as either a hash table or a tree structure.
 In addition, the index can be maintained in either volatile memory or persistent memory. Both options would 
 work for a key-value store, and it barely affects the effectiveness of Pacman.
+
+The paper notes that the most unique operation associated with log-structures key-value stores is garbage collection 
+(GC), which is also unfortunately the most likely bottleneck in almost all implementations. 
+From a high level, the GC operation compacts a log segment by copying key-value entries that are still alive (i.e.,
+being referenced by the index) to another log segment, freeing the part of storage occupied by entries that are 
+dead (i.e., not being referenced by the index). 
+
+
