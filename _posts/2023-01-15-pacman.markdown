@@ -61,3 +61,9 @@ write dirty data back to the NVM explicitly, due to the better write throughput 
 Lastly, GC inevitably involves copying data from one log segment to another. The paper observes that most 
 implementations do not separate cold and hot data. As a result, a log segment may contain mixed cold and hot entries,
 which incurs unnecessary data copy as cold entries, if stored in their dedicated log segments, do not need frequent GC. 
+
+Pacman addresses the above issues with software additions to the existing implementations which we present as follows.
+First, to reduce the number of index probing for key-value entries during GC, the paper proposes adding a special
+"hint" per entry, called the shortcut, that stores the location of the mapping entry in the index, hence allowing the
+GC process to bypass regular index lookup and to directly access the mapping entry at the leaf/hash bucket level. 
+The shortcut is initialized when the entry is first inserted into the log, and when the entry is copied during GC.
