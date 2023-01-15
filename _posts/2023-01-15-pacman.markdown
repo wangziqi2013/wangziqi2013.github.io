@@ -36,12 +36,15 @@ In addition, the index can be maintained in either volatile memory or persistent
 work for a key-value store, and it barely affects the effectiveness of Pacman.
 
 The paper notes that the most unique operation associated with log-structures key-value stores is garbage collection 
-(GC), which is also unfortunately the most likely bottleneck in almost all implementations. 
+(GC).
 From a high level, the GC operation compacts a log segment by copying key-value entries that are still alive (i.e.,
 being referenced by the index) to another log segment, freeing the part of storage occupied by entries that are 
-dead (i.e., not being referenced by the index). Dead entries in log-structured key-value stored can be introduced 
+dead (i.e., not being referenced by the index). Dead entries in log-structured key-value stores can be introduced 
 by either explicitly removing an entry, or by modifying an existing entry. 
 Consequently, in write-dominant scenarios, GC is a vital process for recycling persistent storage and will likely be
 invoked frequently.
-
+Unfortunately, when deployed on NVM, the paper observes that GC has become a major bottleneck for key-value stores,
+especially when the persistent storage utilization is high, as evidenced by the figure presented in the paper. 
+In addition, adding more background threads to perform GC does not alleviate the problem by much, since, as the 
+paper points out, the GC process is likely bounded by NVM write bandwidth rather than computation.
 
