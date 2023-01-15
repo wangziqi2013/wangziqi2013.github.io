@@ -90,4 +90,11 @@ The next optimization Pacman introduces is to decouple data copy from index upda
 The paper points out that, conventionally, GC is performed by first copying an entry from the old log segment to the 
 new segment, and then updating the index for the entry just copied. This operation is repeated for every entry in
 the old log segment. However, tightly coupling data copy with index update has two negative consequences. First,
-it lowers access locality since NVM accesses alternates between data and index. 
+it lowers access locality since NVM accesses alternates between data and index. Second, is also incurs one persist 
+barrier for every entry being copied in order to preserve recoverability. To counter the problem, the paper proposes
+a two-stage process, where the GC process first performs data copy from the old to the new segment, and then it
+updates index entries to commit the changes. Only one persist barrier is needed between the two stages.
+In addition, during the first stage, instead of using regular memory instructions that can pollute the cache by 
+bringing data to be copied into the cache, the paper proposes using non-temporal stores such that the operation
+will be directly performed on the NVM, bypassing the cache hierarchy entirely. 
+
