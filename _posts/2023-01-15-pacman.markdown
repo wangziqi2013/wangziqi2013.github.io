@@ -85,3 +85,9 @@ One bit is reserved in the array for every MIN\_SIZE bytes of the log segment an
 always placed on MIN\_SIZE boundary. The "deleted" bit will be lost after a crash due to being stored in the volatile 
 DRAM. However, the paper indicates that the bit can be restored during recovery by checking with the index, or 
 restored gradually on-demand during regular operation.
+
+The next optimization Pacman introduces is to decouple data copy from index update during the GC process. 
+The paper points out that, conventionally, GC is performed by first copying an entry from the old log segment to the 
+new segment, and then updating the index for the entry just copied. This operation is repeated for every entry in
+the old log segment. However, tightly coupling data copy with index update has two negative consequences. First,
+it lowers access locality since NVM accesses alternates between data and index. 
