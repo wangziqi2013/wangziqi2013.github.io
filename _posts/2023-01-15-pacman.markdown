@@ -74,3 +74,10 @@ Furthermore, to avoid the memory block pointed to by the shortcut from becoming 
 deallocated and reused for other purposes), the paper also suggests that blocks allocated for the index should never
 be repurposed for other usages. It would be needed to maintain separate free lists for these blocks such that
 accessing the shortcut pointers will never induce undefined behavior.
+
+To reduce the number of reads for metadata during GC, the paper proposes special optimizations for two of the 
+most important types of metadata, namely key-value entry size and the "deleted" bit. The entry size simply indicates
+the number of bytes consumed by the entry, and the "deleted" bit indicates whether the entry is valid or 
+stale. The paper observes that entry sizes are usually small and require only a few bits to encode. As a result,
+size information can be embedded into the unused higher bits of a pointer within the index that points to the entry 
+in the log segment. 
