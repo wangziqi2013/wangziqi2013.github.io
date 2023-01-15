@@ -21,7 +21,11 @@ and writes; (2) the use of persist barriers; and (3) excessive data copy.
 2. Metadata reads and writes during GC can be reduced by keeping shortcuts, i.e., direct pointers into the index 
 structure, as well as size information embedded into the index pointers. 
 
-3. 
+3. Usages of persist barriers can be reduced by the two-stage GC process, where data copy happens first, and 
+index updates happens the next. This process will preserve the consistency of the index structure since the index
+is updated using atomic CAS instructions.
+
+4. 
 
 This paper presents Pacman, a software solution aiming at reducing the overhead of log-structure key-value store
 running on Byte-Addressable Non-Volatile Memory (NVM). The paper is motivated by the uniformly high overhead of garbage 
