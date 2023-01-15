@@ -23,6 +23,10 @@ at high storage utilization.
 The Pacman design is based on log-structured key-value stores where modifications to the existing key-value entries are 
 implemented log appends of the newer key-value rather than in-place updates. As a result, there can be multiple 
 versions of key-value entries
-co-existing on the persistent storage. 
+co-existing on the persistent storage. To maintain the correct write semantics, i.e., a read operation should always 
+access the most up-to-date write, an extra index is added to the key-value store which maps keys to the most recently
+appended key-value pairs. Read operations must go through the index in order to access the correct instance of 
+value, and modification operations also have to update the index to point to the newly appended key-value pair 
+to commit the change. 
 
-.
+
