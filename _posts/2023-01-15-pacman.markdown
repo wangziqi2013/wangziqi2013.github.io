@@ -25,7 +25,9 @@ structure, as well as size information embedded into the index pointers.
 index updates happens the next. This process will preserve the consistency of the index structure since the index
 is updated using atomic CAS instructions.
 
-4. 
+4. Excessive data copy can be alleviated by separating cold and hot data, such that log segments containing hot
+data will likely only contain few valid entries when selected for GC. Hot data can be identified by sampling
+of the access trace and sorting by the key frequency.
 
 This paper presents Pacman, a software solution aiming at reducing the overhead of log-structure key-value store
 running on Byte-Addressable Non-Volatile Memory (NVM). The paper is motivated by the uniformly high overhead of garbage 
