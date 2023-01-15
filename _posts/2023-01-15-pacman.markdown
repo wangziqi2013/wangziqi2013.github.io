@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Pacman: An Efficient Compaction Approach for Log-Structured Key-Value Store on Persistent Memory"
+date:   2023-01-14 02:06:00 -0500
+categories: paper
+paper_title: "Pacman: An Efficient Compaction Approach for Log-Structured Key-Value Store on Persistent Memory"
+paper_link: https://www.usenix.org/conference/atc22/presentation/wang-jing
+paper_keyword: NVM; Pacman; Log-structured NVM; Key-Value Store
+paper_year: USENIX ATC 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
