@@ -18,7 +18,10 @@ version_mgmt:
 1. The bottleneck of log-structured key-value store on NVM is the GC process, due to (1) small, random metadata reads
 and writes; (2) the use of persist barriers; and (3) excessive data copy.
 
-2. 
+2. Metadata reads and writes during GC can be reduced by keeping shortcuts, i.e., direct pointers into the index 
+structure, as well as size information embedded into the index pointers. 
+
+3. 
 
 This paper presents Pacman, a software solution aiming at reducing the overhead of log-structure key-value store
 running on Byte-Addressable Non-Volatile Memory (NVM). The paper is motivated by the uniformly high overhead of garbage 
