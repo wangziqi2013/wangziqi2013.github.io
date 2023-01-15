@@ -19,3 +19,10 @@ collection in log-structured key-value store designs when they are deployed on N
 solution, Pacman, addresses the challenge by adopting special software techniques based on the performance 
 characteristics of NVM devices. As a result, Pacman improves the operational throughput of key-value stores even
 at high storage utilization.
+
+The Pacman design is based on log-structured key-value stores where modifications to the existing key-value entries are 
+implemented log appends of the newer key-value rather than in-place updates. As a result, there can be multiple 
+versions of key-value entries
+co-existing on the persistent storage. 
+
+.
