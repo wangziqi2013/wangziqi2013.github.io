@@ -67,3 +67,10 @@ First, to reduce the number of index probing for key-value entries during GC, th
 "hint" per entry, called the shortcut, that stores the location of the mapping entry in the index, hence allowing the
 GC process to bypass regular index lookup and to directly access the mapping entry at the leaf/hash bucket level. 
 The shortcut is initialized when the entry is first inserted into the log, and when the entry is copied during GC.
+Note that, however, that due to index operations that change the internal node or bucket layout (e.g., B+Tree 
+insertions), the shortcut is only treated as a soft hint and must be validated before use. If the shortcut is 
+no longer valid, then the GC process will still perform the regular lookup.
+Furthermore, to avoid the memory block pointed to by the shortcut from becoming invalid (e.g., the block may be
+deallocated and reused for other purposes), the paper also suggests that blocks allocated for the index should never
+be repurposed for other usages. It would be needed to maintain separate free lists for these blocks such that
+accessing the shortcut pointers will never induce undefined behavior.
