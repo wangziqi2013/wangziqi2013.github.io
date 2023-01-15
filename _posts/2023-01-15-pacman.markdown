@@ -5,10 +5,17 @@ date:   2023-01-14 02:06:00 -0500
 categories: paper
 paper_title: "Pacman: An Efficient Compaction Approach for Log-Structured Key-Value Store on Persistent Memory"
 paper_link: https://www.usenix.org/conference/atc22/presentation/wang-jing
-paper_keyword: NVM; Pacman; Log-structured NVM; Key-Value Store
+paper_keyword: NVM; Pacman; Log-structured NVM; Key-Value Store; NVM
 paper_year: USENIX ATC 2022
 rw_set:
 htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Pacman, a software solution aiming at reducing the overhead of log-structure key-value store
+running on Byte-Addressable Non-Volatile Memory (NVM). The paper is motivated by the uniformly high overhead of garbage 
+collection in log-structured key-value store designs when they are deployed on NVM. The proposed software 
+solution, Pacman, addresses the challenge by adopting special software techniques based on the performance 
+characteristics of NVM devices. As a result, Pacman improves the operational throughput of key-value stores even
+at high storage utilization.
