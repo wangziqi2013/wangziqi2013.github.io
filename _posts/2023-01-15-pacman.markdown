@@ -80,4 +80,8 @@ most important types of metadata, namely key-value entry size and the "deleted" 
 the number of bytes consumed by the entry, and the "deleted" bit indicates whether the entry is valid or 
 stale. The paper observes that entry sizes are usually small and require only a few bits to encode. As a result,
 size information can be embedded into the unused higher bits of a pointer within the index that points to the entry 
-in the log segment. 
+in the log segment. As for the "deleted" bit, the paper proposes to maintain them in the DRAM as a separate array.
+One bit is reserved in the array for every MIN\_SIZE bytes of the log segment and the paper assumes that entries are 
+always placed on MIN\_SIZE boundary. The "deleted" bit will be lost after a crash due to being stored in the volatile 
+DRAM. However, the paper indicates that the bit can be restored during recovery by checking with the index, or 
+restored gradually on-demand during regular operation.
