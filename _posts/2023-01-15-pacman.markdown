@@ -39,6 +39,9 @@ The paper notes that the most unique operation associated with log-structures ke
 (GC), which is also unfortunately the most likely bottleneck in almost all implementations. 
 From a high level, the GC operation compacts a log segment by copying key-value entries that are still alive (i.e.,
 being referenced by the index) to another log segment, freeing the part of storage occupied by entries that are 
-dead (i.e., not being referenced by the index). 
+dead (i.e., not being referenced by the index). Dead entries in log-structured key-value stored can be introduced 
+by either explicitly removing an entry, or by modifying an existing entry. 
+Consequently, in write-dominant scenarios, GC is a vital process for recycling persistent storage and will likely be
+invoked frequently.
 
 
