@@ -48,3 +48,8 @@ especially when the persistent storage utilization is high, as evidenced by the 
 In addition, adding more background threads to perform GC does not alleviate the problem by much, since, as the 
 paper points out, the GC process is likely bounded by NVM write bandwidth rather than computation.
 
+The paper lists several reasons that explain the observed effect. First, GC requires probing the index in order to
+determine whether a key-value entry in the log segment is alive or not. Besides, after the data copy concludes, the 
+GC process also needs to update the index to point to the new entry. Accesses to the index will incur a large number 
+of small random reads, which increases the latency of GC operations.
+Second, 
