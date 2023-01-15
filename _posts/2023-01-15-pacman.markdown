@@ -48,10 +48,16 @@ especially when the persistent storage utilization is high, as evidenced by the 
 In addition, adding more background threads to perform GC does not alleviate the problem by much, since, as the 
 paper points out, the GC process is likely bounded by NVM write bandwidth rather than computation.
 
-The paper lists several reasons that explain the observed effect. First, GC requires probing the index in order to
+The paper lists several reasons that explain the observed effect. First, GC requires index probings to
 determine whether a key-value entry in the log segment is alive or not. Besides, after the data copy concludes, the 
 GC process also needs to update the index to point to the new entry. Accesses to the index will incur a large number 
 of small random reads and writes, which increases the latency of GC operations.
 Secondly, current implementations use persist barriers consisting of one or more cache line flushes plus a memory 
-fences at the end in order to maintain correct write ordering between the data and the metadata, which is crucial
-for correctness. However, the persist barrier is expensive and will severely affect performance. 
+fence at the end, in order to maintain correct write ordering between the data and the metadata, which is crucial
+for correctness. However, the persist barrier is expensive and will severely affect performance. The paper also noted
+that, on newer hardware models, persist barriers are no longer strictly required, as the cache hierarchy is also
+included in the persistence domain (with a hardware feature called eADR). However, developers may still want to 
+write dirty data back to the NVM explicitly, due to the better write throughput achieved. 
+Lastly, GC inevitably involves copying data from one log segment to another. The paper observes that most 
+implementations do not separate cold and hot data. As a result, a log segment may contain mixed cold and hot entries,
+which incurs unnecessary data copy as cold entries, if stored in their dedicated log segments, do not need frequent GC. 
