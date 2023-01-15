@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. The bottleneck of log-structured key-value store on NVM is the GC process, due to (1) small, random metadata reads
+and writes; (2) the use of persist barriers; and (3) excessive data copy.
+
+2. 
+
 This paper presents Pacman, a software solution aiming at reducing the overhead of log-structure key-value store
 running on Byte-Addressable Non-Volatile Memory (NVM). The paper is motivated by the uniformly high overhead of garbage 
 collection in log-structured key-value store designs when they are deployed on NVM. The proposed software 
