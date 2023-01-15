@@ -51,5 +51,7 @@ paper points out, the GC process is likely bounded by NVM write bandwidth rather
 The paper lists several reasons that explain the observed effect. First, GC requires probing the index in order to
 determine whether a key-value entry in the log segment is alive or not. Besides, after the data copy concludes, the 
 GC process also needs to update the index to point to the new entry. Accesses to the index will incur a large number 
-of small random reads, which increases the latency of GC operations.
-Second, 
+of small random reads and writes, which increases the latency of GC operations.
+Secondly, current implementations use persist barriers consisting of one or more cache line flushes plus a memory 
+fences at the end in order to maintain correct write ordering between the data and the metadata, which is crucial
+for correctness. However, the persist barrier is expensive and will severely affect performance. 
