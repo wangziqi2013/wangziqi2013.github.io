@@ -29,4 +29,8 @@ appended key-value pairs. Read operations must go through the index in order to 
 value, and modification operations also have to update the index to point to the newly appended key-value pair 
 to commit the change. 
 
-
+While the paper does not specify a concrete implementation, and Pacman is generally applicable to virtually any
+log-structured key-value store design, it is suggested in the paper that logs are implemented as per-thread 
+memory blocks of MBs in size, and the index can be implemented as either a hash table or a tree structure.
+In addition, the index can be maintained in either volatile memory or persistent memory. Both options would 
+work for a key-value store, and it barely affects the effectiveness of Pacman.
