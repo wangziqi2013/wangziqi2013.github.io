@@ -97,4 +97,6 @@ updates index entries to commit the changes. Only one persist barrier is needed 
 In addition, during the first stage, instead of using regular memory instructions that can pollute the cache by 
 bringing data to be copied into the cache, the paper proposes using non-temporal stores such that the operation
 will be directly performed on the NVM, bypassing the cache hierarchy entirely. 
-
+Second, during the second stage, index entry updates are performed using atomic Compare-and-Swap instructions, such
+that the index is always in a consistent state, which preserves the atomicity (and hence the recoverability) of the 
+operation.
