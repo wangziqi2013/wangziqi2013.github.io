@@ -100,3 +100,9 @@ will be directly performed on the NVM, bypassing the cache hierarchy entirely.
 Second, during the second stage, index entry updates are performed using atomic Compare-and-Swap instructions, such
 that the index is always in a consistent state, which preserves the atomicity (and hence the recoverability) of the 
 operation.
+
+The last optimize proposed in the paper is to separate cold and hot data, such that frequently modified key-value
+entries are grouped into the same log segment. Doing so has the advantage of minimizing the amount of data that has
+to be copied, since when a block qualifies for GC, it is likely that most of the entries in the block have become
+stale as a result of modifications. While prior works have already exploited the exact same idea, the paper proposes
+a low-overhead approach for classifying hot data which we present as follows. 
