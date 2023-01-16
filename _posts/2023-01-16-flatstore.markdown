@@ -65,4 +65,8 @@ which is also the next log allocation point.
 A log entry consists of an "Op" field indicating the type of the operation (insert, modification, or delete),
 a version ID field that stores the version ID of the key-value pair which is used for Garbage Collection, 
 and two fields for storing the key and the value. The key field is 8 bytes, which can either be a key embedded
-in the log entry, or a pointer that points to an externally allocated key. 
+in the log entry, or a pointer that points to an externally allocated key. The value field contains variable-sized 
+binary data, whose length can be between 1 byte and up to 16 bytes (with the value being encoded in the field as well).
+Larger values are stored as an 8-byte pointer pointing to an externally allocated block.
+
+
