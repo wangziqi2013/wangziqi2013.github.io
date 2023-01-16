@@ -51,4 +51,7 @@ the new trends of commercial workloads. In order to design FlatStore for maximum
 two critical performance characteristics of NVM. First, although sequential writes are faster than random writes 
 with a few threads, when the number of threads increases, the performance gap between the two would narrow (as a 
 possible result of internal resource contention), making it less beneficial to perform sequential writes instead of 
-random ones when the thread count is large.
+random ones when the thread count is large. Second, repeated cache block flushes using the clwb instruction on the same 
+address will suffer extremely high latency, the cause of which is speculated to be either internal serialization of 
+successive clwb instructions, or NVM's wear-leveling mechanism.
+
