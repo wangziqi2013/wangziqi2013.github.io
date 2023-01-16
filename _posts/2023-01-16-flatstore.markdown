@@ -69,4 +69,7 @@ in the log entry, or a pointer that points to an externally allocated key. The v
 binary data, whose length can be between 1 byte and up to 16 bytes (with the value being encoded in the field as well).
 Larger values are stored as an 8-byte pointer pointing to an externally allocated block.
 
+FlatStore's modification operations (including insertions) are implemented as a three-stage process. In the first 
+stage, the memory block for the key and/or the value is allocated, if they cannot be embedded within the log entry.
+The externally allocated blocks, if any, are persisted using a persist barrier at the end of the stage. 
 
