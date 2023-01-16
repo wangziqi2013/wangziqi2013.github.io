@@ -99,3 +99,10 @@ During crash recovery, the allocation metadata can be restored by scanning the l
 that contains externally allocated blocks, and then reconstructing allocation metadata. The head of the chunk
 can be easily found by aligning block pointers down to the nearest 4MB boundary because all chunks are aligned to
 this address boundary.
+
+To address the problem that sequential write performance degrades with an increasing number of worker threads, 
+FlatStore proposes a technique called "Horizontal Batching" that enables a dedicated core to persist log 
+entries on behalf of all other cores. In FlatStore, incoming requests are dispatched to cores based on the 
+hash value of the keys. On receiving a request, a core will first perform stage one locally (i.e., allocating 
+key and/or value blocks if necessary). At the end of stage one, it will insert the log entry into a 
+local volatile work-stealing buffer. 
