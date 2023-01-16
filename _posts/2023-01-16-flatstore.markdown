@@ -89,3 +89,10 @@ Both log segments and externally allocated keys and/or values are allocated by a
 requests free storage from the OS at 4MB granularity, and partitions them into smaller blocks which are maintained 
 in size-segregated free lists for fast allocation. For non-log segments, each 4MB chunk also has a bitmap recording 
 the allocation status of the rest of the storage in the chunk.
+As for log segments, they are simply given away to individual threads and are maintained in a per-thread list. 
+The per-thread list of log segments should be maintained properly such that all log segments that are in use
+before a crash can be located for crash recovery.
+The paper noted that the allocator metadata, mainly the bitmaps, do not have to be persisted at all in the runtime,
+since allocation information is already included in the log entries, i.e., if a log entry contains a pointer to 
+externally allocated blocks, then the 4MB chunk containing the block must be one of the allocated chunks.
+
