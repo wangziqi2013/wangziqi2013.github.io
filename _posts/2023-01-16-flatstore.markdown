@@ -105,4 +105,10 @@ FlatStore proposes a technique called "Horizontal Batching" that enables a dedic
 entries on behalf of all other cores. In FlatStore, incoming requests are dispatched to cores based on the 
 hash value of the keys. On receiving a request, a core will first perform stage one locally (i.e., allocating 
 key and/or value blocks if necessary). At the end of stage one, it will insert the log entry into a 
-local volatile work-stealing buffer. 
+local volatile work-stealing buffer. After the first stage, the core will then attempt to become the leader by 
+grabbing a global lock. If the lock is acquired successfully, the core will then start collecting log entries from 
+all other core's work-stealing buffers, appends the log entries into its own log segment, and updates the index, hence 
+completing stage two and stage three. 
+After completing the stages, the core will then set a flag in the work-stealing buffers to indicate that the operation
+has succeeded, and then release the global lock. 
+
