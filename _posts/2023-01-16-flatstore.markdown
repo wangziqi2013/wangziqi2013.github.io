@@ -112,3 +112,9 @@ completing stage two and stage three.
 After completing the stages, the core will then set a flag in the work-stealing buffers to indicate that the operation
 has succeeded, and then release the global lock. 
 
+If the core fails to acquire the lock, it will then become a follower core, which would wait for the request it 
+put into the work-stealing buffer to be handled by another leader core. In the meantime, the follower core will
+continue to process requests in order to keep the system busy and minimize cycle wastage. 
+The follower cores will also periodically check the flags in the work-stealing buffer. 
+A follower core will respond to the client after a request has been completed by the leader core.
+
