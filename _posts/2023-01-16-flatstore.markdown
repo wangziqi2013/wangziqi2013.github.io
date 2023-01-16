@@ -84,3 +84,8 @@ If the key already exists in the index, it is updated to point to the newly allo
 Version ID field of the newly added entry is one plus the Version ID of the existing entry. Otherwise, the 
 key is freshly inserted into the index, and its Version ID is set to zero.
 No persist barrier is issued in this stage as the index is stored in volatile memory.
+
+Both log segments and externally allocated keys and/or values are allocated by a custom allocator. The allocator 
+requests free storage from the OS at 4MB granularity, and partitions them into smaller blocks which are maintained 
+in size-segregated free lists for fast allocation. For non-log segments, each 4MB chunk also has a bitmap recording 
+the allocation status of the rest of the storage in the chunk.
