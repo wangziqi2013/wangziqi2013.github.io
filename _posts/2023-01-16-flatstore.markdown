@@ -19,7 +19,8 @@ version_mgmt:
 this scenario should be avoided by having a dedicated "leader core" that steals from other core's work queue and 
 perform sequential log writes on behalf of the other cores.
 
-
+2. In a log-structured KV store, the allocator metadata does not need to be persisted eagerly to the NVM since 
+the log itself already contains allocation information and can be used to fully reconstruct allocator metadata.
 
 This paper proposes FlatStore, a log-structured key-value store designed for NVM. FlatStore addresses the bandwidth
 under-utilization problem in prior works and addresses the issue with careful examination of NVM performance 
