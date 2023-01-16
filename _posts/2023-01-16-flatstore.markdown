@@ -54,4 +54,6 @@ possible result of internal resource contention), making it less beneficial to p
 random ones when the thread count is large. Second, repeated cache block flushes using the clwb instruction on the same 
 address will suffer extremely high latency, the cause of which is speculated to be either internal serialization of 
 successive clwb instructions, or NVM's wear-leveling mechanism.
-
+The design insight we can gather from this study, therefore, is that (1) an efficient design should perform sequential
+writes only with a few threads, and (2) the design should avoid repeatedly flushing the same address as much as 
+possible. 
