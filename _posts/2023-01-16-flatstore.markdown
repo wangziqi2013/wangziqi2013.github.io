@@ -135,9 +135,9 @@ threads concurrently performing sequential writes.
 As with all log-structured storage systems, when free storage is running low, FlatStore will invoke 
 Garbage Collection (GC) on a set of background GC threads. The GC threads will select log segments based on the 
 liveness of the segment. Liveness is defined as the percentage of key-value pairs that are still 
-up-to-date and can be calculated by querying with the index.
+up-to-date and can be calculated by querying the index.
 After a log segment is selected for GC, the GC threads will then copy all the live pairs from the segment to a 
-newly allocated segment, updates the index, and then deallocate the old log segment.
+newly allocated segment, update the index, and then deallocate the old log segment.
 The index is updated using atomic instructions without blocking foreground activity, and hence the GC can proceed 
 in parallel with regular operations. 
 
