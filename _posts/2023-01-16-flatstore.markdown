@@ -33,12 +33,15 @@ of the raw bandwidth. After careful investigation, the paper concludes that prio
 bandwidth for two reasons. First, these designs keep the index structure in persistent memory which will be read
 and written during operations. However, frequent reads and writes of the index are detrimental to overall performance,
 since these reads and writes, however small they are, will saturate NVM bandwidth. The problem is generally worse 
-with PUT operations, as these operations require updating the index, which itself may incur large write amplification
-(e.g., moving hash tab;e slots, shifting B+TRee keys).
-Second, 
+with PUT (modification) operations, as these operations require updating the index, which itself may incur large 
+write amplification (e.g., moving hash table slots, shifting B+TRee keys, etc.).
+Second, prior works only assume that data can be flushed back to the NVM at 64-byte cache block granularity.
+However, in reality, NVM internally performs reads and writes at a larger granularity, i.e., 256 bytes. The mismatch
+between the granularity of cache block flushes and the granularity of hardware operations will degrade 
+performance further.
 
 The paper also observes a new trend in key-value workloads on production systems. First, most values are small, with
-the size of the majority of objects being inserted fewer than a few hundred bytes. Secondly, today's workloads 
+the size of the majority of objects being inserted fewer than a few hundred bytes. Second, today's workloads 
 exhibit more fast-changing objects, indicating that these workloads are likely write-dominant. The paper hence concludes
 that an efficient key-value store design should be specifically optimized to support small objects well and should be 
 writer-friendly.
