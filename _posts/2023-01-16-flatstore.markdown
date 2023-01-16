@@ -57,3 +57,9 @@ successive clwb instructions, or NVM's wear-leveling mechanism.
 The design insight we can gather from this study, therefore, is that (1) an efficient design should perform sequential
 writes only with a few threads, and (2) the design should avoid repeatedly flushing the same address as much as 
 possible. 
+
+We next present FlatStore design as follows. In FlatStore, both insertion of a new key and modification to an existing 
+key are implemented as appending to a per-thread log segment. The log segment is allocated on the NVM as 4MB memory 
+blocks aligned to the 4MB boundary, and each log segment has a tail pointer indicating the current tail of the log
+which is also the next log allocation point.
+
