@@ -118,3 +118,7 @@ continue to process requests in order to keep the system busy and minimize cycle
 The follower cores will also periodically check the flags in the work-stealing buffer. 
 A follower core will respond to the client after a request has been completed by the leader core.
 
+On large systems with more than one socket, having a single leader core and a globally shared lock might become a 
+scalability bottleneck. In such systems, there can be multiple leader cores, each responsible for the follower
+cores on its own socket. This core grouping technique makes FlatStore scalable while minimizing the number of 
+threads concurrently performing sequential writes. 
