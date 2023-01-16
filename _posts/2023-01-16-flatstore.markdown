@@ -69,11 +69,18 @@ in the log entry, or a pointer that points to an externally allocated key. The v
 binary data, whose length can be between 1 byte and up to 16 bytes (with the value being encoded in the field as well).
 Larger values are stored as an 8-byte pointer pointing to an externally allocated block.
 
+FlatStore also maintains an index in volatile memory that tracks the most up-to-date key-value pairs for all keys
+stored in all log segments. The index can be any mapping structure that, given a key, maps it to an address in the 
+log. The index need not be persisted during runtime, since it can be restored on crash recovery by scanning the log
+segments. However, on an ordered shutdown, the index is copied to the NVM such that it can be loaded back to 
+volatile memory on the next startup.
+
 FlatStore's modification operations (including insertions) are implemented as a three-stage process. In the first 
 stage, the memory block for the key and/or the value is allocated, if they cannot be embedded within the log entry.
 The externally allocated blocks, if any, are persisted using a persist barrier at the end of the stage. 
 Then, in the second stage, the log entry is initialized at the current tail position, after which the tail pointer 
 is incremented and persisted using another persist barrier. Lastly, the index is updated to commit the operation.
-If the key already exists in the index, it is updated to point to the newly allocated log entry. Otherwise, the 
-key is freshly inserted into the index.
+If the key already exists in the index, it is updated to point to the newly allocated log entry, and the 
+Version ID field of the newly added entry is one plus the Version ID of the existing entry. Otherwise, the 
+key is freshly inserted into the index, and its Version ID is set to zero.
 No persist barrier is issued in this stage as the index is stored in volatile memory.
