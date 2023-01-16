@@ -62,4 +62,7 @@ We next present FlatStore design as follows. In FlatStore, both insertion of a n
 key are implemented as appending to a per-thread log segment. The log segment is allocated on the NVM as 4MB memory 
 blocks aligned to the 4MB boundary, and each log segment has a tail pointer indicating the current tail of the log
 which is also the next log allocation point.
-
+A log entry consists of an "Op" field indicating the type of the operation (insert, modification, or delete),
+a version ID field that stores the version ID of the key-value pair which is used for Garbage Collection, 
+and two fields for storing the key and the value. The key field is 8 bytes, which can either be a key embedded
+in the log entry, or a pointer that points to an externally allocated key. 
