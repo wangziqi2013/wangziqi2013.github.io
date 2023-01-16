@@ -26,3 +26,10 @@ operation updates the value. Compared with conventional approaches that update d
 key-value store transforms random writes to updated values to sequential writes at the end of the log buffer
 and therefore demonstrates better write performance. Besides, the atomicity of operations can be easily guaranteed
 because the update operation is only committed when the corresponding index entry is updated.
+
+
+The paper also observes a new trend in key-value workloads on production systems. First, most values are small, with
+the size of the majority of objects being inserted fewer than a few hundred bytes. Secondly, today's workloads 
+exhibit more fast-changing objects, indicating that these workloads are likely write-dominant. The paper hence concludes
+that an efficient key-value store design should be specifically optimized to support small objects well and should be 
+writer-friendly.
