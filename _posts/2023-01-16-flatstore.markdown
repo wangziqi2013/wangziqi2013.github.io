@@ -45,3 +45,10 @@ the size of the majority of objects being inserted fewer than a few hundred byte
 exhibit more fast-changing objects, indicating that these workloads are likely write-dominant. The paper hence concludes
 that an efficient key-value store design should be specifically optimized to support small objects well and should be 
 writer-friendly.
+
+Based on the above observations, the paper proposes FlatStore to address the limitations of prior works and to leverage 
+the new trends of commercial workloads. In order to design FlatStore for maximum bandwidth utilization, the paper lists
+two critical performance characteristics of NVM. First, although sequential writes are faster than random writes 
+with a few threads, when the number of threads increases, the performance gap between the two would narrow (as a 
+possible result of internal resource contention), making it less beneficial to perform sequential writes instead of 
+random ones when the thread count is large.
