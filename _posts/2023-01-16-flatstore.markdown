@@ -122,3 +122,9 @@ On large systems with more than one socket, having a single leader core and a gl
 scalability bottleneck. In such systems, there can be multiple leader cores, each responsible for the follower
 cores on its own socket. This core grouping technique makes FlatStore scalable while minimizing the number of 
 threads concurrently performing sequential writes. 
+
+As with all log-structured storage systems, when free storage is running low, FlatStore will invoke 
+Garbage Collection (GC) on a set of background GC threads. The GC threads will select log segments based on the 
+liveness of the segment. Liveness is defined as the percentage of key-value pairs that are still 
+up-to-date and can be calculated by querying with the index.
+
