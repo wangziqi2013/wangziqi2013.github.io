@@ -22,4 +22,7 @@ FlatStore is, in its essence, a log-structured storage architecture where modifi
 (represented as key-value pairs) are implemented as appending to a persistent log as new data. In order for read
 operations to locate the most recent key-value pair, an index structure keeps track of the most up-to-date value given
 a lookup key, which is updated every time to point to the newly inserted key-value pair every time a modification
-operation updates the value. 
+operation updates the value. Compared with conventional approaches that update data in place, a log-structured
+key-value store transforms random writes to updated values to sequential writes at the end of the log buffer
+and therefore demonstrates better write performance. Besides, the atomicity of operations can be easily guaranteed
+because the update operation is only committed when the corresponding index entry is updated.
