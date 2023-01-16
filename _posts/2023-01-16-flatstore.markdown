@@ -31,7 +31,11 @@ Despite being advantageous over the conventional designs, the paper noted, howev
 key-value stores severely under-utilize the available bandwidth of NVM, often falling behind to only using one-tenth
 of the raw bandwidth. After careful investigation, the paper concludes that prior designs fail to utilize the full
 bandwidth for two reasons. First, these designs keep the index structure in persistent memory which will be read
-and written during operations. 
+and written during operations. However, frequent reads and writes of the index are detrimental to overall performance,
+since these reads and writes, however small they are, will saturate NVM bandwidth. The problem is generally worse 
+with PUT operations, as these operations require updating the index, which itself may incur large write amplification
+(e.g., moving hash tab;e slots, shifting B+TRee keys).
+Second, 
 
 The paper also observes a new trend in key-value workloads on production systems. First, most values are small, with
 the size of the majority of objects being inserted fewer than a few hundred bytes. Secondly, today's workloads 
