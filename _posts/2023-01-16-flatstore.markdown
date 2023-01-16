@@ -95,4 +95,7 @@ before a crash can be located for crash recovery.
 The paper noted that the allocator metadata, mainly the bitmaps, do not have to be persisted at all in the runtime,
 since allocation information is already included in the log entries, i.e., if a log entry contains a pointer to 
 externally allocated blocks, then the 4MB chunk containing the block must be one of the allocated chunks.
-
+During crash recovery, the allocation metadata can be restored by scanning the log, locating every 4MB chunk
+that contains externally allocated blocks, and then reconstructing allocation metadata. The head of the chunk
+can be easily found by aligning block pointers down to the nearest 4MB boundary because all chunks are aligned to
+this address boundary.
