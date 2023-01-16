@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. NVM sequential write performance degrades when there are multiple writers. In log-structured KV store designs,
+this scenario should be avoided by having a dedicated "leader core" that steals from other core's work queue and 
+perform sequential log writes on behalf of the other cores.
+
+
+
 This paper proposes FlatStore, a log-structured key-value store designed for NVM. FlatStore addresses the bandwidth
 under-utilization problem in prior works and addresses the issue with careful examination of NVM performance 
 characteristics and clever designs on the logging protocol. Compared with prior works, FlatStore achieves considerable 
