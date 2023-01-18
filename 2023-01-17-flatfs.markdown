@@ -25,4 +25,9 @@ where the intermediate nodes are directories that can contain files and other di
 are regular files or soft links. However, this tree model comes at a cost as a file path needs to be internally 
 resolved into an inode number by the file system before it can be used by other file system calls. On conventional
 systems using HDDs or SSDs, the cost of path resolution is relatively cheap due to the high overhead of performing 
-I/Os. 
+I/Os. However, with the introduction of NVM, whose read and write latencies are comparable to those of DRAM and 
+are much faster than even the fastest SSDs, I/O has largely ceased to be the slowest component on the critical path,
+whose latency now is even comparable to those of the software. As a result, the existing hierarchical file model
+can eventually become the bottleneck of file operations. 
+
+To confirm the above claim, this paper conducted two sets of experiments. 
