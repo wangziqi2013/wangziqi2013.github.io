@@ -12,7 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
-
+ 
 **Highlight:**
 
 1. NVM sequential write performance degrades when there are multiple writers. In log-structured KV store designs,
