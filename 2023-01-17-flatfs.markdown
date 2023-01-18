@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "FlatFS: Flatten Hierarchical File System Namespace on Non-volatile Memories"
+date:   2023-01-17 23:59:00 -0500
+categories: paper
+paper_title: "FlatFS: Flatten Hierarchical File System Namespace on Non-volatile Memories"
+paper_link: https://www.usenix.org/conference/atc22/presentation/cai
+paper_keyword: NVM; FlatFS; File System
+paper_year: USENIX ATC 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
