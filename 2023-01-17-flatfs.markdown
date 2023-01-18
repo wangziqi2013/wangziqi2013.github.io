@@ -16,4 +16,6 @@ version_mgmt:
 This paper presents FlatFS, a file system designed for Byte-Addressable Non-Volatile Memory (NVM) that adopts 
 a flat namespace to replace the hierarchical directory tree. The paper is motivated by the high overhead of component
 resolution and file tree walking in the existing hierarchical file systems when they are deployed on fast NVM as 
-external storage. 
+external storage. The paper addresses the issue by replacing the hierarchical organization of the file system with
+a flat namespace organization while preserving the conventional hierarchical view. Compared with conventional
+file systems, FlatFS demonstrates better performance and scalability when the operations are metadata-intensive.
