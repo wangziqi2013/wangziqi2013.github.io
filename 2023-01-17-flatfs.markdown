@@ -75,3 +75,9 @@ index key is the full path of the directory appended with `\x01`, and the other 
 content, whose index key is the full path of the directory appended with `\xFE`. Queries using the directory's full
 path will hence always hit the beginning of the directory. The content of the directory can then be listed by scanning 
 on the leaf level until the end of the entry is seen.
+
+Other range operations on the index, such as directory deletion and directory move, can be implemented with the support
+of two index operations. The first is tree split, which, given a split key, partitions the index tree into two parts,
+such that each part only contains keys that are smaller than or larger than the split key.
+The split operation is implemented as walking down the tree from the root level and splitting every node on the 
+walking path using the split key. 
