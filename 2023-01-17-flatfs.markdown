@@ -101,5 +101,7 @@ a merge needs to be performed instead of an insert. The paper does not cover thi
 When a leaf node entry is updated, e.g., by a rename operation, FlatFS checks whether the key can still be compressed
 by the common prefix of the leaf node. If the check fails, then FlatFS will decompress all keys and find a new common
 prefix. The decompression process copies characters in the prefix to the suffix and increases the size of the suffix.
-
+To avoid frequent decompression, the paper proposes Write-Optimized Compressed Key (WoC Key) that always "prefetch"
+more characters to the suffix when decompression happens. This technique reduces write operations that occur during
+frequent decompression because it amortizes the cost of expanding the suffix over fewer large writes. 
 
