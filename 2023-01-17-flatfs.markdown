@@ -13,6 +13,8 @@ htm_cr:
 version_mgmt:
 ---
 
+
+
 This paper presents FlatFS, a file system designed for Byte-Addressable Non-Volatile Memory (NVM) that adopts 
 a flat namespace to replace the hierarchical directory tree. The paper is motivated by the high overhead of component
 resolution and file tree walking in the existing hierarchical file systems when they are deployed on fast NVM as 
@@ -30,4 +32,7 @@ are much faster than even the fastest SSDs, I/O has largely ceased to be the slo
 whose latency now is even comparable to those of the software. As a result, the existing hierarchical file model
 can eventually become the bottleneck of file operations. 
 
-To confirm the above claim, this paper conducted two sets of experiments. 
+To confirm the above claim, the authors of the paper conducted two sets of experiments. First, the authors measured
+the overhead of resolving a component name to the corresponding dentry object. Results show that even with a warm
+dcache, where the name is hashed and used to look up a hash table, the overhead is non-negligible, constituting 
+around 30% of the total execution time.
