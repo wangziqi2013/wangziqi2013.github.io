@@ -13,7 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
 
+1. The paper indicates that in the experiment, resolving 50 components takes 14x more time than resolving a single 
+   component. Why is this non-scalable? It seems perfectly scalable to me. The real problem perhaps is that it 
+   is not constant time.
 
 This paper presents FlatFS, a file system designed for Byte-Addressable Non-Volatile Memory (NVM) that adopts 
 a flat namespace to replace the hierarchical directory tree. The paper is motivated by the high overhead of component
