@@ -25,7 +25,9 @@ only has keys that are smaller than the keys in the other. This process can be d
 into the taller one or directly merging the root of the shorter tree into the taller tree's rightmost inner node at 
 the same depth.
 
-
+3. String keys that represent full paths stored in a B+Tree leaf node can be compressed using the common prefix.
+When an existing key is modified or a new key is to be inserted, the prefix may need to be adjusted by expanding
+the suffix.
 
 **Comments:**
 
