@@ -65,3 +65,10 @@ together. To reduce storage overhead, all keys stored in the same node are compr
 As a result, a key in a node is stored as a triple: the shred prefix, the suffix, and the size of the suffix.
 Concurrent tree operations are synchronized between different threads using top-down lock coupling. The integrity
 of the tree is also protected against system failures using undo logging.
+
+Metadata operations on FlatFS start by querying the index. Regular file lookups use the full path and simply perform
+point queries. Relative paths should be converted to full paths using the current working directory environmental 
+variable before being used. Directory lists use the full path of the directory. To delimit a directory, FlatFS
+maintains two hidden entries in the index for every directory, with one denoting the beginning of the 
+directory content, whose 
+
