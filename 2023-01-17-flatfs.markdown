@@ -38,8 +38,13 @@ can eventually become the bottleneck of file operations.
 
 To confirm the above claim, the authors of the paper conducted two sets of experiments. First, the authors measured
 the overhead of resolving a component name to the corresponding dentry object. Results show that even with a warm
-dcache, where the name is hashed and used to look up a hash table, the overhead is non-negligible, constituting 
-around 30% of the total execution time. The overhead is almost doubled if the dcache is cold, i.e., the entry is not
-in the cache and hence must be read from the underlying storage. Besides, the authors also conducted experiments with
-a varying number of components on the path. Results show that component resolution time scales with the number of 
-components, but somehow it is sub-linear and no explanation is given in the paper.
+dcache (a hash table that stores recently resolved paths and maps them to dentry objects) the overhead is 
+non-negligible, constituting around 30% of the total execution time. The overhead is almost doubled if the dcache 
+is cold, i.e., the entry is not in the cache and hence must be read from the underlying storage. 
+Besides, the authors also conducted experiments with a varying number of components on the path. Results show that 
+component resolution time scales with the number of components, but somehow it is sub-linear and no explanation is 
+given in the paper.
+The second experiment measures the overall cost of path walking and name resolution during metadata operations.
+Results show that when executing `ls -R` command to list all directories and files recursively in a directory tree of
+depth 11, the overhead of directory tree walking can constitute up to 80% of total execution time, again demonstrating
+the high overhead of directory tree walking.
