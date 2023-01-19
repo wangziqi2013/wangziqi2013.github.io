@@ -76,8 +76,16 @@ content, whose index key is the full path of the directory appended with `\xFE`.
 path will hence always hit the beginning of the directory. The content of the directory can then be listed by scanning 
 on the leaf level until the end of the entry is seen.
 
-Other range operations on the index, such as directory deletion and directory move, can be implemented with the support
-of two index operations. The first is tree split, which, given a split key, partitions the index tree into two parts,
+Other range operations on the index, such as directory deletion and directory move, can be implemented using two index 
+transformation operations. The first is tree split, which, given a split key, partitions the index tree into two parts,
 such that each part only contains keys that are smaller than or larger than the split key.
 The split operation is implemented as walking down the tree from the root level and splitting every node on the 
-walking path using the split key. 
+walking path using the split key, hence producing two equally height trees. 
+The second operation is tree join, which is the exact opposite of tree split. Given two trees where the keys in
+the left tree are smaller than all keys in the right tree, the operation produces one single tree that contains 
+all keys in both smaller trees. 
+The tree join operation is implemented by simply merging the root of the "shorter" tree (i.e., the one with a smaller
+number of levels) into the rightmost inner node of the "taller" tree. If merging is impossible due to tree node
+size limitation, the two trees are joined by recursively inserting a new key into the parent node of the taller
+tree's inner node and then directly linking the shorter tree into the parent node as a child. This process can propagate
+till the root of the taller tree, which may even cause a new root to be created if the current root node is full.
