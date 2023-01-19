@@ -71,4 +71,7 @@ point queries. Relative paths should be converted to full paths using the curren
 variable before being used. Directory lists use the full path of the directory. To delimit a directory, FlatFS
 maintains two hidden entries in the index for every directory, with one denoting the beginning of the 
 directory content, whose 
-
+index key is the full path of the directory appended with `\x01`, and the other denoting the end of the directory
+content, whose index key is the full path of the directory appended with `\xFE`. Queries using the directory's full
+path will hence always hit the beginning of the directory. The content of the directory can then be listed by scanning 
+on the leaf level until the end of the entry is seen.
