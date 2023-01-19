@@ -13,11 +13,21 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Path walking and name resolution are high-overhead operations for NVM file systems. To address this problem,
+we can implement the file system as a flat namespace and use an index to track all files and directories. 
+This approach can be also considered as a generalization of having an infinitely sized dcache.
+
+
+
 **Comments:**
 
 1. The paper indicates that in the experiment, resolving 50 components takes 14x more time than resolving a single 
    component. Why is this non-scalable? It seems perfectly scalable to me. The real problem perhaps is that it 
    is not constant time.
+
+2. How do threads synchronize when they (1) Scan the leaf node? (2) Perform split and join?
 
 This paper presents FlatFS, a file system designed for Byte-Addressable Non-Volatile Memory (NVM) that adopts 
 a flat namespace to replace the hierarchical directory tree. The paper is motivated by the high overhead of component
