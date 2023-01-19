@@ -89,3 +89,8 @@ number of levels) into the rightmost inner node of the "taller" tree. If merging
 size limitation, the two trees are joined by recursively inserting a new key into the parent node of the taller
 tree's inner node and then directly linking the shorter tree into the parent node as a child. This process can propagate
 till the root of the taller tree, which may even cause a new root to be created if the current root node is full.
+
+With the two new tree operations, directory remove can be implemented as two tree splits using the delimiter keys
+of the directory as the split keys, discarding the middle subtree (i.e., the one that contains the directory to
+be removed and all the content), and then joining the two remaining subtrees together. 
+
