@@ -57,3 +57,8 @@ hence achieving faster lookups while avoiding the time-costing level-by-level co
 since B+Tree traversals mostly involve sequential memory accesses within nodes with only indirections between nodes,
 the access pattern of the index search is also more suitable for NVM.
 
+We next present FlatFS's index structure, the Range-Optimized Index Tree or Br-Tree. The Br-Tree is essentially a 
+B+Tree indexed by path strings, with the node size being 256 bytes which aligns with the size of NVM's internal 
+read and write buffers. As with all B+Trees, keys stored in leaf nodes are sorted in lexicographical order, meaning
+that files or directories that share the same common prefix (i.e., they are under the same directory) will be stored 
+together. 
