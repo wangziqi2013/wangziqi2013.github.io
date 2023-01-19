@@ -35,4 +35,7 @@ can eventually become the bottleneck of file operations.
 To confirm the above claim, the authors of the paper conducted two sets of experiments. First, the authors measured
 the overhead of resolving a component name to the corresponding dentry object. Results show that even with a warm
 dcache, where the name is hashed and used to look up a hash table, the overhead is non-negligible, constituting 
-around 30% of the total execution time.
+around 30% of the total execution time. The overhead is almost doubled if the dcache is cold, i.e., the entry is not
+in the cache and hence must be read from the underlying storage. Besides, the authors also conducted experiments with
+a varying number of components on the path. Results show that component resolution time scales with the number of 
+components, but somehow it is sub-linear and no explanation is given in the paper.
