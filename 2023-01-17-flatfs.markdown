@@ -19,6 +19,12 @@ version_mgmt:
 we can implement the file system as a flat namespace and use an index to track all files and directories. 
 This approach can be also considered as a generalization of having an infinitely sized dcache.
 
+2. B+Tree can be split into two parts using a split key. This operation is done by traversing down the tree
+and splitting every node on the path using the key. Two subtrees can also be joined together if one of them
+only has keys that are smaller than the keys in the other. This process can be done by linking the shorter subtree
+into the taller one or directly merging the root of the shorter tree into the taller tree's rightmost inner node at 
+the same depth.
+
 
 
 **Comments:**
