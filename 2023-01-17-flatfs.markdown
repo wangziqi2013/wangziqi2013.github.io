@@ -48,3 +48,12 @@ The second experiment measures the overall cost of path walking and name resolut
 Results show that when executing `ls -R` command to list all directories and files recursively in a directory tree of
 depth 11, the overhead of directory tree walking can constitute up to 80% of total execution time, again demonstrating
 the high overhead of directory tree walking.
+
+FlatFS addresses the above issues by organizing the entire file system as a flat namespace. In FlatFS, files and 
+directories are still uniquely identified by the full absolute path as in a regular file system, but instead of 
+resolving each component of the full path as a separate component by searching the component name in a directory
+structure, FlatFS directly maps the full path to the file or directory's inode number using a B+Tree index structure, 
+hence achieving faster lookups while avoiding the time-costing level-by-level component name resolution. Furthermore, 
+since B+Tree traversals mostly involve sequential memory accesses within nodes with only indirections between nodes,
+the access pattern of the index search is also more suitable for NVM.
+
