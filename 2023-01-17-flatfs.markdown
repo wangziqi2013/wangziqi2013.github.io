@@ -93,4 +93,7 @@ till the root of the taller tree, which may even cause a new root to be created 
 With the two new tree operations, directory remove can be implemented as two tree splits using the delimiter keys
 of the directory as the split keys, discarding the middle subtree (i.e., the one that contains the directory to
 be removed and all the content), and then joining the two remaining subtrees together. 
-
+Directory move can be implemented as first removing the directory from the index tree and then splitting the tree using
+either of the two delimiter keys of the directory and then joining the tree subtrees together, with the 
+one containing the directory content in the middle. Note that if the move target is already a directory, then 
+a merge needs to be performed instead of an insert. The paper does not cover this case, though.
