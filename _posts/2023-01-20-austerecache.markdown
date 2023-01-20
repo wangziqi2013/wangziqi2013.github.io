@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes AustereCache, a flash (SSD) caching design that aims at lowering runtime memory consumption while 
+increasing the effective cache size with deduplication and compression. AustereCache is based on prior flash caching 
+proposals that implement deduplication and compression and is motivated by their high metadata memory footprint during 
+the runtime. AustereCache addresses the problem with more efficient metadata organization on both DRAM and SSD. 
+
+
