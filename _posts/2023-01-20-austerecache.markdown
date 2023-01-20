@@ -80,7 +80,7 @@ The FP index is organized similarly, except that it is now divided into two part
 main memory, and it only contains partial tags (which is much smaller than the full tag, e.g., 16 bits) that 
 could result in false hits. 
 The second part of the FP index is moved to a reserved metadata region of the SSD. The in-SSD part has the same
-set-associative organization as the in-memory part, but it stores the full tag as well as the physical pointer. 
+set-associative organization as the in-memory part, but it stores the full tag as well as the back pointers. 
 The data region of the SSD is also divided into chunk-sized blocks and organized the same as the FP index.
 Consequently, every entry of the FP index has a corresponding block in the data region, which eliminates 
 the need for physical pointers. 
@@ -101,3 +101,12 @@ The metadata of compressed chunks is stored in the corresponding FP index entry 
 entries in the FP index are marked as used but not accessed during normal operations.
 A compressed sub-chunk can be accessed by first finding its FP index entry and then reading sequentially until the 
 last sub-chunk.
+
+Lastly, the paper proposes new eviction algorithms for both indices structures when an entry cannot be found.
+For the LBA index, eviction is performed within a set, i.e., anytime a new entry is to be allocated, an existing entry
+from the same set will be evicted. The eviction victim is determined using LRU algorithm where all entries 
+of the set are maintained in a per-set LRU list. Index query that hits the cache will move the entry to the head of 
+the LRU list, and so is a newly inserted entry. When an eviction decision is to be made, the LRU tail will be chosen
+and then evicted. On eviction of an LBA entry, the corresponding back pointer in the FP entry is also removed.
+
+
