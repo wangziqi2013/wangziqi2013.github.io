@@ -97,4 +97,7 @@ the chunk can be computed from the set and way number of the FP index entry.
 AustereCache also reduces the amount of metadata required for tracking compressed segment size in the baseline design. 
 In AustereCache, compressed chunks are stored as consecutive sub-chunks in the data region of the SSD (and the 
 last sub-chunk is padded to align to the sub-chunk boundary). 
-
+The metadata of compressed chunks is stored in the corresponding FP index entry of the first sub-chunk. The rest 
+entries in the FP index are marked as used but not accessed during normal operations.
+A compressed sub-chunk can be accessed by first finding its FP index entry and then reading sequentially until the 
+last sub-chunk.
