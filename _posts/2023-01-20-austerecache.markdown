@@ -44,4 +44,7 @@ a list of back pointers, called LBA lists, which point to the LBA entries whose 
 value. The fingerprint, which is computed using SHA-1, uniquely identifies the content of a chunk, with the 
 probability of collision being practically zero.
 
+On disk read operations, the LBA of the chunk is first used to query the LBA index. If an entry exists, indicating that
+the chunk exists in the cache, the fingerprint from the LBA index is then used to query the FP index, and the chunk is 
+read from its storage location.
 
