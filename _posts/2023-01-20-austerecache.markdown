@@ -27,4 +27,9 @@ the runtime. AustereCache addresses the problem with more efficient metadata org
 AustereCache assumes a flash caching architecture where flash storage, such as Solid-State Disks (SSD), are used in 
 a caching layer between the conventional hard drive and the main memory. Since SSD has lower access latency but 
 is more expensive in terms of dollars per GB, the cache architecture improves overall disk I/O latency without 
-sacrificing the capacity of conventional hard drives. 
+sacrificing the capacity of conventional hard drives. In the flash caching architecture, the SSD stores recently used
+data in the granularity of chunks, the size of which is 32KB and is independent of the I/O size or the sector size
+of the underlying hard drive. Each chunk is uniquely identified by the LBA. The cache can be either write-back or 
+write-through, and AustereCache is effective for both of them.
+
+
