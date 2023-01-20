@@ -23,8 +23,10 @@ This paper proposes AustereCache, a flash (SSD) caching design that aims at lowe
 increasing the effective cache size with deduplication and compression. AustereCache is based on prior flash caching 
 proposals that implement deduplication and compression and is motivated by their high metadata memory footprint during 
 the runtime. AustereCache addresses the problem with more efficient metadata organization on both DRAM and SSD. 
+Compared with prior works, AustereCache substantially reduces in-memory indexing data structure size while 
+achieving equal or better overall performance.
 
-AustereCache assumes a flash caching architecture where flash storage, such as Solid-State Disks (SSD), are used in 
+AustereCache assumes a flash caching architecture where flash storage, such as Solid-State Disks (SSD), is used in 
 a caching layer between the conventional hard drive and the main memory. Since SSD has lower access latency but 
 is more expensive in terms of dollars per GB, the cache architecture improves overall disk I/O latency without 
 sacrificing the capacity of conventional hard drives. In the flash caching architecture, the SSD stores recently used
@@ -75,9 +77,14 @@ controller searches the set by comparing the rest of the bits in the hash value 
 LBA index if one of the comparisons results in a match.
 
 The FP index is organized similarly, except that it is now divided into two parts. The first part still resides in the
-main memory, and it only contains partial tags that could result in false hits. 
+main memory, and it only contains partial tags (which is much smaller than the full tag, e.g., 16 bits) that 
+could result in false hits. 
 The second part of the FP index is moved to a reserved metadata region of the SSD. The in-SSD part has the same
 set-associative organization as the in-memory part, but it stores the full tag as well as the physical pointer. 
+The data region of the SSD is also divided into chunk-sized blocks and organized the same as the FP index.
+Consequently, every entry of the FP index has a corresponding block in the data region, which eliminates 
+the need for physical pointers. 
+
 With the new organization, FP index queries consist of two steps. In the first step, the hash of the FP value is 
 computed, and the set is located. The software controller searches the set for a partial tag match and will immediately
 declare a cache miss if no match can be found. However, if a match is found, due to the possibility of false hits, the
@@ -85,4 +92,9 @@ software controller must validate the search in the second step by checking the 
 This operation does not need to search the on-SSD part of the FP index since the same set and way number
 from the first step are used. The check will read the on-SSD part of the index into memory and then perform the 
 final comparison. If the comparison indicates a tag match, the access hits the FP index and the physical location of 
-the chunk can be read from the on-SSD index entry.
+the chunk can be computed from the set and way number of the FP index entry.
+
+AustereCache also reduces the amount of metadata required for tracking compressed segment size in the baseline design. 
+In AustereCache, compressed chunks are stored as consecutive sub-chunks in the data region of the SSD (and the 
+last sub-chunk is padded to align to the sub-chunk boundary). 
+
