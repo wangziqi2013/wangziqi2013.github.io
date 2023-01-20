@@ -62,4 +62,8 @@ Compression can be further applied to the baseline system to reduce the storage 
 The paper suggests that LZ4 be used for chunk compression. After compression, chunks become variably sized data 
 segments, and hence additional metadata is needed in the FP index to track the size of the compressed segments. 
 
-
+Both deduplication and compression add a non-negligible amount of metadata which consumes precious runtime memory.
+Using the simple back-of-the-envelope calculation, the paper argues that naive designs could end up with several times 
+more memory usage than a design without deduplication and compression, which limits the effectiveness of 
+flash caching as it reduces the amount of main memory that could have been available to cache frequently accessed 
+disk data.
