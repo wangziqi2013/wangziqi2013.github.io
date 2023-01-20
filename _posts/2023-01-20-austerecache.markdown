@@ -34,5 +34,14 @@ write-through, and AustereCache is effective for both of them.
 
 The paper assumes the baseline workflow as follows. Chunk metadata is maintained in two indexing structures, namely the 
 LBA index that maps chunk LBA to its fingerprint, and the FP index that maps the fingerprint to the physical location
-of the chunk on the SSD. The fingerprint uniquely identifies the content of a chunk (with the probability of 
-collision being practically zero) and is computed using SHA-1.
+of the chunk on the SSD. Both index structures are critical to the operation of the cache and must hence be loaded into
+the runtime main memory for efficient reads and writes.
+The LBA index uses chunk LBAs as keys and returns a pointer to an entry in the FP index, which is essential to
+deduplication as it maps different chunks having the same content to the same fingerprint entry. The FP index uses 
+fingerprint values as keys and returns physical pointers to chunk storage on the SSD cache.
+Since multiple LBA entries can point to the same FP entry as a result of deduplication, each FP entry also maintains 
+a list of back pointers, called LBA lists, which point to the LBA entries whose chunk data hash to the fingerprint 
+value. The fingerprint, which is computed using SHA-1, uniquely identifies the content of a chunk, with the 
+probability of collision being practically zero.
+
+
