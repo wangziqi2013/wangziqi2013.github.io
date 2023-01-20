@@ -45,6 +45,11 @@ value. The fingerprint, which is computed using SHA-1, uniquely identifies the c
 probability of collision being practically zero.
 
 On disk read operations, the LBA of the chunk is first used to query the LBA index. If an entry exists, indicating that
-the chunk exists in the cache, the fingerprint from the LBA index is then used to query the FP index, and the chunk is 
-read from its storage location.
+the chunk exists in the cache, the fingerprint from the LBA index is then used to query the FP index, which returns the 
+physical pointer of the chunk whose data is then read from its storage location.
+On write operations, the cache controller first computes the SHA-1 hash of the chunk (if I/O size is smaller than
+the chunk size, then this operation needs to read out the currently cached chunk and then apply the writes first)
+as the fingerprint. Then the fingerprint is used to query the FP index. If an entry exists, the corresponding LBA
+index of the updated chunk is updated to point to the new FP index entry. The LBA lists of the FP entries should
+also be updated accordingly. 
 
