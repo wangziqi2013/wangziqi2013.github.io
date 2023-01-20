@@ -18,4 +18,7 @@ increasing the effective cache size with deduplication and compression. AustereC
 proposals that implement deduplication and compression and is motivated by their high metadata memory footprint during 
 the runtime. AustereCache addresses the problem with more efficient metadata organization on both DRAM and SSD. 
 
-
+AustereCache assumes a flash caching architecture where flash storage, such as Solid-State Disks (SSD), are used in 
+a caching layer between the conventional hard drive and the main memory. Since SSD has lower access latency but 
+is more expensive in terms of dollars per GB, the cache architecture improves overall disk I/O latency without 
+sacrificing the capacity of conventional hard drives. 
