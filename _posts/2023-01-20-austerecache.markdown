@@ -58,3 +58,8 @@ is inserted. The new entry is initialized using the LBA and/or the fingerprint v
 If the cache is write-back, then an additional dirty bit is added per LBA entry, and the chunk is written back
 to the SSD when a dirty chunk is evicted.
 
+Compression can be further applied to the baseline system to reduce the storage cost of every deduplicated chunk.
+The paper suggests that LZ4 be used for chunk compression. After compression, chunks become variably sized data 
+segments, and hence additional metadata is needed in the FP index to track the size of the compressed segments. 
+
+
