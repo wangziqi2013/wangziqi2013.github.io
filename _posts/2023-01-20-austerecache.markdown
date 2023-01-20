@@ -32,4 +32,7 @@ data in the granularity of chunks, the size of which is 32KB and is independent 
 of the underlying hard drive. Each chunk is uniquely identified by the LBA. The cache can be either write-back or 
 write-through, and AustereCache is effective for both of them.
 
-
+The paper assumes the baseline workflow as follows. Chunk metadata is maintained in two indexing structures, namely the 
+LBA index that maps chunk LBA to its fingerprint, and the FP index that maps the fingerprint to the physical location
+of the chunk on the SSD. The fingerprint uniquely identifies the content of a chunk (with the probability of 
+collision being practically zero) and is computed using SHA-1.
