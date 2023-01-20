@@ -113,4 +113,7 @@ However, the same LRU idea cannot be applied to the FP index, as the FP index is
 (implicitly with the back pointers) but LRU does not consider the reference count value when making decisions.
 The paper hence proposes a novel algorithm that incorporates both reference counts and LRU information which 
 we present as follows. First, the algorithm considers the LBA entries in the first half of the LRU list as 
-"hot", and the other half as "cold". 
+"hot", and the other half as "cold". Second, "hot" LBA entries will contribute two points to the 
+FP entry that contains a back pointer to it, and "cold" ones only contribute one. 
+Lastly, after the points of all FP entries from the set are calculated, the one with the fewest points will be 
+evicted. 
