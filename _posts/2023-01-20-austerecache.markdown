@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Deduplication and compression can be both applied to SSD cache at the same time using two indices. The first
+is the LBA index that maps chunk addresses to content-based fingerprints. The second is the FP index which
+maps fingerprint values to the storage locations of the chunks on the SSD.
+This two-index architecture essentially the SSD cache a fingerprint-centered key-value store.
+
+2. 
+
 **Comments:**
 
 1. Although SHA-1/SHA-256 is extremely unlikely to collide and seems to never happen in practice, the paper should
