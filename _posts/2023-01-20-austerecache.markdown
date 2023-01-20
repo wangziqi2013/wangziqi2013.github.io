@@ -109,4 +109,8 @@ of the set are maintained in a per-set LRU list. Index query that hits the cache
 the LRU list, and so is a newly inserted entry. When an eviction decision is to be made, the LRU tail will be chosen
 and then evicted. On eviction of an LBA entry, the corresponding back pointer in the FP entry is also removed.
 
-
+However, the same LRU idea cannot be applied to the FP index, as the FP index is essentially reference counted 
+(implicitly with the back pointers) but LRU does not consider the reference count value when making decisions.
+The paper hence proposes a novel algorithm that incorporates both reference counts and LRU information which 
+we present as follows. First, the algorithm considers the LBA entries in the first half of the LRU list as 
+"hot", and the other half as "cold". 
