@@ -52,4 +52,9 @@ the chunk size, then this operation needs to read out the currently cached chunk
 as the fingerprint. Then the fingerprint is used to query the FP index. If an entry exists, the corresponding LBA
 index of the updated chunk is updated to point to the new FP index entry. The LBA lists of the FP entries should
 also be updated accordingly. 
+In both scenarios, if an LBA or FP entry cannot be found, then the access misses the cache and must fetch data from
+the underlying hard disk. In the meantime, an existing entry is evicted before the new entry
+is inserted. The new entry is initialized using the LBA and/or the fingerprint value of the chunk to be accessed.
+If the cache is write-back, then an additional dirty bit is added per LBA entry, and the chunk is written back
+to the SSD when a dirty chunk is evicted.
 
