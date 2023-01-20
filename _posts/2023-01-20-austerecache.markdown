@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Although SHA-1/SHA-256 is extremely unlikely to collide and seems to never happen in practice, the paper should
+still discuss the possibility of collisions and the handling of this situation. The discussion is necessary because
+future advancements in cryptography may make SHA vulnerable to hash collision attacks. 
+
 This paper proposes AustereCache, a flash (SSD) caching design that aims at lowering runtime memory consumption while 
 increasing the effective cache size with deduplication and compression. AustereCache is based on prior flash caching 
 proposals that implement deduplication and compression and is motivated by their high metadata memory footprint during 
