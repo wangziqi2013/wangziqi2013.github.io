@@ -74,4 +74,9 @@ cache by first hashing the LBA and then using the lower bits as the set index to
 controller searches the set by comparing the rest of the bits in the hash value against the tags. A request hits the 
 LBA index if one of the comparisons results in a match.
 
-
+The FP index is organized similarly, except that it is now divided into two parts. The first part still resides in the
+main memory, and it only contains partial tags that could result in false hits. 
+The second part of the FP index is moved to a reserved metadata region of the SSD. The in-SSD part has the same
+set-associative organization as the in-memory part, but it stores the full tag as well as the physical pointer. 
+With the new organization, FP index queries consist of two steps. In the first step, the hash of the FP value is 
+computed, and the set is located. 
