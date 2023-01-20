@@ -16,11 +16,15 @@ version_mgmt:
 **Highlights:**
 
 1. Deduplication and compression can be both applied to SSD cache at the same time using two indices. The first
-is the LBA index that maps chunk addresses to content-based fingerprints. The second is the FP index which
+is the LBA index which maps chunk addresses to content-based fingerprints. The second is the FP index which
 maps fingerprint values to the storage locations of the chunks on the SSD.
 This two-index architecture essentially the SSD cache a fingerprint-centered key-value store.
 
-2. 
+2. The memory overhead of the two-index architecture can be reduced by (1) Organizing the indices as a set-associative
+software cache; (2) Eliminating the physical location pointer by organizing the data region in the same set-associative
+manner as the FP index (such that each slot in the data region has a corresponding FP entry); and (3) Offloading part
+of the essential information contained in the in-memory FP index to the SSD and then relying on extra read operations
+to fetch those data in the runtime.
 
 **Comments:**
 
