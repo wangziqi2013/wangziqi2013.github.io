@@ -67,3 +67,11 @@ Using the simple back-of-the-envelope calculation, the paper argues that naive d
 more memory usage than a design without deduplication and compression, which limits the effectiveness of 
 flash caching as it reduces the amount of main memory that could have been available to cache frequently accessed 
 disk data.
+
+To address this problem, the paper proposes a new organization of caching metadata which we present as follows.
+First, the LBA index is organized as a set-associative software cache. An LBA is mapped into an entry of the 
+cache by first hashing the LBA and then using the lower bits as the set index to locate the set. Then the software
+controller searches the set by comparing the rest of the bits in the hash value against the tags. A request hits the 
+LBA index if one of the comparisons results in a match.
+
+
