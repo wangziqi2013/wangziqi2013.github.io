@@ -11,7 +11,7 @@ email: ziqiw [at] alumni.cmu.edu
 description: > # this means to ignore newlines until "baseurl:"
   Ziqi Wang
   <br />
-  Carnegie Mellon University
+  Carnegie Mellon Alumni
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://wangziqi2013.github.io" # the base hostname & protocol for your site
 #twitter_username: jekyllrb
