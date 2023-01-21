@@ -260,7 +260,7 @@ instrumentations which slow down the emulation significantly):
 This happens, because the emulated system runs much slowly than it is supposed to be, but the kernel is able to
 observe wall-clock time, thus reaching to the wrong conclusion that the system has been stalled.
 
-To address this matter, run QEMU with the option `-icount shift=auto`, which instructs QEMU to virtualize time based on how many
+To address this matter, ~~run QEMU with the option `-icount shift=auto`~~, run QEMU with the option `-icount shift=1`, which instructs QEMU to virtualize time based on how many
 instructions it has executed. With `icount` enabled, the emulated guest system will stop printing the RCU warning
 message from the kernel thread, since the kernel can now only observe elapsed time as the number of instructions
 that have been executed.
