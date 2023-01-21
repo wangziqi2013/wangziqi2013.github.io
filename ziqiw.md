@@ -12,7 +12,7 @@ Resume
 Research Statement
 ------------------
 
-I am a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") 
+I ~~am~~ used to be a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") 
 and [Dimitrios Skarlatos](http://www.cs.cmu.edu/~dskarlat/ "Dimitrios's homepage") since 2017 Fall. 
 My research area is computer architecture and memory architecture, especially Hardware Transaction Memory (HTM), Non-Volatile Memory, Memory and Cache
 Compression, Cache optimization for serverless & micro-services, and
@@ -32,10 +32,10 @@ Research Projects
 -----------------
 
 <!--
-**(2021.08 - Present)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on malloc-less memory allocation for small, short-lived objects.
+**(2021.08 - 2022.12)** I am working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on malloc-less memory allocation for small, short-lived objects.
 -->
 
-**(2021.08 - Present)** I am working on the next research project.
+**(2021.08 - 2022.12)** I am working on the next research project.
 
 **(2020.12 - 2021.08)** I was working with Professor Todd Mowry, Dimitrios Skarlatos and Professor Gennady Pekhimenko (U of T) on memory compression on multi-dimentional address space.
 
