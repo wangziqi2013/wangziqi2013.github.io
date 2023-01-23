@@ -63,3 +63,11 @@ threshold (15% of total heap size as suggested by the paper). The scanning proce
 in parallel and access an inconsistent process address space. The paper noted that although this approach may miss 
 some live references if the reference is copied around in the memory during the scan, the possibility of it 
 actually happening is still low and will unlikely to be a major problem.
+
+The paper also proposes a few optimizations. First, to prevent cyclic reference, i.e., two or more blocks in the 
+quarantine list contain pointers to each other hence forming a cycle, which causes these blocks to be never freed,
+MineSweepers fills a block with zero when free() is called on the block. Second, to avoid holding too much memory
+resources in quarantine, large allocations that are satisfied by mmap() system calls, when freed, will be eagerly 
+released to the OS kernel by calling madvise(). The block itself still needs to be inserted into the quarantine list
+because the virtual address may still be reused by the OS kernel if not so.
+
