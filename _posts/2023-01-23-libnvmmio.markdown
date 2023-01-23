@@ -50,6 +50,12 @@ on a persistent heap. Libnvmmio also maintains an internal mapping that associat
 as the virtual address range allocated to the opened file with the per-file metadata.
 On file reads and writes, libnvmmio translates the operations to the corresponding load and store sequences 
 on the virtual address space of the mapped file. Extra log entries may also be generated to support failure atomicity
-(which we cover later). None of these operations will invoke system calls, nor do they require the heavyweight 
+(which we cover later). 
+If the user application already explicitly maps the file using mmap, libnvmmio also provides the corresponding
+interface, `nvmemcpy`, for accessing memory regions mapped to a file as a replacement for regular loads and stores. 
+In this case, the application needs to be modified and recompiled in order to benefit from libnvmmio.
+None of these operations will invoke system calls, nor do they require the heavyweight 
 file system stack. As a result, libnvmmio can be implemented entirely in the user space and it effectively 
 reduces the cost of system calls and the file system stack.
+
+
