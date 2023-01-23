@@ -32,4 +32,10 @@ To address this problem, MineSweeper proposes that the actual deallocation of bl
 library call should be postponed until no other reference is held by the application. After this condition is met,
 the application can never gain access to the freed block via direct pointer accesses (but is still vulnerable
 to other forms of pointer anomalies such as buffer overflow) and hence the use-after-free scenario becomes impossible.
-
+To achieve the design goal, MineSweeper integrates with the memory allocator's free function. When an object is about to
+be freed by the application, instead of deallocating the storage and insert it into the free list, MineSweeper moves 
+the object pointer into a quarantine list, hence preventing the object from being reallocated on another request. 
+Periodically, MineSweeper scans the address space of the application, treating every aligned 8-byte value as a 
+pointer, and deallocates those in the quarantine list whose has not occurred during the scan.
+Note that this approach will incur both false positives and false negatives. False positives is a result of 
+treating every value as a pointer. 
