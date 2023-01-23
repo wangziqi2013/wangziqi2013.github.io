@@ -43,4 +43,9 @@ Libnvmmio addresses both issues of the existing file systems which we present as
 Overall, libnvmmio acts as an intermediate level between the user space program and the underlying file system 
 interfaces. Libnvmmio does not implement any low-level file system operations such as metadata maintenance but instead
 simply serves as a system call translation layer and delegates these low-level operations to an existing NVM file 
-system. 
+system. In particular, libnvmmio, during the runtime, intercepts file systems calls open, read, and write and 
+replaces them with memory-mapped systems calls. On file open, it translates the open system call to mmap which 
+maps the file into the virtual address space and returns the file descriptor. Per-file metadata is also allocated
+on a persistent heap. Libnvmmio also maintains an internal mapping that associates the file descriptor as well
+as the virtual address range allocated to the opened file with the per-file metadata.
+
