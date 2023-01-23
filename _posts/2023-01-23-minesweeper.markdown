@@ -20,3 +20,10 @@ use-after-free cases by scanning for pointers that have freed by the application
 Compared with prior works, MineSweeper offers strong protection guarantees while only incurring marginal penalty
 on execution time and memory consumption. Besides, MineSweeper does not require modification to the application
 and only requires non-functional changes to the allocator.
+
+The MineSweeper design addresses use-after-free scenario where a pointer from the malloc library is used by the 
+application after free has been called to deallocate the pointer. In this scenario, a malicious attacker can 
+request allocation of the same size as the deallocated block after which it populates the block with the attack vector.
+If the targeted application later on uses the block to perform vulnerable operations, e.g., virtual function calls,
+the attacker can hijack the control flow by populating the block with a function pointer to an attack routine.
+As a result, the application is compromised and sensitive data might be leaked to the attacker. 
