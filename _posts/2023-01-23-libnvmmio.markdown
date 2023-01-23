@@ -61,3 +61,8 @@ reduces the cost of system calls and the file system stack.
 To address the second problem in prior works, namely providing epoch-based persistence with low overhead, libnvmmio
 leverages both undo and redo logging and switch between them dynamically in the runtime. 
 Libnvmmio maintains log entries for every 4KB block in the file (except the last block which can be of arbitrary size). 
+In order to find the log entry with low overhead, Libnvmmio maintains an internal radix tree in the per-file
+metadata that maps block offset into the file to the corresponding log entry. 
+Log entries are generated at small granularity by file write operations. Each log entry consists of a 
+starting offset within the block, the length of the write, and the payload (which can be either undo or redo data).
+
