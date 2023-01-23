@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. Does MineSweeper need to save allocation size somewhere as well (C++ can do this already)? What if a live reference 
+points to the middle of an object after the object is passed to free()?
+
 This paper presents MineSweeper, a memory safety tool that detects use-after-free cases for malloc library with little
 overhead on both execution cycles and memory. MineSweeper is motivated by Mark-and-Sweep Garbage Collection (GC)
 techniques that detect live references to objects. MineSweeper leverages a similar algorithm to detect potential
@@ -43,3 +48,4 @@ pointer values in the quarantine list. On the other hand, false negatives can ar
 are not stored on aligned boundaries, or that the pointer values are tagged (e.g., on higher bits with ARM's 
 Pointer Authentication Code ISA extension). However, the paper argues that the two cases are relatively rare and 
 can be addresses by application programmers (applications are assumed to be non-malicious).
+
