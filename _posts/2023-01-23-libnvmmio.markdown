@@ -62,7 +62,7 @@ To address the second problem in prior works, namely providing epoch-based persi
 leverages both undo and redo logging and switch between them dynamically in the runtime. 
 Libnvmmio maintains log entries for every 4KB block in the file (except the last block which can be of arbitrary size). 
 In order to find the log entry with low overhead, Libnvmmio maintains an internal radix tree in the per-file
-metadata that maps block offset into the file to the corresponding log entry. 
+metadata as an index that maps block offset into the file to the corresponding log entry. 
 Log entries are generated at small granularity by file write operations. Each log entry consists of a 
 starting offset within the block, the length of the write, and the payload (which can be either undo or redo data).
 For undo logging, libnvmmio copies the original data before the write from the offset into the log entry, 
@@ -92,3 +92,9 @@ To quickly adapt to the request pattern and select the optimal logging scheme, l
 reads and writes in the per-file metadata and selects the logging scheme for the next epoch when the current 
 epoch ends. The paper suggests that if the percentage of writes exceeds an empirical ratio of 40%, then the logging
 scheme for the next epoch will be redo logging. Otherwise it will be undo logging. 
+
+On crash recovery, the handler scans per-file metadata on persistent storage and determines whether 
+a file needs to be restored to the most recent committed epoch by checking whether the file 
+has any outstanding log entries from the non-most-up-to-date epoch.
+Files with outstanding log entries are restored by copying undo or redo data back to their original locations in the 
+file. 
