@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Use-after-free bugs can be utilized by malicious attackers to inject the attack vector into a memory block
+being used by the application after the block is freed.
+
+
+
 **Comments:**
 
 1. Does MineSweeper need to save allocation size somewhere as well (C++ can do this already)? What if a live reference 
