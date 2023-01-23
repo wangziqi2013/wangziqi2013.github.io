@@ -48,4 +48,8 @@ replaces them with memory-mapped systems calls. On file open, it translates the 
 maps the file into the virtual address space and returns the file descriptor. Per-file metadata is also allocated
 on a persistent heap. Libnvmmio also maintains an internal mapping that associates the file descriptor as well
 as the virtual address range allocated to the opened file with the per-file metadata.
-
+On file reads and writes, libnvmmio translates the operations to the corresponding load and store sequences 
+on the virtual address space of the mapped file. Extra log entries may also be generated to support failure atomicity
+(which we cover later). None of these operations will invoke system calls, nor do they require the heavyweight 
+file system stack. As a result, libnvmmio can be implemented entirely in the user space and it effectively 
+reduces the cost of system calls and the file system stack.
