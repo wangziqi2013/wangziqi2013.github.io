@@ -18,7 +18,10 @@ version_mgmt:
 1. Use-after-free bugs can be utilized by malicious attackers to inject the attack vector into a memory block
 being used by the application after the block is freed.
 
-
+2. We can borrow from GC mark-and-sweep algorithms to detect whether there are live references to a block
+being sent to free(). If true, the block should not be deallocated. 
+The scan process, however, does not need to be precise as in GC. 
+As a result, both false positive and false negatives can occur.
 
 **Comments:**
 
