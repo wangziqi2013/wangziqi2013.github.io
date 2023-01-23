@@ -17,3 +17,6 @@ This paper presents MineSweeper, a memory safety tool that detects use-after-fre
 overhead on both execution cycles and memory. MineSweeper is motivated by Mark-and-Sweep Garbage Collection (GC)
 techniques that detect live references to objects. MineSweeper leverages a similar algorithm to detect potential
 use-after-free cases by scanning for pointers that have freed by the application in the application's address space.
+Compared with prior works, MineSweeper offers strong protection guarantees while only incurring marginal penalty
+on execution time and memory consumption. Besides, MineSweeper does not require modification to the application
+and only requires non-functional changes to the allocator.
