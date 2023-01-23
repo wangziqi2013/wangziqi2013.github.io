@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. Existing NVM file systems have two problems: (1) The read/write interface has high software overhead, and (2) the 
+failure-atomicity model is unclear or hard to use. The two issues can be addressed by (1) Adding a system call
+translation layer that transforms read/write into loads and stores on mmap'ed memory, and (2) implementing
+an epoch-based persistence model by generating log entries on write requests and using a dedicated thread to
+commit the log entries in the background.
+
+
 This paper presents libnvmmio, a user-space file system extension to support efficient failure-atomic semantics 
 on Byte-Addressable Non-Volatile Memory (NVM). Libnvmmio acts as an intermediate module between the user space system 
 call interface and the existing memory-mapped file interface. Libnvmmio lowers the software overhead of the legacy 
