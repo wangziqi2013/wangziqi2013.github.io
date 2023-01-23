@@ -70,4 +70,9 @@ MineSweepers fills a block with zero when free() is called on the block. Second,
 resources in quarantine, large allocations that are satisfied by mmap() system calls, when freed, will be eagerly 
 released to the OS kernel by calling madvise(). The block itself still needs to be inserted into the quarantine list
 because the virtual address may still be reused by the OS kernel if not so.
-
+In addition, MineSweepers should keep track of pages whose virtual addresses are still in-use while the physical
+pages are deallocated. These pages will not be scanned as accessing them would cause the OS to page them back.
+Lastly, the paper proposes to use multiple worker threads (six threads as suggested in the paper) to perform 
+the scan. These worker threads are waken up by the main scan thread dividing the address ranges to scan, and each 
+of them maintains their own bitmaps. The final result, on completion, is processed by the main scan thread to
+produce the final scan result.
