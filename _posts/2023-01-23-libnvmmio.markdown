@@ -75,4 +75,11 @@ log entry to see if the requested range overlaps with any of the entries and ret
 Libnvmmio implements an epoch-based persistence model, where data generated from an epoch will be guaranteed to
 persist before data from all future epochs is. Application programs delimit epoch boundaries using the msync()
 or fsync() system calls which are also intercepted by libnvmmio.
+On receiving the call, libnvmmio advances the current epoch by atomically incrementing an epoch counter in the 
+per-file metadata which indicates the current epoch of the file. The global epoch counter is also copied to 
+every log entry to indicate the epoch that the log entry belongs to.
+After incrementing the epoch counter, libnvmmio will then wake up a background thread dedicated to persistence.
+The background thread will then scan the log entries of the file and commit the log entries in the background.
+For undo logging, the background thread flushes dirty data back to the NVM for every address range being written.
+For redo logging, the background thread updates the file in-place using data from redo log entries.
 
