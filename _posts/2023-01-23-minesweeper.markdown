@@ -27,3 +27,9 @@ request allocation of the same size as the deallocated block after which it popu
 If the targeted application later on uses the block to perform vulnerable operations, e.g., virtual function calls,
 the attacker can hijack the control flow by populating the block with a function pointer to an attack routine.
 As a result, the application is compromised and sensitive data might be leaked to the attacker. 
+
+To address this problem, MineSweeper proposes that the actual deallocation of blocks that are freed via the free 
+library call should be postponed until no other reference is held by the application. After this condition is met,
+the application can never gain access to the freed block via direct pointer accesses (but is still vulnerable
+to other forms of pointer anomalies such as buffer overflow) and hence the use-after-free scenario becomes impossible.
+
