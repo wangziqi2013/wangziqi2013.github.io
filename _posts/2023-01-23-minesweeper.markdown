@@ -49,3 +49,9 @@ are not stored on aligned boundaries, or that the pointer values are tagged (e.g
 Pointer Authentication Code ISA extension). However, the paper argues that the two cases are relatively rare and 
 can be addresses by application programmers (applications are assumed to be non-malicious).
 
+We next describe the implementation level details. MineSweeper uses a bitmap to represent whether a pointer to a 
+particular word exists in the application's memory. To this end, MineSweeper reserves 1 bit for every 128 bit (16 bytes)
+of physical memory in the application's address space, incurring less than 1% of memory overhead. 
+During the scan, MineSweeper treats every 8-byte aligned value as a pointer, and sets the corresponding bit in the 
+bitmap by shifting the value right and using the result as an index into the bitmap.
+
