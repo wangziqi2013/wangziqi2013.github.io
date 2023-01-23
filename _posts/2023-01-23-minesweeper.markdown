@@ -54,4 +54,12 @@ particular word exists in the application's memory. To this end, MineSweeper res
 of physical memory in the application's address space, incurring less than 1% of memory overhead. 
 During the scan, MineSweeper treats every 8-byte aligned value as a pointer, and sets the corresponding bit in the 
 bitmap by shifting the value right and using the result as an index into the bitmap.
+Then, for every pointer in the quarantine list, MineSweeper tests whether the bit that corresponds to the pointer is
+set. If true, the pointer is not deallocated as there can be potentially a live reference to the object. Otherwise,
+the pointer value is freed.
 
+The scan is triggered by the application thread when the amount of memory in the quarantine list exceeds a certain
+threshold (15% of total heap size as suggested by the paper). The scanning process can proceed with the application
+in parallel and access an inconsistent process address space. The paper noted that although this approach may miss 
+some live references if the reference is copied around in the memory during the scan, the possibility of it 
+actually happening is still low and will unlikely to be a major problem.
