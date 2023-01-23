@@ -38,3 +38,9 @@ the page level and will cause cascaded updates on the indirection level. The sec
 either undo or redo logging being a viable option. However, neither of the two logging approaches is tuned for 
 all cases. For example, undo logging is beneficial in write-dominant scenarios as it does not require extra indirection
 into the log on read accesses, while redo logging works the best in read-dominant scenarios.
+
+Libnvmmio addresses both issues of the existing file systems which we present as follows. 
+Overall, libnvmmio acts as an intermediate level between the user space program and the underlying file system 
+interfaces. Libnvmmio does not implement any low-level file system operations such as metadata maintenance but instead
+simply serves as a system call translation layer and delegates these low-level operations to an existing NVM file 
+system. 
