@@ -34,4 +34,7 @@ by a memory fence. However, ad-hoc solutions to persistence are error-prone and,
 Prior works have proposed two techniques that guarantee failure atomicity. The first is shadow paging, which buffers 
 file updates with shadow pages and commits the updates by atomically updating the pointers in the indirection level
 of the file system. The paper commented that shadow paging incurs large write amplification since it must be done at
-the page level and will cause cascaded updates on the indirection level. 
+the page level and will cause cascaded updates on the indirection level. The second technique is logging, with
+either undo or redo logging being a viable option. However, neither of the two logging approaches is tuned for 
+all cases. For example, undo logging is beneficial in write-dominant scenarios as it does not require extra indirection
+into the log on read accesses, while redo logging works the best in read-dominant scenarios.
