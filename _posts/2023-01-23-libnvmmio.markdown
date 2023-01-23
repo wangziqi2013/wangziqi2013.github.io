@@ -21,6 +21,8 @@ translation layer that transforms read/write into loads and stores on mmap'ed me
 an epoch-based persistence model by generating log entries on write requests and using a dedicated thread to
 commit the log entries in the background.
 
+2. Undo logging is better for write-dominant workloads while redo is for read-dominant. A logging design can
+dynamically switch between these two by monitoring the ratio of writes in the runtime.
 
 This paper presents libnvmmio, a user-space file system extension to support efficient failure-atomic semantics 
 on Byte-Addressable Non-Volatile Memory (NVM). Libnvmmio acts as an intermediate module between the user space system 
