@@ -19,4 +19,6 @@ call interface and the existing memory-mapped file interface. Libnvmmio lowers t
 read/write interface and implements an epoch-based persistent model that allows dirty data to be persisted in an
 orderly manner.
 
-
+Libnvmmio was motivated by two issues with the existing NVM-based file systems. First, as NVM offers low-latency
+I/O that is comparable to those of DRAM and is much faster than SSD and HDD, the software overhead of the 
+file system stack has become a major problem that lies on the critical path of file access. 
