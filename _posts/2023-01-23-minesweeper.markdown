@@ -38,4 +38,8 @@ the object pointer into a quarantine list, hence preventing the object from bein
 Periodically, MineSweeper scans the address space of the application, treating every aligned 8-byte value as a 
 pointer, and deallocates those in the quarantine list whose has not occurred during the scan.
 Note that this approach will incur both false positives and false negatives. False positives is a result of 
-treating every value as a pointer. 
+treating every value as a pointer. It might therefore be possible that some patterns or integer values coincide with 
+pointer values in the quarantine list. On the other hand, false negatives can arise if actual pointer values 
+are not stored on aligned boundaries, or that the pointer values are tagged (e.g., on higher bits with ARM's 
+Pointer Authentication Code ISA extension). However, the paper argues that the two cases are relatively rare and 
+can be addresses by application programmers (applications are assumed to be non-malicious).
