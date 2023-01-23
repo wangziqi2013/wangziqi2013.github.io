@@ -36,8 +36,8 @@ file updates with shadow pages and commits the updates by atomically updating th
 of the file system. The paper commented that shadow paging incurs large write amplification since it must be done at
 the page level and will cause cascaded updates on the indirection level. The second technique is logging, with
 either undo or redo logging being a viable option. However, neither of the two logging approaches is tuned for 
-all cases. For example, undo logging is beneficial in write-dominant scenarios as it does not require extra indirection
-into the log on read accesses, while redo logging works the best in read-dominant scenarios.
+all cases. For example, redo logging is beneficial in write-dominant scenarios as requires an extra indirection
+into the log on read accesses, while undo logging works the best in read-dominant scenarios.
 
 Libnvmmio addresses both issues of the existing file systems which we present as follows. 
 Overall, libnvmmio acts as an intermediate level between the user space program and the underlying file system 
@@ -85,5 +85,10 @@ For redo logging, the background thread updates the file in-place using data fro
 After the log entries are processed, the background thread removes the entries, and the epoch has been successfully 
 committed. Furthermore, if a pending write operation conflicts with an outstanding epoch commit, libnvmmio 
 will prioritize
-the epoch commit (to avoid race condition) by eagerly committing the log entry first, deleting it, only after
+the epoch commit (to avoid race condition) by eagerly committing the log entry first and deleting it, only after
 which the new log entry is generated.
+
+To quickly adapt to the request pattern and select the optimal logging scheme, libnvmmio monitors the number of 
+reads and writes in the per-file metadata and selects the logging scheme for the next epoch when the current 
+epoch ends. The paper suggests that if the percentage of writes exceeds an empirical ratio of 40%, then the logging
+scheme for the next epoch will be redo logging. Otherwise it will be undo logging. 
