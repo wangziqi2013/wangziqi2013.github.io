@@ -21,4 +21,8 @@ orderly manner.
 
 Libnvmmio was motivated by two issues with the existing NVM-based file systems. First, as NVM offers low-latency
 I/O that is comparable to those of DRAM and is much faster than SSD and HDD, the software overhead of the 
-file system stack has become a major problem that lies on the critical path of file access. 
+file system stack has become a major problem that lies on the critical path of file access. In particular,
+the paper points out that the legacy read/write file access interface incurs large overheads due to data copies
+between the kernel buffer and user-space buffer. The paper also conducted experiments that showed that data copies
+between buffers constitute almost half of the total execution time. 
+
