@@ -58,4 +58,6 @@ None of these operations will invoke system calls, nor do they require the heavy
 file system stack. As a result, libnvmmio can be implemented entirely in the user space and it effectively 
 reduces the cost of system calls and the file system stack.
 
-
+To address the second problem in prior works, namely providing epoch-based persistence with low overhead, libnvmmio
+leverages both undo and redo logging and switch between them dynamically in the runtime. 
+Libnvmmio maintains log entries for every 4KB block in the file (except the last block which can be of arbitrary size). 
