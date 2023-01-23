@@ -67,6 +67,12 @@ Log entries are generated at small granularity by file write operations. Each lo
 starting offset within the block, the length of the write, and the payload (which can be either undo or redo data).
 For undo logging, libnvmmio copies the original data before the write from the offset into the log entry, 
 persists the entry, and performs the write in-place. For redo logging, libnvmmio simply copies data to be written 
-into the log entry. One additional level of indirection is added to read operations if redo logging is used,
+into the log entry and persists it. 
+One additional level of indirection is added to read operations if redo logging is used,
 since redo logging stores the most up-to-date data in the log entry. In this case, libnvmmio will check the 
 log entry to see if the requested range overlaps with any of the entries and returns data from the log if positive. 
+
+Libnvmmio implements an epoch-based persistence model, where data generated from an epoch will be guaranteed to
+persist before data from all future epochs is. Application programs delimit epoch boundaries using the msync()
+or fsync() system calls which are also intercepted by libnvmmio.
+
