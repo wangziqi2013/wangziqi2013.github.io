@@ -31,4 +31,7 @@ Second, programs that use NVM file systems often need a property called failure 
 file operation is atomic concerning system failures. In order to support this property, programmers used to 
 implement their own persistence primitives such as the persist barrier consisting of cache line flushes followed 
 by a memory fence. However, ad-hoc solutions to persistence are error-prone and, in most cases, suboptimal.
-
+Prior works have proposed two techniques that guarantee failure atomicity. The first is shadow paging, which buffers 
+file updates with shadow pages and commits the updates by atomically updating the pointers in the indirection level
+of the file system. The paper commented that shadow paging incurs large write amplification since it must be done at
+the page level and will cause cascaded updates on the indirection level. 
