@@ -25,4 +25,10 @@ file system stack has become a major problem that lies on the critical path of f
 the paper points out that the legacy read/write file access interface incurs large overheads due to data copies
 between the kernel buffer and user-space buffer. The paper also conducted experiments that showed that data copies
 between buffers constitute almost half of the total execution time. 
+By contrast, memory-mapped I/O using the mmap interface enables low overhead file access as the virtual-to-physical 
+mapping is only set up once by the OS kernel on the first access to a page and the rest is handled by the hardware MMU. 
+Second, programs that use NVM file systems often need a property called failure atomicity, which guarantees that a 
+file operation is atomic concerning system failures. In order to support this property, programmers used to 
+implement their own persistence primitives such as the persist barrier consisting of cache line flushes followed 
+by a memory fence. However, ad-hoc solutions to persistence are error-prone and, in most cases, suboptimal.
 
