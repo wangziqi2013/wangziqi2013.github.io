@@ -82,4 +82,8 @@ After incrementing the epoch counter, libnvmmio will then wake up a background t
 The background thread will then scan the log entries of the file and commit the log entries in the background.
 For undo logging, the background thread flushes dirty data back to the NVM for every address range being written.
 For redo logging, the background thread updates the file in-place using data from redo log entries.
-
+After the log entries are processed, the background thread removes the entries, and the epoch has been successfully 
+committed. Furthermore, if a pending write operation conflicts with an outstanding epoch commit, libnvmmio 
+will prioritize
+the epoch commit (to avoid race condition) by eagerly committing the log entry first, deleting it, only after
+which the new log entry is generated.
