@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "CARAT CAKE: Replacing Paging via Compiler/Kernel Cooperation"
+date:   2023-01-24 07:17:00 -0500
+categories: paper
+paper_title: "CARAT CAKE: Replacing Paging via Compiler/Kernel Cooperation"
+paper_link: https://dl.acm.org/doi/10.1145/3503222.3507771
+paper_keyword: Carat; Compiler; TLB; OS
+paper_year: ASPLOS 2020
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
