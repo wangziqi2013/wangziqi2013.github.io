@@ -51,7 +51,7 @@ To achieve the design goal, MineSweeper integrates with the memory allocator's f
 be freed by the application, instead of deallocating the storage and insert it into the free list, MineSweeper moves 
 the object pointer into a quarantine list, hence preventing the object from being reallocated on another request. 
 Periodically, MineSweeper scans the address space of the application, treating every aligned 8-byte value as a 
-pointer, and deallocates those in the quarantine list whose has not occurred during the scan.
+pointer, and deallocates those in the quarantine list whose value has not occurred during the scan.
 Note that this approach will incur both false positives and false negatives. False positives is a result of 
 treating every value as a pointer. It might therefore be possible that some patterns or integer values coincide with 
 pointer values in the quarantine list. On the other hand, false negatives can arise if actual pointer values 
