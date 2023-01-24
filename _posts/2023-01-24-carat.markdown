@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes Carat Cake, a compiler-OS co-design that eliminates the need for the hardware memory management 
+unit (MMU) and TLB while providing the same level of address mapping and protection. Carat Cake is motivated by the 
+high performance and power overhead of today's address translation infrastructure and aims at eliminating the overhead
+completely thus allowing applications to be directly executed on the physical address space. 
+
+
