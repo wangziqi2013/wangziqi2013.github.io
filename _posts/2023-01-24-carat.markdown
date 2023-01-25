@@ -87,4 +87,6 @@ entry points, the call instruction triggers an access violation and the process 
 Inserting a stub before every memory access will inevitably slow down normal execution tremendously. To solve this
 problem, the paper proposes several optimizations. The first is to leverage hardware extensions such as Intel MPX 
 to perform bounds checks, eliminating the instructions to look up the region table and perform the comparison.
- 
+
+
+
