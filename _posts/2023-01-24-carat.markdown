@@ -29,4 +29,9 @@ The paper identifies four issues with the MMU.
 First, the MMU hardware consumes real estate on the chip and increases energy consumption as it is a significant
 piece of hardware that is accessed for every memory instruction. Besides, MMU hardware is difficult to get right
 and requires non-trivial design and verification efforts, which elongates the development process. 
-Second, 
+Second, the L1 TLB limits the size of the L1 cache because the L1 cache is virtually indexed. As a result, the 
+number of bits that must remain unchanged before and after the translation should be at least the number of 
+bits used to index the L1 cache. For example, on the current architecture, a 4KB page guarantees that the lower 12 bits 
+will not change, thus enabling a maximum number of (12 - 6) = 6 bits for generating the index, limiting the L1
+size to 64 sets.
+Third, 
