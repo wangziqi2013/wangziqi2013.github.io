@@ -39,3 +39,12 @@ misses the TLB and a page walk has to be started. The extra latency has become a
 whose working set size far exceeds the coverage of any realistic TLB hardware.
 Lastly, security attacks that exploit hardware-controlled access permissions, such as Spectre, can be difficult to 
 mitigate with software patches, as the MMU hardware is generally not programmable.
+
+In order to address all these issues with hardware address translation, this paper proposes to eliminate
+the hardware MMU, and instead, use software approaches to perform address translation and to enforce access rights.
+The paper identifies three design goals that must be achieved in order to provide the same level of abstraction as 
+the existing virtual memory mechanism. First, the design should be able to enforce access rights at user-defined 
+memory regions. This feature corresponds to the per-page access permission bits of the conventional virtual memory 
+system. 
+
+
