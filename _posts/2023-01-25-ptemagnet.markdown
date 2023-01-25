@@ -16,11 +16,11 @@ version_mgmt:
 **Highlights:**
 
 1. The outer level of the nested page table suffers low spatial locality because it uses the physical addresses of the 
-guest as lookup keys. As a result, even if the guest has spatial locality on its access pattern, the underlying physical
-pages still will not demonstrate spatial locality. 
+guest as lookup keys. As a result, even if the guest has spatial locality on its virtual address access pattern, the 
+underlying physical pages still will not demonstrate spatial locality. 
 
-2. Modern OS kernel's demand paging only backs one physical page to the virtual page being accessed, causing physical
-page fragmentation.
+2. Modern OS kernel's demand paging mechanism only allocates one physical page for the virtual page being 
+accessed, causing fragmentation of the physical address space.
 
 3. We can pre-allocate 8 physical pages for one demand paging request such that future demand paging on the rest
 of the virtual pages can just use the pre-allocated physical pages.
@@ -29,6 +29,9 @@ of the virtual pages can just use the pre-allocated physical pages.
 
 1. This paper is extremely well-written with a comprehensive statement of the challenge and a good description of the 
 design. But I am still surprised that there are only three pictures in the result section. 
+
+2. I think the same idea can also be exploited to address the physical page fragmentation problem. If there is a 
+way to effectively defragment the physical address space, then huge pages would be much easier to use.
 
 This paper presents PTEMagnet, an Operating System kernel buddy allocator that minimizes physical address
 space fragmentation and improves the performance of nested page table walks in virtualized environments.
