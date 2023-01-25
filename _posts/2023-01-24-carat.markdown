@@ -110,4 +110,9 @@ When the kernel decides the relocate a region belonging to a process, it notifie
 runtime that exists in one of the process's regions. If the runtime decides that the relocation address is valid, 
 it begins the relocation process by stopping all threads in the process and letting them dump a snapshot of their
 register states. 
-
+Then the runtime copies the region from its current physical address to the destination physical
+address and rewrites all pointers point to the region. The pointers are rewritten by using the region's old
+address to query the allocation map, and for each object residing in that region, rewriting the pointer value to
+point to the same object after the relocation.
+Since some registers may also contain a pointer value, the runtime also rewrites the register dump to reflect the
+changes. After pointers have been rewritten, the threads can load the register snapshot back and resume execution.
