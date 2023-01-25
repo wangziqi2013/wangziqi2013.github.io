@@ -111,8 +111,13 @@ runtime that exists in one of the process's regions. If the runtime decides that
 it begins the relocation process by stopping all threads in the process and letting them dump a snapshot of their
 register states. 
 Then the runtime copies the region from its current physical address to the destination physical
-address and rewrites all pointers point to the region. The pointers are rewritten by using the region's old
-address to query the allocation map, and for each object residing in that region, rewriting the pointer value to
-point to the same object after the relocation.
+address and rewrites all pointers pointing to the region. The pointers are rewritten by using the region's old
+address to query the allocation map, and for each object residing in that region, rewriting the pointer value such
+that it refers to the same object after the relocation.
 Since some registers may also contain a pointer value, the runtime also rewrites the register dump to reflect the
 changes. After pointers have been rewritten, the threads can load the register snapshot back and resume execution.
+
+The paper authors also build a prototype OS kernel to validate the feasibility of the design. The OS kernel still runs
+on x86 architecture and hence does not eliminate the MMU hardware (the paper mentioned that you can turn off
+the MMU in 32-bit mode, but it is no longer supported under 64-bit mode). Instead, the kernel initializes an identity 
+mapping from the virtual to the physical address space using the biggest page size possible which is 1GB. 
