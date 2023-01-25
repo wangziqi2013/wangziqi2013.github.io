@@ -45,6 +45,11 @@ the hardware MMU, and instead, use software approaches to perform address transl
 The paper identifies three design goals that must be achieved in order to provide the same level of abstraction as 
 the existing virtual memory mechanism. First, the design should be able to enforce access rights at user-defined 
 memory regions. This feature corresponds to the per-page access permission bits of the conventional virtual memory 
-system. 
+system. Second, the design should only allow pre-defined entry points to request kernel functions or high-privileged 
+functions while restricting access to arbitrary code in the kernel and another process's address space. This 
+feature corresponds to the system call feature on the existing architecture that exposes supervisor entry points. 
+Lastly, the design should also support transparent page migration which enables physical pages to move around or 
+be swapped out without disrupting user-space execution. In conventional systems, this feature is achieved by 
+updating the virtual-to-physical mapping and then performing a TLB shootdown.
 
 
