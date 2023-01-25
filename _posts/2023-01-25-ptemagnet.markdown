@@ -38,3 +38,9 @@ A more thorough investigation reveals the cause as a lack of spatial locality in
 which causes more frequent cache misses and a larger memory footprint that further reduces the effectiveness 
 of page walk caches.
 
+This phenomenon can be explained by the demand paging mechanism used in today's OS kernel design. In today's kernel, 
+when the user-space application requests memory, the OS simply returns a consecutive range of virtual addresses
+without backing it with physical storage. Instead, physical pages are allocated only when the virtual address
+range is accessed for the first time, which triggers a page fault and traps into the OS. At this moment, the OS
+allocates one single page from its buddy allocator and sets up the virtual-to-physical mapping.
+
