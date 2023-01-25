@@ -19,6 +19,9 @@ version_mgmt:
 guest as lookup keys. As a result, even if the guest has spatial locality on its access pattern, the underlying physical
 pages still will not demonstrate spatial locality. 
 
+2. Modern OS kernel's demand paging only backs one physical page to the virtual page being accessed, causing physical
+page fragmentation.
+
 
 
 **Comments:**
