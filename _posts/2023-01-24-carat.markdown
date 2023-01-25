@@ -74,4 +74,10 @@ In order to enforce access rights and function call privilege checks, Caret inse
 operation, including explicit memory
 accesses, function calls and returns, and the function prologue/epilogue to set up the stack. The software
 stub checks the dynamic address of the memory access and compares the address against an internal region table.
-
+The region table is initialized by the OS when the kernel loads the binary and is communicated to Caret
+runtime when the process is initialized. The table consists of valid address regions that are assigned to the 
+process and the access rights of each region.
+For memory operations, the base address and the operation itself are checked
+to see whether it is within the allowed range and if the operation matches the permission. For stack operations,
+Caret checks if the stack is about to overrun the allocated area. If true, then Caret notifies the kernel which may
+either allocate more memory for the stack or terminate the process. 
