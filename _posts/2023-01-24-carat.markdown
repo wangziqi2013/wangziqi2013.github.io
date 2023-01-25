@@ -120,4 +120,8 @@ changes. After pointers have been rewritten, the threads can load the register s
 The paper authors also build a prototype OS kernel to validate the feasibility of the design. The OS kernel still runs
 on x86 architecture and hence does not eliminate the MMU hardware (the paper mentioned that you can turn off
 the MMU in 32-bit mode, but it is no longer supported under 64-bit mode). Instead, the kernel initializes an identity 
-mapping from the virtual to the physical address space using the biggest page size possible which is 1GB. 
+mapping from the virtual to the physical address space using the biggest page size possible which is 1GB. This way, 
+although the MMU is still functioning, it is extremely unlikely to become an actual bottleneck since the coverage of 
+the MMU is maximized. The authors also extended the OS kernel to support the process abstraction and regions of 
+processes. The OS kernel is also compiled with the same compiler such that kernel code is also protected against
+access violations. 
