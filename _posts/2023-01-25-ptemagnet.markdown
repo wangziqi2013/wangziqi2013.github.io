@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+**Comments:**
+
+1. This paper is extremely well-written with a comprehensive statement of the challenge and a good description of the 
+design. But I am still surprised that there are only three pictures in the result section. 
+
+This paper presents PTEMagnet
