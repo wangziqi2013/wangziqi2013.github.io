@@ -22,4 +22,6 @@ This paper presents PTEMagnet, an Operating System kernel buddy allocator that m
 space fragmentation and improves the performance of nested page table walks in virtualized environments.
 The paper is motivated by the high degree of physical address space fragmentation when multiple memory-intensive 
 processes are hosted in the same virtual machine, causing noticeable slowdowns on nested 2D page table walk. 
-
+The paper addresses this problem using a customized kernel buddy allocator that opportunistically pre-allocates 
+continuous physical pages on demand paging. As a result, page walks demonstrate better spatial locality which
+improves overall system performance.
