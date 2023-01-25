@@ -51,3 +51,15 @@ since the walk accesses the radix tree using the guest physical address (gPA) as
 if the workload demonstrates spatial locality on the virtual address space, the guest physical addresses used 
 for walking the outer level of the page table would still be likely to access different parts of the radix tree,
 hence resulting in high cache miss ratio as well as large memory footprint.
+
+One way to deal with the issue is to increase the spatial locality of physical pages even when multiple processes
+are co-located together in the system. PTEMagnet addresses the challenge by pre-allocating 8 pages from the 
+buddy allocator whenever a virtual address is accessed and requires demand paging. When adjacent virtual pages
+are accessed, the pre-allocated physical pages can then be directly used to satisfy the mapping.  
+The resulting memory allocation pattern demonstrates great improvements in physical address locality because it is
+guaranteed that the eight consecutive virtual pages will be mapped to a contiguous range of physical pages as well.
+
+We next describe the process as follows. In addition to the regular data structures, the kernel maintains an
+extra table, the Page Reservation Table (PaRT), tracking the existing pre-allocated ranges for every eight-page 
+virtual address.
+
