@@ -106,4 +106,8 @@ memory locations that store the pointer value. The allocation escape map is upda
 escape analysis when entering and exiting a function. Luckily, the paper observes that most allocations only have 
 a small number of escapes, and hence the map is only updated sparsely. 
 
+When the kernel decides the relocate a region belonging to a process, it notifies the process by signaling the Carat
+runtime that exists in one of the process's regions. If the runtime decides that the relocation address is valid, 
+it begins the relocation process by stopping all threads in the process and letting them dump a snapshot of their
+register states. 
 
