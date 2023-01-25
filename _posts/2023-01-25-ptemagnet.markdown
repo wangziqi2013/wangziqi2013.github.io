@@ -18,4 +18,8 @@ version_mgmt:
 1. This paper is extremely well-written with a comprehensive statement of the challenge and a good description of the 
 design. But I am still surprised that there are only three pictures in the result section. 
 
-This paper presents PTEMagnet
+This paper presents PTEMagnet, an Operating System kernel buddy allocator that minimizes physical address
+space fragmentation and improves the performance of nested page table walks in virtualized environments.
+The paper is motivated by the high degree of physical address space fragmentation when multiple memory-intensive 
+processes are hosted in the same virtual machine, causing noticeable slowdowns on nested 2D page table walk. 
+
