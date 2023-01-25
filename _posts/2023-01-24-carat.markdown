@@ -22,6 +22,9 @@ path, area and power overhead, and Spectre attack.
 and transparent page migration. All features can be implemented in software by having the compiler injecting 
 software stubs before memory accesses and control flow transfers.
 
+3. With software assistance, we can build a single address space OS that still supports multiple processes. Isolation
+between processes and between processes and the kernel is achieved with software runtime checks.
+
 
 
 **Comments:**
