@@ -124,4 +124,9 @@ mapping from the virtual to the physical address space using the biggest page si
 although the MMU is still functioning, it is extremely unlikely to become an actual bottleneck since the coverage of 
 the MMU is maximized. The authors also extended the OS kernel to support the process abstraction and regions of 
 processes. The OS kernel is also compiled with the same compiler such that kernel code is also protected against
-access violations. 
+access violations. In the final operating model, all processes running within the OS share the same identity-mapped
+virtual address space. Each process consists of one or more regions which are continuous ranges of memory assigned
+to the process with the proper permission. Carat software instrumentation guarantees that processes remain isolated 
+from each other by checking every memory instruction for permission. Processes still request OS service using 
+system calls. However, since the process and the OS run under the same privilege level, they are also isolated from the 
+OS by checking the integrity of control flow transfers during the runtime.
