@@ -99,5 +99,11 @@ is vital to Carat's normal operation, as all processes share the same physical a
 to be constantly moved to reduce fragmentation. In order to move regions, Carat tracks all pointers that point to 
 non-local objects (e.g., heap, global data) and rewrites them when the region is relocated. The tracking mechanism 
 is implemented with two internal data structures. The first is an allocation map that stores pointers being allocated
-statically and dynamically. 
+statically and dynamically. The allocation map is populated when malloc() is called to acquire a pointer.
+Statically allocated objects are inserted into the map at initialization time. 
+The second map is the allocation escape map, which maps every object pointer in the allocation map to a set of 
+memory locations that store the pointer value. The allocation escape map is updated based on the result of the 
+escape analysis when entering and exiting a function. Luckily, the paper observes that most allocations only have 
+a small number of escapes, and hence the map is only updated sparsely. 
+
 
