@@ -69,5 +69,9 @@ The Carat runtime is also linked into the application. The runtime is responsibl
 as we will see later, performing various tasks on behalf of the OS that would have been done by the hardware MMU on
 today's hardware.
 
-
+We next describe how Caret implements each of its features.
+In order to enforce access rights and function call privilege checks, Caret inserts a stub before every memory 
+operation, including explicit memory
+accesses, function calls and returns, and the function prologue/epilogue to set up the stack. The software
+stub checks the dynamic address of the memory access and compares the address against an internal region table.
 
