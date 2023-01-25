@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. My biggest concern about the design is its usage scenario. If Carat is to be deployed for servers running cloud 
+workloads, how does it solve the virtualization problem (which is addressed with 2D page table walks)? 
+This design seems a perfect fit for micro VMs that run within a lightweight supervisor. It enables the micro VM 
+to start multiple processes as service handlers.
+
 This paper proposes Carat Cake, a compiler-OS co-design that eliminates the need for the hardware memory management 
 unit (MMU) and TLB while providing the same level of address mapping and protection. Carat Cake is motivated by the 
 high performance and power overhead of today's address translation infrastructure and aims at eliminating the overhead
