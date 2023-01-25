@@ -20,6 +20,9 @@ workloads, how does it solve the virtualization problem (which is addressed with
 This design seems a perfect fit for micro VMs that run within a lightweight supervisor. It enables the micro VM 
 to start multiple processes as service handlers.
 
+2. Statically linked binaries can be huge and there is no virtual memory mechanism to deduplicate them. How
+does Carat address this problem?
+
 This paper proposes Carat Cake, a compiler-OS co-design that eliminates the need for the hardware memory management 
 unit (MMU) and TLB while providing the same level of address mapping and protection. Carat Cake is motivated by the 
 high performance and power overhead of today's address translation infrastructure and aims at eliminating the overhead
@@ -90,5 +93,4 @@ to perform bounds checks, eliminating the instructions to look up the region tab
 Second, static analyses can be conducted to further reduce the number of checks. For example, loop invariants
 only need to be checked once at the beginning of the loop. Besides, if the compiler can infer the range of the loop, 
 it may also hoist the check outside of the loop as a big range. 
-
 
