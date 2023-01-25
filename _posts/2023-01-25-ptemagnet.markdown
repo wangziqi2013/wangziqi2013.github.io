@@ -22,7 +22,8 @@ pages still will not demonstrate spatial locality.
 2. Modern OS kernel's demand paging only backs one physical page to the virtual page being accessed, causing physical
 page fragmentation.
 
-
+3. We can pre-allocate 8 physical pages for one demand paging request such that future demand paging on the rest
+of the virtual pages can just use the pre-allocated physical pages.
 
 **Comments:**
 
