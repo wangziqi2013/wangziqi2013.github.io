@@ -59,4 +59,10 @@ Lastly, the design should also support transparent page migration which enables 
 be swapped out without disrupting user-space execution. In conventional systems, this feature is achieved by 
 updating the virtual-to-physical mapping and then performing a TLB shootdown.
 
+In order to move the responsibility of MMU to the software, Carat leverages compile-time instrumentation to 
+add stubs before certain critical operations. At a high level, Carat uses a customized compiler toolchain with 
+special passes after generating the IR to insert the stubs called "guards". When an application is compiled, 
+the compiler scans the IR, identifies instructions that may require extra operations, and inserts the guards. 
+
+
 
