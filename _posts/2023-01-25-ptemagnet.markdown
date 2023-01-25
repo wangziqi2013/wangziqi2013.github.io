@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. The outer level of the nested page table suffers low spatial locality because it uses the physical addresses of the 
+guest as lookup keys. As a result, even if the guest has spatial locality on its access pattern, the underlying physical
+pages still will not demonstrate spatial locality. 
+
+
+
 **Comments:**
 
 1. This paper is extremely well-written with a comprehensive statement of the challenge and a good description of the 
