@@ -66,3 +66,9 @@ When a virtual address is accessed for the first time and requires demand paging
 PaRT to see whether the address is covered by the table. If true, then the physical page is allocated with no cost
 since it is already pre-allocated. Otherwise, a new entry is inserted into the PaRT, which points to a newly allocated
 eight-page block from the kernel's buddy allocator.
+
+Pre-allocated pages can also be reclaimed by the OS when all pages in a block are freed or when the memory
+pressure exceeds a certain threshold. PTEMagnet allows users to configure a threshold, which, if reached, will
+trigger the kernel to reclaim pre-allocated pages. The reclamation process is simply the kernel walking the 
+PaRT and freeing physical pages back to the buddy allocator until memory consumption drops below the 
+threshold.
