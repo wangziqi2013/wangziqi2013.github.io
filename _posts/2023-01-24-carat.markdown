@@ -84,3 +84,7 @@ either allocate more memory for the stack or terminate the process. For function
 the call and the stack boundary are checked. If the target of the function call is not one of the pre-defined
 entry points, the call instruction triggers an access violation and the process should be terminated.
 
+Inserting a stub before every memory access will inevitably slow down normal execution tremendously. To solve this
+problem, the paper proposes several optimizations. The first is to leverage hardware extensions such as Intel MPX 
+to perform bounds checks, eliminating the instructions to look up the region table and perform the comparison.
+ 
