@@ -80,4 +80,7 @@ process and the access rights of each region.
 For memory operations, the base address and the operation itself are checked
 to see whether it is within the allowed range and if the operation matches the permission. For stack operations,
 Caret checks if the stack is about to overrun the allocated area. If true, then Caret notifies the kernel which may
-either allocate more memory for the stack or terminate the process. 
+either allocate more memory for the stack or terminate the process. For function calls, both the target address of 
+the call and the stack boundary are checked. If the target of the function call is not one of the pre-defined
+entry points, the call instruction triggers an access violation and the process should be terminated.
+
