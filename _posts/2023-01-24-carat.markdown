@@ -94,3 +94,10 @@ Second, static analyses can be conducted to further reduce the number of checks.
 only need to be checked once at the beginning of the loop. Besides, if the compiler can infer the range of the loop, 
 it may also hoist the check outside of the loop as a big range. 
 
+As discussed in earlier sections, Carat also supports relocations of regions allocated to a process. Region allocation
+is vital to Carat's normal operation, as all processes share the same physical address space and therefore regions need
+to be constantly moved to reduce fragmentation. In order to move regions, Carat tracks all pointers that point to 
+non-local objects (e.g., heap, global data) and rewrites them when the region is relocated. The tracking mechanism 
+is implemented with two internal data structures. The first is an allocation map that stores pointers being allocated
+statically and dynamically. 
+
