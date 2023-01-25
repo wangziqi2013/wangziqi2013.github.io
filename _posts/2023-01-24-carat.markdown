@@ -25,4 +25,8 @@ Conventionally, address translation occurs for every memory access instruction i
 translation is performed by the hardware MMU consisting of a TLB for caching recently used translation entries
 and a page table walker that fetches an entry from the main memory when an access misses the TLB.
 While providing the flexibility of a per-process virtual address space, the benefit comes at a cost.
-
+The paper identifies four issues with the MMU.
+First, the MMU hardware consumes real estate on the chip and increases energy consumption as it is a significant
+piece of hardware that is accessed for every memory instruction. Besides, MMU hardware is difficult to get right
+and requires non-trivial design and verification efforts, which elongates the development process. 
+Second, 
