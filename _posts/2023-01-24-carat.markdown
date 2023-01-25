@@ -25,7 +25,10 @@ software stubs before memory accesses and control flow transfers.
 3. With software assistance, we can build a single address space OS that still supports multiple processes. Isolation
 between processes and between processes and the kernel is achieved with software runtime checks.
 
-
+4. When a region (i.e., a segment in x86 addressing model) is relocated by the OS, the software needs to rewrite all
+pointers that point to objects within the region. This goal can be achieved by tracking all object addresses and 
+escapes (i.e., memory locations that store pointers to the objects) using internal data structures. The software
+runtime then iterates over the objects in the region and then rewrites their values to point to the relocated region.
 
 **Comments:**
 
