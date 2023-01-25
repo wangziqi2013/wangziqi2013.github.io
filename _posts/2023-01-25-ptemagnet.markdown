@@ -47,4 +47,7 @@ Consequently, if multiple processes are co-located in the same system as they al
 the physical pages that each process obtains are likely to be lacking spatial locality (i.e., far away from each other 
 on the physical address space) as a result of allocations being interleaved with each other.
 Unfortunately, such an allocation pattern can adversely affect the efficiency of outer-level page table walks,
-since the walk accesses the radix tree using the guest physical address (gPA) as a key. 
+since the walk accesses the radix tree using the guest physical address (gPA) as a key. In this scenario, even
+if the workload demonstrates spatial locality on the virtual address space, the guest physical addresses used 
+for walking the outer level of the page table would still be likely to access different parts of the radix tree,
+hence resulting in high cache miss ratio as well as large memory footprint.
