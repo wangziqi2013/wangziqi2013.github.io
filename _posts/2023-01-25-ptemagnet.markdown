@@ -25,3 +25,10 @@ processes are hosted in the same virtual machine, causing noticeable slowdowns o
 The paper addresses this problem using a customized kernel buddy allocator that opportunistically pre-allocates 
 continuous physical pages on demand paging. As a result, page walks demonstrate better spatial locality which
 improves overall system performance.
+
+Nested page table walk has long been known to become a significant source of slowdowns in virtualized environments.
+The MMU page table walker must first acquire mappings from the guest virtual address (gVA) to the guest physical address
+(gPA), and then from the gPA to the host physical address (hPA). This translation requires two page tables that
+perform the first and the second step of the above process, respectively.
+
+
