@@ -37,4 +37,5 @@ size to 64 sets.
 Third, address translation also incurs extra latency on the memory access critical path, especially when the translation
 misses the TLB and a page walk has to be started. The extra latency has become an issue with today's big data workload
 whose working set size far exceeds the coverage of any realistic TLB hardware.
-Lastly, 
+Lastly, security attacks that exploit hardware-controlled access permissions, such as Spectre, can be difficult to 
+mitigate with software patches, as the MMU hardware is generally not programmable.
