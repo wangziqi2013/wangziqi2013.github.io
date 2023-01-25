@@ -62,4 +62,7 @@ guaranteed that the eight consecutive virtual pages will be mapped to a contiguo
 We next describe the process as follows. In addition to the regular data structures, the kernel maintains an
 extra table, the Page Reservation Table (PaRT), tracking the existing pre-allocated ranges for every eight-page 
 virtual address.
-
+When a virtual address is accessed for the first time and requires demand paging, the kernel first checks the 
+PaRT to see whether the address is covered by the table. If true, then the physical page is allocated with no cost
+since it is already pre-allocated. Otherwise, a new entry is inserted into the PaRT, which points to a newly allocated
+eight-page block from the kernel's buddy allocator.
