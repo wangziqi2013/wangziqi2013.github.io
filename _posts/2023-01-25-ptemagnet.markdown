@@ -31,4 +31,10 @@ The MMU page table walker must first acquire mappings from the guest virtual add
 (gPA), and then from the gPA to the host physical address (hPA). This translation requires two page tables that
 perform the first and the second step of the above process, respectively.
 
+To pinpoint the source of slowdowns during page table walks in this setting, the paper conducted a series of 
+experiments, and the results indicate that most of the overheads originate from walking the outer level of the 
+table, i.e., mapping from gPA to hPA. 
+A more thorough investigation reveals the cause as a lack of spatial locality in the outer level of the page table,
+which causes more frequent cache misses and a larger memory footprint that further reduces the effectiveness 
+of page walk caches.
 
