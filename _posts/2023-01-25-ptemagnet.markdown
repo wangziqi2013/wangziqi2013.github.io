@@ -43,4 +43,8 @@ when the user-space application requests memory, the OS simply returns a consecu
 without backing it with physical storage. Instead, physical pages are allocated only when the virtual address
 range is accessed for the first time, which triggers a page fault and traps into the OS. At this moment, the OS
 allocates one single page from its buddy allocator and sets up the virtual-to-physical mapping.
-
+Consequently, if multiple processes are co-located in the same system as they allocate memory via demand paging, 
+the physical pages that each process obtains are likely to be lacking spatial locality (i.e., far away from each other 
+on the physical address space) as a result of allocations being interleaved with each other.
+Unfortunately, such an allocation pattern can adversely affect the efficiency of outer-level page table walks,
+since the walk accesses the radix tree using the guest physical address (gPA) as a key. 
