@@ -18,6 +18,10 @@ version_mgmt:
 1. The MMU hardware is detrimental to performance in various aspects, e.g., limited L1 size, TLB misses on the critical
 path, area and power overhead, and Spectre attack.
 
+2. The MMU provides three different features, i.e., permission checking, control flow checking (for OS entry points),
+and transparent page migration. All features can be implemented in software by having the compiler injecting 
+software stubs before memory accesses and control flow transfers.
+
 
 
 **Comments:**
