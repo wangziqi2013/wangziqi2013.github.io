@@ -98,3 +98,8 @@ in this case. This scheme is used when the object is too large and/or cannot be 
 of the prior two works. The global table is generated statically by compilers, and the index to the global table is
 OR'ed to the pointer value (with code implicitly issued by the compiler) when a pointer is generated from such 
 variables.
+
+In all the above cases, the metadata object contains the base and bound of the object which delimits the memory region
+that the pointer can point to. The hardware will check the validity of the pointer when it performs load and store 
+operations using the address and returns the status of the check using the poison bits.
+Compilers may also statically issue "promote" instructions to force a check. 
