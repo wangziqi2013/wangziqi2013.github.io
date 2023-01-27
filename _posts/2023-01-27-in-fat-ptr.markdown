@@ -114,3 +114,10 @@ The in-fat pointer design also includes a customized compiler that is responsibl
 objects during compilation, issuing code to perform validations, and assigning tags to pointers. Besides, when a 
 pointer value is changed by pointer arithmetics, the compiler should also adjust the tag if the pointer uses the 
 local offset scheme. 
+
+To enable sub-object level address checks, in-fat pointer further extends the metadata object with a pointer to 
+a per-type layout table. The layout table is another compiler-generated data structure that describes the 
+base and bounds of all fields within a struct or union.
+Each entry of the layout table consists of a base, bound, as the metadata object, and a parent field pointing to
+the containing struct of the current one (when structs are recursively defined). Recursively defined structs are
+flattened, i.e., all fields in child structs will appear in the outermost struct's layout table. 
