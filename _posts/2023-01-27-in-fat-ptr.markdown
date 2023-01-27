@@ -110,4 +110,7 @@ to determine the addressing scheme. Later validations of the
 same pointer will simply use the cached values instead of fetching them from the memory.
 The values of the shadow registers are invalidated when the register is reloaded with a new pointer value.
 
-
+The in-fat pointer design also includes a customized compiler that is responsible for generating all the metadata 
+objects during compilation, issuing code to perform validations, and assigning tags to pointers. Besides, when a 
+pointer value is changed by pointer arithmetics, the compiler should also adjust the tag if the pointer uses the 
+local offset scheme. 
