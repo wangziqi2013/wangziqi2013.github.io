@@ -55,4 +55,10 @@ In-fat pointer is designed to be a tool that assists software debugging and prev
 however, completely stop malicious attackers from abusing memory bugs as in-fat pointer does not validate the metadata 
 bits.
 
-
+We next describe the hardware mechanism of in-fat pointer. The proposed design embeds metadata bits that encode
+both the location of the metadata and the field index that the pointer points to. The paper assumes 16 unused bits 
+in virtual address pointers. The highest two bits are "poison bits" that indicate whether the pointer has failed
+validation or not. The two poison bits are set by bounds-checking hardware to store the result of the check, which
+can be in one of the three states: valid, meaning that the check passes; invalid, meaning that the check did not pass;
+and recoverable, which is implementation-dependent but usually off-by-one pointers (allowed by C standard but must not
+be dereferenced). The next two bits are scheme selector bits that 
