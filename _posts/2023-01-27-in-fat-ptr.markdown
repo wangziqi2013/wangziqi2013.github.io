@@ -12,3 +12,10 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes In-fat pointer, a hardware-software pointer tagging scheme that protects applications from spatial
+memory errors caused by pointer-related bugs. In-fat pointer leverages the higher unused bits in virtual address 
+pointers and embeds object bound and layout information to help specialized hardware check the validity of the 
+pointer when the pointers are dereferenced.
+Compared to prior works, in-fat pointer achieves a stronger protection guarantee which is at sub-object level 
+without incurring high hardware and software overhead.
