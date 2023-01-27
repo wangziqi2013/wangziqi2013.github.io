@@ -25,4 +25,7 @@ regular virtual address pointer to store the extra bits containing the base and 
 While not limited by the number of usable bits in the upper part of virtual pointers, such a scheme is likely to
 increase the application's memory consumption due to wider pointers, and also break backward compatibility at the binary
 level because applications compiled to use the legacy interface is unable to be executed under the new model.
+Second, some other proposals, most notably AddressSanitizer, adopts a memory-centric approach where metadata is
+stored in shadow memory where every address that a pointer can possibly point to is reserved a shadow location
+to store the metadata. The shadow memory address of a pointer can then be derived using simple arithmetics.
 
