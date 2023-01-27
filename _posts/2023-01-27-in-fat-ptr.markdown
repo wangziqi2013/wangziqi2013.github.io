@@ -78,16 +78,23 @@ programmers. This scheme supports objects whose size is less than several hundre
 of the cases. It can also be used for objects of all storage classes, including stack objects, heap objects, and global 
 objects.
 
-The second metadata scheme is the subheap scheme, which embeds the metadata object in allocation units called 
+The second metadata scheme is the subheap scheme, which embeds the metadata object in heap allocation units called 
 arenas. The subheap scheme assumes that the memory allocator will place same-type objects on an address-aligned 
 bigger block called an "arena". The metadata object is then placed at the beginning of the arena for easy address
 computation. Since arenas are address-aligned on the virtual address space, the metadata object can be accessed by 
 rounding the pointer value down to the nearest arena boundary. In this scheme, all the lower 12 bits can be used
 to store the field index.
+This scheme is only applicable to heap-allocated objects but it consumes less memory since objects in the same
+arena share the same metadata object.
 **Note:** The paper describes a slightly different scheme where the base address of the metadata object is stored in
 one of the 16 control registers. In this scenario, 4 of the lower 12 bits must store the register index, and the
 software is responsible for loading the control registers with metadata addresses. This scheme is more expensive and
 less versatile than what I had above because it adds extra registers which must be properly maintained and context
 switched and cannot support more than 16 types.
 
-
+The last metadata scheme is the global table scheme, where the metadata object is stored in a global table. All 12
+bits are dedicated to the table index, and in-fat pointer does not offer sub-object level protection
+in this case. This scheme is used when the object is too large and/or cannot be allocated on the heap such that neither 
+of the prior two works. The global table is generated statically by compilers, and the index to the global table is
+OR'ed to the pointer value (with code implicitly issued by the compiler) when a pointer is generated from such 
+variables.
