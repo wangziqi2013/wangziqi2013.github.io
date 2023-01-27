@@ -38,3 +38,10 @@ and the metadata object must be fetched using some complicated addressing scheme
 However, prior works on tagged-pointer designs often only guard memory accesses at the object level without 
 considering sub-object level protection as a viable option, which limits the strength of the protection
 that they offer.
+
+In-fat pointer addresses the limitations of prior works with two novel features. First, in-fat pointers embrace 
+multiple metadata schemes and hence allow the compiler to select the optimal one during compilation time 
+according to the static property of the object. Second, in-fat pointers also offer sub-object level protection
+that detects spatial memory errors, i.e., if a pointer is generated to point to a non-array field of an
+object, the pointer cannot be used to access adjacent fields within the same object.
+
