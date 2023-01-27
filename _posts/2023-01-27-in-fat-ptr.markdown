@@ -28,4 +28,6 @@ level because applications compiled to use the legacy interface is unable to be 
 Second, some other proposals, most notably AddressSanitizer, adopts a memory-centric approach where metadata is
 stored in shadow memory where every address that a pointer can possibly point to is reserved a shadow location
 to store the metadata. The shadow memory address of a pointer can then be derived using simple arithmetics.
-
+This design, while retaining the conventional pointer width, consumes an abnormally high amount of memory especially
+when the application allocates large arrays. In addition, the amount of memory that needs to be reserved is 
+proportional to the size of the working set, rather than to the number of memory allocations.
