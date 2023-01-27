@@ -31,3 +31,8 @@ to store the metadata. The shadow memory address of a pointer can then be derive
 This design, while retaining the conventional pointer width, consumes an abnormally high amount of memory especially
 when the application allocates large arrays. In addition, the amount of memory that needs to be reserved is 
 proportional to the size of the working set, rather than to the number of memory allocations.
+Lastly, there have also been explorations on tagged-pointer schemes where the metadata bits are embedded in 
+the unused higher bits of virtual address pointers. Due to the relatively limited number of bits that can be 
+freely repurposed, the metadata bits usually encode a metadata object that is stored somewhere else in the memory,
+and the metadata object must be fetched using some complicated addressing schemes.
+
