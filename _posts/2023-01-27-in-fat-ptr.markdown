@@ -121,3 +121,13 @@ base and bounds of all fields within a struct or union.
 Each entry of the layout table consists of a base, bound, as the metadata object, and a parent field pointing to
 the containing struct of the current one (when structs are recursively defined). Recursively defined structs are
 flattened, i.e., all fields in child structs will appear in the outermost struct's layout table. 
+For array objects, only one entry is included in the layout table with the size of the array element and the
+element count.
+Recall from previous sections that the tagged pointers include the index of the field that the pointer is currently 
+pointing to.
+To verify whether a pointer is valid at the sub-object level, the hardware first follows the metadata object to 
+locate the layout table. Then the hardware uses the filed index in the pointer to locate the entry. If the entry
+is not in the outermost struct, the hardware will then recursively traverse the hierarchy until the outermost 
+struct is reached, calculating the base and bound of the field along the way.
+After the base and bound of the field is computed, the pointer is then validated by checking whether it lies in 
+the region delimited by the base and bound values.
