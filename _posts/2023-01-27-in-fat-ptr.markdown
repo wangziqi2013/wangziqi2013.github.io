@@ -84,6 +84,10 @@ bigger block called an "arena". The metadata object is then placed at the beginn
 computation. Since arenas are address-aligned on the virtual address space, the metadata object can be accessed by 
 rounding the pointer value down to the nearest arena boundary. In this scheme, all the lower 12 bits can be used
 to store the field index.
-
+**Note:** The paper describes a slightly different scheme where the base address of the metadata object is stored in
+one of the 16 control registers. In this scenario, 4 of the lower 12 bits must store the register index, and the
+software is responsible for loading the control registers with metadata addresses. This scheme is more expensive and
+less versatile than what I had above because it adds extra registers which must be properly maintained and context
+switched and cannot support more than 16 types.
 
 
