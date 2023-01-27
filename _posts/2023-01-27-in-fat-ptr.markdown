@@ -44,4 +44,6 @@ multiple metadata schemes and hence allow the compiler to select the optimal one
 according to the static property of the object. Second, in-fat pointers also offer sub-object level protection
 that detects spatial memory errors, i.e., if a pointer is generated to point to a non-array field of an
 object, the pointer cannot be used to access adjacent fields within the same object.
-
+In-fat pointer is designed to be a tool that assists software debugging and to prevent application bugs. It does not,
+however, completely stop malicious attackers from abusing memory bugs as in-fat pointer does not validate the metadata 
+bits.
