@@ -103,3 +103,11 @@ In all the above cases, the metadata object contains the base and bound of the o
 that the pointer can point to. The hardware will check the validity of the pointer when it performs load and store 
 operations using the address and returns the status of the check using the poison bits.
 Compilers may also statically issue "promote" instructions to force a check. 
+The authors also suggest adding a set of shadow registers to extend all general-purpose registers with the base 
+and bound information. When a hardware validation is performed, the base and bound are then fetched from the 
+metadata object and stored in the shadow register that corresponds to the pointer, using the scheme selector bits
+to determine the addressing scheme. Later validations of the 
+same pointer will simply use the cached values instead of fetching them from the memory.
+The values of the shadow registers are invalidated when the register is reloaded with a new pointer value.
+
+
