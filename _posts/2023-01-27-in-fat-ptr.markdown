@@ -18,6 +18,9 @@ version_mgmt:
 1. Pointer tagging schemes can validate both at the object-level and sub-object level. In the latter case, we need
 to store the layout of objects in per-type layout tables and check them dynamically by hardware.
 
+2. Object bounds metadata can be stored in various forms. They can be appended to the end of the object and addressed
+with an offset field, or be stored in per-type arenas whose address can be computed directly from the pointer values,
+or be stored in a global table whose index is stored in the upper bits of pointers.
 
 **Comments:**
 
