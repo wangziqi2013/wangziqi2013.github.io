@@ -61,4 +61,14 @@ in virtual address pointers. The highest two bits are "poison bits" that indicat
 validation or not. The two poison bits are set by bounds-checking hardware to store the result of the check, which
 can be in one of the three states: valid, meaning that the check passes; invalid, meaning that the check did not pass;
 and recoverable, which is implementation-dependent but usually off-by-one pointers (allowed by C standard but must not
-be dereferenced). The next two bits are scheme selector bits that 
+be dereferenced). The next two bits are scheme selector bits which determine the metadata scheme used for this pointer
+and affect the interpretation of the rest 12 bits, which we describe as follows. 
+
+The first metadata scheme is called the local offset scheme, where the metadata is appended to an object whose offset
+to the current pointer value is stored in 6 out of the 12 remaining bits. The other 6 bits store the field index
+that the pointer points to if the field is in a struct.
+The compiler is responsible for computing the offset when generating the pointer of a field and when pointer 
+arithmetic is applied to the pointer value. Note that the hardware can guarantee that the offset is always valid
+since the pointer will be validated at the runtime to be within the dynamic bounds.
+
+
