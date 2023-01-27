@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "In-fat pointer: hardware-assisted tagged-pointer spatial memory safety defense with subobject granularity protection"
+date:   2023-01-27 01:36:00 -0500
+categories: paper
+paper_title: "In-fat pointer: hardware-assisted tagged-pointer spatial memory safety defense with subobject granularity protection"
+paper_link: https://dl.acm.org/doi/10.1145/3445814.3446761
+paper_keyword: Fat Pointer; Memory Safety
+paper_year: ASPLOS 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
