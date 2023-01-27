@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+**Comments:**
+
+1. The paper assumes 16 unused bits in virtual address pointers. While this assumption remains true in today's
+architecture, it may no longer hold on future architectures that have a bigger virtual address space.
+
 This paper proposes In-fat pointer, a hardware pointer tagging scheme that protects applications from spatial
 memory errors caused by pointer-related bugs. In-fat pointer leverages the higher unused bits in virtual address 
 pointers and embeds object bound and layout information to help specialized hardware check the validity of the 
@@ -44,6 +51,8 @@ multiple metadata schemes and hence allow the compiler to select the optimal one
 according to the static property of the object. Second, in-fat pointers also offer sub-object level protection
 that detects spatial memory errors, i.e., if a pointer is generated to point to a non-array field of an
 object, the pointer cannot be used to access adjacent fields within the same object.
-In-fat pointer is designed to be a tool that assists software debugging and to prevent application bugs. It does not,
+In-fat pointer is designed to be a tool that assists software debugging and prevents application bugs. It does not,
 however, completely stop malicious attackers from abusing memory bugs as in-fat pointer does not validate the metadata 
 bits.
+
+
