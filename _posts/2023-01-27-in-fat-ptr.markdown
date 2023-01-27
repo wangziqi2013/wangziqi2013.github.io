@@ -78,5 +78,12 @@ programmers. This scheme supports objects whose size is less than several hundre
 of the cases. It can also be used for objects of all storage classes, including stack objects, heap objects, and global 
 objects.
 
+The second metadata scheme is the subheap scheme, which embeds the metadata object in allocation units called 
+arenas. The subheap scheme assumes that the memory allocator will place same-type objects on an address-aligned 
+bigger block called an "arena". The metadata object is then placed at the beginning of the arena for easy address
+computation. Since arenas are address-aligned on the virtual address space, the metadata object can be accessed by 
+rounding the pointer value down to the nearest arena boundary. In this scheme, all the lower 12 bits can be used
+to store the field index.
+
 
 
