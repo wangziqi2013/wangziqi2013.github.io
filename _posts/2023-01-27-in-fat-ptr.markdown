@@ -35,4 +35,6 @@ Lastly, there have also been explorations on tagged-pointer schemes where the me
 the unused higher bits of virtual address pointers. Due to the relatively limited number of bits that can be 
 freely repurposed, the metadata bits usually encode a metadata object that is stored somewhere else in the memory,
 and the metadata object must be fetched using some complicated addressing schemes.
-
+However, prior works on tagged-pointer designs often only guard memory accesses at the object level without 
+considering sub-object level protection as a viable option, which limits the strength of the protection
+that they offer.
