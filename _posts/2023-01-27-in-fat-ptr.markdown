@@ -15,6 +15,10 @@ version_mgmt:
 
 **Highlight:**
 
+1. Pointer tagging schemes can validate both at the object-level and sub-object level. In the latter case, we need
+to store the layout of objects in per-type layout tables and check them dynamically by hardware.
+
+
 **Comments:**
 
 1. The paper assumes 16 unused bits in virtual address pointers. While this assumption remains true in today's
