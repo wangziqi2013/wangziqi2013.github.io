@@ -61,6 +61,11 @@ To address the issues with prior works, FaaSnap adopts a snapshot approach that 
 precise working set of function execution and stores it as a disk file. The snapshot file can then be loaded back
 to the main memory in the background without blocking normal execution. 
 FaaSnap is built on Firecracker and extends its snapshotting model.
-From a high level, FaaSnap 
+From a high level, the snapshot process in FaaSnap is controlled by the system daemon running on the host system.
+The daemon is very much similar to the existing daemon in Firecracker in that it serves as a gateway to the outsider 
+world and coordinates VM's execution and resource. 
+When a function is first time invoked, the daemon tracks the working set of the function and saves it to a snapshot 
+file. On later invocations of the same function, the daemon will load the snapshot file and start from the snapshot,
+hence reducing the startup latency.
 
-
+We describe the operational details as follows. 
