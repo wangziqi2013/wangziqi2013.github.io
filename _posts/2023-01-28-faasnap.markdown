@@ -89,4 +89,8 @@ that are needed in the current Firecracker implementation to fetch these zero pa
 Second, data pages are also merged into regions and saved to the snapshot file as a "loading set".
 The paper suggests that if the pages are scattered across the address space, then FaaSnap will attempt to merge
 as many as possible (e.g., by allowing a few zero pages in between) to minimize the number of regions. 
+Lastly, regions are written into the snapshot file following roughly the chronological order that pages in the 
+region are accessed during the recording phase, i.e., if most of the pages in a region are accessed early during
+the execution, then the entire region should also be written to a smaller offset of the file, such that the region
+under discussion will be loaded before other regions when the snapshot is restored.
 
