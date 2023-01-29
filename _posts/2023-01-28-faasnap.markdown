@@ -90,7 +90,13 @@ Second, data pages are also merged into regions and saved to the snapshot file a
 The paper suggests that if the pages are scattered across the address space, then FaaSnap will attempt to merge
 as many as possible (e.g., by allowing a few zero pages in between) to minimize the number of regions. 
 Lastly, regions are written into the snapshot file following roughly the chronological order that pages in the 
-region are accessed during the recording phase, i.e., if most of the pages in a region are accessed early during
+region are accessed during the recording phase, i.e., if some pages in a region are accessed early during
 the execution, then the entire region should also be written to a smaller offset of the file, such that the region
 under discussion will be loaded before other regions when the snapshot is restored.
+
+On future invocations of the function, FaaSnap will load data contained in the snapshot file into the page
+cache instead of serving them from the existing Firecracker's memory snapshot file upon major page faults.
+In order to restore the snapshot image, which now consists of three layers, i.e., pages not recorded and reside
+in the regular memory snapshot file, zero regions whose ranges are saved to FaaSnap's snapshot file, and the
+regions that contain data being recorded, FaaSnap performs a hierarchy of memory maps which we describe as follows.
 
