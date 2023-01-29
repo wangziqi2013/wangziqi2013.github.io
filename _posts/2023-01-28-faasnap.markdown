@@ -69,3 +69,7 @@ file. On later invocations of the same function, the daemon will load the snapsh
 hence reducing the startup latency.
 
 We describe the operational details as follows. 
+During function execution, the FaaSnap daemon monitors the dynamic memory consumption of the function instance. 
+If the memory consumption increases by a certain threshold, it then uses a system call "mincore" to obtain a list 
+of virtual page addresses that are currently being mapped into the address space. Note that "mincore" is executed 
+by the daemon and hence reflects the host-side view of the function's working set. 
