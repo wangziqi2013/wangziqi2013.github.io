@@ -86,5 +86,7 @@ First, anonymous pages whose contents are zero are not saved. Instead, the FaaSn
 into zero regions, and simply stores the address range of the region. These zero regions can be conveniently mapped
 back to the virtual address space as anonymous memory on future invocations, which eliminates the major page faults 
 that are needed in the current Firecracker implementation to fetch these zero pages from the memory file. 
-
+Second, data pages are also merged into regions and saved to the snapshot file as a "loading set".
+The paper suggests that if the pages are scattered across the address space, then FaaSnap will attempt to merge
+as many as possible (e.g., by allowing a few zero pages in between) to minimize the number of regions. 
 
