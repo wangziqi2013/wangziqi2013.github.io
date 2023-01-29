@@ -22,6 +22,10 @@ the file which is then loaded back later on future invocations of the same funct
 2. The problem with the above approach is that the memory contents of the guest VM is served by expensive major page 
 faults on-demand, especially for anonymous pages whose contents are zero. 
 
+3. To address the problem, the paper proposes to record the working set and save them separately into a snapshot file.
+Pages are grouped into consecutive address regions and written into the file following the chronological order.
+Zero anonymous pages do not need to be saved, and instead, we only log their address range.
+
 
 
 This paper presents FaaSnap, a serverless (Function-as-a-Service, FaaS) framework that enables fast function invocation
