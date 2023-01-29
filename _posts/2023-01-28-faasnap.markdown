@@ -12,3 +12,7 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents FaaSnap, a serverless (Function-as-a-Service, FaaS) framework that enables fast function invocation
+by using efficient snapshotting. The paper is motivated by the high cold-start latency of function invocation in
+production environments. 
