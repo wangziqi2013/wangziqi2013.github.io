@@ -37,5 +37,10 @@ into a disk file on the host system. In this scenario, when a page fault is rais
 page belongs to a VM instance whose memory state is mapped to a file, the page fault will be handled as a major page
 fault, and the corresponding disk file is mapped to the guest physical memory by the kernel. Changes made to the 
 guest physical address space can then be committed back to the file.
-
+While this approach lowers startup latency compared with the regular VMs, the paper observes that Firecracker 
+still suffers unnecessarily higher latency due to slow DISK I/Os. In addition, anonymous memory in the guest system 
+is mapped to the file as part of the memory snapshot and must be loaded back on snapshot recovery. 
+However, unused anonymous memory, in practice, can be directly initialized on the host as anonymous memory rather 
+than being read from the snapshot file, which wastes processor cycles and I/O bandwidth to fetch it from the snapshot 
+file. 
 
