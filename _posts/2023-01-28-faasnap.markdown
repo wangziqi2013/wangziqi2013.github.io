@@ -49,5 +49,8 @@ of functions by checking the "Access" bit in the guest page table entries. Pages
 execution will then be saved to a disk file as a prefetch set and reloaded back to the main memory the next time
 the function is invoked. While this approach can effectively turn major page faults incurred by cold starts into 
 minor page faults that only require searching the page cache and establishing address mappings, the paper identifies
-two problems. 
+two problems. First, REAP only records the first run of a function and uses the working set to generate the prefetch
+set. Consequently, the performance benefit of REAP is sensitive to the stability of the working set. If the working set 
+changes, REAP still needs to read from the original memory file as in a cold start. Second, REAP loads the prefetch set
+into the main memory synchronously at the beginning of execution, which constitutes part of the startup latency.
 
