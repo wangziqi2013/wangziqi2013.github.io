@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlight:**
+
+1. The existing Firecracker VMM can capture the snapshot of a VM by mapping the physical address space of the VM to
+a disk file on the host system. Memory modifications made by the guest VM instance can then be committed back to
+the file which is then loaded back later on future invocations of the same function.
+
+2. 
+
 This paper presents FaaSnap, a serverless (Function-as-a-Service, FaaS) framework that enables fast function invocation
 by using efficient snapshotting. The paper is motivated by the high cold-start latency of function invocation in
 production environments. While prior works have already explored the idea of leveraging memory snapshots for fast
