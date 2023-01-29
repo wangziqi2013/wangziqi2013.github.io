@@ -99,4 +99,7 @@ cache instead of serving them from the existing Firecracker's memory snapshot fi
 In order to restore the snapshot image, which now consists of three layers, i.e., pages not recorded and reside
 in the regular memory snapshot file, zero regions whose ranges are saved to FaaSnap's snapshot file, and the
 regions that contain data being recorded, FaaSnap performs a hierarchy of memory maps which we describe as follows.
-
+First, it maps Firecracker's snapshot file into the main memory using a single mmap just as in the current 
+implementation. Then it also maps zero regions into the VM's address space, but the parameters to mmap indicate that
+the mapping is fulfilled by anonymous memory. As a result, memory accesses to the zero regions will be handled 
+with minor page faults rather than major ones.
