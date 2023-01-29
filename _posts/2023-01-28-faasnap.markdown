@@ -44,3 +44,10 @@ However, unused anonymous memory, in practice, can be directly initialized on th
 than being read from the snapshot file, which wastes processor cycles and I/O bandwidth to fetch it from the snapshot 
 file. 
 
+The last technique is REAP, which adopts prefetching to accelerate the startup process. REAP records the working set
+of functions by checking the "Access" bit in the guest page table entries. Pages that are accessed during function
+execution will then be saved to a disk file as a prefetch set and reloaded back to the main memory the next time
+the function is invoked. While this approach can effectively turn major page faults incurred by cold starts into 
+minor page faults that only require searching the page cache and establishing address mappings, the paper identifies
+two problems. 
+
