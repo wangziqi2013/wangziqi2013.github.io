@@ -107,3 +107,7 @@ Lastly, FaaSnap kick-starts the VM instance and, in the meantime, maps data regi
 Since regions are stored in the file successively, it is sufficient to call mmap once per region. 
 The parameters to mmap will also indicate that the contents of the map should be eagerly fetched to the page cache
 such that they can be served with minor page faults. 
+The paper also emphasizes that the last step, called "concurrent paging", does not block the VM from execution. 
+If the VM accesses a page before
+the daemon can map it from the snapshot file, the page fault will then be captured by the VMM, which is handled by
+the daemon as a regular major fault that reads the corresponding region from the snapshot file.
