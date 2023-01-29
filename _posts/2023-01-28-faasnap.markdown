@@ -19,7 +19,10 @@ version_mgmt:
 a disk file on the host system. Memory modifications made by the guest VM instance can then be committed back to
 the file which is then loaded back later on future invocations of the same function.
 
-2. 
+2. The problem with the above approach is that the memory contents of the guest VM is served by expensive major page 
+faults on-demand, especially for anonymous pages whose contents are zero. 
+
+
 
 This paper presents FaaSnap, a serverless (Function-as-a-Service, FaaS) framework that enables fast function invocation
 by using efficient snapshotting. The paper is motivated by the high cold-start latency of function invocation in
