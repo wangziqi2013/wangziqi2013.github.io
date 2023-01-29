@@ -103,3 +103,7 @@ First, it maps Firecracker's snapshot file into the main memory using a single m
 implementation. Then it also maps zero regions into the VM's address space, but the parameters to mmap indicate that
 the mapping is fulfilled by anonymous memory. As a result, memory accesses to the zero regions will be handled 
 with minor page faults rather than major ones.
+Lastly, FaaSnap kick-starts the VM instance and, in the meantime, maps data regions in the snapshot file using mmap. 
+Since regions are stored in the file successively, it is sufficient to call mmap once per region. 
+The parameters to mmap will also indicate that the contents of the map should be eagerly fetched to the page cache
+such that they can be served with minor page faults. 
