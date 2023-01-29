@@ -19,3 +19,10 @@ production environments. While prior works have already explored the idea of lev
 startups, FaaSnap further optimizes the snapshotting algorithm such that both the I/O cost and the latency penalty 
 for loading the snapshot is minimized. When evaluated on a variety of serverless workloads, FaaSnap achieves nearly 
 ideal performance compared with warm startups which also outperforms prior works in general.
+
+The paper begins with a review of prior techniques for reducing the cold-start latency, which is a phenomenon observed
+in serverless functions that inhibits efficient function invocation if the function is "cold", i.e., its working set 
+has not been loaded into the main memory yet. These techniques can be classified into three different types.
+The first is called Keep-Alive policy, which caches an existing function instance in the main memory for a 
+while after it has completed execution. Both the process image and the accessed files are hence "warm" in the 
+main memory or the page cache, enabling future execution to be started with low latency. 
