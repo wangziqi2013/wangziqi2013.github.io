@@ -15,4 +15,7 @@ version_mgmt:
 
 This paper presents FaaSnap, a serverless (Function-as-a-Service, FaaS) framework that enables fast function invocation
 by using efficient snapshotting. The paper is motivated by the high cold-start latency of function invocation in
-production environments. 
+production environments. While prior works have already explored the idea of leveraging memory snapshots for fast
+startups, FaaSnap further optimizes the snapshotting algorithm such that both the I/O cost and the latency penalty 
+for loading the snapshot is minimized. When evaluated on a variety of serverless workloads, FaaSnap achieves nearly 
+ideal performance compared with warm startups which also outperforms prior works in general.
