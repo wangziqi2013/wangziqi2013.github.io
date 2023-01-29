@@ -38,19 +38,29 @@ page belongs to a VM instance whose memory state is mapped to a file, the page f
 fault, and the corresponding disk file is mapped to the guest physical memory by the kernel. Changes made to the 
 guest physical address space can then be committed back to the file.
 While this approach lowers startup latency compared with the regular VMs, the paper observes that Firecracker 
-still suffers unnecessarily higher latency due to slow DISK I/Os. In addition, anonymous memory in the guest system 
+still suffers unnecessarily higher latency due to small and random DISK I/Os on the snapshot file due to
+demand paging. In addition, anonymous memory in the guest system 
 is mapped to the file as part of the memory snapshot and must be loaded back on snapshot recovery. 
 However, unused anonymous memory, in practice, can be directly initialized on the host as anonymous memory rather 
 than being read from the snapshot file, which wastes processor cycles and I/O bandwidth to fetch it from the snapshot 
 file. 
 
 The last technique is REAP, which adopts prefetching to accelerate the startup process. REAP records the working set
-of functions by checking the "Access" bit in the guest page table entries. Pages that are accessed during function
+of functions by hooking on the page fault handler function in the user space (or by checking the "Access" bit in the 
+guest page table entries). Pages that are accessed during function
 execution will then be saved to a disk file as a prefetch set and reloaded back to the main memory the next time
 the function is invoked. While this approach can effectively turn major page faults incurred by cold starts into 
 minor page faults that only require searching the page cache and establishing address mappings, the paper identifies
 two problems. First, REAP only records the first run of a function and uses the working set to generate the prefetch
 set. Consequently, the performance benefit of REAP is sensitive to the stability of the working set. If the working set 
-changes, REAP still needs to read from the original memory file as in a cold start. Second, REAP loads the prefetch set
-into the main memory synchronously at the beginning of execution, which constitutes part of the startup latency.
+changes from run to run, REAP still needs to read from the original memory file as in a cold start. 
+Second, REAP loads the prefetch set into the main memory synchronously at the beginning of execution, which 
+constitutes part of the startup latency.
+
+To address the issues with prior works, FaaSnap adopts a snapshot approach that captures a more general and more 
+precise working set of function execution and stores it as a disk file. The snapshot file can then be loaded back
+to the main memory in the background without blocking normal execution. 
+FaaSnap is built on Firecracker and extends its snapshotting model.
+From a high level, FaaSnap 
+
 
