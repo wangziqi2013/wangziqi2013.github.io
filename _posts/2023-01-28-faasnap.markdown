@@ -29,3 +29,13 @@ main memory or the page cache, enabling future execution to be started with low 
 that function Keep-Alive has limited benefits because it consumes main memory resources for an extended period of time
 which may prevent useful work from being done on the host. The situation is further aggravated by the fact that
 most functions are not repeatedly called, meaning that future invocations will likely still be cold starts.
+
+The second technique is to leverage unikernels and lightweight virtual machines to reduce the amount of work during 
+function startup, hence enabling millisecond-level function invocation latency, as exemplified by Firecracker. 
+Furthermore, Firecracker also supports taking the memory snapshot of a virtual machine by mapping the guest memory
+into a disk file on the host system. In this scenario, when a page fault is raised to the host kernel, if the 
+page belongs to a VM instance whose memory state is mapped to a file, the page fault will be handled as a major page
+fault, and the corresponding disk file is mapped to the guest physical memory by the kernel. Changes made to the 
+guest physical address space can then be committed back to the file.
+
+
