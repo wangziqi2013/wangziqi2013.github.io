@@ -25,4 +25,7 @@ in serverless functions that inhibits efficient function invocation if the funct
 has not been loaded into the main memory yet. These techniques can be classified into three different types.
 The first is called Keep-Alive policy, which caches an existing function instance in the main memory for a 
 while after it has completed execution. Both the process image and the accessed files are hence "warm" in the 
-main memory or the page cache, enabling future execution to be started with low latency. 
+main memory or the page cache, enabling future execution to be started with low latency. However, the paper noted
+that function Keep-Alive has limited benefits because it consumes main memory resources for an extended period of time
+which may prevent useful work from being done on the host. The situation is further aggravated by the fact that
+most functions are not repeatedly called, meaning that future invocations will likely still be cold starts.
