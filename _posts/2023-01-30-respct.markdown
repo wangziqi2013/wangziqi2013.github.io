@@ -16,4 +16,6 @@ version_mgmt:
 This paper presents ResPCT, a software epoch-based non-volatile memory snapshotting framework. ResPCT protects 
 the integrity of shared data from system failures by periodically checkpointing the states of variables to the NVM.
 To maximize performance while minimizing programmer's effort, ResPCT adopts in-cache line undo logging and leverages
-programmers' notations to mark checkpoint boundaries. 
+programmers' notations to mark checkpoint boundaries. ResPCT achieves only marginal performance loss while 
+providing the benefit of failure atomicity. Compared with prior works, ResPCT also achieves a significant reduction
+in runtime overhead due to its in-cache line logging model.
