@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "ResPCT: Fast Checkpointing in Non-volatile Memory for Multi-threaded Applications"
+date:   2023-01-30 10:41:00 -0500
+categories: paper
+paper_title: "ResPCT: Fast Checkpointing in Non-volatile Memory for Multi-threaded Applications"
+paper_link: https://dl.acm.org/doi/10.1145/3492321.3519590
+paper_keyword: NVM; ResPCT; Undo Logging; Memory Snapshot; Epoch-Based Snapshot
+paper_year: EuroSys 2022
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
