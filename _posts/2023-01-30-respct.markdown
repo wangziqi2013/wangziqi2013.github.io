@@ -39,4 +39,8 @@ Prior works that leverage undo logging often exhibit low performance due to the 
 A persist barrier consists of one or more cache line flushes or write backs, followed by a memory fence, which maps to
 clflush/clwb and sfense on x86 architecture, respectively. Persist barriers are detrimental to performance because 
 excessive cache line flushes will contend memory bandwidth with regular operations, and the store fence forces 
-the processor pipeline to stall until the flushes are completed. 
+the processor pipeline to stall until the flushes are completed. Unfortunately, software implementations of undo logging
+often involve one persist barrier per memory write within an epoch, i.e., when a cache block is first time written
+in the epoch, the undo log entry is generated and then immediately flushed into the NVM log buffer using a persist
+barrier. The actual store can only be performed after the barrier since undo logging enforces the write ordering 
+between log write and data write. 
