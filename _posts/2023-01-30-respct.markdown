@@ -24,4 +24,10 @@ ResPCT aims to provide an epoch-based checkpointing model for lock-based data st
 the multithreaded execution is divided into non-disjoint intervals, called epochs, and the state of shared data
 is persisted to the NVM at the end of an epoch and before the next one starts. On crash recovery, the system finds
 the latest persisted epoch and then restores the system state to the one recorded by that epoch. 
-
+ResPCT assumes that the application periodically creates a checkpoint using an interface function it provides.
+ResPCT also assumes that the application programmer can explicitly mark the Restart Points (RP) to which the system 
+state can potentially be restored. For common use cases such as data structures, the RPs can be easily identified
+at some points in the code region that is not within a critical section (as the code within critical sections will 
+mutate shared data and leave it in a temporarily inconsistent state). 
+Currently, ResPCT only supports critical section-based use cases. Lock-free data structures, for example, is not 
+supported because ResPCT's internal logging API is not safe for concurrent invocations.
