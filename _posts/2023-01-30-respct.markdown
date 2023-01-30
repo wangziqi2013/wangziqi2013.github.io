@@ -15,7 +15,7 @@ version_mgmt:
 
 This paper presents ResPCT, a software epoch-based non-volatile memory snapshotting framework. ResPCT protects 
 the integrity of shared data from system failures by periodically checkpointing the states of variables to the NVM.
-To maximize performance while minimizing programmer's effort, ResPCT adopts in-cache line undo logging and leverages
+To maximize performance while minimizing programmer effort, ResPCT adopts in-cache line undo logging and leverages
 programmers' notations to mark checkpoint boundaries. ResPCT achieves only marginal performance loss while 
 providing the benefit of failure atomicity. Compared with prior works, ResPCT also achieves a significant reduction
 in runtime overhead due to its in-cache line logging model.
@@ -24,10 +24,13 @@ ResPCT aims to provide an epoch-based checkpointing model for lock-based data st
 the multithreaded execution is divided into non-disjoint intervals, called epochs, and the state of shared data
 is persisted to the NVM at the end of an epoch and before the next one starts. On crash recovery, the system finds
 the latest persisted epoch and then restores the system state to the one recorded by that epoch. 
+In the case of multithreaded applications
 ResPCT assumes that the application periodically creates a checkpoint using an interface function it provides.
 ResPCT also assumes that the application programmer can explicitly mark the Restart Points (RP) to which the system 
 state can potentially be restored. For common use cases such as data structures, the RPs can be easily identified
 at some points in the code region that is not within a critical section (as the code within critical sections will 
 mutate shared data and leave it in a temporarily inconsistent state). 
-Currently, ResPCT only supports critical section-based use cases. Lock-free data structures, for example, is not 
+Currently, ResPCT only supports critical section-based use cases. Lock-free data structures, for example, are not 
 supported because ResPCT's internal logging API is not safe for concurrent invocations.
+
+
