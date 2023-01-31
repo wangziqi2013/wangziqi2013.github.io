@@ -63,4 +63,9 @@ GC will saturate NVM's bandwidth even at a low thread count, and therefore is no
 To address the performance issue identified above, the paper proposes two design changes to the existing algorithm.
 The first is to use DRAM buffer to temporarily serve as the copy destination when a region is being filled up.
 By diverting the write operations from the new region allocated on NVM to the temporary region on DRAM, the GC
-process no longer issues small and random writes to the NVM in the form of object copy. 
+process no longer issues small and random writes to the NVM in the form of object copy. Instead, objects are 
+written to the DRAM buffer, being "consolidated" there, and when the DRAM buffer becomes full, written back
+to the NVM region in large sequential writes. To avoid updating references to the GC'ed objects twice, the first time 
+to the DRAM buffer and then to the newly allocated NVM region when the DRAM buffer is emptied, the algorithm reserves a 
+shadow region on the NVM every time a DRAM region is created. The references are still updated to point to the shadow 
+region on the NVM, which will finally become canonical after the DRAM region is written back.
