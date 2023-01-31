@@ -45,3 +45,10 @@ This header pointer serves as a trampoline such that if the same object is visit
 reference in the future, the algorithm can figure out that the object has already been GC'ed, and then correctly update
 the references.
 
+To identify the performance traits of the above GC process on NVM, the paper conducts experiments that compares 
+the execution latency and memory bandwidth consumption between GC running on DRAM and NVM.
+The paper made three critical observations. First, a higher percentage of execution cycles are spent on GC when
+running on NVM. In particular, NVM-based GC suffers a greater slowdown than the rest of the execution, which is 
+also larger than the average slowdown over all benchmarks. This phenomenon suggests that GC has become a bigger 
+bottleneck on NVM than on DRAM.
+
