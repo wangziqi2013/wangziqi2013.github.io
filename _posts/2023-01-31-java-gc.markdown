@@ -92,4 +92,6 @@ the write back should only be performed after the DFS traversal has been complet
 To trace the progress of DFS, the paper leverages the fact that the first object being touched by DFS is also
 the last that will be popped out of the stack (due to the LIFO stack). Therefore, the first object being pushed into
 the DFS stack will be used as an indicator of whether the region can be written back to the NVM.
-
+Lastly, to increase the cache hit ratio of DFS traversal, the paper proposes inserting prefetching instructions to
+an object when the object's address is added to the DFS stack. The paper also observes that prefetching benefits 
+NVM more than it benefits DRAM, due to NVM's bigger access latency.
