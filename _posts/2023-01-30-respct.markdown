@@ -118,12 +118,12 @@ may arise in deadlock-free code as a result of other blocking function calls or 
 one thread is blocked by a condition that can only be lifted by another thread proceeding to a certain point. However,
 if the latter thread is blocked in the `RP` function, it will never proceed to that point as the former thread 
 is also blocked elsewhere and will never enter an `RP` function.
-ResPCT addresses this problem by trusting the programmer to insert function calls `checkpoint\_allow()` 
+ResPCT addresses this problem by trusting the programmer to insert function calls `checkpoint_allow()` 
 that exclude the thread that
 calls blocking functions or wait in condition variables from the global consensus before it is blocked. 
-The thread should also rejoin the global consensus by calling `checkpoint\_prevent()` after it returns from
+The thread should also rejoin the global consensus by calling `checkpoint_prevent()` after it returns from
 the blocking call. 
-Unfortunately, threads that call `checkpoint\_allow()` must not perform any write to persistent variables between
+Unfortunately, threads that call `checkpoint_allow()` must not perform any write to persistent variables between
 this call and the previous `RP` function call in all cases. Otherwise, if a checkpoint happens when the thread is
 blocked, after which the system crashes, these modifications may not be reverted as the global epoch counter had
 already been advanced to make these local modifications seem committed states. But in reality, these modifications
