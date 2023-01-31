@@ -90,6 +90,10 @@ When the system crashes, some modifications after the last committed epoch will 
 to the NVM. However, some other modifications will be reflected in the post-crash NVM image, causing an inconsistent
 state which needs to be restored.
 The restoration procedure first determines the last committed epoch by reading the global epoch counter.
-
+It then iterates over all shared variables and compares the epoch of the variable with the last committed epoch value.
+If the two values mismatch, suggesting that the variable contains a newer value not belonging to the epoch, the 
+recovery procedure will then roll back the modifications by copying the undo entry to the variable and then resetting 
+its epoch value to the last committed epoch. 
+After all the variables have been processed, the system state is now reverted to the point of the last committed epoch.
 
 
