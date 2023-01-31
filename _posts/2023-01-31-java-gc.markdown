@@ -79,4 +79,7 @@ traversed, can be correctly updated to also point to the destination object.
 However, the updates to the source object header also generate small and random writes which are particularly
 detrimental to performance. Fortunately, these small and random writes can be eliminated by using a separate 
 data structure in the DRAM to track the source-destination relation of GC'ed objects. 
-
+To this purpose, the paper proposes adding a shared lock-free map that, given a key as the address of the source object,
+returns the address of the destination object. In order to bound the amount of DRAM that the map can use,
+the map adopts an open addressing hash table scheme and can fail to insert after a certain number of hash conflicts.
+If an insertion fails, the algorithm falls back to using the source object header to store the pointer.
