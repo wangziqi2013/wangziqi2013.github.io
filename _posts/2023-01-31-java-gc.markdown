@@ -38,5 +38,10 @@ object copy. Then for every young region, the algorithm traverses its remembered
 are still referenced by an old space object to the newly allocated region. For each object being copied in this
 process, the algorithm also adds the other young objects that it references, hence recursively marking live objects 
 in the young space such that they will eventually be copied. The marking process is implemented as graph 
-
+Depth-First Search (DFS) using a LIFO stack (for better locality). Additionally, after an object is copied from
+the young space to the old space, the reference pointer that point to the object is updated to point to the new 
+object. Besides, the pointer to the object in the destination is also stored in the header of the source object.
+This header pointer serves as a trampoline such that if the same object is visited from another
+reference in the future, the algorithm can figure out that the object has already been GC'ed, and then correctly update
+the references.
 
