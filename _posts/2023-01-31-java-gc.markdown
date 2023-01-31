@@ -89,5 +89,7 @@ non-temporal writes, which bypass the cache hierarchy and will not pollute the c
 Second, as DRAM and NVM are two separate devices, the process of writing a DRAM region back to the NVM can be
 conducted by another thread and partially overlapped with the object copy. However, the paper notes that 
 the write back should only be performed after the DFS traversal has been completed for all objects in the DRAM region. 
-
+To trace the progress of DFS, the paper leverages the fact that the first object being touched by DFS is also
+the last that will be popped out of the stack (due to the LIFO stack). Therefore, the first object being pushed into
+the DFS stack will be used as an indicator of whether the region can be written back to the NVM.
 
