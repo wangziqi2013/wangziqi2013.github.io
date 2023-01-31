@@ -57,5 +57,12 @@ ResPCT maintains a global epoch counter that indicates the current global epoch 
 incremented by one when the global epoch advances by calling the `checkpoint` function.
 When a variable is being modified, the template wrapper function will first check whether the epoch of the variable
 equals the current global epoch. If true, then no logging needs to be done, as the variable has already been
-modified under the same epoch. 
+modified under the same epoch. Otherwise, the wrapper function will copy the old value of the variable into the
+undo entry and then update the variable's epoch value to the current global epoch, hence generating the undo
+log entry. Since the undo entry and the data item are on the same cache block, they will either be written back
+to the NVM together, or the value on the NVM remains unchanged since the last modification. In the former case,
+recovery is performed by copying the undo log entry back to the data item. In the latter case, no recovery is needed
+as the updated value in the current epoch is never written back to the NVM.
+
+
 
