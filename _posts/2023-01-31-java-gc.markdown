@@ -20,7 +20,10 @@ update in the header of the source object. These small and random writes are det
 running on NVM, and when mixed with reads, they can saturate NVM's operation bandwidth faster, hence causing
 performance degradation.
 
-
+2. To remove the small and random writes, we can (1) Use DRAM as a temporary buffer to hold the objects, thus
+eliminating the writes to NVM and only writing back the consolidated buffer using large and sequential writes;
+and (2) Use DRAM data structures to track the old-new object relation instead of tracking them with
+pointers embedded in the object header.
 
 This paper presents an improved Java Garbage Collection (GC) algorithm optimized for Byte-Addressable Non-Volatile
 Memory (NVM). The paper is motivated by the performance degradation of Java's default GC algorithm when deployed
