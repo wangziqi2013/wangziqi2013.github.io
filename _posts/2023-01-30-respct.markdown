@@ -79,4 +79,7 @@ back by issuing a persist barrier. After the persist barrier returns, the thread
 the initiator thread that the checkpoint has been completed.
 The initiator of the checkpoint, on the other hand, first flushes its local modifications as described earlier,
 and then keeps polling the local flags of all other threads until all threads have completed the local flush.
-
+At this point, the checkpoint has been globally completed and the initiator clears the `timer` flag after
+advancing the global epoch counter. 
+On observing that the `timer` flag has been reset (in a polling loop), the rest of the threads will return from 
+the `RP` function and proceed with their execution.
