@@ -51,4 +51,11 @@ implicit variable is the undo entry of the same type. The second implicit variab
 epoch that the undo entry belongs to. The template is carefully crafted such that the compiler will put the three 
 variables on the same cache block. On x86 architecture (and many other architectures), since the basic unit of 
 persistence is no less than a single cache line, such a data layout can guarantee that the three variables will
-always been persisted atomically.
+always be persisted atomically.
+
+ResPCT maintains a global epoch counter that indicates the current global epoch number. The epoch counter will be 
+incremented by one when the global epoch advances by calling the `checkpoint` function.
+When a variable is being modified, the template wrapper function will first check whether the epoch of the variable
+equals the current global epoch. If true, then no logging needs to be done, as the variable has already been
+modified under the same epoch. 
+
