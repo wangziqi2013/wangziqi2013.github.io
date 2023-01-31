@@ -72,4 +72,11 @@ to the NVM.
 As mentioned earlier, the current epoch is committed to the NVM when a thread calls the `checkpoint` function,
 which sets a global flag `timer` to indicate that threads should checkpoint their modified states.
 In this case, all threads, excluding the caller, must reach a global stop at the next RP. 
+To achieve this, each thread maintains a local flag variable to indicate whether the thread has entered the RP. 
+When a thread calls the `RP` function, it first checks whether the global `timer` flag is set, i.e., whether 
+a checkpoint is requested. If true, the thread will traverse its local list of modified variables and flushes them
+back by issuing a persist barrier. After the persist barrier returns, the thread sets its local flag to signal
+the initiator thread that the checkpoint has been completed.
+The initiator of the checkpoint, on the other hand, first flushes its local modifications as described earlier,
+and then keeps polling the local flags of all other threads until all threads have completed the local flush.
 
