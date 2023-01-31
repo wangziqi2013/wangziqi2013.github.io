@@ -47,4 +47,8 @@ between log write and data write.
 
 ResPCT gets rid of the excessive persist barrier of undo logging using a technique called in-cache line logging (InCLL).
 In ResPCT, persistent variables are wrapped by templates that generate two other implicit variables. The first 
-implicit variable is the undo entry of the same type. 
+implicit variable is the undo entry of the same type. The second implicit variable is an epoch number indicating the 
+epoch that the undo entry belongs to. The template is carefully crafted such that the compiler will put the three 
+variables on the same cache block. On x86 architecture (and many other architectures), since the basic unit of 
+persistence is no less than a single cache line, such a data layout can guarantee that the three variables will
+always been persisted atomically.
