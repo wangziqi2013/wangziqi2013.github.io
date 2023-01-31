@@ -19,3 +19,9 @@ on NVM due to NVM's low write bandwidth, especially under random I/O. The propos
 pattern of GC, which contains excessive small writes and has bad locality, into large, sequential writes by
 leveraging DRAM as an intermediate buffer. Consequently, higher performance can be achieved with the improved algorithm
 as GC utilizes NVM more efficiently and hence constitute fewer cycles on the execution critical path.
+
+The paper aims at optimizing the GC algorithm on Java virtual machine which provides a managed execution 
+environment where heap allocations need not be explicitly freed by the programmer. Rather, the virtual machine
+maintains internal tracking data structures such that objects living on the heap can be automatically deallocated
+when they are no longer referenced by the execution context, hence becoming "dead".
+
