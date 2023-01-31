@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Bridging the Performance Gap for Copy-based Garbage Collectors atop Non-Volatile Memory"
+date:   2023-01-31 03:28:00 -0500
+categories: paper
+paper_title: "Bridging the Performance Gap for Copy-based Garbage Collectors atop Non-Volatile Memory"
+paper_link: https://dl.acm.org/doi/10.1145/3447786.3456246
+paper_keyword: Java; Garbage Collection; NVM
+paper_year: EuroSys 2021
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
