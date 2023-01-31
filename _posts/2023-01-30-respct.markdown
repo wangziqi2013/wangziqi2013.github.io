@@ -44,3 +44,7 @@ often involve one persist barrier per memory write within an epoch, i.e., when a
 in the epoch, the undo log entry is generated and then immediately flushed into the NVM log buffer using a persist
 barrier. The actual store can only be performed after the barrier since undo logging enforces the write ordering 
 between log write and data write. 
+
+ResPCT gets rid of the excessive persist barrier of undo logging using a technique called in-cache line logging (InCLL).
+In ResPCT, persistent variables are wrapped by templates that generate two other implicit variables. The first 
+implicit variable is the undo entry of the same type. 
