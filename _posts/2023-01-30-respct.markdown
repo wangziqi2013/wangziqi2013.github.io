@@ -81,5 +81,15 @@ The initiator of the checkpoint, on the other hand, first flushes its local modi
 and then keeps polling the local flags of all other threads until all threads have completed the local flush.
 At this point, the checkpoint has been globally completed and the initiator clears the `timer` flag after
 advancing the global epoch counter. 
+The global epoch counter is also persisted to the NVM such that the recovery procedure can read it and decide
+the last committed epoch. 
 On observing that the `timer` flag has been reset (in a polling loop), the rest of the threads will return from 
 the `RP` function and proceed with their execution.
+
+When the system crashes, some modifications after the last committed epoch will be lost due to not being written back
+to the NVM. However, some other modifications will be reflected in the post-crash NVM image, causing an inconsistent
+state which needs to be restored.
+The restoration procedure first determines the last committed epoch by reading the global epoch counter.
+
+
+
