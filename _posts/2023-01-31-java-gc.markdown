@@ -15,4 +15,7 @@ version_mgmt:
 
 This paper presents an improved Java Garbage Collection (GC) algorithm optimized for Byte-Addressable Non-Volatile
 Memory (NVM). The paper is motivated by the performance degradation of Java's default GC algorithm when deployed
-on NVM due to NVM's low write bandwidth, especially under random I/O. 
+on NVM due to NVM's low write bandwidth, especially under random I/O. The proposed algorithm transforms the read/write
+pattern of GC, which contains excessive small writes and has bad locality, into large, sequential writes by
+leveraging DRAM as an intermediate buffer. Consequently, higher performance can be achieved with the improved algorithm
+as GC utilizes NVM more efficiently and hence constitute fewer cycles on the execution critical path.
