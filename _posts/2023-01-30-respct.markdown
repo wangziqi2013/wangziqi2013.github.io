@@ -96,4 +96,9 @@ recovery procedure will then roll back the modifications by copying the undo ent
 its epoch value to the last committed epoch. 
 After all the variables have been processed, the system state is now reverted to the point of the last committed epoch.
 
+The paper also noted that, by blocking threads in the `RP` function until the global checkpoint is completed, deadlocks
+may arise in deadlock-free code as a result of other blocking function calls or condition variables. In these cases,
+one thread is blocked by a condition that can only be lifted by another thread proceeding to a certain point. However,
+if the latter thread is blocked in the `RP` function, it will never proceed to that point as the former thread 
+is also blocked elsewhere and will never enter an `RP` function.
 
