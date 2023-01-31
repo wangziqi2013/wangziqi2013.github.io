@@ -24,4 +24,8 @@ The paper aims at optimizing the GC algorithm on Java virtual machine which prov
 environment where heap allocations need not be explicitly freed by the programmer. Rather, the virtual machine
 maintains internal tracking data structures such that objects living on the heap can be automatically deallocated
 when they are no longer referenced by the execution context, hence becoming "dead".
-
+While the GC algorithm, called Garbage-First GC or "G1GC", consists of several smaller subroutines to deal with
+different cases, the paper focuses on the most common and frequently invoked type of routine which we describe
+as follows. The Java heap allocator places objects (regardless of their sizes, unlike a general heap allocator) 
+on memory blocks called regions using the simple bump pointer allocation strategy and objects are never explicitly
+freed. 
