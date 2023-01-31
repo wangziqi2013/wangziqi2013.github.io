@@ -15,7 +15,7 @@ version_mgmt:
 
 **Highlights:**
 
-1. Generation copy GC will generate a large quantity of small and random writes, mostly due to object copy and pointer 
+1. Generational copy GC will generate a large quantity of small and random writes, mostly due to object copy and pointer 
 update in the header of the source object. These small and random writes are detrimental to performance when
 running on NVM, and when mixed with reads, they can saturate NVM's operation bandwidth faster, hence causing
 performance degradation.

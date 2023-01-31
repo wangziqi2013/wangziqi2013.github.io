@@ -12,14 +12,14 @@ Resume
 Research Statement
 ------------------
 
-I ~~am~~ used to be a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") 
+I ~~am~~ was a PhD student working with Professor [Todd Mowry](http://www.cs.cmu.edu/~tcm/ "Todd Mowry's homepage") 
 and [Dimitrios Skarlatos](http://www.cs.cmu.edu/~dskarlat/ "Dimitrios's homepage") since 2017 Fall. 
 My research area is computer architecture and memory architecture, especially Hardware Transaction Memory (HTM), Non-Volatile Memory, Memory and Cache
 Compression, Cache optimization for serverless & micro-services, and
 [Page Overlays](http://users.ece.cmu.edu/~omutlu/pub/page-overlays-for-fine-grained-memory-management_isca15.pdf "Page Overlays").
 My research interest also covers concurrent data structure design and parallel computation.
 
-I used to work closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
+I was working closely with Processor [Andy Pavlo](http://www.cs.cmu.edu/~pavlo/ "Andy Pavlo's homepage") during my
 Masters education at CMU, and my research project was efficient indexing for in-memory databases. 
 
 The goal of my research is to accelerate data access and manipulation on modern general purpose 
