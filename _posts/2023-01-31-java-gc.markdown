@@ -20,7 +20,8 @@ pattern of GC, which contains excessive small writes and has bad locality, into 
 leveraging DRAM as an intermediate buffer. Consequently, higher performance can be achieved with the improved algorithm
 as GC utilizes NVM more efficiently and hence constitute fewer cycles on the execution critical path.
 
-The paper aims at optimizing the GC algorithm on Java virtual machine which provides a managed execution 
+The paper aims at optimizing the GC algorithm on Java Virtual Machine (NVM) when deployed on NVM.
+The JVM provides a managed execution 
 environment where heap allocations need not be explicitly freed by the programmer. Rather, the virtual machine
 maintains internal tracking data structures such that objects living on the heap can be automatically deallocated
 when they are no longer referenced by the execution context, hence becoming "dead".
@@ -32,6 +33,8 @@ freed. The JVM maintains two different types of regions, one is the young spaces
 allocated more recently and have not gone through any GC process. The other type of region is called the old space
 which contains regions that have been GC'ed at least once. For every young region, the GC algorithm keeps track of 
 a set of objects in the old space, called the remembered set, that holds references to objects in the young space.
+Note that the paper assumes that the algorithm neglects the persistence aspect of NVM and only treats it as 
+a larger version of DRAM.
 
 During garbage collection, the algorithm first allocates a new region in the old space as the destination of the
 object copy. Then for every young region, the algorithm traverses its remembered set and copies all objects that
@@ -69,3 +72,11 @@ to the NVM region in large sequential writes. To avoid updating references to th
 to the DRAM buffer and then to the newly allocated NVM region when the DRAM buffer is emptied, the algorithm reserves a 
 shadow region on the NVM every time a DRAM region is created. The references are still updated to point to the shadow 
 region on the NVM, which will finally become canonical after the DRAM region is written back.
+
+The second problem lies in the trampoline pointer in the header of the source objects. During GC, this pointer is 
+updated to point to the destination when the object is copied such that references to this object, when they are 
+traversed, can be correctly updated to also point to the destination object.
+However, the updates to the source object header also generate small and random writes which are particularly
+detrimental to performance. Fortunately, these small and random writes can be eliminated by using a separate 
+data structure in the DRAM to track the source-destination relation of GC'ed objects. 
+
