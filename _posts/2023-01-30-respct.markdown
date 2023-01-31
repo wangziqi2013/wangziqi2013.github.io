@@ -21,7 +21,14 @@ between the log entry and the data item in conventional undo logging.
 
 2. In software, the global consistent state can be captured by stopping all threads at their local consistent points
 (i.e., points in the code where global states are not being mutated). The local consistent points can be manually 
-marked by programmers with little effort especially for lock-based data structures.
+marked by programmers with little effort, especially for lock-based data structures.
+
+**Comments:**
+
+1. How does the recovery procedure know the full set of variables to look for? For pointer-based data structures,
+this process is easy because you can just traverse the entire structure to figure out all the shared states.
+But what if the states are not connected by pointers? Do we need a central repository that holds the addresses
+of all shared variables?
 
 This paper presents ResPCT, a software epoch-based non-volatile memory snapshotting framework. ResPCT protects 
 the integrity of shared data from system failures by periodically checkpointing the states of variables to the NVM.
