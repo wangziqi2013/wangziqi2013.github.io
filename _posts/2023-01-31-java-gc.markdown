@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Generation copy GC will generate a large quantity of small and random writes, mostly due to object copy and pointer 
+update in the header of the source object. These small and random writes are detrimental to performance when
+running on NVM, and when mixed with reads, they can saturate NVM's operation bandwidth faster, hence causing
+performance degradation.
+
+
+
 This paper presents an improved Java Garbage Collection (GC) algorithm optimized for Byte-Addressable Non-Volatile
 Memory (NVM). The paper is motivated by the performance degradation of Java's default GC algorithm when deployed
 on NVM due to NVM's low write bandwidth, especially under random I/O. The proposed algorithm transforms the read/write
