@@ -69,4 +69,7 @@ modified during the current epoch. When a log entry is generated, the software w
 of the variable into the list. The list is traversed during epoch commit in order to flush all modifications back
 to the NVM.
 
+As mentioned earlier, the current epoch is committed to the NVM when a thread calls the `checkpoint` function,
+which sets a global flag `timer` to indicate that threads should checkpoint their modified states.
+In this case, all threads, excluding the caller, must reach a global stop at the next RP. 
 
