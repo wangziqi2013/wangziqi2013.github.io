@@ -64,5 +64,9 @@ to the NVM together, or the value on the NVM remains unchanged since the last mo
 recovery is performed by copying the undo log entry back to the data item. In the latter case, no recovery is needed
 as the updated value in the current epoch is never written back to the NVM.
 
+Each thread in ResPCT also maintains a thread-local list that stores the addresses of variables that have been
+modified during the current epoch. When a log entry is generated, the software wrapper inserts the address
+of the variable into the list. The list is traversed during epoch commit in order to flush all modifications back
+to the NVM.
 
 
