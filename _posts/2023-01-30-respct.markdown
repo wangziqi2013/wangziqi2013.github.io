@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. In-cache line logging places the data item and the undo log entry in the same cache line, such that either these
+two are written back to the NVM atomically, or neither of them is written back. This approach saves the persist barrier
+between the log entry and the data item in conventional undo logging.
+
+
+
 This paper presents ResPCT, a software epoch-based non-volatile memory snapshotting framework. ResPCT protects 
 the integrity of shared data from system failures by periodically checkpointing the states of variables to the NVM.
 To maximize performance while minimizing programmer effort, ResPCT adopts in-cache line undo logging and leverages
