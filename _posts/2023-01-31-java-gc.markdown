@@ -28,4 +28,9 @@ While the GC algorithm, called Garbage-First GC or "G1GC", consists of several s
 different cases, the paper focuses on the most common and frequently invoked type of routine which we describe
 as follows. The Java heap allocator places objects (regardless of their sizes, unlike a general heap allocator) 
 on memory blocks called regions using the simple bump pointer allocation strategy and objects are never explicitly
-freed. 
+freed. The JVM maintains two different types of regions, one is the young spaces which contain objects that are 
+allocated more recently and have not gone through any GC process. The other type of region is called the old space
+which contains regions that have been GC'ed at least once. For every young region, the GC algorithm keeps track of 
+a set of objects in the old space, called the remembered set, that holds references to objects in the young space.
+
+
