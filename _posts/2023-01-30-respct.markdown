@@ -106,3 +106,9 @@ that exclude the thread that
 calls blocking functions or wait in condition variables from the global consensus before it is blocked. 
 The thread should also rejoin the global consensus by calling `checkpoint\_prevent()` after it returns from
 the blocking call. 
+Unfortunately, threads that call `checkpoint\_allow()` must not perform any write to persistent variables between
+this call and the previous `RP` function call in all cases. Otherwise, if a checkpoint happens when the thread is
+blocked, after which the system crashes, these modifications may not be reverted as the global epoch counter had
+already been advanced to make these local modifications seem committed states. But in reality, these modifications
+are not guaranteed to be written back to the NVM due to lack of `RP` calls of the blocked thread.
+
