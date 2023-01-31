@@ -83,3 +83,11 @@ To this purpose, the paper proposes adding a shared lock-free map that, given a 
 returns the address of the destination object. In order to bound the amount of DRAM that the map can use,
 the map adopts an open addressing hash table scheme and can fail to insert after a certain number of hash conflicts.
 If an insertion fails, the algorithm falls back to using the source object header to store the pointer.
+
+The paper also proposes a few extra optimizations. First, object copy from the source region to the DRAM buffer can use 
+non-temporal writes, which bypass the cache hierarchy and will not pollute the cache.
+Second, as DRAM and NVM are two separate devices, the process of writing a DRAM region back to the NVM can be
+conducted by another thread and partially overlapped with the object copy. However, the paper notes that 
+the write back should only be performed after the DFS traversal has been completed for all objects in the DRAM region. 
+
+
