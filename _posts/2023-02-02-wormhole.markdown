@@ -46,4 +46,7 @@ O(log(N)), which is the time complexity of key lookups in B+Trees, will become b
 Wormhole combines a B+Tree and radix tree by borrowing the chained leaf structure from B+Tree and borrowing the 
 trie structure for the upper levels. More specifically, in Wormhole, the bottommost level of the structure is 
 identical to the leaf level of a B+Tree, i.e., a linked list of leaf nodes, in which key-value pairs are stored
-in sorted order. 
+in sorted order. Meanwhile, the upper level of the structure is a radix tree that maps lookup keys (called anchor keys) 
+to the leaf nodes, and the number of keys in the upper-level radix tree equals the number of leaf nodes. 
+During a traversal, the search key is first used to traverse through the radix tree until a leaf node is reached.
+Then a regular B+Tree leaf search is performed on the leaf node to locate the key-value pair if the key exists.
