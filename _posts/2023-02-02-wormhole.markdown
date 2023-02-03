@@ -66,3 +66,9 @@ is conveniently chosen as the smallest token that the paper assumes to be never 
 smallest token can be any ASCII control character smaller than any of the printable characters.
 After appending the end mark, the resulting anchor key for node B is smaller than the anchor key for node C,
 while not being a prefix of the latter.
+
+Lookup operations on the radix tree are straightforward. The operation starts at the root of the tree, and for each
+token in the search key, the procedure selects the next node by indexing the pointer array on the current node.
+However, since the radix tree only stores prefixes (possibly with the end mark) of the actual keys stored in the 
+leaf nodes, during the radix tree traversal, there may be no next node in the current level given
+the corresponding token. 
