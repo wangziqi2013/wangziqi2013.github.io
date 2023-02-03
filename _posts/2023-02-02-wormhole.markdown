@@ -78,4 +78,5 @@ leftmost leaf node of the right subtree in the current node (i.e., the smallest 
 If neither of the two nodes exists, then the search key does not exist, and the lookup returns a failure.
 Second, the search key may run out of tokens, but the lookup still has not reached a leaf node. In this case, 
 the procedure traverses down the tree by using the end mark as the implicit token until a leaf node is reached.
-
+After a leaf node is reached, the lookup procedure performs a binary search on the leaf node as in a regular B+Tree.
+If the key is found, then the procedure returns the value. Otherwise, the procedure a failure.
