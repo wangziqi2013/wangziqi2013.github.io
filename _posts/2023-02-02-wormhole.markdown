@@ -35,4 +35,8 @@ pointer-chasing, which is known for its bad locality and low memory throughput.
 On the other hand, there also exists a type of indexing structure, called radix trees or tries, that gets rid of
 key comparisons at each level. Instead, in radix trees, search keys are regarded as consisting of a string of 
 "tokens". At each level during the traversal, the node of the next level is selected using the token as an index 
-into the current node's pointer array. 
+into the current node's pointer array. Radix trees also support range queries just like B+Trees and skip lists if 
+the lexical order of keys is consistent with the partial ordering. In practice, this condition is already true 
+for common key types, such as string keys. Integer keys, however, need to be transformed to big-endian format 
+on small-endian machines (e.g., x86) before they can be used as search keys in radix trees.
+
