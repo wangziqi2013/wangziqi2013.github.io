@@ -69,6 +69,13 @@ while not being a prefix of the latter.
 
 Lookup operations on the radix tree are straightforward. The operation starts at the root of the tree, and for each
 token in the search key, the procedure selects the next node by indexing the pointer array on the current node.
-However, since the radix tree only stores prefixes (possibly with the end mark) of the actual keys stored in the 
-leaf nodes, during the radix tree traversal, there may be no next node in the current level given
-the corresponding token. 
+However, since the radix tree only stores prefixes (possibly with the end mark) of a subset of the actual keys 
+stored in the leaf nodes, during the radix tree traversal, several cases can happen.
+First, even if there is no next node in the current level given the corresponding token, the search key may still be
+in one of the leaf nodes. In this case, the leaf node should be either the rightmost leaf node of the left subtree
+in the current node (i.e., the largest element smaller than the token) or the immediate left sibling of the 
+leftmost leaf node of the right subtree in the current node (i.e., the smallest element larger than the token). 
+If neither of the two nodes exists, then the search key does not exist, and the lookup returns a failure.
+Second, the search key may run out of tokens, but the lookup still has not reached a leaf node. In this case, 
+the procedure traverses down the tree by using the end mark as the implicit token until a leaf node is reached.
+
