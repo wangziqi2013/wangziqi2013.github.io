@@ -27,7 +27,12 @@ Unordered indexing structures, such as hash tables, enable amortized constant-ti
 point queries but incapable of performing range queries. Ordered indexing structures, such as B+Trees and skip
 lists, are constructed based on the partial ordering between keys. Lookup operations in these structures require one 
 key comparison at each level, and the number of levels is proportional to the logarithm of the total number of
-keys stored in the index, which degrades as the index becomes larger. Even worse, since most implementations of
-ordered indexing structures use pointers to link "nodes" together in order to support mutation operations (i.e.,
-insert, delete) efficiently, index traversal is essentially implemented as pointer-chasing, which is known for
-its bad locality and low memory throughput.
+keys stored in the index, i.e., O(log(N)), which degrades as the index becomes larger. Even worse, since 
+most implementations of ordered indexing structures use pointers to link "nodes" together in order to support 
+mutation operations (i.e., insert, delete) efficiently, index traversal is essentially implemented as 
+pointer-chasing, which is known for its bad locality and low memory throughput.
+
+On the other hand, there also exists a type of indexing structure, called radix trees or tries, that gets rid of
+key comparisons at each level. Instead, in radix trees, search keys are regarded as consisting of a string of 
+"tokens". At each level during the traversal, the node of the next level is selected using the token as an index 
+into the current node's pointer array. 
