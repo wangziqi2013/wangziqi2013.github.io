@@ -21,3 +21,8 @@ leaf level. The resulting tree structure combines the storage efficiency of comp
 and the time efficiency for lookups at the upper levels. Consequently, Wormhole outperforms the more conventional
 index structures such as tries and even demonstrates close performance to constant-time hash tables with range query
 support.
+
+The paper begins by noticing the widening performance gap between ordered and unordered indexing structures.
+Unordered indexing structures, such as hash tables, enable amortized constant-time lookup, hence suitable for
+point queries but incapable of performing range queries. Ordered indexing structures, such as B+Trees and skip
+lists, are constructed based on the partial ordering between keys. 
