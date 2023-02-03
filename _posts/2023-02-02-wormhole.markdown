@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper presents Wormhole, a hybrid trie-B+Tree index structure that enjoys the storage efficiency of B+Trees
+with the lower lookup cost of a radix tree (i.e., a trie). The paper is motivated by the 
+seemingly complementary space-time trade-offs of B+Tree and tries and proposes to combine the two to form a 
+new data structure using path-compressed tries as the upper levels and B+Tree sorted-leaf nodes as the bottommost 
+leaf level. 
