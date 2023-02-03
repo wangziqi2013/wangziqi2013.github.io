@@ -38,7 +38,12 @@ key comparisons at each level. Instead, in radix trees, search keys are regarded
 into the current node's pointer array. Radix trees also support range queries just like B+Trees and skip lists if 
 the lexical order of keys is consistent with the partial ordering. In practice, this condition is already true 
 for common key types, such as string keys. Integer keys, however, need to be transformed to big-endian format 
-on small-endian machines (e.g., x86) before they can be used as search keys in radix trees.
+on small-endian machines (e.g., x86) before they can be used as order-preserving search keys in radix trees.
 Compared with B+Trees and skip lists, radix trees enable O(L) lookup time where L is the number of tokens 
 in the search keys. As the index grows, the time benefit of using radix trees gradually becomes obvious as 
-O(log(N)) grows bigger than O(L).
+O(log(N)), which is the time complexity of key lookups in B+Trees, will become bigger than O(L).
+ 
+Wormhole combines a B+Tree and radix tree by borrowing the chained leaf structure from B+Tree and borrowing the 
+trie structure for the upper levels. More specifically, in Wormhole, the bottommost level of the structure is 
+identical to the leaf level of a B+Tree, i.e., a linked list of leaf nodes, in which key-value pairs are stored
+in sorted order. 
