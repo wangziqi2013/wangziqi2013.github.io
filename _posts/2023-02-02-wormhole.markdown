@@ -25,4 +25,9 @@ support.
 The paper begins by noticing the widening performance gap between ordered and unordered indexing structures.
 Unordered indexing structures, such as hash tables, enable amortized constant-time lookup, hence suitable for
 point queries but incapable of performing range queries. Ordered indexing structures, such as B+Trees and skip
-lists, are constructed based on the partial ordering between keys. 
+lists, are constructed based on the partial ordering between keys. Lookup operations in these structures require one 
+key comparison at each level, and the number of levels is proportional to the logarithm of the total number of
+keys stored in the index, which degrades as the index becomes larger. Even worse, since most implementations of
+ordered indexing structures use pointers to link "nodes" together in order to support mutation operations (i.e.,
+insert, delete) efficiently, index traversal is essentially implemented as pointer-chasing, which is known for
+its bad locality and low memory throughput.
