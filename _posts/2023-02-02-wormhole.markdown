@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Wormhole: A Fast Ordered Index for In-memory Data Management"
+date:   2023-02-02 19:29:00 -0500
+categories: paper
+paper_title: "Wormhole: A Fast Ordered Index for In-memory Data Management"
+paper_link: https://dl.acm.org/doi/10.1145/3302424.3303955
+paper_keyword: B+Tree; Trie; Hash Table; Wormhole
+paper_year: EuroSys 2019
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
