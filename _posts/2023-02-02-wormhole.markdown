@@ -60,4 +60,9 @@ such that none of them is a prefix to the other. The paper describes the algorit
 consecutive nodes at the leaf level, i.e., A, B and C, if the anchor keys are already selected for A and C, then
 the anchor key for B can be derived as the longest common prefix of the first key in node B and the last key in 
 node A, plus the next token in the first key of node B. The derived anchor key is lexically larger than all keys 
-in node A and is not a prefix of any keys in A. 
+in node A and is not a prefix of any keys in A. However, the anchor key generated this way can still be a prefix
+of the anchor key for node C. In this case, the anchor key of B is further appended with an "end mark", which
+is conveniently chosen as the smallest token that the paper assumes to be never used. For string keys, the 
+smallest token can be any ASCII control character smaller than any of the printable characters.
+After appending the end mark, the resulting anchor key for node B is smaller than the anchor key for node C,
+while not being a prefix of the latter.
