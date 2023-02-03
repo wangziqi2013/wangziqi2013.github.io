@@ -55,4 +55,9 @@ One naive approach for generating the upper-level radix tree is to select the sm
 then construct a radix tree using these keys. However, this naive approach will likely generate a sub-optimal 
 radix tree if the keys can be uniquely identified by only a prefix. To leverage key prefixes, instead of using the 
 full keys to construct the upper-level radix tree, Wormhole proposes that we use the shortest prefix of the first
-key in each leaf node as the anchor key for constructing the radix tree. 
+key in each leaf node as the anchor key for constructing the radix tree. In addition, the prefix should be chosen 
+such that none of them is a prefix to the other. The paper describes the algorithm as follows. Given three 
+consecutive nodes at the leaf level, i.e., A, B and C, if the anchor keys are already selected for A and C, then
+the anchor key for B can be derived as the longest common prefix of the first key in node B and the last key in 
+node A, plus the next token in the first key of node B. The derived anchor key is lexically larger than all keys 
+in node A and is not a prefix of any keys in A. 
