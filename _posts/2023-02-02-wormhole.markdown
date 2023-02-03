@@ -50,3 +50,9 @@ in sorted order. Meanwhile, the upper level of the structure is a radix tree tha
 to the leaf nodes, and the number of keys in the upper-level radix tree equals the number of leaf nodes. 
 During a traversal, the search key is first used to traverse through the radix tree until a leaf node is reached.
 Then a regular B+Tree leaf search is performed on the leaf node to locate the key-value pair if the key exists.
+
+One naive approach for generating the upper-level radix tree is to select the smallest key in each leaf node, and 
+then construct a radix tree using these keys. However, this naive approach will likely generate a sub-optimal 
+radix tree if the keys can be uniquely identified by only a prefix. To leverage key prefixes, instead of using the 
+full keys to construct the upper-level radix tree, Wormhole proposes that we use the shortest prefix of the first
+key in each leaf node as the anchor key for constructing the radix tree. 
