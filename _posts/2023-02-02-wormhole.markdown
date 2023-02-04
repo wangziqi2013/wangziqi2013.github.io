@@ -93,4 +93,7 @@ tokens in the lookup key, the paper further proposes to maintain the internal no
 The hash table is indexed using the partial key of the node (i.e., the path from the root to the node), and each entry
 of the hash table consists of the following fields. First, the entry contains the partial key and the hash value for
 tag comparison. Second, the entry also contains the type of the node, which is either the leaf node of the radix tree or
-the inner node. 
+the inner node. The node type field is used to indicate whether tree traversal is completed or not. Next, if the
+entry represents an inner node, it also contains a bitmap indicating the status of child nodes, one bit for every
+possible child. If the bit is "1", then the child node exists, and tree traversal can proceed down the path to the child
+node. 
