@@ -130,4 +130,8 @@ each probe. Second, to accelerate key lookup in the leaf node, which can potenti
 variable-sized, the paper proposes to store an extra sorted array of hash values for each key in the leaf node. 
 Key lookups can therefore be reduced to binary searches on the sorted hash value array plus a final key comparison.
 Additionally, newly inserted keys can simply be appended to the end of the node as long as the hash value array
-remains sorted.
+remains sorted. Lastly, if the key does not support an "end mark" symbol which is the minimum possible token that
+will never be used for regular keys, then Wormhole should refrain from splitting a node if the anchor key for
+the new node contains the "end mark". In this scenario, the node will become a "fat node" whose size exceeds the 
+threshold. This case, however, is relatively rare according to the paper and hence will not affect the overall 
+performance.
