@@ -119,6 +119,11 @@ a new instance of the hash table with the modifications applied. The old instanc
 atomic compare-and-swap, after which it is reclaimed shortly.
 To maintain consistency between the hash table and the radix tree, the paper proposes to use version numbers. The
 hash table is extended with a version number that is incremented by one for every modification operation. 
-The version number if read before the traversal, and validated against the most up-to-date value after the leaf
+The version number is read before the traversal and validated against the most up-to-date value after the leaf
 node is reached. If the two numbers differ, the operation will be retried as the traversal has potentially used
 a stale version of the hash table.
+
+A few optimizations can be applied to Wormhole to make it more efficient. First, during hash table lookups, 
+tag comparison can be omitted until the last probe where both the has hand the partial key in the entry are checked.
+If the check passes, the probe succeeds. Otherwise, the probe should restart and always check the partial key on
+each prove. 
