@@ -114,4 +114,11 @@ such as insertion and deletion are performed on the node after locking it in wri
 lock the node in reader modes, hence supporting multiple concurrent readers or an exclusive writer. 
 Second, to support structural changes, i.e., anchor key insertion and deletion into or from the radix tree, the
 radix tree also has a global lock that synchronizes structural modifications with lookup operations. 
-
+Operations on the hash table are synchronized with each other using RCU, i.e., every hash table operation generates
+a new instance of the hash table with the modifications applied. The old instance is replaced with the new one using
+atomic compare-and-swap, after which it is reclaimed shortly.
+To maintain consistency between the hash table and the radix tree, the paper proposes to use version numbers. The
+hash table is extended with a version number that is incremented by one for every modification operation. 
+The version number if read before the traversal, and validated against the most up-to-date value after the leaf
+node is reached. If the two numbers differ, the operation will be retried as the traversal has potentially used
+a stale version of the hash table.
