@@ -13,6 +13,16 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. B+Trees need lots of key comparisons during the lookup and take O(log(N)) comparisons per lookup. When the keys
+are lengthy, e.g., string keys, the key comparison can become a significant bottleneck.
+By contrast, radix trees do not need key comparisons and they take O(L) pointer chasing per lookup, which makes it
+a better candidate for indexing string keys. However, the high memory overhead of radix trees obstructs its adoption
+to some extent.
+
+
+
 This paper presents Wormhole, a hybrid trie-B+Tree index structure that enjoys the storage efficiency of B+Trees
 with the lower lookup cost of a radix tree (i.e., a trie). The paper is motivated by the 
 seemingly complementary space-time trade-offs of B+Tree and tries and proposes to combine the two to form a 
