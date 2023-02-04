@@ -103,4 +103,7 @@ earlier situations occurs during lookups.
 With the hashed radix tree representation, key lookups are modified as follows. Instead of following the child link
 of the current node to traverse down the tree, the lookup procedure now finds the longest prefix of the lookup key
 using the hash table with binary search, i.e., the lookup begins by probing the hash table with the full key, and 
-if the probing fails, it probes the hash table with the first half of the key, and so on. 
+if the probing fails, it probes the hash table with the first half of the key, and so on. The probing process continues
+until the longest prefix is found, after which either a leaf node is reached, or one of the two situations discussed
+above occurs. In the latter case, the leaf node can be located using the leaf node range indicators of the hash table
+entry. 
