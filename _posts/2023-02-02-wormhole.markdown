@@ -96,4 +96,8 @@ tag comparison. Second, the entry also contains the type of the node, which is e
 the inner node. The node type field is used to indicate whether tree traversal is completed or not. Next, if the
 entry represents an inner node, it also contains a bitmap indicating the status of child nodes, one bit for every
 possible child. If the bit is "1", then the child node exists, and tree traversal can proceed down the path to the child
-node. 
+node. Otherwise, the child node does not exist. Finally, the entry also contains the range of leaf nodes that the 
+subtree covers. This field is used to quickly locate the leaf node in constant time when one of the two 
+earlier situations occurs during lookups. 
+
+With the hashed radix tree representation, key lookups are modified as follows.
