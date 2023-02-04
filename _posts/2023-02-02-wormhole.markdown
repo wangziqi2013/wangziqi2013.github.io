@@ -79,4 +79,9 @@ If neither of the two nodes exists, then the search key does not exist, and the 
 Second, the search key may run out of tokens, but the lookup still has not reached a leaf node. In this case, 
 the procedure traverses down the tree by using the end mark as the implicit token until a leaf node is reached.
 After a leaf node is reached, the lookup procedure performs a binary search on the leaf node as in a regular B+Tree.
-If the key is found, then the procedure returns the value. Otherwise, the procedure a failure.
+If the key is found, then the procedure returns the value. Otherwise, the procedure returns a failure.
+
+The procedure for key insertion resembles key lookups in the first half. After a leaf node is reached, the procedure
+then inserts the key into the leaf node and sorts the node to maintain key order. If the size of the node exceeds
+a certain threshold, the node is split into two, and the anchor key for the new node is generated and then inserted
+into the upper-level radix tree. 
