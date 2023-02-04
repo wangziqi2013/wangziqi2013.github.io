@@ -107,3 +107,11 @@ if the probing fails, it probes the hash table with the first half of the key, a
 until the longest prefix is found, after which either a leaf node is reached, or one of the two situations discussed
 above occurs. In the latter case, the leaf node can be located using the leaf node range indicators of the hash table
 entry. 
+
+To support concurrent operations on the Wormhole structure, the paper proposes a locking mechanism that works 
+as follows. First, every leaf node is extended with a reader-writer lock. Local modifications to the leaf node
+such as insertion and deletion are performed on the node after locking it in writer mode, and leaf reads should also 
+lock the node in reader modes, hence supporting multiple concurrent readers or an exclusive writer. 
+Second, to support structural changes, i.e., anchor key insertion and deletion into or from the radix tree, the
+radix tree also has a global lock that synchronizes structural modifications with lookup operations. 
+
