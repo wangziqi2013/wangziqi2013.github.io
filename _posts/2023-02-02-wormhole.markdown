@@ -84,4 +84,6 @@ If the key is found, then the procedure returns the value. Otherwise, the proced
 The procedure for key insertion resembles key lookups in the first half. After a leaf node is reached, the procedure
 then inserts the key into the leaf node and sorts the node to maintain key order. If the size of the node exceeds
 a certain threshold, the node is split into two, and the anchor key for the new node is generated and then inserted
-into the upper-level radix tree. 
+into the upper-level radix tree. Key deletions are just the reverse of key insertions, i.e., after the leaf node 
+is reached if the key exists in the leaf node, it is removed from the leaf. If the node size drops under a threshold,
+the node is merged into its neighbor node, after which the anchor key is removed from the radix tree.
