@@ -21,7 +21,10 @@ By contrast, radix trees do not need key comparisons and they take O(L) pointer 
 a better candidate for indexing string keys. However, the high memory overhead of radix trees obstructs its adoption
 to some extent.
 
-
+2. We can combine B+Tree and radix tree by using the B+Tree sorted leaf node as the bottom level and a radix tree as 
+the upper level. An anchor key is generated for each leaf node and then inserted into the radix tree such that the
+leaf node can be found by searching the radix tree. The anchor keys can be generated as a prefix (plus a possible
+end mark symbol) of the minimum key in the leaf node as long as anchor keys are not prefixes of each other.
 
 This paper presents Wormhole, a hybrid trie-B+Tree index structure that enjoys the storage efficiency of B+Trees
 with the lower lookup cost of a radix tree (i.e., a trie). The paper is motivated by the 
