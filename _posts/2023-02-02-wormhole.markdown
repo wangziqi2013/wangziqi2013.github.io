@@ -87,3 +87,10 @@ a certain threshold, the node is split into two, and the anchor key for the new 
 into the upper-level radix tree. Key deletions are just the reverse of key insertions, i.e., after the leaf node 
 is reached if the key exists in the leaf node, it is removed from the leaf. If the node size drops under a threshold,
 the node is merged into its neighbor node, after which the anchor key is removed from the radix tree.
+
+To further reduce the number of serial memory accesses in the lookup process, which is O(L) where L is the number of 
+tokens in the lookup key, the paper further proposes to maintain the internal nodes of the radix tree in a hash table.
+The hash table is indexed using the partial key of the node (i.e., the path from the root to the node), and each entry
+of the hash table consists of the following fields. First, the entry contains the partial key and the hash value for
+tag comparison. Second, the entry also contains the type of the node, which is either the leaf node of the radix tree or
+the inner node. 
