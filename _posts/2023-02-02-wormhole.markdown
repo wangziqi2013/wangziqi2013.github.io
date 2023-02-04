@@ -26,6 +26,10 @@ the upper level. An anchor key is generated for each leaf node and then inserted
 leaf node can be found by searching the radix tree. The anchor keys can be generated as a prefix (plus a possible
 end mark symbol) of the minimum key in the leaf node as long as anchor keys are not prefixes of each other.
 
+3. We can further accelerate radix tree lookup by storing the nodes in a hash table indexed by the partial keys
+of the nodes. Key lookups can then be implemented as a binary search to find the longest prefix that exists 
+in the hash table.
+
 This paper presents Wormhole, a hybrid trie-B+Tree index structure that enjoys the storage efficiency of B+Trees
 with the lower lookup cost of a radix tree (i.e., a trie). The paper is motivated by the 
 seemingly complementary space-time trade-offs of B+Tree and tries and proposes to combine the two to form a 
