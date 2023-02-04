@@ -126,4 +126,8 @@ a stale version of the hash table.
 A few optimizations can be applied to Wormhole to make it more efficient. First, during hash table lookups, 
 tag comparison can be omitted until the last probe where both the has hand the partial key in the entry are checked.
 If the check passes, the probe succeeds. Otherwise, the probe should restart and always check the partial key on
-each prove. 
+each probe. Second, to accelerate key lookup in the leaf node, which can potentially be quite costly as keys are 
+variable-sized, the paper proposes to store an extra sorted array of hash values for each key in the leaf node. 
+Key lookups can therefore be reduced to binary searches on the sorted hash value array plus a final key comparison.
+Additionally, newly inserted keys can simply be appended to the end of the node as long as the hash value array
+remains sorted.
