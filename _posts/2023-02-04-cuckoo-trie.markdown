@@ -17,7 +17,13 @@ This paper presents Cuckoo Trie, a hashed radix tree (trie) representation that 
 for more efficient lookups. The paper is motivated by the low memory-level parallelism of conventional pointer-based 
 ordered indexing structures, such as B+Trees and radix trees. The paper focuses on radix trees and addresses 
 the problem with a hashed representation of the radix tree nodes, such that nodes on the tree traversal path can be 
-prefetched using key prefixes. Compared with conventional point-based radix tree implementations that serialize 
+prefetched using key prefixes. Compared with conventional pointer-based radix tree implementations that serialize 
 the memory accesses at each level, Cuckoo Trie demonstrates higher operation throughput on certain workloads.
+
+The paper begins by observing that modern out-of-order hardware has a high degree of memory-level parallelism. In
+particular, the hardware can execute non-dependent memory instruction out-of-order and tolerate multiple cache misses
+until the hardware resources such as MSHRs are saturated. However, the capability of performing memory operations in 
+parallel is often under-utilized by conventional implementations of radix trees, as in these
+
 
 
