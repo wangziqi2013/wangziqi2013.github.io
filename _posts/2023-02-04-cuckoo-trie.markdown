@@ -30,4 +30,8 @@ exceed the size of the cache hierarchy, meaning that the memory accesses will su
 and be satisfied by the main memory serially. Consequently, the overall performance of these implementations will 
 degrade as the working set is becoming larger due to the lack of memory-level parallelism.
 
-
+The Cuckoo Trie design is based on Bucketized Cuckoo Hashing. In Bucketized Cuckoo hashing, the hash table is organized
+as a software set-associative lookup structure. Each set is called a bucket and consists of `s` items. Keys are
+hashed to two values that correspond to two buckets in the table, and a key can reside in any of the items of the 
+two buckets. Lookup operations in the bucketized cuckoo hash table take constant time as only two buckets that
+the key can map to are checked. 
