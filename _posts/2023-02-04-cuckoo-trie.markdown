@@ -46,3 +46,11 @@ using a high-water mark indicating the progress of rehashing. Items that fall un
 already rehashed to the newer table, and therefore, operations on these items must be conducted on the new table. 
 On the other hand, items that are still above the high-water mark are in the old table, and correspondingly,
 modifications to these items must be conducted on the old table.
+
+With Bucketized Cuckoo Hashing, a radix tree can be represented as hashed nodes stored in the table instead of 
+being linked together by explicit pointers. Logically speaking, each item of the hash table consists of a 
+key prefix that the node encodes (i.e., the string of tokens in order to reach the node from the root), which is also
+the lookup key of the item; a bitmap indicating the availability of child nodes, the size of which equals two to
+the number of bits in each token; two pointers delimiting the range of leaf nodes that the node covers (if the node
+if a leaf node, then the pointers are undefined), and a type field to indicate whether the node is an inner node or 
+a leaf node. Lookup operations on the Cuckoo Trie are performed as follows. 
