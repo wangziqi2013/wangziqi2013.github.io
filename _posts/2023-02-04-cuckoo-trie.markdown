@@ -53,4 +53,8 @@ key prefix that the node encodes (i.e., the string of tokens in order to reach t
 the lookup key of the item; a bitmap indicating the availability of child nodes, the size of which equals two to
 the number of bits in each token; two pointers delimiting the range of leaf nodes that the node covers (if the node
 if a leaf node, then the pointers are undefined), and a type field to indicate whether the node is an inner node or 
-a leaf node. Lookup operations on the Cuckoo Trie are performed as follows. 
+a leaf node. Lookup operations on the Cuckoo Trie are performed as follows. First, the lookup procedure issues D
+prefetching requests to prefetch the buckets that can contain the first D nodes on the traversal path.
+For radix trees, the lookup keys for the nodes on the traversal path can be easily computed using the first D 
+key prefixes. The depth of prefetching D depends on the degree of memory-level parallelism of the system and 
+can be empirically measured. 
