@@ -57,4 +57,7 @@ a leaf node. Lookup operations on the Cuckoo Trie are performed as follows. Firs
 prefetching requests to prefetch the buckets that can contain the first D nodes on the traversal path.
 For radix trees, the lookup keys for the nodes on the traversal path can be easily computed using the first D 
 key prefixes. The depth of prefetching D depends on the degree of memory-level parallelism of the system and 
-can be empirically measured. 
+can be empirically measured. Then the lookup process begins by performing lookups on the hash table using 
+the key prefixes, adding one more token to the prefix after going down a level, until a leaf node is reached.
+For each level that has been traversed, the lookup procedure also issues new prefetch instructions for key
+prefixes that are D tokens ahead, striving to keep the memory pipeline busy and fully utilize the memory bandwidth.
