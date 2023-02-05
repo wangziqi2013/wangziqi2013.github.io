@@ -40,4 +40,9 @@ victim key from one of the two buckets needs to be relocated to the alternate bu
 to free up an item slot. This relocation process may potentially happen recursively several times if the other
 bucket of the victim key is also full, and can fail eventually after a certain number of attempts. However,
 the paper suggests that Bucketized Cuckoo Hashing can sustain a high load factor that is usually greater 
-than 90% before the inevitable failure. 
+than 90% before the inevitable failure. In this case, the hash table is resized and the existing items are rehashed
+to the newer and larger table. This resizing process can be overlapped with normal operation on the old table
+using a high-water mark indicating the progress of rehashing. Items that fall under the high-water mark are
+already rehashed to the newer table, and therefore, operations on these items must be conducted on the new table. 
+On the other hand, items that are still above the high-water mark are in the old table, and correspondingly,
+modifications to these items must be conducted on the old table.
