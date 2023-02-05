@@ -34,4 +34,10 @@ The Cuckoo Trie design is based on Bucketized Cuckoo Hashing. In Bucketized Cuck
 as a software set-associative lookup structure. Each set is called a bucket and consists of `s` items. Keys are
 hashed to two values that correspond to two buckets in the table, and a key can reside in any of the items of the 
 two buckets. Lookup operations in the bucketized cuckoo hash table take constant time as only two buckets that
-the key can map to are checked. 
+the key can map to are checked. Insert operations, on the other hand, may require multiple key relocations if 
+conflicts occur. More specifically, on key insertions, if both buckets that the key maps to are full, then a 
+victim key from one of the two buckets needs to be relocated to the alternate bucket of the victim key in order
+to free up an item slot. This relocation process may potentially happen recursively several times if the other
+bucket of the victim key is also full, and can fail eventually after a certain number of attempts. However,
+the paper suggests that Bucketized Cuckoo Hashing can sustain a high load factor that is usually greater 
+than 90% before the inevitable failure. 
