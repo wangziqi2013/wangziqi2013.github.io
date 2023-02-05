@@ -24,6 +24,10 @@ The paper begins by observing that modern out-of-order hardware has a high degre
 particular, the hardware can execute non-dependent memory instruction out-of-order and tolerate multiple cache misses
 until the hardware resources such as MSHRs are saturated. However, the capability of performing memory operations in 
 parallel is often under-utilized by conventional implementations of radix trees, as in these
-
+implementations, the next level of tree traversal can only be obtained after the parent level is fetched from the 
+memory hierarchy. To make things worse, on modern big-data workloads, the amount of working set data will likely
+exceed the size of the cache hierarchy, meaning that the memory accesses will suffer cache misses on all levels
+and be satisfied by the main memory serially. Consequently, the overall performance of these implementations will 
+degrade as the working set is becoming larger due to the lack of memory-level parallelism.
 
 
