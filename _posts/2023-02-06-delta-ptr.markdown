@@ -21,3 +21,8 @@ the tag when pointers are generated or moved, but not when pointers are derefere
 that perform pointer checks when the pointer is dereferenced, Delta Pointers demonstrate less runtime overhead 
 on SPEC benchmark due to its ability to remove the explicit bounds check and the branching overhead on pointer
 dereferences.
+
+The paper begins by noticing that prior works on software memory protection tend to embed per-object or 
+per-type metadata at higher bits of the pointer in order to offer protection. The metadata on the higher bits are 
+used to index an in-memory metadata structure that stores the bounds information of the pointer, which is accessed 
+by compiler instrumented code when the pointer is dereferenced. 
