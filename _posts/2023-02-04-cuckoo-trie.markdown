@@ -86,4 +86,9 @@ To address the validation challenge, instead of storing the full partial key in 
 each entry only stores the last token in the partial key plus a pointer to the parent node. Validation can then be 
 performed recursively during the traversal, i.e., the current node is validated if its parent node is validated and the 
 last token in the partial key matches the token stored in the node's hash entry.
+However, since entries may relocation in a Cuckoo hash table, storing the physical pointer to the parent node is
+infeasible. Instead, the paper proposes to assign each node a "color" which is a unique identifier of the entry 
+across the `2s` items in the two buckets that the node maps to (and hence there should be at least `2s` different
+values for colors). Child nodes then store the color of their parent nodes and are validated by comparing the 
+parent node's color with the color stored in the entry.
 
