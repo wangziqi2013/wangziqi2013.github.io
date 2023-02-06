@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Delta pointers: buffer overflow checks without the checks"
+date:   2023-02-06 03:05:00 -0500
+categories: paper
+paper_title: "Delta pointers: buffer overflow checks without the checks"
+paper_link: https://dl.acm.org/doi/10.1145/3190508.3190553
+paper_keyword: Memory Safety; Delta Pointer; Pointer Tagging
+paper_year: EuroSys 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
