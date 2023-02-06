@@ -52,4 +52,7 @@ The middle 31 bits of the pointer is initialized to be the negation of object si
 while the highest bits of the pointer is reserved to indicate the validity of the pointer.
 When a pointer is moved via pointer arithmetic, the compiler also generates code to add or subtract the
 same value from the tag as is for the pointer.
-
+The benefit of using negation to represent object size is that if the pointer is moved out of its upper bound, then
+the carry bit of the tag will be set due to the value of the tag being flipped from negative to positive.
+Similarly, if the pointer is moved within its bound, the carry bit will become clear as the value of the tag becomes 
+negative again.
