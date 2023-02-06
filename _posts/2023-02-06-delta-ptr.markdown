@@ -77,3 +77,6 @@ in two's complement as 0xFFFFFFFF), meaning that it must not be moved.
 Third, the compiler should also distinguish between the instrumented and uninstrumented domain and adjust the pointers
 when they cross the domain. For example, when a pointer is passed to shared library functions, since the library is
 not instrumented, the tag should be masked off from the pointer such that the library retains its normal behavior.
+Similarly, when an object is returned from library functions, the tag should be generated and OR'ed to the higher
+bits of the pointer. The bounds information of pointers returned from common library functions can be trivially 
+identified, e.g., using the semantics of the function and/or the return object type. 
