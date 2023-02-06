@@ -82,5 +82,8 @@ To address the relocation challenge, both hash values are pre-computed and store
 is to be relocated, the procedure compares its current bucket number against the two hash values and selects the one
 that differs to be the destination bucket number.
 
-
+To address the validation challenge, instead of storing the full partial key in each entry, the paper proposes that
+each entry only stores the last token in the partial key plus a pointer to the parent node. Validation can then be 
+performed recursively during the traversal, i.e., the current node is validated if its parent node is validated and the 
+last token in the partial key matches the token stored in the node's hash entry.
 
