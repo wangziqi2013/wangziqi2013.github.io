@@ -22,6 +22,10 @@ Why not just compute the two buckets and store both of them in the entry?
 Besides, it seems that t is much smaller than S (t = 16 and S is the number of buckets). However, the hash
 function f() maps from the value domain of t to the value domain of S. What is the purpose of such a mapping?
 
+2. I do not get why you need the peelable function? I understand that the purpose of the function is to 
+enable fast and incremental hash calculation when the child node's hash is known. But since the tree is
+traversed root-to-leaf, isn't the parent's hash already computed when the child node is validated?
+
 This paper presents Cuckoo Trie, a hashed radix tree (trie) representation that utilizes memory-level parallelism 
 for more efficient lookups. The paper is motivated by the low memory-level parallelism of conventional pointer-based 
 ordered indexing structures, such as B+Trees and radix trees. The paper focuses on radix trees and addresses 
