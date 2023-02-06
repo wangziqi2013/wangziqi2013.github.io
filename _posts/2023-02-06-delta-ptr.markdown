@@ -44,3 +44,12 @@ protected by ASLR, must also be moved to the lower address range. Virtual memory
 address space should also be reserved with user-space non-reserving mmap calls such that they will not be given out
 by the kernel on future mmap calls. On the other hand, the OS address space is unaffected and the kernel can still 
 operate with normal 64-bit addressing because Delta Pointer does not instrument the kernel code.
+
+As mentioned earlier, Delta Pointer directly embeds bounds information at the high 32 bits of a pointer.
+The metadata is initialized by compiler-generated instrumentation when a new object is allocated and a pointer 
+is generated from the object.
+The middle 31 bits of the pointer is initialized to be the negation of object size in two's complement form,
+while the highest bits of the pointer is reserved to indicate the validity of the pointer.
+When a pointer is moved via pointer arithmetic, the compiler also generates code to add or subtract the
+same value from the tag as is for the pointer.
+
