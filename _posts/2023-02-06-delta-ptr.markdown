@@ -56,3 +56,8 @@ The benefit of using negation to represent object size is that if the pointer is
 the carry bit of the tag will be set due to the value of the tag being flipped from negative to positive.
 Similarly, if the pointer is moved within its bound, the carry bit will become clear as the value of the tag becomes 
 negative again.
+Overall, by checking the carry bit, i.e., the highest bit of the tag, the processor can determine whether the pointer
+is valid or not. In practice, the check can be performed implicitly by the existing MMU, as the bit pattern of an
+out-of-bound pointer would appear to be a non-canonical pointer on x86-64. Non-canonical pointers, when dereferenced,  
+will cause the hardware MMU to raise an access exception signal to the OS, which results in the termination of the 
+process. This check is already performed by today's MMU and therefore is essentially free.
