@@ -19,7 +19,12 @@ version_mgmt:
 This storage format favors higher memory-level parallelism since the keys for the nodes on the traversal path
 can be derived from the lookup key and hence the nodes can be easily prefetched from the hash slots.
 
-2. 
+2. Node entries in the hash table do not need to store the full key prefix it encodes for key validation (which is
+necessary for hash table lookups to rule out hash conflicts) because nodes can be validated recursively, i.e.,
+if the parent node is validated and the last token in the partial key matches the token at the same offset in the
+lookup key, then the child node is also successfully validated. To this end, we can store a "soft pointer" 
+(not a physical pointer) to the parent node and only compare the pointer value with the actual parent node 
+during the traversal.
 
 **Comments:**
 
