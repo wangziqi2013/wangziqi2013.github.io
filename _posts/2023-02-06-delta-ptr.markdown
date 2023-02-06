@@ -67,3 +67,8 @@ out-of-bound pointer would appear to be a non-canonical pointer on x86-64. Non-c
 will cause the hardware MMU to raise an access exception signal to the OS, which results in the termination of the 
 process. This check is already performed by today's MMU and therefore is essentially free.
 
+Delta Pointer leverages static analysis at compilation time to insert instrumentation. There are several occasions
+that instrumentation should be inserted. First, when a pointer is dereferenced, the middle 31 bits should be masked off
+such that the pointer is either a valid regular pointer, or an invalid one that triggers an access fault.
+Second, when new pointers are generated from existing ones via pointer arithmetic, the tag bits of the new pointer 
+should be computed such that the bound information is still correct.
