@@ -36,4 +36,8 @@ the execution cycle they occupy but also the complications of branch prediction.
 In order to eliminate the conditional branches at pointer dereference time, the Delta Pointer design proposes to
 directly embed bounds information on higher unused bits of pointers without any accompanying metadata table
 in the main memory. As a result, the embedded metadata must contain all information that is necessary to perform
-the check and to support pointer manipulation. 
+the check and to support pointer manipulation. In Delta Pointer, the high 32 bits of a 64-bit pointer is dedicated
+to storing the metadata, while the lower 32 bits still function as pointers, granting a 4GB address space to the
+process. On 64 bit architectures, such a design requires that the binary of the protected process be loaded to
+a lower address within the first 4GB of the virtual address space. All the segments of the process, including those
+protected by ASLR, must also be moved to the lower address range. 
