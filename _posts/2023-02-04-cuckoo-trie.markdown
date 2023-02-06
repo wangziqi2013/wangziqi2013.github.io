@@ -70,3 +70,6 @@ can be empirically measured. Then the lookup process begins by performing lookup
 the key prefixes, adding one more token to the prefix after going down a level, until a leaf node is reached.
 For each level that has been traversed, the lookup procedure also issues new prefetch instructions for key
 prefixes that are D tokens ahead, striving to keep the memory pipeline busy and fully utilize the memory bandwidth.
+
+The above naive approach needs to store a node's key prefix in each entry for two purposes. First, when the entry 
+is relocated to its alternate bucket, the key prefix is essential for computing the index of the alternate bucket.
