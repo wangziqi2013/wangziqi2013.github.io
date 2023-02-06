@@ -13,6 +13,11 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. The paper seems to ignore the case where a pointer is rounded up (and the round-down case is not convincing to me).
+How could the compiler catch the round-up case and adjust the tag accordingly?
+
 This paper presents Delta Pointer, a memory safety mechanism that protects the application from buffer overflow attacks.
 Delta Pointer aims at providing efficient buffer overflow prevention while minimizing the overhead of software 
 instrumentation, especially the branching overhead. To achieve this goal, the Delta Pointer design explicitly embed
@@ -61,3 +66,4 @@ is valid or not. In practice, the check can be performed implicitly by the exist
 out-of-bound pointer would appear to be a non-canonical pointer on x86-64. Non-canonical pointers, when dereferenced,  
 will cause the hardware MMU to raise an access exception signal to the OS, which results in the termination of the 
 process. This check is already performed by today's MMU and therefore is essentially free.
+
