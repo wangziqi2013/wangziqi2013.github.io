@@ -17,4 +17,7 @@ This paper presents Delta Pointer, a memory safety mechanism that protects the a
 Delta Pointer aims at providing efficient buffer overflow prevention while minimizing the overhead of software 
 instrumentation, especially the branching overhead. To achieve this goal, the Delta Pointer design explicitly embed
 the object bound information in the upper bits of the pointer and relies on compiler instrumentation to update
-the tag when pointers are generated or moved, but not when pointers are dereferenced. 
+the tag when pointers are generated or moved, but not when pointers are dereferenced. Compared with prior works 
+that perform pointer checks when the pointer is dereferenced, Delta Pointers demonstrate less runtime overhead 
+on SPEC benchmark due to its ability to remove the explicit bounds check and the branching overhead on pointer
+dereferences.
