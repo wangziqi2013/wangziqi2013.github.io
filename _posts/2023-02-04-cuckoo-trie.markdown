@@ -78,4 +78,9 @@ to verify that the node is indeed the one that matches the search key rather tha
 However, storing each node's key prefix in the hash table entry brings unnecessary storage 
 overhead and increases the extra work on every hash table lookup, and the paper hence proposes to not store them.
 
+To address the relocation challenge, both hash values are pre-computed and stored in the entry. When an entry
+is to be relocated, the procedure compares its current bucket number against the two hash values and selects the one
+that differs to be the destination bucket number.
+
+
 
