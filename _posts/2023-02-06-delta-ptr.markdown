@@ -13,6 +13,14 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. We can directly embed bounds information on higher bits of pointers without adding in-memory metadata tables.
+The bounds information indicates the upper bound of the current object that the pointer refers to and is 
+adjusted when the pointer is moved.
+
+
+
 **Comments:**
 
 1. The paper seems to ignore the case where a pointer is rounded up (and the round-down case is not convincing to me).
