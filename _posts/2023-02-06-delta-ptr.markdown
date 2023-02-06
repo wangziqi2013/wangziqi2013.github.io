@@ -72,3 +72,8 @@ that instrumentation should be inserted. First, when a pointer is dereferenced, 
 such that the pointer is either a valid regular pointer, or an invalid one that triggers an access fault.
 Second, when new pointers are generated from existing ones via pointer arithmetic, the tag bits of the new pointer 
 should be computed such that the bound information is still correct.
+In particular, when a pointer is assigned the value NULL, the bound of the pointer should be set to one (represented
+in two's complement as 0xFFFFFFFF), meaning that it must not be moved.
+Third, the compiler should also distinguish between the instrumented and uninstrumented domain and adjust the pointers
+when they cross the domain. For example, when a pointer is passed to shared library functions, since the library is
+not instrumented, the tag should be masked off from the pointer such that the library retains its normal behavior.
