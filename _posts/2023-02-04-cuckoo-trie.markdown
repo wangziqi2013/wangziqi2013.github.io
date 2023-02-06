@@ -73,3 +73,9 @@ prefixes that are D tokens ahead, striving to keep the memory pipeline busy and 
 
 The above naive approach needs to store a node's key prefix in each entry for two purposes. First, when the entry 
 is relocated to its alternate bucket, the key prefix is essential for computing the index of the alternate bucket.
+Second, the hash table lookup procedure also compares the key prefix stored in the entry against the lookup key
+to verify that the node is indeed the one that matches the search key rather than hash conflicts.
+However, storing each node's key prefix in the hash table entry brings unnecessary storage 
+overhead and increases the extra work on every hash table lookup, and the paper hence proposes to not store them.
+
+
