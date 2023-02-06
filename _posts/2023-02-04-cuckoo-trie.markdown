@@ -15,6 +15,12 @@ version_mgmt:
 
 **Highlights:**
 
+1. Radix trees can be represented in a hashed form with nodes being stored in the table using the prefix key it encodes.
+This storage format favors higher memory-level parallelism since the keys for the nodes on the traversal path
+can be derived from the lookup key and hence the nodes can be easily prefetched from the hash slots.
+
+2. 
+
 **Comments:**
 
 1. Why using the complicated two-step hashing scheme to compute the alternative bucket for relocation?
