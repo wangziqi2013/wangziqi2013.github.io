@@ -93,6 +93,11 @@ last token in the partial key matches the token stored in the node's hash entry.
 However, since entries may relocation in a Cuckoo hash table, storing the physical pointer to the parent node is
 infeasible. Instead, the paper proposes to assign each node a "color" which is a unique identifier of the entry 
 across the `2s` items in the two buckets that the node maps to (and hence there should be at least `2s` different
-values for colors). Child nodes then store the color of their parent nodes and are validated by comparing the 
+values for colors). Child nodes then store the colors of their parent nodes and are validated by comparing the 
 parent node's color with the color stored in the entry.
 
+Cuckoo Trie also supports path compression where a special node called the "jump node" can represent multiple tokens.
+In this case, the jump node is inserted into the hash table using the partial prefix as a regular node at its level,
+but it stores the depth of the node which is the number of tokens that must be skipped during tree traversal. 
+Accordingly, when a jump node is encountered, the lookup procedure simply skips K tokens that follow the current
+where K is the depth stored in the jump node.
