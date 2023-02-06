@@ -32,3 +32,8 @@ the other for the upper bound. Furthermore, certain designs may need more branch
 such as temporarily out-of-bound pointers and uninstrumented code where the metadata is unavailable. 
 These branch instructions are generally expensive operations for modern pipelined processors due to not only 
 the execution cycle they occupy but also the complications of branch prediction.
+
+In order to eliminate the conditional branches at pointer dereference time, the Delta Pointer design proposes to
+directly embed bounds information on higher unused bits of pointers without any accompanying metadata table
+in the main memory. As a result, the embedded metadata must contain all information that is necessary to perform
+the check and to support pointer manipulation. 
