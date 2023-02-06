@@ -40,4 +40,7 @@ the check and to support pointer manipulation. In Delta Pointer, the high 32 bit
 to storing the metadata, while the lower 32 bits still function as pointers, granting a 4GB address space to the
 process. On 64 bit architectures, such a design requires that the binary of the protected process be loaded to
 a lower address within the first 4GB of the virtual address space. All the segments of the process, including those
-protected by ASLR, must also be moved to the lower address range. 
+protected by ASLR, must also be moved to the lower address range. Virtual memory range above 4GB and below the kernel
+address space should also be reserved with user-space non-reserving mmap calls such that they will not be given out
+by the kernel on future mmap calls. On the other hand, the OS address space is unaffected and the kernel can still 
+operate with normal 64-bit addressing because Delta Pointer does not instrument the kernel code.
