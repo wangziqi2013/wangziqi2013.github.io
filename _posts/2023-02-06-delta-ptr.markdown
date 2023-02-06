@@ -25,4 +25,10 @@ dereferences.
 The paper begins by noticing that prior works on software memory protection tend to embed per-object or 
 per-type metadata at higher bits of the pointer in order to offer protection. The metadata on the higher bits are 
 used to index an in-memory metadata structure that stores the bounds information of the pointer, which is accessed 
-by compiler instrumented code when the pointer is dereferenced. 
+by compiler instrumented code when the pointer is dereferenced. While this approach offers functionally correct
+protection, they require excessive checks on every pointer dereference. In particular, the paper noted that 
+most of them require at least two conditional branches to perform the check, one for the lower bound and the 
+the other for the upper bound. Furthermore, certain designs may need more branches to deal with special cases 
+such as temporarily out-of-bound pointers and uninstrumented code where the metadata is unavailable. 
+These branch instructions are generally expensive operations for modern pipelined processors due to not only 
+the execution cycle they occupy but also the complications of branch prediction.
