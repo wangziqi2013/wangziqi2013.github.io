@@ -25,3 +25,9 @@ RCU is a lightweight synchronization primitive that has been gaining popularity 
 pointer-based kernel data structures. Compared with conventional lock-based synchronization primitives, RCU
 liberates readers of the data structure from acquiring the lock. Instead, readers can directly access the 
 data structure within the declared critical section (using API calls `rcu_read_lock` and `rcu_read_unlock`).
+However, for writers, RCU requires that writers must first copy the object it intends to modify into a newly
+allocated private object, then apply the writes to the private object, and finally publish the new object to
+future readers by atomically switching the pointer that points to the old object to the new one.
+In addition, writers must also wait for all readers to give up their reference to the old object after it is unlinked
+from the data structure before the old object can be reclaimed.
+
