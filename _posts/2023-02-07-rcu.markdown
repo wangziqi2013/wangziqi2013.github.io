@@ -17,6 +17,11 @@ This paper presents Read-Log-Update (RLU), a parallel programming paradigm that 
 as a lightweight synchronization primitive. RLU overcomes the limitations of RCU by providing a higher
 degree of writer parallelism and better flexibility. To achieve this goal, RLU adopted the timestamp-based 
 synchronization algorithm from Software Transactional Memory (STM) designs and tailored it for the specific
-scenario that RLU aims to address. Compared with RCU, RLU demonstrates higher operation throughput and better
+challenge that RLU aims to address. Compared with RCU, RLU demonstrates higher operation throughput and better
 scalability on certain commonly used data structures, which proves to be a feasible alternative to RCU for 
-concurrent data structure. 
+manipulating concurrent data structures. 
+
+RCU is a lightweight synchronization primitive that has been gaining popularity in Linux kernel for manipulating
+pointer-based kernel data structures. Compared with conventional lock-based synchronization primitives, RCU
+liberates readers of the data structure from acquiring the lock. Instead, readers can directly access the 
+data structure within the declared critical section (using API calls `rcu_read_lock` and `rcu_read_unlock`).
