@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Read-Log-Update: A Lightweight Synchronization Mechanism for Concurrent Programming"
+date:   2023-02-07 23:20:00 -0500
+categories: paper
+paper_title: "Read-Log-Update: A Lightweight Synchronization Mechanism for Concurrent Programming"
+paper_link: https://dl.acm.org/doi/10.1145/2815400.2815406
+paper_keyword: RCU; RLU; STM; Read-Log-Update
+paper_year: SOSP 2015
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
