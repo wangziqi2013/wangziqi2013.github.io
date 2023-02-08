@@ -15,4 +15,8 @@ version_mgmt:
 
 This paper presents Read-Log-Update (RLU), a parallel programming paradigm that replaces Read-Copy-Update (RCU)
 as a lightweight synchronization primitive. RLU overcomes the limitations of RCU by providing a higher
-degree of writer parallelism and better flexibility. 
+degree of writer parallelism and better flexibility. To achieve this goal, RLU adopted the timestamp-based 
+synchronization algorithm from Software Transactional Memory (STM) designs and tailored it for the specific
+scenario that RLU aims to address. Compared with RCU, RLU demonstrates higher operation throughput and better
+scalability on certain commonly used data structures, which proves to be a feasible alternative to RCU for 
+concurrent data structure. 
