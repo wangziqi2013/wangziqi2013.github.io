@@ -30,4 +30,6 @@ allocated private object, then apply the writes to the private object, and final
 future readers by atomically switching the pointer that points to the old object to the new one.
 In addition, writers must also wait for all readers to give up their reference to the old object after it is unlinked
 from the data structure before the old object can be reclaimed.
-
+This process is implemented in the API call `rcu_synchronize`, which waits for all readers, after the time point
+it is called, to experience a quiescent period where the reader does not hold any reference to any object in the
+structure. The wait time is called a grace period and is essential for the functional correctness of RCU.
