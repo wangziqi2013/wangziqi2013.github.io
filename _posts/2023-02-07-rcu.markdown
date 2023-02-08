@@ -36,4 +36,8 @@ structure. The wait time is called a grace period and is essential for the funct
 
 The paper identifies three problems with the existing RCU implementation in Linux kernel. First, RCU does not
 provide any mechanism to synchronize between writers, and therefore writers must be synchronized via some other 
-mechanism such as global spin locks, hence limiting the degree of RCU's parallelism. 
+mechanism such as global spin locks, hence limiting the degree of RCU's parallelism. Second, RCU only supports a 
+single pointer switch since the "update" step must be conducted atomically. This constraint greatly limits the 
+flexibility of RCU as many common data structures must be updated with multiple pointer swings. For example, in 
+Linux kernel, doubly linked lists must only be traversed in one direction if used with RCU to avoid seeing 
+inconsistent backward pointers. 
