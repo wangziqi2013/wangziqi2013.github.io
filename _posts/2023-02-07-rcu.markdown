@@ -33,3 +33,7 @@ from the data structure before the old object can be reclaimed.
 This process is implemented in the API call `rcu_synchronize`, which waits for all readers, after the time point
 it is called, to experience a quiescent period where the reader does not hold any reference to any object in the
 structure. The wait time is called a grace period and is essential for the functional correctness of RCU.
+
+The paper identifies three problems with the existing RCU implementation in Linux kernel. First, RCU does not
+provide any mechanism to synchronize between writers, and therefore writers must be synchronized via some other 
+mechanism such as global spin locks, hence limiting the degree of RCU's parallelism. 
