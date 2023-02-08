@@ -20,7 +20,7 @@ The bounds information indicates the upper bound of the current object that the 
 adjusted when the pointer is moved.
 
 2. We can use more than 16 bits in virtual address pointers to store metadata, at the cost of a shrunk virtual address 
-space. In this case, the application binary and all its segmented must be loaded at the lower end of the address space,
+space. In this case, the application binary and all its segments must be loaded at the lower end of the address space,
 and the rest of the unreachable address range should be disabled using mmap().
 
 **Comments:**
