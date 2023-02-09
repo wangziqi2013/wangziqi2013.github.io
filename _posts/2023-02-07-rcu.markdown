@@ -18,7 +18,10 @@ version_mgmt:
 1. The conventional RCU paradigm has limited writer parallelism, can only support one pointer swing, and needs
 to wait for grace periods.
 
-
+2. We can improve RCU by using a two-version MVCC scheme where reader-writer synchronization is realized using 
+a global timestamp clock, and writer-writer synchronization is realized with regular per-object locks.
+The grace period can also be overlapped with regular execution by lazily performing GC on the older of the two
+versions. 
 
 **Comments:**
 
