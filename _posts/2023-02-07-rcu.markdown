@@ -99,6 +99,15 @@ pass before they write back the committed objects. The grace period in such a sc
 will be accessing the objects when the write back is performed, hence preserving a consistent view of the shared memory.
 Writers wait for the grace period by repeatedly checking the reader timestamps of all other threads until all the 
 reader timestamps are greater than its writer timestamp.
-After the write back concludes, the writer then clears the header field for all objects it has modified, resets 
-the writer timestamp to infinity, and then reclaims the private object copies in the log buffer.
+After the write back concludes, the writer then clears the header field for all objects it has modified and resets 
+the writer timestamp to infinity such that no future readers can hold any reference to objects in the private log 
+buffer. Finally, after a second grace period, the writer thread reclaims the private object copies in the log buffer.
+The second grace period is implemented in the same way as in RCU (i.e., wait for every thread to experience at least
+one quiescent state). 
 
+In order to reduce the performance overhead in the writer's commit protocol, most notably, the two grace periods, the
+paper proposes two optimizations. First, the second grace period can overlap with the writer's regular execution,
+if the writer simply leaves the old log buffer alone and uses a new log buffer every time it starts a write 
+critical section. Old log buffers are periodically checked and only reclaimed after at least one grace period has 
+passed. Second, the first grace period can also be at least partially avoided by not eagerly performing the 
+write back after the atomic commit. 
