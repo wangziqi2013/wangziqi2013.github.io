@@ -73,4 +73,6 @@ However, if the pointer is not-NULL, indicating that the object is currently loc
 reader thread should then follow the pointer to locate the writer thread (using the log buffer's address) and 
 compares its read timestamp with the writer thread's writer timestamp. If the latter is larger, indicating that the
 writes happen logically after the reader threads, then the reader thread still accesses the original object. 
-
+This condition also covers the case where the writer thread has infinity as its writer timestamp.
+Otherwise, if the reader timestamp is larger, then the reader will read from the writer's private log buffer as the
+reader logically starts after the writer commits its modifications.
