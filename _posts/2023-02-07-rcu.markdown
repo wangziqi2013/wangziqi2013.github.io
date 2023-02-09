@@ -40,4 +40,6 @@ mechanism such as global spin locks, hence limiting the degree of RCU's parallel
 single pointer switch since the "update" step must be conducted atomically. This constraint greatly limits the 
 flexibility of RCU as many common data structures must be updated with multiple pointer swings. For example, in 
 Linux kernel, doubly linked lists must only be traversed in one direction if used with RCU to avoid seeing 
-inconsistent backward pointers. 
+inconsistent backward pointers. Lastly, the grace period forces writers to wait for readers, which further degrades
+write performance. In addition, as the number of cores increase, the grace period will generally become longer as 
+the writer must waiter for every reader core to go through at least one quiescent period.
