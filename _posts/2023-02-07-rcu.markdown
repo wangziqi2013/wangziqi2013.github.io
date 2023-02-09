@@ -13,10 +13,17 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. The conventional RCU paradigm has limited writer parallelism, can only support one pointer swing, and needs
+to wait for grace periods.
+
+
+
 **Comments:**
 
 1. On page 8, top left, second line, "since this clock only gets updated after RLU synchronize calls". I could not
-see how it is the case? In the pseudo-code the clock gets updated before the synchronize call. In an earlier 
+see how it is the case. In the pseudo-code the clock gets updated before the synchronize call. In an earlier 
 statement of the section, we also have "only in this case, the writer sends a
 'sync request' to the conflicting thread to force it to release
 its locks, by making the thread increment the global clock,
