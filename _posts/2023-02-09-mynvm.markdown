@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "Reducing DRAM Footprint with NVM in Facebook"
+date:   2023-02-09 14:02:00 -0500
+categories: paper
+paper_title: "Reducing DRAM Footprint with NVM in Facebook"
+paper_link: https://dl.acm.org/doi/10.1145/3190508.3190524
+paper_keyword: NVM; RockDB; NVM Cache
+paper_year: EuroSys 2018
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
