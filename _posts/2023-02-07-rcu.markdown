@@ -88,4 +88,10 @@ First, the writer thread sets its write timestamp to one plus the current global
 At this moment, the updates remain invisible to concurrent readers, as these readers will only obtain reader
 timestamps that are smaller than the writer timestamp. Next, the writer thread atomically increments the global 
 timestamp counter, publishing its writes in the private log buffer to concurrent and future readers.
+The atomic increment operation serves as the serialization point between readers and the writer. Readers that obtain
+the timestamp before this point is logically ordered before the writer, and hence will not read the objects even if
+the objects they access are locked. Readers starting after this point, on the contrary, are considered logically after
+the writer, and as a result, these readers will find their timestamps to be greater than the writer timestamp
+when they access a locked object, and therefore, will read from the writer's private log buffer.
+
 
