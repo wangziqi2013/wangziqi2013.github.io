@@ -41,5 +41,10 @@ single pointer switch since the "update" step must be conducted atomically. This
 flexibility of RCU as many common data structures must be updated with multiple pointer swings. For example, in 
 Linux kernel, doubly linked lists must only be traversed in one direction if used with RCU to avoid seeing 
 inconsistent backward pointers. Lastly, the grace period forces writers to wait for readers, which further degrades
-write performance. In addition, as the number of cores increase, the grace period will generally become longer as 
+write performance. In addition, as the number of cores increases, the grace period will generally become longer as 
 the writer must waiter for every reader core to go through at least one quiescent period.
+
+To address the above problems, the paper proposes RLU which (1) enables multiple writers to proceed as long as they
+operate on different data items; (2) allows a writer to commit multiple updates atomically even if these updates 
+require more than one pointer swings; and (3) naturally supports the deferral of memory reclamation for unlinked 
+objects, hence removing the grace period from the critical path. 
