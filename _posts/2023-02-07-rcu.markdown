@@ -110,4 +110,8 @@ paper proposes two optimizations. First, the second grace period can overlap wit
 if the writer simply leaves the old log buffer alone and uses a new log buffer every time it starts a write 
 critical section. Old log buffers are periodically checked and only reclaimed after at least one grace period has 
 passed. Second, the first grace period can also be at least partially avoided by not eagerly performing the 
-write back after the atomic commit. 
+write back after the atomic commit. Instead, the writer can simply let the modified object stay in its private 
+log buffer indefinitely until another writer attempts to lock the object for write. In this case, the second writer
+will force the first writer to perform the write back after the grace period has passed. Since the first writer
+only performs the write back when necessary, the wasted cycles on waiting for the grace period are likely
+to dramatically decrease as the grace period will likely overlap will the writers execution after the critical section.
