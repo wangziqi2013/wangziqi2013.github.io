@@ -94,4 +94,8 @@ the objects they access are locked. Readers starting after this point, on the co
 the writer, and as a result, these readers will find their timestamps to be greater than the writer timestamp
 when they access a locked object, and therefore, will read from the writer's private log buffer.
 
+After atomically committing the writes, writer threads, just like in RCU, need to wait for the grace period to
+pass before they write back the committed objects. The grace period in such a scenario guarantees that no readers
+will be accessing the objects when the write back is performed, hence preserving a consistent view of the shared memory.
+
 
