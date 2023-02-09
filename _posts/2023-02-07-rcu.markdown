@@ -97,5 +97,8 @@ when they access a locked object, and therefore, will read from the writer's pri
 After atomically committing the writes, writer threads, just like in RCU, need to wait for the grace period to
 pass before they write back the committed objects. The grace period in such a scenario guarantees that no readers
 will be accessing the objects when the write back is performed, hence preserving a consistent view of the shared memory.
-
+Writers wait for the grace period by repeatedly checking the reader timestamps of all other threads until all the 
+reader timestamps are greater than its writer timestamp.
+After the write back concludes, the writer then clears the header field for all objects it has modified, resets 
+the writer timestamp to infinity, and then reclaims the private object copies in the log buffer.
 
