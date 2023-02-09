@@ -59,4 +59,6 @@ i.e., if the pointer value is NULL, then the object does not have a private copy
 writers. Consequently, readers can directly access the object without any synchronization.
 In order to support atomic commits of multiple written objects, RCU also has a global lock, which is implemented as 
 a shared timestamp counter. As we will see later, the counter indicates the current most up-to-date logical snapshot.
-
+Correspondingly, every thread also has a writer timestamp, which indicates the snapshot that the writer generates.
+This writer timestamp is initialized to infinity when a thread is created, meaning that the thread does not hold
+any memory snapshot in its private log buffer.
