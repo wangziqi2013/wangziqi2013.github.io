@@ -13,6 +13,15 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+1. On page 8, top left, second line, "since this clock only gets updated after RLU synchronize calls". I could not
+see how it is the case? In the pseudo-code the clock gets updated before the synchronize call. In an earlier 
+statement of the section, we also have "only in this case, the writer sends a
+'sync request' to the conflicting thread to force it to release
+its locks, by making the thread increment the global clock,
+execute RLU synchronize, write back, and unlock".
+
 This paper presents Read-Log-Update (RLU), a parallel programming paradigm that replaces Read-Copy-Update (RCU)
 as a lightweight synchronization primitive. RLU overcomes the limitations of RCU by providing a higher
 degree of writer parallelism and better flexibility. To achieve this goal, RLU adopted the timestamp-based 
