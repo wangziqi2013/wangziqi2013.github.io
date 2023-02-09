@@ -47,4 +47,6 @@ the writer must waiter for every reader core to go through at least one quiescen
 To address the above problems, the paper proposes RLU which (1) enables multiple writers to proceed as long as they
 operate on different data items; (2) allows a writer to commit multiple updates atomically even if these updates 
 require more than one pointer swings; and (3) naturally supports the deferral of memory reclamation for unlinked 
-objects, hence removing the grace period from the critical path. 
+objects, hence removing the grace period from the critical path. Overall, RLU is potentially more efficient than RCU
+especially on write-dominant workloads due to its higher degree of writer parallelism and lower overhead of 
+memory reclamation.
