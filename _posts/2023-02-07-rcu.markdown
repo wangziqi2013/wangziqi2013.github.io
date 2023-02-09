@@ -84,5 +84,8 @@ the pointer to the private copy in the header field. If locking fails, then the 
 locked objects and retry.
 After the writer thread completes its critical section, the thread will then atomically commit all its updates
 to concurrent and future readers as follows.
-
+First, the writer thread sets its write timestamp to one plus the current global timestamp. 
+At this moment, the updates remain invisible to concurrent readers, as these readers will only obtain reader
+timestamps that are smaller than the writer timestamp. Next, the writer thread atomically increments the global 
+timestamp counter, publishing its writes in the private log buffer to concurrent and future readers.
 
