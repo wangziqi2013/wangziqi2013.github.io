@@ -76,3 +76,13 @@ writes happen logically after the reader threads, then the reader thread still a
 This condition also covers the case where the writer thread has infinity as its writer timestamp.
 Otherwise, if the reader timestamp is larger, then the reader will read from the writer's private log buffer as the
 reader logically starts after the writer commits its modifications.
+
+Writer threads, when they modify an object, they need to first allocate the object in its private log buffer,
+and then lock the object by updating its header pointer field. Multiple objects can be modified and added to the log 
+buffer, unlike in RCU. In order to lock an object, the locker thread uses atomic Compare-and-Swap instruction to install
+the pointer to the private copy in the header field. If locking fails, then the writer should relinquish all previously
+locked objects and retry.
+After the writer thread completes its critical section, the thread will then atomically commit all its updates
+to concurrent and future readers as follows.
+
+
