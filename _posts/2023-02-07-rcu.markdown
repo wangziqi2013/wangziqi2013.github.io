@@ -54,4 +54,9 @@ memory reclamation.
 We next describe the design of RLU in more detail. In RLU, every thread has a private log buffer that holds copies 
 of shared objects when they are being modified for the first time by the critical section. Objects in the log buffer
 will also be published to other readers when the writer completes as we show later. Each shared object has a header
-that contains a pointer to the copy of the private object in the log buffer. 
+that contains a pointer to the copy of the private object in the log buffer. This pointer is also treated as a lock,
+i.e., if the pointer value is NULL, then the object does not have a private copy in the log buffer of one of the 
+writers. Consequently, readers can directly access the object without any synchronization.
+In order to support atomic commits of multiple written objects, RCU also has a global lock, which is implemented as 
+a shared timestamp counter. As we will see later, the counter indicates the current most up-to-date logical snapshot.
+
