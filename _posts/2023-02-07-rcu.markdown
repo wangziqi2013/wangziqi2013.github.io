@@ -59,6 +59,14 @@ i.e., if the pointer value is NULL, then the object does not have a private copy
 writers. Consequently, readers can directly access the object without any synchronization.
 In order to support atomic commits of multiple written objects, RCU also has a global lock, which is implemented as 
 a shared timestamp counter. As we will see later, the counter indicates the current most up-to-date logical snapshot.
-Correspondingly, every thread also has a writer timestamp, which indicates the snapshot that the writer generates.
-This writer timestamp is initialized to infinity when a thread is created, meaning that the thread does not hold
-any memory snapshot in its private log buffer.
+Correspondingly, every writer thread also has a writer timestamp, which indicates the snapshot that the writer 
+generates. This writer timestamp is initialized to infinity when a thread is created, meaning that the thread does 
+not hold any memory snapshot in its private log buffer.
+Reader threads, on the other hand, keep a reader timestamp to indicate the memory snapshot it is bound to access. 
+
+Reader threads in RLU delimit the read critical section using the same API as in RCU. At the beginning of the 
+read critical section, the thread reads the value of the global timestamp counter and saves it as the read
+timestamp. When the reader intends to access
+an object, the access wrapper function first reads the pointer value from the object header. If the pointer is NULL,
+the reader directly accesses the object as the object is the most up-to-date version.
+
