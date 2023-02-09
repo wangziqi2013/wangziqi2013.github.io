@@ -69,4 +69,8 @@ read critical section, the thread reads the value of the global timestamp counte
 timestamp. When the reader intends to access
 an object, the access wrapper function first reads the pointer value from the object header. If the pointer is NULL,
 the reader directly accesses the object as the object is the most up-to-date version.
+However, if the pointer is not-NULL, indicating that the object is currently locked by another writer thread, the 
+reader thread should then follow the pointer to locate the writer thread (using the log buffer's address) and 
+compares its read timestamp with the writer thread's writer timestamp. If the latter is larger, indicating that the
+writes happen logically after the reader threads, then the reader thread still accesses the original object. 
 
