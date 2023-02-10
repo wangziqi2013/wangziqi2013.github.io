@@ -12,3 +12,9 @@ htm_cd:
 htm_cr:
 version_mgmt:
 ---
+
+This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enables the speculative execution of 
+functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
+determinism during chained invocation, i.e., with high probabilities, chained function execution will
+follow the same path given the same invocation history, and the outputs of a single function will be identical
+given the same inputs. 
