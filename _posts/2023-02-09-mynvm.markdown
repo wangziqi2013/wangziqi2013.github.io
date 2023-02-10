@@ -22,3 +22,7 @@ while offering a significant reduction in storage device expenses.
 In addition, compared with the unmodified RocksDB using NVM as the caching layer, MyNVM demonstrates a clear 
 performance advantage in both average latency and P99 latency.
 
+MyNVM is built upon RocksDB, a key-value store engine that features high-performance writes by using log-structured
+merge trees. RocksDB consists of two levels of storage. The first level is the in-memory index mapping keys
+to values, which is implemented as a high-performance skip list. Most requests are satisfied by the in-memory index 
+and hence do not need to query the next level. 
