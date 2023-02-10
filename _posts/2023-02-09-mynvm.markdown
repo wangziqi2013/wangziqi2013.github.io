@@ -47,4 +47,9 @@ at least one file is picked from that layer and then merged into the next layer 
 RocksDB strives to keep the size of each layer within a certain threshold, and smaller layers (closer to the main 
 memory) have smaller sizes than bigger layers to facilitate fast searches.
 Key-value entries, once they migrate to the disk, become immutable. Future updates on these entries will be committed
-in a log-structured manner.
+in a log-structured manner. Stale entries can be naturally identified and removed during the merge process.
+
+When RocksDB is deployed in production, DRAM is also used as a write-through block caching layer for holding 
+recently used data from the files in block granularity. However, as NVM devices emerge as a cheaper (price per GB) 
+but slower alternative to DRAM, it seems feasible to at least replace part of the DRAM cache with block-interface
+NVM devices as the second caching layer below DRAM. 
