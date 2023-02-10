@@ -13,6 +13,13 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. RocksDB is based on log-structured merge trees and it can benefit from adding a DRAM-based block cache that stores 
+data blocks from the persistent files. However, if we replace the caching layer with block-interface NVM, performance
+will degrade due to (1) Large block sizes causing excessive bandwidth consumption; (2) Repeated evictions causing 
+shortened NVM lifetime; and (3) The software path of interrupt-based I/O becoming the bottleneck.
+
 This paper presents MyNVM, a caching layer design for RocksDB that leverages NVM as a fast alternative to DRAM.
 To goal of MyNVM is to maintain an acceptable latency with RocksDB key-value store while replacing the DRAM caching
 layer with cheaper but slower block-NVM storage. MyNVM achieves the goal by carefully tuning the engineering 
