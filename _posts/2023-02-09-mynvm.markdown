@@ -53,3 +53,9 @@ When RocksDB is deployed in production, DRAM is also used as a write-through blo
 recently used data from the files in block granularity. However, as NVM devices emerge as a cheaper (price per GB) 
 but slower alternative to DRAM, it seems feasible to at least replace part of the DRAM cache with block-interface
 NVM devices as the second caching layer below DRAM. 
+To study the feasibility of using NVM to build a level-2 caching layer, the authors conducted a few experiments and
+identified several challenges. First, NVM devices, despite being much faster than SSD, are still bandwidth-limited,
+offering around 2GB/s for reads. Besides, the bandwidth will drop further when reads and writes interleave, which 
+aggravates the bandwidth problem. This performance characteristic is detrimental to caching as RocksDB uses relatively
+large block size (16KB). As a result, when block accesses hit the NVM layer, the access will bring an entire 16KB 
+block from the NVM, which can consume excessive bandwidth and lower the performance.
