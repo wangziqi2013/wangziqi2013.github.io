@@ -65,3 +65,11 @@ many of the evicted blocks being cold. Storing cold blocks is unnecessary and sh
 which should hence be avoided. Lastly, as NVM devices are much faster than disks and SSDs, the conventional 
 interrupt-based OS interface for accessing these devices becomes the performance bottleneck due to the relatively
 high overhead of serving the interrupt.
+
+To address these challenges, the paper proposes a few techniques which we describe as follows. First, to alleviate 
+the bandwidth problem with big block sizes, the paper proposes to use smaller 4KB blocks for storing the 
+key-value pairs. However, reducing block size can affect RocksDB's performance in several ways. First, 
+the per-file index stores the first key in each block of the file. When the block size is reduced from 16KB to 4KB,
+the number of keys in the index will also quadruple, which increases both the storage cost and runtime lookup overhead.
+
+
