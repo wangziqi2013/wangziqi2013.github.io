@@ -59,3 +59,7 @@ offering around 2GB/s for reads. Besides, the bandwidth will drop further when r
 aggravates the bandwidth problem. This performance characteristic is detrimental to caching as RocksDB uses relatively
 large block size (16KB). As a result, when block accesses hit the NVM layer, the access will bring an entire 16KB 
 block from the NVM, which can consume excessive bandwidth and lower the performance.
+Second, NVM devices can only ensure a limited number of writes before they become unreliable. However, when used
+as a caching layer, these devices are expected to receive a high amount of eviction traffic from the DRAM cache, with 
+many of the evicted blocks being cold. Storing cold blocks is unnecessary and shortens the lifetime of the device,
+which should hence be avoided. 
