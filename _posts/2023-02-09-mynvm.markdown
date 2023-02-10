@@ -17,5 +17,8 @@ This paper presents MyNVM, a caching layer design for RocksDB that leverages NVM
 To goal of MyNVM is to maintain an acceptable latency with RocksDB key-value store while replacing the DRAM caching
 layer with cheaper but slower block-NVM storage. MyNVM achieves the goal by carefully tuning the engineering 
 aspects of RocksDB storage layer in order to match the performance characteristics of NVM devices. 
-
+Consequently, MyNVM suffers only marginal slowdowns compared with systems using only DRAM as the caching layer
+while offering a significant reduction in storage device expenses.
+In addition, compared with the unmodified RocksDB using NVM as the caching layer, MyNVM demonstrates a clear 
+performance advantage in both average latency and P99 latency.
 
