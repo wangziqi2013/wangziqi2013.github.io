@@ -90,3 +90,9 @@ blocks instead of the more appealing 4KB because empirical results show that man
 to approximately to around 4KB, indicating that they can be conveniently laid out on the NVM device by giving each
 compressed block its physical page while minimizing the internal fragmentation caused by zero padding.
 
+To solve the second challenge, i.e., device lifetime issue with frequent evictions from the DRAM level, the 
+paper proposes to adopt an admission policy that only selectively caches evicted blocks that are likely to be
+accessed in the future. The admission policy is implemented as a simulated LRU list for the NVM caching layer
+over the access trace. When a block is evicted from the DRAM layer, the simulated LRU list determines whether or
+not the block should be inserted into the NVM layer. If the block is in the LRU list, then it will be inserted
+into the NVM cache, and otherwise, it is directly dropped (recall that the caching layers are write-through).
