@@ -81,4 +81,12 @@ causes the compression ratio to drop as the compressing algorithm now needs to g
 for every block. To address this problem, instead of generating a separate dictionary for each block, the 
 paper proposes to generate a shared dictionary by sampling the content
 of all blocks in a file when they are written back, after which compression is performed using the shared dictionary.
-The third problem is block alignment. 
+The third problem is block alignment. Since blocks are stored in compressed form and the compressed size of different 
+blocks can vary significantly, the blocks need to be stored aligned to the physical block boundary of the NVM
+device to minimize read amplification, i.e., the phenomenon that multiple physical blocks are accessed in order to
+serve a single misaligned block. However, the compressed size of 4KB blocks is usually smaller than 4KB. If these blocks
+are stored compactly, many of them would cause read amplification. To solve this problem, the paper proposes using 6KB
+blocks instead of the more appealing 4KB because empirical results show that many 6KB blocks can be compressed
+to approximately to around 4KB, indicating that they can be conveniently laid out on the NVM device by giving each
+compressed block its physical page while minimizing the internal fragmentation caused by zero padding.
+
