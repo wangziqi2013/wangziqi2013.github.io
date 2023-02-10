@@ -96,3 +96,10 @@ accessed in the future. The admission policy is implemented as a simulated LRU l
 over the access trace. When a block is evicted from the DRAM layer, the simulated LRU list determines whether or
 not the block should be inserted into the NVM layer. If the block is in the LRU list, then it will be inserted
 into the NVM cache, and otherwise, it is directly dropped (recall that the caching layers are write-through).
+
+The address the last challenge, the paper proposes to use polling instead of interrupts when performing I/O on the
+NVM device. On one hand, polling minimizes the software overhead for interrupt handling and kernel traps. On the
+other hand, however, polling itself may also potentially waste processor cycles if conducted too frequently.
+To prevent polling from becoming a performance burden, the paper proposes that the polling should only start
+after half of the mean I/O latency has passed, which is generally several microseconds.
+RocksDB will also monitor the latency of past I/O requests and update the polling delay accordingly.
