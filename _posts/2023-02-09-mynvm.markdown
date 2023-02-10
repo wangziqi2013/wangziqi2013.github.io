@@ -20,6 +20,10 @@ data blocks from the persistent files. However, if we replace the caching layer 
 will degrade due to (1) Large block sizes causing excessive bandwidth consumption; (2) Repeated evictions causing 
 shortened NVM lifetime; and (3) The software path of interrupt-based I/O becoming the bottleneck.
 
+2. We can address these issues by (1) using smaller block sizes, with a two-level per-file indexing, shared dictionary
+compression algorithm, and block placement optimized for alignment; (2) admission control algorithm leveraging a 
+simulated LRU list; and (3) using polling-based I/O instead of interrupts.
+
 This paper presents MyNVM, a caching layer design for RocksDB that leverages NVM as a fast alternative to DRAM.
 To goal of MyNVM is to maintain an acceptable latency with RocksDB key-value store while replacing the DRAM caching
 layer with cheaper but slower block-NVM storage. MyNVM achieves the goal by carefully tuning the engineering 
