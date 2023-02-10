@@ -1,0 +1,14 @@
+---
+layout: paper-summary
+title:  "SpecFaaS: Accelerating Serverless Applications with Speculative Function Execution"
+date:   2023-02-10 18:06:00 -0500
+categories: paper
+paper_title: "SpecFaaS: Accelerating Serverless Applications with Speculative Function Execution"
+paper_link: N/A
+paper_keyword: Serverless; Speculative Execution; SpecFaaS
+paper_year: HPCA 2023
+rw_set:
+htm_cd:
+htm_cr:
+version_mgmt:
+---
