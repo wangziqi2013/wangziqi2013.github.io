@@ -67,12 +67,18 @@ interrupt-based OS interface for accessing these devices becomes the performance
 high overhead of serving the interrupt.
 
 To address these challenges, the paper proposes a few techniques which we describe as follows. First, to alleviate 
-the bandwidth problem with big block sizes, the paper proposes to use smaller 4KB blocks for storing the 
+the bandwidth problem with big block sizes, the paper proposes to use smaller blocks for storing the 
 key-value pairs. However, reducing block size can affect RocksDB's performance in several ways. First, 
-the per-file index stores the first key in each block of the file. When the block size is reduced from 16KB to 4KB,
+the per-file index stores the first key in each block of the file. For example, when the block size is reduced 
+from 16KB to 4KB,
 the number of keys in the index will also quadruple, which increases both the storage cost and runtime lookup overhead.
 To deal with the problem, the paper proposes to divide the index into multiple blocks that can be fetched to
 the caching layer separately and also add an extra level of indexing over the current index. This two-level indexing 
 scheme enables the index to be partially cached and accelerates lookup operations.
-
-
+The second problem with using a smaller block size is its interaction with compression. 
+RocksDB employs compression for blocks when they are stored in the second level. Changing block size, however, 
+causes the compression ratio to drop as the compressing algorithm now needs to generate a separate dictionary 
+for every block. To address this problem, instead of generating a separate dictionary for each block, the 
+paper proposes to generate a shared dictionary by sampling the content
+of all blocks in a file when they are written back, after which compression is performed using the shared dictionary.
+The third problem is block alignment. 
