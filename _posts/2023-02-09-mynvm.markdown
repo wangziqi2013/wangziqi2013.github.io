@@ -33,3 +33,7 @@ Data blocks within a file are 16KB in size and they just contain key-value pairs
 The bloom filter enables quick searches of the file. The index is constructed using the first key of each block
 and is the entry point of key lookups within the file.
 
+Key insertions in RocksDB are performed directly on the main memory level and are hence very fast. 
+Key lookups will first query the in-memory index structure. If the query misses, then lookups will
+turn to the second level. For each layer in the level, the procedure first performs a binary search
+across the files in the layer. 
