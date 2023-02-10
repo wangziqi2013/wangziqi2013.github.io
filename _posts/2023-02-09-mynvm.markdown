@@ -62,4 +62,6 @@ block from the NVM, which can consume excessive bandwidth and lower the performa
 Second, NVM devices can only ensure a limited number of writes before they become unreliable. However, when used
 as a caching layer, these devices are expected to receive a high amount of eviction traffic from the DRAM cache, with 
 many of the evicted blocks being cold. Storing cold blocks is unnecessary and shortens the lifetime of the device,
-which should hence be avoided. 
+which should hence be avoided. Lastly, as NVM devices are much faster than disks and SSDs, the conventional 
+interrupt-based OS interface for accessing these devices becomes the performance bottleneck due to the relatively
+high overhead of serving the interrupt.
