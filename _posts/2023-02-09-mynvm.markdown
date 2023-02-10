@@ -44,4 +44,7 @@ the next. The lookup fails if the key is not found in any of the layers.
 As the in-memory index structure is becoming larger, key-value entries will be gradually migrated to the second level
 by generating a new file containing the entries from the memory index. Similarly, when a layer becomes overly large,
 at least one file is picked from that layer and then merged into the next layer just like how LSM trees are merged. 
-
+RocksDB strives to keep the size of each layer within a certain threshold, and smaller layers (closer to the main 
+memory) have smaller sizes than bigger layers to facilitate fast searches.
+Key-value entries, once they migrate to the disk, become immutable. Future updates on these entries will be committed
+in a log-structured manner.
