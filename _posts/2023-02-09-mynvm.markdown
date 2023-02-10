@@ -71,5 +71,8 @@ the bandwidth problem with big block sizes, the paper proposes to use smaller 4K
 key-value pairs. However, reducing block size can affect RocksDB's performance in several ways. First, 
 the per-file index stores the first key in each block of the file. When the block size is reduced from 16KB to 4KB,
 the number of keys in the index will also quadruple, which increases both the storage cost and runtime lookup overhead.
+To deal with the problem, the paper proposes to divide the index into multiple blocks that can be fetched to
+the caching layer separately and also add an extra level of indexing over the current index. This two-level indexing 
+scheme enables the index to be partially cached and accelerates lookup operations.
 
 
