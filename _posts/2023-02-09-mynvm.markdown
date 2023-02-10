@@ -41,3 +41,7 @@ block after checking with the bloom filter. Finally, the procedure performs anot
 This process can repeat multiple times as the lookup process misses in the previous layer and proceeds to
 the next. The lookup fails if the key is not found in any of the layers. 
 
+As the in-memory index structure is becoming larger, key-value entries will be gradually migrated to the second level
+by generating a new file containing the entries from the memory index. Similarly, when a layer becomes overly large,
+at least one file is picked from that layer and then merged into the next layer just like how LSM trees are merged. 
+
