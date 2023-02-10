@@ -17,4 +17,7 @@ This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enab
 functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
 determinism during chained invocation, i.e., with high probabilities, chained function execution will
 follow the same path given the same invocation history, and the outputs of a single function will be identical
-given the same inputs. 
+given the same inputs. To leverage such high degrees of determinism, SpecFaaS speculatively executes functions in
+a call chain and buffers their outputs until all the predecessors of the functions complete non-speculatively.
+Consequently, SpecFaaS can achieve much shorter overall execution latency in most cases as it effectively overlaps
+the execution of dependent functions, which will be serialized without SpecFaaS.
