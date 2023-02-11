@@ -64,4 +64,8 @@ The sequence table stores the control flow of the function, which can be either 
 function specification or implicitly inferred from the runtime execution trace. When the first function with a chain
 is invoked, the platform's scheduler can speculatively invoke functions following the control flow graph. 
 To deal with branches, the scheduler also actively predict the outcome of branches using the past execution history.
-As stated earlier, branches in chained functions are highly biased given the execution history. 
+As stated earlier, branches in chained functions are highly biased given the execution history. Therefore, for 
+each branching node in the control flow, the scheduler maintains the Branch Predictor metadata which is
+a mapping between execution history and the frequencies of branch outcomes. Branch prediction is then performed 
+by using the current dynamic execution history to query the map and then selecting the path with the highest 
+probability. The branch predictor metadata is also updated when functions commit and become non-speculative.
