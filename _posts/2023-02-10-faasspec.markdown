@@ -75,4 +75,10 @@ The Memoization Table addresses the data dependency problem between consecutive 
 When a function is speculatively invoked, if its input depends on the output of its predecessors, then the 
 input will be provided by querying the Memoization Table with the input of the predecessor function, which
 itself may be from the Memoization Table of another function.
-
+When the function is committed, the non-speculative input and output are also inserted into the Memoization Table 
+for future reference.
+An easy case that is worth mentioning is when the function is pure, meaning that it has no side-effect and that the 
+output of the function entirely depends on its input. In this case, the function need not be executed until the 
+validation point. If validation succeeds, i.e., the actual input of the function matches the speculative input,
+then the function is completed without consuming any resource. However, if validation fails, the function is 
+still executed non-speculatively.
