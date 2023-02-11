@@ -44,3 +44,9 @@ Second, both the control and data dependency pattern is highly deterministic, me
 be the same when a branch occurs given the same execution history till the branching point, and that the output of a
 function will also likely be the same given the same input. 
 This observation indicates that history-based branch prediction and memorization would both work well.
+Lastly, many functions do not frequently read or write global states, and even if they do, they typically
+do not access the same location in the global state.
+This observation suggests that the chained functions are unlikely to collide with each other via global state
+access, and therefore, executing them out-of-order would be a feasible choice.
+In addition, most functions do not have side effects that may prevent speculative execution. The most common types
+of side effects are global state accesses, temporary file creation, and sending HTTP requests. 
