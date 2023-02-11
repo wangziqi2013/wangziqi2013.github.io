@@ -13,6 +13,12 @@ htm_cr:
 version_mgmt:
 ---
 
+**Highlights:**
+
+1. Chained function execution is mostly deterministic on control (given the same invocation history) and data 
+dependency (given the same input). We can leverage these characteristics to speculatively execute functions using
+branch prediction and input prediction. 
+
 **Comments:**
 
 
