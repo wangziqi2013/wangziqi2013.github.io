@@ -40,3 +40,7 @@ a minor fraction of the total invocation latency even on warm starts (it becomes
 major part of the overhead being the chained invocation (a.k.a. transfer function) and platform overhead. It is 
 therefore more beneficial to optimize the entire process via overlapping rather than simply making execution faster
 which can only yield marginal improvement. 
+Second, both the control and data dependency pattern is highly deterministic, meaning that the control flow will likely
+be the same when a branch occurs given the same execution history till the branching point, and that the output of a
+function will also likely be the same given the same input. 
+This observation indicates that history-based branch prediction and memorization would both work well.
