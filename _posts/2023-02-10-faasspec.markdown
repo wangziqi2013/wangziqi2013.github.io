@@ -13,6 +13,10 @@ htm_cr:
 version_mgmt:
 ---
 
+**Comments:**
+
+
+
 This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enables the speculative execution of 
 functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
 determinism during chained invocation, i.e., with high probabilities, chained function execution will
@@ -100,3 +104,9 @@ the successor is forced to be squashed. Similarly, when a function is about to r
 its predecessors from the closest one to the more remote ones (on the control flow graph) for possible data 
 forwarding. When a function successfully commits, it also commits all its Data Buffer items to the global storage
 by writing them back.
+
+SpecFaaS commits functions in order. A function can successfully commit after all its predecessors have committed
+if the branch prediction result matches the actual direction and inputs are correctly predicted.
+If the function fails validation, then the function itself plus all of its successor functions will be squashed by the 
+platform. After the function is squashed, it can be restarted in either speculation mode or serial mode depending
+on the configuration.
