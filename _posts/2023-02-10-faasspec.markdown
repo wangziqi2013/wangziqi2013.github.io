@@ -116,3 +116,8 @@ execution, the platform will start the second function speculatively before its 
 However, for implicit chaining, the platform will not speculatively execute the caller function past the 
 invocation point, since in the case of implicit chaining, the caller function typically depends on the 
 data returned by the callee.
+
+SpecFaaS also handles system calls that can introduce side effects. The most prominent of them are socket send
+and file operations. To avoid these side effects, which cannot be easily squashed once they occur, from being 
+observed during speculative execution, SpecFaaS instruments the user-space system call interface of these functions 
+and buffers the operation until the function commits. 
