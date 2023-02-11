@@ -80,5 +80,10 @@ for future reference.
 An easy case that is worth mentioning is when the function is pure, meaning that it has no side-effect and that the 
 output of the function entirely depends on its input. In this case, the function need not be executed until the 
 validation point. If validation succeeds, i.e., the actual input of the function matches the speculative input,
-then the function is completed without consuming any resource. However, if validation fails, the function is 
+then the function is completed without consuming any resources. However, if validation fails, the function is 
 still executed non-speculatively.
+
+The third component is the Data Buffer, which serves two purposes. First, the data buffer temporarily holds global
+state writes by speculative functions such that they are not committed to the visible global state until the
+function commit point. Second, the Data Buffer also detects conflicts between functions. In SpecFaaS, functions conflict
+via Write-after-Read (WAR) and Write-after-Write (WAW) dependencies. 
