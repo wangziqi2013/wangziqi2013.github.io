@@ -26,6 +26,10 @@ SpecFaaS aims at optimizing chained execution of serverless functions in FaaS pl
 is divided into basic execution units called "functions", and each function can be separately invoked either locally
 or via RPC. The FaaS platform is responsible for managing the resource provisioning, scheduling, and the scaling
 aspects of functions, liberating programmers from such tasks. FaaS platforms support chained function execution
-in two fashions. 
+in two fashions. In the first fashion, the control flow between functions is explicitly expressed using a procedure
+annotation language which enables common control flow nodes, such as conditional branches and data dependencies to
+be expressed and understood by the platform. In this case, the platform functions as a function scheduler, which
+selects the next function to execute when the previous one completes according to the control flow graph.
+
 
 
