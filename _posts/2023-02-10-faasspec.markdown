@@ -34,4 +34,9 @@ In the second fashion, control flow information is expressed implicitly during r
 hierarchical view of execution where a callee returns to the caller and resumes caller execution, rather than
 giving control to the scheduler. 
 
-
+To better understand the behavior of chained function execution, the paper conducted experimentation using three
+serverless benchmarks that use function chaining. The first observation is that function execution only constitutes 
+a minor fraction of the total invocation latency even on warm starts (it becomes much worse for cold starts), with the
+major part of the overhead being the chained invocation (a.k.a. transfer function) and platform overhead. It is 
+therefore more beneficial to optimize the entire process via overlapping rather than simply making execution faster
+which can only yield marginal improvement. 
