@@ -30,7 +30,10 @@ logical predecessor of B and two global data items X and Y. If A writes X, B rea
 B will be squashed due to the WAR conflict on data item Y.
 However, before A writes Y, function B has already seen an inconsistent state where X is modified but Y is not.
 This inconsistent state will never occur during a serial execution and therefore would incur undefined behavior.
-
+In practice, such inconsistent reads may be harmless. But in the worse case, they can also cause serious problems
+such as infinite loops, invalid pointers, etc.
+This problem has been studied thoroughly under the context of HTM Optimistic Concurrency Control algorithms.
+Since SpecFaaS essentially adopts the HTM algorithms for function execution, the same issue would also arise here.
 
 This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enables the speculative execution of 
 functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
