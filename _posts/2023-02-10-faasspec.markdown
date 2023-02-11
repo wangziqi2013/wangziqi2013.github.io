@@ -54,4 +54,7 @@ of side effects are global state accesses, temporary file creation, and sending 
 Based on the above observations, SpecFaaS implements a speculative function execution mechanism where functions are
 started before their predecessors are completed. In this novel paradigm, functions that are in the same invocation
 chain can be executed out-of-order rather than being serially invoked by the platform, overlapping their execution
-and hence significantly reducing the end-to-end latency.
+and hence significantly reducing the end-to-end latency. Similar to speculative execution on hardware, functions
+must be validated after execution in order after they are completed in order to ensure that the control and 
+data dependencies are not violated. If a function is validated successfully, it commits all global state modifications 
+and exits.
