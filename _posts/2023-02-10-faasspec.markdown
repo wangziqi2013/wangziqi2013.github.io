@@ -19,9 +19,13 @@ version_mgmt:
 dependency (given the same input). We can leverage these characteristics to speculatively execute functions using
 branch prediction and input prediction. 
 
+2. The actual algorithm for speculative execution resembles how the processor schedules basic blocks and how
+Hardware Transactional Memory schedules transactions. In fact, functions in this context are just similar to
+the concept of basic blocks or transactions.
+
 **Comments:**
 
-
+1. The conflict detection protocol
 
 This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enables the speculative execution of 
 functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
