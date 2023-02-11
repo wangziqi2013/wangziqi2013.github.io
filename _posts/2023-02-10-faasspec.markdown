@@ -30,6 +30,8 @@ in two fashions. In the first fashion, the control flow between functions is exp
 annotation language which enables common control flow nodes, such as conditional branches and data dependencies to
 be expressed and understood by the platform. In this case, the platform functions as a function scheduler, which
 selects the next function to execute when the previous one completes according to the control flow graph.
-
+In the second fashion, control flow information is expressed implicitly during runtime invocation, forming a 
+hierarchical view of execution where a callee returns to the caller and resumes caller execution, rather than
+giving control to the scheduler. 
 
 
