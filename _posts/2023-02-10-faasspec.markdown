@@ -21,3 +21,11 @@ given the same inputs. To leverage such high degrees of determinism, SpecFaaS sp
 a call chain and buffers their outputs until all the predecessors of the functions complete non-speculatively.
 Consequently, SpecFaaS can achieve much shorter overall execution latency in most cases as it effectively overlaps
 the execution of dependent functions, which will be serialized without SpecFaaS.
+
+SpecFaaS aims at optimizing chained execution of serverless functions in FaaS platforms. In FaaS, an application
+is divided into basic execution units called "functions", and each function can be separately invoked either locally
+or via RPC. The FaaS platform is responsible for managing the resource provisioning, scheduling, and the scaling
+aspects of functions, liberating programmers from such tasks. FaaS platforms support chained function execution
+in two fashions. 
+
+
