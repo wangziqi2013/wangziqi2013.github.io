@@ -25,7 +25,12 @@ the concept of basic blocks or transactions.
 
 **Comments:**
 
-1. The conflict detection protocol
+1. The conflict detection protocol may cause inconsistent reads. Imagine two functions A and B with A being the
+logical predecessor of B and two global data items X and Y. If A writes X, B reads X and Y, then A writes Y, eventually,
+B will be squashed due to the WAR conflict on data item Y.
+However, before A writes Y, function B has already seen an inconsistent state where X is modified but Y is not.
+This inconsistent state will never occur during a serial execution and therefore would incur undefined behavior.
+
 
 This paper proposes SpecFaaS, a function-as-a-service (FaaS) framework that enables the speculative execution of 
 functions to speed up chained invocation. SpecFaaS is motivated by the high degree of both control and data 
