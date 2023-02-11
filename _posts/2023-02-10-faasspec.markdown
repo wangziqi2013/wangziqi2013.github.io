@@ -110,3 +110,9 @@ if the branch prediction result matches the actual direction and inputs are corr
 If the function fails validation, then the function itself plus all of its successor functions will be squashed by the 
 platform. After the function is squashed, it can be restarted in either speculation mode or serial mode depending
 on the configuration.
+
+Implicit function chaining can be handled similarly, i.e., if a function invokes another function during past 
+execution, the platform will start the second function speculatively before its invocation point. 
+However, for implicit chaining, the platform will not speculatively execute the caller function past the 
+invocation point, since in the case of implicit chaining, the caller function typically depends on the 
+data returned by the callee.
