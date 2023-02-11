@@ -58,3 +58,10 @@ and hence significantly reducing the end-to-end latency. Similar to speculative 
 must be validated after execution in order after they are completed in order to ensure that the control and 
 data dependencies are not violated. If a function is validated successfully, it commits all global state modifications 
 and exits.
+
+SpecFaaS consists of three major components. The first component is the Sequence Table and Branch Predictor.
+The sequence table stores the control flow of the function, which can be either compiled from the explicitly provided
+function specification or implicitly inferred from the runtime execution trace. When the first function with a chain
+is invoked, the platform's scheduler can speculatively invoke functions following the control flow graph. 
+To deal with branches, the scheduler also actively predict the outcome of branches using the past execution history.
+As stated earlier, branches in chained functions are highly biased given the execution history. 
