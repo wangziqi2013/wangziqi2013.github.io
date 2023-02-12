@@ -1,4 +1,3 @@
-
 ---
 layout: post
 title:  "Notes on Redis Source Code Reading"
@@ -7,8 +6,7 @@ categories: article
 ontop: true
 ---
 
-Workflow from Input to Command Handler
---------------------------------------
+### Workflow from Input to Command Handler
 
 `call()` (file `server.c`) is the entry point for processing a client message. It invokes `c->cmd->proc(c)`.
 `c->cmd` points to the table `redisCommandTable` in commands.c and the type is `struct redisCommand`.
@@ -49,8 +47,7 @@ To summarize:
 `processCommand()`-->
 `call()`--(via command table)-->Command handler
 
-Command Processing
-------------------
+### Command Processing
 
 Command process starts with the call back function registered in the command table `redisCommandTable` 
 (file `commands.c`). Each command has its separate handler function which is called by `call()` in `server.c`.
@@ -96,13 +93,11 @@ To summarize:
 `dictAddRaw()`-->
 `dictSetKey()`
 
-The Dict Object
----------------
+### The Dict Object
 
 Dictionary objects lie at the central of Redis as the database itself is implemented as a `struct dict` object.
 
-Disabling Persistence
----------------------
+### Disabling Persistence
 
 Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
 via `fork()`) to capture a consistent memory snapshot and save it to the disk. AOF (Append-Only File) is similar 
