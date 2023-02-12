@@ -107,6 +107,12 @@ The definition of the metadata field depends on the type of the `dict` object an
 variable-sized. However, the metadata field is largely irrelevant to the operation of the `dict` object.
 The `struct dictEntry` objects in the same bucket are linked together as a linked list via the `next` pointer.
 
+The `dict` object contains two instances of hash tables, stored in fields `ht_table`, `ht_used`, and `ht_size_exp`.
+Field `ht_table` stores two copies of the bucket array, with each bucket being a pointer to a linked list
+of `struct dictEntry` objects. Field `ht_used` tracks the number of entries in each of the two hash tables.
+Field `ht_size_exp` stores the log2 of the sizes of the `ht_table` array (hash table sizes are always powers of two).
+
+
 
 ### Disabling Persistence
 
