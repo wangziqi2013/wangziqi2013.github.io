@@ -133,6 +133,11 @@ to zero, and the `ht_size_exp` field is set to the log2 of the new size. Finally
 to zero, indicating that a rehashing is in progress. The value will be reset back to `-1` after the rehashing
 completes.
 
+On basically every hash table operation, the macro `dictIsRehashing()` (file `dict.h`) is called to check if the table 
+is currently under rehashing. The macro simply checks whether `d->rehashidx` is `-1` or not.
+If rehashing is in progress, then the function `_dictRehashStep()` is called to incrementally rehash a few 
+buckets from the first hash table to the second one.
+
 
 
 ### Disabling Persistence
