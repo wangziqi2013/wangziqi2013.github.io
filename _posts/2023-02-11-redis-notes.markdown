@@ -93,6 +93,16 @@ To summarize:
 `dictAddRaw()`-->
 `dictSetKey()`
 
+### Sending The Reply
+
+After a command is processed, the reply message is sent back to the client. Replies are generated into the client's
+buffer by calling `addReply()` (file `networking.c`) with an `robj` object as the parameter.
+The function first checks whether the `robj` object is of string type using macro `sdsEncodedObject()` 
+(file `server.h`). If true, then the string contained in the object is added to the reply buffer by calling 
+`_addReplyToBufferOrList()` with the pointer to the `sds` string and the length of the string as arguments.
+
+
+
 ### The Dict Object
 
 Dictionary objects lie at the core of Redis as the database itself is implemented as a `struct dict` object.
@@ -204,8 +214,8 @@ invokes `selectDb()` to change the client's current database reference.
 
 #### Database Type
 
-The database object is initialized as `dict` instances with the type being `dbDictType` (file `server.c`).
-The type object has all callbacks being set except key and value duplication functions, meaning that when
+The database object contains a `dict` instance for key-value mapping, with the type being `dbDictType` (file `server.
+c`). The type object has all callbacks being set except key and value duplication functions, meaning that when
 a key-value pair is inserted into the database, the function that inserts it must duplicate the object if necessary.
 Besides, database value objects are reference counted, as indicated by the destructor callback function
 `dictObjectDestructor()` (file `server.c`). This function calls `decrRefCount()` (file `object.c`) on the value object.
