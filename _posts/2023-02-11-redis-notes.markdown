@@ -252,6 +252,12 @@ connection object itself or on the socket. For example, `type->set_read_handler`
 to the connection object's `read_handler` field, while `type->read` directly reads the socket using the `read` system
 call. The newly allocated connection object is returned to the caller for later usage.
 
+To summarize:
+
+`acceptTcpHandler()`-->
+`connCreateAcceptedSocket()`--(enters `connection.c`)-->
+`connCreateSocket()`
+
 
 ## Data Structures
 
