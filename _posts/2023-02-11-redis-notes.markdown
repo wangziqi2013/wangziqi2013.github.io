@@ -96,6 +96,10 @@ To summarize:
 ### The Dict Object
 
 Dictionary objects lie at the central of Redis as the database itself is implemented as a `struct dict` object.
+The struct is defined in `dict.h` and implemented in `dict.c` and it is quite simple. 
+The `dict` object merely implements a standard chained hash table with incremental rehashing.
+
+
 
 ### Disabling Persistence
 
