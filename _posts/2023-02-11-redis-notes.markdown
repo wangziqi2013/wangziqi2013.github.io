@@ -273,6 +273,22 @@ Macro `SDS_HDR()`, given an `sds` pointer and the header type, returns the point
 Macro `SDS_HDR_VAR()` is translated into a variable definition of name `sh`, which points to the header of the given 
 `sds` object.
 
+#### SDS Object Creation
+
+`sds` objects are created by calling `sdsnewlen()` or `sdstrynewlen()`, both wrapping the actual creation function 
+`_sdsnewlen()`. Function `_sdsnewlen()` takes a pointer to the string or binary data, the length of data, and a flag
+`trymalloc` indicating whether `malloc()` failure should cause a panic.
+The function first computes the type of header to use by calling `sdsReqType()`. For shorter strings, we can encode
+its length and allocated buffer size with smaller integers, and therefore, the shorter header can be used to save
+space. It then allocates the storage for the `sds` object by calling `s_malloc_usable()`. 
+The allocated size is the data size, plus header size, plus the trailing zero, although `malloc` may return
+a slightly larger buffer due to binned allocation, which is put in `usable`.
+Then the header is initialized with the length of data and the allocated size.
+Finally, the data is copied into the buffer using `memcpy()`. The `sds` type pointer is returned back to the
+caller. The pointer can be directly used as a C language string without any typecast or pointer arithmetic.
+
+
+
 ### Disabling Persistence
 
 Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
