@@ -214,7 +214,19 @@ To summarize:
 `listenToPort()`--(enters `anet.c`)-->
 `anetTcpServer()`-->
 `_anetTcpServer()`-->
-`anetListen()`
+`anetListen()`--(enters kernel)-->
+`bind()` and `listen()`
+
+#### Accepting New Connections
+
+Later on during server initialization, the listening sockets are registered to the AE Library for monitoring.
+The path begins with `createSocketAcceptHandler()` (file `server.c`), which calls `aeCreateFileEvent()` to
+register the listening sockets one by one with the callback handler being `acceptTcpHandler()`.
+The callback handler `acceptTcpHandler()` (file `networking.c`), as discussed above, will be invoked
+when the AE Library fires it.
+The handler calls `anetTcpAccept()` (file `anet.c`), which wraps `anetGenericAccept()` (file `anet.c`).
+The latter accepts the connection by invoking the `accept()` system call.
+
 
 
 ## Data Structures
