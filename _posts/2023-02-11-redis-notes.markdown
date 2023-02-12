@@ -183,11 +183,25 @@ are deallocated.
 
 ### The Database Object
 
+#### Initialization
+
 The database object is the top-level data structure in Redis which maps keys to values. 
 Database objects are initialized when the server is initialized in `initServer()` (file `server.c`). 
 Users could specify the number of databases in the configuration file using `databases` option. This option
 is registered in the options table `configs` (file `config.c`), and when the configuration is applied, it
 sets `server.dbnum` field to the value given by the user (default to 16 otherwise).
+
+During initialization, the databases are created as an array of `redisDb` objects using `zmalloc()` and stored in 
+`server.db` field. Later in the same function, the databases are initialized. In particular, 
+
+#### Selection
+
+Each client is assigned a database when created, which is a reference to the database object in the server object. 
+By default, Redis assigns database zero to each newly created client
+in `createClient()`. In addition, clients can also switch database using the `SELECT` command, which is handled by
+the `selectCommand()` function (file `db.c`). The function parses the only argument as the database index and then
+invokes `selectDb()` to change the client's current database reference.
+
 
 ### Disabling Persistence
 
