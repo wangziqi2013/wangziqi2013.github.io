@@ -153,7 +153,12 @@ The `select`-compatible implementation resides in `ae_select.c`. The file define
 which contains the file descriptor arrays to be used with `select()` system call.
 The file implements three vital functions. Function `aeApiCreate()` initializes the `aeApiState` object and 
 sets the `apidata` field of the event loop object to point to the initialized object.
-
+Function `aeApiAddEvent()` adds a given file descriptor into the descriptor array, which enables the descriptor 
+to be monitored by the library. Function `aeApiPoll()` invokes `select()` system call with the file descriptor array.
+The system call is blocking and will return when one or more file descriptor become available, or on a timeout.
+After the system call returns, the function will scan the file descriptor array to determine which of them 
+have fired, and inserts them into the `fired` array of the event loop object.
+The function also returns the number of fired file descriptors to the caller.
 
 ## Data Structures
 
