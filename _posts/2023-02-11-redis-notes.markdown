@@ -162,6 +162,13 @@ first hash table if no rehashing is in progress, or returns the index on the sec
 Besides, the key will not be inserted if it already exists in any of the two tables.
 If the check passes, a new entry object is allocated and linked to the head of the bucket.
 
+Deletion is implemented in `dictGenericDelete()`. This function locates the bucket using the hash value,
+walks the linked list, and unlinks the entry from the list if the hash value and key match. 
+The function also takes an argument, `nofree`, which indicates whether the entry unlinked from the dictionary 
+should be freed or not. If the caller needs the deleted entry (as is the case with `dictUnlink()`) then this
+value should be set to `1`. Otherwise it is set to zero, as in `dictDelete()`.
+
+
 ### Disabling Persistence
 
 Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
