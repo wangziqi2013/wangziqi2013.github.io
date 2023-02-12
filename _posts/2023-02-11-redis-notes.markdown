@@ -99,6 +99,13 @@ Dictionary objects lie at the central of Redis as the database itself is impleme
 The struct is defined in `dict.h` and implemented in `dict.c` and it is quite simple. 
 The `dict` object merely implements a standard chained hash table with incremental rehashing.
 
+#### The Data Structure
+
+Entries in the `dict` object is implemented as `struct dictEntry` objects. The object contains a key pointer,
+a value field that can be a pointer, an integer, a floating point number, etc, and a metadata field. 
+The definition of the metadata field depends on the type of the `dict` object and it makes the `dictEntry` 
+variable-sized. However, the metadata field is largely irrelevant to the operation of the `dict` object.
+The `struct dictEntry` objects in the same bucket are linked together as a linked list via the `next` pointer.
 
 
 ### Disabling Persistence
