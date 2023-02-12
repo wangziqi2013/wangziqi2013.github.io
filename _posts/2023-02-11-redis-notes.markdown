@@ -194,6 +194,8 @@ after these messages are generated into the reply buffer in last iteration's com
 
 ### The Listening Path
 
+#### Binding and Listening
+
 Redis server listens on one or more sockets and accepts connections from the clients. 
 This listening path begins in function `initServer()` (file `server.c`) by calling `listenToPort()`.
 The function `listenToPort()` (file `server.c`) accepts a list IP addresses to bind to and a single port number.
@@ -206,6 +208,13 @@ Finally, the newly created file descriptor is returned to the caller.
 Note that Redis also supports other types of sockets, such as IPv6 and TLS, but we assume IPv4 sockets are
 used to simplify the discussion.
 
+To summarize:
+
+`initServer()`-->
+`listenToPort()`--(enters `anet.c`)-->
+`anetTcpServer()`-->
+`_anetTcpServer()`-->
+`anetListen()`
 
 
 ## Data Structures
