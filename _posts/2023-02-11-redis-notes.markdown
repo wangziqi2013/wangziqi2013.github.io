@@ -138,6 +138,11 @@ is currently under rehashing. The macro simply checks whether `d->rehashidx` is 
 If rehashing is in progress, then the function `_dictRehashStep()` is called to incrementally rehash a few 
 buckets from the first hash table to the second one.
 
+Function `_dictRehashStep()` wraps over `dictRehash()`. The latter rehashes entries by removing them from the first
+hash table and inserting them into the second hash table, with the values of `d->ht_used` being adjusted accordingly.
+The function returns when the first hash table becomes empty, or when `n * 10` buckets have been rehashed in the
+current invocation. The field `d->rehashidx` stores the next index of the bucket to be rehashed and is hence 
+incremented for every rehashed bucket.
 
 
 ### Disabling Persistence
