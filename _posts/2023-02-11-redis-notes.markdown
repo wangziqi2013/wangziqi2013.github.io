@@ -100,3 +100,12 @@ The Dict Object
 ---------------
 
 Dictionary objects lie at the central of Redis as the database itself is implemented as a `struct dict` object.
+
+Disabling Persistence
+---------------------
+
+Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
+via `fork()`) to capture a consistent memory snapshot and save it to the disk. AOF (Append-Only File) is similar 
+to write-ahead logging and it writes committed operations to a log file on the disk.
+Besides, when Redis exits via Ctrl-C, it will also save the dump of the database as `dump.rdb` in the current 
+working directory.
