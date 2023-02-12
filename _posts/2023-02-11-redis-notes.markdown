@@ -126,6 +126,8 @@ a `struct sharedObjectsStruct` object in `server.c`. The object is a statically 
 The singleton `shared` object is populated in function `createSharedObjects()` (file `server.c`).
 The function initializes the object by creating `sds` string objects using `createObject()` (file `object.c`).
 
+### The Asynchronous Event (AE) Library 
+
 ## Data Structures
 
 ### The Dict Object
@@ -295,6 +297,17 @@ The SDS library also implements common string operations such as string copy, co
 implementations are rather straightforward. Besides, the library provides functions to convert other types into 
 `sds` objects, e.g., `sdsfromlonglong()`, and to print into an `sds` object from a format string just like
 `snprintf()`.
+
+### Linked List
+
+Redis contains a standard doubly linked list implementation in file `adlist.h` and `adlist.c`. The source code is 
+simple and easy to understand with very little to cover. However, it is worth noting that Redis's linked list
+object carries three call back functions, namely, `dup`, `free`, and `match`. These three functions will duplicate,
+deallocate, or compare for equality on the value object (`value` field of each node), respectively.
+As a result, the list object can be duplicated, deallocated, and searched for a particular key using the interface 
+functions `listDup()`, `listRelease()`, and `listSearch()`.
+
+## Build, Compilation, and Usage
 
 ### Disabling Persistence
 
