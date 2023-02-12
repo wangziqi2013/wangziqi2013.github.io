@@ -168,7 +168,13 @@ The singleton event loop object is initialized during server initialization by c
 (file `ae.c`), which initializes the loop object and returns it to the server. The server saves the event loop 
 object in the server object field `el`.
 
-
+During the operation of the server, the function `aeCreateFileEvent()` will be called to register new file descriptors
+and callback handlers to the AE library. This function carries the descriptor to be registered, the callback handler
+`proc` (which is a function pointer), and the argument to the callback handler `clientData` (which is the `client`
+object for client sockets). Note that although only one callback handler is passed to this function, the AE Library
+internally distinguishes between read handlers and write handlers (as evidenced by the `rfileProc` and `wfileProc`
+fields of `struct aeFileEvent`). Consequently, the provided handler will be used as both the read and the write
+handler. 
 
 ## Data Structures
 
