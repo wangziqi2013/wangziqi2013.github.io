@@ -156,7 +156,11 @@ list of the bucket and compares hash values and keys against the entries.
 Note that if rehashing is in progress, then both hash table instances will be checked. Otherwise, only the 
 first instance is checked.
 
-
+The insert operation is implemented in `dictAddRaw()`. This function first checks whether the key already
+exists (in both tables) by calling `_dictKeyIndex()`. `_dictKeyIndex()` returns the index of the bucket on the
+first hash table if no rehashing is in progress, or returns the index on the second hash table otherwise.
+Besides, the key will not be inserted if it already exists in any of the two tables.
+If the check passes, a new entry object is allocated and linked to the head of the bucket.
 
 ### Disabling Persistence
 
