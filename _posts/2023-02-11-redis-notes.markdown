@@ -128,6 +128,14 @@ The function initializes the object by creating `sds` string objects using `crea
 
 ### The Asynchronous Event (AE) Library 
 
+Redis implements an Asynchronous Event Library, or the AE library, to facilitate socket-based communication.
+The AE library is defined in `ae.h` and `ae.c`. At a high level, the AE library works as an event loop, which is
+also the main event loop of Redis server. The event loop monitors the read and write status of file descriptors 
+using blocking system calls. When one or more file descriptors become readable or writable, the loop will unblock
+and the corresponding event will be handled by invoking the callback functions. The rest of Redis registers 
+the file descriptors and callback handlers to the AE library such that the operation of the server can be properly 
+driven.
+
 ## Data Structures
 
 ### The Dict Object
@@ -302,7 +310,7 @@ implementations are rather straightforward. Besides, the library provides functi
 
 Redis contains a standard doubly linked list implementation in file `adlist.h` and `adlist.c`. The source code is 
 simple and easy to understand with very little to cover. However, it is worth noting that Redis's linked list
-object carries three call back functions, namely, `dup`, `free`, and `match`. These three functions will duplicate,
+object carries three callback functions, namely, `dup`, `free`, and `match`. These three functions will duplicate,
 deallocate, or compare for equality on the value object (`value` field of each node), respectively.
 As a result, the list object can be duplicated, deallocated, and searched for a particular key using the interface 
 functions `listDup()`, `listRelease()`, and `listSearch()`.
