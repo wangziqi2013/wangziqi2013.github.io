@@ -287,7 +287,10 @@ Then the header is initialized with the length of data and the allocated size.
 Finally, the data is copied into the buffer using `memcpy()`. The `sds` type pointer is returned back to the
 caller. The pointer can be directly used as a C language string without any typecast or pointer arithmetic.
 
-
+The SDS library also implements common string operations such as string copy, concatenation, trimming, etc. Their
+implementations are rather straightforward. Besides, the library provides functions to convert other types into 
+`sds` objects, e.g., `sdsfromlonglong()`, and to print into an `sds` object from a format string just like
+`snprintf()`.
 
 ### Disabling Persistence
 
