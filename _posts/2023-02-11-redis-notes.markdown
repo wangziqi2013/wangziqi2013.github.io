@@ -110,6 +110,12 @@ is added to the buffer in a linked list.
 Function `_addReplyToBuffer()` (file `networking.c`) performs the copy from the reply object to the client's 
 buffer (`c->buf`) using `memcpy()`. The buffer pointer `c->bufpos` is also adjusted accordingly.
 
+To summarize:
+
+`addReply()`-->
+`_addReplyToBufferOrList()`-->
+`_addReplyToBuffer()`
+
 #### Reply Objects
 
 Redis defines reply objects for commonly used replies, e.g., `"+OK"`. The reply objects are defined as
