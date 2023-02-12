@@ -176,6 +176,22 @@ internally distinguishes between read handlers and write handlers (as evidenced 
 fields of `struct aeFileEvent`). Consequently, the provided handler will be used as both the read and the write
 handler. 
 
+After server initialization, the server enters the main event loop by calling `aeMain()` (file `ae.c`). 
+This function loops infinitely and calls `aeProcessEvents()` in every iteration.
+Function `aeProcessEvents()` first invokes the `beforesleep` callback (which is registered by the server during 
+initialization), then invokes `aeApiPoll()`, which may be blocked in the kernel. After the call returns, the
+function then invokes the after-sleep callback `aftersleep`, and then processes fired events.
+It simply scans the `fired` array, and for each file descriptor in the array, invokes its read or write 
+callback handler with `clientData` as one of the arguments.
+A `mask` argument is also passed to the callback handler to indicate whether the fired descriptor is ready for 
+read, write, or both.
+
+Overall, the `aeProcessEvents()` function implements the main event loop of Redis server. Redis server uses
+the AE Library to multiplex between multiple clients as well as the listening socket, hence implementing the 
+listening and the read path. In addition, Redis server uses the before-sleep callback mechanism of the event loop 
+object to implement the write path. Reply messages to the clients are sent within the before-sleep callback
+after these messages are generated into the reply buffer in last iteration's command processing.
+
 ## Data Structures
 
 ### The Dict Object
