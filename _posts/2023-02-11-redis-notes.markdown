@@ -181,6 +181,14 @@ by `dictSetKey()` and `dictSetVal()` macros to duplicate the key and value (if o
 Similarly, `keyDestructor` and `valDestructor`, when provided, are used to deallocate keys and values when entries
 are deallocated.
 
+### The Database Object
+
+The database object is the top-level data structure in Redis which maps keys to values. 
+Database objects are initialized when the server is initialized in `initServer()` (file `server.c`). 
+Users could specify the number of databases in the configuration file using `databases` option. This option
+is registered in the options table `configs` (file `config.c`), and when the configuration is applied, it
+sets `server.dbnum` field to the value given by the user (default to 16 otherwise).
+
 ### Disabling Persistence
 
 Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
@@ -195,5 +203,5 @@ In order to disable persistence entirely, pass the following command line option
 ./redis-server --save "" --appendonly no
 ```
 
-The first `--save` options with an empty string disables RDB snapshotting. The second `--appendonly` option disables
-AOF.
+The first `--save` option followed by an empty string disables RDB snapshotting. The second `--appendonly` option 
+disables AOF.
