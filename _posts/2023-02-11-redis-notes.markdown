@@ -202,6 +202,19 @@ in `createClient()`. In addition, clients can also switch database using the `SE
 the `selectCommand()` function (file `db.c`). The function parses the only argument as the database index and then
 invokes `selectDb()` to change the client's current database reference.
 
+#### Database Type
+
+The database object is initialized as `dict` instances with the type being `dbDictType` (file `server.c`).
+The type object has all callbacks being set except key and value duplication functions, meaning that when
+a key-value pair is inserted into the database, the function that inserts it must duplicate the object if necessary.
+Besides, database value objects are reference counted, as indicated by the destructor callback function
+`dictObjectDestructor()` (file `server.c`). This function calls `decrRefCount()` (file `object.c`) on the value object.
+If the reference count drops to zero, `decrRefCount()` will then deallocate the value object based on its type using
+a switch block.
+
+Key objects, on the contrary, is not reference counted. The destructor callback function for database keys is
+`dictSdsDestructor()` (file `server.c`), which simply deallocates the key string object by calling `sdsfree()` (file 
+`sds.c`).
 
 ### Disabling Persistence
 
