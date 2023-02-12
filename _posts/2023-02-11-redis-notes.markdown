@@ -109,3 +109,12 @@ via `fork()`) to capture a consistent memory snapshot and save it to the disk. A
 to write-ahead logging and it writes committed operations to a log file on the disk.
 Besides, when Redis exits via Ctrl-C, it will also save the dump of the database as `dump.rdb` in the current 
 working directory.
+
+In order to disable persistence entirely, pass the following command line options to `redis-server`:
+
+```
+./redis-server --save "" --appendonly no
+```
+
+The first `--save` options with an empty string disables RDB snapshotting. The second `--appendonly` option disables
+AOF.
