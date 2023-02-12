@@ -258,6 +258,14 @@ To summarize:
 `connCreateAcceptedSocket()`--(enters `connection.c`)-->
 `connCreateSocket()`
 
+#### Creating the Client Object
+
+After creating the connection object, the Redis server then proceeds to creating the client object.
+This path also begins in `acceptTcpHandler()` right after the connection object is returned. 
+The returned object is passed into function `acceptCommonHandler()` (file `networking.c`), which first 
+checks whether the connection is valid and legal (e.g., not exceeding the maximum number of concurrent
+connection), and then calls `createClient()` to create the client object.
+
 
 ## Data Structures
 
