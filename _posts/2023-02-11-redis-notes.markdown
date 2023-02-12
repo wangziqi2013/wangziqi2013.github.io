@@ -6,7 +6,9 @@ categories: article
 ontop: true
 ---
 
-### Workflow from Input to Command Handler
+## General Workflow
+
+### Input Parsing and Dispatching
 
 `call()` (file `server.c`) is the entry point for processing a client message. It invokes `c->cmd->proc(c)`.
 `c->cmd` points to the table `redisCommandTable` in commands.c and the type is `struct redisCommand`.
@@ -123,6 +125,8 @@ a `struct sharedObjectsStruct` object in `server.c`. The object is a statically 
 `shared` in `server.c` and it contains the `robj` objects that can be used for `addReply()`.
 The singleton `shared` object is populated in function `createSharedObjects()` (file `server.c`).
 The function initializes the object by creating `sds` string objects using `createObject()` (file `object.c`).
+
+## Data Structures
 
 ### The Dict Object
 
