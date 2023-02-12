@@ -266,6 +266,14 @@ The returned object is passed into function `acceptCommonHandler()` (file `netwo
 checks whether the connection is valid and legal (e.g., not exceeding the maximum number of concurrent
 connection), and then calls `createClient()` to create the client object.
 
+Function `createClient()` (file `networking.c`) first creates a `struct client` object using `zmalloc()` 
+and then sets the read handler of the connection object for the client to `readQueryFromClient` by calling 
+`connSetReadHandler()`. 
+Finally, the function initializes the client's states including the send and receive data buffer and buffer
+pointers. The database object that the client operates on is also set to the default one on index zero by
+calling `selectDb()`.
+
+
 
 ## Data Structures
 
