@@ -112,6 +112,15 @@ Field `ht_table` stores two copies of the bucket array, with each bucket being a
 of `struct dictEntry` objects. Field `ht_used` tracks the number of entries in each of the two hash tables.
 Field `ht_size_exp` stores the log2 of the sizes of the `ht_table` array (hash table sizes are always powers of two).
 
+#### Incremental Rehashing
+
+When the number of entries exceeds a certain threshold (currently when the load factor grows above 1, or when
+rehashing is disabled but the load factor grows above 5), the hash table in the `dict` object will be resized
+via the rehashing operation. The rehashing operation iterates over entries in the first instance of the hash
+table (on index 0) and moves them to the second instance of the hash table (on index 1). 
+If a rehashing is going on, insert operations will directly insert the new key into the second instance. 
+Read operations, on the contrary, have to check both hash tables because the entry can reside in either of them
+depending on the rehashing progress.
 
 
 ### Disabling Persistence
