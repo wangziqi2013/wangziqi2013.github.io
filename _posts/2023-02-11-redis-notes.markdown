@@ -281,7 +281,11 @@ via `aeCreateFileEvent()`.
 The registered callback handler to the AE Library is function `connSocketEventHandler()` (file `connection.c`),
 which will in turn call `read_handler` and/or `write_handler` fields when the file descriptor fires in the AE Library. 
 
-
+Overall, during the client creation process, the file descriptor of the client is registered to the AE Library
+for monitoring. The callback handler `readQueryFromClient` will be invoked (after several levels of indirection)
+when the file descriptor is read to be read. Note that the client does not register any write handler to the 
+connection to the object. As a result, the connection is only capable of reading from the client but
+not vise versa.
 
 ## Data Structures
 
