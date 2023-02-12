@@ -227,7 +227,15 @@ when the AE Library fires it.
 The handler calls `anetTcpAccept()` (file `anet.c`), which wraps `anetGenericAccept()` (file `anet.c`).
 The latter accepts the connection by invoking the `accept()` system call.
 
+To summarize:
 
+`initServer()`-->
+`createSocketAcceptHandler()`-->
+`aeCreateFileEvent()`-->
+`acceptTcpHandler()`--(enters `anet.c`)-->
+`anetTcpAccept()`-->
+`anetGenericAccept()`--(enters kernel)-->
+`accept()`
 
 ## Data Structures
 
