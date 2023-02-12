@@ -308,3 +308,9 @@ In order to disable persistence entirely, pass the following command line option
 
 The first `--save` option followed by an empty string disables RDB snapshotting. The second `--appendonly` option 
 disables AOF.
+
+### Adding New Source Files
+
+Redis has a rather clear and simple make system. In order to add a new source file for compilation, 
+first you should create the file under `./src` directory. Then update the `Makefile` under `./src` by adding the object
+file name to the list named `REDIS_SERVER_OBJ` (assuming the file is part of the server).
