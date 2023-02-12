@@ -226,16 +226,32 @@ The callback handler `acceptTcpHandler()` (file `networking.c`), as discussed ab
 when the AE Library fires it.
 The handler calls `anetTcpAccept()` (file `anet.c`), which wraps `anetGenericAccept()` (file `anet.c`).
 The latter accepts the connection by invoking the `accept()` system call.
+The newly assigned socket for communicating with the client is also returned to the caller for later usage.
 
 To summarize:
 
 `initServer()`-->
-`createSocketAcceptHandler()`-->
-`aeCreateFileEvent()`-->
+`createSocketAcceptHandler()`--(enters `ae.c`)-->
+`aeCreateFileEvent()`--(via callbacks, enters `networking.c`)-->
 `acceptTcpHandler()`--(enters `anet.c`)-->
 `anetTcpAccept()`-->
 `anetGenericAccept()`--(enters kernel)-->
 `accept()`
+
+#### Creating the Connection Object
+
+After the connection is accepted at the OS level, the next step is to initialize the local data structures for
+keeping the client's information. This path begins in function `acceptTcpHandler()` (file `networking.c`) by
+calling `connCreateAcceptedSocket()` (file `connection.c`). The function wraps `connCreateSocket()` 
+which allocates a new connection object of type `struct connection`.
+The connection object represents the server-side state of the connection. The object stores the file descriptor
+returned from `accept` system call. The object also contains two critical callback handlers, the `read_handler`
+and the `write_handler`, which are invoked for reading and writing data from/into the socket. 
+The `type` field of the connection object defines a series of function pointers that either operate on the 
+connection object itself or on the socket. For example, `type->set_read_handler` assigns a new read handler
+to the connection object's `read_handler` field, while `type->read` directly reads the socket using the `read` system
+call. The newly allocated connection object is returned to the caller for later usage.
+
 
 ## Data Structures
 
