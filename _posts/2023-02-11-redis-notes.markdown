@@ -95,7 +95,7 @@ To summarize:
 
 ### The Dict Object
 
-Dictionary objects lie at the central of Redis as the database itself is implemented as a `struct dict` object.
+Dictionary objects lie at the core of Redis as the database itself is implemented as a `struct dict` object.
 The struct is defined in `dict.h` and implemented in `dict.c` and it is quite simple. 
 The `dict` object merely implements a standard chained hash table with incremental rehashing.
 
@@ -147,6 +147,16 @@ incremented for every rehashed bucket.
 Rehashing is completed when `d->ht_used` for the first table drop to zero. In this case, the second hash table is
 moved to the first table's slot, and the first table is deallocated by calling `zfree()`.
 Field `d->rehashidx` is also reset to `-1` such that no rehashing will be attempted.
+
+#### Dict Operations
+
+The lookup operation on the `dict` object is implemented in `dictFind()`. This function first calls `dictHashKey()`
+to compute the key hash value, then uses the hash value to find the bucket, and finally walks the entry linked
+list of the bucket and compares hash values and keys against the entries.
+Note that if rehashing is in progress, then both hash table instances will be checked. Otherwise, only the 
+first instance is checked.
+
+
 
 ### Disabling Persistence
 
