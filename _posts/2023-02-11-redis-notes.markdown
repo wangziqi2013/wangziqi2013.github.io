@@ -122,6 +122,12 @@ If a rehashing is going on, insert operations will directly insert the new key i
 Read operations, on the contrary, have to check both hash tables because the entry can reside in either of them
 depending on the rehashing progress.
 
+Rehashes are triggered by function `_dictKeyIndex()` which computes key hash values. The function calls 
+`_dictExpandIfNeeded()` to check for rehashing conditions. If the load factor of the hash table exceeds the 
+threshold, it will call `dictExpand()` to initiate the rehashing. The size of the new table is twice as large
+as the previous one as evidenced by the second argument passed to `dictExpand()`, i.e., `d->ht_used[0] + 1`.
+
+Function `dictExpand()`
 
 ### Disabling Persistence
 
