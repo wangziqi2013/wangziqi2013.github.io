@@ -168,6 +168,18 @@ The function also takes an argument, `nofree`, which indicates whether the entry
 should be freed or not. If the caller needs the deleted entry (as is the case with `dictUnlink()`) then this
 value should be set to `1`. Otherwise it is set to zero, as in `dictDelete()`.
 
+More complicated operations are also available on the `dict` object. However, these composite operations are 
+just combinations of the above three primitives and can be easily understood.
+
+#### Dict Types
+
+Every `dict` object also has a type object of type `struct dictType` which is accessed via `d->type`. 
+The type object consists of function pointers to handle a certain key and value types. 
+For example, `hashFunction` defines the hash function for the key type.
+`keyDup` and `keyDup` define the duplication function for keys and values. These two callbacks are used
+by `dictSetKey()` and `dictSetVal()` macros to duplicate the key and value (if one is provided).
+Similarly, `keyDestructor` and `valDestructor`, when provided, are used to deallocate keys and values when entries
+are deallocated.
 
 ### Disabling Persistence
 
