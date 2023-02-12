@@ -144,6 +144,13 @@ There are also two callback functions, namely, `beforesleep` and `aftersleep`, t
 object. These two functions are set during server initialization and will be called before and after the blocking 
 system call, respectively.
 
+The AE library is compatible with a number of system calls that monitor the status of file descriptors, including 
+`evport()`, `epoll()`, `kqueue()`, and `select()`, with the preference being in a descending order 
+(selected in file `ae.c` as a sequence of `#ifdef`s). In the following sections, we use `select()` as an example, but
+the workflow does not really change between the system calls used.
+
+
+
 ## Data Structures
 
 ### The Dict Object
