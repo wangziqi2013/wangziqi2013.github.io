@@ -247,6 +247,17 @@ Key objects, on the contrary, is not reference counted. The destructor callback 
 `dictSdsDestructor()` (file `server.c`), which simply deallocates the key string object by calling `sdsfree()` (file 
 `sds.c`).
 
+### The Simple Dynamic String (SDS) Library
+
+Redis encapsulates strings and binary data into a data type called the `sds` type. `sds` is an efficient
+and compact library for representing strings and arbitrary binary data. The implementation is in `sds.h` and `sds.c`.
+
+The `sds` type objects are referred to using the type name `sds`, which, surprisingly, is typedef'ed as `char *`. 
+An `sds` type pointer, therefore, points to the beginning of the null-terminated string. 
+However, compared with the standard C language strings, the `sds` object also has a header that is located *before*
+the `sds` pointer. The header stores the length and the allocated buffer size of the string and can be accessed
+by moving the pointer *forward*.
+
 ### Disabling Persistence
 
 Redis has two independent persistence mechanisms: RDB and AOF. RDB uses copy-on-write (implemented in the OS kernel
