@@ -287,6 +287,16 @@ when the file descriptor is read to be read. Note that the client does not regis
 connection to the object. As a result, the connection is only capable of reading from the client but
 not vise versa.
 
+To summarize:
+
+`acceptTcpHandler()`-->
+`acceptCommonHandler()`-->
+`createClient()`--(enters `connection.c`)-->
+`connSetReadHandler()`-->
+`connSocketSetReadHandler()`--(enters `ae.c`)-->
+`aeCreateFileEvent()`--(via callback, enters `networking.c`)-->
+`readQueryFromClient()`-->
+
 ## Data Structures
 
 ### The Dict Object
