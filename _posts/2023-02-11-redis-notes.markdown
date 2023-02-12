@@ -144,6 +144,9 @@ The function returns when the first hash table becomes empty, or when `n * 10` b
 current invocation. The field `d->rehashidx` stores the next index of the bucket to be rehashed and is hence 
 incremented for every rehashed bucket.
 
+Rehashing is completed when `d->ht_used` for the first table drop to zero. In this case, the second hash table is
+moved to the first table's slot, and the first table is deallocated by calling `zfree()`.
+Field `d->rehashidx` is also reset to `-1` such that no rehashing will be attempted.
 
 ### Disabling Persistence
 
