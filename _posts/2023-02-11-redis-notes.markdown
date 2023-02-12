@@ -136,6 +136,14 @@ and the corresponding event will be handled by invoking the callback functions. 
 the file descriptors and callback handlers to the AE library such that the operation of the server can be properly 
 driven.
 
+The central data structure of the AE library is `struct aeEventLoop` (file `ae.h`) which contains information for
+event handling and registration. In particular, field `events` stores an array of registered file descriptors and 
+callback handlers (of type `struct aeFileEvent`). Field `fired` stores an array of file descriptors that become
+readable or writable in the current iteration. 
+There are also two callback functions, namely, `beforesleep` and `aftersleep`, that are registered to the event loop
+object. These two functions are set during server initialization and will be called before and after the blocking 
+system call, respectively.
+
 ## Data Structures
 
 ### The Dict Object
