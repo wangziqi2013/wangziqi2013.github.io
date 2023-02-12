@@ -265,11 +265,13 @@ terminating `'\0'`), a `alloc` field storing the size of the allocated buffer (e
 and a `flag` field storing the header type.
 Headers can be one of the four types, namely `sdshdr8`, `sdshdr16`, `sdshdr32`, and `sdshdr64`. These four types
 differ from each other by using different integer types for the `len` and `alloc` fields. 
-The `flag` field is placed at the end of the header and is therefore can be accessed via the `sds` pointer by
-subtracting a constant value. The `flag` field stores the header type, which must be read first in order to
-determine the size of the header.
+The 8-bit `flag` field is placed at the end of the header and is therefore can be accessed via the `sds` pointer by
+subtracting one from it (e.g., `sds[-1]`). The `flag` field stores the header type, which must be read first in order 
+to determine the size of the header.
 
-
+Macro `SDS_HDR()`, given an `sds` pointer and the header type, returns the pointer to the header. 
+Macro `SDS_HDR_VAR()` is translated into a variable definition of name `sh`, which points to the header of the given 
+`sds` object.
 
 ### Disabling Persistence
 
