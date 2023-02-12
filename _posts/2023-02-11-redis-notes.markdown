@@ -95,6 +95,8 @@ To summarize:
 
 ### Sending The Reply
 
+#### The Workflow
+
 After a command is processed, the reply message is sent back to the client. Replies are generated into the client's
 buffer by calling `addReply()` (file `networking.c`) with an `robj` object as the parameter.
 The function first checks whether the `robj` object is of string type using macro `sdsEncodedObject()` 
@@ -107,6 +109,14 @@ is added to the buffer in a linked list.
 
 Function `_addReplyToBuffer()` (file `networking.c`) performs the copy from the reply object to the client's 
 buffer (`c->buf`) using `memcpy()`. The buffer pointer `c->bufpos` is also adjusted accordingly.
+
+#### Reply Objects
+
+Redis defines reply objects for commonly used replies, e.g., `"+OK"`. The reply objects are defined as
+a `struct sharedObjectsStruct` object in `server.c`. The object is a statically declared singleton named 
+`shared` in `server.c` and it contains the `robj` objects that can be used for `addReply()`.
+The singleton `shared` object is populated in function `createSharedObjects()` (file `server.c`).
+The function initializes the object by creating `sds` string objects using `createObject()` (file `object.c`).
 
 ### The Dict Object
 
