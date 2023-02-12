@@ -273,6 +273,14 @@ Finally, the function initializes the client's states including the send and rec
 pointers. The database object that the client operates on is also set to the default one on index zero by
 calling `selectDb()`.
 
+Function `connSetReadHandler()` (file `connection.c`) will indirectly call `connSocketSetReadHandler()` via the
+per-connection object `type` field. 
+Function `connSocketSetReadHandler()` (file `connection.c`) stores the callback handler in the connection
+object's `read_handler` field and then registers the file descriptor of the connection to the AE Library
+via `aeCreateFileEvent()`. 
+The registered callback handler to the AE Library is function `connSocketEventHandler()` (file `connection.c`),
+which will in turn call `read_handler` and/or `write_handler` fields when the file descriptor fires in the AE Library. 
+
 
 
 ## Data Structures
