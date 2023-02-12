@@ -101,7 +101,12 @@ The function first checks whether the `robj` object is of string type using macr
 (file `server.h`). If true, then the string contained in the object is added to the reply buffer by calling 
 `_addReplyToBufferOrList()` with the pointer to the `sds` string and the length of the string as arguments.
 
+Function `_addReplyToBufferOrList()` (file `networking.c`) wraps `_addReplyToBuffer()` and `_addReplyProtoToList()`.
+The former is used if the reply message can fit into the client's reply buffer. Otherwise, the reply message
+is added to the buffer in a linked list.
 
+Function `_addReplyToBuffer()` (file `networking.c`) performs the copy from the reply object to the client's 
+buffer (`c->buf`) using `memcpy()`. The buffer pointer `c->bufpos` is also adjusted accordingly.
 
 ### The Dict Object
 
