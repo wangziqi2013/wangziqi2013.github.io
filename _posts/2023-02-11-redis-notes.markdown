@@ -252,11 +252,24 @@ Key objects, on the contrary, is not reference counted. The destructor callback 
 Redis encapsulates strings and binary data into a data type called the `sds` type. `sds` is an efficient
 and compact library for representing strings and arbitrary binary data. The implementation is in `sds.h` and `sds.c`.
 
+#### Memory Layout
+
 The `sds` type objects are referred to using the type name `sds`, which, surprisingly, is typedef'ed as `char *`. 
 An `sds` type pointer, therefore, points to the beginning of the null-terminated string. 
 However, compared with the standard C language strings, the `sds` object also has a header that is located *before*
 the `sds` pointer. The header stores the length and the allocated buffer size of the string and can be accessed
 by moving the pointer *forward*.
+
+An `sds` header consists of three fields, i.e., a `len` field storing the length of the string (excluding the 
+terminating `'\0'`), a `alloc` field storing the size of the allocated buffer (excluding the terminating `'\0'`),
+and a `flag` field storing the header type.
+Headers can be one of the four types, namely `sdshdr8`, `sdshdr16`, `sdshdr32`, and `sdshdr64`. These four types
+differ from each other by using different integer types for the `len` and `alloc` fields. 
+The `flag` field is placed at the end of the header and is therefore can be accessed via the `sds` pointer by
+subtracting a constant value. The `flag` field stores the header type, which must be read first in order to
+determine the size of the header.
+
+
 
 ### Disabling Persistence
 
