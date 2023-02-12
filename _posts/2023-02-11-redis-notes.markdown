@@ -192,6 +192,22 @@ listening and the read path. In addition, Redis server uses the before-sleep cal
 object to implement the write path. Reply messages to the clients are sent within the before-sleep callback
 after these messages are generated into the reply buffer in last iteration's command processing.
 
+### The Listening Path
+
+Redis server listens on one or more sockets and accepts connections from the clients. 
+This listening path begins in function `initServer()` (file `server.c`) by calling `listenToPort()`.
+The function `listenToPort()` (file `server.c`) accepts a list IP addresses to bind to and a single port number.
+For every address, it invokes `anetTcpServer()` (file `anet.c`) to bind the address.
+The function `anetTcpServer()` wraps over `_anetTcpServer()` (file `anet.c`), which creates a new socket
+for listening by invoking the system call `socket()` followed by `anetListen()` (file `anet.c`).
+Function `anetListen()` simply invokes system calls `bind()` and then `listen()` to bind the address
+and start listening.
+Finally, the newly created file descriptor is returned to the caller.
+Note that Redis also supports other types of sockets, such as IPv6 and TLS, but we assume IPv4 sockets are
+used to simplify the discussion.
+
+
+
 ## Data Structures
 
 ### The Dict Object
