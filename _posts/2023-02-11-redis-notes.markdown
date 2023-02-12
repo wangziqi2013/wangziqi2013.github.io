@@ -144,6 +144,8 @@ There are also two callback functions, namely, `beforesleep` and `aftersleep`, t
 object. These two functions are set during server initialization and will be called before and after the blocking 
 system call, respectively.
 
+#### The System Call Layer
+
 The AE library is compatible with a number of system calls that monitor the status of file descriptors, including 
 `evport()`, `epoll()`, `kqueue()`, and `select()`, with the preference being in a descending order 
 (selected in file `ae.c` as a sequence of `#ifdef`s). In the following sections, we use `select()` as an example, but
@@ -159,6 +161,14 @@ The system call is blocking and will return when one or more file descriptor bec
 After the system call returns, the function will scan the file descriptor array to determine which of them 
 have fired, and inserts them into the `fired` array of the event loop object.
 The function also returns the number of fired file descriptors to the caller.
+
+#### The Event Handling Layer
+
+The singleton event loop object is initialized during server initialization by calling `aeCreateEventLoop()` 
+(file `ae.c`), which initializes the loop object and returns it to the server. The server saves the event loop 
+object in the server object field `el`.
+
+
 
 ## Data Structures
 
