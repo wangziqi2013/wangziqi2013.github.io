@@ -149,6 +149,10 @@ The AE library is compatible with a number of system calls that monitor the stat
 (selected in file `ae.c` as a sequence of `#ifdef`s). In the following sections, we use `select()` as an example, but
 the workflow does not really change between the system calls used.
 
+The `select`-compatible implementation resides in `ae_select.c`. The file defines `struct aeApiState`,
+which contains the file descriptor arrays to be used with `select()` system call.
+The file implements three vital functions. Function `aeApiCreate()` initializes the `aeApiState` object and 
+sets the `apidata` field of the event loop object to point to the initialized object.
 
 
 ## Data Structures
