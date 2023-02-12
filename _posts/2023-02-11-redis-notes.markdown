@@ -127,7 +127,13 @@ Rehashes are triggered by function `_dictKeyIndex()` which computes key hash val
 threshold, it will call `dictExpand()` to initiate the rehashing. The size of the new table is twice as large
 as the previous one as evidenced by the second argument passed to `dictExpand()`, i.e., `d->ht_used[0] + 1`.
 
-Function `dictExpand()`
+Function `dictExpand()` simply wraps over `_dictExpand`. The latter allocates the bucket array of the second hash 
+table instance by calling `zcalloc()` and assigns it to `d->ht_table[1]`. In addition, the `ht_used` field is set
+to zero, and the `ht_size_exp` field is set to the log2 of the new size. Finally, the function sets `d->rehashidx`
+to zero, indicating that a rehashing is in progress. The value will be reset back to `-1` after the rehashing
+completes.
+
+
 
 ### Disabling Persistence
 
