@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Notes on Redis Source Code Reading"
+title:  "Understanding Redis Source Code"
 date:   2023-02-11 22:14:00 -0500
 categories: article
 ontop: true
