@@ -342,6 +342,16 @@ However, after a careful examination of the function body, it turns out that the
 `handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
 configuration variable defined in `config.c`).
 
+Function `handleClientsWithPendingWrites()` (file `networking.c`) traverses the list `server.clients_pending_write`,
+which contains clients that have reply messages to send. This list is populated at the beginning of `addReply()` by
+calling `prepareClientToWrite()` (file `networking.c`).
+For every client in the list, the function calls `writeToClient()`, which wraps over `_writeToClient()`.
+Function `_writeToClient()` (file `networking.c`) further calls `connWrite()` on the client's connection
+object, which indirectly calls `connSocketWrite()` via the connection's `type` field.
+The write path terminates at function `connSocketWrite` (file `connection.c`), which invokes the `write()` system
+call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
+due to `write()` not being able to accept the requested length (which is completely normal).
+
 
 ## Data Structures
 
