@@ -326,6 +326,12 @@ To summarize:
 
 ### The Write Path
 
+After the Redis server processes the command, the reply is generated into the client's reply buffer by calling 
+`addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
+is coupled with `c->bufpos` to indicate the current write position.
+
+In order to send the reply message back to the client, the Redis server 
+
 ## Data Structures
 
 ### The Dict Object
