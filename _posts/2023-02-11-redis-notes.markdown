@@ -412,7 +412,12 @@ read the file, and concatenate the `sds` string storing the command line options
 Since options given by the command line are processed after those in the configuration file, the command line
 options have higher priority and can hence override those in the configuration file.
 
-
+The combined `sds` string containing the configuration file content and command line options are then passed to 
+function `loadServerConfigFromString()` (file `config.c`). The function parses the string by first splitting it
+into lines using `sds` utility function `sdssplitlen()`. Then the function splits each individual line that
+is not empty nor begins with `#` into tokens using `sdssplitargs()`.
+Next, the function searches the `configs` table to lookup the option key, which is the first token of the line.
+If the configuration entry is found in the table, the value is set by calling `interface.set()` of the entry.
 
 ## Data Structures
 
