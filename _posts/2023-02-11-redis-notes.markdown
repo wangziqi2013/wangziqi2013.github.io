@@ -305,6 +305,15 @@ this function will be invoked every time some data arrives at the socket and is 
 The handler will be invoked with the connection object as its sole argument, which is passed to the 
 AE Library at registration time.
 
+Function `readQueryFromClient()` (file `networking.c`) first checks whether the buffer is big enough for the client
+message. In most cases, no action is taken, and the function then calls `connRead()` on the client's connection object.
+Inline function `connRead()` (file `connection.h`) indirectly calls `connSocketRead()` via the connection
+object's `type->read`, which in turn invokes the `read()` system call to pull data out of the socket stream.
+Note that the destination buffer of the read is the client's `querybuf`, which is coupled with `qblen` to indicate
+the current length of data in the buffer. 
+The length to be read is calculated as the remaining capacity of the buffer, as evidenced by the 
+local variable `readlen`.
+
 
 
 ## Data Structures
