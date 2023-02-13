@@ -419,6 +419,16 @@ is not empty nor begins with `#` into tokens using `sdssplitargs()`.
 Next, the function searches the `configs` table to lookup the option key, which is the first token of the line.
 If the configuration entry is found in the table, the value is set by calling `interface.set()` of the entry.
 
+To summarize:
+
+`main()`-->
+`initServerConfig()`--(enters `server.c`)-->
+`initConfigValues()`
+
+`main()`--(enters `server.c`)-->
+`loadServerConfig()`-->
+`loadServerConfigFromString()`
+
 ## Data Structures
 
 ### The Dict Object
