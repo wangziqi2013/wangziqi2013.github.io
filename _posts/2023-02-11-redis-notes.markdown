@@ -97,8 +97,6 @@ To summarize:
 
 ### Sending The Reply
 
-#### The Workflow
-
 After a command is processed, the reply message is sent back to the client. Replies are generated into the client's
 buffer by calling `addReply()` (file `networking.c`) with an `robj` object as the parameter.
 The function first checks whether the `robj` object is of string type using macro `sdsEncodedObject()` 
@@ -361,6 +359,18 @@ To summarize:
 `_writeToClient()`--(enters `connection.c`)-->
 `connWrite()`--(enters kernel)-->
 `write()`-->
+
+### Configuration
+
+#### Specifying the Configurations
+
+Redis server configuration is set up during server initialization. Configuration capability is implemented in 
+file `config.c`. The file contains a configuration table named `configs`, which stores all configurations. 
+The element of the `configs` table is of type `struct standardConfig`, which consists of a `name`, an `alias`,
+`flags`, and two type-dependent objects. Both `name` and `alias` are the names that can be used as the option key. 
+The type-dependent objects, namely `interface` and `data`, define the data storage of the configuration
+value and the interface functions for setting, getting, and initializing the configuration options. 
+
 
 ## Data Structures
 
