@@ -352,6 +352,15 @@ The write path terminates at function `connSocketWrite` (file `connection.c`), w
 call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
 due to `write()` not being able to accept the requested length (which is completely normal).
 
+To summarize:
+
+`beforeSleep()`--(enters `networking.c`)-->
+`handleClientsWithPendingWritesUsingThreads()`-->
+`handleClientsWithPendingWrites()`-->
+`writeToClient()`-->
+`_writeToClient()`--(enters `connection.c`)-->
+`connWrite()`--(enters kernel)-->
+`write()`-->
 
 ## Data Structures
 
