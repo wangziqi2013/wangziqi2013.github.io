@@ -315,7 +315,7 @@ The length to be read is calculated as the remaining capacity of the buffer, as 
 local variable `readlen`.
 
 After data is read from the socket, the handler then invokes `processInputBuffer()` to parse and dispatch 
-the command. 
+the command. We have already covered the command parsing and dispatching in an earlier section.
 
 To summarize:
 
@@ -330,7 +330,18 @@ After the Redis server processes the command, the reply is generated into the cl
 `addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
 is coupled with `c->bufpos` to indicate the current write position.
 
-In order to send the reply message back to the client, the Redis server 
+In order to send the reply message back to the client, the Redis server, during initialization, registers a callback 
+function to the AE Library as the before-sleep callback via `aeSetBeforeSleepProc()`. The callback function 
+being registered is `beforeSleep()`.
+
+Recall that the before-sleep callback, i.e., function `beforeSleep()` (file `server.c`), is invoked right before 
+the AE Library invokes `select()` (or other multiplexing system calls). 
+The function invokes `handleClientsWithPendingWritesUsingThreads()` (file `networking.c`) whose name may be somehow
+misleading because Redis, by default, is not multi-threaded.
+However, after a careful examination of the function body, it turns out that the function simply wraps over 
+`handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
+configuration variable defined in `config.c`).
+
 
 ## Data Structures
 
