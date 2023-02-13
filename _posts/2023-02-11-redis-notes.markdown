@@ -397,6 +397,14 @@ singleton server object).
 Function `initServerConfig()` also sets the default value for non-configurable fields in the server object by directly 
 assigning to them.
 
+Then in the second stage, the main function of the server parses the command line options.
+If the configuration file name is given, it must be the first argument (i.e., `argv[1]`). Otherwise, all command
+line options will treated as options keys and values. The server iterates over the `argv` vector, treating every
+entry that begins with `"--"` as keys, and those between keys as values belonging to the former key.
+The parsed keys and values are concatenated to an `sds` string, such that each line of the string represents 
+a configurable option. As mentioned earlier, if multiple values are specified for a key, all the values will be 
+concatenated and appear on the same line, separated by a space.
+
 ## Data Structures
 
 ### The Dict Object
