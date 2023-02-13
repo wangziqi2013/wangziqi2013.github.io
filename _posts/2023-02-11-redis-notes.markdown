@@ -377,7 +377,7 @@ given.
 The `configs` table is just an array of `struct standardConfig` objects where configurable options are defined 
 using the pre-defined macros. The macros are straightforward to use and the existing table is a good reference.
 
-#### Reading Configuration
+#### Reading Configuration Options
 
 Redis server supports two forms of configuration. Either it is provided via a configuration file, or it is 
 directly given in the command line option. In the former case, the file should be organized into lines, where
@@ -405,6 +405,14 @@ The parsed keys and values are concatenated to an `sds` string, such that each l
 a configurable option. As mentioned earlier, if multiple values are specified for a key, all the values will be 
 concatenated and appear on the same line, separated by a space.
 
+To summarize:
+
+`main()`-->
+`initServerConfig()`--(enters `server.c`)-->
+`initConfigValues()`
+
+#### Parsing Configuration Options
+
 In the final stage, the main function invokes `loadServerConfig()` (file `config.c`), passing the configuration
 file name (if given) and the `sds` string parsed from the command line options as an argument.
 The function will first search for the file (or files, if the file name is a regular expression), then
@@ -418,12 +426,10 @@ into lines using `sds` utility function `sdssplitlen()`. Then the function split
 is not empty nor begins with `#` into tokens using `sdssplitargs()`.
 Next, the function searches the `configs` table to lookup the option key, which is the first token of the line.
 If the configuration entry is found in the table, the value is set by calling `interface.set()` of the entry.
+The setter function will convert the value or values into the correct type and then write them to the pointer
+stored in the configuration entry.
 
 To summarize:
-
-`main()`-->
-`initServerConfig()`--(enters `server.c`)-->
-`initConfigValues()`
 
 `main()`--(enters `server.c`)-->
 `loadServerConfig()`-->
