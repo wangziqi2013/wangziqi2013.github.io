@@ -383,9 +383,19 @@ Redis server supports two forms of configuration. Either it is provided via a co
 directly given in the command line option. In the former case, the file should be organized into lines, where
 each non-empty line not starting with `#` specifies the value of a configuration option. 
 The first token of the line (character string ending with a space) is treated as the option key, and the rest of 
-the line is treated as the value.
+the line is treated as the value. In the case of command line options, the option key is given by prefixing 
+the key with `--`, and the option value follows the key. Multiple values can be given for a single key, 
+with space characters separating them. These command line values will be concatenated to form the actual value during
+server initialization
 
-
+The server reads the configuration options in three stages.
+In the first stage, it initializes all options defined in the `configs` table to their default values by calling 
+`initServerConfig()` (file `server.c`) in the main function. This function in turn calls 
+`initConfigValues()` in file `config.c`, which simply iterates over all configuration entries in the `configs` 
+table and writing the default value to the pointer stored in the entry (which all points to the fields of the 
+singleton server object).
+Function `initServerConfig()` also sets the default value for non-configurable fields in the server object by directly 
+assigning to them.
 
 ## Data Structures
 
