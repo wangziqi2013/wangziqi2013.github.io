@@ -297,6 +297,16 @@ To summarize:
 `aeCreateFileEvent()`--(via callback, enters `networking.c`)-->
 `readQueryFromClient()`-->
 
+### The Read Path
+
+As discussed earlier, when a client is initialized, its file descriptor is registered to the AE Library for read.
+The callback handler of the registration is function `readQueryFromClient()`, meaning that
+this function will be invoked every time some data arrives at the socket and is selected by the AE Library.
+The handler will be invoked with the connection object as its sole argument, which is passed to the 
+AE Library at registration time.
+
+
+
 ## Data Structures
 
 ### The Dict Object
