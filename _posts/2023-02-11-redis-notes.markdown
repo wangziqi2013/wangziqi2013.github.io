@@ -377,6 +377,14 @@ given.
 The `configs` table is just an array of `struct standardConfig` objects where configurable options are defined 
 using the pre-defined macros. The macros are straightforward to use and the existing table is a good reference.
 
+#### Reading Configuration
+
+Redis server supports two forms of configuration. Either it is provided via a configuration file, or it is 
+directly given in the command line option. In the former case, the file should be organized into lines, where
+each non-empty line not starting with `#` specifies the value of a configuration option. 
+The first token of the line (character string ending with a space) is treated as the option key, and the rest of 
+the line is treated as the value.
+
 
 
 ## Data Structures
