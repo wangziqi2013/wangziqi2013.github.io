@@ -405,6 +405,15 @@ The parsed keys and values are concatenated to an `sds` string, such that each l
 a configurable option. As mentioned earlier, if multiple values are specified for a key, all the values will be 
 concatenated and appear on the same line, separated by a space.
 
+In the final stage, the main function invokes `loadServerConfig()` (file `config.c`), passing the configuration
+file name (if given) and the `sds` string parsed from the command line options as an argument.
+The function will first search for the file (or files, if the file name is a regular expression), then
+read the file, and concatenate the `sds` string storing the command line options to the file content. 
+Since options given by the command line are processed after those in the configuration file, the command line
+options have higher priority and can hence override those in the configuration file.
+
+
+
 ## Data Structures
 
 ### The Dict Object
