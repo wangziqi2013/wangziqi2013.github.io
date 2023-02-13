@@ -370,6 +370,13 @@ The element of the `configs` table is of type `struct standardConfig`, which con
 `flags`, and two type-dependent objects. Both `name` and `alias` are the names that can be used as the option key. 
 The type-dependent objects, namely `interface` and `data`, define the data storage of the configuration
 value and the interface functions for setting, getting, and initializing the configuration options. 
+In particular, the `data` object contains a pointer to the location that the configuration value should be written
+to after they are read. It also contains the default value of the configuration in the case it is not explicitly
+given.
+
+The `configs` table is just an array of `struct standardConfig` objects where configurable options are defined 
+using the pre-defined macros. The macros are straightforward to use and the existing table is a good reference.
+
 
 
 ## Data Structures
