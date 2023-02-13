@@ -314,7 +314,17 @@ the current length of data in the buffer.
 The length to be read is calculated as the remaining capacity of the buffer, as evidenced by the 
 local variable `readlen`.
 
+After data is read from the socket, the handler then invokes `processInputBuffer()` to parse and dispatch 
+the command. 
 
+To summarize:
+
+`readQueryFromClient()`--(enters `connection.c`)-->
+`connRead()`-->
+`connSocketRead()`--(enters kernel)-->
+`read()`
+
+### The Write Path
 
 ## Data Structures
 
