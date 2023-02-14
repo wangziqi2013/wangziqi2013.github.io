@@ -635,6 +635,13 @@ claim, check out the endianness conversion macros and functions in `endianconv.h
 Accordingly, the macros `intrev32ifbe()` and `memrev16/32/64ifbe`, which are heavily used in 
 the `intset` implementation, can be safely ignored as no-ops.
 
+#### Layout
+
+The `intset` object contains only two fields. Field `encoding` stores the current element size, the value of which
+can be one of the `INTSET_ENC_INT16`, `INTSET_ENC_INT32`, and `INTSET_ENC_INT64`. Field `length` stores the current 
+number of elements in the set.
+The element array follows the two fields and it fills the rest of the object. Note that the `intset` object itself
+is also variable-sized due to having the element array at the end.
 
 
 ## Build, Compilation, and Usage
