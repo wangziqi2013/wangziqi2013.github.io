@@ -747,6 +747,16 @@ If the `encoding` field is of value `2'b0xxx xxxx`, then the entry is a 7-bit in
 is stored in the lower 7 bits of the encoding field. In this case, the entry has no extra bytes as the value
 "borrows" 7 bits from the `encoding` field.
 
+Similarly, if the field is of value `2'b10xx xxxx` or `2'b110x xxxx`, then the entry is a 6-bit or 13-bit
+integer. In the former case, the lower 6 bits of the field stores the integer value. In the latter case,
+the lower 5 bits and the next byte store the integer (and hence it has 5 + 8 = 13 bits).
+
+If the `encoding` field is of value `2'b1110 xxxx`, then the entry is a string with a 12-bit length field.
+In this case, the lower 4 bits of the field plus the next byte encodes the length of the string. The string
+value is stored compactly right after.
+Similarly, if the field is `2'b1111 0000`, then the entry is a string with 32-bit length field. 
+No bit is borrowed from the encoding field in this case, and the next 4 bytes encode the length of the string.
+
 
 
 ## Build, Compilation, and Usage
