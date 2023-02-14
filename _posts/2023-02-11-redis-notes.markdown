@@ -739,6 +739,16 @@ form of an integer, then the next bytes will be the integer.
 Finally, there are also special string and integer encodings that "borrow" bits from the `encoding` field. 
 In this case, the lower bits of the field will be used to store either the string length of the integer.
 
+At the end of the listpack object, there is an end mark of value `0xFF`. The end mark can be thought of as a 
+special encoding field that does not encode any data, but rather indicates the end of the list. 
+
+We next discuss the data layout of different encodings. 
+If the `encoding` field is of value `2'b0xxx xxxx`, then the entry is a 7-bit integer, and the integer value
+is stored in the lower 7 bits of the encoding field. In this case, the entry has no extra bytes as the value
+"borrows" 7 bits from the `encoding` field.
+
+
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
