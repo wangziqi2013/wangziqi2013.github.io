@@ -709,6 +709,13 @@ One corner case of insertion is when the `intset` object grows to become overly 
 size of the `intset` exceeds `1<<30` (1G entries), the `intset` object is force converted to a `dict` object to avoid 
 allocating huge arrays from the system.
 
+Set element is removed using command `SREM`, which is implemented by `setTypeRemove()` (file `t_set.c`).
+This function simply multiplexes between `dictDelete()` and `intsetRemove()` for `dict` and `intset`, respectively.
+Interestingly, this function also implements a global policy, which states that if the load factor of a `dict`
+type hash table (including the set object) drops below a compile-time constant `HASHTABLE_MIN_FILL` (which is 10%), 
+then the hash table needs to be shrinked by calling `dictResize()` (file `dict.c`). 
+The policy is implemented in function `htNeedsResize()`, which is defined in a seemingly unrelated place: `server.c`.
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
