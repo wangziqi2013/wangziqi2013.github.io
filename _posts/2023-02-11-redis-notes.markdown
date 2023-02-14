@@ -719,6 +719,14 @@ The policy is implemented in function `htNeedsResize()`, which is defined in a s
 Lastly, the size of the set, also known as the "cadinality" of the set, can be obtained via command `SCARD`. This
 command is implemented by `setTypeSize()` (file `t_set.c`), which multiplexes between `dictSize()` and `intsetLen()`.
 
+### The Listpack Object
+
+Redis contains a `listpack` object to compactly represent lists of integers and strings. 
+The `listpack` object is implemented to maximize storage efficiency at the cost of lower read performance,
+especially random reads. The implementation is in file `listpack.h` and `listpack.c`. 
+
+
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
