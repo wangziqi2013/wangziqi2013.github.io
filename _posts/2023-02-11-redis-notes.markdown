@@ -626,6 +626,15 @@ different element sizes, namely, 16-bit, 32-bit, and 64-bit integers. At any giv
 the same size, hence necessitating upgrade conversions between types when an element is inserted and the element 
 cannot be represented in the current type. There is no downgrade, though, as an `intset` element will remain in
 the upgraded type even if all elements can be represented with shorter integers.
+Second, Redis performs endian conversion on both `intset` internal metadata and the set elements when they are
+read from and written into memory. The endian conversion is to maintain compatibility between small- and big-endian
+architectures when a database is dumped on one architecture and loaded back into the memory on another 
+architecture with different endianness. Fortunately, Redis internally adopts small-endian representation for all
+data and metadata, meaning that the endianness conversion on x86 architecture is merely no-ops. To verify this
+claim, check out the endianness conversion macros and functions in `endianconv.h` and `endianconv.c`.
+Accordingly, the macros `intrev32ifbe()` and `memrev16/32/64ifbe`, which are heavily used in 
+the `intset` implementation, can be safely ignored as no-ops.
+
 
 
 ## Build, Compilation, and Usage
