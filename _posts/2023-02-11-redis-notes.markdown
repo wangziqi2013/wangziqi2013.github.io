@@ -716,6 +716,9 @@ type hash table (including the set object) drops below a compile-time constant `
 then the hash table needs to be shrinked by calling `dictResize()` (file `dict.c`). 
 The policy is implemented in function `htNeedsResize()`, which is defined in a seemingly unrelated place: `server.c`.
 
+Lastly, the size of the set, also known as the "cadinality" of the set, can be obtained via command `SCARD`. This
+command is implemented by `setTypeSize()` (file `t_set.c`), which multiplexes between `dictSize()` and `intsetLen()`.
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
