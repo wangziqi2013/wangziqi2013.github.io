@@ -548,10 +548,10 @@ invokes `selectDb()` to change the client's current database reference.
 
 #### Database Type
 
-The database object contains a `dict` instance for key-value mapping, with the type being `dbDictType` (file `server.
-c`). The type object has all callbacks being set except key and value duplication functions, meaning that when
-a key-value pair is inserted into the database, the function that inserts it must duplicate the object if necessary.
-Besides, database value objects are reference counted, as indicated by the destructor callback function
+The database object contains a `dict` instance for key-value mapping, with the type being `dbDictType` 
+(file `server.c`). The type object has all callbacks being set except key and value duplication functions, meaning 
+that when a key-value pair is inserted into the database, the function that inserts it must duplicate the object if 
+necessary. Besides, database value objects are reference counted, as indicated by the destructor callback function
 `dictObjectDestructor()` (file `server.c`). This function calls `decrRefCount()` (file `object.c`) on the value object.
 If the reference count drops to zero, `decrRefCount()` will then deallocate the value object based on its type using
 a switch block.
@@ -613,6 +613,15 @@ object carries three callback functions, namely, `dup`, `free`, and `match`. The
 deallocate, or compare for equality on the value object (`value` field of each node), respectively.
 As a result, the list object can be duplicated, deallocated, and searched for a particular key using the interface 
 functions `listDup()`, `listRelease()`, and `listSearch()`.
+
+### Intset
+
+Redis implements sorted integer set in file `intset.h` and `intset.c`. Overall, the `intset` structure is just an
+array of integer elements stored compactly in sorted order. Lookup operations on the set involve binary search to
+locate the position of the given search key. Insertion operations need to shift the elements backwards if the 
+key to be inserted is to be inserted into the middle of the element array.
+
+
 
 ## Build, Compilation, and Usage
 
