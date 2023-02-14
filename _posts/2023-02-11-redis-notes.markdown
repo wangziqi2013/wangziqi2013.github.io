@@ -659,6 +659,13 @@ allocation size feature), and finally inserts the element into the array after s
 elements using `intsetMoveTail()` to make room for it.
 Deletion operations using `intsetRemove()` is just the reverse of insertion.
 
+### The Set Object
+
+Redis's `setType` object is the user-visible set type that can be manipulated using commands 
+`SADD`, `SREM`, `SCARD`, and so on. The set object has two implementations. The first is the `intset` object
+that only stores 16-bit, 32-bit, or 64-bit integers. The second is the `dict` object that can store
+arbitrary elements as long as they can be hashed and compared.
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
