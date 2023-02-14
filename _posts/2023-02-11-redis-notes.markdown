@@ -705,7 +705,9 @@ the newly created object. Finally, the old `intset` object is freed by calling `
 and the newly created `dict` object is assigned to the `robj` object.
 After conversion is completed, the new key is inserted into the set object by calling `dictAddRaw()`.
 
-
+One corner case of insertion is when the `intset` object grows to become overly large. In particular, when the
+size of the `intset` exceeds `1<<30` (1G entries), the `intset` object is force converted to a `dict` object to avoid 
+allocating huge arrays from the system.
 
 ## Build, Compilation, and Usage
 
