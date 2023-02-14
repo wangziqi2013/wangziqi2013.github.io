@@ -670,6 +670,15 @@ can be parsed as an integer, then Redis will initialize the set as an `intset`. 
 elements can no longer be represented as integers, the set is implicitly converted into the `dict` object, hence
 allowing the insertion to happen without error.
 
+#### Set Creation
+
+The set object can be created via `SADD` and `SMOVE` if the (destination) key does not yet exist in the current 
+database. In this case, the command handler calls `setTypeCreate()` (file `t_set.c`). The function checks whether the
+key can be parsed as a long integer using object utility function `isSdsRepresentableAsLongLong()` (file `object.c`),
+which itself calls into `string2ll()` (file `util.c`). If true, then the set object is created using 
+`createIntsetObject()` (file `object.c`), which initializes an `intset` object and wraps it with `robj` type. 
+
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
