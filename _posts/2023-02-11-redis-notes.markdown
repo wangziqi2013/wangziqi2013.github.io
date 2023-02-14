@@ -677,7 +677,9 @@ database. In this case, the command handler calls `setTypeCreate()` (file `t_set
 key can be parsed as a long integer using object utility function `isSdsRepresentableAsLongLong()` (file `object.c`),
 which itself calls into `string2ll()` (file `util.c`). If true, then the set object is created using 
 `createIntsetObject()` (file `object.c`), which initializes an `intset` object and wraps it with `robj` type. 
-
+Otherwise it is created using `createSetObject()` (file `object.c`), which is simply a `dict` object wrapped in 
+`robj`. Note that Redis distinguishes these two representations via `robj` object's `encoding` field
+(`OBJ_ENCODING_INTSET` and `OBJ_ENCODING_HT`, respectively).
 
 ## Build, Compilation, and Usage
 
