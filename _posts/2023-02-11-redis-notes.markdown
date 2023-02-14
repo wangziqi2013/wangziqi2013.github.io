@@ -621,6 +621,11 @@ array of integer elements stored compactly in sorted order. Lookup operations on
 locate the position of the given search key. Insertion operations need to shift the elements backwards if the 
 key to be inserted is to be inserted into the middle of the element array.
 
+Simple as it is, there are, however, several implementational issues. First, the `intset` object implements three
+different element sizes, namely, 16-bit, 32-bit, and 64-bit integers. At any given moment, all elements must be of 
+the same size, hence necessitating upgrade conversions between types when an element is inserted and the element 
+cannot be represented in the current type. There is no downgrade, though, as an `intset` element will remain in
+the upgraded type even if all elements can be represented with shorter integers.
 
 
 ## Build, Compilation, and Usage
