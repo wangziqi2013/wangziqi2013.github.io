@@ -643,6 +643,15 @@ number of elements in the set.
 The element array follows the two fields and it fills the rest of the object. Note that the `intset` object itself
 is also variable-sized due to having the element array at the end.
 
+#### Operations
+
+An `intset` object is created via `intsetNew()`, which initializes an object with zero element.
+Lookup operations use `intsetFind()`, which calls into `intsetSearch()` to perform the binary search.
+Insert operations use `intsetAdd()`. This function first checks whether the newly inserted value can be 
+represented with the `intset`'s current type. If negative, the function calls `intsetUpgradeAndAdd()` to
+first upgrade the set and then inserts the element. Function `intsetUpgradeAndAdd()` in turn calls 
+`intsetResize()`, which uses `realloc()` to expand the memory block of the current `intset` object. 
+
 
 ## Build, Compilation, and Usage
 
