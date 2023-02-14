@@ -730,7 +730,14 @@ The header of the object consists of two fields. The first field is a 32-bit int
 of the object including all three parts. The second field is a 16-bit integer storing the number of list 
 elements in the body.
 
-
+The body of the `listpack` object consists of an array of variable-sized entries. Each entry consists of 
+a 1-byte `encoding` field describing the encoding of the element (which can be a string or integer, but there are
+different flavors due to compression). The interpretation of the following bytes depend on the `encoding` field. 
+In general, if the field indicates that the entry is a form of a string, then the next bytes will be the length
+of the string, followed by the string itself. On the other hand, if the field indicates that the entry is a 
+form of an integer, then the next bytes will be the integer. 
+Finally, there are also special string and integer encodings that "borrow" bits from the `encoding` field. 
+In this case, the lower bits of the field will be used to store either the string length of the integer.
 
 ## Build, Compilation, and Usage
 
