@@ -757,7 +757,9 @@ value is stored compactly right after.
 Similarly, if the field is `2'b1111 0000`, then the entry is a string with 32-bit length field. 
 No bit is borrowed from the encoding field in this case, and the next 4 bytes encode the length of the string.
 
-
+The rest three cases for `encoding`, i.e., `2'b 1111 0001`, `2'b 1111 0010`, `2'b 1111 0011`, `2'b 1111 0100`,
+represent 16-bit, 32-bit, and 64-bit integers, respectively. No bit is borrowed from the `encoding` field, and 
+the integer value is stored after the field.
 
 ## Build, Compilation, and Usage
 
