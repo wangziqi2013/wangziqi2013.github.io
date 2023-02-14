@@ -680,6 +680,19 @@ which itself calls into `string2ll()` (file `util.c`). If true, then the set obj
 Otherwise it is created using `createSetObject()` (file `object.c`), which is simply a `dict` object wrapped in 
 `robj`. Note that Redis distinguishes these two representations via `robj` object's `encoding` field
 (`OBJ_ENCODING_INTSET` and `OBJ_ENCODING_HT`, respectively).
+Besides, the `dict` type sets use `setDictType` (global data defined in file `server.c`) for key and values.
+The `setDictType` type object defines key comparison, key destructor, and key hash functions while the 
+rest are left blank. 
+
+#### Set Operations
+
+The client can check whether an element is a member of the set using the `SISMEMBER` command. Internally, this 
+command is implemented by function `setTypeIsMember()` (file `t_set.c`). The function simply multiplexes 
+`dictFind()` (file `dict.c`) and `intsetFind()` (file `intset.c`) for `dict` and `intset` types, respectively.
+The function returns an integer value to indicate whether the element exists. The integer value is also returned to
+the client as the result of the query.
+
+
 
 ## Build, Compilation, and Usage
 
