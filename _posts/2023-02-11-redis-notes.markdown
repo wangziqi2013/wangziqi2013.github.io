@@ -692,6 +692,10 @@ command is implemented by function `setTypeIsMember()` (file `t_set.c`). The fun
 The function returns an integer value to indicate whether the element exists. The integer value is also returned to
 the client as the result of the query.
 
+New elements can be added via command `SADD`, `SMOVE`, etc. These commands are implemented with `setTypeAdd()`
+(file `t_set.c`). If the set object is a `dict`, it simply calls `dictAddRaw()` (file `dict.c`) to create an entry,
+and then sets the key of the entry to the element value.
+
 
 
 ## Build, Compilation, and Usage
