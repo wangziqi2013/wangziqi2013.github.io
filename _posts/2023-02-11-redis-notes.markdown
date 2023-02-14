@@ -651,7 +651,13 @@ Insert operations use `intsetAdd()`. This function first checks whether the newl
 represented with the `intset`'s current type. If negative, the function calls `intsetUpgradeAndAdd()` to
 first upgrade the set and then inserts the element. Function `intsetUpgradeAndAdd()` in turn calls 
 `intsetResize()`, which uses `realloc()` to expand the memory block of the current `intset` object. 
-
+The function then type casts all the existing elements in the element array to the upgraded size.
+Otherwise, the element can be directly into the `intset` without any conversion. In this case, the 
+insert function calls `intsetSearch()` to locate the insertion point via binary search, then calls 
+`intsetResize()` to potentially expand the `intset`'s memory block (it is essentially abusing `malloc` library's
+allocation size feature), and finally inserts the element into the array after shifting the existing 
+elements using `intsetMoveTail()` to make room for it.
+Deletion operations using `intsetRemove()` is just the reverse of insertion.
 
 ## Build, Compilation, and Usage
 
