@@ -665,6 +665,10 @@ Redis's `setType` object is the user-visible set type that can be manipulated us
 `SADD`, `SREM`, `SCARD`, and so on. The set object has two implementations. The first is the `intset` object
 that only stores 16-bit, 32-bit, or 64-bit integers. The second is the `dict` object that can store
 arbitrary elements as long as they can be hashed and compared.
+The initial type of a set object is determined by the first element inserted into the set. If the initial element
+can be parsed as an integer, then Redis will initialize the set as an `intset`. However, if later inserted 
+elements can no longer be represented as integers, the set is implicitly converted into the `dict` object, hence
+allowing the insertion to happen without error.
 
 ## Build, Compilation, and Usage
 
