@@ -696,6 +696,15 @@ New elements can be added via command `SADD`, `SMOVE`, etc. These commands are i
 (file `t_set.c`). If the set object is a `dict`, it simply calls `dictAddRaw()` (file `dict.c`) to create an entry,
 and then sets the key of the entry to the element value.
 
+For `intset` type, however, whenever a new element is added, the function needs to check whether the new element
+can be parsed into an integer using `isSdsRepresentableAsLongLong()`. If it is not the case, then the existing
+set is converted into a `dict` set by calling `setTypeConvert()`. This function first creates a `dict` type set
+using `setTypeCreate()` and then iterates over the `intset` object and converts the integer elements into
+`sds` objects using `sdsfromlonglong()` (file `sds.c`). Finally, the converted `sds` type keys are inserted into
+the newly created object. Finally, the old `intset` object is freed by calling `zfree()` on the `robj`'s `ptr` field,
+and the newly created `dict` object is assigned to the `robj` object.
+After conversion is completed, the new key is inserted into the set object by calling `dictAddRaw()`.
+
 
 
 ## Build, Compilation, and Usage
