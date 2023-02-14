@@ -725,6 +725,8 @@ Redis contains a `listpack` object to compactly represent lists of integers and 
 The `listpack` object is implemented to maximize storage efficiency at the cost of lower read performance,
 especially random reads. The implementation is in file `listpack.h` and `listpack.c`. 
 
+#### Object Memory Layout
+
 Overall, the `listpack` object is a single block of memory consisting of a header, a body, and an end mark.
 The header of the object consists of two fields. The first field is a 32-bit integer storing the total size
 of the object including all three parts. The second field is a 16-bit integer storing the number of list 
@@ -741,6 +743,8 @@ In this case, the lower bits of the field will be used to store either the strin
 
 At the end of the listpack object, there is an end mark of value `0xFF`. The end mark can be thought of as a 
 special encoding field that does not encode any data, but rather indicates the end of the list. 
+
+#### Entry Encoding
 
 We next discuss the data layout of different encodings. 
 If the `encoding` field is of value `2'b0xxx xxxx`, then the entry is a 7-bit integer, and the integer value
@@ -760,6 +764,17 @@ No bit is borrowed from the encoding field in this case, and the next 4 bytes en
 The rest three cases for `encoding`, i.e., `2'b 1111 0001`, `2'b 1111 0010`, `2'b 1111 0011`, `2'b 1111 0100`,
 represent 16-bit, 32-bit, and 64-bit integers, respectively. No bit is borrowed from the `encoding` field, and 
 the integer value is stored after the field.
+
+#### Helper Macros and Functions
+
+The source code implementing the `listpack` type provides several helper macros and functions to aid 
+programming and promote redability.
+Macro `lpGetTotalBytes()` takes a pointer to the header (first byte) of the object and returns the object size
+in total number of bytes. Macro `lpGetNumElements()` takes a pointer to the header (first byte) of the object and 
+returns the number of elements. Similarly, macros `lpSetTotalBytes()` and `lpSetNumElements()` set the two header
+fields given a header pointer and the new value.
+
+
 
 ## Build, Compilation, and Usage
 
