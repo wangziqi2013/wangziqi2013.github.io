@@ -774,7 +774,14 @@ in total number of bytes. Macro `lpGetNumElements()` takes a pointer to the head
 returns the number of elements. Similarly, macros `lpSetTotalBytes()` and `lpSetNumElements()` set the two header
 fields given a header pointer and the new value.
 
+Macros whose name begins with `LP_ENCODING_` facilitates encoding-related matters. The order that these macros 
+are laid out in the source file is also important, as it is also the order that the `encoding` field should be 
+tested due to the special encoding of the field. 
 
+Function `lpCurrentEncodedSizeUnsafe()`, given an entry pointer (pointing to the `encoding` field), returns the 
+size of the field including the encoding field and the data. A similar function, `lpCurrentEncodedSizeBytes()`, 
+returns the size of the encoding field plus the length field, if the entry stores an integer. Otherwise, it
+always returns `1` for integers.
 
 ## Build, Compilation, and Usage
 
