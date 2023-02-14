@@ -725,6 +725,11 @@ Redis contains a `listpack` object to compactly represent lists of integers and 
 The `listpack` object is implemented to maximize storage efficiency at the cost of lower read performance,
 especially random reads. The implementation is in file `listpack.h` and `listpack.c`. 
 
+Overall, the `listpack` object is a single block of memory consisting of a header, a body, and an end mark.
+The header of the object consists of two fields. The first field is a 32-bit integer storing the total size
+of the object including all three parts. The second field is a 16-bit integer storing the number of list 
+elements in the body.
+
 
 
 ## Build, Compilation, and Usage
