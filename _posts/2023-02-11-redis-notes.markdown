@@ -621,7 +621,7 @@ array of integer elements stored compactly in sorted order. Lookup operations on
 locate the position of the given search key. Insertion operations need to shift the elements backwards if the 
 key to be inserted is to be inserted into the middle of the element array.
 
-Simple as it is, there are, however, several implementational issues. First, the `intset` object implements three
+Simple as it is, there are, however, several implementational highlights. First, the `intset` object implements three
 different element sizes, namely, 16-bit, 32-bit, and 64-bit integers. At any given moment, all elements must be of 
 the same size, hence necessitating upgrade conversions between types when an element is inserted and the element 
 cannot be represented in the current type. There is no downgrade, though, as an `intset` element will remain in
@@ -721,8 +721,8 @@ command is implemented by `setTypeSize()` (file `t_set.c`), which multiplexes be
 
 ### The Listpack Object
 
-Redis contains a `listpack` object to compactly represent lists of integers and strings. 
-The `listpack` object is implemented to maximize storage efficiency at the cost of lower read performance,
+Redis implements a `listpack` type to compactly represent lists of integers and strings. 
+The `listpack` type is designed to maximize storage efficiency at the cost of lower read performance,
 especially random reads. The implementation is in file `listpack.h` and `listpack.c`. 
 
 #### Object Memory Layout
@@ -734,12 +734,13 @@ elements in the body.
 
 The body of the `listpack` object consists of an array of variable-sized entries. Each entry consists of 
 a 1-byte `encoding` field describing the encoding of the element (which can be a string or integer, but there are
-different flavors due to compression). The interpretation of the following bytes depend on the `encoding` field. 
+several forms of storage-efficient encoding for each type). The interpretation of the following bytes depend 
+on the `encoding` field. 
 In general, if the field indicates that the entry is a form of a string, then the next bytes will be the length
 of the string, followed by the string itself. On the other hand, if the field indicates that the entry is a 
 form of an integer, then the next bytes will be the integer. 
 Finally, there are also special string and integer encodings that "borrow" bits from the `encoding` field. 
-In this case, the lower bits of the field will be used to store either the string length of the integer.
+In this case, the lower bits of the field will be used to store either the string length or the integer value.
 
 At the end of the listpack object, there is an end mark of value `0xFF`. The end mark can be thought of as a 
 special encoding field that does not encode any data, but rather indicates the end of the list. 
@@ -761,7 +762,7 @@ value is stored compactly right after.
 Similarly, if the field is `2'b1111 0000`, then the entry is a string with 32-bit length field. 
 No bit is borrowed from the encoding field in this case, and the next 4 bytes encode the length of the string.
 
-The rest three cases for `encoding`, i.e., `2'b 1111 0001`, `2'b 1111 0010`, `2'b 1111 0011`, `2'b 1111 0100`,
+The rest three cases for `encoding`, i.e., `2'b1111 0001`, `2'b1111 0010`, `2'b1111 0011`, `2'b1111 0100`,
 represent 16-bit, 32-bit, and 64-bit integers, respectively. No bit is borrowed from the `encoding` field, and 
 the integer value is stored after the field.
 
