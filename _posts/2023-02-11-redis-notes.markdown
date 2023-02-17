@@ -798,6 +798,15 @@ representing the current session can be created by initializing a `redis.Redis` 
 IP address of the Redis server and the port number.
 Class `Redis` is defined in file `client.py` of the source tree. In the most general case, the object constructor 
 creates a `ConnectionPool` object and saves it to the `connection_pool` field of the `Redis` object.
+The `ConnectionPool` object (file `connection.py`) is a thin wrapping layer over the actual connection object, 
+`class Connection`. The `ConnectionPool` is responsible for dynamically maintaining a pool of connection objects to
+maximize the reuse of allocated OS sockets.
+The class provides two main interface methods. The first is `get_connection()`, which either returns an existing
+connection object from its `_available_connections` list, or creates a new connection object by calling 
+`make_connection()` of itself if the list is empty.
+Either way, the new connection is created with the arguments passed into `class Redis`'s constructor,
+connected to the Redis server by calling `connect()` on the connection object, and finally 
+returned back to the caller.
 
 
 ## Build, Compilation, and Usage
