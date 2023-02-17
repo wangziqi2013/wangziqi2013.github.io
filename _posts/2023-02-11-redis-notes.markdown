@@ -827,7 +827,10 @@ as `class Connection`. The most important interface of this object is `connect()
 the OS and connects the to Redis server.
 In particular, this function first requests a socket from the OS by calling `_connect()` of itself, which in turn
 invokes Python library function `socket()` to access the system call. 
-
+Then it invokes `on_connect()` to authenticate with the server, if the credential is given, set the
+client's name, and then select the database. All the operations in this function are optional, and will
+only be performed when the information is given to the `class Redis` object (via the constructor) owning the 
+connection object.
 
 
 ## Build, Compilation, and Usage
