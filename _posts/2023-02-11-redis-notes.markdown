@@ -893,6 +893,16 @@ The returned list of buffer objects from `pack()` is then given to the `send_pac
 first argument. Function `send_packed_command()` iterates over the list, and for each buffer object, invokes 
 `sendall()` on the socket object of the connection to send it to the Redis server.
 
+### Waiting for the Result
+
+After the command is sent, the control flow returns to function `_send_command_parse_response()` (file `client.py`)`,
+and will then call `parse_response()` of the `Redis` object to wait for the result. 
+Function `parse_response()` (file `client.py`) takes the connection object as its first argument and it
+further calls into the `read_response()` method of the connection object.
+Function `read_response()` (file `connection.py`) wraps over `read_response()` on the same `_parser` field.
+The `_parser` field is assigned during construction of the connection object (by calling `set_parser()` on `self`) 
+and is of type `class PythonParser`.
+
 
 
 
