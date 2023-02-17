@@ -850,6 +850,13 @@ Commonly used commands such as `GET` and `SET` are implemented in `class BasicKe
 For example, the `GET` command is implemented as a simple function `get()`, which does nothing else except  
 calling `execute_command()` with the command string `GET` as the first argument and the key as the second argument.
 
+`class BasicKeyCommands`, together with a few other classes implementing commands, are inherited by the main `Redis`
+class. Therefore, calls to method `execute_command()` within the `get()` (which is called by the user using the 
+`Redis` object as `this` pointer) will eventually land in `class Redis`'s `execute_command()` method.
+Function `execute_command()` (file `client.py`) accepts unnamed arguments in `args` and keyword arguments 
+in `options`. This function first grabs a connection object either from its `connection` field (in the case
+of single connection `Redis` object), or by calling `get_connection()` of the pool object.
+
 
 ## Build, Compilation, and Usage
 
