@@ -832,6 +832,14 @@ client's name, and then select the database. All the operations in this function
 only be performed when the information is given to the `class Redis` object (via the constructor) owning the 
 connection object.
 
+The default connection object assumes TCP/IP protocol without TLS. Alternatively, users can instruct the `Redis`
+object to use Unix domain sockets, which is a form of IPC that binds to a local file system node rather than
+to a host name of IP address. The domain socket connection object is implemented as `class UnixDomainSocketConnection`
+(file `connection.py`), which inherits from the connection class discussed above.
+The domain socket class overrides the `_connect()` method such that it creates a domain socket object 
+by calling Python library function `socket()` with the socket type being `AF_UNIX`.
+
+
 
 ## Build, Compilation, and Usage
 
