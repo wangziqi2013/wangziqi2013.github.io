@@ -856,6 +856,12 @@ class. Therefore, calls to method `execute_command()` within the `get()` (which 
 Function `execute_command()` (file `client.py`) accepts unnamed arguments in `args` and keyword arguments 
 in `options`. This function first grabs a connection object either from its `connection` field (in the case
 of single connection `Redis` object), or by calling `get_connection()` of the pool object.
+Then it indirectly invokes `_send_command_parse_response()` to send the command and wait for the response.
+Function `_send_command_parse_response()` (file `client.py`) simply calls `send_command()` on the connection
+object, and then waits for and parses the response by calling `parse_response()`. The 
+value from `parse_response()` is returned to the user.
+
+### Generating the Request String
 
 
 ## Build, Compilation, and Usage
