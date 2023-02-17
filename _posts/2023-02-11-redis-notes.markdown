@@ -784,6 +784,15 @@ size of the field including the encoding field and the data. A similar function,
 returns the size of the encoding field plus the length field, if the entry stores an integer. Otherwise, it
 always returns `1` for integers.
 
+## Redis Python Client Library
+
+At the client side, a client library is needed to communicate with Redis server. The client library implements 
+Redis's `RESP` protocol, which encodes strings, arrays, and so on into a specific format that can be understood
+by Redis server. Many open-sourced implementations of the Redis client interface are available, and in this section,
+we go over the [Python language implementation](https://github.com/redis/redis-py), `redis-py`.
+
+
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
