@@ -872,7 +872,11 @@ The pack method takes a list argument `args` and implements Redis's RESP protoco
 The RESP protocol serializes strings, integers, lists, and so on, into a single stream that can be understood
 by the Redis server. For Redis requests, the REST-compatible stream begins with a `*` symbol, followed by
 the number of arguments (including the command itself) and then `\r\n`. 
-
+The command is encoded as a string object, which begins with `$`, followed by the length of the string,
+then followed by `\r\n`, and finally followed by the string itself (which can contain `\r`, `\n`, or both).
+The rest of the stream consists of the arguments in their corresponding RESP encoding. In the simplest
+scenario, there is no argument, and the stream only contains the command. In common scenarios such as 
+`GET`, there is only one argument, which is the key, and the key is encoded by RESP as a string object.
 
 ## Build, Compilation, and Usage
 
