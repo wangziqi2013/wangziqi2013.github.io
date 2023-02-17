@@ -815,6 +815,12 @@ processes. The former is guarded by a thread lock such that concurrent usages of
 cause data corruption. The latter is also necessary to avoid different processes after `fork()` to keep sharing 
 connections.
 
+Interestingly, the `class Redis` constructor can also be instructed to use Unix domain socket, which is 
+an IPC mechanism provided by the OS kernel, when argument `unix_socket_path` is set to anything but `None`. 
+Besides, argument `single_connection_client`, if set not `None`, will cause the `class Redis` object to only
+open a single connection and save it to field `connection`. 
+In this case, the object is single-thread only and the connection pool is not initialized.
+
 ## Build, Compilation, and Usage
 
 ### Disabling Persistence
