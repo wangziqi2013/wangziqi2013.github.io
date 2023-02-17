@@ -791,10 +791,10 @@ Redis's `RESP` protocol, which encodes strings, arrays, and so on into a specifi
 by Redis server. Many open-sourced implementations of the Redis client interface are available, and in this section,
 we go over the [Python language implementation](https://github.com/redis/redis-py), `redis-py`.
 
-### Initializing the Connection
+### Initializing the Client Object
 
 The Redis Python interface can be imported into the source using `import redis`. After that, a new `Redis` object 
-representing the current session can be created by initializing a `redis.Redis` object with the host name or 
+representing the client can be created by initializing `redis.Redis` with the host name or 
 IP address of the Redis server and the port number.
 Class `Redis` is defined in file `client.py` of the source tree. In the most general case, the object constructor 
 creates a `ConnectionPool` object and saves it to the `connection_pool` field of the `Redis` object.
@@ -818,8 +818,17 @@ connections.
 Interestingly, the `class Redis` constructor can also be instructed to use Unix domain socket, which is 
 an IPC mechanism provided by the OS kernel, when argument `unix_socket_path` is set to anything but `None`. 
 Besides, argument `single_connection_client`, if set not `None`, will cause the `class Redis` object to only
-open a single connection and save it to field `connection`. 
-In this case, the object is single-thread only and the connection pool is not initialized.
+open a single connection and save it to field `connection`. In this case, the object is single-thread only.
+
+### The Connection Object
+
+The connection object, which will be initialized and managed by the connection pool, is defined in file `connection.py`
+as `class Connection`. The most important interface of this object is `connect()`, which requests a socket from
+the OS and connects the to Redis server.
+In particular, this function first requests a socket from the OS by calling `_connect()` of itself, which in turn
+invokes Python library function `socket()` to access the system call. 
+
+
 
 ## Build, Compilation, and Usage
 
