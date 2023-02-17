@@ -911,7 +911,14 @@ calls `_read_from_socket()` in a loop, which in turn invokes `recv` on the conne
 response data and appending it into the parser's internal buffer object `_buffer`.
 Function `readline()` returns on seeing a trailing `SYM_CRLF` in the response stream.
 
-
+After the response message is fully received, the control flow returns to the parer object's `_read_response()` method.
+This method then inspects the first character of the response message and parses the rest based on the first character. 
+If the first character indicates that more data should be received, the method will further call `read()` method
+of the `_buffer` to complete the receival process. The response message is returned to the caller after it is 
+fully received. The return value will then climb up the call chain through the 
+connect object's `_read_response()` and `read_response()`, the `Redis` object's `parse_response()`, 
+`_send_command_parse_response()`, and `execute_command()`, the `BasicKeyCommands` object's `get()`, 
+and finally to the user.
 
 ## Build, Compilation, and Usage
 
