@@ -791,6 +791,13 @@ Redis's `RESP` protocol, which encodes strings, arrays, and so on into a specifi
 by Redis server. Many open-sourced implementations of the Redis client interface are available, and in this section,
 we go over the [Python language implementation](https://github.com/redis/redis-py), `redis-py`.
 
+### Initializing the Connection
+
+The Redis Python interface can be imported into the source using `import redis`. After that, a new `Redis` object 
+representing the current session can be created by initializing a `redis.Redis` object with the host name or 
+IP address of the Redis server and the port number.
+Class `Redis` is defined in file `client.py` of the source tree. In the most general case, the object constructor 
+creates a `ConnectionPool` object and saves it to the `connection_pool` field of the `Redis` object.
 
 
 ## Build, Compilation, and Usage
