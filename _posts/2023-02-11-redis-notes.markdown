@@ -887,6 +887,14 @@ and finally another `SYM_CRLF`.
 The final result can be in one or more buffer objects to avoid large data copy. The buffer objects are 
 inserted into a list and returned to the caller.
 
+### Sending The Stream
+
+The returned list of buffer objects from `pack()` is then given to the `send_packed_command()` method as the
+first argument. Function `send_packed_command()` iterates over the list, and for each buffer object, invokes 
+`sendall()` on the socket object of the connection to send it to the Redis server.
+
+
+
 
 
 ## Build, Compilation, and Usage
