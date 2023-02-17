@@ -903,7 +903,13 @@ Function `read_response()` (file `connection.py`) wraps over `read_response()` o
 The `_parser` field is assigned during construction of the connection object (by calling `set_parser()` on `self`) 
 and is of type `class PythonParser`.
 
-
+Function `read_response()` (file `connection.py`) of `class PythonParser` calls `_read_response()` of the same object.
+The latter in turn calls `readline()` on its `_buffer` field. The `_buffer` field is assigned when the connection
+is initialized, in the connection object's `on_connect()` method (which calls the `on_connect()` method of the
+parser). The type of the `_buffer` field is `class SocketBuffer`. Its `readline()` method (file `connection.py`)
+calls `_read_from_socket()` in a loop, which in turn invokes `recv` on the connection socket's, receiving 
+response data and appending it into the parser's internal buffer object `_buffer`.
+Function `readline()` returns on seeing a trailing `SYM_CRLF` in the response stream.
 
 
 
