@@ -844,6 +844,12 @@ The connection type is selected by passing different class objects into `class C
 
 ### Executing Commands
 
+After constructing the object and setting up the connection, the `class Redis` object is returned to the caller,
+which is ready to accept commands.
+Commonly used commands such as `GET` and `SET` are implemented in `class BasicKeyCommands` (file `commands/core.py`).
+For example, the `GET` command is implemented as a simple function `get()`, which does nothing else except  
+calling `execute_command()` with the command string `GET` as the first argument and the key as the second argument.
+
 
 ## Build, Compilation, and Usage
 
