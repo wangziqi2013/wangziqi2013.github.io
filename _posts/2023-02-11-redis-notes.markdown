@@ -807,7 +807,13 @@ connection object from its `_available_connections` list, or creates a new conne
 Either way, the new connection is created with the arguments passed into `class Redis`'s constructor,
 connected to the Redis server by calling `connect()` on the connection object, and finally 
 returned back to the caller.
-
+The second method is `release()`, which returns a connection back to the pool object by inserting it back into
+the `_available_connections` list. Note that the pool object will keep connections alive and not disconnect them
+proactively from the client's side. 
+The pool object is both thread-safe and fork-safe such that connections will not be shared between threads and
+processes. The former is guarded by a thread lock such that concurrent usages of the Redis object will not
+cause data corruption. The latter is also necessary to avoid different processes after `fork()` to keep sharing 
+connections.
 
 ## Build, Compilation, and Usage
 
