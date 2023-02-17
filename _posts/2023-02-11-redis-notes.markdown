@@ -839,6 +839,10 @@ to a host name of IP address. The domain socket connection object is implemented
 The domain socket class overrides the `_connect()` method such that it creates a domain socket object 
 by calling Python library function `socket()` with the socket type being `AF_UNIX`.
 
+The connection type is selected by passing different class objects into `class ConnectionPool`'s contructor as the
+`connection_class` argument. 
+
+### Executing Commands
 
 
 ## Build, Compilation, and Usage
