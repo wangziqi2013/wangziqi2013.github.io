@@ -59,12 +59,23 @@ call on the socket descriptor. The return value from the `read()` system call is
 as local variable `nread`.
 
 After the read call returns, the function first checks the return value for any anomalies (both `0` and `-1` 
-indicate anomalies). Then the size of the receiving buffer is updated by increasing it by calling 
+indicate anomalies). Then the size of the receiving buffer is updated by calling 
 `sdsIncrLen`, which increases the length of the string object by `nread` bytes.
 Lastly, the function `processInputBuffer()` is called to parse the received content in the buffer. 
-This function may return `C_ERR` to indicate parsing failure. 
-If this occurs, the function call to `beforeNextClient()` will close the connection and deallocate the 
+This function may return `C_ERR` to indicate a parsing failure. 
+If a failure occurs, the function call to `beforeNextClient()` will close the connection and deallocate the 
 client object, hence terminating the current session.
+
+#### Parsing Command Data
+
+Function `processInputBuffer()` (file `networking.c`) is called every time new data is received from the 
+connection, which is is responsible for parsing command data and driving the state machine.
+This function starts parsing from `c->qb_pos` until the buffer is drained.
+It first checks whether `c->reqtype` is zero or not. If it is zero, indicating that the function is currently
+parsing a new command rather than in the middle of parsing, then it determines whether the command is
+a multiblock one (i.e., using RESP) or an inline command by checking whether the first character of the buffer
+is `*`. In the case of RESP, the request type field of the client object is set to `PROTO_REQ_MULTIBULK`.
+For RESP format requests, the function then calls `processMultibulkBuffer()` to parse the RESP strings.
 
 ### Input Parsing and Dispatching
 
