@@ -6,6 +6,13 @@ categories: article
 ontop: true
 ---
 
+## The Redis Serialization Protocol (RESP)
+
+Newer versions of Redis employ the RESP (Redis Serialization Protocol) to transfer requests and responses as 
+binary strings over the connection. From a high level, RESP provides an easy-to-implement specification for 
+representing common data types such as strings, integers, arrays.
+
+
 ## General Workflow
 
 ### Input Parsing and Dispatching
@@ -852,7 +859,7 @@ calling `execute_command()` with the command string `GET` as the first argument 
 
 `class BasicKeyCommands`, together with a few other classes implementing commands, are inherited by the main `Redis`
 class. Therefore, calls to method `execute_command()` within the `get()` (which is called by the user using the 
-`Redis` object as `this` pointer) will eventually land in `class Redis`'s `execute_command()` method.
+`Redis` object as `self` pointer) will eventually land in `class Redis`'s `execute_command()` method.
 Function `execute_command()` (file `client.py`) accepts unnamed arguments in `args` and keyword arguments 
 in `options`. This function first grabs a connection object either from its `connection` field (in the case
 of single connection `Redis` object), or by calling `get_connection()` of the pool object.
@@ -895,7 +902,7 @@ first argument. Function `send_packed_command()` iterates over the list, and for
 
 ### Waiting for the Result
 
-After the command is sent, the control flow returns to function `_send_command_parse_response()` (file `client.py`)`,
+After the command is sent, the control flow returns to function `_send_command_parse_response()` (file `client.py`),
 and will then call `parse_response()` of the `Redis` object to wait for the result. 
 Function `parse_response()` (file `client.py`) takes the connection object as its first argument and it
 further calls into the `read_response()` method of the connection object.
@@ -915,10 +922,10 @@ After the response message is fully received, the control flow returns to the pa
 This method then inspects the first character of the response message and parses the rest based on the first character. 
 If the first character indicates that more data should be received, the method will further call `read()` method
 of the `_buffer` to complete the receival process. The response message is returned to the caller after it is 
-fully received. The return value will then climb up the call chain through the 
+fully received. The response message will then climb up the call chain through the 
 connect object's `_read_response()` and `read_response()`, the `Redis` object's `parse_response()`, 
 `_send_command_parse_response()`, and `execute_command()`, the `BasicKeyCommands` object's `get()`, 
-and finally to the user.
+and finally be returned to the user.
 
 ## Build, Compilation, and Usage
 
