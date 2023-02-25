@@ -39,6 +39,9 @@ The second is `bulklen`, which is the length of the current RESP string being re
 The struct member `querybuf` is an SDS type string used as the per-connection receiving buffer, with the 
 member `qb_pos` as the current head of receiving. 
 
+The received RESP string objects are stored temporarily in the `argv` field of the client object as an array 
+of `robj` objects. The `argc` field simply indicates the number of elements in the `argv` field.
+
 
 ### Input Parsing and Dispatching
 
