@@ -8,8 +8,8 @@ ontop: true
 
 ## The Redis Serialization Protocol (RESP)
 
-Newer versions of Redis employ the RESP (Redis Serialization Protocol) to transfer requests and responses as 
-binary strings over the connection. From a high level, RESP provides an easy-to-implement specification for 
+Newer versions of Redis employ RESP (Redis Serialization Protocol) to transfer requests and responses as 
+binary strings. From a high level, RESP provides an easy-to-implement specification for 
 representing common data types such as strings, integers, arrays.
 In RESP, strings are represented as a `$` character, followed by the length of the string in decimal format, 
 followed by `\r\n`. The string itself can contain arbitrary characters including `\0`, `\r` and `\n` and can
@@ -18,6 +18,12 @@ Integers are represented as a `:` character, followed by the decimal representat
 Arrays are represented as a `*` character, followed by the number of elements of the array in decimal
 format, followed by `\r\n`. The elements of the array then follows the array header, which themselves can be
 of any of the valid data types.
+
+Both Redis requests and responses are encoded by RESP before they are sent over the connection. For requests, 
+the RESP format is always an array of strings, with the first string being the command and the rest of them
+being the arguments. Responses, however, can be of any valid RESP data type. The most common form of a reply 
+is a string beginning with either `+`, indicating that the command has executed successfully, or `-`, 
+indicating that the command failed to execute.
 
 ## General Workflow
 
