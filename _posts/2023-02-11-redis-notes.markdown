@@ -58,7 +58,13 @@ function indirectly invokes `connSocketRead()` (file `connection.c`), which in t
 call on the socket descriptor. The return value from the `read()` system call is also relayed back to the caller
 as local variable `nread`.
 
-
+After the read call returns, the function first checks the return value for any anomalies (both `0` and `-1` 
+indicate anomalies). Then the size of the receiving buffer is updated by increasing it by calling 
+`sdsIncrLen`, which increases the length of the string object by `nread` bytes.
+Lastly, the function `processInputBuffer()` is called to parse the received content in the buffer. 
+This function may return `C_ERR` to indicate parsing failure. 
+If this occurs, the function call to `beforeNextClient()` will close the connection and deallocate the 
+client object, hence terminating the current session.
 
 ### Input Parsing and Dispatching
 
