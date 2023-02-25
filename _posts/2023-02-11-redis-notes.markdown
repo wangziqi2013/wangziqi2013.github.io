@@ -29,6 +29,19 @@ indicating that the command failed to execute.
 
 ### Input Parsing and Dispatching
 
+#### The State Machine
+
+Requests are read by a state machine over potentially multiple attempts to read from the connection, due to the 
+fact that a request may not be fully received with a single read operation, especially the long ones.
+Redis maintains a few state variables in the `struct client` object (defined in file `server.h`). 
+The first is `multibulklen`, which is the number of elements in the request RESP array.
+The second is `bulklen`, which is the length of the current RESP string being received.
+The struct member `querybuf` is an SDS type string used as the per-connection receiving buffer, with the 
+member `qb_pos` as the current head of receiving. 
+
+
+### Input Parsing and Dispatching
+
 `call()` (file `server.c`) is the entry point for processing a client message. It invokes `c->cmd->proc(c)`.
 `c->cmd` points to the table `redisCommandTable` in commands.c and the type is `struct redisCommand`.
 The call back function for each command is also defined in `struct redisCommand` as field `proc`, i.e.,
