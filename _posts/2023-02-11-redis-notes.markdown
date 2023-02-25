@@ -27,7 +27,7 @@ indicating that the command failed to execute.
 
 ## General Workflow
 
-### Input Parsing and Dispatching
+### Command Parsing and Dispatching
 
 #### The State Machine
 
@@ -37,10 +37,24 @@ Redis maintains a few state variables in the `struct client` object (defined in 
 The first is `multibulklen`, which is the number of elements in the request RESP array.
 The second is `bulklen`, which is the length of the current RESP string being received.
 The struct member `querybuf` is an SDS type string used as the per-connection receiving buffer, with the 
-member `qb_pos` as the current head of receiving. 
+member `qb_pos` as the current head of command parsing. The length of the SDS string, on the other
+hand, represents the current size of data in the receiving buffer.
 
 The received RESP string objects are stored temporarily in the `argv` field of the client object as an array 
 of `robj` objects. The `argc` field simply indicates the number of elements in the `argv` field.
+
+#### Reading from the Connection
+
+The input parsing workflow begins with function `readQueryFromClient()` (file `networking.c`), which is registered
+to the AE library as the call back function of the connection and will be invoked when the socket is ready to be read.
+In the most common case, this function 
+first attempts to allocate at least `PROTO_IOBUF_LEN` bytes in the receiving buffer by calling `sdsMakeRoomFor()`,  and 
+then computes the number of bytes to read, `readlen`, by calling `sdsavail()` on the query buffer object 
+`c->querybuf`, which returns the number of available bytes after the current valid content in the allocated memory 
+block for the buffer. 
+
+
+
 
 
 ### Input Parsing and Dispatching
