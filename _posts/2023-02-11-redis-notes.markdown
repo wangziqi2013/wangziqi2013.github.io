@@ -11,7 +11,13 @@ ontop: true
 Newer versions of Redis employ the RESP (Redis Serialization Protocol) to transfer requests and responses as 
 binary strings over the connection. From a high level, RESP provides an easy-to-implement specification for 
 representing common data types such as strings, integers, arrays.
-
+In RESP, strings are represented as a `$` character, followed by the length of the string in decimal format, 
+followed by `\r\n`. The string itself can contain arbitrary characters including `\0`, `\r` and `\n` and can
+hence be used to represent binary blobs.
+Integers are represented as a `:` character, followed by the decimal representation, followed by `\r\n`. 
+Arrays are represented as a `*` character, followed by the number of elements of the array in decimal
+format, followed by `\r\n`. The elements of the array then follows the array header, which themselves can be
+of any of the valid data types.
 
 ## General Workflow
 
