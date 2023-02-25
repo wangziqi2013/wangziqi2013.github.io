@@ -76,6 +76,13 @@ parsing a new command rather than in the middle of parsing, then it determines w
 a multiblock one (i.e., using RESP) or an inline command by checking whether the first character of the buffer
 is `*`. In the case of RESP, the request type field of the client object is set to `PROTO_REQ_MULTIBULK`.
 For RESP format requests, the function then calls `processMultibulkBuffer()` to parse the RESP strings.
+If the command is fully received, then function `processMultibulkBuffer()` will finish parsing and return `C_OK`, 
+after which the command is executed by calling `processCommandAndResetClient()`. 
+Otherwise, the command cannot be parsed because more data is to be received.
+In either case, the receiving buffer is truncated by calling `sdsrange`, which shifts the unparsed content of 
+the buffer after `c->qb_pos` to the beginning, preparing the buffer for the next receiving operation.
+The client object's `qb_pos` field is also reset to zero to indicate that future parsing will start from the 
+first byte of the buffer.
 
 ### Input Parsing and Dispatching
 
