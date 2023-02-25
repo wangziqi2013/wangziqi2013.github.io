@@ -53,7 +53,10 @@ then computes the number of bytes to read, `readlen`, by calling `sdsavail()` on
 `c->querybuf`, which returns the number of available bytes after the current valid content in the allocated memory 
 block for the buffer. 
 
-
+After the buffer is set up, the function calls `connRead()` to actually read from the connection. The `connRead()`
+function indirectly invokes `connSocketRead()` (file `connection.c`), which in turn invokes the `read()` system
+call on the socket descriptor. The return value from the `read()` system call is also relayed back to the caller
+as local variable `nread`.
 
 
 
