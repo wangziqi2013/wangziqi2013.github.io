@@ -142,6 +142,16 @@ and the arguments are separated by one or more space characters and is terminate
 The inline request format is more human readable and favors manually generated requests via command line tools 
 such as `telnet`.
 
+When processing a new command from the client, the Redis server distinguishes between RESP format and inline format
+by checking whether the first character of the request is `*` or not. In the latter case, the function 
+`processInlineBuffer()` is invoked to process the request as an inline request.
+
+Function `processInlineBuffer()` (file `networking.c`) first verifies that the entire command has been received in
+the buffer by checking whether `\n` is in the buffer. Note that Redis cannot determine the length of the 
+inline request if the request is not fully received, and hence will always report error back to the client
+if the `\n` is not found. In other words, inline requests cannot be received over multiple `read()` attempts
+and is therefore not recommended for usages beyond manual testing.
+
 
 
 ### Command Processing
