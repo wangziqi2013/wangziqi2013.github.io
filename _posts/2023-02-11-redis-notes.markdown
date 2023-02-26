@@ -225,44 +225,6 @@ To summarize:
 `connSocketRead()`--(enters kernel)-->
 `read()`
 
-### The Write Path
-
-After the Redis server processes the command, the reply is generated into the client's reply buffer by calling 
-`addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
-is coupled with `c->bufpos` to indicate the current write position.
-
-In order to send the reply message back to the client, the Redis server, during initialization, registers a callback 
-function to the AE Library as the before-sleep callback via `aeSetBeforeSleepProc()`. The callback function 
-being registered is `beforeSleep()`.
-
-Recall that the before-sleep callback, i.e., function `beforeSleep()` (file `server.c`), is invoked right before 
-the AE Library invokes `select()` (or other multiplexing system calls). 
-The function invokes `handleClientsWithPendingWritesUsingThreads()` (file `networking.c`) whose name may be somehow
-misleading because Redis, by default, is not multi-threaded.
-However, after a careful examination of the function body, it turns out that the function simply wraps over 
-`handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
-configuration variable defined in `config.c`).
-
-Function `handleClientsWithPendingWrites()` (file `networking.c`) traverses the list `server.clients_pending_write`,
-which contains clients that have reply messages to send. This list is populated at the beginning of `addReply()` by
-calling `prepareClientToWrite()` (file `networking.c`).
-For every client in the list, the function calls `writeToClient()`, which wraps over `_writeToClient()`.
-Function `_writeToClient()` (file `networking.c`) further calls `connWrite()` on the client's connection
-object, which indirectly calls `connSocketWrite()` via the connection's `type` field.
-The write path terminates at function `connSocketWrite` (file `connection.c`), which invokes the `write()` system
-call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
-due to `write()` not being able to accept the requested length (which is completely normal).
-
-To summarize:
-
-`beforeSleep()`--(enters `networking.c`)-->
-`handleClientsWithPendingWritesUsingThreads()`-->
-`handleClientsWithPendingWrites()`-->
-`writeToClient()`-->
-`_writeToClient()`--(enters `connection.c`)-->
-`connWrite()`--(enters kernel)-->
-`write()`-->
-
 ### Command Parsing and Dispatching
 
 #### The State Machine
@@ -516,6 +478,44 @@ a `struct sharedObjectsStruct` object in `server.c`. The object is a statically 
 `shared` in `server.c` and it contains the `robj` objects that can be used for `addReply()`.
 The singleton `shared` object is populated in function `createSharedObjects()` (file `server.c`).
 The function initializes the object by creating `sds` string objects using `createObject()` (file `object.c`).
+
+### The Write Path
+
+After the Redis server processes the command, the reply is generated into the client's reply buffer by calling 
+`addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
+is coupled with `c->bufpos` to indicate the current write position.
+
+In order to send the reply message back to the client, the Redis server, during initialization, registers a callback 
+function to the AE Library as the before-sleep callback via `aeSetBeforeSleepProc()`. The callback function 
+being registered is `beforeSleep()`.
+
+Recall that the before-sleep callback, i.e., function `beforeSleep()` (file `server.c`), is invoked right before 
+the AE Library invokes `select()` (or other multiplexing system calls). 
+The function invokes `handleClientsWithPendingWritesUsingThreads()` (file `networking.c`) whose name may be somehow
+misleading because Redis, by default, is not multi-threaded.
+However, after a careful examination of the function body, it turns out that the function simply wraps over 
+`handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
+configuration variable defined in `config.c`).
+
+Function `handleClientsWithPendingWrites()` (file `networking.c`) traverses the list `server.clients_pending_write`,
+which contains clients that have reply messages to send. This list is populated at the beginning of `addReply()` by
+calling `prepareClientToWrite()` (file `networking.c`).
+For every client in the list, the function calls `writeToClient()`, which wraps over `_writeToClient()`.
+Function `_writeToClient()` (file `networking.c`) further calls `connWrite()` on the client's connection
+object, which indirectly calls `connSocketWrite()` via the connection's `type` field.
+The write path terminates at function `connSocketWrite` (file `connection.c`), which invokes the `write()` system
+call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
+due to `write()` not being able to accept the requested length (which is completely normal).
+
+To summarize:
+
+`beforeSleep()`--(enters `networking.c`)-->
+`handleClientsWithPendingWritesUsingThreads()`-->
+`handleClientsWithPendingWrites()`-->
+`writeToClient()`-->
+`_writeToClient()`--(enters `connection.c`)-->
+`connWrite()`--(enters kernel)-->
+`write()`-->
 
 ### Configuration
 
@@ -1078,6 +1078,24 @@ connect object's `_read_response()` and `read_response()`, the `Redis` object's 
 and finally be returned to the user.
 
 ## Build, Compilation, and Usage
+
+### Connecting to Redis Server using Telnet
+
+Instead of using a client that implements RESP, users can interact with Redis server using `telnet`
+by manually typing the command. For a Redis server instance started on the local host on the default port `6379`,
+users can connect to it using the following telnet command:
+
+```
+telnet localhost 6379
+```
+
+After connecting to the server (there is no prompt), users can then send commands with space-separated arguments.
+For example, in order to set a key `key1` to string `value1`, type the following command:
+
+```
+set key1 value1
+```
+
 
 ### Disabling Persistence
 
