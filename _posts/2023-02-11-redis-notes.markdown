@@ -114,6 +114,15 @@ Then in the next iteration of `readQueryFromClient()`, the `c->bulklen` will be 
 receiving buffer such that the buffer can always hold the element in its entirety.
 The parsing function will not process the element before it is fully received.
 
+After the element is fully received, the function `processMultibulkBuffer()` then allocates a new SDS string object
+and wraps it with a `robj` object by calling `createStringObject()` with the pointer to the receiving buffer and 
+the length of the element as arguments.
+The function also implements an optimization here, i.e., if the length of the element exceeds a certain threshold
+(`PROTO_MBULK_BIG_ARG`) and the receiving buffer only contains the element's data, then the receiving buffer
+will be directly used as the SDS string without redundantly copying its content to a newly created string object. 
+In this case, a new receiving buffer will be created and assigned to the client object.
+
+
 
 ### Input Parsing and Dispatching
 
