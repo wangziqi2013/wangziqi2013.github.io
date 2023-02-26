@@ -91,6 +91,11 @@ which case the function reads the number of elements in the array by first verif
 in the receiving buffer (meaning that the array header has been fully received), and then parsing the 
 number of elements by calling `string2ll()` (file `util.h`) to convert the decimal representation in the array header
 to an integer.
+After the array size is parsed, the value is stored in `c->multibulklen`, and `c->argv` is initialized accordingly.
+Future invocations of this function will see a non-zero value for `c->multibulklen`, in which case it knows that
+the state machine is currently in the middle of parsing a partially received command and will therefore skip
+the above step. 
+
 
 
 ### Input Parsing and Dispatching
