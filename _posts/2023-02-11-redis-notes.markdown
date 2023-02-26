@@ -180,6 +180,12 @@ The in-memory command dictionary is implemented as a `dict` object in the server
 During initialization, function `populateCommandTable()` traverses the table `redisCommandTable`, and for every
 table entry, inserts it into the in-memory command dictionary using the command name as the lookup key.
 
+Function `lookupCommand()` (file `server.c`) simply wraps `lookupCommandLogic()`, which in turn calls 
+`dictFetchValue()` on `server.commands` to look up the in-memory command dictionary.
+If the command is found, it will be returned back to the caller
+function `processCommand()` as a pointer to the `struct redisCommand` object and assigned to the `cmd`
+field of the client object.
+
 
 ### Command Processing
 
