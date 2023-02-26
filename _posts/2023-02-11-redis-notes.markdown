@@ -96,6 +96,14 @@ Future invocations of this function will see a non-zero value for `c->multibulkl
 the state machine is currently in the middle of parsing a partially received command and will therefore skip
 the above step. 
 
+#### Parsing Command Data
+
+After parsing the header, the function then proceed to parse the array element one by one, using `c->multibulklen`
+as the loop control variable. For every element, the loop checks whether it begins with `$`, then parses the 
+length of the RESP string using `string2ll()` after verifying the `\r` character, and finally reads the string 
+into a newly allocated SDS object. The SDS object is wrapped by an `robj` object and then put into `c->argv`. 
+At the end of the loop, `c->multibulklen` is decremented by one to indicate that one element has been successfully 
+parsed.
 
 
 ### Input Parsing and Dispatching
