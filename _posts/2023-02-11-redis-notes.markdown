@@ -135,6 +135,15 @@ To summarize:
 `processInputBuffer()`-->
 `processMultibulkBuffer()`
 
+#### Inline Requests
+
+Alternatively, requests can be sent to and processed by the Redis server in an inline format where the command 
+and the arguments are separated by one or more space characters and is terminated by the new line character `\n`. 
+The inline request format is more human readable and favors manually generated requests via command line tools 
+such as `telnet`.
+
+
+
 ### Command Processing
 
 Command process starts with the call back function registered in the command table `redisCommandTable` 
