@@ -1096,6 +1096,18 @@ For example, in order to set a key `key1` to string `value1`, type the following
 set key1 value1
 ```
 
+and Redis will return `+OK` to indicate successful execution of the command. In order to retrieve the value
+set by the previous command, type
+
+```
+get key1
+```
+
+and Redis will return `value1`.
+
+Note that common key combinations such as `Ctrl+C`, `Ctrl+D`, and `Ctrl+Z` do not work on telnet as intended.
+In order to terminate the session, users need to first press `Ctrl+]` to switch to telnet console, and then
+type `quit` to close the connection. 
 
 ### Disabling Persistence
 
