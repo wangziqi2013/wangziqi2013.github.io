@@ -129,7 +129,11 @@ in the middle of receiving an element, and `c->multibulklen` is decremented by o
 If `c->multibulklen` drops to zero after decrementing, then the command has been fully parsed, in
 which case the function returns `C_OK` to notify the caller that the command can be processed.
 
+To summarize:
 
+`readQueryFromClient()`-->
+`processInputBuffer()`-->
+`processMultibulkBuffer()`
 
 ### Input Parsing and Dispatching
 
