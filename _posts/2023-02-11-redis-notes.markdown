@@ -185,7 +185,18 @@ Function `lookupCommand()` (file `server.c`) simply wraps `lookupCommandLogic()`
 If the command is found, it will be returned back to the caller
 function `processCommand()` as a pointer to the `struct redisCommand` object and assigned to the `cmd`
 field of the client object.
+The function then performs command integrity checks such as the number of arguments (the arity check),
+sets a few flags according to the command's statically-defined properties, and checks the permissions.
+If any of the checks fails, the server will reject the command and send an error message back to the
+client by calling `rejectCommand()`.
+At last, after all checks have passed, the command is executed by calling `call()` on the client object.
 
+Function `call()` (file `server.c`) performs a large number of extra checks based on the runtime 
+flags of the command and the server configuration. However, the most critical line of the function is the line that
+invokes `c->cmd->proc()`, which is the command handler registered to the `struct redisCommand` object.
+The command handler implements the specific command that corresponds to the command string in the request.
+Individual command handlers can be easily located in the global table `redisCommandTable` residing in file 
+`server.c`.
 
 ### Command Processing
 
