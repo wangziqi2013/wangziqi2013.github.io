@@ -25,7 +25,243 @@ being the arguments. Responses, however, can be of any valid RESP data type. The
 is a string beginning with either `+`, indicating that the command has executed successfully, or `-`, 
 indicating that the command failed to execute.
 
+## The Asynchronous Event (AE) Library 
+
+Redis implements an Asynchronous Event Library, or the AE library, to facilitate socket-based communication.
+The AE library is defined in `ae.h` and `ae.c`. At a high level, the AE library works as an event loop, which is
+also the main event loop of Redis server. The event loop monitors the read and write status of file descriptors 
+using blocking system calls. When one or more file descriptors become readable or writable, the loop will unblock
+and the corresponding event will be handled by invoking the callback functions. The rest of Redis registers 
+the file descriptors and callback handlers to the AE library such that the operation of the server can be properly 
+driven.
+
+The central data structure of the AE library is `struct aeEventLoop` (file `ae.h`) which contains information for
+event handling and registration. In particular, field `events` stores an array of registered file descriptors and 
+callback handlers (of type `struct aeFileEvent`). Field `fired` stores an array of file descriptors that become
+readable or writable in the current iteration. 
+There are also two callback functions, namely, `beforesleep` and `aftersleep`, that are registered to the event loop
+object. These two functions are set during server initialization and will be called before and after the blocking 
+system call, respectively.
+
+### The System Call Layer
+
+The AE library is compatible with a number of system calls that monitor the status of file descriptors, including 
+`evport()`, `epoll()`, `kqueue()`, and `select()`, with the preference being in a descending order 
+(selected in file `ae.c` as a sequence of `#ifdef`s). In the following sections, we use `select()` as an example, but
+the workflow does not really change between the system calls used.
+
+The `select`-compatible implementation resides in `ae_select.c`. The file defines `struct aeApiState`,
+which contains the file descriptor arrays to be used with `select()` system call.
+The file implements three vital functions. Function `aeApiCreate()` initializes the `aeApiState` object and 
+sets the `apidata` field of the event loop object to point to the initialized object.
+Function `aeApiAddEvent()` adds a given file descriptor into the descriptor array, which enables the descriptor 
+to be monitored by the library. Function `aeApiPoll()` invokes `select()` system call with the file descriptor array.
+The system call is blocking and will return when one or more file descriptor become available, or on a timeout.
+After the system call returns, the function will scan the file descriptor array to determine which of them 
+have fired, and inserts them into the `fired` array of the event loop object.
+The function also returns the number of fired file descriptors to the caller.
+
+### The Event Handling Layer
+
+The singleton event loop object is initialized during server initialization by calling `aeCreateEventLoop()` 
+(file `ae.c`), which initializes the loop object and returns it to the server. The server saves the event loop 
+object in the server object field `el`.
+
+During the operation of the server, the function `aeCreateFileEvent()` will be called to register new file descriptors
+and callback handlers to the AE library. This function carries the descriptor to be registered, the callback handler
+`proc` (which is a function pointer), and the argument to the callback handler `clientData` (which is the `client`
+object for client sockets). Note that although only one callback handler is passed to this function, the AE Library
+internally distinguishes between read handlers and write handlers (as evidenced by the `rfileProc` and `wfileProc`
+fields of `struct aeFileEvent`). Consequently, the provided handler will be used as both the read and the write
+handler. 
+
+After server initialization, the server enters the main event loop by calling `aeMain()` (file `ae.c`). 
+This function loops infinitely and calls `aeProcessEvents()` in every iteration.
+Function `aeProcessEvents()` first invokes the `beforesleep` callback (which is registered by the server during 
+initialization), then invokes `aeApiPoll()`, which may be blocked in the kernel. After the call returns, the
+function then invokes the after-sleep callback `aftersleep`, and then processes fired events.
+It simply scans the `fired` array, and for each file descriptor in the array, invokes its read or write 
+callback handler with `clientData` as one of the arguments.
+A `mask` argument is also passed to the callback handler to indicate whether the fired descriptor is ready for 
+read, write, or both.
+
+Overall, the `aeProcessEvents()` function implements the main event loop of Redis server. Redis server uses
+the AE Library to multiplex between multiple clients as well as the listening socket, hence implementing the 
+listening and the read path. In addition, Redis server uses the before-sleep callback mechanism of the event loop 
+object to implement the write path. Reply messages to the clients are sent within the before-sleep callback
+after these messages are generated into the reply buffer in last iteration's command processing.
+
 ## General Workflow
+
+### The Listening Path
+
+#### Binding and Listening
+
+Redis server listens on one or more sockets and accepts connections from the clients. 
+This listening path begins in function `initServer()` (file `server.c`) by calling `listenToPort()`.
+The function `listenToPort()` (file `server.c`) accepts a list IP addresses to bind to and a single port number.
+For every address, it invokes `anetTcpServer()` (file `anet.c`) to bind the address.
+The function `anetTcpServer()` wraps over `_anetTcpServer()` (file `anet.c`), which creates a new socket
+for listening by invoking the system call `socket()` followed by `anetListen()` (file `anet.c`).
+Function `anetListen()` simply invokes system calls `bind()` and then `listen()` to bind the address
+and start listening.
+Finally, the newly created file descriptor is returned to the caller.
+Note that Redis also supports other types of sockets, such as IPv6 and TLS, but we assume IPv4 sockets are
+used to simplify the discussion.
+
+To summarize:
+
+`initServer()`-->
+`listenToPort()`--(enters `anet.c`)-->
+`anetTcpServer()`-->
+`_anetTcpServer()`-->
+`anetListen()`--(enters kernel)-->
+`bind()` and `listen()`
+
+#### Accepting New Connections
+
+Later on during server initialization, the listening sockets are registered to the AE Library for monitoring.
+The path begins with `createSocketAcceptHandler()` (file `server.c`), which calls `aeCreateFileEvent()` to
+register the listening sockets one by one with the callback handler being `acceptTcpHandler()`.
+The callback handler `acceptTcpHandler()` (file `networking.c`), as discussed above, will be invoked
+when the AE Library fires it.
+The handler calls `anetTcpAccept()` (file `anet.c`), which wraps `anetGenericAccept()` (file `anet.c`).
+The latter accepts the connection by invoking the `accept()` system call.
+The newly assigned socket for communicating with the client is also returned to the caller for later usage.
+
+To summarize:
+
+`initServer()`-->
+`createSocketAcceptHandler()`--(enters `ae.c`)-->
+`aeCreateFileEvent()`--(via callbacks, enters `networking.c`)-->
+`acceptTcpHandler()`--(enters `anet.c`)-->
+`anetTcpAccept()`-->
+`anetGenericAccept()`--(enters kernel)-->
+`accept()`
+
+#### Creating the Connection Object
+
+After the connection is accepted at the OS level, the next step is to initialize the local data structures for
+keeping the client's information. This path begins in function `acceptTcpHandler()` (file `networking.c`) by
+calling `connCreateAcceptedSocket()` (file `connection.c`). The function wraps `connCreateSocket()` 
+which allocates a new connection object of type `struct connection`.
+The connection object represents the server-side state of the connection. The object stores the file descriptor
+returned from `accept` system call. The object also contains two critical callback handlers, the `read_handler`
+and the `write_handler`, which are invoked for reading and writing data from/into the socket. 
+The `type` field of the connection object defines a series of function pointers that either operate on the 
+connection object itself or on the socket. For example, `type->set_read_handler` assigns a new read handler
+to the connection object's `read_handler` field, while `type->read` directly reads the socket using the `read` system
+call. The newly allocated connection object is returned to the caller for later usage.
+
+To summarize:
+
+`acceptTcpHandler()`-->
+`connCreateAcceptedSocket()`--(enters `connection.c`)-->
+`connCreateSocket()`
+
+#### Creating the Client Object
+
+After creating the connection object, the Redis server then proceeds to creating the client object.
+This path also begins in `acceptTcpHandler()` right after the connection object is returned. 
+The returned object is passed into function `acceptCommonHandler()` (file `networking.c`), which first 
+checks whether the connection is valid and legal (e.g., not exceeding the maximum number of concurrent
+connection), and then calls `createClient()` to create the client object.
+
+Function `createClient()` (file `networking.c`) first creates a `struct client` object using `zmalloc()` 
+and then sets the read handler of the connection object for the client to `readQueryFromClient` by calling 
+`connSetReadHandler()`. 
+Finally, the function initializes the client's states including the send and receive data buffer and buffer
+pointers. The database object that the client operates on is also set to the default one on index zero by
+calling `selectDb()`.
+
+Function `connSetReadHandler()` (file `connection.c`) will indirectly call `connSocketSetReadHandler()` via the
+per-connection object `type` field. 
+Function `connSocketSetReadHandler()` (file `connection.c`) stores the callback handler in the connection
+object's `read_handler` field and then registers the file descriptor of the connection to the AE Library
+via `aeCreateFileEvent()`. 
+The registered callback handler to the AE Library is function `connSocketEventHandler()` (file `connection.c`),
+which will in turn call `read_handler` and/or `write_handler` fields when the file descriptor fires in the AE Library. 
+
+Overall, during the client creation process, the file descriptor of the client is registered to the AE Library
+for monitoring. The callback handler `readQueryFromClient` will be invoked (after several levels of indirection)
+when the file descriptor is read to be read. Note that the client does not register any write handler to the 
+connection to the object. As a result, the connection is only capable of reading from the client but
+not vise versa.
+
+To summarize:
+
+`acceptTcpHandler()`-->
+`acceptCommonHandler()`-->
+`createClient()`--(enters `connection.c`)-->
+`connSetReadHandler()`-->
+`connSocketSetReadHandler()`--(enters `ae.c`)-->
+`aeCreateFileEvent()`--(via callback, enters `networking.c`)-->
+`readQueryFromClient()`-->
+
+### The Read Path
+
+As discussed earlier, when a client is initialized, its file descriptor is registered to the AE Library for read.
+The callback handler of the registration is function `readQueryFromClient()`, meaning that
+this function will be invoked every time some data arrives at the socket and is selected by the AE Library.
+The handler will be invoked with the connection object as its sole argument, which is passed to the 
+AE Library at registration time.
+
+Function `readQueryFromClient()` (file `networking.c`) first checks whether the buffer is big enough for the client
+message. In most cases, no action is taken, and the function then calls `connRead()` on the client's connection object.
+Inline function `connRead()` (file `connection.h`) indirectly calls `connSocketRead()` via the connection
+object's `type->read`, which in turn invokes the `read()` system call to pull data out of the socket stream.
+Note that the destination buffer of the read is the client's `querybuf`, which is coupled with `qblen` to indicate
+the current length of data in the buffer. 
+The length to be read is calculated as the remaining capacity of the buffer, as evidenced by the 
+local variable `readlen`.
+
+After data is read from the socket, the handler then invokes `processInputBuffer()` to parse and dispatch 
+the command. We have already covered the command parsing and dispatching in an earlier section.
+
+To summarize:
+
+`readQueryFromClient()`--(enters `connection.c`)-->
+`connRead()`-->
+`connSocketRead()`--(enters kernel)-->
+`read()`
+
+### The Write Path
+
+After the Redis server processes the command, the reply is generated into the client's reply buffer by calling 
+`addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
+is coupled with `c->bufpos` to indicate the current write position.
+
+In order to send the reply message back to the client, the Redis server, during initialization, registers a callback 
+function to the AE Library as the before-sleep callback via `aeSetBeforeSleepProc()`. The callback function 
+being registered is `beforeSleep()`.
+
+Recall that the before-sleep callback, i.e., function `beforeSleep()` (file `server.c`), is invoked right before 
+the AE Library invokes `select()` (or other multiplexing system calls). 
+The function invokes `handleClientsWithPendingWritesUsingThreads()` (file `networking.c`) whose name may be somehow
+misleading because Redis, by default, is not multi-threaded.
+However, after a careful examination of the function body, it turns out that the function simply wraps over 
+`handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
+configuration variable defined in `config.c`).
+
+Function `handleClientsWithPendingWrites()` (file `networking.c`) traverses the list `server.clients_pending_write`,
+which contains clients that have reply messages to send. This list is populated at the beginning of `addReply()` by
+calling `prepareClientToWrite()` (file `networking.c`).
+For every client in the list, the function calls `writeToClient()`, which wraps over `_writeToClient()`.
+Function `_writeToClient()` (file `networking.c`) further calls `connWrite()` on the client's connection
+object, which indirectly calls `connSocketWrite()` via the connection's `type` field.
+The write path terminates at function `connSocketWrite` (file `connection.c`), which invokes the `write()` system
+call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
+due to `write()` not being able to accept the requested length (which is completely normal).
+
+To summarize:
+
+`beforeSleep()`--(enters `networking.c`)-->
+`handleClientsWithPendingWritesUsingThreads()`-->
+`handleClientsWithPendingWrites()`-->
+`writeToClient()`-->
+`_writeToClient()`--(enters `connection.c`)-->
+`connWrite()`--(enters kernel)-->
+`write()`-->
 
 ### Command Parsing and Dispatching
 
@@ -198,6 +434,14 @@ The command handler implements the specific command that corresponds to the comm
 Individual command handlers can be easily located in the global table `redisCommandTable` residing in file 
 `server.c`.
 
+To summarize:
+
+`processInputBuffer()`-->
+`processCommandAndResetClient()`--(enters `server.c`)-->
+`processCommand()`-->
+`call()`--(via callback)-->
+`c->cmd->proc()`
+
 ### Command Processing
 
 Command process starts with the call back function registered in the command table `redisCommandTable` 
@@ -272,242 +516,6 @@ a `struct sharedObjectsStruct` object in `server.c`. The object is a statically 
 `shared` in `server.c` and it contains the `robj` objects that can be used for `addReply()`.
 The singleton `shared` object is populated in function `createSharedObjects()` (file `server.c`).
 The function initializes the object by creating `sds` string objects using `createObject()` (file `object.c`).
-
-### The Asynchronous Event (AE) Library 
-
-Redis implements an Asynchronous Event Library, or the AE library, to facilitate socket-based communication.
-The AE library is defined in `ae.h` and `ae.c`. At a high level, the AE library works as an event loop, which is
-also the main event loop of Redis server. The event loop monitors the read and write status of file descriptors 
-using blocking system calls. When one or more file descriptors become readable or writable, the loop will unblock
-and the corresponding event will be handled by invoking the callback functions. The rest of Redis registers 
-the file descriptors and callback handlers to the AE library such that the operation of the server can be properly 
-driven.
-
-The central data structure of the AE library is `struct aeEventLoop` (file `ae.h`) which contains information for
-event handling and registration. In particular, field `events` stores an array of registered file descriptors and 
-callback handlers (of type `struct aeFileEvent`). Field `fired` stores an array of file descriptors that become
-readable or writable in the current iteration. 
-There are also two callback functions, namely, `beforesleep` and `aftersleep`, that are registered to the event loop
-object. These two functions are set during server initialization and will be called before and after the blocking 
-system call, respectively.
-
-#### The System Call Layer
-
-The AE library is compatible with a number of system calls that monitor the status of file descriptors, including 
-`evport()`, `epoll()`, `kqueue()`, and `select()`, with the preference being in a descending order 
-(selected in file `ae.c` as a sequence of `#ifdef`s). In the following sections, we use `select()` as an example, but
-the workflow does not really change between the system calls used.
-
-The `select`-compatible implementation resides in `ae_select.c`. The file defines `struct aeApiState`,
-which contains the file descriptor arrays to be used with `select()` system call.
-The file implements three vital functions. Function `aeApiCreate()` initializes the `aeApiState` object and 
-sets the `apidata` field of the event loop object to point to the initialized object.
-Function `aeApiAddEvent()` adds a given file descriptor into the descriptor array, which enables the descriptor 
-to be monitored by the library. Function `aeApiPoll()` invokes `select()` system call with the file descriptor array.
-The system call is blocking and will return when one or more file descriptor become available, or on a timeout.
-After the system call returns, the function will scan the file descriptor array to determine which of them 
-have fired, and inserts them into the `fired` array of the event loop object.
-The function also returns the number of fired file descriptors to the caller.
-
-#### The Event Handling Layer
-
-The singleton event loop object is initialized during server initialization by calling `aeCreateEventLoop()` 
-(file `ae.c`), which initializes the loop object and returns it to the server. The server saves the event loop 
-object in the server object field `el`.
-
-During the operation of the server, the function `aeCreateFileEvent()` will be called to register new file descriptors
-and callback handlers to the AE library. This function carries the descriptor to be registered, the callback handler
-`proc` (which is a function pointer), and the argument to the callback handler `clientData` (which is the `client`
-object for client sockets). Note that although only one callback handler is passed to this function, the AE Library
-internally distinguishes between read handlers and write handlers (as evidenced by the `rfileProc` and `wfileProc`
-fields of `struct aeFileEvent`). Consequently, the provided handler will be used as both the read and the write
-handler. 
-
-After server initialization, the server enters the main event loop by calling `aeMain()` (file `ae.c`). 
-This function loops infinitely and calls `aeProcessEvents()` in every iteration.
-Function `aeProcessEvents()` first invokes the `beforesleep` callback (which is registered by the server during 
-initialization), then invokes `aeApiPoll()`, which may be blocked in the kernel. After the call returns, the
-function then invokes the after-sleep callback `aftersleep`, and then processes fired events.
-It simply scans the `fired` array, and for each file descriptor in the array, invokes its read or write 
-callback handler with `clientData` as one of the arguments.
-A `mask` argument is also passed to the callback handler to indicate whether the fired descriptor is ready for 
-read, write, or both.
-
-Overall, the `aeProcessEvents()` function implements the main event loop of Redis server. Redis server uses
-the AE Library to multiplex between multiple clients as well as the listening socket, hence implementing the 
-listening and the read path. In addition, Redis server uses the before-sleep callback mechanism of the event loop 
-object to implement the write path. Reply messages to the clients are sent within the before-sleep callback
-after these messages are generated into the reply buffer in last iteration's command processing.
-
-### The Listening Path
-
-#### Binding and Listening
-
-Redis server listens on one or more sockets and accepts connections from the clients. 
-This listening path begins in function `initServer()` (file `server.c`) by calling `listenToPort()`.
-The function `listenToPort()` (file `server.c`) accepts a list IP addresses to bind to and a single port number.
-For every address, it invokes `anetTcpServer()` (file `anet.c`) to bind the address.
-The function `anetTcpServer()` wraps over `_anetTcpServer()` (file `anet.c`), which creates a new socket
-for listening by invoking the system call `socket()` followed by `anetListen()` (file `anet.c`).
-Function `anetListen()` simply invokes system calls `bind()` and then `listen()` to bind the address
-and start listening.
-Finally, the newly created file descriptor is returned to the caller.
-Note that Redis also supports other types of sockets, such as IPv6 and TLS, but we assume IPv4 sockets are
-used to simplify the discussion.
-
-To summarize:
-
-`initServer()`-->
-`listenToPort()`--(enters `anet.c`)-->
-`anetTcpServer()`-->
-`_anetTcpServer()`-->
-`anetListen()`--(enters kernel)-->
-`bind()` and `listen()`
-
-#### Accepting New Connections
-
-Later on during server initialization, the listening sockets are registered to the AE Library for monitoring.
-The path begins with `createSocketAcceptHandler()` (file `server.c`), which calls `aeCreateFileEvent()` to
-register the listening sockets one by one with the callback handler being `acceptTcpHandler()`.
-The callback handler `acceptTcpHandler()` (file `networking.c`), as discussed above, will be invoked
-when the AE Library fires it.
-The handler calls `anetTcpAccept()` (file `anet.c`), which wraps `anetGenericAccept()` (file `anet.c`).
-The latter accepts the connection by invoking the `accept()` system call.
-The newly assigned socket for communicating with the client is also returned to the caller for later usage.
-
-To summarize:
-
-`initServer()`-->
-`createSocketAcceptHandler()`--(enters `ae.c`)-->
-`aeCreateFileEvent()`--(via callbacks, enters `networking.c`)-->
-`acceptTcpHandler()`--(enters `anet.c`)-->
-`anetTcpAccept()`-->
-`anetGenericAccept()`--(enters kernel)-->
-`accept()`
-
-#### Creating the Connection Object
-
-After the connection is accepted at the OS level, the next step is to initialize the local data structures for
-keeping the client's information. This path begins in function `acceptTcpHandler()` (file `networking.c`) by
-calling `connCreateAcceptedSocket()` (file `connection.c`). The function wraps `connCreateSocket()` 
-which allocates a new connection object of type `struct connection`.
-The connection object represents the server-side state of the connection. The object stores the file descriptor
-returned from `accept` system call. The object also contains two critical callback handlers, the `read_handler`
-and the `write_handler`, which are invoked for reading and writing data from/into the socket. 
-The `type` field of the connection object defines a series of function pointers that either operate on the 
-connection object itself or on the socket. For example, `type->set_read_handler` assigns a new read handler
-to the connection object's `read_handler` field, while `type->read` directly reads the socket using the `read` system
-call. The newly allocated connection object is returned to the caller for later usage.
-
-To summarize:
-
-`acceptTcpHandler()`-->
-`connCreateAcceptedSocket()`--(enters `connection.c`)-->
-`connCreateSocket()`
-
-#### Creating the Client Object
-
-After creating the connection object, the Redis server then proceeds to creating the client object.
-This path also begins in `acceptTcpHandler()` right after the connection object is returned. 
-The returned object is passed into function `acceptCommonHandler()` (file `networking.c`), which first 
-checks whether the connection is valid and legal (e.g., not exceeding the maximum number of concurrent
-connection), and then calls `createClient()` to create the client object.
-
-Function `createClient()` (file `networking.c`) first creates a `struct client` object using `zmalloc()` 
-and then sets the read handler of the connection object for the client to `readQueryFromClient` by calling 
-`connSetReadHandler()`. 
-Finally, the function initializes the client's states including the send and receive data buffer and buffer
-pointers. The database object that the client operates on is also set to the default one on index zero by
-calling `selectDb()`.
-
-Function `connSetReadHandler()` (file `connection.c`) will indirectly call `connSocketSetReadHandler()` via the
-per-connection object `type` field. 
-Function `connSocketSetReadHandler()` (file `connection.c`) stores the callback handler in the connection
-object's `read_handler` field and then registers the file descriptor of the connection to the AE Library
-via `aeCreateFileEvent()`. 
-The registered callback handler to the AE Library is function `connSocketEventHandler()` (file `connection.c`),
-which will in turn call `read_handler` and/or `write_handler` fields when the file descriptor fires in the AE Library. 
-
-Overall, during the client creation process, the file descriptor of the client is registered to the AE Library
-for monitoring. The callback handler `readQueryFromClient` will be invoked (after several levels of indirection)
-when the file descriptor is read to be read. Note that the client does not register any write handler to the 
-connection to the object. As a result, the connection is only capable of reading from the client but
-not vise versa.
-
-To summarize:
-
-`acceptTcpHandler()`-->
-`acceptCommonHandler()`-->
-`createClient()`--(enters `connection.c`)-->
-`connSetReadHandler()`-->
-`connSocketSetReadHandler()`--(enters `ae.c`)-->
-`aeCreateFileEvent()`--(via callback, enters `networking.c`)-->
-`readQueryFromClient()`-->
-
-### The Read Path
-
-As discussed earlier, when a client is initialized, its file descriptor is registered to the AE Library for read.
-The callback handler of the registration is function `readQueryFromClient()`, meaning that
-this function will be invoked every time some data arrives at the socket and is selected by the AE Library.
-The handler will be invoked with the connection object as its sole argument, which is passed to the 
-AE Library at registration time.
-
-Function `readQueryFromClient()` (file `networking.c`) first checks whether the buffer is big enough for the client
-message. In most cases, no action is taken, and the function then calls `connRead()` on the client's connection object.
-Inline function `connRead()` (file `connection.h`) indirectly calls `connSocketRead()` via the connection
-object's `type->read`, which in turn invokes the `read()` system call to pull data out of the socket stream.
-Note that the destination buffer of the read is the client's `querybuf`, which is coupled with `qblen` to indicate
-the current length of data in the buffer. 
-The length to be read is calculated as the remaining capacity of the buffer, as evidenced by the 
-local variable `readlen`.
-
-After data is read from the socket, the handler then invokes `processInputBuffer()` to parse and dispatch 
-the command. We have already covered the command parsing and dispatching in an earlier section.
-
-To summarize:
-
-`readQueryFromClient()`--(enters `connection.c`)-->
-`connRead()`-->
-`connSocketRead()`--(enters kernel)-->
-`read()`
-
-### The Write Path
-
-After the Redis server processes the command, the reply is generated into the client's reply buffer by calling 
-`addReply()`. The function eventually copies data in the reply message to the client's reply buffer `c->buf`, which
-is coupled with `c->bufpos` to indicate the current write position.
-
-In order to send the reply message back to the client, the Redis server, during initialization, registers a callback 
-function to the AE Library as the before-sleep callback via `aeSetBeforeSleepProc()`. The callback function 
-being registered is `beforeSleep()`.
-
-Recall that the before-sleep callback, i.e., function `beforeSleep()` (file `server.c`), is invoked right before 
-the AE Library invokes `select()` (or other multiplexing system calls). 
-The function invokes `handleClientsWithPendingWritesUsingThreads()` (file `networking.c`) whose name may be somehow
-misleading because Redis, by default, is not multi-threaded.
-However, after a careful examination of the function body, it turns out that the function simply wraps over 
-`handleClientsWithPendingWrites()` if multi-threading is disabled (by checking `server.io_threads_num`, a
-configuration variable defined in `config.c`).
-
-Function `handleClientsWithPendingWrites()` (file `networking.c`) traverses the list `server.clients_pending_write`,
-which contains clients that have reply messages to send. This list is populated at the beginning of `addReply()` by
-calling `prepareClientToWrite()` (file `networking.c`).
-For every client in the list, the function calls `writeToClient()`, which wraps over `_writeToClient()`.
-Function `_writeToClient()` (file `networking.c`) further calls `connWrite()` on the client's connection
-object, which indirectly calls `connSocketWrite()` via the connection's `type` field.
-The write path terminates at function `connSocketWrite` (file `connection.c`), which invokes the `write()` system
-call on the connection's file descriptor. Note that `connWrite()` might be invoked several times for a single buffer
-due to `write()` not being able to accept the requested length (which is completely normal).
-
-To summarize:
-
-`beforeSleep()`--(enters `networking.c`)-->
-`handleClientsWithPendingWritesUsingThreads()`-->
-`handleClientsWithPendingWrites()`-->
-`writeToClient()`-->
-`_writeToClient()`--(enters `connection.c`)-->
-`connWrite()`--(enters kernel)-->
-`write()`-->
 
 ### Configuration
 
