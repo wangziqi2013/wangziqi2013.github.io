@@ -105,6 +105,15 @@ into a newly allocated SDS object. The SDS object is wrapped by an `robj` object
 At the end of the loop, `c->multibulklen` is decremented by one to indicate that one element has been successfully 
 parsed.
 
+However, simple as it seems, the parsing code must also take one possible scenario into consideration, i.e., when
+the element is too big to be fully received by one `read()` call. In this scenario, multiple invocations to the 
+receiving function have to be made in order to fully receive the element before copying it to the argv as an SDS 
+string. More specifically, the parsing function uses `c->bulklen` to store the remaining length
+of the current string element to be read after the length is parsed from the receiving buffer. 
+Then in the next iteration of `readQueryFromClient()`, the `c->bulklen` will be used to determine the size of the 
+receiving buffer such that the buffer can always hold the element in its entirety.
+The parsing function will not process the element before it is fully received.
+
 
 ### Input Parsing and Dispatching
 
