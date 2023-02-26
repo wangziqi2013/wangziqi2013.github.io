@@ -158,7 +158,11 @@ calls `sdssplitargs()` to split `aux` into an local `argv` vector containing sub
 The function then initializes `c->argc` and `c->argv` with newly created `robj` objects wrapping the substrings 
 in the local `argv` vector.
 
+To summarize:
 
+`readQueryFromClient()`-->
+`processInputBuffer()`-->
+`processInlineBuffer()`
 
 ### Command Processing
 
