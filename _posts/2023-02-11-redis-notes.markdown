@@ -135,47 +135,6 @@ To summarize:
 `processInputBuffer()`-->
 `processMultibulkBuffer()`
 
-### Input Parsing and Dispatching
-
-`call()` (file `server.c`) is the entry point for processing a client message. It invokes `c->cmd->proc(c)`.
-`c->cmd` points to the table `redisCommandTable` in commands.c and the type is `struct redisCommand`.
-The call back function for each command is also defined in `struct redisCommand` as field `proc`, i.e.,
-the one called within `call()`.
-
-`c->cmd` is set by function `processCommand()` (file `server.c`). The same function also invokes `call()` at
-the end. This function assumes that `c->argv` and `c->argc` are both set by its caller. It calls `lookupCommand()`
-to find the `struct redisCommand` object in the command table.
-
-`processCommand()` is called by `processCommandAndResetClient()` (file `networking.c`). The function is further
-called by `processInputBuffer()` (same file).
-In `processInputBuffer()`, the command string received from the client is parsed by calling `processInlineBuffer()`.
-
-Function `processInputBuffer()` is the core routine that converts data from the client into Redis objects.
-It first creates an `sds` (Simple Dynamic String, file `sds.h/c`) object named `aux` from `c->querybuf`, which is 
-the receiving buffer filled by the networking functions.
-Then it parses the string object using `sdssplitargs()` and stores the vector in local variable `argv`, which is 
-just an array of sds objects, each being a substring parsed from the input buffer.
-Later on in the function, `c->argc` and `c->argv` are both set in a `for` loop. For every substring in `argv`,
-the function creates an redis object of type `robj *` by calling `createObject()` (file `object.c`) with the 
-first argument being `OBJ_STRING` and the second being the substring `sds` object.
-
-Function `createObject()` (file `object.c`) simply creates a new `robj` object using `zmalloc()`, fills in the 
-type, encoding, and reference count, and initializes its `ptr` field to point to whatever that is passed
-as the second argument. In our case, the second argument is an `sds` object from the `argv` discussed above.
-
-To complete this workflow: function `processInputBuffer()` is called by `readQueryFromClient()`. 
-This function itself is registered as the read call back when a client is created in `createClient()` by calling 
-`connSetReadHandler()` on the connection object.
-
-To summarize:
-
-`createClient()`--(register as call back)-->
-`readQueryFromClient()`--(call back)-->
-`processInputBuffer()`-->
-`processCommandAndResetClient()`--(enters server.c)-->
-`processCommand()`-->
-`call()`--(via command table)-->Command handler
-
 ### Command Processing
 
 Command process starts with the call back function registered in the command table `redisCommandTable` 
