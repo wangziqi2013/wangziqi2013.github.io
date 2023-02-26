@@ -171,6 +171,14 @@ After receiving and parsing the command, the client object's `argc` and `argv` a
 In this case, the parsing function returns `C_OK` to the caller function `processInputBuffer()`, and 
 the command is processed by calling `processCommandAndResetClient()`, which in turn calls `processCommand()`. 
 
+Function `processCommand()` (file `server.c`) implements the command dispatching logic as follows.
+The function first looks up the in-memory command dictionary by calling `lookupCommand()`, which searches the
+structure using the first element of the client object's `argv` vector as the key. 
+The in-memory command dictionary is initialized from the statically defined global variable `redisCommandTable`
+(file `server.c`) during server initialization by calling `populateCommandTable()`.
+The in-memory command dictionary is implemented as a `dict` object in the server object as a field named `commands`.
+During initialization, function `populateCommandTable()` traverses the table `redisCommandTable`, and for every
+table entry, inserts it into the in-memory command dictionary using the command name as the lookup key.
 
 
 ### Command Processing
