@@ -152,6 +152,12 @@ inline request if the request is not fully received, and hence will always repor
 if the `\n` is not found. In other words, inline requests cannot be received over multiple `read()` attempts
 and is therefore not recommended for usages beyond manual testing.
 
+If the `\n` is found, then the function first creates a new SDS string object `aux` that only
+contains the content of the inline request from the receiving buffer, and then
+calls `sdssplitargs()` to split `aux` into an local `argv` vector containing substrings separated by space characters.
+The function then initializes `c->argc` and `c->argv` with newly created `robj` objects wrapping the substrings 
+in the local `argv` vector.
+
 
 
 ### Command Processing
