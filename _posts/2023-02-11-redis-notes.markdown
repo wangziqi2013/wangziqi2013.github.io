@@ -122,6 +122,13 @@ The function also implements an optimization here, i.e., if the length of the el
 will be directly used as the SDS string without redundantly copying its content to a newly created string object. 
 In this case, a new receiving buffer will be created and assigned to the client object.
 
+After fully receiving an element, the `robj` object will be inserted into the client object's `argv` array,
+and `c->argc` is incremented by one to indicate that one more element has been parsed.
+At the end of the parsing loop, `c->bulklen` will be set to `-1` to indicate that the state machine is not
+in the middle of receiving an element, and `c->multibulklen` is decremented by one.
+If `c->multibulklen` drops to zero after decrementing, then the command has been fully parsed, in
+which case the function returns `C_OK` to notify the caller that the command can be processed.
+
 
 
 ### Input Parsing and Dispatching
