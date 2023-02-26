@@ -164,6 +164,15 @@ To summarize:
 `processInputBuffer()`-->
 `processInlineBuffer()`
 
+#### Command Dispatching
+
+After receiving and parsing the command, the client object's `argc` and `argv` are set to the number of arguments 
+(including the command itself) and the substrings containing argument data, respectively.
+In this case, the parsing function returns `C_OK` to the caller function `processInputBuffer()`, and 
+the command is processed by calling `processCommandAndResetClient()`, which in turn calls `processCommand()`. 
+
+
+
 ### Command Processing
 
 Command process starts with the call back function registered in the command table `redisCommandTable` 
