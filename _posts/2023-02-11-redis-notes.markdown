@@ -41,15 +41,16 @@ member `qb_pos` as the current head of command parsing. The length of the SDS st
 hand, represents the current size of data in the receiving buffer.
 
 The received RESP string objects are stored temporarily in the `argv` field of the client object as an array 
-of `robj` objects. The `argc` field simply indicates the number of elements in the `argv` field.
+of `robj` objects, with the `argc` field indicating the current number of arguments that are already parsed. 
+The total number of elements in the `argv` field is indicated by the value of `multibulklen`.
 
 #### Reading from the Connection
 
 The input parsing workflow begins with function `readQueryFromClient()` (file `networking.c`), which is registered
 to the AE library as the call back function of the connection and will be invoked when the socket is ready to be read.
 In the most common case, this function 
-first attempts to allocate at least `PROTO_IOBUF_LEN` bytes in the receiving buffer by calling `sdsMakeRoomFor()`,  and 
-then computes the number of bytes to read, `readlen`, by calling `sdsavail()` on the query buffer object 
+first attempts to allocate at least `PROTO_IOBUF_LEN` bytes in the receiving buffer by calling `sdsMakeRoomFor()`,  
+and then computes the number of bytes to read, `readlen`, by calling `sdsavail()` on the query buffer object 
 `c->querybuf`, which returns the number of available bytes after the current valid content in the allocated memory 
 block for the buffer. 
 
@@ -66,7 +67,7 @@ This function may return `C_ERR` to indicate a parsing failure.
 If a failure occurs, the function call to `beforeNextClient()` will close the connection and deallocate the 
 client object, hence terminating the current session.
 
-#### Parsing Command Data
+#### Parsing Command Header
 
 Function `processInputBuffer()` (file `networking.c`) is called every time new data is received from the 
 connection, which is is responsible for parsing command data and driving the state machine.
@@ -79,10 +80,18 @@ For RESP format requests, the function then calls `processMultibulkBuffer()` to 
 If the command is fully received, then function `processMultibulkBuffer()` will finish parsing and return `C_OK`, 
 after which the command is executed by calling `processCommandAndResetClient()`. 
 Otherwise, the command cannot be parsed because more data is to be received.
-In either case, the receiving buffer is truncated by calling `sdsrange`, which shifts the unparsed content of 
-the buffer after `c->qb_pos` to the beginning, preparing the buffer for the next receiving operation.
-The client object's `qb_pos` field is also reset to zero to indicate that future parsing will start from the 
-first byte of the buffer.
+In either case, the receiving buffer is truncated by calling `sdsrange()` (file `sds.c`), which shifts the 
+unparsed content of the buffer after `c->qb_pos` to the beginning, preparing the buffer for the next receiving 
+operation. The client object's `qb_pos` field is also reset to zero to indicate that future parsing will start from 
+the first byte of the buffer.
+
+Function `processMultibulkBuffer()` (file `networking.c`) implements RESP parsing. 
+The function first checks whether `c->multibulklen` is zero. If true, then a new command is being parsed, in
+which case the function reads the number of elements in the array by first verifying that a `\r` exists 
+in the receiving buffer (meaning that the array header has been fully received), and then parsing the 
+number of elements by calling `string2ll()` (file `util.h`) to convert the decimal representation in the array header
+to an integer.
+
 
 ### Input Parsing and Dispatching
 
